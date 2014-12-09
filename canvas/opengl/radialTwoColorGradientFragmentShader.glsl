@@ -12,7 +12,7 @@
 uniform vec4   v_startColor4d;
 uniform vec4   v_endColor4d;
 uniform mat3x2 m_transform;
-varying vec2   v_textureCoords2d;
+varying vec2   textCoords;
 const vec2     v_center2d = vec2(0,0);
 
 void main(void)
@@ -21,7 +21,7 @@ void main(void)
             v_endColor4d,
             1.0 - distance(
                 vec2(
-                    m_transform * vec3(v_textureCoords2d,1)),
+                    m_transform * vec3(textCoords,1)),
                 v_center2d));
     }
 

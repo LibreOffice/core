@@ -13,7 +13,7 @@ uniform int       i_nColors;
 uniform sampler1D t_colorArray4d;
 uniform sampler1D t_stopArray1d;
 uniform mat3x2    m_transform;
-varying vec2      v_textureCoords2d;
+varying vec2     textCoords;
 
 int max(int x, int y)
 {
@@ -34,7 +34,7 @@ int findBucket(float t)
 void main(void)
 {
     float fAlpha =
-        clamp( (m_transform * vec3(v_textureCoords2d,1)).s,
+        clamp( (m_transform * vec3(textCoords,1)).s,
                 0.0, 1.0 );
 
     int nMinBucket = findBucket( fAlpha );

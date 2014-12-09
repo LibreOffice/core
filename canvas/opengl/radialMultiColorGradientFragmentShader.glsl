@@ -13,7 +13,7 @@ uniform int       i_nColors;
 uniform sampler1D t_colorArray4d;
 uniform sampler1D t_stopArray1d;
 uniform mat3x2    m_transform;
-varying vec2      v_textureCoords2d;
+varying vec2     textCoords;
 const vec2        v_center2d = vec2(0,0);
 
 int max(int x, int y)
@@ -36,7 +36,7 @@ void main(void)
 {
     float fAlpha =
         clamp( 1.0 - distance(
-                    vec2( m_transform * vec3(v_textureCoords2d,1)),
+                    vec2( m_transform * vec3(textCoords,1)),
                     v_center2d),
                 0.0, 1.0 );
 
