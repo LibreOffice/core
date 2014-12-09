@@ -1722,7 +1722,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                             long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMargin;
                             long nScaleSize = aVars.GetTextSize().Width();         // without margin
 
-                            if ( nScaleSize > 0 )       // 0 if the text is empty (formulas, number formats)
+                            if ( nAvailable > 0 && nScaleSize > 0 )       // 0 if the text is empty (formulas, number formats)
                             {
                                 long nScale = ( nAvailable * 100 ) / nScaleSize;
 
