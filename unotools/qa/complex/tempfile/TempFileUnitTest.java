@@ -29,9 +29,6 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
-/* Document.
- */
-
 public class TempFileUnitTest /* extends ComplexTestCase */ {
     private XMultiServiceFactory m_xMSF = null;
     private XSimpleFileAccess m_xSFA = null;
@@ -61,12 +58,12 @@ public class TempFileUnitTest /* extends ComplexTestCase */ {
     }
 
     @Test public void ExecuteTest01() {
-        TempFileTest aTest = new Test01( m_xMSF, m_xSFA );
+        Test01 aTest = new Test01( m_xMSF, m_xSFA );
         assertTrue( "Test01 failed!", aTest.test() );
     }
 
     @Test public void ExecuteTest02() {
-        TempFileTest aTest = new Test02( m_xMSF, m_xSFA );
+        Test02 aTest = new Test02( m_xMSF, m_xSFA );
         assertTrue( "Test02 failed!", aTest.test() );
     }
 

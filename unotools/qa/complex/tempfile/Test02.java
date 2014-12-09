@@ -25,7 +25,7 @@ import com.sun.star.io.*;
 import com.sun.star.uno.UnoRuntime;
 import java.util.Random;
 
-public class Test02 implements TempFileTest {
+public class Test02 {
 
     XMultiServiceFactory m_xMSF;
     XSimpleFileAccess m_xSFA;

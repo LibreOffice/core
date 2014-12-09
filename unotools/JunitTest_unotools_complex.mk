@@ -27,7 +27,6 @@ $(eval $(call gb_JunitTest_add_classes,unotools_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,unotools_complex,\
-    unotools/qa/complex/tempfile/TempFileTest \
     unotools/qa/complex/tempfile/TempFileUnitTest \
     unotools/qa/complex/tempfile/Test01 \
     unotools/qa/complex/tempfile/Test02 \
