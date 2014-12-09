@@ -41,7 +41,6 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.util.XCloseBroadcaster;
 
 
 public final class WikiEditorImpl extends WeakBase

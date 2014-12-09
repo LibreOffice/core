@@ -17,7 +17,6 @@
  */
 
 import java.util.*;
-import java.awt.*;
 
 /** This class prints out the system properties.
 
