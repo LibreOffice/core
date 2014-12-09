@@ -335,7 +335,7 @@ void ImportLotus::NamedSheet( void )
     OUString aName;
     Read(aName);
 
-    SCTAB nLTab(static_cast<SCTAB>(nTmpTab));
+    SCTAB nLTab(SanitizeTab(static_cast<SCTAB>(nTmpTab)));
 
     if (pD->HasTable(nLTab))
         pD->RenameTab(nLTab, aName);
@@ -395,7 +395,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
 
     sal_uInt16 nTmpRow(0);
     Read(nTmpRow);
-    SCROW nRow(static_cast<SCROW>(nTmpRow));
+    SCROW nRow(SanitizeRow(static_cast<SCROW>(nTmpRow)));
     sal_uInt16 nHeight(0);
     Read(nHeight);
 
