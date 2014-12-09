@@ -36,6 +36,9 @@ static const char lcl_aServiceNamePolar3d[] = "com.sun.star.chart2.PolarCoordina
 
 static const char lcl_aImplementationNamePolar2d[] = "com.sun.star.comp.chart2.PolarCoordinateSystem2d";
 static const char lcl_aImplementationNamePolar3d[] = "com.sun.star.comp.chart2.PolarCoordinateSystem3d";
+
+static const char CHART2_COOSYSTEM_POLAR_SERVICE_NAME[] = "com.sun.star.chart2.CoordinateSystems.Polar";
+
 }
 
 namespace chart

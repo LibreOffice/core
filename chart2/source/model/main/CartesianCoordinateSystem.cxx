@@ -36,6 +36,9 @@ static const char lcl_aServiceNameCartesian3d[] = "com.sun.star.chart2.Cartesian
 
 static const char lcl_aImplementationNameCartesian2d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem2d";
 static const char lcl_aImplementationNameCartesian3d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem3d";
+
+static const char CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME[] = "com.sun.star.chart2.CoordinateSystems.Cartesian";
+
 }
 
 namespace chart
