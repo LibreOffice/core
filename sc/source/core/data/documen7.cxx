@@ -365,18 +365,30 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPrevious();
-    // wenn die Zelle die erste oder sonstwo ist
+    assert(pPrev != pCell);                 // pointing to itself?!?
+    // if the cell is first or somwhere in chain
     if ( pPrev || pFormulaTree == pCell )
     {
         ScFormulaCell* pNext = pCell->GetNext();
+        assert(pNext != pCell);             // pointing to itself?!?
         if ( pPrev )
-            pPrev->SetNext( pNext );        // gibt Vorlaeufer
+        {
+            assert(pFormulaTree != pCell);  // if this cell is also head something's wrong
+            pPrev->SetNext( pNext );        // predecessor exists, set successor
+        }
         else
-            pFormulaTree = pNext;           // ist erste Zelle
+        {
+            pFormulaTree = pNext;           // this cell was first cell
+        }
         if ( pNext )
-            pNext->SetPrevious( pPrev );    // gibt Nachfolger
+        {
+            assert(pEOFormulaTree != pCell); // if this cell is also tail something's wrong
+            pNext->SetPrevious( pPrev );    // sucessor exists, set predecessor
+        }
         else
-            pEOFormulaTree = pPrev;         // ist letzte Zelle
+        {
+            pEOFormulaTree = pPrev;         // this cell was last cell
+        }
         pCell->SetPrevious( 0 );
         pCell->SetNext( 0 );
         sal_uInt16 nRPN = pCell->GetCode()->GetCodeLen();
@@ -543,18 +555,30 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "RemoveFromFormulaTrack: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
-    // wenn die Zelle die erste oder sonstwo ist
+    assert(pPrev != pCell);                     // pointing to itself?!?
+    // if the cell is first or somwhere in chain
     if ( pPrev || pFormulaTrack == pCell )
     {
         ScFormulaCell* pNext = pCell->GetNextTrack();
+        assert(pNext != pCell);                 // pointing to itself?!?
         if ( pPrev )
-            pPrev->SetNextTrack( pNext );       // gibt Vorlaeufer
+        {
+            assert(pFormulaTrack != pCell);     // if this cell is also head something's wrong
+            pPrev->SetNextTrack( pNext );       // predecessor exists, set successor
+        }
         else
-            pFormulaTrack = pNext;              // ist erste Zelle
+        {
+            pFormulaTrack = pNext;              // this cell was first cell
+        }
         if ( pNext )
-            pNext->SetPreviousTrack( pPrev );   // gibt Nachfolger
+        {
+            assert(pEOFormulaTrack != pCell);   // if this cell is also tail something's wrong
+            pNext->SetPreviousTrack( pPrev );   // sucessor exists, set predecessor
+        }
         else
-            pEOFormulaTrack = pPrev;            // ist letzte Zelle
+        {
+            pEOFormulaTrack = pPrev;            // this cell was last cell
+        }
         pCell->SetPreviousTrack( 0 );
         pCell->SetNextTrack( 0 );
         --nFormulaTrackCount;
