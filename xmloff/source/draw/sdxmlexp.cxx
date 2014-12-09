@@ -2552,10 +2552,13 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
         Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
-        DocumentSettingsSerializer *pFilter;
-        pFilter = dynamic_cast<DocumentSettingsSerializer *>(xProps.get());
-        if( pFilter )
-            rProps = pFilter->filterStreamsToStorage( GetTargetStorage(), rProps );
+        DocumentSettingsSerializer *pFilter(dynamic_cast<DocumentSettingsSerializer *>(xProps.get()));
+        if (!pFilter)
+            return;
+        const uno::Reference< embed::XStorage > xStorage(GetTargetStorage());
+        if (!xStorage.is())
+            return;
+        rProps = pFilter->filterStreamsToStorage(xStorage, rProps);
     }
 }
 
