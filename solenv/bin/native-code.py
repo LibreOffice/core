@@ -47,7 +47,7 @@ core_factory_list = [
     ("libutllo.a", "utl_component_getFactory"),
     ("libxmlsecurity.a", "xmlsecurity_component_getFactory"),
     ("libxolo.a", "xo_component_getFactory"),
-    ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory"),
+    ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
     ]
 
@@ -153,7 +153,7 @@ draw_constructor_list = [
     ]
 
 writer_factory_list = [
-    ("libsblo.a", "sb_component_getFactory"),
+    ("libsblo.a", "sb_component_getFactory", "#ifdef ANDROID"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
@@ -197,15 +197,16 @@ extern "C" {
 
 if options.groups:
     for factory_group in options.groups:
-        for (factory_name,factory_function) in factory_map[factory_group]:
-            if factory_function == 'sb_component_getFactory':
-                print ('#ifdef ANDROID')
-            if factory_function == 'xsec_xmlsec_component_getFactory':
-                print ('#ifndef ANDROID')
+        for entry in factory_map[factory_group]:
+            factory_name = entry[0]
+            factory_function = entry[1]
+            factory_guard = None
+            if len(entry) > 2:
+                factory_guard = entry[2]
+            if factory_guard:
+                print (factory_guard)
             print ('void * '+factory_function+'( const char* , void* , void* );')
-            if factory_function == 'sb_component_getFactory':
-                print ('#endif')
-            if factory_function == 'xsec_xmlsec_component_getFactory':
+            if factory_guard:
                 print ('#endif')
 
 print ('')
@@ -222,15 +223,16 @@ lo_get_factory_map(void)
 
 if options.groups:
     for factory_group in options.groups:
-        for (factory_name,factory_function) in factory_map[factory_group]:
-            if factory_function == 'sb_component_getFactory':
-                print ('#ifdef ANDROID')
-            if factory_function == 'xsec_xmlsec_component_getFactory':
-                print ('#ifndef ANDROID')
+        for entry in factory_map[factory_group]:
+            factory_name = entry[0]
+            factory_function = entry[1]
+            factory_guard = None
+            if len(entry) > 2:
+                factory_guard = entry[2]
+            if factory_guard:
+                print (factory_guard)
             print ('        { "'+factory_name+'", '+factory_function+' },')
-            if factory_function == 'sb_component_getFactory':
-                print ('#endif')
-            if factory_function == 'xsec_xmlsec_component_getFactory':
+            if factory_guard:
                 print ('#endif')
 
 print ("""
@@ -278,3 +280,5 @@ print ("""
 }
 
 }""")
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
