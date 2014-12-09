@@ -3109,19 +3109,6 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
                 aHdl.broadcast();
             }
             break;
-        case BROADCAST_ALL_POSITIONS:
-            {
-                // Handler only used with formula cells.
-                SetDirtyOnRangeHandler aHdl(*this);
-                sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
-                ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, 0, nTab));
-                for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-                {
-                    aHint.GetAddress().SetRow(nRow);
-                    pDocument->Broadcast(aHint);
-                }
-            }
-            break;
         case BROADCAST_BROADCASTERS:
             {
                 // Handler only used with formula cells.

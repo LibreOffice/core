@@ -172,7 +172,6 @@ public:
     {
         BROADCAST_NONE,             ///< no broadcasting
         BROADCAST_DATA_POSITIONS,   ///< broadcast existing cells with position => does AreaBroadcast
-        BROADCAST_ALL_POSITIONS,    ///< broadcast all cells, including empty, with position => does AreaBroadcast
         BROADCAST_BROADCASTERS      ///< broadcast only existing cell broadcasters => no AreaBroadcast of range!
     };
 
