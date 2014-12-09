@@ -5,8 +5,11 @@ import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import org.mozilla.gecko.gfx.CairoImage;
+import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
+import org.mozilla.gecko.gfx.SubTile;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -23,22 +26,11 @@ public class LOKitThread extends Thread {
         TileProviderFactory.initialize();
     }
 
-    private void draw() {
-        if (mTileProvider == null || mApplication == null) {
-            // called too early...
-            return;
-        }
-
-        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-        DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
-        mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
-        mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
-        mLayerClient.reevaluateTiles();
-    }
-
-    private void tileRequest(TileIdentifier tileId) {
+    private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
         mLayerClient.beginDrawing();
-        mLayerClient.addTile(tileId);
+        CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
+        SubTile tile = new SubTile(image, tileId);
+        composedTileLayer.addTile(tile);
         mLayerClient.endDrawing(mViewportMetrics);
     }
 
@@ -49,14 +41,17 @@ public class LOKitThread extends Thread {
             return;
         }
 
-        draw();
+        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+        DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
+        mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
+        mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
 
         mLayerClient.setPageRect(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         mLayerClient.setViewportMetrics(mLayerClient.getViewportMetrics());
         mLayerClient.forceRedraw();
     }
 
-    /** Invalidate everything + handle the geometry change + draw. */
+    /** Invalidate everything + handle the geometry change */
     private void refresh() {
         Bitmap bitmap = mTileProvider.thumbnail(1000);
         if (bitmap != null) {
@@ -84,8 +79,6 @@ public class LOKitThread extends Thread {
         mTileProvider = TileProviderFactory.create(mLayerClient, filename);
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
-            mLayerClient.setTileProvider(mTileProvider);
-
             LOKitShell.showProgressSpinner();
             refresh();
             LOKitShell.hideProgressSpinner();
@@ -132,7 +125,7 @@ public class LOKitThread extends Thread {
                 changePart(event.mPartIndex);
                 break;
             case LOEvent.TILE_REQUEST:
-                tileRequest(event.mTileId);
+                tileRequest(event.mComposedTileLayer, event.mTileId);
                 break;
         }
     }

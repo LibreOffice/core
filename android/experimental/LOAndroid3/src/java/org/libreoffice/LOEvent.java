@@ -2,6 +2,7 @@ package org.libreoffice;
 
 import android.graphics.Rect;
 
+import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.IntSize;
 
@@ -17,12 +18,14 @@ public class LOEvent {
     public static final int REDRAW = 8;
     public static final int TILE_REQUEST = 9;
 
-    public int mType;
+    public final int mType;
+
     public ImmutableViewportMetrics mViewportMetrics;
     public String mTypeString;
     public int mPartIndex;
     public String mFilename;
     public TileIdentifier mTileId;
+    public ComposedTileLayer mComposedTileLayer;
 
     public LOEvent(int type) {
         mType = type;
@@ -33,9 +36,10 @@ public class LOEvent {
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
-    public LOEvent(int type, TileIdentifier tileId) {
+    public LOEvent(int type, ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
         mType = type;
         mTypeString = "Tile Request";
+        mComposedTileLayer = composedTileLayer;
         mTileId = tileId;
     }
 

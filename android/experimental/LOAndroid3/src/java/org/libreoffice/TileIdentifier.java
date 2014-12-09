@@ -1,14 +1,18 @@
 package org.libreoffice;
 
+import org.mozilla.gecko.gfx.IntSize;
+
 public class TileIdentifier {
     public final int x;
     public final int y;
     public final float zoom;
+    public final IntSize size;
 
-    public TileIdentifier(int x, int y, float zoom) {
+    public TileIdentifier(int x, int y, float zoom, IntSize size) {
         this.x = x;
         this.y = y;
         this.zoom = zoom;
+        this.size = size;
     }
 
     @Override

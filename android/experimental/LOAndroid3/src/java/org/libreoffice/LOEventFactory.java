@@ -2,6 +2,7 @@ package org.libreoffice;
 
 import android.graphics.Rect;
 
+import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.IntSize;
 
@@ -39,7 +40,7 @@ public class LOEventFactory {
         return new LOEvent(LOEvent.REDRAW);
     }
 
-    public static LOEvent tileRequest(TileIdentifier tileRequest) {
-        return new LOEvent(LOEvent.TILE_REQUEST, tileRequest);
+    public static LOEvent tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileRequest) {
+        return new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileRequest);
     }
 }

@@ -5,6 +5,8 @@
 
 package org.mozilla.gecko.gfx;
 
+import android.graphics.Rect;
+
 import org.libreoffice.TileIdentifier;
 
 public class SubTile extends SingleTileLayer {
@@ -14,6 +16,16 @@ public class SubTile extends SingleTileLayer {
     public SubTile(CairoImage mImage, TileIdentifier id) {
         super(mImage);
         this.id = id;
+    }
+
+    public void refreshTileMetrics() {
+        Rect position = getPosition();
+        float positionX = id.x / id.zoom;
+        float positionY = id.y / id.zoom;
+        float tileSizeWidth = id.size.width / id.zoom;
+        float tileSizeHeight = id.size.height / id.zoom;
+        position.set((int) positionX, (int) positionY, (int) (positionX + tileSizeWidth), (int) (positionY + tileSizeHeight));
+        setPosition(position);
     }
 
     public void markForRemoval() {

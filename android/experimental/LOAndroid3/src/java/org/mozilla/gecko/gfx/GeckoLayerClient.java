@@ -15,8 +15,6 @@ import android.util.Log;
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
-import org.libreoffice.TileIdentifier;
-import org.libreoffice.TileProvider;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.util.FloatUtils;
 
@@ -35,7 +33,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     private boolean mRecordDrawTimes;
     private final DrawTimingQueue mDrawTimingQueue;
 
-    private DynamicTileLayer mRootLayer;
+    private ComposedTileLayer mRootLayer;
 
     /* The Gecko viewport as per the UI thread. Must be touched only on the UI thread.
      * If any events being sent to Gecko that are relative to the Gecko viewport position,
@@ -228,7 +226,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
             mDrawTimingQueue.add(displayPort);
         }
 
-        LOKitShell.sendEvent(LOEventFactory.viewport(clampedMetrics));
+        reevaluateTiles();
     }
 
     /**
@@ -472,10 +470,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     }
 
     /* Root Layer Access */
-    public void setTileProvider(TileProvider tileProvider) {
-        mRootLayer.setTileProvider(tileProvider);
-    }
-
     public void reevaluateTiles() {
         mRootLayer.reevaluateTiles(getViewportMetrics());
     }
@@ -483,9 +477,4 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     public void clearAndResetlayers() {
         mRootLayer.clearAndReset();
     }
-
-    public void addTile(TileIdentifier tileId) {
-        mRootLayer.addTile(tileId);
-    }
-
 }
