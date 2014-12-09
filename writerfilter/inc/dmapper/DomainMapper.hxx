@@ -21,7 +21,6 @@
 
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 
 #include <map>

@@ -60,6 +60,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/text/FontEmphasis.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <filter/msfilter/util.hxx>
