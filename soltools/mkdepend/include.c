@@ -104,7 +104,7 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
         else
         {
             int partial = (p - file);
-            int inc_len = strlen(include);
+            size_t inc_len = strlen(include);
             if(inc_len + partial >= BUFSIZ )
             {
                 fatalerr("include filename too long \"%s\"\n", include);
