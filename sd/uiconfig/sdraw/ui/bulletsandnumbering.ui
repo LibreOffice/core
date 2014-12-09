@@ -6,6 +6,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Bullets and Numbering</property>
+    <property name="resizable">False</property>
     <property name="window_position">mouse</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -59,6 +60,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
