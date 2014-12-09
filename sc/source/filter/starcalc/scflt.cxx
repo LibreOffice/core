@@ -1460,8 +1460,10 @@ void Sc10Import::LoadTables()
         for (i=0; i < DataCount; i++)
         {
             rStream.ReadUInt16( DataEnd );
+            DataEnd = SanitizeCol(DataEnd);
             rStream.ReadUInt16( DataValue );
-            for (SCCOL j = static_cast<SCCOL>(DataStart); j <= static_cast<SCCOL>(DataEnd); j++) pDoc->SetColWidth(j, static_cast<SCTAB> (TabNo), DataValue);
+            for (SCCOL j = static_cast<SCCOL>(DataStart); j <= static_cast<SCCOL>(DataEnd); j++)
+                pDoc->SetColWidth(j, static_cast<SCTAB> (TabNo), DataValue);
             DataStart = DataEnd + 1;
         }
         pPrgrsBar->Progress();
