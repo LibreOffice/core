@@ -332,13 +332,12 @@ namespace HelperNotifyChanges
 //      actual functions
 
 //  input - undo OK
-
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             const OUString& rString,
                             const EditTextObject* pData )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
-    ScMarkData& rMark = GetViewData().GetMarkData();
+    ScMarkData rMark(GetViewData().GetMarkData());
     bool bRecord = pDoc->IsUndoEnabled();
     SCTAB i;
 
