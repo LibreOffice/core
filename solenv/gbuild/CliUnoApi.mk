@@ -13,7 +13,8 @@ gb_CliUnoApi_EXT := $(gb_CliAssembly_POLICYEXT)
 
 gb_CliUnoApi_KEYFILE_DEFAULT := $(gb_CliAssembly_KEYFILE_DEFAULT)
 
-gb_CliUnoApi_DEPS := $(call gb_Executable_get_runtime_dependencies,climaker)
+gb_CliUnoApi_DEPS := $(call gb_Executable_get_runtime_dependencies,climaker) \
+    $(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
 gb_CliUnoApi_COMMAND := $(call gb_Executable_get_command,climaker)
 
 define gb_CliUnoApi__command
