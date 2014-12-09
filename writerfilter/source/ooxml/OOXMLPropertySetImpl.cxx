@@ -20,7 +20,7 @@
 #include "OOXMLPropertySetImpl.hxx"
 #include <stdio.h>
 #include <iostream>
-#include <resourcemodel/QNameToString.hxx>
+#include <ooxml/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <oox/token/tokens.hxx>
 

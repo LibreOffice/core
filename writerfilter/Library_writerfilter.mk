@@ -122,10 +122,10 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLParserState \
     writerfilter/source/ooxml/OOXMLPropertySetImpl \
     writerfilter/source/ooxml/OOXMLStreamImpl \
+    writerfilter/source/ooxml/qnametostrcore \
     writerfilter/source/resourcemodel/LoggedResources \
     writerfilter/source/resourcemodel/ResourceModelHelper \
     writerfilter/source/resourcemodel/TagLogger \
-    writerfilter/source/resourcemodel/qnametostrcore \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\

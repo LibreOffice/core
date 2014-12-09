@@ -19,12 +19,12 @@ class ContentHandler(xml.sax.handler.ContentHandler):
     def startDocument(self):
         print("""
 #include "ooxml/resourceids.hxx"
-#include "resourcemodel/QNameToString.hxx"
+#include "ooxml/QNameToString.hxx"
 
 namespace writerfilter
 {
 
-void QNameToString::init_ooxml()
+void QNameToString::init()
 {
 #ifdef DEBUG_WRITERFILTER
     /* ooxml */

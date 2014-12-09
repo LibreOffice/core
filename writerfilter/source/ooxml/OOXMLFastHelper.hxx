@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTHELPER_HXX
 
 #include <iostream>
-#include <resourcemodel/QNameToString.hxx>
+#include <ooxml/QNameToString.hxx>
 #include "OOXMLFastContextHandler.hxx"
 
 namespace writerfilter {

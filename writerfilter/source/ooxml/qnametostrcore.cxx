@@ -16,44 +16,40 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
-#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
 
-#include <boost/shared_ptr.hpp>
-#include <map>
-#include <string>
-#include <iostream>
-#include <resourcemodel/WW8ResourceModel.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <ooxml/QNameToString.hxx>
 
 namespace writerfilter
 {
 
-class QNameToString
+QNameToString::Pointer_t QNameToString::pInstance;
+
+QNameToString::Pointer_t QNameToString::Instance()
 {
-    typedef boost::shared_ptr<QNameToString> Pointer_t;
-    typedef std::map < Id, std::string > Map;
+    if (pInstance.get() == nullptr)
+        pInstance = QNameToString::Pointer_t(new QNameToString());
 
-    static Pointer_t pInstance;
-
-    void init_ooxml();
-
-    Map mMap;
-
-protected:
-    /**
-       Generated.
-     */
-    QNameToString();
-
-public:
-    static Pointer_t Instance();
-
-    std::string operator()(Id qName);
-};
-
+    return pInstance;
 }
 
-#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_QNAMETOSTRING_HXX
+std::string QNameToString::operator()(Id qName)
+{
+    (void) qName;
+#ifdef DEBUG_WRITERFILTER
+    Map::const_iterator aIt = mMap.find(qName);
+
+    if (aIt != mMap.end())
+        return aIt->second;
+
+#endif
+    return std::string();
+}
+
+QNameToString::QNameToString()
+{
+    init();
+}
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

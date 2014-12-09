@@ -12,7 +12,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <ooxml/resourceids.hxx>
-#include <resourcemodel/QNameToString.hxx>
+#include <ooxml/QNameToString.hxx>
 
 
 namespace writerfilter

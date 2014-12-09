@@ -20,7 +20,7 @@
 #include <libxml/xmlstring.h>
 #include <string.h>
 #include <resourcemodel/TagLogger.hxx>
-#include <resourcemodel/QNameToString.hxx>
+#include <ooxml/QNameToString.hxx>
 #include <boost/unordered_map.hpp>
 
 using namespace css;

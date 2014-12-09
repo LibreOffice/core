@@ -19,7 +19,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <resourcemodel/LoggedResources.hxx>
-#include <resourcemodel/QNameToString.hxx>
+#include <ooxml/QNameToString.hxx>
 
 using namespace ::com::sun::star;
 
