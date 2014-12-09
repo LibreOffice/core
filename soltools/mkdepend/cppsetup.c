@@ -151,7 +151,7 @@ _my_if_errors (IfParser *ip, const char *cp, const char *expecting)
 #define MAXNAMELEN 256
 
 char *
-_lookup_variable (const char *var, int len)
+_lookup_variable (const char *var, size_t len)
 {
     char tmpbuf[MAXNAMELEN + 1];
 
@@ -165,7 +165,7 @@ _lookup_variable (const char *var, int len)
 
 
 static int
-_my_eval_defined (IfParser *ip, const char *var, int len)
+_my_eval_defined (IfParser *ip, const char *var, size_t len)
 {
     (void)ip;
     if (_lookup_variable (var, len))
@@ -177,7 +177,7 @@ _my_eval_defined (IfParser *ip, const char *var, int len)
 #define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
 
 static int
-_my_eval_variable (IfParser *ip, const char *var, int len)
+_my_eval_variable (IfParser *ip, const char *var, size_t len)
 {
     char *s;
 

@@ -157,7 +157,7 @@ parse_value (IfParser *g, const char *cp, int *valp)
       case 'd':
         if (strncmp (cp, "defined", 7) == 0 && !isalnum(cp[7])) {
             int paren = 0;
-            int len;
+            size_t len;
 
             cp += 7;
             SKIPSPACE (cp);
@@ -166,7 +166,7 @@ parse_value (IfParser *g, const char *cp, int *valp)
               cp++;
             }
             DO (cp = parse_variable (g, cp, &var));
-            len = (int)(cp - var);
+            len = (size_t)(cp - var);
             SKIPSPACE (cp);
             if (paren && *cp != ')')
                 return CALLFUNC(g, handle_error) (g, cp, ")");
@@ -182,7 +182,7 @@ parse_value (IfParser *g, const char *cp, int *valp)
       return CALLFUNC(g, handle_error) (g, cp, "variable or number");
     else {
       DO (cp = parse_variable (g, cp, &var));
-      *valp = (*(g->funcs.eval_variable)) (g, var, cp - var);
+      *valp = (*(g->funcs.eval_variable)) (g, var, (size_t)(cp - var));
     }
 
     return cp;
