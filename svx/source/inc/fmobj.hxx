@@ -29,6 +29,8 @@
 
 class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
 {
+    FmFormObj( const FmFormObj& ); // disabled
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >  aEvts;  // events des Objects
     ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
