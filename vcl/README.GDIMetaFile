@@ -189,20 +189,19 @@ Basic pseudocode
 ----------------
 
 The following illustrates an exceptionally basic and incomplete implementation of how to use
-GDIMetafile (TODO: put this into a unit test, or a vcl demo app).
+GDIMetafile. An example can be found at vcl/workben/mtfdemo.cxx
 
 
-main()
+DemoWin::Paint()
 {
     // assume that VCL has been initialized and a new application created
 
     Window* pWin = new WorkWindow();
     GDIMetaFile* pMtf = new GDIMetaFile();
 
-    ifstream aInFile;
-    aInFile.open("example.emf");
+    SvFileStream aFileStream("example.emf", STEAM_READ);
 
-    pMtf->Read(aInFile);
+    ReadWindowMetafile(aFileStream, pMtf);
     pMtf->Play(pWin);
     
 }
