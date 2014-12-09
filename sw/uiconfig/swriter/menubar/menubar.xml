@@ -433,6 +433,7 @@
       <menu:menuitem menu:id=".uno:TableSort"/>
       <menu:menuitem menu:id=".uno:InsertFormula"/>
       <menu:menuitem menu:id=".uno:TableNumberFormatDialog"/>
+      <menu:menuitem menu:id=".uno:TableNumberRecognition"/>
       <menu:menuitem menu:id=".uno:TableBoundaries"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:TableDialog"/>

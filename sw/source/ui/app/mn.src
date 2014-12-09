@@ -768,6 +768,9 @@ Menu MN_TAB_POPUPMENU
         MENU_PASTE_SPECIAL
         _NUMBERING_RELATED_MENU
         SEPARATOR ;
+        MN_TAB1
+        MN_TAB2
+        SEPARATOR ;
         MN_RESET
         MN_TEXT_ATTR
         SEPARATOR ;
@@ -780,22 +783,6 @@ Menu MN_TAB_POPUPMENU
             ITEM_FORMAT_PARA_DLG
         };
         ITEM_TRANSLITERATE_MENU
-        SEPARATOR ;
-        MN_TAB1
-        MN_TAB2
-        MN_FRM_CAPTION_ITEM
-        MenuItem
-        {
-            Identifier = FN_VIEW_TABLEGRID ;
-            HelpId = CMD_FN_VIEW_TABLEGRID ;
-            Text [ en-US ] = "Table Boundaries" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_SET_MODOPT_TBLNUMFMT ;
-            HelpId = CMD_FN_SET_MODOPT_TBLNUMFMT ;
-            Text [ en-US ] = "~Number Recognition";
-        };
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
     };
