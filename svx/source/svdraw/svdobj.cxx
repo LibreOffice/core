@@ -135,6 +135,7 @@
 #include <svdobjuserdatalist.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/optional.hpp>
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
@@ -271,6 +272,15 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
 struct SdrObject::Impl
 {
     sdr::ObjectUserVector maObjectUsers;
+
+    boost::optional<double> mnRelativeWidth;
+    sal_Int16               meRelativeWidthRelation;
+    boost::optional<double> mnRelativeHeight;
+    sal_Int16               meRelativeHeightRelation;
+
+    Impl() :
+        meRelativeWidthRelation(text::RelOrientation::PAGE_FRAME),
+        meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME) {}
 };
 
 
@@ -360,8 +370,6 @@ SdrObject::SdrObject() :
     ,pGrabBagItem(NULL)
     ,mnNavigationPosition(SAL_MAX_UINT32)
     ,mnLayerID(0)
-    ,meRelativeWidthRelation(text::RelOrientation::PAGE_FRAME)
-    ,meRelativeHeightRelation(text::RelOrientation::PAGE_FRAME)
     ,mpSvxShape( NULL )
     ,maWeakUnoShape()
     ,mbDoNotInsertIntoPageAutomatically(false)
@@ -544,6 +552,52 @@ SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
     }
 
     return *mpGlobalItemPool;
+}
+
+void SdrObject::SetRelativeWidth( double nValue )
+{
+    mpImpl->mnRelativeWidth.reset( nValue );
+}
+
+void SdrObject::SetRelativeWidthRelation( sal_Int16 eValue )
+{
+    mpImpl->meRelativeWidthRelation = eValue;
+}
+
+void SdrObject::SetRelativeHeight( double nValue )
+{
+    mpImpl->mnRelativeHeight.reset( nValue );
+}
+
+void SdrObject::SetRelativeHeightRelation( sal_Int16 eValue )
+{
+    mpImpl->meRelativeHeightRelation = eValue;
+}
+
+const double* SdrObject::GetRelativeWidth( ) const
+{
+    if (!mpImpl->mnRelativeWidth)
+        return NULL;
+
+    return &mpImpl->mnRelativeWidth.get();
+}
+
+sal_Int16 SdrObject::GetRelativeWidthRelation() const
+{
+    return mpImpl->meRelativeWidthRelation;
+}
+
+const double* SdrObject::GetRelativeHeight( ) const
+{
+    if (!mpImpl->mnRelativeHeight)
+        return NULL;
+
+    return &mpImpl->mnRelativeHeight.get();
+}
+
+sal_Int16 SdrObject::GetRelativeHeightRelation() const
+{
+    return mpImpl->meRelativeHeightRelation;
 }
 
 SfxItemPool & SdrObject::GetObjectItemPool() const
@@ -1530,10 +1584,10 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
     if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
         if (bUnsetRelative)
         {
-            mnRelativeWidth.reset( );
-            meRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
-            meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
-            mnRelativeHeight.reset( );
+            mpImpl->mnRelativeWidth.reset();
+            mpImpl->meRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
+            mpImpl->meRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
+            mpImpl->mnRelativeHeight.reset();
         }
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         NbcResize(rRef,xFact,yFact);
