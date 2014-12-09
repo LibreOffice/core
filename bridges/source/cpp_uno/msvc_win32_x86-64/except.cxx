@@ -466,9 +466,20 @@ struct ExceptionType
             // As _n0 is always initialized to zero, that means the
             // hasvirtbase flag (see the ONTL catchabletype struct) is
             // off, and thus the copyctor is of the ctor_ptr kind.
-            _pTypeInfo = (sal_uInt32) ((sal_uInt64) mscx_getRTTI( pTD->pTypeName ) - pCodeBase);
+            type_info * ti = mscx_getRTTI(pTD->pTypeName);
+            assert(
+                pCodeBase <= reinterpret_cast<sal_uInt64>(ti)
+                && reinterpret_cast<sal_uInt64>(ti) - pCodeBase < 0x100000000);
+                //TODO
+            _pTypeInfo = static_cast<sal_uInt32>(
+                reinterpret_cast<sal_uInt64>(ti) - pCodeBase);
             GenerateConstructorTrampoline( pCode, pTD );
-            _pCopyCtor = (sal_uInt32) ((sal_uInt64) pCode - pCodeBase);
+            assert(
+                pCodeBase <= reinterpret_cast<sal_uInt64>(pCode)
+                && (reinterpret_cast<sal_uInt64>(pCode) - pCodeBase
+                    < 0x100000000)); //TODO
+            _pCopyCtor = static_cast<sal_uInt32>(
+                reinterpret_cast<sal_uInt64>(pCode) - pCodeBase);
         }
     inline ~ExceptionType() throw ()
         {
@@ -533,7 +544,8 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
 
     unsigned char * pCode = _code = (unsigned char *)::rtl_allocateMemory( codeSize );
 
-    _codeBase = (sal_uInt64)pCode & ~(ExceptionInfos::allocationGranularity-1);
+    _codeBase = reinterpret_cast<sal_uInt64>(pCode)
+        & ~static_cast<sal_uInt64>(ExceptionInfos::allocationGranularity - 1);
 
     DWORD old_protect;
 #if OSL_DEBUG_LEVEL > 0
@@ -549,19 +561,28 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
     pCode += codeSnippetSize;
 
     // Info count accompanied by type info ptrs: type, base type, base base type, ...
-    _types = (sal_Int32)((sal_uInt64)::rtl_allocateMemory( 4 + 4* nLen) - _codeBase);
-    *(sal_Int32 *)_types = nLen;
+    DWORD * types = static_cast<DWORD *>(rtl_allocateMemory(4 + 4 * nLen));
+    assert(
+        _codeBase <= reinterpret_cast<sal_uInt64>(types)
+        && reinterpret_cast<sal_uInt64>(types) - _codeBase < 0x100000000);
+        //TODO
+    _types = static_cast<sal_Int32>(
+        reinterpret_cast<sal_uInt64>(types) - _codeBase);
+    types[0] = nLen;
 
-    ExceptionType ** ppTypes = (ExceptionType **)((sal_Int32 *)_types + 1);
-
-    int nPos = 0;
+    int nPos = 1;
     for ( pCompTD = (typelib_CompoundTypeDescription*)pTD;
           pCompTD; pCompTD = pCompTD->pBaseTypeDescription )
     {
-        ppTypes[nPos++] =
-            new ExceptionType( pCode, _codeBase,
-                               (typelib_TypeDescription *)pCompTD );
+        ExceptionType * et = new ExceptionType(
+            pCode, _codeBase, (typelib_TypeDescription *)pCompTD);
         pCode += codeSnippetSize;
+        assert(
+            _codeBase <= reinterpret_cast<sal_uInt64>(et)
+            && reinterpret_cast<sal_uInt64>(et) - _codeBase < 0x100000000);
+            //TODO
+        types[nPos++]
+            = static_cast<DWORD>(reinterpret_cast<sal_uInt64>(et) - _codeBase);
     }
 }
 
