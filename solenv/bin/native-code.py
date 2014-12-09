@@ -49,6 +49,9 @@ core_factory_list = [
     ("libxolo.a", "xo_component_getFactory"),
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
+    ("libcanvasfactorylo.a", "canvasfactory_component_getFactory", "#ifdef ANDROID"),
+    ("libvclcanvaslo.a", "vclcanvas_component_getFactory", "#ifdef ANDROID"),
+    ("libmtfrendererlo.a", "mtfrenderer_component_getFactory", "#ifdef ANDROID"),
     ]
 
 core_constructor_list = [
