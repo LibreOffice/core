@@ -91,7 +91,7 @@ struct __cxa_exception
   // Stack of exceptions in cleanups.
   __cxa_exception* nextPropagatingException;
 
-  // The nuber of active cleanup handlers for this exception.
+  // The number of active cleanup handlers for this exception.
   int propagationCount;
 #else
   // Cache parsed handler data from the personality routine Phase 1
@@ -139,7 +139,7 @@ struct __cxa_dependent_exception
   // Stack of exceptions in cleanups.
   __cxa_exception* nextPropagatingException;
 
-  // The nuber of active cleanup handlers for this exception.
+  // The number of active cleanup handlers for this exception.
   int propagationCount;
 #else
   // Cache parsed handler data from the personality routine Phase 1
