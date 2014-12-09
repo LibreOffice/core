@@ -267,6 +267,8 @@ Edit::~Edit()
         uno::Reference< lang::XEventListener> xEL( mxDnDListener, uno::UNO_QUERY );
         xEL->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
     }
+
+    SetType(WINDOW_WINDOW);
 }
 
 void Edit::ImplInitEditData()
