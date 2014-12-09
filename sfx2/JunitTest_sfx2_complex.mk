@@ -38,7 +38,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
     sfx2/qa/complex/sfx2/DocumentProperties \
     sfx2/qa/complex/sfx2/GlobalEventBroadcaster \
     sfx2/qa/complex/sfx2/UndoManager \
-    sfx2/qa/complex/sfx2/JUnitBasedTest \
     sfx2/qa/complex/sfx2/DocumentEvents \
     sfx2/qa/complex/sfx2/tools/DialogThread \
     sfx2/qa/complex/sfx2/tools/TestDocument \

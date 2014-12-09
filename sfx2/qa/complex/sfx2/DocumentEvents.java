@@ -1,15 +1,18 @@
 package complex.sfx2;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
 import org.openoffice.test.tools.OfficeDocument;
 
 import com.sun.star.document.DocumentEvent;
@@ -17,18 +20,35 @@ import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XEventListener;
-import com.sun.star.uno.Exception;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseListener;
 import com.sun.star.util.XCloseable;
 
-public class DocumentEvents extends JUnitBasedTest
+public class DocumentEvents
 {
+    private static final OfficeConnection m_connection = new OfficeConnection();
+
+    @BeforeClass
+    public static void setUpConnection() throws Exception
+    {
+        m_connection.setUp();
+    }
+
+
+    @AfterClass
+    public static void tearDownConnection() throws InterruptedException, com.sun.star.uno.Exception
+    {
+        m_connection.tearDown();
+    }
+
     @Before
     public void beforeTest() throws Exception
     {
-        m_document = OfficeDocument.blankTextDocument( this.getORB() );
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(
+                XMultiServiceFactory.class, m_connection.getComponentContext().getServiceManager() );
+        m_document = OfficeDocument.blankTextDocument( xMSF1 );
     }
 
     @After
