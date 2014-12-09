@@ -55,6 +55,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_right">6</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -62,7 +63,6 @@
                 <property name="fill">True</property>
                 <property name="position">2</property>
                 <property name="secondary">True</property>
-                <property name="non_homogeneous">True</property>
               </packing>
             </child>
           </object>
