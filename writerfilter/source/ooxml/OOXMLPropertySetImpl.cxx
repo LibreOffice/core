@@ -831,6 +831,9 @@ void OOXMLPropertySetEntryToString::attribute(Id nId, Value & rValue)
         mStr = rValue.getString();
 }
 
+/*
+  class: OOXMLPropertySetEntryToInteger
+*/
 
 OOXMLPropertySetEntryToInteger::OOXMLPropertySetEntryToInteger(Id nId)
 : mnId(nId), mnValue(0)
@@ -851,6 +854,23 @@ void OOXMLPropertySetEntryToInteger::attribute(Id nId, Value & rValue)
         mnValue = rValue.getInt();
 }
 
+/*
+  class: OOXMLPropertySetEntryToBool
+*/
+
+OOXMLPropertySetEntryToBool::OOXMLPropertySetEntryToBool(Id nId)
+    : mnId(nId), mValue(false)
+{}
+
+OOXMLPropertySetEntryToBool::~OOXMLPropertySetEntryToBool() {}
+
+void OOXMLPropertySetEntryToBool::sprm(Sprm & /*rSprm*/) {}
+
+void OOXMLPropertySetEntryToBool::attribute(Id nId, Value & rValue)
+{
+    if (nId == mnId)
+        mValue = (rValue.getInt() != 0);
+}
 
 }}
 
