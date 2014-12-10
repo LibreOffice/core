@@ -300,6 +300,8 @@ struct BlendFrameCache
 
 struct ImplSVData
 {
+    ImplSVData();
+
     SalData*                mpSalData;
     SalInstance*            mpDefInst;                      // Default SalInstance
     Application*            mpApp;                          // pApp
@@ -339,9 +341,7 @@ struct ImplSVData
     Link maDeInitHook;
 };
 
-void        ImplInitSVData();
 void        ImplDeInitSVData();
-void        ImplDestroySVData();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
 VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
 VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
@@ -357,8 +357,7 @@ void        ImplFreeEventHookData();
 
 bool        ImplCallPreNotify( NotifyEvent& rEvt );
 
-extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
-inline ImplSVData* ImplGetSVData() { return pImplSVData; }
+VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
 VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
 bool ImplInitAccessBridge();

@@ -241,7 +241,6 @@ public:
     @attention The initialization of the application itself is done in Init()
 
     @see    InitSalData is implemented by platform specific code.
-            ImplInitSVData initializes the global instance data
     */
                                 Application();
 

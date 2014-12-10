@@ -240,9 +240,6 @@ bool InitVCL()
 
     EmbeddedFontsHelper::clearTemporaryFontFiles();
 
-    if( ! ImplGetSVData() )
-        ImplInitSVData();
-
     if( !ImplGetSVData()->mpApp )
     {
         pOwnSvApp = new Application();

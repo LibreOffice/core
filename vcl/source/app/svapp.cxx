@@ -194,8 +194,6 @@ Application::Application()
     OUString aVar("LIBO_VERSION"), aValue(LIBO_VERSION_DOTTED);
     osl_setEnvironment(aVar.pData, aValue.pData);
 
-    if( ! ImplGetSVData() )
-        ImplInitSVData();
     ImplGetSVData()->mpApp = this;
     InitSalData();
 }
@@ -205,7 +203,6 @@ Application::~Application()
     ImplDeInitSVData();
     DeInitSalData();
     ImplGetSVData()->mpApp = NULL;
-    ImplDestroySVData();
 }
 
 int Application::Main()

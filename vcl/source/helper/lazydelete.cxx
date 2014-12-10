@@ -80,11 +80,6 @@ DeleteOnDeinitBase::~DeleteOnDeinitBase()
 void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData )
-    {
-        ImplInitSVData();
-        pSVData = ImplGetSVData();
-    }
 
     DBG_ASSERT( ! pSVData->mbDeInit, "DeleteOnDeinit added after DeiInitVCL !" );
     if( pSVData->mbDeInit )

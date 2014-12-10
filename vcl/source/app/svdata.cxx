@@ -64,8 +64,9 @@ namespace
         public rtl::Static<ImplSVData, private_aImplSVData> {};
 }
 
-// static SV-Data
-ImplSVData* pImplSVData = NULL;
+ImplSVData* ImplGetSVData() {
+    return &private_aImplSVData::get();
+}
 
 SalSystem* ImplGetSalSystem()
 {
@@ -75,14 +76,12 @@ SalSystem* ImplGetSalSystem()
     return pSVData->mpSalSystem;
 }
 
-void ImplInitSVData()
+ImplSVData::ImplSVData()
 {
-    pImplSVData = &private_aImplSVData::get();
-
     // init global instance data
-    memset( pImplSVData, 0, sizeof( ImplSVData ) );
-    pImplSVData->maHelpData.mbAutoHelpId = true;
-    pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
+    memset( this, 0, sizeof( ImplSVData ) );
+    maHelpData.mbAutoHelpId = true;
+    maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 }
 
 void ImplDeInitSVData()
@@ -102,11 +101,6 @@ void ImplDeInitSVData()
         delete pSVData->maCtrlData.mpCleanUnitStrings, pSVData->maCtrlData.mpCleanUnitStrings = NULL;
     if( pSVData->mpPaperNames )
         delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
-}
-
-void ImplDestroySVData()
-{
-    pImplSVData = NULL;
 }
 
 vcl::Window* ImplGetDefaultWindow()
