@@ -183,7 +183,7 @@ void EditUndoDelContent::Redo()
     pEE->RemoveParaPortion(nNode);
 
     // Do not delete node, depends on the undo!
-    pEE->GetEditDoc().Remove( nNode );
+    pEE->GetEditDoc().Release( nNode );
     if (pEE->IsCallParaInsertedOrDeleted())
         pEE->ParagraphDeleted( nNode );
 
