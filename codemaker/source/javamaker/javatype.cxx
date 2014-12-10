@@ -1825,18 +1825,22 @@ void handleExceptionType(
     MethodDescriptor desc2(manager, dependencies, "void", 0, 0);
     code.reset(cf->newCode());
     code->loadLocalReference(0);
-    sal_uInt16 index3 = 1;
-    code->loadLocalReference(index3++);
-    code->loadLocalReference(index3++);
+    sal_uInt16 index3 = 3;
     // Note that we hack in the java.lang.Throwable parameter further down,
     // because MethodDescriptor does not know how to handle it.
     desc2.addParameter("string", false, true, 0);
-    if (!(baseException || baseRuntimeException)) {
+    if (baseException || baseRuntimeException) {
+        code->loadLocalReference(2);
+        code->loadLocalReference(1);
+        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/String;Ljava/lang/Throwable;)V");
+    } else {
+        code->loadLocalReference(1);
+        code->loadLocalReference(2);
         addExceptionBaseArguments(
             manager, dependencies, &desc2, code.get(), entity->getDirectBase(),
             &index3);
+        code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/Throwable;" + desc2.getDescriptor().copy(1));
     }
-    code->instrInvokespecial(superClass, "<init>", "(Ljava/lang/Throwable;" + desc2.getDescriptor().copy(1));
     sal_uInt16 maxSize2 = index3;
     if (baseRuntimeException) {
         maxSize2 = std::max(
