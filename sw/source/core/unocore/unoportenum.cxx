@@ -1284,6 +1284,7 @@ static void lcl_CreatePortions(
     std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pUnoCrsr->GetNode());
 
     bool bAtEnd( false );
+    sal_Int32 nOldIndex = -1;
     while (!bAtEnd) // every iteration consumes at least current character!
     {
         if (pUnoCrsr->HasMark())
@@ -1302,6 +1303,9 @@ static void lcl_CreatePortions(
         SwpHints * const pHints = pTxtNode->GetpSwpHints();
         const sal_Int32 nCurrentIndex =
             pUnoCrsr->GetPoint()->nContent.GetIndex();
+        // Make sure we are not looping forever
+        assert(nOldIndex == -1 || nOldIndex < nCurrentIndex);
+        nOldIndex = nCurrentIndex;
         // this contains the portion which consumes the character in the
         // text at nCurrentIndex; i.e. it must be set _once_ per iteration
         uno::Reference< XTextRange > xRef;

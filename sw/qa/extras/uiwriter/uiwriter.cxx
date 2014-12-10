@@ -61,8 +61,10 @@ public:
     void testChineseConversionSimplifiedToTraditional();
     void testFdo85554();
     void testAutoCorr();
+    void testUNOMethod();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
+    /*
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testFdo69893);
@@ -85,6 +87,8 @@ public:
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testAutoCorr);
+    */
+    CPPUNIT_TEST(testUNOMethod);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -618,6 +622,21 @@ void SwUiWriterTest::testAutoCorr()
     const uno::Reference< text::XTextTable > xTable(getParagraphOrTable(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+}
+
+void SwUiWriterTest::testUNOMethod()
+{
+    createDoc("uno-cycle.odt");
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName("Mark"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xTextCursor(xText->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextCursor.is());
+
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+            xTextCursor->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+    // Hits assert in lcl_CreatePortions or loops forever
+    xParagraph->createEnumeration();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
