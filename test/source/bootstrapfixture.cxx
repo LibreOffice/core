@@ -30,6 +30,8 @@
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 
+#include <isheadless.hxx>
+
 #include <boost/scoped_array.hpp>
 #include <cstring>
 
@@ -100,7 +102,7 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
         LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
 
         InitVCL();
-        if (Application::IsHeadlessModeRequested())
+        if (test::isHeadless())
             Application::EnableHeadlessMode(true);
 
         test_init_impl(false, true, pFactory);

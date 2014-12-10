@@ -25,6 +25,8 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
 
+#include <isheadless.hxx>
+
 namespace {
 
 class Protector: public CppUnit::Protector, private boost::noncopyable {
@@ -38,7 +40,7 @@ public:
         MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
         LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
         InitVCL();
-        if (Application::IsHeadlessModeRequested()) {
+        if (test::isHeadless()) {
             Application::EnableHeadlessMode(true);
         }
         Application::setDeInitHook(STATIC_LINK(this, Protector, deinitHook));
