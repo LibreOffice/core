@@ -336,7 +336,7 @@ void SdDLL::Init()
 
     // register your exotic remote controls here
 #ifdef ENABLE_SDREMOTE
-    if ( !Application::IsHeadlessModeRequested() )
+    if ( !Application::IsHeadlessModeEnabled() )
         RegisterRemotes();
 #endif
 }
