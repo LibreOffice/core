@@ -45,8 +45,8 @@ import com.sun.star.wizards.ui.event.XItemListenerAdapter;
  */
 public class ScenarioSelector extends FieldSelection implements XItemListener, XFieldSelectionListener
 {
-    final static int PRIVATE = 0;
-    final static int BUSINESS = 1;
+    private final static int PRIVATE = 0;
+    private final static int BUSINESS = 1;
 
     private final XRadioButton optBusiness;
     private XListBox xTableListBox;
@@ -171,7 +171,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
     }
 
-    public void initializeCategory(int _iCategory)
+    private void initializeCategory(int _iCategory)
     {
         try
         {
@@ -187,7 +187,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
     }
 
-    public void initializeTable(int _iTable)
+    private void initializeTable(int _iTable)
     {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                 {
@@ -293,7 +293,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public void disposing(EventObject arg0)
     {
     }
-    protected int ID;
+    private int ID;
 
     public int getID()
     {

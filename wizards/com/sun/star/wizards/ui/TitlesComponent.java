@@ -29,13 +29,13 @@ import java.util.*;
 public class TitlesComponent extends ControlScroller
 {
 
-    int iLabelPosX;
-    static final int iRelLabelPosXDist = 6;
-    public String[] fieldnames;
-    public Map<String, String> fieldtitleset;
-    public String[] fieldtitles;
-    static final String SOLABELPREFIX = "lblColumnName_";
-    static final String SOTITLEPREFIX = "lblTitleName_";
+    private int iLabelPosX;
+    private static final int iRelLabelPosXDist = 6;
+    private String[] fieldnames;
+    private Map<String, String> fieldtitleset;
+    private String[] fieldtitles;
+    private static final String SOLABELPREFIX = "lblColumnName_";
+    private static final String SOTITLEPREFIX = "lblTitleName_";
 
     public TitlesComponent(WizardDialog _CurUnoDialog, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _uitextfieldcount, String _slblColumnNames, String _slblColumnTitles, int _firsthelpindex)
     {
@@ -86,7 +86,7 @@ public class TitlesComponent extends ControlScroller
     class ControlRow
     {
 
-        XTextComponent xTextComponent;
+        private XTextComponent xTextComponent;
 
         public ControlRow(int _index, int _iCompPosY)
         {

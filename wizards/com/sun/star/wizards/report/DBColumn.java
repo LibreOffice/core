@@ -43,25 +43,25 @@ import com.sun.star.wizards.text.TextFieldHandler;
 public class DBColumn
 {
 
-    public XCell xValCell;
-    public XTextRange xValTextCell;
-    public XTextCursor xValCellCursor;
+    private XCell xValCell;
+    private XTextRange xValTextCell;
+    private XTextCursor xValCellCursor;
     public XCell xNameCell;
-    public XTextRange xNameTextCell;
-    public boolean bAlignLeft;
-    public String CharFontName;
-    public PropertyState PropertyState;
+    private XTextRange xNameTextCell;
+    private boolean bAlignLeft;
+    private String CharFontName;
+    private PropertyState PropertyState;
     public int ValColumn = 1;
-    public int ValRow = 0;
+    private int ValRow = 0;
     public FieldColumn CurDBField;
     private XTextTable xTextTable;
     private XTableColumns xTableColumns;
     private XCellRange xCellRange;
     public XNamed xTableName;
     private boolean bIsGroupColumn;
-    RecordParser CurDBMetaData;
-    RecordTable CurRecordTable;
-    TextTableHandler oTextTableHandler;
+    private RecordParser CurDBMetaData;
+    private RecordTable CurRecordTable;
+    private TextTableHandler oTextTableHandler;
 
     public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bforce)
     {
@@ -230,7 +230,7 @@ public class DBColumn
         replaceValueCellofTable(_bIsLandscape);
     }
 
-    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
+    private void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
     {
         XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
         xTextCursor.gotoStart(false);
@@ -275,7 +275,7 @@ public class DBColumn
         }
     }
 
-    public void modifyCellContent(Object CurGroupValue)
+    private void modifyCellContent(Object CurGroupValue)
     {
         double dblValue = 0;
         try
@@ -327,7 +327,7 @@ public class DBColumn
         }
     }
     // If the parameter CurGroupValue is null the placeholders are inserted
-    public void replaceValueCellofTable(boolean _bIsLandscape)
+    private void replaceValueCellofTable(boolean _bIsLandscape)
     {
         try
         {

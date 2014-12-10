@@ -74,7 +74,7 @@ public class MessageArea
     /** Show the given string at the end of the message area and scroll to make
         it visible.  Indent the string as requested.
     */
-    public static synchronized void print (int nIndentation, String aMessage)
+    private static synchronized void print (int nIndentation, String aMessage)
     {
         while (nIndentation-- > 0) {
             aMessage = " " + aMessage;
@@ -99,7 +99,7 @@ public class MessageArea
     /** Show the given string at the end of the message area and scroll to make
         it visible.
     */
-    public static void println (int nIndentation, String aMessage)
+    private static void println (int nIndentation, String aMessage)
     {
         print (nIndentation, aMessage+"\n");
     }

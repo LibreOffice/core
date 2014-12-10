@@ -36,18 +36,18 @@ import java.util.ArrayList;
 public class ReportLayouter
 {
 
-    UnoDialog CurUnoDialog;
-    static final int SOCONTENTLST = 29;
+    private UnoDialog CurUnoDialog;
+    private static final int SOCONTENTLST = 29;
     final static public int SOOPTLANDSCAPE = 30;
     final static public int SOOPTPORTRAIT = 31;
-    static final int SOLAYOUTLST = 32;
-    XListBox xContentListBox;
-    XListBox xLayoutListBox;
+    private static final int SOLAYOUTLST = 32;
+    private XListBox xContentListBox;
+    private XListBox xLayoutListBox;
     int iOldContentPos;
     int iOldLayoutPos;
-    IReportDocument CurReportDocument;
-    public String[][] LayoutFiles;
-    public String[][] ContentFiles;
+    private IReportDocument CurReportDocument;
+    private String[][] LayoutFiles;
+    private String[][] ContentFiles;
     Object aOrientationImage;
     private final XMultiServiceFactory m_xMSF;
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
@@ -365,7 +365,7 @@ public class ReportLayouter
             }
     }
 
-    public void clearConstants()
+    private void clearConstants()
     {
         constRangeList.clear();
         trTitleconst = null;
@@ -384,7 +384,7 @@ public class ReportLayouter
         te.write(tr);
     }
 
-    public List<XTextRange> searchFillInItems(int type)
+    private List<XTextRange> searchFillInItems(int type)
     {
       try
       {

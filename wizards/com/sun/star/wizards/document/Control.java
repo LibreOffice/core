@@ -40,14 +40,14 @@ public class Control extends Shape
 {
 
     XControlModel xControlModel;
-    XControl xControl;
+    private XControl xControl;
     public XPropertySet xPropertySet;
     XWindowPeer xWindowPeer;
-    String sServiceName;
-    static final int SOMAXTEXTSIZE = 50;
+    private String sServiceName;
+    private static final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
-    protected XNameContainer xFormName;
-    protected static final int IIMGFIELDWIDTH = 3000;
+    private XNameContainer xFormName;
+    private static final int IIMGFIELDWIDTH = 3000;
 
     public Control()
     {
@@ -71,7 +71,7 @@ public class Control extends Shape
         createControl(_icontroltype, null, null);
     }
 
-    public void createControl(int _icontroltype, XShapes _xGroupShapes, String _FieldName)
+    private void createControl(int _icontroltype, XShapes _xGroupShapes, String _FieldName)
     {
         try
         {
@@ -105,7 +105,7 @@ public class Control extends Shape
         }
     }
 
-    public void insertControlInContainer(String _fieldname)
+    private void insertControlInContainer(String _fieldname)
     {
         try
         {
@@ -123,7 +123,7 @@ public class Control extends Shape
         }
     }
 
-    public String getControlName(String _fieldname)
+    private String getControlName(String _fieldname)
     {
         String controlname = PropertyNames.EMPTY_STRING;
         switch (getControlType())
@@ -215,7 +215,7 @@ public class Control extends Shape
         }
     }
 
-    public Size getPreferredSize(String sText)
+    private Size getPreferredSize(String sText)
     {
         try
         {
@@ -251,12 +251,12 @@ public class Control extends Shape
     /** the peer should be retrieved every time before it is used because it
      * might be disposed otherwise
      */
-    public XLayoutConstrains getPeer()
+    private XLayoutConstrains getPeer()
     {
         return UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
     }
 
-    public Size getPeerSize()
+    private Size getPeerSize()
     {
         try
         {

@@ -21,7 +21,7 @@ package complex.olesimplestorage;
 public class TestHelper
 {
 
-    String m_sTestPrefix;
+    private String m_sTestPrefix;
 
     public TestHelper (  String sTestPrefix )
     {

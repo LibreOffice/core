@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 
 class TestHelper
 {
-    String m_sTestPrefix;
+    private String m_sTestPrefix;
 
     /** Creates a new instance of TestHelper
      */

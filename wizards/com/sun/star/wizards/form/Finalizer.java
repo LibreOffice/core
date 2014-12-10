@@ -33,11 +33,11 @@ import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 public class Finalizer
 {
 
-    WizardDialog CurUnoDialog;
-    short curtabindex;
-    XRadioButton optModifyForm;
-    XTextComponent txtFormName;
-    FormDocument oFormDocument;
+    private WizardDialog CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optModifyForm;
+    private XTextComponent txtFormName;
+    private FormDocument oFormDocument;
 
     public Finalizer(WizardDialog _CurUnoDialog)
     {

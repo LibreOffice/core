@@ -26,7 +26,7 @@ import com.sun.star.wizards.common.PropertyNames;
 public class ColumnPropertySet
 {
 
-    TypeInspector oTypeInspector;
+    private TypeInspector oTypeInspector;
     public XPropertySet xPropertySet;
     private int nType;
     private String sTypeName = PropertyNames.EMPTY_STRING;

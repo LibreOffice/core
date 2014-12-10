@@ -622,7 +622,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
 
 
-    public boolean isStoreAllowed()
+    private boolean isStoreAllowed()
         {
         return false;
         }

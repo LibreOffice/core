@@ -45,7 +45,7 @@ class AccessibleRelationHandler
     {
     }
 
-    public AccessibleRelationHandler( XAccessibleContext xContext )
+    private AccessibleRelationHandler( XAccessibleContext xContext )
     {
         XAccessibleRelationSet xRelation = xContext.getAccessibleRelationSet();
         if (xRelation != null)

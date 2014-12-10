@@ -26,9 +26,9 @@ import com.sun.star.wizards.common.PropertyNames;
 public class CGTable
 {
 
-    XMultiServiceFactory xMSF;
+    private XMultiServiceFactory xMSF;
     XNameAccess xNameAccessFieldsNode;
-    XNameAccess xNameAccessTableNode;
+    private XNameAccess xNameAccessTableNode;
 
     public CGTable(XMultiServiceFactory _xMSF)
     {

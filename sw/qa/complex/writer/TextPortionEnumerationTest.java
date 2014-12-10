@@ -3365,7 +3365,7 @@ public class TextPortionEnumerationTest
         assertEquals("gotoEndOfWord(): wrong string", "Text", string);
     }
 
-    abstract class AttachHelper
+    private abstract class AttachHelper
     {
         abstract boolean isAttribute();
         abstract TreeNode mkTreeNode();

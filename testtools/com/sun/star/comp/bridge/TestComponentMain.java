@@ -38,8 +38,8 @@ import com.sun.star.uno.UnoRuntime;
 public class TestComponentMain
 {
 
-    static class InstanceProvider implements XInstanceProvider {
-        XComponentContext ctx;
+    private static class InstanceProvider implements XInstanceProvider {
+        private XComponentContext ctx;
 
         public InstanceProvider( XComponentContext ctx )
         {

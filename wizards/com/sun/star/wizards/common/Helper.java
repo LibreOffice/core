@@ -199,7 +199,7 @@ public class Helper
      * @param oValue the parameter that has to represent an object
      * @return a null reference if the array is empty
      */
-    public static Object getArrayValue(Object oValue)
+    private static Object getArrayValue(Object oValue)
     {
         try
         {

@@ -60,7 +60,7 @@ public class FormHandler
     private static final String TEXTFIELD = "TextField";
     private static final String TIMEFIELD = "TimeField";
 
-    public XFormsSupplier xFormsSupplier;
+    private XFormsSupplier xFormsSupplier;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
     public XDrawPage xDrawPage;
@@ -76,24 +76,24 @@ public class FormHandler
     public final static int SOGRIDCONTROL = 6;
     public final static int SOIMAGECONTROL = 7;
     public final static int SODATETIMECONTROL = 8;
-    int iImageControlHeight = 2000;
+    private int iImageControlHeight = 2000;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
-    int iXPixelFactor = -1;
-    int iYPixelFactor = -1;
-    int iXNirwanaPos = 50000;
-    int iYNirwanaPos = 50000;
-    public int nLabelHeight = -1;
-    public int nDBRefHeight = -1;
-    public int BasicLabelDiffHeight = -1;
-    XNameAccess xNamedForms;
+    private int iXPixelFactor = -1;
+    private int iYPixelFactor = -1;
+    private int iXNirwanaPos = 50000;
+    private int iYNirwanaPos = 50000;
+    private int nLabelHeight = -1;
+    private int nDBRefHeight = -1;
+    private int BasicLabelDiffHeight = -1;
+    private XNameAccess xNamedForms;
     XControlAccess xControlAccess;
     XShapeGrouper xShapeGrouper;
-    XNameContainer xNamedFormContainer;
+    private XNameContainer xNamedFormContainer;
 
-    public class ControlData
+    public static class ControlData
     {
         int DataType;
-        int ControlType;
+        private int ControlType;
         String GridColumnName;
     }
 
@@ -154,7 +154,7 @@ public class FormHandler
         return -1;
     }
 
-    public void initializeBasicControlValues()
+    private void initializeBasicControlValues()
     {
         Control oLabelControl = new Control(this, SOLABEL, new Point(), new Size());
         XDevice xDevice = UnoRuntime.queryInterface(XDevice.class, oLabelControl.xWindowPeer);
@@ -169,7 +169,7 @@ public class FormHandler
         xDrawPage.remove(oTextControl.xShape);
     }
 
-    public ControlData createControlData(int _datatype, int _controltype, String _gridcolumnname)
+    private ControlData createControlData(int _datatype, int _controltype, String _gridcolumnname)
     {
         ControlData curControlData = new ControlData();
         curControlData.DataType = _datatype;
@@ -222,7 +222,7 @@ public class FormHandler
         }
     }
 
-    public boolean hasFormByName(String _FormName)
+    private boolean hasFormByName(String _FormName)
     {
         xNamedFormContainer = getDocumentForms();
         xNamedForms = UnoRuntime.queryInterface(XNameAccess.class, xNamedFormContainer);
@@ -264,7 +264,7 @@ public class FormHandler
         }
     }
 
-    public boolean belongsToForm(Object _oDrawPageElement, String _FormName)
+    private boolean belongsToForm(Object _oDrawPageElement, String _FormName)
     {
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
         if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
@@ -313,7 +313,7 @@ public class FormHandler
         return insertFormbyName(_FormName, getDocumentForms());
     }
 
-    public XNameContainer getFormByName(String _sname)
+    private XNameContainer getFormByName(String _sname)
     {
         XNameContainer xNamedForm = null;
         try

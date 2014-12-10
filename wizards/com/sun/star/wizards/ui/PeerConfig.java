@@ -33,9 +33,9 @@ public class PeerConfig implements XWindowListener
 {
 
     private final ArrayList<PeerTask> m_aPeerTasks = new ArrayList<PeerTask>();
-    ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
-    ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
-    UnoDialog oUnoDialog = null;
+    private ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
+    private ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
+    private UnoDialog oUnoDialog = null;
 
     public PeerConfig(UnoDialog _oUnoDialog)
     {
@@ -46,9 +46,9 @@ public class PeerConfig implements XWindowListener
     class PeerTask
     {
 
-        XControl xControl;
-        String[] propnames;
-        Object[] propvalues;
+        private XControl xControl;
+        private String[] propnames;
+        private Object[] propvalues;
 
         public PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_)
         {
@@ -159,7 +159,7 @@ public class PeerConfig implements XWindowListener
 
 
 
-    public void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues)
+    private void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues)
     {
         PeerTask oPeerTask = new PeerTask(_xControl, propnames, propvalues);
         this.m_aPeerTasks.add(oPeerTask);

@@ -266,7 +266,7 @@ public abstract class OfficeDocument
      *
      * @return An {@code Iterator} of {@code EmbeddedObject} objects.
      */
-    public Iterator<EmbeddedObject> getEmbeddedObjects() {
+    private Iterator<EmbeddedObject> getEmbeddedObjects() {
 
         if (embeddedObjects == null && manifestDoc != null) {
             embeddedObjects = new HashMap<String, EmbeddedObject>();

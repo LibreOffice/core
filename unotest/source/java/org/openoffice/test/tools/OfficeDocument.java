@@ -61,7 +61,7 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    protected static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
+    private static XComponent implLoadAsComponent( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
     {
         XComponentLoader aLoader = UnoRuntime.queryInterface( XComponentLoader.class,
             orb.createInstance( "com.sun.star.frame.Desktop" ) );
@@ -147,7 +147,7 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    public <T> T query( Class<T> aInterfaceClass )
+    private <T> T query( Class<T> aInterfaceClass )
     {
         return UnoRuntime.queryInterface( aInterfaceClass, m_documentComponent );
     }
@@ -207,7 +207,7 @@ public class OfficeDocument
     /* ------------------------------------------------------------------ */
     /** returns a URL which can be used to create a document of a certain type
     */
-    public static String getDocumentFactoryURL( DocumentType eType )
+    private static String getDocumentFactoryURL( DocumentType eType )
     {
         if ( eType == DocumentType.WRITER )
             return "private:factory/swriter";
@@ -227,7 +227,7 @@ public class OfficeDocument
     /* ------------------------------------------------------------------ */
     /** classifies a document
     */
-    public DocumentType classify( )
+    private DocumentType classify( )
     {
         XServiceInfo xSI = UnoRuntime.queryInterface( XServiceInfo.class, m_documentComponent );
 

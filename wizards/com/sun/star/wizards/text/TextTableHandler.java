@@ -42,7 +42,7 @@ public class TextTableHandler
 {
 
     public XTextTablesSupplier xTextTablesSupplier;
-    public XTextDocument xTextDocument;
+    private XTextDocument xTextDocument;
     private NumberFormatter oNumberFormatter;
 
     /** Creates a new instance of TextTableHandler */
@@ -136,7 +136,7 @@ public class TextTableHandler
         }
     }
 
-    public void removeTextTable(Object oTextTable)
+    private void removeTextTable(Object oTextTable)
     {
         try
         {

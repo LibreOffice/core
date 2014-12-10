@@ -112,7 +112,7 @@ public class CRMDatabase
     }
 
 
-    public XDatabaseDocumentUI getDocumentUI()
+    private XDatabaseDocumentUI getDocumentUI()
     {
         XModel docModel = UnoRuntime.queryInterface( XModel.class, m_database.getDatabaseDocument() );
         return UnoRuntime.queryInterface( XDatabaseDocumentUI.class, docModel.getCurrentController() );

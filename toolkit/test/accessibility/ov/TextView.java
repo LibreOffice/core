@@ -47,7 +47,7 @@ public class TextView
     }
 
 
-    public TextView (ObjectViewContainer aContainer)
+    private TextView (ObjectViewContainer aContainer)
     {
         super (aContainer);
 

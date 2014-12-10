@@ -65,7 +65,7 @@ public class GroupFieldHandler extends FieldSelection
         }
     }
 
-    public boolean isGroupField(String _FieldName)
+    private boolean isGroupField(String _FieldName)
     {
         return (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, _FieldName) != -1);
     }
@@ -135,7 +135,7 @@ public class GroupFieldHandler extends FieldSelection
 
     }
 
-    /* protected */ class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    /* protected */ private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         public void moveItemDown(String Selitem)

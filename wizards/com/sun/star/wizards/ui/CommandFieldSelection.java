@@ -43,7 +43,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private final WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -133,7 +133,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     /**
      * @return Returns the sQueryPrefix.
      */
-    public String getQueryPrefix()
+    private String getQueryPrefix()
     {
         if (sQueryPrefix == null)
         {
@@ -161,7 +161,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     /**
      * @return Returns the sTablePrefix.
      */
-    public String getTablePrefix()
+    private String getTablePrefix()
     {
         if (sTablePrefix == null)
         {
@@ -188,7 +188,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
     }
 
-    public void fillUpFieldsListbox()
+    private void fillUpFieldsListbox()
     {
         try
         {
@@ -318,7 +318,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         toggleCommandListBox(bdoenable);
     }
 
-    public void toggleCommandListBox(boolean _bdoenable)
+    private void toggleCommandListBox(boolean _bdoenable)
     {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlblTable), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(_bdoenable));
@@ -374,7 +374,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
     }
 
-    public void preselectCommand(String _selitem, int _nCommandType, boolean _bReadOnly)
+    private void preselectCommand(String _selitem, int _nCommandType, boolean _bReadOnly)
     {
         if (_selitem.length() > 0)
         {

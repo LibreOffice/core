@@ -27,9 +27,9 @@ import share.LogWriter;
 
 public class Test01 {
     LogWriter m_aLogWriter;
-    XMultiServiceFactory m_xMSF = null;
-    XSimpleFileAccess m_xSFA = null;
-    TestHelper m_aTestHelper = null;
+    private XMultiServiceFactory m_xMSF = null;
+    private XSimpleFileAccess m_xSFA = null;
+    private TestHelper m_aTestHelper = null;
 
     public Test01(XMultiServiceFactory xMSF, XSimpleFileAccess xSFA) {
         m_xMSF = xMSF;

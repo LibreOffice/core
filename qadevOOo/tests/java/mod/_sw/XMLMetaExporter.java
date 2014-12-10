@@ -165,14 +165,14 @@ public class XMLMetaExporter extends TestCase {
      * to log specified.
      * @see ifc.document._XFilter
      */
-    protected class MetaFilterChecker extends XMLTools.XMLTagsChecker
+    private class MetaFilterChecker extends XMLTools.XMLTagsChecker
       implements ifc.document._XFilter.FilterChecker {
 
         /**
          * Creates a class which will write information
          * into log specified.
          */
-        public MetaFilterChecker(PrintWriter log) {
+        private MetaFilterChecker(PrintWriter log) {
             super(log) ;
         }
 

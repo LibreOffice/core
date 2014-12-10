@@ -32,15 +32,15 @@ import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 public class Finalizer
 {
 
-    TableWizard CurUnoDialog;
-    short curtabindex;
-    XRadioButton optModifyTable;
-    XRadioButton optWorkWithTable;
-    XTextComponent txtTableName;
-    XListBox xCatalogListBox;
-    XListBox xSchemaListBox;
-    TableDescriptor curtabledescriptor;
-    public static int WORKWITHTABLEMODE = 0;
+    private TableWizard CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optModifyTable;
+    private XRadioButton optWorkWithTable;
+    private XTextComponent txtTableName;
+    private XListBox xCatalogListBox;
+    private XListBox xSchemaListBox;
+    private TableDescriptor curtabledescriptor;
+    private static int WORKWITHTABLEMODE = 0;
     public static int MODIFYTABLEMODE = 1;
     public static int STARTFORMWIZARDMODE = 2;
 
@@ -296,7 +296,7 @@ public class Finalizer
         return curtabledescriptor.getComposedTableName(scatalogname, sschemaname, _stablename);
     }
 
-    public void setTableName(String _tablename)
+    private void setTableName(String _tablename)
     {
         if (txtTableName.getText().equals(PropertyNames.EMPTY_STRING))
         {

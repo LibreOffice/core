@@ -168,13 +168,13 @@ public class ScAccessibleCsvCell extends TestCase {
         }
     }
 
-    public class loadThread extends Thread {
+    private class loadThread extends Thread {
 
         private final SOfficeFactory SOF;
         private final PropertyValue[] args;
         public XComponent xSpreadSheedDoc = null;
 
-        public loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
+        private loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
             this.SOF = SOF;
             this.args = Args;
         }

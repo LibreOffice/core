@@ -79,7 +79,7 @@ public class OfficeDocument
         return createNewFrame(xMSF, listener, "_blank");
     }
 
-    public static XFrame createNewFrame(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName)
+    private static XFrame createNewFrame(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName)
     {
         XFrame xFrame = null;
         if (FrameName.equalsIgnoreCase("WIZARD_LIVE_PREVIEW"))
@@ -102,7 +102,7 @@ public class OfficeDocument
         return xFrame;
     }
 
-    public static XFrame createNewPreviewFrame(XMultiServiceFactory xMSF, XTerminateListener listener)
+    private static XFrame createNewPreviewFrame(XMultiServiceFactory xMSF, XTerminateListener listener)
     {
         XToolkit xToolkit = null;
         try

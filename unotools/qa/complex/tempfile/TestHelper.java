@@ -27,7 +27,7 @@ import com.sun.star.ucb.XSimpleFileAccess;
 
 public class TestHelper {
 
-    String m_sTestPrefix;
+    private String m_sTestPrefix;
 
     public TestHelper( String sTestPrefix ) {
 

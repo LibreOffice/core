@@ -29,9 +29,9 @@ import com.sun.star.wizards.ui.FilterComponent;
 public class QuerySummary extends QueryMetaData
 {
 
-    static final protected int RID_QUERY = 2300;
-    String sSummary;
-    Resource oResource;
+    static final private int RID_QUERY = 2300;
+    private String sSummary;
+    private Resource oResource;
     private final String sSeparator;
     private final String sReturnChar;
     private final String sAnd;
@@ -148,7 +148,7 @@ public class QuerySummary extends QueryMetaData
     }
     // TODO: How can you merge the following two methods to a single one in a smarter way??
 
-    public String combinePartString(int _InitResID, String[] _FieldNames, int _AlternativeResID)
+    private String combinePartString(int _InitResID, String[] _FieldNames, int _AlternativeResID)
     {
         if (_FieldNames != null && _FieldNames.length > 0)
         {
@@ -157,7 +157,7 @@ public class QuerySummary extends QueryMetaData
         return oResource.getResText(_AlternativeResID);
     }
 
-    protected String ArrayFieldsToString(int _InitResID, String[] _FieldNames)
+    private String ArrayFieldsToString(int _InitResID, String[] _FieldNames)
     {
         String sReturn = oResource.getResText(_InitResID);
         int FieldCount = _FieldNames.length;
@@ -172,7 +172,7 @@ public class QuerySummary extends QueryMetaData
         return (sReturn);
     }
 
-    public String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags)
+    private String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags)
     {
         if (_FieldNames != null && _FieldNames.length > 0)
         {
@@ -181,7 +181,7 @@ public class QuerySummary extends QueryMetaData
         return oResource.getResText(_AlternativeResID);
     }
 
-    public String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags)
+    private String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags)
     {
         String CurString = PropertyNames.EMPTY_STRING;
         String sReturn = oResource.getResText(_InitResID);

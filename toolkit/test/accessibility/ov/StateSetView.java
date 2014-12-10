@@ -60,7 +60,7 @@ public class StateSetView
         return aView;
     }
 
-    public StateSetView (ObjectViewContainer aContainer)
+    private StateSetView (ObjectViewContainer aContainer)
     {
         super (aContainer);
 
@@ -124,7 +124,7 @@ public class StateSetView
 
 
 
-public static class StateSetAllView
+private static class StateSetAllView
     extends StateSetView
 {
     /** Create a FocusView when the given object supports the
@@ -140,7 +140,7 @@ public static class StateSetAllView
             return null;
     }
 
-    public StateSetAllView (ObjectViewContainer aContainer)
+    private StateSetAllView (ObjectViewContainer aContainer)
     {
         super (aContainer);
 
@@ -217,7 +217,7 @@ public static class StateSetAllView
 }
 
 
-public static class StateSetSetView
+private static class StateSetSetView
     extends StateSetView
 {
     static public ObjectView Create (
@@ -230,7 +230,7 @@ public static class StateSetSetView
             return null;
     }
 
-    public StateSetSetView (ObjectViewContainer aContainer)
+    private StateSetSetView (ObjectViewContainer aContainer)
     {
         super (aContainer);
 

@@ -170,7 +170,7 @@ public class Assurance
 
     public class AssureException extends RuntimeException {
 
-        public AssureException(String msg) {
+        private AssureException(String msg) {
             super(msg);
         }
         public AssureException(Throwable cause) {

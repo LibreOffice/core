@@ -109,7 +109,7 @@ public class DataSource
 
     /** provides the container of query definitions of the data source
      */
-    public XNameAccess getQueryDefinitions()
+    private XNameAccess getQueryDefinitions()
     {
         final XQueryDefinitionsSupplier suppQueries = UnoRuntime.queryInterface(
                 XQueryDefinitionsSupplier.class, m_dataSource);

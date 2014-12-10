@@ -34,10 +34,10 @@ class TestWorkAt implements TestIWorkAt {
     int _sync_counter;
     int _async_counter;
 
-    Thread _sync_thread;
-    Thread _async_thread;
+    private Thread _sync_thread;
+    private Thread _async_thread;
 
-    boolean _passedAync = true;
+    private boolean _passedAync = true;
     boolean _notified = false;
 
     public synchronized void syncCall() throws Throwable {

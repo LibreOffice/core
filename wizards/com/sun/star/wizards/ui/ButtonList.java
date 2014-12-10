@@ -65,7 +65,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     public int helpURL = 0;
     private IImageRenderer renderer;
     private ListModel listModel;
-    public IRenderer counterRenderer = new SimpleCounterRenderer();
+    private IRenderer counterRenderer = new SimpleCounterRenderer();
     private final static int LINE_HEIGHT = 8;
 
     /** Getter for property m_aButtonSize.
@@ -420,7 +420,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return gap;
     }
 
-    public ListModel getListModel()
+    private ListModel getListModel()
     {
         return listModel;
     }
@@ -485,7 +485,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         step = short1;
     }
 
-    public void setPageStart(int i)
+    private void setPageStart(int i)
     {
         if (i == pageStart)
         {
@@ -614,12 +614,12 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-    public static class Counter
+    private static class Counter
     {
 
-        public int start,  end,  max;
+        private int start,  end,  max;
 
-        public Counter(int start_, int end_, int max_)
+        private Counter(int start_, int end_, int max_)
         {
             start = start_;
             end = end_;

@@ -27,7 +27,7 @@ import com.sun.star.lib.uno.environments.java.java_environment;
 
 public class ProxyProvider
 {
-    static java_environment env= new java_environment(null);
+    private static java_environment env= new java_environment(null);
 
     /** returns Holder proxy objects for the specified interface. If the method is called
      * several times with the same arguments then each time a new HolderProxy is returned.
@@ -61,7 +61,7 @@ public class ProxyProvider
 
 class Proxy implements IQueryInterface, XEventListener
 {
-    String oid;
+    private String oid;
     Type type;
     Proxy(String oid, Type t) {
         this.oid = oid;

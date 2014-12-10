@@ -112,7 +112,7 @@ public class ColumnStyle extends Style implements Cloneable {
      *
      * @param colWidth The width of this column.
      */
-    public void setColWidth(int colWidth) {
+    private void setColWidth(int colWidth) {
 
         this.colWidth = colWidth;
     }

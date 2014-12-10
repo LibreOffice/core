@@ -40,7 +40,7 @@ class AccessibleContextHandler
         super ();
     }
 
-    public AccessibleContextHandler (XAccessibleContext xContext)
+    private AccessibleContextHandler (XAccessibleContext xContext)
     {
         super();
         if (xContext != null)

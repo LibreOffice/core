@@ -26,7 +26,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 class AccessibleTreeNode
 {
     /// The parent node.  It is null for the root node.
-    protected AccessibleTreeNode maParent;
+    private AccessibleTreeNode maParent;
 
     /// The object to be displayed.
     private final Object maDisplayObject;

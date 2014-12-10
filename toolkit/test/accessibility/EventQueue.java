@@ -27,8 +27,8 @@ import java.util.LinkedList;
 class EventQueue
     implements Runnable
 {
-    public boolean mbVerbose = false;
-    public boolean mbHandleDisposingEventsSynchronous = true;
+    private boolean mbVerbose = false;
+    private boolean mbHandleDisposingEventsSynchronous = true;
 
     public synchronized static EventQueue Instance ()
     {
