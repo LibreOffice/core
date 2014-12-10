@@ -48,8 +48,8 @@ import com.sun.star.awt.XExtendedToolkit;
 */
 public class SimpleOffice
 {
-    XDesktop mxDesktop = null;
-    OfficeConnection aConnection;
+    private XDesktop mxDesktop = null;
+    private OfficeConnection aConnection;
     int mnPortNumber;
 
     public SimpleOffice (int nPortNumber)
@@ -260,7 +260,7 @@ public class SimpleOffice
 
 
 
-    public XWindow getCurrentWindow (XModel xModel)
+    private XWindow getCurrentWindow (XModel xModel)
     {
         XWindow xWindow = null;
         try
@@ -297,7 +297,7 @@ public class SimpleOffice
 
 
 
-    public XDrawPage getCurrentDrawPage (XDrawView xView)
+    private XDrawPage getCurrentDrawPage (XDrawView xView)
     {
         XDrawPage xPage = null;
         try
@@ -320,12 +320,12 @@ public class SimpleOffice
 
     /** @descr Return the current view of the given desktop.
     */
-    public XDrawView getCurrentView ()
+    private XDrawView getCurrentView ()
     {
         return getCurrentView (getDesktop());
     }
 
-    public XDrawView getCurrentView (XDesktop xDesktop)
+    private XDrawView getCurrentView (XDesktop xDesktop)
     {
         if (xDesktop == null)
             MessageArea.println ("can't get desktop to retrieve current view");

@@ -42,7 +42,7 @@ public class MSOfficePrint
 {
     private String m_sPrinterName;               // within Windows the tools need a printer name;
 
-    public void setPrinterName(String _s) {m_sPrinterName = _s;}
+    private void setPrinterName(String _s) {m_sPrinterName = _s;}
 
 
     private static boolean isWordDocument(String _sSuffix)

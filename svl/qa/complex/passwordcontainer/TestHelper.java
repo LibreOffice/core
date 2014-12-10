@@ -22,7 +22,7 @@ import com.sun.star.task.UserRecord;
 
 
 public class TestHelper {
-    String m_sTestPrefix;
+    private String m_sTestPrefix;
 
     public TestHelper(  String sTestPrefix ) {
         m_sTestPrefix = sTestPrefix;
@@ -32,7 +32,7 @@ public class TestHelper {
         System.out.println( m_sTestPrefix + "Error: " + sError );
     }
 
-    public void Message( String sMessage ) {
+    private void Message( String sMessage ) {
         System.out.println( m_sTestPrefix + sMessage );
     }
 

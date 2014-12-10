@@ -34,8 +34,8 @@ public class FieldSelection
     protected boolean AppendMode = false;
     protected Integer IStep;
 
-    protected int CompPosY;
-    protected int CompHeight;
+    private int CompPosY;
+    private int CompHeight;
 
     private XFieldSelectionListener xFieldSelection;
     private int maxfieldcount = 10000000;
@@ -54,7 +54,7 @@ public class FieldSelection
     private final static int SOSELFLDSLST = 8;
 
 
-    class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -79,7 +79,7 @@ public class FieldSelection
         }
     }
 
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -557,7 +557,7 @@ public class FieldSelection
         }
     }
 
-    public void deselectFields(boolean bMoveAll)
+    private void deselectFields(boolean bMoveAll)
     {
         String SearchString;
         short iOldFieldSelected = xFieldsListBox.getSelectedItemPos();

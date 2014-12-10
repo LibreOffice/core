@@ -81,7 +81,7 @@ public class various extends TestCase {
      *
      * @see com.sun.star.bridge.XInstanceProvider
      */
-    protected class MyInstanceProvider implements XInstanceProvider {
+    private class MyInstanceProvider implements XInstanceProvider {
         /**
          * a MultiServiceFactory for creating instances
          *
@@ -94,7 +94,7 @@ public class various extends TestCase {
          *
          * @see com.sun.star.lang.MultiServiceFactory
          */
-        public MyInstanceProvider(XMultiServiceFactory xMSF) {
+        private MyInstanceProvider(XMultiServiceFactory xMSF) {
             this.xMSF = xMSF;
         }
 
@@ -119,23 +119,23 @@ public class various extends TestCase {
     * Then stores exception thrown by call if it occurred, or
     * return value.
     */
-    protected class AcceptorThread extends Thread {
+    private class AcceptorThread extends Thread {
         /**
         * If exception occurred during method call it is
         * stored in this field.
         */
-        public Exception ex = null ;
+        private Exception ex = null ;
         private final XAcceptor acc;
         /**
         * If method call returns some value it stores in this field.
         */
-        public XConnection acceptedCall = null ;
+        private XConnection acceptedCall = null ;
 
         /**
         * Creates object which can call <code>accept</code> method
         * of the Acceptor object specified.
         */
-        public AcceptorThread(XAcceptor acc) {
+        private AcceptorThread(XAcceptor acc) {
             this.acc = acc ;
         }
 

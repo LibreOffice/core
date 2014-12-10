@@ -96,12 +96,12 @@ public class PageContext
         return footer;
     }
 
-    public CSSNumericValue getHeaderHeight()
+    private CSSNumericValue getHeaderHeight()
     {
         return headerHeight;
     }
 
-    public CSSNumericValue getFooterHeight()
+    private CSSNumericValue getFooterHeight()
     {
         return footerHeight;
     }

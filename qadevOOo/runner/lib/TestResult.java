@@ -27,7 +27,7 @@ public class TestResult {
     /**
      * Contains methods having been tested and their results.
      */
-    protected HashMap<String, Status> testedMethods = new HashMap<String, Status>();
+    private HashMap<String, Status> testedMethods = new HashMap<String, Status>();
 
     /**
      * The method makes method tested with the result, i.e. it adds to its

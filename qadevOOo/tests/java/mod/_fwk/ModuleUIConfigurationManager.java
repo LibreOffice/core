@@ -122,13 +122,13 @@ public class ModuleUIConfigurationManager extends TestCase {
      * interface to trigger the event for a listener call.
      * @see ifc.ui._XUIConfiguration
      */
-    public static class ConfigurationListener implements _XUIConfiguration.XUIConfigurationListenerImpl {
+    private static class ConfigurationListener implements _XUIConfiguration.XUIConfigurationListenerImpl {
         private boolean triggered = false;
         private final PrintWriter log;
         private final XUIConfigurationManager xUIManager;
         private final XMultiServiceFactory xMSF;
 
-        public ConfigurationListener(PrintWriter _log, XUIConfigurationManager xUIManager, XMultiServiceFactory xMSF) {
+        private ConfigurationListener(PrintWriter _log, XUIConfigurationManager xUIManager, XMultiServiceFactory xMSF) {
             log = _log;
             this.xUIManager = xUIManager;
             this.xMSF = xMSF;

@@ -273,8 +273,8 @@ class Job implements
         }
     }
 
-    public static final String __serviceName = "test.Job";
-    static Impl impl = new Impl();
+    private static final String __serviceName = "test.Job";
+    private static Impl impl = new Impl();
 
     public Object createInstanceWithArguments(Object[] args) {
     return impl;

@@ -199,7 +199,7 @@ public class TestParameters extends HashMap<String,Object> {
      * to OOo rules.
      * @return A valid OS name, or "" if the name is not known.
      */
-    String getSOCompatibleOSName() {
+    private String getSOCompatibleOSName() {
         String osname = System.getProperty ("os.name").toLowerCase ();
         String osarch = System.getProperty ("os.arch");
         String operatingSystem = "";

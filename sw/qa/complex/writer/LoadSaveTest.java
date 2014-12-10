@@ -148,10 +148,10 @@ public class LoadSaveTest
         }
     }
 
-    class EventListener implements XDocumentEventListener
+    private class EventListener implements XDocumentEventListener
     {
-        boolean m_isLayoutFinished = false;
-        boolean IsLayoutFinished() { return m_isLayoutFinished; }
+        private boolean m_isLayoutFinished = false;
+        private boolean IsLayoutFinished() { return m_isLayoutFinished; }
         public void documentEventOccured(DocumentEvent Event)
         {
             if ("OnLayoutFinished".equals(Event.EventName))

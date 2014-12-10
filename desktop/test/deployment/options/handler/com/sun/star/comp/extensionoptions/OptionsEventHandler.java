@@ -43,7 +43,7 @@ import com.sun.star.util.XChangesBatch;
  */
 public class OptionsEventHandler {
 
-    public static class _OptionsEventHandler extends WeakBase
+    private static class _OptionsEventHandler extends WeakBase
         implements XServiceInfo, XContainerWindowEventHandler {
 
         static private final String __serviceName =
@@ -106,7 +106,7 @@ public class OptionsEventHandler {
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }

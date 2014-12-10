@@ -198,7 +198,7 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
     public void removeEventListener(com.sun.star.lang.XEventListener xEventListener) {
     }
 
-    protected class CommonLayer implements XLayer, XTimeStamped {
+    private class CommonLayer implements XLayer, XTimeStamped {
         public void readData(XLayerHandler xLayerHandler)
                       throws com.sun.star.lang.NullPointerException,
                              com.sun.star.lang.WrappedTargetException,

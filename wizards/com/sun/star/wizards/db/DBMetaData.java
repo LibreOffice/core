@@ -85,13 +85,13 @@ public class DBMetaData
     private XPropertySet m_dataSourceSettings;
     private XOfficeDatabaseDocument xModel;
     private XPropertySet xDataSourcePropertySet;
-    public java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
-    public Locale aLocale;
+    private java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
+    private Locale aLocale;
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
     private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
-    public XComponent xConnectionComponent;
+    private XComponent xConnectionComponent;
 
     private XNameAccess xNameAccess;
     private XInterface xDatabaseContext;
@@ -254,7 +254,7 @@ public class DBMetaData
         private String Name;
         private int CommandType;
 
-        public CommandObject(String _CommandName, int _CommandType)
+        private CommandObject(String _CommandName, int _CommandType)
         {
             try
             {
@@ -310,7 +310,7 @@ public class DBMetaData
         return bHasEscapeProcessing;
     }
 
-    public XNameAccess getQueryNamesAsNameAccess()
+    private XNameAccess getQueryNamesAsNameAccess()
     {
         XQueriesSupplier xDBQueries = UnoRuntime.queryInterface( XQueriesSupplier.class, DBConnection );
         xQueryNames = xDBQueries.getQueries();
@@ -519,7 +519,7 @@ public class DBMetaData
         }
     }
 
-    public void getDataSourceInterfaces() throws Exception
+    private void getDataSourceInterfaces() throws Exception
     {
         xDataSourcePropertySet = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
@@ -737,7 +737,7 @@ public class DBMetaData
         return supportsPrimaryKeys;
     }
 
-    public boolean supportsCoreSQLGrammar()
+    private boolean supportsCoreSQLGrammar()
     {
         try
         {
@@ -856,7 +856,7 @@ public class DBMetaData
      * the document may not be open
      * @param i_createTemplate  describes the type of the document: "form" or "report"
      */
-    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
+    private void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
     {
         try
         {
@@ -980,7 +980,7 @@ public class DBMetaData
     /**
      * @return Returns the xWindowPeer.
      */
-    public XWindowPeer getWindowPeer()
+    private XWindowPeer getWindowPeer()
     {
         return xWindowPeer;
     }

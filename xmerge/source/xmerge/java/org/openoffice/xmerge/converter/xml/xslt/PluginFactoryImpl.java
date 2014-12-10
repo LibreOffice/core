@@ -126,7 +126,7 @@ public final class PluginFactoryImpl extends PluginFactory
      *
      * @return  The file extension of a {@code Document}.
      */
-    public String getDeviceFileExtension() {
+    private String getDeviceFileExtension() {
         Class<? extends PluginFactoryImpl> c = this.getClass();
         InputStream is = c.getResourceAsStream("XsltPlugin.properties");
         Properties props = new Properties();

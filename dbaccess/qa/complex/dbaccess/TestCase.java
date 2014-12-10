@@ -116,7 +116,7 @@ public abstract class TestCase
      *          is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
-    protected void assureException( final String _message, final Object _object, final String _methodName,
+    private void assureException( final String _message, final Object _object, final String _methodName,
         final Class[] _argClasses, final Object[] _methodArgs, final Class _expectedExceptionClass )
     {
         Class objectClass = _object.getClass();
@@ -152,7 +152,7 @@ public abstract class TestCase
      * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
-    protected void assureException( final String _message, final Object _object, final String _methodName,
+    private void assureException( final String _message, final Object _object, final String _methodName,
         final Object[] _methodArgs, final Class _expectedExceptionClass )
     {
         Class[] argClasses = new Class[ _methodArgs.length ];
@@ -169,7 +169,7 @@ public abstract class TestCase
      * @param _expectedExceptionClass is the class of the exception to be caught. If this is null,
      *          it means that <em>no</em> exception must be throw by invoking the method.
     */
-    protected void assureException( final Object _object, final String _methodName, final Object[] _methodArgs,
+    private void assureException( final Object _object, final String _methodName, final Object[] _methodArgs,
         final Class _expectedExceptionClass )
     {
         assureException(

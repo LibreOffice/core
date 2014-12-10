@@ -38,13 +38,13 @@ import com.sun.star.wizards.common.PropertyNames;
 public class RecordParser extends QueryMetaData
 {
 
-    XNameAccess xColumns;
-    com.sun.star.sdbc.XRow xResultSetRow;
+    private XNameAccess xColumns;
+    private com.sun.star.sdbc.XRow xResultSetRow;
     public XResultSet ResultSet;
-    XInterface xRowSet;
-    XCompletedExecution xExecute;
-    XComponent xRowSetComponent;
-    XInteractionHandler xInteraction;
+    private XInterface xRowSet;
+    private XCompletedExecution xExecute;
+    private XComponent xRowSetComponent;
+    private XInteractionHandler xInteraction;
     public FieldColumn[] GroupFieldColumns;
     public FieldColumn[] RecordFieldColumns;
 
@@ -115,7 +115,7 @@ public class RecordParser extends QueryMetaData
         return Any.VOID;
     }
 
-    public Object getColumnValue(int ColIndex, int iType)
+    private Object getColumnValue(int ColIndex, int iType)
     {
         Object oAny = Any.VOID;
         switch (iType)

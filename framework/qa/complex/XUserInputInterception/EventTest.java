@@ -327,7 +327,7 @@ public class EventTest {
      * Listener which added and its method must be called
      * on <code>keyPressed</code> and <code>keyReleased</code> call.
      */
-    public class MyKeyHandler implements XKeyHandler {
+    private class MyKeyHandler implements XKeyHandler {
         /**
          * This event sets the member <code>m_keyPressed</coed> to
          *  <code>true</code>
@@ -363,7 +363,7 @@ public class EventTest {
      * Listener which added and its method must be called
      * on <code>mousePressed</code> and <code>mouseReleased</code> call.
      */
-    public class MyMouseClickHandler implements XMouseClickHandler {
+    private class MyMouseClickHandler implements XMouseClickHandler {
         /**
          * This event sets the member <code>m_mousePressed</coed> to
          *  <code>true</code>

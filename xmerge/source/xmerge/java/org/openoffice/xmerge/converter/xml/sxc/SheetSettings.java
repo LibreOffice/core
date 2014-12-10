@@ -205,7 +205,7 @@ public class SheetSettings implements OfficeConstants {
      *
      * @return the name of the worksheet.
      */
-    public String getSheetName() {
+    private String getSheetName() {
         return sheetName;
     }
 

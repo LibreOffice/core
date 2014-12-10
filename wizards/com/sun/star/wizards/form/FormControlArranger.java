@@ -38,7 +38,7 @@ import com.sun.star.wizards.document.TimeStampControl;
 public class FormControlArranger
 {
 
-    public static final String LABELCONTROL = "LabelControl";
+    private static final String LABELCONTROL = "LabelControl";
     protected DatabaseControl[] DBControlList = null;
     private final XNameContainer xFormName;
     private final XMultiServiceFactory xMSF;

@@ -116,9 +116,9 @@ public class _XPropertySet {
     * Structure that collects three properties of each type to test :
     * Constrained, Bound and Normal.
     */
-    public class PropsToTest {
-           String constrained = null;
-           String bound = null;
+    private class PropsToTest {
+           private String constrained = null;
+           private String bound = null;
            String normal = null;
     }
 
@@ -474,7 +474,7 @@ public class _XPropertySet {
     * Gets the properties being tested. Searches and stores by one
     * property of each kind (Bound, Vetoable, Normal).
     */
-    public PropsToTest getPropsToTest(XPropertySetInfo xPSI) {
+    private PropsToTest getPropsToTest(XPropertySetInfo xPSI) {
 
         Property[] properties = xPSI.getProperties();
         String bound = "";

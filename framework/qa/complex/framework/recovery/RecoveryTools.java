@@ -162,7 +162,7 @@ public class RecoveryTools {
         }
     }
 
-    public HashMap<String, String> getRecoveryFiles()
+    private HashMap<String, String> getRecoveryFiles()
         throws com.sun.star.io.IOException
     {
         try{

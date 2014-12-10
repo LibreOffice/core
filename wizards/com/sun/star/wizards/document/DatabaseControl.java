@@ -52,7 +52,7 @@ public class DatabaseControl extends Control
         createGridColumn(_oGridControl, _curfieldcolumn, _fieldtype, _columntitle);
     }
 
-    protected int getFieldType()
+    private int getFieldType()
     {
         return m_nFieldType;
     }
@@ -159,7 +159,7 @@ public class DatabaseControl extends Control
         }
     }
 
-    public void setNumericLimits()
+    private void setNumericLimits()
     {
         try
         {

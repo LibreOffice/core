@@ -264,7 +264,7 @@ public class FormDocument extends TextDocument
         }
     }
 
-    public ControlForm getControlFormByName(String _sname)
+    private ControlForm getControlFormByName(String _sname)
     {
         for (int i = 0; i < oControlForms.size(); i++)
         {
@@ -334,16 +334,16 @@ public class FormDocument extends TextDocument
     public class ControlForm
     {
 
-        XNameContainer xFormContainer;
+        private XNameContainer xFormContainer;
         GridControl oGridControl;
-        FormControlArranger oFormController;
-        int curArrangement;
-        FormDocument oFormDocument;
-        String Name;
-        Point aStartPoint;
+        private FormControlArranger oFormController;
+        private int curArrangement;
+        private FormDocument oFormDocument;
+        private String Name;
+        private Point aStartPoint;
         private Size aFormSize;
-        CommandMetaData oDBMetaData;
-        XPropertySet xPropertySet;
+        private CommandMetaData oDBMetaData;
+        private XPropertySet xPropertySet;
 
         public ControlForm(FormDocument _oFormDocument, String _sname, Point _astartPoint, Size _aFormSize)
         {
@@ -432,12 +432,12 @@ public class FormDocument extends TextDocument
             }
         }
 
-        public Size getFormSize()
+        private Size getFormSize()
         {
             return aFormSize;
         }
 
-        public void setFormSize(Size _aSize)
+        private void setFormSize(Size _aSize)
         {
             aFormSize = _aSize;
             oFormController.setFormSize(aFormSize);
@@ -537,7 +537,7 @@ public class FormDocument extends TextDocument
             }
         }
 
-        public void finalizeControls()
+        private void finalizeControls()
         {
             Control[] oLabelControls = getLabelControls();
             Control[] oDBControls = getDatabaseControls();

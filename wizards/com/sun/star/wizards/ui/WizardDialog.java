@@ -51,8 +51,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private int nNewStep = 1;
     private int nOldStep = 1;
     private int nMaxStep = 1;
-    XItemEventBroadcaster xRoadmapBroadcaster;
-    String[] sRMItemLabels;
+    private XItemEventBroadcaster xRoadmapBroadcaster;
+    private String[] sRMItemLabels;
     private Object oRoadmap;
     private XSingleServiceFactory xSSFRoadmap;
     public XIndexContainer xIndexContRoadmap;
@@ -82,7 +82,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return oWizardResource;
     }
 
-    public void activate()
+    private void activate()
     {
         try
         {
@@ -146,7 +146,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         Helper.setUnoPropertyValue(oRoadmap, "Complete", Boolean.valueOf(bComplete));
     }
 
-    public boolean isRoadmapComplete()
+    private boolean isRoadmapComplete()
     {
         try
         {
@@ -171,7 +171,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public int getCurrentRoadmapItemID()
+    private int getCurrentRoadmapItemID()
     {
         try
         {
@@ -350,7 +350,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     abstract protected void enterStep(int nOldStep, int nNewStep);
 
-    protected void changeToStep(int nNewStep)
+    private void changeToStep(int nNewStep)
     {
         Helper.setUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP, Integer.valueOf(nNewStep));
         setCurrentRoadmapItemID((short) (nNewStep));
@@ -509,7 +509,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         enableFinishButton(_bEnableFinish);
     }
 
-    public void enableBackButton(boolean enabled)
+    private void enableBackButton(boolean enabled)
     {
         setControlProperty("btnWizardBack", PropertyNames.PROPERTY_ENABLED, enabled ? Boolean.TRUE : Boolean.FALSE);
     }
@@ -553,7 +553,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public boolean isStepEnabled(int _nStep)
+    private boolean isStepEnabled(int _nStep)
     {
         try
         {
@@ -599,7 +599,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     }
 
     //TODO discuss with rp
-    protected int getNextAvailableStep()
+    private int getNextAvailableStep()
     {
         if (isRoadmapComplete())
         {
@@ -702,12 +702,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         xDialog.endExecute();
     }
 
-    protected void callHelp()
+    private void callHelp()
     {
         //should be overridden by extending class
     }
 
-    public void removeTerminateListener()
+    private void removeTerminateListener()
     {
         if (bTerminateListenermustberemoved)
         {

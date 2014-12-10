@@ -70,7 +70,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
      * We have to remove this!!!
      * @return
      */
-    ReportTextDocument getDoc()
+    private ReportTextDocument getDoc()
     {
         if (m_aDoc == null)
         {
@@ -125,9 +125,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     {
         return getDoc().xWindowPeer;
     }
-    static String sMsgQueryCreationImpossible;
-    static String sReportFormNotExisting;
-    static String sMsgEndAutopilot;
+    private static String sMsgQueryCreationImpossible;
+    private static String sReportFormNotExisting;
+    private static String sMsgEndAutopilot;
 
     private void initialResources()
     {
@@ -138,7 +138,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         m_resource.getResText(UIConsts.RID_DB_COMMON + 14);
     }
 
-    public void addTextSectionCopies()
+    private void addTextSectionCopies()
     {
         m_aDoc.setLayoutSectionsVisible(false);
         XTextCursor xTextCursor = ReportTextDocument.createTextCursor(m_aDoc.xTextDocument.getText());
@@ -454,7 +454,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         return m_aDoc.xFrame;
     }
 
-    public XMultiServiceFactory getDocumentServiceFactory()
+    private XMultiServiceFactory getDocumentServiceFactory()
     {
         return m_aDoc.xMSFDoc;
     }

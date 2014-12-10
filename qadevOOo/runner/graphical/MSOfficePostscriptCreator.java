@@ -36,7 +36,7 @@ public class MSOfficePostscriptCreator implements IOffice
 {
     private String m_sPrinterName;               // within Windows the tools need a printer name;
 
-    public void setPrinterName(String _s)
+    private void setPrinterName(String _s)
     {
         m_sPrinterName = _s;
     }

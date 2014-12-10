@@ -28,10 +28,10 @@ import java.util.Random;
 
 public class Test01 implements OLESimpleStorageTest
 {
-    XMultiServiceFactory m_xMSF = null;
-    TestHelper m_aTestHelper = null;
-    static final int pStreamCnt = 5;
-    static final int pBytesCnt = 10;
+    private XMultiServiceFactory m_xMSF = null;
+    private TestHelper m_aTestHelper = null;
+    private static final int pStreamCnt = 5;
+    private static final int pBytesCnt = 10;
 
     public Test01 ( XMultiServiceFactory xMSF )
     {

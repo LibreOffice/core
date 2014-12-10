@@ -49,7 +49,7 @@ import com.sun.star.document.XDocumentProperties;
 public class FileAccess
 {
 
-    public static String deleteLastSlashfromUrl(String _sPath)
+    private static String deleteLastSlashfromUrl(String _sPath)
     {
         if (_sPath.endsWith("/"))
         {
@@ -338,7 +338,7 @@ public class FileAccess
     /**
      * We search in all given path for a given file
      */
-    public static String addPath(String _sPath, String _sPath2)
+    private static String addPath(String _sPath, String _sPath2)
     {
         String sNewPath;
         if (!_sPath.endsWith("/"))
@@ -481,7 +481,7 @@ public class FileAccess
 
         return LocLayoutFiles;
     }
-    public XSimpleFileAccess2 fileAccess;
+    private XSimpleFileAccess2 fileAccess;
 
     public FileAccess(XMultiServiceFactory xmsf) throws com.sun.star.uno.Exception
     {
@@ -496,7 +496,7 @@ public class FileAccess
     /**
      * @return the extension of the given filename.
      */
-    public static String getExtension(String filename)
+    private static String getExtension(String filename)
     {
         int p = filename.indexOf('.');
         if (p == -1)
@@ -540,7 +540,7 @@ public class FileAccess
         return getFilename(path, "/");
     }
 
-    public static String getFilename(String path, String pathSeparator)
+    private static String getFilename(String path, String pathSeparator)
     {
         String[] s = JavaTools.ArrayoutofString(path, pathSeparator);
         return s[s.length - 1];

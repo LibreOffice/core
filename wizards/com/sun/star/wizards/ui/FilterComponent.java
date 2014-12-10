@@ -59,46 +59,46 @@ public class FilterComponent
     private final String slblFieldNames;
     private final String slblOperators;
     private final String slblValue;
-    WizardDialog CurUnoDialog;
+    private WizardDialog CurUnoDialog;
     private static final int BaseID = 2300;
     private final String sIncSuffix;
     private final ControlRow[] oControlRows;
     private final String sDuplicateCondition;
-    static final int SOOPTORMODE = 100;
-    static final int SOOPTANDMODE = 101;
-    QueryMetaData oQueryMetaData;
-    int iDateFormat;
-    int iTimeFormat;
+    private static final int SOOPTORMODE = 100;
+    private static final int SOOPTANDMODE = 101;
+    private QueryMetaData oQueryMetaData;
+    private int iDateFormat;
+    private int iTimeFormat;
     private PropertyValue[][] filterconditions;
     private short curtabindex;
-    static final int SO_FIRSTFIELDNAME = 1;
-    static final int SO_SECONDFIELDNAME = 2;
-    static final int SO_THIRDFIELDNAME = 3;
-    static final int SO_FOURTHFIELDNAME = 4;
-    int[] SO_FIELDNAMELIST = new int[]
+    private static final int SO_FIRSTFIELDNAME = 1;
+    private static final int SO_SECONDFIELDNAME = 2;
+    private static final int SO_THIRDFIELDNAME = 3;
+    private static final int SO_FOURTHFIELDNAME = 4;
+    private int[] SO_FIELDNAMELIST = new int[]
     {
         SO_FIRSTFIELDNAME, SO_SECONDFIELDNAME, SO_THIRDFIELDNAME, SO_FOURTHFIELDNAME
     };
-    static final int SO_FIRSTCONDITION = 5;
-    static final int SO_SECONDCONDITION = 6;
-    static final int SO_THIRDCONDITION = 7;
-    static final int SO_FOURTHCONDITION = 8;
-    int[] SO_CONDITIONLIST = new int[]
+    private static final int SO_FIRSTCONDITION = 5;
+    private static final int SO_SECONDCONDITION = 6;
+    private static final int SO_THIRDCONDITION = 7;
+    private static final int SO_FOURTHCONDITION = 8;
+    private int[] SO_CONDITIONLIST = new int[]
     {
         SO_FIRSTCONDITION, SO_SECONDCONDITION, SO_THIRDCONDITION, SO_FOURTHCONDITION
     };
-    static final int SO_FIRSTTEXTFIELD = 1;
-    static final int SO_SECONDTEXTFIELD = 2;
-    static final int SO_THIRDTEXTFIELD = 3;
-    static final int SO_FOURTHTEXTFIELD = 4;
-    int[] SO_TEXTFIELDLIST = new int[]
+    private static final int SO_FIRSTTEXTFIELD = 1;
+    private static final int SO_SECONDTEXTFIELD = 2;
+    private static final int SO_THIRDTEXTFIELD = 3;
+    private static final int SO_FOURTHTEXTFIELD = 4;
+    private int[] SO_TEXTFIELDLIST = new int[]
     {
         SO_FIRSTTEXTFIELD, SO_SECONDTEXTFIELD, SO_THIRDTEXTFIELD, SO_FOURTHTEXTFIELD
     };
-    static final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
-    static final int SO_SECONDBOOLFIELDNAME = 256 + 2;
-    static final int SO_THIRDBOOLFIELDNAME = 256 + 3;
-    static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
+    private static final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
+    private static final int SO_SECONDBOOLFIELDNAME = 256 + 2;
+    private static final int SO_THIRDBOOLFIELDNAME = 256 + 3;
+    private static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;
     int curHelpID;
@@ -173,7 +173,7 @@ public class FilterComponent
 
     }
 
-    public static String getIndexNumber(String _sStr)
+    private static String getIndexNumber(String _sStr)
     {
         return _sStr.substring(_sStr.length() - 1, _sStr.length());
     }
@@ -499,17 +499,17 @@ public class FilterComponent
 
 
 
-    final class ControlRow
+    private final class ControlRow
     {
 
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
-        protected XInterface[] ControlElements = new XInterface[6];
+        private XInterface[] ControlElements = new XInterface[6];
         private boolean m_bEnabled;
-        String[] FieldNames;
+        private String[] FieldNames;
 
-        protected ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
+        private ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
         {
             int nFieldWidth = 71;
             int nOperatorWidth = 70;
@@ -693,7 +693,7 @@ public class FilterComponent
          * @return true if the current condition is complete, all needed fields are filled with values.
          * So we can enable the next.
          */
-        boolean isConditionComplete()
+        private boolean isConditionComplete()
         {
             try
             {
@@ -737,7 +737,7 @@ public class FilterComponent
             }
         }
 
-        protected void setCondition(PropertyValue _filtercondition)
+        private void setCondition(PropertyValue _filtercondition)
         {
             try
             {
@@ -807,13 +807,13 @@ public class FilterComponent
             }
         }
 
-        protected void setFieldNames(String[] _FieldNames)
+        private void setFieldNames(String[] _FieldNames)
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.STRING_ITEM_LIST, _FieldNames);
             FieldNames = _FieldNames;
         }
 
-        protected boolean isEnabled()
+        private boolean isEnabled()
         {
             return m_bEnabled;
         }
@@ -860,7 +860,7 @@ public class FilterComponent
             }
         }
 
-        protected String getSelectedFieldName()
+        private String getSelectedFieldName()
         {
             try
             {
@@ -876,7 +876,7 @@ public class FilterComponent
 
         // TODO: check if it is really useful to match the indices of the listbox the API constants
         // =, <>, <, >, <=, >=, like, !like, is null, !is null
-        protected short getSelectedOperator()
+        private short getSelectedOperator()
         {
             try
             {
@@ -915,7 +915,7 @@ public class FilterComponent
         }
 
         // TODO make a difference between Text and Numbers
-        protected Object getValue()
+        private Object getValue()
         {
             return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
         }

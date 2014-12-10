@@ -146,7 +146,7 @@ class WriterFrame extends java.awt.Frame
         return rc;
     }
 
-    public Rectangle getUnoFramePosition() throws Exception
+    private Rectangle getUnoFramePosition() throws Exception
     {
         com.sun.star.awt.XWindow win = m_bean.getFrame().getContainerWindow();
         com.sun.star.awt.Rectangle rect = win.getPosSize();

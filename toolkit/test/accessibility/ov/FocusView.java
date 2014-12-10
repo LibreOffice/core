@@ -53,7 +53,7 @@ public class FocusView
             return null;
     }
 
-    public FocusView (ObjectViewContainer aContainer)
+    private FocusView (ObjectViewContainer aContainer)
     {
         super (aContainer);
 

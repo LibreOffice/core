@@ -31,7 +31,7 @@ public class TextElement extends ParaStyled
         this(range.getString(), (String) Helper.getUnoPropertyValue(range.getStart(), "ParaStyleName"));
     }
 
-    TextElement(String text_, String paraStyle_)
+    private TextElement(String text_, String paraStyle_)
     {
         super(paraStyle_);
         text = text_;

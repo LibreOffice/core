@@ -651,9 +651,9 @@ public class OOoBeanTest
         }
     }
 
-    class BeanPanel extends Panel
+    private class BeanPanel extends Panel
     {
-        public BeanPanel(OOoBean b)
+        private BeanPanel(OOoBean b)
         {
             setLayout(new BorderLayout());
             add(b, BorderLayout.CENTER);

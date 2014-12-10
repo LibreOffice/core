@@ -47,7 +47,7 @@ public class FormWizard extends DatabaseObjectWizard
     private static String slblSelFields;
     private String sShowBinaryFields = PropertyNames.EMPTY_STRING;
     private String serrFormNameexists = PropertyNames.EMPTY_STRING;
-    public static final int SOMAIN_PAGE = 1;
+    private static final int SOMAIN_PAGE = 1;
     public static final int SOSUBFORM_PAGE = 2;
     public static final int SOSUBFORMFIELDS_PAGE = 3;
     public static final int SOFIELDLINKER_PAGE = 4;
@@ -209,7 +209,7 @@ public class FormWizard extends DatabaseObjectWizard
         }
     }
 
-    public void buildSteps()
+    private void buildSteps()
     {
         curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields, slblTables, true, 34411);
         curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
@@ -308,7 +308,7 @@ public class FormWizard extends DatabaseObjectWizard
         xDialog.endExecute();
     }
 
-    public void insertFormRelatedSteps()
+    private void insertFormRelatedSteps()
     {
         addRoadmap();
         int i = 0;
@@ -370,10 +370,10 @@ public class FormWizard extends DatabaseObjectWizard
         serrFormNameexists = m_oResource.getResText(UIConsts.RID_FORM + 98);
     }
 
-    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        protected int ID;
+        private int ID;
 
         // @Override
         public int getID()

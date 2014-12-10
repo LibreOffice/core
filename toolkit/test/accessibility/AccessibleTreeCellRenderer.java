@@ -29,10 +29,10 @@ import javax.swing.tree.TreePath;
 public class AccessibleTreeCellRenderer
     extends DefaultTreeCellRenderer
 {
-    public Color
+    private Color
         maDefaultColor,
         maChangedColor;
-    protected ArrayList<Boolean>
+    private ArrayList<Boolean>
         maChangedLines;
 
 
@@ -77,7 +77,7 @@ public class AccessibleTreeCellRenderer
     /** Inform the cell renderer of a new changed line which to paint
         highlighted when asked to paint it the next time.
     */
-    public void addChangedLine (int nRow)
+    private void addChangedLine (int nRow)
     {
         while (maChangedLines.size() <= nRow) {
             maChangedLines.add(null);

@@ -113,7 +113,7 @@ public class AccessibilityTree
     /** Expand the nodes in the subtree rooted in aNode according to the
         specified expander.  The tree is locked during the expansion.
     */
-    protected void expandTree (AccessibleTreeNode aNode, Expander aExpander)
+    private void expandTree (AccessibleTreeNode aNode, Expander aExpander)
     {
         if (mnExpandLevel == 0)
         {
@@ -189,7 +189,7 @@ public class AccessibilityTree
     {
         expandShapes ((AccessibleTreeNode)maTree.getModel().getRoot());
     }
-    public void expandShapes (AccessibleTreeNode aNode)
+    private void expandShapes (AccessibleTreeNode aNode)
     {
         expandTree (aNode, new ShapeExpander());
     }
@@ -199,7 +199,7 @@ public class AccessibilityTree
     {
         expandAll ((AccessibleTreeNode)maTree.getModel().getRoot());
     }
-    public void expandAll (AccessibleTreeNode aNode)
+    private void expandAll (AccessibleTreeNode aNode)
     {
         expandTree (aNode, new AllExpander());
     }
@@ -222,7 +222,7 @@ public class AccessibilityTree
     }
     */
 
-    class MouseListener extends MouseAdapter
+    private class MouseListener extends MouseAdapter
     {
         public MouseListener (AccessibilityTree aTree)
         {
@@ -239,7 +239,7 @@ public class AccessibilityTree
         @Override
         public void mouseReleased(MouseEvent e) { popupTrigger(e); }
 
-        public boolean popupTrigger( MouseEvent e )
+        private boolean popupTrigger( MouseEvent e )
         {
             boolean bIsPopup = e.isPopupTrigger();
             if( !bIsPopup )
@@ -296,12 +296,12 @@ public class AccessibilityTree
         private final AccessibilityTree maTree;
     }
 
-    class NodeAction extends AbstractAction
+    private class NodeAction extends AbstractAction
     {
         private final int mnIndex;
         private final AccessibleTreeNode maNode;
 
-        public NodeAction( String aName, AccessibleTreeNode aNode, int nIndex )
+        private NodeAction( String aName, AccessibleTreeNode aNode, int nIndex )
         {
             super( aName );
             maNode = aNode;
@@ -315,7 +315,7 @@ public class AccessibilityTree
     }
 
     // This action expands all shapes in the subtree rooted in the specified node.
-    class ShapeExpandAction extends AbstractAction
+    private class ShapeExpandAction extends AbstractAction
     {
         private final AccessibilityTree maTree;
         private final AccTreeNode maNode;
@@ -332,7 +332,7 @@ public class AccessibilityTree
     }
 
     // This action expands all nodes in the subtree rooted in the specified node.
-    class SubtreeExpandAction extends AbstractAction
+    private class SubtreeExpandAction extends AbstractAction
     {
         private final AccessibilityTree maTree;
         private final AccTreeNode maNode;
@@ -350,20 +350,20 @@ public class AccessibilityTree
 
     /** Predicate class to determine whether a node should be expanded
      * For use with expandTree method */
-    abstract class Expander
+    private abstract class Expander
     {
         abstract public boolean expand (Object aObject);
     }
 
     /** expand all nodes */
-    class AllExpander extends Expander
+    private class AllExpander extends Expander
     {
         @Override
         public boolean expand(Object aObject) { return true; }
     }
 
     /** expand all nodes with accessibility roles > 100 */
-    class ShapeExpander extends Expander
+    private class ShapeExpander extends Expander
     {
         @Override
         public boolean expand (Object aObject)
@@ -382,7 +382,7 @@ public class AccessibilityTree
 
 
 
-    protected AccessibleTreeCellRenderer  maCellRenderer;
+    private AccessibleTreeCellRenderer  maCellRenderer;
     private final JTree  maTree;
     private int mnExpandLevel;
 }

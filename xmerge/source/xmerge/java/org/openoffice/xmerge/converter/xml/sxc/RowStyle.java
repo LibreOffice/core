@@ -113,7 +113,7 @@ public class RowStyle extends Style implements Cloneable {
      *
      * @param  RowHeight  The height of this row.
      */
-    public void setRowHeight(int RowHeight) {
+    private void setRowHeight(int RowHeight) {
         this.rowHeight = RowHeight;
     }
 

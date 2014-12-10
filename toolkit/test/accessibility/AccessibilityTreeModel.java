@@ -30,7 +30,7 @@ import com.sun.star.uno.UnoRuntime;
 public class AccessibilityTreeModel
     extends AccessibilityTreeModelBase
 {
-    public boolean mbVerbose = false;
+    private boolean mbVerbose = false;
 
     public AccessibilityTreeModel (AccessibleTreeNode aRoot)
     {
@@ -147,7 +147,7 @@ public class AccessibilityTreeModel
 
     /** Remove a node (and all children) from the tree model.
     */
-    protected boolean removeChild (AccessibleTreeNode aNode)
+    private boolean removeChild (AccessibleTreeNode aNode)
     {
         try
         {
@@ -206,7 +206,7 @@ public class AccessibilityTreeModel
             Returns the new or existing representation of the specified
             accessible object.
     */
-    protected AccessibleTreeNode addChild (AccTreeNode aParentNode, XAccessible xNewChild)
+    private AccessibleTreeNode addChild (AccTreeNode aParentNode, XAccessible xNewChild)
     {
         AccessibleTreeNode aChildNode = null;
         try
@@ -258,7 +258,7 @@ public class AccessibilityTreeModel
         @param aNode
             The node to insert into the internal tree structure.
     */
-    protected boolean addNode (AccessibleTreeNode aNode)
+    private boolean addNode (AccessibleTreeNode aNode)
     {
         boolean bRet = false;
         try
@@ -293,7 +293,7 @@ public class AccessibilityTreeModel
     /** create path to node, suitable for TreeModelEvent constructor
      * @see javax.swing.event.TreeModelEvent#TreeModelEvent
      */
-    protected Object[] createPath (AccessibleTreeNode aNode)
+    private Object[] createPath (AccessibleTreeNode aNode)
     {
         ArrayList<AccessibleTreeNode> aPath = new ArrayList<AccessibleTreeNode>();
         aNode.createPath (aPath);
@@ -307,7 +307,7 @@ public class AccessibilityTreeModel
     // tree cache, and we should get removed as soon as they are out.
 
 
-    protected void fireTreeNodesChanged(TreeModelEvent e)
+    private void fireTreeNodesChanged(TreeModelEvent e)
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
@@ -323,7 +323,7 @@ public class AccessibilityTreeModel
         }
     }
 
-    protected void fireTreeNodesRemoved(final TreeModelEvent e)
+    private void fireTreeNodesRemoved(final TreeModelEvent e)
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
@@ -331,7 +331,7 @@ public class AccessibilityTreeModel
         }
     }
 
-    protected void fireTreeStructureChanged(final TreeModelEvent e)
+    private void fireTreeStructureChanged(final TreeModelEvent e)
     {
         for(int i = 0; i < maTMListeners.size(); i++)
         {
@@ -348,13 +348,13 @@ public class AccessibilityTreeModel
     /** Create a TreeModelEvent object that informs listeners that one child
         has been removed from or inserted into its parent.
     */
-    public TreeModelEvent createChildUpdateEvent (XAccessibleContext xParent)
+    private TreeModelEvent createChildUpdateEvent (XAccessibleContext xParent)
     {
         AccessibleTreeNode aParentNode = maNodeMap.GetNode (xParent);
         return createEvent (aParentNode, xParent);
     }
 
-    public TreeModelEvent createEvent (AccessibleTreeNode aParentNode, XAccessibleContext xChild)
+    private TreeModelEvent createEvent (AccessibleTreeNode aParentNode, XAccessibleContext xChild)
     {
         AccessibleTreeNode aChildNode = null;
         if (xChild != null)
@@ -394,7 +394,7 @@ public class AccessibilityTreeModel
     /** Create a TreeModelEvent that indicates changes at those children of
         the specified node with the specified indices.
     */
-    protected TreeModelEvent createChangeEvent (AccTreeNode aNode, java.util.List<Integer> aChildIndices)
+    private TreeModelEvent createChangeEvent (AccTreeNode aNode, java.util.List<Integer> aChildIndices)
     {
         // Build a list of child objects that are indicated by the given indices.
         int nCount = aChildIndices.size();
@@ -415,7 +415,7 @@ public class AccessibilityTreeModel
 
 
 
-    protected XAccessibleEventBroadcaster getBroadcaster (Object aObject)
+    private XAccessibleEventBroadcaster getBroadcaster (Object aObject)
     {
         if (aObject instanceof AccTreeNode)
             return UnoRuntime.queryInterface (
@@ -424,7 +424,7 @@ public class AccessibilityTreeModel
             return null;
     }
 
-    protected void registerAccListener( Object aObject )
+    private void registerAccListener( Object aObject )
     {
         // register this as listener for XAccessibleEventBroadcaster
         // implementations
@@ -435,7 +435,7 @@ public class AccessibilityTreeModel
         }
     }
 
-    protected void removeAccListener( Object aObject )
+    private void removeAccListener( Object aObject )
     {
         XAccessibleEventBroadcaster xBroadcaster = getBroadcaster( aObject );
         if (xBroadcaster != null)

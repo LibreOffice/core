@@ -47,7 +47,7 @@ public class ContextView
             return null;
     }
 
-    public ContextView (ObjectViewContainer aContainer)
+    private ContextView (ObjectViewContainer aContainer)
     {
         super (aContainer);
         JLabel aNameLabel = new JLabel ("Name: ");

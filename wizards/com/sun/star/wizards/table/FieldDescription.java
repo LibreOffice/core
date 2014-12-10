@@ -106,7 +106,7 @@ public class FieldDescription
         return bexists;
     }
 
-    public void setFieldProperties(XNameAccess _xNameAccessFieldNode)
+    private void setFieldProperties(XNameAccess _xNameAccessFieldNode)
     {
         try
         {

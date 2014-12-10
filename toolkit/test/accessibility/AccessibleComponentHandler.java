@@ -42,7 +42,7 @@ class AccessibleComponentHandler
     {
     }
 
-    public AccessibleComponentHandler (XAccessibleComponent xComponent)
+    private AccessibleComponentHandler (XAccessibleComponent xComponent)
     {
         if (xComponent != null)
             maChildList.setSize (6);
