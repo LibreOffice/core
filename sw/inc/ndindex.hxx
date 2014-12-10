@@ -30,7 +30,7 @@ class SwNode;
 class SwNodes;
 
 /// Marks a node in the document model.
-class SW_DLLPUBLIC SwNodeIndex
+class SW_DLLPUBLIC SwNodeIndex SAL_FINAL
 {
     friend void SwNodes::RegisterIndex( SwNodeIndex& );
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
