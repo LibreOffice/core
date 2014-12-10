@@ -63,6 +63,7 @@ public:
     void testAutoCorr();
     void testFdo87005();
     void testMergeDoc();
+    void testCreatePortions();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -89,6 +90,7 @@ public:
     CPPUNIT_TEST(testAutoCorr);
     CPPUNIT_TEST(testFdo87005);
     CPPUNIT_TEST(testMergeDoc);
+    CPPUNIT_TEST(testCreatePortions);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -660,6 +662,21 @@ void SwUiWriterTest::testMergeDoc()
     getParagraph(5, "Para Six: One Three Four Five");
     getParagraph(6, "");
     getParagraph(7, "");
+}
+
+void SwUiWriterTest::testCreatePortions()
+{
+    createDoc("uno-cycle.odt");
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName("Mark"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xTextCursor(xText->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextCursor.is());
+
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+            xTextCursor->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+    // This looped forever in lcl_CreatePortions
+    xParagraph->createEnumeration();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
