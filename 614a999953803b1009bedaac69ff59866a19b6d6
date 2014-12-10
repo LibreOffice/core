@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_91e4060e",
+        "filename": "include/tools/debug.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-12-10T21:18:20Z",
+      "side": 1,
+      "message": "please don\u0027t use sal_uLong, the sal_uIntPtr type exists specifically for the purpose of casting pointer values",
+      "revId": "614a999953803b1009bedaac69ff59866a19b6d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
