@@ -103,7 +103,7 @@ public class ObjectViewContainer
     /** Add the given class to the list of classes which will be
         instantiated the next time an accessible object is set.
     */
-    public void RegisterView (Class aObjectViewClass)
+    private void RegisterView (Class aObjectViewClass)
     {
         System.out.println ("registering " + aObjectViewClass);
         maViewTemplates.add(aObjectViewClass);

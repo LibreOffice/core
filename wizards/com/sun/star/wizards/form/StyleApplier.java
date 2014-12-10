@@ -375,7 +375,7 @@ public class StyleApplier
         }
     }
 
-    public void applyDBControlProperties(int[] _iStyleColors)
+    private void applyDBControlProperties(int[] _iStyleColors)
     {
         try
         {

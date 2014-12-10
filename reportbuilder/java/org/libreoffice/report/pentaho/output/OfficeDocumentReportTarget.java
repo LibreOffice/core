@@ -200,7 +200,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
     }
 
-    protected static class GroupContext
+    public static class GroupContext
     {
 
         private final GroupContext parent;
@@ -222,7 +222,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             return iterationCount;
         }
 
-        public void setIterationCount(final int iterationCount)
+        private void setIterationCount(final int iterationCount)
         {
             this.iterationCount = iterationCount;
         }
@@ -232,7 +232,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             return groupWithRepeatingSection;
         }
 
-        public void setGroupWithRepeatingSection(final boolean groupWithRepeatingSection)
+        private void setGroupWithRepeatingSection(final boolean groupWithRepeatingSection)
         {
             this.groupWithRepeatingSection = groupWithRepeatingSection;
         }

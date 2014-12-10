@@ -431,7 +431,7 @@ public class JavaTools
         return -1;
     }
 
-    public static boolean isEqual(PropertyValue firstPropValue, PropertyValue secPropValue)
+    private static boolean isEqual(PropertyValue firstPropValue, PropertyValue secPropValue)
     {
         if (!firstPropValue.Name.equals(secPropValue.Name))
         {

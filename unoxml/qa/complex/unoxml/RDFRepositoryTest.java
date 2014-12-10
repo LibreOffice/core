@@ -587,7 +587,7 @@ public class RDFRepositoryTest
         return c.toArray(new XNode[c.size()][]);
     }
 
-    static class BindingComp implements java.util.Comparator<XNode[]>
+    private static class BindingComp implements java.util.Comparator<XNode[]>
     {
         public int compare(XNode[] left, XNode[] right)
         {
@@ -604,7 +604,7 @@ public class RDFRepositoryTest
         }
     }
 
-    static class StmtComp implements java.util.Comparator<Statement>
+    private static class StmtComp implements java.util.Comparator<Statement>
     {
         public int compare(Statement left, Statement right)
         {
@@ -628,7 +628,7 @@ public class RDFRepositoryTest
             return 0;
         }
 
-        public int cmp(XNode i_Left, XNode i_Right)
+        private int cmp(XNode i_Left, XNode i_Right)
         {
             if (isBlank(i_Left)) {
                 return isBlank(i_Right) ? 0 : 1;
@@ -791,9 +791,9 @@ public class RDFRepositoryTest
         }
     }
 
-    class TestRange implements XTextRange, XMetadatable, XServiceInfo
+    private class TestRange implements XTextRange, XMetadatable, XServiceInfo
     {
-        String m_Stream;
+        private String m_Stream;
         String m_XmlId;
         String m_Text;
         TestRange(String i_Str) { m_Text = i_Str; }

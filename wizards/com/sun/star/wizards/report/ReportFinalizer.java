@@ -35,12 +35,12 @@ import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 public class ReportFinalizer
 {
 
-    WizardDialog CurUnoDialog;
-    XTextComponent xTitleTextBox;
-    String StoreName;
-    String DefaultName;
-    String OldDefaultName;
-    IReportDocument CurReportDocument;
+    private WizardDialog CurUnoDialog;
+    private XTextComponent xTitleTextBox;
+    private String StoreName;
+    private String DefaultName;
+    private String OldDefaultName;
+    private IReportDocument CurReportDocument;
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;

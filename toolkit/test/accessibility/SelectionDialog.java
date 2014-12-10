@@ -53,7 +53,7 @@ class SelectionDialog extends JDialog
     }
 
     /** build dialog */
-    protected void Layout ()
+    private void Layout ()
     {
         setTitle( "Select" );
 
@@ -132,13 +132,13 @@ class SelectionDialog extends JDialog
     }
 
 
-    void close ()
+    private void close ()
     {
         setVisible(false);
         dispose();
     }
 
-    void select()
+    private void select()
     {
         try
         {
@@ -153,7 +153,7 @@ class SelectionDialog extends JDialog
         }
     }
 
-    void deselect()
+    private void deselect()
     {
         try
         {
@@ -169,12 +169,12 @@ class SelectionDialog extends JDialog
         }
     }
 
-    void selectAll()
+    private void selectAll()
     {
         mxSelection.selectAllAccessibleChildren();
     }
 
-    void clearSelection()
+    private void clearSelection()
     {
         mxSelection.clearAccessibleSelection();
     }

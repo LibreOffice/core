@@ -43,8 +43,8 @@ public class AccessibilityWorkBench
     implements ActionListener, XTerminateListener, TreeSelectionListener
 
 {
-    public static final String msVersion = "v1.7.2";
-    public String msOptionsFileName = ".AWBrc";
+    private static final String msVersion = "v1.7.2";
+    private String msOptionsFileName = ".AWBrc";
 
     public static void main (String args[])
     {
@@ -116,7 +116,7 @@ public class AccessibilityWorkBench
 
     /** Create and arrange the widgets of the GUI.
     */
-    public void Layout  ()
+    private void Layout  ()
     {
         setSize (new Dimension (8000,600));
 
@@ -209,7 +209,7 @@ public class AccessibilityWorkBench
 
     /** Shortcut method for adding an object to a GridBagLayout.
     */
-    void addGridElement (JComponent object,
+    private void addGridElement (JComponent object,
         int x, int y, int width, int height, int weightx, int weighty,
         int anchor, int fill)
     {
@@ -231,7 +231,7 @@ public class AccessibilityWorkBench
     /** Create a new button and place at the right most position into the
         button bar.
     */
-    public JButton createButton (String title, String command)
+    private JButton createButton (String title, String command)
     {
         JButton aButton = new JButton (title);
         aButton.setEnabled (false);
@@ -250,7 +250,7 @@ public class AccessibilityWorkBench
             Returns the new menu bar.  The returned reference is also
             remembered in the data member <member>maMenuBar</member>.
     */
-    JMenuBar CreateMenuBar ()
+    private JMenuBar CreateMenuBar ()
     {
         // Menu bar.
         JMenuBar aMenuBar = new JMenuBar ();
@@ -342,7 +342,7 @@ public class AccessibilityWorkBench
         actions will be carried out every time.  The main purpose of a
         second call is that of a re-initialization after a reconnect.
     */
-    protected void initialize ()
+    private void initialize ()
     {
         maCanvas.clear();
 
@@ -385,7 +385,7 @@ public class AccessibilityWorkBench
     /** Update the states of the buttons according to the internal state of
         the AWB.
     */
-    protected void UpdateButtonStates ()
+    private void UpdateButtonStates ()
     {
         aConnectButton.setEnabled (mbInitialized);
         aQuitButton.setEnabled (mbInitialized);
@@ -566,9 +566,9 @@ public class AccessibilityWorkBench
     private static AccessibilityWorkBench
         saWorkBench = null;
 
-    protected SimpleOffice
+    private SimpleOffice
         office;
-    protected InformationWriter
+    private InformationWriter
         info;
 
     private JPanel

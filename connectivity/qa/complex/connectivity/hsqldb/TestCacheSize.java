@@ -68,54 +68,54 @@ import com.sun.star.sdbc.*;
 public class TestCacheSize {
 
     // program can edit the *.properties file to set cache_size
-    protected boolean filedb = true;
+    private boolean filedb = true;
 
     // shutdown performed mid operation - not for mem: or hsql: URL's
-    protected boolean shutdown = true;
+    private boolean shutdown = true;
 
     // fixed
-    protected String url = "sdbc:embedded:hsqldb";
+    private String url = "sdbc:embedded:hsqldb";
 
     // frequent reporting of progress
-    boolean reportProgress = false;
+    private boolean reportProgress = false;
 
-    XMultiServiceFactory servicefactory = null;
+    private XMultiServiceFactory servicefactory = null;
 
     // type of the big table {MEMORY | CACHED | TEXT}
-    String tableType      = "CACHED";
-    int    cacheScale     = 17;
+    private String tableType      = "CACHED";
+    private int    cacheScale     = 17;
     int    cacheSizeScale = 8;
 
     // script format {TEXT, BINARY, COMPRESSED}
-    String logType       = "TEXT";
-    int     writeDelay    = 60;
-    boolean indexZip      = true;
-    boolean indexLastName = false;
-    boolean addForeignKey = false;
-    boolean refIntegrity  = true;
+    private String logType       = "TEXT";
+    private int     writeDelay    = 60;
+    private boolean indexZip      = true;
+    private boolean indexLastName = false;
+    private boolean addForeignKey = false;
+    private boolean refIntegrity  = true;
 
     // speeds up inserts when tableType=="CACHED"
-    boolean createTempTable = false;
+    private boolean createTempTable = false;
 
     // introduces fragmentation to the .data file during insert
-    boolean deleteWhileInsert         = false;
-    int     deleteWhileInsertInterval = 10000;
+    private boolean deleteWhileInsert         = false;
+    private int     deleteWhileInsertInterval = 10000;
 
     // size of the tables used in test
     int bigrows   = 10000;
     int smallrows = 0xfff;
 
     // if the extra table needs to be created and filled up
-    boolean multikeytable = false;
+    private boolean multikeytable = false;
 
 
-    String     user;
-    String     password;
-    XStatement  sStatement;
-    XConnection cConnection;
+    private String     user;
+    private String     password;
+    private XStatement  sStatement;
+    private XConnection cConnection;
     XDataSource ds;
-    XDriver drv;
-    com.sun.star.beans.PropertyValue[] info;
+    private XDriver drv;
+    private com.sun.star.beans.PropertyValue[] info;
 
     public TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
         servicefactory = _xmulti;

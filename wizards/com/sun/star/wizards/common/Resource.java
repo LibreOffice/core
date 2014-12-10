@@ -27,10 +27,10 @@ import com.sun.star.uno.UnoRuntime;
 public class Resource
 {
 
-    XMultiServiceFactory xMSF;
-    String Module;
-    XIndexAccess xStringIndexAccess;
-    XIndexAccess xStringListIndexAccess;
+    private XMultiServiceFactory xMSF;
+    private String Module;
+    private XIndexAccess xStringIndexAccess;
+    private XIndexAccess xStringListIndexAccess;
 
     /** Creates a new instance of Resource
      */

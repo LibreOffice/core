@@ -36,7 +36,7 @@ public class UnoDialog
 
     public XMultiServiceFactory xMSF;
     public XMultiServiceFactory MSFDialogModel;
-    public XNameContainer xDlgNames;
+    private XNameContainer xDlgNames;
     public XControlContainer xDlgContainer;
     private XNameAccess m_xDlgNameAccess;
     public XControl xControl;
@@ -45,8 +45,8 @@ public class UnoDialog
     public XWindow xWindow;
     public XComponent xComponent;
     public XInterface xDialogModel;
-    public XInterface xUnoDialog;
-    public XVclWindowPeer xVclWindowPeer;
+    private XInterface xUnoDialog;
+    private XVclWindowPeer xVclWindowPeer;
     public HashMap<String, Integer> ControlList;
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
@@ -98,7 +98,7 @@ public class UnoDialog
         return iKey;
     }
 
-    public void createPeerConfiguration()
+    private void createPeerConfiguration()
     {
         m_oPeerConfig = new PeerConfig(this);
     }
@@ -316,7 +316,7 @@ public class UnoDialog
         return insertEditField("com.sun.star.awt.UnoControlFormattedFieldModel", sName, iControlKey, xTextListener, sProperties, sValues);
     }
 
-    public XTextComponent insertEditField(String ServiceName, String sName, int iControlKey, XTextListener xTextListener, String[] sProperties, Object[] sValues)
+    private XTextComponent insertEditField(String ServiceName, String sName, int iControlKey, XTextListener xTextListener, String[] sProperties, Object[] sValues)
     {
         try
         {
@@ -626,7 +626,7 @@ public class UnoDialog
         setEnabled(control, enabled ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    public static void setEnabled(Object control, Boolean enabled)
+    private static void setEnabled(Object control, Boolean enabled)
     {
         Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
     }
@@ -635,7 +635,7 @@ public class UnoDialog
      * @param oControlModel the model of a control
      * @return the LabelType according to UIConsts.CONTROLTYPE
      */
-    public static int getControlModelType(Object oControlModel)
+    private static int getControlModelType(Object oControlModel)
     {
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, oControlModel);
         if (xServiceInfo.supportsService("com.sun.star.awt.UnoControlFixedTextModel"))
@@ -729,7 +729,7 @@ public class UnoDialog
      * @param itype The type of the control conforming to UIConst.ControlType
      * @return the name of the property that contains the value of a controlmodel
      */
-    public static String getDisplayProperty(int itype)
+    private static String getDisplayProperty(int itype)
     {
         switch (itype)
         {
@@ -783,7 +783,7 @@ public class UnoDialog
     }
     private Boolean BisHighContrastModeActivated = null;
 
-    public boolean isHighContrastModeActivated()
+    private boolean isHighContrastModeActivated()
     {
         if (xVclWindowPeer != null)
         {
@@ -819,20 +819,20 @@ public class UnoDialog
         }
     }
 
-    public static int getRedColorShare(int _nColor)
+    private static int getRedColorShare(int _nColor)
     {
         int nRed = _nColor / 65536;
         return nRed;
     }
 
-    public static int getGreenColorShare(int _nColor)
+    private static int getGreenColorShare(int _nColor)
     {
         int nRedModulo = _nColor % 65536;
         int nGreen = nRedModulo / 256;
         return nGreen;
     }
 
-    public static int getBlueColorShare(int _nColor)
+    private static int getBlueColorShare(int _nColor)
     {
         int nRedModulo = _nColor % 65536;
         int nGreenModulo = (nRedModulo % 256);

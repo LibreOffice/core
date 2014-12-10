@@ -78,7 +78,7 @@ public class CLITest extends ComplexTestCase
  */
 class Reader extends Thread
 {
-    InputStream is;
+    private InputStream is;
     public Reader(InputStream stream)
     {
         is = stream;

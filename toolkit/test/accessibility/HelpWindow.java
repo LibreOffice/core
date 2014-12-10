@@ -69,7 +69,7 @@ class HelpWindow
 
 
 
-    public void loadURL (URL aURL)
+    private void loadURL (URL aURL)
     {
         maHistory.addLast (aURL);
         selectHistoryPage (maHistory.size()-1);

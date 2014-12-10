@@ -38,12 +38,12 @@ public abstract class DataAware {
     /**
      * this is the data object.
      */
-    protected Object dataObject;
+    private Object dataObject;
     /**
      * A Value Object knows how to get/set a value
      * from/to the data object.
      */
-    protected Value value;
+    private Value value;
 
     /**
      * creates a DataAware object for the given data object and Value object.
@@ -58,7 +58,7 @@ public abstract class DataAware {
     /**
      * returns the data object.
      */
-    public Object getDataObject() {
+    private Object getDataObject() {
         return dataObject;
     }
 
@@ -69,7 +69,7 @@ public abstract class DataAware {
      * another kind of Data is needed.
      * @param newValue the new value to set to the DataObject.
      */
-    protected void setToData(Object newValue) {
+    private void setToData(Object newValue) {
         value.set(newValue,getDataObject());
     }
 
@@ -79,7 +79,7 @@ public abstract class DataAware {
      * the value object.
      * @return the current value of the data object.
      */
-    protected Object getFromData() {
+    private Object getFromData() {
         return value.get(getDataObject());
     }
 
@@ -99,7 +99,7 @@ public abstract class DataAware {
      * enables
      * @param currentValue
      */
-    protected void enableControls(Object currentValue) {
+    private void enableControls(Object currentValue) {
     }
 
     /**
@@ -126,7 +126,7 @@ public abstract class DataAware {
      * @param b second object to compare.
      * @return true if both are null or both are equal.
      */
-    protected boolean equals(Object a, Object b) {
+    private boolean equals(Object a, Object b) {
         if (a == null && b == null)
             return true;
         if (a == null || b == null)

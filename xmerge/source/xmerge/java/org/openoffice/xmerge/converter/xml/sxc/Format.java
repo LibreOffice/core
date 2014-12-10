@@ -188,7 +188,7 @@ public class Format implements Cloneable {
       *
       * @return  The formatting category of the object.
       */
-     public String getCategory() {
+     private String getCategory() {
          return category;
      }
 
@@ -197,7 +197,7 @@ public class Format implements Cloneable {
       *
       * @return  The value of the formula.
       */
-     public String getValue() {
+     private String getValue() {
          return value;
      }
 
@@ -225,7 +225,7 @@ public class Format implements Cloneable {
       *
       * @return  {@code Format} specifier for this category.
       */
-     public String getFormatSpecifier() {
+     private String getFormatSpecifier() {
          return formatSpecifier;
      }
 
@@ -243,7 +243,7 @@ public class Format implements Cloneable {
       *
       * @return  Number of decimal places.
       */
-     public int getDecimalPlaces() {
+     private int getDecimalPlaces() {
          return decimalPlaces;
      }
 

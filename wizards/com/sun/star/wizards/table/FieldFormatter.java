@@ -41,18 +41,18 @@ import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 public class FieldFormatter implements XItemListener
 {
 
-    TableWizard CurUnoDialog;
-    TableDescriptor curTableDescriptor;
-    Object oColumnDescriptorModel;
-    XTextComponent txtfieldname;
-    XListBox xlstFieldNames;
-    XButton btnplus;
-    XButton btnminus;
-    XButton btnShiftUp;
-    XButton btnShiftDown;
+    private TableWizard CurUnoDialog;
+    private TableDescriptor curTableDescriptor;
+    private Object oColumnDescriptorModel;
+    private XTextComponent txtfieldname;
+    private XListBox xlstFieldNames;
+    private XButton btnplus;
+    private XButton btnminus;
+    private XButton btnShiftUp;
+    private XButton btnShiftDown;
     short curtabindex;
     String suntitled;
-    Integer IFieldFormatStep;
+    private Integer IFieldFormatStep;
 
     public FieldFormatter(TableWizard _CurUnoDialog)
     {
@@ -235,7 +235,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.setFocus("lstfieldnames");
     }
 
-    public void toggleButtons()
+    private void toggleButtons()
     {
         boolean benableShiftUpButton = false;
         boolean benableShiftDownButton = false;
@@ -321,7 +321,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.repaintDialogStep();
     }
 
-    public void modifyFieldName()
+    private void modifyFieldName()
     {
         String newfieldname = txtfieldname.getText();
         String oldfieldname = xlstFieldNames.getSelectedItem();
@@ -379,7 +379,7 @@ public class FieldFormatter implements XItemListener
         toggleButtons();
     }
 
-    public String[] shiftArrayItem(String[] _slist, int _oldindex, int _shiftcount)
+    private String[] shiftArrayItem(String[] _slist, int _oldindex, int _shiftcount)
     {
         int newindex = _oldindex + _shiftcount;
         if ((newindex >= 0) && (newindex < _slist.length))

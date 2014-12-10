@@ -26,7 +26,7 @@ public class PerformanceContainer {
     /*
       simple helper functions to start/stop a timer, to know how long a process need in milliseconds
      */
-    public long getStartTime()
+    private long getStartTime()
         {
             return System.currentTimeMillis();
         }

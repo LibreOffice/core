@@ -28,28 +28,28 @@ public abstract class ControlScroller
 
     protected WizardDialog CurUnoDialog;
     protected int ncurfieldcount;
-    protected int nblockincrement;
+    private int nblockincrement;
     private int nlineincrement;
-    protected int nscrollvalue = 0;
-    protected int ntotfieldcount;
-    XScrollBar xScrollBar;
-    protected ArrayList<PropertyValue[]> scrollfields;
+    private int nscrollvalue = 0;
+    private int ntotfieldcount;
+    private XScrollBar xScrollBar;
+    private ArrayList<PropertyValue[]> scrollfields;
     protected int iCompPosX;
     protected int iCompPosY;
     protected int iCompWidth;
     protected int iCompHeight;
-    protected int iStartPosY;
+    private int iStartPosY;
     protected short curtabindex;
-    int iStep;
+    private int iStep;
     protected Integer IStep;
-    protected int linedistance;
+    private int linedistance;
     int iScrollBarWidth = 10;
-    int SORELFIRSTPOSY = 3;
+    private int SORELFIRSTPOSY = 3;
     protected int curHelpIndex;
-    String sIncSuffix;
+    private String sIncSuffix;
     protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
 
-    class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
+    private class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
     {
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -150,7 +150,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void fillupControls(boolean binitialize)
+    private void fillupControls(boolean binitialize)
     {
         for (int a = 0; a < this.nblockincrement; a++)
         {
@@ -169,7 +169,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void fillupControls(int guiRow)
+    private void fillupControls(int guiRow)
     {
         PropertyValue[] nameProps = scrollfields.get(guiRow);
         PropertyValue[] valueProps = scrollfields.get(guiRow + nscrollvalue);
@@ -186,7 +186,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void setScrollValue(int _nscrollvalue)
+    private void setScrollValue(int _nscrollvalue)
     {
         if (_nscrollvalue >= 0)
         {
@@ -297,7 +297,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected void scrollRowsInfo()
+    private void scrollRowsInfo()
     {
         int cols =
                 scrollfields.size() > 0
@@ -320,7 +320,7 @@ public abstract class ControlScroller
      * @return the propertyValue object corresponding to
      * this control.
      */
-    protected PropertyValue fieldInfo(int guiRow, int column)
+    private PropertyValue fieldInfo(int guiRow, int column)
     {
         if (guiRow + nscrollvalue < scrollfields.size())
         {
@@ -334,7 +334,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
+    private PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
     {
         if (CurUnoDialog.getDlgNameAccess().hasByName(nameProp.Name))
         {
@@ -370,7 +370,7 @@ public abstract class ControlScroller
 
 
 
-    protected void setControlData(String controlname, Object newvalue)
+    private void setControlData(String controlname, Object newvalue)
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
@@ -380,7 +380,7 @@ public abstract class ControlScroller
         }
     }
 
-    protected Object getControlData(String controlname)
+    private Object getControlData(String controlname)
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);

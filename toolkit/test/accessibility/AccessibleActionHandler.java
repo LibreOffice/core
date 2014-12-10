@@ -40,7 +40,7 @@ class AccessibleActionHandler
     {
     }
 
-    public AccessibleActionHandler (XAccessibleAction xAction)
+    private AccessibleActionHandler (XAccessibleAction xAction)
     {
         if (xAction != null)
             maChildList.setSize (1 + xAction.getAccessibleActionCount());

@@ -40,7 +40,7 @@ class AccessibleExtendedComponentHandler
     {
     }
 
-    public AccessibleExtendedComponentHandler (XAccessibleExtendedComponent xEComponent)
+    private AccessibleExtendedComponentHandler (XAccessibleExtendedComponent xEComponent)
     {
         if (xEComponent != null)
             maChildList.setSize (0);

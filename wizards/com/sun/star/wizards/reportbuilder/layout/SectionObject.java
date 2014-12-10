@@ -25,7 +25,7 @@ abstract public class SectionObject
 {
 
     Object m_aParentObject; // this could be FixedText or FormattedField or null
-    PropertySetHelper m_aPropertySetHelper;
+    private PropertySetHelper m_aPropertySetHelper;
 
     public SectionObject()
     {

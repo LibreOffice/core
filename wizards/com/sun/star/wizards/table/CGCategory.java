@@ -31,10 +31,10 @@ public class CGCategory
 {
 
     private static final String CGROOTPATH = "/org.openoffice.Office.TableWizard/TableWizard/";
-    XMultiServiceFactory xMSF;
+    private XMultiServiceFactory xMSF;
     XNameAccess xNameAccessTablesNode;
-    XNameAccess xNameAccessCurBusinessNode;
-    Object oconfigView;
+    private XNameAccess xNameAccessCurBusinessNode;
+    private Object oconfigView;
 
     public CGCategory(XMultiServiceFactory _xMSF)
     {

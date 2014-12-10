@@ -329,7 +329,7 @@ public class GraphicalTestArguments
         }
 
     // set methods
-    public void setReferenceType(String _sType)
+    private void setReferenceType(String _sType)
         {
             // special casse, null is not allowed, set to default.
             if (_sType == null)
@@ -342,10 +342,10 @@ public class GraphicalTestArguments
             }
         }
     public void setTargetFrameName(String _sTargetFrameName) {m_sTargetFrameName = _sTargetFrameName;}
-    public void setPrinterName(String _sName) {m_sPrinterName = _sName;}
+    private void setPrinterName(String _sName) {m_sPrinterName = _sName;}
     private void setHidden() { m_bHidden = true;}
     private void setViewable() {m_bHidden = false;}
-    public void setDefaultXMLFormatApp(String _sNameOfApp) {m_sDefaultXMLFormatApplication = _sNameOfApp;}
+    private void setDefaultXMLFormatApp(String _sNameOfApp) {m_sDefaultXMLFormatApplication = _sNameOfApp;}
 
     // get methods
     public XMultiServiceFactory getMultiServiceFactory()

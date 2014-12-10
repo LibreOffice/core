@@ -729,7 +729,7 @@ public class ProcessHandler
      * @return <code>true</code> if the external command was
      * found and successfully started.
      */
-    public boolean isStarted()
+    private boolean isStarted()
     {
         return isStarted;
     }
@@ -741,7 +741,7 @@ public class ProcessHandler
      * @return <code>true</code> if the command correctly starts,
      * exits and was not interrupted due to timeout.
      */
-    public boolean isFinished()
+    private boolean isFinished()
     {
         return isFinished;
     }

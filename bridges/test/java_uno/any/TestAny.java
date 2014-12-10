@@ -2177,7 +2177,7 @@ final class TestAny {
         private final Class clazz;
     }
 
-    public static class Enum1 extends Enum {
+    private static class Enum1 extends Enum {
         public Enum1() {
             super(0);
         }
@@ -2192,31 +2192,31 @@ final class TestAny {
         }
     }
 
-    public static class Enum2 extends Enum1 {
+    private static class Enum2 extends Enum1 {
         @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == Enum2.class;
         }
     }
 
-    public static class BaseStruct {
+    private static class BaseStruct {
         @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == BaseStruct.class;
         }
     }
 
-    public static class DerivedStruct extends BaseStruct {
+    private static class DerivedStruct extends BaseStruct {
         @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == DerivedStruct.class;
         }
     }
 
-    public static class BaseException extends com.sun.star.uno.Exception {
+    private static class BaseException extends com.sun.star.uno.Exception {
         public BaseException() {}
 
-        public BaseException(String message) {
+        private BaseException(String message) {
             super(message);
         }
 
@@ -2226,7 +2226,7 @@ final class TestAny {
         }
     }
 
-    public static class DerivedException extends BaseException {
+    private static class DerivedException extends BaseException {
         public DerivedException() {}
 
         public DerivedException(String message) {
@@ -2239,12 +2239,12 @@ final class TestAny {
         }
     }
 
-    public static class BaseRuntimeException
+    private static class BaseRuntimeException
         extends com.sun.star.uno.RuntimeException
     {
         public BaseRuntimeException() {}
 
-        public BaseRuntimeException(String message) {
+        private BaseRuntimeException(String message) {
             super(message);
         }
 
@@ -2255,7 +2255,7 @@ final class TestAny {
         }
     }
 
-    public static class DerivedRuntimeException extends BaseRuntimeException
+    private static class DerivedRuntimeException extends BaseRuntimeException
     {
         public DerivedRuntimeException() {}
 

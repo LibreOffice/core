@@ -28,9 +28,9 @@ import com.sun.star.accessibility.AccessibleStateType;
 
 class CanvasShape
 {
-    public final Color maHighlightColor = Color.red;
-    public final Color maSelectionColor = Color.green;
-    public final Color maFocusColor = Color.blue;
+    private final Color maHighlightColor = Color.red;
+    private final Color maSelectionColor = Color.green;
+    private final Color maFocusColor = Color.blue;
 
     public CanvasShape (AccTreeNode aNode)
     {

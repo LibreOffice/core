@@ -40,17 +40,17 @@ import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 public class FormConfiguration
 {
 
-    WizardDialog CurUnoDialog;
-    short curtabindex;
-    XRadioButton optOnExistingRelation;
-    XCheckBox chkcreateSubForm;
-    XRadioButton optSelectManually;
-    XFixedText lblRelations;
-    XListBox lstRelations;
-    String[] sreferencedTables;
-    CommandFieldSelection CurSubFormFieldSelection;
-    boolean bsupportsRelations;
-    RelationController oRelationController = null;
+    private WizardDialog CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optOnExistingRelation;
+    private XCheckBox chkcreateSubForm;
+    private XRadioButton optSelectManually;
+    private XFixedText lblRelations;
+    private XListBox lstRelations;
+    private String[] sreferencedTables;
+    private CommandFieldSelection CurSubFormFieldSelection;
+    private boolean bsupportsRelations;
+    private RelationController oRelationController = null;
 
     public FormConfiguration(WizardDialog _CurUnoDialog)
     {
@@ -176,7 +176,7 @@ public class FormConfiguration
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
     }
 
-    public void toggleSteps()
+    private void toggleSteps()
     {
         if (chkcreateSubForm.getState() == 1)
         {

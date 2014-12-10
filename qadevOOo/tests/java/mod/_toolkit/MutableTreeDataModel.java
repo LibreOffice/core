@@ -80,7 +80,7 @@ public class MutableTreeDataModel extends TestCase {
         return tEnv;
     } // finish method getTestEnvironment
 
-    public class XTreeDataModelListenerEvent implements ifc.awt.tree._XTreeDataModel.XTreeDataModelListenerEvent{
+    private class XTreeDataModelListenerEvent implements ifc.awt.tree._XTreeDataModel.XTreeDataModelListenerEvent{
 
         public void fireEvent(){
 

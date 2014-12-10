@@ -31,13 +31,13 @@ import com.sun.star.comp.loader.FactoryHelper;
 
 public class Job {
 
-    static public class _Implementation implements XServiceInfo, XTypeProvider,
+    static private class _Implementation implements XServiceInfo, XTypeProvider,
             XJob, XNamed {
     static private final String __serviceName = "test.Job";
         Object oDoc = null;
         String actionType = null;
         String actionParm = null;
-        XMultiServiceFactory oMSF = null;
+        private XMultiServiceFactory oMSF = null;
 
 
     public _Implementation(XMultiServiceFactory xMSF) {
@@ -57,7 +57,7 @@ public class Job {
         return new String[] {__serviceName};
     }
 
-        public static int executed = 0;
+        private static int executed = 0;
         public Object execute(NamedValue[] args) {
             executed++;
 

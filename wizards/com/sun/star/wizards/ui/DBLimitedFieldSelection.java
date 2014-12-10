@@ -30,14 +30,14 @@ public abstract class DBLimitedFieldSelection
 {
 
     protected WizardDialog CurUnoDialog;
-    protected String sNoField;
+    private String sNoField;
     protected Integer IStep;
     protected static final int rowcount = 4;
-    protected static final int MAXSELINDEX = rowcount - 1;
+    private static final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
     protected int iCurPosY;
     protected int FirstHelpIndex;
-    protected int iCompPosX;
+    private int iCompPosX;
 
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int _FirstHelpIndex)
     {

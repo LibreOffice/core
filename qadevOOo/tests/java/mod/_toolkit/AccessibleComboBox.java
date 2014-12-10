@@ -193,11 +193,11 @@ public class AccessibleComboBox extends TestCase {
     /**
      * Thread for opening modal dialog 'Character style'.
      */
-    public class DiagThread extends Thread {
-        public XTextDocument xTextDoc = null;
-        public XMultiServiceFactory msf = null;
+    private class DiagThread extends Thread {
+        private XTextDocument xTextDoc = null;
+        private XMultiServiceFactory msf = null;
 
-        public DiagThread(XTextDocument xTextDoc, XMultiServiceFactory msf) {
+        private DiagThread(XTextDocument xTextDoc, XMultiServiceFactory msf) {
             this.xTextDoc = xTextDoc;
             this.msf = msf;
         }

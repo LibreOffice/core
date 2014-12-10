@@ -25,7 +25,7 @@ import com.sun.star.util.XModifiable;
 public abstract class TestCase extends complexlib.ComplexTestCase implements com.sun.star.lang.XEventListener
 {
     protected XMultiServiceFactory    m_orb;              /// our service factory
-    protected DocumentType            m_documentType;     /// the type of our document
+    private DocumentType            m_documentType;     /// the type of our document
     protected DocumentHelper          m_document;         /// our current test document
     protected FormLayer               m_formLayer;
 

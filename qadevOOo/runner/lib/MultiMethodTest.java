@@ -290,7 +290,7 @@ public class MultiMethodTest
      * @param methName the method name to set status
      * @param methStatus the status to set to the method
      */
-    protected void setStatus(String methName, Status methStatus)
+    private void setStatus(String methName, Status methStatus)
     {
         tRes.tested(methName, methStatus);
     }
@@ -298,7 +298,7 @@ public class MultiMethodTest
     /**
      * sets the substates
      */
-    protected void setSubStates(String msg)
+    private void setSubStates(String msg)
     {
         for (int k = 0; k < entry.SubEntryCount; k++)
         {
@@ -332,7 +332,7 @@ public class MultiMethodTest
     /**
      * Checks if the <code>method</code> test has been already called.
      */
-    protected boolean isCalled(String method)
+    private boolean isCalled(String method)
     {
         return methCalled.contains(method);
     }
@@ -373,7 +373,7 @@ public class MultiMethodTest
     /**
      * Just calls the <code>method</code> test.
      */
-    protected void callMethod(String method)
+    private void callMethod(String method)
     {
         methCalled.add(method);
         invokeTestMethod(getMethodFor(method), method);
@@ -440,7 +440,7 @@ public class MultiMethodTest
      *
      * @return the testing method, if found, <tt>null</tt> otherwise
      */
-    protected Method getMethodFor(String method)
+    private Method getMethodFor(String method)
     {
         String mName = "_" + method;
 

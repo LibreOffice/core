@@ -27,23 +27,23 @@ import java.util.ArrayList;
 public class SortingComponent
 {
 
-    WizardDialog CurUnoDialog;
-    int MaxSortIndex = -1;
-    static String sNoSorting;
-    static String sSortCriteriaisduplicate;
-    static String[] sSortHeader = new String[4];
-    static String[] sSortAscend = new String[4];
-    static String[] sSortDescend = new String[4];
-    public int MAXSORTCRITERIAINDEX = 3;
-    static final int SOFIRSTSORTLST = 0;
-    static final int SOSECSORTLST = 1;
-    static final int SOTHIRDSORTLST = 2;
-    static final int SOFOURTHSORTLST = 3;
-    static final int[] SOSORTLST = new int[]
+    private WizardDialog CurUnoDialog;
+    private int MaxSortIndex = -1;
+    private static String sNoSorting;
+    private static String sSortCriteriaisduplicate;
+    private static String[] sSortHeader = new String[4];
+    private static String[] sSortAscend = new String[4];
+    private static String[] sSortDescend = new String[4];
+    private int MAXSORTCRITERIAINDEX = 3;
+    private static final int SOFIRSTSORTLST = 0;
+    private static final int SOSECSORTLST = 1;
+    private static final int SOTHIRDSORTLST = 2;
+    private static final int SOFOURTHSORTLST = 3;
+    private static final int[] SOSORTLST = new int[]
     {
         SOFIRSTSORTLST, SOSECSORTLST, SOTHIRDSORTLST, SOFOURTHSORTLST
     };
-    XListBox[] xSortListBox = new XListBox[4];
+    private XListBox[] xSortListBox = new XListBox[4];
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
@@ -191,7 +191,7 @@ public class SortingComponent
      * sets the controls of a Sorting criterion to readonly or not.
      * @param _index index of the Sorting criterion
      */
-    public void setReadOnly(int _index, boolean _breadonly)
+    private void setReadOnly(int _index, boolean _breadonly)
     {
         CurUnoDialog.setControlProperty("lstSort" + Integer.toString(_index + 1), PropertyNames.READ_ONLY, Boolean.valueOf(_breadonly));
     }

@@ -52,14 +52,14 @@ import com.sun.star.wizards.common.PropertyNames;
 public class TableDescriptor extends CommandMetaData implements XContainerListener
 {
 
-    XDataDescriptorFactory xTableDataDescriptorFactory;
-    XPropertySet xPropTableDataDescriptor;
+    private XDataDescriptorFactory xTableDataDescriptorFactory;
+    private XPropertySet xPropTableDataDescriptor;
     private XNameAccess xNameAccessColumns;
     private XIndexAccess xIndexAccessKeys;
-    public XDataDescriptorFactory xColumnDataDescriptorFactory;
-    XContainer xTableContainer;
-    XAppend xTableAppend;
-    XDrop xTableDrop;
+    private XDataDescriptorFactory xColumnDataDescriptorFactory;
+    private XContainer xTableContainer;
+    private XAppend xTableAppend;
+    private XDrop xTableDrop;
     private XAppend xKeyAppend;
     private XDrop xKeyDrop;
     private String[] sTableFilters = null;
@@ -135,7 +135,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    public boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation)
+    private boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation)
     {
         try
         {
@@ -201,7 +201,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         return false;
     }
 
-    public boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet)
+    private boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet)
     {
         try
         {
@@ -382,7 +382,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    public boolean modifyColumn(String _sname, String _spropname, Object _oValue)
+    private boolean modifyColumn(String _sname, String _spropname, Object _oValue)
     {
         try
         {
@@ -476,7 +476,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    public String[] getColumnNames()
+    private String[] getColumnNames()
     {
         if (columncontainer.size() > 0)
         {
@@ -640,7 +640,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
 
 
-    public XPropertySet addPrimaryKeyColumn(String _columnname)
+    private XPropertySet addPrimaryKeyColumn(String _columnname)
     {
         try
         {
@@ -765,7 +765,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
     }
 
-    public boolean appendTableNameToFilter(String _scomposedtablename)
+    private boolean appendTableNameToFilter(String _scomposedtablename)
     {
         boolean bhastoinsert = true;
         for (int i = 0; i < sTableFilters.length; i++)

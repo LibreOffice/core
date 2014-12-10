@@ -59,7 +59,7 @@ public class Properties extends HashMap<String,Object>
         return getProperties(this);
     }
 
-    public static PropertyValue[] getProperties(Map<String,Object> map)
+    private static PropertyValue[] getProperties(Map<String,Object> map)
     {
         PropertyValue[] pv = new PropertyValue[map.size()];
 
@@ -71,7 +71,7 @@ public class Properties extends HashMap<String,Object>
         return pv;
     }
 
-    public static PropertyValue createProperty(String name, Map<String,Object> map)
+    private static PropertyValue createProperty(String name, Map<String,Object> map)
     {
         return createProperty(name, map.get(name));
     }

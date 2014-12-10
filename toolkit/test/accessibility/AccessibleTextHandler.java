@@ -67,7 +67,7 @@ class AccessibleTextHandler extends NodeHandler
     {
     }
 
-    public AccessibleTextHandler (XAccessibleText xText)
+    private AccessibleTextHandler (XAccessibleText xText)
     {
         if (xText != null)
             maChildList.setSize (8);
@@ -379,9 +379,9 @@ class AccessibleTextHandler extends NodeHandler
     }
 
 
-    static String[] aTextActions =
+    private static String[] aTextActions =
         new String[] { "select...", "copy..." };
-    static String[] aEditableTextActions =
+    private static String[] aEditableTextActions =
         new String[] { "select...", "copy...",
                        "cut...", "paste...", "edit...", "format..." };
 
@@ -491,10 +491,10 @@ class AccessibleTextHandler extends NodeHandler
 abstract class TextActionDialog extends JDialog
     implements ActionListener
 {
-    AccTreeNode aNode;
+    private AccTreeNode aNode;
     JTextArea aText;
-    String sName;
-    JCheckBox aIndexToggle;
+    private String sName;
+    private JCheckBox aIndexToggle;
 
     public TextActionDialog( AccTreeNode aNd,
                              String sExplanation,
@@ -548,13 +548,13 @@ abstract class TextActionDialog extends JDialog
         aContent.add( aButtons, BorderLayout.SOUTH );
     }
 
-    void cancel()
+    private void cancel()
     {
         setVisible(false);
         dispose();
     }
 
-    void action()
+    private void action()
     {
         String sError = null;
         try
@@ -589,7 +589,7 @@ abstract class TextActionDialog extends JDialog
 
     int getSelectionStart()     { return getSelection(true); }
     int getSelectionEnd()       { return getSelection(false); }
-    int getSelection(boolean bStart)
+    private int getSelection(boolean bStart)
     {
         return ( bStart ^ aIndexToggle.isSelected() )
             ? aText.getSelectionStart() : aText.getSelectionEnd();
@@ -634,7 +634,7 @@ class TextEditDialog extends TextActionDialog
 
 
     /** update the text */
-    boolean updateText( XAccessibleEditableText xEdit, String sNew )
+    private boolean updateText( XAccessibleEditableText xEdit, String sNew )
     {
         String sOld = xEdit.getText();
 
@@ -757,11 +757,11 @@ class TextAttributeDialog extends TextActionDialog
     }
 
 
-    class ColorIcon implements Icon
+    private class ColorIcon implements Icon
     {
-        boolean bForeground;
-        static final int nHeight = 16;
-        static final int nWidth = 16;
+        private boolean bForeground;
+        private static final int nHeight = 16;
+        private static final int nWidth = 16;
 
         public ColorIcon(boolean bWhich) { bForeground = bWhich; }
         public int getIconHeight()  { return nHeight; }

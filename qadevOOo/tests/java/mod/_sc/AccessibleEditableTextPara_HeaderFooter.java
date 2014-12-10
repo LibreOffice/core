@@ -167,11 +167,11 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
     /**
      * Thread for opening modal dialog 'Print Settings'.
      */
-    public class DiagThread extends Thread {
-        public XComponent xCalcDoc = null;
-        public XMultiServiceFactory msf = null;
+    private class DiagThread extends Thread {
+        private XComponent xCalcDoc = null;
+        private XMultiServiceFactory msf = null;
 
-        public DiagThread(XComponent xCalcDoc, XMultiServiceFactory msf) {
+        private DiagThread(XComponent xCalcDoc, XMultiServiceFactory msf) {
             this.xCalcDoc = xCalcDoc;
             this.msf = msf;
         }

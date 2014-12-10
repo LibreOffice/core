@@ -114,7 +114,7 @@ public class UnoDialog2 extends UnoDialog
         return (XTextComponent) insertEditField(sName, textListener, "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, XTextComponent.class);
     }
 
-    public XControl insertImage(String sName, String[] sPropNames, Object[] oPropValues)
+    private XControl insertImage(String sName, String[] sPropNames, Object[] oPropValues)
     {
         return (XControl) insertControlModel2("com.sun.star.awt.UnoControlImageControlModel", sName, sPropNames, oPropValues, XControl.class);
     }
@@ -160,7 +160,7 @@ public class UnoDialog2 extends UnoDialog
 
 
 
-    public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
+    private Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
     {
         try
         {
@@ -179,7 +179,7 @@ public class UnoDialog2 extends UnoDialog
         return xDlgContainer.getControl(componentName);
     }
 
-    public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
+    private Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));
     }
