@@ -426,7 +426,7 @@ const CharSetNameMap *GetCharSetNameMap()
 {
     static const CharSetNameMap aMapArr[] =
     {
-#   define IMPLENTRY(X) { RTL_TEXTENCODING_##X, "" #X "" }
+#   define IMPLENTRY(X) { RTL_TEXTENCODING_##X, #X }
         IMPLENTRY(DONTKNOW),
         IMPLENTRY(MS_1252),
         IMPLENTRY(APPLE_ROMAN),

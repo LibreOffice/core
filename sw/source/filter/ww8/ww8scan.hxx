@@ -46,7 +46,7 @@
 //Commonly used string literals for stream and storage names in word docs
 namespace SL
 {
-#   define DEFCONSTSTRINGARRAY(X) extern const char a##X[sizeof("" #X "")]
+#   define DEFCONSTSTRINGARRAY(X) extern const char a##X[sizeof(#X)]
     DEFCONSTSTRINGARRAY(ObjectPool);
     DEFCONSTSTRINGARRAY(1Table);
     DEFCONSTSTRINGARRAY(0Table);
