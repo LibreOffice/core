@@ -134,7 +134,8 @@ private:
     void                ClearIndex();
 
     DECL_LINK(OpenHdl, void *);
-    DECL_LINK(          TimeoutHdl, Timer* );
+    DECL_LINK(IdleHdl, Idle* );
+    DECL_LINK(TimeoutHdl, Timer*);
 
 public:
     IndexTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );

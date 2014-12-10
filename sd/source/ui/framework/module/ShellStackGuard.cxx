@@ -118,12 +118,12 @@ void SAL_CALL ShellStackGuard::disposing (
         }
 }
 
-IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pTimer)
+IMPL_LINK(ShellStackGuard, TimeoutHandler, Idle*, pIdle)
 {
 #ifdef DEBUG
-    OSL_ASSERT(pTimer==&maPrinterPollingIdle);
+    OSL_ASSERT(pIdle==&maPrinterPollingIdle);
 #else
-    (void)pTimer;
+    (void)pIdle;
 #endif
     if (mpUpdateLock.get() != NULL)
     {

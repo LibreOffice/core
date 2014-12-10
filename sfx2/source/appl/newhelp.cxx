@@ -538,7 +538,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
 
     m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
     Link aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
-    aFactoryIdle.SetIdleHdl( aTimeoutLink );
+    aFactoryIdle.SetIdleHdl( LINK(this, IndexTabPage_Impl, IdleHdl ));
     aFactoryIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
     aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
 }
@@ -708,12 +708,17 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
     return 0;
 }
 
-IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
+IMPL_LINK( IndexTabPage_Impl, IdleHdl, Idle*, pIdle )
 {
-    if ( &aFactoryIdle == pTimer )
+    if ( &aFactoryIdle == pIdle )
         InitializeIndex();
-    else if ( &aKeywordTimer == pTimer && !sKeyword.isEmpty() )
-        aKeywordLink.Call( this );
+    return 0;
+}
+
+IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer)
+{
+    if(&aKeywordTimer == pTimer && !sKeyword.isEmpty())
+        aKeywordLink.Call(this);
     return 0;
 }
 
