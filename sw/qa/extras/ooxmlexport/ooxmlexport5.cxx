@@ -721,6 +721,12 @@ DECLARE_OOXMLEXPORT_TEST(testTblpprShape, "tblppr-shape.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2540), getProperty<sal_Int32>(xPageStyle, "LeftMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testImageNoborder, "image-noborder.docx")
+{
+    // This was 26; we exported border for an image that had no border.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

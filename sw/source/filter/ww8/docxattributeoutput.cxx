@@ -4215,21 +4215,28 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     m_pSerializer->singleElementNS( XML_a, XML_avLst,
             FSEND );
     m_pSerializer->endElementNS( XML_a, XML_prstGeom );
-    m_pSerializer->singleElementNS( XML_a, XML_noFill,
-            FSEND );
-    m_pSerializer->startElementNS( XML_a, XML_ln,
-            XML_w, "9525",
-            FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_noFill,
-            FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_miter,
-            XML_lim, "800000",
-            FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_headEnd,
-            FSEND );
-    m_pSerializer->singleElementNS( XML_a, XML_tailEnd,
-            FSEND );
-    m_pSerializer->endElementNS( XML_a, XML_ln );
+
+    const SvxBoxItem& rBoxItem = pFrmFmt->GetBox();
+    const SvxBorderLine* pLeft = rBoxItem.GetLine(BOX_LINE_LEFT);
+    const SvxBorderLine* pRight = rBoxItem.GetLine(BOX_LINE_RIGHT);
+    const SvxBorderLine* pTop = rBoxItem.GetLine(BOX_LINE_TOP);
+    const SvxBorderLine* pBottom = rBoxItem.GetLine(BOX_LINE_BOTTOM);
+    if (pLeft || pRight || pTop || pBottom)
+    {
+        m_pSerializer->startElementNS( XML_a, XML_ln,
+                                       XML_w, "9525",
+                                       FSEND );
+        m_pSerializer->singleElementNS( XML_a, XML_noFill,
+                                        FSEND );
+        m_pSerializer->singleElementNS( XML_a, XML_miter,
+                                        XML_lim, "800000",
+                                        FSEND );
+        m_pSerializer->singleElementNS( XML_a, XML_headEnd,
+                                        FSEND );
+        m_pSerializer->singleElementNS( XML_a, XML_tailEnd,
+                                        FSEND );
+        m_pSerializer->endElementNS( XML_a, XML_ln );
+    }
 
     m_rExport.SdrExporter().writeDMLEffectLst(*pFrmFmt);
 
