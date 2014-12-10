@@ -1393,26 +1393,14 @@ public:
     /** Enables headless mode.
 
      @param dialogsAreFatal     Set to true if a dialog ends the session, false if not.
-
-     @see IsHeadlessModeEnabled, IsHeadlessModeRequested
     */
     static void                 EnableHeadlessMode( bool dialogsAreFatal );
 
     /** Determines if headless mode is enabled
 
      @return True if headless mode is enabled, false if not.
-
-     @see EnableHeadlessMode, IsHeadlessModeRequested
     */
     static bool                 IsHeadlessModeEnabled();
-
-    /** Check command line arguments for \code --headless \endcode
-
-     @return True if headless mode was requested, false if not
-
-     @see EnableHeadlessMode, IsHeadlessModeEnabled
-    */
-    static bool                 IsHeadlessModeRequested();
 
     /** Enable Console Only mode
 

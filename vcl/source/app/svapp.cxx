@@ -27,7 +27,6 @@
 
 #include "rtl/tencinfo.h"
 #include "rtl/instance.hxx"
-#include "rtl/process.h"
 
 #include "tools/debug.hxx"
 #include "tools/time.hxx"
@@ -1533,19 +1532,6 @@ void Application::EnableHeadlessMode( bool dialogsAreFatal )
 bool Application::IsHeadlessModeEnabled()
 {
     return IsDialogCancelEnabled();
-}
-
-bool Application::IsHeadlessModeRequested()
-{
-    sal_uInt32 n = rtl_getAppCommandArgCount();
-    for (sal_uInt32 i = 0; i < n; ++i) {
-        OUString arg;
-        rtl_getAppCommandArg(i, &arg.pData);
-        if ( arg == "--headless" || arg == "-headless" ) {
-            return true;
-        }
-    }
-    return false;
 }
 
 static bool bConsoleOnly = false;

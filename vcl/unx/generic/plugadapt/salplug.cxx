@@ -21,6 +21,7 @@
 #include "osl/process.h"
 
 #include "rtl/bootstrap.hxx"
+#include "rtl/process.h"
 
 #include "salinst.hxx"
 #include "generic/gensys.h"
@@ -34,6 +35,25 @@
 
 extern "C" {
 typedef SalInstance*(*salFactoryProc)();
+}
+
+namespace {
+
+// HACK to obtain Application::IsHeadlessModeEnabled early on, before
+// Application::EnableHeadlessMode has potentially been called:
+bool IsHeadlessModeRequested()
+{
+    sal_uInt32 n = rtl_getAppCommandArgCount();
+    for (sal_uInt32 i = 0; i < n; ++i) {
+        OUString arg;
+        rtl_getAppCommandArg(i, &arg.pData);
+        if ( arg == "--headless" || arg == "-headless" ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 }
 
 static oslModule pCloseModule = NULL;
@@ -216,7 +236,7 @@ SalInstance *CreateSalInstance()
     SalInstance *pInst = NULL;
 
     OUString aUsePlugin;
-    if( Application::IsHeadlessModeRequested() )
+    if( IsHeadlessModeRequested() )
         aUsePlugin = "svp";
     else
     {
