@@ -1347,7 +1347,7 @@
         <prop oor:name="OpenCLSubsetOnly" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
-            <desc>Whether to use only a subset of OpenCL.</desc>
+            <desc>Whether to use OpenCL only when a formula uses only a subset of operator and function opcodes.</desc>
           </info>
           <value>true</value>
         </prop>
