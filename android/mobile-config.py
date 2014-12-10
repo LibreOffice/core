@@ -74,6 +74,15 @@ if __name__ == '__main__':
 
     print "saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total)
 
+    # Don't do pointless Word -> Writer and similar conversions when we have no UI.
+    microsoftImport = '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Filter"]/group[@%(name)s="Microsoft"]/group[@%(name)s="Import"]/prop' % {
+        "component-schema": "{http://openoffice.org/2001/registry}component-schema",
+        "name": "{http://openoffice.org/2001/registry}name",
+    }
+    props = root.findall(microsoftImport)
+    for prop in props:
+        prop.findall("value")[0].text = "false"
+
     # The namespace prefixes xs and oor are present in attribute *values*, and namespace
     # declarations for them are needed, even if no actual elements or attributes with these
     # namespace prefixes are present. Fun.
