@@ -349,8 +349,6 @@ private:
     LineNumberSettings                                                              m_aLineNumberSettings;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;
-    /// Detect attempt to insert multiple bookmarks at the same position
-    css::uno::Reference<css::text::XTextRange>                                      m_xPrevBookmark;
     OUString                                                                        m_sCurrentBkmkId;
     OUString                                                                        m_sCurrentBkmkName;
 
