@@ -6025,6 +6025,144 @@ OUString WindowsError(DWORD nErrorCode)
     return result;
 }
 
+#if SAL_LOG_INFO
+
+OUString CertificatePropertyName(int nId)
+{
+    switch (nId)
+    {
+    case CERT_ACCESS_STATE_PROP_ID: return OUString("ACCESS_STATE");
+    case CERT_AIA_URL_RETRIEVED_PROP_ID: return OUString("AIA_URL_RETRIEVED");
+    case CERT_ARCHIVED_KEY_HASH_PROP_ID: return OUString("ARCHIVED_KEY_HASH");
+    case CERT_ARCHIVED_PROP_ID: return OUString("ARCHIVED");
+    case CERT_AUTHORITY_INFO_ACCESS_PROP_ID: return OUString("AUTHORITY_INFO_ACCESS");
+    case CERT_AUTH_ROOT_SHA256_HASH_PROP_ID: return OUString("AUTH_ROOT_SHA256_HASH");
+    case CERT_AUTO_ENROLL_PROP_ID: return OUString("AUTO_ENROLL");
+    case CERT_AUTO_ENROLL_RETRY_PROP_ID: return OUString("AUTO_ENROLL_RETRY");
+    case CERT_BACKED_UP_PROP_ID: return OUString("BACKED_UP");
+    case CERT_CA_DISABLE_CRL_PROP_ID: return OUString("CA_DISABLE_CRL");
+    case CERT_CA_OCSP_AUTHORITY_INFO_ACCESS_PROP_ID: return OUString("CA_OCSP_AUTHORITY_INFO_ACCESS");
+    case CERT_CEP_PROP_ID: return OUString("CEP");
+    case CERT_CROSS_CERT_DIST_POINTS_PROP_ID: return OUString("CROSS_CERT_DIST_POINTS");
+    case CERT_CTL_USAGE_PROP_ID: return OUString("CTL_USAGE");
+    case CERT_DATE_STAMP_PROP_ID: return OUString("DATE_STAMP");
+    case CERT_DESCRIPTION_PROP_ID: return OUString("DESCRIPTION");
+    case CERT_DISALLOWED_FILETIME_PROP_ID: return OUString("DISALLOWED_FILETIME");
+    case CERT_EFS_PROP_ID: return OUString("EFS");
+    case CERT_ENROLLMENT_PROP_ID: return OUString("ENROLLMENT");
+    case CERT_EXTENDED_ERROR_INFO_PROP_ID: return OUString("EXTENDED_ERROR_INFO");
+    case CERT_FORTEZZA_DATA_PROP_ID: return OUString("FORTEZZA_DATA");
+    case CERT_FRIENDLY_NAME_PROP_ID: return OUString("FRIENDLY_NAME");
+    case CERT_HASH_PROP_ID: return OUString("HASH");
+    case CERT_HCRYPTPROV_OR_NCRYPT_KEY_HANDLE_PROP_ID: return OUString("HCRYPTPROV_OR_NCRYPT_KEY_HANDLE");
+    case CERT_HCRYPTPROV_TRANSFER_PROP_ID: return OUString("HCRYPTPROV_TRANSFER");
+    case CERT_IE30_RESERVED_PROP_ID: return OUString("IE30_RESERVED");
+    case CERT_ISSUER_CHAIN_PUB_KEY_CNG_ALG_BIT_LENGTH_PROP_ID: return OUString("ISSUER_CHAIN_PUB_KEY_CNG_ALG_BIT_LENGTH");
+    case CERT_ISSUER_CHAIN_SIGN_HASH_CNG_ALG_PROP_ID: return OUString("ISSUER_CHAIN_SIGN_HASH_CNG_ALG");
+    case CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID: return OUString("ISSUER_PUBLIC_KEY_MD5_HASH");
+    case CERT_ISSUER_PUB_KEY_BIT_LENGTH_PROP_ID: return OUString("ISSUER_PUB_KEY_BIT_LENGTH");
+    case CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID: return OUString("ISSUER_SERIAL_NUMBER_MD5_HASH");
+    case CERT_KEY_CONTEXT_PROP_ID: return OUString("KEY_CONTEXT");
+    case CERT_KEY_IDENTIFIER_PROP_ID: return OUString("KEY_IDENTIFIER");
+    case CERT_KEY_PROV_HANDLE_PROP_ID: return OUString("KEY_PROV_HANDLE");
+    case CERT_KEY_PROV_INFO_PROP_ID: return OUString("KEY_PROV_INFO");
+    case CERT_KEY_REPAIR_ATTEMPTED_PROP_ID: return OUString("KEY_REPAIR_ATTEMPTED");
+    case CERT_KEY_SPEC_PROP_ID: return OUString("KEY_SPEC");
+    case CERT_MD5_HASH_PROP_ID: return OUString("MD5_HASH");
+    case CERT_NCRYPT_KEY_HANDLE_PROP_ID: return OUString("NCRYPT_KEY_HANDLE");
+    case CERT_NCRYPT_KEY_HANDLE_TRANSFER_PROP_ID: return OUString("NCRYPT_KEY_HANDLE_TRANSFER");
+    case CERT_NEW_KEY_PROP_ID: return OUString("NEW_KEY");
+    case CERT_NEXT_UPDATE_LOCATION_PROP_ID: return OUString("NEXT_UPDATE_LOCATION");
+    case CERT_NO_AUTO_EXPIRE_CHECK_PROP_ID: return OUString("NO_AUTO_EXPIRE_CHECK");
+    case CERT_NO_EXPIRE_NOTIFICATION_PROP_ID: return OUString("NO_EXPIRE_NOTIFICATION");
+    case CERT_OCSP_CACHE_PREFIX_PROP_ID: return OUString("OCSP_CACHE_PREFIX");
+    case CERT_OCSP_RESPONSE_PROP_ID: return OUString("OCSP_RESPONSE");
+    case CERT_PUBKEY_ALG_PARA_PROP_ID: return OUString("PUBKEY_ALG_PARA");
+    case CERT_PUBKEY_HASH_RESERVED_PROP_ID: return OUString("PUBKEY_HASH_RESERVED");
+    case CERT_PUB_KEY_CNG_ALG_BIT_LENGTH_PROP_ID: return OUString("PUB_KEY_CNG_ALG_BIT_LENGTH");
+    case CERT_PVK_FILE_PROP_ID: return OUString("PVK_FILE");
+    case CERT_RENEWAL_PROP_ID: return OUString("RENEWAL");
+    case CERT_REQUEST_ORIGINATOR_PROP_ID: return OUString("REQUEST_ORIGINATOR");
+    case CERT_ROOT_PROGRAM_CERT_POLICIES_PROP_ID: return OUString("ROOT_PROGRAM_CERT_POLICIES");
+    case CERT_ROOT_PROGRAM_CHAIN_POLICIES_PROP_ID: return OUString("ROOT_PROGRAM_CHAIN_POLICIES");
+    case CERT_ROOT_PROGRAM_NAME_CONSTRAINTS_PROP_ID: return OUString("ROOT_PROGRAM_NAME_CONSTRAINTS");
+    case CERT_SCARD_PIN_ID_PROP_ID: return OUString("SCARD_PIN_ID");
+    case CERT_SCARD_PIN_INFO_PROP_ID: return OUString("SCARD_PIN_INFO");
+    case CERT_SEND_AS_TRUSTED_ISSUER_PROP_ID: return OUString("SEND_AS_TRUSTED_ISSUER");
+    case CERT_SHA256_HASH_PROP_ID: return OUString("SHA256_HASH");
+    case CERT_SIGNATURE_HASH_PROP_ID: return OUString("SIGNATURE_HASH");
+    case CERT_SIGN_HASH_CNG_ALG_PROP_ID: return OUString("SIGN_HASH_CNG_ALG");
+    case CERT_SMART_CARD_DATA_PROP_ID: return OUString("SMART_CARD_DATA");
+    case CERT_SMART_CARD_READER_NON_REMOVABLE_PROP_ID: return OUString("SMART_CARD_READER_NON_REMOVABLE");
+    case CERT_SMART_CARD_READER_PROP_ID: return OUString("SMART_CARD_READER");
+    case CERT_SMART_CARD_ROOT_INFO_PROP_ID: return OUString("SMART_CARD_ROOT_INFO");
+    case CERT_SOURCE_LOCATION_PROP_ID: return OUString("SOURCE_LOCATION");
+    case CERT_SOURCE_URL_PROP_ID: return OUString("SOURCE_URL");
+    case CERT_SUBJECT_DISABLE_CRL_PROP_ID: return OUString("SUBJECT_DISABLE_CRL");
+    case CERT_SUBJECT_INFO_ACCESS_PROP_ID: return OUString("SUBJECT_INFO_ACCESS");
+    case CERT_SUBJECT_NAME_MD5_HASH_PROP_ID: return OUString("SUBJECT_NAME_MD5_HASH");
+    case CERT_SUBJECT_OCSP_AUTHORITY_INFO_ACCESS_PROP_ID: return OUString("SUBJECT_OCSP_AUTHORITY_INFO_ACCESS");
+    case CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID: return OUString("SUBJECT_PUBLIC_KEY_MD5_HASH");
+    case CERT_SUBJECT_PUB_KEY_BIT_LENGTH_PROP_ID: return OUString("SUBJECT_PUB_KEY_BIT_LENGTH");
+    default: return OUString::number(nId);
+    }
+}
+
+void DumpCertContext(PCCERT_CONTEXT pCertContext)
+{
+    DWORD nProperty(0);
+    bool first(true);
+    while ((nProperty = CertEnumCertificateContextProperties(pCertContext, nProperty)) != 0)
+    {
+        if (first)
+            SAL_INFO("vcl.pdfwriter", "Certificate context properties:");
+        first = false;
+        SAL_INFO("vcl.pdfwriter", "  " << CertificatePropertyName(nProperty));
+    }
+}
+
+void DumpCryptProvider(HCRYPTPROV hCryptProv)
+{
+    DWORD nDataLen(0);
+
+    if (!CryptGetProvParam(hCryptProv, PP_ENUMALGS, NULL, &nDataLen, CRYPT_FIRST))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptGetProvParam failed: " << WindowsError(GetLastError()));
+        return;
+    }
+    BYTE *pData = new BYTE[nDataLen];
+    bool first(true);
+    while (true)
+    {
+        DWORD nDataLen2(nDataLen);
+        if (!CryptGetProvParam(hCryptProv, PP_ENUMALGS, pData, &nDataLen2, (first ? CRYPT_FIRST : CRYPT_NEXT)))
+        {
+            if (GetLastError() == ERROR_NO_MORE_ITEMS)
+                break;
+
+            SAL_WARN("vcl.pdfwriter", "CryptGetProvParam failed: " << WindowsError(GetLastError()));
+            delete[] pData;
+            return;
+        }
+        if (first)
+            SAL_INFO("vcl.pdfwriter", "Crypt provider algorithms:");
+
+        PROV_ENUMALGS *pAlg = reinterpret_cast<PROV_ENUMALGS*>(pData);
+        SAL_INFO("vcl.pdfwriter", "  " <<
+                 (GET_ALG_CLASS(pAlg->aiAlgid) == ALG_CLASS_DATA_ENCRYPT ? "ENCRYPT" :
+                  (GET_ALG_CLASS(pAlg->aiAlgid) == ALG_CLASS_HASH ? "HASH" :
+                   (GET_ALG_CLASS(pAlg->aiAlgid) == ALG_CLASS_KEY_EXCHANGE ? "KEY_EXCHANGE" :
+                    (GET_ALG_CLASS(pAlg->aiAlgid) == ALG_CLASS_SIGNATURE ? "SIGNATURE" :
+                     OUString::number(GET_ALG_CLASS(pAlg->aiAlgid), 16))))) <<
+                 " Algid=" << std::hex << pAlg->aiAlgid << std::dec << " BitLen=" << pAlg->dwBitLen << " Name=" << pAlg->szName);
+
+        first = false;
+    }
+
+    delete[] pData;
+}
+#endif
+
 }
 
 #endif
@@ -6215,59 +6353,59 @@ bool PDFWriterImpl::finalizeSignature()
 
 #else
 
-    PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
-    if (pCertContext == NULL)
+    // Prepare buffer and calculate PDF file digest
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
+
+    HCERTSTORE hCertStore = CertOpenSystemStore(NULL, "MY");
+    if (!hCertStore)
+    {
+        SAL_WARN("vcl.pdfwriter", "CertOpenSystemStore failed: " << WindowsError(GetLastError()));
+        return false;
+    }
+
+    PCCERT_CONTEXT pCertContextFromDER = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
+    if (pCertContextFromDER == NULL)
     {
         SAL_WARN("vcl.pdfwriter", "CertCreateCertificateContext failed: " << WindowsError(GetLastError()));
         return false;
     }
 
-#if SAL_LOG_INFO
-    DWORD nProperty(0);
-    bool first(true);
-    while ((nProperty = CertEnumCertificateContextProperties(pCertContext, nProperty)) != 0)
+    PCCERT_CONTEXT pCertContext = CertFindCertificateInStore(hCertStore, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 0, CERT_FIND_EXISTING, (const void*) pCertContextFromDER, NULL);
+    if (pCertContext == NULL)
     {
-        if (first)
-            SAL_INFO("vcl.pdfwriter", "Certificate context properties:");
-        first = false;
-#if 0
-        DWORD nSize(0);
-        if (!CertGetCertificateContextProperty(pCertContext, nProperty, NULL, &nSize))
-            SAL_INFO("vcl.pdfwriter", "  " << "(missing?) " << std::hex << nProperty);
-        else
-        {
-            boost::scoped_array<char> aData(new char[nSize]);
-            if (!CertGetCertificateContextProperty(pCertContext, nProperty, aData.get(), &nSize))
-                SAL_INFO("vcl.pdfwriter", "  " << "(missing?) " << std::hex:: << nProperty);
-            else
-                SAL_INFO("vcl.pdfwriter", "  " << CertificatePropertyNameAndData(nProperty, aData, nSize));
-        }
-#else
-        SAL_INFO("vcl.pdfwriter", "  " << std::hex << nProperty);
-#endif
+        SAL_WARN("vcl.pdfwriter", "CertFindCertificateInStore failed: " << WindowsError(GetLastError()));
+        return false;
     }
-#endif
 
-    // Prepare buffer and calculate PDF file digest
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
-
-    HCRYPTPROV hCryptProvider;
-    if (!CryptAcquireContext(&hCryptProvider, NULL, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
+    HCRYPTPROV_OR_NCRYPT_KEY_HANDLE hCryptProvOrNCryptKey;
+    DWORD nKeySpec;
+    BOOL bMustFree;
+    if (!CryptAcquireCertificatePrivateKey(pCertContext, CRYPT_ACQUIRE_CACHE_FLAG, NULL, &hCryptProvOrNCryptKey, &nKeySpec, &bMustFree))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptAcquireContext failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptAcquireCertificatePrivateKey failed: " << WindowsError(GetLastError()));
         CertFreeCertificateContext(pCertContext);
         return false;
     }
+    assert(!bMustFree);
+
+    SAL_INFO("vcl.pdfwriter", "Certificate has private key that is " <<
+             (nKeySpec == AT_KEYEXCHANGE ? OUString("for key exchange") :
+              (nKeySpec == AT_SIGNATURE ? OUString("for signatures") :
+               (nKeySpec == CERT_NCRYPT_KEY_SPEC ? OUString("for CNG (Cryptographi API: Next Generation)") :
+                OUString("unknown type (") + OUString::number(nKeySpec, 16) + ")"))));
+
+    DumpCertContext(pCertContext);
+    DumpCryptProvider(hCryptProvOrNCryptKey);
 
     HCRYPTHASH hHash;
-    if (!CryptCreateHash(hCryptProvider, CALG_SHA1, 0, 0, &hHash))
+    if (!CryptCreateHash(hCryptProvOrNCryptKey, CALG_SHA1, 0, 0, &hHash))
     {
         SAL_WARN("vcl.pdfwriter", "CryptCreateHash failed: " << WindowsError(GetLastError()));
-        CryptReleaseContext(hCryptProvider, 0);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
 
+#if 0
     DWORD nHashSize;
     DWORD nHashSizeLen(sizeof(DWORD));
     if (!CryptGetHashParam(hHash, HP_HASHSIZE, reinterpret_cast<BYTE *>(&nHashSize), &nHashSizeLen, 0))
@@ -6281,40 +6419,50 @@ bool PDFWriterImpl::finalizeSignature()
 
     assert(nHashSizeLen == sizeof(DWORD));
     assert(nHashSize == 20);
+#endif
 
     boost::scoped_array<char> buffer(new char[m_nSignatureContentOffset + 1]);
     sal_uInt64 bytesRead;
 
     //FIXME: Check if SHA1 is calculated from the correct byterange
-    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead)) );
-    if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
+    if (osl::File::E_None != m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead) ||
+        bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
+    {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: First buffer read failed!");
+        CryptDestroyHash(hHash);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
 
     if (!CryptHashData(hHash, reinterpret_cast<const BYTE *>(buffer.get()), bytesRead, 0))
     {
         SAL_WARN("vcl.pdfwriter", "CryptHashData failed: " << WindowsError(GetLastError()));
         CryptDestroyHash(hHash);
-        CryptReleaseContext(hCryptProvider, 0);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
 
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1)) );
     buffer.reset(new char[nLastByteRangeNo + 1]);
-    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead)) );
-    if (bytesRead != (sal_uInt64) nLastByteRangeNo)
+
+    if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
+        osl::File::E_None != m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead) ||
+        bytesRead != (sal_uInt64) nLastByteRangeNo)
+    {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: Second buffer read failed!");
+        CryptDestroyHash(hHash);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
 
     if (!CryptHashData(hHash, reinterpret_cast<const BYTE *>(buffer.get()), bytesRead, 0))
     {
         SAL_WARN("vcl.pdfwriter", "CryptHashData failed: " << WindowsError(GetLastError()));
         CryptDestroyHash(hHash);
-        CryptReleaseContext(hCryptProvider, 0);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
 
-#if 0 // We don't actualy need the hash bytes
+#if 0 // We don't actually need the hash bytes
     unsigned char aHash[20];
     if (!CryptGetHashParam(hHash, HP_HASHVAL, aHash, &nHashSize, 0))
     {
@@ -6338,28 +6486,27 @@ bool PDFWriterImpl::finalizeSignature()
     OString pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 );
 
     DWORD nSigLen(0);
-    if (!CryptSignHash(hHash, AT_SIGNATURE, NULL, 0, NULL, &nSigLen))
+    if (!CryptSignHash(hHash, nKeySpec, NULL, 0, NULL, &nSigLen))
     {
         SAL_WARN("vcl.pdfwriter", "CryptSignHash failed: " << WindowsError(GetLastError()));
         CryptDestroyHash(hHash);
-        CryptReleaseContext(hCryptProvider, 0);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
 
+    SAL_INFO("vcl.pdfwriter", "Signature size is " << nSigLen << " bytes");
+
     boost::scoped_array<BYTE> pSig(new BYTE[nSigLen]);
-    if (!CryptSignHash(hHash, AT_SIGNATURE, NULL, 0, pSig.get(), &nSigLen))
+    if (!CryptSignHash(hHash, nKeySpec, NULL, 0, pSig.get(), &nSigLen))
     {
         SAL_WARN("vcl.pdfwriter", "CryptSignHash failed: " << WindowsError(GetLastError()));
         CryptDestroyHash(hHash);
-        CryptReleaseContext(hCryptProvider, 0);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
 
     // Release resources
     CryptDestroyHash(hHash);
-    CryptReleaseContext(hCryptProvider, 0);
     CertFreeCertificateContext(pCertContext);
 
     OStringBuffer cms_hexbuffer;
