@@ -25,8 +25,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
@@ -549,28 +547,9 @@ public class RDFRepositoryTest
 
 // utilities -------------------------------------------------------------
 
-    public void report2(Exception e)
-    {
-        if (e instanceof WrappedTargetException)
-        {
-            System.out.println("Cause:");
-            Exception cause = (Exception)
-                (((WrappedTargetException)e).TargetException);
-            System.out.println(cause.toString());
-            report2(cause);
-        } else if (e instanceof WrappedTargetRuntimeException) {
-            System.out.println("Cause:");
-            Exception cause = (Exception)
-                (((WrappedTargetRuntimeException)e).TargetException);
-            System.out.println(cause.toString());
-            report2(cause);
-        }
-    }
-
     public void report(Exception e) {
         System.out.println("Exception occurred:");
         e.printStackTrace();
-        report2(e);
         fail();
     }
 

@@ -43,7 +43,7 @@ public final class Relay implements XRelay, XSource {
         } catch (RuntimeException e) {
             throw e;
         } catch (com.sun.star.uno.Exception e) {
-            throw new WrappedTargetRuntimeException(e.getMessage(), this, e);
+            throw new WrappedTargetRuntimeException(e, e.getMessage(), this, e);
         } catch (Exception e) {
             throw new com.sun.star.uno.RuntimeException(e, "", this);
         }
@@ -55,7 +55,7 @@ public final class Relay implements XRelay, XSource {
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));
         } catch (com.sun.star.uno.Exception e) {
-            throw new WrappedTargetRuntimeException(e.getMessage(), this, e);
+            throw new WrappedTargetRuntimeException(e, e.getMessage(), this, e);
         }
         new Thread() {
             @Override

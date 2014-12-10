@@ -688,11 +688,11 @@ XMultiPropertySet
         }
         catch (java.lang.NoSuchFieldException e)
         {
-            throw new WrappedTargetException("Field does not exist", this, e);
+            throw new WrappedTargetException(e, "Field does not exist", this, e);
         }
         catch (java.lang.IllegalAccessException e)
         {
-            throw new WrappedTargetException("", this ,e);
+            throw new WrappedTargetException(e, "", this ,e);
         }
         return ret;
     }
@@ -808,7 +808,7 @@ XMultiPropertySet
         }
         catch(java.lang.Exception e)
         {
-            throw new WrappedTargetException("PropertySet.setPropertyValueNoBroadcast", this, e);
+            throw new WrappedTargetException(e, "PropertySet.setPropertyValueNoBroadcast", this, e);
         }
     }
     /** Retrieves the value of a property. This implementation presumes that the values are stored in member variables

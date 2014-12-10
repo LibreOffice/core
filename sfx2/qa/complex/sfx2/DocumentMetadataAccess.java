@@ -46,7 +46,6 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.StringPair;
@@ -863,28 +862,9 @@ public class DocumentMetadataAccess
 
 // utilities -------------------------------------------------------------
 
-    public void report2(Exception e)
-    {
-        if (e instanceof WrappedTargetException)
-        {
-            System.out.println("Cause:");
-            Exception cause = (Exception)
-                (((WrappedTargetException)e).TargetException);
-            System.out.println(cause.toString());
-            report2(cause);
-        } else if (e instanceof WrappedTargetRuntimeException) {
-            System.out.println("Cause:");
-            Exception cause = (Exception)
-                (((WrappedTargetRuntimeException)e).TargetException);
-            System.out.println(cause.toString());
-            report2(cause);
-        }
-    }
-
     public void report(Exception e) {
         System.out.println("Exception occurred:");
         e.printStackTrace(System.err);
-        report2(e);
         fail();
     }
 

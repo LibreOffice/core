@@ -479,7 +479,7 @@ public final class PropertySetMixin {
             } catch (UnknownPropertyException e) {
                 continue;
             } catch (WrappedTargetException e) {
-                throw new WrappedTargetRuntimeException(e,
+                throw new WrappedTargetRuntimeException(e.getCause(),
                     e.getMessage(), object, e.TargetException);
             }
             s[n++] = new PropertyValue(handleMap[i], i, value, state[0]);
@@ -742,7 +742,7 @@ public final class PropertySetMixin {
             {
                 throw new PropertyVetoException(e, name, object);
             } else {
-                throw new WrappedTargetException(
+                throw new WrappedTargetException(e.getCause(),
                     e.getMessage(), object, e.TargetException);
             }
         }
@@ -774,7 +774,7 @@ public final class PropertySetMixin {
             {
                 throw new UnknownPropertyException(e, name, object);
             } else {
-                throw new WrappedTargetException(
+                throw new WrappedTargetException(e.getCause(),
                     e.getMessage(), object, e.TargetException);
             }
         }

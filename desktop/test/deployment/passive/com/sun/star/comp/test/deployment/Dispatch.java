@@ -77,7 +77,7 @@ public final class Dispatch extends WeakBase implements XServiceInfo, XDispatch
         } catch (com.sun.star.uno.RuntimeException e) {
             throw e;
         } catch (com.sun.star.uno.Exception e) {
-            throw new WrappedTargetRuntimeException(
+            throw new WrappedTargetRuntimeException(e,
                 "wrapped: " + e.getMessage(), this, e);
         }
     }

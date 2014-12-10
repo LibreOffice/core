@@ -130,7 +130,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
                 createDialog();
             }
             catch ( Exception e ) {
-                throw new com.sun.star.lang.WrappedTargetRuntimeException( e.getMessage(), this, e );
+                throw new com.sun.star.lang.WrappedTargetRuntimeException( e, e.getMessage(), this, e );
             }
         }
     }
