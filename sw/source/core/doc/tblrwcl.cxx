@@ -1483,7 +1483,7 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
                                         pULPara->pInsBox );
                 }
         }
-        else if( nLeft )
+        else
         {
             // There are still Boxes on the left side, so put the Left-
             // and Merge-Box into one Box and Line, insert before/after
@@ -1514,85 +1514,6 @@ static void lcl_Merge_MoveLine(_FndLine& rFndLine, _InsULPara *const pULPara)
                     lcl_CpyLines( nPos+1, pLines->size(), *pLines,
                                         pLMBox );
             lcl_CalcWidth( pLMBox );        // calculate the Box's width
-        }
-        else if( nRight+1 < (sal_uInt16)pFndLn->GetTabBoxes().size() )
-        {
-            // There are still Boxes on the right, so put the Right-
-            // and Merge-Box into one Box and Line, insert before/after
-            // a Line with a Box, into which the upper/lower Lines are
-            // inserted
-            SwTableLine* pInsLine = pULPara->pRightBox->GetUpper();
-            SwTableBox* pRMBox;
-            if( pULPara->pLeftBox->GetUpper() == pInsLine )
-            {
-                pRMBox = new SwTableBox(
-                    static_cast<SwTableBoxFmt*>(pULPara->pRightBox->GetFrmFmt()), 0, pInsLine );
-                SwTableLine* pRMLn = new SwTableLine(
-                    static_cast<SwTableLineFmt*>(pInsLine->GetFrmFmt()), 2, pRMBox );
-                pRMLn->ClaimFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
-                pRMBox->GetTabLines().insert( pRMBox->GetTabLines().begin(), pRMLn );
-
-                lcl_CpyBoxes( 1, 3, pInsLine->GetTabBoxes(), pRMLn );
-
-                pInsLine->GetTabBoxes().insert( pInsLine->GetTabBoxes().begin(), pRMBox );
-            }
-            else
-            {
-                // Left and Merge have been merged, so also move Right into the Line
-                pInsLine = pULPara->pLeftBox->GetUpper();
-                sal_uInt16 nMvPos = pULPara->pRightBox->GetUpper()->GetTabBoxes().GetPos(
-                                      pULPara->pRightBox );
-                lcl_CpyBoxes( nMvPos, nMvPos+1,
-                            pULPara->pRightBox->GetUpper()->GetTabBoxes(),
-                            pInsLine );
-                pRMBox = pInsLine->GetUpper();
-
-                // If there are already Lines, then these need to go into a new Line and Box
-                nMvPos = pRMBox->GetTabLines().GetPos( pInsLine );
-                if( pULPara->bUL ? nMvPos != 0
-                                : nMvPos+1 < (sal_uInt16)pRMBox->GetTabLines().size() )
-                {
-                    // Merge all Lines into a new Line and Box
-                    SwTableLine* pNewLn = new SwTableLine(
-                        static_cast<SwTableLineFmt*>(pInsLine->GetFrmFmt()), 1, pRMBox );
-                    pNewLn->ClaimFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
-                    pRMBox->GetTabLines().insert(
-                                pRMBox->GetTabLines().begin() + (pULPara->bUL ? nMvPos : nMvPos+1),
-                                pNewLn );
-                    pRMBox = new SwTableBox( static_cast<SwTableBoxFmt*>(pRMBox->GetFrmFmt()), 0, pNewLn );
-                    pNewLn->GetTabBoxes().insert( pNewLn->GetTabBoxes().begin(), pRMBox );
-
-                    sal_uInt16 nPos1, nPos2;
-                    if( pULPara->bUL )
-                        nPos1 = 0,
-                        nPos2 = nMvPos;
-                    else
-                        nPos1 = nMvPos+2,
-                        nPos2 = pNewLn->GetUpper()->GetTabLines().size();
-
-                    lcl_CpyLines( nPos1, nPos2,
-                                pNewLn->GetUpper()->GetTabLines(), pRMBox );
-                    lcl_CalcWidth( pRMBox );        // calculate the Box's width
-
-                    pRMBox = new SwTableBox( static_cast<SwTableBoxFmt*>(pRMBox->GetFrmFmt()), 0, pNewLn );
-                    pNewLn->GetTabBoxes().push_back( pRMBox );
-                }
-            }
-            if( pULPara->bUL )  // Upper ?
-            {
-                // If there are Lines before it, move them
-                if( 0 != ( nPos = pLines->GetPos( pFndLn )) )
-                    lcl_CpyLines( 0, nPos, *pLines, pRMBox, 0 );
-            }
-            else
-                // If there are Lines after it, move them
-                if( (nPos = pLines->GetPos( pFndLn )) + 1 < (sal_uInt16)pLines->size() )
-                    lcl_CpyLines( nPos+1, pLines->size(), *pLines,
-                                        pRMBox );
-            lcl_CalcWidth( pRMBox );        // calculate the Box's width
-        }
-        else {
-            OSL_FAIL( "So ... what do we do now?" );
         }
     }
     // Left/Right
