@@ -1193,6 +1193,11 @@ static sal_Int32 lcl_ExportFrames(
     FrameDependSortList_t & i_rFrames,
     sal_Int32 const i_nCurrentIndex)
 {
+    // Ignore frames which are not exported, as we are exporting a selection
+    // and they are anchored before the start of the selection.
+    while (i_rFrames.size() && i_rFrames.front().nIndex < i_nCurrentIndex)
+        i_rFrames.pop_front();
+
     // find first Frame in (sorted) i_rFrames at current position
     while (i_rFrames.size() && (i_rFrames.front().nIndex == i_nCurrentIndex))
     // do not check for i_nEnd here; this is done implicity by lcl_MoveCursor
