@@ -759,7 +759,15 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
         XML_TEXT_FRAME_FLOATING_FRAME != nType)
     {
         Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-        xTextImportHelper->InsertTextContent( xTxtCntnt );
+        try
+        {
+            xTextImportHelper->InsertTextContent(xTxtCntnt);
+        }
+        catch (lang::IllegalArgumentException const& e)
+        {
+            SAL_WARN("xmloff.text", "Cannot import part of the text - probably an image in the text frame? " << e.Message);
+            return;
+        }
     }
 
     // #107848#
