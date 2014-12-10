@@ -550,14 +550,14 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 CGFloat unifiedHeight = rControlRegion.GetHeight();
                 CGRect drawRect = CGRectMake(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
                 CUIDraw([NSWindow coreUIRenderer], drawRect, mrContext,
-                        (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
+                        reinterpret_cast<CFDictionaryRef>([NSDictionary dictionaryWithObjectsAndKeys:
                         @"kCUIWidgetWindowFrame", @"widget",
                         @"regularwin", @"windowtype",
                         (bDrawActive ? @"normal" : @"inactive"), @"state",
                         [NSNumber numberWithDouble:unifiedHeight], @"kCUIWindowFrameUnifiedTitleBarHeightKey",
                         [NSNumber numberWithBool:NO], @"kCUIWindowFrameDrawTitleSeparatorKey",
                         [NSNumber numberWithBool:YES], @"is.flipped",
-                        nil],
+                        nil]),
                         nil);;
             }
             else
