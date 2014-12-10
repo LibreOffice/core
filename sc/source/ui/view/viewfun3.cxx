@@ -676,8 +676,24 @@ bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, bool bApi )
         if ( !aDataHelper.GetTransferable().is() )
             return false;
 
+        SCCOL nPosX = 0;
+        SCROW nPosY = 0;
+
+        ScViewData& rViewData = GetViewData();
+        ScRange aRange;
+        if ( rViewData.GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+        {
+            nPosX = aRange.aStart.Col();
+            nPosY = aRange.aStart.Row();
+        }
+        else
+        {
+            nPosX = rViewData.GetCurX();
+            nPosY = rViewData.GetCurY();
+        }
+
         bRet = PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
-                                GetViewData().GetCurX(), GetViewData().GetCurY(),
+                                nPosX, nPosY,
                                 NULL, false, !bApi );       // allow warning dialog
 
         if ( !bRet && !bApi )
