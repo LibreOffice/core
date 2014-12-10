@@ -740,6 +740,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // CommandLineArgs):
         desktop::Desktop::GetCommandLineArgs().setHeadless();
 
+        Application::EnableHeadlessMode(true);
+
         // We could use InitVCL() here -- and used to before using soffice_main,
         // however that now deals with the initialisation for us (and it's not
         // possible to try to set up VCL twice.
@@ -772,8 +774,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
             fprintf(stderr, "LOK init failed -- restart required\n");
             return false;
         }
-
-        Application::EnableHeadlessMode(true);
 
         ErrorHandler::RegisterDisplay(aBasicErrorFunc);
 

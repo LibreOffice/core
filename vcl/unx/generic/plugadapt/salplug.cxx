@@ -43,6 +43,9 @@ namespace {
 // Application::EnableHeadlessMode has potentially been called:
 bool IsHeadlessModeRequested()
 {
+    if (Application::IsHeadlessModeEnabled()) {
+        return true;
+    }
     sal_uInt32 n = rtl_getAppCommandArgCount();
     for (sal_uInt32 i = 0; i < n; ++i) {
         OUString arg;
