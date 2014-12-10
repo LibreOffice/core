@@ -48,6 +48,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
 
+#include <app.hxx>
 #include <salinst.hxx>
 
 // Tiled Rendering is Linux only for now.
@@ -59,7 +60,8 @@
 #include <basebmp/bitmapdevice.hxx>
 #endif
 
-// We also need to hackily be able to start the main libreoffice thread
+#include "../app/cmdlineargs.hxx"
+// We also need to hackily be able to start the main libreoffice thread:
 #include "../app/sofficemain.h"
 #include "../app/officeipcthread.hxx"
 
@@ -722,22 +724,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
     try
     {
-        // We specifically need to make sure we have the "headless"
-        // command arg set (various code specifically checks via
-        // CommandLineArgs). We could alternatively add some other
-        // flag elsewhere to indicate headlessness, which would
-        // then be set from here or via CommandLineArgs.
-        // (The first argument is treated specially by osl_setCommandArgs
-        // however it is valid to make it \0 instead.)
-        char sName[] = "";
-        char sHeadless[] = "--headless";
-        char* pArgs[2] = { sName, sHeadless };
-
-        // If we've set up the command args elsewhere then we cannot do it
-        // again (as an assert will fire), this will be the case e.g.
-        // for unit tests (and possibly if UNO is being used in addition
-        // to LOK in an external program).
-        osl_setCommandArgs(2, pArgs);
         SAL_INFO("lok", "Attempting to initalize UNO");
         if (!initialize_uno(aAppURL))
         {
@@ -748,6 +734,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
         // Force headless -- this is only for bitmap rendering.
         rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
+
+        // We specifically need to make sure we have the "headless"
+        // command arg set (various code specifically checks via
+        // CommandLineArgs):
+        desktop::Desktop::GetCommandLineArgs().setHeadless();
 
         // We could use InitVCL() here -- and used to before using soffice_main,
         // however that now deals with the initialisation for us (and it's not
