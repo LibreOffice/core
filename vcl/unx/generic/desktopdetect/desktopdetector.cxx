@@ -28,7 +28,6 @@
 #include "rtl/ustrbuf.hxx"
 #include "osl/module.h"
 #include "osl/thread.h"
-#include "vcl/svapp.hxx"
 
 #include "vclpluginapi.h"
 
@@ -326,7 +325,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     OUString plugin;
     rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", plugin);
 
-    if (plugin == "svp" || Application::IsHeadlessModeRequested())
+    if (plugin == "svp")
         pDisplayStr = NULL;
     else
     {
