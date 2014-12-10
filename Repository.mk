@@ -815,6 +815,13 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	xmlsec \
+	chart2_opengl_shader \
+	vcl_opengl_shader \
+	$(if $(ENABLE_OPENGL_CANVAS),canvas_opengl_shader) \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
+	slideshow_opengl_shader \
 ))
 
 ifeq ($(GUIBASE),unx)
