@@ -3522,13 +3522,9 @@ if test "$_os" = "WINNT"; then
             # are always "better", we list them in reverse chronological order.
 
             case $vcnum in
-            110)
-                COMEX=14
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.0 7.1A"
-                ;;
             120)
                 COMEX=15
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0"
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
                 ;;
             esac
 
