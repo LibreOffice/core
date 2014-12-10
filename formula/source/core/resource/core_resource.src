@@ -2370,7 +2370,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_AGGREGATE
     {
-        Text = "AGGREGATE" ;
+        Text [ en-US ] = "AGGREGATE" ;
     };
     String SC_OPCODE_T_TEST
     {
