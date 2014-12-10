@@ -320,8 +320,8 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
         if (!xComponent.is())
         {
-            pLib->maLastExceptionMsg = "unknown load failure";
-            SAL_INFO("lok", "Document can't be loaded - unknown load failure");
+            pLib->maLastExceptionMsg = "loadComponentFromURL returned an empty reference";
+            SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
         }
 
         return new LibLODocument_Impl(xComponent);
