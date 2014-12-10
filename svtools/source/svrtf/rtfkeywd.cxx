@@ -1000,6 +1000,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_SHPFBLWTXT},   RTF_SHPFBLWTXT},
 {{OOO_STRING_SVTOOLS_RTF_SHPFHDR},      RTF_SHPFHDR},
 {{OOO_STRING_SVTOOLS_RTF_SHPGRP},       RTF_SHPGRP},
+{{OOO_STRING_SVTOOLS_RTF_SHPINST},      RTF_SHPINST},
 {{OOO_STRING_SVTOOLS_RTF_SHPLEFT},      RTF_SHPLEFT},
 {{OOO_STRING_SVTOOLS_RTF_SHPLID},       RTF_SHPLID},
 {{OOO_STRING_SVTOOLS_RTF_SHPLOCKANCHOR},    RTF_SHPLOCKANCHOR},
@@ -1227,6 +1228,7 @@ int GetRTFToken( const OUString& rSearch )
                         sizeof( RTF_TokenEntry ),
                         RTFKeyCompare )))
         nRet = ((RTF_TokenEntry*)pFound)->nToken;
+
     return nRet;
 }
 

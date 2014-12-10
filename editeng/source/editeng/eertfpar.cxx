@@ -197,6 +197,13 @@ void EditRTFParser::NextToken( int nToken )
             ReadField();
         }
         break;
+        case RTF_SHPINST:  // fdo#76776 process contents of shpinst
+        break;
+        case RTF_SP:       // fdo#76776 but skip SP groups
+        {
+            SkipGroup();
+        }
+        break;
         case RTF_PGDSCTBL: // #i29453# ignore \*\pgdsctbl destination
         case RTF_LISTTEXT:
         {
