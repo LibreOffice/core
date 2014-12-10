@@ -57,21 +57,20 @@ if __name__ == '__main__':
         total += len(ET.tostring(child))
 
     saved = 0
-    restarted = True
+    to_remove = []
 
-    while restarted:
-        restarted = False
-        for child in root:
-            section = child.attrib['{http://openoffice.org/2001/registry}name']
-            package = child.attrib['{http://openoffice.org/2001/registry}package']
-            size = len(ET.tostring(child));
-            key = '%s/%s' % (package, section)
-            if key in main_xcd_discard:
-                root.remove(child)
-                print 'removed %s - saving %d' % (key, size)
-                saved = saved + size
-                restarted = True
-                break
+    for child in root:
+        section = child.attrib['{http://openoffice.org/2001/registry}name']
+        package = child.attrib['{http://openoffice.org/2001/registry}package']
+        size = len(ET.tostring(child));
+        key = '%s/%s' % (package, section)
+        if key in main_xcd_discard:
+            print 'removed %s - saving %d' % (key, size)
+            saved = saved + size
+            to_remove.append(child)
+
+    for child in to_remove:
+        root.remove(child)
 
     print "saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total)
 
@@ -82,3 +81,5 @@ if __name__ == '__main__':
     root.set('xmlns:oor', 'http://openoffice.org/2001/registry')
 
     tree.write(sys.argv[2], 'UTF-8', True)
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
