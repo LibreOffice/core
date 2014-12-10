@@ -9580,58 +9580,6 @@ else
     fi
 fi
 
-dnl =========================================
-dnl Check for the Microsoft DirectX SDK.
-dnl =========================================
-if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
-    AC_MSG_CHECKING([for DirectX SDK])
-    if test "$build_os" = "cygwin"; then
-        dnl A standard installation of the DirectX SDK sets $DXSDK_DIR
-        if test -n "$DXSDK_DIR"; then
-            DIRECTXSDK_HOME=`cygpath -d "$DXSDK_DIR"`
-            DIRECTXSDK_HOME=`cygpath -u "$DIRECTXSDK_HOME"`
-        fi
-        # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
-        # the "DirectX SDK not found" error later.
-        # (Where?)
-
-        # Remove a possible trailing backslash
-        DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
-    fi
-
-    if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" -o -f "$DIRECTXSDK_HOME/Include/d3d9.h"; then
-        HAVE_DIRECTXSDK_H="yes"
-    else
-        HAVE_DIRECTXSDK_H="no"
-    fi
-
-    if test "$BITNESS_OVERRIDE" = 64; then
-        DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x64"
-    else
-        DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x86"
-    fi
-    PathFormat "$DIRECTXSDK_LIB"
-    DIRECTXSDK_LIB="$formatted_path"
-
-    if test -f "$DIRECTXSDK_LIB/ddraw.lib" -o -f "$DIRECTXSDK_LIB/d3d9.lib"; then
-        HAVE_DIRECTXSDK_LIB="yes"
-    else
-        HAVE_DIRECTXSDK_LIB="no"
-    fi
-
-    if test "$HAVE_DIRECTXSDK_H" = "yes" -a "$HAVE_DIRECTXSDK_LIB" = "yes"; then
-        AC_MSG_RESULT([found])
-    else
-        AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
-    fi
-    if test -n "$DIRECTXSDK_HOME"; then
-        PathFormat "$DIRECTXSDK_HOME"
-        DIRECTXSDK_HOME="$formatted_path"
-        SOLARINC="$SOLARINC -I$DIRECTXSDK_HOME/include"
-    fi
-fi
-AC_SUBST(DIRECTXSDK_HOME)
-
 dnl ***************************************
 dnl Checking for bison and flex
 dnl ***************************************
@@ -12527,9 +12475,6 @@ if test "$build_os" = "cygwin"; then
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
-    if test "$ENABLE_DIRECTX" = "TRUE" -a "$HAVE_DIRECTXSDK_LIB" = "yes"; then
-        ILIB="$ILIB;$DIRECTXSDK_LIB"
-    fi
     AC_SUBST(ILIB)
 fi
 
