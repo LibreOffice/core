@@ -326,6 +326,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                     case SVX_HOR_JUSTIFY_CENTER:
                         aPos.X() += nHorPos;
                         break;
+                    // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                     case SVX_HOR_JUSTIFY_STANDARD:
                     default:
                         // Standard is not handled here
