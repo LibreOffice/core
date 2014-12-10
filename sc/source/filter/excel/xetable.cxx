@@ -2069,6 +2069,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     // on its own data.
     size_t nRows = maRowMap.size();
     size_t nThreads = std::max( std::thread::hardware_concurrency(), 1U );
+    nThreads = 1; // globally disable multi-threading for now.
     if ( nThreads == 1 || nRows < 128 )
     {
         RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
