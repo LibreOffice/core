@@ -4423,10 +4423,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                 uno::Reference<text::XTextRange> xRange(xCursor, uno::UNO_QUERY_THROW);
                 if (m_xPrevBookmark.is())
                 {
-                    fprintf(stderr, "ok here\n");
                     uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(), uno::UNO_QUERY_THROW);
-                    fprintf(stderr, "still ok here\n");
-
                     if (xTextRangeCompare->compareRegionStarts(m_xPrevBookmark, xRange) == 0 &&
                         xTextRangeCompare->compareRegionEnds(m_xPrevBookmark, xRange) == 0)
                     {
