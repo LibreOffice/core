@@ -150,6 +150,7 @@ draw_factory_list = [
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
+    ("libanimcorelo.a", "animcore_component_getFactory", "#ifdef ANDROID"),
     ]
 
 draw_constructor_list = [
