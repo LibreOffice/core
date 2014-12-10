@@ -176,11 +176,11 @@ public class OTimeModel extends GenericModelTest {
         return tEnv;
     }
 
-    static class Checker implements UpdateChecker {
-            XLoadable formLoaderF = null;
-            XPropertySet ps = null;
-            XInterface ctrl = null;
-            String ChangePropertyName = null;
+    private static class Checker implements UpdateChecker {
+            private XLoadable formLoaderF = null;
+            private XPropertySet ps = null;
+            private XInterface ctrl = null;
+            private String ChangePropertyName = null;
             Object ChangePropertyValue = null;
 
             public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName, Object ChangePropertyValue) {

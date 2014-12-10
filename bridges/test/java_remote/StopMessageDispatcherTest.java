@@ -45,7 +45,7 @@ public final class StopMessageDispatcherTest extends ComplexTestCase {
             new TestBed().execute(new Provider(), false, Client.class, 10000));
     }
 
-    public static final class Client extends TestBed.Client {
+    private static final class Client extends TestBed.Client {
         public static void main(String[] args) {
             new Client().execute();
         }

@@ -39,7 +39,7 @@ class AccessibleHypertextHandler extends AccessibleTreeHandler
     {
     }
 
-    public AccessibleHypertextHandler (XAccessibleHypertext xText)
+    private AccessibleHypertextHandler (XAccessibleHypertext xText)
     {
         if (xText != null)
             maChildList.setSize (1);

@@ -60,10 +60,10 @@ public class CommandMetaData extends DBMetaData
     public String[] NonAggregateFieldNames;
     private int CommandType;
     private String Command;
-    boolean bCatalogAtStart = true;
+    private boolean bCatalogAtStart = true;
     String sCatalogSep = PropertyNames.EMPTY_STRING;
     String sIdentifierQuote = PropertyNames.EMPTY_STRING;
-    boolean bCommandComposerAttributesalreadyRetrieved = false;
+    private boolean bCommandComposerAttributesalreadyRetrieved = false;
 
     public CommandMetaData(XMultiServiceFactory xMSF)
     {
@@ -332,7 +332,7 @@ public class CommandMetaData extends DBMetaData
         CommandType = _commandType;
     }
 
-    public boolean isnumeric(FieldColumn _oFieldColumn)
+    private boolean isnumeric(FieldColumn _oFieldColumn)
     {
         try
         {
@@ -523,7 +523,7 @@ public class CommandMetaData extends DBMetaData
         return RecordFieldNames[i];
     }
 
-    public void setCommandComposingAttributes()
+    private void setCommandComposingAttributes()
     {
         try
         {

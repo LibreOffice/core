@@ -33,7 +33,7 @@ public class TestExtension {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class _TestExtension extends WeakBase
+    private static class _TestExtension extends WeakBase
         implements XServiceInfo {
         /** The service name, that must be used to get an instance of this service.
          */
@@ -51,7 +51,7 @@ public class TestExtension {
          * static component initialisation functions as well as in
          * getSupportedServiceNames.
          */
-        public static String[] getServiceNames() {
+        private static String[] getServiceNames() {
             String[] sSupportedServiceNames = { __serviceName };
             return sSupportedServiceNames;
         }

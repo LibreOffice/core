@@ -53,7 +53,7 @@ import org.mozilla.javascript.Scriptable;
 
 public class ScriptProviderForJavaScript {
 
-    public static class ScriptProviderForJavaScript_2 extends ScriptProvider {
+    private static class ScriptProviderForJavaScript_2 extends ScriptProvider {
 
         public ScriptProviderForJavaScript_2(XComponentContext ctx) {
             super(ctx, "JavaScript");

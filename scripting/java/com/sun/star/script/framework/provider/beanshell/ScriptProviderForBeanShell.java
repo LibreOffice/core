@@ -55,7 +55,7 @@ import java.util.StringTokenizer;
 
 public class ScriptProviderForBeanShell {
 
-    public static class ScriptProviderForBeanShell_2 extends ScriptProvider {
+    private static class ScriptProviderForBeanShell_2 extends ScriptProvider {
 
         public ScriptProviderForBeanShell_2(XComponentContext ctx) {
             super(ctx, "BeanShell");

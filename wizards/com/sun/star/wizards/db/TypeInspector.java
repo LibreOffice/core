@@ -45,7 +45,7 @@ public class TypeInspector
         DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
     };
     static final int INVALID = 999999;
-    XResultSet xResultSet;
+    private XResultSet xResultSet;
 
     public class TypeInfo
     {
@@ -201,12 +201,12 @@ public class TypeInspector
         return -1;
     }
 
-    public boolean supportsDataType(int _curDataType)
+    private boolean supportsDataType(int _curDataType)
     {
         return (JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType) > -1);
     }
 
-    public int getLastConversionFallbackDataType()
+    private int getLastConversionFallbackDataType()
     {
         if (supportsDataType(DataType.VARCHAR))
         {

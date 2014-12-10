@@ -60,7 +60,7 @@ public class InformationWriter
         }
     }
 
-    public void printProperty (XInterface xObject, String prefix, String name)
+    private void printProperty (XInterface xObject, String prefix, String name)
     {
         try
         {
@@ -216,7 +216,7 @@ public class InformationWriter
     /** @descr Print information concerning the accessibility of the given
         object.
     */
-    public boolean showAccessibility (XInterface xObject, int depth)
+    private boolean showAccessibility (XInterface xObject, int depth)
     {
         try
         {
@@ -320,7 +320,7 @@ public class InformationWriter
 
     /** @descr Print information about the given accessible component.
     */
-    public void showAccessibleComponent (XInterface xObject, String sIndent)
+    private void showAccessibleComponent (XInterface xObject, String sIndent)
     {
         try
         {

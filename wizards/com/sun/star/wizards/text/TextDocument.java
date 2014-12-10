@@ -78,7 +78,7 @@ public class TextDocument
 
         private final String m_identifier;
 
-        protected final String getIdentifier()
+        private final String getIdentifier()
         {
             return m_identifier;
         }
@@ -178,7 +178,7 @@ public class TextDocument
         xProgressBar.setValue(5);
     }
 
-    public XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate)
+    private XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate)
     {
         PropertyValue loadValues[] = new PropertyValue[3];
         //      open document in the Preview mode
@@ -227,7 +227,7 @@ public class TextDocument
 
     }
 
-    public Size getPageSize()
+    private Size getPageSize()
     {
         try
         {

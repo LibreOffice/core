@@ -35,12 +35,12 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class GridControl extends Shape
 {
 
-    FieldColumn[] fieldcolumns;
+    private FieldColumn[] fieldcolumns;
     public XNameContainer xNameContainer;
     public XGridColumnFactory xGridColumnFactory;
     public XPropertySet xPropertySet;
     XNameAccess xNameAccess;
-    XControlModel xControlModel;
+    private XControlModel xControlModel;
     public XComponent xComponent;
 
     public GridControl(XMultiServiceFactory _xMSF, String _sname, FormHandler _oFormHandler, XNameContainer _xFormName, FieldColumn[] _fieldcolumns, Point _aPoint, Size _aSize)

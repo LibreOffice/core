@@ -28,7 +28,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 class AccessibleTreeHandler
     extends NodeHandler
 {
-    protected XAccessibleContext mxContext;
+    private XAccessibleContext mxContext;
 
     @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
@@ -45,7 +45,7 @@ class AccessibleTreeHandler
         mxContext = null;
     }
 
-    public AccessibleTreeHandler (XAccessibleContext xContext)
+    private AccessibleTreeHandler (XAccessibleContext xContext)
     {
         super();
         mxContext = xContext;

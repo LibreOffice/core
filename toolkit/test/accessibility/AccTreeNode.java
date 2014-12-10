@@ -38,15 +38,15 @@ import com.sun.star.uno.UnoRuntime;
 class AccTreeNode
     extends AccessibleTreeNode
 {
-    class HandlerDescriptor
+    private class HandlerDescriptor
     {
-        public HandlerDescriptor (NodeHandler aHandler)
+        private HandlerDescriptor (NodeHandler aHandler)
         {
             maHandler = aHandler;
             mnChildCount = -1;
         }
-        public NodeHandler maHandler;
-        public int mnChildCount;
+        private NodeHandler maHandler;
+        private int mnChildCount;
     }
     /// NodeHandlers for this node
     private ArrayList<HandlerDescriptor> maHandlers;
@@ -158,7 +158,7 @@ class AccTreeNode
 
 
     /** iterate over handlers and return child sum */
-    protected HandlerDescriptor getHandlerDescriptor (int i)
+    private HandlerDescriptor getHandlerDescriptor (int i)
     {
         HandlerDescriptor aDescriptor = maHandlers.get(i);
         if (aDescriptor.mnChildCount < 0)

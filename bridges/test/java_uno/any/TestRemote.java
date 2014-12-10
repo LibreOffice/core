@@ -34,7 +34,7 @@ public final class TestRemote {
         System.exit(success ? 0 : 1);
     }
 
-    public static final class Client extends TestBed.Client {
+    private static final class Client extends TestBed.Client {
         public static void main(String[] args) {
             new Client().execute();
         }

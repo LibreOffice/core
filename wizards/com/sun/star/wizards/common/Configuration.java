@@ -83,7 +83,7 @@ public abstract class Configuration
         }
     }
 
-    public static String getLocaleString(XMultiServiceFactory xMSF, String root, String key)
+    private static String getLocaleString(XMultiServiceFactory xMSF, String root, String key)
     {
         String sLocale = PropertyNames.EMPTY_STRING;
         try
@@ -102,7 +102,7 @@ public abstract class Configuration
         return sLocale;
     }
 
-    public static Locale getLocale(XMultiServiceFactory xMSF, String root, String key)
+    private static Locale getLocale(XMultiServiceFactory xMSF, String root, String key)
     {
         Locale aLocLocale = new Locale();
         String sLocale = getLocaleString(xMSF, root, key);

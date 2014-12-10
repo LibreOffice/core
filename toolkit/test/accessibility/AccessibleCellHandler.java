@@ -47,7 +47,7 @@ class AccessibleCellHandler extends NodeHandler
     {
     }
 
-    public AccessibleCellHandler (XAccessibleTable xTable)
+    private AccessibleCellHandler (XAccessibleTable xTable)
     {
         if (xTable != null)
             maChildList.setSize (8);

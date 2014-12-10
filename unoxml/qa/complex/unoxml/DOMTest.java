@@ -2728,7 +2728,7 @@ public class DOMTest
         serializable.serialize(xHandler, new StringPair[0]);
     }
 
-    class DummyDocumentHandler implements XDocumentHandler
+    private class DummyDocumentHandler implements XDocumentHandler
     {
         public void startDocument() throws SAXException {}
         public void endDocument() throws SAXException {}
@@ -2741,7 +2741,7 @@ public class DOMTest
     }
 
     // just for importNode...
-    abstract class MockNode implements XNode
+    private abstract class MockNode implements XNode
     {
         MockDoc  m_document;
         MockNode m_parent;
@@ -3010,7 +3010,7 @@ public class DOMTest
     }
     class MockAttr extends MockNode implements XAttr
     {
-        String m_value;
+        private String m_value;
 
         MockAttr(String name, String value) {
             m_localname = name; m_value = value;

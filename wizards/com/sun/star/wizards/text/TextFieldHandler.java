@@ -45,7 +45,7 @@ import com.sun.star.wizards.common.PropertyNames;
 public class TextFieldHandler
 {
 
-    public XTextFieldsSupplier xTextFieldsSupplier;
+    private XTextFieldsSupplier xTextFieldsSupplier;
     private final XMultiServiceFactory xMSFDoc;
 
     /**
@@ -57,7 +57,7 @@ public class TextFieldHandler
         xTextFieldsSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument);
     }
 
-    public void refreshTextFields()
+    private void refreshTextFields()
     {
         XRefreshable xUp = UnoRuntime.queryInterface(XRefreshable.class, xTextFieldsSupplier.getTextFields());
         xUp.refresh();
@@ -111,7 +111,7 @@ public class TextFieldHandler
         }
     }
 
-    public XPropertySet createUserField(String FieldName, String FieldTitle) throws com.sun.star.uno.Exception
+    private XPropertySet createUserField(String FieldName, String FieldTitle) throws com.sun.star.uno.Exception
     {
         Object oMaster = xMSFDoc.createInstance("com.sun.star.text.FieldMaster.User");
         XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oMaster);

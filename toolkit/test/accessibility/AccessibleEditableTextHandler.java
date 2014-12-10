@@ -39,7 +39,7 @@ class AccessibleEditableTextHandler extends NodeHandler
     {
     }
 
-    public AccessibleEditableTextHandler (XAccessibleEditableText xText)
+    private AccessibleEditableTextHandler (XAccessibleEditableText xText)
     {
         if (xText != null)
             maChildList.setSize (1);

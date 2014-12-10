@@ -23,7 +23,7 @@ import com.sun.star.report.XFormattedField;
 public class SectionTextField extends SectionObject
 {
 
-    protected SectionTextField(XFormattedField _aFormattedField)
+    private SectionTextField(XFormattedField _aFormattedField)
     {
         m_aParentObject = _aFormattedField;
     // We would like to know, what properties are in this object.

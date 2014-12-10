@@ -41,7 +41,7 @@ class AccessibleSelectionHandler
     {
     }
 
-    public AccessibleSelectionHandler( XAccessibleSelection xSelection )
+    private AccessibleSelectionHandler( XAccessibleSelection xSelection )
     {
         if (xSelection != null)
             maChildList.setSize( 2 );

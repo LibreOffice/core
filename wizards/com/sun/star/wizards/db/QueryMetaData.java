@@ -34,7 +34,7 @@ public class QueryMetaData extends CommandMetaData
     public PropertyValue[][] GroupByFilterConditions = new PropertyValue[][]
     {
     };
-    public String[] UniqueAggregateFieldNames = new String[]
+    private String[] UniqueAggregateFieldNames = new String[]
     {
     };
     public int Type = QueryType.SODETAILQUERY;

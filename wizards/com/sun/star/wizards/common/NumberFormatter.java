@@ -36,17 +36,17 @@ import com.sun.star.util.XNumberFormatter;
 public class NumberFormatter
 {
 
-    public int iDateFormatKey = -1;
-    public int iDateTimeFormatKey = -1;
-    public int iNumberFormatKey = -1;
-    public int iTextFormatKey = -1;
-    public int iTimeFormatKey = -1;
-    public int iLogicalFormatKey = -1;
-    public long lDateCorrection;
-    public XNumberFormatter xNumberFormatter;
-    public XNumberFormats xNumberFormats;
-    public XNumberFormatTypes xNumberFormatTypes;
-    public XPropertySet xNumberFormatSettings;
+    private int iDateFormatKey = -1;
+    private int iDateTimeFormatKey = -1;
+    private int iNumberFormatKey = -1;
+    private int iTextFormatKey = -1;
+    private int iTimeFormatKey = -1;
+    private int iLogicalFormatKey = -1;
+    private long lDateCorrection;
+    private XNumberFormatter xNumberFormatter;
+    private XNumberFormats xNumberFormats;
+    private XNumberFormatTypes xNumberFormatTypes;
+    private XPropertySet xNumberFormatSettings;
     private final Locale aLocale;
 
 
@@ -108,7 +108,7 @@ public class NumberFormatter
     /**
      * returns a numberformat for a FormatString.
      */
-    public int defineNumberFormat(String _FormatString, Locale _aLocale)
+    private int defineNumberFormat(String _FormatString, Locale _aLocale)
     {
         try
         {

@@ -78,7 +78,7 @@ public class NameDefinition implements OfficeConstants {
      *
      * @return the name which identifies the definition.
      */
-    public String getName() {
+    private String getName() {
         return name;
     }
 
@@ -96,7 +96,7 @@ public class NameDefinition implements OfficeConstants {
      *
      * @return the definition.
      */
-    public String getDefinition() {
+    private String getDefinition() {
         return definition;
     }
 
@@ -105,7 +105,7 @@ public class NameDefinition implements OfficeConstants {
      *
      * @return the base cell address.
      */
-    public String getBaseCellAddress() {
+    private String getBaseCellAddress() {
         return baseCellAddress;
     }
 
@@ -114,7 +114,7 @@ public class NameDefinition implements OfficeConstants {
      *
      * @return whether or not this name definition is of type expression.
      */
-    public boolean isExpressionType() {
+    private boolean isExpressionType() {
         return expressionType;
     }
 
@@ -123,7 +123,7 @@ public class NameDefinition implements OfficeConstants {
      *
      * @return whether or not this name definition is of type range.
      */
-    public boolean isRangeType() {
+    private boolean isRangeType() {
         return rangeType;
     }
 

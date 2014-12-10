@@ -41,9 +41,9 @@ public class Shape
     protected FormHandler oFormHandler;
     public XServiceInfo xServiceInfo;
     protected Point aPoint;
-    protected Size aSize;
+    private Size aSize;
     protected XControlShape xControlShape;
-    public XMultiServiceFactory xMSF;
+    private XMultiServiceFactory xMSF;
     public XShapes xShapes;
 
     public Shape(FormHandler _oFormHandler, Point _aPoint, Size _aSize)

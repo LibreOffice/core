@@ -1047,59 +1047,59 @@ class TestClass extends PropertySet
     public char charPropA;
     public Property propByteA= new Property("PropByteA", 3, new Type(Byte.TYPE), (short) 0);
     public byte bytePropA;
-    public Property propShortA= new Property("PropShortA", 4, new Type(Short.TYPE), (short) 0);
-    public short shortPropA;
-    public Property propIntA= new Property("PropIntA", 5, new Type(Integer.TYPE), (short) 0);
+    private Property propShortA= new Property("PropShortA", 4, new Type(Short.TYPE), (short) 0);
+    private short shortPropA;
+    private Property propIntA= new Property("PropIntA", 5, new Type(Integer.TYPE), (short) 0);
     public int intPropA;
-    public Property propLongA= new Property("PropLongA", 6, new Type(Long.TYPE), (short) 0);
-    public long longPropA;
-    public Property propFloatA= new Property("PropFloatA", 7, new Type(Float.TYPE), (short) 0);
-    public float floatPropA;
-    public Property propDoubleA= new Property("PropDoubleA", 8, new Type(Double.TYPE), (short) 0);
-    public double doublePropA;
-    public Property propStringA= new Property("PropStringA", 9, new Type(String.class), (short) 0);
-    public String stringPropA;
-    public Property propArrayByteA= new Property("PropArrayByteA", 10, new Type(byte[].class), (short) 0);
-    public byte[] arBytePropA;
-    public Property propTypeA= new Property("PropTypeA", 11, new Type(Type.class), (short) 0);
-    public Type typePropA;
+    private Property propLongA= new Property("PropLongA", 6, new Type(Long.TYPE), (short) 0);
+    private long longPropA;
+    private Property propFloatA= new Property("PropFloatA", 7, new Type(Float.TYPE), (short) 0);
+    private float floatPropA;
+    private Property propDoubleA= new Property("PropDoubleA", 8, new Type(Double.TYPE), (short) 0);
+    private double doublePropA;
+    private Property propStringA= new Property("PropStringA", 9, new Type(String.class), (short) 0);
+    private String stringPropA;
+    private Property propArrayByteA= new Property("PropArrayByteA", 10, new Type(byte[].class), (short) 0);
+    private byte[] arBytePropA;
+    private Property propTypeA= new Property("PropTypeA", 11, new Type(Type.class), (short) 0);
+    private Type typePropA;
     public Property propObjectA= new Property("PropObjectA",12, new Type(Object.class), (short) 0);
     public Object objectPropA;
     public Property propAnyA= new Property("PropAnyA", 13, new Type(Any.class), (short) 0);
     public Any anyPropA;
-    public Property propXInterfaceA= new Property("PropXInterfaceA", 13, new Type(Any.class), (short) 0);
-    public XInterface xInterfacePropA;
+    private Property propXInterfaceA= new Property("PropXInterfaceA", 13, new Type(Any.class), (short) 0);
+    private XInterface xInterfacePropA;
     public Property propXWeakA= new Property("PropXWeakA", 13, new Type(Any.class), (short) 0);
-    public XWeak xWeakPropA;
-    public Property propEnum =
+    private XWeak xWeakPropA;
+    private Property propEnum =
         new Property("PropEnum", 14, new Type("com.sun.star.beans.PropertyState", TypeClass.ENUM), (short)0);
-    public com.sun.star.beans.PropertyState enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
+    private com.sun.star.beans.PropertyState enumPropertyState = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
     // Test private, protected, package access, Anys as arguments and members, members with a value
 
-    public Property propBoolB= new Property("PropBoolB", 101, new Type(Boolean.TYPE), (short) 0);
-    protected boolean boolPropB;
+    private Property propBoolB= new Property("PropBoolB", 101, new Type(Boolean.TYPE), (short) 0);
+    private boolean boolPropB;
 
-    public Property propBoolC= new Property("PropBoolC", 201, new Type(Boolean.TYPE), (short) 0);
-    boolean boolPropC;
+    private Property propBoolC= new Property("PropBoolC", 201, new Type(Boolean.TYPE), (short) 0);
+    private boolean boolPropC;
 
-    public Property propBoolD= new Property("PropBoolD", 301, new Type(Boolean.TYPE), (short) 0);
+    private Property propBoolD= new Property("PropBoolD", 301, new Type(Boolean.TYPE), (short) 0);
 
     public Property propBoolClass= new Property("PropBoolClass", 1001, new Type(Boolean.class), (short) 0);
     public Boolean boolClassProp;
-    public Property propCharClass= new Property("PropCharClass", 1002, new Type(Character.class), (short) 0);
-    public Character charClassProp;
-    public Property propByteClass= new Property("PropByteClass", 1003, new Type(Byte.class), (short) 0);
-    public Byte byteClassProp;
-    public Property propShortClass= new Property("PropShortClass", 1004, new Type(Short.class), (short) 0);
-    public Short shortClassProp;
-    public Property propIntClass= new Property("PropIntClass", 1005, new Type(Integer.class), (short) 0);
+    private Property propCharClass= new Property("PropCharClass", 1002, new Type(Character.class), (short) 0);
+    private Character charClassProp;
+    private Property propByteClass= new Property("PropByteClass", 1003, new Type(Byte.class), (short) 0);
+    private Byte byteClassProp;
+    private Property propShortClass= new Property("PropShortClass", 1004, new Type(Short.class), (short) 0);
+    private Short shortClassProp;
+    private Property propIntClass= new Property("PropIntClass", 1005, new Type(Integer.class), (short) 0);
     public Integer intClassProp;
-    public Property propLongClass= new Property("PropLongClass", 1006, new Type(Long.class), (short) 0);
-    public Long longClassProp;
-    public Property propFloatClass= new Property("PropFloatClass", 1007, new Type(Float.class), (short) 0);
-    public Float floatClassProp;
-    public Property propDoubleClass= new Property("PropDoubleClass", 1008, new Type(Double.class), (short) 0);
-    public Double doubleClassProp;
+    private Property propLongClass= new Property("PropLongClass", 1006, new Type(Long.class), (short) 0);
+    private Long longClassProp;
+    private Property propFloatClass= new Property("PropFloatClass", 1007, new Type(Float.class), (short) 0);
+    private Float floatClassProp;
+    private Property propDoubleClass= new Property("PropDoubleClass", 1008, new Type(Double.class), (short) 0);
+    private Double doubleClassProp;
 
 
     public TestClass()
@@ -1624,7 +1624,7 @@ XPropertiesChangeListener
     int nChangeCalled;
     int nPropertiesChange;
     int nVetoCalled;
-    int nDisposingCalled;
+    private int nDisposingCalled;
     boolean bVeto= false;
     PropertyChangeEvent evt;
     PropertyChangeEvent[] arEvt;

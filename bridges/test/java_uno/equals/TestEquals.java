@@ -74,7 +74,7 @@ public final class TestEquals {
         return url;
     }
 
-    public static final class Client extends TestBed.Client {
+    private static final class Client extends TestBed.Client {
         public static void main(String[] args) {
             new Client().execute();
         }

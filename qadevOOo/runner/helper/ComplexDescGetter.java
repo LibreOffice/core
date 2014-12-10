@@ -33,7 +33,7 @@ import complexlib.ComplexTestCase;
 public class ComplexDescGetter extends DescGetter
 {
 
-    ComplexTest testClass;
+    private ComplexTest testClass;
 
     /** Creates new ComplexDescGetter */
     public ComplexDescGetter()

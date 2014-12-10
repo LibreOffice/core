@@ -71,7 +71,7 @@ public abstract class BaseDialog extends BaseControl {
         return xMSF;
     }
 
-    public XFrame getCurrentFrame() {
+    private XFrame getCurrentFrame() {
         try {
             Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", context);
             XDesktop xDesktop = UnoRuntime.queryInterface(XDesktop.class, oDesktop);
@@ -84,7 +84,7 @@ public abstract class BaseDialog extends BaseControl {
         }
     }
 
-    public Rectangle getWorkspaceDimensions() {
+    private Rectangle getWorkspaceDimensions() {
         return getCurrentFrame().getComponentWindow().getPosSize();
     }
 

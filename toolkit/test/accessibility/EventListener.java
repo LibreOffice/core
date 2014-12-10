@@ -23,7 +23,7 @@ import com.sun.star.accessibility.*;
 */
 public class EventListener
 {
-    public boolean mbVerbose = false;
+    private boolean mbVerbose = false;
 
     public EventListener (AccessibilityTreeModel aTreeModel)
     {

@@ -28,14 +28,14 @@ import com.sun.star.uno.Type;
 
 
 class TestBridge implements IBridge {
-    static public final boolean DEBUG = false;
+    static private final boolean DEBUG = false;
 
-    final HashMap<String,Object> _hashtable = new HashMap<String,Object>();
+    private final HashMap<String,Object> _hashtable = new HashMap<String,Object>();
 
-    IEnvironment _source ;//= new com.sun.star.lib.uno.environments.java.java_environment(null);
+    private IEnvironment _source ;//= new com.sun.star.lib.uno.environments.java.java_environment(null);
 
 
-    class MyEnv implements IEnvironment {
+    private class MyEnv implements IEnvironment {
         public Object getContext() {
             return null;
         }

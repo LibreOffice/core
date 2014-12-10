@@ -783,9 +783,9 @@ public class ODatabaseForm extends TestCase {
      * for the XDatabaseParameterBroadcaster test
      * @see ifc.form._XDatabaseParameterBroadcaster
      */
-    public class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
-        boolean listenerWasCalled = false;
-        PrintWriter log = new PrintWriter(System.out);
+    private class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
+        private boolean listenerWasCalled = false;
+        private PrintWriter log = new PrintWriter(System.out);
 
         /**
          * Return true, if the listener was called, false otherwise.
@@ -845,7 +845,7 @@ public class ODatabaseForm extends TestCase {
      * for the XCompletedExecution test
      * @see ifc.sdb._XCompletedExecution
      */
-    public class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
+    private class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
         private boolean handlerWasUsed = false;
         private PrintWriter log = new PrintWriter(System.out);
 

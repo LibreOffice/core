@@ -43,7 +43,7 @@ public class TwipsConverter {
      *
      * @return  {@code int} containing the converted value.
      */
-    public static int cm2twips(float value) {
+    private static int cm2twips(float value) {
         int twips = (int) ((value/2.54)*1440);
         return twips;
     }
@@ -55,7 +55,7 @@ public class TwipsConverter {
      *
      * @return  {@code int} containing the converted value.
      */
-    public static int inches2twips(float value) {
+    private static int inches2twips(float value) {
         return (int) (value*1440);
     }
 

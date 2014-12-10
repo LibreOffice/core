@@ -39,13 +39,13 @@ class AccessibleImageHandler extends NodeHandler
     {
     }
 
-    public AccessibleImageHandler (XAccessibleImage xImage)
+    private AccessibleImageHandler (XAccessibleImage xImage)
     {
         if (xImage != null)
             maChildList.setSize (1);
     }
 
-    protected static XAccessibleImage getImage (AccTreeNode aNode)
+    private static XAccessibleImage getImage (AccTreeNode aNode)
     {
         return UnoRuntime.queryInterface (
             XAccessibleImage.class, aNode.getContext());

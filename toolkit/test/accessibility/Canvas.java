@@ -190,7 +190,7 @@ class Canvas
         return Options.GetBoolean ("ShowText");
     }
 
-    public void setShowText (boolean bNewValue)
+    private void setShowText (boolean bNewValue)
     {
         Options.SetBoolean ("ShowText", bNewValue);
         repaint ();
@@ -202,7 +202,7 @@ class Canvas
         repaint ();
     }
 
-    public int getZoomMode ()
+    private int getZoomMode ()
     {
         return Options.GetInteger ("ZoomMode", WHOLE_SCREEN);
     }
@@ -388,7 +388,7 @@ class Canvas
             highlightObject (FindCanvasShapeUnderMouse (e));
     }
 
-    protected CanvasShape FindCanvasShapeUnderMouse (MouseEvent e)
+    private CanvasShape FindCanvasShapeUnderMouse (MouseEvent e)
     {
         CanvasShape aObjectUnderMouse = null;
         int nCount = maObjectList.size();
@@ -405,7 +405,7 @@ class Canvas
         return aObjectUnderMouse;
     }
 
-    protected boolean highlightObject (CanvasShape aNewActiveObject)
+    private boolean highlightObject (CanvasShape aNewActiveObject)
     {
         if (aNewActiveObject != maActiveObject)
         {

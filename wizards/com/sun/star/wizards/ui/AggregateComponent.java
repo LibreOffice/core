@@ -37,23 +37,23 @@ import com.sun.star.wizards.db.QueryMetaData;
 public class AggregateComponent extends ControlScroller
 {
 
-    String[] sFunctions;
-    String[] sFunctionOperators = new String[]
+    private String[] sFunctions;
+    private String[] sFunctionOperators = new String[]
     {
         "SUM", "AVG", "MIN", "MAX"
     };
-    QueryMetaData CurDBMetaData;
-    String soptDetailQuery;
-    String soptSummaryQuery;
-    String slblAggregate;
-    String slblFieldNames;
-    String sDuplicateAggregateFunction;
-    int Count;
-    static final int SOADDROW = 1;
-    static final int SOREMOVEROW = 2;
-    ArrayList<ControlRow> ControlRowVector;
-    int curHelpID;
-    int lastHelpIndex;
+    private QueryMetaData CurDBMetaData;
+    private String soptDetailQuery;
+    private String soptSummaryQuery;
+    private String slblAggregate;
+    private String slblFieldNames;
+    private String sDuplicateAggregateFunction;
+    private int Count;
+    private static final int SOADDROW = 1;
+    private static final int SOREMOVEROW = 2;
+    private ArrayList<ControlRow> ControlRowVector;
+    private int curHelpID;
+    private int lastHelpIndex;
 
     /** Creates a new instance of AggrgateComponent */
     public AggregateComponent(WizardDialog _CurUnoDialog, QueryMetaData _CurDBMetaData, int _iStep, int _iPosX, int _iPosY, int _iWidth, int _uitextfieldcount, int _firstHelpID)
@@ -133,7 +133,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    public int getQueryType()
+    private int getQueryType()
     {
         if (((Short) CurUnoDialog.getControlProperty("optDetailQuery", PropertyNames.PROPERTY_STATE)).intValue() == 1)
         {
@@ -145,7 +145,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(EventObject eventObject)
@@ -216,7 +216,7 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    protected void addRow()
+    private void addRow()
     {
         int fieldcount = super.getTotalFieldCount();
         registerControlGroupAtIndex(fieldcount);
@@ -238,7 +238,7 @@ public class AggregateComponent extends ControlScroller
         CurUnoDialog.repaintDialogStep();
     }
 
-    protected void removeRow()
+    private void removeRow()
     {
         int fieldcount = super.getTotalFieldCount();
         if (fieldcount > 0)
@@ -258,7 +258,7 @@ public class AggregateComponent extends ControlScroller
         CurUnoDialog.repaintDialogStep();
     }
 
-    protected void toggleButtons()
+    private void toggleButtons()
     {
         ControlRow curcontrolrow = null;
         boolean biscomplete = true;
@@ -274,7 +274,7 @@ public class AggregateComponent extends ControlScroller
         togglefollowingDialogSteps();
     }
 
-    public void toggleComponent()
+    private void toggleComponent()
     {
         CurDBMetaData.Type = getQueryType();
         boolean benableComponent = isAggregateComponentEnabled();
@@ -490,14 +490,14 @@ public class AggregateComponent extends ControlScroller
         }
     }
 
-    protected class ControlRow
+    private class ControlRow
     {
 
         private XListBox xFieldListBox;
         private XListBox xFunctionListBox;
         private int index;
 
-        protected ControlRow(int _index, int ypos, int _curHelpID)
+        private ControlRow(int _index, int ypos, int _curHelpID)
         {
             try
             {
@@ -553,7 +553,7 @@ public class AggregateComponent extends ControlScroller
             UnoDialog.deselectListBox(xFunctionListBox);
         }
 
-        protected class ItemListenerImpl implements com.sun.star.awt.XItemListener
+        private class ItemListenerImpl implements com.sun.star.awt.XItemListener
         {
 
             public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)

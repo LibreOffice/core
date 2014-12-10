@@ -27,9 +27,9 @@ import java.util.Random;
 
 public class Test02 {
 
-    XMultiServiceFactory m_xMSF;
-    XSimpleFileAccess m_xSFA;
-    TestHelper m_aTestHelper;
+    private XMultiServiceFactory m_xMSF;
+    private XSimpleFileAccess m_xSFA;
+    private TestHelper m_aTestHelper;
 
     public Test02(XMultiServiceFactory xMSF, XSimpleFileAccess xSFA) {
         m_xMSF = xMSF;

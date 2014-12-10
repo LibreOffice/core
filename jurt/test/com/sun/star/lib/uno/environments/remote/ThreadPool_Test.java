@@ -232,7 +232,7 @@ public class ThreadPool_Test {
         }
 
         abstract class Stress extends Thread {
-            public Stress(int count) {
+            private Stress(int count) {
                 this.count = count;
             }
 

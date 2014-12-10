@@ -493,12 +493,12 @@ public class GenericModelTest extends TestCase {
     } // finish method getTestEnvironment
 
 
-    static class Checker implements ifc.form._XUpdateBroadcaster.UpdateChecker {
+    private static class Checker implements ifc.form._XUpdateBroadcaster.UpdateChecker {
             private Object lastValue = null;
-            XLoadable formLoaderF = null;
-            XPropertySet ps = null;
-            XInterface ctrl = null;
-            String ChangePropertyName = null;
+            private XLoadable formLoaderF = null;
+            private XPropertySet ps = null;
+            private XInterface ctrl = null;
+            private String ChangePropertyName = null;
             Object ChangePropertyValue = null;
 
             public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName, Object ChangePropertyValue) {

@@ -182,14 +182,14 @@ public class XMLContentExporter extends TestCase {
      * to log specified.
      * @see ifc.document._XFilter
      */
-    protected class ContentFilterChecker extends XMLTools.XMLTagsChecker
+    private class ContentFilterChecker extends XMLTools.XMLTagsChecker
       implements ifc.document._XFilter.FilterChecker {
 
         /**
          * Creates a class which will write information
          * into log specified.
          */
-        public ContentFilterChecker(PrintWriter log) {
+        private ContentFilterChecker(PrintWriter log) {
             super(log) ;
         }
 

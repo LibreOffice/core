@@ -49,7 +49,7 @@ import java.util.ArrayList;
 
 public class ScriptProviderForJava {
 
-    public static class _ScriptProviderForJava extends ScriptProvider {
+    private static class _ScriptProviderForJava extends ScriptProvider {
 
         private final Resolver m_resolutionPolicy = new StrictResolver();
 

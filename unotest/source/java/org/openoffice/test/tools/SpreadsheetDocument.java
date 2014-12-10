@@ -44,7 +44,7 @@ public class SpreadsheetDocument extends OfficeDocument
     /* ------------------------------------------------------------------ */
     /** returns the sheets collection
     */
-    public XSpreadsheets getSheets()
+    private XSpreadsheets getSheets()
     {
         XSpreadsheetDocument spreadsheetDoc = UnoRuntime.queryInterface( XSpreadsheetDocument.class, getDocument() );
         return spreadsheetDoc.getSheets();

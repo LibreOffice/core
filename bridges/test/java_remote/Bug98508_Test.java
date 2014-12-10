@@ -59,7 +59,7 @@ public final class Bug98508_Test extends ComplexTestCase {
         assure("test", t.execute(new Provider(t), true, Client.class, 10000));
     }
 
-    public static final class Client extends TestBed.Client {
+    private static final class Client extends TestBed.Client {
         public static void main(String[] args) {
             new Client().execute();
         }

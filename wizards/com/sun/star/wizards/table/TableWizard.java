@@ -38,19 +38,19 @@ import com.sun.star.wizards.ui.*;
 public class TableWizard extends DatabaseObjectWizard implements XTextListener
 {
 
-    static String slblFields;
-    static String slblSelFields;
-    Finalizer curFinalizer;
-    ScenarioSelector curScenarioSelector;
-    FieldFormatter curFieldFormatter;
-    PrimaryKeyHandler curPrimaryKeyHandler;
+    private static String slblFields;
+    private static String slblSelFields;
+    private Finalizer curFinalizer;
+    private ScenarioSelector curScenarioSelector;
+    private FieldFormatter curFieldFormatter;
+    private PrimaryKeyHandler curPrimaryKeyHandler;
     public HashMap<String, FieldDescription> fielditems;
     int wizardmode;
     String tablename;
     String serrToManyFields;
     String serrTableNameexists;
     String scomposedtablename;
-    TableDescriptor curTableDescriptor;
+    private TableDescriptor curTableDescriptor;
     public static final int SOMAINPAGE = 1;
     public static final int SOFIELDSFORMATPAGE = 2;
     public static final int SOPRIMARYKEYPAGE = 3;
@@ -231,7 +231,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 */
-    public void buildSteps()
+    private void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
         curFieldFormatter = new FieldFormatter(this);
@@ -243,7 +243,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         enableNavigationButtons(false, false, false);
     }
 
-    public boolean createTable()
+    private boolean createTable()
     {
         boolean bIsSuccessfull = true;
         boolean bTableCreated = false;
@@ -334,7 +334,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         xDialog.endExecute();
     }
 
-    public void insertFormRelatedSteps()
+    private void insertFormRelatedSteps()
     {
         addRoadmap();
         int i = 0;
@@ -378,7 +378,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         return PropertyNames.EMPTY_STRING;
     }
 
-    public boolean getTableResources()
+    private boolean getTableResources()
     {
         super.m_oResource.getResText(UIConsts.RID_TABLE + 1);
         slblFields = m_oResource.getResText(UIConsts.RID_TABLE + 19);

@@ -58,7 +58,7 @@ public final class RemoteServiceTest extends TestBase {
             };
     }
 
-    public static final class Server {
+    private static final class Server {
         public static void main(String[] arguments) throws Exception {
             XComponentContext context
                 = Bootstrap.createInitialComponentContext(null);

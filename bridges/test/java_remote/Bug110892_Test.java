@@ -54,7 +54,7 @@ public final class Bug110892_Test extends ComplexTestCase {
                                      10000));
     }
 
-    public static final class Client extends TestBed.Client {
+    private static final class Client extends TestBed.Client {
         public static void main(String[] args) {
             new Client().execute();
         }

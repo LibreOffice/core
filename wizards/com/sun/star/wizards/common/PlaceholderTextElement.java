@@ -26,9 +26,9 @@ import com.sun.star.text.*;
 public class PlaceholderTextElement extends TextElement
 {
 
-    String hint;
+    private String hint;
     String placeHolderText;
-    XMultiServiceFactory xmsf;
+    private XMultiServiceFactory xmsf;
 
     public PlaceholderTextElement(XTextRange textRange, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)
     {
@@ -56,7 +56,7 @@ public class PlaceholderTextElement extends TextElement
         }
     }
 
-    public static XTextContent createPlaceHolder(XMultiServiceFactory xmsf, String ph, String hint)
+    private static XTextContent createPlaceHolder(XMultiServiceFactory xmsf, String ph, String hint)
     {
         Object placeHolder;
         try
