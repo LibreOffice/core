@@ -52,6 +52,8 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -166,6 +168,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext( xContext ),
         m_bSetUserFieldContent( false ),
+        m_bSetDateValue( false ),
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
@@ -2144,10 +2147,17 @@ bool DomainMapper_Impl::IsOpenField() const
     return !m_aFieldStack.empty();
 }
 
+// Mark top field context as containing a fixed field
+void DomainMapper_Impl::SetFieldLocked()
+{
+    if (IsOpenField())
+        m_aFieldStack.top()->SetFieldLocked();
+}
 
-FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart) :
-    m_bFieldCommandCompleted( false )
-    ,m_xStartRange( xStart )
+FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart)
+    : m_bFieldCommandCompleted( false )
+    , m_xStartRange( xStart )
+    , m_bFieldLocked( false )
 {
 }
 
@@ -2824,6 +2834,7 @@ void DomainMapper_Impl::CloseFieldCommand()
     if( pContext.get() )
     {
         m_bSetUserFieldContent = false;
+        m_bSetDateValue = false;
         FieldConversionMap_t aFieldConversionMap = lcl_GetFieldConversion();
         bool bCreateEnhancedField = false;
 
@@ -2921,10 +2932,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_DATE:
                     if (xFieldProperties.is())
                     {
-                        //not fixed,
-                        xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_IS_FIXED),
-                            uno::makeAny( false ));
+                        // Get field fixed property from the context handler
+                        if (pContext->IsFieldLocked())
+                        {
+                            xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName(PROP_IS_FIXED),
+                                uno::makeAny( true ));
+                            m_bSetDateValue = true;
+                        }
+                        else
+                            xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName(PROP_IS_FIXED),
+                                uno::makeAny( false ));
+
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_IS_DATE),
                             uno::makeAny( true ));
@@ -3292,7 +3312,16 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_SYMBOL       : break;
                     case FIELD_TEMPLATE: break;
                     case FIELD_TIME         :
+                    {
+                        if (pContext->IsFieldLocked())
+                        {
+                            xFieldProperties->setPropertyValue(
+                                rPropNameSupplier.GetName(PROP_IS_FIXED),
+                                uno::makeAny( true ));
+                            m_bSetDateValue = true;
+                        }
                         SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+                    }
                     break;
                     case FIELD_TITLE        :
                     {
@@ -3378,6 +3407,28 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     return bRet;
 }
 
+// Calculates css::DateTime based on ddddd.sssss since 1900-1-0
+::com::sun::star::util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
+{
+    const sal_uInt32 secondsPerDay = 86400;
+    const sal_uInt16 secondsPerHour = 3600;
+
+    DateTime d(Date(30, 12, 1899));
+    d += (long)dSerial;
+
+    double frac = dSerial - (long)dSerial;
+    sal_uInt32 seconds = frac * secondsPerDay;
+
+    ::com::sun::star::util::DateTime date;
+    date.Year = d.GetYear();
+    date.Month = d.GetMonth();
+    date.Day = d.GetDay();
+    date.Hours = seconds / secondsPerHour;
+    date.Minutes = (seconds % secondsPerHour) / 60;
+    date.Seconds = seconds % 60;
+
+    return date;
+}
 
 void DomainMapper_Impl::SetFieldResult( OUString& rResult )
 {
@@ -3409,6 +3460,21 @@ void DomainMapper_Impl::SetFieldResult( OUString& rResult )
                         xDependentField->getTextFieldMaster()->setPropertyValue(
                                 rPropNameSupplier.GetName(PROP_CONTENT),
                              uno::makeAny( rResult ));
+                    }
+                    else if ( m_bSetDateValue )
+                    {
+                        uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier( m_xTextDocument, uno::UNO_QUERY_THROW );
+
+                        uno::Reference< util::XNumberFormatter > xFormatter( ::com::sun::star::util::NumberFormatter::create( m_xComponentContext ), uno::UNO_QUERY_THROW );
+                        xFormatter->attachNumberFormatsSupplier( xNumberSupplier );
+                        sal_Int32 nKey = 0;
+
+                        uno::Reference< beans::XPropertySet > xFieldProperties( xTextField, uno::UNO_QUERY_THROW);
+
+                        xFieldProperties->getPropertyValue( "NumberFormat" ) >>= nKey;
+                        xFieldProperties->setPropertyValue(
+                            "DateTimeValue",
+                            uno::makeAny( lcl_dateTimeFromSerial( xFormatter->convertStringToNumber( nKey, rResult ) ) ) );
                     }
                     else
                     {

@@ -124,6 +124,7 @@ class FieldContext
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >          m_xStartRange;
 
     OUString                                                                 m_sCommand;
+    bool m_bFieldLocked;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
@@ -144,6 +145,9 @@ public:
 
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
     bool                    IsCommandCompleted() const { return m_bFieldCommandCompleted;    }
+
+    void                    SetFieldLocked() { m_bFieldLocked = true; }
+    bool                    IsFieldLocked() { return m_bFieldLocked; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >      GetTextField() const { return m_xTextField;}
     void    SetTextField(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > xTextField) { m_xTextField = xTextField;}
@@ -322,6 +326,7 @@ private:
 
     FieldStack                                                                      m_aFieldStack;
     bool                                                                            m_bSetUserFieldContent;
+    bool                                                                            m_bSetDateValue;
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
@@ -560,6 +565,8 @@ public:
     //the current field context waits for the completion of the command
     bool IsOpenFieldCommand() const;
     bool IsOpenField() const;
+    //mark field in current context as locked (fixed)
+    void SetFieldLocked();
     //collect the pieces of the command
     void AppendFieldCommand(OUString& rPartOfCommand);
     void handleFieldAsk

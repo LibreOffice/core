@@ -190,6 +190,7 @@ public:
     void startField();
     void fieldSeparator();
     void endField();
+    void lockField();
     void ftnednref();
     void ftnedncont();
     void ftnednsep();

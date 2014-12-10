@@ -287,6 +287,20 @@ public:
     int getValue() const;
 };
 
+class OOXMLPropertySetEntryToBool : public Properties
+{
+    Id mnId;
+    bool mValue;
+public:
+    OOXMLPropertySetEntryToBool(Id nId);
+    virtual ~OOXMLPropertySetEntryToBool();
+
+    virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
+    virtual void attribute(Id nId, Value & rValue) SAL_OVERRIDE;
+
+    bool getValue() const { return mValue; }
+};
+
 Sprm::Kind SprmKind(sal_uInt32 nSprmCode);
 
 }  // namespace ooxml

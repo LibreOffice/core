@@ -801,6 +801,10 @@ const OUString & OOXMLPropertySetEntryToString::getString() const
     return mStr;
 }
 
+/*
+  class: OOXMLPropertySetEntryToInteger
+*/
+
 OOXMLPropertySetEntryToInteger::OOXMLPropertySetEntryToInteger(Id nId)
 : mnId(nId), mnValue(0)
 {
@@ -823,6 +827,24 @@ void OOXMLPropertySetEntryToInteger::attribute(Id nId, Value & rValue)
 int OOXMLPropertySetEntryToInteger::getValue() const
 {
     return mnValue;
+}
+
+/*
+  class: OOXMLPropertySetEntryToBool
+*/
+
+OOXMLPropertySetEntryToBool::OOXMLPropertySetEntryToBool(Id nId)
+    : mnId(nId), mValue(false)
+{}
+
+OOXMLPropertySetEntryToBool::~OOXMLPropertySetEntryToBool() {}
+
+void OOXMLPropertySetEntryToBool::sprm(Sprm & /*rSprm*/) {}
+
+void OOXMLPropertySetEntryToBool::attribute(Id nId, Value & rValue)
+{
+    if (nId == mnId)
+        mValue = (rValue.getInt() != 0);
 }
 
 }}
