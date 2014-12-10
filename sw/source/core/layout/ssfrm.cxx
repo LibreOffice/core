@@ -457,7 +457,10 @@ void SwLayoutFrm::Destroy()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
+                {
                     delete pAnchoredObj;
+                    assert(!pFrm->GetDrawObjs() || nCnt > pFrm->GetDrawObjs()->size());
+                }
                 else
                 {
                     SdrObject* pSdrObj = pAnchoredObj->DrawObj();
@@ -469,11 +472,12 @@ void SwLayoutFrm::Destroy()
                     {
                         pContact->DisconnectObjFromLayout( pSdrObj );
                     }
-                }
-                if ( pFrm->GetDrawObjs() &&
-                     nCnt == pFrm->GetDrawObjs()->size() )
-                {
-                    pFrm->GetDrawObjs()->Remove( *pAnchoredObj );
+
+                    if ( pFrm->GetDrawObjs() &&
+                         nCnt == pFrm->GetDrawObjs()->size() )
+                    {
+                        pFrm->GetDrawObjs()->Remove( *pAnchoredObj );
+                    }
                 }
             }
             pFrm->Remove();
@@ -488,7 +492,10 @@ void SwLayoutFrm::Destroy()
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
+            {
                 delete pAnchoredObj;
+                assert(!GetDrawObjs() || nCnt > GetDrawObjs()->size());
+            }
             else
             {
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
@@ -500,10 +507,11 @@ void SwLayoutFrm::Destroy()
                 {
                     pContact->DisconnectObjFromLayout( pSdrObj );
                 }
-            }
-            if ( GetDrawObjs() && nCnt == GetDrawObjs()->size() )
-            {
-                GetDrawObjs()->Remove( *pAnchoredObj );
+
+                if ( GetDrawObjs() && nCnt == GetDrawObjs()->size() )
+                {
+                    GetDrawObjs()->Remove( *pAnchoredObj );
+                }
             }
         }
     }
