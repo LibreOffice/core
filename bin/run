@@ -29,7 +29,7 @@ echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
 echo "setting search path to: ${PATH}"
 echo "execing: ${exedir}/$1"
 
-exec "${exedir}"/$@
+exec ${LO_TRACE} "${exedir}"/$@
 
 elif [ $(uname) = Darwin ]; then
 
@@ -48,7 +48,7 @@ echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
 echo "setting search path to: ${DYLD_LIBRARY_PATH}"
 echo "execing: ${exedir}/$1"
 
-exec "${exedir}"/$@
+exec ${LO_TRACE} "${exedir}"/$@
 
 else
 
@@ -70,6 +70,6 @@ echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
 echo "setting search path to: ${LD_LIBRARY_PATH}"
 echo "execing: ${exedir}/$1"
 
-exec "${exedir}"/$@
+exec ${LO_TRACE} "${exedir}"/$@
 
 fi
