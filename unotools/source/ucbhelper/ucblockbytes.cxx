@@ -875,7 +875,7 @@ static bool UCBOpenContentSync(
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
-    if ( !aScheme.equalsAscii( "http" ) ||
+    if ( !aScheme.equalsAscii( "http" ) &&
          !aScheme.equalsAscii( "https" ) )
         xLockBytes->SetStreamValid_Impl();
 
