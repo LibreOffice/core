@@ -1158,12 +1158,8 @@ void XMLTextImportHelper::InsertTextContent(
     assert(m_pImpl->m_xCursorAsRange.is());
     if (m_pImpl->m_xText.is())
     {
-        try {
-            m_pImpl->m_xText->insertTextContent( m_pImpl->m_xCursorAsRange, xContent, sal_False);
-        } catch ( const lang::IllegalArgumentException & )
-        {
-            SAL_WARN( "xmloff", "Cannot import part of the text - probably an image in the text frame?" );
-        }
+        // note: this may throw IllegalArgumentException and callers handle it
+        m_pImpl->m_xText->insertTextContent( m_pImpl->m_xCursorAsRange, xContent, sal_False);
     }
 }
 
