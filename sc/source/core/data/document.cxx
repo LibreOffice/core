@@ -1216,7 +1216,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
 
             // Collect all formula groups that will get split by the shifting,
             // and end all their listening.  Record the position of the top
-            // cell of the topmost group, and the postion of the bottom cell
+            // cell of the topmost group, and the position of the bottom cell
             // of the bottommost group.
             EndListeningIntersectedGroups(aEndListenCxt, aShiftedRange, &aGroupPos);
 

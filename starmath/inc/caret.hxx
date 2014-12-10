@@ -404,7 +404,7 @@ private:
  * </TR>
  * </TABLE>
  *
- * Below is a directed graph over the caret postions and how you can move between them.
+ * Below is a directed graph over the caret positions and how you can move between them.
  * \dot
  * digraph {
  *     labelloc = "t";

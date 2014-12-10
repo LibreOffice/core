@@ -192,7 +192,7 @@ namespace dbaui
         bool SaveData(long nRow, sal_uInt16 nColumnId);
         /** AdjustFieldDescription set the needed values for the description
             @param  _pFieldDesc     the field description where to set the values
-            @param  _rMultiSel      contains the postions which changed for undo/redo
+            @param  _rMultiSel      contains the positions which changed for undo/redo
             @param  _nPos           the current position
             @param  _bSet           should a key be set
             @param  _bPrimaryKey    which value should the pkey have

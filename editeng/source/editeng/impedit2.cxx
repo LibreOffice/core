@@ -3881,7 +3881,7 @@ long ImpEditEngine::GetPortionXOffset(
     }
     if ( bR2LPara )
     {
-        // Switch X postions...
+        // Switch X positions...
         OSL_ENSURE( GetTextRanger() || GetPaperSize().Width(), "GetPortionXOffset - paper size?!" );
         OSL_ENSURE( GetTextRanger() || (nX <= GetPaperSize().Width()), "GetPortionXOffset - position out of paper size!" );
         nX = GetPaperSize().Width() - nX;

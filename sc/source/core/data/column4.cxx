@@ -1322,7 +1322,7 @@ public:
             if (nEndGroupPos > nDataSize)
             {
                 // The group goes beyond the specified end row.  Move to the
-                // one before the end postion to finish the loop.
+                // one before the end position to finish the loop.
                 pp = ppEnd - 1;
             }
             else

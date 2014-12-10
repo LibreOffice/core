@@ -78,7 +78,7 @@ void SfxApplication::Exit()
     This virtual method is called from SFx through Application::Main(),
     after Execute() has finished and
     - the configuration (SfxConfigManager) was already saved,
-    - the window postions etc. in the SfxIniManager were written,
+    - the window positions etc. in the SfxIniManager were written,
     - the Application widow still exists, but is hidden
     - all Documents and their Views already are closed.
     - Dispatcher, Bindings etc. already destroyed.

@@ -163,7 +163,7 @@ public:
     void    SetLastLineAlign(enumXFAlignType align,bool bJustSingleWord = false);
 
     /**
-     * @descr   Set the shadow of the paragraph.there is 4 postions, you
+     * @descr   Set the shadow of the paragraph.there is 4 positions, you
                 can find it in the definition of enumShadowPos.
      * @param   pos
      * @param   offset the distance between the paragraph border and the shadow.

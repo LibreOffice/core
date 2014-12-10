@@ -130,7 +130,7 @@ ShowDropPos     - This method must be called by the QueryDrop handler,
                   inserted. This method can also be used in the Drop
                   handler, in order to determine the position at which
                   the Tabs shall be inserted. In the method, the
-                  postion of the Event must be passed. This method
+                  position of the Event must be passed. This method
                   returns the position, at which the Tabs shall be inserted.
 
 HideDropPos     - This method takes back the DropPosition previously

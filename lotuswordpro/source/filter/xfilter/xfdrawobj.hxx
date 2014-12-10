@@ -72,7 +72,7 @@
 /**
  * @brief
  * Base class for all drawing object(ellipse,rect,circle,...).
- * I can set Postions,anchor,rotate,text style name here.
+ * I can set Positions,anchor,rotate,text style name here.
  *
  * Drawing objects can be rotated,scaled and skewed, drawing objects must have positions setted,
  * you can use SetPosition(...).

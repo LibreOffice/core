@@ -96,7 +96,7 @@ public:
     void _End(bool bRestoreSelection = true);
 };
 
-// #i18881# to be able to identify the postions of the changed words
+// #i18881# to be able to identify the positions of the changed words
 // the content positions of each portion need to be saved
 struct SpellContentPosition
 {
