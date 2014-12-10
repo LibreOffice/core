@@ -1792,7 +1792,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
         }
 
         // It is allowed to move footnotes in other footnotes but not sections
-        const bool bChkRange = pFrm->IsInFtn() && !HasMark();
+        const bool bChkRange = !pFrm->IsInFtn() || HasMark();
         const SwPosition aOldPos( *GetPoint() );
         const bool bInReadOnly = IsReadOnlyAvailable();
 
