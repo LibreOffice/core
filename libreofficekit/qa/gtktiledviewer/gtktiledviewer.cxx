@@ -20,7 +20,7 @@
 
 static int help()
 {
-    fprintf( stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install> [path to document]\n" );
+    fprintf( stderr, "Usage: gtktiledviewer <absolute-path-to-libreoffice-install> <path-to-document>\n" );
     return 1;
 }
 
@@ -197,7 +197,7 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 
 int main( int argc, char* argv[] )
 {
-    if( argc < 2 ||
+    if( argc < 3 ||
         ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
         return help();
 
