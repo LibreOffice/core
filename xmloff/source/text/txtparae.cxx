@@ -2277,130 +2277,139 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
 
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
-                if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+                if (!bAutoStyles)
                 {
-                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    if (xBookmark.is())
+                    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
                     {
-                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
-                    }
+                        Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                        if (xBookmark.is())
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                        }
 
-                    if (xFormField.is())
-                    {
-                        GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
-                    }
+                        if (xFormField.is())
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
+                        }
 
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
-                    if (xFormField.is())
-                    {
-                        FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
+                        GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
+                        if (xFormField.is())
+                        {
+                            FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
+                        }
+                        GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
                     }
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK_START, false);
-                }
-                /* The OpenDocument standard does not include support for TextMarks for now, so use bookmarks instead. */
-                else
-                {
-                    if (xFormField.is())
+                    /* The OpenDocument standard does not include support for TextMarks for now, so use bookmarks instead. */
+                    else
                     {
-                        OUString sName;
-                        Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
-                        if (xParameters.is() && xParameters->hasByName("Name"))
+                        if (xFormField.is())
                         {
-                            const Any aValue = xParameters->getByName("Name");
-                            aValue >>= sName;
-                        }
-                        if (sName.isEmpty())
-                        {   // name attribute is mandatory, so have to pull a
-                            // rabbit out of the hat here
-                            sName = sFieldMarkName + OUString::number(
-                                    m_pImpl->AddFieldMarkStart(xFormField));
-                        }
-                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
-                                sName);
-                        SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                            XML_NAMESPACE_TEXT, XML_BOOKMARK_START,
-                            false, false );
-                        const OUString sFieldType = xFormField->getFieldType();
-                        if (sFieldType ==  ODF_FORMTEXT)
-                        {
-                            openFieldMark = TEXT;
-                        }
-                        else if (sFieldType == ODF_FORMCHECKBOX)
-                        {
-                            openFieldMark = CHECK;
-                        }
-                        else
-                        {
-                            openFieldMark = NONE;
+                            OUString sName;
+                            Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                            if (xParameters.is() && xParameters->hasByName("Name"))
+                            {
+                                const Any aValue = xParameters->getByName("Name");
+                                aValue >>= sName;
+                            }
+                            if (sName.isEmpty())
+                            {   // name attribute is mandatory, so have to pull a
+                                // rabbit out of the hat here
+                                sName = sFieldMarkName + OUString::number(
+                                        m_pImpl->AddFieldMarkStart(xFormField));
+                            }
+                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
+                                    sName);
+                            SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                                XML_NAMESPACE_TEXT, XML_BOOKMARK_START,
+                                false, false );
+                            const OUString sFieldType = xFormField->getFieldType();
+                            if (sFieldType ==  ODF_FORMTEXT)
+                            {
+                                openFieldMark = TEXT;
+                            }
+                            else if (sFieldType == ODF_FORMCHECKBOX)
+                            {
+                                openFieldMark = CHECK;
+                            }
+                            else
+                            {
+                                openFieldMark = NONE;
+                            }
                         }
                     }
                 }
             }
             else if (sType.equals(sTextFieldEnd))
             {
-                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (!bAutoStyles)
+                {
+                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
 
-                if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
-                {
-                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                        XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
-                        false, false );
-                }
-                else
-                {
-                    if (xFormField.is())
+                    if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     {
-                        OUString sName;
-                        Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
-                        if (xParameters.is() && xParameters->hasByName("Name"))
-                        {
-                            const Any aValue = xParameters->getByName("Name");
-                            aValue >>= sName;
-                        }
-                        if (sName.isEmpty())
-                        {   // name attribute is mandatory, so have to pull a
-                            // rabbit out of the hat here
-                            sName = sFieldMarkName + OUString::number(
-                                m_pImpl->GetFieldMarkIndex(xFormField));
-                        }
-                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
-                                sName);
                         SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                            XML_NAMESPACE_TEXT, XML_BOOKMARK_END,
+                            XML_NAMESPACE_FIELD, XML_FIELDMARK_END,
                             false, false );
+                    }
+                    else
+                    {
+                        if (xFormField.is())
+                        {
+                            OUString sName;
+                            Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
+                            if (xParameters.is() && xParameters->hasByName("Name"))
+                            {
+                                const Any aValue = xParameters->getByName("Name");
+                                aValue >>= sName;
+                            }
+                            if (sName.isEmpty())
+                            {   // name attribute is mandatory, so have to pull a
+                                // rabbit out of the hat here
+                                sName = sFieldMarkName + OUString::number(
+                                    m_pImpl->GetFieldMarkIndex(xFormField));
+                            }
+                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
+                                    sName);
+                            SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                                XML_NAMESPACE_TEXT, XML_BOOKMARK_END,
+                                false, false );
+                        }
                     }
                 }
             }
             else if (sType.equals(sTextFieldStartEnd))
             {
-                if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+                if (!bAutoStyles)
                 {
-                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    if (xBookmark.is())
+                    if (GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012)
                     {
-                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                        Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                        if (xBookmark.is())
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                        }
+                        Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                        if (xFormField.is())
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
+                        }
+                        GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
+                        if (xFormField.is())
+                        {
+                            FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
+                        }
+                        GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
                     }
-                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    if (xFormField.is())
+                    else
                     {
-                        GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
-                    }
-                    GetExport().StartElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
-                    if (xFormField.is())
-                    {
-                        FieldParamExporter(&GetExport(), xFormField->getParameters()).Export();
-                    }
-                    GetExport().EndElement(XML_NAMESPACE_FIELD, XML_FIELDMARK, false);
-                }
-                else
-                {
-                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
-                    if (xBookmark.is())
-                    {
-                        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
-                        SvXMLElementExport aElem( GetExport(), !bAutoStyles,
-                            XML_NAMESPACE_TEXT, XML_BOOKMARK,
-                            false, false );
+                        Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                        if (xBookmark.is())
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
+                            SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                                XML_NAMESPACE_TEXT, XML_BOOKMARK,
+                                false, false );
+                        }
                     }
                 }
             }
