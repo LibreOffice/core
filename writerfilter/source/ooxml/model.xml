@@ -12521,7 +12521,7 @@
           <text/>
         </attribute>
         <attribute name="fldLock">
-          <text/>
+          <ref name="ST_OnOff"/>
         </attribute>
         <attribute name="dirty">
           <text/>
@@ -12574,7 +12574,7 @@
           <ref name="ST_FldCharType"/>
         </attribute>
         <attribute name="fldLock">
-          <text/>
+          <ref name="ST_OnOff"/>
         </attribute>
         <attribute name="dirty">
           <text/>
@@ -17511,6 +17511,7 @@
       <action name="start" action="fieldend">
         <cond tokenid="ooxml:CT_FldChar_fldCharType" value="ooxml:Value_ST_FldCharType_end"/>
       </action>
+      <action name="start" action="fieldlock"/>
     </resource>
     <resource name="CT_Hyperlink" resource="Stream">
       <attribute name="tgtFrame" tokenid="ooxml:CT_Hyperlink_tgtFrame"/>

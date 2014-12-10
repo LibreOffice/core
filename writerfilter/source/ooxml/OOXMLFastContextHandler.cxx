@@ -47,6 +47,7 @@ static const sal_uInt8 cFtnEdnCont = 0x4;
 static const sal_uInt8 cFieldStart = 0x13;
 static const sal_uInt8 cFieldSep = 0x14;
 static const sal_uInt8 cFieldEnd = 0x15;
+static const sal_uInt8 cFieldLock = 0x8;
 
 namespace writerfilter {
 namespace ooxml
@@ -549,6 +550,14 @@ void OOXMLFastContextHandler::endField()
     startCharacterGroup();
     if (isForwardEvents())
         mpStream->text(&cFieldEnd, 1);
+    endCharacterGroup();
+}
+
+void OOXMLFastContextHandler::lockField()
+{
+    startCharacterGroup();
+    if (isForwardEvents())
+        mpStream->text(&cFieldLock, 1);
     endCharacterGroup();
 }
 

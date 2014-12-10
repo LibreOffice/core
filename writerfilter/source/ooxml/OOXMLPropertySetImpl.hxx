@@ -324,6 +324,20 @@ public:
     int getValue() const { return mnValue;}
 };
 
+class OOXMLPropertySetEntryToBool : public Properties
+{
+    Id mnId;
+    bool mValue;
+public:
+    OOXMLPropertySetEntryToBool(Id nId);
+    virtual ~OOXMLPropertySetEntryToBool();
+
+    virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
+    virtual void attribute(Id nId, Value & rValue) SAL_OVERRIDE;
+
+    bool getValue() const { return mValue; }
+};
+
 }  // namespace ooxml
 } // namespace writerfilter
 

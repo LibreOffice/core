@@ -451,6 +451,14 @@ def factoryChooseAction(actionNode):
         ret.append("    %spHandler->fieldSeparator();" % (extra_space))
     elif actionNode.getAttribute("action") == "fieldend":
         ret.append("    %spHandler->endField();" % (extra_space))
+    elif actionNode.getAttribute("action") == "fieldlock":
+        ret.append("    %s{" % (extra_space))
+        ret.append("        %sOOXMLPropertySetEntryToBool aHandler(NS_ooxml::LN_CT_FldChar_fldLock);" % (extra_space))
+        ret.append("        %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % (extra_space))
+        ret.append("            %spStream->getPropertySetAttrs()->resolve(aHandler);" % (extra_space))
+        ret.append("        %sif (aHandler.getValue())" % (extra_space))
+        ret.append("            %spHandler->lockField();" % (extra_space))
+        ret.append("    %s}" % (extra_space))
     elif actionNode.getAttribute("action") == "printproperty":
         ret.append("    %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % extra_space)
         ret.append("    %s    pStream->sendProperty(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))

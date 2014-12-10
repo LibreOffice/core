@@ -2826,6 +2826,10 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             switch(*data_)
             {
                 case 0x02: return; //footnote character
+                case 0x08: // Lock field if in field context
+                    if (m_pImpl->IsOpenField())
+                        m_pImpl->SetFieldLocked();
+                    return;
                 case 0x0c: //page break
                     m_pImpl->deferBreak(PAGE_BREAK);
                     return;
