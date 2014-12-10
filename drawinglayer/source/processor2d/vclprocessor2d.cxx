@@ -840,7 +840,7 @@ namespace drawinglayer
             // Prepare target output size
             Size aDestSize(aDestRectView.GetSize());
 
-            if(aDestSize.getWidth() && aDestSize.getHeight())
+            if(aDestSize.getWidth() > 0 && aDestSize.getHeight() > 0)
             {
                 // Get preferred Metafile output size. When it's very equal to the output size, it's probably
                 // a rounding error somewhere, so correct it to get a 1:1 output without single pixel scalings
