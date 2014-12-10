@@ -33,6 +33,24 @@
       "revId": "0e74a99f6d03049e696033d94feeef6cc6e59d73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_118d5631",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1000665
+      },
+      "writtenOn": "2014-12-10T22:52:38Z",
+      "side": 1,
+      "message": "Ok, I\u0027m getting back to the previous implementation of the function adapted to ptr_vector. But it still won\u0027t compile because maPageDescs[i] return const ref.\nI\u0027m not used to C++ anymore :(\nAny advise welcome.\n\nSwPageDesc* SwDoc::FindPageDesc(const OUString\u0026 rName, sal_uInt16* pPos) const\n{\n    SwPageDesc* pRet \u003d NULL;\n    if( pPos ) *pPos \u003d USHRT_MAX;\n\n    for( sal_uInt16 n \u003d 0, nEnd \u003d maPageDescs.size(); n \u003c nEnd; ++n )\n    {\n        SwPageDesc\u0026 rTmp \u003d maPageDescs[ n ];       \n        if( rTmp.HasName( rName ) )\n        {\n            pRet \u003d \u0026rTmp;\n            if( pPos )\n                *pPos \u003d n;\n            break;\n        }\n    }\n    return pRet;\n}",
+      "parentUuid": "fa32b979_71ce2285",
+      "revId": "0e74a99f6d03049e696033d94feeef6cc6e59d73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
