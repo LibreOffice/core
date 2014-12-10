@@ -2609,7 +2609,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                     {
                         pValue = pAtom->findNextChildAtom(pValue);
                         if( pValue && pValue->getType() == DFF_msofbtAnimAttributeValue )
-                            importAttributeValue( pValue, aValue2 );
+                            (void)importAttributeValue( pValue, aValue2 );
 
                         bool bCouldBeFormula = false;
                         bool bHasValue = aValue2.hasValue();
