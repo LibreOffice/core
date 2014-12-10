@@ -9,7 +9,6 @@
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Hyperlink</property>
-    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
