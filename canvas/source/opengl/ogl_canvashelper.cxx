@@ -213,11 +213,12 @@ namespace oglcanvas
                 aBounds.expand(::basegfx::tools::getRange(*aCurr++));
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
+            aTextureTransform.invert();
             const float aTextureTransformation[] =
             {
-                    float(aTextureTransform.get(1,0)), float(aTextureTransform.get(1,1)),
-                    float(aTextureTransform.get(1,2)), float(aTextureTransform.get(0,0)),
-                    float(aTextureTransform.get(0,1)), float(aTextureTransform.get(0,2))
+                    float(aTextureTransform.get(0,0)), float(aTextureTransform.get(1,0)),
+                    float(aTextureTransform.get(0,1)), float(aTextureTransform.get(1,1)),
+                    float(aTextureTransform.get(0,2)), float(aTextureTransform.get(1,2))
             };
             const glm::mat3x2 aTexTransform = glm::make_mat3x2(aTextureTransformation);
 
