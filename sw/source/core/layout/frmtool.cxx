@@ -3193,12 +3193,11 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
     {
         long nRstHeight = 0;
         SwFrm *pLow = pCell->Lower();
-        do
-        {   nRstHeight += ::CalcRowRstHeight( static_cast<SwLayoutFrm*>(pLow) );
+        while (pLow && pLow->IsLayoutFrm())
+        {
+            nRstHeight += ::CalcRowRstHeight(static_cast<SwLayoutFrm*>(pLow));
             pLow = pLow->GetNext();
-
-        } while ( pLow );
-
+        }
         return nRstHeight;
     }
 }
@@ -3206,11 +3205,11 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
 SwTwips CalcRowRstHeight( SwLayoutFrm *pRow )
 {
     SwTwips nRstHeight = LONG_MAX;
-    SwLayoutFrm *pLow = static_cast<SwLayoutFrm*>(pRow->Lower());
-    while ( pLow )
+    SwFrm *pLow = pRow->Lower();
+    while (pLow && pLow->IsLayoutFrm())
     {
-        nRstHeight = std::min( nRstHeight, ::lcl_CalcCellRstHeight( pLow ) );
-        pLow = static_cast<SwLayoutFrm*>(pLow->GetNext());
+        nRstHeight = std::min(nRstHeight, ::lcl_CalcCellRstHeight(static_cast<SwLayoutFrm*>(pLow)));
+        pLow = pLow->GetNext();
     }
     return nRstHeight;
 }
