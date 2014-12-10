@@ -186,9 +186,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "headless" )
             {
-                // Headless means also invisibile, so set this parameter to true!
-                m_headless = true;
-                m_invisible = true;
+                setHeadless();
             }
             else if ( oArg == "cat" )
             {

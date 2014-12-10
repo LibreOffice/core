@@ -111,7 +111,7 @@ class CommandLineArgs: private boost::noncopyable
         // Special analyzed states (does not match directly to a command line parameter!)
         bool IsEmpty() const { return m_bEmpty;}
 
-        void setHeadless() { m_headless = true; }
+        void setHeadless() { m_headless = true; m_invisible = true; }
 
     private:
         void                    ParseCommandLine_Impl( Supplier& supplier );
