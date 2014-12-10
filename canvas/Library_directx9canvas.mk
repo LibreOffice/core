@@ -29,12 +29,6 @@ $(eval $(call gb_Library_add_defs,directx9canvas,\
 	-UNOMINMAX \
 ))
 
-ifneq ($(filter 80 81,$(WINDOWS_SDK_VERSION)),)
-$(eval $(call gb_Library_add_defs,directx9canvas,\
-	-DWIN8_SDK=1 \
-))
-endif
-
 $(eval $(call gb_Library_use_external,directx9canvas,boost_headers))
 
 $(eval $(call gb_Library_use_libraries,directx9canvas,\

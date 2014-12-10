@@ -56,26 +56,10 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#if WIN8_SDK == 1 || defined(_USING_V110_SDK71_)
+#include <d3d9.h>
 
-    #include <d3d9.h>
+typedef IDirect3DSurface9 surface_type;
 
-    typedef IDirect3DSurface9 surface_type;
-
-#else
-
-    #include <dxsdkver.h>
-    #include <d3d9.h>
-    #include <d3dx9.h>
-    #if _DXSDK_BUILD_MAJOR < 1734 /* Earlier than the August 2009 DXSDK */
-        #include <dxerr9.h>
-    #else
-        #include <dxerr.h>
-    #endif
-
-    typedef IDirect3DSurface9 surface_type;
-
-#endif
 
 #undef DrawText
 
