@@ -443,6 +443,7 @@ inline uno_Sequence * icopyConstructSequence(
             }
             case typelib_TypeClass_SEQUENCE: // sequence of sequence
             {
+                // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
                 pDest = allocSeq( sizeof (uno_Sequence *), nElements );
                 if (pDest != 0)
                 {
