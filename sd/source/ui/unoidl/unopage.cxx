@@ -1477,6 +1477,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) c
             case PRESOBJ_DATETIME:
                 aShapeType += "DateTimeShape";
                 break;
+            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             case PRESOBJ_NONE:
             case PRESOBJ_IMAGE:
             case PRESOBJ_MAX:
