@@ -18,8 +18,6 @@
  */
 
 
-#if DIRECTX_VERSION == 0x0900
-
 #define MAX_TEXTURE_SIZE (2048)
 #define MIN_TEXTURE_SIZE (32)
 //#define FAKE_MAX_NUMBER_TEXTURES (2)
@@ -1341,7 +1339,5 @@ namespace dxcanvas
         return IDXRenderModuleSharedPtr( new DXRenderModule(rParent) );
     }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

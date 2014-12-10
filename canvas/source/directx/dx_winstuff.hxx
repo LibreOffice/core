@@ -38,10 +38,6 @@
 # define D3D_DEBUG_INFO
 #endif
 
-#ifndef DIRECTX_VERSION
-#error please define for which directx version we should compile
-#endif
-
 #if defined _MSC_VER
 #pragma warning(push,1)
 #endif
