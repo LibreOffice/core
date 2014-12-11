@@ -16,30 +16,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/**
- * Helper class to hold a Filename or a FileURL
- * Something like File in Java,
- * with some more extensions direct to ConvWatch and its name conventions
- *
- *
- */
 package convwatch;
 
 import helper.URLHelper;
 import helper.StringHelper;
 
-interface Filenamer
-{
-    String getSuffix();
-    String getFileURL();
-    String getAbsoluteSystemFilename();
-    String getFilename();
-    String getSystemPath();
-}
-
-
-
-abstract class FilenameHelper_impl implements Filenamer
+/**
+ * Helper class to hold a Filename or a FileURL
+ * Something like File in Java,
+ * with some more extensions direct to ConvWatch and its name conventions
+ */
+abstract class FilenameHelper_impl
 {
     private String fs;                                   // file separator like '/'
     private String m_sPath;

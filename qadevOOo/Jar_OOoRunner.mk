@@ -100,7 +100,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/graphical/GlobalLogWriter \
     qadevOOo/runner/graphical/GraphicalComparator \
     qadevOOo/runner/graphical/HTMLResult \
-    qadevOOo/runner/graphical/IDocument \
     qadevOOo/runner/graphical/ImageHelper \
     qadevOOo/runner/graphical/IniFile \
     qadevOOo/runner/graphical/IOffice \
@@ -164,7 +163,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/org/openoffice/Runner \
     qadevOOo/runner/org/openoffice/RunnerService \
     qadevOOo/runner/share/ComplexTest \
-    qadevOOo/runner/share/CwsDataExchange \
     qadevOOo/runner/share/DescEntry \
     qadevOOo/runner/share/DescGetter \
     qadevOOo/runner/share/LogWriter \

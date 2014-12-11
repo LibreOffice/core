@@ -125,9 +125,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     }
 
 
-    /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
-     */
     public boolean iscompleted(int _ndialogpage)
     {
         switch (_ndialogpage)
@@ -149,9 +146,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     }
 
 
-    /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
-     */
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
     {
         boolean bScenarioiscompleted = _biscompleted;

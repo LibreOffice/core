@@ -108,9 +108,6 @@ public class WeakBase_Test
     }
 }
 
-interface Aint
-{
-}
 class OtherClass extends WeakBase implements XBridgeSupplier2
 {
 
@@ -120,7 +117,7 @@ class OtherClass extends WeakBase implements XBridgeSupplier2
     }
 }
 
-class SomeClass extends OtherClass implements Aint,XReference
+class SomeClass extends OtherClass implements XReference
 {
 
     public void dispose()

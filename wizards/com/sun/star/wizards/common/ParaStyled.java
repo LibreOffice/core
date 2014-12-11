@@ -21,7 +21,7 @@ package com.sun.star.wizards.common;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.*;
 
-class ParaStyled implements TemplateElement
+class ParaStyled
 {
 
     private String paraStyle;

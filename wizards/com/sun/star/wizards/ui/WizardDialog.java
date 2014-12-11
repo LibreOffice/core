@@ -44,7 +44,7 @@ import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 import com.sun.star.wizards.ui.event.XWindowListenerAdapter;
 
-public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion
+public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener
 {
 
     private static final int iButtonWidth = 50;
@@ -358,28 +358,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         enableBackButton(nNewStep != 1);
     }
 
-
-    /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
-     */
-    public boolean iscompleted(int _ndialogpage)
-    {
-        return false;
-    }
-
-    /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
-     */
-    public void setcompleted(int _ndialogpage, boolean _biscompleted)
-    {
-    }
-
-    /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.XCompletion#setmodified(int, java.lang.Object, java.lang.Object)
-     */
-    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
-    {
-    }
 
     public void drawNaviBar()
     {
