@@ -462,6 +462,11 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78599,"fdo78599.docx")
         return;
     //docx file after RT is getting corrupted.
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:hyperlink/w:r[6]/w:fldChar", "fldCharType", "end" );
+
+    // Check for automatic hyphenation
+    if (xmlDocPtr pSettingsXml = parseExport("word/settings.xml"))
+        // This failed as w:settings had no w:autoHyphenation child.
+        assertXPath(pSettingsXml, "/w:settings/w:autoHyphenation");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testfdo78886, "fdo78886.docx")

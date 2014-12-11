@@ -43,6 +43,7 @@
 #include <IMark.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <wrtww8.hxx>
@@ -58,6 +59,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -848,6 +850,17 @@ void DocxExport::WriteSettings()
     if( m_aSettings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number( m_aSettings.defaultTabStop).getStr(), FSEND );
+
+    // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
+    // Use the setting from the default style.
+    SwTxtFmtColl* pColl = pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
+    const SfxPoolItem* pItem;
+    if (pColl && SfxItemState::SET == pColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem))
+    {
+        pFS->singleElementNS(XML_w, XML_autoHyphenation,
+                             FSNS(XML_w, XML_val), OString::boolean(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()),
+                             FSEND);
+    }
 
     // Even and Odd Headers
     if( m_aSettings.evenAndOddHeaders )
