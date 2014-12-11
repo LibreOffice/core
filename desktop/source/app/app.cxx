@@ -2312,6 +2312,9 @@ void Desktop::OpenClients()
                 SAL_WARN( "desktop.app", "Error during recovery" << e.Message);
             }
         }
+        else if (bExistsRecoveryData && bDisableRecovery)
+            // prevent new Writer doc
+            bRecovery = true;
 
         Reference< XSessionManagerListener2 > xSessionListener;
         try
@@ -2325,8 +2328,7 @@ void Desktop::OpenClients()
             SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
         }
 
-        // in bDisableRecovery case call doRestore() to prevent new Writer doc
-        if ((!bExistsRecoveryData || bDisableRecovery) && xSessionListener.is())
+        if ( !bExistsRecoveryData && xSessionListener.is() )
         {
             // session management
             try
