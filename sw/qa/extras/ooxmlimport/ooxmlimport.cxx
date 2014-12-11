@@ -2557,6 +2557,21 @@ DECLARE_OOXMLIMPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(aExpectedSuffix,SAL_N_ELEMENTS(aExpectedSuffix)), aSuffix);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFixedDateFieldImport, "fixed-date-field.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    // Check fixed property was imported and date value was parsed correctly
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, "IsFixed"));
+    com::sun::star::util::DateTime date = getProperty<com::sun::star::util::DateTime>(xField, "DateTimeValue");
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)24, date.Day);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)7, date.Month);
+    CPPUNIT_ASSERT_EQUAL((sal_Int16)2014, date.Year);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

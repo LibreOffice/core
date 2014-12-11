@@ -644,6 +644,16 @@ DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // Previously, fixed fields were exported as static text ("Date (fixed)")
+        // Check they are now exported correctly as fldChar with fldLock attribute
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldLock", "true");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
