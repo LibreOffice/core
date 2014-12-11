@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "jni_bridge.h"
+#include "jniunoenvironmentdata.hxx"
 
 #include <boost/static_assert.hpp>
 #include "jvmaccess/unovirtualmachine.hxx"

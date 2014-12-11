@@ -36,17 +36,6 @@
 namespace jni_uno
 {
 
-struct JniUnoEnvironmentData: boost::noncopyable {
-    explicit JniUnoEnvironmentData(
-        rtl::Reference<jvmaccess::UnoVirtualMachine> const & theMachine):
-        machine(theMachine), asynchronousFinalizer(nullptr)
-    {}
-
-    rtl::Reference<jvmaccess::UnoVirtualMachine> machine;
-    osl::Mutex mutex;
-    jobject asynchronousFinalizer;
-};
-
 //==== holds environments and mappings =========================================
 struct Bridge;
 struct Mapping : public uno_Mapping

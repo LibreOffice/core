@@ -29,6 +29,7 @@
 #include "rtl/ustrbuf.hxx"
 
 #include "jni_bridge.h"
+#include "jniunoenvironmentdata.hxx"
 
 namespace
 {

@@ -25,6 +25,7 @@
 #include <sal/alloca.h>
 
 #include "jni_bridge.h"
+#include "jniunoenvironmentdata.hxx"
 
 namespace jni_uno
 {
