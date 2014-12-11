@@ -125,7 +125,7 @@ void SvMetaName::DoReadContextSvIdl( SvIdlDataBase & rBase,
         if( cDel == '\0' )
             rInStm.ReadDelemiter();
         else
-            rInStm.Read( cDel );
+            (void)rInStm.Read( cDel );
     }
 }
 
