@@ -1961,6 +1961,28 @@ void Test::testMatrix()
     }
 }
 
+void Test::testMatrixComparisonWithErrors()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    // Insert the source values in A1:A2.
+    m_pDoc->SetString(0, 0, 0, "=1/0");
+    m_pDoc->SetValue( 0, 1, 0, 1.0);
+
+    // Create a matrix formula in B3:B4 referencing A1:A2 and doing a greater
+    // than comparison on it's values. Error value must be propagated.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 2, 1, 3, aMark, "=A1:A2>0");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("#DIV/0!"), m_pDoc->GetString(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(1.0,                 m_pDoc->GetValue( 0,1,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("#DIV/0!"), m_pDoc->GetString(1,2,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"),    m_pDoc->GetString(1,3,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testEnterMixedMatrix()
 {
     m_pDoc->InsertTab(0, "foo");
