@@ -195,6 +195,7 @@ public:
     ScRefCellValue GetCellValue( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
     ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
 
+    const sc::CellTextAttr* GetCellTextAttr( SCROW nRow ) const;
     const sc::CellTextAttr* GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
 
     void        Delete( SCROW nRow );
@@ -337,7 +338,8 @@ public:
     bool HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const;
 
     void CloneFormulaCell(
-        const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt );
+        const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
+        const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt );
 
     svl::SharedString GetSharedString( SCROW nRow ) const;
 

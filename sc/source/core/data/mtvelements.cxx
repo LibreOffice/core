@@ -14,14 +14,6 @@
 
 namespace sc {
 
-CellTextAttr::CellTextAttr() :
-    mnTextWidth(TEXTWIDTH_DIRTY),
-    mnScriptType(SC_SCRIPTTYPE_UNKNOWN) {}
-
-CellTextAttr::CellTextAttr(const CellTextAttr& r) :
-    mnTextWidth(r.mnTextWidth),
-    mnScriptType(r.mnScriptType) {}
-
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)

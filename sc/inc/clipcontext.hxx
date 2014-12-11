@@ -12,6 +12,7 @@
 
 #include "address.hxx"
 #include "cellvalue.hxx"
+#include <celltextattr.hxx>
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -57,6 +58,7 @@ class CopyFromClipContext : public ClipContextBase
     InsertDeleteFlags mnDeleteFlag;
 
     std::vector<ScCellValue> maSingleCells;
+    std::vector<sc::CellTextAttr> maSingleCellAttrs;
     std::vector<const ScPatternAttr*> maSinglePatterns;
     std::vector<const ScPostIt*> maSingleNotes;
 
@@ -107,7 +109,10 @@ public:
     void setSingleCellColumnSize( size_t nSize );
 
     ScCellValue& getSingleCell( size_t nColOffset );
+    sc::CellTextAttr& getSingleCellAttr( size_t nColOffset );
+
     void setSingleCell( const ScAddress& rSrcPos, const ScColumn& rSrcCol );
+
 
     const ScPatternAttr* getSingleCellPattern( size_t nColOffset ) const;
     void setSingleCellPattern( size_t nColOffset, const ScPatternAttr* pAttr );
