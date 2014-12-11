@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_71b0628c",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3102,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-12-11T17:30:27Z",
+      "side": 1,
+      "message": "Please don\u0027t mix functional and whitespace changes.",
+      "revId": "c9861ddd1815306ff468c855102650ee59dc8d07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
