@@ -613,7 +613,6 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
 void Outliner::AddText( const OutlinerParaObject& rPObj )
 {
-    Paragraph* pPara;
 
     bool bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( false );
@@ -635,7 +634,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
 
     for( sal_Int32 n = 0; n < rPObj.Count(); n++ )
     {
-        pPara = new Paragraph( rPObj.GetParagraphData(n) );
+        Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(n) );
         pParaList->Append(pPara);
         sal_Int32 nP = nPara+n;
         DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");

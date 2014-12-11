@@ -1434,7 +1434,6 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
     // Since features are treated differently than normal character attributes,
     // can also the order of the start list be change!
     bool bResort = false;
-    bool bDelAttr = false;
     sal_Int32 nEndChanges = nIndex+nDeleted;
 
     sal_Int32 nAttr = 0;
@@ -1442,7 +1441,7 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
     EditCharAttrib* pAttrib = GetAttrib(rAttribs, nAttr);
     while ( pAttrib )
     {
-        bDelAttr = false;
+        bool bDelAttr = false;
         if ( pAttrib->GetEnd() >= nIndex )
         {
             // Move all Attribute behind the insert point...

@@ -127,12 +127,12 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
         return E_INVALIDARG;
 
     HRESULT hr = E_FAIL;
-    char    pBuff[] = "Test OleClipboard";
 
     if ( CF_TEXT == pFormatetc->cfFormat )
     {
         CHGlobalHelper hGlobHlp( TRUE );
 
+        char    pBuff[] = "Test OleClipboard";
         hGlobHlp.Write( pBuff, sizeof( pBuff ), NULL );
 
         pmedium->tymed          = TYMED_HGLOBAL;
