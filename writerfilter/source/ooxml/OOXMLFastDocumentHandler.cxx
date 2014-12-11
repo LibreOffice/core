@@ -142,12 +142,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_WRITERFILTER
-    clog << this << ":createFastChildContext:"
-         << fastTokenToId(Element)
-         << endl;
-#endif
-
     if ( mpStream == nullptr && mpDocument == nullptr )
     {
         // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
