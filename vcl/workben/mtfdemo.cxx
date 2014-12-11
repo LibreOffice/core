@@ -87,13 +87,25 @@ public:
 
     virtual int Main() SAL_OVERRIDE
     {
-        mpWin = new DemoMtfWin(*mpFileName);
-        mpWin->SetText(OUString("Display metafile"));
+        try
+        {
+            mpWin = new DemoMtfWin(*mpFileName);
+            mpWin->SetText(OUString("Display metafile"));
 
-        mpWin->Show();
+            mpWin->Show();
 
-        Application::Execute();
-
+            Application::Execute();
+        }
+        catch (const css::uno::Exception& e)
+        {
+            SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+            return 1;
+        }
+        catch (const std::exception& e)
+        {
+            SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+            return 1;
+        }
         return 0;
     }
 
