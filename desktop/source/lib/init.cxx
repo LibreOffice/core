@@ -578,7 +578,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
     pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
 
-    VirtualDevice aDevice(0, (sal_uInt16)32);
+    VirtualDevice aDevice(0, Size(1, 1), (sal_uInt16)32);
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
     aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),

@@ -241,13 +241,15 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
 }
 
-VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount )
+VirtualDevice::VirtualDevice(const SystemGraphicsData *pData, const Size &rSize,
+                             sal_uInt16 nBitCount)
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
-    ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
+    ImplInitVirDev(Application::GetDefaultDevice(), rSize.Width(), rSize.Height(),
+                   nBitCount, pData);
 }
 
 VirtualDevice::~VirtualDevice()

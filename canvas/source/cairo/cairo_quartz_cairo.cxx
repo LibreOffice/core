@@ -269,7 +269,7 @@ namespace cairo
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.rCGContext = getCGContext();
         return boost::shared_ptr<VirtualDevice>(
-            new VirtualDevice( &aSystemGraphicsData, getDepth() ));
+            new VirtualDevice( &aSystemGraphicsData, Size(1, 1), getDepth() ));
     }
 
     /**
