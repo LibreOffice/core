@@ -1296,7 +1296,6 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
-        rOutDev.SetClipRegion(vcl::Region(true));
         setupOutDevState( viewState, renderState, TEXT_COLOR );
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
