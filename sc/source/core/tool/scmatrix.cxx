@@ -69,51 +69,63 @@ typedef mdds::multi_type_matrix<custom_string_trait> MatrixImplType;
 
 namespace {
 
-struct ElemEqualZero : public unary_function<double, bool>
+struct ElemEqualZero : public unary_function<double, double>
 {
-    bool operator() (double val) const
+    double operator() (double val) const
     {
-        return val == 0.0;
+        if (!::rtl::math::isFinite(val))
+            return val;
+        return val == 0.0 ? 1.0 : 0.0;
     }
 };
 
-struct ElemNotEqualZero : public unary_function<double, bool>
+struct ElemNotEqualZero : public unary_function<double, double>
 {
-    bool operator() (double val) const
+    double operator() (double val) const
     {
-        return val != 0.0;
+        if (!::rtl::math::isFinite(val))
+            return val;
+        return val != 0.0 ? 1.0 : 0.0;
     }
 };
 
-struct ElemGreaterZero : public unary_function<double, bool>
+struct ElemGreaterZero : public unary_function<double, double>
 {
-    bool operator() (double val) const
+    double operator() (double val) const
     {
-        return val > 0.0;
+        if (!::rtl::math::isFinite(val))
+            return val;
+        return val > 0.0 ? 1.0 : 0.0;
     }
 };
 
-struct ElemLessZero : public unary_function<double, bool>
+struct ElemLessZero : public unary_function<double, double>
 {
-    bool operator() (double val) const
+    double operator() (double val) const
     {
-        return val < 0.0;
+        if (!::rtl::math::isFinite(val))
+            return val;
+        return val < 0.0 ? 1.0 : 0.0;
     }
 };
 
-struct ElemGreaterEqualZero : public unary_function<double, bool>
+struct ElemGreaterEqualZero : public unary_function<double, double>
 {
-    bool operator() (double val) const
+    double operator() (double val) const
     {
-        return val >= 0.0;
+        if (!::rtl::math::isFinite(val))
+            return val;
+        return val >= 0.0 ? 1.0 : 0.0;
     }
 };
 
-struct ElemLessEqualZero : public unary_function<double, bool>
+struct ElemLessEqualZero : public unary_function<double, double>
 {
-    bool operator() (double val) const
+    double operator() (double val) const
     {
-        return val <= 0.0;
+        if (!::rtl::math::isFinite(val))
+            return val;
+        return val <= 0.0 ? 1.0 : 0.0;
     }
 };
 
@@ -122,7 +134,7 @@ class CompareMatrixElemFunc : std::unary_function<MatrixImplType::element_block_
 {
     static _Comp maComp;
 
-    std::vector<bool> maNewMatValues;
+    std::vector<double> maNewMatValues;     // double instead of bool to transport error values
     size_t mnRow;
     size_t mnCol;
 public:
@@ -144,13 +156,6 @@ public:
                 for (; it != itEnd; ++it)
                 {
                     double fVal = *it;
-                    if (!rtl::math::isFinite(fVal))
-                    {
-                        /* FIXME: this silently skips an error instead of propagating it! */
-                        maNewMatValues.push_back(false);
-                        continue;
-                    }
-
                     maNewMatValues.push_back(maComp(fVal));
                 }
             }
@@ -172,7 +177,7 @@ public:
             case mdds::mtm::element_empty:
             default:
                 // Fill it with false.
-                maNewMatValues.resize(maNewMatValues.size() + node.size, false);
+                maNewMatValues.resize(maNewMatValues.size() + node.size, 0.0);
         }
     }
 
@@ -201,7 +206,7 @@ public:
     ScMatrixImpl(SCSIZE nC, SCSIZE nR);
     ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal);
 
-    ScMatrixImpl( size_t nC, size_t nR, const std::vector<bool>& rInitVals );
+    ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals );
 
     ~ScMatrixImpl();
 
@@ -296,7 +301,7 @@ ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
     maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
 
-ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<bool>& rInitVals ) :
+ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
     maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
 
 ScMatrixImpl::~ScMatrixImpl()
@@ -1290,32 +1295,35 @@ public:
     }
 };
 
-inline bool evaluate( double fVal, ScQueryOp eOp )
+inline double evaluate( double fVal, ScQueryOp eOp )
 {
+    if (!rtl::math::isFinite(fVal))
+        return fVal;
+
     switch (eOp)
     {
         case SC_EQUAL:
-            return fVal == 0.0;
+            return fVal == 0.0 ? 1.0 : 0.0;
         case SC_LESS:
-            return fVal < 0.0;
+            return fVal < 0.0 ? 1.0 : 0.0;
         case SC_GREATER:
-            return fVal > 0.0;
+            return fVal > 0.0 ? 1.0 : 0.0;
         break;
         case SC_LESS_EQUAL:
-            return fVal <= 0.0;
+            return fVal <= 0.0 ? 1.0 : 0.0;
         break;
         case SC_GREATER_EQUAL:
-            return fVal >= 0.0;
+            return fVal >= 0.0 ? 1.0 : 0.0;
         break;
         case SC_NOT_EQUAL:
-            return fVal != 0.0;
+            return fVal != 0.0 ? 1.0 : 0.0;
         break;
         default:
             ;
     }
 
     OSL_TRACE( "evaluate: unhandled comparison operator: %d", (int)eOp);
-    return false;
+    return CreateDoubleError( errUnknownState);
 }
 
 class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type, void>
@@ -1323,7 +1331,7 @@ class CompareMatrixFunc : std::unary_function<MatrixImplType::element_block_type
     sc::Compare& mrComp;
     size_t mnMatPos;
     sc::CompareOptions* mpOptions;
-    std::vector<bool> maResValues;
+    std::vector<double> maResValues;    // double instead of bool to transport error values
 
     void compare()
     {
@@ -1403,7 +1411,7 @@ public:
         }
     }
 
-    const std::vector<bool>& getValues() const
+    const std::vector<double>& getValues() const
     {
         return maResValues;
     }
@@ -1417,7 +1425,7 @@ class CompareMatrixToNumericFunc : std::unary_function<MatrixImplType::element_b
     sc::Compare& mrComp;
     double mfRightValue;
     sc::CompareOptions* mpOptions;
-    std::vector<bool> maResValues;
+    std::vector<double> maResValues;    // double instead of bool to transport error values
 
     void compare()
     {
@@ -1495,7 +1503,7 @@ public:
         }
     }
 
-    const std::vector<bool>& getValues() const
+    const std::vector<double>& getValues() const
     {
         return maResValues;
     }
@@ -1717,7 +1725,7 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
             maMat.walk(aFunc);
 
             // We assume the result matrix has the same dimension as this matrix.
-            const std::vector<bool>& rResVal = aFunc.getValues();
+            const std::vector<double>& rResVal = aFunc.getValues();
             if (nSize != rResVal.size())
                 ScMatrixRef();
 
@@ -1729,7 +1737,7 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
     maMat.walk(aFunc);
 
     // We assume the result matrix has the same dimension as this matrix.
-    const std::vector<bool>& rResVal = aFunc.getValues();
+    const std::vector<double>& rResVal = aFunc.getValues();
     if (nSize != rResVal.size())
         ScMatrixRef();
 
@@ -1888,7 +1896,7 @@ ScMatrix::ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal) :
     SAL_WARN_IF( !nR, "sc", "ScMatrix with 0 rows!");
 }
 
-ScMatrix::ScMatrix( size_t nC, size_t nR, const std::vector<bool>& rInitVals ) :
+ScMatrix::ScMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
     pImpl(new ScMatrixImpl(nC, nR, rInitVals)), nRefCnt(0)
 {
     SAL_WARN_IF( !nC, "sc", "ScMatrix with 0 columns!");
