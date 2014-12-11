@@ -57,6 +57,7 @@ public:
     void testChineseConversionTraditionalToSimplified();
     void testChineseConversionSimplifiedToTraditional();
     void testFdo85554();
+    void testBookmarkUndo();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testChineseConversionTraditionalToSimplified);
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
     CPPUNIT_TEST(testFdo85554);
+    CPPUNIT_TEST(testBookmarkUndo);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -586,6 +588,40 @@ void SwUiWriterTest::testFdo85554()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
 }
 
+void SwUiWriterTest::testBookmarkUndo()
+{
+    SwDoc* pDoc = createDoc();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
+
+    pMarkAccess->makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::BOOKMARK);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark("Mark");
+    CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
+
+    pMarkAccess->renameMark(ppBkmk->get(), "Mark_");
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd());
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+
+    pMarkAccess->deleteMark( pMarkAccess->findMark("Mark_") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();

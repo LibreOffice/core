@@ -276,7 +276,11 @@ namespace sw { namespace mark
     {
         DdeBookmark::DeregisterFromDoc(io_pDoc);
 
-        // fdo#51741 Bookmark should mark document as modified when deleted
+        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        {
+            io_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                    new SwUndoDeleteBookmark(*this));
+        }
         io_pDoc->getIDocumentState().SetModified();
     }
 

@@ -67,15 +67,22 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
+class SwUndoDeleteBookmark : public SwUndoBookmark
+{
+public:
+    SwUndoDeleteBookmark( const ::sw::mark::IMark& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+};
+
 class SwUndoRenameBookmark : public SwUndo
 {
     const OUString m_sOldName;
     const OUString m_sNewName;
-    const sal_uLong m_nNode;
-    const sal_Int32 m_nCntnt;
 
 public:
-    SwUndoRenameBookmark( const ::sw::mark::IMark&, const OUString& rNewName );
+    SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName );
     virtual ~SwUndoRenameBookmark();
 
 private:
