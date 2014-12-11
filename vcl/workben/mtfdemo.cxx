@@ -80,6 +80,13 @@ class DemoMtfApp : public Application
     }
 
 public:
+
+    DemoMtfApp()
+        : mpWin(NULL)
+        , mpFileName(NULL)
+    {
+    }
+
     virtual int Main() SAL_OVERRIDE
     {
         mpWin = new DemoMtfWin(*mpFileName);
