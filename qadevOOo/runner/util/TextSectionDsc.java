@@ -36,11 +36,6 @@ public class TextSectionDsc extends InstDescr {
         initTextSection();
     }
 
-    public TextSectionDsc( String name ) {
-        this.name = name;
-        initTextSection();
-    }
-
     @Override
     public String getName() {
         return name;

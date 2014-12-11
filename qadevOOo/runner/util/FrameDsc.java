@@ -46,12 +46,6 @@ public class FrameDsc extends InstDescr {
         initFrame();
     }
 
-    public FrameDsc( String FrameName, int nHeight, int nWidth ) {
-        name = FrameName;
-        height = nHeight;
-        width = nWidth;
-        initFrame();
-    }
     @Override
     public String getName() {
         return name;

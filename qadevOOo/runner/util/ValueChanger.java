@@ -800,8 +800,6 @@ public class ValueChanger {
                 Class<?> enumClass = oldValue.getClass();
                 Field[] flds = enumClass.getFields();
 
-                newValue = null;
-
                 for (int i = 0; i < flds.length; i++) {
                     if (Enum.class.equals(flds[i].getType().getSuperclass())) {
 

@@ -47,9 +47,4 @@ public class OSHelper
                 System.getProperty("os.arch").equals("i386");
         }
 
-    public static boolean isUnix()
-        {
-            return isLinuxIntel() || isSolarisIntel() || isSolarisSparc();
-        }
-
 }

@@ -93,28 +93,6 @@ class ShareConnection
 
 public class DBHelper
 {
-    /**
-     * This method inserts given values into<br>
-     * the table 'states'
-     * @param values a set of comma separated values to be inserted
-     */
-
-    public void SQLinsertValues(Connection _aCon, String _sTableName, String value_names, String values)
-        {
-            if (_aCon == null)
-            {
-                GlobalLogWriter.get().println("DB: ERROR: in SQLinsertValues, connection not established.");
-                return;
-            }
-
-            StringBuffer aInsertStr = new StringBuffer();
-
-            aInsertStr.append( "INSERT INTO " ) . append( _sTableName );
-            aInsertStr.append( " (").append( value_names ).append ( ")" );
-            aInsertStr.append(" VALUES (" ).append( values ).append( ")" );
-            ExecSQL(_aCon, aInsertStr.toString() );
-        }
-
     public void SQLupdateValue(Connection _aCon, String _sTableName, String _sSet, String _sWhere)
         {
             if (_aCon == null)
@@ -205,13 +183,6 @@ public class DBHelper
             return ts + _sToQuote + ts;
         }
 
-/* default date format in the MySQL DB yyyy-MM-dd */
-    public static String today()
-        {
-            return DateHelper.getDateString("yyyy-MM-dd");
-        }
-
-    public static final String sComma = ",";
     public static final String sEqual = "=";
     public static final String sAND = " AND ";
 

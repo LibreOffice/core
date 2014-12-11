@@ -36,11 +36,6 @@ public class BookmarkDsc extends InstDescr {
             initBookmark();
     }
 
-    public BookmarkDsc( String name ) {
-            this.name = name;
-            initBookmark();
-    }
-
     @Override
     public String getName() {
             return name;

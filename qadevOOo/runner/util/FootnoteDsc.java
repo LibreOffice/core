@@ -36,11 +36,6 @@ public class FootnoteDsc extends InstDescr {
         initFootnote();
     }
 
-    public FootnoteDsc( String name ) {
-        this.name = name;
-        initFootnote();
-    }
-
     @Override
     public String getName() {
         return name;

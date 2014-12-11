@@ -98,16 +98,6 @@ public class MultiMethodTest
     private final ArrayList<String> methCalled = new ArrayList<String>(10);
 
     /**
-     * Disposes the test environment, which was corrupted by the test.
-     *
-     * @param tEnv the environment to dispose
-     */
-    public void disposeEnvironment(TestEnvironment tEnv)
-    {
-        disposeEnvironment();
-    }
-
-    /**
      * Disposes the current test environment, which was corrupted by the test.
      *
      * @see #disposeEnvironment(TestEnvironment)

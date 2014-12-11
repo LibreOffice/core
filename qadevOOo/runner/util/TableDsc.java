@@ -43,12 +43,6 @@ public class TableDsc extends InstDescr {
         initTable();
     }
 
-    public TableDsc( String TableName, int nRows, int nColumns ) {
-        name = TableName;
-        rows = nRows;
-        columns = nColumns;
-        initTable();
-    }
     @Override
     public String getName() {
         return name;

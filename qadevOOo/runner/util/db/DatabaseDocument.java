@@ -44,11 +44,6 @@ public class DatabaseDocument
         m_storeDoc = UnoRuntime.queryInterface( XStorable.class, m_databaseDocument );
     }
 
-    public DataSource getDataSource()
-    {
-        return m_dataSource;
-    }
-
     public XOfficeDatabaseDocument getDatabaseDocument()
     {
         return m_databaseDocument;

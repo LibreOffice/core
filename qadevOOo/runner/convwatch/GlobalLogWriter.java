@@ -34,10 +34,5 @@ public class GlobalLogWriter
             return m_aGlobalLogWriter;
         }
 
-    public static synchronized void set(LogWriter _aLog)
-        {
-            m_aGlobalLogWriter = _aLog;
-        }
-
 }
 

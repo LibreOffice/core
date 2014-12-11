@@ -106,10 +106,6 @@ public class InternalLogWriter extends PrintWriter
         return message;
     }
 
-    public Object getWatcher() {
-        return null;
-    }
-
     public void setWatcher(Object watcher) {
     }
 

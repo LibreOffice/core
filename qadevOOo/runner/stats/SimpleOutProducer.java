@@ -55,10 +55,6 @@ public class SimpleOutProducer implements LogWriter {
         return true;
     }
 
-    public Object getWatcher() {
-        return null;
-    }
-
     public void setWatcher(Object watcher) {
     }
 

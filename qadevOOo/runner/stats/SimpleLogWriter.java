@@ -84,10 +84,6 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
         return true;
     }
 
-    public Object getWatcher() {
-        return this.ow;
-    }
-
     public void setWatcher(Object watcher)
     {
         if (watcher != null)

@@ -119,41 +119,10 @@ public class Status extends SimpleStatus {
     }
 
     /**
-     * Checks whether the status runstate is skipped.
-     */
-    public boolean isSkipped() {
-        return getRunState() == SKIPPED;
-    }
-
-    /**
-     * Checks whether the status runstate is excluded.
-     */
-    public boolean isExcluded() {
-        return getRunState() == EXCLUDED;
-    }
-
-    /**
-     * Checks whether the status runstate is exception.
-     */
-    public boolean isException() {
-        return getRunState() == EXCEPTION;
-    }
-
-    /**
      * Checks whether the status state is failed.
      */
     public boolean isFailed() {
         return !getState();
     }
 
-    /**
-     * Checks whether the status state is ok.
-     */
-    public boolean isOK() {
-        return getState();
-    }
-
-    public String getDescription () {
-        return getRunStateString();
-    }
 }

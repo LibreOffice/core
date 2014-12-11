@@ -20,7 +20,6 @@ package convwatch;
 
 import java.sql.Connection;
 import java.util.StringTokenizer;
-import java.util.ArrayList;
 import helper.OSHelper;
 
 public class DB extends DBHelper
@@ -52,70 +51,6 @@ public class DB extends DBHelper
             if (_sDBInfoString == null) return;
             getDB().fillVariables(_sDBInfoString);
             getDB().updatestate_status("source started");
-        }
-
-    public static void test()
-        {
-            getDB().sql_test();
-        }
-
-    public static void source_start()
-        {
-            getDB().updatestate_status("source started");
-        }
-
-    public static void source_finished()
-        {
-            getDB().updatestate_status( "source finished");
-        }
-
-    public static void source_failed(String _sMessage)
-        {
-            getDB().updatestate_status("source failed");
-            getDB().updateinfo_status(_sMessage);
-        }
-
-    public static void destination_start()
-        {
-            getDB().updatestate_status("destination started");
-        }
-
-    public static void destination_finished()
-        {
-            getDB().updatestate_status("PASSED-OK");
-        }
-
-    public static void destination_failed(String _sStatus, String _sMessage)
-        {
-            getDB().updatestate_status(_sStatus);
-            getDB().updateinfo_status(_sMessage);
-        }
-    public static void writeNumberOfPages(int _nPages)
-        {
-            getDB().updatepagecount_documents(_nPages);
-        }
-    public static void writeErrorFile(String _sErrorFile)
-        {
-            getDB().updateerrorfile_status(_sErrorFile);
-        }
-    public static void writeHTMLFile(String _sHTMLFile)
-        {
-            getDB().updatehtmlfile_status(_sHTMLFile);
-        }
-
-    public static void writeToDB(String _sFilename,
-                                 String _sBasename,
-                                 String _sFileFormat,
-                                 String _sBuildID,
-                                 String _sSourceType,
-                                 int _nResolution )
-        {
-            GlobalLogWriter.get().println("DB:   Filename:" + _sFilename);
-            GlobalLogWriter.get().println("DB:   Basename:" + _sBasename);
-            GlobalLogWriter.get().println("DB: FileFormat:" + _sFileFormat);
-            GlobalLogWriter.get().println("DB:    BuildID:" + _sBuildID);
-            GlobalLogWriter.get().println("DB: SourceType:" + _sSourceType);
-            GlobalLogWriter.get().println("DB: Resolution:" + _nResolution);
         }
 
     private String getEnvironment()
@@ -203,86 +138,6 @@ public class DB extends DBHelper
             }
         }
 
-    private void sql_test()
-        {
-            String sUUID = getDBDistinct();
-            System.out.println("UUID: " + sUUID);
-        }
-
-    private ArrayList<String> QuerySQL(Connection _aCon, String _sSQL)
-        {
-            java.sql.Statement oStmt = null;
-            ArrayList<String> aResultList = new ArrayList<String>();
-            try
-            {
-                try
-                {
-                    oStmt = _aCon.createStatement();
-                    java.sql.ResultSet aResultSet = null;
-                    try
-                    {
-                        aResultSet = oStmt.executeQuery(_sSQL);
-                        java.sql.ResultSetMetaData aResultSetMetaData = aResultSet.getMetaData();
-
-                        int nColumnCount = aResultSetMetaData.getColumnCount();         // java sql starts with '1'
-
-                        while( aResultSet.next() )
-                        {
-                            StringBuffer aResult = new StringBuffer();
-                            try
-                            {
-                                aResult.append("sqlresult: ");
-                                for (int i=1;i<=nColumnCount;i++)
-                                {
-                                    String sColumnName = aResultSetMetaData.getColumnName(i);
-                                    aResult.append(sColumnName).append("=");
-                                    String sValue;
-                                    int nSQLType = aResultSetMetaData.getColumnType(i);
-                                    switch(nSQLType)
-                                    {
-                                    case java.sql.Types.VARCHAR:
-                                        sValue = "'" + aResultSet.getString(i)  +  "'";
-                                        break;
-                                    case java.sql.Types.INTEGER:
-                                    {
-                                        int nValue = aResultSet.getInt(i);
-                                        sValue = String.valueOf(nValue);
-                                        break;
-                                    }
-
-                                    default:
-                                        sValue = "UNSUPPORTED TYPE";
-                                    }
-                                    aResult.append(sValue).append(", ");
-                                }
-                                String sResult = aResult.toString();
-                                aResultList.add(sResult);
-                            }
-                            catch (java.sql.SQLException e)
-                            {
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        if (aResultSet != null)
-                            aResultSet.close();
-                    }
-                }
-                finally
-                {
-                    if (oStmt != null)
-                        oStmt.close();
-                }
-            }
-            catch (java.sql.SQLException e)
-            {
-                String sError = e.getMessage();
-                GlobalLogWriter.get().println("DB: Original SQL error: " + sError);
-            }
-            return aResultList;
-        }
-
     private void updatestate_status(String _sStatus)
         {
             Connection aCon = new ShareConnection().getConnection();
@@ -293,43 +148,6 @@ public class DB extends DBHelper
             {
             SQLupdateValue( aCon, "status", sSet, sWhere );
         }
-        }
-    private void updateinfo_status(String _sInfo)
-        {
-            Connection aCon = new ShareConnection().getConnection();
-
-            String sSet = "info=" + Quote(_sInfo);
-            String sWhere = getWhereClause();
-            SQLupdateValue( aCon, "status", sSet, sWhere );
-        }
-    private void updateerrorfile_status(String _sErrorFile)
-        {
-            Connection aCon = new ShareConnection().getConnection();
-
-            String sErrorFile = _sErrorFile.replace('\\', '/');
-
-            String sSet = "errorfile=" + Quote(sErrorFile);
-            String sWhere = getWhereClause();
-            SQLupdateValue( aCon, "status", sSet, sWhere );
-        }
-    private void updatehtmlfile_status(String _sHtmlFile)
-        {
-            Connection aCon = new ShareConnection().getConnection();
-
-            String sHtmlFile = _sHtmlFile.replace('\\', '/');
-
-            String sSet = "htmlfile=" + Quote(sHtmlFile);
-            String sWhere = getWhereClause();
-            SQLupdateValue( aCon, "status", sSet, sWhere );
-        }
-    private void updatepagecount_documents(int _nPageCount)
-        {
-            Connection aCon = new ShareConnection().getConnection();
-
-            String sSet = "pagecount=" + _nPageCount;
-            String sWhere = getWhereClause();
-            SQLupdateValue( aCon, "documents", sSet, sWhere );
-
         }
 
 
@@ -351,78 +169,6 @@ public class DB extends DBHelper
                 aWhereClause.append( "dbdistinct2" ). append(sEqual) . append(Quote(m_sDBDistinct));
             }
             return aWhereClause.toString();
-        }
-
-    private String getDBDistinct()
-        {
-            Connection aCon = new ShareConnection().getConnection();
-
-            String sSQL = "SELECT uuid()";
-            ArrayList<String> aResultList = QuerySQL(aCon, sSQL);
-
-            for (int i=0;i<aResultList.size();i++)
-            {
-                String sResult = aResultList.get(i);
-
-                StringTokenizer aTokenizer = new StringTokenizer(sResult,",",false);
-                if (aTokenizer.hasMoreTokens())
-                {
-                    String sToken = aTokenizer.nextToken();
-                    int nIndex = sToken.indexOf("uuid()=");
-                    int nIndexTuettel = sToken.indexOf('\'', nIndex);
-                    int nIndexTuettel2 = sToken.lastIndexOf('\'');
-                    String sUuid = sToken.substring(nIndexTuettel + 1, nIndexTuettel2);
-                    return sUuid;
-                }
-            }
-
-            return "0";
-        }
-
-    public static void insertinto_documentcompare(String _sSourceVersion, String _sSourceName, String _sSourceCreatorType,
-                                                  String _sDestinationVersion, String _sDestinationName, String _sDestinationCreatorType,
-                                                  String _sDocumentPoolDir, String _sDocumentPoolName, String _sMailAddress,
-                                                  String _sSpecial, String _sParentDistinct)
-        {
-            getDB().insertinto_documentcompare_impl(  _sSourceVersion,   _sSourceName,   _sSourceCreatorType,
-                                                      _sDestinationVersion,   _sDestinationName,   _sDestinationCreatorType,
-                                                      _sDocumentPoolDir,   _sDocumentPoolName,   _sMailAddress,
-                                                      _sSpecial, _sParentDistinct);
-        }
-
-    private void insertinto_documentcompare_impl(String _sSourceVersion, String _sSourceName, String _sSourceCreatorType,
-                                                 String _sDestinationVersion, String _sDestinationName, String _sDestinationCreatorType,
-                                                 String _sDocumentPoolDir, String _sDocumentPoolName, String _sMailAddress,
-                                                 String _sSpecial, String _sParentDistinct)
-        {
-            // $sSQLInsert = "INSERT INTO documentcompare
-            if (_sParentDistinct == null)
-            {
-                _sParentDistinct = "";
-            }
-
-            Connection aCon = new ShareConnection().getConnection();
-
-            String sValueLine="dbdistinct2, environment, sourceversion, sourcename, sourcecreatortype, destinationversion, destinationname, destinationcreatortype, documentpoolpath, documentpool, mailfeedback, state, special, parentdistinct, startdate";
-            String sDocumentPoolDir = _sDocumentPoolDir.replace('\\', '/');
-            StringBuffer aDataLine = new StringBuffer();
-            aDataLine.append( Quote(getDBDistinct()) ) . append( sComma ) .
-                append( Quote( getEnvironment()) ) . append( sComma ) .
-                append( Quote( _sSourceVersion) )   . append( sComma ) .
-                append( Quote( _sSourceName) )   . append( sComma ) .
-                append( Quote( _sSourceCreatorType ) )   . append( sComma ) .
-                append( Quote( _sDestinationVersion) )   . append( sComma ) .
-                append( Quote( _sDestinationName) )   . append( sComma ) .
-                append( Quote( _sDestinationCreatorType ) )   . append( sComma ) .
-                append( Quote( sDocumentPoolDir) ) . append( sComma ) .
-                append( Quote( _sDocumentPoolName) ) . append( sComma ) .
-                append( Quote( _sMailAddress) )    . append( sComma ) .
-                append( Quote( "new" )) . append ( sComma ) .
-                append( Quote( _sSpecial ) )    . append( sComma ) .
-                append( Quote( _sParentDistinct ) )    . append( sComma ) .
-                append( Quote( today() ));
-
-            SQLinsertValues(aCon, "documentcompare", sValueLine, aDataLine.toString());
         }
 
 }
