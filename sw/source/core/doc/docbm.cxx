@@ -25,6 +25,7 @@
 #include <dcontact.hxx>
 #include <doc.hxx>
 #include <IDocumentState.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
@@ -45,6 +46,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>
 #include <swundo.hxx>
+#include <UndoBookmark.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <stdio.h>
@@ -466,12 +468,18 @@ namespace sw { namespace mark
             return false;
         if (::sw::mark::MarkBase* pMarkBase = dynamic_cast< ::sw::mark::MarkBase* >(io_pMark))
         {
-            m_aMarkNamesSet.erase(pMarkBase->GetName());
+            const OUString sOldName(pMarkBase->GetName());
+            m_aMarkNamesSet.erase(sOldName);
             m_aMarkNamesSet.insert(rNewName);
             pMarkBase->SetName(rNewName);
 
-            // fdo#51741 Bookmark should mark document as modified when renamed
-            if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark)) {
+            if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
+            {
+                if (m_pDoc->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    m_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                            new SwUndoRenameBookmark(sOldName, rNewName));
+                }
                 m_pDoc->SetModified();
             }
         }
