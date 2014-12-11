@@ -27,7 +27,6 @@ public final class DirectBufferAllocator {
     private static native void freeDirectBufferNative(ByteBuffer aBuffer);
 
     public static ByteBuffer allocate(int size) {
-        Log.i(LOGTAG, "Allocating size: " + size);
         return allocateVM(size);
     }
 

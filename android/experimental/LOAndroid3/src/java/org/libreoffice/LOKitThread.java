@@ -103,7 +103,6 @@ public class LOKitThread extends Thread {
     }
 
     private void processEvent(LOEvent event) {
-        Log.i(LOGTAG, "processEvent: " + event.getTypeString());
         switch (event.mType) {
             case LOEvent.LOAD:
                 loadDocument(event.mFilename);
@@ -124,7 +123,6 @@ public class LOKitThread extends Thread {
     }
 
     public void queueEvent(LOEvent event) {
-        Log.i(LOGTAG, "Event: " + event.getTypeString());
         mEventQueue.add(event);
     }
 

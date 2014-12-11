@@ -190,11 +190,11 @@ public class LOKitTileProvider implements TileProvider {
             float twipHeight = mTileHeight / zoom;
             long start = System.currentTimeMillis() - objectCreationTime;
 
-            Log.i(LOGTAG, "paintTile >> @" + start + " (" + tileSize.width + " " + tileSize.height + " " + (int) twipX + " " + (int) twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
+            //Log.i(LOGTAG, "paintTile >> @" + start + " (" + tileSize.width + " " + tileSize.height + " " + (int) twipX + " " + (int) twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
             mDocument.paintTile(buffer, tileSize.width, tileSize.height, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
 
             long stop = System.currentTimeMillis() - objectCreationTime;
-            Log.i(LOGTAG, "paintTile << @" + stop + " elapsed: " + (stop - start));
+            //Log.i(LOGTAG, "paintTile << @" + stop + " elapsed: " + (stop - start));
         } else {
             Log.e(LOGTAG, "Document is null!!");
         }
