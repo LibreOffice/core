@@ -1229,7 +1229,20 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
                 sal_Int32 nStyleMapIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_RPT_NUMBERFORMAT );
                 addDataStyle(nNumberFormat);
                 XMLPropertyState aNumberStyleState( nStyleMapIndex, uno::makeAny( getDataStyleName(nNumberFormat) ) );
-                aPropertyStates.push_back( aNumberStyleState );
+                auto const iter(::std::find_if(
+                    aPropertyStates.begin(), aPropertyStates.end(),
+                    [nStyleMapIndex] (XMLPropertyState const& rItem)
+                        { return rItem.mnIndex == nStyleMapIndex; } ));
+                if (iter == aPropertyStates.end())
+                {
+                    aPropertyStates.push_back( aNumberStyleState );
+                }
+                else
+                {   // there is already a property but it has the wrong type
+                    // (integer not string); TODO: can we prevent it
+                    // getting added earlier?
+                    (*iter) = aNumberStyleState;
+                }
             }
         }
     }
