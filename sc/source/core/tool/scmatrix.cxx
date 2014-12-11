@@ -1437,7 +1437,7 @@ class CompareMatrixToNumericFunc : std::unary_function<MatrixImplType::element_b
     {
         double fVal = sc::CompareEmptyToNumericFunc(mfRightValue);
         bool bRes = evaluate(fVal, mrComp.meOp);
-        maResValues.resize(maResValues.size() + nSize, bRes);
+        maResValues.resize(maResValues.size() + nSize, bRes ? 1.0 : 0.0);
     }
 
 public:
