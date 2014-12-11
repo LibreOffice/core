@@ -84,7 +84,8 @@ void SAL_CALL Mapping_map_to_uno(
                 static_cast< Mapping const * >( mapping )->m_bridge;
             JNI_guarded_context jni(
                 bridge->m_jni_info,
-                (static_cast<jni_uno::Context *>(bridge->m_java_env->pContext)
+                (static_cast<jni_uno::JniUnoEnvironmentData *>(
+                    bridge->m_java_env->pContext)
                  ->machine));
 
             JNI_interface_type_info const * info =
@@ -135,7 +136,7 @@ void SAL_CALL Mapping_map_to_java(
                     static_cast< Mapping const * >( mapping )->m_bridge;
                 JNI_guarded_context jni(
                     bridge->m_jni_info,
-                    (static_cast<jni_uno::Context *>(
+                    (static_cast<jni_uno::JniUnoEnvironmentData *>(
                         bridge->m_java_env->pContext)
                      ->machine));
                 jni->DeleteGlobalRef( *ppJavaI );
@@ -148,7 +149,8 @@ void SAL_CALL Mapping_map_to_java(
                 static_cast< Mapping const * >( mapping )->m_bridge;
             JNI_guarded_context jni(
                 bridge->m_jni_info,
-                (static_cast<jni_uno::Context *>(bridge->m_java_env->pContext)
+                (static_cast<jni_uno::JniUnoEnvironmentData *>(
+                    bridge->m_java_env->pContext)
                  ->machine));
 
             JNI_interface_type_info const * info =
@@ -234,7 +236,8 @@ Bridge::Bridge(
 {
     // bootstrapping bridge jni_info
     m_jni_info = JNI_info::get_jni_info(
-        static_cast<jni_uno::Context *>(m_java_env->pContext)->machine);
+        static_cast<jni_uno::JniUnoEnvironmentData *>(m_java_env->pContext)
+        ->machine);
 
     assert(m_java_env != 0);
     assert(m_uno_env != 0);
@@ -412,17 +415,18 @@ using namespace ::jni_uno;
 extern "C" {
 
 void SAL_CALL java_env_dispose(uno_Environment * env) {
-    jni_uno::Context * context = static_cast<jni_uno::Context *>(env->pContext);
+    auto * envData
+        = static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
     jobject async;
     {
-        osl::MutexGuard g(context->mutex);
-        async = context->asynchronousFinalizer;
-        context->asynchronousFinalizer = nullptr;
+        osl::MutexGuard g(envData->mutex);
+        async = envData->asynchronousFinalizer;
+        envData->asynchronousFinalizer = nullptr;
     }
     if (async != nullptr) {
         try {
             jvmaccess::VirtualMachine::AttachGuard g(
-                context->machine->getVirtualMachine());
+                envData->machine->getVirtualMachine());
             JNIEnv * jniEnv = g.getEnvironment();
             jclass cl = jniEnv->FindClass(
                 "com/sun/star/lib/util/AsynchronousFinalizer");
@@ -453,7 +457,7 @@ void SAL_CALL java_env_dispose(uno_Environment * env) {
 
 void SAL_CALL java_env_disposing(uno_Environment * env) {
     java_env_dispose(env);
-    delete static_cast<jni_uno::Context *>(env->pContext);
+    delete static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
 }
 
 #ifdef DISABLE_DYNLOADING
@@ -464,15 +468,15 @@ void SAL_CALL java_env_disposing(uno_Environment * env) {
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
-    java_env->pContext = new jni_uno::Context(
+    auto * envData = new jni_uno::JniUnoEnvironmentData(
         static_cast<jvmaccess::UnoVirtualMachine *>(java_env->pContext));
+    java_env->pContext = envData;
     java_env->dispose = java_env_dispose;
     java_env->environmentDisposing = java_env_disposing;
     java_env->pExtEnv = 0; // no extended support
     try {
         jvmaccess::VirtualMachine::AttachGuard g(
-            static_cast<jni_uno::Context *>(java_env->pContext)->machine
-            ->getVirtualMachine());
+            envData->machine->getVirtualMachine());
         JNIEnv * jniEnv = g.getEnvironment();
         jclass cl = jniEnv->FindClass(
             "com/sun/star/lib/util/AsynchronousFinalizer");
@@ -499,9 +503,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
                         SAL_WARN("bridges", "exception in NewGlobalRef");
                             //TODO: report failure
                     } else {
-                        (static_cast<jni_uno::Context *>(java_env->pContext)->
-                         asynchronousFinalizer)
-                            = o;
+                        envData->asynchronousFinalizer = o;
                     }
                 }
             }

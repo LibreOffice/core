@@ -36,8 +36,8 @@
 namespace jni_uno
 {
 
-struct Context: boost::noncopyable {
-    explicit Context(
+struct JniUnoEnvironmentData: boost::noncopyable {
+    explicit JniUnoEnvironmentData(
         rtl::Reference<jvmaccess::UnoVirtualMachine> const & theMachine):
         machine(theMachine), asynchronousFinalizer(nullptr)
     {}

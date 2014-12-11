@@ -69,11 +69,11 @@ jobject Bridge::map_to_java(
         args2[ 4 ].l = info->m_type;
         args2[ 5 ].l = jo_oid.get();
         args2[ 6 ].l = info->m_proxy_ctor;
-        jni_uno::Context * context = static_cast<jni_uno::Context *>(
+        auto * envData = static_cast<jni_uno::JniUnoEnvironmentData *>(
             m_java_env->pContext);
         {
-            osl::MutexGuard g(context->mutex);
-            args2[ 7 ].l = context->asynchronousFinalizer;
+            osl::MutexGuard g(envData->mutex);
+            args2[ 7 ].l = envData->asynchronousFinalizer;
         }
         jo_iface = jni->CallStaticObjectMethodA(
             m_jni_info->m_class_JNI_proxy,
@@ -379,8 +379,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     JNI_context jni(
         jni_info, jni_env,
         static_cast< jobject >(
-            static_cast<Context *>(bridge->m_java_env->pContext)->machine
-            ->getClassLoader()));
+            static_cast<JniUnoEnvironmentData *>(bridge->m_java_env->pContext)
+            ->machine->getClassLoader()));
 
     OUString method_name;
 
@@ -626,8 +626,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNI_context jni(
         jni_info, jni_env,
         static_cast< jobject >(
-            static_cast<Context *>(bridge->m_java_env->pContext)->machine
-            ->getClassLoader()));
+            static_cast<JniUnoEnvironmentData *>(bridge->m_java_env->pContext)
+            ->machine->getClassLoader()));
 
     uno_Interface * pUnoI = reinterpret_cast< uno_Interface * >(
         jni->GetLongField(
