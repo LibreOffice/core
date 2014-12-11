@@ -5,7 +5,6 @@
   <object class="GtkDialog" id="HangulHanjaConversionDialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Hangul/Hanja Conversion</property>
-    <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
