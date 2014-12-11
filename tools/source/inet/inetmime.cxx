@@ -1712,7 +1712,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 if (++pBodyPtr == pBodyEnd)
                                     break;
                             default:
-                                aOutput << *pBodyPtr++;
+                                aOutput.WriteUInt32( *pBodyPtr++ );
                                 break;
                         }
                 comment_done:
@@ -2334,16 +2334,16 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 
                                     case '\\':
                                         if (++pStart != pBodyPtr)
-                                            aOutput << *pStart++;
+                                            aOutput.WriteUInt32( *pStart++ );
                                         break;
 
                                     case '\x0D': // CR
                                         pStart += 2;
-                                        aOutput << *pStart++;
+                                        aOutput.WriteUInt32( *pStart++ );
                                         break;
 
                                     default:
-                                        aOutput << *pStart++;
+                                        aOutput.WriteUInt32( *pStart++ );
                                         break;
                                 }
                             bInitialSpace = aOutput.flush();
@@ -3520,7 +3520,7 @@ INetMIMEEncodedWordOutputSink::~INetMIMEEncodedWordOutputSink()
 }
 
 INetMIMEEncodedWordOutputSink &
-INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
+INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
 {
     if (nChar == ' ')
     {
