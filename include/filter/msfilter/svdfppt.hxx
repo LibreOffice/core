@@ -54,6 +54,7 @@ class SvxMSDffManager;
 class PPTTextObj;
 class DffRecordHeader;
 class SvxBulletItem;
+enum class PptSlideLayout;
 
 #define PPT_IMPORTFLAGS_NO_TEXT_ASSERT  1
 
@@ -194,7 +195,7 @@ public:
 
 struct PptSlideLayoutAtom
 {
-    sal_Int32           eLayout;                // 0..18
+    PptSlideLayout      eLayout;                // 0..18
     sal_uInt8           aPlaceholderId[ 8 ];
 
 public:
@@ -1574,25 +1575,28 @@ public :
 #define PPT_CharAttr_Escapement         19  //00080000
 
 // values for PptSlideLayoutAtom.eLayout
-#define PPT_LAYOUT_TITLESLIDE               0   // The slide is a title slide
-#define PPT_LAYOUT_TITLEANDBODYSLIDE        1   // Title and body slide
-#define PPT_LAYOUT_TITLEMASTERSLIDE         2   // Title master slide
-#define PPT_LAYOUT_MASTERSLIDE              3   // Master slide layout
-#define PPT_LAYOUT_MASTERNOTES              4   // Master notes layout
-#define PPT_LAYOUT_NOTESTITLEBODY           5   // Notes title/body layout
-#define PPT_LAYOUT_HANDOUTLAYOUT            6   // Handout layout, therefore it doesn't have placeholders except header, footer, and date
-#define PPT_LAYOUT_ONLYTITLE                7   // Only title placeholder
-#define PPT_LAYOUT_2COLUMNSANDTITLE         8   // Body of the slide has 2 columns and a title
-#define PPT_LAYOUT_2ROWSANDTITLE            9   // Slide's body has 2 rows and a title
-#define PPT_LAYOUT_RIGHTCOLUMN2ROWS         10  // Body contains 2 columns, right column has 2 rows
-#define PPT_LAYOUT_LEFTCOLUMN2ROWS          11  // Body contains 2 columns, left column has 2 rows
-#define PPT_LAYOUT_BOTTOMROW2COLUMNS        12  // Body contains 2 rows, bottom row has 2 columns
-#define PPT_LAYOUT_TOPROW2COLUMN            13  // Body contains 2 rows, top row has 2 columns
-#define PPT_LAYOUT_4OBJECTS                 14  // 4 objects
-#define PPT_LAYOUT_BIGOBJECT                15  // Big object
-#define PPT_LAYOUT_BLANCSLIDE               16  // Blank slide
-#define PPT_LAYOUT_TITLERIGHTBODYLEFT       17  // Vertical title on the right, body on the left
-#define PPT_LAYOUT_TITLERIGHT2BODIESLEFT    18  // Vertical title on the right, body on the left split into 2 rows
+enum class PptSlideLayout
+{
+    TITLESLIDE             =  0,   // The slide is a title slide
+    TITLEANDBODYSLIDE      =  1,   // Title and body slide
+    TITLEMASTERSLIDE       =  2,   // Title master slide
+    MASTERSLIDE            =  3,   // Master slide layout
+    MASTERNOTES            =  4,   // Master notes layout
+    NOTESTITLEBODY         =  5,   // Notes title/body layout
+    HANDOUTLAYOUT          =  6,   // Handout layout, therefore it doesn't have placeholders except header, footer, and date
+    ONLYTITLE              =  7,   // Only title placeholder
+    TWOCOLUMNSANDTITLE     =  8,   // Body of the slide has 2 columns and a title
+    TWOROWSANDTITLE        =  9,   // Slide's body has 2 rows and a title
+    RIGHTCOLUMN2ROWS       =  10,  // Body contains 2 columns, right column has 2 rows
+    LEFTCOLUMN2ROWS        =  11,  // Body contains 2 columns, left column has 2 rows
+    BOTTOMROW2COLUMNS      =  12,  // Body contains 2 rows, bottom row has 2 columns
+    TOPROW2COLUMN          =  13,  // Body contains 2 rows, top row has 2 columns
+    FOUROBJECTS            =  14,  // 4 objects
+    BIGOBJECT              =  15,  // Big object
+    BLANCSLIDE             =  16,  // Blank slide
+    TITLERIGHTBODYLEFT     =  17,  // Vertical title on the right, body on the left
+    TITLERIGHT2BODIESLEFT  =  18   // Vertical title on the right, body on the left split into 2 rows
+};
 
 // the following table describes the placeholder id's (values from reality followed by values taken from the documentation)
 #define PPT_PLACEHOLDER_NONE                    0   //  0 None

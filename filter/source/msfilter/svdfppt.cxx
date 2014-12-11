@@ -293,14 +293,16 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
 
 void PptSlideLayoutAtom::Clear()
 {
-    eLayout = 0;
+    eLayout = PptSlideLayout::TITLESLIDE;
     for ( sal_uInt16 i = 0; i < 8; i++ )
         aPlaceholderId[ i ] = 0;
 }
 
 SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom )
 {
-    rIn.ReadInt32( rAtom.eLayout );
+    sal_Int32 nTmp;
+    rIn.ReadInt32(nTmp);
+    rAtom.eLayout = static_cast<PptSlideLayout>(nTmp);
     rIn.Read( rAtom.aPlaceholderId, 8 );
     return rIn;
 }
@@ -988,7 +990,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     case TSS_TYPE_PAGETITLE :
                     case TSS_TYPE_TITLE :
                     {
-                        if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
+                        if ( GetSlideLayoutAtom()->eLayout == PptSlideLayout::TITLEMASTERSLIDE )
                             nDestinationInstance = TSS_TYPE_TITLE;
                         else
                             nDestinationInstance = TSS_TYPE_PAGETITLE;
