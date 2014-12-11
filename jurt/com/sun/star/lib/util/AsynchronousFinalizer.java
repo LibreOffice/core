@@ -24,15 +24,17 @@ import java.util.LinkedList;
  * Helper class to asynchronously execute finalize methods.
  *
  * <p>Current JVMs seem not to be robust against long-running finalize methods,
- * in that such long-running finalize methods may lead to OutOfMemoryErrors. This
- * class mitigates the problem by asynchronously shifting the bodies of
+ * in that such long-running finalize methods may lead to OutOfMemoryErrors.
+ * This class mitigates the problem by asynchronously shifting the bodies of
  * potentially long-running finalize methods into an extra thread.  Classes that
  * make use of this in their finalize methods are the proxies used in the
  * intra-process JNI UNO bridge and the inter-process Java URP UNO bridge (where
  * in both cases finalizers lead to synchronous UNO release calls).</p>
  *
- * <p>If JVMs are getting more mature and should no longer have problems with
- * long-running finalize methods, this class could be removed again.</p>
+ * <p>Irrespective whether JVMs are getting more mature and should no longer
+ * have problems with long-running finalize methods, at least the JNI UNO bridge
+ * needs some way to stop finalization of proxies (to C++ objects) well before
+ * process exit, as provided by drain().</p>
  */
 public final class AsynchronousFinalizer {
     public AsynchronousFinalizer() {
