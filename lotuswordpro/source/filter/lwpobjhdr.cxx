@@ -85,11 +85,11 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
 
     if ( LwpFileHeader::m_nFileRevision < 0x000B)
     {
-        rStrm >> m_nTag;
+        rStrm.ReadUInt32( m_nTag );
         m_ID.Read(&rStrm);
-        rStrm >> nVersionID;
-        rStrm >> nRefCount;
-        rStrm >> nNextVersionOffset;
+        rStrm.ReadUInt32( nVersionID );
+        rStrm.ReadUInt32( nRefCount );
+        rStrm.ReadUInt32( nNextVersionOffset );
 
         nHeaderSize = sizeof(m_nTag) + m_ID.DiskSize()
             + sizeof(nVersionID)
@@ -100,17 +100,17 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         if ((m_nTag == TAG_AMI) || ( LwpFileHeader::m_nFileRevision < 0x0006))
         {
             sal_uInt32 nNextVersionID = 0;
-            rStrm >> nNextVersionID;
+            rStrm.ReadUInt32( nNextVersionID );
             nHeaderSize += sizeof(nNextVersionID);
         }
-        rStrm >> m_nSize;
+        rStrm.ReadUInt32( m_nSize );
     }
     else
     {
         sal_uInt8 nFlagBits = 0;
         sal_uInt16 VOType = 0;
-        rStrm >> VOType;
-        rStrm >> nFlagBits;
+        rStrm.ReadUInt16( VOType );
+        rStrm.ReadUInt8( nFlagBits );
 
         m_nTag = static_cast<sal_uInt32>(VOType);
         m_ID.ReadIndexed(&rStrm);
@@ -121,19 +121,19 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         switch (nFlagBits & VERSION_BITS)
         {
             case ONE_BYTE_VERSION:
-                rStrm >> tmpByte;
+                rStrm.ReadUInt8( tmpByte );
                 nVersionID = static_cast<sal_uInt32>( tmpByte );
                 nHeaderSize++;
                 break;
 
             case TWO_BYTE_VERSION:
-                rStrm >> tmpShort;
+                rStrm.ReadUInt16( tmpShort );
                 nVersionID = static_cast<sal_uInt32>( tmpShort );
                 nHeaderSize += 2;
                 break;
 
             case FOUR_BYTE_VERSION:
-                rStrm >> nVersionID;
+                rStrm.ReadUInt32( nVersionID );
                 nHeaderSize += 4;
                 break;
             case DEFAULT_VERSION:   //fall through
@@ -145,27 +145,27 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         switch (nFlagBits & REFCOUNT_BITS)
         {
             case ONE_BYTE_REFCOUNT:
-                rStrm >> tmpByte;
+                rStrm.ReadUInt8( tmpByte );
                 nRefCount = static_cast<sal_uInt32>( tmpByte );
                 nHeaderSize++;
                 break;
 
             case TWO_BYTE_REFCOUNT:
-                rStrm >> tmpShort;
+                rStrm.ReadUInt16( tmpShort );
                 nRefCount = static_cast<sal_uInt32>( tmpShort );
                 nHeaderSize += 2;
                 break;
 
             case FOUR_BYTE_REFCOUNT:    //through
             default:
-                rStrm >> nRefCount;
+                rStrm.ReadUInt32( nRefCount );
                 nHeaderSize += 4;
                 break;
         }
 
         if (nFlagBits & HAS_PREVOFFSET)
         {
-            rStrm >> nNextVersionOffset;
+            rStrm.ReadUInt32( nNextVersionOffset );
             nHeaderSize += 4;
         }
         else
@@ -174,20 +174,20 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         switch (nFlagBits & SIZE_BITS)
         {
             case ONE_BYTE_SIZE:
-                rStrm >> tmpByte;
+                rStrm.ReadUInt8( tmpByte );
                 m_nSize = static_cast<sal_uInt32>( tmpByte );
                 nHeaderSize++;
                 break;
 
             case TWO_BYTE_SIZE:
-                rStrm >> tmpShort;
+                rStrm.ReadUInt16( tmpShort );
                 m_nSize = static_cast<sal_uInt32>(tmpShort);
                 nHeaderSize += 2;
                 break;
 
             case FOUR_BYTE_SIZE:    //go through
             default:
-                rStrm >> m_nSize;
+                rStrm.ReadUInt32( m_nSize );
                 nHeaderSize += 4;
                 break;
         }

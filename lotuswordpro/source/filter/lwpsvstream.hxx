@@ -72,13 +72,13 @@ public:
     sal_Int64 Tell();
     sal_Int64 Seek( sal_Int64 pos );
 
-    LwpSvStream& operator>>( sal_uInt8& rUInt8 );
-    LwpSvStream& operator>>( sal_uInt16& rUInt16 );
-    LwpSvStream& operator>>( sal_uInt32& rUInt32 );
+    LwpSvStream& ReadUInt8( sal_uInt8& rUInt8 );
+    LwpSvStream& ReadUInt16( sal_uInt16& rUInt16 );
+    LwpSvStream& ReadUInt32( sal_uInt32& rUInt32 );
 
-    LwpSvStream& operator>>( sal_Int8& rInt8 );
-    LwpSvStream& operator>>( sal_Int16& rInt16 );
-    LwpSvStream& operator>>( sal_Int32& rInt32 );
+    LwpSvStream& ReadInt8( sal_Int8& rInt8 );
+    LwpSvStream& ReadInt16( sal_Int16& rInt16 );
+    LwpSvStream& ReadInt32( sal_Int32& rInt32 );
 
     static const sal_uInt32 LWP_STREAM_BASE;
 

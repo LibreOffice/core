@@ -70,37 +70,37 @@ sal_Int32 LwpSvStream::Read(void* buf, sal_Int32 nBytesToRead)
     return m_pStream->Read(buf,nBytesToRead);
 }
 
-LwpSvStream& LwpSvStream::operator>>( sal_uInt8& rUInt8 )
+LwpSvStream& LwpSvStream::ReadUInt8( sal_uInt8& rUInt8 )
 {
     m_pStream->ReadUChar( rUInt8 );
     return *this;
 }
 
-LwpSvStream& LwpSvStream::operator>>( sal_uInt16& rUInt16 )
+LwpSvStream& LwpSvStream::ReadUInt16( sal_uInt16& rUInt16 )
 {
     m_pStream->ReadUInt16( rUInt16 );
     return *this;
 }
 
-LwpSvStream& LwpSvStream::operator>>( sal_uInt32& rUInt32 )
+LwpSvStream& LwpSvStream::ReadUInt32( sal_uInt32& rUInt32 )
 {
     m_pStream->ReadUInt32( rUInt32 );
     return *this;
 }
 
-LwpSvStream& LwpSvStream::operator>>( sal_Int8& rInt8 )
+LwpSvStream& LwpSvStream::ReadInt8( sal_Int8& rInt8 )
 {
     m_pStream->ReadSChar( rInt8 );
     return *this;
 }
 
-LwpSvStream& LwpSvStream::operator>>( sal_Int16& rInt16 )
+LwpSvStream& LwpSvStream::ReadInt16( sal_Int16& rInt16 )
 {
     m_pStream->ReadInt16( rInt16 );
     return *this;
 }
 
-LwpSvStream& LwpSvStream::operator>>( sal_Int32& rInt32 )
+LwpSvStream& LwpSvStream::ReadInt32( sal_Int32& rInt32 )
 {
     m_pStream->ReadInt32( rInt32 );
     return *this;

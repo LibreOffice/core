@@ -70,22 +70,22 @@ LwpFileHeader::LwpFileHeader()
 sal_uInt32 LwpFileHeader::Read(LwpSvStream *pStrm)
 {
     sal_uInt32 len = 0;
-    *pStrm >> m_nAppRevision;
+    pStrm->ReadUInt16( m_nAppRevision );
     len += sizeof(m_nAppRevision);
-    *pStrm >> m_nFileRevision;
+    pStrm->ReadUInt16( m_nFileRevision );
     len += sizeof(m_nFileRevision);
-    *pStrm >> m_nAppReleaseNo;
+    pStrm->ReadUInt16( m_nAppReleaseNo );
     len += sizeof(m_nAppReleaseNo);
-    *pStrm >> m_nRequiredAppRevision;
+    pStrm->ReadUInt16( m_nRequiredAppRevision );
     len += sizeof(m_nRequiredAppRevision);
-    *pStrm >> m_nRequiredFileRevision;
+    pStrm->ReadUInt16( m_nRequiredFileRevision );
     len += sizeof(m_nRequiredFileRevision);
     len += m_cDocumentID.Read(pStrm);
     if (m_nFileRevision < 0x000B)
         m_nRootIndexOffset = BAD_OFFSET;
     else
     {
-        *pStrm >> m_nRootIndexOffset;
+        pStrm->ReadUInt32( m_nRootIndexOffset );
         len += sizeof(m_nRootIndexOffset);
     }
     return len;
