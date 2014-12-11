@@ -633,7 +633,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                 COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
                 //fdo#33455 handle 1 bit depth pngs with palette entries
                 //to set fore/back colors
-                if (const BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(BITMAP_INFO_ACCESS))
+                if (BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(BITMAP_INFO_ACCESS))
                 {
                     const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
                     if (rPalette.GetEntryCount() == 2)
