@@ -75,7 +75,7 @@ void Bridge::handle_java_exc(
     JLocalAutoRef jo_class( jni, jni->GetObjectClass( jo_exc.get() ) );
     JLocalAutoRef jo_class_name(
         jni, jni->CallObjectMethodA(
-            jo_class.get(), m_jni_info->m_method_Class_getName, 0 ) );
+            jo_class.get(), getJniInfo()->m_method_Class_getName, 0 ) );
     jni.ensure_no_exception();
     OUString exc_name(
         jstring_to_oustring( jni, (jstring) jo_class_name.get() ) );
@@ -86,7 +86,7 @@ void Bridge::handle_java_exc(
         // call toString()
         JLocalAutoRef jo_descr(
             jni, jni->CallObjectMethodA(
-                jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
+                jo_exc.get(), getJniInfo()->m_method_Object_toString, 0 ) );
         jni.ensure_no_exception();
         throw BridgeRuntimeError(
             "non-UNO exception occurred: "
@@ -129,7 +129,7 @@ void Bridge::call_java(
     assert( function_pos_offset == 0 || function_pos_offset == 1 );
 
     JNI_guarded_context jni(
-        m_jni_info,
+        getJniInfo(),
         static_cast<JniUnoEnvironmentData *>(m_java_env->pContext)->machine);
 
     // assure fully initialized iface_td:
@@ -208,7 +208,7 @@ void Bridge::call_java(
 
     JNI_interface_type_info const * info =
         static_cast< JNI_interface_type_info const * >(
-            m_jni_info->get_type_info( jni, &iface_td->aBase ) );
+            getJniInfo()->get_type_info( jni, &iface_td->aBase ) );
     jmethodID method_id = info->m_methods[ function_pos ];
 
 #if OSL_DEBUG_LEVEL > 0
@@ -219,20 +219,20 @@ void Bridge::call_java(
     jni.ensure_no_exception();
     JLocalAutoRef jo_descr(
         jni, jni->CallObjectMethodA(
-            jo_method.get(), m_jni_info->m_method_Object_toString, 0 ) );
+            jo_method.get(), getJniInfo()->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
     trace_buf.append( " on " );
     jo_descr.reset(
         jni->CallObjectMethodA(
-            javaI, m_jni_info->m_method_Object_toString, 0 ) );
+            javaI, getJniInfo()->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
     trace_buf.append( " (" );
     JLocalAutoRef jo_class( jni, jni->GetObjectClass( javaI ) );
     jo_descr.reset(
         jni->CallObjectMethodA(
-            jo_class.get(), m_jni_info->m_method_Object_toString, 0 ) );
+            jo_class.get(), getJniInfo()->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
     trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
     trace_buf.append( ")" );
@@ -427,7 +427,7 @@ inline UNO_proxy::UNO_proxy(
       m_oid( oid ),
       m_type_info( info )
 {
-    JNI_info const * jni_info = bridge->m_jni_info;
+    JNI_info const * jni_info = bridge->getJniInfo();
     JLocalAutoRef jo_string_array(
         jni, jni->NewObjectArray( 1, jni_info->m_class_String, jo_oid ) );
     jni.ensure_no_exception();
@@ -529,7 +529,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     try
     {
         JNI_guarded_context jni(
-            bridge->m_jni_info,
+            bridge->getJniInfo(),
             (static_cast<JniUnoEnvironmentData *>(bridge->m_java_env->pContext)
              ->machine));
 
@@ -617,7 +617,7 @@ void SAL_CALL UNO_proxy_dispatch(
                 bridge->call_java(
                     that->m_javaI, iface_td,
                     attrib_td->nIndex, 1, // get, then set method
-                    bridge->m_jni_info->m_void_type.getTypeLibType(),
+                    bridge->getJniInfo()->m_void_type.getTypeLibType(),
                     &param, 1,
                     0, uno_args, uno_exc );
             }
@@ -672,7 +672,7 @@ void SAL_CALL UNO_proxy_dispatch(
 
                 if (0 == pInterface)
                 {
-                    JNI_info const * jni_info = bridge->m_jni_info;
+                    JNI_info const * jni_info = bridge->getJniInfo();
                     JNI_guarded_context jni(
                         jni_info,
                         (static_cast<JniUnoEnvironmentData *>(

@@ -21,7 +21,6 @@
 #define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_BRIDGE_H
 
 #include "jni_base.h"
-#include "jni_info.h"
 #include "jni_helper.h"
 
 #include "osl/diagnose.h"
@@ -36,13 +35,15 @@
 namespace jni_uno
 {
 
-//==== holds environments and mappings =========================================
+class JNI_info;
 struct Bridge;
+
 struct Mapping : public uno_Mapping
 {
     Bridge * m_bridge;
 };
 
+// Holds environments and mappings:
 struct Bridge
 {
     mutable oslInterlockedCount m_ref;
@@ -53,8 +54,6 @@ struct Bridge
     Mapping                     m_java2uno;
     Mapping                     m_uno2java;
     bool                        m_registered_java2uno;
-
-    JNI_info const *            m_jni_info;
 
     ~Bridge();
     explicit Bridge(
@@ -107,6 +106,8 @@ struct Bridge
     uno_Interface * map_to_uno(
         JNI_context const & jni,
         jobject javaI, JNI_interface_type_info const * info ) const;
+
+    JNI_info const * getJniInfo() const;
 };
 
 }

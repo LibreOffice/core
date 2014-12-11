@@ -47,8 +47,8 @@ jobject Bridge::map_to_java(
     args[ 0 ].l = jo_oid.get();
     args[ 1 ].l = info->m_type;
     jobject jo_iface = jni->CallObjectMethodA(
-        m_jni_info->m_object_java_env,
-        m_jni_info->m_method_IEnvironment_getRegisteredInterface, args );
+        getJniInfo()->m_object_java_env,
+        getJniInfo()->m_method_IEnvironment_getRegisteredInterface, args );
     jni.ensure_no_exception();
 
     if (0 == jo_iface) // no registered iface
@@ -63,7 +63,7 @@ jobject Bridge::map_to_java(
         acquire();
         args2[ 0 ].j = reinterpret_cast< sal_Int64 >( this );
         (*pUnoI->acquire)( pUnoI );
-        args2[ 1 ].l = m_jni_info->m_object_java_env;
+        args2[ 1 ].l = getJniInfo()->m_object_java_env;
         args2[ 2 ].j = reinterpret_cast< sal_Int64 >( pUnoI );
         typelib_typedescription_acquire( info->m_td.get() );
         args2[ 3 ].j = reinterpret_cast< sal_Int64 >( info->m_td.get() );
@@ -77,8 +77,8 @@ jobject Bridge::map_to_java(
             args2[ 7 ].l = envData->asynchronousFinalizer;
         }
         jo_iface = jni->CallStaticObjectMethodA(
-            m_jni_info->m_class_JNI_proxy,
-            m_jni_info->m_method_JNI_proxy_create, args2 );
+            getJniInfo()->m_class_JNI_proxy,
+            getJniInfo()->m_method_JNI_proxy_create, args2 );
         jni.ensure_no_exception();
     }
 
@@ -125,7 +125,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
             // call toString()
             JLocalAutoRef jo_descr(
                 jni, jni->CallObjectMethodA(
-                    jo_exc.get(), m_jni_info->m_method_Object_toString, 0 ) );
+                    jo_exc.get(), getJniInfo()->m_method_Object_toString, 0 ) );
             jni.ensure_no_exception();
             throw BridgeRuntimeError(
                 "throwing java exception failed: "
@@ -376,7 +376,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
     jobjectArray jo_args /* may be 0 */ )
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
-    JNI_info const * jni_info = bridge->m_jni_info;
+    JNI_info const * jni_info = bridge->getJniInfo();
     JNI_context jni(
         jni_info, jni_env,
         static_cast< jobject >(
@@ -623,7 +623,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_finalize__J(
     JNIEnv * jni_env, jobject jo_proxy, jlong bridge_handle )
 {
     Bridge const * bridge = reinterpret_cast< Bridge const * >( bridge_handle );
-    JNI_info const * jni_info = bridge->m_jni_info;
+    JNI_info const * jni_info = bridge->getJniInfo();
     JNI_context jni(
         jni_info, jni_env,
         static_cast< jobject >(

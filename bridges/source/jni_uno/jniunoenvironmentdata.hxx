@@ -29,16 +29,21 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
+#include <jni_info.h>
+
 namespace jni_uno {
 
 // The pContext payload of a JNI uno_Environment:
 struct JniUnoEnvironmentData: boost::noncopyable {
     explicit JniUnoEnvironmentData(
         rtl::Reference<jvmaccess::UnoVirtualMachine> const & theMachine):
-        machine(theMachine), asynchronousFinalizer(nullptr)
+        machine(theMachine), info(JNI_info::get_jni_info(theMachine)),
+        asynchronousFinalizer(nullptr)
     {}
 
-    rtl::Reference<jvmaccess::UnoVirtualMachine> machine;
+    rtl::Reference<jvmaccess::UnoVirtualMachine> const machine;
+    JNI_info const * const info;
+
     osl::Mutex mutex;
     jobject asynchronousFinalizer;
 };
