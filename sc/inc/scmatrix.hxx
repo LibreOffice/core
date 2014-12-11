@@ -202,7 +202,7 @@ public:
     ScMatrix(SCSIZE nC, SCSIZE nR);
     ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal);
 
-    ScMatrix( size_t nC, size_t nR, const std::vector<bool>& rInitVals );
+    ScMatrix( size_t nC, size_t nR, const std::vector<double>& rInitVals );
 
     /** Clone the matrix. */
     ScMatrix* Clone() const;
