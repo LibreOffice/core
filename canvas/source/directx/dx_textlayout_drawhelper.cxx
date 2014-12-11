@@ -86,7 +86,7 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(hdc);
-        VirtualDevice aVirtualDevice(&aSystemGraphicsData, 0);
+        VirtualDevice aVirtualDevice(&aSystemGraphicsData, Size(1, 1), 0);
 
         // disable font antialiasing - GDI does not handle alpha
         // surfaces properly.
@@ -242,7 +242,7 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(GetDC( NULL ));
-        VirtualDevice aVirtualDevice(&aSystemGraphicsData, 0);
+        VirtualDevice aVirtualDevice(&aSystemGraphicsData, Size(1, 1), 0);
 
         // create the font
         const ::com::sun::star::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();
