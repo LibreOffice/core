@@ -537,6 +537,8 @@ JNI_info::JNI_info(
         jni, find_class( jni, "com.sun.star.uno.IEnvironment" ) );
     JLocalAutoRef jo_JNI_proxy(
         jni, find_class( jni, "com.sun.star.bridges.jni_uno.JNI_proxy" ) );
+    JLocalAutoRef jo_AsynchronousFinalizer(
+        jni, find_class( jni, "com.sun.star.lib.util.AsynchronousFinalizer" ) );
 
     // method Object.toString()
     m_method_Object_toString = jni->GetMethodID(
@@ -749,6 +751,17 @@ JNI_info::JNI_info(
     jni.ensure_no_exception();
     assert( 0 != m_field_JNI_proxy_m_oid );
 
+    // ctor AsynchronousFinalizer
+    m_ctor_AsynchronousFinalizer = jni->GetMethodID(
+        (jclass) jo_AsynchronousFinalizer.get(), "<init>", "()V" );
+    jni.ensure_no_exception();
+    assert( 0 != m_ctor_AsynchronousFinalizer );
+    // method AsynchronousFinalizer.drain()
+    m_method_AsynchronousFinalizer_drain = jni->GetMethodID(
+        (jclass) jo_AsynchronousFinalizer.get(), "drain", "()V" );
+    jni.ensure_no_exception();
+    assert( 0 != m_method_AsynchronousFinalizer_drain );
+
     // get java env
     OUString java_env_type_name( UNO_LB_JAVA );
     JLocalAutoRef jo_java(
@@ -812,6 +825,8 @@ JNI_info::JNI_info(
         (jclass) jni->NewGlobalRef( jo_TypeClass.get() );
     m_class_JNI_proxy =
         (jclass) jni->NewGlobalRef( jo_JNI_proxy.get() );
+    m_class_AsynchronousFinalizer =
+        (jclass) jni->NewGlobalRef( jo_AsynchronousFinalizer.get() );
 
     m_class_Character =
         (jclass) jni->NewGlobalRef( jo_Character.get() );
@@ -896,6 +911,7 @@ void JNI_info::destruct( JNIEnv * jni_env )
     jni_env->DeleteGlobalRef( m_class_Boolean );
     jni_env->DeleteGlobalRef( m_class_Character );
 
+    jni_env->DeleteGlobalRef( m_class_AsynchronousFinalizer );
     jni_env->DeleteGlobalRef( m_class_JNI_proxy );
     jni_env->DeleteGlobalRef( m_class_RuntimeException );
     jni_env->DeleteGlobalRef( m_class_UnoRuntime );

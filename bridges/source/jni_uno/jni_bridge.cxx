@@ -434,29 +434,16 @@ void SAL_CALL java_env_dispose(uno_Environment * env) {
         }
         if (async != nullptr) {
             try {
-                jvmaccess::VirtualMachine::AttachGuard g(
-                    envData->machine->getVirtualMachine());
-                JNIEnv * jniEnv = g.getEnvironment();
-                jclass cl = jniEnv->FindClass(
-                    "com/sun/star/lib/util/AsynchronousFinalizer");
-                if (cl == nullptr) {
-                    jniEnv->ExceptionClear();
-                    SAL_WARN("bridges", "exception in FindClass");
-                } else {
-                    jmethodID id = jniEnv->GetMethodID(cl, "drain", "()V");
-                    if (id == nullptr) {
-                        jniEnv->ExceptionClear();
-                        SAL_WARN("bridges", "exception in GetMethodID");
-                    } else {
-                        jniEnv->CallObjectMethod(async, id);
-                        if (jniEnv->ExceptionOccurred()) {
-                            jniEnv->ExceptionClear();
-                            SAL_WARN(
-                                "bridges", "exception in CallObjectMethod");
-                        }
-                    }
-                }
-                jniEnv->DeleteGlobalRef(async);
+                JNI_guarded_context jni(envData->info, envData->machine);
+                jni->CallObjectMethodA(
+                    async, envData->info->m_method_AsynchronousFinalizer_drain,
+                    nullptr);
+                jni.ensure_no_exception();
+                jni->DeleteGlobalRef(async);
+            } catch (const BridgeRuntimeError & e) {
+                SAL_WARN(
+                    "bridges",
+                    "ignoring BridgeRuntimeError \"" << e.m_message << "\"");
             } catch (
                 jvmaccess::VirtualMachine::AttachGuard::CreationException &)
             {
@@ -499,39 +486,15 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
         std::unique_ptr<jni_uno::JniUnoEnvironmentData> envData(
             new jni_uno::JniUnoEnvironmentData(vm));
         {
-            jvmaccess::VirtualMachine::AttachGuard g(
-                envData->machine->getVirtualMachine());
-            JNIEnv * jniEnv = g.getEnvironment();
-            jclass cl = jniEnv->FindClass(
-                "com/sun/star/lib/util/AsynchronousFinalizer");
-            if (cl == nullptr) {
-                jniEnv->ExceptionClear();
-                SAL_WARN("bridges", "exception in FindClass");
-                    //TODO: report failure
-            } else {
-                jmethodID id = jniEnv->GetMethodID(cl, "<init>", "()V");
-                if (id == nullptr) {
-                    jniEnv->ExceptionClear();
-                    SAL_WARN("bridges", "exception in GetMethodID");
-                        //TODO: report failure
-                } else {
-                    jobject o = jniEnv->NewObject(cl, id);
-                    if (o == nullptr) {
-                        jniEnv->ExceptionClear();
-                        SAL_WARN("bridges", "exception in NewObject");
-                            //TODO: report failure
-                    } else {
-                        o = jniEnv->NewGlobalRef(o);
-                        if (o == nullptr) {
-                            jniEnv->ExceptionClear();
-                            SAL_WARN("bridges", "exception in NewGlobalRef");
-                                //TODO: report failure
-                        } else {
-                            envData->asynchronousFinalizer = o;
-                        }
-                    }
-                }
-            }
+            JNI_guarded_context jni(envData->info, envData->machine);
+            JLocalAutoRef ref(
+                jni,
+                jni->NewObject(
+                    envData->info->m_class_AsynchronousFinalizer,
+                    envData->info->m_ctor_AsynchronousFinalizer));
+            jni.ensure_no_exception();
+            envData->asynchronousFinalizer = jni->NewGlobalRef(ref.get());
+            jni.ensure_no_exception();
         }
         java_env->pContext = envData.release();
     } catch (const BridgeRuntimeError & e) {

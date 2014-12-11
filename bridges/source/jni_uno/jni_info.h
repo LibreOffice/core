@@ -150,6 +150,7 @@ public:
     jclass                      m_class_Type;
     jclass                      m_class_TypeClass;
     jclass                      m_class_JNI_proxy;
+    jclass                      m_class_AsynchronousFinalizer;
 
     jmethodID                   m_method_Object_toString;
     jmethodID                   m_method_Class_getName;
@@ -190,6 +191,9 @@ public:
     jfieldID                    m_field_JNI_proxy_m_td_handle;
     jfieldID                    m_field_JNI_proxy_m_type;
     jfieldID                    m_field_JNI_proxy_m_oid;
+
+    jmethodID                   m_ctor_AsynchronousFinalizer;
+    jmethodID                   m_method_AsynchronousFinalizer_drain;
 
     ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
     ::com::sun::star::uno::Type const & m_Exception_type;
