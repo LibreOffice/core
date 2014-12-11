@@ -2824,7 +2824,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
     return NULL;
 }
 
-XHatch::XHatch(const Color& rCol, XHatchStyle eTheStyle, long nTheDistance,
+XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, long nTheDistance,
                long nTheAngle) :
     eStyle(eTheStyle),
     aColor(rCol),
@@ -2868,7 +2868,7 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
         sal_Int16  nITemp;
         sal_Int32  nLTemp;
 
-        rIn.ReadInt16( nITemp ); aHatch.SetHatchStyle((XHatchStyle)nITemp);
+        rIn.ReadInt16( nITemp ); aHatch.SetHatchStyle((css::drawing::HatchStyle)nITemp);
         rIn.ReadUInt16( nRed );
         rIn.ReadUInt16( nGreen );
         rIn.ReadUInt16( nBlue );
@@ -3036,7 +3036,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
                 SetName( aName );
                 if ( bHatch )
                 {
-                    aHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
+                    aHatch.SetHatchStyle( (css::drawing::HatchStyle)aUnoHatch.Style );
                     aHatch.SetColor( aUnoHatch.Color );
                     aHatch.SetDistance( aUnoHatch.Distance );
                     aHatch.SetAngle( aUnoHatch.Angle );
@@ -3054,7 +3054,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
             if(!(rVal >>= aUnoHatch))
                 return false;
 
-            aHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
+            aHatch.SetHatchStyle( (css::drawing::HatchStyle)aUnoHatch.Style );
             aHatch.SetColor( aUnoHatch.Color );
             aHatch.SetDistance( aUnoHatch.Distance );
             aHatch.SetAngle( aUnoHatch.Angle );
@@ -3075,7 +3075,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
             sal_Int16 nVal = sal_Int16();
             if (!(rVal >>= nVal ))
                 return false;
-            aHatch.SetHatchStyle( (XHatchStyle)nVal );
+            aHatch.SetHatchStyle( (css::drawing::HatchStyle)nVal );
             break;
         }
 

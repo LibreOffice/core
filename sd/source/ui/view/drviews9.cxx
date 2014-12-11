@@ -567,7 +567,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE, false);
                     SFX_REQUEST_ARG (rReq, pAngle, SfxUInt32Item, ID_VAL_ANGLE, false);
 
-                    if (CHECK_RANGE (XHATCH_SINGLE, (sal_Int32)pStyle->GetValue (), XHATCH_TRIPLE) &&
+                    if (CHECK_RANGE (css::drawing::HatchStyle_SINGLE, (sal_Int32)pStyle->GetValue (), css::drawing::HatchStyle_TRIPLE) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360))
                     {
                         pAttr->ClearItem (XATTR_FILLHATCH);
@@ -585,7 +585,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             {
                                 XHatch aHatch(pEntry->GetHatch());
 
-                                aHatch.SetHatchStyle ((XHatchStyle) pStyle->GetValue ());
+                                aHatch.SetHatchStyle ((css::drawing::HatchStyle) pStyle->GetValue ());
                                 aHatch.SetDistance (pDistance->GetValue ());
                                 aHatch.SetAngle (pAngle->GetValue () * 10);
 
@@ -598,7 +598,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         if (i >= nCounts)
                         {
                             Color  aBlack (0, 0, 0);
-                            XHatch aHatch (aBlack, (XHatchStyle) pStyle->GetValue (), pDistance->GetValue (),
+                            XHatch aHatch (aBlack, (css::drawing::HatchStyle) pStyle->GetValue (), pDistance->GetValue (),
                                            pAngle->GetValue () * 10);
 
                             pHatchList->Insert (new XHatchEntry (aHatch, pName->GetValue ()));

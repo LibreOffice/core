@@ -1139,25 +1139,25 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
             SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aSource);
             // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
             SfxItemSet aHatchAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
-            XHatchStyle eStyle;
+            css::drawing::HatchStyle eStyle;
 
             switch(rHatch.GetStyle())
             {
                 case(HATCH_TRIPLE) :
                 {
-                    eStyle = XHATCH_TRIPLE;
+                    eStyle = css::drawing::HatchStyle_TRIPLE;
                     break;
                 }
 
                 case(HATCH_DOUBLE) :
                 {
-                    eStyle = XHATCH_DOUBLE;
+                    eStyle = css::drawing::HatchStyle_DOUBLE;
                     break;
                 }
 
                 default:
                 {
-                    eStyle = XHATCH_SINGLE;
+                    eStyle = css::drawing::HatchStyle_SINGLE;
                     break;
                 }
             }

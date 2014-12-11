@@ -113,21 +113,21 @@ namespace drawinglayer
             }
         }
 
-        attribute::HatchStyle XHatchStyleToHatchStyle(XHatchStyle eStyle)
+        attribute::HatchStyle XHatchStyleToHatchStyle(css::drawing::HatchStyle eStyle)
         {
             switch(eStyle)
             {
-                case XHATCH_SINGLE :
+                case css::drawing::HatchStyle_SINGLE :
                 {
                     return attribute::HATCHSTYLE_SINGLE;
                 }
-                case XHATCH_DOUBLE :
+                case css::drawing::HatchStyle_DOUBLE :
                 {
                     return attribute::HATCHSTYLE_DOUBLE;
                 }
                 default :
                 {
-                    return attribute::HATCHSTYLE_TRIPLE; // XHATCH_TRIPLE
+                    return attribute::HATCHSTYLE_TRIPLE; // css::drawing::HatchStyle_TRIPLE
                 }
             }
         }
