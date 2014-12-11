@@ -1348,11 +1348,13 @@ XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
     return XFastAttributeListRef( pAttr );
 }
 
-bool DocxExport::ignoreAttributeForStyles( sal_uInt16 nWhich ) const
+bool DocxExport::ignoreAttributeForStyleDefaults( sal_uInt16 nWhich ) const
 {
     if( nWhich == RES_TEXTGRID )
         return true; // w:docGrid is written only to document.xml, not to styles.xml
-    return MSWordExportBase::ignoreAttributeForStyles( nWhich );
+    if (nWhich == RES_PARATR_HYPHENZONE)
+        return true; // w:suppressAutoHyphens is only a formatting exception, not a default
+    return MSWordExportBase::ignoreAttributeForStyleDefaults( nWhich );
 }
 
 void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp)

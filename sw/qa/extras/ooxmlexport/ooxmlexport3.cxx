@@ -262,6 +262,9 @@ DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")
 
     // Finally check the same for numbering styles.
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']", "default", "1");
+
+    // This was 1, the default style had <w:suppressAutoHyphens w:val="true"/> even for a default style having no RES_PARATR_HYPHENZONE set.
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:pPr/w:suppressAutoHyphens", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar1, "calendar1.docx")

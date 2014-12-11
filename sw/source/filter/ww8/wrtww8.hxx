@@ -655,7 +655,7 @@ public:
     virtual bool AddSectionBreaksForTOX() const = 0;
 
     /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
-    virtual bool ignoreAttributeForStyles( sal_uInt16 /*nWhich*/ ) const { return false; }
+    virtual bool ignoreAttributeForStyleDefaults( sal_uInt16 /*nWhich*/ ) const { return false; }
 
     /// If saving page break is preferred as a paragraph attribute (yes) or as a special character (no).
     virtual bool PreferPageBreakBefore() const = 0;

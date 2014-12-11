@@ -473,7 +473,7 @@ void MSWordStyles::SetStyleDefaults( const SwFmt& rFmt, bool bPap )
     const bool* pFlags = aFlags + ( nStt - RES_CHRATR_BEGIN );
     for ( n = nStt; n < nEnd; ++n, ++pFlags )
     {
-        if ( *pFlags && !m_rExport.ignoreAttributeForStyles( n )
+        if ( *pFlags && !m_rExport.ignoreAttributeForStyleDefaults( n )
             && SfxItemState::SET != rFmt.GetItemState(n, false))
         {
             //If we are a character property then see if it is one of the

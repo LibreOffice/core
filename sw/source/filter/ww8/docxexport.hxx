@@ -125,7 +125,7 @@ public:
 
     virtual bool AddSectionBreaksForTOX() const SAL_OVERRIDE { return true; }
 
-    virtual bool ignoreAttributeForStyles( sal_uInt16 nWhich ) const SAL_OVERRIDE;
+    virtual bool ignoreAttributeForStyleDefaults( sal_uInt16 nWhich ) const SAL_OVERRIDE;
 
     virtual bool PreferPageBreakBefore() const SAL_OVERRIDE { return false; }
 
