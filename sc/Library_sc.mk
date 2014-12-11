@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/autonamecache \
     sc/source/core/data/bcaslot \
     sc/source/core/data/bigrange \
+    sc/source/core/data/celltextattr \
     sc/source/core/data/cellvalue \
     sc/source/core/data/cellvalues \
     sc/source/core/data/clipcontext \

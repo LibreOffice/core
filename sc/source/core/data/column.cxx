@@ -763,6 +763,13 @@ ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& 
     return aVal;
 }
 
+const sc::CellTextAttr* ScColumn::GetCellTextAttr( SCROW nRow ) const
+{
+    sc::ColumnBlockConstPosition aBlockPos;
+    aBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
+    return GetCellTextAttr(aBlockPos, nRow);
+}
+
 const sc::CellTextAttr* ScColumn::GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const
 {
     sc::CellTextAttrStoreType::const_position_type aPos = maCellTextAttrs.position(rBlockPos.miCellTextAttrPos, nRow);

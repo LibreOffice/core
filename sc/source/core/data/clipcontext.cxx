@@ -113,6 +113,7 @@ InsertDeleteFlags CopyFromClipContext::getDeleteFlag() const
 void CopyFromClipContext::setSingleCellColumnSize( size_t nSize )
 {
     maSingleCells.resize(nSize);
+    maSingleCellAttrs.resize(nSize);
     maSinglePatterns.resize(nSize, NULL);
     maSingleNotes.resize(nSize, NULL);
 }
@@ -123,10 +124,24 @@ ScCellValue& CopyFromClipContext::getSingleCell( size_t nColOffset )
     return maSingleCells[nColOffset];
 }
 
+sc::CellTextAttr& CopyFromClipContext::getSingleCellAttr( size_t nColOffset )
+{
+    assert(nColOffset < maSingleCellAttrs.size());
+    return maSingleCellAttrs[nColOffset];
+}
+
 void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColumn& rSrcCol )
 {
     SCCOL nColOffset = rSrcPos.Col() - mpClipDoc->GetClipParam().getWholeRange().aStart.Col();
     ScCellValue& rSrcCell = getSingleCell(nColOffset);
+
+    const sc::CellTextAttr* pAttr = rSrcCol.GetCellTextAttr(rSrcPos.Row());
+
+    if (pAttr)
+    {
+        sc::CellTextAttr& rAttr = getSingleCellAttr(nColOffset);
+        rAttr = *pAttr;
+    }
 
     if (mbAsLink)
     {

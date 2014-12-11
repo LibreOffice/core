@@ -1171,7 +1171,7 @@ void ScTable::FillFormulaVertical(
         return;
 
     aCol[nCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
-    aCol[nCol].CloneFormulaCell(rSrcCell, aSpans, NULL);
+    aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, NULL);
 
     boost::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
     sc::StartListeningContext aStartCxt(*pDocument, pSet);

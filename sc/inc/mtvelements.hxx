@@ -17,6 +17,7 @@
 #include <editeng/editobj.hxx>
 #include "calcmacros.hxx"
 #include "postit.hxx"
+#include <celltextattr.hxx>
 #include <osl/mutex.hxx>
 
 #if DEBUG_COLUMN_STORAGE
@@ -37,15 +38,6 @@ class ScDocument;
 struct ScRefCellValue;
 
 namespace sc {
-
-struct CellTextAttr
-{
-    sal_uInt16 mnTextWidth;
-    sal_uInt8 mnScriptType;
-
-    CellTextAttr();
-    CellTextAttr(const CellTextAttr& r);
-};
 
 /// Custom element type IDs for multi_type_vector.
 

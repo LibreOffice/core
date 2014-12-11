@@ -152,6 +152,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     bool bSameDocPool = (rCxt.getClipDoc()->GetPool() == pDocument->GetPool());
 
     ScCellValue& rSrcCell = rCxt.getSingleCell(nColOffset);
+    sc::CellTextAttr& rSrcAttr = rCxt.getSingleCellAttr(nColOffset);
 
     InsertDeleteFlags nFlags = rCxt.getInsertFlag();
 
@@ -167,7 +168,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     if ((nFlags & IDF_CONTENTS) != IDF_NONE)
     {
-        std::vector<sc::CellTextAttr> aTextAttrs(nDestSize);
+        std::vector<sc::CellTextAttr> aTextAttrs(nDestSize, rSrcAttr);
 
         switch (rSrcCell.meType)
         {
@@ -217,7 +218,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.push_back(sc::RowSpan(nRow1, nRow2));
-                CloneFormulaCell(*rSrcCell.mpFormula, aRanges, NULL);
+                CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges, NULL);
             }
             break;
             default:
@@ -478,7 +479,8 @@ void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDele
 }
 
 void ScColumn::CloneFormulaCell(
-    const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt )
+    const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
+    const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt )
 {
     sc::CellStoreType::iterator itPos = maCells.begin();
     sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
@@ -543,7 +545,7 @@ void ScColumn::CloneFormulaCell(
         pCell = sc::formula_block::at(*aPosObj.first->data, aPosObj.second);
         JoinNewFormulaCell(aPosObj, *pCell);
 
-        std::vector<sc::CellTextAttr> aTextAttrs(nLen);
+        std::vector<sc::CellTextAttr> aTextAttrs(nLen, rAttr);
         itAttrPos = maCellTextAttrs.set(itAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
     }
 

@@ -105,7 +105,10 @@ bool ScDocument::CopyOneCellFromClip(
         if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
             rCxt.setSingleCellNote(nColOffset, pClipDoc->GetNote(aSrcPos));
 
-        rCxt.setSingleCell(aSrcPos, pSrcTab->aCol[aSrcPos.Col()]);
+        ScColumn& rSrcCol = pSrcTab->aCol[aSrcPos.Col()];
+        // Determine the script type of the copied single cell.
+        rSrcCol.UpdateScriptTypes(aSrcPos.Row(), aSrcPos.Row());
+        rCxt.setSingleCell(aSrcPos, rSrcCol);
     }
 
     // All good. Proceed with the pasting.
