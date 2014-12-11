@@ -278,8 +278,13 @@ namespace cairo
         aSystemGraphicsData.hDrawable = getDrawable();
         aSystemGraphicsData.pXRenderFormat = getRenderFormat();
 
+        int width = cairo_xlib_surface_get_width(mpSurface.get());
+        int height = cairo_xlib_surface_get_height(mpSurface.get());
+
         return boost::shared_ptr<VirtualDevice>(
-            new VirtualDevice( &aSystemGraphicsData, std::max( getDepth(), 0 ) ));
+            new VirtualDevice(&aSystemGraphicsData,
+                              Size(width, height),
+                              std::max(getDepth(), 0)));
     }
 
     /**
