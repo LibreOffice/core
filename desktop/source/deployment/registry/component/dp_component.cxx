@@ -439,7 +439,7 @@ void BackendImpl::initServiceRdbFiles()
     // switch common rdb:
     if (!m_commonRDB_orig.isEmpty())
     {
-        create_ucb_content(
+        (void)create_ucb_content(
             &oldRDB, makeURL( getCachePath(), m_commonRDB_orig),
             xCmdEnv, false /* no throw */ );
     }
