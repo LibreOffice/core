@@ -100,7 +100,7 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
         throw io::IOException(THROW_WHERE );
 }
 
-ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
+ByteGrabber& ByteGrabber::ReadInt8(sal_Int8& rInt8)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (xStream->readBytes(aSequence,1) != 1)
@@ -110,7 +110,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int8& rInt8)
     return *this;
 }
 
-ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
+ByteGrabber& ByteGrabber::ReadInt16(sal_Int16& rInt16)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (xStream->readBytes ( aSequence, 2) != 2)
@@ -125,7 +125,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int16& rInt16)
     return *this;
 }
 
-ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
+ByteGrabber& ByteGrabber::ReadInt32(sal_Int32& rInt32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -143,7 +143,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_Int32& rInt32)
     return *this;
 }
 
-ByteGrabber& ByteGrabber::operator >> (sal_uInt8& rInt8)
+ByteGrabber& ByteGrabber::ReadUInt8(sal_uInt8& rInt8)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -153,7 +153,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt8& rInt8)
         rInt8 = static_cast < sal_uInt8 > (aSequence[0] & 0xFF );
     return *this;
 }
-ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
+ByteGrabber& ByteGrabber::ReadUInt16(sal_uInt16& rInt16)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -168,7 +168,7 @@ ByteGrabber& ByteGrabber::operator >> (sal_uInt16& rInt16)
     }
     return *this;
 }
-ByteGrabber& ByteGrabber::operator >> (sal_uInt32& ruInt32)
+ByteGrabber& ByteGrabber::ReadUInt32(sal_uInt32& ruInt32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

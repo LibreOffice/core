@@ -639,19 +639,19 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
     sal_Int64 nPos = -rEntry.nOffset;
 
     aGrabber.seek(nPos);
-    aGrabber >> nTestSig;
+    aGrabber.ReadInt32( nTestSig );
 
     if (nTestSig != LOCSIG)
         throw ZipIOException("Invalid LOC header (bad signature)" );
-    aGrabber >> nVersion;
-    aGrabber >> nFlag;
-    aGrabber >> nHow;
-    aGrabber >> nTime;
-    aGrabber >> nCRC;
-    aGrabber >> nCompressedSize;
-    aGrabber >> nSize;
-    aGrabber >> nPathLen;
-    aGrabber >> nExtraLen;
+    aGrabber.ReadInt16( nVersion );
+    aGrabber.ReadInt16( nFlag );
+    aGrabber.ReadInt16( nHow );
+    aGrabber.ReadInt32( nTime );
+    aGrabber.ReadInt32( nCRC );
+    aGrabber.ReadInt32( nCompressedSize );
+    aGrabber.ReadInt32( nSize );
+    aGrabber.ReadInt16( nPathLen );
+    aGrabber.ReadInt16( nExtraLen );
     rEntry.nOffset = aGrabber.getPosition() + nPathLen + nExtraLen;
 
     // FIXME64: need to read 64bit LOC
@@ -763,9 +763,9 @@ sal_Int32 ZipFile::readCEN()
         if (nEndPos == -1)
             return -1;
         aGrabber.seek(nEndPos + ENDTOT);
-        aGrabber >> nTotal;
-        aGrabber >> nCenLen;
-        aGrabber >> nCenOff;
+        aGrabber.ReadUInt16( nTotal );
+        aGrabber.ReadInt32( nCenLen );
+        aGrabber.ReadInt32( nCenOff );
 
         if ( nTotal * CENHDR > nCenLen )
             throw ZipException("invalid END header (bad entry count)" );
@@ -796,34 +796,34 @@ sal_Int32 ZipFile::readCEN()
 
         for (nCount = 0 ; nCount < nTotal; nCount++)
         {
-            aMemGrabber >> nTestSig;
+            aMemGrabber.ReadInt32( nTestSig );
             if ( nTestSig != CENSIG )
                 throw ZipException("Invalid CEN header (bad signature)" );
 
             aMemGrabber.skipBytes ( 2 );
-            aMemGrabber >> aEntry.nVersion;
+            aMemGrabber.ReadInt16( aEntry.nVersion );
 
             if ( ( aEntry.nVersion & 1 ) == 1 )
                 throw ZipException("Invalid CEN header (encrypted entry)" );
 
-            aMemGrabber >> aEntry.nFlag;
-            aMemGrabber >> aEntry.nMethod;
+            aMemGrabber.ReadInt16( aEntry.nFlag );
+            aMemGrabber.ReadInt16( aEntry.nMethod );
 
             if ( aEntry.nMethod != STORED && aEntry.nMethod != DEFLATED)
                 throw ZipException("Invalid CEN header (bad compression method)" );
 
-            aMemGrabber >> aEntry.nTime;
-            aMemGrabber >> aEntry.nCrc;
+            aMemGrabber.ReadInt32( aEntry.nTime );
+            aMemGrabber.ReadInt32( aEntry.nCrc );
 
             sal_uInt32 nCompressedSize, nSize, nOffset;
 
-            aMemGrabber >> nCompressedSize;
-            aMemGrabber >> nSize;
-            aMemGrabber >> aEntry.nPathLen;
-            aMemGrabber >> aEntry.nExtraLen;
-            aMemGrabber >> nCommentLen;
+            aMemGrabber.ReadUInt32( nCompressedSize );
+            aMemGrabber.ReadUInt32( nSize );
+            aMemGrabber.ReadInt16( aEntry.nPathLen );
+            aMemGrabber.ReadInt16( aEntry.nExtraLen );
+            aMemGrabber.ReadInt16( nCommentLen );
             aMemGrabber.skipBytes ( 8 );
-            aMemGrabber >> nOffset;
+            aMemGrabber.ReadUInt32( nOffset );
 
             // FIXME64: need to read the 64bit header instead
             if ( nSize == 0xffffffff ||
@@ -905,22 +905,22 @@ sal_Int32 ZipFile::recover()
                     ZipEntry aEntry;
                     MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 26 ) );
 
-                    aMemGrabber >> aEntry.nVersion;
+                    aMemGrabber.ReadInt16( aEntry.nVersion );
                     if ( ( aEntry.nVersion & 1 ) != 1 )
                     {
-                        aMemGrabber >> aEntry.nFlag;
-                        aMemGrabber >> aEntry.nMethod;
+                        aMemGrabber.ReadInt16( aEntry.nFlag );
+                        aMemGrabber.ReadInt16( aEntry.nMethod );
 
                         if ( aEntry.nMethod == STORED || aEntry.nMethod == DEFLATED )
                         {
                             sal_uInt32 nCompressedSize, nSize;
 
-                            aMemGrabber >> aEntry.nTime;
-                            aMemGrabber >> aEntry.nCrc;
-                            aMemGrabber >> nCompressedSize;
-                            aMemGrabber >> nSize;
-                            aMemGrabber >> aEntry.nPathLen;
-                            aMemGrabber >> aEntry.nExtraLen;
+                            aMemGrabber.ReadInt32( aEntry.nTime );
+                            aMemGrabber.ReadInt32( aEntry.nCrc );
+                            aMemGrabber.ReadUInt32( nCompressedSize );
+                            aMemGrabber.ReadUInt32( nSize );
+                            aMemGrabber.ReadInt16( aEntry.nPathLen );
+                            aMemGrabber.ReadInt16( aEntry.nExtraLen );
 
                             // FIXME64: need to read the 64bit header instead
                             if ( nSize == 0xffffffff ||
@@ -978,9 +978,9 @@ sal_Int32 ZipFile::recover()
                     sal_uInt32 nCompressedSize32, nSize32;
                     sal_Int64 nCompressedSize, nSize;
                     MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 12 ) );
-                    aMemGrabber >> nCRC32;
-                    aMemGrabber >> nCompressedSize32;
-                    aMemGrabber >> nSize32;
+                    aMemGrabber.ReadInt32( nCRC32 );
+                    aMemGrabber.ReadUInt32( nCompressedSize32 );
+                    aMemGrabber.ReadUInt32( nSize32 );
 
                     // FIXME64: work to be done here ...
                     nCompressedSize = nCompressedSize32;

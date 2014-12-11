@@ -48,12 +48,12 @@ public:
     sal_Int64 GetPosition()
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    ByteChucker& operator << (sal_Int8 nInt8);
-    ByteChucker& operator << (sal_Int16 nInt16);
-    ByteChucker& operator << (sal_Int32 nInt32);
-    ByteChucker& operator << (sal_uInt8 nuInt8);
-    ByteChucker& operator << (sal_uInt16 nuInt16);
-    ByteChucker& operator << (sal_uInt32 nuInt32);
+    ByteChucker& WriteInt8(sal_Int8 nInt8);
+    ByteChucker& WriteInt16(sal_Int16 nInt16);
+    ByteChucker& WriteInt32(sal_Int32 nInt32);
+    ByteChucker& WriteUInt8(sal_uInt8 nuInt8);
+    ByteChucker& WriteUInt16(sal_uInt16 nuInt16);
+    ByteChucker& WriteUInt32(sal_uInt32 nuInt32);
 };
 
 #endif

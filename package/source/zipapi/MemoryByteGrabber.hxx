@@ -99,7 +99,7 @@ public:
     {
         return mnEnd;
     }
-    MemoryByteGrabber& operator >> (sal_Int8& rInt8)
+    MemoryByteGrabber& ReadInt8(sal_Int8& rInt8)
     {
         if (mnCurrent + 1 > mnEnd )
             rInt8 = 0;
@@ -107,7 +107,7 @@ public:
             rInt8 = mpBuffer [mnCurrent++] & 0xFF;
         return *this;
     }
-    MemoryByteGrabber& operator >> (sal_Int16& rInt16)
+    MemoryByteGrabber& ReadInt16(sal_Int16& rInt16)
     {
         if (mnCurrent + 2 > mnEnd )
             rInt16 = 0;
@@ -118,7 +118,7 @@ public:
         }
         return *this;
     }
-    MemoryByteGrabber& operator >> (sal_Int32& rInt32)
+    MemoryByteGrabber& ReadInt32(sal_Int32& rInt32)
     {
         if (mnCurrent + 4 > mnEnd )
             rInt32 = 0;
@@ -132,7 +132,7 @@ public:
         return *this;
     }
 
-    MemoryByteGrabber& operator >> (sal_uInt8& rInt8)
+    MemoryByteGrabber& ReadUInt8(sal_uInt8& rInt8)
     {
         if (mnCurrent + 1 > mnEnd )
             rInt8 = 0;
@@ -140,7 +140,7 @@ public:
             rInt8 = mpBuffer [mnCurrent++] & 0xFF;
         return *this;
     }
-    MemoryByteGrabber& operator >> (sal_uInt16& rInt16)
+    MemoryByteGrabber& ReadUInt16(sal_uInt16& rInt16)
     {
         if (mnCurrent + 2 > mnEnd )
             rInt16 = 0;
@@ -151,7 +151,7 @@ public:
         }
         return *this;
     }
-    MemoryByteGrabber& operator >> (sal_uInt32& rInt32)
+    MemoryByteGrabber& ReadUInt32(sal_uInt32& rInt32)
     {
         if (mnCurrent + 4 > mnEnd )
             rInt32 = 0;

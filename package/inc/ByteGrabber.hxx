@@ -58,12 +58,12 @@ public:
     sal_Int64 SAL_CALL getLength(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    ByteGrabber& operator >> (sal_Int8& rInt8);
-    ByteGrabber& operator >> (sal_Int16& rInt16);
-    ByteGrabber& operator >> (sal_Int32& rInt32);
-    ByteGrabber& operator >> (sal_uInt8& ruInt8);
-    ByteGrabber& operator >> (sal_uInt16& ruInt16);
-    ByteGrabber& operator >> (sal_uInt32& ruInt32);
+    ByteGrabber& ReadInt8(sal_Int8& rInt8);
+    ByteGrabber& ReadInt16(sal_Int16& rInt16);
+    ByteGrabber& ReadInt32(sal_Int32& rInt32);
+    ByteGrabber& ReadUInt8(sal_uInt8& ruInt8);
+    ByteGrabber& ReadUInt16(sal_uInt16& ruInt16);
+    ByteGrabber& ReadUInt32(sal_uInt32& ruInt32);
 };
 
 #endif

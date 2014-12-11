@@ -122,14 +122,14 @@ void ZipOutputStream::finish()
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {
-    m_aChucker << ENDSIG;
-    m_aChucker << static_cast < sal_Int16 > ( 0 );
-    m_aChucker << static_cast < sal_Int16 > ( 0 );
-    m_aChucker << static_cast < sal_Int16 > ( m_aZipList.size() );
-    m_aChucker << static_cast < sal_Int16 > ( m_aZipList.size() );
-    m_aChucker << nLength;
-    m_aChucker << nOffset;
-    m_aChucker << static_cast < sal_Int16 > ( 0 );
+    m_aChucker.WriteInt32( ENDSIG );
+    m_aChucker.WriteInt16( static_cast < sal_Int16 > ( 0 ) );
+    m_aChucker.WriteInt16( static_cast < sal_Int16 > ( 0 ) );
+    m_aChucker.WriteInt16( static_cast < sal_Int16 > ( m_aZipList.size() ) );
+    m_aChucker.WriteInt16( static_cast < sal_Int16 > ( m_aZipList.size() ) );
+    m_aChucker.WriteUInt32( nLength );
+    m_aChucker.WriteUInt32( nOffset );
+    m_aChucker.WriteInt16( static_cast < sal_Int16 > ( 0 ) );
 }
 
 static sal_uInt32 getTruncated( sal_Int64 nNum, bool *pIsTruncated )
@@ -152,24 +152,24 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
-    m_aChucker << CENSIG;
-    m_aChucker << rEntry.nVersion;
-    m_aChucker << rEntry.nVersion;
-    m_aChucker << rEntry.nFlag;
-    m_aChucker << rEntry.nMethod;
+    m_aChucker.WriteInt32( CENSIG );
+    m_aChucker.WriteInt16( rEntry.nVersion );
+    m_aChucker.WriteInt16( rEntry.nVersion );
+    m_aChucker.WriteInt16( rEntry.nFlag );
+    m_aChucker.WriteInt16( rEntry.nMethod );
     bool bWrite64Header = false;
 
-    m_aChucker << static_cast < sal_uInt32> ( rEntry.nTime );
-    m_aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
-    m_aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
-    m_aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
-    m_aChucker << nNameLength;
-    m_aChucker << static_cast < sal_Int16> (0);
-    m_aChucker << static_cast < sal_Int16> (0);
-    m_aChucker << static_cast < sal_Int16> (0);
-    m_aChucker << static_cast < sal_Int16> (0);
-    m_aChucker << static_cast < sal_Int32> (0);
-    m_aChucker << getTruncated( rEntry.nOffset, &bWrite64Header );
+    m_aChucker.WriteUInt32( static_cast < sal_uInt32> ( rEntry.nTime ) );
+    m_aChucker.WriteUInt32( static_cast < sal_uInt32> ( rEntry.nCrc ) );
+    m_aChucker.WriteUInt32( getTruncated( rEntry.nCompressedSize, &bWrite64Header ) );
+    m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
+    m_aChucker.WriteInt16( nNameLength );
+    m_aChucker.WriteInt16( static_cast < sal_Int16> (0) );
+    m_aChucker.WriteInt16( static_cast < sal_Int16> (0) );
+    m_aChucker.WriteInt16( static_cast < sal_Int16> (0) );
+    m_aChucker.WriteInt16( static_cast < sal_Int16> (0) );
+    m_aChucker.WriteInt32( static_cast < sal_Int32> (0) );
+    m_aChucker.WriteUInt32( getTruncated( rEntry.nOffset, &bWrite64Header ) );
 
     if( bWrite64Header )
     {
@@ -188,10 +188,10 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
 {
     bool bWrite64Header = false;
 
-    m_aChucker << EXTSIG;
-    m_aChucker << static_cast < sal_uInt32> ( rEntry.nCrc );
-    m_aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
-    m_aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
+    m_aChucker.WriteInt32( EXTSIG );
+    m_aChucker.WriteUInt32( static_cast < sal_uInt32> ( rEntry.nCrc ) );
+    m_aChucker.WriteUInt32( getTruncated( rEntry.nCompressedSize, &bWrite64Header ) );
+    m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
 
     if( bWrite64Header )
     {
@@ -216,33 +216,33 @@ void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
     OString sUTF8Name = OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
-    m_aChucker << LOCSIG;
-    m_aChucker << rEntry.nVersion;
+    m_aChucker.WriteInt32( LOCSIG );
+    m_aChucker.WriteInt16( rEntry.nVersion );
 
-    m_aChucker << rEntry.nFlag;
+    m_aChucker.WriteInt16( rEntry.nFlag );
     // If it's an encrypted entry, we pretend its stored plain text
     if (bEncrypt)
-        m_aChucker << static_cast < sal_Int16 > ( STORED );
+        m_aChucker.WriteInt16( static_cast < sal_Int16 > ( STORED ) );
     else
-        m_aChucker << rEntry.nMethod;
+        m_aChucker.WriteInt16( rEntry.nMethod );
 
     bool bWrite64Header = false;
 
-    m_aChucker << static_cast < sal_uInt32 > (rEntry.nTime);
+    m_aChucker.WriteUInt32( static_cast < sal_uInt32 > (rEntry.nTime) );
     if ((rEntry.nFlag & 8) == 8 )
     {
-        m_aChucker << static_cast < sal_Int32 > (0);
-        m_aChucker << static_cast < sal_Int32 > (0);
-        m_aChucker << static_cast < sal_Int32 > (0);
+        m_aChucker.WriteInt32( static_cast < sal_Int32 > (0) );
+        m_aChucker.WriteInt32( static_cast < sal_Int32 > (0) );
+        m_aChucker.WriteInt32( static_cast < sal_Int32 > (0) );
     }
     else
     {
-        m_aChucker << static_cast < sal_uInt32 > (rEntry.nCrc);
-        m_aChucker << getTruncated( rEntry.nCompressedSize, &bWrite64Header );
-        m_aChucker << getTruncated( rEntry.nSize, &bWrite64Header );
+        m_aChucker.WriteUInt32( static_cast < sal_uInt32 > (rEntry.nCrc) );
+        m_aChucker.WriteUInt32( getTruncated( rEntry.nCompressedSize, &bWrite64Header ) );
+        m_aChucker.WriteUInt32( getTruncated( rEntry.nSize, &bWrite64Header ) );
     }
-    m_aChucker << nNameLength;
-    m_aChucker << static_cast < sal_Int16 > (0);
+    m_aChucker.WriteInt16( nNameLength );
+    m_aChucker.WriteInt16( static_cast < sal_Int16 > (0) );
 
     if( bWrite64Header )
     {
