@@ -2079,12 +2079,11 @@ void ImpEditEngine::AddPortionIterated(
                     pFieldAttr->GetStart() != pFieldAttr->GetEnd() &&
                     pFieldAttr->Which() == EE_FEATURE_FIELD;
             sal_Int32 nEndField = bIsField ? pFieldAttr->GetEnd() : USHRT_MAX;
-            bool bIsEndField = false;
             do
             {
                 aCursor = CursorRight( aCursor);
                 //determine whether a field and has been reached
-                bIsEndField = nEndField == aCursor.GetIndex();
+                bool bIsEndField = nEndField == aCursor.GetIndex();
                 //search for a new field attribute
                 const EditCharAttrib* _pFieldAttr = aCursor.GetNode()->GetCharAttribs().
                                                         FindFeature( aCursor.GetIndex() );

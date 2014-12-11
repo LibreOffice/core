@@ -3002,13 +3002,12 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: GetPaM" );
 
     long nY = 0;
-    long nTmpHeight;
     EditPaM aPaM;
     sal_Int32 nPortion;
     for ( nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
     {
         ParaPortion* pPortion = GetParaPortions()[nPortion];
-        nTmpHeight = pPortion->GetHeight();     // should also be correct for !bVisible!
+        const long nTmpHeight = pPortion->GetHeight();     // should also be correct for !bVisible!
         nY += nTmpHeight;
         if ( nY > aDocPos.Y() )
         {

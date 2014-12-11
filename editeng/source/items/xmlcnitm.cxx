@@ -120,7 +120,6 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
             const OUString* pNames = aNameSequence.getConstArray();
             const sal_Int32 nCount = aNameSequence.getLength();
             Any aAny;
-            AttributeData* pData;
             sal_Int32 nAttr;
 
             for( nAttr = 0; nAttr < nCount; nAttr++ )
@@ -131,7 +130,7 @@ bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal
                 if( aAny.getValue() == NULL || aAny.getValueType() != cppu::UnoType<AttributeData>::get() )
                     return false;
 
-                pData = (AttributeData*)aAny.getValue();
+                AttributeData* pData = (AttributeData*)aAny.getValue();
                 sal_Int32 pos = aName.indexOf( ':' );
                 if( pos != -1 )
                 {

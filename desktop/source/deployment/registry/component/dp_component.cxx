@@ -1307,10 +1307,10 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     if (m_registered == REG_UNINIT)
     {
         m_registered = REG_NOT_REGISTERED;
-        bool bAmbiguousComponentName = false;
         const Reference<registry::XSimpleRegistry> xRDB( getRDB() );
         if (xRDB.is())
         {
+            bool bAmbiguousComponentName = false;
             // lookup rdb for location URL:
             const Reference<registry::XRegistryKey> xRootKey(
                 xRDB->getRootKey() );

@@ -187,7 +187,6 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
     bool option_verbose = false;
     bool option_bundled = false;
     bool option_suppressLicense = false;
-    bool subcmd_add = false;
     bool subcmd_gui = false;
     OUString logFile;
     OUString repository;
@@ -239,7 +238,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         osl_getCommandArg( nPos, &subCommand.pData );
         ++nPos;
         subCommand = subCommand.trim();
-        subcmd_add = subCommand == "add";
+        bool subcmd_add = subCommand == "add";
         subcmd_gui = subCommand == "gui";
 
         // sun-command options and packages:
