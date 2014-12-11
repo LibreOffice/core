@@ -17,6 +17,8 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
+ #include <basegfx/polygon/b2dpolygontools.hxx>
+
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
@@ -27,6 +29,8 @@
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
 
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+
 #include "ogl_canvasfont.hxx"
 #include "ogl_canvastools.hxx"
 #include "ogl_canvasbitmap.hxx"
@@ -36,6 +40,7 @@
 
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <vcl/opengl/GLMHelper.hxx>
 
 #include <boost/scoped_array.hpp>
 
@@ -94,6 +99,53 @@ namespace oglcanvas
 
     namespace
     {
+
+
+       basegfx::B2DLineJoin b2DJoineFromJoin( sal_Int8 nJoinType )
+       {
+           switch( nJoinType )
+           {
+               case rendering::PathJoinType::NONE:
+                   return basegfx::B2DLINEJOIN_NONE;
+
+               case rendering::PathJoinType::MITER:
+                   return basegfx::B2DLINEJOIN_MITER;
+
+               case rendering::PathJoinType::ROUND:
+                   return basegfx::B2DLINEJOIN_ROUND;
+
+               case rendering::PathJoinType::BEVEL:
+                   return basegfx::B2DLINEJOIN_BEVEL;
+
+               default:
+                   ENSURE_OR_THROW( false,
+                                     "b2DJoineFromJoin(): Unexpected join type" );
+           }
+
+           return basegfx::B2DLINEJOIN_NONE;
+       }
+
+       drawing::LineCap unoCapeFromCap( sal_Int8 nCapType)
+       {
+           switch ( nCapType)
+           {
+               case rendering::PathCapType::BUTT:
+                   return drawing::LineCap_BUTT;
+
+               case rendering::PathCapType::ROUND:
+                   return drawing::LineCap_ROUND;
+
+               case rendering::PathCapType::SQUARE:
+                   return drawing::LineCap_SQUARE;
+
+               default:
+                   ENSURE_OR_THROW( false,
+                                     "unoCapeFromCap(): Unexpected cap type" );
+           }
+           return drawing::LineCap_BUTT;
+       }
+
+
         bool lcl_drawPoint( const CanvasHelper&              rHelper,
                             const ::basegfx::B2DHomMatrix&   rTransform,
                             GLenum                           eSrcBlend,
@@ -531,7 +583,7 @@ namespace oglcanvas
                                                                                    const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
                                                                                    const rendering::ViewState&                          viewState,
                                                                                    const rendering::RenderState&                        renderState,
-                                                                                   const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
+                                                                                   const rendering::StrokeAttributes&                   strokeAttributes )
     {
         ENSURE_OR_THROW( xPolyPolygon.is(),
                           "CanvasHelper::strokePolyPolygon: polygon is NULL");
@@ -542,12 +594,66 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maPolyPolys.push_back(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
-            rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+            ::basegfx::B2DSize aLinePixelSize(strokeAttributes.StrokeWidth,
+                                              strokeAttributes.StrokeWidth);
+            ::basegfx::B2DPolyPolygon aPolyPoly(
+                     ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
-            // TODO(F3): fallback to drawPolyPolygon currently
-            rAct.maFunction = &lcl_drawPolyPolygon;
+
+            if( strokeAttributes.DashArray.getLength() )
+            {
+                const ::std::vector<double>& aDashArray(
+                    ::comphelper::sequenceToContainer< ::std::vector<double> >(strokeAttributes.DashArray) );
+
+                ::basegfx::B2DPolyPolygon aDashedPolyPoly;
+
+                for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+                {
+                    // AW: new interface; You may also get gaps in the same run now
+                    basegfx::tools::applyLineDashing(aPolyPoly.getB2DPolygon(i),
+                                                     aDashArray,
+                                                     &aDashedPolyPoly);
+                }
+
+                aPolyPoly = aDashedPolyPoly;
+            }
+
+            if( aLinePixelSize.getLength() < 1.42 )
+            {
+                // line width < 1.0 in device pixel, thus, output as a
+                // simple hairline poly-polygon
+                rAct.maPolyPolys.push_back(aPolyPoly);
+                rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+
+                rAct.maFunction = &lcl_drawPolyPolygon;
+            }
+            else
+            {
+                // render as a 'thick' line
+                ::basegfx::B2DPolyPolygon aStrokedPolyPoly;
+                for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
+                {
+                    // TODO(F2): Use MiterLimit from StrokeAttributes,
+                    // need to convert it here to angle.
+
+                    // TODO(F2): Also use Cap settings from
+                    // StrokeAttributes, the
+                    // createAreaGeometryForLineStartEnd() method does not
+                    // seem to fit very well here
+
+                    // AW: New interface, will create bezier polygons now
+                    aStrokedPolyPoly.append(basegfx::tools::createAreaGeometry(
+                        aPolyPoly.getB2DPolygon(i),
+                        strokeAttributes.StrokeWidth*0.5,
+                        b2DJoineFromJoin(strokeAttributes.JoinType),
+                        unoCapeFromCap(strokeAttributes.StartCapType)
+                        ));
+                }
+                rAct.maPolyPolys.push_back(aStrokedPolyPoly);
+                rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+
+                rAct.maFunction = &lcl_fillPolyPolygon;
+            }
         }
 
         // TODO(P1): Provide caching here.
