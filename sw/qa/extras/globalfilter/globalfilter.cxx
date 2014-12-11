@@ -165,6 +165,7 @@ void Test::testLinkedGraphicRT()
             if( aNodes[nIndex]->IsGrfNode() )
             {
                 SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+                CPPUNIT_ASSERT(pGrfNode);
                 // RT via DOCX makes linked graphic embedded?!
                 if( aFilterNames[nFilter] != "Office Open XML Text" )
                 {
