@@ -649,6 +649,28 @@ DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    // Check fixed property was imported and date value was parsed correctly
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, "IsFixed"));
+    com::sun::star::util::DateTime date = getProperty<com::sun::star::util::DateTime>(xField, "DateTimeValue");
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)24, date.Day);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)7, date.Month);
+    CPPUNIT_ASSERT_EQUAL((sal_Int16)2014, date.Year);
+
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // Previously, fixed fields were exported as static text ("Date (fixed)")
+        // Check they are now exported correctly as fldChar with fldLock attribute
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:fldChar", "fldLock", "true");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
