@@ -19,13 +19,18 @@
 package graphical;
 
 import complexlib.ComplexTestCase;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 
-abstract public class EnhancedComplexTestCase extends ComplexTestCase implements IDocument
+abstract public class EnhancedComplexTestCase extends ComplexTestCase
 {
 
+    /**
+     * Call this for each document
+     */
+    protected abstract void checkOneFile(String _sDocument, String _sResult, ParameterHelper _aParams) throws OfficeException;
 
 private void callEntry(String _sEntry, ParameterHelper _aParam)
 {

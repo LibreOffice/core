@@ -53,7 +53,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/common/NamedValueCollection       \
 	wizards/com/sun/star/wizards/common/ParaStyled       \
 	wizards/com/sun/star/wizards/common/PlaceholderTextElement       \
-	wizards/com/sun/star/wizards/common/TemplateElement       \
 	wizards/com/sun/star/wizards/common/TextElement       \
 	wizards/com/sun/star/wizards/db/DBMetaData					\
 	wizards/com/sun/star/wizards/db/CommandMetaData				\
@@ -89,7 +88,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/ui/UnoDialog					\
 	wizards/com/sun/star/wizards/ui/UnoDialog2					\
 	wizards/com/sun/star/wizards/ui/XFieldSelectionListener			\
-	wizards/com/sun/star/wizards/ui/XCompletion					\
 	wizards/com/sun/star/wizards/document/Control					\
 	wizards/com/sun/star/wizards/document/DatabaseControl				\
 	wizards/com/sun/star/wizards/document/FormHandler				\

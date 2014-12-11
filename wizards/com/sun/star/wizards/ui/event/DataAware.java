@@ -114,10 +114,6 @@ public abstract class DataAware {
         enableControls(ui);
     }
 
-    public interface Listener {
-        void eventPerformed(Object event);
-    }
-
     /**
      * compares the two given objects.
      * This method is null safe and returns true also if both are null...

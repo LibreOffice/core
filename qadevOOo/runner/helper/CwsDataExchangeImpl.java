@@ -22,16 +22,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import lib.TestParameters;
-import share.CwsDataExchange;
 import share.LogWriter;
 import util.PropertyName;
 import util.utils;
 
 /**
- * Implementation of the interface CwsDataExchange
- * @see share.CwsDataExchange
+ * Exchange information to the EIS database
+ *
  */
-public class CwsDataExchangeImpl implements CwsDataExchange
+public class CwsDataExchangeImpl
 {
 
     private final TestParameters param;
@@ -47,6 +46,10 @@ public class CwsDataExchangeImpl implements CwsDataExchange
         mDebug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
     }
 
+    /**
+     * Returns all module names which are added to the specified childworkspace
+     * @return a String array of all added modules
+     */
     public ArrayList<String> getModules()
     {
         // the cwstouched command send its version information to StdErr.
@@ -97,6 +100,10 @@ public class CwsDataExchangeImpl implements CwsDataExchange
         return moduleNames;
     }
 
+    /**
+     * Set the test status of cws related UnoAPI tests to the EIS dabase
+     * @param status the status of the UnoAPI test
+     */
     public void setUnoApiCwsStatus(boolean status)
     {
 
