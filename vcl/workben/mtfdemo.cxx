@@ -37,19 +37,17 @@ using namespace css;
 
 class DemoMtfWin : public WorkWindow
 {
-    GDIMetaFile *mpMtf;
+    GDIMetaFile maMtf;
 
 public:
-    DemoMtfWin(OUString& aFileName) :
-        WorkWindow(NULL, WB_APP | WB_STDWORK)
+    DemoMtfWin(OUString& aFileName)
+        : WorkWindow(NULL, WB_APP | WB_STDWORK)
     {
-
-
         SvFileStream aFileStream(aFileName, STREAM_READ);
 
         if (aFileStream.IsOpen())
         {
-            ReadWindowMetafile(aFileStream, *mpMtf);
+            ReadWindowMetafile(aFileStream, maMtf);
         }
         else
         {
@@ -62,7 +60,7 @@ public:
 
 void DemoMtfWin::Paint( const Rectangle& rRect )
 {
-    mpMtf->Play(this, mpMtf->GetActionSize());
+    maMtf.Play(this, maMtf.GetActionSize());
 
     WorkWindow::Paint( rRect );
 }
