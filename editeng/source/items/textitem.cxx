@@ -3084,6 +3084,14 @@ bool SvxCharRotateItem::operator==( const SfxPoolItem& rItem ) const
            IsFitToLine() == static_cast<const SvxCharRotateItem&>(rItem).IsFitToLine();
 }
 
+void SvxCharRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxCharRotateItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fitToLine"), BAD_CAST(OString::boolean(IsFitToLine()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
 
 /*************************************************************************
 |*    class SvxCharScaleItem

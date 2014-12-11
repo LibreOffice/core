@@ -74,6 +74,8 @@ public:
 
     bool IsFitToLine() const                { return bFitToLine; }
     void SetFitToLine( bool b )             { bFitToLine = b; }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif
