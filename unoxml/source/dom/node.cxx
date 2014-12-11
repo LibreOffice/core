@@ -913,6 +913,7 @@ namespace DOM
                 if (pNew->next != NULL)
                     pNew->next->prev = pNew;
                 pNew->parent = pOld->parent;
+                // coverity[var_deref_op] pNew->parent cannot be NULL here
                 if(pNew->parent->children == pOld)
                     pNew->parent->children = pNew;
                 if(pNew->parent->last == pOld)
