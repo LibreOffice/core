@@ -213,6 +213,7 @@ public:
     void testInsertNameList();
     void testCSV();
     void testMatrix();
+    void testMatrixComparisonWithErrors();
     void testEnterMixedMatrix();
     void testMatrixEditable();
 
@@ -494,6 +495,7 @@ public:
     CPPUNIT_TEST(testInsertNameList);
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
+    CPPUNIT_TEST(testMatrixComparisonWithErrors);
     CPPUNIT_TEST(testEnterMixedMatrix);
     CPPUNIT_TEST(testMatrixEditable);
     CPPUNIT_TEST(testPivotTable);
