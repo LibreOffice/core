@@ -3071,8 +3071,12 @@ class BroadcastBroadcastersHandler
     bool        mbBroadcasted;
 
 public:
-    explicit BroadcastBroadcastersHandler( ScHint& rHint ) :
-        mrHint(rHint), mrAddress(mrHint.GetAddress()) {}
+    explicit BroadcastBroadcastersHandler( ScHint& rHint )
+        : mrHint(rHint)
+        , mrAddress(mrHint.GetAddress())
+        , mbBroadcasted(false)
+    {
+    }
 
     void operator() ( size_t nRow, SvtBroadcaster* pBroadcaster )
     {
