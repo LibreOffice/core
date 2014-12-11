@@ -86,10 +86,25 @@ void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     SetInDoc( &rContext.GetDoc() );
 }
 
-SwUndoRenameBookmark::SwUndoRenameBookmark( const ::sw::mark::IMark& rBkmk, const OUString& rOldName )
+SwUndoDeleteBookmark::SwUndoDeleteBookmark( const ::sw::mark::IMark& rBkmk )
+    : SwUndoBookmark( UNDO_DELBOOKMARK, rBkmk )
+{
+}
+
+void SwUndoDeleteBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    SetInDoc( &rContext.GetDoc() );
+}
+
+void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    ResetInDoc( &rContext.GetDoc() );
+}
+
+SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName )
     : SwUndo( UNDO_BOOKMARK_RENAME )
     , m_sOldName( rOldName )
-    , m_sNewName( rBkmk.GetName() )
+    , m_sNewName( rNewName )
 {
 }
 

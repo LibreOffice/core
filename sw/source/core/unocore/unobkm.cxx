@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 
 #include <TextCursorHelper.hxx>
-#include <UndoBookmark.hxx>
 #include <unotextrange.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
@@ -32,7 +31,6 @@
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
 #include <IDocumentState.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <docsh.hxx>
@@ -349,15 +347,7 @@ throw (uno::RuntimeException, std::exception)
         *aPam.GetMark() = m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos();
     }
 
-    const OUString sOldName(m_pImpl->m_pRegisteredBookmark->GetName());
-    if (pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName))
-    {
-        if (m_pImpl->m_pDoc->GetIDocumentUndoRedo().DoesUndo())
-        {
-            m_pImpl->m_pDoc->GetIDocumentUndoRedo().AppendUndo(
-                    new SwUndoRenameBookmark(*m_pImpl->m_pRegisteredBookmark, sOldName));
-        }
-    }
+    pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName);
 }
 
 OUString SAL_CALL
