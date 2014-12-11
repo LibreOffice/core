@@ -68,7 +68,7 @@ void DemoMtfWin::Paint( const Rectangle& rRect )
 class DemoMtfApp : public Application
 {
     DemoMtfWin *mpWin;
-    OUString *mpFileName;
+    OUString maFileName;
 
     void showHelp()
     {
@@ -81,7 +81,6 @@ public:
 
     DemoMtfApp()
         : mpWin(NULL)
-        , mpFileName(NULL)
     {
     }
 
@@ -89,7 +88,7 @@ public:
     {
         try
         {
-            mpWin = new DemoMtfWin(*mpFileName);
+            mpWin = new DemoMtfWin(maFileName);
             mpWin->SetText(OUString("Display metafile"));
 
             mpWin->Show();
@@ -126,7 +125,7 @@ protected:
                 if (aArg == "--help" || aArg == "-h")
                     showHelp();
                 else
-                    mpFileName = new OUString(aArg);
+                    maFileName = aArg;
             }
 
             uno::Reference<uno::XComponentContext> xComponentContext
