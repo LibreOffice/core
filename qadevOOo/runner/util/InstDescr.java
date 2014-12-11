@@ -31,12 +31,6 @@ abstract public class InstDescr {
     protected abstract String getName();
 
     /**
-     * the method getIfcClass
-     */
-    public Class<?> getIfcClass()  {
-        return ifcClass;
-    }
-    /**
      * the method getService
      */
     protected abstract String getService();

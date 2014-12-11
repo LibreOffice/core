@@ -38,12 +38,7 @@ public interface LogWriter {
     boolean summary(share.DescEntry entry);
 
 
-    /**
-     * Returns the <CODE>Watcher</CODE> which is associated with this logger
-     * @see share.Watcher
-     * @return the associated <CODE>Watcher</CODE>
-     */
-    Object getWatcher();
+
 
     /**
      * Set a <CODE>Watcher</CODE> to the <CODE>LogWriter</CODE>

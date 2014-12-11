@@ -51,15 +51,6 @@ public class XMLTools {
          */
         public AttributeList() {}
 
-        /**
-         * Constructs a list which will report to <code>log</code>
-         * specified about each <code>XDocumentHandler</code> method
-         * call.
-         */
-        public AttributeList(PrintWriter log) {
-            this.log = log ;
-        }
-
         private AttributeList(XAttributeList list) {
             if (list == null) return ;
             for (short i = 0; i < list.getLength(); i++) {
@@ -468,20 +459,6 @@ public class XMLTools {
 
         /**
          * Creates a tag with the name specified, which must have an
-         * attribute with name specified. The value of this attribute
-         * doesn't make sense.
-         * @param tagName The name of the tag.
-         * @param attrName The name of attribute which must be contained
-         * in the tag.
-         */
-        public Tag(String tagName, String attrName) {
-            name = tagName ;
-            attrList = new String[1][3] ;
-            attrList[0][0] = attrName ;
-        }
-
-        /**
-         * Creates a tag with the name specified, which must have an
          * attribute with the value specified. The type of value
          * assumed to be 'CDATA'.
          * @param tagName The name of the tag.
@@ -495,43 +472,6 @@ public class XMLTools {
             attrList[0][0] = attrName ;
             attrList[0][1] = "CDATA" ;
             attrList[0][2] = attrValue ;
-        }
-
-        /**
-         * Creates a tag with the name specified, which must have
-         * attributes specified. The value of thesee attributes
-         * doesn't make sense.
-         * @param tagName The name of the tag.
-         * @param attrNames Array with names of attributes which must
-         * be contained in the tag.
-         */
-        public Tag(String tagName, String[] attrNames) {
-            name = tagName ;
-            attrList = new String[attrNames.length][3] ;
-            for (int i = 0; i < attrNames.length; i++) {
-                attrList[i][0] = attrNames[i] ;
-            }
-        }
-
-        /**
-         * Creates a tag with the name specified, which must have an
-         * attributes with their values specified. The type of all values
-         * assumed to be 'CDATA'.
-         * @param tagName The name of the tag.
-         * @param attrValues An array with attribute names and their values.
-         * <code>attrValues[N][0]</code> element contains the name of Nth
-         * attribute, and <code>attrValues[N][1]</code> element contains
-         * value of Nth attribute, if value is <code>null</code> then the
-         * attribute value can be any.
-         */
-        public Tag(String tagName, String[][] attrValues) {
-            name = tagName ;
-            attrList = new String[attrValues.length][3] ;
-            for (int i = 0; i < attrValues.length; i++) {
-                attrList[i][0] = attrValues[i][0] ;
-                attrList[i][1] = "CDATA" ;
-                attrList[i][2] = attrValues[i][1] ;
-            }
         }
 
         /**

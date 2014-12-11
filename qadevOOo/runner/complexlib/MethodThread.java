@@ -40,19 +40,6 @@ public class MethodThread extends Thread
     private boolean mExceptionHappened = false;
     private Object[] mParameter = null;
 
-    /**
-     * Constructor.
-     * @param testMethod The method that will be invoked.
-     * @param invokeClass The class where the method is invoked.
-     * @param log The logging mechanism.
-     */
-    public MethodThread(Method testMethod, Object invokeClass, PrintWriter log)
-    {
-        mTestMethod = testMethod;
-        mInvokeClass = invokeClass;
-        mLog = log;
-    }
-
     public MethodThread(Method testMethod, Object invokeClass, Object[] parameter, PrintWriter log)
     {
         mTestMethod = testMethod;

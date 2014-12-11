@@ -24,7 +24,5 @@ public interface ComplexTest {
 
     String[] getTestMethodNames();
 
-    String getTestObjectName();
-
 }
 

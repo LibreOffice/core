@@ -119,7 +119,6 @@ public class ProcessHandler
     private int exitValue = -1;
     private boolean isFinished = false;
     private boolean isStarted = false;
-    private boolean mbTimedOut = false;
     private long mTimeOut = 0;
     private String stdInBuff = "";
     private Pump stdout = null;
@@ -145,57 +144,6 @@ public class ProcessHandler
     }
 
     /**
-     * Creates instance with specified external command
-     * including parameters as an array.
-     * Debug info and output
-     * of external command is printed to stdout.
-     */
-    public ProcessHandler(String[] cmdLines)
-    {
-        this(null, null, null, null, 0);
-        cmdLineArray = cmdLines;
-    }
-
-    /**
-     * Creates instance with specified external command
-     * including parameters as an array, with environment
-     * variables.
-     * Debug info and output
-     * of external command is printed to stdout.
-     * @see java.lang.Runtime exec(String[], String[])
-     */
-    public ProcessHandler(String[] cmdLines, String[] envVars)
-    {
-        this(null, null, null, envVars, 0);
-        cmdLineArray = cmdLines;
-    }
-
-    /**
-     * Creates instance with specified external command
-     * including parameters as an array, with environment
-     * variables. The command will be started in workDir.
-     * Debug info and output
-     * of external command is printed to stdout.
-     */
-    public ProcessHandler(String[] cmdLines, File workDir)
-    {
-        this(null, null, workDir, null, 0);
-        cmdLineArray = cmdLines;
-
-    }
-
-    /**
-     * Creates instance with specified external command and
-     * log stream where debug info and output
-     * of external command is printed out.  The command will be started in workDir.
-     */
-    public ProcessHandler(String[] cmdLines, PrintWriter log, File workDir)
-    {
-        this(null, log, workDir, null, 0);
-        cmdLineArray = cmdLines;
-    }
-
-    /**
      * Creates instance with specified external command and
      * log stream where debug info and output
      * of external command is printed out.
@@ -211,40 +159,6 @@ public class ProcessHandler
     public ProcessHandler(String cmdLine, int timeOut)
     {
         this(cmdLine, null, null, null, timeOut);
-    }
-
-    /**
-     * Creates instance with specified external command which
-     * will be executed in the some work directory.
-     * Debug info and output
-     * of external commandis printed to stdout.
-     */
-    public ProcessHandler(String cmdLine, File workDir)
-    {
-        this(cmdLine, null, workDir, null, 0);
-    }
-
-    /**
-     * Creates instance with specified external command which
-     * will be executed in the some work directory.
-     * Debug info and output printed in log stream.
-     */
-    public ProcessHandler(String cmdLine, PrintWriter log, File workDir)
-    {
-        this(cmdLine, log, workDir, null, 0);
-    }
-
-    /**
-     * Creates instance with specified external command which
-     * will be executed in the some work directory  and
-     * log stream where debug info and output
-     * of external command is printed .
-     * The specified environment variables are set for the new process.
-     * If log stream is null, logging is printed to stdout.
-     */
-    public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars)
-    {
-        this(cmdLine, log, workDir, envVars, 0);
     }
 
     /**
@@ -323,22 +237,6 @@ public class ProcessHandler
     }
 
     /**
-     * If not equal 0, the time to maximal wait.
-     */
-    public void setProcessTimeout(int _n)
-    {
-        m_nProcessTimeout = _n;
-    }
-
-    /**
-     * This command will call after ProcessTimeout is arrived.
-     */
-    public void setProcessKiller(String _s)
-    {
-        m_sProcessKiller = _s;
-    }
-
-    /**
      * This method do an asynchronous execution of the commands. To avoid a interruption on long running processes
      * caused by <CODE>OfficeWatcher</CODE>, the OfficeWatcher get frequently a ping.
      * @see helper.OfficeWatcher
@@ -392,16 +290,6 @@ public class ProcessHandler
             dbg("runCommand Process is not finished but there are no changes in output stream.");
             this.kill();
         }
-    }
-
-    public boolean isTimedOut()
-    {
-        return mbTimedOut;
-    }
-
-    private void setTimedOut(boolean bTimedOut)
-    {
-        mbTimedOut = bTimedOut;
     }
 
     /**
@@ -476,26 +364,6 @@ public class ProcessHandler
         isStarted = false;
     }
 
-    /**
-     * Returns the time in seconds since 1st January 1970
-     */
-    private static long getSystemTime()
-    {
-        final long nTime = System.currentTimeMillis();
-        return nTime;
-    }
-    private long m_nExactStartTimeInMillisec;
-
-    private void initialExactStartTime()
-    {
-        m_nExactStartTimeInMillisec = getSystemTime();
-    }
-
-    public long getProcessStartTime()
-    {
-        return m_nExactStartTimeInMillisec;
-    }
-
     private void showEnvVars()
     {
         if (envVars != null)
@@ -530,7 +398,6 @@ public class ProcessHandler
                 }
                 showEnvVars();
                 log.println("");
-                initialExactStartTime();
                 initializeProcessKiller();
                 m_aProcess = runtime.exec(cmdLineArray, envVars);
             }
@@ -650,7 +517,6 @@ public class ProcessHandler
                 }
                 if (timeout < 0)
                 {
-                    setTimedOut(true);
                     log.println("The process has timed out!");
                 }
             }

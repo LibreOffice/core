@@ -67,14 +67,6 @@ public class TestResult {
     }
 
     /**
-     * @return methods available in the interface tested.
-     */
-    public String[] getTestedMethods() {
-        return testedMethods.keySet().toArray(
-                new String[testedMethods.size()]);
-    }
-
-    /**
      * @return <tt>true</tt> if the method belongs to the interface tested,
      * <tt>false</tt> otherwise.
      */

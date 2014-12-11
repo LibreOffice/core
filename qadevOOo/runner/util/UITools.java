@@ -205,26 +205,6 @@ public class UITools {
         }
      }
 
-      /**
-       * returns the message of a Basic-MessageBox
-       * @return the message of a Basic-MessageBox
-       * @throws java.lang.Exception if something fail
-       */
-     public String getMsgBoxText()
-        throws java.lang.Exception
-     {
-        try{
-            XAccessibleContext xMessage =AccessibilityTools.getAccessibleObjectForRole(mXRoot,
-                                     AccessibleRole.LABEL);
-
-            XInterface xMessageInterface = UnoRuntime.queryInterface(XInterface.class, xMessage);
-
-            return getString(xMessageInterface);
-         } catch (Exception e) {
-            throw new Exception("Could not get message from Basic-MessageBox:", e);
-        }
-     }
-
     /**
      * Prints the accessible tree to the <CODE>logWriter</CODE> only if <CODE>debugIsActive</CODE>
      * is set to <CODE>true</CODE>

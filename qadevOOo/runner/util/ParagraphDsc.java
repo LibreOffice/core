@@ -37,11 +37,6 @@ public class ParagraphDsc extends InstDescr {
         initParagraph();
     }
 
-    public ParagraphDsc( String name ) {
-        this.name = name;
-        initParagraph();
-    }
-
     @Override
     public String getName() {
         return name;

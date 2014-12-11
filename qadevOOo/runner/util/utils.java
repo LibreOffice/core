@@ -193,24 +193,7 @@ public class utils {
         return fulldocURL;
     }
 
-    /**
-     *
-     * This method creates folders needed
-     *
-     */
-    public static void make_Directories(String first, String path) {
-        String already_done = null;
-        String fs = System.getProperty("file.separator");
-        StringTokenizer path_tokenizer = new StringTokenizer(path, fs, false);
-        already_done = first;
-        while (path_tokenizer.hasMoreTokens()) {
-            String part = path_tokenizer.nextToken();
-            File new_dir = new File(already_done + File.separatorChar + part);
-            already_done = new_dir.toString();
-            //create the directory
-            new_dir.mkdirs();
-        }
-    }
+
 
 
 

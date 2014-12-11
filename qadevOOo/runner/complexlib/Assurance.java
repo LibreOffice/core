@@ -52,28 +52,6 @@ public class Assurance
         assure(msg, s, false);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Assure that two int values are equal
      * @param message the message to print when the equality test fails
@@ -84,12 +62,6 @@ public class Assurance
         assureEquals( message, Integer.valueOf( expected ), Integer.valueOf( actual ), false );
     }
 
-
-
-
-
-
-
     /**
      * Assure that two string values are equal
      * @param message the message to print when the equality test fails
@@ -99,10 +71,6 @@ public class Assurance
     protected void assureEquals( String message, String expected, String actual ) {
         assureEquals( message, expected, actual, false );
     }
-
-
-
-
 
     /**
      * assures the two given sequences are of equal length, and have equal content
@@ -116,8 +84,6 @@ public class Assurance
             assureEquals( i_message + ": mismatch at element pos " + i, i_expected[i], i_actual[i], i_continue );
         }
     }
-
-
 
     /**
      * Mark the currently executed method as failed.
@@ -172,9 +138,6 @@ public class Assurance
 
         private AssureException(String msg) {
             super(msg);
-        }
-        public AssureException(Throwable cause) {
-            super(cause);
         }
     }
 }

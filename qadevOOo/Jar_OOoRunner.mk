@@ -45,7 +45,6 @@ $(eval $(call gb_Jar_set_packageroot,OOoRunner,\
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
-    qadevOOo/runner/base/java_cmp \
     qadevOOo/runner/base/java_complex \
     qadevOOo/runner/base/java_fat \
     qadevOOo/runner/base/java_fat_service \
@@ -54,72 +53,10 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/complexlib/ComplexTestCase \
     qadevOOo/runner/complexlib/MethodThread \
     qadevOOo/runner/complexlib/ShowTargets \
-    qadevOOo/runner/convwatch/BorderRemover \
-    qadevOOo/runner/convwatch/BuildID \
-    qadevOOo/runner/convwatch/ConvWatch \
-    qadevOOo/runner/convwatch/ConvWatchCancelException \
-    qadevOOo/runner/convwatch/ConvWatchException \
-    qadevOOo/runner/convwatch/ConvWatchStarter \
-    qadevOOo/runner/convwatch/CrashLoopTest \
-    qadevOOo/runner/convwatch/DateHelper \
     qadevOOo/runner/convwatch/DB \
     qadevOOo/runner/convwatch/DBHelper \
-    qadevOOo/runner/convwatch/DirectoryHelper \
-    qadevOOo/runner/convwatch/DocumentConverter \
-    qadevOOo/runner/convwatch/EnhancedComplexTestCase \
-    qadevOOo/runner/convwatch/FileHelper \
-    qadevOOo/runner/convwatch/FilenameHelper \
-    qadevOOo/runner/convwatch/GfxCompare \
     qadevOOo/runner/convwatch/GlobalLogWriter \
-    qadevOOo/runner/convwatch/GraphicalDifferenceCheck \
-    qadevOOo/runner/convwatch/GraphicalTestArguments \
-    qadevOOo/runner/convwatch/HTMLOutputter \
-    qadevOOo/runner/convwatch/ImageHelper \
-    qadevOOo/runner/convwatch/IniFile \
-    qadevOOo/runner/convwatch/INIOutputter \
-    qadevOOo/runner/convwatch/LISTOutputter \
-    qadevOOo/runner/convwatch/MSOfficePrint \
-    qadevOOo/runner/convwatch/NameHelper \
-    qadevOOo/runner/convwatch/OfficePrint \
-    qadevOOo/runner/convwatch/PerformanceContainer \
-    qadevOOo/runner/convwatch/PixelCounter \
-    qadevOOo/runner/convwatch/PRNCompare \
-    qadevOOo/runner/convwatch/PropertyName \
-    qadevOOo/runner/convwatch/ReferenceBuilder \
-    qadevOOo/runner/convwatch/ReportDesignerTest \
-    qadevOOo/runner/convwatch/SimpleFileSemaphore \
-    qadevOOo/runner/convwatch/StatusHelper \
-    qadevOOo/runner/convwatch/TimeHelper \
-    qadevOOo/runner/convwatch/TriState \
-    qadevOOo/runner/convwatch/ValueNotFoundException \
-    qadevOOo/runner/graphical/BuildID \
-    qadevOOo/runner/graphical/DateHelper \
-    qadevOOo/runner/graphical/DirectoryHelper \
-    qadevOOo/runner/graphical/EnhancedComplexTestCase \
     qadevOOo/runner/graphical/FileHelper \
-    qadevOOo/runner/graphical/GlobalLogWriter \
-    qadevOOo/runner/graphical/GraphicalComparator \
-    qadevOOo/runner/graphical/HTMLResult \
-    qadevOOo/runner/graphical/ImageHelper \
-    qadevOOo/runner/graphical/IniFile \
-    qadevOOo/runner/graphical/IOffice \
-    qadevOOo/runner/graphical/JPEGComparator \
-    qadevOOo/runner/graphical/JPEGCreator \
-    qadevOOo/runner/graphical/JPEGEvaluator \
-    qadevOOo/runner/graphical/MSOfficePostscriptCreator \
-    qadevOOo/runner/graphical/Office \
-    qadevOOo/runner/graphical/OfficeException \
-    qadevOOo/runner/graphical/OpenOfficeDatabaseReportExtractor \
-    qadevOOo/runner/graphical/OpenOfficePostscriptCreator \
-    qadevOOo/runner/graphical/ParameterHelper \
-    qadevOOo/runner/graphical/PerformanceContainer \
-    qadevOOo/runner/graphical/PixelCounter \
-    qadevOOo/runner/graphical/PostscriptCreator \
-    qadevOOo/runner/graphical/PropertyName \
-    qadevOOo/runner/graphical/TimeHelper \
-    qadevOOo/runner/graphical/Tolerance \
-    qadevOOo/runner/graphical/WrongEnvironmentException \
-    qadevOOo/runner/graphical/WrongSuffixException \
     qadevOOo/runner/helper/APIDescGetter \
     qadevOOo/runner/helper/AppProvider \
     qadevOOo/runner/helper/BuildEnvTools \
@@ -131,9 +68,7 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/helper/ContextMenuInterceptor \
     qadevOOo/runner/helper/CwsDataExchangeImpl \
     qadevOOo/runner/helper/FileTools \
-    qadevOOo/runner/helper/InetTools \
     qadevOOo/runner/helper/LoggingThread \
-    qadevOOo/runner/helper/ObjectInspectorModelImpl \
     qadevOOo/runner/helper/OfficeProvider \
     qadevOOo/runner/helper/OfficeWatcher \
     qadevOOo/runner/helper/OSHelper \
@@ -141,8 +76,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/helper/ProcessHandler \
     qadevOOo/runner/helper/PropertyHandlerFactroy \
     qadevOOo/runner/helper/PropertyHandlerImpl \
-    qadevOOo/runner/helper/PropertyHelper \
-    qadevOOo/runner/helper/SimpleMailSender \
     qadevOOo/runner/helper/StreamSimulator \
     qadevOOo/runner/helper/StringHelper \
     qadevOOo/runner/helper/UnoProvider \
@@ -152,7 +85,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/lib/ExceptionStatus \
     qadevOOo/runner/lib/MultiMethodTest \
     qadevOOo/runner/lib/MultiPropertyTest \
-    qadevOOo/runner/lib/Parameters \
     qadevOOo/runner/lib/SimpleStatus \
     qadevOOo/runner/lib/Status \
     qadevOOo/runner/lib/StatusException \
@@ -167,26 +99,14 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/share/DescGetter \
     qadevOOo/runner/share/LogWriter \
     qadevOOo/runner/share/Watcher \
-    qadevOOo/runner/stats/ComplexDataBaseOutProducer \
-    qadevOOo/runner/stats/DataBaseOutProducer \
-    qadevOOo/runner/stats/FatDataBaseOutProducer \
-    qadevOOo/runner/stats/FileLogWriter \
     qadevOOo/runner/stats/InternalLogWriter \
     qadevOOo/runner/stats/OutProducerFactory \
-    qadevOOo/runner/stats/SimpleFileOutProducer \
     qadevOOo/runner/stats/SimpleLogWriter \
     qadevOOo/runner/stats/SimpleOutProducer \
-    qadevOOo/runner/stats/SQLExecution \
     qadevOOo/runner/stats/Summarizer \
     qadevOOo/runner/util/AccessibilityTools \
-    qadevOOo/runner/util/BasicMacroTools \
     qadevOOo/runner/util/BookmarkDsc \
     qadevOOo/runner/util/CalcTools \
-    qadevOOo/runner/util/compare/DocComparator \
-    qadevOOo/runner/util/compare/DocComparatorFactory \
-    qadevOOo/runner/util/compare/GraphicalComparator \
-    qadevOOo/runner/util/compare/PDFComparator \
-    qadevOOo/runner/util/ControlDsc \
     qadevOOo/runner/util/db/DatabaseDocument \
     qadevOOo/runner/util/db/DataSource \
     qadevOOo/runner/util/db/DataSourceDescriptor \
@@ -203,11 +123,9 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/runner/util/InstDescr \
     qadevOOo/runner/util/ParagraphDsc \
     qadevOOo/runner/util/PropertyName \
-    qadevOOo/runner/util/ReferenceMarkDsc \
     qadevOOo/runner/util/RegistryTools \
     qadevOOo/runner/util/ShapeDsc \
     qadevOOo/runner/util/SOfficeFactory \
-    qadevOOo/runner/util/StyleFamilyDsc \
     qadevOOo/runner/util/SysUtils \
     qadevOOo/runner/util/TableDsc \
     qadevOOo/runner/util/TextSectionDsc \

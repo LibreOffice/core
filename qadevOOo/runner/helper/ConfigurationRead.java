@@ -19,7 +19,6 @@ package helper;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XHierarchicalNameAccess;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyState;
@@ -70,21 +69,6 @@ public class ConfigurationRead {
     public ConfigurationRead(XMultiServiceFactory xMSF) {
         this(xMSF, "org.openoffice.Setup");
     }
-
-
-
-
-    /**
-     * Get the elements of the root node.
-     * @return All elements of the root node.
-     */
-    public String[] getRootNodeNames() {
-        XNameAccess xName = UnoRuntime.queryInterface(XNameAccess.class, root);
-        String[]names = xName.getElementNames();
-        return names;
-    }
-
-
 
     /**
      * Get contents of a node by its hierarchical name.

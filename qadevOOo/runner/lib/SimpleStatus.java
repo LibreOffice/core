@@ -37,11 +37,6 @@ class SimpleStatus {
     public final static int EXCEPTION = 3;
 
     /**
-     * The constant represents EXCLUDED runtime state.
-     */
-    public final static int EXCLUDED = 2;
-
-    /**
      * The constant represents SKIPPED runtime state.
      */
     public final static int SKIPPED = 1;
@@ -84,8 +79,6 @@ class SimpleStatus {
         this.runState = runState;
         if ( runState == PASSED ) {
             runStateString = "PASSED";
-        } else if ( runState == EXCLUDED ) {
-            runStateString = "EXCLUDED";
         } else if ( runState == SKIPPED ) {
             runStateString = "SKIPPED";
         } else if ( runState == EXCEPTION ) {
