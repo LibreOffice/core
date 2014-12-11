@@ -469,6 +469,10 @@ void SAL_CALL java_env_disposing(uno_Environment * env) {
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
+    // JavaComponentLoader::getJavaLoader (in
+    // stoc/source/javaloader/javaloader.cxx) stores a
+    // jvmaccess::UnoVirtualMachine pointer into java_env->pContext; replace it
+    // here with a pointer to a full JniUnoEnvironmentData:
     auto * envData = new jni_uno::JniUnoEnvironmentData(
         static_cast<jvmaccess::UnoVirtualMachine *>(java_env->pContext));
     java_env->pContext = envData;
