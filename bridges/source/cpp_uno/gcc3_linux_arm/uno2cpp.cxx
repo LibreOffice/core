@@ -408,7 +408,7 @@ static void cpp_call(
 
     if (pReturnTypeDescr)
     {
-        bool bSimpleReturn = !arm::return_in_hidden_param( pReturnTypeRef )
+        bool bSimpleReturn = !arm::return_in_hidden_param( pReturnTypeRef );
 
         if (bSimpleReturn)
             pCppReturn = pUnoReturn; // direct way for simple types
