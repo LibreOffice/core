@@ -622,7 +622,7 @@ bool ImplSdPPTImport::Import()
                         sal_uInt32 nTitleInstance = TSS_TYPE_PAGETITLE;
                         sal_uInt32 nOutlinerInstance = TSS_TYPE_BODY;
                         const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
-                        bool bSwapStyleSheet = pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE;
+                        bool bSwapStyleSheet = pSlideLayout->eLayout == PptSlideLayout::TITLEMASTERSLIDE;
                         if ( bSwapStyleSheet )
                         {
                             nTitleInstance = TSS_TYPE_TITLE;
@@ -1006,9 +1006,9 @@ bool ImplSdPPTImport::Import()
                     SetPageNum( nMaster, PPT_MASTERPAGE );
                     if ( !pFoundMaster )
                         pFoundMaster = pMaster;
-                    else if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
+                    else if ( GetSlideLayoutAtom()->eLayout == PptSlideLayout::TITLEMASTERSLIDE )
                         pFoundMaster = pMaster;
-                    if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
+                    if ( GetSlideLayoutAtom()->eLayout == PptSlideLayout::TITLEMASTERSLIDE )
                         break;
                 }
             }
@@ -1043,7 +1043,7 @@ bool ImplSdPPTImport::Import()
             {
                 switch ( pSlideLayout->eLayout )            // presentation layout for standard pages
                 {
-                    case PPT_LAYOUT_TITLEANDBODYSLIDE :
+                    case PptSlideLayout::TITLEANDBODYSLIDE :
                     {
                         eAutoLayout = AUTOLAYOUT_ENUM;
                         sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
@@ -1071,7 +1071,7 @@ bool ImplSdPPTImport::Import()
                     }
                     break;
 
-                    case PPT_LAYOUT_2COLUMNSANDTITLE :
+                    case PptSlideLayout::TWOCOLUMNSANDTITLE :
                     {
                         eAutoLayout = AUTOLAYOUT_2TEXT;
                         sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
@@ -1097,7 +1097,7 @@ bool ImplSdPPTImport::Import()
                     }
                     break;
 
-                    case PPT_LAYOUT_2ROWSANDTITLE :
+                    case PptSlideLayout::TWOROWSANDTITLE :
                     {
                         eAutoLayout = AUTOLAYOUT_2TEXT;
                         sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
@@ -1109,41 +1109,41 @@ bool ImplSdPPTImport::Import()
                     }
                     break;
 
-                    case PPT_LAYOUT_TITLESLIDE :
+                    case PptSlideLayout::TITLESLIDE :
                         eAutoLayout = AUTOLAYOUT_TITLE;
                     break;
-                    case PPT_LAYOUT_ONLYTITLE :
+                    case PptSlideLayout::ONLYTITLE :
                         eAutoLayout = AUTOLAYOUT_ONLY_TITLE;
                     break;
-                    case PPT_LAYOUT_RIGHTCOLUMN2ROWS :
+                    case PptSlideLayout::RIGHTCOLUMN2ROWS :
                         eAutoLayout = AUTOLAYOUT_TEXT2OBJ;
                     break;
-                    case PPT_LAYOUT_LEFTCOLUMN2ROWS :
+                    case PptSlideLayout::LEFTCOLUMN2ROWS :
                         eAutoLayout = AUTOLAYOUT_2OBJTEXT;
                     break;
-                    case PPT_LAYOUT_TOPROW2COLUMN :
+                    case PptSlideLayout::TOPROW2COLUMN :
                         eAutoLayout = AUTOLAYOUT_2OBJOVERTEXT;
                     break;
-                    case PPT_LAYOUT_4OBJECTS :
+                    case PptSlideLayout::FOUROBJECTS :
                         eAutoLayout = AUTOLAYOUT_4OBJ;
                     break;
-                    case PPT_LAYOUT_BIGOBJECT :
+                    case PptSlideLayout::BIGOBJECT :
                         eAutoLayout = AUTOLAYOUT_OBJ;
                     break;
-                    case PPT_LAYOUT_TITLERIGHTBODYLEFT :
+                    case PptSlideLayout::TITLERIGHTBODYLEFT :
                         eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE; // AUTOLAYOUT_ENUM;
                     break;
-                    case PPT_LAYOUT_TITLERIGHT2BODIESLEFT :
+                    case PptSlideLayout::TITLERIGHT2BODIESLEFT :
                         eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART; // AUTOLAYOUT_TEXT2OBJ;
                     break;
 
-                    case PPT_LAYOUT_BOTTOMROW2COLUMNS :
-                    case PPT_LAYOUT_BLANCSLIDE :
-                    case PPT_LAYOUT_MASTERSLIDE :           // layout of the standard and title master page
-                    case PPT_LAYOUT_TITLEMASTERSLIDE :
-                    case PPT_LAYOUT_MASTERNOTES :           // layout of the note master page
-                    case PPT_LAYOUT_NOTESTITLEBODY :        // presentation layout for note pages
-                    case PPT_LAYOUT_HANDOUTLAYOUT :         // presentation layout for handout
+                    case PptSlideLayout::BOTTOMROW2COLUMNS :
+                    case PptSlideLayout::BLANCSLIDE :
+                    case PptSlideLayout::MASTERSLIDE :           // layout of the standard and title master page
+                    case PptSlideLayout::TITLEMASTERSLIDE :
+                    case PptSlideLayout::MASTERNOTES :           // layout of the note master page
+                    case PptSlideLayout::NOTESTITLEBODY :        // presentation layout for note pages
+                    case PptSlideLayout::HANDOUTLAYOUT :         // presentation layout for handout
                         eAutoLayout = AUTOLAYOUT_NONE;
                     break;
                 }
@@ -1381,7 +1381,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
         {
             bool bVisible = pHFE->IsToDisplay( i );
             if ( ( eAktPageKind == PPT_SLIDEPAGE )
-                && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PPT_LAYOUT_TITLESLIDE )
+                && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PptSlideLayout::TITLESLIDE )
                     && ( aDocAtom.bTitlePlaceholdersOmitted  ) )
             {
                 bVisible = false;
@@ -2406,12 +2406,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                                     case 1:
                                     {
-                                        if ( pSlideLayout->eLayout == PPT_LAYOUT_TITLEANDBODYSLIDE )
+                                        if ( pSlideLayout->eLayout == PptSlideLayout::TITLEANDBODYSLIDE )
                                         {   // position in outline area
                                             if ( aLogicRect != aOutlineRect )
                                                 pPresObj->SetUserCall( NULL );
                                         }
-                                        else if ( pSlideLayout->eLayout == PPT_LAYOUT_2COLUMNSANDTITLE )
+                                        else if ( pSlideLayout->eLayout == PptSlideLayout::TWOCOLUMNSANDTITLE )
                                         {   // position in outline area left
                                             if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
                                                 std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
@@ -2422,7 +2422,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                                 pPresObj->SetUserCall(NULL);
                                             }
                                         }
-                                        else if ( pSlideLayout->eLayout == PPT_LAYOUT_2ROWSANDTITLE )
+                                        else if ( pSlideLayout->eLayout == PptSlideLayout::TWOROWSANDTITLE )
                                         {   // position in outline area top
                                             if (std::abs(aLogicRect.Left()  - aOutlineRect.Left())  > MAX_USER_MOVE ||
                                                 std::abs(aLogicRect.Top()   - aOutlineRect.Top())   > MAX_USER_MOVE ||
@@ -2441,7 +2441,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                                     case 2:
                                     {
-                                        if ( pSlideLayout->eLayout == PPT_LAYOUT_2COLUMNSANDTITLE )
+                                        if ( pSlideLayout->eLayout == PptSlideLayout::TWOCOLUMNSANDTITLE )
                                         {   // position in outline area right
                                             if (std::abs(aLogicRect.Right()  - aOutlineRect.Right())  > MAX_USER_MOVE ||
                                                 std::abs(aLogicRect.Top()    - aOutlineRect.Top())    > MAX_USER_MOVE ||
@@ -2452,7 +2452,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                                 pPresObj->SetUserCall( NULL );
                                             }
                                         }
-                                        else if ( pSlideLayout->eLayout == PPT_LAYOUT_2ROWSANDTITLE )
+                                        else if ( pSlideLayout->eLayout == PptSlideLayout::TWOROWSANDTITLE )
                                         {   // position in outline area bottom
                                             if (std::abs(aLogicRect.Left()   - aOutlineRect.Left())   > MAX_USER_MOVE ||
                                                 std::abs(aLogicRect.Bottom() - aOutlineRect.Bottom()) > MAX_USER_MOVE ||
