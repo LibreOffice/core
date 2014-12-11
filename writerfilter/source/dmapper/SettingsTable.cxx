@@ -21,6 +21,10 @@
 #include <rtl/ustring.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <SettingsTable.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ConversionHelper.hxx>
@@ -75,6 +79,7 @@ struct SettingsTable_Impl
     bool                embedSystemFonts;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bNoColumnBalance;
+    bool                m_bAutoHyphenation;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
@@ -106,6 +111,7 @@ struct SettingsTable_Impl
     , embedSystemFonts(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bNoColumnBalance(false)
+    , m_bAutoHyphenation(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_pThemeFontLangProps(3)
@@ -281,6 +287,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_noColumnBalance:
         m_pImpl->m_bNoColumnBalance = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_autoHyphenation:
+        m_pImpl->m_bAutoHyphenation = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_WRITERFILTER
@@ -375,6 +384,21 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     // Record changes value
     if (xDocProps.is())
         xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
+
+    // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
+    if (m_pImpl->m_bAutoHyphenation)
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDoc, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameContainer> xParagraphStyles = xStyleFamilies->getByName("ParagraphStyles").get< uno::Reference<container::XNameContainer> >();
+        uno::Reference<style::XStyle> xDefault = xParagraphStyles->getByName("Standard").get< uno::Reference<style::XStyle> >();
+        uno::Reference<beans::XPropertyState> xPropertyState(xDefault, uno::UNO_QUERY);
+        if (xPropertyState->getPropertyState("ParaIsHyphenation") == beans::PropertyState_DEFAULT_VALUE)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
+            xPropertySet->setPropertyValue("ParaIsHyphenation", uno::makeAny(true));
+        }
+    }
 }
 
 
