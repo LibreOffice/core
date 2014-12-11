@@ -187,9 +187,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         }
         for(sal_uInt16 i = 0 ; i <= TOX_AUTHORITIES; i++)
         {
-         uno::Reference< beans::XPropertySet >  xSectPr(pxIndexSectionsArr[i]->xContainerSection, uno::UNO_QUERY);
-            uno::Any aVal;
-
+            uno::Reference< beans::XPropertySet >  xSectPr(pxIndexSectionsArr[i]->xContainerSection, uno::UNO_QUERY);
             if(xSectPr.is())
             {
                 xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, makeAny(i == nTOXIndex));
