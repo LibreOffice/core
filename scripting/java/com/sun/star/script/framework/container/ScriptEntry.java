@@ -31,7 +31,7 @@ public class ScriptEntry implements Cloneable {
 
     private Map<String, String> languagedepprops;
 
-    private ScriptEntry(String language, String languagename,
+    public  ScriptEntry(String language, String languagename,
                        String location) {
 
         this.language = language;
@@ -105,7 +105,7 @@ public class ScriptEntry implements Cloneable {
         return language;
     }
 
-    private String getLocation() {
+    public  String getLocation() {
         return location;
     }
 

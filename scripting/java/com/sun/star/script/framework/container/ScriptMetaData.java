@@ -62,7 +62,7 @@ public class ScriptMetaData extends ScriptEntry {
         return (source != null && hasSource) ? source : null;
     }
 
-    private byte[] getSourceBytes() {
+    public  byte[] getSourceBytes() {
         return (source != null && hasSource) ? source.getBytes() : null;
     }
 
@@ -126,7 +126,7 @@ public class ScriptMetaData extends ScriptEntry {
         return result;
     }
 
-    private String getLocationPlaceHolder() {
+    public String getLocationPlaceHolder() {
         String placeHolder = "Unknown";
         String pathToParcel = parent.getPathToParcel();
 
