@@ -41,13 +41,9 @@ public class LOKitThread extends Thread {
             return;
         }
 
-        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-        DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
-        mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
-        mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
-
         mLayerClient.setPageRect(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-        mLayerClient.setViewportMetrics(mLayerClient.getViewportMetrics());
+        mViewportMetrics = mLayerClient.getViewportMetrics();
+        mLayerClient.setViewportMetrics(mViewportMetrics.setZoomFactor(mViewportMetrics.getWidth() / mViewportMetrics.getPageWidth()));
         mLayerClient.forceRedraw();
     }
 
