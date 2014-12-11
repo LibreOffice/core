@@ -77,6 +77,7 @@ namespace com { namespace sun { namespace star { namespace awt
 } } } }
 
 class Color;
+class OutputDevice;
 
 namespace canvas
 {
@@ -579,6 +580,11 @@ namespace canvas
             ::std::size_t       mnEntries;
             bool                mbCaseSensitive;
         };
+
+        CANVASTOOLS_DLLPUBLIC void clipOutDev(const css::rendering::ViewState& viewState,
+                        const css::rendering::RenderState& renderState,
+                        OutputDevice& rOutDev,
+                        OutputDevice* p2ndOutDev=NULL);
     }
 }
 

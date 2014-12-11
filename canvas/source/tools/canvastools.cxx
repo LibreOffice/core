@@ -1291,6 +1291,81 @@ namespace canvas
                                    nColorSteps ) );
         }
 
+        void clipOutDev(const rendering::ViewState& viewState,
+                        const rendering::RenderState& renderState,
+                        OutputDevice& rOutDev,
+                        OutputDevice* p2ndOutDev)
+        {
+            // accumulate non-empty clips into one region
+            vcl::Region aClipRegion(true);
+
+            if( viewState.Clip.is() )
+            {
+                ::basegfx::B2DPolyPolygon aClipPoly(
+                    ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(viewState.Clip) );
+
+                if( aClipPoly.count() )
+                {
+                    // setup non-empty clipping
+                    ::basegfx::B2DHomMatrix aMatrix;
+                    aClipPoly.transform(
+                        ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
+                                                                        viewState.AffineTransform ) );
+
+                    aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
+                }
+                else
+                {
+                    // clip polygon is empty
+                    aClipRegion.SetEmpty();
+                }
+            }
+
+            if( renderState.Clip.is() )
+            {
+                ::basegfx::B2DPolyPolygon aClipPoly(
+                    ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
+
+                ::basegfx::B2DHomMatrix aMatrix;
+                aClipPoly.transform(
+                    ::canvas::tools::mergeViewAndRenderTransform( aMatrix,
+                                                                  viewState,
+                                                                  renderState ) );
+
+                if( aClipPoly.count() )
+                {
+                    // setup non-empty clipping
+                    vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
+                    aClipRegion.Intersect( aRegion );
+                }
+                else
+                {
+                    // clip polygon is empty
+                    aClipRegion.SetEmpty();
+                }
+            }
+
+            // setup accumulated clip region. Note that setting an
+            // empty clip region denotes "clip everything" on the
+            // OutputDevice (which is why we translate that into
+            // SetClipRegion() here). When both view and render clip
+            // are empty, aClipRegion remains default-constructed,
+            // i.e. empty, too.
+            if( aClipRegion.IsNull() )
+            {
+                rOutDev.SetClipRegion();
+
+                if( p2ndOutDev )
+                    p2ndOutDev->SetClipRegion();
+            }
+            else
+            {
+                rOutDev.SetClipRegion( aClipRegion );
+
+                if( p2ndOutDev )
+                    p2ndOutDev->SetClipRegion( aClipRegion );
+            }
+        }
     } // namespace tools
 
 } // namespace canvas

@@ -127,73 +127,7 @@ namespace cairocanvas
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
-
-        // accumulate non-empty clips into one region
-        // ==========================================
-
-        vcl::Region aClipRegion;
-
-        if( viewState.Clip.is() )
-        {
-            ::basegfx::B2DPolyPolygon aClipPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
-                    viewState.Clip) );
-
-            if( aClipPoly.count() )
-            {
-                // setup non-empty clipping
-                ::basegfx::B2DHomMatrix aMatrix;
-                aClipPoly.transform(
-                    ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
-                                                                    viewState.AffineTransform ) );
-
-                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( tools::PolyPolygon( aClipPoly ) );
-            }
-        }
-
-        if( renderState.Clip.is() )
-        {
-            ::basegfx::B2DPolyPolygon aClipPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
-                    renderState.Clip) );
-
-            ::basegfx::B2DHomMatrix aMatrix;
-            aClipPoly.transform(
-                ::canvas::tools::mergeViewAndRenderTransform( aMatrix,
-                                                              viewState,
-                                                              renderState ) );
-
-            if( aClipPoly.count() )
-            {
-                // setup non-empty clipping
-                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( tools::PolyPolygon( aClipPoly ) );
-
-                if( aClipRegion.IsEmpty() )
-                    aClipRegion = aRegion;
-                else
-                    aClipRegion.Intersect( aRegion );
-            }
-            else
-            {
-                // clip polygon is empty
-                aClipRegion.SetEmpty();
-            }
-        }
-
-        // setup accumulated clip region. Note that setting an
-        // empty clip region denotes "clip everything" on the
-        // OutputDevice (which is why we translate that into
-        // SetClipRegion() here). When both view and render clip
-        // are empty, aClipRegion remains default-constructed,
-        // i.e. empty, too.
-        if( aClipRegion.IsEmpty() )
-        {
-            rOutDev.SetClipRegion();
-        }
-        else
-        {
-            rOutDev.SetClipRegion( aClipRegion );
-        }
+        ::canvas::tools::clipOutDev(viewState, renderState, rOutDev);
 
         if( eColorType != IGNORE_COLOR )
         {
@@ -238,6 +172,27 @@ namespace cairocanvas
         return nTransparency;
     }
 
+    class DeviceSettingsGuard
+    {
+    private:
+        OutputDevice *mpVirtualDevice;
+        bool mbMappingWasEnabled;
+    public:
+        DeviceSettingsGuard(OutputDevice *pVirtualDevice)
+            : mpVirtualDevice(pVirtualDevice)
+            , mbMappingWasEnabled(mpVirtualDevice->IsMapModeEnabled())
+        {
+            mpVirtualDevice->Push();
+            mpVirtualDevice->EnableMapMode(false);
+        }
+
+        ~DeviceSettingsGuard()
+        {
+            mpVirtualDevice->EnableMapMode(mbMappingWasEnabled);
+            mpVirtualDevice->Pop();
+        }
+    };
+
     bool setupTextOutput( OutputDevice&                                     rOutDev,
                           const rendering::XCanvas*                         pOwner,
                           ::Point&                                          o_rOutPos,
@@ -247,14 +202,12 @@ namespace cairocanvas
     {
         setupOutDevState( rOutDev, pOwner, viewState, renderState, TEXT_COLOR );
 
-        vcl::Font aVCLFont;
-
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
         ENSURE_ARG_OR_THROW( pFont,
                          "CanvasHelper::setupTextOutput(): Font not compatible with this canvas" );
 
-        aVCLFont = pFont->getVCLFont();
+        vcl::Font aVCLFont = pFont->getVCLFont();
 
         Color aColor( COL_BLACK );
 
@@ -272,7 +225,6 @@ namespace cairocanvas
             return false;
 
         rOutDev.SetFont( aVCLFont );
-
 
         return true;
     }
@@ -297,6 +249,8 @@ namespace cairocanvas
 
         if( mpVirtualDevice )
         {
+            DeviceSettingsGuard aGuard(mpVirtualDevice.get());
+
 #if defined CAIRO_HAS_WIN32_SURFACE
             // FIXME: Some kind of work-araound...
             cairo_rectangle (mpCairo.get(), 0, 0, 0, 0);
@@ -356,6 +310,8 @@ namespace cairocanvas
 
             if( mpVirtualDevice )
             {
+                DeviceSettingsGuard aGuard(mpVirtualDevice.get());
+
 #if defined CAIRO_HAS_WIN32_SURFACE
                 // FIXME: Some kind of work-araound...
                 cairo_rectangle(mpCairo.get(), 0, 0, 0, 0);

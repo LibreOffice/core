@@ -1228,78 +1228,7 @@ namespace vclcanvas
 
         // TODO(P2): Don't change clipping all the time, maintain current clip
         // state and change only when update is necessary
-
-        // accumulate non-empty clips into one region
-        // ==========================================
-
-        vcl::Region aClipRegion(true);
-
-        if( viewState.Clip.is() )
-        {
-            ::basegfx::B2DPolyPolygon aClipPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(viewState.Clip) );
-
-            if( aClipPoly.count() )
-            {
-                // setup non-empty clipping
-                ::basegfx::B2DHomMatrix aMatrix;
-                aClipPoly.transform(
-                    ::basegfx::unotools::homMatrixFromAffineMatrix( aMatrix,
-                                                                    viewState.AffineTransform ) );
-
-                aClipRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
-            }
-            else
-            {
-                // clip polygon is empty
-                aClipRegion.SetEmpty();
-            }
-        }
-
-        if( renderState.Clip.is() )
-        {
-            ::basegfx::B2DPolyPolygon aClipPoly(
-                ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(renderState.Clip) );
-
-            ::basegfx::B2DHomMatrix aMatrix;
-            aClipPoly.transform(
-                ::canvas::tools::mergeViewAndRenderTransform( aMatrix,
-                                                              viewState,
-                                                              renderState ) );
-
-            if( aClipPoly.count() )
-            {
-                // setup non-empty clipping
-                vcl::Region aRegion = vcl::Region::GetRegionFromPolyPolygon( ::tools::PolyPolygon( aClipPoly ) );
-                aClipRegion.Intersect( aRegion );
-            }
-            else
-            {
-                // clip polygon is empty
-                aClipRegion.SetEmpty();
-            }
-        }
-
-        // setup accumulated clip region. Note that setting an
-        // empty clip region denotes "clip everything" on the
-        // OutputDevice (which is why we translate that into
-        // SetClipRegion() here). When both view and render clip
-        // are empty, aClipRegion remains default-constructed,
-        // i.e. empty, too.
-        if( aClipRegion.IsNull() )
-        {
-            rOutDev.SetClipRegion();
-
-            if( p2ndOutDev )
-                p2ndOutDev->SetClipRegion();
-        }
-        else
-        {
-            rOutDev.SetClipRegion( aClipRegion );
-
-            if( p2ndOutDev )
-                p2ndOutDev->SetClipRegion( aClipRegion );
-        }
+        ::canvas::tools::clipOutDev(viewState, renderState, rOutDev, p2ndOutDev);
 
         Color aColor( COL_WHITE );
 
@@ -1365,18 +1294,17 @@ namespace vclcanvas
         ENSURE_OR_THROW( mpOutDev.get(),
                          "outdev null. Are we disposed?" );
 
-        setupOutDevState( viewState, renderState, TEXT_COLOR );
-
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
-        vcl::Font aVCLFont;
+        rOutDev.SetClipRegion(vcl::Region(true));
+        setupOutDevState( viewState, renderState, TEXT_COLOR );
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
         ENSURE_ARG_OR_THROW( pFont,
                              "Font not compatible with this canvas" );
 
-        aVCLFont = pFont->getVCLFont();
+        vcl::Font aVCLFont = pFont->getVCLFont();
 
         Color aColor( COL_BLACK );
 
