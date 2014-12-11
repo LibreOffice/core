@@ -299,7 +299,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
             else
             {
                 pXHatch.reset(new XHatch( m_pLbLineColor->GetSelectEntryColor(),
-                                 (XHatchStyle) m_pLbLineType->GetSelectEntryPos(),
+                                 (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
                                  GetCoreValue( *m_pMtrDistance, ePoolUnit ),
                                  static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
             }
@@ -366,7 +366,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
     }
 
     XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                    (XHatchStyle) m_pLbLineType->GetSelectEntryPos(),
+                    (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
                     GetCoreValue( *m_pMtrDistance, ePoolUnit ),
                     static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 
@@ -513,7 +513,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl)
     if( !nError )
     {
         XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                        (XHatchStyle) m_pLbLineType->GetSelectEntryPos(),
+                        (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
                         GetCoreValue( *m_pMtrDistance, ePoolUnit ),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10) );
         XHatchEntry* pEntry = new XHatchEntry( aXHatch, aName );
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
             {
                 bLoop = false;
                 XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
-                                (XHatchStyle) m_pLbLineType->GetSelectEntryPos(),
+                                (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
                                  GetCoreValue( *m_pMtrDistance, ePoolUnit ),
                                 static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 

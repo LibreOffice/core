@@ -71,11 +71,11 @@ bool XHatchList::Create()
     aStr.append(" 1");
 
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLACK),XHATCH_SINGLE,100,  0),aStr.toString()));
+    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLACK),css::drawing::HatchStyle_SINGLE,100,  0),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_RED  ),XHATCH_DOUBLE, 80,450),aStr.toString()));
+    Insert(new XHatchEntry(XHatch(RGB_Color(COL_RED  ),css::drawing::HatchStyle_DOUBLE, 80,450),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),XHATCH_TRIPLE,120,  0),aStr.toString()));
+    Insert(new XHatchEntry(XHatch(RGB_Color(COL_BLUE ),css::drawing::HatchStyle_TRIPLE,120,  0),aStr.toString()));
 
     return true;
 }
@@ -100,19 +100,19 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
 
         switch(rHatch.GetHatchStyle())
         {
-            case XHATCH_SINGLE :
+            case css::drawing::HatchStyle_SINGLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
                 break;
             }
-            case XHATCH_DOUBLE :
+            case css::drawing::HatchStyle_DOUBLE :
             {
                 aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
                 break;
             }
             default :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE; // XHATCH_TRIPLE
+                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE; // css::drawing::HatchStyle_TRIPLE
                 break;
             }
         }

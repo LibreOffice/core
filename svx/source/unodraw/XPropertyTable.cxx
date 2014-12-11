@@ -510,7 +510,7 @@ XPropertyEntry* SvxUnoXHatchTable::getEntry( const OUString& rName, const uno::A
         return NULL;
 
     XHatch aXHatch;
-    aXHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
+    aXHatch.SetHatchStyle( (css::drawing::HatchStyle)aUnoHatch.Style );
     aXHatch.SetColor( aUnoHatch.Color );
     aXHatch.SetDistance( aUnoHatch.Distance );
     aXHatch.SetAngle( aUnoHatch.Angle );
