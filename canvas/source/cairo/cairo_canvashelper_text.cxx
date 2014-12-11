@@ -176,12 +176,15 @@ namespace cairocanvas
     {
     private:
         OutputDevice *mpVirtualDevice;
+        cairo_t *mpCairo;
         bool mbMappingWasEnabled;
     public:
-        DeviceSettingsGuard(OutputDevice *pVirtualDevice)
+        DeviceSettingsGuard(OutputDevice *pVirtualDevice, cairo_t *pCairo)
             : mpVirtualDevice(pVirtualDevice)
+            , mpCairo(pCairo)
             , mbMappingWasEnabled(mpVirtualDevice->IsMapModeEnabled())
         {
+            cairo_save(mpCairo);
             mpVirtualDevice->Push();
             mpVirtualDevice->EnableMapMode(false);
         }
@@ -190,6 +193,7 @@ namespace cairocanvas
         {
             mpVirtualDevice->EnableMapMode(mbMappingWasEnabled);
             mpVirtualDevice->Pop();
+            cairo_restore(mpCairo);
         }
     };
 
@@ -229,6 +233,17 @@ namespace cairocanvas
         return true;
     }
 
+    //set the clip of the rOutDev to the cairo surface
+    void CanvasHelper::clip_cairo_from_dev(::OutputDevice& rOutDev)
+    {
+        vcl::Region aRegion(rOutDev.GetClipRegion());
+        if (!aRegion.IsEmpty() && !aRegion.IsNull())
+        {
+            doPolyPolygonImplementation(aRegion.GetAsB2DPolyPolygon(), Clip, mpCairo.get(),
+                                        NULL, mpSurfaceProvider, rendering::FillRule_EVEN_ODD);
+        }
+    }
+
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         pOwner,
                                                                           const rendering::StringContext&                   text,
                                                                           const uno::Reference< rendering::XCanvasFont >&   xFont,
@@ -249,7 +264,7 @@ namespace cairocanvas
 
         if( mpVirtualDevice )
         {
-            DeviceSettingsGuard aGuard(mpVirtualDevice.get());
+            DeviceSettingsGuard aGuard(mpVirtualDevice.get(), mpCairo.get());
 
 #if defined CAIRO_HAS_WIN32_SURFACE
             // FIXME: Some kind of work-araound...
@@ -283,6 +298,8 @@ namespace cairocanvas
             // TODO(F2): alpha
             mpVirtualDevice->SetLayoutMode( nLayoutMode );
 
+            clip_cairo_from_dev(*mpVirtualDevice);
+
             OSL_TRACE(":cairocanvas::CanvasHelper::drawText(O,t,f,v,r,d): %s", OUStringToOString( text.Text.copy( text.StartPosition, text.Length ),
                                                                                                          RTL_TEXTENCODING_UTF8 ).getStr());
 
@@ -310,7 +327,7 @@ namespace cairocanvas
 
             if( mpVirtualDevice )
             {
-                DeviceSettingsGuard aGuard(mpVirtualDevice.get());
+                DeviceSettingsGuard aGuard(mpVirtualDevice.get(), mpCairo.get());
 
 #if defined CAIRO_HAS_WIN32_SURFACE
                 // FIXME: Some kind of work-araound...
@@ -325,6 +342,8 @@ namespace cairocanvas
                 ::Point aOutpos;
                 if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xLayoutedText->getFont() ) )
                     return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
+
+                clip_cairo_from_dev(*mpVirtualDevice);
 
                 // TODO(F2): What about the offset scalings?
                 pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
