@@ -119,48 +119,80 @@ public class Factory
     private final String m_impl_name;
     private final String [] m_supported_services;
     private final Class<?> m_impl_class;
-    private java.lang.reflect.Method m_method;
-    private java.lang.reflect.Constructor m_ctor;
+    private final java.lang.reflect.Method m_method;
+    private final java.lang.reflect.Constructor m_ctor;
 
     private Factory(
         Class impl_class, String impl_name, String supported_services [] )
+                throws com.sun.star.uno.DeploymentException
     {
         m_impl_name = impl_name;
         m_supported_services = supported_services;
         m_impl_class = impl_class;
-        m_method = null;
-        m_ctor = null;
 
         Class params [] = new Class [] { XComponentContext.class };
 
+        if (!java.lang.reflect.Modifier.isPublic( impl_class.getModifiers() ))
+        {
+            throw new com.sun.star.uno.DeploymentException("class " + impl_class + " is not public");
+        }
+
+        java.lang.reflect.Method tmpMethod = null;
         try
         {
             // seeking for "public static Object __create( XComponentContext )"
-            m_method = m_impl_class.getMethod( "__create", params );
-            int mod = m_method.getModifiers();
-            if (!m_method.getReturnType().equals( Object.class ) ||
+            tmpMethod = m_impl_class.getMethod( "__create", params );
+            int mod = tmpMethod.getModifiers();
+            if (!tmpMethod.getReturnType().equals( Object.class ) ||
                 !java.lang.reflect.Modifier.isStatic( mod ) ||
                 !java.lang.reflect.Modifier.isPublic( mod ))
             {
-                m_method = null;
+                tmpMethod = null;
             }
         }
         catch (Exception exc)
         {
         }
+        m_method = tmpMethod;
 
+
+        java.lang.reflect.Constructor tmpCtor = null;
         if (null == m_method)
         {
             try
             {
                 // ctor with context
-                m_ctor = m_impl_class.getConstructor( params );
+                tmpCtor = m_impl_class.getConstructor( params );
             }
             catch (Exception exc)
             {
+            }
+            if (tmpCtor != null)
+            {
+                if (!java.lang.reflect.Modifier.isPublic( tmpCtor.getModifiers() ))
+                {
+                    throw new com.sun.star.uno.DeploymentException("constructor with XComponentContext param for class  " + impl_class + " is not public");
+                }
+            }
+            else
+            {
                 // else take default ctor
+                java.lang.reflect.Constructor defaultCtor;
+                try
+                {
+                    defaultCtor = m_impl_class.getConstructor(new Class[0]);
+                }
+                catch (Exception exc2)
+                {
+                    throw new com.sun.star.uno.DeploymentException(exc2, "class " + impl_class + " has no means of creating it, cannot find a __create method or a useful constructor.");
+                }
+                if (!java.lang.reflect.Modifier.isPublic( defaultCtor.getModifiers() ))
+                {
+                    throw new com.sun.star.uno.DeploymentException("default constructor for class  " + impl_class + " is not public");
+                }
             }
         }
+        m_ctor = tmpCtor;
     }
 
 
