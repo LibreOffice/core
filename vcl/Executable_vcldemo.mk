@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
     vclmain \
 ))
 
+ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,vcldemo,\
 	-lm \
@@ -54,6 +55,7 @@ $(eval $(call gb_Executable_add_libs,vcldemo,\
 $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
 	glxtest \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -42,8 +42,8 @@ $(eval $(call gb_Executable_add_exception_objects,tiledrendering,\
     sw/qa/tiledrendering/tiledrendering \
 ))
 
+ifneq ($(ENABLE_HEADLESS),TRUE)
 ifeq ($(OS),LINUX)
-
 $(eval $(call gb_Executable_add_libs,tiledrendering,\
 	-lm \
 	-ldl \
@@ -56,6 +56,7 @@ $(eval $(call gb_Executable_add_libs,tiledrendering,\
 $(eval $(call gb_Executable_use_static_libraries,tiledrendering,\
 	glxtest \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
