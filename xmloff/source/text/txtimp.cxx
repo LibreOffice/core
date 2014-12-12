@@ -846,17 +846,17 @@ namespace
             pCurrent != m_pInParams->end();
             ++pCurrent)
         {
-            if(pCurrent->first.equalsAscii(ODF_FORMDROPDOWN_RESULT))
+            if(pCurrent->first == ODF_FORMDROPDOWN_RESULT)
             {
                 // sal_Int32
                 vOutParams[pCurrent->first] = makeAny(pCurrent->second.toInt32());
             }
-            else if(pCurrent->first.equalsAscii(ODF_FORMCHECKBOX_RESULT))
+            else if(pCurrent->first == ODF_FORMCHECKBOX_RESULT)
             {
                 // bool
                 vOutParams[pCurrent->first] = makeAny(pCurrent->second.toBoolean());
             }
-            else if(pCurrent->first.equalsAscii(ODF_FORMDROPDOWN_LISTENTRY))
+            else if(pCurrent->first == ODF_FORMDROPDOWN_LISTENTRY)
             {
                 // sequence
                 vListEntries.push_back(pCurrent->second);

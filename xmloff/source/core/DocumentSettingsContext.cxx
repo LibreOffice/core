@@ -376,7 +376,7 @@ void XMLDocumentSettingsContext::EndElement()
         bool bFound(false);
         while((i >= 0) && !bFound)
         {
-            if (aSeqViewProps[i].Name.equalsAscii("Views"))
+            if (aSeqViewProps[i].Name == "Views")
             {
                 bFound = true;
                 uno::Reference<container::XIndexAccess> xIndexAccess;
@@ -404,13 +404,13 @@ void XMLDocumentSettingsContext::EndElement()
             {
                 OUString sProp( aSeqConfigProps[i].Name );
 
-                if ( sProp.equalsAscii("PrinterName") )
+                if ( sProp == "PrinterName" )
                 {
                     OUString sEmpty;
                     aSeqConfigProps[i].Value = uno::makeAny( sEmpty );
                     nFound++;
                 }
-                else if ( sProp.equalsAscii("PrinterSetup") )
+                else if ( sProp == "PrinterSetup" )
                 {
                     uno::Sequence< sal_Int8 > aEmpty;
                     aSeqConfigProps[i].Value = uno::makeAny( aEmpty );

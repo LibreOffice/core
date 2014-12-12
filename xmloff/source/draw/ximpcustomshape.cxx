@@ -226,62 +226,62 @@ bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rP
     else if ( rParaString[ nIndex ] > '9' )
     {
         bNumberRequired = false;
-        if ( rParaString.matchIgnoreAsciiCaseAsciiL( "left", 4, nIndex ) )
+        if ( rParaString.matchIgnoreAsciiCase( "left", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT;
             nIndex += 4;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "top", 3, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "top", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP;
             nIndex += 3;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "right", 5, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "right", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT;
             nIndex += 5;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "bottom", 6, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "bottom", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM;
             nIndex += 6;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "xstretch", 8, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "xstretch", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
             nIndex += 8;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "ystretch", 8, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "ystretch", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
             nIndex += 8;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "hasstroke", 9, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "hasstroke", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
             nIndex += 9;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "hasfill", 7, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "hasfill", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL;
             nIndex += 7;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "width", 5, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "width", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH;
             nIndex += 5;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "height", 6, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "height", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT;
             nIndex += 6;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "logwidth", 8, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "logwidth", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
             nIndex += 8;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "logheight", 9, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCase( "logheight", nIndex ) )
         {
             rParameter.Type = com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
             nIndex += 9;

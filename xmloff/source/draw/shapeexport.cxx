@@ -195,7 +195,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
     if( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
     {
         OUString aType( xShape->getShapeType() );
-        if( aType.equalsAscii( "com.sun.star.drawing.CustomShape" ) )
+        if( aType == "com.sun.star.drawing.CustomShape" )
         {
             uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
             if( xSet.is() )

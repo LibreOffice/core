@@ -53,11 +53,6 @@ using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::drawing::PointSequence;
 
-
-const sal_Char sAPI_ImageMapRectangleObject[] = "com.sun.star.image.ImageMapRectangleObject";
-const sal_Char sAPI_ImageMapCircleObject[] = "com.sun.star.image.ImageMapCircleObject";
-const sal_Char sAPI_ImageMapPolygonObject[] = "com.sun.star.image.ImageMapPolygonObject";
-
 XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
     msBoundary("Boundary"),
     msCenter("Center"),
@@ -144,20 +139,17 @@ void XMLImageMapExport::ExportMapEntry(
         {
             OUString& rName = sServiceNames[i];
 
-            if ( rName.equalsAsciiL(sAPI_ImageMapRectangleObject,
-                                    sizeof(sAPI_ImageMapRectangleObject)-1) )
+            if ( rName == "com.sun.star.image.ImageMapRectangleObject" )
             {
                 eType = XML_AREA_RECTANGLE;
                 break;
             }
-            else if ( rName.equalsAsciiL(sAPI_ImageMapCircleObject,
-                                         sizeof(sAPI_ImageMapCircleObject)-1) )
+            else if ( rName == "com.sun.star.image.ImageMapCircleObject" )
             {
                 eType = XML_AREA_CIRCLE;
                 break;
             }
-            else if ( rName.equalsAsciiL(sAPI_ImageMapPolygonObject,
-                                         sizeof(sAPI_ImageMapPolygonObject)-1))
+            else if ( rName == "com.sun.star.image.ImageMapPolygonObject" )
             {
                 eType = XML_AREA_POLYGON;
                 break;

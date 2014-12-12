@@ -484,7 +484,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
     const Reference< xml::sax::XAttributeList >&)
 {
     SvXMLImportContext* pContext = NULL;
-    if ( _rLocalName.equalsAscii( "form" ) )
+    if ( _rLocalName == "form" )
     {
         if ( m_xCurrentPageFormsSupp.is() )
             pContext = new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xCurrentPageFormsSupp->getForms() );

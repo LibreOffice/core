@@ -1490,14 +1490,11 @@ void XMLConfigItemTContext_Impl::StartElement(
             if ( IsXMLToken( aLocalName, XML_NAME ) )
             {
                 const OUString& rValue = xAttrList->getValueByIndex( i );
-                const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-                const sal_Char sCursorX[] = "CursorPositionX";
-                const sal_Char sCursorY[] = "CursorPositionY";
-                if( rValue.equalsAsciiL( sRedlineProtectionKey, sizeof(sRedlineProtectionKey)-1 ) )
+                if( rValue == "RedlineProtectionKey" )
                     m_bIsRedlineProtectionKey = true;
-                else if( rValue.equalsAsciiL( sCursorX, sizeof(sCursorX)-1 ) )
+                else if( rValue == "CursorPositionX" )
                     m_bIsCursorX = true;
-                else if( rValue.equalsAsciiL( sCursorY, sizeof(sCursorY)-1 ) )
+                else if( rValue == "CursorPositionY" )
                     m_bIsCursorY = true;
 
                 break;

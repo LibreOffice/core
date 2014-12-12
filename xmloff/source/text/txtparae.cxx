@@ -387,7 +387,7 @@ void FieldParamExporter::Export()
             aValue >>= sValue;
             ExportParameter(*pCurrent,sValue);
 
-            if ( pCurrent->equalsAscii( ODF_OLE_PARAM ) )
+            if ( *pCurrent == ODF_OLE_PARAM )
             {
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();

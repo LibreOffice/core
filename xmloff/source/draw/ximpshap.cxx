@@ -128,7 +128,7 @@ static bool ImpIsEmptyURL( const OUString& rURL )
 
     // #i13140# Also compare against 'toplevel' URLs. which also
     // result in empty filename strings.
-    if( rURL.equalsAscii( "#./" ) )
+    if( rURL == "#./" )
         return true;
 
     return false;
@@ -3068,10 +3068,10 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
         {
-            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
+            if( xAttrList->getValueByIndex( n ) == "application/vnd.sun.star.media" )
                 mbMedia = true;
 #if HAVE_FEATURE_GLTF
-            if( xAttrList->getValueByIndex( n ).equalsAscii( "model/vnd.gltf+json" ) )
+            if( xAttrList->getValueByIndex( n ) == "model/vnd.gltf+json" )
                 mbMedia = true;
 #endif
             // leave this loop
@@ -3220,49 +3220,49 @@ void SdXMLPluginShapeContext::EndElement()
             {
                 const OUString& rName = maParams[ nParam ].Name;
 
-                if( rName.equalsAscii( "Loop" ) )
+                if( rName == "Loop" )
                 {
                     OUString aValueStr;
                     maParams[ nParam ].Value >>= aValueStr;
                     xProps->setPropertyValue("Loop",
-                        uno::makeAny( aValueStr.equalsAscii( "true" ) ) );
+                        uno::makeAny( aValueStr == "true" ) );
                 }
-                else if( rName.equalsAscii( "Mute" ) )
+                else if( rName == "Mute" )
                 {
                     OUString aValueStr;
                     maParams[ nParam ].Value >>= aValueStr;
                     xProps->setPropertyValue("Mute",
-                        uno::makeAny( aValueStr.equalsAscii( "true" ) ) );
+                        uno::makeAny( aValueStr == "true" ) );
                 }
-                else if( rName.equalsAscii( "VolumeDB" ) )
+                else if( rName == "VolumeDB" )
                 {
                     OUString aValueStr;
                     maParams[ nParam ].Value >>= aValueStr;
                     xProps->setPropertyValue("VolumeDB",
                                                 uno::makeAny( static_cast< sal_Int16 >( aValueStr.toInt32() ) ) );
                 }
-                else if( rName.equalsAscii( "Zoom" ) )
+                else if( rName == "Zoom" )
                 {
                     OUString            aZoomStr;
                     media::ZoomLevel    eZoomLevel;
 
                     maParams[ nParam ].Value >>= aZoomStr;
 
-                    if( aZoomStr.equalsAscii( "25%" ) )
+                    if( aZoomStr == "25%" )
                         eZoomLevel = media::ZoomLevel_ZOOM_1_TO_4;
-                    else if( aZoomStr.equalsAscii( "50%" ) )
+                    else if( aZoomStr == "50%" )
                         eZoomLevel = media::ZoomLevel_ZOOM_1_TO_2;
-                    else if( aZoomStr.equalsAscii( "100%" ) )
+                    else if( aZoomStr == "100%" )
                         eZoomLevel = media::ZoomLevel_ORIGINAL;
-                    else if( aZoomStr.equalsAscii( "200%" ) )
+                    else if( aZoomStr == "200%" )
                         eZoomLevel = media::ZoomLevel_ZOOM_2_TO_1;
-                    else if( aZoomStr.equalsAscii( "400%" ) )
+                    else if( aZoomStr == "400%" )
                         eZoomLevel = media::ZoomLevel_ZOOM_4_TO_1;
-                    else if( aZoomStr.equalsAscii( "fit" ) )
+                    else if( aZoomStr == "fit" )
                         eZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
-                    else if( aZoomStr.equalsAscii( "fixedfit" ) )
+                    else if( aZoomStr == "fixedfit" )
                         eZoomLevel = media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT;
-                    else if( aZoomStr.equalsAscii( "fullscreen" ) )
+                    else if( aZoomStr == "fullscreen" )
                         eZoomLevel = media::ZoomLevel_FULLSCREEN;
                     else
                         eZoomLevel = media::ZoomLevel_NOT_AVAILABLE;

@@ -29,37 +29,37 @@ namespace
         sal_uInt32 nRetval(0);
 
         // pixel formats first
-        if(rString.endsWithAsciiL(".bmp", 4))
+        if(rString.endsWith(".bmp"))
         {
             return 10;
         }
-        if(rString.endsWithAsciiL(".gif", 4))
+        if(rString.endsWith(".gif"))
         {
             return 20;
         }
-        if(rString.endsWithAsciiL(".jpg", 4))
+        if(rString.endsWith(".jpg"))
         {
             return 30;
         }
-        if(rString.endsWithAsciiL(".png", 4))
+        if(rString.endsWith(".png"))
         {
             return 40;
         }
 
         // vector formats, prefer always
-        if(rString.endsWithAsciiL(".svm", 4))
+        if(rString.endsWith(".svm"))
         {
             return 1000;
         }
-        if(rString.endsWithAsciiL(".wmf", 4))
+        if(rString.endsWith(".wmf"))
         {
             return 1010;
         }
-        if(rString.endsWithAsciiL(".emf", 4))
+        if(rString.endsWith(".emf"))
         {
             return 1020;
         }
-        else if(rString.endsWithAsciiL(".svg", 4))
+        if(rString.endsWith(".svg"))
         {
             return 1030;
         }

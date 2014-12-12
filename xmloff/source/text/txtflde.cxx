@@ -1930,9 +1930,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         OUString sFieldMaster = aFieldMasters[i];
 
         // workaround for #no-bug#
-        static const sal_Char sDB[] =
-            "com.sun.star.text.FieldMaster.DataBase.";
-        if ( sFieldMaster.matchIgnoreAsciiCaseAsciiL( sDB, sizeof(sDB)-1) )
+        if ( sFieldMaster.startsWithIgnoreAsciiCase(
+                 "com.sun.star.text.FieldMaster.DataBase.") )
         {
             continue;
         }
@@ -1948,7 +1947,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
         aAny >>= xPropSet;
 
         // save interesting field masters
-        if (sFieldMasterType.equalsAscii(FIELD_SERVICE_SETEXP))
+        if (sFieldMasterType == FIELD_SERVICE_SETEXP)
         {
             sal_Int32 nType = GetIntProperty(sPropertySubType, xPropSet);
 
@@ -1962,11 +1961,11 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 aVarName.push_back( sFieldMaster );
             }
         }
-        else if (sFieldMasterType.equalsAscii(FIELD_SERVICE_USER))
+        else if (sFieldMasterType == FIELD_SERVICE_USER)
         {
             aUserName.push_back( sFieldMaster );
         }
-        else if (sFieldMasterType.equalsAscii(FIELD_SERVICE_DDE))
+        else if (sFieldMasterType == FIELD_SERVICE_DDE)
         {
             aDdeName.push_back( sFieldMaster );
         }

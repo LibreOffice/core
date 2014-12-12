@@ -1617,8 +1617,6 @@ void XMLSectionExport::ExportBoolean(
 
 const sal_Char sAPI_FieldMaster_Bibliography[] =
                                 "com.sun.star.text.FieldMaster.Bibliography";
-const sal_Char sAPI_SortKey[] = "SortKey";
-const sal_Char sAPI_IsSortAscending[] = "IsSortAscending";
 
 void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 {
@@ -1708,8 +1706,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                 {
                     PropertyValue& rValue = rKey[nPropertyKey];
 
-                    if (rValue.Name.equalsAsciiL(sAPI_SortKey,
-                                                 sizeof(sAPI_SortKey)-1))
+                    if (rValue.Name == "SortKey")
                     {
                         sal_Int16 nKey = 0;
                         rValue.Value >>= nKey;
@@ -1721,8 +1718,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                                                  sBuf.makeStringAndClear());
                         }
                     }
-                    else if (rValue.Name.equalsAsciiL(sAPI_IsSortAscending,
-                                            sizeof(sAPI_IsSortAscending)-1))
+                    else if (rValue.Name == "IsSortAscending")
                     {
                         bool bTmp = *(sal_Bool*)rValue.Value.getValue();
                         rExport.AddAttribute(XML_NAMESPACE_TEXT,

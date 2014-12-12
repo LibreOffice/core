@@ -247,7 +247,7 @@ RDFaReader::ReadURIOrSafeCURIE(OUString const & i_rURIOrSafeCURIE) const
     }
     else
     {
-        if (i_rURIOrSafeCURIE.matchAsciiL("_:", 2)) // blank node
+        if (i_rURIOrSafeCURIE.startsWith("_:")) // blank node
         {
             SAL_INFO("xmloff.core", "ReadURIOrSafeCURIE: invalid URI: scheme is _" );
             return OUString();
@@ -273,7 +273,7 @@ RDFaInserter::LookupBlankNode(OUString const & i_rNodeId )
 uno::Reference< rdf::XURI >
 RDFaInserter::MakeURI( OUString const & i_rURI) const
 {
-    if (i_rURI.matchAsciiL("_:", 2)) // blank node
+    if (i_rURI.startsWith("_:")) // blank node
     {
         SAL_INFO("xmloff.core", "MakeURI: cannot create URI for blank node");
         return 0;
@@ -295,7 +295,7 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
 uno::Reference< rdf::XResource>
 RDFaInserter::MakeResource( OUString const & i_rResource)
 {
-    if (i_rResource.matchAsciiL("_:", 2)) // blank node
+    if (i_rResource.startsWith("_:")) // blank node
     {
         // we cannot use the blank node label as-is: it must be distinct
         // from labels in other graphs, so create fresh ones per XML stream
