@@ -97,7 +97,6 @@ static const char szOldManagerStream[] = "BasicManager";
 static const char szManagerStream[] = "BasicManager2";
 static const char szImbedded[] = "LIBIMBEDDED";
 static const char szCryptingKey[] = "CryptedBasic";
-static const char szScriptLanguage[] = "StarBasic";
 
 TYPEINIT1( BasicManager, SfxBroadcaster );
 
@@ -396,7 +395,7 @@ public:
 
     bool&             IsReference()           { return bReference; }
 
-    bool              IsExtern() const        { return ! aStorageName.equalsAscii(szImbedded); }
+    bool              IsExtern() const        { return aStorageName != szImbedded; }
 
     void              SetStorageName( const OUString& rName )   { aStorageName = rName; }
     const OUString&   GetStorageName() const                  { return aStorageName; }
@@ -874,7 +873,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
 
         // Correct absolute pathname if relative is existing.
         // Always try relative first if there are two stands on disk
-        if ( !pInfo->GetRelStorageName().isEmpty() && ( ! pInfo->GetRelStorageName().equalsAscii(szImbedded) ) )
+        if ( !pInfo->GetRelStorageName().isEmpty() && pInfo->GetRelStorageName() != szImbedded )
         {
             INetURLObject aObj( aRealStorageName, INET_PROT_FILE );
             aObj.removeSegment();
@@ -966,7 +965,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
             DBG_ASSERT(!bWasAbsolute, "RelStorageName was absolute!" );
 
             SotStorageRef xStorageRef;
-            if ( ( aLibAbsStorage == aCurStorage ) || ( aLibRelStorageName.equalsAscii(szImbedded) ) )
+            if ( aLibAbsStorage == aCurStorage || aLibRelStorageName == szImbedded )
             {
                 xStorageRef = &rStorage;
             }
@@ -1046,7 +1045,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     DBG_ASSERT( pLibInfo, "LibInfo!?" );
 
     OUString aStorageName( pLibInfo->GetStorageName() );
-    if ( aStorageName.isEmpty() || ( aStorageName.equalsAscii(szImbedded) ) )
+    if ( aStorageName.isEmpty() || aStorageName == szImbedded )
     {
         aStorageName = GetStorageName();
     }
@@ -1967,7 +1966,7 @@ uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     if( !pMod )
         throw container::NoSuchElementException();
     uno::Reference< script::XStarBasicModuleInfo > xMod = (XStarBasicModuleInfo*)new ModuleInfo_Impl
-        ( aName, OUString::createFromAscii( szScriptLanguage ), pMod->GetSource32() );
+        ( aName, "StarBasic", pMod->GetSource32() );
     uno::Any aRetAny;
     aRetAny <<= xMod;
     return aRetAny;

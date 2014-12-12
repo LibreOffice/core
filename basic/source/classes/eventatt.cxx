@@ -183,7 +183,7 @@ void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeExc
 
 void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
 {
-    if( aScriptEvent.ScriptType.equalsAscii( "StarBasic" ) )
+    if( aScriptEvent.ScriptType == "StarBasic" )
     {
         // Full qualified name?
         OUString aMacro( aScriptEvent.ScriptCode );
@@ -219,7 +219,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         else if( pParent )
         {
             OUString aName = p->GetName();
-            if( aName.equalsAscii("Standard") )
+            if( aName == "Standard" )
             {
                 // Own basic is doc standard lib
                 xDocStandardBasic = static_cast<StarBASIC*>(p);
@@ -233,11 +233,11 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
         bool bSearchLib = true;
         StarBASICRef xLibSearchBasic;
-        if( aLocation.equalsAscii("application") )
+        if( aLocation == "application" )
         {
             xLibSearchBasic = xAppStandardBasic;
         }
-        else if( aLocation.equalsAscii("document") )
+        else if( aLocation == "document" )
         {
             xLibSearchBasic = xDocStandardBasic;
         }

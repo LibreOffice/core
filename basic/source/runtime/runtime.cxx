@@ -1002,7 +1002,7 @@ SbxVariableRef SbiRuntime::PopVar()
 #endif
     SbxVariableRef xVar = refExprStk->Get( --nExprLvl );
 #ifdef DBG_UTIL
-    if ( xVar->GetName().equalsAscii( "Cells" ) )
+    if ( xVar->GetName() == "Cells" )
         SAL_INFO("basic", "PopVar: Name equals 'Cells'" );
 #endif
     // methods hold themselves in parameter 0
@@ -1990,7 +1990,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                                 pNewObj->SetParent( rItem.m_pObjParent );
                                 refVar->PutObject( pNewObj );
                             }
-                            else if( rItem.m_aObjClass.equalsIgnoreAsciiCaseAscii( pCollectionStr ) )
+                            else if( rItem.m_aObjClass.equalsIgnoreAsciiCase( pCollectionStr ) )
                             {
                                 BasicCollection* pNewCollection = new BasicCollection( OUString(pCollectionStr) );
                                 pNewCollection->SetName( rItem.m_aObjName );

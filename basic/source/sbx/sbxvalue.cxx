@@ -806,7 +806,7 @@ bool SbxValue::SetType( SbxDataType t )
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
-                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName().equalsAscii("Parent"),
+                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
                                     "SID_PARENTOBJECT is not named 'Parent'" );
                         bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )

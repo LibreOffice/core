@@ -2053,10 +2053,10 @@ BasicCollection::BasicCollection( const OUString& rClass )
 {
     if( !nCountHash )
     {
-        nCountHash  = MakeHashCode( OUString::createFromAscii( pCountStr ) );
-        nAddHash    = MakeHashCode( OUString::createFromAscii( pAddStr ) );
-        nItemHash   = MakeHashCode( OUString::createFromAscii( pItemStr ) );
-        nRemoveHash = MakeHashCode( OUString::createFromAscii( pRemoveStr ) );
+        nCountHash  = MakeHashCode( pCountStr );
+        nAddHash    = MakeHashCode( pAddStr );
+        nItemHash   = MakeHashCode( pItemStr );
+        nRemoveHash = MakeHashCode( pRemoveStr );
     }
     Initialize();
 
@@ -2078,14 +2078,14 @@ void BasicCollection::Initialize()
     SetFlag( SBX_FIXED );
     ResetFlag( SBX_WRITE );
     SbxVariable* p;
-    p = Make( OUString::createFromAscii( pCountStr ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( pCountStr, SbxCLASS_PROPERTY, SbxINTEGER );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( OUString::createFromAscii( pAddStr ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pAddStr, SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( OUString::createFromAscii( pItemStr ), SbxCLASS_METHOD, SbxVARIANT );
+    p = Make( pItemStr, SbxCLASS_METHOD, SbxVARIANT );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( OUString::createFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pRemoveStr, SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     if ( !xAddInfo.Is() )
     {
@@ -2124,22 +2124,22 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         if( bRead || bWrite )
         {
             if( pVar->GetHashCode() == nCountHash
-                  && aVarName.equalsIgnoreAsciiCaseAscii( pCountStr ) )
+                  && aVarName.equalsIgnoreAsciiCase( pCountStr ) )
             {
                 pVar->PutLong( xItemArray->Count32() );
             }
             else if( pVar->GetHashCode() == nAddHash
-                  && aVarName.equalsIgnoreAsciiCaseAscii( pAddStr ) )
+                  && aVarName.equalsIgnoreAsciiCase( pAddStr ) )
             {
                 CollAdd( pArg );
             }
             else if( pVar->GetHashCode() == nItemHash
-                  && aVarName.equalsIgnoreAsciiCaseAscii( pItemStr ) )
+                  && aVarName.equalsIgnoreAsciiCase( pItemStr ) )
             {
                 CollItem( pArg );
             }
             else if( pVar->GetHashCode() == nRemoveHash
-                  && aVarName.equalsIgnoreAsciiCaseAscii( pRemoveStr ) )
+                  && aVarName.equalsIgnoreAsciiCase( pRemoveStr ) )
             {
                 CollRemove( pArg );
             }
@@ -2152,12 +2152,12 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         else if ( bRequestInfo )
         {
             if( pVar->GetHashCode() == nAddHash
-                  && aVarName.equalsIgnoreAsciiCaseAscii( pAddStr ) )
+                  && aVarName.equalsIgnoreAsciiCase( pAddStr ) )
             {
                 pVar->SetInfo( xAddInfo );
             }
             else if( pVar->GetHashCode() == nItemHash
-                  && aVarName.equalsIgnoreAsciiCaseAscii( pItemStr ) )
+                  && aVarName.equalsIgnoreAsciiCase( pItemStr ) )
             {
                 pVar->SetInfo( xItemInfo );
             }

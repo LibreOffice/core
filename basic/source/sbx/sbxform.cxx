@@ -74,8 +74,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 #define BASICFORMAT_TRUEFALSE       "True/False"
 #define BASICFORMAT_ONOFF           "On/Off"
 
-#define EMPTYFORMATSTRING           ""
-
 // Comment: Visual-Basic has a maximum of 12 positions after the
 //          decimal point for floating-point-numbers.
 // all format-strings are compatible to Visual-Basic:
@@ -388,9 +386,7 @@ OUString SbxBasicFormater::GetPosFormatString( const OUString& sFormatStrg, bool
         return sFormatStrg.copy( 0,nPos );
     }
 
-    OUString aRetStr;
-    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
-    return aRetStr;
+    return OUString();
 }
 
 // see also GetPosFormatString()
@@ -415,9 +411,7 @@ OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, bool
             return sTempStrg.copy( 0,nPos );
         }
     }
-    OUString aRetStr;
-    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
-    return aRetStr;
+    return OUString();
 }
 
 // see also GetPosFormatString()
@@ -448,9 +442,7 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, bool &
         }
     }
 
-    OUString aRetStr;
-    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
-    return aRetStr;
+    return OUString();
 }
 
 // see also GetPosFormatString()
@@ -477,9 +469,7 @@ OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, boo
         }
     }
 
-    OUString aRetStr;
-    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
-    return aRetStr;
+    return OUString();
 }
 
 // returns value <> 0 in case of an error
@@ -974,7 +964,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
     // analyse format-string concerning predefined formats:
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_GENERALNUMBER ) )
     {
-        sFormatStrg = OUString::createFromAscii( GENERALNUMBER_FORMAT );
+        sFormatStrg = GENERALNUMBER_FORMAT;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_CURRENCY ) )
     {
@@ -982,19 +972,19 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_FIXED ) )
     {
-        sFormatStrg = OUString::createFromAscii( FIXED_FORMAT );
+        sFormatStrg = FIXED_FORMAT;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_STANDARD ) )
     {
-        sFormatStrg = OUString::createFromAscii( STANDARD_FORMAT );
+        sFormatStrg = STANDARD_FORMAT;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_PERCENT ) )
     {
-        sFormatStrg = OUString::createFromAscii( PERCENT_FORMAT );
+        sFormatStrg = PERCENT_FORMAT;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_SCIENTIFIC ) )
     {
-        sFormatStrg = OUString::createFromAscii( SCIENTIFIC_FORMAT );
+        sFormatStrg = SCIENTIFIC_FORMAT;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_YESNO ) )
     {
