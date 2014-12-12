@@ -83,6 +83,12 @@ void WinMtfClipPath::moveClipRegion( const Size& rSize )
     maClip = basegfx::tools::B2DClipState( aCurrClip );
 }
 
+void WinMtfClipPath::setDefaultClipPath()
+{
+    // Empty clip region - everything visible
+    maClip = basegfx::tools::B2DClipState();
+}
+
 basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
 {
     return maClip.getClipPoly();
@@ -795,6 +801,12 @@ void WinMtfOutput::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int3
             aPolyPolygon = ImplMap(aPolyPolygon);
     }
     aClipPath.setClipPath(aPolyPolygon, nClippingMode);
+}
+
+void WinMtfOutput::SetDefaultClipPath()
+{
+    mbClipNeedsUpdate = true;
+    aClipPath.setDefaultClipPath();
 }
 
 WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
