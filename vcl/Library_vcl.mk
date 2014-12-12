@@ -124,6 +124,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    $(if $(filter TRUE,$(ENABLE_OPENGL_CANVAS)), \
 	vcl/opengl/DeviceInfo \
 	vcl/opengl/gdiimpl \
 	vcl/opengl/salbmp \
@@ -131,6 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/framebuffer \
 	vcl/opengl/program \
 	vcl/opengl/texture \
+    ) \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/source/window/openglwin \

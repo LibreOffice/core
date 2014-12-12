@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_libs,merged,\
 endif
 
 ifeq ($(OS),LINUX)
+ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Library_add_libs,merged,\
 	-lm \
 	-ldl \
@@ -107,6 +108,7 @@ $(eval $(call gb_Library_add_libs,merged,\
 	-lrt \
 	-lX11 \
 ))
+endif
 endif
 
 ifeq ($(OS),WNT)
