@@ -5980,20 +5980,22 @@ bool PDFWriterImpl::emitSignature()
 
 #if !defined(ANDROID) && !defined(IOS) && !defined(_WIN32)
 
+namespace {
+
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
-    return (char *)arg;
+    return PL_strdup((char *)arg);
 }
 
-namespace {
-    class HashContextScope {
-        HASHContext *mpPtr;
-    public:
-        HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
-        ~HashContextScope() { clear(); }
-        void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = NULL; }
-        HASHContext *get() { return mpPtr; }
-    };
+class HashContextScope {
+    HASHContext *mpPtr;
+public:
+    HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
+    ~HashContextScope() { clear(); }
+    void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = NULL; }
+    HASHContext *get() { return mpPtr; }
+};
+
 }
 
 #endif
@@ -6109,8 +6111,6 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
 
-    OString pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 );
-
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
     {
@@ -6184,19 +6184,32 @@ bool PDFWriterImpl::finalizeSignature()
     NSSCMSEncoderContext *cms_ecx;
 
     //FIXME: Check if password is passed correctly to SEC_PKCS7CreateSignedData function
-    cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, (PK11PasswordFunc)::PDFSigningPKCS7PasswordCallback, (void *)pass.getStr(), NULL, NULL, NULL, NULL);
+
+    // Inded, it was not, I think, and that caused a crash as described in fdo#83937.
+    // Unfortunately I could not test this fix fully before my hardware token decided to
+    // block itself thanks to too many wrong PIN attempts. Possibly it would work to
+    // even just pass NULL for the password callback function and its argument here.
+    // After all, at least with the hardware token and associated software I tested
+    // with, the software itself pops up a dialog asking for the PIN (password).
+
+    char *pass(strdup(OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
+    cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, PDFSigningPKCS7PasswordCallback, pass, NULL, NULL, NULL, NULL);
 
     if (!cms_ecx)
     {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: can't start DER encoder.");
+        free(pass);
         return false;
     }
 
     if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: can't finish DER encoder.");
+        free(pass);
         return false;
     }
+
+    free(pass);
 
     OStringBuffer cms_hexbuffer;
 
