@@ -1935,6 +1935,8 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                     break;
 
                 case POS_OUTSIDE:
+                    assert(pDestRedl && "is this actually impossible");
+                    if (pDestRedl)
                     {
                         SwRangeRedline* pCpyRedl = new SwRangeRedline(
                             pDestRedl->GetRedlineData(), *pDStt );
