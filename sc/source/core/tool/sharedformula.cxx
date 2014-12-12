@@ -362,15 +362,18 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
         {
             case formula::svSingleRef:
             {
-                ScAddress aPos = t->GetSingleRef()->toAbs(rTopCell.aPos);
+                const ScSingleRefData* pRef = t->GetSingleRef();
+                ScAddress aPos = pRef->toAbs(rTopCell.aPos);
                 ScFormulaCell** pp = ppSharedTop;
                 ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
-                for (; pp != ppEnd; ++pp, aPos.IncRow())
+                for (; pp != ppEnd; ++pp)
                 {
                     if (!aPos.IsValid())
                         break;
 
                     rDoc.StartListeningCell(rCxt, aPos, **pp);
+                    if (pRef->IsRowRel())
+                        aPos.IncRow();
                 }
             }
             break;
