@@ -1456,6 +1456,13 @@ void Sc10Import::LoadTables()
             return;
         }
         rStream.ReadUInt16( DataCount );
+        const sal_Size nMaxPossibleRecords = rStream.remainingSize() / (sizeof(sal_uInt16)*2);
+        if (DataCount > nMaxPossibleRecords)
+        {
+            SAL_WARN("sc", "Parsing error: " << nMaxPossibleRecords <<
+                     " max possible pairs, but " << DataCount << " claimed, truncating");
+            DataCount = nMaxPossibleRecords;
+        }
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
