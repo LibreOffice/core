@@ -184,7 +184,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
 
     ::std::map< OUString,bool > aResultSetChanged;
     TSQLStatements aKeyConditions;
-    TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
     // here we build the condition part for the update statement
@@ -349,8 +348,6 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
 {
     OUString aQuote  = getIdentifierQuoteString();
     TSQLStatements aKeyConditions;
-    TSQLStatements aIndexConditions;
-    TSQLStatements aSql;
 
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
