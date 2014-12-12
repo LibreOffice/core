@@ -771,7 +771,7 @@ SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     , bLoadUserDefinedSettings( false )
 {
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString::createFromAscii(cUserDefinedSettings);
+    aNames[0] = cUserDefinedSettings;
     Sequence< Any > aValues = GetProperties( aNames );
     EnableNotification( aNames );
     const Any* pValues = aValues.getConstArray();
@@ -787,7 +787,7 @@ SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
 void SvtLoadOptions_Impl::Commit()
 {
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString::createFromAscii(cUserDefinedSettings);
+    aNames[0] = cUserDefinedSettings;
     Sequence< Any > aValues( 1 );
     aValues[0].setValue(&bLoadUserDefinedSettings, ::getBooleanCppuType());
     PutProperties( aNames, aValues );
