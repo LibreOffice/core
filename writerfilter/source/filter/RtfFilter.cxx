@@ -21,7 +21,8 @@
 #include <RtfFilter.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <dmapper/DomainMapper.hxx>
+#include <dmapper/DomainMapperFactory.hxx>
+#include <resourcemodel/TagLogger.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -113,7 +114,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
                            uno::Reference<task::XStatusIndicator>());
 
         writerfilter::Stream::Pointer_t pStream(
-            new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF, xInsertTextRange, bIsNewDoc));
+            writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF, xInsertTextRange, bIsNewDoc));
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
             writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPER_HXX
 #define INCLUDED_WRITERFILTER_INC_DMAPPER_DOMAINMAPPER_HXX
 
+#include <dmapper/DomainMapperFactory.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
@@ -62,12 +63,6 @@ enum SprmType
 {
     SPRM_DEFAULT,
     SPRM_LIST
-};
-enum SourceDocumentType
-{
-    DOCUMENT_DOC,
-    DOCUMENT_OOXML,
-    DOCUMENT_RTF
 };
 class DomainMapper : public LoggedProperties, public LoggedTable,
                     public BinaryObj, public LoggedStream

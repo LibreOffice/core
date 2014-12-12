@@ -81,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/DomainMapperTableHandler \
     writerfilter/source/dmapper/DomainMapperTableManager \
     writerfilter/source/dmapper/DomainMapper_Impl \
+	writerfilter/source/dmapper/domainmapperfactory \
     writerfilter/source/dmapper/FFDataHandler \
     writerfilter/source/dmapper/FontTable \
     writerfilter/source/dmapper/FormControlHelper \
