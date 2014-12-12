@@ -1106,7 +1106,7 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
             // Specified table name is not found in this document.  Assume this is an external document.
             aDocName = aTab;
             sal_Int32 n = aDocName.lastIndexOf('.');
-            if (n != -1 && n > 0)
+            if (n > 0)
             {
                 // Extension found.  Strip it.
                 aTab = aTab.replaceAt(n, 1, "");
