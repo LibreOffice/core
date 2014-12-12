@@ -277,15 +277,15 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                     {
                         OUString aKey = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
                         OUString aValue = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
-                        if( aKey.equalsAscii( "COMPAT_DUPLEX_MODE" ) )
+                        if( aKey == "COMPAT_DUPLEX_MODE" )
                         {
-                            if( aValue.equalsAscii( "DUPLEX_UNKNOWN" ) )
+                            if( aValue == "DUPLEX_UNKNOWN" )
                                 pJobData->meDuplexMode = DUPLEX_UNKNOWN;
-                            else if( aValue.equalsAscii( "DUPLEX_OFF" ) )
+                            else if( aValue == "DUPLEX_OFF" )
                                 pJobData->meDuplexMode = DUPLEX_OFF;
-                            else if( aValue.equalsAscii( "DUPLEX_SHORTEDGE" ) )
+                            else if( aValue == "DUPLEX_SHORTEDGE" )
                                 pJobData->meDuplexMode = DUPLEX_SHORTEDGE;
-                            else if( aValue.equalsAscii( "DUPLEX_LONGEDGE" ) )
+                            else if( aValue == "DUPLEX_LONGEDGE" )
                                 pJobData->meDuplexMode = DUPLEX_LONGEDGE;
                         }
                         else
