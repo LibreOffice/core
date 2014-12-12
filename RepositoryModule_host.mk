@@ -118,7 +118,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	$(call gb_Helper_optional,DESKTOP,setup_native) \
 	sfx2 \
 	shell \
-	slideshow \
+        $(if $(ENABLE_HEADLESS),,slideshow) \
 	smoketest \
 	solenv \
 	soltools \

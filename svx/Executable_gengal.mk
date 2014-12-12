@@ -67,7 +67,7 @@ $(eval $(call gb_Executable_add_libs,gengal,\
 	-lpthread \
     -lGL \
     -lGLU \
-    -lX11 \
+    $(if $(filter ,$(ENABLE_HEADLESS)),-lX11) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,gengal,\

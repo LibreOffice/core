@@ -43,14 +43,13 @@ $(eval $(call gb_Executable_add_exception_objects,tiledrendering,\
 ))
 
 ifeq ($(OS),LINUX)
-
 $(eval $(call gb_Executable_add_libs,tiledrendering,\
 	-lm \
 	-ldl \
 	-lpthread \
     -lGL \
     -lGLU \
-    -lX11 \
+    $(if $(filter ,$(ENABLE_HEADLESS)),-lX11) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,tiledrendering,\

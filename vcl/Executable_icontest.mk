@@ -26,14 +26,13 @@ $(eval $(call gb_Executable_use_static_libraries,icontest,\
 ))
 
 ifeq ($(OS),LINUX)
-
 $(eval $(call gb_Executable_add_libs,icontest,\
 	-lm \
 	-ldl \
 	-lpthread \
     -lGL \
     -lGLU \
-    -lX11 \
+    $(if $(filter ,$(ENABLE_HEADLESS)),-lX11) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,icontest,\

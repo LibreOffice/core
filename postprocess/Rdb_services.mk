@@ -73,7 +73,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	sdext/source/presenter/presenter \
 	sdext/source/minimizer/minimizer \
 	sfx2/util/sfx \
-	slideshow/util/slideshow \
+        $(if $(ENABLE_HEADLESS),,slideshow/util/slideshow) \
 	sot/util/sot \
 	starmath/util/sm \
 	starmath/util/smd \
@@ -220,7 +220,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		extensions/source/update/ui/updchk \
 	) \
 	$(if $(ENABLE_OPENGL), \
-		slideshow/source/engine/OGLTrans/ogltrans \
+                $(if $(ENABLE_HEADLESS),,slideshow/source/engine/OGLTrans/ogltrans) \
 	) \
 	$(if $(ENABLE_TDE), \
 		shell/source/backends/kdebe/tdebe1 \

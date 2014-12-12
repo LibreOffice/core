@@ -35,7 +35,7 @@ $(eval $(call gb_StaticLibrary_add_libs,glxtest,\
 	-lpthread \
     -lGL \
     -lGLU \
-    -lX11 \
+    $(if $(filter ,$(ENABLE_HEADLESS)),-lX11) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,glxtest,\

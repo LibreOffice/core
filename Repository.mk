@@ -419,7 +419,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sdui \
 	sfx \
 	simplecanvas \
-	slideshow \
+	$(if $(ENABLE_HEADLESS),,slideshow) \
 	sot \
 	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
@@ -825,7 +825,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
-	slideshow_opengl_shader \
+        $(if $(ENABLE_HEADLESS),,slideshow_opengl_shader) \
 ))
 
 ifeq ($(GUIBASE),unx)

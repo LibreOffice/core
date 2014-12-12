@@ -48,7 +48,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_desktop_detector \
     StaticLibrary_headless \
-	StaticLibrary_glxtest \
+    StaticLibrary_glxtest \
     Package_fontunxppds \
     Package_fontunxpsprint \
 ))
@@ -98,6 +98,12 @@ $(eval $(call gb_Module_add_targets,vcl,\
 ))
 endif
 
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Module_add_targets,vcl,\
+    StaticLibrary_glxtest \
+))
+endif
+
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_fontcharmap \
 	CppunitTest_vcl_complextext \
@@ -107,10 +113,16 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_wmf_test \
 ))
 
+
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_timer \
 ))
 endif
 
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Module_add_check_targets,vcl,\
+	CppunitTest_vcl_timer \
+))
+endif
 # vim: set noet sw=4 ts=4:

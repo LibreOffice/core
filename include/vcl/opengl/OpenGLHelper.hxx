@@ -16,7 +16,7 @@
 
 #include <rtl/ustring.hxx>
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
 #  include <prex.h>
 #  include "GL/glxew.h"
 #  include <postx.h>
@@ -67,7 +67,7 @@ public:
      */
     static bool isVCLOpenGLEnabled();
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     static bool GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI);
     static GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted );
 #endif

@@ -28,6 +28,13 @@
 
 #include <vcl/opengl/glxtest.hxx>
 
+#ifdef LIBO_HEADLESS
+bool fire_glxtest_process()
+{
+    return true;
+}
+#else
+
 #ifdef __SUNPRO_CC
 #include <stdio.h>
 #endif
@@ -268,3 +275,5 @@ bool fire_glxtest_process()
   *glxtest_pid = pid;
   return true;
 }
+
+#endif

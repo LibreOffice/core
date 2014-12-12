@@ -112,7 +112,7 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lpthread \
     -lGL \
     -lGLU \
-    -lX11 \
+    $(if $(filter ,$(ENABLE_HEADLESS)),-lX11) \
 ))
 endif
 

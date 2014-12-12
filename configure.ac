@@ -10209,7 +10209,7 @@ else
     dnl Check for system Mesa
     dnl ===================================================================
     AC_MSG_CHECKING([which Mesa headers to use])
-    if test "$with_system_mesa_headers" = "yes"; then
+    if test "$with_system_mesa_headers" = "yes" && "$with_x" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_MESA_HEADERS=TRUE
         AC_LANG_PUSH(C)
