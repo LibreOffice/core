@@ -696,7 +696,11 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
 sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
 {
-    assert(nWhich >= pImp->mnStart && nWhich <= pImp->mnEnd);
+    if (nWhich < pImp->mnStart || nWhich > pImp->mnEnd)
+    {
+        assert(false && "missing bounds check before use");
+        return 0;
+    }
     return nWhich - pImp->mnStart;
 }
 
