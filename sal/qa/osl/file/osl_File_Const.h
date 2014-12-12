@@ -103,10 +103,10 @@ const sal_Char pBuffer_Blank[]  = "";
 //        n###Len for its length
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
-    ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( ( str_value ) )
+    ::rtl::OUString a##str_name( ( str_value ) )
 
 #define OSLTEST_DECLARE_UTF8(str_name, str_value ) \
-    ::rtl::OUString a##str_name = ::rtl::Uri::decode( ::rtl::OUString::createFromAscii( ( str_value ) ), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
+    ::rtl::OUString a##str_name = ::rtl::Uri::decode( ::rtl::OUString( str_value ), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
 
 // OS independent file definition
 
@@ -123,7 +123,8 @@ OSLTEST_DECLARE( UserDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
 // common used URL:temp, canonical, root, relative, link,etc
 
 OSLTEST_DECLARE( CanURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/canonical.name" );
-OSLTEST_DECLARE( CanURL2,  "ca@#;+.,$///78no\0ni..name" );
+rtl::OUString aCanURL2(
+    RTL_CONSTASCII_USTRINGPARAM("ca@#;+.,$///78no\0ni..name"));
 OSLTEST_DECLARE( CanURL3,  "ca@#;+.,$//tmp/678nonical//name" );
 OSLTEST_DECLARE( CanURL4,  "canonical.name" );
 OSLTEST_DECLARE( TmpName1, "tmpdir" );
