@@ -766,7 +766,7 @@ long ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
 {
 
     const SolarMutexGuard aGuard;
-    m_pUpdateBtn->Enable(true);
+    m_pUpdateBtn->Enable(false);
 
     m_pExtensionBox->removeEntry(xPackage);
 
@@ -1005,7 +1005,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
 
     m_pCancelBtn->Enable( bLockInterface );
     m_pAddBtn->Enable( !bLockInterface );
-    m_pUpdateBtn->Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
+    m_pUpdateBtn->Enable(false);
     m_pExtensionBox->enableButtons( !bLockInterface );
 
     clearEventID();
@@ -1282,7 +1282,7 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         const SolarMutexGuard aGuard;
-        m_aUpdateBtn.Enable( true );
+        m_aUpdateBtn.Enable( false );
         return m_pExtensionBox->addEntry( xPackage );
     }
     return 0;

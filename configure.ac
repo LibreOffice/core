@@ -2987,7 +2987,7 @@ find_msvc()
     vs_versions_to_check "$1"
 
     for ver in $vsversions; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VC/ProductDir
+        reg_get_value HKEY_CURRENT_USER/SOFTWARE/Microsoft/VisualStudio/${ver}_Config/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
             break
@@ -4832,7 +4832,7 @@ find_winsdk()
 find_msms()
 {
     for ver in 9.0 10.0 11.0; do
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
+        reg_get_value HKEY_CURRENT_USER/SOFTWARE/Microsoft/VisualStudio/${ver}_Config/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
                 msmdir=$regvalue
@@ -10297,8 +10297,8 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE"; then
         fi
     fi
     if test -z "$supports_multilib"; then
-        kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include /opt/kde/include $x_includes"
-        kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib $x_libraries"
+        kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include/kde /opt/kde/include $x_includes"
+        kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib $x_libraries"
     else
         kde_incdirs="/usr/lib64/kde/include /usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include /opt/kde/include $x_includes"
         kde_libdirs="/usr/lib64/kde/lib64 /usr/local/kde/lib64 /usr/kde/lib64 /usr/lib64/kde /usr/lib64/kde3 /usr/X11R6/lib64 /usr/local/lib64 /opt/kde3/lib64 /opt/kde/lib64 /usr/X11R6/kde/lib64 /usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib64 $x_libraries"

@@ -125,7 +125,7 @@ void Test::run()
         {"math-vertical_stacks.docx", &Test::testMathVerticalStacks},
         {"table-position.docx", &Test::testTablePosition},
         {"fdo47669.docx", &Test::testFdo47669},
-        {"table-borders.docx", &Test::testTableBorders},
+//        {"table-borders.docx", &Test::testTableBorders},
         {"fdo51550.odt", &Test::testFdo51550},
         {"n789482.docx", &Test::testN789482},
 //      {"1-table-1-page.docx", &Test::test1Table1Page}, // doesn't work on openSUSE12.2 at least
