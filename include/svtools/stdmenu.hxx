@@ -31,36 +31,34 @@ namespace vcl {
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class FontNameMenu
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl von Fonts. Das Menu wird ueber Fill mit den FontNamen
-gefuellt. Fill sortiert automatisch die FontNamen (inkl. aller Umlaute und
-sprachabhaengig). Mit SetCurName()/GetCurName() kann der aktuelle Fontname
-gesetzt/abgefragt werden. Wenn SetCurName() mit einem leeren String
-aufgerufen wird, wird kein Eintrag als aktueller angezeigt (fuer DontKnow).
-Vor dem Selectaufruf wird der ausgewaehlte Name automatisch als aktueller
-gesetzt und wuerde beim naechsten Aufruf auch als aktueller Name angezeigt
-werden. Deshalb sollte vor PopupMenu::Execute() gegebenenfalls mit
-SetCurName() der aktuelle Fontname gesetzt werden.
+Allows the selection of fonts. The menu is filled with the FontNames by
+the method Fill(). Fill() automatically sorts the FontNames (incl. all
+umlauts and language-dependent). Using SetCurName()/GetCurName(), the
+current FontName can be set/requested. If SetCurName() is called with
+an empty string, no entry is displayed as the current one.
+Before the Select call, the selected name is automatically set as the
+current one and would be displayed as the current name on the next call.
+Because of this, the current FontName should be set using SetCurName()
+if necessary before calling PopupMenu::Execute().
 
-Da die Id's und der interne Aufbau des Menus nicht bekannt ist, muss ein
-Select-Handler gesetzt werden, um die Auswahl eines Namens mitzubekommen.
+As the Ids and the internal structure of the menu are not known, a
+Select handler must be set in order to notice the selection of a name.
 
-In dieses Menu koennen keine weiteren Items eingefuegt werden.
+No further items can be inserted into that menu.
 
-Spaeter soll auch das Menu die gleichen Bitmaps anzeigen, wie die
-FontNameBox. Auf den Systemen, wo Menues nicht automatisch scrollen,
-wird spaeter wohl ein A-Z Menu ziwschengeschaltet. Da ein Menu bei vielen
-installierten Fonts bisher schon immer lange gebraucht hat, sollte dieses
-Menu schon jetzt nur einmal erzeugt werden (da sonst das Kontextmenu bis
-zu 10-Sekunden fuer die Erzeugung brauchen koennte).
+Later on, the menu shall display the same bitmaps as the FontNameBox.
+On many systems, where menues don't scroll automatically, an A-Z menu
+might be interposed. As a menu has always needed long when many Fonts
+are installed, this menu should only be generated once.
 
-Querverweise
+References
 
 FontList; FontSizeMenu; FontNameBox
 
@@ -68,32 +66,32 @@ FontList; FontSizeMenu; FontNameBox
 
 class FontSizeMenu
 
-Beschreibung
+Description
 
-Erlaubt die Auswahl von Fontgroessen. Ueber Fill wird das FontSizeMenu
-gefuellt und ueber GetCurHeight() kann die ausgewaehlte Fontgroesse
-abgefragt werden. Mit SetCurHeight()/GetCurHeight() kann die aktuelle
-Fontgroesse gesetzt/abgefragt werden. Wenn SetCurHeight() mit 0 aufgerufen
-wird, wird kein Eintrag als aktueller angezeigt (fuer DontKnow). Vor dem
-Selectaufruf wird die ausgewaehlte Groesse automatisch als aktuelle gesetzt
-und wuerde beim naechsten Aufruf auch als aktuelle Groesse angezeigt werden.
-Deshalb sollte vor PopupMenu::Execute() gegebenenfalls mit SetCurHeight()
-die aktuelle Groesse gesetzt werden. Da die Groessen vom ausgewaehlten Font
-abhaengen, sollte nach einer Aenderung des Fontnamen das Menu mit Fill mit
-den Groessen des Fonts neu gefuellt werden.
+Allows the selection of font sizes. The FontSizeMenu is filled using
+Fill(). The selected font size can be queried using GetCurHeight().
+Using SetCurHeight()/GetCurHeight(), the current font size can be set/
+requested. If SetCurHeight() is called with 0, no entry is displayed
+as the current one.
+Before the Select call, the selected size is automatically set as the
+current one and would be displayed as the current size on the next call.
+Because of this, the current font size should be set using SetCurHeight()
+if necessary before calling PopupMenu::Execute(). As the font sizes
+depend on the selected Font, the Menu should be re-filled with the
+sizes of the font using Fill() after a change to the font name.
 
-Da die Id's und der interne Aufbau des Menus nicht bekannt ist, muss ein
-Select-Handler gesetzt werden, um die Auswahl einer Groesse mitzubekommen.
+As the Ids and the internal structure of the menu are not known, a
+Select handler must be set in order to notice the selection of a size.
 
-Alle Groessen werden in 10tel Point angegeben.
+All sizes are given in 1/10 points.
 
-In dieses Menu koennen keine weiteren Items eingefuegt werden.
+No further items can be inserted into that menu.
 
-Spaeter soll das Menu je nach System die Groessen anders darstelllen. Zum
-Beispiel koennte der Mac spaeter vielleicht einmal die Groessen als Outline
-darstellen, die als Bitmap-Fonts vorhanden sind.
+Later on, the menu shall display the sizes in respect to the system.
+For example, Mac could possibly show an outline of the fonts that are
+available as bitmaps.
 
-Querverweise
+References
 
 FontList; FontNameMenu; FontSizeBox
 
