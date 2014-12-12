@@ -55,6 +55,7 @@ class PPTTextObj;
 class DffRecordHeader;
 class SvxBulletItem;
 enum class PptSlideLayout;
+enum class PptPlaceholder;
 
 #define PPT_IMPORTFLAGS_NO_TEXT_ASSERT  1
 
@@ -196,7 +197,7 @@ public:
 struct PptSlideLayoutAtom
 {
     PptSlideLayout      eLayout;                // 0..18
-    sal_uInt8           aPlaceholderId[ 8 ];
+    PptPlaceholder      aPlaceholderId[ 8 ];
 
 public:
                         PptSlideLayoutAtom() { Clear(); }
@@ -304,7 +305,7 @@ public:
 struct PptOEPlaceholderAtom
 {
     sal_uInt32          nPlacementId;
-    sal_uInt8           nPlaceholderId;
+    PptPlaceholder      nPlaceholderId;
     sal_uInt8           nPlaceholderSize; // 0=Full size, 1=Half size, 2=Quarter of Slide
 
 public:
@@ -1599,32 +1600,35 @@ enum class PptSlideLayout
 };
 
 // the following table describes the placeholder id's (values from reality followed by values taken from the documentation)
-#define PPT_PLACEHOLDER_NONE                    0   //  0 None
-#define PPT_PLACEHOLDER_MASTERTITLE             1   //  1 Master title
-#define PPT_PLACEHOLDER_MASTERBODY              2   //  2 Master body
-#define PPT_PLACEHOLDER_MASTERCENTEREDTITLE     3   //  3 Master centered title
-#define PPT_PLACEHOLDER_MASTERSUBTITLE          4   // 10 Master subtitle
-#define PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE   5   //  4 Master notes slide image
-#define PPT_PLACEHOLDER_MASTERNOTESBODYIMAGE    6   //  5 Master notes body image
-#define PPT_PLACEHOLDER_MASTERDATE              7   //  6 Master date
-#define PPT_PLACEHOLDER_MASTERSLIDENUMBER       8   //  7 Master slide number
-#define PPT_PLACEHOLDER_MASTERFOOTER            9   //  8 Master footer
-#define PPT_PLACEHOLDER_MASTERHEADER            10  //  9 Master header
-#define PPT_PLACEHOLDER_GENERICTEXTOBJECT           // 11 Generic text object
-#define PPT_PLACEHOLDER_TITLE                   13  // 12 Title
-#define PPT_PLACEHOLDER_BODY                    14  // 13 Body
-#define PPT_PLACEHOLDER_NOTESBODY               12  // 14 Notes body
-#define PPT_PLACEHOLDER_CENTEREDTITLE           15  // 15 Centered title
-#define PPT_PLACEHOLDER_SUBTITLE                16  // 16 Subtitle
-#define PPT_PLACEHOLDER_VERTICALTEXTTITLE       17  // 17 Vertical text title
-#define PPT_PLACEHOLDER_VERTICALTEXTBODY        18  // 18 Vertical text body
-#define PPT_PLACEHOLDER_NOTESSLIDEIMAGE         11  // 19 Notes slide image
-#define PPT_PLACEHOLDER_OBJECT                  19  // 20 Object (no matter the size)
-#define PPT_PLACEHOLDER_GRAPH                   20  // 21 Graph
-#define PPT_PLACEHOLDER_TABLE                   21  // 22 Table
-#define PPT_PLACEHOLDER_CLIPART                 22  // 23 Clip Art
-#define PPT_PLACEHOLDER_ORGANISZATIONCHART      23  // 24 Organization Chart
-#define PPT_PLACEHOLDER_MEDIACLIP               24  // 25 Media Clip
+enum class PptPlaceholder
+{
+    NONE                   = 0,   //  0 None
+    MASTERTITLE            = 1,   //  1 Master title
+    MASTERBODY             = 2,   //  2 Master body
+    MASTERCENTEREDTITLE    = 3,   //  3 Master centered title
+    MASTERSUBTITLE         = 4,   // 10 Master subtitle
+    MASTERNOTESSLIDEIMAGE  = 5,   //  4 Master notes slide image
+    MASTERNOTESBODYIMAGE   = 6,   //  5 Master notes body image
+    MASTERDATE             = 7,   //  6 Master date
+    MASTERSLIDENUMBER      = 8,   //  7 Master slide number
+    MASTERFOOTER           = 9,   //  8 Master footer
+    MASTERHEADER           = 10,  //  9 Master header
+                                  // 11 Generic text object
+    TITLE                  = 13,  // 12 Title
+    BODY                   = 14,  // 13 Body
+    NOTESBODY              = 12,  // 14 Notes body
+    CENTEREDTITLE          = 15,  // 15 Centered title
+    SUBTITLE               = 16,  // 16 Subtitle
+    VERTICALTEXTTITLE      = 17,  // 17 Vertical text title
+    VERTICALTEXTBODY       = 18,  // 18 Vertical text body
+    NOTESSLIDEIMAGE        = 11,  // 19 Notes slide image
+    OBJECT                 = 19,  // 20 Object (no matter the size)
+    GRAPH                  = 20,  // 21 Graph
+    TABLE                  = 21,  // 22 Table
+    CLIPART                = 22,  // 23 Clip Art
+    ORGANISZATIONCHART     = 23,  // 24 Organization Chart
+    MEDIACLIP              = 24  // 25 Media Clip
+};
 
 #endif // INCLUDED_FILTER_MSFILTER_SVDFPPT_HXX
 

@@ -1046,25 +1046,25 @@ bool ImplSdPPTImport::Import()
                     case PptSlideLayout::TITLEANDBODYSLIDE :
                     {
                         eAutoLayout = AUTOLAYOUT_ENUM;
-                        sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
+                        PptPlaceholder nID1 = pSlideLayout->aPlaceholderId[ 1 ];
                         switch ( nID1 )
                         {
-                            case PPT_PLACEHOLDER_BODY :
+                            case PptPlaceholder::BODY :
                                 eAutoLayout = AUTOLAYOUT_ENUM;
                             break;
-                            case PPT_PLACEHOLDER_TABLE :
+                            case PptPlaceholder::TABLE :
                                 eAutoLayout = AUTOLAYOUT_TAB;
                             break;
-                            case PPT_PLACEHOLDER_ORGANISZATIONCHART :
+                            case PptPlaceholder::ORGANISZATIONCHART :
                                 eAutoLayout = AUTOLAYOUT_ORG;
                             break;
-                            case PPT_PLACEHOLDER_GRAPH :
+                            case PptPlaceholder::GRAPH :
                                 eAutoLayout = AUTOLAYOUT_CHART;
                             break;
-                            case PPT_PLACEHOLDER_OBJECT :
+                            case PptPlaceholder::OBJECT :
                                 eAutoLayout = AUTOLAYOUT_OBJ;
                             break;
-                            case PPT_PLACEHOLDER_VERTICALTEXTBODY :
+                            case PptPlaceholder::VERTICALTEXTBODY :
                                 eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE;
                             break;
                         }
@@ -1074,25 +1074,25 @@ bool ImplSdPPTImport::Import()
                     case PptSlideLayout::TWOCOLUMNSANDTITLE :
                     {
                         eAutoLayout = AUTOLAYOUT_2TEXT;
-                        sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
-                        sal_uInt16 nID2 = pSlideLayout->aPlaceholderId[ 2 ];
-                        if ( nID1 == PPT_PLACEHOLDER_BODY && nID2 == PPT_PLACEHOLDER_GRAPH )
+                        PptPlaceholder nID1 = pSlideLayout->aPlaceholderId[ 1 ];
+                        PptPlaceholder nID2 = pSlideLayout->aPlaceholderId[ 2 ];
+                        if ( nID1 == PptPlaceholder::BODY && nID2 == PptPlaceholder::GRAPH )
                             eAutoLayout = AUTOLAYOUT_TEXTCHART;
-                        else if ( nID1 == PPT_PLACEHOLDER_GRAPH && nID2 == PPT_PLACEHOLDER_BODY )
+                        else if ( nID1 == PptPlaceholder::GRAPH && nID2 == PptPlaceholder::BODY )
                             eAutoLayout = AUTOLAYOUT_CHARTTEXT;
-                        else if ( nID1 == PPT_PLACEHOLDER_BODY && nID2 == PPT_PLACEHOLDER_CLIPART )
+                        else if ( nID1 == PptPlaceholder::BODY && nID2 == PptPlaceholder::CLIPART )
                             eAutoLayout = AUTOLAYOUT_TEXTCLIP;
-                        else if ( nID1 == PPT_PLACEHOLDER_CLIPART && nID2 == PPT_PLACEHOLDER_BODY )
+                        else if ( nID1 == PptPlaceholder::CLIPART && nID2 == PptPlaceholder::BODY )
                             eAutoLayout = AUTOLAYOUT_CLIPTEXT;
-                        else if ( nID1 == PPT_PLACEHOLDER_CLIPART && nID2 == PPT_PLACEHOLDER_VERTICALTEXTBODY )
+                        else if ( nID1 == PptPlaceholder::CLIPART && nID2 == PptPlaceholder::VERTICALTEXTBODY )
                             eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART;
-                        else if ( ( nID1 == PPT_PLACEHOLDER_BODY )
-                            && ( ( nID2 == PPT_PLACEHOLDER_OBJECT ) || ( nID2 == PPT_PLACEHOLDER_MEDIACLIP ) ) )
+                        else if ( ( nID1 == PptPlaceholder::BODY )
+                            && ( ( nID2 == PptPlaceholder::OBJECT ) || ( nID2 == PptPlaceholder::MEDIACLIP ) ) )
                             eAutoLayout = AUTOLAYOUT_TEXTOBJ;
-                        else if ( ( nID2 == PPT_PLACEHOLDER_BODY )
-                            && ( ( nID1 == PPT_PLACEHOLDER_OBJECT ) || ( nID1 == PPT_PLACEHOLDER_MEDIACLIP ) ) )
+                        else if ( ( nID2 == PptPlaceholder::BODY )
+                            && ( ( nID1 == PptPlaceholder::OBJECT ) || ( nID1 == PptPlaceholder::MEDIACLIP ) ) )
                             eAutoLayout = AUTOLAYOUT_OBJTEXT;
-                        else if ( ( nID1 == PPT_PLACEHOLDER_OBJECT ) && ( nID2 == PPT_PLACEHOLDER_OBJECT  ) )
+                        else if ( ( nID1 == PptPlaceholder::OBJECT ) && ( nID2 == PptPlaceholder::OBJECT  ) )
                             eAutoLayout = AUTOLAYOUT_OBJ;
                     }
                     break;
@@ -1100,11 +1100,11 @@ bool ImplSdPPTImport::Import()
                     case PptSlideLayout::TWOROWSANDTITLE :
                     {
                         eAutoLayout = AUTOLAYOUT_2TEXT;
-                        sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
-                        sal_uInt16 nID2 = pSlideLayout->aPlaceholderId[ 2 ];
-                        if ( nID1 == PPT_PLACEHOLDER_BODY && nID2 == PPT_PLACEHOLDER_OBJECT )
+                        PptPlaceholder nID1 = pSlideLayout->aPlaceholderId[ 1 ];
+                        PptPlaceholder nID2 = pSlideLayout->aPlaceholderId[ 2 ];
+                        if ( nID1 == PptPlaceholder::BODY && nID2 == PptPlaceholder::OBJECT )
                             eAutoLayout = AUTOLAYOUT_TEXTOVEROBJ;
-                        else if ( nID1 == PPT_PLACEHOLDER_OBJECT && nID2 == PPT_PLACEHOLDER_BODY )
+                        else if ( nID1 == PptPlaceholder::OBJECT && nID2 == PptPlaceholder::BODY )
                             eAutoLayout = AUTOLAYOUT_OBJOVERTEXT;
                     }
                     break;
@@ -2121,36 +2121,36 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     {
         switch( pPlaceHolder->nPlaceholderId )
         {
-            case PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE :
-            case PPT_PLACEHOLDER_MASTERCENTEREDTITLE :
-            case PPT_PLACEHOLDER_MASTERTITLE :
+            case PptPlaceholder::MASTERNOTESSLIDEIMAGE :
+            case PptPlaceholder::MASTERCENTEREDTITLE :
+            case PptPlaceholder::MASTERTITLE :
             {
                 ePresKind = PRESOBJ_TITLE;
                 aPresentationText = pPage->GetPresObjText( ePresKind );
             }
             break;
-            case PPT_PLACEHOLDER_MASTERBODY :
+            case PptPlaceholder::MASTERBODY :
             {
                 ePresKind = PRESOBJ_OUTLINE;
                 aPresentationText = pPage->GetPresObjText( ePresKind );
             }
             break;
-            case PPT_PLACEHOLDER_MASTERSUBTITLE :
+            case PptPlaceholder::MASTERSUBTITLE :
             {
                 ePresKind = PRESOBJ_TEXT;
                 aPresentationText = pPage->GetPresObjText( ePresKind );
             }
             break;
-            case PPT_PLACEHOLDER_MASTERNOTESBODYIMAGE :
+            case PptPlaceholder::MASTERNOTESBODYIMAGE :
             {
                 ePresKind = PRESOBJ_NOTES;
                 aPresentationText = pPage->GetPresObjText( ePresKind );
             }
             break;
-            case PPT_PLACEHOLDER_MASTERDATE :           ePresKind = PRESOBJ_DATETIME;   break;
-            case PPT_PLACEHOLDER_MASTERSLIDENUMBER :    ePresKind = PRESOBJ_SLIDENUMBER;break;
-            case PPT_PLACEHOLDER_MASTERFOOTER :         ePresKind = PRESOBJ_FOOTER;     break;
-            case PPT_PLACEHOLDER_MASTERHEADER :         ePresKind = PRESOBJ_HEADER;     break;
+            case PptPlaceholder::MASTERDATE :           ePresKind = PRESOBJ_DATETIME;   break;
+            case PptPlaceholder::MASTERSLIDENUMBER :    ePresKind = PRESOBJ_SLIDENUMBER;break;
+            case PptPlaceholder::MASTERFOOTER :         ePresKind = PRESOBJ_FOOTER;     break;
+            case PptPlaceholder::MASTERHEADER :         ePresKind = PRESOBJ_HEADER;     break;
         }
     }
     switch ( pTextObj->GetDestinationInstance() )
@@ -2194,8 +2194,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         break;
         case TSS_TYPE_NOTES :
         {
-            if ( pPlaceHolder && ( ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE )
-                || ( pPlaceHolder->nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) ) )
+            if ( pPlaceHolder && ( ( pPlaceHolder->nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
+                || ( pPlaceHolder->nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) ) )
             {
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                 if ( pSheet )
@@ -2229,7 +2229,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         break;
     }
     pText = static_cast<SdrTextObj*>(SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPageCapsule, pSheet, ppStyleSheetAry ));
-    if ( pPlaceHolder && pPlaceHolder->nPlaceholderId )
+    if ( pPlaceHolder && pPlaceHolder->nPlaceholderId != PptPlaceholder::NONE )
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
         {
@@ -2292,7 +2292,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             if ( pSlideLayout || ( eAktPageKind == PPT_NOTEPAGE ) )
             {
                 sal_uInt32 nPlacementId = pPlaceHolder->nPlacementId;
-                sal_Int16 nPlaceholderId = pPlaceHolder->nPlaceholderId;
+                PptPlaceholder nPlaceholderId = pPlaceHolder->nPlaceholderId;
 
                 if ( eAktPageKind == PPT_SLIDEPAGE )
                 {
@@ -2306,15 +2306,15 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         bEmptyPresObj = ( pTextObj->Count() == 0 ) || ( pTextObj->Count() == 1 && pTextObj->First()->GetTextSize() == 0 );
                         switch ( nPlaceholderId )
                         {
-                            case PPT_PLACEHOLDER_NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
-                            case PPT_PLACEHOLDER_VERTICALTEXTTITLE :
+                            case PptPlaceholder::NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
+                            case PptPlaceholder::VERTICALTEXTTITLE :
                                 bVertical = true;   // PASSTHROUGH !!!
-                            case PPT_PLACEHOLDER_TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
-                            case PPT_PLACEHOLDER_VERTICALTEXTBODY :
+                            case PptPlaceholder::TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
+                            case PptPlaceholder::VERTICALTEXTBODY :
                                 bVertical = true;   // PASSTHROUGH !!!
-                            case PPT_PLACEHOLDER_BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
-                            case PPT_PLACEHOLDER_CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
-                            case PPT_PLACEHOLDER_SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE
+                            case PptPlaceholder::BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
+                            case PptPlaceholder::CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
+                            case PptPlaceholder::SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE
 
                             default :
                             {
@@ -2322,12 +2322,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                 {
                                     switch ( nPlaceholderId )
                                     {
-                                        case PPT_PLACEHOLDER_MEDIACLIP :
-                                        case PPT_PLACEHOLDER_OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
-                                        case PPT_PLACEHOLDER_GRAPH : ePresObjKind = PRESOBJ_CHART; break;
-                                        case PPT_PLACEHOLDER_TABLE : ePresObjKind = PRESOBJ_TABLE; break;
-                                        case PPT_PLACEHOLDER_CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
-                                        case PPT_PLACEHOLDER_ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
+                                        case PptPlaceholder::MEDIACLIP :
+                                        case PptPlaceholder::OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
+                                        case PptPlaceholder::GRAPH : ePresObjKind = PRESOBJ_CHART; break;
+                                        case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_TABLE; break;
+                                        case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
+                                        case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
                                     }
                                 }
                             };
@@ -2340,12 +2340,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                             bEmptyPresObj = false;
                             switch ( nPlaceholderId )
                             {
-                                case PPT_PLACEHOLDER_MEDIACLIP :
-                                case PPT_PLACEHOLDER_OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
-                                case PPT_PLACEHOLDER_GRAPH : ePresObjKind = PRESOBJ_CHART; break;
-                                case PPT_PLACEHOLDER_TABLE : ePresObjKind = PRESOBJ_CALC; break;
-                                case PPT_PLACEHOLDER_CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
-                                case PPT_PLACEHOLDER_ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
+                                case PptPlaceholder::MEDIACLIP :
+                                case PptPlaceholder::OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
+                                case PptPlaceholder::GRAPH : ePresObjKind = PRESOBJ_CHART; break;
+                                case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_CALC; break;
+                                case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
+                                case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
                             }
                         }
                     }
