@@ -79,7 +79,7 @@ void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
     FmFormPage::lateInit( rPage, pNewModel );
 
     SwDrawModel* pSwDrawModel = pNewModel;
-    if ( !pModel )
+    if (!pSwDrawModel)
     {
         pSwDrawModel = &dynamic_cast<SwDrawModel&>(*GetModel());
         assert( pSwDrawModel );
