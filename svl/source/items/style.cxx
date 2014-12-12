@@ -884,12 +884,6 @@ void SfxStyleSheetBase::Store( SvStream& )
 {
 }
 
-SfxStyleSheet::SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
-    : SfxStyleSheetBase(OUString("dummy"), NULL, SFX_STYLE_FAMILY_ALL, 0)
-{
-    assert(false);
-}
-
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
                              const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,

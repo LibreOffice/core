@@ -274,8 +274,6 @@ public:
     SfxStyleSheetBase&          Add( const SfxStyleSheetBase& );
 };
 
-
-
 class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
                      public SfxListener, public SfxBroadcaster, public svl::StyleSheetUser
 {
@@ -292,11 +290,14 @@ public:
     virtual bool        SetParent( const OUString& ) SAL_OVERRIDE;
 
 protected:
-    SfxStyleSheet(); // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
+    SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
+        : SfxStyleSheetBase(OUString("dummy"), NULL, SFX_STYLE_FAMILY_ALL, 0)
+    {
+        assert(false);
+    }
     virtual             ~SfxStyleSheet();
+
 };
-
-
 
 class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
