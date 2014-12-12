@@ -10202,7 +10202,9 @@ elif test $_os = WINNT; then
     SYSTEM_MESA_HEADERS=
     BUILD_TYPE="$BUILD_TYPE MESA"
 else
-    ENABLE_OPENGL=TRUE
+    if test "$with_x" != "no"; then
+        ENABLE_OPENGL=TRUE
+    fi
     ENABLE_OPENGL_CANVAS=TRUE
 
     dnl ===================================================================
