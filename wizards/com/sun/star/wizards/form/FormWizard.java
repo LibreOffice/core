@@ -376,12 +376,6 @@ public class FormWizard extends DatabaseObjectWizard
         private int ID;
 
         // @Override
-        public int getID()
-        {
-            return ID;
-        }
-
-        // @Override
         public void setID(String sIncSuffix)
         {
             ID = 1;

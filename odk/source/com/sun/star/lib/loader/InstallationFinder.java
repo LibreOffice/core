@@ -424,7 +424,7 @@ final class InstallationFinder {
                         lines.get( i ), "=" );
                     if ( tokens.countTokens() != 2 )
                         continue;
-                    String key = tokens.nextToken();
+                    tokens.nextToken(); // key
                     String url = tokens.nextToken();
                     path = getCanonicalPathFromFileURL( url );
                     if ( path != null )

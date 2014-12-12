@@ -1268,7 +1268,7 @@ public class TextPortionEnumerationTest
 
     @Test public void testTextField() throws Exception
     {
-        String name = mkName("ruby");
+        mkName("ruby");
         TreeNode root = new TreeNode();
         TreeNode txtf = new TextFieldNode("abc");
         root.appendChild(txtf);

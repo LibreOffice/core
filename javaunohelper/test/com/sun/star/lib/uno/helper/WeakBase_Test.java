@@ -67,7 +67,7 @@ public class WeakBase_Test
         Type[] t1= f1.getTypes();
         Type[] t2= f2.getTypes();
         assertArrayEquals(t1, t2);
-        Foo2 f3= new Foo2();
+        new Foo2();
     }
 
     @Test public void queryAdapter() throws Exception

@@ -602,7 +602,7 @@ public class PropertySet_Test
         cl.anyPropA= null;
         cl.propAnyA.Attributes= PropertyAttribute.MAYBEVOID;
 
-        Type _t= new Type(Object.class);
+        new Type(Object.class);
         cl.setPropertyValue("PropAnyA", null);
         assertEquals(cl.anyPropA.getType(), new Type(void.class));
         assertNull(cl.anyPropA.getObject());

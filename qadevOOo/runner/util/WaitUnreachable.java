@@ -114,5 +114,6 @@ public final class WaitUnreachable {
 
     private Object obj;
     private final ReferenceQueue<Object> queue;
+    @SuppressWarnings("unused")
     private final PhantomReference<Object> ref;
 }

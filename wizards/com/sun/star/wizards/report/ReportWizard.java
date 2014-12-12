@@ -642,11 +642,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 
         private int m_nID;
 
-        public int getID()
-        {
-            return m_nID;
-        }
-
         public void setID(String sIncSuffix)
         {
             m_nID = 1;

@@ -167,7 +167,7 @@ public final class TestBed {
                     XConnection connection = acceptor.accept(
                         connectionDescription);
                     System.out.println("Server: ...connected...");
-                    XBridge bridge = factory.createBridge(
+                    factory.createBridge(
                         "", protocolDescription, connection, provider);
                     System.out.println("Server: ...bridged.");
                 }

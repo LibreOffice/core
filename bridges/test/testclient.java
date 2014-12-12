@@ -115,7 +115,7 @@ public class testclient
                 if( null != xConnection )
                 {
                     System.out.println( "after connect" );
-                    com.sun.star.uno.IBridge bridge = UnoRuntime.getBridgeByName(
+                    UnoRuntime.getBridgeByName(
                         "java",
                         null,
                         "remote",

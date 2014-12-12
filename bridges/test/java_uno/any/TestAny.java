@@ -2182,10 +2182,6 @@ final class TestAny {
             super(0);
         }
 
-        public static Enum1 fromInt(int value) {
-            return new Enum1();
-        }
-
         @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == Enum1.class;
@@ -2216,10 +2212,6 @@ final class TestAny {
     private static class BaseException extends com.sun.star.uno.Exception {
         public BaseException() {}
 
-        private BaseException(String message) {
-            super(message);
-        }
-
         @Override
         public boolean equals(Object obj) {
             return obj != null && obj.getClass() == BaseException.class;
@@ -2228,10 +2220,6 @@ final class TestAny {
 
     private static class DerivedException extends BaseException {
         public DerivedException() {}
-
-        public DerivedException(String message) {
-            super(message);
-        }
 
         @Override
         public boolean equals(Object obj) {
@@ -2244,10 +2232,6 @@ final class TestAny {
     {
         public BaseRuntimeException() {}
 
-        private BaseRuntimeException(String message) {
-            super(message);
-        }
-
         @Override
         public boolean equals(Object obj) {
             return obj != null
@@ -2258,10 +2242,6 @@ final class TestAny {
     private static class DerivedRuntimeException extends BaseRuntimeException
     {
         public DerivedRuntimeException() {}
-
-        public DerivedRuntimeException(String message) {
-            super(message);
-        }
 
         @Override
         public boolean equals(Object obj) {

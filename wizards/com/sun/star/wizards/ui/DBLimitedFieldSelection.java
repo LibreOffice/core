@@ -37,7 +37,6 @@ public abstract class DBLimitedFieldSelection
     protected short curtabindex;
     protected int iCurPosY;
     protected int FirstHelpIndex;
-    private int iCompPosX;
 
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int _FirstHelpIndex)
     {
@@ -46,7 +45,6 @@ public abstract class DBLimitedFieldSelection
         curtabindex = (short) (iStep * 100);
         sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
         IStep = Integer.valueOf(iStep);
-        iCompPosX = _iCompPosX;
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {

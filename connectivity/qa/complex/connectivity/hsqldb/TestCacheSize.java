@@ -79,8 +79,6 @@ public class TestCacheSize {
     // frequent reporting of progress
     private boolean reportProgress = false;
 
-    private XMultiServiceFactory servicefactory = null;
-
     // type of the big table {MEMORY | CACHED | TEXT}
     private String tableType      = "CACHED";
     private int    cacheScale     = 17;
@@ -109,8 +107,6 @@ public class TestCacheSize {
     private boolean multikeytable = false;
 
 
-    private String     user;
-    private String     password;
     private XStatement  sStatement;
     private XConnection cConnection;
     XDataSource ds;
@@ -118,7 +114,6 @@ public class TestCacheSize {
     private com.sun.star.beans.PropertyValue[] info;
 
     public TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
-        servicefactory = _xmulti;
         drv = _drv;
         info = _info;
     }
@@ -128,9 +123,6 @@ public class TestCacheSize {
     }
 
     public void setUp() {
-
-        user     = "sa";
-        password = "";
 
         try {
             sStatement  = null;

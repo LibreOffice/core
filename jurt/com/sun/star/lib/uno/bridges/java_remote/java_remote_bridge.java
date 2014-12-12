@@ -21,7 +21,6 @@ package com.sun.star.lib.uno.bridges.java_remote;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,16 +29,13 @@ import java.util.Map;
 
 import com.sun.star.lib.util.DisposeListener;
 import com.sun.star.lib.util.DisposeNotifier;
-
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
-
 import com.sun.star.connection.XConnection;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.DisposedException;
-
 import com.sun.star.lib.uno.environments.java.java_environment;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.environments.remote.IReceiver;
@@ -48,11 +44,8 @@ import com.sun.star.lib.uno.environments.remote.Message;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
 import com.sun.star.lib.uno.environments.remote.ThreadPoolManager;
 import com.sun.star.lib.uno.environments.remote.IThreadPool;
-
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-
-
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.IEnvironment;
 import com.sun.star.uno.UnoRuntime;
@@ -212,6 +205,7 @@ public class java_remote_bridge
         }
 
         private final Type type;
+        @SuppressWarnings("unused")
         private final Object object;
         private int count = 1;
     }

@@ -98,7 +98,6 @@ public class AccessibilityWorkBench
             + System.getProperty ("os.version"));
         MessageArea.println ("Using port " + nPortNumber);
         office = new SimpleOffice (nPortNumber);
-        info = new InformationWriter ();
 
         maAccessibilityTree.getComponent().addTreeSelectionListener (this);
 
@@ -568,8 +567,6 @@ public class AccessibilityWorkBench
 
     private SimpleOffice
         office;
-    private InformationWriter
-        info;
 
     private JPanel
         maButtonBar;

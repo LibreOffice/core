@@ -62,7 +62,7 @@ public class UrlResolver_Test
 
             // now create the desktop service
             // NOTE: use the office component context here !
-            Object oDesktop = xOfficeFactory.createInstanceWithContext("com.sun.star.frame.Desktop",
+            xOfficeFactory.createInstanceWithContext("com.sun.star.frame.Desktop",
                                                                        xOfficeComponentContext );
         } catch(com.sun.star.connection.NoConnectException e) {
             System.out.println(e.getMessage());

@@ -43,7 +43,7 @@ public class ProxyProvider
             return retVal;
 
         Type type= new Type(TypeDescription.getTypeDescription(iface));
-        Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
+        new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
         // find the object identifier
         String sOid= UnoRuntime.generateOid(obj);
         retVal= env.getRegisteredInterface(sOid, type);
