@@ -61,7 +61,8 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 $(eval $(call gb_Library_use_externals,vcl,\
 	jpeg \
 	$(if $(filter-out WNT,$(OS)), \
-		nss3) \
+		nss3 \
+		plc4) \
 	libeot \
 ))
 
