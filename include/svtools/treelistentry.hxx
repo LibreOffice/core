@@ -27,13 +27,13 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-// Flags, die am Model haengen
+// flags related to the model
 #define SV_ENTRYFLAG_CHILDREN_ON_DEMAND   0x0001
 #define SV_ENTRYFLAG_DISABLE_DROP       0x0002
 #define SV_ENTRYFLAG_IN_USE             0x0004
-// wird gesetzt, wenn RequestingChildren keine Children gestzt hat
+// is set if RequestingChildren has not set any children
 #define SV_ENTRYFLAG_NO_NODEBMP         0x0008
-// Eintrag hatte oder hat Kinder
+// entry had or has children
 #define SV_ENTRYFLAG_HAD_CHILDREN       0x0010
 
 #define SV_ENTRYFLAG_USER_FLAGS         0xF000
@@ -81,9 +81,9 @@ public:
 
     size_t ItemCount() const;
 
-    // DARF NUR GERUFEN WERDEN, WENN DER EINTRAG NOCH NICHT IM MODEL
-    // EINGEFUEGT IST, DA SONST FUER DAS ITEM KEINE VIEW-ABHAENGIGEN
-    // DATEN ALLOZIERT WERDEN!
+    // MAY ONLY BE CALLED IF THE ENTRY HAS NOT YET BEEN INSERTED INTO
+    // THE MODEL, AS OTHERWISE NO VIEW-DEPENDENT DATEA ARE ALLOCATED
+    // FOR THE ITEM!
     void        AddItem( SvLBoxItem* pItem );
     void ReplaceItem( SvLBoxItem* pNewItem, size_t nPos );
     const SvLBoxItem* GetItem( size_t nPos ) const;

@@ -83,7 +83,7 @@ void FontNameMenu::SetCurName(const OUString& rName)
 {
     maCurName = rName;
 
-    // Menueintrag checken
+    // check menu entry
     sal_uInt16 nChecked = 0;
     sal_uInt16 nItemCount = GetItemCount();
     for( sal_uInt16 i = 0; i < nItemCount; i++ )

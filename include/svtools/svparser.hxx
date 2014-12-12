@@ -47,32 +47,31 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
 
 protected:
     SvStream&           rInput;
-    OUString            aToken;             // gescanntes Token
-    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
-    sal_uLong           nlLinePos;          // akt. Spalten Nummer
+    OUString            aToken;             // scanned token
+    sal_uLong           nlLineNr;           // current line number
+    sal_uLong           nlLinePos;          // current column number
 
-    SvParser_Impl       *pImplData;         // interne Daten
-    long                nTokenValue;        // zusaetzlicher Wert (RTF)
+    SvParser_Impl       *pImplData;         // internal data
+    long                nTokenValue;        // additional vavlue (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
-    SvParserState       eState;             // Status auch in abgl. Klassen
+    SvParserState       eState;             // status also in derived classes
 
     rtl_TextEncoding    eSrcEnc;        // Source encoding
 
     sal_uLong nNextChPos;
-    sal_Unicode nNextCh;                // Akt. Zeichen fuer die "lex"
+    sal_Unicode nNextCh;                // current character for the "lex"
 
 
-    bool                bDownloadingFile : 1;// sal_True: Es wird gerade ein externes
-                                        //       File geladen. d.h. alle
-                                        //       DataAvailable Links muessen
-                                        //       ignoriert werden.
-                                        // Wenn keibes der folgenden
-                                        // Flags gesetzt ist, wird der
-                                        // Stream als ANSI gelesen,
-                                        // aber als CharSet DONTKNOW
-                                        // zurueckgegeben.
-    bool                bUCS2BSrcEnc : 1;   // oder als big-endian UCS2
-    bool                bSwitchToUCS2 : 1;  // Umschalten des ist erlaubt
+    bool                bDownloadingFile : 1; // true: An external file is
+                                        // currently being loaded, i.e.
+                                        // all DataAvailable Links must
+                                        // be ignored.
+                                        // If none of the following
+                                        // flags is set, the stream
+                                        // is read as ANSI, but returned
+                                        // as CharSet DONTKNOW.
+    bool                bUCS2BSrcEnc : 1;   // or as big-endian UCS2
+    bool                bSwitchToUCS2 : 1;  // switching is allowed
 
     bool                bRTF_InTextRead : 1;  // only for RTF-Parser!!!
 
@@ -92,21 +91,21 @@ protected:
         ~TokenStackType() { }
     };
 
-    // Methoden fuer Token-Stack
-    int SkipToken( short nCnt = -1 );       // n Tokens zurueck "skippen"
+    // methods for Token stack
+    int SkipToken( short nCnt = -1 );       // "skip" n Tokens back
     TokenStackType* GetStackPtr( short nCnt );
     inline sal_uInt8 GetStackPos() const;
 
-    // scanne das naechste Token:
-    //  Tokenstack abarbeiten und ggfs. _GetNextToken() rufen. Diese
-    //  ist fuers erkennen von neuen Token verantwortlich
+    // scan the next token:
+    //  work off Token stack and call _GetNextToken() if necessary.
+    //  That one is responsible for the recognition of new Tokens.
     int GetNextToken();
     virtual int _GetNextToken() = 0;
 
-    // wird fuer jedes Token gerufen, das in CallParser erkannt wird
+    // is called for each Token that is recognized in CallParser
     virtual void NextToken( int nToken );
 
-    // zu Zeiten der SvRefBase-Ableitung darf nicht jeder loeschen
+    // at times of SvRefBase derivation, not everybody may delete
     virtual ~SvParser();
 
     void ClearTxtConvContext();
@@ -117,10 +116,9 @@ private:
     sal_uInt8 nTokenStackSize, nTokenStackPos;
 
 public:
-    // Konstruktor
     SvParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
 
-    virtual  SvParserState CallParser() = 0;    // Aufruf des Parsers
+    virtual  SvParserState CallParser() = 0; // calling of the parser
 
     inline SvParserState GetStatus() const  { return eState; }  // StatusInfo
 
@@ -128,8 +126,8 @@ public:
     inline sal_uLong    GetLinePos() const      { return nlLinePos; }
     inline sal_uLong    IncLineNr()             { return ++nlLineNr; }
     inline sal_uLong    IncLinePos()            { return ++nlLinePos; }
-    inline sal_uLong    SetLineNr( sal_uLong nlNum );           // inline unten
-    inline sal_uLong    SetLinePos( sal_uLong nlPos );          // inline unten
+    inline sal_uLong    SetLineNr( sal_uLong nlNum );           // inline bottom
+    inline sal_uLong    SetLinePos( sal_uLong nlPos );          // inline bottom
 
     sal_Unicode GetNextChar();
     void RereadLookahead();
@@ -141,7 +139,7 @@ public:
 
     long CallAsyncCallLink() { return NewDataRead( this, 0 ); }
 
-    // fuers asynchrone lesen aus dem SvStream
+    // for asynchronous reading from the SvStream
     void SaveState( int nToken );
     void RestoreState();
     virtual void Continue( int nToken );
@@ -157,19 +155,19 @@ public:
     void SetSrcUCS2BEncoding( bool bSet ) { bUCS2BSrcEnc = bSet; }
     bool IsSrcUCS2BEncoding() const { return bUCS2BSrcEnc; }
 
-    // Darf der Zeichensatz auf UCS/2 umgeschaltet werden, wenn
-    // in den ersten beiden Zeichen im Stream eine BOM steht?
+    // May the character set be switched to UCS/2, if a BOM
+    // is in the first two characters of the stream?
     void SetSwitchToUCS2( bool bSet ) { bSwitchToUCS2 = bSet; }
     bool IsSwitchToUCS2() const { return bSwitchToUCS2; }
 
-    // Aus wie vielen Bytes betseht ein Zeichen
+    // how many bytes a character consists of
     inline sal_uInt16 GetCharSize() const;
 
     int GetSaveToken() const;
 
-    // Aufbau einer Which-Map 'rWhichMap' aus einem Array von
-    // 'pWhichIds' von Which-Ids. Es hat die Lange 'nWhichIds'.
-    // Die Which-Map wird nicht geloescht.
+    // build a Which-Map 'rWhichMap' from an array of WhichIds
+    // 'pWhichIds'. It has the length 'nWhichIds'.
+    // The WhichMap is not deleted.
     static void BuildWhichTbl( std::vector<sal_uInt16> &rWhichMap,
                                sal_uInt16 *pWhichIds,
                                sal_uInt16 nWhichIds );

@@ -51,7 +51,7 @@ private:
     SvLBoxButtonData_Impl*  pImpl;
     bool                    bDataOk;
     SvButtonState           eState;
-    std::vector<Image>      aBmps;  // Indizes siehe Konstanten BMP_ ....
+    std::vector<Image>      aBmps;  // indices s. constants BMP_ ....
 
     SVT_DLLPRIVATE void     SetWidthAndHeight();
     SVT_DLLPRIVATE void     InitData( bool bImagesFromDefault,
@@ -69,7 +69,7 @@ public:
     void                    SetLink( const Link& rLink) { aLink=rLink; }
     const Link&             GetLink() const { return aLink; }
     bool                    IsRadio();
-    // weil Buttons nicht von LinkHdl abgeleitet sind
+    // as buttons are not derived from LinkHdl
     void                    CallLink();
 
     void                    StoreButtonState( SvTreeListEntry* pEntry, sal_uInt16 nItemFlags );
@@ -130,7 +130,7 @@ public:
 #define SV_ITEMSTATE_CHECKED            0x0002
 #define SV_ITEMSTATE_TRISTATE           0x0004
 #define SV_ITEMSTATE_HILIGHTED          0x0008
-#define SV_STATE_MASK 0xFFF8  // zum Loeschen von UNCHECKED,CHECKED,TRISTATE
+#define SV_STATE_MASK 0xFFF8  // for deletion of UNCHECKED,CHECKED,TRISTATE
 
 class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
