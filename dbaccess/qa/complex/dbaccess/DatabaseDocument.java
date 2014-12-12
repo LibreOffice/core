@@ -516,7 +516,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     private void impl_storeDocument( final XModel _document ) throws Exception
     {
         // store the document
-        final String documentURL = FileHelper.getOOoCompatibleFileURL( _document.getURL() );
+        FileHelper.getOOoCompatibleFileURL( _document.getURL() );
         final XStorable storeDoc = UnoRuntime.queryInterface(XStorable.class, _document);
         storeDoc.store();
 

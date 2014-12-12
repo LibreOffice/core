@@ -88,8 +88,7 @@ public class DOMTest
 
     @Test public void testXSAXDocumentBuilder() throws Exception
     {
-        XSAXDocumentBuilder xSAXBuilder =
-            UnoRuntime.queryInterface(XSAXDocumentBuilder.class,
+        UnoRuntime.queryInterface(XSAXDocumentBuilder.class,
             m_xMSF.createInstance("com.sun.star.xml.dom.SAXDocumentBuilder"));
         //FIXME TODO
     }

@@ -94,7 +94,7 @@ public final class TestEquals {
                               prov.getInstance(INSTANCE2));
             XConnection connection = acceptor.accept(CONNECTION_DESCRIPTION);
             System.out.println("Client, 2nd connection: ...connected...");
-            XBridge bridge2 = factory.createBridge(
+            factory.createBridge(
                 "", PROTOCOL_DESCRIPTION, connection, prov);
             System.out.println("Client, 2nd connection: ...bridged.");
             synchronized (lock) {

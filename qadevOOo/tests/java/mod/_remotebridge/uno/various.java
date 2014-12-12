@@ -119,11 +119,6 @@ public class various extends TestCase {
     * return value.
     */
     private class AcceptorThread extends Thread {
-        /**
-        * If exception occurred during method call it is
-        * stored in this field.
-        */
-        private Exception ex = null ;
         private final XAcceptor acc;
         private final XInstanceProvider xInstProv;
         private final XBridgeFactory xBrdgFctr;
@@ -154,11 +149,8 @@ public class various extends TestCase {
                 xBrdgFctr.createBridge("MyBridge", "urp",
                                             acceptedCall, xInstProv);
             } catch (com.sun.star.connection.ConnectionSetupException e) {
-                ex = e ;
             } catch (com.sun.star.connection.AlreadyAcceptingException e) {
-                ex = e ;
             } catch (com.sun.star.bridge.BridgeExistsException e) {
-                ex = e ;
             }
         }
     }

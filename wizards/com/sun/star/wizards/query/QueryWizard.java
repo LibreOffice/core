@@ -399,11 +399,6 @@ public class QueryWizard extends DatabaseObjectWizard
 
         private int ID;
 
-        public int getID()
-        {
-            return ID;
-        }
-
         public void setID(String sIncSuffix)
         {
             ID = 1;

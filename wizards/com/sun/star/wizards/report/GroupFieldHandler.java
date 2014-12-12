@@ -176,12 +176,6 @@ public class GroupFieldHandler extends FieldSelection
             }
         }
 
-        public int getID()
-        {
-            // TODO: here is a good place for a comment, isn't it?
-            return 2;
-        }
-
         public void setID(String sIncSuffix)
         {
         }

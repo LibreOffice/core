@@ -45,7 +45,6 @@ import com.sun.star.lang.XComponent;
 
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.StringPair;

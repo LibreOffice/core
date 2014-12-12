@@ -43,7 +43,7 @@ public final class BridgeFactory_Test {
 
         // test that we can not create another bridge with same name
         try {
-            XBridge dummy = bridgeFactory.createBridge("testbridge", "urp", leftSide, null);
+            bridgeFactory.createBridge("testbridge", "urp", leftSide, null);
 
             fail();
         }

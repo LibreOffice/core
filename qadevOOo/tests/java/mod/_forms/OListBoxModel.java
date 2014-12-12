@@ -189,14 +189,12 @@ public class OListBoxModel extends GenericModelTest {
             private XPropertySet ps = null;
             private XInterface ctrl = null;
             private String ChangePropertyName = null;
-            Object ChangePropertyValue = null;
 
             public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName, Object ChangePropertyValue) {
                 formLoaderF = xl;
                 this.ps = ps;
                 this.ctrl = ctrl;
                 this.ChangePropertyName=ChangePropertyName;
-                this.ChangePropertyValue=ChangePropertyValue;
             }
 
             public void update() throws Exception {

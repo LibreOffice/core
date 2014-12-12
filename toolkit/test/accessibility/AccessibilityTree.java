@@ -53,8 +53,6 @@ public class AccessibilityTree
                 new StringNode ("Please press Update button", null));
         maTree.setModel (aModel);
 
-        maCellRenderer = new AccessibleTreeCellRenderer();
-
         maTree.addMouseListener (new MouseListener (this));
 
         // Listen to expansions and collapses to change the mouse cursor.
@@ -382,7 +380,6 @@ public class AccessibilityTree
 
 
 
-    private AccessibleTreeCellRenderer  maCellRenderer;
     private final JTree  maTree;
     private int mnExpandLevel;
 }

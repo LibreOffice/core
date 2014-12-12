@@ -23,6 +23,7 @@ import com.sun.star.lib.util.AsynchronousFinalizer;
 import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -155,6 +156,7 @@ final class ProxyFactory {
 
         private final String oid;
         private final Type type;
+        @SuppressWarnings("unused")
         private int dummy = 0;
     }
 

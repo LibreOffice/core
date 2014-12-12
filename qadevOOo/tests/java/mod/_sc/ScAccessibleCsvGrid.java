@@ -34,7 +34,6 @@ import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
@@ -158,7 +157,6 @@ public class ScAccessibleCsvGrid extends TestCase {
 
         private final SOfficeFactory SOF;
         private final PropertyValue[] args;
-        public XComponent xSpreadSheedDoc = null;
 
         private loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
             this.SOF = SOF;

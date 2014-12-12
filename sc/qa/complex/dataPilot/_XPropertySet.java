@@ -343,7 +343,7 @@ public class _XPropertySet {
         }
 
         try {
-            Object gValue = oObj.getPropertyValue(toCheck);
+            oObj.getPropertyValue(toCheck);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             System.out.println("Exception occurred while trying to get property '"+
                  PTT.normal+"'");

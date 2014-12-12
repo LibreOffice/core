@@ -36,7 +36,6 @@ import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -193,7 +192,6 @@ public class ScAccessibleCsvRuler extends TestCase {
 
         private final SOfficeFactory SOF;
         private final PropertyValue[] args;
-        public XComponent xSpreadSheedDoc = null;
 
         private loadThread(SOfficeFactory SOF, PropertyValue[] Args) {
             this.SOF = SOF;

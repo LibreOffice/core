@@ -120,16 +120,7 @@ public class various extends TestCase {
     * return value.
     */
     private class AcceptorThread extends Thread {
-        /**
-        * If exception occurred during method call it is
-        * stored in this field.
-        */
-        private Exception ex = null ;
         private final XAcceptor acc;
-        /**
-        * If method call returns some value it stores in this field.
-        */
-        private XConnection acceptedCall = null ;
 
         /**
         * Creates object which can call <code>accept</code> method
@@ -146,11 +137,9 @@ public class various extends TestCase {
         @Override
         public void run() {
             try {
-                acceptedCall = acc.accept(connectString) ;
+                acc.accept(connectString) ;
             } catch (com.sun.star.connection.ConnectionSetupException e) {
-                ex = e ;
             } catch (com.sun.star.connection.AlreadyAcceptingException e) {
-                ex = e ;
             }
         }
     }
