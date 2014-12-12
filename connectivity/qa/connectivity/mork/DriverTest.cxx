@@ -149,17 +149,17 @@ void MorkDriverTest::test_select_default_all()
     bool result = xResultSet->first();
     CPPUNIT_ASSERT_MESSAGE("fetch first row failed!", result);
     OUString mail = xDelegatorRow->getString(1);
-    CPPUNIT_ASSERT_MESSAGE("first row is not john@doe.org!", mail.equalsAscii("john@doe.org"));
+    CPPUNIT_ASSERT_MESSAGE("first row is not john@doe.org!", mail == "john@doe.org");
 
     result = xResultSet->next();
     CPPUNIT_ASSERT_MESSAGE("fetch second row failed!", result);
     mail = xDelegatorRow->getString(1);
-    CPPUNIT_ASSERT_MESSAGE("second row is not john@doe10.org!", mail.equalsAscii("john@doe10.org"));
+    CPPUNIT_ASSERT_MESSAGE("second row is not john@doe10.org!", mail == "john@doe10.org");
 
     result = xResultSet->last();
     CPPUNIT_ASSERT_MESSAGE("fetch last row failed!", result);
     mail = xDelegatorRow->getString(1);
-    CPPUNIT_ASSERT_MESSAGE("last row is not john@doe9.org!", mail.equalsAscii("john@doe9.org"));
+    CPPUNIT_ASSERT_MESSAGE("last row is not john@doe9.org!", mail == "john@doe9.org");
 
     css::uno::Reference<css::sdbc::XCloseable>(
         xStatement, css::uno::UNO_QUERY_THROW)->close();
@@ -189,7 +189,7 @@ void MorkDriverTest::test_select_list_table_joe_doe_5()
     bool result = xResultSet->first();
     CPPUNIT_ASSERT_MESSAGE("fetch first row failed!", result);
     OUString mail = xDelegatorRow->getString(1);
-    CPPUNIT_ASSERT_MESSAGE("last row is not john@doe5.org!", mail.equalsAscii("john@doe5.org"));
+    CPPUNIT_ASSERT_MESSAGE("last row is not john@doe5.org!", mail == "john@doe5.org");
 
     css::uno::Reference<css::sdbc::XCloseable>(
         xStatement, css::uno::UNO_QUERY_THROW)->close();

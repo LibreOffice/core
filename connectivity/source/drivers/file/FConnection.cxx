@@ -105,9 +105,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     const PropertyValue *pEnd    = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if( pIter->Name.equalsAscii("Extension"))
+        if( pIter->Name == "Extension" )
             OSL_VERIFY( pIter->Value >>= aExt );
-        else if( pIter->Name.equalsAscii("CharSet"))
+        else if( pIter->Name == "CharSet" )
         {
             OUString sIanaName;
             OSL_VERIFY( pIter->Value >>= sIanaName );
@@ -119,11 +119,11 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             else
                 m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
         }
-        else if( pIter->Name.equalsAscii("ShowDeleted"))
+        else if( pIter->Name == "ShowDeleted" )
         {
             OSL_VERIFY( pIter->Value >>= m_bShowDeleted );
         }
-        else if( pIter->Name.equalsAscii("EnableSQL92Check"))
+        else if( pIter->Name == "EnableSQL92Check" )
         {
             pIter->Value >>= m_bCheckSQL92;
         }

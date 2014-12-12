@@ -1185,9 +1185,9 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         row[1] <<= xRow->getString( 1 );
         row[2] <<= xRow->getString( 2 );
         OUString type = xRow->getString(3);
-        if( type.equalsAscii( "r" ) )
+        if( type == "r" )
         {
-            if( xRow->getString(1).equalsAscii( "pg_catalog" ) )
+            if( xRow->getString(1) == "pg_catalog" )
             {
                 row[3] <<= statics.SYSTEM_TABLE;
             }
@@ -1196,7 +1196,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
                 row[3] <<= statics.TABLE;
             }
         }
-        else if( type.equalsAscii( "v" ) )
+        else if( type == "v" )
         {
             row[3] <<= statics.VIEW;
         }
@@ -1323,7 +1323,7 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
     // string representation. Additionally, the edit-table-type-selection-box
     // is not so unusable anymore.
     sal_Int32 ret = com::sun::star::sdbc::DataType::LONGVARCHAR;
-    if( typtype.equalsAscii( "b" ) )
+    if( typtype == "b" )
     {
         // as long as the OOo framework does not support arrays,
         // the user is better of with interpreting arrays as strings !
@@ -1341,11 +1341,11 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
             ret = ii->second;
         }
     }
-    else if( typtype.equalsAscii( "c" ) )
+    else if( typtype == "c" )
     {
         ret = com::sun::star::sdbc::DataType::STRUCT;
     }
-    else if( typtype.equalsAscii( "d" ) )
+    else if( typtype == "d" )
     {
         ret = com::sun::star::sdbc::DataType::LONGVARCHAR;
     }

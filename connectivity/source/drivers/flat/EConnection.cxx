@@ -68,33 +68,33 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(pBegin->Name.equalsAscii("HeaderLine"))
+        if(pBegin->Name == "HeaderLine")
             OSL_VERIFY( pBegin->Value >>= m_bHeaderLine );
-        else if(pBegin->Name.equalsAscii("FieldDelimiter"))
+        else if(pBegin->Name == "FieldDelimiter")
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cFieldDelimiter = aVal.toChar();
         }
-        else if(pBegin->Name.equalsAscii("StringDelimiter"))
+        else if(pBegin->Name == "StringDelimiter")
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cStringDelimiter = aVal.toChar();
         }
-        else if(pBegin->Name.equalsAscii("DecimalDelimiter"))
+        else if(pBegin->Name == "DecimalDelimiter")
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cDecimalDelimiter = aVal.toChar();
         }
-        else if(pBegin->Name.equalsAscii("ThousandDelimiter"))
+        else if(pBegin->Name == "ThousandDelimiter")
         {
             OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cThousandDelimiter = aVal.toChar();
         }
-        else if ( pBegin->Name.equalsAscii("MaxRowScan") )
+        else if ( pBegin->Name == "MaxRowScan" )
         {
             pBegin->Value >>= m_nMaxRowsToScan;
         }

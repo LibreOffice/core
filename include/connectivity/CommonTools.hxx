@@ -162,12 +162,12 @@ namespace connectivity
 #define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
     OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)   \
     {   \
-        return OUString::createFromAscii(implasciiname); \
+        return OUString(implasciiname); \
     }   \
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname); \
+        aSupported[0] = serviceasciiname; \
         return aSupported;  \
     }   \
     sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) \

@@ -880,8 +880,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             matchString = parseTree->getChild(2)->getTokenValue();
         }
 
-        if ( columnName.equalsAscii("0") && op == MQueryOp::Is &&
-             matchString.equalsAscii("1") ) {
+        if ( columnName == "0" && op == MQueryOp::Is && matchString == "1" ) {
             OSL_TRACE("Query always evaluates to FALSE");
             m_bIsAlwaysFalseQuery = true;
         }

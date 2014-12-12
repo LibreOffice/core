@@ -152,7 +152,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     {
         OUString aVal;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
-        m_bReadOnly = aVal.equalsAscii("Y");
+        m_bReadOnly = aVal == "Y";
     }
     catch(Exception&)
     {

@@ -146,7 +146,7 @@ namespace connectivity { namespace hsqldb
                     const PropertyValue* pEnd  = pIter + aInfo.getLength();
                     for(;pIter != pEnd;++pIter)
                     {
-                        if ( pIter->Name.equalsAscii("readonly") )
+                        if ( pIter->Name == "readonly" )
                             m_bReadOnly = true;
                     }
                 }
