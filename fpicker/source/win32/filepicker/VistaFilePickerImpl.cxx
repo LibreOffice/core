@@ -51,6 +51,28 @@ HWND choose_parent_window()
     return hwnd_parent;
 }
 
+namespace {
+
+bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
+    OUString path;
+    if (osl::FileBase::getSystemPathFromFileURL(url, path)
+        != osl::FileBase::E_None)
+    {
+        return false;
+    }
+#if defined __MINGW32__
+    HRESULT res = SHCreateItemFromParsingName(
+        reinterpret_cast<LPCTSTR>(path.getStr()), NULL, IID_IShellItem,
+        reinterpret_cast<void **>(&folder));
+#else
+    HRESULT res = SHCreateItemFromParsingName(
+        path.getStr(), NULL, IID_PPV_ARGS(&folder));
+#endif
+    return SUCCEEDED(res);
+}
+
+}
+
 namespace fpicker{
 namespace win32{
 namespace vista{
@@ -681,12 +703,7 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
     // <- SYNCHRONIZED
 
     ComPtr< IShellItem > pFolder;
-#ifdef __MINGW32__
-    HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(sDirectory.getStr()), NULL, IID_IShellItem, reinterpret_cast<void**>(&pFolder) );
-#else
-    HRESULT hResult = SHCreateItemFromParsingName ( sDirectory.getStr(), NULL, IID_PPV_ARGS(&pFolder) );
-#endif
-    if ( FAILED(hResult) )
+    if ( !createFolderItem(sDirectory, pFolder) )
         return;
 
     if ( m_bInExecute || bForce )
@@ -878,12 +895,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     if( m_sDirectory.getLength())
     {
         ComPtr< IShellItem > pFolder;
-        #ifdef __MINGW32__
-            HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(m_sDirectory.getStr()), NULL, IID_IShellItem, reinterpret_cast<void**>(&pFolder) );
-        #else
-            HRESULT hResult = SHCreateItemFromParsingName ( m_sDirectory.getStr(), NULL, IID_PPV_ARGS(&pFolder) );
-        #endif
-        if ( SUCCEEDED(hResult) )
+        if ( createFolderItem(m_sDirectory, pFolder) )
         {
             if (m_sFilename.getLength())
             {
@@ -931,7 +943,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 FindClose( hFind );
             }
             else
-                hResult = iDialog->AddPlace(pFolder, FDAP_TOP);
+                iDialog->AddPlace(pFolder, FDAP_TOP);
         }
     }
 
