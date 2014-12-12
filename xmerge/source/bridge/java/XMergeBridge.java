@@ -82,7 +82,7 @@ public class XMergeBridge {
     /** This inner class provides the component as a concrete implementation
      * of the service description. It implements the needed interfaces.
      */
-    static private class _XMergeBridge implements
+    static public class _XMergeBridge implements
                                                XImportFilter,
      XExportFilter,
         XServiceName,

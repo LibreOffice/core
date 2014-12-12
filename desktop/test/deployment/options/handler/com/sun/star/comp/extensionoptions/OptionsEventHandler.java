@@ -43,7 +43,7 @@ import com.sun.star.util.XChangesBatch;
  */
 public class OptionsEventHandler {
 
-    private static class _OptionsEventHandler extends WeakBase
+    public static class _OptionsEventHandler extends WeakBase
         implements XServiceInfo, XContainerWindowEventHandler {
 
         static private final String __serviceName =

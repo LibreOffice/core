@@ -53,7 +53,7 @@ public class InspectorAddon {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    private static class InspectorAddonImpl extends WeakBase implements XDispatchProvider, XInitialization, XServiceInfo {
+    public static class InspectorAddonImpl extends WeakBase implements XDispatchProvider, XInitialization, XServiceInfo {
     private org.openoffice.XInstanceInspector xInstInspector = null;
 //    Dispatcher oDispatcher = null;
     private XFrame m_xFrame = null;

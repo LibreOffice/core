@@ -65,7 +65,7 @@ import com.sun.star.test.XTestDialogHandler;
 // ComponentBase, see implementation of TestComponentA.
 public class DialogComponent {
 
-    private static class _DialogComponent
+    public static class _DialogComponent
         implements XTypeProvider, XServiceInfo, XTestDialogHandler, XDialogEventHandler {
 
         private static final String __serviceName= "com.sun.star.test.TestDialogHandler";

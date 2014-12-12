@@ -752,7 +752,7 @@ public class ExampleDataPilotSource
 {
     //  implementation of com.sun.star.sheet.DataPilotSource
 
-    static private class _ExampleDataPilotSource implements
+    static public class _ExampleDataPilotSource implements
                         com.sun.star.sheet.XDimensionsSupplier,
                         com.sun.star.sheet.XDataPilotResults,
                         com.sun.star.util.XRefreshable,

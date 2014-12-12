@@ -49,7 +49,7 @@ public class MinimalComponent {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    private static class _MinimalComponent extends WeakBase
+    public static class _MinimalComponent extends WeakBase
         implements XInitialization, XServiceInfo {
         /** The service name, that must be used to get an instance of this service.
          */

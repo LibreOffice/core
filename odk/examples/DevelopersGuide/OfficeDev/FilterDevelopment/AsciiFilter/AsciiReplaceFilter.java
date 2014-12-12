@@ -67,7 +67,7 @@ import com.sun.star.document.XFilter;
 
 public class AsciiReplaceFilter
 {
-    private static class _AsciiReplaceFilter extends     WeakBase
+    public static class _AsciiReplaceFilter extends     WeakBase
                                             implements  XInitialization ,
                                                         XServiceInfo    ,
                                                         XNamed          ,

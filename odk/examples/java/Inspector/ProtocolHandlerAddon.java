@@ -57,7 +57,7 @@ public class ProtocolHandlerAddon {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    private static class ProtocolHandlerAddonImpl extends WeakBase implements
+    public static class ProtocolHandlerAddonImpl extends WeakBase implements
                                                  XDispatchProvider,
                                                  XDispatch,
                                                  XInitialization,
