@@ -88,24 +88,6 @@ LwpSvStream& LwpSvStream::ReadUInt32( sal_uInt32& rUInt32 )
     return *this;
 }
 
-LwpSvStream& LwpSvStream::ReadInt8( sal_Int8& rInt8 )
-{
-    m_pStream->ReadSChar( rInt8 );
-    return *this;
-}
-
-LwpSvStream& LwpSvStream::ReadInt16( sal_Int16& rInt16 )
-{
-    m_pStream->ReadInt16( rInt16 );
-    return *this;
-}
-
-LwpSvStream& LwpSvStream::ReadInt32( sal_Int32& rInt32 )
-{
-    m_pStream->ReadInt32( rInt32 );
-    return *this;
-}
-
 /**
  * @descr       SeekRel in stream
 */

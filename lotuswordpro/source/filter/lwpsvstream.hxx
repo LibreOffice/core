@@ -76,10 +76,6 @@ public:
     LwpSvStream& ReadUInt16( sal_uInt16& rUInt16 );
     LwpSvStream& ReadUInt32( sal_uInt32& rUInt32 );
 
-    LwpSvStream& ReadInt8( sal_Int8& rInt8 );
-    LwpSvStream& ReadInt16( sal_Int16& rInt16 );
-    LwpSvStream& ReadInt32( sal_Int32& rInt32 );
-
     static const sal_uInt32 LWP_STREAM_BASE;
 
     LwpSvStream * GetCompressedStream()

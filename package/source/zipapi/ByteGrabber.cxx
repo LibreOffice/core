@@ -100,90 +100,32 @@ sal_Int64 SAL_CALL ByteGrabber::getLength(  )
         throw io::IOException(THROW_WHERE );
 }
 
-ByteGrabber& ByteGrabber::ReadInt8(sal_Int8& rInt8)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (xStream->readBytes(aSequence,1) != 1)
-        rInt8 = 0;
-    else
-        rInt8 = aSequence[0] & 0xFF;
-    return *this;
-}
-
-ByteGrabber& ByteGrabber::ReadInt16(sal_Int16& rInt16)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if (xStream->readBytes ( aSequence, 2) != 2)
-        rInt16 = 0;
-    else
-    {
-        pSequence = aSequence.getConstArray();
-        rInt16 = static_cast <sal_Int16>
-               ( (pSequence[0] & 0xFF)
-              | (pSequence[1] & 0xFF) << 8);
-    }
-    return *this;
-}
-
-ByteGrabber& ByteGrabber::ReadInt32(sal_Int32& rInt32)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if (xStream->readBytes(aSequence, 4) != 4)
-        rInt32 = 0;
-    else
-    {
-        pSequence = aSequence.getConstArray();
-        rInt32 = static_cast < sal_Int32 >
-                ( (pSequence[0] & 0xFF)
-              | ( pSequence[1] & 0xFF ) << 8
-              | ( pSequence[2] & 0xFF ) << 16
-              | ( pSequence[3] & 0xFF ) << 24 );
-    }
-    return *this;
-}
-
-ByteGrabber& ByteGrabber::ReadUInt8(sal_uInt8& rInt8)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    if (xStream->readBytes(aSequence,1) != 1)
-        rInt8 = 0;
-    else
-        rInt8 = static_cast < sal_uInt8 > (aSequence[0] & 0xFF );
-    return *this;
-}
-ByteGrabber& ByteGrabber::ReadUInt16(sal_uInt16& rInt16)
+sal_uInt16 ByteGrabber::ReadUInt16()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if (xStream->readBytes(aSequence, 2) != 2)
-        rInt16 = 0;
-    else
-    {
-        pSequence = aSequence.getConstArray();
-        rInt16 = static_cast <sal_uInt16>
-               ( (pSequence[0] & 0xFF)
-              | (pSequence[1] & 0xFF) << 8);
-    }
-    return *this;
+        return 0;
+
+    pSequence = aSequence.getConstArray();
+    return static_cast <sal_uInt16>
+           ( (pSequence[0] & 0xFF)
+          | (pSequence[1] & 0xFF) << 8);
 }
-ByteGrabber& ByteGrabber::ReadUInt32(sal_uInt32& ruInt32)
+
+sal_uInt32 ByteGrabber::ReadUInt32()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if (xStream->readBytes(aSequence, 4) != 4)
-        ruInt32 = 0;
-    else
-    {
-        pSequence = aSequence.getConstArray();
-        ruInt32 = static_cast < sal_uInt32 >
-                ( (pSequence[0] & 0xFF)
-              | ( pSequence[1] & 0xFF ) << 8
-              | ( pSequence[2] & 0xFF ) << 16
-              | ( pSequence[3] & 0xFF ) << 24 );
-    }
-    return *this;
+        return 0;
+
+    pSequence = aSequence.getConstArray();
+    return static_cast < sal_uInt32 >
+            ( (pSequence[0] & 0xFF)
+          | ( pSequence[1] & 0xFF ) << 8
+          | ( pSequence[2] & 0xFF ) << 16
+          | ( pSequence[3] & 0xFF ) << 24 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

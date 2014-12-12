@@ -99,70 +99,57 @@ public:
     {
         return mnEnd;
     }
-    MemoryByteGrabber& ReadInt8(sal_Int8& rInt8)
+    sal_Int8 ReadInt8()
     {
         if (mnCurrent + 1 > mnEnd )
-            rInt8 = 0;
-        else
-            rInt8 = mpBuffer [mnCurrent++] & 0xFF;
-        return *this;
+            return 0;
+        return mpBuffer [mnCurrent++] & 0xFF;
     }
-    MemoryByteGrabber& ReadInt16(sal_Int16& rInt16)
+    sal_Int16 ReadInt16()
     {
         if (mnCurrent + 2 > mnEnd )
-            rInt16 = 0;
-        else
-        {
-            rInt16  =   mpBuffer[mnCurrent++] & 0xFF;
-            rInt16 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
-        }
-        return *this;
+            return 0;
+        sal_Int16 nInt16  =   mpBuffer[mnCurrent++] & 0xFF;
+        nInt16 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
+        return nInt16;
     }
-    MemoryByteGrabber& ReadInt32(sal_Int32& rInt32)
+    sal_Int32 ReadInt32()
     {
         if (mnCurrent + 4 > mnEnd )
-            rInt32 = 0;
-        else
-        {
-            rInt32  =   mpBuffer[mnCurrent++] & 0xFF;
-            rInt32 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
-            rInt32 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 16;
-            rInt32 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 24;
-        }
-        return *this;
+            return 0;
+
+        sal_Int32 nInt32  =   mpBuffer[mnCurrent++] & 0xFF;
+        nInt32 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 8;
+        nInt32 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 16;
+        nInt32 |= ( mpBuffer[mnCurrent++] & 0xFF ) << 24;
+        return nInt32;
     }
 
-    MemoryByteGrabber& ReadUInt8(sal_uInt8& rInt8)
+    sal_uInt8 ReadUInt8()
     {
         if (mnCurrent + 1 > mnEnd )
-            rInt8 = 0;
-        else
-            rInt8 = mpBuffer [mnCurrent++] & 0xFF;
-        return *this;
+            return 0;
+        return mpBuffer [mnCurrent++] & 0xFF;
     }
-    MemoryByteGrabber& ReadUInt16(sal_uInt16& rInt16)
+    sal_uInt16 ReadUInt16()
     {
         if (mnCurrent + 2 > mnEnd )
-            rInt16 = 0;
-        else
-        {
-            rInt16  =   mpBuffer [mnCurrent++] & 0xFF;
-            rInt16 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 8;
-        }
-        return *this;
+            return 0;
+
+        sal_uInt16 nInt16  =   mpBuffer [mnCurrent++] & 0xFF;
+        nInt16 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 8;
+        return nInt16;
     }
-    MemoryByteGrabber& ReadUInt32(sal_uInt32& rInt32)
+    sal_uInt32 ReadUInt32()
     {
         if (mnCurrent + 4 > mnEnd )
-            rInt32 = 0;
-        else
-        {
-            rInt32  =   mpBuffer [mnCurrent++] & 0xFF;
-            rInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 8;
-            rInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 16;
-            rInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 24;
-        }
-        return *this;
+            return 0;
+
+        sal_uInt32 nInt32  =   mpBuffer [mnCurrent++] & 0xFF;
+        nInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 8;
+        nInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 16;
+        nInt32 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 24;
+        return nInt32;
     }
 };
 
