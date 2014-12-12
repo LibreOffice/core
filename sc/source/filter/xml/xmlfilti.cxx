@@ -178,12 +178,19 @@ bool ScXMLFilterContext::GetConnection()
         // secondary item gets the current connection.
         return rItem.mbOr;
 
+    // The next condition of this stack will get the current connection.
+    ++rItem.mnCondCount;
+
     if (maConnStack.size() < 2)
         // There is no last stack.  Likely the first condition in the first
-        // stack whose connection is not used.
-        return true;
+        // stack whose connection is not used.  Default in
+        // ScQueryEntry::eConnect is SC_AND, so return false (AND instead of
+        // OR) here. Otherwise, when saving the document again, we'd write a
+        // uselessly stacked
+        // <table:filter-or><table:filter-and>...</table:filter-and></table:filter-or>
+        // for two conditions connected with AND.
+        return false;
 
-    ++rItem.mnCondCount;
     std::vector<ConnStackItem>::reverse_iterator itr = maConnStack.rbegin();
     ++itr;
     return itr->mbOr; // connection of the last stack.
