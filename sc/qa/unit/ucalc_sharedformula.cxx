@@ -1656,4 +1656,40 @@ void Test::testSharedFormulaUpdateOnDBChange()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaAbsCellListener()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+
+    const char* pData[][1] = {
+        { "=$A$1" },
+        { "=$A$1" },
+        { "=$A$1" }
+    };
+
+    insertRangeData(m_pDoc, ScAddress(1,0,0), pData, SAL_N_ELEMENTS(pData));
+
+    // A1 should have 3 listeners listening into it.
+    const SvtBroadcaster* pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pBC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pBC->GetAllListeners().size());
+
+    // Check the formula results.
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // Change the value of A1 and make sure B1:B3 follows.
+    m_pDoc->SetValue(ScAddress(0,0,0), 2.5);
+
+    CPPUNIT_ASSERT_EQUAL(2.5, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.5, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(2.5, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
