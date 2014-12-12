@@ -294,9 +294,9 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         }
         else
         {
-            ScAddress aCellPos( nPosX, nPosY, GetViewData()->GetTabNo() );
-            ScImportExport aObj( GetViewData()->GetDocument(), aCellPos );
-            aObj.SetImportBroadcast(true);
+            ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
+            ScImportExport aObj( GetViewData().GetDocument(), aCellPos );
+            aObj.SetOverwriting( true );
 
             OUString aStr;
             SotStorageStreamRef xStream;
