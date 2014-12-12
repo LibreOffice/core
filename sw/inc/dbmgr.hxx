@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
@@ -72,18 +73,18 @@ class SvNumberFormatter;
 class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
+class SwCalc;
+class INetURLObject;
 
 // -----------------------------------------------------------------------
 
 enum DBMgrOptions
 {
     DBMGR_MERGE,             ///< Data records in fields.
-    DBMGR_INSERT,            ///< Data records in text.
-    DBMGR_MERGE_MAILMERGE,   ///< Print mail merge.
-    DBMGR_MERGE_MAILING,     ///< Send mail merge as email.
-    DBMGR_MERGE_MAILFILES,   ///< Save mail merg as files.
-    DBMGR_MERGE_DOCUMENTS,   ///< Print merged documents.
-    DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
+    DBMGR_MERGE_PRINTER,     ///< Print mail merge.
+    DBMGR_MERGE_EMAIL,       ///< Send mail merge as email.
+    DBMGR_MERGE_FILE,        ///< Save mail merge as files.
+    DBMGR_MERGE_SHELL        ///< Create merge doc and keep the doc shell.
 };
 
 // -----------------------------------------------------------------------
@@ -160,6 +161,7 @@ struct SwMergeDescriptor
 
     sal_Bool                                            bPrintAsync;
     sal_Bool                                            bCreateSingleFile;
+    sal_Bool                                            bSubjectIsFilename;
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
@@ -173,6 +175,7 @@ struct SwMergeDescriptor
         bSendAsAttachment( sal_False ),
         bPrintAsync( sal_False ),
         bCreateSingleFile( sal_False ),
+        bSubjectIsFilename( sal_False ),
         pMailMergeConfigItem(0)
         {}
 
@@ -191,11 +194,9 @@ friend class SwConnectionDisposedListener_Impl;
     String              sEMailAddrFld;      ///< Mailing: Column name of email address.
     String              sSubject;           ///< Mailing: Subject
     String              sAttached;          ///< Mailing: Attached Files.
-    sal_uInt16          nMergeType;
+    sal_Bool            bCancel;            ///< Mail merge canceled.
     sal_Bool            bInitDBFields : 1;
     sal_Bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
-    sal_Bool            bCancel : 1;        ///< Mail merge save canceled.
-
     sal_Bool            bInMerge    : 1;    ///< merge process active
     sal_Bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
     sal_Bool            bMergeLock : 1;     /**< prevent update of database fields while document is
@@ -225,9 +226,15 @@ public:
     SwNewDBMgr();
     ~SwNewDBMgr();
 
-    /// Current merge type. Cf. DBMgrOptions-enum.
-    inline sal_uInt16   GetMergeType() const            { return nMergeType; }
-    inline void     SetMergeType( sal_uInt16 nTyp )     { nMergeType = nTyp; }
+    enum DBConnURITypes {
+        DBCONN_UNKNOWN = 0,
+        DBCONN_ODB,
+        DBCONN_CALC,
+        DBCONN_DBASE,
+        DBCONN_FLAT,
+        DBCONN_MSJET,
+        DBCONN_MSACE
+    };
 
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
@@ -239,6 +246,7 @@ public:
     /// Merging of data records into fields.
     sal_Bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
     sal_Bool            Merge(SwWrtShell* pSh);
+    void                MergeCancel();
 
     /// Initialize data fields that lack name of database.
     inline sal_Bool     IsInitDBFields() const  { return bInitDBFields; }
@@ -280,7 +288,6 @@ public:
                           const String& rColNm );
 
     inline sal_Bool     IsInMerge() const   { return bInMerge; }
-    void            EndMerge();
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties,
@@ -315,6 +322,8 @@ public:
 
     sal_Bool            GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
                                 OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
+    sal_Bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
+                                              sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
     sal_Bool            ToNextMergeRecord();
     sal_Bool            ToNextRecord(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
 
@@ -340,10 +349,34 @@ public:
 
     static ::com::sun::star::uno::Sequence<OUString> GetExistingDatabaseNames();
 
+    static DBConnURITypes GetDBunoURI(const OUString &rURI, ::com::sun::star::uno::Any &aURLAny);
+
     /**
-     Loads a data source from file and registers it. Returns the registered name.
+     Loads a data source from file and registers it.
+
+     This function requires GUI interaction, as it loads the data source from
+     the filename returned by a file picker and additional settings dialog.
+     In case of success it returns the registered name, otherwise an empty string.
      */
     static String               LoadAndRegisterDataSource();
+
+    /**
+     Loads a data source from file and registers it.
+
+     In case of success it returns the registered name, otherwise an empty string.
+     Optionally add a prefix to the registered DB name.
+     */
+    static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const ::com::sun::star::uno::Any &rUnoURI,
+                                                         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings,
+                                                         const OUString &rURI, const OUString *pPrefix = 0, const String *pDestDir = 0);
+    /**
+     Loads a data source from file and registers it.
+
+     Convenience function, which calls GetDBunoURI and has just one mandatory parameter.
+     In case of success it returns the registered name, otherwise an empty string.
+     */
+    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = 0, const String *pDestDir = 0,
+                                                         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings = 0);
 
     static SwDbtoolsClient&    GetDbtoolsClient();
     /// has to be called from _FinitUI()
@@ -380,8 +413,6 @@ public:
                             sal_Int32 _nCommandType,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                             );
-    //merge into one document - returns the number of merged docs
-    sal_Int32 MergeDocuments( SwMailMergeConfigItem& rMMConfig, SwView& rSourceView );
 };
 
 #endif

@@ -415,6 +415,11 @@ OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
     return pDlg->GetWindowState( nMask );
 }
 
+void AbstractFldInputDlg_Impl::EndDialog(long n)
+{
+    pDlg->EndDialog(n);
+}
+
 String AbstractInsFootNoteDlg_Impl::GetFontName()
 {
     return pDlg->GetFontName();
@@ -486,9 +491,9 @@ uno::Reference< sdbc::XResultSet> AbstractMailMergeDlg_Impl::GetResultSet() cons
 {
     return pDlg->GetResultSet();
 }
-bool AbstractMailMergeDlg_Impl::IsSaveIndividualDocs() const
+bool AbstractMailMergeDlg_Impl::IsSaveSingleDoc() const
 {
-    return pDlg->IsSaveIndividualDocs();
+    return pDlg->IsSaveSingleDoc();
 }
 bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
 {

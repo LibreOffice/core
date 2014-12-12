@@ -86,6 +86,7 @@
 #include <fldupde.hxx>
 #include <switerator.hxx>
 #include <boost/foreach.hpp>
+#include <tools/datetimeutils.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -3882,6 +3883,14 @@ sal_Bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet 
 
 String SwDoc::GetUniqueTblName() const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeTable"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpTblFrmFmtTbl->size() + 1 );
+        return newName;
+    }
+
     ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();

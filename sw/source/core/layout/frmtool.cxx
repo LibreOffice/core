@@ -1002,15 +1002,38 @@ SwCntntNotify::~SwCntntNotify()
 /*************************************************************************/
 
 void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
-                        SwFrm *pFrm, SwPageFrm *pPage )
+                        SwFrm *pFrm, SwPageFrm *pPage, SwDoc* doc )
 {
+#if OSL_DEBUG_LEVEL > 0
+    std::list<SwFrmFmt*> checkFmts;
     for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
     {
-        SwFrmFmt *pFmt = (SwFrmFmt*)(*pTbl)[i];
+        SwFrmFmt *pFmt = (*pTbl)[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( rAnch.GetCntntAnchor() &&
              (rAnch.GetCntntAnchor()->nNode.GetIndex() == nIndex) )
         {
+            checkFmts.push_back( pFmt );
+        }
+    }
+#else
+    (void)pTbl;
+#endif
+    SwFrmFmtAnchorMap::const_iterator_pair range = doc->GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( doc->GetNodes(), nIndex ));
+    for( std::multimap< SwNodeIndex, SwFrmFmt* >::const_iterator it = range.first;
+         it != range.second;
+         )
+    {
+        SwFrmFmt *pFmt = it->second;
+        const SwFmtAnchor &rAnch = pFmt->GetAnchor();
+        if ( rAnch.GetCntntAnchor() &&
+             (rAnch.GetCntntAnchor()->nNode.GetIndex() == nIndex) )
+        {
+#if OSL_DEBUG_LEVEL > 0
+            std::list<SwFrmFmt*>::iterator checkPos = std::find( checkFmts.begin(), checkFmts.end(), pFmt );
+            assert( checkPos != checkFmts.end());
+            checkFmts.erase( checkPos );
+#endif
             const bool bFlyAtFly = rAnch.GetAnchorId() == FLY_AT_FLY; // LAYER_IMPL
             //Is a frame or a SdrObject described?
             const bool bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
@@ -1028,8 +1051,8 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                 if ( bSdrObj && 0 == (pSdrObj = pFmt->FindSdrObject()) )
                 {
                     OSL_ENSURE( !bSdrObj, "DrawObject not found." );
+                    ++it;
                     pFmt->GetDoc()->DelFrmFmt( pFmt );
-                    --i;
                     continue;
                 }
                 if ( pSdrObj )
@@ -1076,14 +1099,18 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                 }
             }
         }
+        ++it;
     }
+#if OSL_DEBUG_LEVEL > 0
+    assert( checkFmts.empty());
+#endif
 }
 
 static bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
 {
-    SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
     if ( RES_FLYFRMFMT == pFmt->Which() )
     {
+        SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
         const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
         const SwFlyFrm* pTmpFrm;
         for( pTmpFrm = aIter.First(); pTmpFrm; pTmpFrm = aIter.Next() )
@@ -1313,7 +1340,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             pPrv = pFrm;
 
             if ( !pTbl->empty() && bObjsDirect && !bDontCreateObjects )
-                AppendObjs( pTbl, nIndex, pFrm, pPage );
+                AppendObjs( pTbl, nIndex, pFrm, pPage, pDoc );
         }
         else if ( pNd->IsTableNode() )
         {   //Should we have encountered a table?
@@ -1533,7 +1560,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             {
                 SwFlyFrm* pFly = pLay->FindFlyFrm();
                 if( pFly )
-                    AppendObjs( pTbl, nIndex, pFly, pPage );
+                    AppendObjs( pTbl, nIndex, pFly, pPage, pDoc );
             }
         }
         else

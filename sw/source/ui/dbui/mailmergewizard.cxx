@@ -34,6 +34,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
 #include "vcl/msgbox.hxx" // RET_CANCEL
+#include <svx/dataaccessdescriptor.hxx>
 
 #include <helpid.h>
 #include <mailmergewizard.hrc>
@@ -273,8 +274,19 @@ void SwMailMergeWizard::UpdateRoadmap()
   -----------------------------------------------------------------------*/
 void SwMailMergeWizard::CreateTargetDocument()
 {
-    GetSwView()->GetWrtShell().GetNewDBMgr()->
-                MergeDocuments( m_rConfigItem, *GetSwView() );
+    svx::ODataAccessDescriptor aDescriptor;
+    aDescriptor.setDataSource( m_rConfigItem.GetCurrentDBData().sDataSource );
+    aDescriptor[ svx::daConnection ]  <<= m_rConfigItem.GetConnection().getTyped();
+    aDescriptor[ svx::daCursor ]      <<= m_rConfigItem.GetResultSet();
+    aDescriptor[ svx::daCommand ]     <<= m_rConfigItem.GetCurrentDBData().sCommand;
+    aDescriptor[ svx::daCommandType ] <<= m_rConfigItem.GetCurrentDBData().nCommandType;
+
+    SwMergeDescriptor aMergeDesc( DBMGR_MERGE_SHELL, GetSwView()->GetWrtShell(),
+        aDescriptor);
+    aMergeDesc.pMailMergeConfigItem = &m_rConfigItem;
+    aMergeDesc.bCreateSingleFile = true;
+
+    GetSwView()->GetWrtShell().GetNewDBMgr()->MergeNew( aMergeDesc );
     m_rConfigItem.SetMergeDone();
     if( m_rConfigItem.GetTargetView() )
         m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame().Appear();

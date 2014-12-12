@@ -44,6 +44,7 @@ $(eval $(call gb_Library_use_libraries,tl,\
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/datetime/datetime \
+    tools/source/datetime/datetimeutils \
     tools/source/datetime/tdate \
     tools/source/datetime/ttime \
     tools/source/debug/debug \

@@ -56,6 +56,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_rtfimport \
     CppunitTest_sw_odfexport \
     CppunitTest_sw_odfimport \
+    CppunitTest_sw_mailmerge \
 ))
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)

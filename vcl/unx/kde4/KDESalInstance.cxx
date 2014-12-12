@@ -22,6 +22,8 @@
 
 #include "KDESalFrame.hxx"
 
+#include "KDEXLib.hxx"
+
 using namespace com::sun::star;
 
 SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nState )
@@ -30,10 +32,19 @@ SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nState )
 }
 
 uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
-        const uno::Reference< uno::XComponentContext >& xMSF )
+    const uno::Reference< uno::XComponentContext >& xMSF )
 {
-    return uno::Reference< ui::dialogs::XFilePicker2 >(
-                new KDE4FilePicker( xMSF ) );
+    KDEXLib* kdeXLib = static_cast<KDEXLib*>( mpXLib );
+    if (kdeXLib->allowKdeDialogs())
+        return uno::Reference< ui::dialogs::XFilePicker2 >(
+            kdeXLib->createFilePicker(xMSF) );
+    else
+        return X11SalInstance::createFilePicker( xMSF );
+}
+
+int KDESalInstance::getFrameWidth()
+{
+    return static_cast<KDEXLib*>( mpXLib )->getFrameWidth();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

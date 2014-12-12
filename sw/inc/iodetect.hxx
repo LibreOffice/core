@@ -95,10 +95,7 @@ public:
     /** Detect for the given file which filter should be used. The filter name
      is returned. If no filter could be found, the name of the ASCII filter
      is returned! */
-    SWD_DLLPUBLIC static const SfxFilter*
-        GetFileFilter( const String& rFileName,
-            const String& rPrefFltName,
-            SfxMedium* pMedium = 0 );
+    SWD_DLLPUBLIC static const SfxFilter* GetFileFilter( const String& rFileName );
 
     /** Detect whether the given file is in the given format.
      For now, only our own filters are supported! */

@@ -79,50 +79,6 @@ DateTime DTTM2DateTime( long lDTTM )
     return aDateTime;
 }
 
-/// Append the number as 2-digit when less than 10.
-static void lcl_AppendTwoDigits( OStringBuffer &rBuffer, sal_Int32 nNum )
-{
-    if ( nNum < 0 || nNum > 99 )
-    {
-        rBuffer.append( "00" );
-        return;
-    }
-
-    if ( nNum < 10 )
-        rBuffer.append( '0' );
-
-    rBuffer.append( nNum );
-}
-
-OString DateTimeToOString( const DateTime& rDateTime )
-{
-    DateTime aInUTC( rDateTime );
-// HACK: this is correct according to the spec, but MSOffice believes everybody lives
-// in UTC+0 when reading it back
-//    aInUTC.ConvertToUTC();
-
-    OStringBuffer aBuffer( 25 );
-    aBuffer.append( sal_Int32( aInUTC.GetYear() ) );
-    aBuffer.append( '-' );
-
-    lcl_AppendTwoDigits( aBuffer, aInUTC.GetMonth() );
-    aBuffer.append( '-' );
-
-    lcl_AppendTwoDigits( aBuffer, aInUTC.GetDay() );
-    aBuffer.append( 'T' );
-
-    lcl_AppendTwoDigits( aBuffer, aInUTC.GetHour() );
-    aBuffer.append( ':' );
-
-    lcl_AppendTwoDigits( aBuffer, aInUTC.GetMin() );
-    aBuffer.append( ':' );
-
-    lcl_AppendTwoDigits( aBuffer, aInUTC.GetSec() );
-    aBuffer.append( 'Z' ); // we are in UTC
-
-    return aBuffer.makeStringAndClear();
-}
-
 sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
     rtl_TextEncoding& rChrSet, OUString& rFontName, bool bDisableUnicodeSupport)
 {

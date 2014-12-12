@@ -1993,7 +1993,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
             if( !pPageDesc )
             {
-                pPageDesc = maPageDescs[ MakePageDesc( rNm ) ];
+                pPageDesc = MakePageDesc(rNm);
             }
             aPageDesc.RegisterToPageDesc( *pPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
@@ -2122,8 +2122,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         if( !pFollow )
         {
             // copy
-            sal_uInt16 nPos = MakePageDesc( rSrcDesc.GetFollow()->GetName() );
-            pFollow = maPageDescs[ nPos ];
+            pFollow = MakePageDesc(rSrcDesc.GetFollow()->GetName());
             CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
         }
         rDstDesc.SetFollow( pFollow );
@@ -2147,6 +2146,22 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
         rDstDesc.GetLeft().DelDiffs( aAttrSet );
         rDstDesc.GetLeft().SetFmtAttr( aAttrSet );
+
+        aAttrSet.ClearItem();
+        aAttrSet.Put( rSrcDesc.GetFirstMaster().GetAttrSet() );
+        aAttrSet.ClearItem( RES_HEADER );
+        aAttrSet.ClearItem( RES_FOOTER );
+
+        rDstDesc.GetFirstMaster().DelDiffs( aAttrSet );
+        rDstDesc.GetFirstMaster().SetFmtAttr( aAttrSet );
+
+        aAttrSet.ClearItem();
+        aAttrSet.Put( rSrcDesc.GetFirstLeft().GetAttrSet() );
+        aAttrSet.ClearItem( RES_HEADER );
+        aAttrSet.ClearItem( RES_FOOTER );
+
+        rDstDesc.GetFirstLeft().DelDiffs( aAttrSet );
+        rDstDesc.GetFirstLeft().SetFmtAttr( aAttrSet );
     }
 
     CopyHeader( rSrcDesc.GetMaster(), rDstDesc.GetMaster() );
@@ -2255,13 +2270,21 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
         for( sal_uInt16 n = 0; n < nCnt; ++n )
         {
             const SwNumRule& rR = *rArr[ n ];
-            if( !rR.IsAutoRule() )
+            SwNumRule* pNew = FindNumRulePtr( rR.GetName());
+            if( pNew )
+                pNew->CopyNumRule( this, rR );
+            else
             {
-                SwNumRule* pNew = FindNumRulePtr( rR.GetName());
-                if( pNew )
-                    pNew->CopyNumRule( this, rR );
-                else
+                if( !rR.IsAutoRule() )
                     MakeNumRule( rR.GetName(), &rR );
+                else
+                {
+                    // as we reset all styles, there shouldn't be any unknown
+                    // automatic SwNumRules, because all should have been
+                    // created by the style copying!
+                    // So just warn and ignore.
+                    SAL_WARN( "sw.styles", "Found unknown auto SwNumRule during reset!" );
+                }
             }
         }
     }

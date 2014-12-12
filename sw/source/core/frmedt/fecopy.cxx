@@ -690,7 +690,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
     // If there are table formulas in the area, then display the table first
     // so that the table formula can calculate a new value first
     // (individual boxes in the area are retrieved via the layout)
-     SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
+    SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
 
     SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode()->GetTableNode();
     if( !pSrcNd )                               // TabellenNode ?
@@ -1029,6 +1029,10 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
             }
 
+            // **
+            // ** Update SwDoc::Append, if you change the following code **
+            // **
+
             // find out if the clipboard document starts with a table
             bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
             SwPosition aInsertPosition( rInsPos );
@@ -1078,19 +1082,12 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
 
                 for ( sal_uInt16 i = 0; i < pClpDoc->GetSpzFrmFmts()->size(); ++i )
                 {
-                    bool bInsWithFmt = true;
                     const SwFrmFmt& rCpyFmt = *(*pClpDoc->GetSpzFrmFmts())[i];
-                    if( bInsWithFmt  )
-                    {
-                        SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                        if ( FLY_AT_PAGE == aAnchor.GetAnchorId() )
-                        {
-                            aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
-                        }
-                        else
-                            continue;
-                        GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
-                    }
+                    SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+                    if ( FLY_AT_PAGE != aAnchor.GetAnchorId() )
+                        continue;
+                    aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
+                    GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
                 }
             }
         }
@@ -1449,7 +1446,43 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
         case SW_PASTESDR_SETATTR:
             {
                 SfxItemSet aSet( GetAttrPool() );
-                aSet.Put(pClpObj->GetMergedItemSet());
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pClpObj);
+
+                if(pSdrGrafObj)
+                {
+                    SdrObject* pTarget = 0;
+
+                    if(0 != pView->GetMarkedObjectList().GetMarkCount())
+                    {
+                        // try to get target (if it's at least one, take first)
+                        SdrMark* pMark = pView->GetMarkedObjectList().GetMark(0);
+
+                        if(pMark)
+                        {
+                            pTarget = pMark->GetMarkedSdrObj();
+                        }
+                    }
+
+                    if(pTarget)
+                    {
+                        // copy ItemSet from target
+                        aSet.Set(pTarget->GetMergedItemSet());
+                    }
+
+                    // for SdrGrafObj, use the graphic as fill style argument
+                    const Graphic& rGraphic = pSdrGrafObj->GetGraphic();
+
+                    if(GRAPHIC_NONE != rGraphic.GetType() && GRAPHIC_DEFAULT != rGraphic.GetType())
+                    {
+                        aSet.Put(XFillBitmapItem(String(), rGraphic));
+                        aSet.Put(XFillStyleItem(XFILL_BITMAP));
+                    }
+                }
+                else
+                {
+                    aSet.Put(pClpObj->GetMergedItemSet());
+                }
+
                 pView->SetAttributes( aSet, sal_False );
             }
             break;

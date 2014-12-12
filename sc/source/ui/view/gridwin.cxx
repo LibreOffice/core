@@ -5542,25 +5542,9 @@ void ScGridWindow::UpdateSelectionOverlay()
                 aRanges.push_back(aRB);
             }
 
-            // #i97672# get the system's hilight color and limit it to the maximum
-            // allowed luminance. This is needed to react on too bright hilight colors
-            // which would otherwise vive a bad visualisation
-            Color aHighlight(GetSettings().GetStyleSettings().GetHighlightColor());
+            // get the system's hilight color
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const basegfx::BColor aSelection(aHighlight.getBColor());
-            const double fLuminance(aSelection.luminance());
-            const double fMaxLum(aSvtOptionsDrawinglayer.GetSelectionMaximumLuminancePercent() / 100.0);
-
-            if(fLuminance > fMaxLum)
-            {
-                const double fFactor(fMaxLum / fLuminance);
-                const basegfx::BColor aNewSelection(
-                    aSelection.getRed() * fFactor,
-                    aSelection.getGreen() * fFactor,
-                    aSelection.getBlue() * fFactor);
-
-                aHighlight = Color(aNewSelection);
-            }
+            const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
             sdr::overlay::OverlayObject* pOverlay = new sdr::overlay::OverlaySelection(
                 sdr::overlay::OVERLAY_TRANSPARENT,

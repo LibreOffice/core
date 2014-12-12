@@ -149,7 +149,7 @@ namespace sw {
 
             void SetRefObject( SwServerObject* pObj );
 
-            void DeregisterFromDoc(SwDoc* const pDoc);
+            virtual void DeregisterFromDoc(SwDoc* const pDoc);
             virtual ~DdeBookmark();
 
         private:
@@ -167,6 +167,8 @@ namespace sw {
                 const OUString& rName,
                 const OUString& rShortName);
             virtual void InitDoc(SwDoc* const io_Doc);
+
+            virtual void DeregisterFromDoc(SwDoc* const io_pDoc);
 
             virtual const OUString& GetShortName() const
                 { return m_sShortName; }

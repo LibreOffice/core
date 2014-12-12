@@ -24,14 +24,13 @@
 #include "dbui.hxx"
 
 PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
-:   ModelessDialog( pParent, SW_RES(DLG_PRINTMONITOR) ),
+:   CancelableModelessDialog( pParent, SW_RES(DLG_PRINTMONITOR) ),
     aDocName    (this, SW_RES( FT_DOCNAME )),
     aPrinting   (this, SW_RES(
         eType == MONITOR_TYPE_MAIL ?
             FT_SENDING : eType == MONITOR_TYPE_SAVE ? FT_SAVING : FT_PRINTING )),
     aPrinter    (this, SW_RES( FT_PRINTER       )),
-    aPrintInfo  (this, SW_RES( FT_PRINTINFO     )),
-    aCancel     (this, SW_RES( PB_CANCELPRNMON  ))
+    aPrintInfo  (this, SW_RES( FT_PRINTINFO     ))
 {
     switch (eType)
     {
@@ -78,18 +77,17 @@ void PrintMonitor::ResizeControls()
         lcl_RePosControl( &aDocName, nDiff );
         lcl_RePosControl( &aPrinting, nDiff );
         lcl_RePosControl( &aPrintInfo, nDiff );
-        lcl_RePosControl( &aCancel, nDiff );
+        lcl_RePosControl( &aCancelButton, nDiff );
     }
 }
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
 CreateMonitor::CreateMonitor( Window *pParent )
-:   ModelessDialog( pParent, SW_RES(DLG_MM_CREATIONMONITOR) ),
+:   CancelableModelessDialog( pParent, SW_RES(DLG_MM_CREATIONMONITOR) ),
     m_aStatus           (this, SW_RES( FT_STATUS )),
     m_aProgress         (this, SW_RES( FT_PROGRESS )),
     m_aCreateDocuments  (this, SW_RES( FT_CREATEDOCUMENTS )),
     m_aCounting         (this, SW_RES( FT_COUNTING )),
-    m_aCancelButton     (this, SW_RES( PB_CANCELPRNMON  )),
     m_sCountingPattern(),
     m_sVariable_Total( OUString("%Y") ),
     m_sVariable_Position( OUString("%X") ),
@@ -122,9 +120,16 @@ void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
     UpdateCountingText();
 }
 
-void CreateMonitor::SetCancelHdl( const Link& rLink )
+CancelableModelessDialog::CancelableModelessDialog( Window *pParent,
+        const ResId& rResId )
+:   ModelessDialog( pParent, rResId ),
+    aCancelButton( this, SW_RES( PB_CANCELPRNMON ))
 {
-    m_aCancelButton.SetClickHdl( rLink );
+}
+
+void CancelableModelessDialog::SetCancelHdl( const Link& rLink )
+{
+    aCancelButton.SetClickHdl( rLink );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

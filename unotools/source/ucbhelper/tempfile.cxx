@@ -27,6 +27,8 @@
 #include <ucbhelper/fileidentifierconverter.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/instance.hxx>
+#include <osl/file.h>
+#include <osl/detail/file.h>
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
@@ -88,14 +90,7 @@ sal_Bool ensuredir( const OUString& rUnqPath )
     // HACK: create directory on a mount point with nobrowse option
     // returns ENOSYS in any case !!
     osl::Directory aDirectory( aPath );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
-#endif
     osl::FileBase::RC nError = aDirectory.open();
-#ifdef UNX
-umask(old_mode);
-#endif
     aDirectory.close();
     if( nError == osl::File::E_None )
         return sal_True;
@@ -199,13 +194,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 
         if ( bDir )
         {
-#ifdef UNX /* RW permission for the user only! */
-            mode_t old_mode = umask(077);
-#endif
             FileBase::RC err = Directory::create( aTmp );
-#ifdef UNX
-            umask(old_mode);
-#endif
             if ( err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory
@@ -274,7 +263,10 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
             aTmp += OUString( ".tmp" );
         if ( bDirectory )
         {
-            FileBase::RC err = Directory::create( aTmp );
+            FileBase::RC err = Directory::create(
+                aTmp,
+                (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write
+                 | osl_File_OpenFlag_Private));
             if ( err == FileBase::E_None )
             {
                 _rImpl.aName = aTmp;
@@ -287,14 +279,8 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
         else
         {
             File aFile( aTmp );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
-#ifdef UNX
-umask(old_mode);
-#endif
+            FileBase::RC err = aFile.open(
+                osl_File_OpenFlag_Create | osl_File_OpenFlag_Private);
             if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
                 _rImpl.aName = aTmp;

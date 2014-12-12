@@ -29,19 +29,6 @@ namespace sdr
 {
     namespace overlay
     {
-        // #i53216# check blink time value range
-        void OverlayAnimatedBitmapEx::impCheckBlinkTimeValueRange()
-        {
-            if(mnBlinkTime < 25)
-            {
-                mnBlinkTime = 25;
-            }
-            else if(mnBlinkTime > 10000)
-            {
-                mnBlinkTime = 10000;
-            }
-        }
-
         drawinglayer::primitive2d::Primitive2DSequence OverlayAnimatedBitmapEx::createOverlayObjectPrimitive2DSequence()
         {
             if(mbOverlayState)
@@ -89,7 +76,7 @@ namespace sdr
             mbAllowsAnimation = true;
 
             // #i53216# check blink time value range
-            impCheckBlinkTimeValueRange();
+            mnBlinkTime = impCheckBlinkTimeValueRange(mnBlinkTime);
         }
 
         OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()

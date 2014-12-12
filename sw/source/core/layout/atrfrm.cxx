@@ -2410,6 +2410,16 @@ SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt )
 
+SwFrmFmt::~SwFrmFmt()
+{
+    if( !GetDoc()->IsInDtor())
+    {
+        const SwFmtAnchor& anchor = GetAnchor();
+        if( anchor.GetCntntAnchor() != NULL )
+            GetDoc()->GetFrmFmtAnchorMap()->Remove( this, anchor.GetCntntAnchor()->nNode );
+    }
+}
+
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;
@@ -2450,6 +2460,31 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {   // invalidate cached uno object
         SetXObject(uno::Reference<uno::XInterface>(0));
     }
+
+    const SwPosition* oldAnchorPosition = NULL;
+    const SwPosition* newAnchorPosition = NULL;
+    if( pNew && pNew->Which() == RES_ATTRSET_CHG )
+    {
+        const SfxPoolItem* tmp = NULL;
+        static_cast< const SwAttrSetChg* >(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false, &tmp );
+        if( tmp )
+            newAnchorPosition = static_cast< const SwFmtAnchor* >( tmp )->GetCntntAnchor();
+    }
+    if( pNew && pNew->Which() == RES_ANCHOR )
+        newAnchorPosition = static_cast< const SwFmtAnchor* >( pNew )->GetCntntAnchor();
+    if( pOld && pOld->Which() == RES_ATTRSET_CHG )
+    {
+        const SfxPoolItem* tmp = NULL;
+        static_cast< const SwAttrSetChg* >(pOld)->GetChgSet()->GetItemState( RES_ANCHOR, false, &tmp );
+        if( tmp )
+            oldAnchorPosition = static_cast< const SwFmtAnchor* >( tmp )->GetCntntAnchor();
+    }
+    if( pOld && pOld->Which() == RES_ANCHOR )
+        oldAnchorPosition = static_cast< const SwFmtAnchor* >( pOld )->GetCntntAnchor();
+    if( oldAnchorPosition != NULL && ( newAnchorPosition == NULL || oldAnchorPosition->nNode.GetIndex() != newAnchorPosition->nNode.GetIndex()))
+        GetDoc()->GetFrmFmtAnchorMap()->Remove( this, oldAnchorPosition->nNode );
+    if( newAnchorPosition != NULL && ( oldAnchorPosition == NULL || oldAnchorPosition->nNode.GetIndex() != newAnchorPosition->nNode.GetIndex()))
+        GetDoc()->GetFrmFmtAnchorMap()->Add( this, newAnchorPosition->nNode );
 }
 
 void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
@@ -3217,6 +3252,54 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
     }
 
     return 0;
+}
+
+
+SwFrmFmtAnchorMap::SwFrmFmtAnchorMap( const SwDoc* _doc )
+: doc( _doc )
+{
+}
+
+void SwFrmFmtAnchorMap::Add( SwFrmFmt* fmt, const SwNodeIndex& pos )
+{
+    assert( pos.GetNode().GetDoc() == doc );
+    items.insert( std::make_pair( pos, fmt ));
+}
+
+void SwFrmFmtAnchorMap::Remove( SwFrmFmt* fmt, const SwNodeIndex& pos )
+{
+    assert( pos.GetNode().GetDoc() == doc );
+    typedef std::multimap< SwNodeIndex, SwFrmFmt* >::iterator iterator;
+    std::pair< iterator, iterator > range = items.equal_range( pos );
+    for( iterator it = range.first; it != range.second; ++it )
+    {
+        if( it->second == fmt )
+        {
+            items.erase( it );
+            return;
+        }
+    }
+    assert( false );
+}
+
+SwFrmFmtAnchorMap::const_iterator_pair SwFrmFmtAnchorMap::equal_range( const SwNodeIndex& pos ) const
+{
+    return items.equal_range( pos );
+}
+
+SwFrmFmtAnchorMap::const_iterator SwFrmFmtAnchorMap::lower_bound( const SwNodeIndex& pos ) const
+{
+    return items.lower_bound( pos );
+}
+
+SwFrmFmtAnchorMap::const_iterator SwFrmFmtAnchorMap::upper_bound( const SwNodeIndex& pos ) const
+{
+    return items.upper_bound( pos );
+}
+
+SwFrmFmtAnchorMap::const_iterator SwFrmFmtAnchorMap::end() const
+{
+    return items.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,6 +39,12 @@ struct SwPosition;
 #define INLINE inline
 #endif
 
+namespace sw {
+namespace mark {
+class IMark;
+}
+}
+
 /// Marks a character position inside a document model node.
 class SW_DLLPUBLIC SwIndex
 {
@@ -50,6 +56,9 @@ private:
     // doubly linked list of Indexes registered at m_pIndexReg
     SwIndex * m_pNext;
     SwIndex * m_pPrev;
+
+    /// Pointer to a mark that owns this position to allow fast lookup of marks of an SwIndexReg.
+    const sw::mark::IMark* m_pMark;
 
     SwIndex& ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue );
     void Init(xub_StrLen const nIdx);
@@ -105,6 +114,10 @@ public:
 
     // Returns pointer to IndexArray (for RTTI at SwIndexReg).
     const SwIndexReg* GetIdxReg() const { return m_pIndexReg; }
+    const SwIndex* GetNext() const { return m_pNext; }
+
+    const sw::mark::IMark* GetMark() const { return m_pMark; }
+    void SetMark(const sw::mark::IMark* pMark);
 };
 
 #undef INLINE
@@ -134,6 +147,7 @@ public:
     TYPEINFO();
 
     void MoveTo( SwIndexReg& rArr );
+    const SwIndex* GetFirstIndex() const { return m_pFirst; }
 };
 
 

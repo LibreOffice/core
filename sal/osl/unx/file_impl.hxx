@@ -22,6 +22,16 @@
 
 #include "osl/file.h"
 #include <stddef.h>
+#include <sys/types.h>
+
+SAL_DLLPUBLIC oslFileError SAL_CALL openFile(
+    rtl_uString* ustrFileURL, oslFileHandle * pHandle, sal_uInt32 uFlags,
+    mode_t mode);
+
+SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFilePath(
+    const char *cpFilePath,
+    oslFileHandle* pHandle,
+    sal_uInt32 uFlags, mode_t mode );
 
 struct DirectoryItem_Impl
 {

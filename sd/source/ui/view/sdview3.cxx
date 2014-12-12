@@ -266,7 +266,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     SdrObject*              pPickObj = NULL;
     SdPage*                 pPage = NULL;
     ImageMap*               pImageMap = NULL;
-    sal_Bool                    bReturn = sal_False;
+    bool bReturn = false;
     sal_Bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
     sal_Bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
     sal_uLong                   nPasteOptions = SDRINSERT_SETDEFLAYER;
@@ -291,6 +291,12 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     SdTransferable* pOwnData = NULL;
     SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
+
+    if(pImplementation && (rDnDAction & DND_ACTION_LINK))
+    {
+        // suppress own data when it's intention is to use it as fill information
+        pImplementation = 0;
+    }
 
     // try to get own transfer data
     if( pImplementation )
@@ -344,10 +350,13 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
         }
     }
 
+    // Changed the whole decision tree to be dependent of bReturn as a flag that
+    // the work was done; this allows to check multiple formats and not just fail
+    // when a CHECK_FORMAT_TRANS(*format*) detected format does not work. This is
+    // e.g. necessary for FORMAT_BITMAP
     if( pOwnData && !nFormat )
     {
         const View* pSourceView = pOwnData->GetView();
-
 
         if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( View ) )
         {
@@ -390,7 +399,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             }
                         }
 
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                 }
                 else
@@ -566,12 +575,12 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 if( pMarkList != mpDragSrcMarkList )
                                     delete pMarkList;
 
-                                bReturn = sal_True;
+                                bReturn = true;
                             }
                             else
                             {
                                 maDropErrorTimer.Start();
-                                bReturn = sal_False;
+                                bReturn = false;
                             }
                         }
                     }
@@ -580,7 +589,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         pOwnData->SetInternalMove( sal_True );
                         MoveAllMarked( Size( maDropPos.X() - pOwnData->GetStartPos().X(),
                                              maDropPos.Y() - pOwnData->GetStartPos().Y() ), bCopy );
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                 }
             }
@@ -606,7 +615,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 else
                 {
                     maDropErrorTimer.Start();
-                    bReturn = sal_False;
+                    bReturn = false;
                 }
             }
         }
@@ -642,7 +651,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             pPage->SetPresentationLayout( aLayout, sal_False, sal_False );
        }
     }
-    else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_DRAWING ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_DRAWING ))
     {
         SotStorageStreamRef xStm;
 
@@ -784,7 +794,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE))
     {
         OUString aOUString;
 
@@ -803,14 +814,15 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
                 InsertObjectAtView( pObj, *GetSdrPageView(), SDRINSERT_SETDEFLAYER );
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
     }
-    else if( !bLink &&
-             ( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) )  &&
-               aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
+
+    if(!bReturn &&
+        !bLink &&
+        (CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBED_SOURCE) || CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBEDDED_OBJ))  &&
+        aDataHelper.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR))
     {
         //TODO/LATER: is it possible that this format is binary?! (from old versions of SO)
         uno::Reference < io::XInputStream > xStm;
@@ -977,15 +989,16 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         }
                     }
 
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
     }
-    else if( !bLink &&
-             ( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
-               CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ) &&
-               aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) )
+
+    if(!bReturn &&
+        !bLink &&
+        (CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE) || CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EMBED_SOURCE_OLE)) &&
+        aDataHelper.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE))
     {
         // online insert ole if format is forced or no gdi metafile is available
         if( (nFormat != 0) || !aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
@@ -1126,7 +1139,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     // let the object stay in loaded state after insertion
                     pObj->Unload();
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
         }
@@ -1137,7 +1150,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             InsertMetaFile( aDataHelper, rPos, pImageMap, true );
         }
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SVXB ) )
+
+    if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_SVXB))
     {
         SotStorageStreamRef xStm;
 
@@ -1171,10 +1185,11 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
             InsertGraphic( aGraphic, mnAction, aInsertPos, NULL, pImageMap );
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_GDIMETAFILE ) )
+
+    if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(FORMAT_GDIMETAFILE))
     {
         Point aInsertPos( rPos );
 
@@ -1197,7 +1212,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 ? true : false ) ? sal_True : sal_False;
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_BITMAP ) )
+
+    if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(FORMAT_BITMAP))
     {
         Bitmap aBmp;
 
@@ -1226,10 +1242,11 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
             InsertGraphic( aBmp, mnAction, aInsertPos, NULL, pImageMap );
-            bReturn = sal_True;
+            bReturn = true;
         }
     }
-    else if( pPickObj && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_XFA ) )
+
+    if(!bReturn && pPickObj && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_XFA ) )
     {
         SotStorageStreamRef xStm;
 
@@ -1292,7 +1309,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_HTML ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_HTML))
     {
         SotStorageStreamRef xStm;
 
@@ -1303,7 +1321,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SOT_FORMATSTR_ID_EDITENGINE))
     {
         SotStorageStreamRef xStm;
 
@@ -1322,7 +1341,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 {
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
                     pOLV->Read( *xStm, String(), EE_FORMAT_BIN, sal_False, mpDocSh->GetHeaderAttributes() );
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
             }
 
@@ -1331,7 +1350,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_RTF ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(FORMAT_RTF))
     {
         SotStorageStreamRef xStm;
 
@@ -1356,7 +1376,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     {
                         // mba: clipboard always must contain absolute URLs (could be from alien source)
                         pOLV->Read( *xStm, String(), EE_FORMAT_RTF, sal_False, mpDocSh->GetHeaderAttributes() );
-                        bReturn = sal_True;
+                        bReturn = true;
                     }
                 }
 
@@ -1366,7 +1386,8 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( CHECK_FORMAT_TRANS( FORMAT_FILE_LIST ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS(FORMAT_FILE_LIST))
     {
         FileList aDropFileList;
 
@@ -1380,9 +1401,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             maDropInsertFileTimer.Start();
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
-    else if( CHECK_FORMAT_TRANS( FORMAT_FILE ) )
+
+    if(!bReturn && CHECK_FORMAT_TRANS(FORMAT_FILE))
     {
         String aDropFile;
 
@@ -1393,9 +1415,10 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             maDropInsertFileTimer.Start();
         }
 
-        bReturn = sal_True;
+        bReturn = true;
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
+
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(FORMAT_STRING))
     {
         if( ( FORMAT_STRING == nFormat ) ||
             ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&
@@ -1411,7 +1434,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( pOLV )
                 {
                     pOLV->InsertText( aOUString );
-                    bReturn = sal_True;
+                    bReturn = true;
                 }
 
                 if( !bReturn )

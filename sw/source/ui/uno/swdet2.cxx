@@ -59,8 +59,7 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
     }
 
     // mba: without preselection there is no PrefFlt
-    String aPrefFlt;
-    const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName(), aPrefFlt, &rMedium );
+    const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName() );
     if( !pTmp )
         return ERRCODE_ABORT;
 

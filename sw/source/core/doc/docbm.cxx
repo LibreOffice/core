@@ -24,6 +24,8 @@
 #include <crossrefbookmark.hxx>
 #include <dcontact.hxx>
 #include <doc.hxx>
+#include <IDocumentState.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
@@ -44,9 +46,11 @@
 #include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>
 #include <swundo.hxx>
+#include <UndoBookmark.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <stdio.h>
+#include <tools/datetimeutils.hxx>
 
 
 using namespace ::std;
@@ -462,9 +466,23 @@ namespace sw { namespace mark
             return true;
         if(hasMark(rNewName))
             return false;
-        m_aMarkNamesSet.erase(dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->GetName());
-        m_aMarkNamesSet.insert(rNewName);
-        dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->SetName(rNewName);
+        if (::sw::mark::MarkBase* pMarkBase = dynamic_cast< ::sw::mark::MarkBase* >(io_pMark))
+        {
+            const OUString sOldName(pMarkBase->GetName());
+            m_aMarkNamesSet.erase(sOldName);
+            m_aMarkNamesSet.insert(rNewName);
+            pMarkBase->SetName(rNewName);
+
+            if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
+            {
+                if (m_pDoc->GetIDocumentUndoRedo().DoesUndo())
+                {
+                    m_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                            new SwUndoRenameBookmark(sOldName, rNewName));
+                }
+                m_pDoc->SetModified();
+            }
+        }
         return true;
     }
 
@@ -839,25 +857,27 @@ namespace sw { namespace mark
         OSL_ENSURE(!rName.isEmpty(),
             "<MarkManager::getUniqueMarkName(..)>"
             " - a name should be proposed");
+        if( m_pDoc->IsInMailMerge())
+        {
+            OUString newName = rName + "MailMergeMark"
+                    + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+                    + OUString::number( m_aMarkNamesSet.size() + 1 );
+            return newName;
+        }
         if(!hasMark(rName)) return rName;
+
         OUStringBuffer sBuf;
         OUString sTmp;
 
-        // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
-        // a unused name. Due to performance-reasons (especially in mailmerge-Szenarios) there
-        // is a map m_aMarkBasenameMapUniqueOffset which holds the next possible offset (XXX) for
-        // rName (so there is no need to test for nCnt-values smaller than the offset).
-        sal_Int32 nCnt = 1;
-        MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
-        if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
+        // Try the name "<rName>XXX", where XXX is a number. Start the number at the existing count rather than 1
+        // in order to increase the chance that already the first one will not exist.
+        sal_Int32 nCnt = m_aMarkNamesSet.size() + 1;
         while(nCnt < SAL_MAX_INT32)
         {
             sTmp = sBuf.append(rName).append(nCnt).makeStringAndClear();
             nCnt++;
             if(!hasMark(sTmp)) break;
         }
-        m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
-
         return sTmp;
     }
 

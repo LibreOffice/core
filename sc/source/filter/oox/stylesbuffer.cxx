@@ -34,6 +34,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -83,6 +84,7 @@ namespace xls {
 
 // ============================================================================
 
+using namespace com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
@@ -1730,19 +1732,19 @@ void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
          SvxBoxItem aBoxItem( ATTR_BORDER );
          ::editeng::SvxBorderLine aLine;
 
-         if ( SvxBoxItem::LineToSvxLine(maApiData.maLeft, aLine, true ) )
+         if (SvxBoxItem::LineToSvxLine(maApiData.maLeft, aLine, false))
          {
              aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
          }
-         if ( SvxBoxItem::LineToSvxLine(maApiData.maRight, aLine, true ) )
+         if (SvxBoxItem::LineToSvxLine(maApiData.maRight, aLine, false))
          {
              aBoxItem.SetLine( &aLine, BOX_LINE_RIGHT );
          }
-         if ( SvxBoxItem::LineToSvxLine(maApiData.maTop, aLine, true ) )
+         if (SvxBoxItem::LineToSvxLine(maApiData.maTop, aLine, false))
          {
              aBoxItem.SetLine( &aLine, BOX_LINE_TOP );
          }
-         if ( SvxBoxItem::LineToSvxLine(maApiData.maBottom, aLine, true ) )
+         if (SvxBoxItem::LineToSvxLine(maApiData.maBottom, aLine, false))
          {
              aBoxItem.SetLine( &aLine, BOX_LINE_BOTTOM );
          }
@@ -1753,11 +1755,11 @@ void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
         SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
         SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
         ::editeng::SvxBorderLine aLine;
-        if ( SvxBoxItem::LineToSvxLine(maApiData.maTLtoBR, aLine, true ) )
+        if (SvxBoxItem::LineToSvxLine(maApiData.maTLtoBR, aLine, false))
         {
             aTLBRItem.SetLine( &aLine );
         }
-        if ( SvxBoxItem::LineToSvxLine(maApiData.maBLtoTR, aLine, true ) )
+        if (SvxBoxItem::LineToSvxLine(maApiData.maBLtoTR, aLine, false))
         {
             aBLTRItem.SetLine( &aLine );
         }
@@ -1822,23 +1824,25 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
         case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         case XML_dashDotDot:        lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
         case XML_dashed:
-        {
-                                    lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
-                                    rBorderLine.LineStyle = API_LINE_DASHED;
-                                    break;
-        }
+            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+            rBorderLine.LineStyle = table::BorderLineStyle::FINE_DASHED;
+        break;
         case XML_dotted:
-        {
-                                    lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
-                                    rBorderLine.LineStyle = API_LINE_DOTTED;
-                                    break;
-        }
-        case XML_double:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN, API_LINE_THIN, API_LINE_THIN ); break;
-        case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR ); rBorderLine.LineStyle = API_FINE_LINE_DASHED;   break;
+            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
+            rBorderLine.LineStyle = table::BorderLineStyle::DOTTED;
+        break;
+        case XML_double:
+            lclSetBorderLineWidth( rBorderLine, 5 ,5, 5 );
+            rBorderLine.LineStyle = table::BorderLineStyle::DOUBLE;
+        break;
+        case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
         case XML_mediumDashDot:     lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
         case XML_mediumDashDotDot:  lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
-        case XML_mediumDashed:      lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
+        case XML_mediumDashed:
+            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
+            rBorderLine.LineStyle = table::BorderLineStyle::DASHED;
+        break;
         case XML_none:              lclSetBorderLineWidth( rBorderLine, API_LINE_NONE );    break;
         case XML_slantDashDot:      lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
         case XML_thick:             lclSetBorderLineWidth( rBorderLine, API_LINE_THICK );   break;

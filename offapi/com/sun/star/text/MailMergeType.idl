@@ -45,6 +45,15 @@ published constants MailMergeType
      */
     const short MAIL = 3;
 
+
+    /** The output is a document shell.
+
+        The successful mail marge returns a XTextDocument based component.
+
+        @since LibreOffice 4.4
+     */
+    const short SHELL = 4;
+
 };
 
 

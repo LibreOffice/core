@@ -24,6 +24,7 @@
 #include <sot/storage.hxx>
 #include <svtools/parhtml.hxx>
 #include <tools/urlobj.hxx>
+#include <boost/scoped_ptr.hpp>
 
 bool IsDocShellRegistered();
 
@@ -265,14 +266,10 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
     return bRet;
 }
 
-/* die Methode stellt fest, von welchem Typ der stream (File) ist.        */
-/* Es wird versucht, eine dem Filter entsprechende Byte-Folge zu finden.  */
-/* Wird kein entsprechender gefunden, wird zur Zeit der ASCII-Reader      */
-/* returnt !! Der Returnwert ist der interne Filtername!                  */
-/* rPrefFltName ist der interne Name des Filters, den der Benutzer im     */
-/* Open-Dialog eingestellt hat.                                           */
-const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
-    const String& rPrefFltName, SfxMedium* pMedium)
+// Check the type of the stream (file) by searching for corresponding set of bytes.
+// If no known type is found, return ASCII for now!
+// Returns the internal FilterName.
+const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
     SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
@@ -287,21 +284,20 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     if ( !pFilter )
         return 0;
 
-    if( pMedium ? ( pMedium->IsStorage() || SotStorage::IsStorageFile( pMedium->GetInStream() ) ) : SotStorage::IsStorageFile( rFileName ) )
+    ::boost::scoped_ptr<SfxMedium> pMedium;
+    if (SotStorage::IsStorageFile(rFileName))
     {
         // package storage or OLEStorage based format
         SotStorageRef xStg;
-        if (!pMedium )
-        {
-            INetURLObject aObj;
-            aObj.SetSmartProtocol( INET_PROT_FILE );
-            aObj.SetSmartURL( rFileName );
-            pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
-        }
+        INetURLObject aObj;
+        aObj.SetSmartProtocol( INET_PROT_FILE );
+        aObj.SetSmartURL( rFileName );
+        pMedium.reset(new SfxMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ));
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
         const SfxFilter* pTemplateFilter = 0;
-        const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( rPrefFltName );
+        const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( String() );
+        assert(!pOldFilter);
         bool bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
         if ( pMedium->IsStorage() )
         {

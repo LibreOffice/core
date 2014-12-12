@@ -31,10 +31,12 @@
 #undef Region
 
 #include "KDESalGraphics.hxx"
+#include "KDESalInstance.hxx"
 
 #include <vcl/settings.hxx>
 #include <vcl/decoview.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <unx/saldata.hxx>
 
 using namespace ::rtl;
 
@@ -78,7 +80,7 @@ QRect region2QRect( const Rectangle& rControlRegion )
 }
 
 KDESalGraphics::KDESalGraphics() :
-    m_image(0)
+    m_image(NULL)
 {
 }
 
@@ -130,13 +132,7 @@ sal_Bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart
     if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
         return true;
 
-    if ( (type == CTRL_PROGRESS)    && (part == PART_ENTIRE_CONTROL) ) return true;
-
-    return false;
-
-    if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
-    if ( (type == CTRL_TAB_PANE) && (part == PART_ENTIRE_CONTROL) ) return true;
-    // no CTRL_TAB_BODY for KDE
+    if ( (type == CTRL_PROGRESS) && (part == PART_ENTIRE_CONTROL) ) return true;
 
     return false;
 }
@@ -169,21 +165,6 @@ namespace
 
         QPainter painter(image);
         kapp->style()->drawComplexControl(element, option, &painter);
-    }
-
-    int getFrameWidth()
-    {
-        static int s_nFrameWidth = -1;
-        if( s_nFrameWidth < 0 )
-        {
-            // fill in a default
-            QFrame aFrame( NULL );
-            aFrame.setFrameRect( QRect(0, 0, 100, 30) );
-            aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-            aFrame.ensurePolished();
-            s_nFrameWidth = aFrame.frameWidth();
-        }
-        return s_nFrameWidth;
     }
 
     void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
@@ -378,8 +359,10 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             QStyleOptionMenuItem option;
             draw( QStyle::PE_PanelMenu, &option, m_image, vclStateValue2StateFlag( nControlState, value ));
+            // Try hard to get any frame!
             QStyleOptionFrame frame;
             draw( QStyle::PE_FrameMenu, &frame, m_image, vclStateValue2StateFlag( nControlState, value ));
+            draw( QStyle::PE_FrameWindow, &frame, m_image, vclStateValue2StateFlag( nControlState, value ));
             lastPopupRect = widgetRect;
         }
         else
@@ -558,7 +541,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                        vclStateValue2StateFlag(nControlState, value) );
 
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
-        int fw = getFrameWidth();
+        int fw = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
         clipRegion = new QRegion( QRegion( widgetRect ).subtracted( widgetRect.adjusted( fw, fw, -fw, -fw )));
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
@@ -779,7 +762,11 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
                     break;
                 }
                 case PART_BUTTON_DOWN:
-                    //the entire control can be used as the "down" button
+                    contentRect = kapp->style()->subControlRect(
+                        QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxArrow );
+
+                    contentRect.translate( boundingRect.left(), boundingRect.top() );
+
                     retVal = true;
                     break;
                 case PART_SUB_EDIT:
@@ -833,17 +820,31 @@ sal_Bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart p
             break;
         }
         case CTRL_MENU_POPUP:
-            if (part == PART_MENU_ITEM_CHECK_MARK || part == PART_MENU_ITEM_RADIO_MARK)
-            { // core uses this to detect radio/checkbox sizes, so just set a square
-                contentRect.setWidth(contentRect.height());
+        {
+            int h, w;
+            switch ( part ) {
+            case PART_MENU_ITEM_CHECK_MARK:
+                h = kapp->style()->pixelMetric(QStyle::PM_IndicatorHeight);
+                w = kapp->style()->pixelMetric(QStyle::PM_IndicatorWidth);
                 retVal = true;
+                break;
+            case PART_MENU_ITEM_RADIO_MARK:
+                h = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
+                w = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
+                retVal = true;
+                break;
+            }
+            if (retVal) {
+                contentRect = QRect(0, 0, w, h);
+                boundingRect = contentRect;
             }
             break;
+        }
         case CTRL_FRAME:
         {
             if( part == PART_BORDER )
             {
-                int nFrameWidth = getFrameWidth();
+                int nFrameWidth = static_cast< KDESalInstance* >(GetSalData()->m_pInstance)->getFrameWidth();
                 sal_uInt16 nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {

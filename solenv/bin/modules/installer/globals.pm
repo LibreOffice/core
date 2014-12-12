@@ -174,6 +174,7 @@ BEGIN
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
     $patchaddon = "Patch";
+    $helppackaddon = "HelpPack";
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";

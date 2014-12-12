@@ -88,6 +88,7 @@
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
 #include <comcore.hrc>      // STR ResIds
+#include <tools/datetimeutils.hxx>
 
 #include <unoframe.hxx>
 
@@ -411,7 +412,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         if( !mbCopyIsMove || this != pSrcDoc )
         {
-            if( mbInReading )
+            if( mbInReading || IsInMailMerge())
                 pDest->SetName( aEmptyStr );
             else
             {
@@ -1907,6 +1908,14 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 
 static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
+    if( pDoc->IsInMailMerge())
+    {
+        OUString newName = "MailMergeFly"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( pDoc->GetSpzFrmFmts()->size() + 1 );
+        return newName;
+    }
+
     ResId aId( nDefStrId, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
@@ -2110,44 +2119,42 @@ void SwDoc::SetAllUniqueFlyNames()
 
 bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 {
-    // If there's a Layout, use it!
     // That can also be a Fly in a Fly in the Header.
     // Is also used by sw3io, to determine if a Redline object is
     // in the Header or Footer.
     // Because Redlines are also attached to Start and EndNoden,
     // the Index must not necessarily be from a ContentNode.
     SwNode* pNd = &rIdx.GetNode();
-    if( pNd->IsCntntNode() && mpCurrentView )//swmod 071029//swmod 071225
-    {
-        const SwFrm *pFrm = pNd->GetCntntNode()->getLayoutFrm( GetCurrentLayout() );
-        if( pFrm )
-        {
-            const SwFrm *pUp = pFrm->GetUpper();
-            while ( pUp && !pUp->IsHeaderFrm() && !pUp->IsFooterFrm() )
-            {
-                if ( pUp->IsFlyFrm() )
-                    pUp = ((SwFlyFrm*)pUp)->GetAnchorFrm();
-                pUp = pUp->GetUpper();
-            }
-            if ( pUp )
-                return true;
-
-            return false;
-        }
-    }
-
-
     const SwNode* pFlyNd = pNd->FindFlyStartNode();
     while( pFlyNd )
     {
         // get up by using the Anchor
+#if OSL_DEBUG_LEVEL > 0
+        std::list<const SwFrmFmt*> checkFmts;
         sal_uInt16 n;
         for( n = 0; n < GetSpzFrmFmts()->size(); ++n )
         {
             const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[ n ];
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if( pIdx && pFlyNd == &pIdx->GetNode() )
+                checkFmts.push_back( pFmt );
+        }
+#endif
+        SwFrmFmtAnchorMap::const_iterator_pair range = GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( *pFlyNd ));
+        SwFrmFmtAnchorMap::const_iterator it;
+        for( it = range.first;
+             it != range.second;
+             ++it )
+        {
+            const SwFrmFmt* pFmt = it->second;
+            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if( pIdx && pFlyNd == &pIdx->GetNode() )
             {
+#if OSL_DEBUG_LEVEL > 0
+                std::list<const SwFrmFmt*>::iterator checkPos = std::find( checkFmts.begin(), checkFmts.end(), pFmt );
+                assert( checkPos != checkFmts.end());
+                checkFmts.erase( checkPos );
+#endif
                 const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                 if ((FLY_AT_PAGE == rAnchor.GetAnchorId()) ||
                     !rAnchor.GetCntntAnchor() )
@@ -2160,11 +2167,14 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 break;
             }
         }
-        if( n >= GetSpzFrmFmts()->size() )
+        if( it == range.second )
         {
             OSL_ENSURE( mbInReading, "Found a FlySection but not a Format!" );
             return false;
         }
+#if OSL_DEBUG_LEVEL > 0
+        assert( checkFmts.empty());
+#endif
     }
 
     return 0 != pNd->FindHeaderStartNode() ||

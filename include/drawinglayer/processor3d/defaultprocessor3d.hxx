@@ -71,7 +71,7 @@ namespace drawinglayer
             rasterconvertB3DPolyPolygon for filled geometry is called. It is a beseclass to
             e.g. base a Z-Buffer supported renderer on the 3D primitive processing.
          */
-        class DRAWINGLAYER_DLLPUBLIC DefaultProcessor3D : public BaseProcessor3D
+        class DefaultProcessor3D : public BaseProcessor3D
         {
         protected:
             /// read-only scene infos (normal handling, etc...)

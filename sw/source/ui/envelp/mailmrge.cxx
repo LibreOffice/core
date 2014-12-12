@@ -193,7 +193,6 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     rSh             (rShell),
     rDBName         (rSourceName),
     rTableName      (rTblName),
-    nMergeType      (DBMGR_MERGE_MAILING),
     m_aDialogSize( GetSizePixel() )
 {
     FreeResource();
@@ -653,18 +652,17 @@ bool SwMailMergeDlg::ExecQryShell()
     SwNewDBMgr* pMgr = rSh.GetNewDBMgr();
 
     if (aPrinterRB.IsChecked())
-        nMergeType = DBMGR_MERGE_MAILMERGE;
+        nMergeType = DBMGR_MERGE_PRINTER;
     else if (aMailingRB.IsChecked())
     {
-        nMergeType = DBMGR_MERGE_MAILING;
+        nMergeType = DBMGR_MERGE_EMAIL;
         pMgr->SetEMailColumn(aAddressFldLB.GetSelectEntry());
         pMgr->SetSubject(aSubjectED.GetText());
         pMgr->SetAttachment(aAttachED.GetText());
     }
     else
     {
-        nMergeType = static_cast< sal_uInt16 >( aSaveSingleDocRB.IsChecked() ?
-                    DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES );
+        nMergeType = DBMGR_MERGE_FILE;
         SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
         if( pMedium )

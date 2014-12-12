@@ -133,6 +133,7 @@ namespace sw { namespace mark
         , m_pPos1(new SwPosition(*(aPaM.GetPoint())))
         , m_aName(rName)
     {
+        m_pPos1->nContent.SetMark(this);
         lcl_FixPosition(*m_pPos1);
         if (aPaM.HasMark() && (*aPaM.GetMark() != *aPaM.GetPoint()))
         {
@@ -152,11 +153,13 @@ namespace sw { namespace mark
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
+        m_pPos1->nContent.SetMark(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
+        m_pPos2->nContent.SetMark(this);
     }
 
     OUString MarkBase::ToString( ) const
@@ -258,6 +261,18 @@ namespace sw { namespace mark
         {
             io_pDoc->GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoInsBookmark(*this));
+        }
+        io_pDoc->SetModified();
+    }
+
+    void Bookmark::DeregisterFromDoc(SwDoc* const io_pDoc)
+    {
+        DdeBookmark::DeregisterFromDoc(io_pDoc);
+
+        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        {
+            io_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                    new SwUndoDeleteBookmark(*this));
         }
         io_pDoc->SetModified();
     }

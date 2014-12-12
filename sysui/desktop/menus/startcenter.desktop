@@ -18,7 +18,7 @@
 [Desktop Entry]
 Version=1.0
 Terminal=false
-NoDisplay=true
+NoDisplay=false
 Icon=startcenter
 Type=Application
 Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Other;
@@ -30,4 +30,33 @@ Comment=The office productivity suite compatible to the open and standardized OD
 StartupNotify=true
 X-GIO-NoFuse=true
 StartupWMClass=libreoffice-startcenter
-X-KDE-Protocols=file,http,smb,ftp,webdav
+X-KDE-Protocols=file,http,ftp,webdav
+
+##Define Actions
+Actions=Writer;Calc;Impress;Draw;Base;Math;
+
+[Desktop Action Writer]
+Name=Text Document
+Exec=${UNIXBASISROOTNAME} --writer
+
+[Desktop Action Calc]
+Name=Spreadsheet
+Exec=${UNIXBASISROOTNAME} --calc
+
+[Desktop Action Impress]
+Name=Presentation
+Exec=${UNIXBASISROOTNAME} --impress
+
+[Desktop Action Draw]
+Name=Drawing
+Exec=${UNIXBASISROOTNAME} --draw
+
+[Desktop Action Base]
+Name=Database
+Exec=${UNIXBASISROOTNAME} --base
+
+[Desktop Action Math]
+Name=Formula
+Exec=${UNIXBASISROOTNAME} --math
+
+##End of actions menu

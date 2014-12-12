@@ -27,6 +27,7 @@ public:
     void testFdo60842();
     void testFdo56272();
     void testFdo55814();
+    void testCreatePortions();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -50,6 +51,7 @@ void Test::run()
         {"fdo60842.odt", &Test::testFdo60842},
         {"fdo56272.odt", &Test::testFdo56272},
         {"fdo55814.odt", &Test::testFdo55814},
+        {"uno-cycle.odt", &Test::testCreatePortions},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -320,6 +322,20 @@ void Test::testFdo55814()
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was "0".
     CPPUNIT_ASSERT_EQUAL(OUString("Hide==\"Yes\""), getProperty<OUString>(xSections->getByIndex(0), "Condition"));
+}
+
+void Test::testCreatePortions()
+{
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xText(xBookmarksSupplier->getBookmarks()->getByName("Mark"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xTextCursor(xText->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextCursor.is());
+
+    uno::Reference<container::XEnumerationAccess> xParagraph(
+            xTextCursor->createEnumeration()->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+    // This looped forever in lcl_CreatePortions
+    xParagraph->createEnumeration();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

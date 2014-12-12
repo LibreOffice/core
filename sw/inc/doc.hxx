@@ -127,6 +127,7 @@ class SwFmt;
 class SwFmtINetFmt;
 class SwFmtRefMark;
 class SwFrmFmt;
+class SwFrmFmtAnchorMap;
 class SwFrmFmts;
 class SwFtnIdxs;
 class SwFtnInfo;
@@ -305,6 +306,7 @@ class SW_DLLPUBLIC SwDoc :
     SwGrfFmtColl    *mpDfltGrfFmtColl;
 
     SwFrmFmts       *mpFrmFmtTbl;        ///< Format table
+    SwFrmFmtAnchorMap *mpFrmFmtAnchorMap;
     SwCharFmts      *mpCharFmtTbl;
     SwFrmFmts       *mpSpzFrmFmtTbl;
     SwSectionFmts   *mpSectionFmtTbl;
@@ -444,6 +446,7 @@ private:
     bool mbCopyIsMove            : 1;    ///< TRUE: Copy is a hidden Move.
     bool mbVisibleLinks          : 1;    ///< TRUE: Links are inserted visibly.
     bool mbInReading             : 1;    ///< TRUE: Document is in the process of being read.
+    bool mbInMailMerge           : 1;    //< TRUE: Document is in the process of being written by mail merge.
     bool mbInXMLImport           : 1;    ///< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    ///< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    ///< TRUE: Document is in the process of being loaded asynchronously.
@@ -624,7 +627,8 @@ private:
     void CopyFlyInFlyImpl(  const SwNodeRange& rRg,
                             const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rStartIdx,
-                            const bool bCopyFlyAtFly = false ) const;
+                            const bool bCopyFlyAtFly = false,
+                            const bool bMergedFirstNode = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, bool, bool );
@@ -692,7 +696,6 @@ private:
      SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, bool, bool );
 
      void InitTOXTypes();
-     void   Paste( const SwDoc& );
      bool DeleteAndJoinImpl(SwPaM&, const bool);
      bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
      bool DeleteRangeImpl(SwPaM&, const bool unused = false);
@@ -1080,7 +1083,8 @@ public:
                             const SwNodeIndex& rInsPos,
                             sal_Bool bMakeNewFrms = sal_True,
                             sal_Bool bDelRedlines = sal_True,
-                            sal_Bool bCopyFlyAtFly = sal_False ) const;
+                            sal_Bool bCopyFlyAtFly = sal_False,
+                            sal_Bool bMergedFirstNode = sal_False ) const;
 
     bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
@@ -1220,6 +1224,9 @@ public:
     const SwCharFmt *GetDfltCharFmt() const { return mpDfltCharFmt;}
           SwCharFmt *GetDfltCharFmt()       { return mpDfltCharFmt;}
 
+    const SwFrmFmtAnchorMap* GetFrmFmtAnchorMap() const { return mpFrmFmtAnchorMap; }
+    SwFrmFmtAnchorMap* GetFrmFmtAnchorMap() { return mpFrmFmtAnchorMap; }
+
     /// @return the interface of the management of (auto)styles
     IStyleAccess& GetIStyleAccess() { return *mpStyleAccess; }
 
@@ -1304,6 +1311,21 @@ public:
     /// Replace all compatability options with those from rSource.
     void ReplaceCompatabilityOptions(const SwDoc& rSource);
 
+    /** Replace all user defined document properties with xSourceDocProps.
+
+        Convenince function used by ReplaceDocumentProperties to skip some UNO calls.
+     */
+    void ReplaceUserDefinedDocumentProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xSourceDocProps );
+
+    // Replace all user defined document properties with those from rSource.
+    void ReplaceUserDefinedDocumentProperties( const SwDoc& rSource );
+
+    /** Replace document properties with those from rSource.
+
+        This includes the user defined document properties!
+     */
+    void ReplaceDocumentProperties(const SwDoc& rSource);
+
     /// Query if style (paragraph- / character- / frame- / page-) is used.
     bool IsUsed( const SwModify& ) const;
     bool IsUsed( const SwNumRule& ) const;
@@ -1344,8 +1366,7 @@ public:
     sal_uInt16 GetPageDescCnt() const { return maPageDescs.size(); }
     const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *maPageDescs[i]; }
     SwPageDesc& GetPageDesc( sal_uInt16 i ) { return *maPageDescs[i]; }
-    SwPageDesc* FindPageDescByName( const String& rName,
-                                    sal_uInt16* pPos = 0 ) const;
+    SwPageDesc* FindPageDesc( const String& rName, sal_uInt16* pPos = NULL) const;
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
@@ -1367,11 +1388,10 @@ public:
     SwPageDesc * GetPageDesc( const String & rName );
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
-    bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
     void DelPageDesc( const String & rName, bool bBroadcast = false);
     void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
-    sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
+    SwPageDesc* MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
@@ -1417,6 +1437,9 @@ public:
 
     bool IsInReading() const                    { return mbInReading; }
     void SetInReading( bool bNew )              { mbInReading = bNew; }
+
+    bool IsInMailMerge() const                  { return mbInMailMerge; }
+    void SetInMailMerge( bool bNew )            { mbInMailMerge = bNew; }
 
     bool IsClipBoard() const                    { return mbClipBoard; }
     /// N.B.: must be called right after constructor! (@see GetXmlIdRegistry)
@@ -2065,7 +2088,10 @@ public:
     ::sw::MetaFieldManager & GetMetaFieldManager();
     ::sw::UndoManager      & GetUndoManager();
     ::sw::UndoManager const& GetUndoManager() const;
+
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
+    SwNodeIndex AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
+                 SwPageDesc* pTargetPageDesc, bool bDeletePrevious = false, int physicalPageOffset = 0 );
 
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)

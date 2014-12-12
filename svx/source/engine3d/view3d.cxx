@@ -213,7 +213,8 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     basegfx::B2DPolyPolygon aPolyPolygon(mpPolygons[b]);
                     aPolyPolygon.transform(aMatrixTransform);
 
-                    ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aPolyPolygon);
+                    ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                        aPolyPolygon);
                     xTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }

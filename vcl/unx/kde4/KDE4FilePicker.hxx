@@ -33,6 +33,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <QObject>
 #include <QString>
 #include <QHash>
 
@@ -52,8 +53,10 @@ typedef ::cppu::WeakComponentImplHelper5
 > KDE4FilePicker_Base;
 
 class KDE4FilePicker
-    : public KDE4FilePicker_Base
+    : public QObject
+    , public KDE4FilePicker_Base
 {
+    Q_OBJECT
 protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
@@ -82,17 +85,14 @@ public:
     virtual ~KDE4FilePicker();
 
     // XFilePickerNotifier
-
     virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XExecutableDialog functions
-
     virtual void SAL_CALL setTitle( const OUString &rTitle ) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Int16 SAL_CALL execute() throw( ::com::sun::star::uno::RuntimeException );
 
     // XFilePicker functions
-
     virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setDefaultName( const OUString &rName ) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setDisplayDirectory( const OUString &rDirectory ) throw( ::com::sun::star::uno::RuntimeException );
@@ -100,17 +100,14 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles() throw( ::com::sun::star::uno::RuntimeException );
 
     // XFilterManager functions
-
     virtual void SAL_CALL appendFilter( const OUString &rTitle, const OUString &rFilter ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setCurrentFilter( const OUString &rTitle ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     virtual OUString SAL_CALL getCurrentFilter() throw( ::com::sun::star::uno::RuntimeException );
 
     // XFilterGroupManager functions
-
     virtual void SAL_CALL appendFilterGroup( const OUString &rGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > &rFilters ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XFilePickerControlAccess functions
-
     virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL enableControl( sal_Int16 nControlId, sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException );
@@ -129,28 +126,92 @@ public:
     */
 
     // XFilePicker2 functions
-
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles()
             throw (::com::sun::star::uno::RuntimeException);
 
     // XInitialization
-
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &rArguments ) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException );
 
     // XCancellable
-
     virtual void SAL_CALL cancel( ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XEventListener
-
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject &rEvent ) throw( ::com::sun::star::uno::RuntimeException );
     using cppu::WeakComponentImplHelperBase::disposing;
 
     // XServiceInfo
-
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString &rServiceName ) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+
+private Q_SLOTS:
+    // XExecutableDialog functions
+    void setTitleSlot( const OUString &rTitle ) throw( ::com::sun::star::uno::RuntimeException ) { return setTitle( rTitle ); }
+    sal_Int16 executeSlot() throw( ::com::sun::star::uno::RuntimeException ) { return execute(); }
+
+    // XFilePicker functions
+    void setMultiSelectionModeSlot( sal_Bool bMode ) throw( ::com::sun::star::uno::RuntimeException ) { return setMultiSelectionMode( bMode ); }
+    void setDefaultNameSlot( const OUString &rName ) throw( ::com::sun::star::uno::RuntimeException ) { return setDefaultName( rName ); }
+    void setDisplayDirectorySlot( const OUString &rDirectory ) throw( ::com::sun::star::uno::RuntimeException ) { return setDisplayDirectory( rDirectory ); }
+    OUString getDisplayDirectorySlot() throw( ::com::sun::star::uno::RuntimeException ) { return getDisplayDirectory(); }
+    ::com::sun::star::uno::Sequence< OUString > getFilesSlot() throw( ::com::sun::star::uno::RuntimeException ) { return getFiles(); }
+
+    // XFilterManager functions
+    void appendFilterSlot( const OUString &rTitle, const OUString &rFilter ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) { return appendFilter( rTitle, rFilter ); }
+    void setCurrentFilterSlot( const OUString &rTitle ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException ) { return setCurrentFilter( rTitle ); }
+    OUString getCurrentFilterSlot() throw( ::com::sun::star::uno::RuntimeException ) { return getCurrentFilter(); }
+
+    // XFilterGroupManager functions
+    void appendFilterGroupSlot( const OUString &rGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > &rFilters ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) { return appendFilterGroup( rGroupTitle, rFilters ); }
+
+    // XFilePickerControlAccess functions
+    void setValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue ) throw (::com::sun::star::uno::RuntimeException) { return setValue( nControlId, nControlAction, rValue ); }
+    ::com::sun::star::uno::Any getValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction ) throw (::com::sun::star::uno::RuntimeException) { return getValue( nControlId, nControlAction ); }
+    void enableControlSlot( sal_Int16 nControlId, sal_Bool bEnable ) throw( ::com::sun::star::uno::RuntimeException ) { return enableControl( nControlId, bEnable ); }
+    void setLabelSlot( sal_Int16 nControlId, const OUString &rLabel ) throw (::com::sun::star::uno::RuntimeException) { return setLabel( nControlId, rLabel ); }
+    OUString getLabelSlot( sal_Int16 nControlId ) throw (::com::sun::star::uno::RuntimeException) { return getLabel( nControlId ); }
+
+    // XFilePicker2 functions
+    ::com::sun::star::uno::Sequence< OUString > getSelectedFilesSlot() throw (::com::sun::star::uno::RuntimeException) { return getSelectedFiles(); }
+
+    // XInitialization
+    void initializeSlot( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &rArguments ) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) { return initialize( rArguments ); }
+
+Q_SIGNALS:
+    // XExecutableDialog functions
+    void setTitleSignal( const OUString &rTitle );
+    sal_Int16 executeSignal();
+
+    // XFilePicker functions
+    void setMultiSelectionModeSignal( sal_Bool bMode );
+    void setDefaultNameSignal( const OUString &rName );
+    void setDisplayDirectorySignal( const OUString &rDirectory );
+    OUString getDisplayDirectorySignal();
+    ::com::sun::star::uno::Sequence< OUString > getFilesSignal();
+
+    // XFilterManager functions
+    void appendFilterSignal( const OUString &rTitle, const OUString &rFilter );
+    void setCurrentFilterSignal( const OUString &rTitle );
+    OUString getCurrentFilterSignal();
+
+    // XFilterGroupManager functions
+    void appendFilterGroupSignal( const OUString &rGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > &rFilters );
+
+    // XFilePickerControlAccess functions
+    void setValueSignal( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any &rValue );
+    ::com::sun::star::uno::Any getValueSignal( sal_Int16 nControlId, sal_Int16 nControlAction );
+    void enableControlSignal( sal_Int16 nControlId, sal_Bool bEnable );
+    void setLabelSignal( sal_Int16 nControlId, const OUString &rLabel );
+    OUString getLabelSignal( sal_Int16 nControlId );
+
+    // XFilePicker2 functions
+    ::com::sun::star::uno::Sequence< OUString > getSelectedFilesSignal() ;
+
+    // XInitialization
+    void initializeSignal( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > &rArguments );
+
+    // Destructor proxy
+    void cleanupProxySignal();
 
 private:
     // prevent copy and assignment
@@ -160,6 +221,13 @@ private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
 
+private Q_SLOTS:
+    void cleanupProxy();
+
+    // emit XFilePickerListener controlStateChanged event
+    void filterChanged(const QString &filter);
+    // emit XFilePickerListener fileSelectionChanged event
+    void selectionChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

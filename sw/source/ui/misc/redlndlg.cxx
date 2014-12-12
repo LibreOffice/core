@@ -293,10 +293,15 @@ void SwRedlineAcceptDlg::InitAuthors()
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     while (pSelEntry)
     {
+        // find the selected redline
+        // (fdo#57874: ignore, if the redline is already gone)
         sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
-        const SwRedline& rRedln = pSh->GetRedline( nPos );
+        if( nPos != USHRT_MAX )
+        {
+            const SwRedline& rRedln = pSh->GetRedline( nPos );
 
-        bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
+            bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
+        }
         pSelEntry = pTable->NextSelected(pSelEntry);
     }
 
@@ -1007,7 +1012,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                 sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
 
                 // disable commenting for protected areas
-                if ((pRed = pSh->GotoRedline(nPos, sal_True)) != 0)
+                if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, sal_True)) != 0)
                 {
                     if( pSh->IsCrsrPtAtEnd() )
                         pSh->SwapPam();
@@ -1048,6 +1053,10 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                             pEntry = pTable->GetParent(pEntry);
 
                         sal_uInt16 nPos = GetRedlinePos(*pEntry);
+
+                        if (nPos == USHRT_MAX)
+                            break;
+
                         const SwRedline &rRedline = pSh->GetRedline(nPos);
 
 

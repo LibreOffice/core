@@ -123,71 +123,102 @@ namespace
     };
     typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 
+    /// Inserts pBkmk to rBkmArr in case it starts or ends at nOwnNode
+    static void lcl_FillBookmark(sw::mark::IMark* const pBkmk, const SwNodeIndex& nOwnNode, SwDoc& rDoc, SwXBookmarkPortion_ImplList& rBkmArr)
+    {
+        bool const hasOther = pBkmk->IsExpanded();
+
+        const SwPosition& rStartPos = pBkmk->GetMarkStart();
+        if(rStartPos.nNode == nOwnNode)
+        {
+            // #i109272#: cross reference marks: need special handling!
+            ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
+            sal_uInt8 const nType = (hasOther || pCrossRefMark)
+                ? BKM_TYPE_START : BKM_TYPE_START_END;
+            rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
+                new SwXBookmarkPortion_Impl(
+                        SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                        nType, rStartPos)));
+        }
+
+        const SwPosition& rEndPos = pBkmk->GetMarkEnd();
+        if(rEndPos.nNode == nOwnNode)
+        {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            auto_ptr<SwPosition> pCrossRefEndPos;
+            SAL_WNODEPRECATED_DECLARATIONS_POP
+            const SwPosition* pEndPos = NULL;
+            ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
+            if(hasOther)
+            {
+                pEndPos = &rEndPos;
+            }
+            else if (pCrossRefMark)
+            {
+                // Crossrefbookmarks only remember the start position but have to span the whole paragraph
+                SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
+                SAL_WNODEPRECATED_DECLARATIONS_POP
+                pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTxtNode()->Len();
+                pEndPos = pCrossRefEndPos.get();
+            }
+            if(pEndPos)
+            {
+                rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
+                    new SwXBookmarkPortion_Impl(
+                            SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                            BKM_TYPE_END, *pEndPos)));
+            }
+        }
+    }
+
     static void lcl_FillBookmarkArray(SwDoc& rDoc, SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_ImplList& rBkmArr)
     {
         IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
         if(!pMarkAccess->getBookmarksCount())
             return;
 
-        // no need to consider marks starting after aEndOfPara
-        SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
-        aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
-        const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
-            pMarkAccess->getBookmarksBegin(),
-            pMarkAccess->getBookmarksEnd(),
-            aEndOfPara,
-            sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
-
-        // search for all bookmarks that start or end in this paragraph
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
-        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-            ppMark != pCandidatesEnd;
-            ++ppMark)
+        SwTxtNode* pTxtNode = nOwnNode.GetNode().GetTxtNode();
+        if (!pTxtNode)
         {
-            ::sw::mark::IMark* const pBkmk = ppMark->get();
-            ::sw::mark::CrossRefBookmark *const pCrossRefMark(
-                    dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
-            bool const hasOther = pBkmk->IsExpanded();
+            // no need to consider marks starting after aEndOfPara
+            SwPosition aEndOfPara(*rUnoCrsr.GetPoint());
+            aEndOfPara.nContent = aEndOfPara.nNode.GetNode().GetTxtNode()->Len();
+            const IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
+                pMarkAccess->getBookmarksBegin(),
+                pMarkAccess->getBookmarksEnd(),
+                aEndOfPara,
+                sw::mark::CompareIMarkStartsAfter()); // finds the first that starts after
 
-            const SwPosition& rStartPos = pBkmk->GetMarkStart();
-            if(rStartPos.nNode == nOwnNode)
+            // search for all bookmarks that start or end in this paragraph
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+                ppMark != pCandidatesEnd;
+                ++ppMark)
             {
-                // #i109272#: cross reference marks: need special handling!
-                sal_uInt8 const nType = (hasOther || pCrossRefMark)
-                    ? BKM_TYPE_START : BKM_TYPE_START_END;
-                rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                    new SwXBookmarkPortion_Impl(
-                            SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
-                            nType, rStartPos)));
+                ::sw::mark::IMark* const pBkmk = ppMark->get();
+                lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
             }
-
-            const SwPosition& rEndPos = pBkmk->GetMarkEnd();
-            if(rEndPos.nNode == nOwnNode)
+        }
+        else
+        {
+            // A text node already knows its marks via its SwIndexes.
+            std::set<sw::mark::IMark*> aSeenMarks;
+            for (const SwIndex* pIndex = pTxtNode->GetFirstIndex(); pIndex; pIndex = pIndex->GetNext())
             {
-                SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                auto_ptr<SwPosition> pCrossRefEndPos;
-                SAL_WNODEPRECATED_DECLARATIONS_POP
-                const SwPosition* pEndPos = NULL;
-                if(hasOther)
-                {
-                    pEndPos = &rEndPos;
-                }
-                else if (pCrossRefMark)
-                {
-                    // Crossrefbookmarks only remember the start position but have to span the whole paragraph
-                    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                    pCrossRefEndPos = auto_ptr<SwPosition>(new SwPosition(rEndPos));
-                    SAL_WNODEPRECATED_DECLARATIONS_POP
-                    pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTxtNode()->Len();
-                    pEndPos = pCrossRefEndPos.get();
-                }
-                if(pEndPos)
-                {
-                    rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                        new SwXBookmarkPortion_Impl(
-                                SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
-                                BKM_TYPE_END, *pEndPos)));
-                }
+                // Need a non-cost mark here, as we'll create an UNO wrapper around it.
+                sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
+                if (!pBkmk)
+                    continue;
+                IDocumentMarkAccess::MarkType eType = pMarkAccess->GetType(*pBkmk);
+                // These are the types stored in the container otherwise accessible via getBookmarks*()
+                if (eType != IDocumentMarkAccess::BOOKMARK && eType != IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK && eType != IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK)
+                    continue;
+                // Only handle bookmarks once, if they start and end at this node as well.
+                if (aSeenMarks.find(pBkmk) != aSeenMarks.end())
+                    continue;
+                aSeenMarks.insert(pBkmk);
+                lcl_FillBookmark(pBkmk, nOwnNode, rDoc, rBkmArr);
             }
         }
     }
@@ -1002,6 +1033,11 @@ lcl_ExportFrames(
     FrameDependSortList_t & i_rFrames,
     xub_StrLen const i_nCurrentIndex)
 {
+    // Ignore frames which are not exported, as we are exporting a selection
+    // and they are anchored before the start of the selection.
+    while (i_rFrames.size() && i_rFrames.front().nIndex < i_nCurrentIndex)
+        i_rFrames.pop_front();
+
     // find first Frame in (sorted) i_rFrames at current position
     while (i_rFrames.size() && (i_rFrames.front().nIndex == i_nCurrentIndex))
     // do not check for i_nEnd here; this is done implicity by lcl_MoveCursor

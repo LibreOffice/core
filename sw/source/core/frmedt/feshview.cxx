@@ -340,16 +340,16 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 OSL_ENSURE( pOld->IsCntntFrm(), "Wrong anchor, page expected." );
                 if( SW_MOVE_LEFT == nDir || SW_MOVE_RIGHT == nDir )
                 {
-                    SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+                    SwPosition pos = *aAnch.GetCntntAnchor();
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pOld)->GetTxtNode();
-                    xub_StrLen nAct = pPos->nContent.GetIndex();
+                    xub_StrLen nAct = pos.nContent.GetIndex();
                     if( SW_MOVE_LEFT == nDir )
                     {
                         bRet = sal_True;
                         if( nAct )
                         {
                             --nAct;
-                            pPos->nContent.Assign( pTxtNd, nAct );
+                            pos.nContent.Assign( pTxtNd, nAct );
                         }
                         else
                             nDir = SW_MOVE_UP;
@@ -362,11 +362,13 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                         {
                             ++nAct;
                             bRet = sal_True;
-                            pPos->nContent.Assign( pTxtNd, nAct );
+                            pos.nContent.Assign( pTxtNd, nAct );
                         }
                         else
                             nDir = SW_MOVE_DOWN;
                     }
+                    if( pos != *aAnch.GetCntntAnchor())
+                        aAnch.SetAnchor( &pos );
                 }
             } // no break!
             case FLY_AT_PARA:
@@ -378,9 +380,9 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                     pNew = pOld->FindNext();
                 if( pNew && pNew != pOld && pNew->IsCntntFrm() )
                 {
-                    SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+                    SwPosition pos = *aAnch.GetCntntAnchor();
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pNew)->GetTxtNode();
-                    pPos->nNode = *pTxtNd;
+                    pos.nNode = *pTxtNd;
                     xub_StrLen nTmp = 0;
                     if( bRet )
                     {
@@ -388,7 +390,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                         if( nTmp )
                             --nTmp;
                     }
-                    pPos->nContent.Assign( pTxtNd, nTmp );
+                    pos.nContent.Assign( pTxtNd, nTmp );
                     bRet = sal_True;
                 }
                 else if( SW_MOVE_UP == nDir || SW_MOVE_DOWN == nDir )

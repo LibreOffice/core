@@ -666,7 +666,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
     // Catch if there's no copy to do
-    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) )
+    if( !rPam.HasMark() || ( *pStt > *pEnd && !bColumnSel ) )
         return false;
 
     // Prevent copying in Flys that are anchored in the area
@@ -843,6 +843,69 @@ static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
     return bRet;
 }
 
+#define NUMRULE_STATE \
+     int aNumRuleState = SFX_ITEM_UNKNOWN; \
+     SwNumRuleItem aNumRuleItem; \
+     int aListIdState = SFX_ITEM_UNKNOWN; \
+     SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() ); \
+
+#define PUSH_NUMRULE_STATE \
+     lcl_PushNumruleState( aNumRuleState, aNumRuleItem, aListIdState, aListIdItem, pDestTxtNd );
+
+#define POP_NUMRULE_STATE \
+     lcl_PopNumruleState( aNumRuleState, aNumRuleItem, aListIdState, aListIdItem, pDestTxtNd, rPam );
+
+static void lcl_PushNumruleState( int &aNumRuleState, SwNumRuleItem &aNumRuleItem,
+                                  int &aListIdState, SfxStringItem &aListIdItem,
+                                  const SwTxtNode *pDestTxtNd )
+{
+    // Safe numrule item at destination.
+    // #i86492# - Safe also <ListId> item of destination.
+    const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
+    if (pAttrSet != NULL)
+    {
+        const SfxPoolItem * pItem = NULL;
+        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
+        if (SFX_ITEM_SET == aNumRuleState)
+            aNumRuleItem = *((SwNumRuleItem *) pItem);
+
+        aListIdState =
+            pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
+        if (SFX_ITEM_SET == aListIdState)
+        {
+            aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        }
+    }
+}
+
+static void lcl_PopNumruleState( int aNumRuleState, const SwNumRuleItem &aNumRuleItem,
+                                 int aListIdState, const SfxStringItem &aListIdItem,
+                                 SwTxtNode *pDestTxtNd, const SwPaM& rPam )
+{
+    /* If only a part of one paragraph is copied
+       restore the numrule at the destination. */
+    // #i86492# - restore also <ListId> item
+    if ( !lcl_MarksWholeNode(rPam) )
+    {
+        if (SFX_ITEM_SET == aNumRuleState)
+        {
+            pDestTxtNd->SetAttr(aNumRuleItem);
+        }
+        else
+        {
+            pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
+        }
+        if (SFX_ITEM_SET == aListIdState)
+        {
+            pDestTxtNd->SetAttr(aListIdItem);
+        }
+        else
+        {
+            pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
+        }
+    }
+}
+
 bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         const bool bMakeNewFrms, const bool bCopyAll,
         SwPaM *const pCpyRange ) const
@@ -854,7 +917,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwPosition* pEnd = rPam.End();
 
     // Catch when there's no copy to do.
-    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
+    if( !rPam.HasMark() || ( *pStt > *pEnd && !bColumnSel ) ||
         //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
         //JP 15.11.2001: don't test inclusive the end, ever exclusive
         ( pDoc == this && *pStt <= rPos && rPos < *pEnd ))
@@ -942,6 +1005,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pNumRuleToPropagate = 0;
     }
 
+    bool bHandledStartNode = false;
+
     // This do/while block is only there so that we can break out of it!
     do {
         if( pSttTxtNd )
@@ -949,6 +1014,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             // Don't copy the beginning completely?
             if( !bCopyCollFmt || bColumnSel || pStt->nContent.GetIndex() )
             {
+                bHandledStartNode = true;
+
                 SwIndex aDestIdx( rPos.nContent );
                 bool bCopyOk = false;
                 if( !pDestTxtNd )
@@ -1006,28 +1073,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
 
-                // Safe numrule item at destination.
-                // #i86492# - Safe also <ListId> item of destination.
-                int aNumRuleState = SFX_ITEM_UNKNOWN;
-                SwNumRuleItem aNumRuleItem;
-                int aListIdState = SFX_ITEM_UNKNOWN;
-                SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
+                NUMRULE_STATE
+                if( bCopyCollFmt && bOneNode )
                 {
-                    const SfxItemSet * pAttrSet = pDestTxtNd->GetpSwAttrSet();
-                    if (pAttrSet != NULL)
-                    {
-                        const SfxPoolItem * pItem = NULL;
-                        aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
-                        if (SFX_ITEM_SET == aNumRuleState)
-                            aNumRuleItem = *((SwNumRuleItem *) pItem);
-
-                        aListIdState =
-                            pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
-                        if (SFX_ITEM_SET == aListIdState)
-                        {
-                            aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-                        }
-                    }
+                    PUSH_NUMRULE_STATE
                 }
 
                 if( !bCopyOk )
@@ -1042,40 +1091,11 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         pEnd->nContent -= nCpyLen;
                 }
 
-                if( bOneNode )
+                if( bCopyCollFmt && bOneNode )
                 {
-                    if( bCopyCollFmt )
-                    {
-                        pSttTxtNd->CopyCollFmt( *pDestTxtNd );
-
-                        /* If only a part of one paragraph is copied
-                           restore the numrule at the destination. */
-                        // #i86492# - restore also <ListId> item
-                        if ( !lcl_MarksWholeNode(rPam) )
-                        {
-                            if (SFX_ITEM_SET == aNumRuleState)
-                            {
-                                pDestTxtNd->SetAttr(aNumRuleItem);
-                            }
-                            else
-                            {
-                                pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
-                            }
-                            if (SFX_ITEM_SET == aListIdState)
-                            {
-                                pDestTxtNd->SetAttr(aListIdItem);
-                            }
-                            else
-                            {
-                                pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
-                            }
-                        }
-                    }
-
-                    break;
+                    pSttTxtNd->CopyCollFmt( *pDestTxtNd );
+                    POP_NUMRULE_STATE
                 }
-
-                aRg.aStart++;
             }
         }
         else if( pDestTxtNd )
@@ -1132,7 +1152,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         }
 
         pDestTxtNd = aInsPos.GetNode().GetTxtNode();
-        if( pEndTxtNd )
+        if( pEndTxtNd && (!bOneNode || !bHandledStartNode) )
         {
             SwIndex aDestIdx( rPos.nContent );
             if( !pDestTxtNd )
@@ -1151,31 +1171,14 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 bStartIsTxtNode = sal_True;
             }
 
-            // Save numrule at destination
-            // #i86492# - Safe also <ListId> item of destination.
-            int aNumRuleState = SFX_ITEM_UNKNOWN;
-            SwNumRuleItem aNumRuleItem;
-            int aListIdState = SFX_ITEM_UNKNOWN;
-            SfxStringItem aListIdItem( RES_PARATR_LIST_ID, String() );
+            const bool bEmptyDestNd = pDestTxtNd->GetTxt().isEmpty();
+
+            NUMRULE_STATE
+            if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
-                const SfxItemSet* pAttrSet = pDestTxtNd->GetpSwAttrSet();
-                if (pAttrSet != NULL)
-                {
-                    const SfxPoolItem * pItem = NULL;
-
-                    aNumRuleState =
-                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem);
-                    if (SFX_ITEM_SET == aNumRuleState)
-                        aNumRuleItem = *((SwNumRuleItem *) pItem);
-
-                    aListIdState =
-                        pAttrSet->GetItemState(RES_PARATR_LIST_ID, sal_False, &pItem);
-                    if (SFX_ITEM_SET == aListIdState)
-                        aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
-                }
+                PUSH_NUMRULE_STATE
             }
 
-            const bool bEmptyDestNd = pDestTxtNd->GetTxt().isEmpty();
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
                             pEnd->nContent.GetIndex() );
 
@@ -1183,31 +1186,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
                 pEndTxtNd->CopyCollFmt( *pDestTxtNd );
-
                 if ( bOneNode )
                 {
-                    /* If only a part of one paragraph is copied
-                       restore the numrule at the destination. */
-                    // #i86492# - restore also <ListId> item
-                    if ( !lcl_MarksWholeNode(rPam) )
-                    {
-                        if (SFX_ITEM_SET == aNumRuleState)
-                        {
-                            pDestTxtNd->SetAttr(aNumRuleItem);
-                        }
-                        else
-                        {
-                            pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
-                        }
-                        if (SFX_ITEM_SET == aListIdState)
-                        {
-                            pDestTxtNd->SetAttr(aListIdItem);
-                        }
-                        else
-                        {
-                            pDestTxtNd->ResetAttr(RES_PARATR_LIST_ID);
-                        }
-                    }
+                    POP_NUMRULE_STATE
                 }
             }
         }
@@ -1215,7 +1196,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         if( bCopyAll || aRg.aStart != aRg.aEnd )
         {
             SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
-            if( pSttTxtNd && bCopyCollFmt && pDestTxtNd->HasSwAttrSet() )
+            if( !bOneNode && pSttTxtNd && bCopyCollFmt && pDestTxtNd->HasSwAttrSet() )
             {
                 aBrkSet.Put( *pDestTxtNd->GetpSwAttrSet() );
                 if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, sal_False ) )
@@ -1227,13 +1208,15 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, 0,aInsPos, bMakeNewFrms, sal_False );
+                CopyWithFlyInFly( aRg, 0, aInsPos, bMakeNewFrms,
+                                  sal_False, sal_False, bHandledStartNode );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTxtNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, bMakeNewFrms, sal_False );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos,
+                                  bMakeNewFrms, sal_False, sal_False, bHandledStartNode );
 
             bCopyBookmarks = false;
 
@@ -1317,7 +1300,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 // Copy method from SwDoc - "copy Flys in Flys"
 void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rInsPos, sal_Bool bMakeNewFrms,
-                            sal_Bool bDelRedlines, sal_Bool bCopyFlyAtFly ) const
+                            sal_Bool bDelRedlines, sal_Bool bCopyFlyAtFly, sal_Bool bMergedFirstNode  ) const
 {
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
 
@@ -1325,13 +1308,17 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
 
     SwNodeIndex aSavePos( rInsPos, -1 );
     bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
-    GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, sal_True );
-    ++aSavePos;
-    if( bEndIsEqualEndPos )
+    SwNodeRange aRg( rRg );
+    if ( bMergedFirstNode )
+        aRg.aStart++;
+    if ( aRg.aStart <= aRg.aEnd )
+        GetNodes()._CopyNodes( aRg, rInsPos, bMakeNewFrms, sal_True );
+    if ( !bMergedFirstNode )
+        ++aSavePos;
+    if ( bEndIsEqualEndPos )
         ((SwNodeIndex&)rRg.aEnd) = aSavePos;
 
     aRedlRest.Restore();
-
 #if OSL_DEBUG_LEVEL > 0
     {
         //JP 17.06.99: Bug 66973 - check count only if the selection is in
@@ -1344,8 +1331,10 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
             !rRg.aStart.GetNode().IsSectionNode() &&
             !aTmpI.GetNode().IsEndNode() )
         {
+            // If the range starts with a SwStartNode, it isn't copied
+            sal_uInt16 offset = (aRg.aStart.GetNode().GetNodeType() != ND_STARTNODE) ? 1 : 0;
             OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
-                    rRg.aEnd.GetIndex() - rRg.aStart.GetIndex(),
+                    aRg.aEnd.GetIndex() - aRg.aStart.GetIndex() - 1 + offset,
                     "An insufficient number of nodes were copied!" );
         }
     }
@@ -1353,7 +1342,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
 
     {
         ::sw::UndoGuard const undoGuard(pDest->GetIDocumentUndoRedo());
-        CopyFlyInFlyImpl( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly );
+        CopyFlyInFlyImpl( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly, bMergedFirstNode );
     }
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
@@ -1391,7 +1380,7 @@ static void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
 
 void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         const xub_StrLen nEndContentIndex, const SwNodeIndex& rStartIdx,
-        const bool bCopyFlyAtFly ) const
+        const bool bCopyFlyAtFly,  const bool bMergedFirstNode ) const
 {
     // First collect all Flys, sort them according to their ordering number,
     // and then only copy them. This maintains the ordering numbers (which are only
@@ -1476,7 +1465,8 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         // #i59964#
         // correct determination of new anchor position
         SwFmtAnchor aAnchor( *(*it).GetAnchor() );
-        SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();
+        assert( aAnchor.GetCntntAnchor() != NULL );
+        SwPosition newPos = *aAnchor.GetCntntAnchor();
         // for at-paragraph and at-character anchored objects the new anchor
         // position can *not* be determined by the difference of the current
         // anchor position to the start of the copied range, because not
@@ -1502,6 +1492,9 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
 
                 ++aIdx;
             }
+            if ( bMergedFirstNode )
+                nAnchorTxtNdNumInRange--;
+
             if ( !bAnchorTxtNdFound )
             {
                 // This case can *not* happen, but to be robust take the first
@@ -1539,25 +1532,26 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                 }
             }
             // apply found anchor text node as new anchor position
-            pNewPos->nNode = aAnchorNdIdx;
+            newPos.nNode = aAnchorNdIdx;
         }
         else
         {
-            long nOffset = pNewPos->nNode.GetIndex() - rRg.aStart.GetIndex();
+            long nOffset = newPos.nNode.GetIndex() - rRg.aStart.GetIndex();
             SwNodeIndex aIdx( rStartIdx, nOffset );
-            pNewPos->nNode = aIdx;
+            newPos.nNode = aIdx;
         }
         // Set the character bound Flys back at the original character
         if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
-             pNewPos->nNode.GetNode().IsTxtNode() )
+             newPos.nNode.GetNode().IsTxtNode() )
         {
-            pNewPos->nContent.Assign( (SwTxtNode*)&pNewPos->nNode.GetNode(),
-                                        pNewPos->nContent.GetIndex() );
+            newPos.nContent.Assign( (SwTxtNode*)&newPos.nNode.GetNode(),
+                                        newPos.nContent.GetIndex() );
         }
         else
         {
-            pNewPos->nContent.Assign( 0, 0 );
+            newPos.nContent.Assign( 0, 0 );
         }
+        aAnchor.SetAnchor( &newPos );
 
         // Check recursion: copy content in its own frame, then don't copy it.
         bool bMakeCpy = true;

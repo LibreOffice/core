@@ -1259,7 +1259,12 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
     // already set the current record number
     SwNewDBMgr* pMgr = GetNewDBMgr();
-    pMgr->CloseAll(sal_False);
+    pMgr->CloseAll( sal_False );
+
+    SvtSysLocale aSysLocale;
+    const LocaleDataWrapper* pLclData = aSysLocale.GetLocaleDataPtr();
+    const long nLang = pLclData->getLanguageTag().getLanguageType();
+    bool bCanFill = pMgr->FillCalcWithMergeData( GetNumberFormatter(), nLang, true, aCalc );
 
     // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
     int nShownSections = 0;
@@ -1349,6 +1354,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         case RES_DBNEXTSETFLD:
         case RES_DBNUMSETFLD:
             UpdateDBNumFlds( *(SwDBNameInfField*)pFld, aCalc );
+            if( bCanFill )
+                bCanFill = pMgr->FillCalcWithMergeData( GetNumberFormatter(), nLang, true, aCalc );
         break;
         case RES_DBFLD:
         {

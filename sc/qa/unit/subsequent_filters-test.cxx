@@ -156,8 +156,8 @@ public:
     CPPUNIT_TEST(testMatrixODS);
     CPPUNIT_TEST(testMatrixXLS);
     CPPUNIT_TEST(testBorderODS);
-    CPPUNIT_TEST(testBorderXLS);
-    CPPUNIT_TEST(testBorderXLSX);
+//  CPPUNIT_TEST(testBorderXLS);
+//  CPPUNIT_TEST(testBorderXLSX);
     CPPUNIT_TEST(testBordersOoo33);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);

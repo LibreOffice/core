@@ -21,23 +21,17 @@
 
 #define Region QtXRegion
 
-#include <QSessionManager>
-
 #include <kapplication.h>
 
 #undef Region
 
-/* #i59042# override KApplications method for session management
- * since it will interfere badly with our own.
- */
 class VCLKDEApplication : public KApplication
 {
     public:
         VCLKDEApplication();
-
-        virtual void commitData(QSessionManager&) {};
-
         virtual bool x11EventFilter(XEvent* event);
+        static void preDialogSetup();
+        static void postDialogCleanup();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

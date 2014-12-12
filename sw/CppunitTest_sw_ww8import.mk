@@ -20,10 +20,11 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8import, \
     cppu \
     cppuhelper \
     sal \
-    test \
-    unotest \
     sw \
-	$(gb_UWINAPI) \
+    test \
+    tl \
+    unotest \
+    $(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_ww8import,\

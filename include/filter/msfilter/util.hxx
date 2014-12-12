@@ -40,7 +40,6 @@ MSFILTER_DLLPUBLIC DateTime DTTM2DateTime( long lDTTM );
 I guess there must be an implementation of this somewhere in LO, but I failed
 to find it, unfortunately :-(
 */
-MSFILTER_DLLPUBLIC OString DateTimeToOString( const DateTime& rDateTime );
 
 /// Given a cBullet in encoding r_ioChrSet and fontname r_ioFontName return a
 /// suitable new Bullet and change r_ioChrSet and r_ioFontName to form the

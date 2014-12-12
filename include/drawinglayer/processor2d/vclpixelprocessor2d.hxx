@@ -31,15 +31,18 @@
 
 namespace drawinglayer
 {
+    namespace primitive2d { class BorderLinePrimitive2D; }
+
     namespace processor2d
     {
+
         /** VclPixelProcessor2D class
 
             This processor derived from VclProcessor2D is the base class for rendering
             all feeded primitives to a VCL Window. It is the currently used renderer
             for all VCL editing output from the DrawingLayer.
          */
-        class DRAWINGLAYER_DLLPUBLIC VclPixelProcessor2D : public VclProcessor2D
+        class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
             struct Impl;
@@ -50,6 +53,10 @@ namespace drawinglayer
                 called from the common process()-implementation
              */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+
+            // some helpers to try direct paints (shortcuts)
+            bool tryDrawPolyPolygonColorPrimitive2DDirect(const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency);
+            bool tryDrawBorderLinePrimitive2DDirect(const drawinglayer::primitive2d::BorderLinePrimitive2D& rSource);
 
         public:
             /// constructor/destructor

@@ -27,6 +27,8 @@
 #include <qsocketnotifier.h>
 #include <qtimer.h>
 
+#include <unx/salinst.h>
+
 class VCLKDEApplication;
 
 class KDEXLib : public QObject, public SalXLib
@@ -49,22 +51,28 @@ class KDEXLib : public QObject, public SalXLib
         QHash< int, SocketData > socketData; // key is fd
         QTimer timeoutTimer;
         QTimer userEventTimer;
-        enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
+        int m_frameWidth;
+        bool m_isGlibEventLoopType;
+        bool m_allowKdeDialogs;
 
     private:
         void setupEventLoop();
 
-    private slots:
+    private Q_SLOTS:
         void socketNotifierActivated( int fd );
         void timeoutActivated();
         void userEventActivated();
         void startTimeoutTimer();
         void startUserEventTimer();
-        bool processYield( bool bWait, bool bHandleAllCurrentEvents );
-    signals:
+        void processYield( bool bWait, bool bHandleAllCurrentEvents );
+    Q_SIGNALS:
         void startTimeoutTimerSignal();
         void startUserEventTimerSignal();
         void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
+        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+            createFilePickerSignal( const com::sun::star::uno::Reference<
+                                          com::sun::star::uno::XComponentContext >& );
+        int getFrameWidthSignal();
 
     public:
         KDEXLib();
@@ -80,6 +88,13 @@ class KDEXLib : public QObject, public SalXLib
         virtual void PostUserEvent();
 
         void doStartup();
+        bool allowKdeDialogs() { return m_allowKdeDialogs; }
+
+    public Q_SLOTS:
+        com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
+            createFilePicker( const com::sun::star::uno::Reference<
+                                  com::sun::star::uno::XComponentContext >& );
+        int getFrameWidth();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

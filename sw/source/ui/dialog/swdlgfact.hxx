@@ -278,6 +278,7 @@ class AbstractFldInputDlg_Impl : public AbstractFldInputDlg
     //from class SalFrame
     virtual void         SetWindowState( const OString & rStr ) ;
     virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const ;
+    virtual void EndDialog(long);
 };
 //for SwFldInputDlg end
 
@@ -328,13 +329,11 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
     virtual const OUString& GetSaveFilter() const;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
-    virtual bool IsSaveIndividualDocs() const;
+    virtual bool IsSaveSingleDoc() const SAL_OVERRIDE;
     virtual bool IsGenerateFromDataBase() const;
     virtual String GetColumnName() const;
     virtual String GetPath() const;
 };
-//for SwMailMergeDlg end
-//for SwMailMergeCreateFromDlg begin
 class SwMailMergeCreateFromDlg;
 class AbstractMailMergeCreateFromDlg_Impl : public AbstractMailMergeCreateFromDlg
 {

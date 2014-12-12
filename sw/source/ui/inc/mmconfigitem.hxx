@@ -38,11 +38,11 @@ namespace com{namespace sun{namespace star{
 
 class SwMailMergeConfigItem_Impl;
 class SwView;
+namespace sw { namespace mark { class IMark; }}
 
 struct SwDocMergeInfo
 {
-    long    nStartPageInTarget;
-    long    nEndPageInTarget;
+    sw::mark::IMark* startPageInTarget;
     long    nDBRow;
 };
 

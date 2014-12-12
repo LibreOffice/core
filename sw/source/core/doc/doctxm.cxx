@@ -63,6 +63,7 @@
 #include <editsh.hxx>
 #include <scriptinfo.hxx>
 #include <switerator.hxx>
+#include <tools/datetimeutils.hxx>
 
 using namespace ::com::sun::star;
 
@@ -608,6 +609,15 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                                     const String* pChkStr ) const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeTOX"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpSectionFmtTbl->size() + 1 );
+        if( pChkStr )
+            newName += *pChkStr;
+        return newName;
+    }
     sal_uInt16 n;
     const SwSectionNode* pSectNd;
     const SwSection* pSect;

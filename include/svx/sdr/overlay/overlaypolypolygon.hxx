@@ -22,6 +22,7 @@
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,21 +30,23 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayPolyPolygonStriped : public OverlayObject
+        class SVX_DLLPUBLIC OverlayPolyPolygonStripedAndFilled : public OverlayObject
         {
         protected:
             // geometry
-            basegfx::B2DPolyPolygon             maPolyPolygon;
+            basegfx::B2DPolyPolygon             maLinePolyPolygon;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
-            explicit OverlayPolyPolygonStriped(const basegfx::B2DPolyPolygon& rPolyPolygon);
-            virtual ~OverlayPolyPolygonStriped();
+            explicit OverlayPolyPolygonStripedAndFilled(
+                const basegfx::B2DPolyPolygon& rLinePolyPolygon);
+            virtual ~OverlayPolyPolygonStripedAndFilled();
 
             // change geometry
-            basegfx::B2DPolyPolygon getPolyPolygon() const { return maPolyPolygon; }
+            basegfx::B2DPolyPolygon getLinePolyPolygon() const { return maLinePolyPolygon; }
+            void setLinePolyPolygon(const basegfx::B2DPolyPolygon& rNew);
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged();
