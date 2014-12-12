@@ -761,11 +761,11 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
         }
         else if( pEdit == mpVectorBox )
         {
-            char pBuf[256];
             mnCurrentElement = mpVectorBox->GetValue()-1;
             double fValue;
             if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ))
             {
+                char pBuf[256];
                 sprintf( pBuf, "%g", fValue );
                 OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
                 mpNumericEdit->SetText( aValue );

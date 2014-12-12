@@ -686,9 +686,9 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
 template<class T>
 void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
 {
-    bool bIllegal = false;
     try
     {
+        bool bIllegal = false;
         switch (rAny.getValueTypeClass())
         {
         case TypeClass_INTERFACE:

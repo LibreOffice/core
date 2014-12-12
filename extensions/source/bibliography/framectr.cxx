@@ -323,7 +323,6 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
-    bool                                    bGroupFound( false );
     frame::DispatchInformation                  aDispatchInfo;
     std::list< frame::DispatchInformation >     aDispatchInfoList;
 
@@ -332,6 +331,7 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
         ( nCommandGroup == frame::CommandGroup::DATA ) ||
         ( nCommandGroup == frame::CommandGroup::VIEW ))
     {
+        bool bGroupFound = false;
         CmdToInfoCache::const_iterator pIter = rCmdCache.begin();
         while ( pIter != rCmdCache.end() )
         {
