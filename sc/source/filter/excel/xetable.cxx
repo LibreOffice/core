@@ -2065,12 +2065,15 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
 
     GetProgressBar().ActivateFinalRowsSegment();
 
+#if 0
     // This is staggeringly slow, and each element operates only
     // on its own data.
-    size_t nRows = maRowMap.size();
-    size_t nThreads = std::max( std::thread::hardware_concurrency(), 1U );
-    nThreads = 1; // globally disable multi-threading for now.
-    if ( nThreads == 1 || nRows < 128 )
+    const size_t nRows = maRowMap.size();
+    const size_t nThreads = nRows < 128 ? 1 : std::max(std::thread::hardware_concurrency(), 1U);
+#else
+    const size_t nThreads = 1; // globally disable multi-threading for now.
+#endif
+    if (nThreads == 1)
     {
         RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
         for (itr = itrBeg; itr != itrEnd; ++itr)
