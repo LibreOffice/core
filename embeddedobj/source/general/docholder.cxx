@@ -695,11 +695,11 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
         }
         catch( const uno::Exception& ){}
 
-        // make sure that lock state of LM is correct even if an exception is thrown in between
-        bool bUnlock = false;
-        bool bLock = false;
         if ( xOwnLM.is() && xDocAreaAcc.is() )
         {
+            // make sure that lock state of LM is correct even if an exception is thrown in between
+            bool bUnlock = false;
+            bool bLock = false;
             try
             {
                 // take over the control over the containers window

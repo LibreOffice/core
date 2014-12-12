@@ -465,7 +465,6 @@ UpdateCheckThread::run()
 {
     osl_setThreadName("UpdateCheckThread");
 
-    bool bExtensionsChecked = false;
     TimeValue systime;
     TimeValue nExtCheckTime;
     osl_getSystemTime( &nExtCheckTime );
@@ -477,6 +476,7 @@ UpdateCheckThread::run()
     aResult = m_aCondition.wait(&tv);
 
     try {
+        bool bExtensionsChecked = false;
 
         while( schedule() )
         {
@@ -569,9 +569,8 @@ UpdateCheckThread::run()
 void SAL_CALL
 ManualUpdateCheckThread::run()
 {
-    bool bExtensionsChecked = false;
-
     try {
+        bool bExtensionsChecked = false;
         runCheck( bExtensionsChecked );
         m_aCondition.reset();
     }
