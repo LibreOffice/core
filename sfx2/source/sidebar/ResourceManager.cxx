@@ -382,7 +382,7 @@ void ResourceManager::ReadContextList (
                 : sValue.getToken(0, ',', nCharacterIndex).trim());
         const OUString sMenuCommand (
             sMenuCommandOverride.getLength()>0
-                ? (sMenuCommandOverride.equalsAscii("none")
+                ? (sMenuCommandOverride == "none"
                     ? OUString()
                     : sMenuCommandOverride)
                 : rsDefaultMenuCommand);
@@ -398,15 +398,15 @@ void ResourceManager::ReadContextList (
         {
             // Handle some special names: abbreviations that make
             // context descriptions more readable.
-            if (sApplicationName.equalsAscii("Writer"))
+            if (sApplicationName == "Writer")
                 aApplications.push_back(EnumContext::Application_Writer);
-            else if (sApplicationName.equalsAscii("Calc"))
+            else if (sApplicationName == "Calc")
                 aApplications.push_back(EnumContext::Application_Calc);
-            else if (sApplicationName.equalsAscii("Draw"))
+            else if (sApplicationName == "Draw")
                 aApplications.push_back(EnumContext::Application_Draw);
-            else if (sApplicationName.equalsAscii("Impress"))
+            else if (sApplicationName == "Impress")
                 aApplications.push_back(EnumContext::Application_Impress);
-            else if (sApplicationName.equalsAscii("DrawImpress"))
+            else if (sApplicationName == "DrawImpress")
             {
                 // A special case among the special names:  it is
                 // common to use the same context descriptions for
@@ -415,7 +415,7 @@ void ResourceManager::ReadContextList (
                 aApplications.push_back(EnumContext::Application_Draw);
                 aApplications.push_back(EnumContext::Application_Impress);
             }
-            else if (sApplicationName.equalsAscii("WriterVariants"))
+            else if (sApplicationName == "WriterVariants")
             {
                 // Another special case for all Writer variants.
                 aApplications.push_back(EnumContext::Application_Writer);
@@ -448,9 +448,9 @@ void ResourceManager::ReadContextList (
         // Setup the flag that controls whether a deck/pane is
         // initially visible/expanded.
         bool bIsInitiallyVisible;
-        if (sInitialState.equalsAscii("visible"))
+        if (sInitialState == "visible")
             bIsInitiallyVisible = true;
-        else if (sInitialState.equalsAscii("hidden"))
+        else if (sInitialState == "hidden")
             bIsInitiallyVisible = false;
         else
         {

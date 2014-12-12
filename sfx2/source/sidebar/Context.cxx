@@ -51,11 +51,11 @@ Context::Context (
 sal_Int32 Context::EvaluateMatch (
     const Context& rOther) const
 {
-    const bool bApplicationNameIsAny (rOther.msApplication.equalsAscii(AnyApplicationName));
+    const bool bApplicationNameIsAny (rOther.msApplication == AnyApplicationName);
     if (rOther.msApplication.equals(msApplication) || bApplicationNameIsAny)
     {
         // Application name matches.
-        const bool bContextNameIsAny (rOther.msContext.equalsAscii(AnyContextName));
+        const bool bContextNameIsAny (rOther.msContext == AnyContextName);
         if (rOther.msContext.equals(msContext) || bContextNameIsAny)
         {
             // Context name matches.

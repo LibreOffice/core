@@ -152,17 +152,17 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                 {
-                    if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUE ))
+                    if ( aSeq[i].Name == ZOOM_PARAM_VALUE )
                     {
                         bAllConverted &= ( aSeq[i].Value >>= nValueTmp );
                         ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_VALUESET ))
+                    else if ( aSeq[i].Name == ZOOM_PARAM_VALUESET )
                     {
                         bAllConverted &= ( aSeq[i].Value >>= nValueSetTmp );
                         ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( ZOOM_PARAM_TYPE ))
+                    else if ( aSeq[i].Name == ZOOM_PARAM_TYPE )
                     {
                         bAllConverted &= ( aSeq[i].Value >>= nTypeTmp );
                         ++nConvertedCount;

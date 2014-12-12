@@ -64,7 +64,7 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
     const PropertyValue* pEnd   = pBegin + aArgs.getLength();
     for ( ; pBegin != pEnd; ++pBegin )
     {
-        if ( pBegin->Name.equalsAscii( "HelpKeyword" ) )
+        if ( pBegin->Name == "HelpKeyword" )
         {
             OUString sHelpKeyword;
             if ( ( pBegin->Value >>= sHelpKeyword ) && !sHelpKeyword.isEmpty() )

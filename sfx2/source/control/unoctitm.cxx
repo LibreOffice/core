@@ -290,7 +290,7 @@ SfxStatusDispatcher::SfxStatusDispatcher()
 void SAL_CALL SfxStatusDispatcher::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     aListeners.addInterface( aURL.Complete, aListener );
-    if ( aURL.Complete.equalsAscii(".uno:LifeTime") )
+    if ( aURL.Complete == ".uno:LifeTime" )
     {
         ::com::sun::star::frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = aURL;

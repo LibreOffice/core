@@ -289,7 +289,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             }
             uri = xContent->getIdentifier()->getContentIdentifier();
             OSL_ENSURE(!uri.isEmpty(), "GetDMA: empty uri?");
-            if (!uri.isEmpty() && !uri.endsWithAsciiL("/", 1))
+            if (!uri.isEmpty() && !uri.endsWith("/"))
             {
                 uri = uri + "/";
             }

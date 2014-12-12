@@ -161,7 +161,7 @@ uno::Reference<rdf::XURI> createBaseURI(
         xBaseURI.set( xPkgURI, uno::UNO_SET_THROW );
     }
     OUStringBuffer buf;
-    if (!xBaseURI->getUriReference().endsWithAsciiL("/", 1))
+    if (!xBaseURI->getUriReference().endsWith("/"))
     {
         const sal_Int32 count( xBaseURI->getPathSegmentCount() );
         if (count > 0)
@@ -552,8 +552,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                     xDirProps->getPropertyValue(
                             utl::MediaDescriptor::PROP_MEDIATYPE() )
                         >>= mimeType;
-                    if (mimeType.matchAsciiL(s_odfmime, sizeof(s_odfmime) - 1))
-                    {
+                    if (mimeType.startsWith(s_odfmime)) {
                         OSL_TRACE("readStream: "
                             "refusing to recurse into embedded document");
                         return;
@@ -655,7 +654,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
                 xDirProps->getPropertyValue(
                         utl::MediaDescriptor::PROP_MEDIATYPE() )
                     >>= mimeType;
-                if (mimeType.matchAsciiL(s_odfmime, sizeof(s_odfmime) - 1)) {
+                if (mimeType.startsWith(s_odfmime)) {
                     OSL_TRACE("writeStream: "
                         "refusing to recurse into embedded document");
                     return;
@@ -695,8 +694,6 @@ retry:
     i_rImpl.m_xRepository.set(rdf::Repository::create(i_rImpl.m_xContext),
             uno::UNO_SET_THROW);
 
-    const OUString manifest (
-            OUString::createFromAscii(s_manifest));
     const OUString baseURI( i_xBaseURI->getStringValue() );
     // try to delay raising errors until after initialization is done
     uno::Any rterr;
@@ -704,9 +701,9 @@ retry:
     bool err(false);
 
     const uno::Reference <rdf::XURI> xManifest(
-        getURIForStream(i_rImpl, manifest));
+        getURIForStream(i_rImpl, s_manifest));
     try {
-        readStream(i_rImpl, i_xStorage, manifest, baseURI);
+        readStream(i_rImpl, i_xStorage, s_manifest, baseURI);
     } catch (const ucb::InteractiveAugmentedIOException & e) {
         // no manifest.rdf: this is not an error in ODF < 1.2
         if (!(ucb::IOErrorCode_NOT_EXISTING_PATH == e.Code)) {
@@ -754,8 +751,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
     try {
 
         i_rImpl.m_xManifest.set(i_rImpl.m_xRepository->createGraph(
-            getURIForStream(i_rImpl,
-                OUString::createFromAscii(s_manifest))),
+            getURIForStream(i_rImpl, s_manifest)),
             uno::UNO_SET_THROW);
 
         // insert the document statement
@@ -769,12 +765,10 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
     }
 
     // add top-level content files
-    if (!addContentOrStylesFileImpl(i_rImpl,
-            OUString::createFromAscii(s_content))) {
+    if (!addContentOrStylesFileImpl(i_rImpl, s_content)) {
         throw uno::RuntimeException();
     }
-    if (!addContentOrStylesFileImpl(i_rImpl,
-            OUString::createFromAscii(s_styles))) {
+    if (!addContentOrStylesFileImpl(i_rImpl, s_styles)) {
         throw uno::RuntimeException();
     }
 }
@@ -796,8 +790,8 @@ DocumentMetadataAccess::DocumentMetadataAccess(
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {
     OSL_ENSURE(!i_rURI.isEmpty(), "DMA::DMA: no URI given!");
-    OSL_ENSURE(i_rURI.endsWithAsciiL("/", 1), "DMA::DMA: URI without / given!");
-    if (!i_rURI.endsWithAsciiL("/", 1)) throw uno::RuntimeException();
+    OSL_ENSURE(i_rURI.endsWith("/"), "DMA::DMA: URI without / given!");
+    if (!i_rURI.endsWith("/")) throw uno::RuntimeException();
     m_pImpl->m_xBaseURI.set(rdf::URI::create(m_pImpl->m_xContext, i_rURI));
     m_pImpl->m_xRepository.set(rdf::Repository::create(m_pImpl->m_xContext),
             uno::UNO_SET_THROW);
@@ -1092,7 +1086,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "DocumentMetadataAccess::loadMetadataFromStorage: "
             "base URI not absolute", *this, 1);
     }
-    if (baseURI.isEmpty() || !baseURI.endsWithAsciiL("/", 1)) {
+    if (!baseURI.endsWith("/")) {
         throw lang::IllegalArgumentException(
             "DocumentMetadataAccess::loadMetadataFromStorage: "
             "base URI does not end with slash", *this, 1);
@@ -1116,8 +1110,6 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         const uno::Reference<rdf::XURI> xMetadataFile(
             getURI<rdf::URIs::PKG_METADATAFILE>(m_pImpl->m_xContext));
         const sal_Int32 len( baseURI.getLength() );
-        const OUString manifest (
-                OUString::createFromAscii(s_manifest));
         for (::std::vector< uno::Reference< rdf::XURI > >::const_iterator it
                 = parts.begin();
                 it != parts.end(); ++it) {
@@ -1129,7 +1121,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 continue;
             }
             const OUString relName( name.copy(len) );
-            if (relName == manifest) {
+            if (relName == s_manifest) {
                 OSL_TRACE("loadMetadataFromStorage: "
                     "found ourselves a recursive manifest!");
                 continue;
@@ -1193,13 +1185,11 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     // export manifest
-    const OUString manifest (
-            OUString::createFromAscii(s_manifest));
     const uno::Reference <rdf::XURI> xManifest(
-        getURIForStream(*m_pImpl, manifest) );
+        getURIForStream(*m_pImpl, s_manifest) );
     const OUString baseURI( m_pImpl->m_xBaseURI->getStringValue() );
     try {
-        writeStream(*m_pImpl, i_xStorage, xManifest, manifest, baseURI);
+        writeStream(*m_pImpl, i_xStorage, xManifest, s_manifest, baseURI);
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const io::IOException & e) {
@@ -1225,7 +1215,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 continue;
             }
             const OUString relName( name.copy(len) );
-            if (relName == manifest) {
+            if (relName == s_manifest) {
                 continue;
             }
             if (!isFileNameValid(relName) || isReservedFile(relName)) {

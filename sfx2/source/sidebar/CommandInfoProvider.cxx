@@ -325,7 +325,7 @@ OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
-        if (aProperties[nIndex].Name.equalsAscii("Name"))
+        if (aProperties[nIndex].Name == "Name")
         {
             OUString sLabel;
             aProperties[nIndex].Value >>= sLabel;
