@@ -1288,7 +1288,6 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
     ePageColorsKind     ( PPT_MASTERPAGE ),
     eAktPageKind        ( PPT_MASTERPAGE )
 {
-    DffRecordHeader* pHd;
     if ( bOk )
     {
         rStCtrl.Seek( STREAM_SEEK_TO_END );
@@ -1307,6 +1306,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             rStCtrl.Seek( 0 );
             DffRecordManager aPptRecManager;                            // contains all first level container and atoms
             aPptRecManager.Consume( rStCtrl, false, nStreamLen );
+            DffRecordHeader* pHd;
             for ( pHd = aPptRecManager.Last(); pHd; pHd = aPptRecManager.Prev() )
             {
                 if ( pHd->nRecType == PPT_PST_UserEditAtom )
@@ -6343,7 +6343,6 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     DffRecordHeader aExtParaHd;
     aExtParaHd.nRecType = 0;    // set empty
 
-    bool bStatus = true;
 
     DffRecordHeader aShapeContainerHd;
     ReadDffRecordHeader( rIn, aShapeContainerHd );
@@ -6379,6 +6378,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         // ClientTextBox
         if ( rSdrPowerPointImport.maShapeRecords.SeekToContent( rIn, DFF_msofbtClientTextbox, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
+            bool bStatus = true;
+
+
             DffRecordHeader aClientTextBoxHd( *rSdrPowerPointImport.maShapeRecords.Current() );
             sal_uInt32  nTextRulerAtomOfs = 0;  // case of zero -> this atom may be found in aClientDataContainerHd;
                                             // case of -1 -> there is no atom of this kind

@@ -1715,8 +1715,6 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
 
             if( !bRet && mpObjects->find( rxShape ) !=  mpObjects->end() )
             {
-                const OUString*                    pElementId = NULL;
-
                 ::com::sun::star::awt::Rectangle    aBoundRect;
                 const GDIMetaFile&                  rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
 
@@ -1728,6 +1726,7 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape,
                 if( rMtf.GetActionSize() )
                 {   // for text field shapes we set up text-adjust attributes
                     // and set visibility to hidden
+                    const OUString* pElementId = NULL;
                     if( mbPresentation )
                     {
                         bool bIsPageNumber  = ( aShapeClass == "Slide_Number" );

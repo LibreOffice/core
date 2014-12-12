@@ -339,7 +339,6 @@ bool PSDReader::ImplReadBody()
 {
     sal_uLong       nX, nY;
     char        nRunCount = 0;
-    signed char nBitCount = -1;
     sal_uInt8       nDat = 0, nDummy, nRed, nGreen, nBlue;
     BitmapColor aBitmapColor;
     nX = nY = 0;
@@ -348,6 +347,7 @@ bool PSDReader::ImplReadBody()
     {
         case 1 :
         {
+            signed char nBitCount = -1;
             while ( nY < mpFileHeader->nRows )
             {
                 if ( nBitCount == -1 )

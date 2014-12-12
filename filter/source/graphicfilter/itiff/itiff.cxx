@@ -878,7 +878,6 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
             {
                 sal_uInt8   nSamp[ 4 ];
                 sal_uInt8   nSampLast[ 4 ] = { 0, 0, 0, 0 };
-                long    nBlack;
 
                 for( nx = 0; nx < nImageWidth; nx++ )
                 {
@@ -904,7 +903,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                                 nSamp[ ns ]= (sal_uInt8) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample );
                         }
                     }
-                    nBlack = nSamp[ 3 ];
+                    const long nBlack = nSamp[ 3 ];
                     nRed = (sal_uInt8) std::max( 0L, 255L - ( ( (long) nSamp[ 0 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
                                 255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
                     nGreen = (sal_uInt8) std::max( 0L, 255L - ( ( (long) nSamp[ 1 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *

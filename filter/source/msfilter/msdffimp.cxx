@@ -446,12 +446,12 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                     Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
                     SdrGluePointList* pList = pO->ForceGluePointList();
 
-                    bool bValidGluePoint = false;
                     sal_Int32 nId = nC;
                     sal_uInt32 nInventor = pO->GetObjInventor();
 
                     if( nInventor == SdrInventor )
                     {
+                        bool bValidGluePoint = false;
                         sal_uInt32 nObjId = pO->GetObjIdentifier();
                         switch( nObjId )
                         {
@@ -3591,12 +3591,12 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
 
         sal_Int32 nParaIndex = 0;
         sal_Int32 nParaSize;
-        const sal_Unicode* pCurrent, *pBuf = rText.getStr();
+        const sal_Unicode* pBuf = rText.getStr();
         const sal_Unicode* pEnd = rText.getStr() + rText.getLength();
 
         while( pBuf < pEnd )
         {
-            pCurrent = pBuf;
+            const sal_Unicode* pCurrent = pBuf;
 
             for ( nParaSize = 0; pBuf < pEnd; )
             {
@@ -5758,12 +5758,12 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
     sal_uInt32  nLength;
     if( !ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
 
-    bool bOk;
     sal_uLong nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
 
     // case A: first Drawing Group Container, then n times Drawing Container
     if( DFF_msofbtDggContainer == nFbt )
     {
+        bool bOk;
         GetDrawingGroupContainerData( rStCtrl, nLength );
 
         rStCtrl.Seek( STREAM_SEEK_TO_END );
