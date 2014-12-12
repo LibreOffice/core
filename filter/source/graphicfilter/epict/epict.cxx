@@ -195,13 +195,12 @@ void PictWriter::MayCallback()
 void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 {
     size_t              nAction, nActionCount;
-    const MetaAction*   pMA;
 
     nActionCount = rMTF.GetActionSize();
 
     for (nAction=0; nAction < nActionCount; nAction++)
     {
-        pMA = rMTF.GetAction( nAction );
+        const MetaAction* pMA = rMTF.GetAction( nAction );
 
         switch( pMA->GetType() )
         {
@@ -223,7 +222,7 @@ void PictWriter::CountActionsAndBitmaps(const GDIMetaFile & rMTF)
 Polygon PictWriter::PolyPolygonToPolygon(const tools::PolyPolygon & rPolyPoly)
 {
     sal_uInt16 nCount,nSize1,nSize2,np,i1,i2,i3,nBestIdx1,nBestIdx2;
-    long nDistSqr,nBestDistSqr, nCountdownTests;
+    long nDistSqr;
     Point aP1,aPRel;
     Polygon aPoly1, aPoly2, aPoly3;
 
@@ -244,8 +243,8 @@ Polygon PictWriter::PolyPolygonToPolygon(const tools::PolyPolygon & rPolyPoly)
         // pictures would need infinite time to export, we limit the number of test
         // by the number of 1000 and cancel the search if necessary preliminarily.
         // The result of this will not be wrong but rather not so beautiful.
-        nCountdownTests=1000;
-        nBestDistSqr=0x7fffffff;
+        long nCountdownTests = 1000;
+        long nBestDistSqr = 0x7fffffff;
         nBestIdx1=0;
         nBestIdx2=0;
         for (i1=0; i1<nSize1; i1++) {

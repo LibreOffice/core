@@ -75,10 +75,9 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
     }
     else {
         sal_Int32 i;
-        double x;
         aDXFLineInfo.eStyle = LINE_DASH;
         for (i=0; i < (pLT->nDashCount); i++) {
-            x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
+            const double x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
             if ( x >= 0.0 ) {
                 if ( aDXFLineInfo.nDotCount == 0 ) {
                     aDXFLineInfo.nDotCount ++;
