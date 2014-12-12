@@ -295,6 +295,7 @@ public :
     void        intersectClipRect( const Rectangle& rRect );
     void        excludeClipRect( const Rectangle& rRect );
     void        moveClipRegion( const Size& rSize );
+    void        setDefaultClipPath();
 
     bool        isEmpty() const { return maClip.isCleared(); }
 
@@ -757,6 +758,7 @@ public:
                             sal_Int32 nClippingMode,
                             bool bIsMapped
                         );
+    void                SetDefaultClipPath();
     void                UpdateClipRegion();
     void                AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile );
 
