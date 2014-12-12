@@ -1026,17 +1026,16 @@ SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
 }
 
 
-static const sal_Char cSearchName[] = "com.sun.star.util.TextSearch";
 static const sal_Char cSearchImpl[] = "com.sun.star.util.TextSearch_i18n";
 
 static OUString getServiceName_Static()
 {
-    return OUString::createFromAscii( cSearchName );
+    return OUString( "com.sun.star.util.TextSearch" );
 }
 
 static OUString getImplementationName_Static()
 {
-    return OUString::createFromAscii( cSearchImpl );
+    return OUString( cSearchImpl );
 }
 
 OUString SAL_CALL

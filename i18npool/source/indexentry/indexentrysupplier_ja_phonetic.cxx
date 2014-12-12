@@ -68,13 +68,13 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable:
     const com::sun::star::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException, std::exception)
 {
-    return collator->loadCollatorAlgorithm(OUString::createFromAscii(first), rLocale, collatorOptions) == 0;
+    return collator->loadCollatorAlgorithm(first, rLocale, collatorOptions) == 0;
 }
 sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant::loadAlgorithm(
     const com::sun::star::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException, std::exception)
 {
-    return collator->loadCollatorAlgorithm(OUString::createFromAscii(first), rLocale, collatorOptions) == 0;
+    return collator->loadCollatorAlgorithm(first, rLocale, collatorOptions) == 0;
 }
 
 static const sal_Char last[] = "ja_phonetic (alphanumeric last)";
@@ -82,13 +82,13 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable::
     const com::sun::star::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException, std::exception)
 {
-    return collator->loadCollatorAlgorithm(OUString::createFromAscii(last), rLocale, collatorOptions) == 0;
+    return collator->loadCollatorAlgorithm(last, rLocale, collatorOptions) == 0;
 }
 sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant::loadAlgorithm(
     const com::sun::star::lang::Locale& rLocale, const OUString& /*SortAlgorithm*/,
     sal_Int32 collatorOptions ) throw (com::sun::star::uno::RuntimeException, std::exception)
 {
-    return collator->loadCollatorAlgorithm(OUString::createFromAscii(last), rLocale, collatorOptions) == 0;
+    return collator->loadCollatorAlgorithm(last, rLocale, collatorOptions) == 0;
 }
 
 } } } }

@@ -110,7 +110,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     return lbr;
 }
 
-#define LOCALE(language, country) lang::Locale(OUString::createFromAscii(language), OUString::createFromAscii(country), OUString())
+#define LOCALE(language, country) lang::Locale(language, country, OUString())
 //      ----------------------------------------------------
 //      class BreakIterator_zh
 //      ----------------------------------------------------;

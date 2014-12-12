@@ -503,15 +503,13 @@ static const sal_Int16 natnum2[] = {
 };
 static const sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
-#define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
-
 static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 {
     // return zh_TW for TW, HK and MO, return zh_CN for other zh locales.
-    if (isLang("zh")) return MsLangId::isTraditionalChinese(rLocale) ? 1 : 0;
+    if (rLocale.Language == "zh") return MsLangId::isTraditionalChinese(rLocale) ? 1 : 0;
 
     for (sal_Int16 i = 2; i < nbOfLocale; i++)
-        if (isLang(natnum1Locales[i]))
+        if (rLocale.Language.equalsAsciiL(natnum1Locales[i], 2))
             return i;
 
     return -1;

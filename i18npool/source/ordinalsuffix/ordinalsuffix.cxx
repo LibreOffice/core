@@ -137,7 +137,7 @@ const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 
 OUString SAL_CALL OrdinalSuffixService::getImplementationName(void) throw( RuntimeException, std::exception )
 {
-    return OUString::createFromAscii(cOrdinalSuffix);
+    return OUString(cOrdinalSuffix);
 }
 
 sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName) throw( RuntimeException, std::exception )
@@ -148,7 +148,7 @@ sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServic
 Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii(cOrdinalSuffix);
+    aRet[0] = cOrdinalSuffix;
     return aRet;
 }
 

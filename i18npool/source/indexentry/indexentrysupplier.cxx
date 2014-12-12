@@ -178,7 +178,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
 OUString SAL_CALL
 IndexEntrySupplier::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OUString::createFromAscii( implementationName );
+    return OUString( implementationName );
 }
 
 sal_Bool SAL_CALL
@@ -191,7 +191,7 @@ Sequence< OUString > SAL_CALL
 IndexEntrySupplier::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii( implementationName );
+    aRet[0] = implementationName;
     return aRet;
 }
 

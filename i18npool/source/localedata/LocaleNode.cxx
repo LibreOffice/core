@@ -770,7 +770,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         sal_Int32 nStart;
                         if (sTheCompatibleCurrency.isEmpty() &&
-                                ((nStart = n->getValue().indexOfAsciiL( "[$", 2)) >= 0))
+                                ((nStart = n->getValue().indexOf("[$")) >= 0))
                         {
                             OUString aCode( n->getValue());
                             sal_Int32 nHyphen = aCode.indexOf( '-', nStart);
@@ -1294,7 +1294,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 
     for ( j = 0; j < getNumberOfChildren(); j++ ) {
         LocaleNode * currNode = getChildAt (j);
-        if( currNode->getName().equalsAscii("Collator") )
+        if( currNode->getName() == "Collator" )
         {
             OUString str;
             str = currNode->getAttr().getValueByName("unoid");
@@ -1307,7 +1307,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 
             nbOfCollations++;
         }
-        if( currNode->getName().equalsAscii("CollationOptions") )
+        if( currNode->getName() == "CollationOptions" )
         {
             LocaleNode* pCollationOptions = currNode;
             nbOfCollationOptions = sal::static_int_cast<sal_Int16>( pCollationOptions->getNumberOfChildren() );
@@ -1408,7 +1408,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     sal_Int16 i;
     for (i = 0; i< getNumberOfChildren();i++) {
         LocaleNode * currNode = getChildAt (i);
-        if( currNode->getName().equalsAscii("IndexKey") )
+        if( currNode->getName() == "IndexKey" )
         {
             OUString str;
             str = currNode->getAttr().getValueByName("unoid");
@@ -1425,13 +1425,13 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
 
             nbOfIndexs++;
         }
-        if( currNode->getName().equalsAscii("UnicodeScript") )
+        if( currNode->getName() == "UnicodeScript" )
         {
             of.writeParameter("unicodeScript", currNode->getValue(), nbOfUnicodeScripts );
             nbOfUnicodeScripts++;
 
         }
-        if( currNode->getName().equalsAscii("FollowPageWord") )
+        if( currNode->getName() == "FollowPageWord" )
         {
             of.writeParameter("followPageWord", currNode->getValue(), nbOfPageWords);
             nbOfPageWords++;
