@@ -234,7 +234,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
 {
     // special case stop all acceptors
     AcceptorMap &rMap = acceptorMap::get();
-    if (aAcceptString.equalsAscii("all")) {
+    if (aAcceptString == "all") {
         rMap.clear();
 
     } else {
@@ -283,9 +283,8 @@ void Desktop::CreateTemporaryDirectory()
     }
 
     // set temp base directory
-    sal_Int32 nLength = aTempBaseURL.getLength();
-    if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
-        aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
+    if ( aTempBaseURL.endsWith( "/" ) )
+        aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
 
     OUString aRet;
     OUString aTempPath( aTempBaseURL );
@@ -298,9 +297,8 @@ void Desktop::CreateTemporaryDirectory()
     {
         ::osl::File::getTempDirURL( aTempBaseURL );
 
-        nLength = aTempBaseURL.getLength();
-        if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
-            aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
+        if ( aTempBaseURL.endsWith( "/" ) )
+            aTempBaseURL = aTempBaseURL.copy( 0, aTempBaseURL.getLength() - 1 );
 
         aTempPath = aTempBaseURL;
         ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );

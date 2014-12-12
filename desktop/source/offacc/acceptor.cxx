@@ -232,15 +232,15 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 
     Reference<XInterface> rInstance;
 
-    if ( aName.equalsAscii( "StarOffice.ServiceManager" ) )
+    if ( aName == "StarOffice.ServiceManager" )
     {
         rInstance = Reference< XInterface >( m_rContext->getServiceManager() );
     }
-    else if(aName.equalsAscii( "StarOffice.ComponentContext" ) )
+    else if ( aName == "StarOffice.ComponentContext" )
     {
         rInstance = m_rContext;
     }
-    else if ( aName.equalsAscii("StarOffice.NamingService" ) )
+    else if ( aName == "StarOffice.NamingService" )
     {
         Reference< XNamingService > rNamingService(
             m_rContext->getServiceManager()->createInstanceWithContext("com.sun.star.uno.NamingService", m_rContext),

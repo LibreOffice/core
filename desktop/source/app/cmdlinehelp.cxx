@@ -139,11 +139,11 @@ namespace desktop
     {
         // if you put variables in other chunks don't forget to call the replace routines
         // for those chunks...
-        OUString aHelpMessage_version = OUString::createFromAscii(aCmdLineHelp_version);
-        OUString aHelpMessage_head = OUString::createFromAscii(aCmdLineHelp_head);
-        OUString aHelpMessage_left = OUString::createFromAscii(aCmdLineHelp_left);
-        OUString aHelpMessage_right = OUString::createFromAscii(aCmdLineHelp_right);
-        OUString aHelpMessage_bottom = OUString::createFromAscii(aCmdLineHelp_bottom);
+        OUString aHelpMessage_version(aCmdLineHelp_version);
+        OUString aHelpMessage_head(aCmdLineHelp_head);
+        OUString aHelpMessage_left(aCmdLineHelp_left);
+        OUString aHelpMessage_right(aCmdLineHelp_right);
+        OUString aHelpMessage_bottom(aCmdLineHelp_bottom);
         aHelpMessage_version = ReplaceStringHookProc(aHelpMessage_version);
         aHelpMessage_head = aHelpMessage_head.replaceFirst( "%CMDNAME", "soffice" );
         if (!unknown.isEmpty())

@@ -45,8 +45,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
     }
     static OUString getTitle( ::ucbhelper::Content &rContent )
     {
-        return OUString( rContent.getPropertyValue(
-                OUString::createFromAscii( "Title" ) ).get<OUString>() );
+        return rContent.getPropertyValue("Title").get<OUString>();
     }
     // just return titles - the ucbhelper should have a simpler API for this [!]
     static css::uno::Reference< css::sdbc::XResultSet >

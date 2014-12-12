@@ -25,8 +25,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-#define PIPE_ARG "--splash-pipe="
-
 namespace desktop
 {
     UnxSplashScreen::UnxSplashScreen( const Reference< uno::XComponentContext >& xCtx )
@@ -104,9 +102,9 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
     {
         OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
-        if ( aArg.matchIgnoreAsciiCaseAsciiL( PIPE_ARG, sizeof( PIPE_ARG ) - 1, 0 ) )
+        OUString aNum;
+        if ( aArg.startsWithIgnoreAsciiCase("--splash-pipe=", &aNum) )
         {
-            OUString aNum = aArg.copy( sizeof( PIPE_ARG ) - 1 );
             int fd = aNum.toInt32();
             m_pOutFd = fdopen( fd, "w" );
 #if OSL_DEBUG_LEVEL > 1

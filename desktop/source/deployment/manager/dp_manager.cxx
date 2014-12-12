@@ -192,16 +192,11 @@ void PackageManagerImpl::initActivationLayer(
                     Reference<sdbc::XRow>(
                         xResultSet, UNO_QUERY_THROW )->getString(
                             1 /* Title */ ) );
-
-                const char extensionRemoved[] = "removed";
-                if (title.endsWith( extensionRemoved ))
+                if (title.endsWith("removed", &title))
                 {
                     //save the file name withouth the "removed" part
-                    sal_Int32 index = title.lastIndexOfAsciiL(
-                        extensionRemoved, sizeof(extensionRemoved) - 1);
-                    OUString remFile = title.copy(0, index);
                     removedEntries.push_back(::rtl::Uri::encode(
-                                                remFile, rtl_UriCharClassPchar,
+                                                title, rtl_UriCharClassPchar,
                                                 rtl_UriEncodeIgnoreEscapes,
                                                 RTL_TEXTENCODING_UTF8 ) );
                 }
