@@ -42,6 +42,7 @@ $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
 ))
 
 ifeq ($(OS),LINUX)
+ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Executable_add_libs,vcldemo,\
 	-lm \
 	-ldl \
@@ -54,6 +55,7 @@ $(eval $(call gb_Executable_add_libs,vcldemo,\
 $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
 	glxtest \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

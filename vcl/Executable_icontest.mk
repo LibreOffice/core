@@ -26,7 +26,7 @@ $(eval $(call gb_Executable_use_static_libraries,icontest,\
 ))
 
 ifeq ($(OS),LINUX)
-
+ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Executable_add_libs,icontest,\
 	-lm \
 	-ldl \
@@ -39,6 +39,7 @@ $(eval $(call gb_Executable_add_libs,icontest,\
 $(eval $(call gb_Executable_use_static_libraries,icontest,\
 	glxtest \
 ))
+endif
 
 else ifeq ($(OS),WNT)
 

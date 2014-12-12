@@ -10169,7 +10169,7 @@ elif test $_os = WINNT; then
     # We need the internal "Mesa" headers.
     SYSTEM_MESA_HEADERS=
     BUILD_TYPE="$BUILD_TYPE MESA"
-else
+elif test "$with_x" != "no"; then
     ENABLE_OPENGL=TRUE
     ENABLE_OPENGL_CANVAS=TRUE
 
