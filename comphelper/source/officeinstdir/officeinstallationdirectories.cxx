@@ -46,8 +46,7 @@ using namespace comphelper;
 
 static bool makeCanonicalFileURL( OUString & rURL )
 {
-    OSL_ENSURE( rURL.matchAsciiL( "file:", sizeof( "file:" ) - 1 , 0 ) ,
-                "File URL expected!" );
+    OSL_ENSURE(rURL.startsWithIgnoreAsciiCase("file:"), "File URL expected!");
 
     OUString aNormalizedURL;
     if ( osl::FileBase::getAbsoluteFileURL( OUString(),
