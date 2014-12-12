@@ -1,0 +1,176 @@
+#!/bin/bash
+
+start_time=$(date "+%s")
+
+# Gibt eine Fehlermeldung aus und beendet das Skipt mit Fehlercode 1
+error()
+{
+  echo "$@" 1>&2
+  exit 1
+}
+
+USAGE="USAGE: build [OPTIONEN] [<srcpath>]
+  -c Configure nicht aufrufen
+  -d make dev-install aufrufen
+  -b Build nicht starten
+  -k Baue mit KDE3 (Standard ist KDE4)
+  -w Windows-Build
+  <srcpath> Pfad, in dem die Sourcen von LibreOffice liegen. Default ist das aktuelle Verzeichnis.
+"
+
+if [ "$1" == "--help" ]; then
+  error "$USAGE"
+fi
+
+# Variablen zum Steuern des Builds
+configure=1
+build=1
+devinst=""
+enable_kde="kde4"
+disable_kde="kde"
+clean=0
+MAKE='make'
+
+while getopts bcdklw opt
+  do case "$opt" in
+  b) build=0;;
+  c) configure=0;;
+  d) devinst="dev-install";;
+  k) enable_kde="kde"
+     disable_kde="kde4";;
+  l) clean=1;;
+  w) windows=1
+     MAKE='/opt/lo/bin/make';;
+  [?]) error "$USAGE";;
+  esac
+done
+
+shift $((OPTIND-1))
+
+src=${1:-"."}
+cd $src || error "Zielverzeichnis existiert nicht."
+
+if [ ! -f ./autogen.sh ]; then
+  error "$USAGE"
+fi
+
+# --java-target-version is now hardcoded to 1.5
+# --enable-pch makes impress unit tests fail
+do_configure()
+{
+  if [ "_$windows" = "_1" ]; then
+    JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.7.0_67'
+    ANT_HOME='/cygdrive/c/sources/apache-ant-1.9.4'
+    JUNIT_HOME='/cygdrive/c/sources/junit-4.10.jar'
+
+    if [ ! -d "${JDK_HOME}" ]; then
+      error "Kein JDK in ${JDK_HOME} gefunden."
+    fi
+    if [ ! -d "${ANT_HOME}" ]; then
+      error "Kein ANT in ${ANT_HOME} gefunden."
+    fi
+    if [ ! -f "${JUNIT_HOME}" ]; then
+      error "Kein JUNIT in ${JUNIT_HOME} gefunden."
+    fi
+    OPTIONS_PLATFORM=(
+      --disable-ccache
+      --with-ant-home="${ANT_HOME}"
+      --with-external-tar=/cygdrive/c/sources/lo-external
+      --with-jdk-home="${JDK_HOME}"
+      --with-junit="${JUNIT_HOME}"
+    )
+  else
+    if [ -f /usr/lib/j2sdk1.5-sun/bin/javac ]; then
+      JDK_HOME="/usr/lib/j2sdk1.5-sun"
+    else
+      JDK_HOME="/usr/lib/jvm/java-6-sun"
+    fi
+    OPTIONS_PLATFORM=(
+      --disable-dbus
+      --disable-"${disable_kde}"
+      --disable-gconf
+      --disable-gnome-vfs
+      --disable-randr-link
+      --enable-"${enable_kde}"
+      --enable-epm
+      --enable-evolution2
+      --enable-lockdown
+      --enable-odk
+      --enable-python=internal
+      --without-afms
+      --without-doxygen
+      --without-fonts
+      --without-ppds
+      --with-external-tar="${HOME}/lo-external"
+      --with-package-format=deb
+      --with-system-curl
+      --with-system-expat
+      --with-system-jpeg
+      --with-system-libpng
+      --with-system-libxml
+      --with-system-openldap
+      --with-system-sane
+      --with-system-zlib
+    )
+  fi
+  OPTIONS=(
+    --disable-online-update
+    --enable-extension-integration
+    --enable-release-build
+    --enable-ext-nlpsolver
+    --enable-ext-presenter-minimizer
+    --enable-ext-wiki-publisher
+    --with-build-version="${BUILD_NUMBER}"
+    --with-help
+    --with-java
+    --with-jdk-home="${JDK_HOME}"
+    --with-lang='de fr es it pt'
+    --with-myspell-dicts
+    --with-system-dicts
+    --with-vendor='it@M Landeshauptstadt München'
+    "${OPTIONS_PLATFORM[@]}"
+  )
+  ./autogen.sh "${OPTIONS[@]}" || error 'autogen.sh fehlgeschlagen.'
+}
+
+do_build() {
+  "$MAKE" $devinst || error "$MAKE fehlgeschlagen."
+}
+
+echo "Startzeit: $(date)" | tee build.log
+
+if [ "_$configure" = "_1" ]; then
+  echo Configuring...
+  do_configure 2>&1 | tee -a build.log
+  ret=${PIPESTATUS[0]}
+  if [ $ret -ne 0 ]; then
+    exit $ret
+  fi
+fi
+
+if [ "_$clean" = "_1" ]; then
+  echo Cleaning...
+  "$MAKE" clean 2>&1 | tee -a build.log
+  ret=${PIPESTATUS[0]}
+  if [ $ret -ne 0 ]; then
+    exit $ret
+  fi
+fi
+
+if [ "_$build" = "_1" ]; then
+  echo Building...
+  do_build 2>&1 | tee -a build.log
+  ret=${PIPESTATUS[0]}
+  if [ $ret -ne 0 ]; then
+    exit $ret
+  fi
+fi
+
+end_time=$(date "+%s")
+
+time_diff=$(($end_time - $start_time))
+minutes=$(($time_diff / 60))
+hours=$(($minutes / 60))
+minutes=$(($minutes - $hours * 60))
+
+echo "Gesamtzeit für den Build: $hours Std. $minutes Min." | tee -a build.log
