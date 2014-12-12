@@ -212,7 +212,7 @@ void PCXReader::ImplReadHeader()
 
 void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
 {
-    sal_uInt8   *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
+    sal_uInt8   *pPlane[ 4 ], * pDest;
     sal_uLong   i, nx, ny, np, nCount, nPercent;
     sal_uLong   nLastPercent = 0;
     sal_uInt8   nDat = 0, nCol = 0;
@@ -292,10 +292,10 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                 }
             }
         }
-        pSource1 = pPlane[ 0 ];
-        pSource2 = pPlane[ 1 ];
-        pSource3 = pPlane[ 2 ];
-        pSource4 = pPlane[ 3 ];
+        sal_uInt8 *pSource1 = pPlane[ 0 ];
+        sal_uInt8 *pSource2 = pPlane[ 1 ];
+        sal_uInt8 *pSource3 = pPlane[ 2 ];
+        sal_uInt8 *pSource4 = pPlane[ 3 ];
         switch ( nBitsPerPlanePix + ( nPlanes << 8 ) )
         {
             // 2 colors
