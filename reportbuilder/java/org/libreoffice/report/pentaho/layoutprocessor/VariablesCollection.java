@@ -68,7 +68,12 @@ public class VariablesCollection
         return namePrefix;
     }
 
-
+    public String addVariable(final FormattedTextElement element)
+    {
+        variables.add(element);
+        final int size = variables.size();
+        return namePrefix + size;
+    }
 
     public FormattedTextElement[] getVariables()
     {
