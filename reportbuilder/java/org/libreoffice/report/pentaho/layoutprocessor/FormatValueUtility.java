@@ -172,7 +172,8 @@ public class FormatValueUtility
             {
                 variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
             }
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
+            // work around fdo#68024
+            //variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
         }
         else
         {
