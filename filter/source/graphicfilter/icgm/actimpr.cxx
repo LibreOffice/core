@@ -53,10 +53,10 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
         CGMOutAct       ( rCGM ),
         nFinalTextCount ( 0 )
 {
-    bool bStatRet = false;
-
     if ( mpCGM->mbStatus )
     {
+        bool bStatRet = false;
+
         uno::Reference< drawing::XDrawPagesSupplier >  aDrawPageSup( rModel, uno::UNO_QUERY );
         if( aDrawPageSup.is() )
         {

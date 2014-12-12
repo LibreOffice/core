@@ -160,10 +160,9 @@ void PBMWriter::ImplWriteBody()
     }
     else
     {
-        int nxCount;
         for ( sal_uLong y = 0; y < mnHeight; y++ )
         {
-            nxCount = 70;
+            int nxCount = 70;
             for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
                 if (!( --nxCount ) )

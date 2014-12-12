@@ -714,7 +714,6 @@ ImportCGM( OUString const & rFileName, uno::Reference< frame::XModel > const & r
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
                                         //          == 0xffrrggbb -> background color in the lower 24 bits
-    bool    bProgressBar = false;
 
     if( rXModel.is() )
     {
@@ -734,7 +733,7 @@ ImportCGM( OUString const & rFileName, uno::Reference< frame::XModel > const & r
 
                         sal_uInt32  nNext = 0;
                         sal_uInt32  nAdd = nInSize / 20;
-                        bProgressBar = aXStatInd.is();
+                        bool bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
                             aXStatInd->start( "CGM Import" , nInSize );
 

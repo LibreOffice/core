@@ -308,11 +308,9 @@ void METWriter::WriteClipRect( const Rectangle& rRect )
 
 void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 {
-    const MetaAction* pMA;
-
     for( size_t nAction = 0, nActionCount=pMTF->GetActionSize(); nAction < nActionCount; nAction++ )
     {
-        pMA =  pMTF->GetAction(nAction);
+        const MetaAction* pMA =  pMTF->GetAction(nAction);
 
         switch (pMA->GetType())
         {
@@ -398,16 +396,15 @@ void METWriter::WriteFieldId(sal_uInt32 nId)
 void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
 {
     size_t nAction, nActionCount;
-    const MetaAction * pMA;
 
-    if (bStatus==false)
+    if (!bStatus)
         return;
 
     nActionCount = pMTF->GetActionSize();
 
     for (nAction = 0; nAction < nActionCount; nAction++)
     {
-        pMA = pMTF->GetAction(nAction);
+        const MetaAction * pMA = pMTF->GetAction(nAction);
 
         switch (pMA->GetType())
         {
@@ -734,14 +731,12 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
 
 void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
 {
-    const MetaAction*   pMA;
-
-    if (bStatus==false)
+    if (!bStatus)
         return;
 
     for ( size_t nAction = 0, nActionCount = pMTF->GetActionSize(); nAction < nActionCount; nAction++)
     {
-        pMA = pMTF->GetAction(nAction);
+        const MetaAction* pMA = pMTF->GetAction(nAction);
 
         switch (pMA->GetType())
         {
@@ -808,7 +803,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
             break;
         }
 
-        if (bStatus==false)
+        if (!bStatus)
             break;
     }
 
@@ -818,7 +813,7 @@ void METWriter::WriteImageObjects(const GDIMetaFile * pMTF)
 
 void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 {
-    if (bStatus==false)
+    if (!bStatus)
         return;
 
     WriteFieldIntroducer(0,DscGrfObjMagic,0,0);

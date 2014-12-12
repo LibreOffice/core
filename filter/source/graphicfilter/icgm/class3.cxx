@@ -26,7 +26,6 @@
 void CGM::ImplDoClass3()
 {
     sal_uInt32  nUInteger;
-    long    nI0, nI1;
     switch ( mnElementID )
     {
         case 0x01 : /*VDC Integer Precision*/
@@ -42,8 +41,8 @@ void CGM::ImplDoClass3()
         case 0x02 : /*VDC Real Precision*/
         {
             nUInteger = ImplGetUI16();
-            nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
-            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
+            const long nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
+            const long nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
             switch( nUInteger )
             {
                 case 0 :

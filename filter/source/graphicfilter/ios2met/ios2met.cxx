@@ -1328,7 +1328,6 @@ void OS2METReader::ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen)
 void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
 {
     sal_uInt16 i,nNumPoints;
-    long x,y;
 
     SetPen( aAttr.aMrkCol );
     SetRasterOp(aAttr.eMrkMix);
@@ -1344,7 +1343,8 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
     if (!bGivenPos) nNumPoints++;
     for (i=0; i<nNumPoints; i++) {
         if (i!=0 || bGivenPos) aAttr.aCurPos=ReadPoint();
-        x=aAttr.aCurPos.X(); y=aAttr.aCurPos.Y();
+        const long x = aAttr.aCurPos.X();
+        const long y=aAttr.aCurPos.Y();
         aCalcBndRect.Union(Rectangle(x-5,y-5,x+5,y+5));
         switch (aAttr.nMrkSymbol) {
             case  2:   // PLUS

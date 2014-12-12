@@ -539,7 +539,6 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     Graphic     aGraphic;
     bool    bRetValue = false;
     bool    bHasPreview = false;
-    bool    bGraphicLinkCreated = false;
     sal_uInt32  nSignature, nPSStreamPos, nPSSize;
     sal_uInt32  nSizeWMF = 0;
     sal_uInt32  nPosWMF = 0;
@@ -593,6 +592,8 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     if ( ImplSearchEntry( pHeader, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
         ImplSearchEntry( &pHeader[ 15 ], (sal_uInt8*)"EPS", 3, 3 ) )
     {
+        bool bGraphicLinkCreated = false;
+
         rStream.Seek( nPSStreamPos );
         sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
         if ( pBuf )
@@ -621,13 +622,12 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
                             if ( pAcc )
                             {
-                                int  nBitsLeft;
                                 bool bIsValid = true;
                                 sal_uInt8 nDat = 0;
                                 char nByte;
                                 for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
                                 {
-                                    nBitsLeft = 0;
+                                    int nBitsLeft = 0;
                                     for ( long x = 0; x < nWidth; x++ )
                                     {
                                         if ( --nBitsLeft < 0 )
