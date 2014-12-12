@@ -435,7 +435,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 break;
             }
 
-            if(aCommand.Name.equalsAscii("getPropertyValues")) {
+            if(aCommand.Name == "getPropertyValues") {
                 Sequence<Property> Properties;
                 if(!(aCommand.Argument >>= Properties))
                 {
@@ -448,7 +448,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 
                 aRet <<= getPropertyValues(Properties,Environment);
             }
-            else if(aCommand.Name.equalsAscii("setPropertyValues") )
+            else if(aCommand.Name == "setPropertyValues")
             {
                 Sequence<PropertyValue> propertyValues;
 
@@ -462,15 +462,15 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 
                 aRet <<= setPropertyValues(propertyValues);
             }
-            else if(aCommand.Name.equalsAscii("getCommandInfo")) {
+            else if(aCommand.Name == "getCommandInfo") {
                 // Note: Implemented by base class.
                 aRet <<= getCommandInfo(Environment);
             }
-            else if(aCommand.Name.equalsAscii("getPropertySetInfo")) {
+            else if(aCommand.Name == "getPropertySetInfo") {
                 // Note: Implemented by base class.
                 aRet <<= getPropertySetInfo(Environment);
             }
-            else if(aCommand.Name.equalsAscii( "insert" ))
+            else if(aCommand.Name == "insert")
             {
                 InsertCommandArgument aInsertArgument;
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
@@ -482,11 +482,11 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 }
                 insert(aInsertArgument,Environment);
             }
-            else if(aCommand.Name.equalsAscii("delete")) {
+            else if(aCommand.Name == "delete") {
                 m_aFTPURL.del();
                 deleted();
             }
-            else if(aCommand.Name.equalsAscii( "open" )) {
+            else if(aCommand.Name == "open") {
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
                     aRet <<= IllegalArgumentException(
@@ -590,7 +590,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
-            } else if(aCommand.Name.equalsAscii("createNewContent")) {
+            } else if(aCommand.Name == "createNewContent") {
                 ContentInfo aArg;
                 if (!(aCommand.Argument >>= aArg)) {
                     ucbhelper::cancelCommandExecution(
@@ -837,35 +837,35 @@ Reference< XRow > FTPContent::getPropertyValues(
 
     for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
         const OUString& Name = seqProp[i].Name;
-        if(Name.equalsAscii("Title"))
+        if(Name == "Title")
             xRow->appendString(seqProp[i],aDirEntry.m_aName);
-        else if(Name.equalsAscii("CreatableContentsInfo"))
+        else if(Name == "CreatableContentsInfo")
             xRow->appendObject(seqProp[i],
                                makeAny(queryCreatableContentsInfo()));
         else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
-            if(Name.equalsAscii("ContentType"))
+            if(Name == "ContentType")
                 xRow->appendString(seqProp[i],
                                    aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR
                                    ? FTP_FOLDER
                                    : FTP_FILE );
-            else if(Name.equalsAscii("IsReadOnly"))
+            else if(Name == "IsReadOnly")
                 xRow->appendBoolean(seqProp[i],
                                     aDirEntry.m_nMode
                                     & INETCOREFTP_FILEMODE_WRITE
                                     ? 0
                                     : 1 );
-            else if(Name.equalsAscii("IsDocument"))
+            else if(Name == "IsDocument")
                 xRow->appendBoolean(seqProp[i],
                                     (aDirEntry.m_nMode &
                                                INETCOREFTP_FILEMODE_ISDIR) != INETCOREFTP_FILEMODE_ISDIR);
-            else if(Name.equalsAscii("IsFolder"))
+            else if(Name == "IsFolder")
                 xRow->appendBoolean(seqProp[i],
                                     (aDirEntry.m_nMode &
                                              INETCOREFTP_FILEMODE_ISDIR) == INETCOREFTP_FILEMODE_ISDIR);
-            else if(Name.equalsAscii("Size"))
+            else if(Name == "Size")
                 xRow->appendLong(seqProp[i],
                                  aDirEntry.m_nSize);
-            else if(Name.equalsAscii("DateCreated"))
+            else if(Name == "DateCreated")
                 xRow->appendTimestamp(seqProp[i],
                                       aDirEntry.m_aDate);
             else

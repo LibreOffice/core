@@ -114,7 +114,7 @@ FileProvider::initialize(
         OUString config;
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
-            config.equalsAscii("NoConfig") )
+            config == "NoConfig" )
             m_pMyShell = new shell( m_xContext, this, false );
         else
             m_pMyShell = new shell( m_xContext, this, true );
@@ -473,9 +473,9 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
            WrappedTargetException,
            RuntimeException, std::exception )
 {
-    if( aPropertyName.equalsAscii( "FileSystemNotation" ) ||
-        aPropertyName.equalsAscii( "HomeDirectory" )      ||
-        aPropertyName.equalsAscii( "HostName" ) )
+    if( aPropertyName == "FileSystemNotation" ||
+        aPropertyName == "HomeDirectory"      ||
+        aPropertyName == "HostName" )
         return;
     else
         throw UnknownPropertyException( THROW_WHERE );
@@ -491,19 +491,19 @@ FileProvider::getPropertyValue(
            RuntimeException, std::exception )
 {
     initProperties();
-    if( aPropertyName.equalsAscii( "FileSystemNotation" ) )
+    if( aPropertyName == "FileSystemNotation" )
     {
         Any aAny;
         aAny <<= m_FileSystemNotation;
         return aAny;
     }
-    else if( aPropertyName.equalsAscii( "HomeDirectory" ) )
+    else if( aPropertyName == "HomeDirectory" )
     {
         Any aAny;
         aAny <<= m_HomeDirectory;
         return aAny;
     }
-    else if( aPropertyName.equalsAscii( "HostName" ) )
+    else if( aPropertyName == "HostName" )
     {
         Any aAny;
         aAny <<= m_HostName;

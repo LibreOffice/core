@@ -60,30 +60,30 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
 
         for( int i = 0; i < seqProp.getLength(); ++i) {
             const OUString& Name = seqProp[i].Name;
-            if(Name.equalsAscii("ContentType") )
+            if(Name == "ContentType")
                 xRow->appendString(seqProp[i],
                                    OUString( "application/ftp" ));
-            else if(Name.equalsAscii("Title"))
+            else if(Name == "Title")
                 xRow->appendString(seqProp[i],dirvec[n].m_aName);
-            else if(Name.equalsAscii("IsReadOnly"))
+            else if(Name == "IsReadOnly")
                 xRow->appendBoolean(seqProp[i],
                                     (dirvec[n].m_nMode &
                                              INETCOREFTP_FILEMODE_WRITE) == INETCOREFTP_FILEMODE_WRITE);
-            else if(Name.equalsAscii("IsDocument"))
+            else if(Name == "IsDocument")
                 xRow->appendBoolean(seqProp[i],
                                     (dirvec[n].m_nMode &
                                                INETCOREFTP_FILEMODE_ISDIR) != INETCOREFTP_FILEMODE_ISDIR);
-            else if(Name.equalsAscii("IsFolder"))
+            else if(Name == "IsFolder")
                 xRow->appendBoolean(seqProp[i],
                                     ( dirvec[n].m_nMode &
                                              INETCOREFTP_FILEMODE_ISDIR) == INETCOREFTP_FILEMODE_ISDIR);
-            else if(Name.equalsAscii("Size"))
+            else if(Name == "Size")
                 xRow->appendLong(seqProp[i],
                                  dirvec[n].m_nSize);
-            else if(Name.equalsAscii("DateCreated"))
+            else if(Name == "DateCreated")
                 xRow->appendTimestamp(seqProp[i],
                                       dirvec[n].m_aDate);
-            else if(Name.equalsAscii("CreatableContentsInfo"))
+            else if(Name == "CreatableContentsInfo")
                 xRow->appendObject(
                     seqProp[i],
                     makeAny(FTPContent::queryCreatableContentsInfo_Static()));
