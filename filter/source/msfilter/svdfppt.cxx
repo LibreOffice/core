@@ -295,7 +295,7 @@ void PptSlideLayoutAtom::Clear()
 {
     eLayout = PptSlideLayout::TITLESLIDE;
     for ( sal_uInt16 i = 0; i < 8; i++ )
-        aPlaceholderId[ i ] = 0;
+        aPlaceholderId[ i ] = PptPlaceholder::NONE;
 }
 
 SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom )
@@ -470,14 +470,17 @@ SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
 void PptOEPlaceholderAtom::Clear()
 {
     nPlacementId = 0;
-    nPlaceholderSize = nPlaceholderId = 0;
+    nPlaceholderSize = 0;
+    nPlaceholderId = PptPlaceholder::NONE;
 }
 
 SvStream& ReadPptOEPlaceholderAtom( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
 {
-    rIn.ReadUInt32( rAtom.nPlacementId )
-       .ReadUChar( rAtom.nPlaceholderId )
-       .ReadUChar( rAtom.nPlaceholderSize );
+    rIn.ReadUInt32( rAtom.nPlacementId );
+    sal_uInt8 nTmp;
+    rIn.ReadUChar(nTmp);
+    rAtom.nPlaceholderId = static_cast<PptPlaceholder>(nTmp);
+    rIn.ReadUChar( rAtom.nPlaceholderSize );
     return rIn;
 }
 
@@ -746,13 +749,15 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         {
                             switch ( aPlaceholderAtom.nPlaceholderId )
                             {
-                                case PPT_PLACEHOLDER_MASTERSLIDENUMBER :    nHeaderFooterInstance++;
+                                case PptPlaceholder::MASTERSLIDENUMBER :    nHeaderFooterInstance++;
                                 // fall-through
-                                case PPT_PLACEHOLDER_MASTERFOOTER :         nHeaderFooterInstance++;
+                                case PptPlaceholder::MASTERFOOTER :         nHeaderFooterInstance++;
                                 // fall-through
-                                case PPT_PLACEHOLDER_MASTERHEADER :         nHeaderFooterInstance++;
+                                case PptPlaceholder::MASTERHEADER :         nHeaderFooterInstance++;
                                 // fall-through
-                                case PPT_PLACEHOLDER_MASTERDATE :           nHeaderFooterInstance++; break;
+                                case PptPlaceholder::MASTERDATE :           nHeaderFooterInstance++; break;
+                                default: break;
+
                             }
                             if ( ! ( nHeaderFooterInstance & 0xfffc ) )     // is this a valid instance ( 0->3 )
                                 rPersistEntry.HeaderFooterOfs[ nHeaderFooterInstance ] = rObjData.rSpHd.GetRecBegFilePos();
@@ -774,7 +779,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 aClientDataHd.SeekToEndOfRecord( rSt );
             }
         }
-        if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE ) && ( rPersistEntry.bNotesMaster == false ) )
+        if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE ) && ( rPersistEntry.bNotesMaster == false ) )
         {
             sal_uInt16 nPageNum = pSdrModel->GetPageCount();
             if ( nPageNum > 0 )
@@ -961,14 +966,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
 
                 SdrObjKind eTextKind = OBJ_RECT;
-                if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE )
-                    || ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
+                if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
+                    || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) )
                 {
                     aTextObj.SetInstance( 2 );
                     eTextKind = OBJ_TITLETEXT;
                 }
-                else if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESBODYIMAGE )
-                    || ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESBODY ) )
+                else if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESBODYIMAGE )
+                    || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESBODY ) )
                 {
                     aTextObj.SetInstance( 2 );
                     eTextKind = OBJ_TEXT;
@@ -1016,7 +1021,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
                 if ( aTextObj.GetDestinationInstance() != TSS_TYPE_TEXT_IN_SHAPE )
                 {
-                    if ( !aTextObj.GetOEPlaceHolderAtom() || !aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId )
+                    if ( !aTextObj.GetOEPlaceHolderAtom() || aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId == PptPlaceholder::NONE )
                     {
                         aTextObj.SetDestinationInstance( TSS_TYPE_TEXT_IN_SHAPE );
                         eTextKind = OBJ_RECT;
