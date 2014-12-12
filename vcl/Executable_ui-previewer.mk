@@ -35,6 +35,7 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
 ))
 
 ifeq ($(OS),LINUX)
+ifeq ($(ENABLE_OPENGL_CANVAS),TRUE)
 $(eval $(call gb_Executable_add_libs,ui-previewer,\
 	-lm \
 	-ldl \
@@ -47,6 +48,7 @@ $(eval $(call gb_Executable_add_libs,ui-previewer,\
 $(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
 	glxtest \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
