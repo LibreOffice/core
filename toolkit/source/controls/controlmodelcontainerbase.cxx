@@ -332,61 +332,61 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
 
     OGeometryControlModel_Base* pNewModel = NULL;
 
-    if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlEditModel ) )
+    if ( aServiceSpecifier == "com.sun.star.awt.UnoControlEditModel" )
         pNewModel = new OGeometryControlModel< UnoControlEditModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlFormattedFieldModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlFormattedFieldModel" )
         pNewModel = new OGeometryControlModel< UnoControlFormattedFieldModel >( m_xContext);
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlFileControlModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlFileControlModel" )
         pNewModel = new OGeometryControlModel< UnoControlFileControlModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlButtonModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlButtonModel" )
         pNewModel = new OGeometryControlModel< UnoControlButtonModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlImageControlModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlImageControlModel" )
         pNewModel = new OGeometryControlModel< UnoControlImageControlModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlRadioButtonModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlRadioButtonModel" )
         pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlCheckBoxModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlCheckBoxModel" )
         pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlFixedHyperlinkModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlFixedHyperlinkModel" )
         pNewModel = new OGeometryControlModel< UnoControlFixedHyperlinkModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoControlFixedTextModel ) )
+    else if ( aServiceSpecifier == "stardiv.vcl.controlmodel.FixedText" )
         pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlGroupBoxModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlGroupBoxModel" )
         pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlListBoxModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlListBoxModel" )
         pNewModel = new OGeometryControlModel< UnoControlListBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlComboBoxModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlComboBoxModel" )
         pNewModel = new OGeometryControlModel< UnoControlComboBoxModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlDateFieldModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlDateFieldModel" )
         pNewModel = new OGeometryControlModel< UnoControlDateFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlTimeFieldModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlTimeFieldModel" )
         pNewModel = new OGeometryControlModel< UnoControlTimeFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlNumericFieldModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlNumericFieldModel" )
         pNewModel = new OGeometryControlModel< UnoControlNumericFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlCurrencyFieldModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlCurrencyFieldModel" )
         pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlPatternFieldModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlPatternFieldModel" )
         pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlProgressBarModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlProgressBarModel" )
         pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlScrollBarModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlScrollBarModel" )
         pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlFixedLineModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlFixedLineModel" )
         pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName2_UnoControlRoadmapModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoControlRoadmapModel" )
         pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_TreeControlModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.tree.TreeControlModel" )
         pNewModel = new OGeometryControlModel< UnoTreeModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_GridControlModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.grid.UnoControlGridModel" )
         pNewModel = new OGeometryControlModel< UnoGridModel >( m_xContext );
     else if ( aServiceSpecifier == "com.sun.star.awt.tab.UnoControlTabPageContainerModel" )
         pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoMultiPageModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoMultiPageModel" )
         pNewModel = new OGeometryControlModel< UnoMultiPageModel >( m_xContext );
     else if ( aServiceSpecifier == "com.sun.star.awt.tab.UnoControlTabPageModel" )
         pNewModel = new OGeometryControlModel< UnoControlTabPageModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoPageModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoPageModel" )
         pNewModel = new OGeometryControlModel< UnoPageModel >( m_xContext );
-    else if ( aServiceSpecifier.equalsAscii( szServiceName_UnoFrameModel ) )
+    else if ( aServiceSpecifier == "com.sun.star.awt.UnoFrameModel" )
         pNewModel = new OGeometryControlModel< UnoFrameModel >( m_xContext );
 
     if ( !pNewModel )
@@ -429,32 +429,28 @@ Sequence< OUString > ControlModelContainerBase::getAvailableServiceNames() throw
     {
         pNamesSeq = new Sequence< OUString >( 26 );
         OUString* pNames = pNamesSeq->getArray();
-        pNames[0] = OUString::createFromAscii( szServiceName2_UnoControlEditModel );
-        pNames[1] = OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
-        pNames[2] = OUString::createFromAscii( szServiceName2_UnoControlFileControlModel );
-        pNames[3] = OUString::createFromAscii( szServiceName2_UnoControlButtonModel );
-        pNames[4] = OUString::createFromAscii( szServiceName2_UnoControlImageControlModel );
-        pNames[5] = OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel );
-        pNames[6] = OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel );
-        pNames[7] = OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel );
-        pNames[8] = OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel );
-        pNames[9] = OUString::createFromAscii( szServiceName2_UnoControlListBoxModel );
-        pNames[10] = OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel );
-        pNames[11] = OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel );
-        pNames[12] = OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel );
-        pNames[13] = OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel );
-        pNames[14] = OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
-        pNames[15] = OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
-        pNames[16] = OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
-        pNames[17] = OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
-        pNames[18] = OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
-        pNames[19] = OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
-        pNames[20] = OUString::createFromAscii( szServiceName_TreeControlModel );
-        pNames[21] = OUString::createFromAscii( szServiceName_GridControlModel );
-        pNames[22] = OUString( "com.sun.star.awt.tab.UnoControlTabPageContainerModel");
-        pNames[23] = OUString( "com.sun.star.awt.tab.UnoControlTabPageModel" );
-        pNames[24] = OUString::createFromAscii( szServiceName_UnoMultiPageModel );
-        pNames[25] = OUString::createFromAscii( szServiceName_UnoFrameModel );
+        pNames[0] = "com.sun.star.awt.UnoControlEditModel";
+        pNames[1] = "com.sun.star.awt.UnoControlFormattedFieldModel";
+        pNames[2] = "com.sun.star.awt.UnoControlFileControlModel";
+        pNames[3] = "com.sun.star.awt.UnoControlButtonModel";
+        pNames[4] = "com.sun.star.awt.UnoControlImageControlModel";
+        pNames[5] = "com.sun.star.awt.UnoControlRadioButtonModel";
+        pNames[6] = "com.sun.star.awt.UnoControlCheckBoxModel";
+        pNames[7] = "com.sun.star.awt.UnoControlFixedTextModel";
+        pNames[8] = "com.sun.star.awt.UnoControlGroupBoxModel";
+        pNames[9] = "com.sun.star.awt.UnoControlListBoxModel";
+        pNames[10] = "com.sun.star.awt.UnoControlComboBoxModel";
+        pNames[11] = "com.sun.star.awt.UnoControlDateFieldModel";
+        pNames[12] = "com.sun.star.awt.UnoControlTimeFieldModel";
+        pNames[13] = "com.sun.star.awt.UnoControlNumericFieldModel";
+        pNames[14] = "com.sun.star.awt.UnoControlCurrencyFieldModel";
+        pNames[15] = "com.sun.star.awt.UnoControlPatternFieldModel";
+        pNames[16] = "com.sun.star.awt.tree.TreeControlModel";
+        pNames[21] = "com.sun.star.awt.grid.UnoControlGridModel";
+        pNames[22] = "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
+        pNames[23] = "com.sun.star.awt.tab.UnoControlTabPageModel";
+        pNames[24] = "com.sun.star.awt.UnoMultiPageModel";
+        pNames[25] = "com.sun.star.awt.UnoFrameModel";
     }
     return *pNamesSeq;
 }
@@ -966,7 +962,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     {
         // we'll need this in every state
         xModelSI.set(*pControlModels, css::uno::UNO_QUERY);
-        bIsRadioButton = xModelSI.is() && xModelSI->supportsService( OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) );
+        bIsRadioButton = xModelSI.is() && xModelSI->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" );
 
         switch ( eState )
         {
@@ -1072,7 +1068,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
 {
     SolarMutexGuard aGuard;
 
-    DBG_ASSERT( _rEvent.PropertyName.equalsAscii( "TabIndex" ),
+    DBG_ASSERT( _rEvent.PropertyName == "TabIndex",
         "ControlModelContainerBase::propertyChange: not listening for this property!" );
 
     // the accessor for the changed element

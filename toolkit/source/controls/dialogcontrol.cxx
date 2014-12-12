@@ -899,7 +899,7 @@ UnoMultiPageModel::Clone() const
 
 OUString UnoMultiPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+    return OUString( "com.sun.star.awt.UnoMultiPageModel" );
 }
 
 uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -907,7 +907,7 @@ uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoMultiPageControl );
+        aAny <<= OUString( "com.sun.star.awt.UnoControlMultiPage" );
         return aAny;
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
@@ -940,7 +940,7 @@ void UnoMultiPageModel::insertByName( const OUString& aName, const Any& aElement
         throw IllegalArgumentException();
 
     // Only a Page model can be inserted into the multipage
-    if ( !xInfo->supportsService( OUString::createFromAscii( szServiceName_UnoPageModel ) ) )
+    if ( !xInfo->supportsService( "com.sun.star.awt.UnoPageModel" ) )
         throw IllegalArgumentException();
 
     return ControlModelContainerBase::insertByName( aName, aElement );
@@ -1019,7 +1019,7 @@ UnoPageModel::Clone() const
 
 OUString UnoPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( szServiceName_UnoPageModel );
+    return OUString( "com.sun.star.awt.UnoPageModel" );
 }
 
 uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1027,7 +1027,7 @@ uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoPageControl );
+        aAny <<= OUString( "com.sun.star.awt.UnoControlPage" );
         return aAny;
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
@@ -1184,7 +1184,7 @@ UnoFrameModel::Clone() const
 
 OUString UnoFrameModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( szServiceName_UnoFrameModel );
+    return OUString( "com.sun.star.awt.UnoFrameModel" );
 }
 
 uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1194,7 +1194,7 @@ uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         case BASEPROPERTY_DEFAULTCONTROL:
         {
-            aAny <<= OUString::createFromAscii( szServiceName_UnoFrameControl );
+            aAny <<= OUString( "com.sun.star.awt.UnoControlFrame" );
             return aAny;
         }
         case BASEPROPERTY_SCROLLWIDTH:

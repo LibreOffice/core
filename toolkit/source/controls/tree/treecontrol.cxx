@@ -80,7 +80,7 @@ UnoControlModel* UnoTreeModel::Clone() const
 
 OUString UnoTreeModel::getServiceName() throw(RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( szServiceName_TreeControlModel );
+    return OUString( "com.sun.star.awt.tree.TreeControlModel" );
 }
 
 Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -101,7 +101,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_TREE_SHOWSHANDLES:
         return Any( sal_True );
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString::createFromAscii( szServiceName_TreeControl ) );
+        return uno::makeAny( OUString( "com.sun.star.awt.tree.TreeControl" ) );
     default:
         return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -180,7 +180,7 @@ public:
     virtual void SAL_CALL removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, szServiceName_TreeControl )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, "com.sun.star.awt.tree.TreeControl" )
 
     using UnoControl::getPeer;
 private:

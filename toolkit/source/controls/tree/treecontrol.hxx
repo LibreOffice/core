@@ -51,7 +51,7 @@ public:
     OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeModel, UnoControlModel, szServiceName_TreeControlModel )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoTreeModel, UnoControlModel, "com.sun.star.awt.tree.TreeControlModel" )
 };
 
 } // toolkit

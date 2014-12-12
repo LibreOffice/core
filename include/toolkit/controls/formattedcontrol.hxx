@@ -77,7 +77,7 @@ namespace toolkit
 
 
         // ::com::sun::star::lang::XServiceInfo
-        DECLIMPL_SERVICEINFO_DERIVED( UnoControlFormattedFieldModel, UnoControlModel, szServiceName2_UnoControlFormattedFieldModel )
+        DECLIMPL_SERVICEINFO_DERIVED( UnoControlFormattedFieldModel, UnoControlModel, "com.sun.star.awt.UnoControlFormattedFieldModel" )
 
     protected:
         virtual ~UnoControlFormattedFieldModel();
@@ -114,7 +114,7 @@ namespace toolkit
         void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XServiceInfo
-        DECLIMPL_SERVICEINFO_DERIVED( UnoFormattedFieldControl, UnoEditControl, szServiceName2_UnoControlFormattedField )
+        DECLIMPL_SERVICEINFO_DERIVED( UnoFormattedFieldControl, UnoEditControl, "com.sun.star.awt.UnoControlFormattedField" )
     };
 
 

@@ -77,7 +77,7 @@ using namespace ::toolkit;
                             { \
                                 ::com::sun::star::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
-                                aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( ServiceName ); \
+                                aNames[ aNames.getLength() - 1 ] = ServiceName; \
                                 return aNames; \
                             } \
 
@@ -1455,7 +1455,7 @@ UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< X
 
 OUString UnoControlFixedHyperlinkModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( szServiceName_UnoControlFixedHyperlinkModel );
+    return OUString( "com.sun.star.awt.UnoControlFixedHyperlinkModel" );
 }
 
 uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1463,7 +1463,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= OUString::createFromAscii( szServiceName_UnoControlFixedHyperlink );
+        aAny <<= OUString( "com.sun.star.awt.UnoControlFixedHyperlink" );
         return aAny;
     }
     else if ( nPropId == BASEPROPERTY_BORDER )
@@ -1658,7 +1658,7 @@ UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentC
 
 OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( szServiceName_UnoControlFixedTextModel );
+    return OUString( "stardiv.vcl.controlmodel.FixedText" );
 }
 
 uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -2009,7 +2009,7 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
 UnoControlListBoxModel::~UnoControlListBoxModel()
 {
 }
-IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName2_UnoControlListBoxModel )
+IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, "com.sun.star.awt.UnoControlListBoxModel" )
 
 OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -2452,7 +2452,7 @@ OUString UnoListBoxControl::GetComponentServiceName()
 {
     return OUString("listbox");
 }
-IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, szServiceName2_UnoControlListBox )
+IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, "com.sun.star.awt.UnoControlListBox" )
 
 void UnoListBoxControl::dispose() throw(uno::RuntimeException, std::exception)
 {
@@ -2877,7 +2877,7 @@ UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentCon
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
 }
 
-IMPL_SERVICEINFO_DERIVED( UnoControlComboBoxModel, UnoControlModel, szServiceName2_UnoControlComboBoxModel )
+IMPL_SERVICEINFO_DERIVED( UnoControlComboBoxModel, UnoControlModel, "com.sun.star.awt.UnoControlComboBoxModel" )
 
 uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
 {
@@ -2963,7 +2963,7 @@ UnoComboBoxControl::UnoComboBoxControl()
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
 }
-IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, szServiceName2_UnoControlComboBox )
+IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, "com.sun.star.awt.UnoControlComboBox" )
 
 OUString UnoComboBoxControl::GetComponentServiceName()
 {

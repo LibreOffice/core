@@ -105,7 +105,7 @@ public:
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setVisible( sal_Bool Visible ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainer, UnoControlBase, szServiceName2_UnoControlContainer )
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainer, UnoControlBase, "com.sun.star.awt.UnoControlContainer" )
 
 protected:
     virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc ) SAL_OVERRIDE;

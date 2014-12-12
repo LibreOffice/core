@@ -269,7 +269,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
                             { \
                                 ::com::sun::star::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
-                                aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( ServiceName ); \
+                                aNames[ aNames.getLength() - 1 ] = ServiceName; \
                                 return aNames; \
                             } \
 
