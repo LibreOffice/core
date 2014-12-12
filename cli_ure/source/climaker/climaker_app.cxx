@@ -344,11 +344,7 @@ SAL_IMPLEMENT_MAIN()
                      !read_argument( &keyfile, info_keyfile, &nPos ) &&
                      !read_argument( &delaySign, info_delaySign, &nPos ))
             {
-                if ( osl_getCommandArg( nPos, &cmd_arg.pData ) !=
-                     osl_Process_E_None )
-                {
-                    OSL_ASSERT( false );
-                }
+                osl_getCommandArg( nPos, &cmd_arg.pData );
                 ++nPos;
                 cmd_arg = cmd_arg.trim();
                 if (cmd_arg.getLength() > 0)

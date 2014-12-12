@@ -2204,9 +2204,8 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
         for (n = 0; n < nArgs; n++)
         {
             rtl_uString * strCommandArg = NULL;
-
-            if ((osl_getCommandArg( n, &strCommandArg ) == osl_Process_E_None) &&
-                ((strCommandArg->buffer[0] == L'-') || (strCommandArg->buffer[0] == L'+')) &&
+            osl_getCommandArg( n, &strCommandArg );
+            if (((strCommandArg->buffer[0] == L'-') || (strCommandArg->buffer[0] == L'+')) &&
                 (rtl_ustr_ascii_compare_WithLength(strCommandArg->buffer, RTL_CONSTASCII_LENGTH(SVERSION_OPTION), SVERSION_OPTION)))
             {
                 sal_Unicode *pCommandArg = strCommandArg->buffer + RTL_CONSTASCII_LENGTH(SVERSION_OPTION);

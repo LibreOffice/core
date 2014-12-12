@@ -103,8 +103,7 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
         OUString aArg;
-        if ( osl_getCommandArg( i, &aArg.pData ) )
-            break;
+        osl_getCommandArg( i, &aArg.pData );
         if ( aArg.matchIgnoreAsciiCaseAsciiL( PIPE_ARG, sizeof( PIPE_ARG ) - 1, 0 ) )
         {
             OUString aNum = aArg.copy( sizeof( PIPE_ARG ) - 1 );

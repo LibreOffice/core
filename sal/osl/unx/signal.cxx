@@ -494,46 +494,42 @@ static int ReportCrash( int Signal )
 
     for ( argi = 0; argi < argc; argi++ )
     {
-        if ( osl_Process_E_None == osl_getCommandArg( argi, &ustrCommandArg ) )
+        osl_getCommandArg( argi, &ustrCommandArg );
+        if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--nocrashreport" ) )
         {
-            if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--nocrashreport" ) )
-            {
-                rtl_uString_release( ustrCommandArg );
-                return -1;
-            }
-            else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--autocrashreport" ) )
-            {
-                bAutoCrashReport = true;
-            }
-            else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength(
-                rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ),
-                REPORTENV_PARAM, strlen(REPORTENV_PARAM) )
-                )
-            {
-                rtl_uString *ustrEnvironment = NULL;
-                rtl_String *strEnv = NULL;
+            rtl_uString_release( ustrCommandArg );
+            return -1;
+        }
+        else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--autocrashreport" ) )
+        {
+            bAutoCrashReport = true;
+        }
+        else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength(
+            rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ),
+            REPORTENV_PARAM, strlen(REPORTENV_PARAM) )
+            )
+        {
+            rtl_uString *ustrEnvironment = NULL;
+            rtl_String *strEnv = NULL;
 
-                rtl_uString_newFromStr( &ustrEnvironment, rtl_uString_getStr( ustrCommandArg ) + strlen(REPORTENV_PARAM) );
+            rtl_uString_newFromStr( &ustrEnvironment, rtl_uString_getStr( ustrCommandArg ) + strlen(REPORTENV_PARAM) );
 
-                if ( ustrEnvironment )
+            if ( ustrEnvironment )
+            {
+                rtl_uString2String(
+                    &strEnv,
+                    rtl_uString_getStr( ustrEnvironment ), rtl_uString_getLength( ustrEnvironment ),
+                    osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS
+                    );
+
+                if ( strEnv )
                 {
-                    rtl_uString2String(
-                        &strEnv,
-                        rtl_uString_getStr( ustrEnvironment ), rtl_uString_getLength( ustrEnvironment ),
-                        osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS
-                        );
-
-                    if ( strEnv )
-                    {
-                        putenv( rtl_string_getStr( strEnv ) );
-                        rtl_string_release( strEnv );
-                    }
-
-                    rtl_uString_release( ustrEnvironment );
+                    putenv( rtl_string_getStr( strEnv ) );
+                    rtl_string_release( strEnv );
                 }
 
+                rtl_uString_release( ustrEnvironment );
             }
-
         }
     }
 

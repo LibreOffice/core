@@ -1152,7 +1152,7 @@ void restartOnMac(bool passArguments) {
         sal_uInt32 n = osl_getCommandArgCount();
         for (sal_uInt32 i = 0; i < n; ++i) {
             OUString arg;
-            OSL_VERIFY(osl_getCommandArg(i, &arg.pData) == osl_Process_E_None);
+            osl_getCommandArg(i, &arg.pData);
             if (arg.match("--accept=")) {
                 wait = true;
             }

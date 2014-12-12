@@ -167,10 +167,10 @@ const char* SalGenericSystem::getFrameResName()
         for( int n = 0; n < nArgs-1; n++ )
         {
             OUString aArg;
-            if( ! osl_getCommandArg( n, &aArg.pData ) &&
-                aArg.equalsIgnoreAsciiCase("-name") &&
-                ! osl_getCommandArg( n+1, &aArg.pData ) )
+            osl_getCommandArg( n, &aArg.pData );
+            if( aArg.equalsIgnoreAsciiCase("-name") )
             {
+                osl_getCommandArg( n+1, &aArg.pData );
                 aResName.append( OUStringToOString( aArg, osl_getThreadTextEncoding() ) );
                 break;
             }
