@@ -30,8 +30,6 @@ class SwNoTxtFrm: public SwCntntFrm
 {
     friend void _FrmFinit();
 
-    short    nWeight;                   // importance of the graphic
-
     const Size& GetSize() const;
 
     void InitCtor();
@@ -60,9 +58,6 @@ public:
 
     void StopAnimation( OutputDevice* = 0 ) const;
     bool HasAnimation()  const;
-
-    // Routine for the graphics cache
-    sal_uInt16 GetWeight() { return nWeight; }
 };
 
 #endif

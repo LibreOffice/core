@@ -153,10 +153,6 @@ SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
 void SwNoTxtFrm::InitCtor()
 {
     mnType = FRMC_NOTXT;
-    // The graphic's weight is 0 if it has not been read,
-    // < 0 if we had a read error and we needed to use the replacement and
-    // > 0 if it is available
-    nWeight = 0;
 }
 
 SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )
@@ -958,7 +954,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
                     nResId = STR_COMCORE_CANT_SHOW;
 
-                const_cast<SwNoTxtFrm*>(this)->nWeight = -1;
                 OUString aText;
                 if ( !nResId &&
                      (aText = pGrfNd->GetTitle()).isEmpty() &&
