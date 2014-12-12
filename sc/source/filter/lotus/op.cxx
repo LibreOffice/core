@@ -175,6 +175,8 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
     if (ValidCol(nCol))
     {
+        nCol = SanitizeCol(nCol);
+
         sal_uInt16 nBreite;
         if( nWidthSpaces )
             // assuming 10cpi character set
