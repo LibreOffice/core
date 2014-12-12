@@ -121,18 +121,12 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         aGrabBagProperties["OOXActiveX"] = uno::makeAny( pDocument->getActiveXDomList() );
         aGrabBagProperties["OOXActiveXBin"] = uno::makeAny( pDocument->getActiveXBinList() );
 
-        // Adding the saved w:themeFontLang setting
-        aGrabBagProperties["ThemeFontLangProps"] = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
-
         // Adding the saved Glossary Documnet DOM to the document's grab bag
         aGrabBagProperties["OOXGlossary"] = uno::makeAny( pDocument->getGlossaryDocDom() );
         aGrabBagProperties["OOXGlossaryDom"] = uno::makeAny( pDocument->getGlossaryDomList() );
 
         // Adding the saved embedding document to document's grab bag
         aGrabBagProperties["OOXEmbeddings"] = uno::makeAny( pDocument->getEmbeddingsList() );
-
-        // Adding the saved compat settings
-        aGrabBagProperties["CompatSettings"] = uno::makeAny( aDomainMapper->GetCompatSettings() );
 
         putPropertiesToDocumentGrabBag( aGrabBagProperties );
 

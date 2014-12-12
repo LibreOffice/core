@@ -169,6 +169,20 @@ DomainMapper::~DomainMapper()
 
         // Apply the document settings after everything else
         m_pImpl->GetSettingsTable()->ApplyProperties( m_pImpl->GetTextDocument( ) );
+
+        // Grab-bag handling
+        comphelper::SequenceAsHashMap aProperties;
+        // Add the saved w:themeFontLang setting
+        aProperties["ThemeFontLangProps"] = uno::makeAny(GetThemeFontLangProperties());
+        // Add the saved compat settings
+        aProperties["CompatSettings"] = uno::makeAny(GetCompatSettings());
+        uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+            aGrabBag.update(aProperties);
+            xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+        }
     }
     catch( const uno::Exception& rEx )
     {
