@@ -377,6 +377,7 @@ void SfxItemPool_Impl::readTheItems (
                     "not an item content" );
 
         // Fill up missing ones
+        // coverity[tainted_data] - ignore this, though we should finally kill off this format
         for ( pItem = 0, n = nLastSurrogate+1; n < nSurrogate; ++n )
             pNewArr->push_back( (SfxPoolItem*) pItem );
         nLastSurrogate = nSurrogate;
