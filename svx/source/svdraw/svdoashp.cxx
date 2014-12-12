@@ -3254,7 +3254,8 @@ OUString SdrObjCustomShape::GetCustomShapeName()
 {
     OUString sShapeName;
     OUString aEngine( static_cast<const SdrCustomShapeEngineItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue() );
-    if ( aEngine.isEmpty() || aEngine.equalsAscii( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) )
+    if ( aEngine.isEmpty()
+         || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine" )
     {
         OUString sShapeType;
         const OUString sType("Type");

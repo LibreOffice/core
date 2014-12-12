@@ -3569,7 +3569,7 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< OUString >& _rPr
     const OUString* pSearch = _rPropertyNames.getConstArray();
     const OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
     for (;pSearch < pSearchTil; ++pSearch)
-        if (pSearch->equalsAscii("FormControlPilotsEnabled"))
+        if (*pSearch == "FormControlPilotsEnabled")
         {
             implAdjustConfigCache();
             InvalidateSlot( SID_FM_USE_WIZARDS, true );

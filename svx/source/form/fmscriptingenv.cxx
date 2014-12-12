@@ -936,8 +936,8 @@ namespace svxform
             {
                 // and it has such a prefix
                 sMacroLocation = sScriptCode.copy( 0, nPrefixLen );
-                DBG_ASSERT( sMacroLocation.equalsAscii( "document" )
-                        ||  sMacroLocation.equalsAscii( "application" ),
+                DBG_ASSERT( sMacroLocation == "document"
+                        ||  sMacroLocation == "application",
                         "FormScriptingEnvironment::doFireScriptEvent: invalid (unknown) prefix!" );
 
                 // strip the prefix: the SfxObjectShell::CallScript knows nothing about such prefixes

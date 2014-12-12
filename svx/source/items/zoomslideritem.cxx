@@ -157,22 +157,22 @@ bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
 
                     for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                     {
-                        if ( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_CURRENTZOOM ))
+                        if ( aSeq[i].Name == ZOOMSLIDER_PARAM_CURRENTZOOM )
                         {
                             bAllConverted &= ( aSeq[i].Value >>= nCurrentZoom );
                             ++nConvertedCount;
                         }
-                        else if ( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ))
+                        else if ( aSeq[i].Name == ZOOMSLIDER_PARAM_SNAPPINGPOINTS )
                         {
                             bAllConverted &= ( aSeq[i].Value >>= aValues );
                             ++nConvertedCount;
                         }
-                        else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MINZOOM ) )
+                        else if( aSeq[i].Name == ZOOMSLIDER_PARAM_MINZOOM )
                         {
                             bAllConverted &= ( aSeq[i].Value >>= nMinZoom );
                             ++nConvertedCount;
                         }
-                        else if( aSeq[i].Name.equalsAscii( ZOOMSLIDER_PARAM_MAXZOOM ) )
+                        else if( aSeq[i].Name == ZOOMSLIDER_PARAM_MAXZOOM )
                         {
                             bAllConverted &= ( aSeq[i].Value >>= nMaxZoom );
                             ++nConvertedCount;

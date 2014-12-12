@@ -164,11 +164,9 @@ uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
     ::rtl::OUString style;
     if( m_pShape )
     {
-        //style = ::rtl::OUString::createFromAscii("style=");
-        style = ::rtl::OUString::createFromAscii("style:");
-        style += static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString();
+        style = "style:" + static_cast<SdrOle2Obj*>(m_pShape)->GetStyleString();
     }
-    style += ::rtl::OUString::createFromAscii(";");
+    style += ";";
     strRet <<= style;
     return strRet;
 }

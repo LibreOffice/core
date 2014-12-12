@@ -134,12 +134,12 @@ bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
                 {
-                    if ( aSeq[i].Name.equalsAscii( VIEWLAYOUT_PARAM_COLUMNS ))
+                    if ( aSeq[i].Name == VIEWLAYOUT_PARAM_COLUMNS )
                     {
                         bAllConverted &= ( aSeq[i].Value >>= nColumns );
                         ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( VIEWLAYOUT_PARAM_BOOKMODE ))
+                    else if ( aSeq[i].Name == VIEWLAYOUT_PARAM_BOOKMODE )
                     {
                         bAllConverted &= ( aSeq[i].Value >>= bBookMode );
                         ++nConvertedCount;

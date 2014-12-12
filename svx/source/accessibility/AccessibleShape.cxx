@@ -755,7 +755,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
             uno::Any aColor;
             aColor = aSet->getPropertyValue ("FillColor");
             aColor >>= nColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillTransparence"));
+            aColor = aSet->getPropertyValue ("FillTransparence");
             short nTrans=0;
             aColor >>= nTrans;
             Color crBk(nColor);
