@@ -947,10 +947,19 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     *pWMF >> cbRgnData
                           >> iMode;
 
-                    PolyPolygon aPolyPoly;
-                    if ( cbRgnData )
-                        ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
-                    pOut->SetClipPath( aPolyPoly, iMode, sal_True );
+                    // This record's region data should be ignored if mode
+                    // is RGN_COPY - see EMF spec section 2.3.2.2
+                    if (iMode == RGN_COPY)
+                    {
+                        pOut->SetDefaultClipPath();
+                    }
+                    else
+                    {
+                        PolyPolygon aPolyPoly;
+                        if ( cbRgnData )
+                            ImplReadRegion( aPolyPoly, *pWMF, nRecSize );
+                        pOut->SetClipPath( aPolyPoly, iMode, sal_True );
+                    }
                 }
                 break;
 
