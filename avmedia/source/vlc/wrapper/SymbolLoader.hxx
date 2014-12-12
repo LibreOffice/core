@@ -93,9 +93,9 @@ namespace
     bool InitApiMap( const ApiMap ( &pMap )[N]  )
     {
 #if defined( LINUX ) || defined( MACOSX )
-        const OUString& fullPath = OUString::createFromAscii(LibName);
+        OUString const fullPath(LibName);
 #elif defined( WNT )
-        const OUString& fullPath = GetVLCPath() + OUString::createFromAscii(LibName);
+        OUString const fullPath(GetVLCPath() + LibName);
 #endif
         SAL_INFO("avmedia", fullPath);
 
