@@ -54,11 +54,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 #if OSL_DEBUG_LEVEL > 0
     // SS does not change PageDesc, but only sets the attibute.
     // The Pagedesc should be available in the document
-    bool bFound = false;
-    for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
-        if ( &rDesc == &GetPageDesc( nTst ) )
-            bFound = true;
-    OSL_ENSURE( bFound, "ChgCurPageDesc with invalid descriptor." );
+    OSL_ENSURE( GetDoc()->ContainsPageDesc( rDesc ), "ChgCurPageDesc with invalid descriptor." );
 #endif
 
     StartAllAction();
@@ -134,6 +130,21 @@ void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     EndAllActionAndCall();
 }
 
+void SwFEShell::ChgPageDescP( const SwPageDesc &rChged, SwPageDesc *pd )
+{
+    StartAllAction();
+    SET_CURR_SHELL( this );
+    //Fix i64842: because Undo has a very special way to handle header/footer content
+    // we have to copy the page descriptor before calling ChgPageDesc.
+    SwPageDesc aDesc( rChged );
+    {
+        ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
+        GetDoc()->CopyPageDesc(rChged, aDesc);
+    }
+    GetDoc()->ChgPageDescP( aDesc, pd );
+    EndAllActionAndCall();
+}
+
 /*************************************************************************
 |*
 |*  SwFEShell::GetPageDesc(), GetCurPageDesc()
@@ -145,19 +156,15 @@ const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
     return GetDoc()->GetPageDesc( i );
 }
 
-SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
-                                            sal_Bool bGetFromPool,
-                                            sal_uInt16* pPos )
+SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
+                                            sal_Bool bGetFromPool )
 {
-    SwPageDesc* pDesc = GetDoc()->FindPageDesc(rName, pPos);
+    SwPageDesc* pDesc = GetDoc()->FindPageDescByName( rName );
     if( !pDesc && bGetFromPool )
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
-        if( USHRT_MAX != nPoolId &&
-            0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
-            && pPos )
-                // appended always
-            *pPos = GetDoc()->GetPageDescCnt() - 1 ;
+        if( USHRT_MAX != nPoolId)
+            pDesc = GetDoc()->GetPageDescFromPool( nPoolId );
     }
     return pDesc;
 }
@@ -173,11 +180,9 @@ sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
             while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
                 pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
-            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
-            {
-                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
-                    return i;
-            }
+            sal_uInt16 pPos;
+            if (pMyDoc->FindPageDescByName( pPage->GetPageDesc()->GetName(), &pPos ) )
+                return pPos;
         }
     }
     return 0;
@@ -191,12 +196,9 @@ sal_uInt16 SwFEShell::GetCurPageDesc( const sal_Bool bCalcFrm ) const
         const SwPageFrm *pPage = pFrm->FindPageFrm();
         if ( pPage )
         {
-            SwDoc *pMyDoc = GetDoc();
-            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
-            {
-                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
-                    return i;
-            }
+            sal_uInt16 pPos;
+            if (GetDoc()->FindPageDescByName( pPage->GetPageDesc()->GetName(), &pPos ))
+                return pPos;
         }
     }
     return 0;

@@ -1423,14 +1423,9 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Wrong AutoFormat Id" );
 
-    SwPageDesc *pNewPgDsc;
-    sal_uInt16 n;
-
-    for( n = 0; n < maPageDescs.size(); ++n )
-        if( nId == ( pNewPgDsc = maPageDescs[ n ] )->GetPoolFmtId() )
-        {
-            return pNewPgDsc;
-        }
+    SwPageDesc* pNewPgDsc = maPageDescs.GetPoolPageDesc( nId );
+    if (pNewPgDsc)
+        return pNewPgDsc;
 
     // error: unknown Pool style
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
@@ -2263,7 +2258,7 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
 {
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Wrong AutoFormat Id" );
-    SwPageDesc *pNewPgDsc = 0;
+    const SwPageDesc *pNewPgDsc = 0;
     bool bFnd = false;
     for( sal_uInt16 n = 0; !bFnd && n < maPageDescs.size(); ++n )
     {

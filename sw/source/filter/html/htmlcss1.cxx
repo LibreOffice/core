@@ -89,16 +89,10 @@ static struct SwCSS1ItemIds
 void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
                                 const SwPageDesc& rNewPageDesc )
 {
-    sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
-    sal_uInt16 i;
-    for( i=0; i<nPageDescs; i++ )
-        if( pPageDesc == &pDoc->GetPageDesc(i) )
-        {
-            pDoc->ChgPageDesc( i, rNewPageDesc );
-            return;
-        }
-
-    OSL_ENSURE( i<nPageDescs, "Seitenvorlage nicht gefunden" );
+    bool contains = pDoc->ContainsPageDesc( pPageDesc );
+    OSL_ENSURE( contains, "Seitenvorlage nicht gefunden" );
+    if( contains )
+        pDoc->ChgPageDescP( rNewPageDesc, const_cast<SwPageDesc*>( pPageDesc ) );
 }
 
 SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const String& rBaseURL, sal_Bool bNewDoc ) :
@@ -1359,30 +1353,19 @@ SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
     return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 }
 
-static SwPageDesc *FindPageDesc( SwDoc *pDoc, sal_uInt16 nPoolId, sal_uInt16& rPage )
-{
-    sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
-    for( rPage=0; rPage < nPageDescs &&
-         pDoc->GetPageDesc(rPage).GetPoolFmtId() != nPoolId; rPage++ )
-         ;
-
-    return rPage < nPageDescs ? &pDoc->GetPageDesc( rPage ) : 0;
-}
-
 const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreate )
 {
     if( RES_POOLPAGE_HTML == nPoolId )
         return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
-    sal_uInt16 nPage;
-    const SwPageDesc *pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
+    const SwPageDesc *pPageDesc = pDoc->FindPageDescByPoolId( nPoolId );
     if( !pPageDesc && bCreate )
     {
         // Die erste Seite wird aus der rechten Seite erzeugt, wenn es die
         // gibt.
         SwPageDesc *pMasterPageDesc = 0;
         if( RES_POOLPAGE_FIRST == nPoolId )
-            pMasterPageDesc = FindPageDesc( pDoc, RES_POOLPAGE_RIGHT, nPage );
+            pMasterPageDesc = pDoc->FindPageDescByPoolId( RES_POOLPAGE_RIGHT );
         if( !pMasterPageDesc )
             pMasterPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
@@ -1391,8 +1374,8 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreat
             GetPageDescFromPool( nPoolId, false );
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
-        pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
-        OSL_ENSURE( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
+        pPageDesc = pDoc->FindPageDescByPoolId( nPoolId );
+        OSL_ENSURE( pPageDesc == pNewPageDesc, "Seitenvorlage nicht gefunden" );
 
         pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, false );
 

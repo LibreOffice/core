@@ -25,19 +25,18 @@
 #include <algorithm>
 #include <o3tl/sorted_vector.hxx>
 
-class SwFieldType;
-class SwFmt;
-class SwFrmFmt;
-class SwCharFmt;
-class SwTOXType;
-class SwUndo;
-class SwSectionFmt;
-class SwNumRule;
-class SwRedline;
-class SwUnoCrsr;
-class SwOLENode;
-class SwTxtFmtColl;
-class SwGrfFmtColl;
+#include "charfmt.hxx"
+#include "fldbas.hxx"
+#include "fmtcol.hxx"
+#include "frmfmt.hxx"
+#include "numrule.hxx"
+#include "section.hxx"
+#include "tox.hxx"
+#include "unocrsr.hxx"
+#include "redline.hxx"
+
+class SwRangeRedline;
+class SwExtraRedline;
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    ///< comes from the I18N UNO interface
@@ -52,93 +51,177 @@ class SwFmtsBase
 {
 public:
     virtual size_t GetFmtCount() const = 0;
-    virtual SwFmt* GetFmt(size_t idx) const = 0;
-    virtual ~SwFmtsBase() = 0;
+    virtual SwFmt* GetFmt(size_t) const = 0;
+    virtual ~SwFmtsBase() {}
 };
 
-class SwGrfFmtColls : public std::vector<SwGrfFmtColl*>, public SwFmtsBase
+template<typename Value>
+class SwFmtsBaseModify : public std::vector<Value>, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
-    sal_uInt16 GetPos(const SwGrfFmtColl* pFmt) const;
-    /// free's any remaining child objects
+    typedef typename std::vector<Value>::const_iterator const_iterator;
+
+private:
+    const bool mCleanup;
+
+public:
+    SwFmtsBaseModify(bool cleanup = true) : mCleanup(cleanup) {}
+
+    using std::vector<Value>::begin;
+    using std::vector<Value>::end;
+
+    // free any remaining child objects based on mCleanup
+    virtual ~SwFmtsBaseModify()
+    {
+        if (mCleanup)
+            for(const_iterator it = begin(); it != end(); ++it)
+                delete *it;
+    }
+
+    sal_uInt16 GetPos(Value const& p) const
+    {
+        const_iterator const it = std::find(begin(), end(), p);
+        return it == end() ? USHRT_MAX : it - begin();
+    }
+    bool Contains(Value const& p) const
+        { return std::find(begin(), end(), p) != end(); }
+    virtual size_t GetFmtCount() const SAL_OVERRIDE
+        { return std::vector<Value>::size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE
+        { return (SwFmt*) std::vector<Value>::operator[](idx); }
+    void dumpAsXml(xmlTextWriterPtr) {};
+};
+
+class SwGrfFmtColls : public SwFmtsBaseModify<SwGrfFmtColl*>
+{
+public:
+    SwGrfFmtColls() : SwFmtsBaseModify( false ) {}
     virtual ~SwGrfFmtColls() {}
 };
 
-/// stupid base class to work around MSVC dllexport mess
-class SAL_DLLPUBLIC_TEMPLATE SwFrmFmts_Base : public std::vector<SwFrmFmt*> {};
+struct SwFrmFmtSearch
+{
+    sal_uInt16 type;
+    const OUString& name;
+    sal_Int32 length;
+
+    SwFrmFmtSearch( sal_uInt16 _type,
+                    const OUString& _name, sal_Int32 _length )
+        :type( _type ), name( _name ), length( _length ) {}
+};
+
+struct CompareSwFrmFmts
+{
+    bool operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const;
+    bool operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const;
+    bool operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const;
+};
+
+struct PrefixCompareSwFrmFmts
+{
+    bool operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const;
+    bool operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const;
+};
+
+typedef o3tl::sorted_vector<SwFrmFmt*, CompareSwFrmFmts,
+                            o3tl::find_partialorder_ptrequals> SwFrmFmtsBase;
 
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrmFmts : public SwFrmFmts_Base, public SwFmtsBase
+/// Mimics o3tl::sorted_vector interface
+class SW_DLLPUBLIC SwFrmFmts : public SwFrmFmtsBase, public SwFmtsBase
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
-    sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
-    bool Contains(const SwFrmFmt* pFmt) const;
-    /// free's any remaining child objects
+    typedef SwFrmFmtsBase::const_iterator const_iterator;
+    typedef SwFrmFmtsBase::size_type size_type;
+    typedef SwFrmFmtsBase::value_type value_type;
+    typedef SwFrmFmtsBase::find_insert_type find_insert_type;
+
+private:
+    find_insert_type insert( const value_type& x, bool isNewRoot );
+
+public:
+    SwFrmFmts();
     virtual ~SwFrmFmts();
+
+    find_insert_type insert( const value_type& x );
+    size_type erase( const value_type& x );
+    void erase( size_type index );
+    void erase( const_iterator const& position );
+
+    const_iterator find( const value_type& x ) const;
+    std::pair<const_iterator,const_iterator>
+        findRange( const value_type& x,
+                   bool& root, sal_Int32 length=-1 ) const;
+    std::pair<const_iterator,const_iterator>
+        findRange( sal_uInt16 type, const OUString& name,
+                   bool& root, sal_Int32 length=-1 ) const;
+
+    bool Contains( const value_type& x ) const;
+
+    virtual size_t GetFmtCount() const SAL_OVERRIDE
+        { return SwFrmFmtsBase::size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE
+        { return (SwFmt*) SwFrmFmtsBase::operator[](idx); }
+
+    void dumpAsXml(xmlTextWriterPtr w, const char* pName);
+
+    bool newDefault( const value_type& x );
 };
 
-class SwCharFmts : public std::vector<SwCharFmt*>, public SwFmtsBase
+/// Unsorted, undeleting SwFrmFmt vector
+class SwFrmFmtsV : public SwFmtsBaseModify<SwFrmFmt*>
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
-    sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
-    bool Contains(const SwCharFmt* pFmt) const;
-    /// free's any remaining child objects
-    virtual ~SwCharFmts();
+    virtual ~SwFrmFmtsV() {}
 };
 
-class SwTxtFmtColls : public std::vector<SwTxtFmtColl*>, public SwFmtsBase
+class SwCharFmts : public SwFmtsBaseModify<SwCharFmt*>
 {
 public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
-    sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
-    virtual ~SwTxtFmtColls() {}
-};
-
-/// Array of Undo-history.
-class SW_DLLPUBLIC SwSectionFmts : public std::vector<SwSectionFmt*>, public SwFmtsBase
-{
-public:
-    virtual size_t GetFmtCount() const { return size(); }
-    virtual SwFmt* GetFmt(size_t idx) const { return (SwFmt*)operator[](idx); }
-    sal_uInt16 GetPos(const SwSectionFmt* pFmt) const;
-    bool Contains(const SwSectionFmt* pFmt) const;
-    /// free's any remaining child objects
-    virtual ~SwSectionFmts();
-};
-
-class SwFldTypes : public std::vector<SwFieldType*> {
-public:
-    /// the destructor will free all objects still in the vector
-    ~SwFldTypes();
-    sal_uInt16 GetPos(const SwFieldType* pFieldType) const;
+    virtual ~SwCharFmts() {}
     void dumpAsXml(xmlTextWriterPtr w);
 };
 
-class SwTOXTypes : public std::vector<SwTOXType*> {
+class SwTxtFmtColls : public SwFmtsBaseModify<SwTxtFmtColl*>
+{
 public:
-    /// the destructor will free all objects still in the vector
-    ~SwTOXTypes();
-    sal_uInt16 GetPos(const SwTOXType* pTOXType) const;
+    SwTxtFmtColls() : SwFmtsBaseModify( false ) {}
+    virtual ~SwTxtFmtColls() {}
+    void dumpAsXml(xmlTextWriterPtr w);
 };
 
-class SW_DLLPUBLIC SwNumRuleTbl : public std::vector<SwNumRule*> {
+/// Array of Undo-history.
+class SW_DLLPUBLIC SwSectionFmts : public SwFmtsBaseModify<SwSectionFmt*>
+{
 public:
-    /// the destructor will free all objects still in the vector
-    ~SwNumRuleTbl();
-    sal_uInt16 GetPos(const SwNumRule* pRule) const;
+    virtual ~SwSectionFmts() {}
+    void dumpAsXml(xmlTextWriterPtr w);
+};
+
+class SwFldTypes : public SwFmtsBaseModify<SwFieldType*>
+{
+public:
+    virtual ~SwFldTypes() {}
+    void dumpAsXml(xmlTextWriterPtr w);
+};
+
+class SwTOXTypes : public SwFmtsBaseModify<SwTOXType*>
+{
+public:
+    virtual ~SwTOXTypes() {}
+};
+
+class SW_DLLPUBLIC SwNumRuleTbl : public SwFmtsBaseModify<SwNumRule*> {
+public:
+    virtual ~SwNumRuleTbl() {}
+    void dumpAsXml(xmlTextWriterPtr w);
 };
 
 struct CompareSwRedlineTbl
 {
     bool operator()(SwRedline* const &lhs, SwRedline* const &rhs) const;
 };
+
 class _SwRedlineTbl
     : public o3tl::sorted_vector<SwRedline*, CompareSwRedlineTbl,
                 o3tl::find_partialorder_ptrequals>

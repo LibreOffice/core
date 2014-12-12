@@ -321,11 +321,10 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
     }
 }
 
-void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
+void SwDoc::ChgPageDescP( const SwPageDesc &rChged, SwPageDesc *pDesc )
 {
-    OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
-
-    SwPageDesc *pDesc = maPageDescs[i];
+    if (!pDesc)
+        pDesc = const_cast<SwPageDesc*>( &rChged );
     SwRootFrm* pTmpRoot = GetCurrentLayout();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -496,12 +495,17 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         : pDesc->GetFirstLeft().GetFooter().GetFooterFmt() == pDesc->GetFirstMaster().GetFooter().GetFooterFmt());
 }
 
+void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
+{
+    OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
+    ChgPageDescP( rChged, maPageDescs[i] );
+}
+
 /// All descriptors whose Follow point to the to-be-deleted have to be adapted.
 // #i7983#
 void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 {
-    if (0 == pDel)
-        return;
+    OSL_ENSURE( NULL != pDel, "PageDesc pointer is invalid." );
 
     // mba: test iteration as clients are removed while iteration
     SwPageDescHint aHint( maPageDescs[0] );
@@ -559,14 +563,10 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
     }
 }
 
-void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
+void SwDoc::DelPageDescP( SwPageDesc *pDel, bool bBroadcast )
 {
-    OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
-    OSL_ENSURE( i != 0, "You cannot delete the default Pagedesc.");
-    if ( i == 0 )
-        return;
-
-    SwPageDesc *pDel = maPageDescs[i];
+    OSL_ENSURE( pDel != NULL, "Don't try to delete a NULL pointer." );
+    OSL_ENSURE( pDel != maPageDescs[0], "You cannot delete the default Pagedesc." );
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PAGE,
@@ -580,9 +580,15 @@ void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
 
     PreDelPageDesc(pDel); // #i7983#
 
-    maPageDescs.erase( maPageDescs.begin() + i );
+    maPageDescs.erase( pDel );
     delete pDel;
     SetModified();
+}
+
+void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
+{
+    OSL_ENSURE( i < maPageDescs.size(), "PageDescs is out of range." );
+    DelPageDescP( maPageDescs[ i ], bBroadcast );
 }
 
 SwPageDesc* SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
@@ -615,7 +621,9 @@ SwPageDesc* SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
         pNew->GetFirstMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
         pNew->GetFirstLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
-    maPageDescs.push_back( pNew );
+
+    std::pair<SwPageDescs::const_iterator, bool> res = maPageDescs.insert( pNew );
+    SAL_WARN_IF(res.second == false, "sw", "MakePageDesc called with existing name" );
 
     if (bBroadcast)
         BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
@@ -628,22 +636,6 @@ SwPageDesc* SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
 
     SetModified();
     return pNew;
-}
-
-SwPageDesc* SwDoc::FindPageDesc( const String& rName, sal_uInt16* pPos ) const
-{
-    SwPageDesc* pRet = NULL;
-    if( pPos ) *pPos = USHRT_MAX;
-
-    for( sal_uInt16 n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
-        if( maPageDescs[ n ]->GetName() == rName )
-        {
-            pRet = maPageDescs[ n ];
-            if( pPos )
-                *pPos = n;
-            break;
-        }
-    return pRet;
 }
 
 void SwDoc::PrtDataChanged()
@@ -838,25 +830,57 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-SwPageDesc * SwDoc::GetPageDesc( const String & rName )
+static SwPageDesc* lcl_FindPageDescByName( SwPageDescs *maPageDescs, const OUString & rName, sal_uInt16* pPos )
 {
-    return FindPageDesc(rName);
+    SwPageDescs::const_iterator it = maPageDescs->find( rName );
+    SwPageDesc* res = NULL;
+    if (it != maPageDescs->end() ) {
+        res = const_cast <SwPageDesc *>( *it );
+        if( pPos )
+            *pPos = std::distance( maPageDescs->begin(), it );
+    }
+    else if( pPos )
+        *pPos = USHRT_MAX;
+    return res;
+}
+
+SwPageDesc* SwDoc::FindPageDescByName( const OUString & rName, sal_uInt16* pPos )
+{
+    return lcl_FindPageDescByName( &maPageDescs, rName, pPos );
+}
+
+SwPageDesc* SwDoc::FindPageDescByName( const OUString & rName, sal_uInt16* pPos ) const
+{
+    return lcl_FindPageDescByName( const_cast <SwPageDescs *>( &maPageDescs ), rName, pPos );
+}
+
+SwPageDesc* SwDoc::FindPageDescByPoolId( sal_uInt16 nPoolId )
+{
+    return maPageDescs.GetPoolPageDesc( nPoolId );
 }
 
 void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
 {
-    sal_uInt16 nI;
-
-    if (FindPageDesc(rName, &nI))
-        DelPageDesc(nI, bBroadcast);
+    SwPageDesc *pd = FindPageDescByName(rName);
+    if (pd)
+        DelPageDescP(pd, bBroadcast);
 }
 
 void SwDoc::ChgPageDesc( const String & rName, const SwPageDesc & rDesc)
 {
-    sal_uInt16 nI;
+    SwPageDesc *pd = FindPageDescByName(rName);
+    if (pd)
+        ChgPageDescP(rDesc, pd);
+}
 
-    if (FindPageDesc(rName, &nI))
-        ChgPageDesc(nI, rDesc);
+bool SwDoc::ContainsPageDesc( const SwPageDesc *pg ) const
+{
+    return maPageDescs.Contains( const_cast<SwPageDesc*>( pg ) );
+}
+
+bool SwDoc::ContainsPageDesc( const SwPageDesc &pg ) const
+{
+    return maPageDescs.Contains( const_cast<SwPageDesc*>( &pg ) );
 }
 
 /*

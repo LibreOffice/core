@@ -356,7 +356,7 @@ SwDoc::SwDoc()
      * DefaultFormats and are also in the list.
      */
     /* Formats */
-    mpFrmFmtTbl->push_back(mpDfltFrmFmt);
+    mpFrmFmtTbl->insert(mpDfltFrmFmt);
     mpCharFmtTbl->push_back(mpDfltCharFmt);
 
     /* FmtColls */
@@ -423,16 +423,6 @@ SwDoc::SwDoc()
     mnRsidRoot = mnRsid;
 
     ResetModified();
-}
-
-static void DeleteAndDestroy(SwFrmFmts& rFmts, int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for( SwFrmFmts::const_iterator it = rFmts.begin() + aStartIdx;
-         it != rFmts.begin() + aEndIdx; ++it )
-             delete *it;
-    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
 }
 
 static void DeleteAndDestroy(SwTxtFmtColls& rFmts, int aStartIdx, int aEndIdx)
@@ -580,10 +570,10 @@ SwDoc::~SwDoc()
 
     // Any of the FrmFormats can still have indices registered.
     // These need to be destroyed now at the latest.
-    BOOST_FOREACH( SwFrmFmt* pFmt, *mpFrmFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
-    BOOST_FOREACH( SwFrmFmt* pFmt, *mpSpzFrmFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
+    for (SwFrmFmts::const_iterator it = mpFrmFmtTbl->begin(); it != mpFrmFmtTbl->end(); it++)
+        lcl_DelFmtIndizes( *it );
+    for (SwFrmFmts::const_iterator it = mpSpzFrmFmtTbl->begin(); it != mpSpzFrmFmtTbl->end(); it++)
+        lcl_DelFmtIndizes( *it );
     BOOST_FOREACH( SwSectionFmt* pFmt, *mpSectionFmtTbl )
         lcl_DelFmtIndizes( pFmt );
 
@@ -591,9 +581,7 @@ SwDoc::~SwDoc()
     // Destroy these only after destroying the FmtIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
-        delete pPageDesc;
-    maPageDescs.clear();
+    maPageDescs.DeleteAndDestroyAll();
 
     // Delete content selections.
     // Don't wait for the SwNodes dtor to destroy them; so that Formats
@@ -640,7 +628,7 @@ SwDoc::~SwDoc()
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no
     // Layout could be constructed due to a read error.
-    DeleteAndDestroy( *mpSpzFrmFmtTbl, 0, mpSpzFrmFmtTbl->size() );
+    mpSpzFrmFmtTbl->DeleteAndDestroyAll();
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
@@ -859,12 +847,12 @@ void SwDoc::ClearDoc()
 
     // remove the dummy pagedesc from the array and delete all the old ones
     sal_uInt16 nDummyPgDsc = 0;
-    if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
+    if (FindPageDescByName(pDummyPgDsc->GetName(), &nDummyPgDsc))
         maPageDescs.erase(maPageDescs.begin() + nDummyPgDsc);
 
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
-        delete pPageDesc;
-    maPageDescs.clear();
+    // remove the dummy pagedec from the array and delete all the old ones
+    maPageDescs.erase( pDummyPgDsc );
+    maPageDescs.DeleteAndDestroyAll();
 
     // Delete for Collections
     // So that we get rid of the dependencies
@@ -883,12 +871,12 @@ void SwDoc::ClearDoc()
     if( mpCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        mpFrmFmtTbl->erase( std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), mpCurrentView->GetLayout()->GetFmt() ) );
-        DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
-        mpFrmFmtTbl->push_back( mpCurrentView->GetLayout()->GetFmt() );
+        mpFrmFmtTbl->erase( mpCurrentView->GetLayout()->GetFmt() );
+        mpFrmFmtTbl->DeleteAndDestroyAll( true );
+        mpFrmFmtTbl->insert( mpCurrentView->GetLayout()->GetFmt() );
     }
-    else    //swmod 071029//swmod 071225
-        DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
+    else
+        mpFrmFmtTbl->DeleteAndDestroyAll( true );
 
     mxForbiddenCharsTable.clear();
 
@@ -901,12 +889,12 @@ void SwDoc::ClearDoc()
 
     GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     pFirstNd->ChgFmtColl( GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-    nDummyPgDsc = maPageDescs.size();
-    maPageDescs.push_back( pDummyPgDsc );
+    std::pair<SwPageDescs::const_iterator, bool> res = maPageDescs.insert( pDummyPgDsc );
+    SAL_WARN_IF(res.second == false, "sw", "ClearDoc: inserted already existing PageDesc" );
     // set the layout back to the new standard pagedesc
     pFirstNd->ResetAllAttr();
     // delete now the dummy pagedesc
-    DelPageDesc( nDummyPgDsc );
+    DelPageDesc( std::distance( maPageDescs.begin(), res.first) );
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
@@ -1405,18 +1393,6 @@ else
         pTargetShell->EndAllAction();
 
     return aStartAppendIndex;
-}
-
-sal_uInt16 SwTxtFmtColls::GetPos(const SwTxtFmtColl* p) const
-{
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-sal_uInt16 SwGrfFmtColls::GetPos(const SwGrfFmtColl* p) const
-{
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

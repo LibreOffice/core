@@ -465,12 +465,10 @@ void RtfExport::WritePageDescTable()
         OutPageDescription( rPageDesc, false, false );
 
         // search for the next page description
-        sal_uInt16 i = nSize;
-        while( i  )
-            if( rPageDesc.GetFollow() == &pDoc->GetPageDesc( --i ) )
-                break;
+        sal_uInt16 nPos;
+        pDoc->FindPageDescByName(rPageDesc.GetFollow()->GetName(), &nPos);
         Strm() << OOO_STRING_SVTOOLS_RTF_PGDSCNXT;
-        OutULong( i ) << ' ';
+        OutULong( nPos ) <<  ' ';
         Strm() << msfilter::rtfutil::OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() << ";}";
     }
     Strm() << '}' << sNewLine;
@@ -564,7 +562,7 @@ void RtfExport::ExportDocument_Impl()
                 pSttPgDsc = (SwFmtPageDesc*)&pSet->Get( RES_PAGEDESC );
                 if( !pSttPgDsc->GetPageDesc() )
                     pSttPgDsc = 0;
-                else if( pDoc->FindPageDesc( pSttPgDsc->
+                else if( pDoc->FindPageDescByName( pSttPgDsc->
                                     GetPageDesc()->GetName(), &nPosInDoc ))
                 {
                     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_PGDSCNO;

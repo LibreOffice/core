@@ -1372,8 +1372,8 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    delete (*mpCharFmtTbl)[nFmt];
     mpCharFmtTbl->erase(mpCharFmtTbl->begin() + nFmt);
+    delete pDel;
 
     SetModified();
 }
@@ -1395,10 +1395,8 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
     }
     else
     {
-
         // The format has to be in the one or the other, we'll see in which one.
-        SwFrmFmts::iterator it = std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), pFmt );
-        if ( it != mpFrmFmtTbl->end() )
+        if ( mpFrmFmtTbl->Contains( pFmt ) )
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFmt->GetName(),
@@ -1412,17 +1410,17 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
-            delete *it;
-            mpFrmFmtTbl->erase(it);
+            mpFrmFmtTbl->erase( pFmt );
+            delete pFmt;
         }
         else
         {
-            SwFrmFmts::iterator it2 = std::find( GetSpzFrmFmts()->begin(), GetSpzFrmFmts()->end(), pFmt );
-            OSL_ENSURE( it2 != GetSpzFrmFmts()->end(), "FrmFmt not found." );
-            if( it2 != GetSpzFrmFmts()->end() )
+            bool contains = GetSpzFrmFmts()->Contains( pFmt );
+            OSL_ENSURE( contains, "FrmFmt not found." );
+            if( contains )
             {
-                delete *it2;
-                GetSpzFrmFmts()->erase( it2 );
+                GetSpzFrmFmts()->erase( pFmt );
+                delete pFmt;
             }
         }
     }
@@ -1430,10 +1428,10 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
 
 void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 {
-    SwFrmFmts::iterator it = std::find( mpTblFrmFmtTbl->begin(), mpTblFrmFmtTbl->end(), pFmt );
+    SwFrmFmts::const_iterator it = mpTblFrmFmtTbl->find( pFmt );
     OSL_ENSURE( it != mpTblFrmFmtTbl->end(), "Fmt not found," );
-    delete *it;
-    mpTblFrmFmtTbl->erase(it);
+    mpTblFrmFmtTbl->erase( it );
+    delete pFmt;
 }
 
 /// Create the formats
@@ -1441,7 +1439,7 @@ SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwFlyFrmFmt *pFmt = new SwFlyFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    GetSpzFrmFmts()->push_back(pFmt);
+    GetSpzFrmFmts()->insert(pFmt);
     SetModified();
     return pFmt;
 }
@@ -1450,7 +1448,7 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
                                      SwFrmFmt *pDerivedFrom )
 {
     SwDrawFrmFmt *pFmt = new SwDrawFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom);
-    GetSpzFrmFmts()->push_back(pFmt);
+    GetSpzFrmFmts()->insert(pFmt);
     SetModified();
     return pFmt;
 }
@@ -1494,7 +1492,7 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    mpTblFrmFmtTbl->push_back( pFmt );
+    mpTblFrmFmtTbl->insert( pFmt );
     SetModified();
 
     return pFmt;
@@ -1508,7 +1506,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
 
     pFmt->SetAuto(bAuto);
-    mpFrmFmtTbl->push_back( pFmt );
+    mpFrmFmtTbl->insert( pFmt );
     SetModified();
 
     if (bBroadcast)
@@ -1934,17 +1932,6 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
     return pNewColl;
 }
 
-static SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const String& rName )
-{
-    for( sal_uInt16 n = rArr.size(); n; )
-    {
-        SwPageDesc* pDesc = rArr[ --n ];
-        if( pDesc->GetName() == rName )
-            return pDesc;
-    }
-    return 0;
-}
-
 void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
                         SwFmtsBase& rDestArr,
                         FNCopyFmt fnCopyFmt,
@@ -1989,12 +1976,13 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             ((SwFmtPageDesc*)pItem)->GetPageDesc() )
         {
             SwFmtPageDesc aPageDesc( *(SwFmtPageDesc*)pItem );
-            const String& rNm = aPageDesc.GetPageDesc()->GetName();
-            SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
-            if( !pPageDesc )
-            {
-                pPageDesc = MakePageDesc(rNm);
-            }
+            SwPageDesc *sPageDesc = aPageDesc.GetPageDesc();;
+            SwPageDescs::const_iterator it = maPageDescs.find( sPageDesc );
+            SwPageDesc *pPageDesc;
+            if( it == maPageDescs.end() )
+                pPageDesc = MakePageDesc( sPageDesc->GetName() );
+            else
+                pPageDesc = const_cast<SwPageDesc*>( *it );
             aPageDesc.RegisterToPageDesc( *pPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
             aTmpAttrSet.Put( aPageDesc );
@@ -2117,14 +2105,17 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     if( rSrcDesc.GetFollow() != &rSrcDesc )
     {
-        SwPageDesc* pFollow = ::lcl_FindPageDesc( maPageDescs,
-                                    rSrcDesc.GetFollow()->GetName() );
-        if( !pFollow )
+        const SwPageDesc* sFollow = rSrcDesc.GetFollow();
+        SwPageDescs::const_iterator it = maPageDescs.find( const_cast<SwPageDesc*>( sFollow ) );
+        SwPageDesc* pFollow;
+        if( it == maPageDescs.end() )
         {
             // copy
-            pFollow = MakePageDesc(rSrcDesc.GetFollow()->GetName());
-            CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
+            pFollow = MakePageDesc( sFollow->GetName() );
+            CopyPageDesc( *sFollow, *pFollow );
         }
+        else
+            pFollow = *it;
         rDstDesc.SetFollow( pFollow );
         bNotifyLayout = true;
     }
@@ -2249,7 +2240,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             while( nCnt )
             {
                 SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
-                if( 0 == ::lcl_FindPageDesc( maPageDescs, pSrc->GetName() ) )
+                if( maPageDescs.end() == maPageDescs.find( pSrc ) )
                     MakePageDesc( pSrc->GetName() );
             }
 
@@ -2257,7 +2248,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             for( nCnt = rSource.maPageDescs.size(); nCnt; )
             {
                 SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
-                CopyPageDesc( *pSrc, *::lcl_FindPageDesc( maPageDescs, pSrc->GetName() ));
+                CopyPageDesc( *pSrc, **(maPageDescs.find( pSrc->GetName()) ));
             }
         }
     }
@@ -2662,40 +2653,152 @@ namespace docfunc
     }
 }
 
-SwFmtsBase::~SwFmtsBase() {}
-
-sal_uInt16 SwFrmFmts::GetPos(const SwFrmFmt* p) const
+SwFrmFmts::SwFrmFmts() : SwFrmFmtsBase( true )
 {
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-bool SwFrmFmts::Contains(const SwFrmFmt* p) const
-{
-    return std::find(begin(), end(), p) != end();
 }
 
 SwFrmFmts::~SwFrmFmts()
 {
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
+    DeleteAndDestroyAll();
 }
 
-sal_uInt16 SwCharFmts::GetPos(const SwCharFmt* p) const
+SwFrmFmts::const_iterator SwFrmFmts::find( const value_type& x ) const
 {
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
+    return SwFrmFmtsBase::find( x );
 }
 
-bool SwCharFmts::Contains(const SwCharFmt* p) const
+std::pair<SwFrmFmts::const_iterator,SwFrmFmts::const_iterator>
+SwFrmFmts::findRange( sal_uInt16 type, const OUString& name, bool& root, sal_Int32 length ) const
 {
-    return std::find(begin(), end(), p) != end();
+    SwFrmFmtSearch x( type, name, length );
+    std::pair<const_iterator, const_iterator> ret(end(), end());
+    if ( !empty() ) {
+        if ( length >= 0 ) {
+            ret = std::equal_range(begin() + GetOffset(), end(), x, PrefixCompareSwFrmFmts());
+            root = (front()->Which() == type
+                 && front()->GetName().CompareTo( name, length ) == 0);
+        }
+        else {
+            ret = std::equal_range(begin() + GetOffset(), end(), x, CompareSwFrmFmts());
+            root = (front()->Which() == type
+                 && front()->GetName().CompareTo( name ) == 0);
+        }
+    }
+    else
+        root = false;
+    return ret;
 }
 
-SwCharFmts::~SwCharFmts()
+std::pair<SwFrmFmts::const_iterator,SwFrmFmts::const_iterator>
+SwFrmFmts::findRange( const value_type& x, bool& root, sal_Int32 length ) const
 {
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
+    return findRange( x->Which(), x->GetName(), root, length );
+}
+
+bool CompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const
+{
+    if (lhs->Which() < rhs->Which())
+        return true;
+    if (lhs->Which() > rhs->Which())
+        return false;
+    return (lhs->GetName().CompareTo( rhs->GetName() ) < 0);
+}
+
+bool CompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const
+{
+    if (lhs->Which() < rhs.type)
+        return true;
+    if (lhs->Which() > rhs.type)
+        return false;
+    return (lhs->GetName().CompareTo( rhs.name ) < 0);
+}
+
+bool CompareSwFrmFmts::operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const
+{
+    if (lhs.type < rhs->Which())
+        return true;
+    if (lhs.type > rhs->Which())
+        return false;
+    return (lhs.name.compareTo( rhs->GetName() ) < 0);
+}
+
+bool PrefixCompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const
+{
+    if (lhs->Which() < rhs.type)
+        return true;
+    if (lhs->Which() > rhs.type)
+        return false;
+    return (lhs->GetName().CompareTo( rhs.name, rhs.length ) < 0);
+}
+
+bool PrefixCompareSwFrmFmts::operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const
+{
+    if (lhs.type < rhs->Which())
+        return true;
+    if (lhs.type > rhs->Which())
+        return false;
+    return (lhs.name.compareTo( rhs->GetName(), lhs.length ) < 0);
+}
+
+SwFrmFmts::find_insert_type SwFrmFmts::insert( const value_type& x, bool isNewRoot )
+{
+    find_insert_type ret = SwFrmFmtsBase::insert( x );
+    SAL_WARN_IF(x->list != 0, "sw", "Inserting already assigned SwFrmFmt");
+    SAL_WARN_IF(isNewRoot == ret.second, "sw", "Error condition in insert SwFrmFmt");
+    x->list = this;
+    return ret;
+}
+
+std::pair<SwFrmFmts::const_iterator,bool> SwFrmFmts::insert( const value_type& x )
+{
+    return insert( x, false );
+}
+
+SwFrmFmts::size_type SwFrmFmts::erase( const value_type& x )
+{
+    size_type ret = SwFrmFmtsBase::erase( x );
+    if (ret) {
+        SAL_WARN_IF(x->list != this, "sw", "Removed invalid / unassigned SwFrmFmt");
+        x->list = 0;
+    }
+    return ret;
+}
+
+void SwFrmFmts::erase( size_type index )
+{
+    erase( begin() + index );
+}
+
+void SwFrmFmts::erase( const_iterator const& position )
+{
+    SAL_WARN_IF((*position)->list != this, "sw", "Removing invalid / unassigned SwFrmFmt");
+    (*position)->list = 0;
+    SwFrmFmtsBase::erase( position );
+}
+/*
+std::pair<SwFrmFmts::const_iterator, SwFrmFmts::const_iterator>
+    SwFrmFmts::find( const value_type& x, bool &root ) const
+{
+    if ( emptry() ) {
+        root = false;
+        return std::pair<const_iterator, const_iterator>( end(), end() );
+    }
+    std::pair<const_iterator, const_iterator> const its =
+            std::equal_range(begin(), end(), x, CompareSwFrmFmts());
+    root = CompareSwPageDescs()(x, front());
+    return its;
+}
+*/
+bool SwFrmFmts::Contains( const value_type& x ) const
+{
+    return (x->list == this);
+}
+
+bool SwFrmFmts::newDefault( const value_type& x )
+{
+    find_insert_type ret = insert( x, true );
+    SwFrmFmtsBase::newDefault( ret.first );
+    return ret.second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

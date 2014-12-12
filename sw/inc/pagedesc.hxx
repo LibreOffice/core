@@ -26,10 +26,13 @@
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include "poolfmt.hxx"
 
 class SfxPoolItem;
 class SwTxtFmtColl;
 class SwNode;
+class SwPageDescs;
 
 /// Separator line adjustment.
 enum SwFtnAdj
@@ -130,6 +133,9 @@ namespace nsUseOnPage
 class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
     friend class SwDoc;
+    // How to define the friend functions _erase and insert
+    // to update the list member
+    friend class SwPageDescs;
 
     OUString    aDescName;
     SvxNumberType   aNumType;
@@ -149,6 +155,9 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     /// Footnote information.
     SwPageFtnInfo aFtnInfo;
 
+    // The assigned list.
+    SwPageDescs *list;
+
     /** Called for mirroring of Chg (doc).
        No adjustment at any other place. */
     SW_DLLPRIVATE void Mirror();
@@ -162,7 +171,7 @@ protected:
 
 public:
     OUString GetName() const { return aDescName; }
-    void SetName( const OUString& rNewName ) { aDescName = rNewName; }
+    void SetName( const OUString& rNewName );
 
     sal_Bool GetLandscape() const { return bLandscape; }
     void SetLandscape( sal_Bool bNew ) { bLandscape = bNew; }
@@ -226,7 +235,7 @@ public:
 
     /// Query and set PoolFormat-Id.
     sal_uInt16 GetPoolFmtId() const         { return aMaster.GetPoolFmtId(); }
-    void SetPoolFmtId( sal_uInt16 nId )     { aMaster.SetPoolFmtId( nId ); }
+    void SetPoolFmtId( sal_uInt16 nId );
     sal_uInt16 GetPoolHelpId() const        { return aMaster.GetPoolHelpId(); }
     void SetPoolHelpId( sal_uInt16 nId )    { aMaster.SetPoolHelpId( nId ); }
     sal_uInt8 GetPoolHlpFileId() const      { return aMaster.GetPoolHlpFileId(); }
@@ -336,9 +345,69 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
+struct CompareSwPageDescs
+{
+    bool operator()(OUString const& lhs, SwPageDesc* const& rhs) const;
+    bool operator()(SwPageDesc* const& lhs, OUString const& rhs) const;
+    bool operator()(SwPageDesc* const& lhs, SwPageDesc* const& rhs) const;
+};
+
+typedef o3tl::sorted_vector<SwPageDesc*, CompareSwPageDescs> SwPageDescsBase;
+
+#define RES_POOLPAGE_SIZE (RES_POOLPAGE_END - RES_POOLPAGE_BEGIN)
+
+//! A list of SwPageDesc pointers sorted by name.
+/*!
+ * The list of SwPageDesc is implemented as a sorted vector. This results in
+ * fast index access O(1) and fast searches O(log n).
+ *
+ * It currently uses special case version of sorted vector, which keeps the
+ * first item out of the sorted vector, as the first item is
+ *   * non-deletable
+ *   * the default item
+ *
+ * There is some internal friend handling for the name and pool id, so these
+ * can be changed on the object and will correctly be reflected in the list.
+ *
+ * @see SwDoc::DelPageDescP
+ * @see SwPageDesc
+ */
+class SwPageDescs : public SwPageDescsBase
+{
+    // to update the poolpages array on PoolFmtId change
+    friend void SwPageDesc::SetPoolFmtId( sal_uInt16 nId );
+
+private:
+    // fast index for pool page resources
+    value_type poolpages[RES_POOLPAGE_SIZE];
+
+    // updates the poolpages array and the SwPageDesc list member
+    void _erase( const value_type& x );
+    bool IsIdInPoolRange( sal_uInt16 nId, bool allowDefault ) const;
+
+    bool SetPoolPageDesc( const value_type& x, sal_uInt16 nId = USHRT_MAX );
+
+public:
+    SwPageDescs();
+    // the destructor will free all objects still in the vector
+    ~SwPageDescs();
+
+    void DeleteAndDestroyAll();
+
+    std::pair<const_iterator,bool> insert( const value_type& x );
+    size_type erase( const value_type& x );
+    void erase( size_type index );
+    void erase( const_iterator const& position );
+
+    const_iterator find( const OUString &name ) const;
+    const_iterator find( const value_type& x ) const;
+
+    bool Contains( const value_type& x ) const;
+    value_type GetPoolPageDesc( sal_uInt16 nId ) const;
+};
 
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const OUString& rName);
 
-#endif  //PAGEDESC_HXX
+#endif // INCLUDED_SW_INC_PAGEDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

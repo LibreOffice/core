@@ -143,7 +143,7 @@ void SwUndoFmtAttr::Init()
     else if ( RES_FRMFMT == m_nFmtWhich )
     {
         SwDoc* pDoc = m_pFmt->GetDoc();
-        if ( pDoc->GetTblFrmFmts()->Contains(static_cast<const SwFrmFmt*>(m_pFmt)))
+        if ( pDoc->GetTblFrmFmts()->Contains(static_cast<SwFrmFmt*>(m_pFmt)))
         {
             // Table Format: save table position, table formats are volatile!
             SwTable * pTbl = SwIterator<SwTable,SwFmt>::FirstElement( *m_pFmt );
@@ -153,7 +153,7 @@ void SwUndoFmtAttr::Init()
                     ->FindTableNode()->GetIndex();
             }
         }
-        else if ( pDoc->GetSections().Contains(static_cast<const SwSectionFmt*>(m_pFmt)))
+        else if ( pDoc->GetSections().Contains(static_cast<SwSectionFmt*>(m_pFmt)))
         {
             m_nNodeIndex = m_pFmt->GetCntnt().GetCntntIdx()->GetIndex();
         }
@@ -231,12 +231,12 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
     {
         case RES_TXTFMTCOLL:
             nPos = pDoc->GetTxtFmtColls()->GetPos(
-                    static_cast<const SwTxtFmtColl*>(m_pFmt) );
+                    static_cast<SwTxtFmtColl*>(m_pFmt) );
             break;
 
         case RES_GRFFMTCOLL:
             nPos = pDoc->GetGrfFmtColls()->GetPos(
-                    static_cast<const SwGrfFmtColl*>(m_pFmt) );
+                    static_cast<SwGrfFmtColl*>(m_pFmt) );
             break;
 
         case RES_CHRFMT:
@@ -282,13 +282,11 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
             // no break!
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
-            nPos = pDoc->GetSpzFrmFmts()->GetPos(
-                    static_cast<const SwFrmFmt*>(m_pFmt) );
-            if ( USHRT_MAX == nPos )
-            {
-                nPos = pDoc->GetFrmFmts()->GetPos(
-                    static_cast<const SwFrmFmt*>(m_pFmt) );
-            }
+            if ((pDoc->GetSpzFrmFmts()->Contains(
+                    static_cast<SwFrmFmt*>(m_pFmt)))
+                || (pDoc->GetFrmFmts()->Contains(
+                    static_cast<SwFrmFmt*>(m_pFmt))) )
+                nPos = 1;
             break;
     }
 

@@ -35,29 +35,34 @@ class IMapObject;
 class SwRect;
 class SwContact;
 class SdrObject;
+class SwFrmFmts;
 
 /// Style of a layout element.
 class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
     friend class SwPageDesc;    ///< Is allowed to call protected CTor.
+    friend class SwFrmFmts;     ///< Is allowed to update the list backref.
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
+
+    // The assigned list.
+    SwFrmFmts *list;
 
 protected:
     SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                 SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
                 const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
-                pDrvdFrm, nFmtWhich )
+                pDrvdFrm, nFmtWhich ), list( 0 )
     {}
 
     SwFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
                 SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
                 const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
-                pDrvdFrm, nFmtWhich )
+                pDrvdFrm, nFmtWhich ), list( 0 )
     {}
 
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
@@ -134,6 +139,8 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
     void RegisterToFormat( SwFmt& rFmt );
+
+    virtual void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
 };
 
 // The FlyFrame-Format
