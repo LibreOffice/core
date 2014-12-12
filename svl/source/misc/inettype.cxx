@@ -713,34 +713,34 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
         {
             OUString aSecondPart = rURL.getToken(1, ':');
             aToken = aSecondPart.getToken(0, '/');
-            if (aToken.equalsAscii(INETTYPE_URL_SUB_FACTORY))
+            if (aToken == "factory")
             {
                 aToken = aSecondPart.getToken(1, '/');
-                if (aToken.equalsAscii(INETTYPE_URL_SSUB_SWRITER))
+                if (aToken == "swriter")
                 {
                     aToken = aSecondPart.getToken(2, '/');
-                    eTypeID = aToken.equalsAscii(INETTYPE_URL_SSSUB_WEB) ?
+                    eTypeID = aToken == "web" ?
                                   CONTENT_TYPE_APP_VND_WRITER_WEB :
-                              aToken.equalsAscii(INETTYPE_URL_SSSUB_GLOB) ?
+                              aToken == "GlobalDocument" ?
                                   CONTENT_TYPE_APP_VND_WRITER_GLOBAL :
                                   CONTENT_TYPE_APP_VND_WRITER;
                 }
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SCALC))
+                else if (aToken == "scalc")
                     eTypeID = CONTENT_TYPE_APP_VND_CALC;
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SDRAW))
+                else if (aToken == "sdraw")
                     eTypeID = CONTENT_TYPE_APP_VND_DRAW;
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SIMPRESS))
+                else if (aToken == "simpress")
                     eTypeID = CONTENT_TYPE_APP_VND_IMPRESS;
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SCHART))
+                else if (aToken == "schart")
                     eTypeID = CONTENT_TYPE_APP_VND_CHART;
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SIMAGE))
+                else if (aToken == "simage")
                     eTypeID = CONTENT_TYPE_APP_VND_IMAGE;
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SMATH))
+                else if (aToken == "smath")
                     eTypeID = CONTENT_TYPE_APP_VND_MATH;
-                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_FRAMESET))
+                else if (aToken == "frameset")
                     eTypeID = CONTENT_TYPE_APP_FRAMESET;
             }
-            else if (aToken.equalsAscii(INETTYPE_URL_SUB_HELPID))
+            else if (aToken == "helpid")
                 eTypeID = CONTENT_TYPE_APP_STARHELP;
         }
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_MAILTO))

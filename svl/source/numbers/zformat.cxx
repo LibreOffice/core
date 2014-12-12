@@ -4540,7 +4540,7 @@ bool SvNumberformat::HasPositiveBracketPlaceholder() const
 {
     sal_uInt16 nAnz = NumFor[0].GetCount();
     OUString *tmpStr = NumFor[0].Info().sStrArray;
-    return (tmpStr[nAnz-1].equalsAscii( "_)" ));
+    return tmpStr[nAnz-1] == "_)";
 }
 
 DateFormat SvNumberformat::GetDateOrder() const
@@ -4837,7 +4837,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                         }
                         break;
                     case NF_SYMBOLTYPE_CALDEL :
-                        if ( pStr[j+1].equalsAscii("buddhist") )
+                        if ( pStr[j+1] == "buddhist" )
                         {
                             aStr.insert( 0, "[$-" );
                             if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
@@ -4862,7 +4862,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
         // The Thai T NatNum modifier during Xcl export.
         if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
-            rKeywords[NF_KEY_THAI_T].equalsAscii( "T") &&
+            rKeywords[NF_KEY_THAI_T] == "T" &&
             MsLangId::getRealLanguage( rNum.GetLang()) ==
             LANGUAGE_THAI && !LCIDInserted )
         {

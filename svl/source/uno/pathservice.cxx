@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -45,7 +46,7 @@ public:
         const OUString & rName)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
-            return rName.equalsAscii("com.sun.star.config.SpecialConfigManager");
+            return cppu::supportsService(this, rName);
         }
 
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()

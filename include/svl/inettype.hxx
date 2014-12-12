@@ -123,22 +123,6 @@
 #define INETTYPE_URL_PROT_MAILTO "mailto"
 #define INETTYPE_URL_PROT_PRIVATE "private"
 
-#define INETTYPE_URL_SUB_FACTORY "factory"
-#define INETTYPE_URL_SUB_HELPID "helpid"
-
-#define INETTYPE_URL_SSUB_FRAMESET "frameset"
-#define INETTYPE_URL_SSUB_SCALC "scalc"
-#define INETTYPE_URL_SSUB_SCHART "schart"
-#define INETTYPE_URL_SSUB_SDRAW "sdraw"
-#define INETTYPE_URL_SSUB_SIMAGE "simage"
-#define INETTYPE_URL_SSUB_SIMPRESS "simpress"
-#define INETTYPE_URL_SSUB_SMATH "smath"
-#define INETTYPE_URL_SSUB_SWRITER "swriter"
-
-#define INETTYPE_URL_SSSUB_GLOB "GlobalDocument"
-#define INETTYPE_URL_SSSUB_WEB "web"
-
-
 enum INetContentType
 {
     CONTENT_TYPE_UNKNOWN,

@@ -731,67 +731,67 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
 
-        if (aPropertyName.equalsAscii( PROPERTYNAME_FMTSTR ))
+        if (aPropertyName == PROPERTYNAME_FMTSTR)
         {
             aRet <<= OUString( pFormat->GetFormatstring() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_LOCALE ))
+        else if (aPropertyName == PROPERTYNAME_LOCALE)
         {
             lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
             aRet <<= aLocale;
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_TYPE ))
+        else if (aPropertyName == PROPERTYNAME_TYPE)
         {
             aRet <<= (sal_Int16)( pFormat->GetType() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_COMMENT ))
+        else if (aPropertyName == PROPERTYNAME_COMMENT)
         {
             aRet <<= OUString( pFormat->GetComment() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_STDFORM ))
+        else if (aPropertyName == PROPERTYNAME_STDFORM)
         {
             //! Pass through SvNumberformat Member bStandard?
             sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
             aRet.setValue( &bStandard, getBooleanCppuType() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_USERDEF ))
+        else if (aPropertyName == PROPERTYNAME_USERDEF)
         {
             sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
             aRet.setValue( &bUserDef, getBooleanCppuType() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_DECIMALS ))
+        else if (aPropertyName == PROPERTYNAME_DECIMALS)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet <<= (sal_Int16)( nDecimals );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_LEADING ))
+        else if (aPropertyName == PROPERTYNAME_LEADING)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet <<= (sal_Int16)( nLeading );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_NEGRED ))
+        else if (aPropertyName == PROPERTYNAME_NEGRED)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet.setValue( &bRed, getBooleanCppuType() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_THOUS ))
+        else if (aPropertyName == PROPERTYNAME_THOUS)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
             aRet.setValue( &bThousand, getBooleanCppuType() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_CURRSYM ))
+        else if (aPropertyName == PROPERTYNAME_CURRSYM)
         {
             OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             aRet <<= aSymbol;
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_CURREXT ))
+        else if (aPropertyName == PROPERTYNAME_CURREXT)
         {
             OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             aRet <<= aExt;
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_CURRABB ))
+        else if (aPropertyName == PROPERTYNAME_CURRABB)
         {
             OUString aSymbol, aExt;
             bool bBank = false;
@@ -975,25 +975,25 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        if (aPropertyName.equalsAscii( PROPERTYNAME_NOZERO ))
+        if (aPropertyName == PROPERTYNAME_NOZERO)
         {
             //  operator >>= shouldn't be used for bool (?)
             if ( aValue.getValueTypeClass() == uno::TypeClass_BOOLEAN )
                 pFormatter->SetNoZero( *(sal_Bool*)aValue.getValue() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_NULLDATE ))
+        else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {
             util::Date aDate;
             if ( aValue >>= aDate )
                 pFormatter->ChangeNullDate( aDate.Day, aDate.Month, aDate.Year );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_STDDEC ))
+        else if (aPropertyName == PROPERTYNAME_STDDEC)
         {
             sal_Int16 nInt16 = sal_Int16();
             if ( aValue >>= nInt16 )
                 pFormatter->ChangeStandardPrec( nInt16 );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_TWODIGIT ))
+        else if (aPropertyName == PROPERTYNAME_TWODIGIT)
         {
             sal_Int16 nInt16 = sal_Int16();
             if ( aValue >>= nInt16 )
@@ -1018,12 +1018,12 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
-        if (aPropertyName.equalsAscii( PROPERTYNAME_NOZERO ))
+        if (aPropertyName == PROPERTYNAME_NOZERO)
         {
             sal_Bool bNoZero = pFormatter->GetNoZero();
             aRet.setValue( &bNoZero, getBooleanCppuType() );
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_NULLDATE ))
+        else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {
             Date* pDate = pFormatter->GetNullDate();
             if (pDate)
@@ -1032,9 +1032,9 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
                 aRet <<= aUnoDate;
             }
         }
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_STDDEC ))
+        else if (aPropertyName == PROPERTYNAME_STDDEC)
             aRet <<= (sal_Int16)( pFormatter->GetStandardPrec() );
-        else if (aPropertyName.equalsAscii( PROPERTYNAME_TWODIGIT ))
+        else if (aPropertyName == PROPERTYNAME_TWODIGIT)
             aRet <<= (sal_Int16)( pFormatter->GetYear2000() );
         else
             throw beans::UnknownPropertyException();
