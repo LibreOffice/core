@@ -96,15 +96,7 @@ void WmfTest::testSine()
 
     CPPUNIT_ASSERT (pDoc);
 
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "top", "0");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "left", "0");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "bottom", "1155947");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[1]", "right", "1155378");
-
-    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "top", "1411");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "left", "2962");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "bottom", "16651");
-    assertXPath(pDoc, "/metafile/sectrectclipregion[2]", "right", "20698");
+    assertXPath(pDoc, "/metafile/sectrectclipregion", 0);
 }
 
 void WmfTest::testEmfProblem()

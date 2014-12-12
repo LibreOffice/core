@@ -1149,10 +1149,20 @@ bool EnhWMFReader::ReadEnhWMF()
                     pWMF->ReadInt32(cbRgnData);
                     pWMF->ReadInt32(nClippingMode);
 
-                    tools::PolyPolygon aPolyPoly;
-                    if (cbRgnData)
-                        ImplReadRegion(aPolyPoly, *pWMF, nRecSize);
-                    pOut->SetClipPath(aPolyPoly, nClippingMode, false);
+                    // This record's region data should be ignored if mode
+                    // is RGN_COPY - see EMF spec section 2.3.2.2
+                    if (nClippingMode == RGN_COPY)
+                    {
+                        pOut->SetDefaultClipPath();
+                    }
+                    else
+                    {
+                        tools::PolyPolygon aPolyPoly;
+                        if (cbRgnData)
+                            ImplReadRegion(aPolyPoly, *pWMF, nRecSize);
+                        pOut->SetClipPath(aPolyPoly, nClippingMode, false);
+                    }
+
                 }
                 break;
 
