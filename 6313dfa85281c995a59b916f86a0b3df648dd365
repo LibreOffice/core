@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_3c34f1dc",
+        "filename": "javaunohelper/com/sun/star/lib/uno/helper/Factory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-12T10:34:34Z",
+      "side": 1,
+      "message": "might be better to throw DeploymentException (derived from RuntimeException); and is it good style to mention runtime exceptions here?",
+      "revId": "6313dfa85281c995a59b916f86a0b3df648dd365",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_5c31b5eb",
+        "filename": "javaunohelper/com/sun/star/lib/uno/helper/Factory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-12T10:34:34Z",
+      "side": 1,
+      "message": "pass on exc2 as cause of the new exception?",
+      "revId": "6313dfa85281c995a59b916f86a0b3df648dd365",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
