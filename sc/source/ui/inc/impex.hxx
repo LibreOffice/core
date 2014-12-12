@@ -67,6 +67,9 @@ class ScImportExport
     bool        bOverflowCell;          // too much data for a cell
     bool        mbApi;
     bool        mbImportBroadcast; // whether or not to broadcast after data import.
+    bool        mbOverwriting;  // Whether we could be overwriting existing values (paste).
+                                // In this case we cannot use the insert optimization, but we
+                                // do not need to broadcast after the import.
     ScExportTextOptions mExportTextOptions;
 
     ScAsciiOptions* pExtOptions;        // extended options
@@ -155,6 +158,7 @@ public:
     bool IsApi() const { return mbApi; }
     void SetApi( bool bApi ) { mbApi = bApi; }
     void SetImportBroadcast( bool b ) { mbImportBroadcast = b; }
+    void SetOverwriting( const bool bOverwriting ) { mbOverwriting = bOverwriting; }
     const ScExportTextOptions& GetExportTextOptions() { return mExportTextOptions; }
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 };
