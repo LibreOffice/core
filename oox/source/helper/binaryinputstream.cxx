@@ -45,7 +45,7 @@ OUString BinaryInputStream::readNulUnicodeArray()
     for (;;)
     {
       sal_uInt16 nChar = readuInt16();
-      if ( mbEof || (nChar < 0) ) break;
+      if ( mbEof || (nChar == 0) ) break;
       aBuffer.append( static_cast< sal_Unicode >( nChar ) );
     }
     return aBuffer.makeStringAndClear();
