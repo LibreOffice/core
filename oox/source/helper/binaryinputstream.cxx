@@ -42,8 +42,12 @@ const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
 OUString BinaryInputStream::readNulUnicodeArray()
 {
     OUStringBuffer aBuffer;
-    for( sal_uInt16 nChar = readuInt16(); !mbEof && (nChar > 0); readValue( nChar ) )
-        aBuffer.append( static_cast< sal_Unicode >( nChar ) );
+    for (;;)
+    {
+      sal_uInt16 nChar = readuInt16();
+      if ( mbEof || (nChar < 0) ) break;
+      aBuffer.append( static_cast< sal_Unicode >( nChar ) );
+    }
     return aBuffer.makeStringAndClear();
 }
 

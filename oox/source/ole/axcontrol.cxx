@@ -663,7 +663,9 @@ bool ComCtlModelBase::importBinaryModel( BinaryInputStream& rInStrm )
     if( importSizePart( rInStrm ) && readPartHeader( rInStrm, getDataPartId(), mnVersion ) )
     {
         // if flags part exists, the first int32 of the data part contains its size
-        sal_uInt32 nCommonPartSize = mbCommonPart ? rInStrm.readuInt32() : 0;
+        sal_uInt32 nCommonPartSize = 0;
+        if (mbCommonPart)
+            nCommonPartSize = rInStrm.readuInt32();
         // implementations must read the exact amount of data, stream must point to its end afterwards
         importControlData( rInStrm );
         // read following parts
@@ -706,9 +708,9 @@ sal_uInt32 ComCtlModelBase::getDataPartId() const
 bool ComCtlModelBase::readPartHeader( BinaryInputStream& rInStrm, sal_uInt32 nExpPartId, sal_uInt16 nExpMajor, sal_uInt16 nExpMinor )
 {
     // no idea if all this is correct...
-    sal_uInt32 nPartId;
-    sal_uInt16 nMajor, nMinor;
-    rInStrm >> nPartId >> nMinor >> nMajor;
+    sal_uInt32 nPartId = rInStrm.readuInt32();
+    sal_uInt16 nMinor = rInStrm.readuInt16();
+    sal_uInt16 nMajor = rInStrm.readuInt16();
     bool bPartId = nPartId == nExpPartId;
     OSL_ENSURE( bPartId, "ComCtlObjectBase::readPartHeader - unexpected part identifier" );
     bool bVersion = ((nExpMajor == SAL_MAX_UINT16) || (nExpMajor == nMajor)) && ((nExpMinor == SAL_MAX_UINT16) || (nExpMinor == nMinor));
@@ -720,7 +722,8 @@ bool ComCtlModelBase::importSizePart( BinaryInputStream& rInStrm )
 {
     if( readPartHeader( rInStrm, COMCTL_ID_SIZE, 0, 8 ) )
     {
-        rInStrm >> maSize.first >> maSize.second;
+        maSize.first = rInStrm.readInt32();
+        maSize.second = rInStrm.readInt32();
         return !rInStrm.isEof();
     }
     return false;
@@ -732,7 +735,7 @@ bool ComCtlModelBase::importCommonPart( BinaryInputStream& rInStrm, sal_uInt32 n
     if( (nPartSize >= 16) && readPartHeader( rInStrm, COMCTL_ID_COMMONDATA, 5, 0 ) )
     {
         rInStrm.skip( 4 );
-        rInStrm >> mnFlags;
+        mnFlags = rInStrm.readuInt32();
         // implementations may read less than the exact amount of data
         importCommonExtraData( rInStrm );
         rInStrm.seek( nEndPos );
@@ -747,8 +750,7 @@ bool ComCtlModelBase::importComplexPart( BinaryInputStream& rInStrm )
 {
     if( readPartHeader( rInStrm, COMCTL_ID_COMPLEXDATA, 5, 1 ) )
     {
-        sal_uInt32 nContFlags;
-        rInStrm >> nContFlags;
+        sal_uInt32 nContFlags = rInStrm.readuInt32();
         bool bReadOk =
             (!getFlag( nContFlags, COMCTL_COMPLEX_FONT ) || OleHelper::importStdFont( maFontData, rInStrm, true )) &&
             (!getFlag( nContFlags, COMCTL_COMPLEX_MOUSEICON ) || OleHelper::importStdPic( maMouseIcon, rInStrm, true ));
@@ -783,7 +785,12 @@ void ComCtlScrollBarModel::convertProperties( PropertyMap& rPropMap, const Contr
 
 void ComCtlScrollBarModel::importControlData( BinaryInputStream& rInStrm )
 {
-    rInStrm >> mnScrollBarFlags >> mnLargeChange >> mnSmallChange >> mnMin >> mnMax >> mnPosition;
+    mnScrollBarFlags = rInStrm.readuInt32();
+    mnLargeChange = rInStrm.readInt32();
+    mnSmallChange = rInStrm.readInt32();
+    mnMin = rInStrm.readInt32();
+    mnMax = rInStrm.readInt32();
+    mnPosition = rInStrm.readInt32();
 }
 
 ComCtlProgressBarModel::ComCtlProgressBarModel( sal_uInt16 nVersion ) :
@@ -813,9 +820,13 @@ void ComCtlProgressBarModel::convertProperties( PropertyMap& rPropMap, const Con
 
 void ComCtlProgressBarModel::importControlData( BinaryInputStream& rInStrm )
 {
-    rInStrm >> mfMin >> mfMax;
+    mfMin = rInStrm.readFloat();
+    mfMax = rInStrm.readFloat();
     if( mnVersion == COMCTL_VERSION_60 )
-        rInStrm >> mnVertical >> mnSmooth;
+    {
+        mnVertical = rInStrm.readuInt16();
+        mnSmooth = rInStrm.readuInt16();
+    }
 }
 
 AxControlModelBase::AxControlModelBase()
@@ -2478,9 +2489,7 @@ bool AxMultiPageModel::importPageAndMultiPageProperties( BinaryInputStream& rInS
     // IDs
     for ( sal_uInt32 count = 0; count < nPageCount; ++count )
     {
-        sal_Int32 nID = 0;
-        rInStrm >> nID;
-        mnIDs.push_back( nID );
+        mnIDs.push_back( rInStrm.readInt32() );
     }
     return true;
 }

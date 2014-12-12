@@ -59,8 +59,8 @@ bool DocumentEncryption::encrypt()
     BinaryXInputStream aDocumentInputStream( xInputStream, false );
     aDocumentInputStream.seekToStart();
 
-    aEncryptedPackageStream.writeValue<sal_uInt32>( aLength ); // size
-    aEncryptedPackageStream.writeValue<sal_uInt32>( 0 );       // reserved
+    aEncryptedPackageStream.WriteUInt32( aLength ); // size
+    aEncryptedPackageStream.WriteUInt32( 0U );       // reserved
 
     mEngine.encrypt(aDocumentInputStream, aEncryptedPackageStream);
 

@@ -546,8 +546,8 @@ bool ComCtlObjectBase::dumpComCtlHeader( sal_uInt32 nExpId, sal_uInt16 nExpMajor
     // no idea if all this is correct...
     sal_uInt32 nId = dumpHex< sal_uInt32 >( "header-id", "COMCTL-HEADER-IDS" );
     ItemGuard aItem( mxOut, "version" );
-    sal_uInt16 nMinor, nMajor;
-    *mxStrm >> nMinor >> nMajor;
+    sal_uInt16 nMinor = mxStrm->readuInt16();
+    sal_uInt16 nMajor = mxStrm->readuInt16();
     mxOut->writeDec( nMajor );
     mxOut->writeChar( '.' );
     mxOut->writeDec( nMinor );
@@ -1042,8 +1042,8 @@ void AxPropertyObjectBase::constructAxPropObj( const String& rPropNameList, bool
 void AxPropertyObjectBase::dumpVersion()
 {
     ItemGuard aItem( mxOut, "version" );
-    sal_uInt8 nMinor, nMajor;
-    *mxStrm >> nMinor >> nMajor;
+    sal_uInt8 nMinor = mxStrm->readuChar();
+    sal_uInt8 nMajor = mxStrm->readuChar();
     mxOut->writeDec( nMajor );
     mxOut->writeChar( '.' );
     mxOut->writeDec( nMinor );
@@ -1885,8 +1885,8 @@ bool VbaDirStreamObject::implIsValid() const
 
 bool VbaDirStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
-    ornRecId = rBaseStrm.readuInt16();
-    ornRecSize = rBaseStrm.readInt32();
+     ornRecId = rBaseStrm.readuInt16();
+     ornRecSize = rBaseStrm.readInt32();
 
     // for no obvious reason, PROJECTVERSION record contains size field of 4, but is 6 bytes long
     if( ornRecId == 9 )

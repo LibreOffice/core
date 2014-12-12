@@ -47,9 +47,9 @@ const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
 bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
-    sal_uInt16 nRecId;
-    rBaseStrm >> mnInstVer >> nRecId >> mnRealSize;
-    ornRecId = nRecId;
+    mnInstVer = rBaseStrm.readuInt16();
+    ornRecId = rBaseStrm.readuInt16();
+    mnRealSize = rBaseStrm.readInt32();
     ornRecSize = isContainer() ? 0 : mnRealSize;
     return !rBaseStrm.isEof();
 }

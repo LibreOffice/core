@@ -207,7 +207,10 @@ const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
 sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 {
     sal_uInt8 nR, nG, nB, nA;
-    rStrm >> nR >> nG >> nB >> nA;
+    nR = rStrm.readuChar();
+    nG = rStrm.readuChar();
+    nB = rStrm.readuChar();
+    nA = rStrm.readuChar();
     sal_Int32 nValue = nA;
     nValue <<= 8;
     nValue |= nR;

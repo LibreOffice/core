@@ -264,33 +264,32 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     mEngine.reset(engine);
     StandardEncryptionInfo& info = engine->getInfo();
 
-    rStream >> info.header.flags;
+    info.header.flags = rStream.readuInt32();
     if( getFlag( info.header.flags, ENCRYPTINFO_EXTERNAL ) )
         return false;
 
-    sal_uInt32 nHeaderSize;
-    rStream >> nHeaderSize;
+    sal_uInt32 nHeaderSize = rStream.readuInt32();
 
     sal_uInt32 actualHeaderSize = sizeof(info.header);
 
     if( (nHeaderSize < actualHeaderSize) )
         return false;
 
-    rStream >> info.header.flags;
-    rStream >> info.header.sizeExtra;
-    rStream >> info.header.algId;
-    rStream >> info.header.algIdHash;
-    rStream >> info.header.keyBits;
-    rStream >> info.header.providedType;
-    rStream >> info.header.reserved1;
-    rStream >> info.header.reserved2;
+    info.header.flags = rStream.readuInt32();
+    info.header.sizeExtra = rStream.readuInt32();
+    info.header.algId = rStream.readuInt32();
+    info.header.algIdHash = rStream.readuInt32();
+    info.header.keyBits = rStream.readuInt32();
+    info.header.providedType = rStream.readuInt32();
+    info.header.reserved1 = rStream.readuInt32();
+    info.header.reserved2 = rStream.readuInt32();
 
     rStream.skip( nHeaderSize - actualHeaderSize );
 
-    rStream >> info.verifier.saltSize;
+    info.verifier.saltSize = rStream.readuInt32();
     rStream.readArray(info.verifier.salt, SAL_N_ELEMENTS(info.verifier.salt));
     rStream.readArray(info.verifier.encryptedVerifier, SAL_N_ELEMENTS(info.verifier.encryptedVerifier));
-    rStream >> info.verifier.encryptedVerifierHashSize;
+    info.verifier.encryptedVerifierHashSize = rStream.readuInt32();
     rStream.readArray(info.verifier.encryptedVerifierHash, SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash));
 
     if( info.verifier.saltSize != 16 )

@@ -68,6 +68,10 @@ public:
         position of the wrapped stream at construction time). */
     void                align( size_t nSize );
 
+    /** Stream operator for all data types supported by the readValue() function. */
+    template< typename Type >
+    AxAlignedInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
+
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
     Type                readAligned() { align( sizeof( Type ) ); return readValue< Type >(); }

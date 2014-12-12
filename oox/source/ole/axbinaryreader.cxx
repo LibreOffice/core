@@ -175,11 +175,11 @@ AxBinaryPropertyReader::AxBinaryPropertyReader( BinaryInputStream& rInStrm, bool
 {
     // version and size of property block
     maInStrm.skip( 2 );
-    sal_uInt16 nBlockSize = maInStrm.readValue< sal_uInt16 >();
+    sal_uInt16 nBlockSize = maInStrm.readuInt16();
     mnPropsEnd = maInStrm.tell() + nBlockSize;
     // flagfield containing existing properties
     if( b64BitPropFlags )
-        maInStrm >> mnPropFlags;
+        mnPropFlags = maInStrm.readInt64();
     else
         mnPropFlags = maInStrm.readuInt32();
     mnNextProp = 1;

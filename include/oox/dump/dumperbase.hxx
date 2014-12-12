@@ -1557,8 +1557,7 @@ typedef ::boost::shared_ptr< InputObjectBase > InputObjectRef;
 template< typename Type >
 Type InputObjectBase::dumpName( const String& rName, const NameListWrapper& rListWrp )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeNameItem( rName, nData, rListWrp );
     return nData;
 }
@@ -1566,8 +1565,7 @@ Type InputObjectBase::dumpName( const String& rName, const NameListWrapper& rLis
 template< typename Type >
 Type InputObjectBase::dumpDec( const String& rName, const NameListWrapper& rListWrp )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeDecItem( rName, nData, rListWrp );
     return nData;
 }
@@ -1575,8 +1573,7 @@ Type InputObjectBase::dumpDec( const String& rName, const NameListWrapper& rList
 template< typename Type >
 Type InputObjectBase::dumpHex( const String& rName, const NameListWrapper& rListWrp )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeHexItem( rName, nData, rListWrp );
     return nData;
 }
@@ -1584,8 +1581,7 @@ Type InputObjectBase::dumpHex( const String& rName, const NameListWrapper& rList
 template< typename Type >
 Type InputObjectBase::dumpBin( const String& rName, const NameListWrapper& rListWrp )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeBinItem( rName, nData, rListWrp );
     return nData;
 }
@@ -1593,8 +1589,7 @@ Type InputObjectBase::dumpBin( const String& rName, const NameListWrapper& rList
 template< typename Type >
 Type InputObjectBase::dumpFix( const String& rName, const NameListWrapper& rListWrp )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeFixItem( rName, nData, rListWrp );
     return nData;
 }
@@ -1602,8 +1597,7 @@ Type InputObjectBase::dumpFix( const String& rName, const NameListWrapper& rList
 template< typename Type >
 Type InputObjectBase::dumpBool( const String& rName, const NameListWrapper& rListWrp )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeDecBoolItem( rName, nData, rListWrp );
     return nData;
 }
@@ -1611,8 +1605,7 @@ Type InputObjectBase::dumpBool( const String& rName, const NameListWrapper& rLis
 template< typename Type >
 Type InputObjectBase::dumpValue( const ItemFormat& rItemFmt )
 {
-    Type nData;
-    *mxStrm >> nData;
+    Type nData = mxStrm->readValue<Type>();
     writeValueItem( rItemFmt, nData );
     return nData;
 }

@@ -31,7 +31,8 @@ bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData
 {
     // read the record header
     sal_Int32 nRecSize;
-    rInStrm >> rnRecId >> nRecSize;
+    rnRecId = rInStrm.readuInt16();
+    nRecSize = rInStrm.readInt32();
     // for no obvious reason, PROJECTVERSION record contains size field of 4, but is 6 bytes long
     if( rnRecId == VBA_ID_PROJECTVERSION )
     {

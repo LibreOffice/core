@@ -76,7 +76,8 @@ bool BiffInputRecordBuffer::startRecord( sal_Int64 nHeaderPos )
     {
         mnHeaderPos = nHeaderPos;
         mrInStrm.seek( nHeaderPos );
-        mrInStrm >> mnRecId >> mnRecSize;
+        mnRecId = mrInStrm.readuInt16();
+        mnRecSize = mrInStrm.readuInt16();
         mnBodyPos = mrInStrm.tell();
         mnNextHeaderPos = mnBodyPos + mnRecSize;
         mbValidHeader = !mrInStrm.isEof() && (mnNextHeaderPos <= mrInStrm.size());
@@ -103,7 +104,7 @@ sal_uInt16 BiffInputRecordBuffer::getNextRecId()
     if( mbValidHeader && (mnNextHeaderPos + 4 <= mrInStrm.size()) )
     {
         mrInStrm.seek( mnNextHeaderPos );
-        mrInStrm >> nRecId;
+        nRecId = mrInStrm.readuInt16();
     }
     return nRecId;
 }
@@ -445,8 +446,7 @@ bool BiffInputStream::jumpToNextStringContinue( bool& rb16BitChars )
     }
 
     // trying to read the flags invalidates stream, if no CONTINUE record has been found
-    sal_uInt8 nFlags;
-    readValue( nFlags );
+    sal_uInt8 nFlags = readuInt8();
     rb16BitChars = getFlag( nFlags, BIFF_STRF_16BIT );
     return !mbEof;
 }

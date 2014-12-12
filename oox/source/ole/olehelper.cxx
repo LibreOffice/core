@@ -260,9 +260,9 @@ sal_uInt32 OleHelper::encodeOleColor( sal_Int32 nRgbColor )
 
 void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
 {
-    rOStr << rId.GetCLSID().Data1;
-    rOStr << rId.GetCLSID().Data2;
-    rOStr << rId.GetCLSID().Data3;
+    rOStr.WriteUInt32( rId.GetCLSID().Data1 );
+    rOStr.WriteUInt16( rId.GetCLSID().Data2 );
+    rOStr.WriteUInt16( rId.GetCLSID().Data3 );
     rOStr.writeArray( rId.GetCLSID().Data4, 8 );
 }
 
@@ -296,7 +296,12 @@ bool OleHelper::importStdFont( StdFontInfo& orFontInfo, BinaryInputStream& rInSt
     }
 
     sal_uInt8 nVersion, nNameLen;
-    rInStrm >> nVersion >> orFontInfo.mnCharSet >> orFontInfo.mnFlags >> orFontInfo.mnWeight >> orFontInfo.mnHeight >> nNameLen;
+    nVersion = rInStrm.readuChar();
+    orFontInfo.mnCharSet = rInStrm.readuInt16();
+    orFontInfo.mnFlags = rInStrm.readuChar();
+    orFontInfo.mnWeight = rInStrm.readuInt16();
+    orFontInfo.mnHeight = rInStrm.readuInt32();
+    nNameLen = rInStrm.readuChar();
     // according to spec the name is ASCII
     orFontInfo.maName = rInStrm.readCharArrayUC( nNameLen, RTL_TEXTENCODING_ASCII_US );
     OSL_ENSURE( nVersion <= 1, "OleHelper::importStdFont - wrong version" );
@@ -315,7 +320,8 @@ bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStre
 
     sal_uInt32 nStdPicId;
     sal_Int32 nBytes;
-    rInStrm >> nStdPicId >> nBytes;
+    nStdPicId = rInStrm.readuInt32();
+    nBytes = rInStrm.readInt32();
     OSL_ENSURE( nStdPicId == OLE_STDPIC_ID, "OleHelper::importStdPic - unexpected header version" );
     return !rInStrm.isEof() && (nStdPicId == OLE_STDPIC_ID) && (nBytes > 0) && (rInStrm.readData( orGraphicData, nBytes ) == nBytes);
 }

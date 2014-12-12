@@ -78,28 +78,19 @@ public:
         All data types supported by the ByteOrderConverter class can be used.
      */
     template< typename Type >
-    void                readValue( Type& ornValue );
+    Type                 readValue();
 
-    /** Reads a value from the stream and converts it to platform byte order.
-        All data types supported by the ByteOrderConverter class can be used.
-     */
-    template< typename Type >
-    Type         readValue() { Type nValue; readValue( nValue ); return nValue; }
-
-    /** Stream operator for all data types supported by the readValue() function. */
-    template< typename Type >
-    BinaryInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
-
-    sal_Int8     readInt8() { return readValue< sal_Int8 >(); }
-    sal_uInt8    readuInt8() { return readValue< sal_uInt8 >(); }
-    sal_Int16    readInt16() { return readValue< sal_Int16 >(); }
-    sal_uInt16   readuInt16() { return readValue< sal_uInt16 >(); }
-    sal_Int32    readInt32() { return readValue< sal_Int32 >(); }
-    sal_uInt32   readuInt32() { return readValue< sal_uInt32 >(); }
-    sal_Int64    readInt64() { return readValue< sal_Int64 >(); }
-    sal_uInt64   readuInt64() { return readValue< sal_uInt64 >(); }
-    float        readFloat() { return readValue< float >(); }
-    double       readDouble() { return readValue< double >(); }
+    sal_Int8             readInt8()   { return readValue<sal_Int8>(); }
+    sal_uInt8            readuInt8()  { return readValue<sal_uInt8>(); }
+    sal_Int16            readInt16()  { return readValue<sal_Int16>(); }
+    sal_uInt16           readuInt16() { return readValue<sal_uInt16>(); }
+    sal_Int32            readInt32()  { return readValue<sal_Int32>(); }
+    sal_uInt32           readuInt32() { return readValue<sal_uInt32>(); }
+    sal_Int64            readInt64()  { return readValue<sal_Int64>(); }
+    sal_uInt64           readuInt64() { return readValue<sal_uInt64>(); }
+    float                readFloat()  { return readValue<float>(); }
+    double               readDouble() { return readValue<double>(); }
+    unsigned char        readuChar()  { return readValue<unsigned char>(); }
 
     /** Reads a (preallocated!) C array of values from the stream.
 
@@ -226,10 +217,12 @@ typedef ::boost::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
 
 
 template< typename Type >
-void BinaryInputStream::readValue( Type& ornValue )
+Type BinaryInputStream::readValue()
 {
+    Type ornValue;
     readMemory( &ornValue, static_cast< sal_Int32 >( sizeof( Type ) ), sizeof( Type ) );
     ByteOrderConverter::convertLittleEndian( ornValue );
+    return ornValue;
 }
 
 template< typename Type >
@@ -309,7 +302,7 @@ public:
 
     /** Stream operator for all data types supported by the readValue() function. */
     template< typename Type >
-    BinaryXInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    BinaryXInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in readMemory() function.
@@ -350,7 +343,7 @@ public:
 
     /** Stream operator for all data types supported by the readValue() function. */
     template< typename Type >
-    SequenceInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    SequenceInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
 
 private:
     /** Returns the number of bytes available in the sequence for the passed byte count. */

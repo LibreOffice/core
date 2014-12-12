@@ -225,7 +225,7 @@ public:
 
     /** Stream operator for integral and floating-point types. */
     template< typename Type >
-    inline BiffInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+    inline BiffInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
 
     // byte strings -----------------------------------------------------------
 

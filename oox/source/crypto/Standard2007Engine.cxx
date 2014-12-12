@@ -221,7 +221,7 @@ bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     if (!generateVerifier())
         return false;
 
-    rStream.writeValue(VERSION_INFO_2007_FORMAT);
+    rStream.WriteUInt32(VERSION_INFO_2007_FORMAT);
 
     sal_uInt32 cspNameSize = (lclCspName.getLength() * 2) + 2;
 
@@ -233,7 +233,7 @@ bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
 
     rStream.writeMemory(&mInfo.header, encryptionHeaderSize);
     rStream.writeUnicodeArray(lclCspName);
-    rStream.writeValue<sal_uInt16>(0);
+    rStream.WriteUInt16(0);
 
     sal_uInt32 encryptionVerifierSize = static_cast<sal_uInt32>(sizeof(EncryptionVerifierAES));
     rStream.writeMemory(&mInfo.verifier, encryptionVerifierSize);

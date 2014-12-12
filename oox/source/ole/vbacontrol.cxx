@@ -527,7 +527,8 @@ bool VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
 {
     sal_uInt64 nAnchorPos = rInStrm.tell();
     sal_uInt32 nSiteCount, nSiteDataSize;
-    rInStrm >> nSiteCount >> nSiteDataSize;
+    nSiteCount = rInStrm.readuInt32();
+    nSiteDataSize = rInStrm.readuInt32();
     sal_Int64 nSiteEndPos = rInStrm.tell() + nSiteDataSize;
 
     // skip the site info structure

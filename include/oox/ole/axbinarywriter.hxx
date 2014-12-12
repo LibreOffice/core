@@ -55,6 +55,11 @@ public:
     void                align( size_t nSize );
 
     void         pad( sal_Int32 nBytes, size_t nAtomSize = 1);
+
+    /** Stream operator for all data types supported by the writeValue() function. */
+    template< typename Type >
+    AxAlignedOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
     void         writeAligned( Type nVal ) { align( sizeof( Type ) ); writeValue( nVal ); }

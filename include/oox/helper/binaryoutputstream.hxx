@@ -58,21 +58,28 @@ public:
      */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) = 0;
 
-    /** Writes a value to the stream and converts it to platform byte order.
-        All data types supported by the ByteOrderConverter class can be used.
-     */
-    template< typename Type >
-    void                writeValue( Type nValue );
-
     template< typename Type >
     void writeArray( Type* opnArray, sal_Int32 nElemCount );
 
     template< typename Type >
     void writeArray( const Type* opnArray, sal_Int32 nElemCount );
 
-    /** Stream operator for all data types supported by the writeValue() function. */
+    /** Writes a value to the stream and converts it to platform byte order.
+        All data types supported by the ByteOrderConverter class can be used.
+     */
     template< typename Type >
-    BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
+    void                  writeValue( Type nValue );
+
+    BinaryOutputStream&   WriteInt8(sal_Int8 x)     { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteUInt8(sal_uInt8 x)   { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteInt16(sal_Int16 x)   { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteUInt16(sal_uInt16 x) { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteInt32(sal_Int32 x)   { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteUInt32(sal_uInt32 x) { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteInt64(sal_Int64 x)   { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteUInt64(sal_uInt64 x) { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteFloat(float x)       { writeValue(x); return *this; }
+    BinaryOutputStream&   WriteDouble(double x)     { writeValue(x); return *this; }
 
     void writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars = false );
 

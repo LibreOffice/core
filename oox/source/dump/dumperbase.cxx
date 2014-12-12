@@ -2157,8 +2157,7 @@ void InputObjectBase::dumpArray( const String& rName, sal_Int32 nBytes, sal_Unic
 
 sal_Unicode InputObjectBase::dumpUnicode( const String& rName )
 {
-    sal_uInt16 nChar;
-    *mxStrm >> nChar;
+    sal_uInt16 nChar = mxStrm->readuInt16();
     sal_Unicode cChar = static_cast< sal_Unicode >( nChar );
     writeCharItem( rName( "char" ), cChar );
     return cChar;
@@ -2185,7 +2184,9 @@ OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen,
 {
     OUStringBuffer aBuffer;
     for( sal_Int32 nIndex = 0; !mxStrm->isEof() && (nIndex < nLen); ++nIndex )
+    {
         aBuffer.append( static_cast< sal_Unicode >( mxStrm->readuInt16() ) );
+    }
     OUString aString = aBuffer.makeStringAndClear();
     if( bHideTrailingNul )
         aString = StringHelper::trimTrailingNul( aString );
@@ -2249,23 +2250,23 @@ OUString InputObjectBase::dumpGuid( const String& rName )
     sal_uInt16 nData16;
     sal_uInt8 nData8;
 
-    *mxStrm >> nData32;
+    nData32 = mxStrm->readuInt32();
     StringHelper::appendHex( aBuffer, nData32, false );
     aBuffer.append( '-' );
-    *mxStrm >> nData16;
+    nData16 = mxStrm->readuInt16();
     StringHelper::appendHex( aBuffer, nData16, false );
     aBuffer.append( '-' );
-    *mxStrm >> nData16;
+    nData16 = mxStrm->readuInt16();
     StringHelper::appendHex( aBuffer, nData16, false );
     aBuffer.append( '-' );
-    *mxStrm >> nData8;
+    nData8 = mxStrm->readuChar();
     StringHelper::appendHex( aBuffer, nData8, false );
-    *mxStrm >> nData8;
+    nData8 = mxStrm->readuChar(  );
     StringHelper::appendHex( aBuffer, nData8, false );
     aBuffer.append( '-' );
     for( int nIndex = 0; nIndex < 6; ++nIndex )
     {
-        *mxStrm >> nData8;
+        nData8 = mxStrm->readuChar(  );
         StringHelper::appendHex( aBuffer, nData8, false );
     }
     StringHelper::enclose( aBuffer, '{', '}' );
