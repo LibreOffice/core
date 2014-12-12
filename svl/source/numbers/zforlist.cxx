@@ -3837,12 +3837,6 @@ NfCurrencyEntry::NfCurrencyEntry(
     nPositiveFormat(nPositiveFmt), nNegativeFormat(nNegativeFmt),
     nDigits(nDig), cZeroChar(cZero) {}
 
-NfCurrencyEntry* NfCurrencyEntry::Clone() const
-{
-    return new NfCurrencyEntry(
-       aSymbol, aBankSymbol, eLanguage, nPositiveFormat, nNegativeFormat, nDigits, cZeroChar);
-}
-
 bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
 {
     return aSymbol      == r.aSymbol

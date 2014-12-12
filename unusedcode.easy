@@ -8,7 +8,6 @@ GDriveSession::GDriveSession()
 ImpBitmap::ImplCrop(Rectangle const&)
 ImpBitmap::ImplErase(Color const&)
 ImpBitmap::ImplSetSalBitmap(SalBitmap*)
-NfCurrencyEntry::Clone() const
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()

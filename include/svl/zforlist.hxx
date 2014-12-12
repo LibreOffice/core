@@ -255,7 +255,7 @@ public:
                                          sal_Unicode cZero );
                         ~NfCurrencyEntry() {}
 
-    NfCurrencyEntry* Clone() const;
+    inline NfCurrencyEntry* Clone() const;
 
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
@@ -305,9 +305,15 @@ public:
 };
 
 /**
- * Necessary for ptr_vector on Windows. Please don't remove this, or at
- * least check it on Windows before attempting to remove it.
+ * Necessary for ptr_vector on Windows. Please don't remove these, or at
+ * least check it on Windows before attempting to remove them.
  */
+NfCurrencyEntry* NfCurrencyEntry::Clone() const
+{
+    return new NfCurrencyEntry(
+       aSymbol, aBankSymbol, eLanguage, nPositiveFormat, nNegativeFormat, nDigits, cZeroChar);
+}
+
 inline NfCurrencyEntry* new_clone( const NfCurrencyEntry& r )
 {
     return r.Clone();
