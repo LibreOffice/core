@@ -327,8 +327,7 @@ bool DocumentDecryption::readEncryptionInfo()
 
     BinaryXInputStream aBinaryInputStream( xEncryptionInfo, true );
 
-    sal_uInt32 aVersion;
-    aBinaryInputStream >> aVersion;
+    sal_uInt32 aVersion = aBinaryInputStream.readuInt32();
 
     switch (aVersion)
     {

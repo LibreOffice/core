@@ -146,8 +146,7 @@ bool AgileEngine::decrypt(
                     BinaryXInputStream& aInputStream,
                     BinaryXOutputStream& aOutputStream)
 {
-    sal_uInt32 totalSize;
-    aInputStream >> totalSize; // Document unencrypted size - 4 bytes
+    sal_uInt32 totalSize = aInputStream.readuInt32(); // Document unencrypted size - 4 bytes
     aInputStream.skip( 4 );    // Reserved 4 Bytes
 
     vector<sal_uInt8> keyDataSalt = mInfo.keyDataSalt;

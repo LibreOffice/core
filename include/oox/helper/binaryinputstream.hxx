@@ -78,18 +78,30 @@ public:
         All data types supported by the ByteOrderConverter class can be used.
      */
     template< typename Type >
+    SAL_WARN_UNUSED_RESULT
     Type                 readValue();
 
+    SAL_WARN_UNUSED_RESULT
     sal_Int8             readInt8()   { return readValue<sal_Int8>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_uInt8            readuInt8()  { return readValue<sal_uInt8>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_Int16            readInt16()  { return readValue<sal_Int16>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_uInt16           readuInt16() { return readValue<sal_uInt16>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_Int32            readInt32()  { return readValue<sal_Int32>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_uInt32           readuInt32() { return readValue<sal_uInt32>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_Int64            readInt64()  { return readValue<sal_Int64>(); }
+    SAL_WARN_UNUSED_RESULT
     sal_uInt64           readuInt64() { return readValue<sal_uInt64>(); }
+    SAL_WARN_UNUSED_RESULT
     float                readFloat()  { return readValue<float>(); }
+    SAL_WARN_UNUSED_RESULT
     double               readDouble() { return readValue<double>(); }
+    SAL_WARN_UNUSED_RESULT
     unsigned char        readuChar()  { return readValue<unsigned char>(); }
 
     /** Reads a (preallocated!) C array of values from the stream.
@@ -204,7 +216,7 @@ public:
 
     /** Copies nBytes bytes from the current position to the passed output stream.
      */
-    void                copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64, sal_Int32 nAtomSize = 1 );
+    void         copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64, sal_Int32 nAtomSize = 1 );
 
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
@@ -299,10 +311,6 @@ public:
     /** Seeks the stream forward by the passed number of bytes. This works for
         non-seekable streams too. */
     virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
-
-    /** Stream operator for all data types supported by the readValue() function. */
-    template< typename Type >
-    BinaryXInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in readMemory() function.

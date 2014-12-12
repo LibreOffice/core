@@ -155,10 +155,6 @@ public:
     /** Write nBytes bytes from the (preallocated!) buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
 
-    /** Stream operator for all data types supported by the writeValue() function. */
-    template< typename Type >
-    BinaryXOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
-
     /** Returns the XOutputStream interface of the wrapped output stream. */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         getXOutputStream() const { return mxOutStrm; }

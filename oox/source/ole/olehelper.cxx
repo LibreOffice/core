@@ -426,7 +426,7 @@ void OleFormCtrlExportHelper::exportName( const Reference< XOutputStream >& rxOu
 {
     oox::BinaryXOutputStream aOut( rxOut, false );
     aOut.writeUnicodeArray( maName );
-    aOut << sal_Int32(0);
+    aOut.WriteInt32(0);
 }
 
 void OleFormCtrlExportHelper::exportCompObj( const Reference< XOutputStream >& rxOut )

@@ -182,9 +182,8 @@ bool Standard2007Engine::decrypt(
                             BinaryXInputStream& aInputStream,
                             BinaryXOutputStream& aOutputStream)
 {
-    sal_uInt32 totalSize;
-    aInputStream >> totalSize; // Document unencrypted size - 4 bytes
-    aInputStream.skip( 4 );    // Reserved 4 Bytes
+    aInputStream.skip(4);    // Document unencrypted size - 4 bytes
+    aInputStream.skip(4);    // Reserved 4 Bytes
 
     vector<sal_uInt8> iv;
     Decrypt aDecryptor(mKey, iv, Crypto::AES_128_ECB);
@@ -227,9 +226,9 @@ bool Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
 
     sal_uInt32 encryptionHeaderSize = static_cast<sal_uInt32>(sizeof(EncryptionStandardHeader));
 
-    rStream << mInfo.header.flags;
+    rStream.WriteUInt32( mInfo.header.flags );
     sal_uInt32 headerSize = encryptionHeaderSize + cspNameSize;
-    rStream << headerSize;
+    rStream.WriteUInt32( headerSize );
 
     rStream.writeMemory(&mInfo.header, encryptionHeaderSize);
     rStream.writeUnicodeArray(lclCspName);
