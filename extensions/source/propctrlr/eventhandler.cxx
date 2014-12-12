@@ -157,7 +157,7 @@ namespace pcr
     {
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
             s_aKnownEvents.insert( EventMap::value_type( \
-                OUString::createFromAscii( asciimethod ), \
+                asciimethod, \
                 EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) ) )
 
         bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )

@@ -533,7 +533,7 @@ UpdateCheckConfig::getByName( const OUString& aName )
     uno::Any aValue = m_xContainer->getByName( aName );
 
     // Provide dynamic default value
-    if( aName.equalsAscii(DOWNLOAD_DESTINATION) )
+    if( aName == DOWNLOAD_DESTINATION )
     {
         OUString aStr;
         aValue >>= aStr;
