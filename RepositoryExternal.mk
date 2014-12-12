@@ -3243,6 +3243,7 @@ gb_ExternalProject__use_nss3:=
 ifeq ($(OS),ANDROID)
 
 gb_LinkTarget__use_nss3:=
+gb_LinkTarget__use_plc4:=
 
 else
 
