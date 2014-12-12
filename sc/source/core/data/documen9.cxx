@@ -242,7 +242,7 @@ void ScDocument::DeleteDrawLayer()
 {
     //UUUU remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
     // it is registered as secondary pool
-    if(xPoolHelper.is())
+    if (xPoolHelper.is() && !IsClipOrUndo()) //Using IsClipOrUndo as a proxy for SharePooledResources called
     {
         ScDocumentPool* pLocalPool = xPoolHelper->GetDocPool();
 
