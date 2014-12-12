@@ -408,58 +408,58 @@ PaperInfo PaperInfo::getDefaultPaperForLocale(
 
     if (
         //United States, Letter
-        rLocale.Country.equalsAscii("US") ||
+        rLocale.Country == "US" ||
         //Puerto Rico:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00046.html
-        rLocale.Country.equalsAscii("PR") ||
+        rLocale.Country == "PR" ||
         //Canada:
         //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00053.html
-        rLocale.Country.equalsAscii("CA") ||
+        rLocale.Country == "CA" ||
         //Venuzuela:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00019.html
-        rLocale.Country.equalsAscii("VE") ||
+        rLocale.Country == "VE" ||
         //Chile:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00240.html
-        rLocale.Country.equalsAscii("CL") ||
+        rLocale.Country == "CL" ||
         //Mexico:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://qa.openoffice.org/issues/show_bug.cgi?id=49739
-        rLocale.Country.equalsAscii("MX") ||
+        rLocale.Country == "MX" ||
         //Colombia:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://qa.openoffice.org/issues/show_bug.cgi?id=69703
-        rLocale.Country.equalsAscii("CO") ||
+        rLocale.Country == "CO" ||
         //Philippines:
         //    http://unicode.org/cldr/trac/ticket/1710
         //    http://ubuntuliving.blogspot.com/2008/07/default-paper-size-in-evince.html
         //    http://www.gov.ph/faqs/driverslicense.asp
-        rLocale.Country.equalsAscii("PH") ||
+        rLocale.Country == "PH" ||
         //Belize:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://www.belize.gov.bz/ct.asp?xItem=1666&ctNode=486&mp=27
-        rLocale.Country.equalsAscii("BZ") ||
+        rLocale.Country == "BZ" ||
         //Costa Rica:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=11258
-        rLocale.Country.equalsAscii("CR") ||
+        rLocale.Country == "CR" ||
         //Guatemala:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=10936
-        rLocale.Country.equalsAscii("GT") ||
+        rLocale.Country == "GT" ||
         //Nicaragua:
         //    http://unicode.org/cldr/trac/ticket/2585
-        rLocale.Country.equalsAscii("NI") ||
+        rLocale.Country == "NI" ||
         //Panama:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://www.minsa.gob.pa/minsa/tl_files/documents/baner_informativo/INSTRUMENTO%20DE%20INVESTIGACION%20DE%20RAAV%202009.pdf
-        rLocale.Country.equalsAscii("PA") ||
+        rLocale.Country == "PA" ||
         //El Salvador:
         //    http://unicode.org/cldr/trac/ticket/2585
         //    http://www.tse.gob.sv
-        rLocale.Country.equalsAscii("SV")
+        rLocale.Country == "SV"
        )
     {
         eType = PAPER_LETTER;
