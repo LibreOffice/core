@@ -1359,7 +1359,7 @@ void SAXWriter::unknown(const OUString& sString) throw (SAXException, RuntimeExc
         throw SAXException();
     }
 
-    if( sString.matchAsciiL( "<?xml", 5 ) )
+    if( sString.startsWith( "<?xml" ) )
         return;
 
     sal_Int32 nLength(0);
