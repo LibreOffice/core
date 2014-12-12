@@ -97,28 +97,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
 
-static const char ITEM_DESCRIPTOR_COMMANDURL[]        = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]           = "HelpURL";
-static const char ITEM_DESCRIPTOR_CONTAINER[]         = "ItemDescriptorContainer";
-static const char ITEM_DESCRIPTOR_LABEL[]             = "Label";
-static const char ITEM_DESCRIPTOR_TYPE[]              = "Type";
-static const char ITEM_DESCRIPTOR_MODULEIDENTIFIER[]  = "ModuleIdentifier";
-static const char ITEM_DESCRIPTOR_DISPATCHPROVIDER[]  = "DispatchProvider";
-static const char ITEM_DESCRIPTOR_STYLE[]             = "Style";
-static const char ITEM_DESCRIPTOR_ISVISIBLE[]         = "IsVisible";
-static const char ITEM_DESCRIPTOR_ENABLED[]           = "Enabled";
-
-static const sal_Int32 LEN_DESCRIPTOR_COMMANDURL       = 10;
-static const sal_Int32 LEN_DESCRIPTOR_HELPURL          = 7;
-static const sal_Int32 LEN_DESCRIPTOR_CONTAINER        = 23;
-static const sal_Int32 LEN_DESCRIPTOR_LABEL            = 5;
-static const sal_Int32 LEN_DESCRIPTOR_TYPE             = 4;
-static const sal_Int32 LEN_DESCRIPTOR_MODULEIDENTIFIER = 16;
-static const sal_Int32 LEN_DESCRIPTOR_DISPATCHPROVIDER = 16;
-static const sal_Int32 LEN_DESCRIPTOR_STYLE            = 5;
-static const sal_Int32 LEN_DESCRIPTOR_ISVISIBLE        = 9;
-static const sal_Int32 LEN_DESCRIPTOR_ENABLED          = 7;
-
 const sal_uInt16 ADDONMENU_MERGE_ITEMID_START = 1500;
 
 namespace framework
@@ -479,20 +457,20 @@ throw ( RuntimeException, std::exception )
                 else if ( Event.State >>= aItemText )
                 {
                     // Replacement for place holders
-                    if ( aItemText.matchAsciiL( "($1)", 4 ))
+                    if ( aItemText.startsWith("($1)") )
                     {
                         OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
                         aTmp += " ";
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
-                    else if ( aItemText.matchAsciiL( "($2)", 4 ))
+                    else if ( aItemText.startsWith("($2)") )
                     {
                         OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
                         aTmp += aItemText.copy( 4 );
                         aItemText = aTmp;
                     }
-                    else if ( aItemText.matchAsciiL( "($3)", 4 ))
+                    else if ( aItemText.startsWith("($3)") )
                     {
                         OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
                         aTmp += aItemText.copy( 4 );
@@ -1655,25 +1633,25 @@ void MenuBarManager::FillMenu(
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     OUString aPropName = aProp[i].Name;
-                    if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, LEN_DESCRIPTOR_COMMANDURL ))
+                    if ( aPropName == "CommandURL" )
                         aProp[i].Value >>= aCommandURL;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, LEN_DESCRIPTOR_HELPURL ))
+                    else if ( aPropName == "HelpURL" )
                         aProp[i].Value >>= aHelpURL;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, LEN_DESCRIPTOR_CONTAINER ))
+                    else if ( aPropName == "ItemDescriptorContainer" )
                         aProp[i].Value >>= xIndexContainer;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, LEN_DESCRIPTOR_LABEL ))
+                    else if ( aPropName == "Label" )
                         aProp[i].Value >>= aLabel;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, LEN_DESCRIPTOR_TYPE ))
+                    else if ( aPropName == "Type" )
                         aProp[i].Value >>= nType;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_MODULEIDENTIFIER, LEN_DESCRIPTOR_MODULEIDENTIFIER ))
+                    else if ( aPropName == "ModuleIdentifier" )
                         aProp[i].Value >>= aModuleIdentifier;
-                    else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_DISPATCHPROVIDER, LEN_DESCRIPTOR_DISPATCHPROVIDER ))
+                    else if ( aPropName == "DispatchProvider" )
                         aProp[i].Value >>= xDispatchProvider;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, LEN_DESCRIPTOR_STYLE ))
+                    else if ( aPropName == "Style" )
                         aProp[i].Value >>= nStyle;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_ISVISIBLE, LEN_DESCRIPTOR_ISVISIBLE ))
+                    else if ( aPropName == "IsVisible" )
                         aProp[i].Value >>= bShow;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_ENABLED, LEN_DESCRIPTOR_ENABLED ))
+                    else if ( aPropName == "Enabled" )
                         aProp[i].Value >>= bEnabled;
                 }
 

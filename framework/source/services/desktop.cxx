@@ -637,8 +637,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
                                                                               const OUString& sTargetFrameName ,
                                                                                     sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException, std::exception )
 {
-    const char UNO_PROTOCOL[] = ".uno:";
-
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -646,7 +644,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     // Remove uno and cmd protocol part as we want to support both of them. We store only the command part
     // in our hash map. All other protocols are stored with the protocol part.
     OUString aCommand( aURL.Main );
-    if ( aURL.Protocol.equalsIgnoreAsciiCaseAsciiL( UNO_PROTOCOL, sizeof( UNO_PROTOCOL )-1 ))
+    if ( aURL.Protocol.equalsIgnoreAsciiCase(".uno:") )
         aCommand = aURL.Path;
 
     // Make boost::unordered_map lookup if the current URL is in the disabled list

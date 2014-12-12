@@ -277,13 +277,13 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
    SAL_INFO("fwk.session", "SessionListener::statusChanged");
    if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionRestore" )
     {
-        if (event.FeatureDescriptor.equalsAscii("update"))
+        if (event.FeatureDescriptor == "update")
             m_bRestored = true; // a document was restored
 
     }
     else if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionSave" )
     {
-        if (event.FeatureDescriptor.equalsAscii("stop"))
+        if (event.FeatureDescriptor == "stop")
         {
             if (m_rSessionManager.is())
                 m_rSessionManager->saveDone(this); // done with save

@@ -27,9 +27,6 @@
 
 namespace framework{
 
-#define JOBURL_PROTOCOL_STR        "vnd.sun.star.job:"
-#define JOBURL_PROTOCOL_LEN        17
-
 #define JOBURL_EVENT_STR           "event="
 #define JOBURL_EVENT_LEN           6
 

@@ -54,7 +54,6 @@ static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 static const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
-static const char ITEM_DESCRIPTOR_WIDTH[]       = "Width";
 
 static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
                                       OUString&                        rCommandURL,
@@ -68,24 +67,24 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
-        if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        if ( rProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
             rProp[i].Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
             rProp[i].Value >>= rHelpURL;
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TOOLTIP ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_TOOLTIP )
             rProp[i].Value >>= rTooltip;
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_LABEL )
             rProp[i].Value >>= rLabel;
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_TYPE )
             rProp[i].Value >>= rType;
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
             rProp[i].Value >>= rVisible;
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
+        else if ( rProp[i].Name == "Width" )
             rProp[i].Value >>= rWidth;
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
             rProp[i].Value >>= rStyle;
     }
 }

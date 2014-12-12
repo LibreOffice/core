@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstring>
+
 #include <jobs/joburl.hxx>
 #include <general.h>
 
@@ -47,9 +51,9 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
     // syntax: vnd.sun.star.job:{[event=<name>],[alias=<name>],[service=<name>]}
 
     // check for "vnd.sun.star.job:"
-    if (sURL.matchIgnoreAsciiCaseAsciiL(JOBURL_PROTOCOL_STR,JOBURL_PROTOCOL_LEN,0))
+    if (sURL.startsWithIgnoreAsciiCase("vnd.sun.star.job:"))
     {
-        sal_Int32 t = JOBURL_PROTOCOL_LEN;
+        sal_Int32 t = std::strlen("vnd.sun.star.job:");
         do
         {
             // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"

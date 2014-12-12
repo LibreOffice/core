@@ -92,11 +92,11 @@ void SAL_CALL RootActionTriggerContainer::release() throw ()
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 throw ( Exception,  RuntimeException, std::exception )
 {
-    if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGER ))
+    if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
         return (OWeakObject *)( new ActionTriggerPropertySet());
-    else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERCONTAINER ))
+    else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERCONTAINER )
         return (OWeakObject *)( new ActionTriggerContainer());
-    else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
+    else if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGERSEPARATOR )
         return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
     else
         throw com::sun::star::uno::RuntimeException("Unknown service specifier!", (OWeakObject *)this );

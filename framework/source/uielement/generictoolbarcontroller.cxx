@@ -224,20 +224,20 @@ throw ( RuntimeException, std::exception )
             else
             {
                 // Replacement for place holders
-                if ( aStrValue.matchAsciiL( "($1)", 4 ))
+                if ( aStrValue.startsWith("($1)") )
                 {
                     OUString aTmp(FwkResId(STR_UPDATEDOC));
                     aTmp += " ";
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
-                else if ( aStrValue.matchAsciiL( "($2)", 4 ))
+                else if ( aStrValue.startsWith("($2)") )
                 {
                     OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
-                else if ( aStrValue.matchAsciiL( "($3)", 4 ))
+                else if ( aStrValue.startsWith("($3)") )
                 {
                     OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
                     aTmp += aStrValue.copy( 4 );

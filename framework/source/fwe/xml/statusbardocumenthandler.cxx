@@ -98,24 +98,24 @@ static void ExtractStatusbarItemParameters(
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
-        if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        if ( rProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
         {
             rProp[i].Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
         {
             rProp[i].Value >>= rHelpURL;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_OFFSET ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_OFFSET )
         {
             rProp[i].Value >>= rOffset;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_STYLE )
         {
             rProp[i].Value >>= rStyle;
         }
-        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
+        else if ( rProp[i].Name == ITEM_DESCRIPTOR_WIDTH )
         {
             rProp[i].Value >>= rWidth;
         }

@@ -70,9 +70,7 @@ AddonMenu::~AddonMenu()
 // Check if command URL string has the unique prefix to identify addon popup menus
 bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {
-    const char aPrefixCharBuf[] = ADDONSPOPUPMENU_URL_PREFIX_STR;
-
-    return aCmdURL.matchAsciiL( aPrefixCharBuf, sizeof( aPrefixCharBuf )-1, 0 );
+    return aCmdURL.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR );
 }
 
 AddonPopupMenu::AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame ) :
