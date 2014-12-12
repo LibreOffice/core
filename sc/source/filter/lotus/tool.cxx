@@ -85,6 +85,10 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, s
 
 void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt)
 {
+    nCol = SanitizeCol(nCol);
+    nRow = SanitizeRow(nRow);
+    nRow = SanitizeTab(nTab);
+
     //  PREC:   nSt = default number of decimal places
     rContext.pDoc->ApplyAttr(nCol, nRow, nTab, *(rContext.pValueFormCache->GetAttr(nFormat, nSt)));
 
