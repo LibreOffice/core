@@ -26,6 +26,10 @@
 
 #include <new>
 
+#if defined LIBO_INTERNAL_ONLY
+#include <initializer_list>
+#endif
+
 namespace rtl
 {
 class ByteSequence;
@@ -108,6 +112,16 @@ public:
         @param len initial sequence length
     */
     inline explicit Sequence( sal_Int32 len );
+
+#if defined LIBO_INTERNAL_ONLY
+    /** Create a sequence with the given elements.
+
+        @param init an initializer_list
+
+        @since LibreOffice 4.5
+     */
+    inline Sequence(std::initializer_list<E> init);
+#endif
 
     /** Destructor: Releases sequence handle. Last handle will destruct
         elements and free memory.

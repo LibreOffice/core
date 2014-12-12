@@ -92,6 +92,17 @@ inline Sequence< E >::Sequence( sal_Int32 len )
         throw ::std::bad_alloc();
 }
 
+#if defined LIBO_INTERNAL_ONLY
+template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
+    if (!uno_type_sequence_construct(
+            &_pSequence, cppu::getTypeFavourUnsigned(this).getTypeLibType(),
+            const_cast<E *>(init.begin()), init.size(), cpp_acquire))
+    {
+        throw std::bad_alloc();
+    }
+}
+#endif
+
 template< class E >
 inline Sequence< E >::~Sequence()
 {

@@ -50,20 +50,15 @@ private:
 
 void Test::testTypeOfBooleanSequence() {
     binaryurp::ReaderState state;
-    css::uno::Sequence< sal_Int8 > buf(13);
-    buf[0] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(20 | 0x80)); // sequence type | cache flag
-    buf[1] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore >> 8));
-    buf[2] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore & 0xFF));
-    buf[3] = RTL_CONSTASCII_LENGTH("[]boolean");
-    buf[4] = '[';
-    buf[5] = ']';
-    buf[6] = 'b';
-    buf[7] = 'o';
-    buf[8] = 'o';
-    buf[9] = 'l';
-    buf[10] = 'e';
-    buf[11] = 'a';
-    buf[12] = 'n';
+    css::uno::Sequence<sal_Int8> buf{
+        static_cast<sal_Int8>(static_cast<sal_uInt8>(20 | 0x80)),
+            // sequence type | cache flag
+        static_cast<sal_Int8>(
+            static_cast<sal_uInt8>(binaryurp::cache::ignore >> 8)),
+        static_cast<sal_Int8>(
+            static_cast<sal_uInt8>(binaryurp::cache::ignore & 0xFF)),
+        RTL_CONSTASCII_LENGTH("[]boolean"),
+       '[', ']', 'b', 'o', 'o', 'l', 'e', 'a', 'n' };
     binaryurp::Unmarshal m(rtl::Reference< binaryurp::Bridge >(), state, buf);
     css::uno::TypeDescription t(m.readType());
     CPPUNIT_ASSERT(
@@ -75,17 +70,14 @@ void Test::testTypeOfBooleanSequence() {
 
 void Test::testTypeOfVoidSequence() {
     binaryurp::ReaderState state;
-    css::uno::Sequence< sal_Int8 > buf(10);
-    buf[0] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(20 | 0x80)); // sequence type | cache flag
-    buf[1] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore >> 8));
-    buf[2] = static_cast< sal_Int8 >(static_cast< sal_uInt8 >(binaryurp::cache::ignore & 0xFF));
-    buf[3] = RTL_CONSTASCII_LENGTH("[]void");
-    buf[4] = '[';
-    buf[5] = ']';
-    buf[6] = 'v';
-    buf[7] = 'o';
-    buf[8] = 'i';
-    buf[9] = 'd';
+    css::uno::Sequence<sal_Int8> buf{
+        static_cast<sal_Int8>(static_cast<sal_uInt8>(20 | 0x80)),
+            // sequence type | cache flag
+        static_cast<sal_Int8>(
+            static_cast<sal_uInt8>(binaryurp::cache::ignore >> 8)),
+        static_cast<sal_Int8>(
+            static_cast<sal_uInt8>(binaryurp::cache::ignore & 0xFF)),
+        RTL_CONSTASCII_LENGTH("[]void"), '[', ']', 'v', 'o', 'i', 'd' };
     binaryurp::Unmarshal m(rtl::Reference< binaryurp::Bridge >(), state, buf);
     try {
         m.readType();

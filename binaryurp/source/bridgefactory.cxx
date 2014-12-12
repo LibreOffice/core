@@ -52,8 +52,7 @@ OUString BridgeFactory::static_getImplementationName() {
 
 css::uno::Sequence< OUString >
 BridgeFactory::static_getSupportedServiceNames() {
-    OUString name("com.sun.star.bridge.BridgeFactory");
-    return css::uno::Sequence< OUString >(&name, 1);
+    return css::uno::Sequence<OUString>{ "com.sun.star.bridge.BridgeFactory" };
 }
 
 void BridgeFactory::removeBridge(
