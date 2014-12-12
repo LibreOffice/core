@@ -1150,7 +1150,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         Reference< XInterface > xOriginal;
         bool remote;
         sal_Int32 i;
-        if( rArgs.getLength() > 1 && rArgs[0].equalsAscii( "-u" ) )
+        if( rArgs.getLength() > 1 && rArgs[0] == "-u" )
         {
             remote = true;
             i = 2;

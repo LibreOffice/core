@@ -63,9 +63,7 @@ CurrentContext::~CurrentContext() {}
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
     throw (css::uno::RuntimeException, std::exception)
 {
-    return Name == KEY
-        ? css::uno::makeAny(OUString::createFromAscii(VALUE))
-        : css::uno::Any();
+    return Name == KEY ? css::uno::makeAny(OUString(VALUE)) : css::uno::Any();
 }
 
 }
@@ -100,8 +98,7 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
         if (!context.is()) {
             return false;
         }
-        css::uno::Any a(
-            context->getValueByName(OUString::createFromAscii(KEY)));
+        css::uno::Any a(context->getValueByName(KEY));
         if (a.getValueType() != ::cppu::UnoType< OUString >::get()) {
             return false;
         }
