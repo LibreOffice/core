@@ -208,6 +208,8 @@ int main( int argc, char* argv[] )
     }
 
     pOffice = lok_init( argv[1] );
+    if ( pOffice == NULL )
+        return 1;
 
     gtk_init( &argc, &argv );
 
