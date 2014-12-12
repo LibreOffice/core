@@ -85,7 +85,7 @@ void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
 
 ::rtl::OUString VCLXAccessibleHeaderBar::getImplementationName() throw (RuntimeException, std::exception)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
+    return OUString( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
 }
 
 
@@ -93,7 +93,7 @@ void VCLXAccessibleHeaderBar::FillAccessibleStateSet( utl::AccessibleStateSetHel
 Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleHeaderBar" );
+    aNames[0] = "com.sun.star.awt.AccessibleHeaderBar";
     return aNames;
 }
 

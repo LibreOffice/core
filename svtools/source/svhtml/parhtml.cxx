@@ -1167,9 +1167,7 @@ int HTMLParser::_GetNextToken()
                                     nCLineNr = GetLineNr();
                                     nCLinePos = GetLinePos();
                                 }
-                                bDone = aToken.getLength() >= 2 &&
-                                        aToken.copy(aToken.getLength()-2,2).
-                                                        equalsAscii( "--" );
+                                bDone = aToken.endsWith( "--" );
                                 if( !bDone )
                                 aToken += OUString(nNextCh);
                             }

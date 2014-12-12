@@ -65,7 +65,7 @@ Any SAL_CALL JavaContext::getValueByName( const OUString& Name) throw (RuntimeEx
 {
     Any retVal;
 
-    if ( Name.equalsAscii( JAVA_INTERACTION_HANDLER_NAME ))
+    if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
         {
             osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());

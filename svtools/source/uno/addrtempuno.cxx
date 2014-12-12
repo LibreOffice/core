@@ -177,7 +177,7 @@ namespace {
         PropertyValue aVal;
         if (_rValue >>= aVal)
         {
-            if (aVal.Name.equalsAscii("DataSource"))
+            if (aVal.Name == "DataSource")
             {
 #if OSL_DEBUG_LEVEL > 0
                 bool bSuccess =
@@ -187,7 +187,7 @@ namespace {
                 return;
             }
 
-            if (aVal.Name.equalsAscii("DataSourceName"))
+            if (aVal.Name == "DataSourceName")
             {
 #if OSL_DEBUG_LEVEL > 0
                 bool bSuccess =
@@ -197,7 +197,7 @@ namespace {
                 return;
             }
 
-            if (aVal.Name.equalsAscii("Command"))
+            if (aVal.Name == "Command")
             {
 #if OSL_DEBUG_LEVEL > 0
                 bool bSuccess =
