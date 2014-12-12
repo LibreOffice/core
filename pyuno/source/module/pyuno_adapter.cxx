@@ -182,7 +182,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
 
     // special hack for the uno object identity concept. The XUnoTunnel.getSomething() call is
     // always handled by the adapter directly.
-    if( aParams.getLength() == 1 && aFunctionName.equalsAscii( "getSomething" ) )
+    if( aParams.getLength() == 1 && aFunctionName == "getSomething" )
     {
         Sequence< sal_Int8 > id;
         if( aParams[0] >>= id )
@@ -244,8 +244,8 @@ Any Adapter::invoke( const OUString &aFunctionName,
 
             if( ret.hasValue() &&
                 ret.getValueTypeClass() == com::sun::star::uno::TypeClass_SEQUENCE &&
-                ! aFunctionName.equalsAscii( "getTypes" ) &&  // needed by introspection itself !
-                ! aFunctionName.equalsAscii( "getImplementationId" ) ) // needed by introspection itself !
+                aFunctionName != "getTypes" &&  // needed by introspection itself !
+                aFunctionName != "getImplementationId" ) // needed by introspection itself !
             {
                 // the sequence can either be
                 // 1)  a simple sequence return value
