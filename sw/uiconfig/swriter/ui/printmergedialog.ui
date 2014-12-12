@@ -20,10 +20,12 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="no">
-                <property name="label">gtk-no</property>
+              <object class="GtkButton" id="yes">
+                <property name="label">gtk-yes</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
@@ -35,12 +37,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="yes">
-                <property name="label">gtk-yes</property>
+              <object class="GtkButton" id="no">
+                <property name="label">gtk-no</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
                 <property name="use_stock">True</property>
@@ -76,8 +76,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="3">no</action-widget>
       <action-widget response="2">yes</action-widget>
+      <action-widget response="3">no</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
   </object>
