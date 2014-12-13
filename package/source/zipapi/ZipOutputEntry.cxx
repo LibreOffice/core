@@ -19,6 +19,7 @@
 
 #include <ZipOutputEntry.hxx>
 
+#include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <comphelper/storagehelper.hxx>
 
@@ -57,8 +58,8 @@ ZipOutputEntry::ZipOutputEntry(
     }
     else
     {
-        m_pBuffer = new ZipPackageBuffer(n_ConstBufferSize);
-        m_xOutStream = m_pBuffer;
+        m_xTempFile = io::TempFile::create(rxContext);
+        m_xOutStream = m_xTempFile->getOutputStream();
     }
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)
@@ -72,10 +73,12 @@ ZipOutputEntry::~ZipOutputEntry( void )
 {
 }
 
-uno::Sequence< sal_Int8 > ZipOutputEntry::getData()
+uno::Reference< io::XInputStream > ZipOutputEntry::getData()
 {
-    m_pBuffer->realloc(m_pBuffer->getPosition());
-    return m_pBuffer->getSequence();
+    m_xOutStream->closeOutput();
+    uno::Reference< io::XSeekable > xTempSeek(m_xOutStream, UNO_QUERY_THROW);
+    xTempSeek->seek(0);
+    return m_xTempFile->getInputStream();
 }
 
 void ZipOutputEntry::closeEntry()

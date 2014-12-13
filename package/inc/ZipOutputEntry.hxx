@@ -20,6 +20,7 @@
 #define INCLUDED_PACKAGE_INC_ZIPOUTPUTENTRY_HXX
 
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XTempFile.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
@@ -36,7 +37,7 @@ class ZipOutputEntry
 {
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
-    css::uno::Reference< ZipPackageBuffer > m_pBuffer;
+    css::uno::Reference< css::io::XTempFile > m_xTempFile;
     css::uno::Reference< css::io::XOutputStream > m_xOutStream;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
@@ -56,7 +57,7 @@ public:
 
     ~ZipOutputEntry();
 
-    css::uno::Sequence< sal_Int8 > getData();
+    css::uno::Reference< css::io::XInputStream > getData();
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
     bool isEncrypt() { return m_bEncryptCurrentEntry; }

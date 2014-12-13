@@ -20,6 +20,7 @@
 #include <ZipOutputStream.hxx>
 
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <osl/diagnose.h>
@@ -101,7 +102,20 @@ void ZipOutputStream::finish()
     for (size_t i = 0; i < m_aEntries.size(); i++)
     {
         writeLOC(m_aEntries[i]->getZipEntry(), m_aEntries[i]->isEncrypt());
-        rawWrite(m_aEntries[i]->getData());
+
+        sal_Int32 nRead;
+        uno::Sequence< sal_Int8 > aSequence(n_ConstBufferSize);
+        uno::Reference< io::XInputStream > xInput = m_aEntries[i]->getData();
+        do
+        {
+            nRead = xInput->readBytes(aSequence, n_ConstBufferSize);
+            if (nRead < n_ConstBufferSize)
+                aSequence.realloc(nRead);
+
+            rawWrite(aSequence);
+        }
+        while (nRead == n_ConstBufferSize);
+
         rawCloseEntry(m_aEntries[i]->isEncrypt());
 
         m_aEntries[i]->getZipPackageStream()->successfullyWritten(m_aEntries[i]->getZipEntry());
