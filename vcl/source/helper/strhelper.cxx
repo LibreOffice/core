@@ -22,25 +22,12 @@
 
 namespace psp {
 
-inline bool isSpace( char cChar )
-{
-    return
-        cChar == ' '    || cChar == '\t'    ||
-        cChar == '\r'   || cChar == '\n'    ||
-        cChar == 0x0c   || cChar == 0x0b;
-}
-
 inline bool isSpace( sal_Unicode cChar )
 {
     return
         cChar == ' '    || cChar == '\t'    ||
         cChar == '\r'   || cChar == '\n'    ||
         cChar == 0x0c   || cChar == 0x0b;
-}
-
-inline bool isProtect( char cChar )
-{
-    return cChar == '`' || cChar == '\'' || cChar == '"';
 }
 
 inline bool isProtect( sal_Unicode cChar )
