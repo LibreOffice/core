@@ -68,6 +68,7 @@
 #include <CellColorHandler.hxx>
 #include <SectionColumnHandler.hxx>
 #include <GraphicHelpers.hxx>
+#include <dmapper/GraphicZOrderHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;

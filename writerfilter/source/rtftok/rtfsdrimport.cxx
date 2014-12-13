@@ -25,8 +25,6 @@
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
-#include <dmapper/DomainMapper.hxx>
-#include "../dmapper/GraphicHelpers.hxx"
 #include <rtfsdrimport.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <oox/vml/vmlformatting.hxx>
@@ -121,11 +119,8 @@ void RTFSdrImport::popParent()
 void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> const& xPropertySet,
                                sal_Int32 const nZOrder, bool const bOldStyle)
 {
-    writerfilter::dmapper::DomainMapper& rMapper =
-        dynamic_cast<writerfilter::dmapper::DomainMapper&>(m_rImport.Mapper());
-    writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
-    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder, bOldStyle)));
-    pHelper->addItem(xPropertySet, nZOrder);
+    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(m_aGraphicZOrderHelper.findZOrder(nZOrder, bOldStyle)));
+    m_aGraphicZOrderHelper.addItem(xPropertySet, nZOrder);
 }
 
 void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> const& xPropertySet,

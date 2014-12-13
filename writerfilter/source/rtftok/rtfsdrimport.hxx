@@ -13,6 +13,7 @@
 #include <stack>
 
 #include <rtfdocumentimpl.hxx>
+#include <dmapper/GraphicZOrderHelper.hxx>
 
 namespace writerfilter
 {
@@ -66,6 +67,7 @@ private:
     bool m_bTextFrame;
     /// if inside \pict, but actually it's a shape (not a picture)
     bool m_bFakePict;
+    writerfilter::dmapper::GraphicZOrderHelper m_aGraphicZOrderHelper;
 };
 } // namespace rtftok
 } // namespace writerfilter

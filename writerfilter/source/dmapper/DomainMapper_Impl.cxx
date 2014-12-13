@@ -67,6 +67,7 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <oox/mathml/import.hxx>
 #include <GraphicHelpers.hxx>
+#include <dmapper/GraphicZOrderHelper.hxx>
 
 #ifdef DEBUG_WRITERFILTER
 #include <dmapperLoggers.hxx>

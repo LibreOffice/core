@@ -52,6 +52,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 
 #include <dmapper/DomainMapper.hxx>
+#include <dmapper/GraphicZOrderHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 
