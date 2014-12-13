@@ -815,15 +815,16 @@ bool ZipPackageStream::saveChild(
                 if (bParallelDeflate)
                 {
                     // Start a new thread deflating this zip entry
-                    ZipOutputEntry *pZipEntry = new ZipOutputEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    ZipOutputEntry *pZipEntry = new ZipOutputEntry(
+                            css::uno::Reference<css::io::XOutputStream>(),
+                            m_xContext, *pTempEntry, this, bToBeEncrypted);
                     rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
                 }
                 else
                 {
                     rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
-                    ZipOutputEntry aZipEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    ZipOutputEntry aZipEntry(rZipOut.getStream(), m_xContext, *pTempEntry, this, bToBeEncrypted);
                     deflateZipEntry(&aZipEntry, xStream);
-                    rZipOut.rawWrite(aZipEntry.getData());
                     rZipOut.rawCloseEntry(bToBeEncrypted);
                 }
             }

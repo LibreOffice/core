@@ -119,6 +119,11 @@ void ZipOutputStream::finish()
     m_aZipList.clear();
 }
 
+css::uno::Reference< css::io::XOutputStream > ZipOutputStream::getStream()
+{
+    return m_xStream;
+}
+
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_ZIPOUTPUTENTRY_HXX
 #define INCLUDED_PACKAGE_INC_ZIPOUTPUTENTRY_HXX
 
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
@@ -36,6 +37,7 @@ class ZipOutputEntry
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
     css::uno::Reference< ZipPackageBuffer > m_pBuffer;
+    css::uno::Reference< css::io::XOutputStream > m_xOutStream;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
@@ -48,6 +50,7 @@ class ZipOutputEntry
 
 public:
     ZipOutputEntry(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt = false);
 
