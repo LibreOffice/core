@@ -1837,7 +1837,8 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
     {
         SystemGraphicsData aData;
         aData.rCGContext = (CGContextRef) context;
-        VirtualDevice aDevice(&aData, (sal_uInt16)0);
+        // the Size argument is irrelevant, I hope
+        VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)0);
         // paint to it
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
     }
