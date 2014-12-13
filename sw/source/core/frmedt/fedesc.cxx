@@ -188,16 +188,17 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(0xffffffff);
     const Point aNulPt;
 
-    FOREACHPAM_START(GetCrsr())
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
 
-        if( 0 != (pCNd = PCURCRSR->GetCntntNode() ) &&
+        if( 0 != (pCNd = rPaM.GetCntntNode() ) &&
             0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, false )) )
             pPtFrm = pPtFrm->FindPageFrm();
         else
             pPtFrm = 0;
 
-        if( PCURCRSR->HasMark() &&
-            0 != (pCNd = PCURCRSR->GetCntntNode( false ) ) &&
+        if( rPaM.HasMark() &&
+            0 != (pCNd = rPaM.GetCntntNode( false ) ) &&
             0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, false )) )
             pMkFrm = pMkFrm->FindPageFrm();
         else
@@ -234,7 +235,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
             break;
         }
 
-    FOREACHPAM_END()
+    }
 
     return pRetDesc;
 }
