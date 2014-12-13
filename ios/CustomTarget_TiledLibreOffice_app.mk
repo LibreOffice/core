@@ -53,11 +53,11 @@ TiledLibreOffice_setup:
 	mkdir -p $(TiledLibreOffice_resource)/ure
 
 	# copy rdb files
-	cp $(INSTDIR)/ure/share/misc/types.rdb 	    $(TiledLibreOffice_resource)
+	cp $(INSTDIR)/program/types.rdb	            $(TiledLibreOffice_resource)
 	cp $(INSTDIR)/program/types/offapi.rdb      $(TiledLibreOffice_resource)
 	cp $(INSTDIR)/program/types/oovbaapi.rdb  	$(TiledLibreOffice_resource)
 	cp $(INSTDIR)/program/services/services.rdb $(TiledLibreOffice_resource)
-	cp $(INSTDIR)/ure/share/misc/services.rdb   $(TiledLibreOffice_resource)/ure
+	cp $(INSTDIR)/program/services.rdb          $(TiledLibreOffice_resource)/ure
 
 	# copy .res files
 	# program/resource is hardcoded in tools/source/rc/resmgr.cxx. Sure,
