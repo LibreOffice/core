@@ -834,12 +834,13 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     SwFlyFrmFmt* pFmt = 0;
     SET_CURR_SHELL( this );
     StartAllAction();
-        FOREACHPAM_START(GetCrsr())
-            pFmt = GetDoc()->getIDocumentContentOperations().Insert(*PCURCRSR, xObj,
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            pFmt = GetDoc()->getIDocumentContentOperations().Insert(rPaM, xObj,
                                     pFlyAttrSet, pGrfAttrSet, pFrmFmt );
             OSL_ENSURE( pFmt, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
 
-        FOREACHPAM_END()
+        }
     EndAllAction();
 
     if( pFmt )
