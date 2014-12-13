@@ -26,7 +26,6 @@
 #include <ooxml/QNameToString.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
-#include <dmapper/DomainMapper.hxx>
 #include <dmapper/GraphicHelpers.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <tools/globname.hxx>
