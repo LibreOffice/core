@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_CELLCOLORHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_CELLCOLORHANDLER_HXX
 
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <boost/shared_ptr.hpp>
 #include <vector>
 

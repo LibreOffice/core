@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPER_HXX
 
 #include <dmapper/DomainMapperFactory.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 

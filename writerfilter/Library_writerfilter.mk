@@ -88,6 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/GraphicHelpers \
     writerfilter/source/dmapper/GraphicImport \
     writerfilter/source/dmapper/LatentStyleHandler \
+    writerfilter/source/dmapper/LoggedResources \
     writerfilter/source/dmapper/MeasureHandler \
     writerfilter/source/dmapper/TrackChangesHandler \
     writerfilter/source/dmapper/ModelEventListener \
@@ -124,7 +125,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLPropertySetImpl \
     writerfilter/source/ooxml/OOXMLStreamImpl \
     writerfilter/source/ooxml/qnametostrcore \
-    writerfilter/source/resourcemodel/LoggedResources \
     writerfilter/source/resourcemodel/ResourceModelHelper \
     writerfilter/source/resourcemodel/TagLogger \
 ))

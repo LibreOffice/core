@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_LOGGEDRESOURCES_HXX
-#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_LOGGEDRESOURCES_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 
-#include "WW8ResourceModel.hxx"
-#include "TagLogger.hxx"
+#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/TagLogger.hxx>
 
 
 namespace writerfilter
@@ -126,6 +126,6 @@ protected:
 };
 
 }
-#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_LOGGEDRESOURCES_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

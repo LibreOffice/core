@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include "PropertyMap.hxx"
 #include "FontTable.hxx"
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;

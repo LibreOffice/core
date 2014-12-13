@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_THEMETABLE_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_THEMETABLE_HXX
 
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <i18nlangtag/languagetag.hxx>

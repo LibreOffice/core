@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICHELPERS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICHELPERS_HXX
 
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 
 #include <boost/shared_ptr.hpp>
 

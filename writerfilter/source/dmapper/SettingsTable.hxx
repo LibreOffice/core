@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SETTINGSTABLE_HXX
 
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <map>

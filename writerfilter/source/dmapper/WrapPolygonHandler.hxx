@@ -22,7 +22,7 @@
 
 #include <deque>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <tools/fract.hxx>
 #include <comphelper/sequenceasvector.hxx>
 

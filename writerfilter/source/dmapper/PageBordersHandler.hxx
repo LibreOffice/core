@@ -22,7 +22,7 @@
 #include "BorderHandler.hxx"
 #include "PropertyMap.hxx"
 
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/table/BorderLine2.hpp>

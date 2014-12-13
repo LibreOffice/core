@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FFDATAHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FFDATAHANDLER_HXX
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <rtl/ustring.hxx>
 #include <vector>
 namespace writerfilter {

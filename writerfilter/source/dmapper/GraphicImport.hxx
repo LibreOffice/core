@@ -22,7 +22,7 @@
 #include <queue>
 #include <boost/scoped_ptr.hpp>
 
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace uno

@@ -21,7 +21,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <resourcemodel/LoggedResources.hxx>
+#include "LoggedResources.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
