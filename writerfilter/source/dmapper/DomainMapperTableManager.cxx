@@ -33,7 +33,7 @@
 #include <o3tl/numeric.hxx>
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 #include <rtl/math.hxx>
 
 namespace writerfilter {

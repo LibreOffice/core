@@ -22,7 +22,7 @@
 
 #include "TablePropertiesHandler.hxx"
 
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <comphelper/sequenceasvector.hxx>

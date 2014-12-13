@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 
 namespace writerfilter
 {

@@ -18,7 +18,6 @@
  */
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <StyleSheetTable.hxx>
-#include <dmapper/DomainMapper.hxx>
 #include <NumberingManager.hxx>
 #include <ConversionHelper.hxx>
 #include <TblStylePrHandler.hxx>

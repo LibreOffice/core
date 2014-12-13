@@ -22,7 +22,7 @@
 
 #include "PropertyMap.hxx"
 
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 
 #include <editeng/numitem.hxx>

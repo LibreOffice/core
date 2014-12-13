@@ -33,7 +33,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <dmapperLoggers.hxx>
 #include <oox/token/tokens.hxx>
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 
 using namespace com::sun::star;
 using namespace oox;

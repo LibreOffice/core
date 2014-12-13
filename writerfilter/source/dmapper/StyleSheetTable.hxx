@@ -21,7 +21,7 @@
 
 #include "TblStylePrHandler.hxx"
 
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include "PropertyMap.hxx"

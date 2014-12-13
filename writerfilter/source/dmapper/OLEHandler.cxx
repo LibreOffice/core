@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <OLEHandler.hxx>
-#include <dmapper/DomainMapper.hxx>
+#include <DomainMapper.hxx>
 #include <PropertyMap.hxx>
 #include "GraphicHelpers.hxx"
 
