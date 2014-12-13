@@ -236,7 +236,7 @@ Control RID_COND_ENTRY
     {
         Pos = MAP_APPFONT( 120, 62 );
         Size = MAP_APPFONT( 60, 14 );
-        Text [ en-US ] = "More options ...";
+        Text [ en-US ] = "More Options...";
     };
     ListBox LB_DATE_TYPE
     {
