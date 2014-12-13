@@ -57,6 +57,7 @@ public:
 
     void finish()
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    css::uno::Reference< css::io::XOutputStream > getStream();
 
     static sal_uInt32 getCurrentDosTime();
     static void setEntry( ZipEntry *pEntry );

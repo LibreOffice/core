@@ -38,18 +38,28 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to deflate Zip entries
  */
-ZipOutputEntry::ZipOutputEntry( const uno::Reference< uno::XComponentContext >& rxContext,
-                        ZipEntry& rEntry,
-                        ZipPackageStream* pStream,
-                        bool bEncrypt)
+ZipOutputEntry::ZipOutputEntry(
+        const css::uno::Reference< css::io::XOutputStream >& rxOutput,
+        const uno::Reference< uno::XComponentContext >& rxContext,
+        ZipEntry& rEntry,
+        ZipPackageStream* pStream,
+        bool bEncrypt)
 : m_aDeflateBuffer(n_ConstBufferSize)
 , m_aDeflater(DEFAULT_COMPRESSION, true)
-, m_pBuffer(new ZipPackageBuffer(n_ConstBufferSize))
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
 , m_bEncryptCurrentEntry(bEncrypt)
 , m_pCurrentStream(pStream)
 {
+    if (rxOutput.is())
+    {
+        m_xOutStream = rxOutput;
+    }
+    else
+    {
+        m_pBuffer = new ZipPackageBuffer(n_ConstBufferSize);
+        m_xOutStream = m_pBuffer;
+    }
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)
     {
@@ -153,7 +163,7 @@ void ZipOutputEntry::doDeflate()
             // FIXME64: uno::Sequence not 64bit safe.
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
-            m_pBuffer->writeBytes( aEncryptionBuffer );
+            m_xOutStream->writeBytes( aEncryptionBuffer );
 
             // the sizes as well as checksum for encrypted streams is calculated here
             m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
@@ -162,7 +172,7 @@ void ZipOutputEntry::doDeflate()
         }
         else
         {
-            m_pBuffer->writeBytes ( aTmpBuffer );
+            m_xOutStream->writeBytes ( aTmpBuffer );
         }
     }
 
@@ -172,7 +182,7 @@ void ZipOutputEntry::doDeflate()
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
         if ( aEncryptionBuffer.getLength() )
         {
-            m_pBuffer->writeBytes( aEncryptionBuffer );
+            m_xOutStream->writeBytes( aEncryptionBuffer );
 
             // the sizes as well as checksum for encrypted streams is calculated hier
             m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
