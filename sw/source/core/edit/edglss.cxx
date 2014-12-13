@@ -216,37 +216,38 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             pInsDoc->SetColumnSelection( true );
         bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false);
         {
-        FOREACHPAM_START(GetCrsr())
-
-            if( !PCURCRSR->HasMark() )
+            for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
             {
-                SwCntntNode *const pNd = PCURCRSR->GetCntntNode();
-                if (0 != pNd &&
-                    ( bColSel || !pNd->GetTxtNode() ) )
+                if( !rPaM.HasMark() )
                 {
-                    PCURCRSR->SetMark();
-                    PCURCRSR->Move( fnMoveForward, fnGoCntnt );
-                    bRet = GetDoc()->getIDocumentContentOperations().CopyRange( *PCURCRSR, aPos, false )
-                        || bRet;
-                    PCURCRSR->Exchange();
-                    PCURCRSR->DeleteMark();
+                    SwCntntNode *const pNd = rPaM.GetCntntNode();
+                    if (0 != pNd &&
+                        ( bColSel || !pNd->GetTxtNode() ) )
+                    {
+                        rPaM.SetMark();
+                        rPaM.Move( fnMoveForward, fnGoCntnt );
+                        bRet = GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, aPos, false )
+                            || bRet;
+                        rPaM.Exchange();
+                        rPaM.DeleteMark();
+                    }
+                }
+                else
+                {
+                    // Make a copy, so that in case we need to adjust the selection
+                    // for the purpose of copying, our shell cursor is not touched.
+                    // (Otherwise we would have to restore it.)
+                    SwPaM aPaM(rPaM);
+                    if (bSelectAll)
+                    {
+                        // Selection starts at the first para of the first cell,
+                        // but we want to copy the table and the start node before
+                        // the first cell as well.
+                        aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
+                    }
+                    bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, false ) || bRet;
                 }
             }
-            else
-            {
-                // Make a copy, so that in case we need to adjust the selection
-                // for the purpose of copying, our shell cursor is not touched.
-                // (Otherwise we would have to restore it.)
-                SwPaM aPaM(*PCURCRSR);
-                if (bSelectAll)
-                    // Selection starts at the first para of the first cell,
-                    // but we want to copy the table and the start node before
-                    // the first cell as well.
-                    aPaM.Start()->nNode = aPaM.Start()->nNode.GetNode().FindTableNode()->GetIndex();
-                bRet = GetDoc()->getIDocumentContentOperations().CopyRange( aPaM, aPos, false ) || bRet;
-            }
-
-        FOREACHPAM_END()
         }
     }
 

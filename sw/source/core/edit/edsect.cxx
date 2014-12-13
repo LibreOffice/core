@@ -41,12 +41,13 @@ SwEditShell::InsertSection(
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
-        FOREACHPAM_START(GetCrsr())
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
             SwSection const*const pNew =
-                GetDoc()->InsertSwSection( *PCURCRSR, rNewData, 0, pAttr );
+                GetDoc()->InsertSwSection( rPaM, rNewData, 0, pAttr );
             if( !pRet )
                 pRet = pNew;
-        FOREACHPAM_END()
+        }
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
         EndAllAction();
@@ -183,10 +184,10 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
     {
         // for all section in the selection
 
-        FOREACHPAM_START(GetCrsr())
-
-            const SwPosition* pStt = PCURCRSR->Start(),
-                            * pEnd = PCURCRSR->End();
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            const SwPosition* pStt = rPaM.Start(),
+                            * pEnd = rPaM.End();
 
             const SwSectionNode* pSttSectNd = pStt->nNode.GetNode().FindSectionNode(),
                                * pEndSectNd = pEnd->nNode.GetNode().FindSectionNode();
@@ -224,7 +225,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
                 }
             }
 
-        FOREACHPAM_END()
+        }
     }
 }
 
@@ -253,10 +254,11 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
 sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 {
     sal_uInt16 nRet = 0;
-    FOREACHPAM_START(GetCrsr())
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
 
-        const SwPosition* pStt = PCURCRSR->Start(),
-                        * pEnd = PCURCRSR->End();
+        const SwPosition* pStt = rPaM.Start(),
+                        * pEnd = rPaM.End();
         const SwCntntNode* pCNd;
         // check the selection, if Start at Node begin and End at Node end
         if( pStt->nContent.GetIndex() ||
@@ -286,7 +288,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
         if( &aSIdx.GetNode() != aEIdx.GetNode().StartOfSectionNode() )
             ++nRet;
 
-    FOREACHPAM_END()
+    }
     return nRet;
 }
 

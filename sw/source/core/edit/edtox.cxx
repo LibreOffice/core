@@ -60,10 +60,10 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
 {
     bool bInsAtPos = rMark.IsAlternativeText();
     StartAllAction();
-    FOREACHPAM_START(GetCrsr())
-
-        const SwPosition *pStt = PCURCRSR->Start(),
-                         *pEnd = PCURCRSR->End();
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        const SwPosition *pStt = rPaM.Start(),
+                         *pEnd = rPaM.End();
         if( bInsAtPos )
         {
             SwPaM aTmp( *pStt );
@@ -72,10 +72,10 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
         else if( *pEnd != *pStt )
         {
             GetDoc()->getIDocumentContentOperations().InsertPoolItem(
-                *PCURCRSR, rMark, nsSetAttrMode::SETATTR_DONTEXPAND );
+                rPaM, rMark, nsSetAttrMode::SETATTR_DONTEXPAND );
         }
 
-    FOREACHPAM_END()
+    }
     EndAllAction();
 }
 

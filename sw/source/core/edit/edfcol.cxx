@@ -58,14 +58,15 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt,
     aRewriter.AddRule(UndoArg1, pLocal->GetName());
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
-    FOREACHPAM_START(GetCrsr())
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
 
-        if ( !PCURCRSR->HasReadonlySel( GetViewOptions()->IsFormView() ) )
+        if ( !rPaM.HasReadonlySel( GetViewOptions()->IsFormView() ) )
         {
-            GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
+            GetDoc()->SetTxtFmtColl( rPaM, pLocal, true, bResetListAttrs );
         }
 
-    FOREACHPAM_END()
+    }
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
     EndAllAction();
 }

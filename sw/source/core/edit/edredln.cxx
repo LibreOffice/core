@@ -110,9 +110,10 @@ bool SwEditShell::RejectRedlinesInSelection()
 bool SwEditShell::SetRedlineComment( const OUString& rS )
 {
     bool bRet = false;
-    FOREACHPAM_START(GetCrsr())
-        bRet = bRet || GetDoc()->getIDocumentRedlineAccess().SetRedlineComment( *PCURCRSR, rS );
-    FOREACHPAM_END()
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        bRet = bRet || GetDoc()->getIDocumentRedlineAccess().SetRedlineComment( rPaM, rS );
+    }
 
     return bRet;
 }

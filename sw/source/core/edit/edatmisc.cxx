@@ -54,11 +54,12 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 
 void SwEditShell::GCAttr()
 {
-    FOREACHPAM_START(GetCrsr())
-        if ( !PCURCRSR->HasMark() )
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        if ( !rPaM.HasMark() )
         {
             SwTxtNode *const pTxtNode =
-                PCURCRSR->GetPoint()->nNode.GetNode().GetTxtNode();
+                rPaM.GetPoint()->nNode.GetNode().GetTxtNode();
             if (pTxtNode)
             {
                 pTxtNode->GCAttr();
@@ -66,8 +67,8 @@ void SwEditShell::GCAttr()
         }
         else
         {
-            const SwNodeIndex& rEnd = PCURCRSR->End()->nNode;
-            SwNodeIndex aIdx( PCURCRSR->Start()->nNode );
+            const SwNodeIndex& rEnd = rPaM.End()->nNode;
+            SwNodeIndex aIdx( rPaM.Start()->nNode );
             SwNode* pNd = &aIdx.GetNode();
             do {
                 if( pNd->IsTxtNode() )
@@ -76,7 +77,7 @@ void SwEditShell::GCAttr()
             while( 0 != ( pNd = GetDoc()->GetNodes().GoNext( &aIdx )) &&
                     aIdx <= rEnd );
         }
-    FOREACHPAM_END()
+    }
 }
 
 /// Set the attribute as new default attribute in the document.
@@ -104,13 +105,14 @@ void SwEditShell::SetAttrItem( const SfxPoolItem& rHint, sal_uInt16 nFlags )
         bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
-        FOREACHPAM_START(GetCrsr())
-            if( PCURCRSR->HasMark() && ( bIsTblMode ||
-                *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() ))
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            if( rPaM.HasMark() && ( bIsTblMode ||
+                *rPaM.GetPoint() != *rPaM.GetMark() ))
             {
-                GetDoc()->getIDocumentContentOperations().InsertPoolItem(*PCURCRSR, rHint, nFlags );
+                GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, rHint, nFlags );
             }
-        FOREACHPAM_END()
+        }
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }

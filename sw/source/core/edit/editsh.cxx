@@ -68,17 +68,17 @@ using namespace com::sun::star;
 void SwEditShell::Insert( sal_Unicode c, bool bOnlyCurrCrsr )
 {
     StartAllAction();
-    FOREACHPAM_START(GetCrsr())
-
-        const bool bSuccess = GetDoc()->getIDocumentContentOperations().InsertString(*PCURCRSR, OUString(c));
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        const bool bSuccess = GetDoc()->getIDocumentContentOperations().InsertString(rPaM, OUString(c));
         OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
         (void) bSuccess;
 
-        SaveTblBoxCntnt( PCURCRSR->GetPoint() );
+        SaveTblBoxCntnt( rPaM.GetPoint() );
         if( bOnlyCurrCrsr )
             break;
 
-    FOREACHPAM_END()
+    }
 
     EndAllAction();
 }
@@ -167,13 +167,14 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
 void SwEditShell::Overwrite(const OUString &rStr)
 {
     StartAllAction();
-    FOREACHPAM_START(GetCrsr())
-        if( !GetDoc()->getIDocumentContentOperations().Overwrite(*PCURCRSR, rStr ) )
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        if( !GetDoc()->getIDocumentContentOperations().Overwrite(rPaM, rStr ) )
         {
             OSL_FAIL( "Doc->getIDocumentContentOperations().Overwrite(Str) failed." );
         }
-        SaveTblBoxCntnt( PCURCRSR->GetPoint() );
-    FOREACHPAM_END()
+        SaveTblBoxCntnt( rPaM.GetPoint() );
+    }
     EndAllAction();
 }
 
@@ -182,11 +183,12 @@ long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-    FOREACHPAM_START(GetCrsr())
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
         // Here, a table cell becomes a normal text cell.
-        GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
-        GetDoc()->getIDocumentContentOperations().SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
-    FOREACHPAM_END()
+        GetDoc()->ClearBoxNumAttrs( rPaM.GetPoint()->nNode );
+        GetDoc()->getIDocumentContentOperations().SplitNode( *rPaM.GetPoint(), bCheckTableStart );
+    }
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
@@ -205,10 +207,11 @@ bool SwEditShell::AppendTxtNode()
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-    FOREACHPAM_START(GetCrsr())
-        GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
-        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( *PCURCRSR->GetPoint()) || bRet;
-    FOREACHPAM_END()
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        GetDoc()->ClearBoxNumAttrs( rPaM.GetPoint()->nNode );
+        bRet = GetDoc()->getIDocumentContentOperations().AppendTxtNode( *rPaM.GetPoint()) || bRet;
+    }
 
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
@@ -1026,12 +1029,11 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     if( pCrsr->GetNext() != pCrsr )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-        FOREACHPAM_START(GetCrsr())
-
-        if( PCURCRSR->HasMark() )
-            GetDoc()->getIDocumentContentOperations().TransliterateText( *PCURCRSR, aTrans );
-
-        FOREACHPAM_END()
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            if( rPaM.HasMark() )
+                GetDoc()->getIDocumentContentOperations().TransliterateText( rPaM, aTrans );
+        }
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     }
     else
@@ -1042,12 +1044,12 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
 
 void SwEditShell::CountWords( SwDocStat& rStat ) const
 {
-    FOREACHPAM_START(GetCrsr())
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        if( rPaM.HasMark() )
+            GetDoc()->CountWords( rPaM, rStat );
 
-        if( PCURCRSR->HasMark() )
-            GetDoc()->CountWords( *PCURCRSR, rStat );
-
-    FOREACHPAM_END()
+    }
 }
 
 void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
