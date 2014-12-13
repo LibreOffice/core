@@ -204,11 +204,12 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    FOREACHPAM_START(GetCrsr()) // for each PaM
-        const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
+    {
+        const bool bSuccess(GetDoc()->getIDocumentContentOperations().InsertPoolItem(rPaM, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
-    FOREACHPAM_END()
+    }
 
     EndAllAction();
 }
@@ -284,12 +285,13 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  // Search-Hint
         SwMsgPoolItem aAnnotationFldHint( RES_TXTATR_ANNOTATION );
         SwMsgPoolItem aInputFldHint( RES_TXTATR_INPUTFIELD );
-        FOREACHPAM_START(GetCrsr())               // for each PaM
-            if( PCURCRSR->HasMark() && bOkay )    // ... with selection
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
+        {
+            if( rPaM.HasMark() && bOkay )    // ... with selection
             {
                 // copy of the PaM
-                SwPaM aCurPam( *PCURCRSR->GetMark(), *PCURCRSR->GetPoint() );
-                SwPaM aPam( *PCURCRSR->GetPoint() );
+                SwPaM aCurPam( *rPaM.GetMark(), *rPaM.GetPoint() );
+                SwPaM aPam( *rPaM.GetPoint() );
 
                 SwPosition *pCurStt = aCurPam.Start(), *pCurEnd =
                     aCurPam.End();
@@ -331,7 +333,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
             if( bTblSelBreak ) // If table section and table formula are updated -> finish
                 break;
 
-        FOREACHPAM_END()
+        }
     }
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();

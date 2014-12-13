@@ -126,11 +126,12 @@ bool SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     SwWait aWait( *GetDoc()->GetDocShell(), true );
     bool bRet = false;
     StartAllAction();
-    FOREACHPAM_START(GetCrsr())
-        if( PCURCRSR->HasMark() )
-            bRet |= 0 != GetDoc()->TextToTable( rInsTblOpts, *PCURCRSR, cCh,
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        if( rPaM.HasMark() )
+            bRet |= 0 != GetDoc()->TextToTable( rInsTblOpts, rPaM, cCh,
                                                 eAdj, pTAFmt );
-    FOREACHPAM_END()
+    }
     EndAllAction();
     return bRet;
 }
@@ -185,14 +186,15 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 bool SwEditShell::IsTextToTableAvailable() const
 {
     bool bOnlyText = false;
-    FOREACHPAM_START(GetCrsr())
-        if( PCURCRSR->HasMark() && *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() )
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        if( rPaM.HasMark() && *rPaM.GetPoint() != *rPaM.GetMark() )
         {
             bOnlyText = true;
 
             // check if selection is in listing
-            sal_uLong nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
-                  nEnd = PCURCRSR->GetPoint()->nNode.GetIndex();
+            sal_uLong nStt = rPaM.GetMark()->nNode.GetIndex(),
+                  nEnd = rPaM.GetPoint()->nNode.GetIndex();
             if( nStt > nEnd )   { sal_uLong n = nStt; nStt = nEnd; nEnd = n; }
 
             for( ; nStt <= nEnd; ++nStt )
@@ -205,7 +207,7 @@ bool SwEditShell::IsTextToTableAvailable() const
             if( !bOnlyText )
                 break;
         }
-    FOREACHPAM_END()
+    }
 
     return bOnlyText;
 }

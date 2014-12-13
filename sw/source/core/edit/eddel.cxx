@@ -121,9 +121,10 @@ long SwEditShell::Delete()
             GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_DELETE, &aRewriter);
         }
 
-        FOREACHPAM_START(GetCrsr())
-            DeleteSel( *PCURCRSR, &bUndo );
-        FOREACHPAM_END()
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            DeleteSel( rPaM, &bUndo );
+        }
 
         // If undo container then close here
         if( bUndo )
@@ -151,15 +152,15 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         SwPosition * pPos = 0;
         boost::shared_ptr<SwPosition> pInsertPos;
         sal_uInt16 nMove = 0;
-        FOREACHPAM_START(GetCrsr())
-
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
             if( !pPos )
             {
                 if( pDestShell == this )
                 {
                     // First cursor represents the target position!!
-                    PCURCRSR->DeleteMark();
-                    pPos = (SwPosition*)PCURCRSR->GetPoint();
+                    rPaM.DeleteMark();
+                    pPos = (SwPosition*)rPaM.GetPoint();
                     continue;
                 }
                 else
@@ -184,9 +185,9 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
             // Check if a selection would be copied into itself
             if( pDestShell->GetDoc() == GetDoc() &&
-                *PCURCRSR->Start() <= *pTmp && *pTmp < *PCURCRSR->End() )
+                *rPaM.Start() <= *pTmp && *pTmp < *rPaM.End() )
                 return sal_False;
-        FOREACHPAM_END()
+        }
     }
 
     pDestShell->StartAllAction();
@@ -199,15 +200,15 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-    FOREACHPAM_START(GetCrsr())
-
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
         if( !pPos )
         {
             if( pDestShell == this )
             {
                 // First cursor represents the target position!!
-                PCURCRSR->DeleteMark();
-                pPos = (SwPosition*)PCURCRSR->GetPoint();
+                rPaM.DeleteMark();
+                pPos = (SwPosition*)rPaM.GetPoint();
                 continue;
             }
             else
@@ -225,7 +226,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         }
 
         // Only for a selection (non-text nodes have selection but Point/GetMark are equal)
-        if( !PCURCRSR->HasMark() || *PCURCRSR->GetPoint() == *PCURCRSR->GetMark() )
+        if( !rPaM.HasMark() || *rPaM.GetPoint() == *rPaM.GetMark() )
             continue;
 
         if( bFirstMove )
@@ -236,7 +237,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = false;
         }
 
-        const bool bSuccess( GetDoc()->getIDocumentContentOperations().CopyRange( *PCURCRSR, *pPos, false ) );
+        const bool bSuccess( GetDoc()->getIDocumentContentOperations().CopyRange( rPaM, *pPos, false ) );
         if (!bSuccess)
             continue;
 
@@ -244,7 +245,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         pDestShell->GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
         bRet = true;
-    FOREACHPAM_END()
+    }
 
     // Maybe nothing has been moved?
     if( !bFirstMove )
@@ -302,14 +303,15 @@ bool SwEditShell::Replace( const OUString& rNewStr, bool bRegExpRplc )
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
-        FOREACHPAM_START(GetCrsr())
-            if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            if( rPaM.HasMark() && *rPaM.GetMark() != *rPaM.GetPoint() )
             {
-                bRet = GetDoc()->getIDocumentContentOperations().ReplaceRange( *PCURCRSR, rNewStr, bRegExpRplc )
+                bRet = GetDoc()->getIDocumentContentOperations().ReplaceRange( rPaM, rNewStr, bRegExpRplc )
                     || bRet;
-                SaveTblBoxCntnt( PCURCRSR->GetPoint() );
+                SaveTblBoxCntnt( rPaM.GetPoint() );
             }
-        FOREACHPAM_END()
+        }
 
         // close Undo container here
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);

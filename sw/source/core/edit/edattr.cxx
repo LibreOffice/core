@@ -481,10 +481,10 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
     if( !nDefDist )
         return false;
 
-    FOREACHPAM_START(GetCrsr())
-
-        sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
-              nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
+    for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+    {
+        sal_uLong nSttNd = rPaM.GetMark()->nNode.GetIndex(),
+              nEndNd = rPaM.GetPoint()->nNode.GetIndex();
 
         if( nSttNd > nEndNd )
             std::swap(nSttNd, nEndNd);
@@ -516,7 +516,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
         if( !bRet )
             break;
 
-    FOREACHPAM_END()
+    }
     return bRet;
 }
 
