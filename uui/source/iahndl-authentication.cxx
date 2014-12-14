@@ -751,7 +751,7 @@ UUIInteractionHelper::handleAuthFallbackRequest( OUString & instructions,
         OUString & url,
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
-    Window * pParent = getParentProperty( );
+    vcl::Window * pParent = getParentProperty( );
     AuthFallbackDlg *dlg = new AuthFallbackDlg( pParent, instructions, url );
     int retCode = dlg->Execute( );
     uno::Reference< task::XInteractionAbort > xAbort;
