@@ -818,9 +818,8 @@
 #define MN_CROP\
     MenuItem\
     {\
-        Identifier = SID_ATTR_GRAF_CROP ; \
-        HelpId = CMD_SID_ATTR_GRAF_CROP ; \
-        Text [ en-US ] = "Crop Image..." ; \
+        Identifier = SID_OBJECT_CROP ; \
+        Text [ en-US ] = "Crop Image" ; \
     };
 
 #define MN_GLUE_INSERT_POINT\
