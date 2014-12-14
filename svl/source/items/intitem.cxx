@@ -24,6 +24,7 @@
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
 #include <svl/metitem.hxx>
+#include <libxml/xmlwriter.h>
 
 
 //  class SfxByteItem
@@ -141,6 +142,13 @@ SfxFieldUnit SfxInt16Item::GetUnit() const
 
 TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
 
+void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUInt16Item"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
 
 
 //  class SfxInt32Item

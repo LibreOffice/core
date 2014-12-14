@@ -22,6 +22,7 @@ $(eval $(call gb_Library_Library,svl))
 $(eval $(call gb_Library_use_externals,svl,\
     boost_headers \
     mdds_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
