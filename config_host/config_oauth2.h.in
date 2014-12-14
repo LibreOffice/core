@@ -41,7 +41,7 @@
 #define ONEDRIVE_AUTH_URL "https://login.live.com/oauth20_authorize.srf"
 #define ONEDRIVE_TOKEN_URL "https://login.live.com/oauth20_token.srf"
 #define ONEDRIVE_REDIRECT_URI "https://login.live.com/oauth20_desktop.srf"
-#define ONEDRIVE_SCOPE "wl.offline_access"
+#define ONEDRIVE_SCOPE "wl.skydrive_update wl.offline_access"
 
 #endif
 
