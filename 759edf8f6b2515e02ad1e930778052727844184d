@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_1c8d6d31",
+        "filename": "extensions/source/update/check/updatecheck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-12-14T11:20:34Z",
+      "side": 1,
+      "message": "this doesn\u0027t compile",
+      "revId": "759edf8f6b2515e02ad1e930778052727844184d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
