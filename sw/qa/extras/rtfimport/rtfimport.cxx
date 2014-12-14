@@ -1986,6 +1986,12 @@ DECLARE_RTFIMPORT_TEST(testFdo85179, "fdo85179.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(50800/360), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo86761, "fdo86761.rtf")
+{
+    // This was 26, even if the picture should have no border, due to fLine=0.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo82859, "fdo82859.rtf")
 {
     // This was 0: "0xffffff" was converted to 0, i.e. the background was black instead of the default.

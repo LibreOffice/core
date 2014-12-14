@@ -137,6 +137,8 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet
 {
     if (nFLine == 0)
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+    else
+        xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_SOLID));
 }
 
 void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const OUString& aKey, const OUString& aValue)
