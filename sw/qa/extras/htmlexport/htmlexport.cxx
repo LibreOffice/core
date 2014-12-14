@@ -122,7 +122,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
-    assertXPath(pDoc, "/html/body/p/font/img", 1);
+    assertXPath(pDoc, "/html/body/p/img", 1);
 }
 
 DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.docx")
@@ -131,7 +131,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.do
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "/html/body", 1);
-    assertXPath(pDoc, "/html/body/p/font/img", 0);
+    assertXPath(pDoc, "/html/body/p/img", 0);
 }
 
 DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
