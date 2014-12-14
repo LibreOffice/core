@@ -1681,7 +1681,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                 if( nCol < nEndCol )
                     lcl_WriteSimpleString( rStrm, OUString(cSep) );
             }
-                WriteUnicodeOrByteEndl( rStrm );
+            WriteUnicodeOrByteEndl( rStrm );
             if( rStrm.GetError() != SVSTREAM_OK )
                 break;
             if( nSizeLimit && rStrm.Tell() > nSizeLimit )
