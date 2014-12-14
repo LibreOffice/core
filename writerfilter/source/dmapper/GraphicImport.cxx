@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -1165,7 +1166,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             //shapes have only one border
             table::BorderLine2 aBorderLine;
             GraphicBorderLine& rBorderLine = m_pImpl->aBorders[0];
-            if (rBorderLine.isEmpty() && xShapeProps.is())
+            if (rBorderLine.isEmpty() && xShapeProps.is() && xShapeProps->getPropertyValue("LineStyle").get<drawing::LineStyle>() != drawing::LineStyle_NONE)
             {
                 // In case we got no border tokens and we have the
                 // original shape, then use its line properties as the
