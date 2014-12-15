@@ -7538,7 +7538,7 @@ dnl Check for system libcmis
 dnl ===================================================================
 # libcmis requires curl and we can't build curl for iOS
 if test $_os != iOS; then
-    libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.4 >= 0.4.0])
+    libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.5 >= 0.5.0])
     ENABLE_CMIS=TRUE
 else
     ENABLE_CMIS=
