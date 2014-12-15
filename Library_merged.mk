@@ -35,60 +35,13 @@ $(eval $(call gb_Library_use_static_libraries,merged,\
 	$(if $(filter unx,$(GUIBASE)),headless) \
 ))
 
-$(eval $(call gb_Library_use_externals,merged,\
-	icu_headers \
-	icui18n \
-	icuuc \
-	boost_headers \
-	boostdatetime \
-	$(call gb_Helper_optional,DESKTOP,clucene) \
-	$(call gb_Helper_optional,COLLADA2GLTF,collada2gltf) \
-	cups \
-	curl \
-	dbus \
-	expat \
-	gconf \
-	gio \
-	glew \
-	graphite \
-	$(if $(ENABLE_GTK),gtk) \
-	harfbuzz \
-	hunspell \
-	jpeg \
-	lcms2 \
-	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \
-	libeot \
-	liblangtag \
-	libxml2 \
-	libxslt \
-	mesa_headers \
-	mythes \
-	nss3 \
-	$(call gb_Helper_optional,COLLADA2GLTF,opencollada_parser) \
-	$(call gb_Helper_optional,COLLADA2GLTF,png) \
-	telepathy \
-	zlib \
-))
-
 ifeq (ALL,$(MERGELIBS))
 $(eval $(call gb_Library_use_static_libraries,merged,\
 	ulingu \
 ))
-$(eval $(call gb_Library_use_externals,merged,\
-	cppunit \
-	hyphen \
-	libexslt \
-	libexttextcat \
-	$(if $(filter-out ANDROID IOS,$(OS)),openldap) \
-	$(call gb_Helper_optional,PYUNO,python) \
-))
 endif
 
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_use_externals,merged,\
-	fontconfig \
-	freetype \
-))
 $(eval $(call gb_Library_add_libs,merged,\
 	-lX11 \
 	-lXext \

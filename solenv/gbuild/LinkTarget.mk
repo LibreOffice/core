@@ -853,6 +853,10 @@ define gb_LinkTarget__is_build_tool
 $(if $(filter $(call gb_LinkTarget__get_workdir_linktargetname,$(1)),$(call gb_BUILD_HELPER_TOOLS)),$(true),$(false))
 endef
 
+define gb_LinkTarget__is_merged
+$(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib))))
+endef
+
 # call gb_LinkTarget_use_libraries,linktarget,libs
 define gb_LinkTarget_use_libraries
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
@@ -865,7 +869,7 @@ $(call gb_LinkTarget__use_libraries,$(1),$(2),$(2),$(4))
 else
 $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
 	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
-		$(if $(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib)))), \
+		$(if $(call gb_LinkTarget__is_merged,$(1)), \
 			$(filter $(gb_MERGEDLIBS),$(2)), merged)) \
 	$(if $(filter $(gb_URELIBS),$(2)), \
 		$(if $(filter $(1),$(foreach lib,$(gb_URELIBS),$(call gb_Library_get_linktarget,$(lib)))), \
@@ -1328,11 +1332,15 @@ $(call gb_LinkTarget_get_target,$(1)) :| \
 endef
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.
-# call gb_LinkTarget_use_external,library,external
+# Automatically forward for libmerged library too when linktarget is merged.
+#
+# call gb_LinkTarget_use_external,linktarget,external
 define gb_LinkTarget_use_external
 $(if $(filter undefined,$(origin gb_LinkTarget__use_$(2))),\
   $(error gb_LinkTarget_use_external: unknown external: $(2)),\
-  $(call gb_LinkTarget__use_$(2),$(1)))
+  $(if $(call gb_LinkTarget__is_merged,$(1)),$(call gb_LinkTarget__use_$(2),$(call gb_Library_get_linktarget,merged))) \
+    $(call gb_LinkTarget__use_$(2),$(1)) \
+)
 endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)
