@@ -11,6 +11,16 @@
 
 $(eval $(call gb_Module_Module,libreoffice))
 
+# This makefile needs to be read first because some variables like T_LIBS
+# for libmerged are cleared there and then later we append stuff to it
+# through e.g. gb_Library_use_external for various libraries in libmerged.
+ifneq ($(MERGELIBS),)
+$(eval $(call gb_Module_add_targets,libreoffice,\
+	Library_merged \
+	$(if $(URELIBS),Library_urelibs) \
+))
+endif
+
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	accessibility \
 	android \
@@ -154,13 +164,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	xmlscript \
 	xmlsecurity \
 ))
-
-ifneq ($(MERGELIBS),)
-$(eval $(call gb_Module_add_targets,libreoffice,\
-	Library_merged \
-	$(if $(URELIBS),Library_urelibs) \
-))
-endif
 
 # Especially when building everything with symbols, the linking of the largest
 # libraries takes enormous amounts of RAM.	To prevent annoying OOM situations
