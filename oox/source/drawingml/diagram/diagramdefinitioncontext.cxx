@@ -48,7 +48,9 @@ DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rPare
 
 DiagramDefinitionContext::~DiagramDefinitionContext()
 {
-    mpLayout->getNode()->dump(0);
+    LayoutNodePtr node = mpLayout->getNode();
+    if (node)
+        node->dump(0);
 }
 
 ContextHandlerRef
