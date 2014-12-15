@@ -203,13 +203,13 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, s
     {
         return ImplScaleFilter( rScaleX, rScaleY, GL_LINEAR );
     }
-    else if( nScaleFlag == BMP_SCALE_SUPER )
+    else if( nScaleFlag == BMP_SCALE_SUPER || nScaleFlag == BMP_SCALE_DEFAULT )
     {
         const Lanczos3Kernel aKernel;
 
         return ImplScaleConvolution( rScaleX, rScaleY, aKernel );
     }
-    else if( nScaleFlag == BMP_SCALE_LANCZOS )
+    else if( nScaleFlag == BMP_SCALE_LANCZOS || nScaleFlag == BMP_SCALE_BESTQUALITY  )
     {
         const Lanczos3Kernel aKernel;
 

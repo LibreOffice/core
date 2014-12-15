@@ -35,18 +35,17 @@
 
 
 #define BMP_SCALE_NONE              0x00000000UL
-#define BMP_SCALE_FAST              0x00000001UL
-#define BMP_SCALE_INTERPOLATE       0x00000002UL
-#define BMP_SCALE_SUPER             0x00000003UL
-#define BMP_SCALE_LANCZOS           0x00000004UL
-#define BMP_SCALE_BICUBIC           0x00000005UL
-#define BMP_SCALE_BILINEAR          0x00000006UL
-#define BMP_SCALE_BOX               0x00000007UL
-
-// Aliases, try to use these two (or BMP_SCALE_FAST/BMP_SCALE_NONE),
-// use a specific algorithm only if you really need to.
-#define BMP_SCALE_BESTQUALITY       BMP_SCALE_LANCZOS
-#define BMP_SCALE_DEFAULT           BMP_SCALE_SUPER
+// Try to preferably use these.
+#define BMP_SCALE_DEFAULT           0x00000001UL
+#define BMP_SCALE_FAST              0x00000002UL
+#define BMP_SCALE_BESTQUALITY       0x00000003UL
+// Specific algorithms,  use only if you really need to.
+#define BMP_SCALE_INTERPOLATE       0x00000004UL
+#define BMP_SCALE_SUPER             0x00000005UL
+#define BMP_SCALE_LANCZOS           0x00000006UL
+#define BMP_SCALE_BICUBIC           0x00000007UL
+#define BMP_SCALE_BILINEAR          0x00000008UL
+#define BMP_SCALE_BOX               0x00000009UL
 
 
 #define BMP_DITHER_NONE             0x00000000UL
