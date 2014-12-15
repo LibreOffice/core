@@ -810,8 +810,6 @@ bool ZipPackageStream::saveChild(
                 if (xSeek.is() && xSeek->getLength() < 100000)
                     bParallelDeflate = false;
 
-                bParallelDeflate = false; // globally disable parallel deflate for now.
-
                 if (bParallelDeflate)
                 {
                     // Start a new thread deflating this zip entry
