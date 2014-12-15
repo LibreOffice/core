@@ -22,7 +22,7 @@
 #include "jni.h"
 
 #include "rtl/ustring.hxx"
-#include "osl/module.h"
+#include "osl/module.hxx"
 
 #include "juhx-export-types.hxx"
 
@@ -51,9 +51,8 @@ static bool inited_juhx( JNIEnv * jni_env )
     if (s_inited)
         return true;
     OUString lib_name = SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION;
-    oslModule hModule =
-        osl_loadModuleRelative( &thisModule, lib_name.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-    if (0 == hModule)
+    osl::Module aModule;
+    if (!aModule.loadRelative(&thisModule, lib_name, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL))
     {
         jclass c = jni_env->FindClass( "java/lang/RuntimeException" );
         jni_env->ThrowNew(
@@ -64,16 +63,14 @@ static bool inited_juhx( JNIEnv * jni_env )
     {
         OUString symbol =
               "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
-        s_writeInfo = (javaunohelper::detail::Func_writeInfo *)osl_getFunctionSymbol(
-            hModule, symbol.pData );
+        s_writeInfo = (javaunohelper::detail::Func_writeInfo *)aModule.getFunctionSymbol(symbol);
         symbol =
             "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
-        s_getFactory = (javaunohelper::detail::Func_getFactory *)osl_getFunctionSymbol(
-            hModule, symbol.pData );
+        s_getFactory = (javaunohelper::detail::Func_getFactory *)aModule.getFunctionSymbol(symbol);
         symbol =
             "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
         s_bootstrap =
-            (javaunohelper::detail::Func_bootstrap *)osl_getFunctionSymbol( hModule, symbol.pData );
+            (javaunohelper::detail::Func_bootstrap *)aModule.getFunctionSymbol(symbol);
 
         if (0 == s_writeInfo ||
             0 == s_getFactory ||
@@ -84,6 +81,7 @@ static bool inited_juhx( JNIEnv * jni_env )
                 c, "error resolving symbols of " SAL_DLLPREFIX "juhx" SAL_DLLEXTENSION "!" );
             return false;
         }
+        aModule.release();
     }
     s_inited = true;
     return true;
