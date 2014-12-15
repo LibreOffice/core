@@ -76,9 +76,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             settings.getJRELocations();
         //Use every plug-in library to get Java installations.
         typedef std::vector<OUString>::const_iterator ci_pl;
-        int cModule = 0;
-         for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i, ++cModule)
-         {
+        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
+        {
             const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(vendor);
@@ -393,8 +392,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         //Use every vendor to get Java installations. At the first usable
         //Java the loop will break
         typedef std::vector<OUString>::const_iterator ci_pl;
-        int cModule = 0;
-        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i, ++cModule)
+        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
         {
             const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
@@ -660,9 +658,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         //Use every plug-in library to determine if the path represents a
         //JRE. If a plugin recognized it then the loop will break
         typedef std::vector<OUString>::const_iterator ci_pl;
-        int cModule = 0;
-        for (ci_pl i = vecVendors.begin(); i != vecVendors.end();
-             ++i, ++cModule)
+        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
         {
             const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
