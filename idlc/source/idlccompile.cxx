@@ -153,6 +153,7 @@ OString makeTempName(const OString& prefix)
     strncat(tmpFilePattern, "XXXXXX", sizeof(tmpFilePattern)-1-strlen(tmpFilePattern));
 
 #ifdef SAL_UNX
+    // coverity[secure_temp] - https://communities.coverity.com/thread/3179
     int nDescriptor = mkstemp(tmpFilePattern);
     if( -1 == nDescriptor )
     {
