@@ -14,7 +14,9 @@
 
 module com { module sun { module star { module ucb {
 
-/** An interaction continuation handing back some authentication data.
+/** An interaction continuation handing back some authentication data
+
+    @since LibreOffice 4.4
 */
 published exception AuthenticationFallbackRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
