@@ -927,6 +927,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
             break;
         }
         case BMP_SCALE_SUPER:
+        case BMP_SCALE_DEFAULT:
         {
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
             {
@@ -941,6 +942,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
             break;
         }
         case BMP_SCALE_LANCZOS :
+        case BMP_SCALE_BESTQUALITY:
         {
             const Lanczos3Kernel kernel;
 
