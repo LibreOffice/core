@@ -498,19 +498,19 @@ bool GetMenuItemData(
         {
             for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
             {
-                if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
                 {
                     aProp[i].Value >>= rCommandURL;
                 }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
                 {
                     aProp[i].Value >>= rSubMenu;
                 }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
                 {
                     aProp[i].Value >>= rLabel;
                 }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
                 {
                     aProp[i].Value >>= rType;
                 }
@@ -543,27 +543,27 @@ bool GetToolbarItemData(
         {
             for ( sal_Int32 i = 0; i < aProp.getLength(); ++i )
             {
-                if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+                if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
                 {
                     aProp[i].Value >>= rCommandURL;
                 }
-                if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_STYLE )
                 {
                     aProp[i].Value >>= rStyle;
                 }
-                else if (aProp[i].Name.equalsAscii(ITEM_DESCRIPTOR_CONTAINER))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_CONTAINER )
                 {
                     aProp[i].Value >>= rSubMenu;
                 }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_LABEL )
                 {
                     aProp[i].Value >>= rLabel;
                 }
-                else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_TYPE )
                 {
                     aProp[i].Value >>= rType;
                 }
-                else if (aProp[i].Name.equalsAscii(ITEM_DESCRIPTOR_ISVISIBLE))
+                else if ( aProp[i].Name == ITEM_DESCRIPTOR_ISVISIBLE )
                 {
                     aProp[i].Value >>= rIsVisible;
                 }
@@ -1111,7 +1111,7 @@ bool MenuSaveInData::LoadSubMenus(
                     {
                         for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
-                            if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
+                            if ( aPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
                             {
                                 aPropSeq[i].Value >>= aLabel;
                                 break;
@@ -3538,7 +3538,7 @@ void ToolbarSaveInData::SetSystemStyle(
             {
                 for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
-                    if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE) )
+                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
                     {
                         aProps[ i ].Value = uno::makeAny( nStyle );
                         break;
@@ -3576,7 +3576,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
             {
                 for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
-                    if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE) )
+                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
                     {
                         aProps[i].Value >>= result;
                         break;
@@ -3610,7 +3610,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
             {
                 for ( sal_Int32 i = 0; i < aProps.getLength(); ++i )
                 {
-                    if ( aProps[ i ].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
+                    if ( aProps[ i ].Name == ITEM_DESCRIPTOR_UINAME )
                     {
                         aProps[ i ].Value >>= result;
                     }
@@ -3637,7 +3637,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
             {
                 for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                 {
-                    if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
+                    if ( aPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
                     {
                         aPropSeq[i].Value >>= result;
                     }
@@ -3688,12 +3688,12 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
             for ( sal_Int32 j = 0; j < props.getLength(); ++j )
             {
-                if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
+                if ( props[ j ].Name == ITEM_DESCRIPTOR_RESOURCEURL )
                 {
                     props[ j ].Value >>= url;
                     systemname = url.copy( url.lastIndexOf( '/' ) + 1 );
                 }
-                else if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
+                else if ( props[ j ].Name == ITEM_DESCRIPTOR_UINAME )
                 {
                     props[ j ].Value >>= uiname;
                 }
@@ -3765,12 +3765,12 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
                 for ( sal_Int32 j = 0; j < props.getLength(); ++j )
                 {
-                    if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_RESOURCEURL) )
+                    if ( props[ j ].Name == ITEM_DESCRIPTOR_RESOURCEURL )
                     {
                         props[ j ].Value >>= url;
                         systemname = url.copy( url.lastIndexOf( '/' ) + 1 );
                     }
-                    else if ( props[ j ].Name.equalsAscii( ITEM_DESCRIPTOR_UINAME) )
+                    else if ( props[ j ].Name == ITEM_DESCRIPTOR_UINAME )
                     {
                         props[ j ].Value >>= uiname;
                     }
@@ -4204,7 +4204,7 @@ bool ToolbarSaveInData::LoadToolbar(
                     {
                         for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
-                            if ( aPropSeq[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ) )
+                            if ( aPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
                             {
                                 aPropSeq[i].Value >>= aLabel;
                                 break;

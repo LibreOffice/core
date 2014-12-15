@@ -226,7 +226,7 @@ void HexColorControl::Paste()
                 OUString aText;
                 aData >>= aText;
 
-                if( !aText.isEmpty() && aText.matchAsciiL( "#", 1, 0 ) )
+                if( !aText.isEmpty() && aText.startsWith( "#" ) )
                     aText = aText.copy(1);
 
                 if( aText.getLength() > 6 )
