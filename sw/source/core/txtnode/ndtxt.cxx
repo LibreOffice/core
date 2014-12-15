@@ -1491,11 +1491,12 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
             const sal_Int32 *const pEndIdx = pHt->GetEnd();
             if ( pEndIdx && !pHt->HasDummyChar() )
             {
-                if ( ( *pEndIdx > nTxtStartIdx
-                       || ( *pEndIdx == nTxtStartIdx
-                            && nAttrStartIdx == nTxtStartIdx ) ) )
+                sal_uInt16 const nWhich = pHt->Which();
+                if (RES_TXTATR_INPUTFIELD != nWhich // fdo#74981 skip fields
+                    && (    *pEndIdx > nTxtStartIdx
+                        || (*pEndIdx == nTxtStartIdx
+                            && nAttrStartIdx == nTxtStartIdx)))
                 {
-                    sal_uInt16 const nWhich = pHt->Which();
                     if ( RES_TXTATR_REFMARK != nWhich )
                     {
                         // attribute in the area => copy
@@ -1926,8 +1927,6 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 void SwTxtNode::CutText( SwTxtNode * const pDest,
             const SwIndex & rStart, const sal_Int32 nLen )
 {
-    if(nLen == 0)
-        return;
     if(pDest)
     {
         SwIndex aDestStt(pDest, pDest->GetTxt().getLength());
