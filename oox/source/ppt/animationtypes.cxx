@@ -33,7 +33,7 @@ namespace oox { namespace ppt {
 Any GetTime(  const OUString & val )
 {
     Any aDuration;
-    if( val.equalsAscii( "indefinite" ) )
+    if( val == "indefinite" )
     {
         aDuration <<= Timing_INDEFINITE;
     }
@@ -48,7 +48,7 @@ Any GetTime(  const OUString & val )
 Any GetTimeAnimateValueTime( const OUString & val )
 {
     Any aPercent;
-    if( val.equalsAscii( "indefinite" ) )
+    if( val == "indefinite" )
     {
         aPercent <<= Timing_INDEFINITE;
     }

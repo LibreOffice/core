@@ -120,7 +120,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
             OSL_TRACE( "Exception %s",  OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
     }
-    else if ( sType.equalsAscii( "slidenum" ) )
+    else if ( sType == "slidenum" )
     {
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.PageNumber" );
         aFields.push_back( Reference< XTextField > ( xIface, UNO_QUERY ) );

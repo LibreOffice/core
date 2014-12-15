@@ -406,8 +406,8 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = true;
             else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
             else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
-            else if( aName.equalsAscii( "visibility" ) )
-                mrTypeModel.mbVisible = !aValue.equalsAscii( "hidden" );
+            else if( aName == "visibility" )
+                mrTypeModel.mbVisible = aValue != "hidden";
             else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
             else if ( aName == "v-text-anchor" ) mrTypeModel.maVTextAnchor = aValue;
             else if ( aName == "mso-wrap-distance-left" ) mrTypeModel.maWrapDistanceLeft = aValue;

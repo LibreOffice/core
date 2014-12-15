@@ -551,11 +551,11 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         oRotation.reset(maTypeModel.maRotation.toInt32());
     if (!maTypeModel.maFlip.isEmpty())
     {
-        if (maTypeModel.maFlip.equalsAscii("x"))
+        if (maTypeModel.maFlip == "x")
         {
             bFlipX = true;
         }
-        else if (maTypeModel.maFlip.equalsAscii("y"))
+        else if (maTypeModel.maFlip == "y")
         {
             bFlipY = true;
         }
@@ -601,7 +601,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         nWrapDistanceBottom = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceBottom, 0, false, true);
     PropertySet(xShape).setAnyProperty(PROP_BottomMargin, uno::makeAny(nWrapDistanceBottom));
 
-    if ( maService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+    if ( maService == "com.sun.star.text.TextFrame" )
     {
         PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
         PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );

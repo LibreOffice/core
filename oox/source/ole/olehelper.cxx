@@ -494,8 +494,8 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
     {
         // Special processing for those html controls
         bool bOneOfHtmlControls = false;
-        if ( rStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_SELECT )
-          || rStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_TEXTBOX ) )
+        if ( rStrmClassId.toAsciiUpperCase() == HTML_GUID_SELECT
+          || rStrmClassId.toAsciiUpperCase() == HTML_GUID_TEXTBOX )
             bOneOfHtmlControls = true;
 
         if ( bOneOfHtmlControls )

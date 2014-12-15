@@ -448,10 +448,8 @@ Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rS
 
 FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
 {
-    bool bWriteHeader = true;
-    if( rMediaType.indexOfAsciiL( "vml", 3 ) >= 0 &&
-        rMediaType.indexOfAsciiL( "+xml", 4 ) < 0 )
-        bWriteHeader = false;
+    bool bWriteHeader
+        = rMediaType.indexOf( "vml" ) < 0 || rMediaType.indexOf( "+xml" ) >= 0;
     return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ), bWriteHeader ) );
 }
 

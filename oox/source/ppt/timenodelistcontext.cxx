@@ -272,7 +272,7 @@ namespace oox { namespace ppt {
                             {
                                 nCommand = EffectCommands::PLAY;
                             }
-                            else if( msCommand.equalsAscii( "playFrom" ) )
+                            else if( msCommand == "playFrom" )
                             {
                                 const OUString aMediaTime( msCommand.copy( 9, msCommand.getLength() - 10 ) );
                                 rtl_math_ConversionStatus eStatus;

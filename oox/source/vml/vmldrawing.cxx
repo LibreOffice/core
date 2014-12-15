@@ -207,7 +207,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     {
         Reference< XMultiServiceFactory > xModelFactory( mrFilter.getModelFactory(), UNO_SET_THROW );
         xShape.set( xModelFactory->createInstance( rService ), UNO_QUERY_THROW );
-        if ( !rService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+        if ( rService != "com.sun.star.text.TextFrame" )
         {
             // insert shape into passed shape collection (maybe drawpage or group shape)
             rxShapes->add( xShape );
