@@ -397,7 +397,7 @@ void OKeySet::executeStatement(OUStringBuffer& io_aFilter, Reference<XSingleSele
             for(;pAnd != pAndEnd;++pAnd)
             {
                 OUString sValue;
-                if ( !(pAnd->Value >>= sValue) || !( sValue == "?" || sValue.matchAsciiL( ":",1,0 ) ) )
+                if ( !(pAnd->Value >>= sValue) || !( sValue == "?" || sValue.startsWith( ":" ) ) )
                 { // we have a criteria which has to be taken into account for updates
                     m_aFilterColumns.push_back(pAnd->Name);
                 }

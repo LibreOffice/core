@@ -600,7 +600,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         PropertyValueSet aInfos;
         for (sal_Int32 i=0; i<aAdditionalInfo.getLength(); ++i, ++pAdditionalInfo)
         {
-            if( pAdditionalInfo->Name.equalsAscii("JDBCDRV"))
+            if( pAdditionalInfo->Name == "JDBCDRV" )
             {   // compatibility
                 PropertyValue aCompatibility(*pAdditionalInfo);
                 aCompatibility.Name = "JavaDriverClass";
@@ -752,7 +752,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
                 *pInfo = *aOverwrittenSetting;
             aRelevantSettings.erase(aOverwrittenSetting);
         }
-        else if( pInfo->Name.equalsAscii("JDBCDRV"))
+        else if( pInfo->Name == "JDBCDRV" )
         {   // this is a compatibility setting, remove it from the sequence (it's replaced by JavaDriverClass)
             nObsoleteSetting = i;
         }

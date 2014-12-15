@@ -1620,8 +1620,8 @@ static ::std::vector< CommentStrip > getComment( const OUString& rQuery )
     ::std::vector< CommentStrip > aRet;
     // First a quick search if there is any "--" or "//" or "/*", if not then
     // the whole copying loop is pointless.
-    if (rQuery.indexOfAsciiL( "--", 2, 0) < 0 && rQuery.indexOfAsciiL( "//", 2, 0) < 0 &&
-            rQuery.indexOfAsciiL( "/*", 2, 0) < 0)
+    if (rQuery.indexOf( "--" ) < 0 && rQuery.indexOf( "//" ) < 0 &&
+            rQuery.indexOf( "/*" ) < 0)
         return aRet;
 
     const sal_Unicode* pCopy = rQuery.getStr();

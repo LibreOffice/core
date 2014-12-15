@@ -1086,14 +1086,14 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         dispose();
 
     }
-    else if (   aCommand.Name.equalsAscii( "storeOwn" ) // compatibility
-            ||  aCommand.Name.equalsAscii( "store" )
+    else if (   aCommand.Name == "storeOwn" // compatibility
+            ||  aCommand.Name == "store"
             )
     {
         impl_store_throw();
     }
-    else if (   aCommand.Name.equalsAscii( "shutdown" ) // compatibility
-            ||  aCommand.Name.equalsAscii( "close" )
+    else if (   aCommand.Name == "shutdown" // compatibility
+            ||  aCommand.Name == "close"
             )
     {
         aRet <<= impl_close_throw();

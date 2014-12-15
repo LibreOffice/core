@@ -64,7 +64,7 @@ public:
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)   \
     {   \
-        return OUString::createFromAscii(implasciiname); \
+        return OUString(implasciiname); \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
@@ -74,7 +74,7 @@ public:
     }   \
     OUString SAL_CALL classname::getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException)    \
     {   \
-        return OUString::createFromAscii(implasciiname); \
+        return OUString(implasciiname); \
     }   \
 
 #define IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
@@ -93,7 +93,7 @@ public:
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname); \
+        aSupported[0] = serviceasciiname; \
         return aSupported;  \
     }   \
 
@@ -105,7 +105,7 @@ public:
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException)   \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(1);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname); \
+        aSupported[0] = serviceasciiname; \
         return aSupported;  \
     }   \
 
@@ -117,8 +117,8 @@ public:
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException)   \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(2);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname1);    \
-        aSupported[1] = OUString::createFromAscii(serviceasciiname2);    \
+        aSupported[0] = serviceasciiname1;    \
+        aSupported[1] = serviceasciiname2;    \
         return aSupported;  \
     }   \
 
@@ -126,8 +126,8 @@ public:
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(2);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname1);    \
-        aSupported[1] = OUString::createFromAscii(serviceasciiname2);    \
+        aSupported[0] = serviceasciiname1;    \
+        aSupported[1] = serviceasciiname2;    \
         return aSupported;  \
     }   \
 
@@ -135,9 +135,9 @@ public:
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)  \
     {   \
         ::com::sun::star::uno::Sequence< OUString > aSupported(3);   \
-        aSupported[0] = OUString::createFromAscii(serviceasciiname1);    \
-        aSupported[1] = OUString::createFromAscii(serviceasciiname2);    \
-        aSupported[2] = OUString::createFromAscii(serviceasciiname3);    \
+        aSupported[0] = serviceasciiname1;    \
+        aSupported[1] = serviceasciiname2;    \
+        aSupported[2] = serviceasciiname3;    \
         return aSupported;  \
     }   \
 

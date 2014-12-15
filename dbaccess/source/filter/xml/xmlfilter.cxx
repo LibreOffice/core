@@ -208,7 +208,7 @@ namespace dbaxml
                     pCreatorThread = new FastLoader(m_xContext, FastLoader::E_JAVA);
 #endif
                 }
-                else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
+                else if ( sURL.startsWithIgnoreAsciiCase("sdbc:calc:") )
                 {
                     pCreatorThread = new FastLoader(m_xContext, FastLoader::E_CALC);
                 }

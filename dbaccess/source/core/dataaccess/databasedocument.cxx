@@ -779,7 +779,7 @@ bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentU
 {
     if  (   ( i_rLogicalDocumentURL == getURL() )
         &&  ( i_rMediaDescriptor.getLength() == 1 )
-        &&  ( i_rMediaDescriptor[0].Name.equalsAscii( "BreakMacroSignature" ) )
+        &&  ( i_rMediaDescriptor[0].Name == "BreakMacroSignature" )
         )
     {
         // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,

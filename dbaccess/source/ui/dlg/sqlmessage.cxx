@@ -198,7 +198,7 @@ namespace
     {
         return  ( !_displayInfo.sErrorCode.isEmpty() )
                 ||  (   !_displayInfo.sSQLState.isEmpty()
-                    &&  !_displayInfo.sSQLState.equalsAscii( "S1000" )
+                    &&  _displayInfo.sSQLState != "S1000"
                     );
     }
 
@@ -340,7 +340,7 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
         )
     {
         lcl_insertExceptionEntry( *m_pExceptionList, elementPos, *loop );
-        bHave22018 = loop->sSQLState.equalsAscii( "22018" );
+        bHave22018 = loop->sSQLState == "22018";
     }
 
     // if the error has the code 22018, then add an additional explanation

@@ -192,22 +192,22 @@ OUString ODsnTypeCollection::getDatasourcePrefixFromMediaType(const OUString& _s
 
 bool ODsnTypeCollection::isShowPropertiesEnabled( const OUString& _sURL ) const
 {
-    return !(    _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:embedded:firebird",sizeof("sdbc:embedded:firebird")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlook",sizeof("sdbc:address:outlook")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:outlookexp",sizeof("sdbc:address:outlookexp")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:mozilla:",sizeof("sdbc:address:mozilla:")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:kab",sizeof("sdbc:address:kab")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:local",sizeof("sdbc:address:evolution:local")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:groupwise",sizeof("sdbc:address:evolution:groupwise")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:evolution:ldap",sizeof("sdbc:address:evolution:ldap")-1)
-            ||  _sURL.matchIgnoreAsciiCaseAsciiL("sdbc:address:macab",sizeof("sdbc:address:macab")-1)  );
+    return !(   _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:hsqldb")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:embedded:firebird")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:outlook")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:outlookexp")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:mozilla:")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:kab")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:evolution:local")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:evolution:groupwise")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:evolution:ldap")
+            ||  _sURL.startsWithIgnoreAsciiCase("sdbc:address:macab")  );
 }
 
 void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sDatabaseName,OUString& _rsHostname,sal_Int32& _nPortNumber) const
 {
     OUString sUrl = cutPrefix(_rDsn);
-    if ( _rDsn.matchIgnoreAsciiCaseAsciiL("jdbc:oracle:thin:",sizeof("jdbc:oracle:thin:")-1) )
+    if ( _rDsn.startsWithIgnoreAsciiCase("jdbc:oracle:thin:") )
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
         if ( !_rsHostname.getLength() && comphelper::string::getTokenCount(sUrl, ':') == 2 )
@@ -219,11 +219,12 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
             _rsHostname = _rsHostname.getToken(comphelper::string::getTokenCount(_rsHostname, '@') - 1, '@');
         _sDatabaseName = sUrl.getToken(comphelper::string::getTokenCount(sUrl, ':') - 1, ':');
     }
-    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:address:ldap:",sizeof("sdbc:address:ldap:")-1) )
+    else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:address:ldap:") )
     {
         lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
     }
-    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:mysqlc:",sizeof("sdbc:mysql:mysqlc:")-1) || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:mysql:jdbc:",sizeof("sdbc:mysql:jdbc:")-1) )
+    else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:mysql:mysqlc:")
+              || _rDsn.startsWithIgnoreAsciiCase("sdbc:mysql:jdbc:") )
     {
         lcl_extractHostAndPort(sUrl,_rsHostname,_nPortNumber);
 
@@ -231,8 +232,8 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
             _rsHostname = sUrl.getToken(0,'/');
         _sDatabaseName = sUrl.getToken(comphelper::string::getTokenCount(sUrl, '/') - 1, '/');
     }
-    else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=",sizeof("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")-1)
-         || _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=",sizeof("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=")-1))
+    else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")
+         || _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") )
     {
         OUString sNewFileName;
         if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )

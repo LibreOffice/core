@@ -106,12 +106,12 @@ namespace dbaui
         PropertyValue aProperty;
         if (_rValue >>= aProperty)
         {
-            if (aProperty.Name.equalsAscii("InitialSelection"))
+            if (aProperty.Name == "InitialSelection")
             {
                 OSL_VERIFY( aProperty.Value >>= m_sInitialSelection );
                 return;
             }
-            else if (aProperty.Name.equalsAscii("ActiveConnection"))
+            else if (aProperty.Name == "ActiveConnection")
             {
                 m_xActiveConnection.set( aProperty.Value, UNO_QUERY );
                 OSL_ENSURE( m_xActiveConnection.is(), "ODirectSQLDialog::implInitialize: invalid connection!" );

@@ -80,11 +80,11 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
     PropertyValue aProperty;
     if (_rValue >>= aProperty)
     {
-        if (aProperty.Name.equalsAscii("InitialSelection"))
+        if (aProperty.Name == "InitialSelection")
         {
             m_aInitialSelection = aProperty.Value;
         }
-        else if (aProperty.Name.equalsAscii("ActiveConnection"))
+        else if (aProperty.Name == "ActiveConnection")
         {
             m_xActiveConnection.set(aProperty.Value,UNO_QUERY);
         }

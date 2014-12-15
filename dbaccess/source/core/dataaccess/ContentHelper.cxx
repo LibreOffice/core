@@ -156,7 +156,7 @@ sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeExc
 Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException, std::exception)
 {
     Any aRet;
-    if ( aCommand.Name.equalsAscii( "getPropertyValues" ) )
+    if ( aCommand.Name == "getPropertyValues" )
     {
         // getPropertyValues
 
@@ -174,7 +174,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         }
         aRet <<= getPropertyValues( Properties);
     }
-    else if ( aCommand.Name.equalsAscii( "setPropertyValues" ) )
+    else if ( aCommand.Name == "setPropertyValues" )
     {
         // setPropertyValues
 
@@ -205,7 +205,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
-    else if ( aCommand.Name.equalsAscii( "getPropertySetInfo" ) )
+    else if ( aCommand.Name == "getPropertySetInfo" )
     {
         // getPropertySetInfo
 
