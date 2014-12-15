@@ -35,21 +35,25 @@ std::vector<OUString> getVectorFromCharArray(char const * const * ar, int size);
      argument to getJREInfoByPath. For example usBinDir is
      file:///c:/j2sdk/jre/bin then file:///c:/j2sdk/jre would be derived.
  */
-void getJREInfoFromBinPath(
-    const OUString& path, std::vector<rtl::Reference<VendorBase> > & vecInfos);
+void addJREInfoFromBinPath(
+    const OUString& path,
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos);
 inline OUString getDirFromFile(const OUString& usFilePath);
-void createJavaInfoFromPath(std::vector<rtl::Reference<VendorBase> >& vecInfos);
+void addJavaInfosFromPath(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos);
 
 /* Returns a VendorBase object if JAVA_HOME environment variable points
    to a JRE.
  */
-rtl::Reference<VendorBase> getJavaInfoFromJavaHome();
+void addJavaInfoFromJavaHome(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos);
 
-void createJavaInfoFromJavaHome(std::vector<rtl::Reference<VendorBase> > &vecInfos);
-void createJavaInfoDirScan(std::vector<rtl::Reference<VendorBase> >& vecInfos);
-#ifdef WNT
-void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> >& vecInfos);
-#endif
+void addJavaInfosDirScan(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos);
 
 bool makeDriveLetterSame(OUString * fileURL);
 
@@ -95,7 +99,8 @@ struct SameOrSubDirJREMap
  */
 rtl::Reference<VendorBase> getJREInfoByPath(const OUString& path);
 
-std::vector<rtl::Reference<VendorBase> > getAllJREInfos();
+std::vector<rtl::Reference<VendorBase> > addAllJREInfos(
+    bool checkJavaHomeAndPath, std::vector<rtl::Reference<VendorBase>> & infos);
 
 bool getJavaProps(
     const OUString & exePath,
@@ -104,8 +109,6 @@ bool getJavaProps(
 #endif
     std::vector<std::pair<OUString, OUString> >& props,
     bool * bProcessRun);
-
-void  createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfos);
 
 void bubbleSortVersion(std::vector<rtl::Reference<VendorBase> >& vec);
 

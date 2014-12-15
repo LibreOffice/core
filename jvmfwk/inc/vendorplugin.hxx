@@ -22,11 +22,13 @@
 #define INCLUDED_JVMFWK_INC_VENDORPLUGIN_HXX
 
 #include <jvmfwk/framework.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.h>
 #include "jni.h"
 #include <vector>
 #include <utility>
 #include "../source/elements.hxx"
+#include <vendorbase.hxx>
 
 /**
    @file
@@ -112,13 +114,15 @@ typedef enum
     version strings.
  */
 javaPluginError jfw_plugin_getAllJavaInfos(
+    bool checkJavaHomeAndPath,
     OUString const& sVendor,
     OUString const& sMinVersion,
     OUString const& sMaxVersion,
     rtl_uString * * arExcludeList,
     sal_Int32  nSizeExcludeList,
     JavaInfo*** parJavaInfo,
-    sal_Int32 *nSizeJavaInfo);
+    sal_Int32 *nSizeJavaInfo,
+    std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 /** obtains information for a JRE at a given location.
 
@@ -202,7 +206,8 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
  */
 javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
-    JavaInfo ** ppInfo);
+    JavaInfo ** ppInfo,
+    std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 
 /** obtains information about installations of Java Runtime Environments (JREs)
@@ -244,7 +249,8 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
 
 javaPluginError jfw_plugin_getJavaInfosFromPath(
     std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
-    std::vector<JavaInfo*> & vecJavaInfosFromPath);
+    std::vector<JavaInfo*> & vecJavaInfosFromPath,
+    std::vector<rtl::Reference<jfw_plugin::VendorBase>> & infos);
 
 /** starts a Java Virtual Machine.
 

@@ -86,14 +86,17 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             //maxVersion and excludeVersions
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
+            std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
             javaPluginError plerr = jfw_plugin_getAllJavaInfos(
+                true,
                 vendor,
                 versionInfo.sMinVersion,
                 versionInfo.sMaxVersion,
                 versionInfo.getExcludeVersions(),
                 versionInfo.getExcludeVersionSize(),
                 & arInfos,
-                & cInfos);
+                & cInfos,
+                infos);
 
             if (plerr != JFW_PLUGIN_E_NONE)
                 return JFW_E_ERROR;
@@ -408,10 +411,12 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 std::pair<OUString, jfw::VersionInfo>(vendor, versionInfo));
         }
 
+        std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
+
         // first inspect Java installation that the JAVA_HOME
         // environment variable points to (if it is set)
         JavaInfo* pHomeInfo = NULL;
-        if (jfw_plugin_getJavaInfoFromJavaHome(versionInfos, &pHomeInfo)
+        if (jfw_plugin_getJavaInfoFromJavaHome(versionInfos, &pHomeInfo, infos)
             == JFW_PLUGIN_E_NONE)
         {
             aCurrentInfo = pHomeInfo;
@@ -431,7 +436,8 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         if (!bInfoFound)
         {
             std::vector<JavaInfo*> vecJavaInfosFromPath;
-            if (jfw_plugin_getJavaInfosFromPath(versionInfos, vecJavaInfosFromPath)
+            if (jfw_plugin_getJavaInfosFromPath(
+                    versionInfos, vecJavaInfosFromPath, infos)
                 == JFW_PLUGIN_E_NONE)
             {
                 std::vector<JavaInfo*>::const_iterator it = vecJavaInfosFromPath.begin();
@@ -482,13 +488,15 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 sal_Int32 cInfos = 0;
                 JavaInfo** arInfos = NULL;
                 javaPluginError plerr = jfw_plugin_getAllJavaInfos(
+                    false,
                     vendor,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
                     versionInfo.getExcludeVersions(),
                     versionInfo.getExcludeVersionSize(),
                     & arInfos,
-                    & cInfos);
+                    & cInfos,
+                    infos);
 
                 if (plerr != JFW_PLUGIN_E_NONE)
                     continue;

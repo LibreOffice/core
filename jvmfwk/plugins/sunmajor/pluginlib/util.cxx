@@ -139,23 +139,35 @@ bool decodeOutput(const OString& s, OUString* out);
 namespace
 {
 
-bool getAndAddJREInfoByPath(const OUString& path,
-                      std::vector<rtl::Reference<VendorBase> > & vecInfos)
+bool addJREInfo(
+    rtl::Reference<VendorBase> const & info,
+    std::vector<rtl::Reference<VendorBase>> & infos)
 {
-    bool ret = false;
-
-    rtl::Reference<VendorBase> aInfo = getJREInfoByPath(path);
-    if (aInfo.is())
-    {
-        ret = true;
-        vector<rtl::Reference<VendorBase> >::const_iterator it_impl= std::find_if(
-            vecInfos.begin(),vecInfos.end(), InfoFindSame(aInfo->getHome()));
-        if(it_impl == vecInfos.end())
-        {
-            vecInfos.push_back(aInfo);
-        }
+    auto i(
+        std::find_if(
+            infos.begin(), infos.end(), InfoFindSame(info->getHome())));
+    if (i == infos.end()) {
+        infos.push_back(info);
+        return true;
+    } else {
+        return false;
     }
-    return ret;
+}
+
+bool getAndAddJREInfoByPath(
+    const OUString& path,
+    std::vector<rtl::Reference<VendorBase> > & allInfos,
+    std::vector<rtl::Reference<VendorBase> > & addedInfos)
+{
+    rtl::Reference<VendorBase> aInfo = getJREInfoByPath(path);
+    if (aInfo.is()) {
+        if (addJREInfo(aInfo, allInfos)) {
+            addedInfos.push_back(aInfo);
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
     OUString getLibraryLocation()
@@ -572,7 +584,9 @@ bool decodeOutput(const OString& s, OUString* out)
 
 
 #if defined WNT
-void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfos)
+void addJavaInfoFromWinReg(
+    std::vector<rtl::Reference<VendorBase> > & allInfos,
+    std::vector<rtl::Reference<VendorBase> > & addedInfos)
 {
         // Get Java s from registry
     std::vector<OUString> vecJavaHome;
@@ -583,7 +597,7 @@ void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfo
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
             it_home++)
         {
-            getAndAddJREInfoByPath(*it_home, vecInfos);
+            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
         }
     }
 
@@ -594,7 +608,7 @@ void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfo
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
             it_home++)
         {
-            getAndAddJREInfoByPath(*it_home, vecInfos);
+            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
         }
    }
 }
@@ -736,8 +750,9 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 }
 
 
-void getJREInfoFromBinPath(
-    const OUString& path, vector<rtl::Reference<VendorBase> > & vecInfos)
+void addJREInfoFromBinPath(
+    const OUString& path, vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
     // file:///c:/jre/bin
     //map:       jre/bin/java.exe
@@ -782,37 +797,41 @@ void getJREInfoFromBinPath(
                     sHome = sBinPath.copy(index - 1);
                 }
             }
-            if (!sHome.isEmpty())
+            if (!sHome.isEmpty()
+                && getAndAddJREInfoByPath(path, allInfos, addedInfos))
             {
-                if (getAndAddJREInfoByPath(sHome, vecInfos))
-                    return;
+                return;
             }
         }
     }
 }
 
-vector<Reference<VendorBase> > getAllJREInfos()
+vector<Reference<VendorBase> > addAllJREInfos(
+    bool checkJavaHomeAndPath,
+    std::vector<rtl::Reference<VendorBase>> & allInfos)
 {
-    vector<Reference<VendorBase> > vecInfos;
+    vector<Reference<VendorBase> > addedInfos;
 
 #if defined WNT
     // Get Javas from the registry
-    createJavaInfoFromWinReg(vecInfos);
+    addJavaInfoFromWinReg(allInfos, addedInfos);
 #endif // WNT
 
 #ifndef JVM_ONE_PATH_CHECK
-    createJavaInfoFromJavaHome(vecInfos);
-    //this function should be called after createJavaInfoDirScan.
-    //Otherwise in SDKs Java may be started twice
-     createJavaInfoFromPath(vecInfos);
+    if (checkJavaHomeAndPath) {
+        addJavaInfoFromJavaHome(allInfos, addedInfos);
+        //this function should be called after addJavaInfosDirScan.
+        //Otherwise in SDKs Java may be started twice
+        addJavaInfosFromPath(allInfos, addedInfos);
+    }
 #endif
 
 #ifdef UNX
-    createJavaInfoDirScan(vecInfos);
+    addJavaInfosDirScan(allInfos, addedInfos);
 #endif
 
-    bubbleSortVersion(vecInfos);
-    return vecInfos;
+    bubbleSortVersion(addedInfos);
+    return addedInfos;
 }
 
 
@@ -1080,7 +1099,9 @@ inline OUString getDirFromFile(const OUString& usFilePath)
     return usFilePath.copy(0, index);
 }
 
-void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
+void addJavaInfosFromPath(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
 // Get Java from PATH environment variable
     static const char sCurDir[] = ".";
@@ -1119,7 +1140,7 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
                     }
                     if(!usBin.isEmpty())
                     {
-                        getJREInfoFromBinPath(usBin, vecInfos);
+                        addJREInfoFromBinPath(usBin, allInfos, addedInfos);
                     }
                 }
             }
@@ -1129,7 +1150,9 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
 }
 
 
-rtl::Reference<VendorBase> getJavaInfoFromJavaHome()
+void addJavaInfoFromJavaHome(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
     // Get Java from JAVA_HOME environment
 
@@ -1144,24 +1167,7 @@ rtl::Reference<VendorBase> getJavaInfoFromJavaHome()
         OUString sHomeUrl;
         if(File::getFileURLFromSystemPath(sHome, sHomeUrl) == File::E_None)
         {
-            return getJREInfoByPath(sHomeUrl);
-        }
-    }
-
-    return NULL;
-}
-
-void createJavaInfoFromJavaHome(vector<rtl::Reference<VendorBase> >& vecInfos)
-{
-    rtl::Reference<VendorBase> aInfo = getJavaInfoFromJavaHome();
-
-    if (aInfo.is())
-    {
-        vector<rtl::Reference<VendorBase> >::const_iterator it_impl= std::find_if(
-            vecInfos.begin(),vecInfos.end(), InfoFindSame(aInfo->getHome()));
-        if(it_impl == vecInfos.end())
-        {
-            vecInfos.push_back(aInfo);
+            getAndAddJREInfoByPath(sHomeUrl, allInfos, addedInfos);
         }
     }
 }
@@ -1185,25 +1191,31 @@ bool makeDriveLetterSame(OUString * fileURL)
 #ifdef UNX
 #ifdef SOLARIS
 
-void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
+void addJavaInfosDirScan(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
     JFW_TRACE2("Checking /usr/jdk/latest");
-    getAndAddJREInfoByPath("file:////usr/jdk/latest", vecInfos);
+    getAndAddJREInfoByPath("file:////usr/jdk/latest", allInfos, addedInfos);
 }
 
 #elif defined MACOSX && defined X86_64
 
-void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
+void addJavaInfosDirScan(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
     // Oracle Java 7
-    getAndAddJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", vecInfos);
+    getAndAddJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", allInfos, addedInfos);
 }
 
 #else
-void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
+void addJavaInfosDirScan(
+    std::vector<rtl::Reference<VendorBase>> & allInfos,
+    std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
     OUString excMessage = "[Java framework] sunjavaplugin: "
-                          "Error in function createJavaInfoDirScan in util.cxx.";
+                          "Error in function addJavaInfosDirScan in util.cxx.";
     int cJavaNames= sizeof(g_arJavaNames) / sizeof(char*);
     boost::scoped_array<OUString> sarJavaNames(new OUString[cJavaNames]);
     OUString *arNames = sarJavaNames.get();
@@ -1273,7 +1285,8 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         }
                         JFW_TRACE2("Checking if directory: " << aStatus.getFileURL() << " is a Java");
 
-                        getAndAddJREInfoByPath(aStatus.getFileURL(),vecInfos);
+                        getAndAddJREInfoByPath(
+                            aStatus.getFileURL(), allInfos, addedInfos);
                     }
 
                     JFW_ENSURE(errNext == File::E_None || errNext == File::E_NOENT,
@@ -1305,7 +1318,8 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                                     && (islash
                                         > RTL_CONSTASCII_LENGTH("file://")))
                                     usDir3 = usDir3.copy(0, islash);
-                                getAndAddJREInfoByPath(usDir3,vecInfos);
+                                getAndAddJREInfoByPath(
+                                    usDir3, allInfos, addedInfos);
                             }
                         }
                     }
