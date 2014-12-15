@@ -189,7 +189,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     throw (css::uno::RuntimeException, std::exception)
 {
     // reject old deprecated queries ...
-    if (sQuery.matchAsciiL("_filterquery_",13,0))
+    if (sQuery.startsWith("_filterquery_"))
         throw css::uno::RuntimeException(
                     "Use of deprecated and now unsupported query!",
                     static_cast< css::container::XContainerQuery* >(this));

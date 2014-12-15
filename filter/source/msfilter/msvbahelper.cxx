@@ -119,7 +119,7 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                     }
                 }
 
-            if ( sMacroURLOrPath.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
+            if ( sMacroURLOrPath.endsWithIgnoreAsciiCase( ".dot" ) )
             {
                 uno::Reference<document::XDocumentPropertiesSupplier> const
                     xDocPropSupp(xModel, uno::UNO_QUERY);

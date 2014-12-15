@@ -193,7 +193,7 @@ Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
 
     for( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; ++i )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( SVG_FILTER_DATA_NAME ) )
+        if( maMediaDescriptor[ i ].Name == SVG_FILTER_DATA_NAME )
             break;
     }
 
@@ -217,7 +217,7 @@ void SAL_CALL SVGDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
     for( sal_Int32 i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if( maMediaDescriptor[ i ].Name.equalsAscii( SVG_FILTER_DATA_NAME ) )
+        if( maMediaDescriptor[ i ].Name == SVG_FILTER_DATA_NAME )
         {
             maMediaDescriptor[ i ].Value >>= maFilterData;
             break;

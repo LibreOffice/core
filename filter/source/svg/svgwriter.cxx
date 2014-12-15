@@ -616,7 +616,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
                         }
                         else
                         {
-                            if( sContent.equalsAscii( "\n" ) )
+                            if( sContent == "\n" )
                                 mbLineBreak = true;
                         }
                     }
@@ -631,7 +631,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
                             }
                             else
                             {
-                                if( sContent.equalsAscii( "\n" ) )
+                                if( sContent == "\n" )
                                     mbLineBreak = true;
                             }
                         }
@@ -941,11 +941,11 @@ bool SVGTextWriter::nextParagraph()
                                         for( sal_Int32 i = 0; i < nCount; ++i )
                                         {
                                             const PropertyValue& rProp = pPropArray[i];
-                                            if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_NUMBERINGTYPE, sizeof(XML_UNO_NAME_NRULE_NUMBERINGTYPE)-1 ) )
+                                            if( rProp.Name == XML_UNO_NAME_NRULE_NUMBERINGTYPE )
                                             {
                                                 rProp.Value >>= eType;
                                             }
-                                            else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_BULLET_CHAR, sizeof(XML_UNO_NAME_NRULE_BULLET_CHAR)-1 ) )
+                                            else if( rProp.Name == XML_UNO_NAME_NRULE_BULLET_CHAR )
                                             {
                                                 OUString sValue;
                                                 rProp.Value >>= sValue;
@@ -1094,14 +1094,14 @@ bool SVGTextWriter::nextTextPortion()
 #if OSL_DEBUG_LEVEL > 0
                         sInfo += "text field type: " + sFieldName + "; content: " + xTextField->getPresentation( /* show command: */ sal_False ) + "; ";
 #endif
-                        if( sFieldName.equalsAscii( "DateTime" ) || sFieldName.equalsAscii( "Header" )
-                                || sFieldName.equalsAscii( "Footer" ) || sFieldName.equalsAscii( "PageNumber" ) )
+                        if( sFieldName == "DateTime" || sFieldName == "Header"
+                                || sFieldName == "Footer" || sFieldName == "PageNumber" )
                         {
                             mbIsPlacehlolderShape = true;
                         }
                         else
                         {
-                            mbIsURLField = sFieldName.equalsAscii( "URL" );
+                            mbIsURLField = sFieldName == "URL";
 
                             if( mbIsURLField )
                             {
@@ -1492,7 +1492,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
             if( sContent.isEmpty() )
                 continue;
-            if( sContent.equalsAscii( "\n" ) )
+            if( sContent == "\n" )
                 mbLineBreak = true;
             if( sContent.match( rText, nStartPos ) )
                 bNotSync = false;

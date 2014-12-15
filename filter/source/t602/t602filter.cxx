@@ -114,16 +114,12 @@ namespace T602ImportFilter {
         "\x04\x4d\x02\xdd\x04\x4e\x02\xc7\x04\x4f\x00\xa7\x04\x34\x00\xe0"  // F
         "\x00\xb4\x00\xb0\x00\xc0\x02\xc6\x01\x58\x01\x59\x00\x20\x00\x20";
 
-#define _AddAtt(_nam, _val) \
-    mpAttrList->AddAttribute(OUString::createFromAscii( _nam ),\
-    OUString::createFromAscii( _val ) );
-
 #define _Start(_nam) \
-    mxHandler->startElement(OUString::createFromAscii(_nam), mAttrList);\
+    mxHandler->startElement(_nam, mAttrList);\
     mpAttrList->Clear();
 
 #define _End(_nam) \
-    mxHandler->endElement(OUString::createFromAscii(_nam));
+    mxHandler->endElement(_nam);
 
 #define _Chars(_ch) \
     mxHandler->characters(OUString::createFromAscii((sal_Char *) _ch) );
@@ -226,7 +222,7 @@ void T602ImportFilter::inschr(unsigned char ch)
         } else {
             char s[20];
             sprintf(s,"%i",pst.wasspace);
-            _AddAtt("text:c",s);
+            mpAttrList->AddAttribute("text:c",OUString::createFromAscii(s));
             _Start("text:s");
             _End("text:s");
         }
@@ -275,28 +271,28 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star::be
 
     mxHandler->startDocument();
 
-    _AddAtt("xmlns:office", "http://openoffice.org/2000/office");
-    _AddAtt("xmlns:style", "http://openoffice.org/2000/style");
-    _AddAtt("xmlns:text", "http://openoffice.org/2000/text");
-    _AddAtt("xmlns:table", "http://openoffice.org/2000/table");
-    _AddAtt("xmlns:draw", "http://openoffice.org/2000/draw");
-    _AddAtt("xmlns:fo", "http://www.w3.org/1999/XSL/Format");
-    _AddAtt("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    _AddAtt("xmlns:number", "http://openoffice.org/2000/datastyle");
-    _AddAtt("xmlns:svg", "http://www.w3.org/2000/svg");
-    _AddAtt("xmlns:chart", "http://openoffice.org/2000/chart");
-    _AddAtt("xmlns:dr3d", "http://openoffice.org/2000/dr3d");
-    _AddAtt("xmlns:math", "http://www.w3.org/1998/Math/MathML");
-    _AddAtt("xmlns:form", "http://openoffice.org/2000/form");
-    _AddAtt("xmlns:script", "http://openoffice.org/2000/script");
-    _AddAtt("office:class", "text");
-    _AddAtt("office:version", "1.0");
+    mpAttrList->AddAttribute("xmlns:office", "http://openoffice.org/2000/office");
+    mpAttrList->AddAttribute("xmlns:style", "http://openoffice.org/2000/style");
+    mpAttrList->AddAttribute("xmlns:text", "http://openoffice.org/2000/text");
+    mpAttrList->AddAttribute("xmlns:table", "http://openoffice.org/2000/table");
+    mpAttrList->AddAttribute("xmlns:draw", "http://openoffice.org/2000/draw");
+    mpAttrList->AddAttribute("xmlns:fo", "http://www.w3.org/1999/XSL/Format");
+    mpAttrList->AddAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    mpAttrList->AddAttribute("xmlns:number", "http://openoffice.org/2000/datastyle");
+    mpAttrList->AddAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
+    mpAttrList->AddAttribute("xmlns:chart", "http://openoffice.org/2000/chart");
+    mpAttrList->AddAttribute("xmlns:dr3d", "http://openoffice.org/2000/dr3d");
+    mpAttrList->AddAttribute("xmlns:math", "http://www.w3.org/1998/Math/MathML");
+    mpAttrList->AddAttribute("xmlns:form", "http://openoffice.org/2000/form");
+    mpAttrList->AddAttribute("xmlns:script", "http://openoffice.org/2000/script");
+    mpAttrList->AddAttribute("office:class", "text");
+    mpAttrList->AddAttribute("office:version", "1.0");
     _Start("office:document-content");
 
     _Start("office:font-decls");
-    _AddAtt("style:name","Courier New");
-    _AddAtt("fo:font-family","Courier New");
-    _AddAtt("style:font-pitch","fixed");
+    mpAttrList->AddAttribute("style:name","Courier New");
+    mpAttrList->AddAttribute("fo:font-family","Courier New");
+    mpAttrList->AddAttribute("style:font-pitch","fixed");
     _Start("style:font-decl");
     _End("style:font-decl");
     _End("office:font-decls");
@@ -304,128 +300,128 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star::be
     _Start("office:automatic-styles");
 
     // Standardni text
-    _AddAtt("style:name","P1");
-    _AddAtt("style:family","paragraph");
-    _AddAtt("style:parent-style-name","Standard");
+    mpAttrList->AddAttribute("style:name","P1");
+    mpAttrList->AddAttribute("style:family","paragraph");
+    mpAttrList->AddAttribute("style:parent-style-name","Standard");
     _Start("style:style");
-    _AddAtt("style:font-name","Courier New");
-    _AddAtt("fo:font-size",fs);
+    mpAttrList->AddAttribute("style:font-name","Courier New");
+    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs));
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // Standardni text - konec stranky
-    _AddAtt("style:name","P2");
-    _AddAtt("style:family","paragraph");
-    _AddAtt("style:parent-style-name","Standard");
+    mpAttrList->AddAttribute("style:name","P2");
+    mpAttrList->AddAttribute("style:family","paragraph");
+    mpAttrList->AddAttribute("style:parent-style-name","Standard");
     _Start("style:style");
-    _AddAtt("style:font-name","Courier New");
-    _AddAtt("fo:font-size",fs);
-    _AddAtt("fo:break-before","page");
+    mpAttrList->AddAttribute("style:font-name","Courier New");
+    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs));
+    mpAttrList->AddAttribute("fo:break-before","page");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T1 Normalni text
-    _AddAtt("style:name","T1");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T1");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T2 Tucny text
-    _AddAtt("style:name","T2");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T2");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-weight","bold");
+    mpAttrList->AddAttribute("fo:font-weight","bold");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T3 Kurziva
-    _AddAtt("style:name","T3");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T3");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-style","italic");
+    mpAttrList->AddAttribute("fo:font-style","italic");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T4 Siroky text
-    _AddAtt("style:name","T4");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T4");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-weight","bold");
-    _AddAtt("style:text-scale","200%");
+    mpAttrList->AddAttribute("fo:font-weight","bold");
+    mpAttrList->AddAttribute("style:text-scale","200%");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T5 Vysoky text
-    _AddAtt("style:name","T5");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T5");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-size",fs2);
-    _AddAtt("fo:font-weight","bold");
-    _AddAtt("style:text-scale","50%");
+    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs2));
+    mpAttrList->AddAttribute("fo:font-weight","bold");
+    mpAttrList->AddAttribute("style:text-scale","50%");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T6 Velky text
-    _AddAtt("style:name","T6");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T6");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-size",fs2);
-    _AddAtt("fo:font-weight","bold");
+    mpAttrList->AddAttribute("fo:font-size",OUString::createFromAscii(fs2));
+    mpAttrList->AddAttribute("fo:font-weight","bold");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T7 Podtrzeny text
-    _AddAtt("style:name","T7");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T7");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("style:text-underline","single");
+    mpAttrList->AddAttribute("style:text-underline","single");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T8 Podtrzena tucny text
-    _AddAtt("style:name","T8");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T8");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-weight","bold");
-    _AddAtt("style:text-underline","single");
+    mpAttrList->AddAttribute("fo:font-weight","bold");
+    mpAttrList->AddAttribute("style:text-underline","single");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T9 Podtrzena kurziva
-    _AddAtt("style:name","T9");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T9");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("fo:font-style","italic");
-    _AddAtt("style:text-underline","single");
+    mpAttrList->AddAttribute("fo:font-style","italic");
+    mpAttrList->AddAttribute("style:text-underline","single");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T10 Horni index
-    _AddAtt("style:name","T10");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T10");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("style:text-position","27% 100%");
+    mpAttrList->AddAttribute("style:text-position","27% 100%");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
 
     // T11 Dolni index
-    _AddAtt("style:name","T11");
-    _AddAtt("style:family","text");
+    mpAttrList->AddAttribute("style:name","T11");
+    mpAttrList->AddAttribute("style:family","text");
     _Start("style:style");
-    _AddAtt("style:text-position","-27% 100%");
+    mpAttrList->AddAttribute("style:text-position","-27% 100%");
     _Start("style:properties");
     _End("style:properties");
     _End("style:style");
@@ -524,7 +520,8 @@ void T602ImportFilter::wrtfnt()
     }
 
     _End("text:span");
-    _AddAtt("text:style-name", style);
+    mpAttrList->AddAttribute(
+        "text:style-name", OUString::createFromAscii(style));
     _Start("text:span");
 }
 
@@ -561,7 +558,7 @@ void T602ImportFilter::par602(bool endofpage)
             if(pst.waspar||ini.reformatpars) {
                 _End("text:span");
                 _End("text:p");
-                _AddAtt("text:style-name", "P1");
+                mpAttrList->AddAttribute("text:style-name", "P1");
                 _Start("text:p");
                 _Start("text:span");
                 wrtfnt();
@@ -587,7 +584,7 @@ void T602ImportFilter::par602(bool endofpage)
             if(!ini.reformatpars) {
                 _End("text:span");
                 _End("text:p");
-                _AddAtt("text:style-name", "P2");
+                mpAttrList->AddAttribute("text:style-name", "P2");
                 _Start("text:p");
                 _Start("text:span");
                 wrtfnt();
@@ -694,9 +691,9 @@ void T602ImportFilter::Read602()
 
     if (node==QUIT) return;
 
-    _AddAtt("text:style-name", "P1");
+    mpAttrList->AddAttribute("text:style-name", "P1");
     _Start("text:p");
-    _AddAtt("text:style-name", "T1");
+    mpAttrList->AddAttribute("text:style-name", "T1");
     _Start("text:span");
 
     if (node==START) { node = EOL; }
@@ -910,33 +907,30 @@ bool T602ImportFilterDialog::OptionsDlg()
     Any any;
 #define _propInt(_prop,_nam,_val) \
     any <<= (sal_Int32)_val;\
-    _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
+    _prop->setPropertyValue(_nam, any);
 #define _propShort(_prop,_nam,_val) \
     any <<= (sal_Int16)_val;\
-    _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
+    _prop->setPropertyValue(_nam, any);
 #define _propBool(_prop,_nam,_val) \
     any <<= _val;\
-    _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
+    _prop->setPropertyValue(_nam, any);
 #define _propString(_prop,_nam,_val) \
-    any <<= OUString::createFromAscii(_val);\
-    _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
+    any <<= OUString(_val);\
+    _prop->setPropertyValue(_nam, any);
 #define _propStringFromResId(_prop,_nam,_val) \
     any <<= getResStr(_val);\
-    _prop->setPropertyValue(OUString::createFromAscii(_nam), any);
+    _prop->setPropertyValue(_nam, any);
 #define _propGet(_prop,_nam) \
-    _prop->getPropertyValue(OUString::createFromAscii(_nam));
-#define _InstCtx(_path,_ctx)\
-    rServiceManager->createInstanceWithContext(\
-    OUString::createFromAscii(_path),_ctx);
+    _prop->getPropertyValue(_nam);
 #define _Inst(_path)\
-    xMultiServiceFactory->createInstance(OUString::createFromAscii(_path) );
+    xMultiServiceFactory->createInstance(_path);
 #define _Insert(_cont,_nam,_obj) \
     any <<= _obj;\
-    _cont->insertByName( OUString::createFromAscii(_nam), any );
+    _cont->insertByName( _nam, any );
 
     Reference < XComponentContext > rComponentContext = defaultBootstrap_InitialComponentContext();
     Reference < XMultiComponentFactory > rServiceManager = rComponentContext->getServiceManager();
-    Reference < XInterface > rInstance = _InstCtx("com.sun.star.awt.UnoControlDialogModel", rComponentContext );
+    Reference < XInterface > rInstance = rServiceManager->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", rComponentContext );
 
     Reference <XMultiServiceFactory> xMultiServiceFactory (rInstance,UNO_QUERY);
 

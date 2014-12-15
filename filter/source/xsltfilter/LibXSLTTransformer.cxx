@@ -334,8 +334,7 @@ namespace XSLT
                 if (lastErr)
                     msg = OUString::createFromAscii(lastErr->message);
                 else
-                    msg = OUString::createFromAscii(
-                            "Unknown XSLT transformation error");
+                    msg = "Unknown XSLT transformation error";
 
                 m_transformer->error(msg);
             }

@@ -847,7 +847,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                   OUString sShowOnlineLayout( "ShowOnlineLayout" );
                   uno::Reference< beans::XPropertySet > xViewProperties;
 
-                if ( aCreator.equalsAscii( "Writer" ) )
+                if ( aCreator == "Writer" )
                 {
                     //i92835 if Writer is in web layout mode this has to be switched to normal view and back to web view in the end
                     try
@@ -868,7 +868,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
 
-                if ( mbExportNotesPages && aCreator.equalsAscii( "Impress" ) )
+                if ( mbExportNotesPages && aCreator == "Impress" )
                 {
                     uno::Reference< drawing::XShapes > xShapes;     // sj: do not allow to export notes when
                     if ( ! ( aSelection >>= xShapes ) )             // exporting a selection -> todo: in the dialog
