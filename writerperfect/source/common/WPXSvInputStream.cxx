@@ -365,7 +365,7 @@ void ZipStorageImpl::traverse(const Reference<container::XNameAccess> &rxContain
 
     for (sal_Int32 n = 0; n < lNames.getLength(); ++n)
     {
-        if (!lNames[n].endsWithAsciiL("/", 1)) // skip dirs
+        if (!lNames[n].endsWith("/")) // skip dirs
         {
             maStreams.push_back(ZipStreamData(rtl::OUStringToOString(lNames[n], RTL_TEXTENCODING_UTF8)));
             maNameMap[lNames[n]] = maStreams.size() - 1;
