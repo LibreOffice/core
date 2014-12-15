@@ -203,6 +203,44 @@ void ScInterpreter::ScWebservice()
     }
 }
 
+/**
+ Returns a string in which all non-alphanumeric characters except stroke and
+ underscore (-_) have been replaced with a percent (%) sign
+ followed by hex digits.
+ It is encoded the same way that the posted data from a WWW form is encoded,
+ that is the same way as in application/x-www-form-urlencoded media type and
+ as pwer RFC 3986.
+
+ @see fdo#76870
+*/
+void ScInterpreter::ScEncodeURL()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1 ) )
+    {
+        OUString aStr = GetString().getString();
+        if ( aStr.isEmpty() )
+        {
+            PushError( errNoValue );
+            return;
+        }
+
+        OStringBuffer aUrlBuf;
+        for ( int i = 0; i < aStr.getLength(); i++ )
+        {
+            sal_Unicode c = aStr[ i ];
+            if ( rtl::isAsciiAlphanumeric( c ) || c == '-' || c == '_' )
+                aUrlBuf.append( static_cast<sal_Char>( c ) );
+            else
+            {
+                aUrlBuf.append( '%' );
+                aUrlBuf.append( OString::number( static_cast<sal_Int32>( c ), 16 ).toAsciiUpperCase() );
+            }
+        }
+        PushString( OUString::fromUtf8( aUrlBuf.makeStringAndClear() ) );
+    }
+}
+
 void ScInterpreter::ScDebugVar()
 {
     // This is to be used by developers only!  Never document this for end
