@@ -274,7 +274,7 @@ OString Databases::getImagesZipFileURL()
 
             if ( !aSymbolsStyleName.isEmpty() )
             {
-                if ( aSymbolsStyleName.equalsAscii("auto") )
+                if ( aSymbolsStyleName == "auto" )
                 {
                     // with the layered images*.zip, tango is the most
                     // complete theme, so show that one
@@ -418,8 +418,8 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
                 ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    &&
                 ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
                 ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
-                !( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).equalsAscii( "picture" ) ) {
-              if(! m_bShowBasic && fileName.equalsAscii("sbasic") )
+                ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ) != "picture" ) {
+              if(! m_bShowBasic && fileName == "sbasic" )
                 continue;
               m_avModules.push_back( fileName );
             }
@@ -630,21 +630,21 @@ Databases::getCollator( const OUString& Language,
         OUString countryStr = country(Language);
         if( countryStr.isEmpty() )
         {
-            if( langStr.equalsAscii("de") )
+            if( langStr == "de" )
                 countryStr = "DE";
-            else if( langStr.equalsAscii("en")  )
+            else if( langStr == "en" )
                 countryStr = "US";
-            else if( langStr.equalsAscii("es")  )
+            else if( langStr == "es" )
                 countryStr = "ES";
-            else if( langStr.equalsAscii("it")  )
+            else if( langStr == "it" )
                 countryStr = "IT";
-            else if( langStr.equalsAscii("fr")  )
+            else if( langStr == "fr" )
                 countryStr = "FR";
-            else if( langStr.equalsAscii("sv")  )
+            else if( langStr == "sv" )
                 countryStr = "SE";
-            else if( langStr.equalsAscii("ja")  )
+            else if( langStr == "ja" )
                 countryStr = "JP";
-            else if( langStr.equalsAscii("ko")  )
+            else if( langStr == "ko" )
                 countryStr = "KR";
         }
         /* FIXME-BCP47: all this does not look right for language tag context,
@@ -1062,7 +1062,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
 
         bool bHighContrastMode = false;
         OUString aCSS( m_aCSS );
-        if ( aCSS.equalsAscii( "default" ) )
+        if ( aCSS == "default" )
         {
             // #i50760: "default" needs to adapt HC mode
             uno::Reference< awt::XToolkit2 > xToolkit =

@@ -246,7 +246,7 @@ ContentProvider::elementReplaced(const container::ContainerEvent& Event)
 
     OUString accessor;
     Event.Accessor >>= accessor;
-    if(!accessor.equalsAscii("HelpStyleSheet"))
+    if(accessor != "HelpStyleSheet")
         return;
 
     OUString replacedElement,element;

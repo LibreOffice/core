@@ -131,7 +131,7 @@ OString URLParameter::getByName( const char* par )
 
 OUString URLParameter::get_id()
 {
-    if( m_aId.equalsAscii("start") )
+    if( m_aId == "start" )
     {   // module is set
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),
@@ -158,7 +158,7 @@ OUString URLParameter::get_title()
 {
     if( isFile() )
         return get_the_title();
-    else if( !m_aModule.equalsAscii("") )
+    else if( !m_aModule.isEmpty() )
     {
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),
@@ -268,7 +268,7 @@ OUString URLParameter::get_the_jar()
 
 void URLParameter::readHelpDataFile()
 {
-    if( get_id().equalsAscii("") )
+    if( get_id().isEmpty() )
         return;
 
     OUString aModule = get_module();
@@ -519,7 +519,7 @@ bool URLParameter::scheme()
         sal_Int32 nLen = m_aExpr.getLength();
         OUString aLastStr =
             m_aExpr.copy(sal::static_int_cast<sal_uInt32>(nLen) - 6);
-        if( aLastStr.equalsAscii( "DbPAR=" ) )
+        if( aLastStr == "DbPAR=" )
         {
             OUString aNewExpr = m_aExpr.copy( 0, 20 );
             OUString aSharedStr("shared");
@@ -618,39 +618,39 @@ bool URLParameter::query()
             query_ = query_.copy( delimIdx+1 ).trim();
         }
 
-        if( parameter.equalsAscii( "Language" ) )
+        if( parameter == "Language" )
             m_aLanguage = value;
-        else if( parameter.equalsAscii( "Device" ) )
+        else if( parameter == "Device" )
             m_aDevice = value;
-        else if( parameter.equalsAscii( "Program" ) )
+        else if( parameter == "Program" )
             m_aProgram = value;
-        else if( parameter.equalsAscii( "Eid" ) )
+        else if( parameter == "Eid" )
             m_aEid = value;
-        else if( parameter.equalsAscii( "UseDB" ) )
-            m_bUseDB = !value.equalsAscii("no");
-        else if( parameter.equalsAscii( "DbPAR" ) )
+        else if( parameter == "UseDB" )
+            m_bUseDB = value != "no";
+        else if( parameter == "DbPAR" )
             m_aDbPar = value;
-        else if( parameter.equalsAscii( "Query" ) )
+        else if( parameter == "Query" )
         {
             if( m_aQuery.isEmpty() )
                 m_aQuery = value;
             else
                 m_aQuery += ( OUString( " " ) + value );
         }
-        else if( parameter.equalsAscii( "Scope" ) )
+        else if( parameter == "Scope" )
             m_aScope = value;
-        else if( parameter.equalsAscii( "System" ) )
+        else if( parameter == "System" )
             m_aSystem = value;
-        else if( parameter.equalsAscii( "HelpPrefix" ) )
+        else if( parameter == "HelpPrefix" )
             m_aPrefix = rtl::Uri::decode(
                 value,
                 rtl_UriDecodeWithCharset,
                 RTL_TEXTENCODING_UTF8 );
-        else if( parameter.equalsAscii( "HitCount" ) )
+        else if( parameter == "HitCount" )
             m_nHitCount = value.toInt32();
-        else if( parameter.equalsAscii( "Active" ) )
+        else if( parameter == "Active" )
             m_aActive = value;
-        else if( parameter.equalsAscii( "Version" ) )
+        else if( parameter == "Version" )
             ; // ignored (but accepted) in the build-in help, useful only for the online help
         else
             ret = false;

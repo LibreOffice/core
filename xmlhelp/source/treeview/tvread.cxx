@@ -262,11 +262,11 @@ TVRead::getByName( const OUString& aName )
 {
     bool found( true );
     Any aAny;
-    if( aName.equalsAscii( "Title" ) )
+    if( aName == "Title" )
         aAny <<= Title;
-    else if( aName.equalsAscii( "TargetURL" ) )
+    else if( aName == "TargetURL" )
         aAny <<= TargetURL;
-    else if( aName.equalsAscii( "Children" ) )
+    else if( aName == "Children" )
     {
         cppu::OWeakObject* p = Children.get();
         aAny <<= Reference< XInterface >( p );
@@ -297,9 +297,9 @@ sal_Bool SAL_CALL
 TVRead::hasByName( const OUString& aName )
     throw( RuntimeException, std::exception )
 {
-    if( aName.equalsAscii( "Title" )     ||
-        aName.equalsAscii( "TargetURL" ) ||
-        aName.equalsAscii( "Children" ) )
+    if( aName == "Title"     ||
+        aName == "TargetURL" ||
+        aName == "Children" )
         return true;
 
     return false;
@@ -316,7 +316,7 @@ TVRead::getByHierarchicalName( const OUString& aName )
     OUString name( aName );
 
     if( ( idx = name.indexOf( '/' ) ) != -1  &&
-        name.copy( 0,idx ).equalsAscii( "Children" ) )
+        name.copy( 0,idx ) == "Children" )
         return Children->getByHierarchicalName( name.copy( 1 + idx ) );
 
     return getByName( name );
@@ -330,7 +330,7 @@ TVRead::hasByHierarchicalName( const OUString& aName )
     OUString name( aName );
 
        if( ( idx = name.indexOf( '/' ) ) != -1  &&
-        name.copy( 0,idx ).equalsAscii( "Children" ) )
+        name.copy( 0,idx ) == "Children" )
         return Children->hasByHierarchicalName( name.copy( 1 + idx ) );
 
     return hasByName( name );
@@ -732,7 +732,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
                 ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
               {
                 OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();
-                if(! showBasic && baseName.equalsAscii("sbasic") )
+                if(! showBasic && baseName == "sbasic" )
                   continue;
                 osl::File aFile( aFileUrl );
                 if( osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )

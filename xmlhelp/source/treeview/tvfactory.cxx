@@ -108,7 +108,7 @@ TVFactory::createInstanceWithArguments(
         if( ! ( Arguments[i] >>= pV ) )
             continue;
 
-        if( !pV.Name.equalsAscii( "nodepath" ) )
+        if( pV.Name != "nodepath" )
             continue;
 
         if( ! ( pV.Value >>= hierview ) )
