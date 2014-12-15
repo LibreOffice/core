@@ -713,6 +713,8 @@ endef
 # call gb_LinkTarget_add_libs,linktarget,libs
 define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : T_LIBS += $(2)
+$(if $(call gb_LinkTarget__is_merged,$(1)),\
+  $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : T_LIBS += $(2))
 
 endef
 
@@ -893,6 +895,9 @@ endef
 # call gb_LinkTarget_use_static_libraries,linktarget,staticlibs
 define gb_LinkTarget_use_static_libraries
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2))
+$(if $(call gb_LinkTarget__is_merged,$(1)),\
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,merged)) : \
+		LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2)))
 
 ifeq ($(DISABLE_DYNLOADING),)
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))

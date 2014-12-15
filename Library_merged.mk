@@ -30,61 +30,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,merged,\
-	$(if $(filter LINUX,$(OS)),glxtest) \
-	$(if $(filter unx,$(GUIBASE)),headless) \
-))
-
-ifeq (ALL,$(MERGELIBS))
-$(eval $(call gb_Library_use_static_libraries,merged,\
-	ulingu \
-))
-endif
-
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_libs,merged,\
-	-lX11 \
-	-lXext \
-	-lSM \
-	-lICE \
-))
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,merged,\
-	-lm \
-	-ldl \
-	-lGL \
-	-lGLU \
-	-lpthread \
-	-lrt \
-	-lX11 \
-))
-endif
-
 ifeq ($(OS),WNT)
-$(eval $(call gb_Library_use_system_win32_libs,merged,\
-	advapi32 \
-	gdi32 \
-	gdiplus \
-	glu32 \
-	imm32 \
-	mpr \
-	msimg32 \
-	oldnames \
-	ole32 \
-	oleaut32 \
-	opengl32 \
-	shell32 \
-	shlwapi \
-	setupapi \
-	user32 \
-	usp10 \
-	uuid \
-	version \
-	winmm \
-	winspool \
-))
 # prevent warning spamming
 $(eval $(call gb_Library_add_ldflags,merged,\
 	/ignore:4049 \
@@ -95,17 +41,6 @@ endif
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_libraries,merged,\
 	AppleRemote \
-))
-$(eval $(call gb_Library_add_libs,merged,\
-	-lobjc \
-))
-$(eval $(call gb_Library_use_system_darwin_frameworks,merged,\
-	Carbon \
-	Cocoa \
-	CoreFoundation \
-	CoreServices \
-	OpenGL \
-	QuickTime \
 ))
 endif
 
