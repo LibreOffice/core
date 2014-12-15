@@ -382,15 +382,17 @@ void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
 {
     BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
     {
-        FOREACHPAM_START( const_cast<SwUnoCrsr*>(pUnoCrsr) )
-            lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR );
-        FOREACHPAM_END()
+        for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr))->GetRingContainer())
+        {
+            lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, rPaM);
+        }
         const SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<const SwUnoTableCrsr*>(pUnoCrsr);
         if( pUnoTblCrsr )
         {
-            FOREACHPAM_START( &(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing() )
-                lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, *PCURCRSR );
-            FOREACHPAM_END()
+            for(SwPaM& rPaM : (&(const_cast<SwUnoTableCrsr*>(pUnoTblCrsr))->GetSelRing())->GetRingContainer())
+            {
+                lcl_ChkPaMBoth( m_aUnoCrsrEntries, nNode, nCntnt, rPaM);
+            }
         }
     }
 }
@@ -419,9 +421,10 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr = _pStkCrsr->GetNext()) != static_cast<SwCrsrShell*>(&rCurShell)->GetStkCrsr()) );
 
-            FOREACHPAM_START( static_cast<SwCrsrShell*>(&rCurShell)->_GetCrsr() )
-                lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR);
-            FOREACHPAM_END()
+            for(SwPaM& rPaM : (static_cast<SwCrsrShell*>(&rCurShell)->_GetCrsr())->GetRingContainer())
+            {
+                lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, rPaM);
+            }
         }
     }
 }

@@ -111,9 +111,10 @@ void PaMCorrAbs( const SwPaM& rRange,
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != pCrsrShell->GetStkCrsr()) );
 
-            FOREACHPAM_START( const_cast<SwShellCrsr*>(pCrsrShell->_GetCrsr()) )
-                lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
-            FOREACHPAM_END()
+            for(SwPaM& rPaM : const_cast<SwShellCrsr*>(pCrsrShell->_GetCrsr())->GetRingContainer())
+            {
+                lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
+            }
 
             if( pCrsrShell->IsTableMode() )
                 lcl_PaMCorrAbs( const_cast<SwPaM &>(*pCrsrShell->GetTblCrs()), aStart, aEnd, aNewPos );
@@ -136,18 +137,20 @@ void PaMCorrAbs( const SwPaM& rRange,
                   lcl_FindUnoCrsrSection(
                       pUnoCursor->GetPoint()->nNode.GetNode() ) );
 
-            FOREACHPAM_START( pUnoCursor )
-                bChange |= lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
-            FOREACHPAM_END()
+            for(SwPaM& rPaM : pUnoCursor->GetRingContainer())
+            {
+                bChange |= lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
+            }
 
             SwUnoTableCrsr *const pUnoTblCrsr =
                 dynamic_cast<SwUnoTableCrsr *>(*it);
             if( pUnoTblCrsr )
             {
-                FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
+                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+                {
                     bChange |=
-                        lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
-                FOREACHPAM_END()
+                        lcl_PaMCorrAbs( rPaM, aStart, aEnd, aNewPos );
+                }
             }
 
             // if a UNO cursor leaves its designated section, we must inform
@@ -275,17 +278,19 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
         {
-            FOREACHPAM_START( *it )
-                lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
-            FOREACHPAM_END()
+            for(SwPaM& rPaM : (*it)->GetRingContainer())
+            {
+                lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
+            }
 
             SwUnoTableCrsr* pUnoTblCrsr =
                 dynamic_cast<SwUnoTableCrsr*>(*it);
             if( pUnoTblCrsr )
             {
-                FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
-                FOREACHPAM_END()
+                for(SwPaM& rPaM : (&pUnoTblCrsr->GetSelRing())->GetRingContainer())
+                {
+                    lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx );
+                }
             }
         }
     }

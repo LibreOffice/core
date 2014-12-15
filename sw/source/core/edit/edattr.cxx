@@ -638,12 +638,12 @@ sal_uInt16 SwEditShell::GetScriptType() const
     sal_uInt16 nRet = 0;
 
     {
-        FOREACHPAM_START(GetCrsr())
-
-            const SwPosition *pStt = PCURCRSR->Start(),
-                             *pEnd = pStt == PCURCRSR->GetMark()
-                                    ? PCURCRSR->GetPoint()
-                                    : PCURCRSR->GetMark();
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            const SwPosition *pStt = rPaM.Start(),
+                             *pEnd = pStt == rPaM.GetMark()
+                                    ? rPaM.GetPoint()
+                                    : rPaM.GetMark();
             if( pStt == pEnd || *pStt == *pEnd )
             {
                 const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
@@ -739,7 +739,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                 SCRIPTTYPE_COMPLEX) == nRet )
                 break;
 
-        FOREACHPAM_END()
+        }
     }
     if( !nRet )
         nRet = SvtLanguageOptions::GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
