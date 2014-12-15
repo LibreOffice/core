@@ -91,7 +91,7 @@ public abstract class ComposedTileLayer extends Layer {
         }
     }
 
-    private RectF roundToTileSize(RectF input, IntSize tileSize) {
+    protected RectF roundToTileSize(RectF input, IntSize tileSize) {
         float minX = ((int) (input.left / tileSize.width)) * tileSize.width;
         float minY = ((int) (input.top / tileSize.height)) * tileSize.height;
         float maxX = ((int) (input.right / tileSize.width) + 1) * tileSize.width;
@@ -99,7 +99,7 @@ public abstract class ComposedTileLayer extends Layer {
         return new RectF(minX, minY, maxX, maxY);
     }
 
-    private RectF inflate(RectF rect, IntSize inflateSize) {
+    protected RectF inflate(RectF rect, IntSize inflateSize) {
         RectF newRect = new RectF(rect);
         newRect.left -= inflateSize.width;
         newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
@@ -113,34 +113,33 @@ public abstract class ComposedTileLayer extends Layer {
         return newRect;
     }
 
-    private RectF normalizeRect(RectF rect, float factor) {
+    protected RectF normalizeRect(RectF rect, float sourceFactor, float targetFactor) {
         RectF normalizedRect = new RectF(
-                rect.left / factor,
-                rect.top / factor,
-                rect.right / factor,
-                rect.bottom / factor);
+                (rect.left / sourceFactor) * targetFactor,
+                (rect.top / sourceFactor) * targetFactor,
+                (rect.right / sourceFactor) * targetFactor,
+                (rect.bottom / sourceFactor) * targetFactor);
 
         return normalizedRect;
     }
 
-    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics) {
-        RectF newCurrentViewPort = inflate(roundToTileSize(viewportMetrics.getViewport(), tileSize), tileSize);
+    public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics, DisplayPortMetrics mDisplayPort) {
+        RectF newCurrentViewPort = getViewPort(viewportMetrics);
         float newZoom = viewportMetrics.zoomFactor;
 
         if (!currentViewport.equals(newCurrentViewPort) || currentZoom != newZoom) {
             currentViewport = newCurrentViewPort;
             currentZoom = newZoom;
 
-            RectF normalizedRect = normalizeRect(currentViewport, currentZoom);
-            RectF normalizedPageRect = normalizeRect(viewportMetrics.getPageRect(), currentZoom);
-
-            Log.i(LOGTAG, "reevaluateTiles " + normalizedRect + " " + normalizedPageRect);
-
             clearMarkedTiles();
             addNewTiles(viewportMetrics);
             markTiles(viewportMetrics);
         }
     }
+
+    protected abstract RectF getViewPort(ImmutableViewportMetrics viewportMetrics);
+
+    protected abstract float getZoom(ImmutableViewportMetrics viewportMetrics);
 
     private void addNewTiles(ImmutableViewportMetrics viewportMetrics) {
         float zoom = getZoom(viewportMetrics);
@@ -165,8 +164,6 @@ public abstract class ComposedTileLayer extends Layer {
             }
         }
     }
-
-    protected abstract float getZoom(ImmutableViewportMetrics viewportMetrics);
 
     private void clearMarkedTiles() {
         List<SubTile> tilesToRemove = new ArrayList<SubTile>();

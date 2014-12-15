@@ -1,13 +1,21 @@
 package org.mozilla.gecko.gfx;
 
+import android.graphics.RectF;
+
 public class FixedZoomTileLayer extends ComposedTileLayer {
     @Override
-    protected float getZoom(ImmutableViewportMetrics viewportMetrics) {
-        return 0.5f;
+    protected RectF getViewPort(ImmutableViewportMetrics viewportMetrics) {
+        float zoom = getZoom(viewportMetrics);
+        RectF rect = normalizeRect(viewportMetrics.getViewport(), viewportMetrics.zoomFactor, zoom);
+        return inflate(roundToTileSize(rect, tileSize), getInflateFactor());
     }
 
     @Override
-    public void addTile(SubTile tile) {
+    protected float getZoom(ImmutableViewportMetrics viewportMetrics) {
+        return 1.0f / 32.0f;
+    }
 
+    private IntSize getInflateFactor() {
+        return tileSize.scale(3);
     }
 }
