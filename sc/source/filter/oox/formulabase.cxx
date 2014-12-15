@@ -857,7 +857,7 @@ static const FunctionData saFuncTable2013[] =
     { "CSCH",                   "CSCH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "DAYS",                   "DAYS",                 NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "DECIMAL",                "DECIMAL",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { 0,                        "ENCODEURL",            NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.ENCODEURL","ENCODEURL",            NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FILTERXML","FILTERXML",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
      * the weird Excel FLOOR behavior, check that and unify or diversify. */

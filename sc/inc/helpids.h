@@ -563,6 +563,7 @@
 #define HID_FUNC_BITRSHIFT                                      "SC_HID_FUNC_BITRSHIFT"
 #define HID_FUNC_FILTERXML                                      "SC_HID_FUNC_FILTERXML"
 #define HID_FUNC_WEBSERVICE                                     "SC_HID_FUNC_WEBSERVICE"
+#define HID_FUNC_ENCODEURL                                      "SC_HID_FUNC_ENCODEURL"
 #define HID_FUNC_COLOR                                          "SC_HID_FUNC_COLOR"
 #define HID_FUNC_COVARIANCE_P                                   "SC_HID_FUNC_COVARIANCE_P"
 #define HID_FUNC_COVARIANCE_S                                   "SC_HID_FUNC_COVARIANCE_S"

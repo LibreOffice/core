@@ -2668,6 +2668,7 @@ void Test::testFunctionLists()
         "CONCATENATE",
         "DECIMAL",
         "DOLLAR",
+        "ENCODEURL",
         "EXACT",
         "FILTERXML",
         "FIND",
