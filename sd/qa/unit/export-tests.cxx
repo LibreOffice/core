@@ -260,7 +260,7 @@ void SdExportTest::testN828390_4()
             const SvxFontItem *pFont = dynamic_cast<const SvxFontItem *>((*it).pAttr);
             if( pFont )
             {
-                CPPUNIT_ASSERT_MESSAGE( "Font is wrong", pFont->GetFamilyName().equalsAscii("Arial"));
+                CPPUNIT_ASSERT_MESSAGE( "Font is wrong", pFont->GetFamilyName() == "Arial");
                 bPassed = true;
             }
             const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);

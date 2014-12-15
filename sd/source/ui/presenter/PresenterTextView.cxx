@@ -452,11 +452,11 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
     sal_Int32 nDistance (0);
-    if (rsDistance.endsWithAsciiL("px", 2))
+    if (rsDistance.endsWith("px"))
     {
         nDistance = rsDistance.copy(0,rsDistance.getLength()-2).toInt32();
     }
-    else if (rsDistance.endsWithAsciiL("l", 1))
+    else if (rsDistance.endsWith("l"))
     {
         const sal_Int32 nLines (rsDistance.copy(0,rsDistance.getLength()-1).toInt32());
         // Take the height of the first line as the height of every line.

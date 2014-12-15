@@ -152,7 +152,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdLayer );
 OUString SAL_CALL SdLayer::getImplementationName()
     throw(uno::RuntimeException, std::exception)
 {
-    return OUString( OUString::createFromAscii(sUNO_SdLayer) );
+    return OUString("SdUnoLayer");
 }
 
 sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
@@ -164,7 +164,7 @@ sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    OUString aServiceName( OUString::createFromAscii(sUNO_Service_DrawingLayer) );
+    OUString aServiceName(UNO_PREFIX "drawing.Layer");
     uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -466,7 +466,7 @@ void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::X
 OUString SAL_CALL SdLayerManager::getImplementationName()
     throw(uno::RuntimeException, std::exception)
 {
-    return OUString( OUString::createFromAscii(sUNO_SdLayerManager) );
+    return OUString("SdUnoLayerManager");
 }
 
 sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
@@ -478,7 +478,7 @@ sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
     throw(uno::RuntimeException, std::exception)
 {
-    OUString aServiceName( OUString::createFromAscii(sUNO_Service_DrawingLayerManager) );
+    OUString aServiceName(UNO_PREFIX "drawing.LayerManager");
     uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

@@ -31,8 +31,6 @@
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
 
-#define B2U(_def_aStr) (OUString::createFromAscii(_def_aStr))
-
 template< class T > T getSafeValue( const Any& rAny )
 {
     T value = T();
@@ -176,8 +174,8 @@ bool SdOptionsGeneric::isMetricSystem()
 SdOptionsLayout::SdOptionsLayout(  sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, bUseConfig ?
                       ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Layout" ) :
-                        B2U( "Office.Impress/Layout" ) ) :
+                        OUString( "Office.Draw/Layout" ) :
+                        OUString( "Office.Impress/Layout" ) ) :
                       OUString() ),
     bRuler( true ),
     bMoveOutline( true ),
@@ -336,8 +334,8 @@ void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
 SdOptionsContents::SdOptionsContents( sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, bUseConfig ?
                       ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Content" ) :
-                        B2U( "Office.Impress/Content" ) ) :
+                        OUString( "Office.Draw/Content" ) :
+                        OUString( "Office.Impress/Content" ) ) :
                       OUString() )
 {
     EnableModify( true );
@@ -415,8 +413,8 @@ void SdOptionsContentsItem::SetOptions(SdOptions*) const
 SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, bUseConfig ?
                       ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Misc" ) :
-                        B2U( "Office.Impress/Misc" ) ) :
+                        OUString( "Office.Draw/Misc" ) :
+                        OUString( "Office.Impress/Misc" ) ) :
                       OUString() ),
     nDefaultObjectSizeWidth(8000),
     nDefaultObjectSizeHeight(5000),
@@ -751,8 +749,8 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 SdOptionsSnap::SdOptionsSnap( sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, bUseConfig ?
                       ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Snap" ) :
-                        B2U( "Office.Impress/Snap" ) ) :
+                        OUString( "Office.Draw/Snap" ) :
+                        OUString( "Office.Impress/Snap" ) ) :
                       OUString() ),
     bSnapHelplines( true ),
     bSnapBorder( true ),
@@ -916,7 +914,7 @@ void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 
 SdOptionsZoom::SdOptionsZoom( sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, ( bUseConfig &&  ( SDCFG_DRAW == nConfigId ) ) ?
-                                 B2U( "Office.Draw/Zoom" ) :
+                                 OUString( "Office.Draw/Zoom" ) :
                                  OUString() ),
     nX( 1 ),
     nY( 1 )
@@ -981,8 +979,8 @@ bool SdOptionsZoom::WriteData( Any* pValues ) const
 SdOptionsGrid::SdOptionsGrid( sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, bUseConfig ?
                       ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Grid" ) :
-                        B2U( "Office.Impress/Grid" ) ) :
+                        OUString( "Office.Draw/Grid" ) :
+                        OUString( "Office.Impress/Grid" ) ) :
                       OUString() )
 {
     EnableModify( false );
@@ -1166,8 +1164,8 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
 SdOptionsPrint::SdOptionsPrint( sal_uInt16 nConfigId, bool bUseConfig ) :
     SdOptionsGeneric( nConfigId, bUseConfig ?
                       ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Print" ) :
-                        B2U( "Office.Impress/Print" ) ) :
+                        OUString( "Office.Draw/Print" ) :
+                        OUString( "Office.Impress/Print" ) ) :
                       OUString() ),
     bDraw( true ),
     bNotes( false ),

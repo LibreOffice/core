@@ -238,7 +238,7 @@ void FullScreenPane::ExtractArguments (
             const OUString sKey = aToken.copy(0, nAssign);
             const OUString sValue = aToken.copy(nAssign+1);
 
-            if (sKey.equalsAscii("ScreenNumber"))
+            if (sKey == "ScreenNumber")
             {
                 rnScreenNumberReturnValue = sValue.toInt32();
             }

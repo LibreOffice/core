@@ -893,7 +893,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
-            else if( aString.matchAsciiL( "rgb(", 4, 0 ) )
+            else if( aString.startsWith( "rgb(" ) )
             {
                 aString = aString.copy( 4, aString.getLength() - 5 );
                 Color aColor;
@@ -904,7 +904,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
-            else if( aString.matchAsciiL( "hsl(", 4, 0 ) )
+            else if( aString.startsWith( "hsl(" ) )
             {
                 sal_Int32 index = 0;
                 sal_Int32 nA = aString.getToken( 0, (sal_Unicode)',', index ).toInt32();

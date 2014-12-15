@@ -71,14 +71,7 @@ const char sUNO_StyleName_measure[] = "measure";
 // SdUnoGraphicStyle
 const char sUNO_SdUnoGraphicStyle[] = "SdUnoGraphicStyle";
 
-// SdUnoPageBackground
-const char sUNO_SdUnoPageBackground[] = "SdUnoPageBackground";
-
-// SdLayerManager
-const char sUNO_SdLayerManager[] = "SdUnoLayerManager";
-
 // SdLayer
-const char sUNO_SdLayer[] = "SdUnoLayer";
 const char sUNO_LayerName_background[] = "background";
 const char sUNO_LayerName_background_objects[] = "backgroundobjects";
 const char sUNO_LayerName_layout[] = "layout";
@@ -104,8 +97,6 @@ const char sUNO_Service_ShadowProperties[] = UNO_PREFIX "drawing.ShadowPropertie
 const char sUNO_Service_ConnectorProperties[] = UNO_PREFIX "drawing.ConnectorProperties";
 const char sUNO_Service_MeasureProperties[] = UNO_PREFIX "drawing.MeasureProperties";
 const char sUNO_Service_PageBackground[] = UNO_PREFIX "drawing.PageBackground";
-const char sUNO_Service_DrawingLayer[] = UNO_PREFIX "drawing.Layer";
-const char sUNO_Service_DrawingLayerManager[] = UNO_PREFIX "drawing.LayerManager";
 const char sUNO_Service_GraphicObjectShape[] = UNO_PREFIX "drawing.GraphicObjectShape";
 const char sUNO_Service_ImageMapRectangleObject[] = UNO_PREFIX "image.ImageMapRectangleObject";
 const char sUNO_Service_ImageMapCircleObject[] = UNO_PREFIX "image.ImageMapCircleObject";

@@ -2866,7 +2866,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW ) ;
             if( xFamily.is() )
             {
-                OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
+                OUString aStyleName(sUNO_PseudoSheet_Background);
 
                 Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
 
@@ -2965,7 +2965,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             Reference< container::XNameAccess > xFamilies( GetModel()->getStyleFamilies(), UNO_QUERY_THROW );
             Reference< container::XNameAccess > xFamily( xFamilies->getByName( getName() ), UNO_QUERY_THROW );
 
-            const OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
+            const OUString aStyleName(sUNO_PseudoSheet_Background);
             rValue <<= Reference< beans::XPropertySet >( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
         }
         else

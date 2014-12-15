@@ -183,7 +183,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
 OUString SAL_CALL SdUnoPageBackground::getImplementationName()
     throw(uno::RuntimeException, std::exception)
 {
-    return OUString::createFromAscii( sUNO_SdUnoPageBackground );
+    return OUString("SdUnoPageBackground");
 }
 
 sal_Bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName )
