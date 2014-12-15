@@ -34,6 +34,7 @@ $(call gb_ExternalProject_get_state_target,poppler,build) :
 			--disable-cairo-output \
 			--disable-poppler-glib \
 			--disable-poppler-qt4 \
+			--disable-poppler-qt5 \
 			--disable-gtk-test \
 			--disable-utils \
 			--disable-cms \
