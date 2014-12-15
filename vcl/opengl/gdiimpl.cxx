@@ -350,6 +350,8 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 
 bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
 {
+    if( mpProgram != NULL )
+        mpProgram->Clean();
     mpProgram = mpContext->UseProgram( rVertexShader, rFragmentShader );
     return ( mpProgram != NULL );
 }
