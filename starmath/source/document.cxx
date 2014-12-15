@@ -912,7 +912,7 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
             aEquation.SetFlat(true);
             bRet = aEquation.Export(rMedium);
         }
-        else if (pFlt->GetFilterName().equalsAscii("MathType 3.x"))
+        else if (pFlt->GetFilterName() == "MathType 3.x")
             bRet = WriteAsMathType3( rMedium );
     }
     return bRet;

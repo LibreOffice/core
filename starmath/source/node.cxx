@@ -1620,11 +1620,11 @@ void SmBraceNode::CreateTextFromNode(OUString &rText)
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (!aStr.isEmpty())
         {
-            if (aStr.equalsAscii("divides"))
+            if (aStr == "divides")
                 rText += "lline";
-            else if (aStr.equalsAscii("parallel"))
+            else if (aStr == "parallel")
                 rText += "ldline";
-            else if (aStr.equalsAscii("<"))
+            else if (aStr == "<")
                 rText += "langle";
             else
                 rText += aStr;
@@ -1643,11 +1643,11 @@ void SmBraceNode::CreateTextFromNode(OUString &rText)
         aStr = comphelper::string::stripStart(aStr, '\\');
         if (!aStr.isEmpty())
         {
-            if (aStr.equalsAscii("divides"))
+            if (aStr == "divides")
                 rText += "rline";
-            else if (aStr.equalsAscii("parallel"))
+            else if (aStr == "parallel")
                 rText += "rdline";
-            else if (aStr.equalsAscii(">"))
+            else if (aStr == ">")
                 rText += "rangle";
             else
                 rText += aStr;
