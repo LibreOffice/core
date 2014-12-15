@@ -362,14 +362,26 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
         case FN_TO_HEADER:
             rSh.MoveCrsr();
-            if ( ( FRMTYPE_HEADER & rSh.GetFrmType(0,false) ) || rSh.GotoHeaderTxt() )
+            if ( FRMTYPE_HEADER & rSh.GetFrmType(0,false) )
                 rSh.SttPg();
+            else
+            {
+                bool bMoved = rSh.GotoHeaderTxt();
+                if ( !bMoved )
+                    rSh.SttPg();
+            }
             bSetRetVal = false;
             break;
         case FN_TO_FOOTER:
             rSh.MoveCrsr();
-            if ( ( FRMTYPE_FOOTER & rSh.GetFrmType(0,false) ) || rSh.GotoFooterTxt() )
+            if ( FRMTYPE_FOOTER & rSh.GetFrmType(0,false) )
                 rSh.EndPg();
+            else
+            {
+                bool bMoved = rSh.GotoFooterTxt();
+                if ( !bMoved )
+                    rSh.EndPg();
+            }
             bSetRetVal = false;
             break;
         case FN_FOOTNOTE_TO_ANCHOR:
