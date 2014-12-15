@@ -2014,8 +2014,6 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 void SwTxtNode::CutText( SwTxtNode * const pDest,
             const SwIndex & rStart, const sal_Int32 nLen )
 {
-    if(nLen == 0)
-        return;
     if(pDest)
     {
         SwIndex aDestStt(pDest, pDest->GetTxt().getLength());
