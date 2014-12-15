@@ -317,6 +317,7 @@ public:
 
     bool ShowDocumentInfoDialog();
 
+    OUString GetRecommendedExtension( const OUString& aTypeName );
     OUString GetRecommendedDir( const OUString& aSuggestedDir );
     OUString GetRecommendedName( const OUString& aSuggestedName,
                                         const OUString& aTypeName );
@@ -791,6 +792,10 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
         OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
                                                     OUString("PreusedFilterName"),
                                                     OUString() );
+
+        OUString aDefType = aDefFiltPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
+        OUString aDefExtension = GetRecommendedExtension( aDefType );
+
         if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
             // is it possible to get these names from somewhere and not just
@@ -828,7 +833,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
                         return STATUS_SAVEAS;
                 }
             }
-            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, true ) )
+            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, aDefExtension, true ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
     }
@@ -1216,6 +1221,32 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
 }
 
 
+OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
+{
+   if ( aTypeName.isEmpty() )
+       return OUString();
+
+   uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
+       comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"),
+       uno::UNO_QUERY );
+   if ( xTypeDetection.is() )
+   {
+       uno::Sequence< beans::PropertyValue > aTypeNameProps;
+       if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
+       {
+           ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
+           uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
+                                           OUString("Extensions"),
+                                           ::uno::Sequence< OUString >() );
+           if ( aExtensions.getLength() )
+               return aExtensions[0];
+       }
+    }
+
+    return OUString();
+}
+
+
 OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 {
     OUString aRecommendedDir;
@@ -1283,16 +1314,9 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 INetURLObject aObj( "c:/" + aRecommendedName, INET_PROT_FILE,
                         INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
 
-                uno::Sequence< beans::PropertyValue > aTypeNameProps;
-                if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
-                {
-                    ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
-                    uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                    OUString("Extensions"),
-                                                    ::uno::Sequence< OUString >() );
-                    if ( aExtensions.getLength() )
-                        aObj.SetExtension( aExtensions[0] );
-                }
+                OUString aExtension = GetRecommendedExtension( aTypeName );
+                if ( !aExtension.isEmpty() )
+                    aObj.SetExtension( aExtension );
 
                 aRecommendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8 );
             }
@@ -1850,13 +1874,14 @@ void SfxStoringHelper::SetDocInfoState(
 bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
                                                     const OUString& aOldUIName,
                                                     const OUString& /*aDefUIName*/,
+                                                    const OUString& aDefExtension,
                                                     bool /*bCanProceedFurther*/ )
 {
     if ( !SvtSaveOptions().IsWarnAlienFormat() )
         return true;
 
     vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
-    SfxAlienWarningDialog aDlg( pWin, aOldUIName );
+    SfxAlienWarningDialog aDlg( pWin, aOldUIName, aDefExtension );
 
     return aDlg.Execute() == RET_OK;
 }

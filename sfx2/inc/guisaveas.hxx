@@ -80,6 +80,7 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                                     const OUString& aOldUIName,
                                     const OUString& aDefUIName,
+                                    const OUString& aDefExtension,
                                     bool bCanProceedFurther );
 
     static vcl::Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );

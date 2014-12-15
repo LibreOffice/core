@@ -25,7 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include "alienwarn.hxx"
 
-SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName)
+SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName, const OUString& _rDefaultExtension)
     : MessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");
@@ -34,16 +34,29 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUStrin
     m_pWarningOnBox->set_margin_left(QueryBox::GetStandardImage().GetSizePixel().Width() + 12);
 
     get(m_pKeepCurrentBtn, "save");
+    get(m_pUseDefaultFormatBtn, "cancel");
+
+    OUString aExtension = _rDefaultExtension.toAsciiUpperCase();
 
     // replace formatname (text)
     OUString sInfoText = get_primary_text();
     sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     set_primary_text(sInfoText);
 
+    //replace defaultextension (text)
+    sInfoText = get_secondary_text();
+    sInfoText = sInfoText.replaceAll( "%DEFAULTEXTENSION", aExtension );
+    set_secondary_text(sInfoText);
+
     // replace formatname (button)
     sInfoText = m_pKeepCurrentBtn->GetText();
     sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     m_pKeepCurrentBtn->SetText( sInfoText );
+
+    // replace defaultextension (button)
+    sInfoText = m_pUseDefaultFormatBtn->GetText();
+    sInfoText = sInfoText.replaceAll( "%DEFAULTEXTENSION", aExtension );
+    m_pUseDefaultFormatBtn->SetText( sInfoText );
 
     // load value of "warning on" checkbox from save options
     m_pWarningOnBox->Check( SvtSaveOptions().IsWarnAlienFormat() );
