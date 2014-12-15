@@ -800,7 +800,6 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 	Highlight \
 	MemoryUsage \
 	OOoRunner \
-	OOoRunnerLight \
 	TestExtension \
 	test \
 	test-tools \

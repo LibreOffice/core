@@ -10,7 +10,7 @@
 $(eval $(call gb_JunitTest_JunitTest,jurt_uno))
 
 $(eval $(call gb_JunitTest_use_jars,jurt_uno,\
-    OOoRunnerLight \
+    OOoRunner \
     ridl \
 ))
 

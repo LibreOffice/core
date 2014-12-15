@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,qadevOOo))
 
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Module_add_targets,qadevOOo,\
-	Jar_OOoRunnerLight \
 	Jar_OOoRunner \
 ))
 endif

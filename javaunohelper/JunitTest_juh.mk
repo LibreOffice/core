@@ -15,7 +15,7 @@ $(eval $(call gb_JunitTest_set_defs,juh,\
 ))
 
 $(eval $(call gb_JunitTest_use_jars,juh,\
-    OOoRunnerLight \
+    OOoRunner \
     ridl \
     jurt \
 ))

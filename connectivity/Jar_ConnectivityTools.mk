@@ -16,7 +16,7 @@ $(eval $(call gb_Jar_use_jars,ConnectivityTools,\
 	jurt \
 	juh \
 	java_uno \
-	OOoRunnerLight \
+	OOoRunner \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,ConnectivityTools,connectivity))
