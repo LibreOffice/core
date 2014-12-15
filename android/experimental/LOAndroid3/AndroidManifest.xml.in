@@ -31,7 +31,7 @@
                 <action android:name="android.intent.action.PICK" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <!-- ODT -->
+                <!-- ODF -->
                 <data android:mimeType="application/vnd.oasis.opendocument.text" />
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics" />
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation" />
@@ -40,6 +40,12 @@
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-flat-xml" />
+
+                <!-- ODF templates -->
+                <data android:mimeType="application/vnd.oasis.opendocument.text-template"/>
+                <data android:mimeType="application/vnd.oasis.opendocument.graphics-template"/>
+                <!-- Seems at least Anroid 5.0 does not recognize this as the mime type of .otp files. -->
+                <data android:mimeType="application/vnd.oasis.opendocument.presentation-template"/>
 
                 <!-- MS -->
                 <data android:mimeType="application/rtf" />
@@ -54,7 +60,12 @@
                 <!-- OOXML -->
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" />
+                <!-- Currently crashes. <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.slideshow"/> -->
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+
+                <!-- OOXML templates -->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.template"/>
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.template"/>
 
                 <!-- OTHER -->
                 <data android:mimeType="text/csv" />
@@ -85,3 +96,5 @@
     </application>
 
 </manifest>
+<!-- vim: shiftwidth=4 softtabstop=4 expandtab:
+-->
