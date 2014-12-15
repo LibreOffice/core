@@ -112,7 +112,7 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     addErrorCode( BIFF_ERR_REF,   "#REF!" );
     addErrorCode( BIFF_ERR_NAME,  "#NAME?" );
     addErrorCode( BIFF_ERR_NUM,   "#NUM!" );
-    addErrorCode( BIFF_ERR_NA,    "#NA" );
+    addErrorCode( BIFF_ERR_NA,    "#N/A" );
 }
 
 void UnitConverter::finalizeImport()
