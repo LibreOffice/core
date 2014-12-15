@@ -69,9 +69,11 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 ))
 
 ifneq ($(DISABLE_PYTHON),TRUE)
+ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	PythonTest_dbaccess_python \
 ))
+endif
 endif
 
 endif
