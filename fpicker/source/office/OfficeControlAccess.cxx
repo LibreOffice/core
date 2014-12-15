@@ -206,7 +206,7 @@ namespace svt
         OUString aTmp( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
-            sHelpURL = OUString::createFromAscii( INET_HID_SCHEME );
+            sHelpURL = INET_HID_SCHEME;
         sHelpURL += aTmp;
         return sHelpURL;
     }
