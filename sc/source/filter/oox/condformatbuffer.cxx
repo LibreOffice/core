@@ -415,9 +415,17 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
 {
     sal_Int32 nType, nSubType, nOperator, nFmla1Size, nFmla2Size, nFmla3Size;
     sal_uInt16 nFlags;
-    rStrm >> nType >> nSubType >> maModel.mnDxfId >> maModel.mnPriority >> nOperator;
+    nType = rStrm.readInt32();
+    nSubType = rStrm.readInt32();
+    maModel.mnDxfId = rStrm.readInt32();
+    maModel.mnPriority = rStrm.readInt32();
+    nOperator = rStrm.readInt32();
     rStrm.skip( 8 );
-    rStrm >> nFlags >> nFmla1Size >> nFmla2Size >> nFmla3Size >> maModel.maText;
+    nFlags = rStrm.readuInt16();
+    nFmla1Size = rStrm.readInt32();
+    nFmla2Size = rStrm.readInt32();
+    nFmla3Size = rStrm.readInt32();
+    rStrm >> maModel.maText;
 
     /*  Import the formulas. For no obvious reason, the sizes of the formulas
         are already stored before. Nevertheless the following formulas contain

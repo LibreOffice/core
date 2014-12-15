@@ -540,9 +540,13 @@ void PivotCacheField::importGroupItem( sal_Int32 nElement, const AttributeList& 
 void PivotCacheField::importPCDField( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> nFlags >> maFieldModel.mnNumFmtId;
+    nFlags = rStrm.readuInt16();
+    maFieldModel.mnNumFmtId = rStrm.readInt32();
     maFieldModel.mnSqlType = rStrm.readInt16();
-    rStrm >> maFieldModel.mnHierarchy >> maFieldModel.mnLevel >> maFieldModel.mnMappingCount >> maFieldModel.maName;
+    maFieldModel.mnHierarchy = rStrm.readInt32();
+    maFieldModel.mnLevel = rStrm.readInt32();
+    maFieldModel.mnMappingCount = rStrm.readInt32();
+    rStrm >> maFieldModel.maName;
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASCAPTION ) )
         rStrm >> maFieldModel.maCaption;
     if( getFlag( nFlags, BIFF12_PCDFIELD_HASFORMULA ) )
@@ -561,7 +565,7 @@ void PivotCacheField::importPCDField( SequenceInputStream& rStrm )
 void PivotCacheField::importPCDFSharedItems( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> nFlags;
+    nFlags = rStrm.readuInt16();
     maSharedItemsModel.mbHasSemiMixed = getFlag( nFlags, BIFF12_PCDFSITEMS_HASSEMIMIXED );
     maSharedItemsModel.mbHasNonDate   = getFlag( nFlags, BIFF12_PCDFSITEMS_HASNONDATE );
     maSharedItemsModel.mbHasDate      = getFlag( nFlags, BIFF12_PCDFSITEMS_HASDATE );
@@ -580,13 +584,18 @@ void PivotCacheField::importPCDFSharedItem( sal_Int32 nRecId, SequenceInputStrea
 
 void PivotCacheField::importPCDFieldGroup( SequenceInputStream& rStrm )
 {
-    rStrm >> maFieldGroupModel.mnParentField >> maFieldGroupModel.mnBaseField;
+    maFieldGroupModel.mnParentField = rStrm.readInt32();
+    maFieldGroupModel.mnBaseField = rStrm.readInt32();
 }
 
 void PivotCacheField::importPCDFRangePr( SequenceInputStream& rStrm )
 {
     sal_uInt8 nGroupBy, nFlags;
-    rStrm >> nGroupBy >> nFlags >> maFieldGroupModel.mfStartValue >> maFieldGroupModel.mfEndValue >> maFieldGroupModel.mfInterval;
+    nGroupBy = rStrm.readuChar();
+    nFlags = rStrm.readuChar();
+    maFieldGroupModel.mfStartValue = rStrm.readDouble();
+    maFieldGroupModel.mfEndValue = rStrm.readDouble();
+    maFieldGroupModel.mfInterval = rStrm.readDouble();
 
     maFieldGroupModel.setBiffGroupBy( nGroupBy );
     maFieldGroupModel.mbRangeGroup   = true;
@@ -1092,7 +1101,11 @@ void PivotCache::importPCDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags1, nFlags2;
     rStrm.skip( 3 );    // create/refresh version id's
-    rStrm >> nFlags1 >> maDefModel.mnMissItemsLimit >> maDefModel.mfRefreshedDate >> nFlags2 >> maDefModel.mnRecords;
+    nFlags1 = rStrm.readuChar();
+    maDefModel.mnMissItemsLimit = rStrm.readInt32();
+    maDefModel.mfRefreshedDate = rStrm.readDouble();
+    nFlags2 = rStrm.readuChar();
+    maDefModel.mnRecords = rStrm.readInt32();
     if( getFlag( nFlags2, BIFF12_PCDEFINITION_HASUSERNAME ) )
         rStrm >> maDefModel.maRefreshedBy;
     if( getFlag( nFlags2, BIFF12_PCDEFINITION_HASRELID ) )
@@ -1113,7 +1126,8 @@ void PivotCache::importPCDefinition( SequenceInputStream& rStrm )
 void PivotCache::importPCDSource( SequenceInputStream& rStrm )
 {
     sal_Int32 nSourceType;
-    rStrm >> nSourceType >> maSourceModel.mnConnectionId;
+    nSourceType = rStrm.readInt32();
+    maSourceModel.mnConnectionId = rStrm.readInt32();
     static const sal_Int32 spnSourceTypes[] = { XML_worksheet, XML_external, XML_consolidation, XML_scenario };
     maSourceModel.mnSourceType = STATIC_ARRAY_SELECT( spnSourceTypes, nSourceType, XML_TOKEN_INVALID );
 }
@@ -1121,7 +1135,9 @@ void PivotCache::importPCDSource( SequenceInputStream& rStrm )
 void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relations& rRelations )
 {
     sal_uInt8 nIsDefName, nIsBuiltinName, nFlags;
-    rStrm >> nIsDefName >> nIsBuiltinName >> nFlags;
+    nIsDefName = rStrm.readuChar();
+    nIsBuiltinName = rStrm.readuChar();
+    nFlags = rStrm.readuChar();
     if( getFlag( nFlags, BIFF12_PCDWBSOURCE_HASSHEET ) )
         rStrm >> maSheetSrcModel.maSheet;
     if( getFlag( nFlags, BIFF12_PCDWBSOURCE_HASRELID ) )

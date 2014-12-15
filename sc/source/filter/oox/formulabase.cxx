@@ -98,7 +98,8 @@ void BinSingleRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelativeA
 {
     sal_Int32 nRow;
     sal_uInt16 nCol;
-    rStrm >> nRow >> nCol;
+    nRow = rStrm.readInt32();
+    nCol = rStrm.readuInt16();
     setBiff12Data( nCol, nRow, bRelativeAsOffset );
 }
 
@@ -121,7 +122,10 @@ void BinComplexRef2d::readBiff12Data( SequenceInputStream& rStrm, bool bRelative
 {
     sal_Int32 nRow1, nRow2;
     sal_uInt16 nCol1, nCol2;
-    rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+    nRow1 = rStrm.readInt32();
+    nRow2 = rStrm.readInt32();
+    nCol1 = rStrm.readuInt16();
+    nCol2 = rStrm.readuInt16();
     maRef1.setBiff12Data( nCol1, nRow1, bRelativeAsOffset );
     maRef2.setBiff12Data( nCol2, nRow2, bRelativeAsOffset );
 }

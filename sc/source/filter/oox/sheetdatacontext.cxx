@@ -372,7 +372,12 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     sal_Int32 nSpanCount;
     sal_uInt16 nHeight, nFlags1;
     sal_uInt8 nFlags2;
-    rStrm >> maCurrPos.mnRow >> aModel.mnXfId >> nHeight >> nFlags1 >> nFlags2 >> nSpanCount;
+    maCurrPos.mnRow = rStrm.readInt32();
+    aModel.mnXfId = rStrm.readInt32();
+    nHeight = rStrm.readuInt16();
+    nFlags1 = rStrm.readuInt16();
+    nFlags2 = rStrm.readuChar();
+    nSpanCount = rStrm.readInt32();
     maCurrPos.mnCol = 0;
 
     // row index is 0-based in BIFF12, but RowModel expects 1-based
@@ -393,7 +398,8 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     for( sal_Int32 nSpanIdx = 0; (nSpanIdx < nSpanCount) && !rStrm.isEof(); ++nSpanIdx )
     {
         sal_Int32 nFirstCol, nLastCol;
-        rStrm >> nFirstCol >> nLastCol;
+        nFirstCol = rStrm.readInt32();
+        nLastCol = rStrm.readInt32();
         aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
     }
 
@@ -406,12 +412,11 @@ bool SheetDataContext::readCellHeader( SequenceInputStream& rStrm, CellType eCel
     switch( eCellType )
     {
         case CELLTYPE_VALUE:
-        case CELLTYPE_FORMULA:  rStrm >> maCurrPos.mnCol;   break;
+        case CELLTYPE_FORMULA:  maCurrPos.mnCol = rStrm.readInt32();   break;
         case CELLTYPE_MULTI:    ++maCurrPos.mnCol;          break;
     }
 
-    sal_uInt32 nXfId;
-    rStrm >> nXfId;
+    sal_uInt32 nXfId = rStrm.readuInt32();
 
     bool bValidAddr = mrAddressConv.convertToCellAddress( maCellData.maCellAddr, maCurrPos, mnSheet, true );
     maCellData.mnXfId = extractValue< sal_Int32 >( nXfId, 0, 24 );
@@ -547,7 +552,8 @@ void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
     {
         BinAddress aRef1, aRef2;
         sal_uInt8 nFlags;
-        rStrm >> aRef1 >> aRef2 >> nFlags;
+        rStrm >> aRef1 >> aRef2;
+        nFlags = rStrm.readuChar();
         maTableData.maRef1        = FormulaProcessorBase::generateAddress2dString( aRef1, false );
         maTableData.maRef2        = FormulaProcessorBase::generateAddress2dString( aRef2, false );
         maTableData.mbRowTable    = getFlag( nFlags, BIFF12_DATATABLE_ROW );

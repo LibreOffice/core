@@ -247,13 +247,15 @@ void SheetViewSettings::importSheetView( SequenceInputStream& rStrm )
     sal_uInt16 nFlags;
     sal_Int32 nViewType;
     BinAddress aFirstPos;
-    rStrm >> nFlags >> nViewType >> aFirstPos;
+    nFlags = rStrm.readuInt16();
+    nViewType = rStrm.readInt32();
+    rStrm >> aFirstPos;
     rModel.maGridColor.importColorId( rStrm );
     rModel.mnCurrentZoom = rStrm.readuInt16();
     rModel.mnNormalZoom = rStrm.readuInt16();
     rModel.mnSheetLayoutZoom = rStrm.readuInt16();
     rModel.mnPageLayoutZoom = rStrm.readuInt16();
-    rStrm >> rModel.mnWorkbookViewId;
+    rModel.mnWorkbookViewId = rStrm.readInt32();
 
     rModel.maFirstPos = getAddressConverter().createValidCellAddress( aFirstPos, getSheetIndex(), false );
     static const sal_Int32 spnViewTypes[] = { XML_normal, XML_pageBreakPreview, XML_pageLayout };
@@ -278,7 +280,11 @@ void SheetViewSettings::importPane( SequenceInputStream& rStrm )
         BinAddress aSecondPos;
         sal_Int32 nActivePaneId;
         sal_uInt8 nFlags;
-        rStrm >> rModel.mfSplitX >> rModel.mfSplitY >> aSecondPos >> nActivePaneId >> nFlags;
+        rModel.mfSplitX = rStrm.readDouble();
+        rModel.mfSplitY = rStrm.readDouble();
+        rStrm >> aSecondPos;
+        nActivePaneId = rStrm.readInt32();
+        nFlags = rStrm.readuChar();
 
         rModel.maSecondPos    = getAddressConverter().createValidCellAddress( aSecondPos, getSheetIndex(), false );
         rModel.mnActivePaneId = lclGetOoxPaneId( nActivePaneId, XML_topLeft );
@@ -296,7 +302,8 @@ void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
         PaneSelectionModel& rPaneSel = maSheetViews.back()->createPaneSelection( lclGetOoxPaneId( nPaneId, -1 ) );
         // cursor position
         BinAddress aActiveCell;
-        rStrm >> aActiveCell >> rPaneSel.mnActiveCellId;
+        rStrm >> aActiveCell;
+        rPaneSel.mnActiveCellId = rStrm.readInt32();
         rPaneSel.maActiveCell = getAddressConverter().createValidCellAddress( aActiveCell, getSheetIndex(), false );
         // selection
         BinRangeList aSelection;
@@ -310,7 +317,9 @@ void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
 {
     SheetViewModel& rModel = *createSheetView();
     sal_uInt16 nFlags;
-    rStrm >> nFlags >> rModel.mnCurrentZoom >> rModel.mnWorkbookViewId;
+    nFlags = rStrm.readuInt16();
+    rModel.mnCurrentZoom = rStrm.readInt32();
+    rModel.mnWorkbookViewId = rStrm.readInt32();
 
     rModel.mbSelected  = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_SELECTED );
     rModel.mbZoomToFit = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_ZOOMTOFIT );
@@ -498,7 +507,14 @@ void ViewSettings::importWorkbookView( SequenceInputStream& rStrm )
 {
     WorkbookViewModel& rModel = createWorkbookView();
     sal_uInt8 nFlags;
-    rStrm >> rModel.mnWinX >> rModel.mnWinY >> rModel.mnWinWidth >> rModel.mnWinHeight >> rModel.mnTabBarWidth >> rModel.mnFirstVisSheet >> rModel.mnActiveSheet >> nFlags;
+    rModel.mnWinX = rStrm.readInt32();
+    rModel.mnWinY = rStrm.readInt32();
+    rModel.mnWinWidth = rStrm.readInt32();
+    rModel.mnWinHeight = rStrm.readInt32();
+    rModel.mnTabBarWidth = rStrm.readInt32();
+    rModel.mnFirstVisSheet = rStrm.readInt32();
+    rModel.mnActiveSheet = rStrm.readInt32();
+    nFlags = rStrm.readuChar();
     rModel.mnVisibility    = getFlagValue( nFlags, BIFF12_WBVIEW_HIDDEN, XML_hidden, XML_visible );
     rModel.mbShowTabBar    = getFlag( nFlags, BIFF12_WBVIEW_SHOWTABBAR );
     rModel.mbShowHorScroll = getFlag( nFlags, BIFF12_WBVIEW_SHOWHORSCROLL );

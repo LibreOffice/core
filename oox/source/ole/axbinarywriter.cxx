@@ -100,7 +100,7 @@ AxBinaryPropertyWriter::ComplexProperty::~ComplexProperty()
 
 bool AxBinaryPropertyWriter::PairProperty::writeProperty( AxAlignedOutputStream& rOutStrm )
 {
-    rOutStrm << mrPairData.first << mrPairData.second;
+    rOutStrm.WriteInt32(mrPairData.first).WriteInt32(mrPairData.second);
     return true;
 }
 
@@ -117,16 +117,16 @@ AxBinaryPropertyWriter::AxBinaryPropertyWriter( BinaryOutputStream& rOutStrm, bo
     mb64BitPropFlags( b64BitPropFlags )
 {
     sal_uInt16 nId( 0x0200 );
-    maOutStrm << nId;
+    maOutStrm.WriteUInt16(nId);
     mnBlockSize = 0; // will be filled in the finalize method
 
-    maOutStrm << nId;
+    maOutStrm.WriteUInt16(nId);
     mnPropFlagsStart = maOutStrm.tell();
 
     if( mb64BitPropFlags )
-        maOutStrm << mnPropFlags;
+        maOutStrm.WriteInt64( mnPropFlags );
     else
-        maOutStrm << sal_uInt32( mnPropFlags );
+        maOutStrm.WriteUInt32( mnPropFlags );
     mnNextProp = 1;
 }
 
@@ -177,12 +177,12 @@ bool AxBinaryPropertyWriter::finalizeExport()
     sal_Int64 nPos = maOutStrm.tell();
     maOutStrm.seek( mnPropFlagsStart - sizeof( mnBlockSize ) );
 
-    maOutStrm << mnBlockSize;
+    maOutStrm.WriteInt16( mnBlockSize );
 
     if( mb64BitPropFlags )
-        maOutStrm << mnPropFlags;
+        maOutStrm.WriteInt64( mnPropFlags );
     else
-        maOutStrm << sal_uInt32( mnPropFlags );
+        maOutStrm.WriteUInt32( mnPropFlags );
 
     maOutStrm.seek( nPos );
     return true;

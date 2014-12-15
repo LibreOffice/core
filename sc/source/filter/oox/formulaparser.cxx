@@ -1321,7 +1321,7 @@ ApiTokenSequence OoxFormulaParserImpl::importBiff12Formula( const CellAddress& r
     while( bOk && !rStrm.isEof() && (rStrm.tell() < nFmlaEndPos) )
     {
         sal_uInt8 nTokenId;
-        rStrm >> nTokenId;
+        nTokenId = rStrm.readuChar();
         sal_uInt8 nTokenClass = nTokenId & BIFF_TOKCLASS_MASK;
         sal_uInt8 nBaseId = nTokenId & BIFF_TOKID_MASK;
 
@@ -1411,7 +1411,7 @@ bool OoxFormulaParserImpl::importAttrToken( SequenceInputStream& rStrm )
 {
     bool bOk = true;
     sal_uInt8 nType;
-    rStrm >> nType;
+    nType = rStrm.readuChar();
     // equal flags in all BIFFs
     switch( nType )
     {
@@ -1444,7 +1444,8 @@ bool OoxFormulaParserImpl::importSpaceToken( SequenceInputStream& rStrm )
 {
     // equal constants in BIFF and OOX
     sal_uInt8 nType, nCount;
-    rStrm >> nType >> nCount;
+    nType = rStrm.readuChar();
+    nCount = rStrm.readuChar();
     switch( nType )
     {
         case BIFF_TOK_ATTR_SPACE_SP:
@@ -1473,9 +1474,11 @@ bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags, nTableId, nCol1, nCol2;
     rStrm.skip( 3 );
-    rStrm >> nFlags >> nTableId;
+    nFlags = rStrm.readuInt16();
+    nTableId = rStrm.readuInt16();
     rStrm.skip( 2 );
-    rStrm >> nCol1 >> nCol2;
+    nCol1 = rStrm.readuInt16();
+    nCol2 = rStrm.readuInt16();
     TableRef xTable = getTables().getTable( nTableId );
     sal_Int32 nTokenIndex = xTable.get() ? xTable->getTokenIndex() : -1;
     if( nTokenIndex >= 0 )
@@ -1706,7 +1709,7 @@ bool OoxFormulaParserImpl::importNameXToken( SequenceInputStream& rStrm )
 bool OoxFormulaParserImpl::importFuncToken( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFuncId;
-    rStrm >> nFuncId;
+    nFuncId = rStrm.readuInt16();
     return pushBiff12Function( nFuncId );
 }
 
@@ -1714,16 +1717,17 @@ bool OoxFormulaParserImpl::importFuncVarToken( SequenceInputStream& rStrm )
 {
     sal_uInt8 nParamCount;
     sal_uInt16 nFuncId;
-    rStrm >> nParamCount >> nFuncId;
+    nParamCount = rStrm.readuChar();
+    nFuncId = rStrm.readuInt16();
     return pushBiff12Function( nFuncId, nParamCount );
 }
 
 bool OoxFormulaParserImpl::importExpToken( SequenceInputStream& rStrm )
 {
     BinAddress aBaseAddr;
-    rStrm >> aBaseAddr.mnRow;
+    aBaseAddr.mnRow = rStrm.readInt32();
     swapStreamPosition( rStrm );
-    rStrm >> aBaseAddr.mnCol;
+    aBaseAddr.mnCol = rStrm.readInt32();
     swapStreamPosition( rStrm );
     return pushSpecialTokenOperand( aBaseAddr, false );
 }
@@ -2843,7 +2847,9 @@ OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
         sal_uInt8 nToken;
         sal_Int16 nRefId;
         sal_Int32 nNameId;
-        rStrm >> nToken >> nRefId >> nNameId;
+        nToken = rStrm.readuChar();
+        nRefId = rStrm.readInt16();
+        nNameId = rStrm.readInt32();
         if( nToken == (BIFF_TOKCLASS_VAL|BIFF_TOKID_NAMEX) )
             aTargetLink = mxImpl->resolveOleTarget( nRefId, true );
     }

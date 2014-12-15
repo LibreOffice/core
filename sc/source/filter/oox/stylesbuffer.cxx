@@ -292,7 +292,9 @@ void Color::importColor( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags, nIndex;
     sal_Int16 nTint;
-    rStrm >> nFlags >> nIndex >> nTint;
+    nFlags = rStrm.readuChar();
+    nIndex = rStrm.readuChar();
+    nTint = rStrm.readInt16();
 
     // scale tint from signed 16-bit to double range -1.0 ... 1.0
     double fTint = nTint;
@@ -662,9 +664,17 @@ void Font::importFont( SequenceInputStream& rStrm )
 
     sal_uInt16 nHeight, nFlags, nWeight, nEscapement;
     sal_uInt8 nUnderline, nFamily, nCharSet, nScheme;
-    rStrm >> nHeight >> nFlags >> nWeight >> nEscapement >> nUnderline >> nFamily >> nCharSet;
+    nHeight = rStrm.readuInt16();
+    nFlags = rStrm.readuInt16();
+    nWeight = rStrm.readuInt16();
+    nEscapement = rStrm.readuInt16();
+    nUnderline = rStrm.readuChar();
+    nFamily = rStrm.readuChar();
+    nCharSet = rStrm.readuChar();
     rStrm.skip( 1 );
-    rStrm >> maModel.maColor >> nScheme >> maModel.maName;
+    rStrm >> maModel.maColor;
+    nScheme = rStrm.readuChar();
+    rStrm >> maModel.maName;
 
     // equal constants in all BIFFs for weight, underline, and escapement
     maModel.setBiff12Scheme( nScheme );
@@ -1554,7 +1564,8 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
     if( BorderLineModel* pBorderLine = getBorderLine( nElement ) )
     {
         sal_uInt16 nStyle;
-        rStrm >> pBorderLine->maColor >> nStyle;
+        rStrm >> pBorderLine->maColor;
+        nStyle = rStrm.readuInt16();
         pBorderLine->setBiffStyle( nStyle );
         pBorderLine->mbUsed = true;
     }
@@ -1758,7 +1769,12 @@ GradientFillModel::GradientFillModel() :
 void GradientFillModel::readGradient( SequenceInputStream& rStrm )
 {
     sal_Int32 nType;
-    rStrm >> nType >> mfAngle >> mfLeft >> mfRight >> mfTop >> mfBottom;
+    nType = rStrm.readInt32();
+    mfAngle = rStrm.readDouble();
+    mfLeft = rStrm.readDouble();
+    mfRight = rStrm.readDouble();
+    mfTop = rStrm.readDouble();
+    mfBottom = rStrm.readDouble();
     static const sal_Int32 spnTypes[] = { XML_linear, XML_path };
     mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
@@ -1770,11 +1786,13 @@ void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf 
     if( bDxf )
     {
         rStrm.skip( 2 );
-        rStrm >> fPosition >> aColor;
+        fPosition = rStrm.readDouble();
+        rStrm >> aColor;
     }
     else
     {
-        rStrm >> aColor >> fPosition;
+        rStrm >> aColor;
+        fPosition = rStrm.readDouble();
     }
     if( !rStrm.isEof() && (fPosition >= 0.0) )
         maColors[ fPosition ] = aColor;
@@ -1874,7 +1892,7 @@ void Fill::importFill( SequenceInputStream& rStrm )
         sal_Int32 nStopCount;
         rStrm.skip( 16 );
         mxGradientModel->readGradient( rStrm );
-        rStrm >> nStopCount;
+        nStopCount = rStrm.readInt32();
         for( sal_Int32 nStop = 0; (nStop < nStopCount) && !rStrm.isEof(); ++nStop )
             mxGradientModel->readGradientStop( rStrm, false );
     }
@@ -2410,12 +2428,13 @@ void Dxf::importDxf( SequenceInputStream& rStrm )
     OUString aFmtCode;
     sal_uInt16 nRecCount;
     rStrm.skip( 4 );    // flags
-    rStrm >> nRecCount;
+    nRecCount = rStrm.readuInt16();
     for( sal_uInt16 nRec = 0; !rStrm.isEof() && (nRec < nRecCount); ++nRec )
     {
         sal_uInt16 nSubRecId, nSubRecSize;
         sal_Int64 nRecEnd = rStrm.tell();
-        rStrm >> nSubRecId >> nSubRecSize;
+        nSubRecId = rStrm.readuInt16();
+        nSubRecSize = rStrm.readuInt16();
         nRecEnd += nSubRecSize;
         switch( nSubRecId )
         {
@@ -2614,7 +2633,8 @@ void CellStyle::importCellStyle( const AttributeList& rAttribs )
 void CellStyle::importCellStyle( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> maModel.mnXfId >> nFlags;
+    maModel.mnXfId = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
     maModel.mnBuiltinId = rStrm.readInt8();
     maModel.mnLevel = rStrm.readInt8();
     rStrm >> maModel.maName;

@@ -349,10 +349,6 @@ public:
         non-seekable streams too. */
     virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
 
-    /** Stream operator for all data types supported by the readValue() function. */
-    template< typename Type >
-    SequenceInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
-
 private:
     /** Returns the number of bytes available in the sequence for the passed byte count. */
     sal_Int32    getMaxBytes( sal_Int32 nBytes ) const
@@ -413,10 +409,6 @@ public:
     /** Seeks the stream forward by the passed number of bytes. This works for
         non-seekable streams too. Does not seek out of the data block. */
     virtual void        skip( sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
-
-    /** Stream operator for all data types supported by the readValue() function. */
-    template< typename Type >
-    RelativeInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
 
 private:
     /** Returns the number of bytes available in the sequence for the passed byte count. */

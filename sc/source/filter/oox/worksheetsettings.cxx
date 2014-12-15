@@ -187,7 +187,9 @@ void WorksheetSettings::importSheetPr( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags1;
     sal_uInt8 nFlags2;
-    rStrm >> nFlags1 >> nFlags2 >> maSheetSettings.maTabColor;
+    nFlags1 = rStrm.readuInt16();
+    nFlags2 = rStrm.readuChar();
+    rStrm >> maSheetSettings.maTabColor;
     rStrm.skip( 8 );    // sync anchor cell
     rStrm >> maSheetSettings.maCodeName;
     // sheet settings
@@ -209,7 +211,7 @@ void WorksheetSettings::importChartSheetPr( SequenceInputStream& rStrm )
 
 void WorksheetSettings::importSheetProtection( SequenceInputStream& rStrm )
 {
-    rStrm >> maSheetProt.mnPasswordHash;
+    maSheetProt.mnPasswordHash = rStrm.readuInt16();
     // no flags field for all these boolean flags?!?
     maSheetProt.mbSheet            = rStrm.readInt32() != 0;
     maSheetProt.mbObjects          = rStrm.readInt32() != 0;
@@ -231,7 +233,7 @@ void WorksheetSettings::importSheetProtection( SequenceInputStream& rStrm )
 
 void WorksheetSettings::importChartProtection( SequenceInputStream& rStrm )
 {
-    rStrm >> maSheetProt.mnPasswordHash;
+    maSheetProt.mnPasswordHash = rStrm.readuInt16();
     // no flags field for all these boolean flags?!?
     maSheetProt.mbSheet            = rStrm.readInt32() != 0;
     maSheetProt.mbObjects          = rStrm.readInt32() != 0;

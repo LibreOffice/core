@@ -65,7 +65,11 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
     sal_Int32 nType;
-    rStrm >> aBinRange >> nType >> maModel.mnId >> maModel.mnHeaderRows >> maModel.mnTotalsRows;
+    rStrm >> aBinRange;
+    nType = rStrm.readInt32();
+    maModel.mnId = rStrm.readInt32();
+    maModel.mnHeaderRows = rStrm.readInt32();
+    maModel.mnTotalsRows = rStrm.readInt32();
     rStrm.skip( 32 );
     rStrm >> maModel.maProgName >> maModel.maDisplayName;
 

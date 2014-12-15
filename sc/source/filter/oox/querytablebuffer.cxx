@@ -179,9 +179,10 @@ void QueryTable::importQueryTable( const AttributeList& rAttribs )
 void QueryTable::importQueryTable( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
-    rStrm >> nFlags;
+    nFlags = rStrm.readuInt32();
     maModel.mnAutoFormatId = rStrm.readuInt16();
-    rStrm >> maModel.mnConnId >> maModel.maDefName;
+    maModel.mnConnId = rStrm.readInt32();
+    rStrm >> maModel.maDefName;
 
     static const sal_Int32 spnGrowShrinkTypes[] = { XML_insertClear, XML_insertDelete, XML_overwriteClear };
     maModel.mnGrowShrinkType = STATIC_ARRAY_SELECT( spnGrowShrinkTypes, extractValue< sal_uInt8 >( nFlags, 6, 2 ), XML_insertDelete );

@@ -226,15 +226,18 @@ void PageSettings::importPicture( const Relations& rRelations, const AttributeLi
 
 void PageSettings::importPageMargins( SequenceInputStream& rStrm )
 {
-    rStrm   >> maModel.mfLeftMargin   >> maModel.mfRightMargin
-            >> maModel.mfTopMargin    >> maModel.mfBottomMargin
-            >> maModel.mfHeaderMargin >> maModel.mfFooterMargin;
+    maModel.mfLeftMargin = rStrm.readDouble();
+    maModel.mfRightMargin = rStrm.readDouble();
+    maModel.mfTopMargin = rStrm.readDouble();
+    maModel.mfBottomMargin = rStrm.readDouble();
+    maModel.mfHeaderMargin = rStrm.readDouble();
+    maModel.mfFooterMargin = rStrm.readDouble();
 }
 
 void PageSettings::importPrintOptions( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> nFlags;
+    nFlags = rStrm.readuInt16();
     maModel.mbHorCenter     = getFlag( nFlags, BIFF12_PRINTOPT_HORCENTER );
     maModel.mbVerCenter     = getFlag( nFlags, BIFF12_PRINTOPT_VERCENTER );
     maModel.mbPrintGrid     = getFlag( nFlags, BIFF12_PRINTOPT_PRINTGRID );
@@ -245,11 +248,16 @@ void PageSettings::importPageSetup( const Relations& rRelations, SequenceInputSt
 {
     OUString aRelId;
     sal_uInt16 nFlags;
-    rStrm   >> maModel.mnPaperSize >> maModel.mnScale
-            >> maModel.mnHorPrintRes >> maModel.mnVerPrintRes
-            >> maModel.mnCopies >> maModel.mnFirstPage
-            >> maModel.mnFitToWidth >> maModel.mnFitToHeight
-            >> nFlags >> aRelId;
+    maModel.mnPaperSize = rStrm.readInt32();
+    maModel.mnScale = rStrm.readInt32();
+    maModel.mnHorPrintRes = rStrm.readInt32();
+    maModel.mnVerPrintRes = rStrm.readInt32();
+    maModel.mnCopies = rStrm.readInt32();
+    maModel.mnFirstPage = rStrm.readInt32();
+    maModel.mnFitToWidth = rStrm.readInt32();
+    maModel.mnFitToHeight = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
+    rStrm >> aRelId;
     maModel.setBiffPrintErrors( extractValue< sal_uInt8 >( nFlags, 9, 2 ) );
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
     maModel.mnOrientation   = getFlagValue( nFlags, BIFF12_PAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, BIFF12_PAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
@@ -265,8 +273,13 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, SequenceIn
 {
     OUString aRelId;
     sal_uInt16 nFirstPage, nFlags;
-    rStrm   >> maModel.mnPaperSize >> maModel.mnHorPrintRes >> maModel.mnVerPrintRes
-            >> maModel.mnCopies >> nFirstPage >> nFlags >> aRelId;
+    maModel.mnPaperSize = rStrm.readInt32();
+    maModel.mnHorPrintRes = rStrm.readInt32();
+    maModel.mnVerPrintRes = rStrm.readInt32();
+    maModel.mnCopies = rStrm.readInt32();
+    nFirstPage = rStrm.readuInt16();
+    nFlags = rStrm.readuInt16();
+    rStrm >> aRelId;
     maModel.maBinSettPath   = rRelations.getFragmentPathFromRelId( aRelId );
     maModel.mnFirstPage     = nFirstPage; // 16-bit in CHARTPAGESETUP
     maModel.mnOrientation   = getFlagValue( nFlags, BIFF12_CHARTPAGESETUP_DEFAULTORIENT, XML_default, getFlagValue( nFlags, BIFF12_CHARTPAGESETUP_LANDSCAPE, XML_landscape, XML_portrait ) );
@@ -279,8 +292,8 @@ void PageSettings::importChartPageSetup( const Relations& rRelations, SequenceIn
 void PageSettings::importHeaderFooter( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm   >> nFlags
-            >> maModel.maOddHeader   >> maModel.maOddFooter
+    nFlags = rStrm.readuInt16();
+    rStrm   >> maModel.maOddHeader   >> maModel.maOddFooter
             >> maModel.maEvenHeader  >> maModel.maEvenFooter
             >> maModel.maFirstHeader >> maModel.maFirstFooter;
     maModel.mbUseEvenHF  = getFlag( nFlags, BIFF12_HEADERFOOTER_DIFFEVEN );

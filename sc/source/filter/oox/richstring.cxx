@@ -224,7 +224,9 @@ void PhoneticSettings::importPhoneticPr( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFontId;
     sal_Int32 nType, nAlignment;
-    rStrm >> nFontId >> nType >> nAlignment;
+    nFontId = rStrm.readuInt16();
+    nType = rStrm.readInt32();
+    nAlignment = rStrm.readInt32();
     maModel.mnFontId = nFontId;
     maModel.setBiffData( nType, nAlignment );
 }
@@ -232,7 +234,8 @@ void PhoneticSettings::importPhoneticPr( SequenceInputStream& rStrm )
 void PhoneticSettings::importStringData( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFontId, nFlags;
-    rStrm >> nFontId >> nFlags;
+    nFontId = rStrm.readuInt16();
+    nFlags = rStrm.readuInt16();
     maModel.mnFontId = nFontId;
     maModel.setBiffData( extractValue< sal_Int32 >( nFlags, 0, 2 ), extractValue< sal_Int32 >( nFlags, 2, 2 ) );
 }

@@ -68,12 +68,9 @@ public:
         position of the wrapped stream at construction time). */
     void                align( size_t nSize );
 
-    /** Stream operator for all data types supported by the readValue() function. */
-    template< typename Type >
-    AxAlignedInputStream& operator>>( Type& ornValue ) { ornValue = readValue<Type>(); return *this; }
-
     /** Aligns the stream according to the passed type and reads a value. */
     template< typename Type >
+    SAL_WARN_UNUSED_RESULT
     Type                readAligned() { align( sizeof( Type ) ); return readValue< Type >(); }
     /** Aligns the stream according to the passed type and skips the size of the type. */
     template< typename Type >
@@ -105,7 +102,7 @@ public:
     /** Reads the next integer property value from the stream, if the
         respective flag in the property mask is set. */
     template< typename StreamType, typename DataType >
-    void         readIntProperty( DataType& ornValue )
+    void                readIntProperty( DataType& ornValue )
                             { if( startNextProperty() ) ornValue = maInStrm.readAligned< StreamType >(); }
     /** Reads the next boolean property value from the stream, if the
         respective flag in the property mask is set. */

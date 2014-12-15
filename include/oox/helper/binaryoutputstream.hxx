@@ -191,10 +191,6 @@ public:
 
     /** Write nBytes bytes from the (preallocated!) buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
-
-    /** Stream operator for all data types supported by the writeValue() function. */
-    template< typename Type >
-    SequenceOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 };
 
 

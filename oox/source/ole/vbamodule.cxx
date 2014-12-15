@@ -91,7 +91,7 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
             break;
             case VBA_ID_MODULEOFFSET:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 4 );
-                aRecStrm >> mnOffset;
+                mnOffset = aRecStrm.readuInt32();
             break;
             case VBA_ID_MODULEHELPCONTEXT:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 4 );

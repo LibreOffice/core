@@ -140,13 +140,16 @@ void WorkbookSettings::importCalcPr( const AttributeList& rAttribs )
 void WorkbookSettings::importFileSharing( SequenceInputStream& rStrm )
 {
     maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
-    rStrm >> maFileSharing.mnPasswordHash >> maFileSharing.maUserName;
+    maFileSharing.mnPasswordHash = rStrm.readuInt16();
+    rStrm >> maFileSharing.maUserName;
 }
 
 void WorkbookSettings::importWorkbookPr( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
-    rStrm >> nFlags >> maBookSettings.mnDefaultThemeVer >> maBookSettings.maCodeName;
+    nFlags = rStrm.readuInt32();
+    maBookSettings.mnDefaultThemeVer = rStrm.readInt32();
+    rStrm >> maBookSettings.maCodeName;
     maBookSettings.setBiffObjectMode( extractValue< sal_uInt16 >( nFlags, 13, 2 ) );
     // set flag means: strip external link values
     maBookSettings.mbSaveExtLinkValues = !getFlag( nFlags, BIFF12_WORKBOOKPR_STRIPEXT );
@@ -157,7 +160,12 @@ void WorkbookSettings::importCalcPr( SequenceInputStream& rStrm )
 {
     sal_Int32 nCalcMode, nProcCount;
     sal_uInt16 nFlags;
-    rStrm >> maCalcSettings.mnCalcId >> nCalcMode >> maCalcSettings.mnIterateCount >> maCalcSettings.mfIterateDelta >> nProcCount >> nFlags;
+    maCalcSettings.mnCalcId = rStrm.readInt32();
+    nCalcMode = rStrm.readInt32();
+    maCalcSettings.mnIterateCount = rStrm.readInt32();
+    maCalcSettings.mfIterateDelta = rStrm.readDouble();
+    nProcCount = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
 
     static const sal_Int32 spnCalcModes[] = { XML_manual, XML_auto, XML_autoNoTable };
     maCalcSettings.mnRefMode       = getFlagValue( nFlags, BIFF12_CALCPR_A1, XML_A1, XML_R1C1 );

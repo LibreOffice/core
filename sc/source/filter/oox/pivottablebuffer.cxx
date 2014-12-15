@@ -308,7 +308,11 @@ void PivotTableField::importReferenceItem( const AttributeList& rAttribs )
 void PivotTableField::importPTField( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2;
-    rStrm >> nFlags1 >> maModel.mnNumFmtId >> nFlags2 >> maModel.mnAutoShowItems >> maModel.mnAutoShowRankBy;
+    nFlags1 = rStrm.readuInt32();
+    maModel.mnNumFmtId = rStrm.readInt32();
+    nFlags2 = rStrm.readuInt32();
+    maModel.mnAutoShowItems = rStrm.readInt32();
+    maModel.mnAutoShowRankBy = rStrm.readInt32();
 
     maModel.setBiffAxis( extractValue< sal_uInt8 >( nFlags1, 0, 3 ) );
     maModel.mbDataField       = getFlag( nFlags1, BIFF12_PTFIELD_DATAFIELD );
@@ -344,7 +348,9 @@ void PivotTableField::importPTFItem( SequenceInputStream& rStrm )
     PTFieldItemModel aModel;
     sal_uInt8 nType;
     sal_uInt16 nFlags;
-    rStrm >> nType >> nFlags >> aModel.mnCacheItem;
+    nType = rStrm.readuChar();
+    nFlags = rStrm.readuInt16();
+    aModel.mnCacheItem = rStrm.readInt32();
 
     aModel.setBiffType( nType );
     aModel.mbShowDetails = !getFlag( nFlags, BIFF12_PTFITEM_HIDEDETAILS );
@@ -355,12 +361,12 @@ void PivotTableField::importPTFItem( SequenceInputStream& rStrm )
 
 void PivotTableField::importPTReference( SequenceInputStream& rStrm )
 {
-    rStrm >> maModel.mnSortRefField;
+    maModel.mnSortRefField = rStrm.readInt32();
 }
 
 void PivotTableField::importPTReferenceItem( SequenceInputStream& rStrm )
 {
-    rStrm >> maModel.mnSortRefItem;
+    maModel.mnSortRefItem = rStrm.readInt32();
 }
 
 void PivotTableField::finalizeImport( const Reference< XDataPilotDescriptor >& rxDPDesc )
@@ -776,9 +782,14 @@ void PivotTableFilter::importPTFilter( SequenceInputStream& rStrm )
 {
     sal_Int32 nType;
     sal_uInt16 nFlags;
-    rStrm >> maModel.mnField >> maModel.mnMemPropField >> nType;
+    maModel.mnField = rStrm.readInt32();
+    maModel.mnMemPropField = rStrm.readInt32();
+    nType = rStrm.readInt32();
     rStrm.skip( 4 );    // unused
-    rStrm >> maModel.mnId >> maModel.mnMeasureField >> maModel.mnMeasureHier >> nFlags;
+    maModel.mnId = rStrm.readInt32();
+    maModel.mnMeasureField = rStrm.readInt32();
+    maModel.mnMeasureHier = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
     if( getFlag( nFlags, BIFF12_PTFILTER_HASNAME ) )
         rStrm >> maModel.maName;
     if( getFlag( nFlags, BIFF12_PTFILTER_HASDESCRIPTION ) )
@@ -815,7 +826,8 @@ void PivotTableFilter::importPTFilter( SequenceInputStream& rStrm )
 void PivotTableFilter::importTop10Filter( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags;
-    rStrm >> nFlags >> maModel.mfValue;
+    nFlags = rStrm.readuChar();
+    maModel.mfValue = rStrm.readDouble();
 
     SAL_WARN_IF(
         getFlag(nFlags, BIFF12_TOP10FILTER_PERCENT) != (maModel.mnType == XML_percent),
@@ -995,13 +1007,18 @@ void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags1, nFlags2, nFlags3;
     sal_uInt8 nDataAxis;
-    rStrm >> nFlags1 >> nFlags2 >> nFlags3 >> nDataAxis;
+    nFlags1 = rStrm.readuInt32();
+    nFlags2 = rStrm.readuInt32();
+    nFlags3 = rStrm.readuInt32();
+    nDataAxis = rStrm.readuChar();
     maDefModel.mnPageWrap = rStrm.readuInt8();
     rStrm.skip( 2 );    // refresh versions
-    rStrm >> maDefModel.mnDataPosition;
+    maDefModel.mnDataPosition = rStrm.readInt32();
     maDefModel.mnAutoFormatId = rStrm.readuInt16();
     rStrm.skip( 2 );    // unused
-    rStrm >> maDefModel.mnChartFormat >> maDefModel.mnCacheId >> maDefModel.maName;
+    maDefModel.mnChartFormat = rStrm.readInt32();
+    maDefModel.mnCacheId = rStrm.readInt32();
+    rStrm >> maDefModel.maName;
     if( getFlag( nFlags2, BIFF12_PTDEF_HASDATACAPTION ) )
         rStrm >> maDefModel.maDataCaption;
     if( getFlag( nFlags2, BIFF12_PTDEF_HASGRANDTOTALCAPTION ) )
@@ -1064,9 +1081,12 @@ void PivotTable::importPTDefinition( SequenceInputStream& rStrm )
 void PivotTable::importPTLocation( SequenceInputStream& rStrm, sal_Int16 nSheet )
 {
     BinRange aBinRange;
-    rStrm   >> aBinRange >> maLocationModel.mnFirstHeaderRow
-            >> maLocationModel.mnFirstDataRow >> maLocationModel.mnFirstDataCol
-            >> maLocationModel.mnRowPageCount >> maLocationModel.mnColPageCount;
+    rStrm >> aBinRange;
+    maLocationModel.mnFirstHeaderRow = rStrm.readInt32();
+    maLocationModel.mnFirstDataRow = rStrm.readInt32();
+    maLocationModel.mnFirstDataCol = rStrm.readInt32();
+    maLocationModel.mnRowPageCount = rStrm.readInt32();
+    maLocationModel.mnColPageCount = rStrm.readInt32();
     getAddressConverter().convertToCellRangeUnchecked( maLocationModel.maRange, aBinRange, nSheet );
 }
 
@@ -1084,9 +1104,10 @@ void PivotTable::importPTPageField( SequenceInputStream& rStrm )
 {
     PTPageFieldModel aModel;
     sal_uInt8 nFlags;
-    rStrm >> aModel.mnField >> aModel.mnItem;
+    aModel.mnField = rStrm.readInt32();
+    aModel.mnItem = rStrm.readInt32();
     rStrm.skip( 4 );    // hierarchy
-    rStrm >> nFlags;
+    nFlags = rStrm.readuChar();
     if( getFlag( nFlags, BIFF12_PTPAGEFIELD_HASNAME ) )
         rStrm >> aModel.maName;
     maPageFields.push_back( aModel );
@@ -1097,7 +1118,13 @@ void PivotTable::importPTDataField( SequenceInputStream& rStrm )
     PTDataFieldModel aModel;
     sal_Int32 nSubtotal, nShowDataAs;
     sal_uInt8 nHasName;
-    rStrm >> aModel.mnField >> nSubtotal >> nShowDataAs >> aModel.mnBaseField >> aModel.mnBaseItem >> aModel.mnNumFmtId >> nHasName;
+    aModel.mnField = rStrm.readInt32(  );
+    nSubtotal = rStrm.readInt32();
+    nShowDataAs = rStrm.readInt32();
+    aModel.mnBaseField = rStrm.readInt32();
+    aModel.mnBaseItem = rStrm.readInt32();
+    aModel.mnNumFmtId = rStrm.readInt32();
+    nHasName = rStrm.readuChar();
     if( nHasName == 1 )
         rStrm >> aModel.maName;
     aModel.setBiffSubtotal( nSubtotal );

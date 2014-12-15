@@ -162,7 +162,8 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 
     sal_uInt32 nFlags;
     BinRangeList aRanges;
-    rStrm >> nFlags >> aRanges >> aModel.maErrorTitle >> aModel.maErrorMessage >> aModel.maInputTitle >> aModel.maInputMessage;
+    nFlags = rStrm.readuInt32();
+    rStrm >> aRanges >> aModel.maErrorTitle >> aModel.maErrorMessage >> aModel.maInputTitle >> aModel.maInputMessage;
 
     // equal flags in all BIFFs
     aModel.setBiffType( extractValue< sal_uInt8 >( nFlags, 0, 4 ) );
@@ -623,7 +624,10 @@ void WorksheetFragment::importSheetFormatPr( SequenceInputStream& rStrm )
 {
     sal_Int32 nDefaultWidth;
     sal_uInt16 nBaseWidth, nDefaultHeight, nFlags;
-    rStrm >> nDefaultWidth >> nBaseWidth >> nDefaultHeight >> nFlags;
+    nDefaultWidth = rStrm.readInt32();
+    nBaseWidth = rStrm.readuInt16();
+    nDefaultHeight = rStrm.readuInt16();
+    nFlags = rStrm.readuInt16();
 
     // base column with
     setBaseColumnWidth( nBaseWidth );
@@ -644,7 +648,11 @@ void WorksheetFragment::importCol( SequenceInputStream& rStrm )
 
     sal_Int32 nWidth;
     sal_uInt16 nFlags;
-    rStrm >> aModel.maRange.mnFirst >> aModel.maRange.mnLast >> nWidth >> aModel.mnXfId >> nFlags;
+    aModel.maRange.mnFirst = rStrm.readInt32();
+    aModel.maRange.mnLast = rStrm.readInt32();
+    nWidth = rStrm.readInt32();
+    aModel.mnXfId = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
 
     // column indexes are 0-based in BIFF12, but ColumnModel expects 1-based
     ++aModel.maRange.mnFirst;
@@ -686,7 +694,10 @@ void WorksheetFragment::importBrk( SequenceInputStream& rStrm, bool bRowBreak )
 {
     PageBreakModel aModel;
     sal_Int32 nManual;
-    rStrm >> aModel.mnColRow >> aModel.mnMin >> aModel.mnMax >> nManual;
+    aModel.mnColRow = rStrm.readInt32();
+    aModel.mnMin = rStrm.readInt32();
+    aModel.mnMax = rStrm.readInt32();
+    nManual = rStrm.readInt32();
     aModel.mbManual = nManual != 0;
     setPageBreak( aModel, bRowBreak );
 }
@@ -706,7 +717,11 @@ void WorksheetFragment::importOleObject( SequenceInputStream& rStrm )
     ::oox::vml::OleObjectInfo aInfo;
     sal_Int32 nAspect, nUpdateMode, nShapeId;
     sal_uInt16 nFlags;
-    rStrm >> nAspect >> nUpdateMode >> nShapeId >> nFlags >> aInfo.maProgId;
+    nAspect = rStrm.readInt32();
+    nUpdateMode = rStrm.readInt32();
+    nShapeId = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
+    rStrm >> aInfo.maProgId;
     aInfo.mbLinked = getFlag( nFlags, BIFF12_OLEOBJECT_LINKED );
     if( aInfo.mbLinked )
         aInfo.maTargetLink = getFormulaParser().importOleTargetLink( rStrm );

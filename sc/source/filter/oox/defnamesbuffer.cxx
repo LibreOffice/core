@@ -279,9 +279,10 @@ void DefinedName::setFormula( const OUString& rFormula )
 void DefinedName::importDefinedName( SequenceInputStream& rStrm )
 {
     sal_uInt32 nFlags;
-    rStrm >> nFlags;
+    nFlags = rStrm.readuInt32();
     rStrm.skip( 1 );    // keyboard shortcut
-    rStrm >> maModel.mnSheet >> maModel.maName;
+    maModel.mnSheet = rStrm.readInt32();
+    rStrm >> maModel.maName;
     mnCalcSheet = (maModel.mnSheet >= 0) ? getWorksheets().getCalcSheetIndex( maModel.mnSheet ) : -1;
 
     // macro function/command, hidden flag

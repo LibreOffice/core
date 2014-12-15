@@ -82,7 +82,8 @@ com::sun::star::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence()
 
 void BinAddress::read( SequenceInputStream& rStrm )
 {
-    rStrm >> mnRow >> mnCol;
+    mnRow = rStrm.readInt32();
+    mnCol = rStrm.readInt32();
 }
 
 void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
@@ -93,7 +94,10 @@ void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
 
 void BinRange::read( SequenceInputStream& rStrm )
 {
-    rStrm >> maFirst.mnRow >> maLast.mnRow >> maFirst.mnCol >> maLast.mnCol;
+    maFirst.mnRow = rStrm.readInt32();
+    maLast.mnRow = rStrm.readInt32();
+    maFirst.mnCol = rStrm.readInt32();
+    maLast.mnCol = rStrm.readInt32();
 }
 
 void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )

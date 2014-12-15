@@ -182,10 +182,15 @@ void Connection::importConnection( SequenceInputStream& rStrm )
     sal_uInt16 nFlags, nStrFlags;
     sal_uInt8 nSavePassword, nCredentials;
     rStrm.skip( 2 );
-    rStrm >> nSavePassword;
+    nSavePassword = rStrm.readuChar();
     rStrm.skip( 1 );
     maModel.mnInterval = rStrm.readuInt16();
-    rStrm >> nFlags >> nStrFlags >> maModel.mnType >> maModel.mnReconnectMethod >> maModel.mnId >> nCredentials;
+    nFlags = rStrm.readuInt16();
+    nStrFlags = rStrm.readuInt16();
+    maModel.mnType = rStrm.readInt32();
+    maModel.mnReconnectMethod = rStrm.readInt32();
+    maModel.mnId = rStrm.readInt32();
+    nCredentials = rStrm.readuChar();
 
     if( getFlag( nStrFlags, BIFF12_CONNECTION_HAS_SOURCEFILE ) )
         rStrm >> maModel.maSourceFile;
@@ -217,7 +222,8 @@ void Connection::importWebPr( SequenceInputStream& rStrm )
 
     sal_uInt32 nFlags;
     sal_uInt8 nStrFlags;
-    rStrm >> nFlags >> nStrFlags;
+    nFlags = rStrm.readuInt32();
+    nStrFlags = rStrm.readuChar();
 
     if( getFlag( nStrFlags, BIFF12_WEBPR_HAS_URL ) )
         rStrm >> rWebPr.maUrl;

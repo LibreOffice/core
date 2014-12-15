@@ -125,7 +125,8 @@ void ExternalName::importExternalNameFlags( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
     sal_Int32 nSheetId;
-    rStrm >> nFlags >> nSheetId;
+    nFlags = rStrm.readuInt16();
+    nSheetId = rStrm.readInt32();
     // index into sheet list of EXTSHEETNAMES (one-based in BIFF12)
     maModel.mnSheet = nSheetId - 1;
     // no flag for built-in names, as in OOXML...
@@ -141,7 +142,8 @@ void ExternalName::importExternalNameFlags( SequenceInputStream& rStrm )
 void ExternalName::importDdeItemValues( SequenceInputStream& rStrm )
 {
     sal_Int32 nRows, nCols;
-    rStrm >> nRows >> nCols;
+    nRows = rStrm.readInt32();
+    nCols = rStrm.readInt32();
     setResultSize( nCols, nRows );
 }
 
@@ -622,7 +624,9 @@ RefSheetsModel::RefSheetsModel() :
 
 void RefSheetsModel::readBiff12Data( SequenceInputStream& rStrm )
 {
-    rStrm >> mnExtRefId >> mnTabId1 >> mnTabId2;
+    mnExtRefId = rStrm.readInt32();
+    mnTabId1 = rStrm.readInt32();
+    mnTabId2 = rStrm.readInt32();
 }
 
 ExternalLinkBuffer::ExternalLinkBuffer( const WorkbookHelper& rHelper ) :
@@ -675,7 +679,7 @@ void ExternalLinkBuffer::importExternalSheets( SequenceInputStream& rStrm )
     OSL_ENSURE( maRefSheets.empty(), "ExternalLinkBuffer::importExternalSheets - multiple EXTERNALSHEETS records" );
     maRefSheets.clear();
     sal_Int32 nRefCount;
-    rStrm >> nRefCount;
+    nRefCount = rStrm.readInt32();
     size_t nMaxCount = getLimitedValue< size_t, sal_Int64 >( nRefCount, 0, rStrm.getRemaining() / 12 );
     maRefSheets.reserve( nMaxCount );
     for( size_t nRefId = 0; !rStrm.isEof() && (nRefId < nMaxCount); ++nRefId )

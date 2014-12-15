@@ -233,7 +233,8 @@ void DiscreteFilter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm 
         case BIFF12_ID_DISCRETEFILTERS:
         {
             sal_Int32 nShowBlank, nCalendarType;
-            rStrm >> nShowBlank >> nCalendarType;
+            nShowBlank = rStrm.readInt32();
+            nCalendarType = rStrm.readInt32();
 
             static const sal_Int32 spnCalendarTypes[] = {
                 XML_none, XML_gregorian, XML_gregorianUs, XML_japan, XML_taiwan, XML_korea, XML_hijri, XML_thai, XML_hebrew,
@@ -298,7 +299,8 @@ void Top10Filter::importRecord( sal_Int32 nRecId, SequenceInputStream& rStrm )
     if( nRecId == BIFF12_ID_TOP10FILTER )
     {
         sal_uInt8 nFlags;
-        rStrm >> nFlags >> mfValue;
+        nFlags = rStrm.readuChar();
+        mfValue = rStrm.readDouble();
         mbTop = getFlag( nFlags, BIFF12_TOP10FILTER_TOP );
         mbPercent = getFlag( nFlags, BIFF12_TOP10FILTER_PERCENT );
     }
@@ -331,7 +333,8 @@ void FilterCriterionModel::setBiffOperator( sal_uInt8 nOperator )
 void FilterCriterionModel::readBiffData( SequenceInputStream& rStrm )
 {
     sal_uInt8 nOperator;
-    rStrm >> mnDataType >> nOperator;
+    mnDataType = rStrm.readuChar();
+    nOperator = rStrm.readuChar();
     setBiffOperator( nOperator );
 
     switch( mnDataType )
@@ -503,7 +506,8 @@ void FilterColumn::importFilterColumn( const AttributeList& rAttribs )
 void FilterColumn::importFilterColumn( SequenceInputStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> mnColId >> nFlags;
+    mnColId = rStrm.readInt32();
+    nFlags = rStrm.readuInt16();
     mbHiddenButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_HIDDENBUTTON );
     mbShowButton = getFlag( nFlags, BIFF12_FILTERCOLUMN_SHOWBUTTON );
 }

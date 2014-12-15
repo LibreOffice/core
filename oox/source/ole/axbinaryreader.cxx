@@ -129,7 +129,8 @@ AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
 
 bool AxBinaryPropertyReader::PairProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
-    rInStrm >> mrPairData.first >> mrPairData.second;
+    mrPairData.first = rInStrm.readInt32();
+    mrPairData.second = rInStrm.readInt32();
     return true;
 }
 

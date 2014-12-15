@@ -315,7 +315,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             case VBA_ID_PROJECTMODULES:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 2 );
                 OSL_ENSURE( maModules.empty(), "VbaProject::importVba - unexpected PROJECTMODULES record" );
-                aRecStrm >> nModuleCount;
+                nModuleCount = aRecStrm.readuInt16();
             break;
             case VBA_ID_MODULENAME:
             {

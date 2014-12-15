@@ -121,7 +121,8 @@ void Comment::importCommentPr( const AttributeList& rAttribs )
 void Comment::importComment( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
-    rStrm >> maModel.mnAuthorId >> aBinRange;
+    maModel.mnAuthorId = rStrm.readInt32();
+    rStrm >> aBinRange;
     // cell range will be checked while inserting the comment into the document
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, aBinRange, getSheetIndex() );
 }

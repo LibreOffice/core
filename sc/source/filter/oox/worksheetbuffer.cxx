@@ -68,7 +68,9 @@ void WorksheetBuffer::importSheet( SequenceInputStream& rStrm )
 {
     sal_Int32 nState;
     SheetInfoModel aModel;
-    rStrm >> nState >> aModel.mnSheetId >> aModel.maRelId >> aModel.maName;
+    nState = rStrm.readInt32();
+    aModel.mnSheetId = rStrm.readInt32();
+    rStrm >> aModel.maRelId >> aModel.maName;
     static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
     aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
     insertSheet( aModel );
