@@ -50,7 +50,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException, std::exception )
     {
         if( m_bIsMenu )
         {
-            if( m_sResourceUrl.equalsAscii( ITEM_MENUBAR_URL ) )
+            if( m_sResourceUrl == ITEM_MENUBAR_URL )
             {
                 if( pCBarHelper->getModuleId() == "com.sun.star.sheet.SpreadsheetDocument" )
                     sName = "Worksheet Menu Bar";
