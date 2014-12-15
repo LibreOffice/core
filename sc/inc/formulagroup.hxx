@@ -133,10 +133,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 #endif
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
-    virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
-                                                   const ScAddress& rTopPos,
-                                                   ScFormulaCellGroup& rGroup,
-                                                   ScTokenArray& rCode) = 0;
+    virtual CompiledFormula* createCompiledFormula( ScFormulaCellGroup& rGroup, ScTokenArray& rCode ) = 0;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
 };
 
@@ -148,10 +145,7 @@ public:
     virtual ~FormulaGroupInterpreterSoftware() {}
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) SAL_OVERRIDE;
-    virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
-                                                   const ScAddress& rTopPos,
-                                                   ScFormulaCellGroup& rGroup,
-                                                   ScTokenArray& rCode) SAL_OVERRIDE;
+    virtual CompiledFormula* createCompiledFormula( ScFormulaCellGroup& rGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
     virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) SAL_OVERRIDE;
 };
 

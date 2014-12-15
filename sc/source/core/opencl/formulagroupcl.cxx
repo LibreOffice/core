@@ -861,7 +861,7 @@ public:
     typedef std::list<boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
     SymbolTable() : mCurId(0) { }
     template<class T>
-    const DynamicKernelArgument* DeclRefArg( FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen );
+    const DynamicKernelArgument* DeclRefArg( FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen, int nResultSize );
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions( std::stringstream& ss )
     {
@@ -875,15 +875,12 @@ public:
     /// Memory mapping from host to device and pass buffers to the given kernel as
     /// arguments
     void Marshal( cl_kernel, int, cl_program );
-    // number of result items.
-    static int nR;
 
 private:
     unsigned int mCurId;
     ArgumentMap mSymbols;
     ArgumentList mParams;
 };
-int SymbolTable::nR = 0;
 
 void SymbolTable::Marshal( cl_kernel k, int nVectorWidth, cl_program pProgram )
 {
@@ -1104,7 +1101,7 @@ public:
     }
     /// Controls how the elements in the DoubleVectorRef are traversed
     virtual size_t GenReductionLoopHeader(
-        std::stringstream& ss, bool& needBody )
+        std::stringstream& ss, int nResultSize, bool& needBody )
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
@@ -1116,7 +1113,7 @@ public:
             ss << mpCodeGen->Gen2(temp, "tmp") << ";\n";
             ss << "nCount = nCount-1;\n";
             ss << "nCount = nCount +"; /*re-assign nCount from count reduction*/
-            ss << Base::GetName() << "[gid0+" << SymbolTable::nR << "]" << ";\n";
+            ss << Base::GetName() << "[gid0+" << nResultSize << "]" << ";\n";
         }
         else if (dynamic_cast<OpCount*>(mpCodeGen.get()))
             ss << temp << "+ tmp";
@@ -1296,7 +1293,10 @@ protected:
 
 class Reduction : public SlidingFunctionBase
 {
+    int mnResultSize;
 public:
+    Reduction( int nResultSize ) : mnResultSize(nResultSize) {}
+
     typedef DynamicKernelSlidingArgument<VectorRef> NumericRange;
     typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
     typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
@@ -1331,7 +1331,9 @@ public:
                 dynamic_cast<ParallelNumericRange*>(vSubArguments[i].get()))
             {
                 //did not handle yet
-                bool needBody; PNR->GenReductionLoopHeader(ss, needBody); if (needBody == false)
+                bool bNeedBody = false;
+                PNR->GenReductionLoopHeader(ss, mnResultSize, bNeedBody);
+                if (!bNeedBody)
                     continue;
             }
             else if (StringRange* SR =
@@ -1713,6 +1715,8 @@ public:
 class OpNop : public Reduction
 {
 public:
+    OpNop( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& ) const SAL_OVERRIDE
     {
@@ -1724,6 +1728,8 @@ public:
 class OpCount : public Reduction
 {
 public:
+    OpCount( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1789,6 +1795,8 @@ public:
 class OpSum : public Reduction
 {
 public:
+    OpSum( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1802,6 +1810,8 @@ public:
 class OpAverage : public Reduction
 {
 public:
+    OpAverage( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1816,6 +1826,8 @@ public:
 class OpSub : public Reduction
 {
 public:
+    OpSub( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1827,6 +1839,8 @@ public:
 class OpMul : public Reduction
 {
 public:
+    OpMul( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "1"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1840,6 +1854,8 @@ public:
 class OpDiv : public Reduction
 {
 public:
+    OpDiv( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "1.0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1851,6 +1867,8 @@ public:
 class OpMin : public Reduction
 {
 public:
+    OpMin( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "MAXFLOAT"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1862,6 +1880,8 @@ public:
 class OpMax : public Reduction
 {
 public:
+    OpMax( int nResultSize ) : Reduction(nResultSize) {}
+
     virtual std::string GetBottom() SAL_OVERRIDE { return "-MAXFLOAT"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
@@ -1898,7 +1918,8 @@ public:
     typedef std::vector<SubArgument> SubArgumentsType;
 
     DynamicKernelSoPArguments(
-        const std::string& s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen );
+        const std::string& s, const FormulaTreeNodeRef& ft,
+        SlidingFunctionBase* pCodeGen, int nResultSize );
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int nVectorWidth, cl_program pProgram ) SAL_OVERRIDE
@@ -2162,9 +2183,10 @@ private:
 };
 
 boost::shared_ptr<DynamicKernelArgument> SoPHelper(
-    const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen )
+    const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
+    int nResultSize )
 {
-    return boost::shared_ptr<DynamicKernelArgument>(new DynamicKernelSoPArguments(ts, ft, pCodeGen));
+    return boost::shared_ptr<DynamicKernelArgument>(new DynamicKernelSoPArguments(ts, ft, pCodeGen, nResultSize));
 }
 
 template<class Base>
@@ -2217,7 +2239,7 @@ DynamicKernelArgument* VectorRefFactory( const std::string& s,
 }
 
 DynamicKernelSoPArguments::DynamicKernelSoPArguments(
-    const std::string& s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen ) :
+    const std::string& s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen, int nResultSize ) :
     DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen), mpClmem2(NULL)
 {
     size_t nChildren = ft->Children.size();
@@ -2329,146 +2351,146 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 }
                 break;
             case ocDiv:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDiv));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDiv(nResultSize), nResultSize));
                 break;
             case ocMul:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMul));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMul(nResultSize), nResultSize));
                 break;
             case ocSub:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSub));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSub(nResultSize), nResultSize));
                 break;
             case ocAdd:
             case ocSum:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSum));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSum(nResultSize), nResultSize));
                 break;
             case ocAverage:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAverage));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAverage(nResultSize), nResultSize));
                 break;
             case ocMin:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMin));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMin(nResultSize), nResultSize));
                 break;
             case ocMax:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMax));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMax(nResultSize), nResultSize));
                 break;
             case ocCount:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCount));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCount(nResultSize), nResultSize));
                 break;
             case ocSumProduct:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSumProduct));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSumProduct, nResultSize));
                 break;
             case ocIRR:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIRR));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIRR, nResultSize));
                 break;
             case ocMIRR:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMIRR));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMIRR, nResultSize));
                 break;
             case ocRMZ:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPMT));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPMT, nResultSize));
                 break;
             case ocZins:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIntrate));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIntrate, nResultSize));
                 break;
             case ocZGZ:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRRI));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRRI, nResultSize));
                 break;
             case ocKapz:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPPMT));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPPMT, nResultSize));
                 break;
             case ocFisher:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisher));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisher, nResultSize));
                 break;
             case ocFisherInv:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisherInv));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisherInv, nResultSize));
                 break;
             case ocGamma:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGamma));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGamma, nResultSize));
                 break;
             case ocLIA:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSLN));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSLN, nResultSize));
                 break;
             case ocGammaLn:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGammaLn));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGammaLn, nResultSize));
                 break;
             case ocGauss:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGauss));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGauss, nResultSize));
                 break;
             /*case ocGeoMean:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGeoMean));
                 break;*/
             case ocHarMean:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpHarMean));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpHarMean, nResultSize));
                 break;
             case ocLessEqual:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLessEqual));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLessEqual, nResultSize));
                 break;
             case ocLess:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLess));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLess, nResultSize));
                 break;
             case ocEqual:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEqual));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEqual, nResultSize));
                 break;
             case ocGreater:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGreater));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGreater, nResultSize));
                 break;
             case ocDIA:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSYD));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSYD, nResultSize));
                 break;
             case ocCorrel:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCorrel));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCorrel, nResultSize));
                 break;
             case ocCos:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCos));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCos, nResultSize));
                 break;
             case ocNegBinomVert :
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNegbinomdist));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNegbinomdist, nResultSize));
                 break;
             case ocPearson:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPearson));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPearson, nResultSize));
                 break;
             case ocRSQ:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRsq));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRsq, nResultSize));
                 break;
             case ocCosecant:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCsc));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCsc, nResultSize));
                 break;
             case ocISPMT:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpISPMT));
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpISPMT, nResultSize));
                 break;
             case ocLaufz:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDuration));
+                        ft->Children[i], new OpDuration, nResultSize));
                 break;
             case ocSinHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSinh));
+                        ft->Children[i], new OpSinh, nResultSize));
                 break;
             case ocAbs:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpAbs));
+                        ft->Children[i], new OpAbs, nResultSize));
                 break;
             case ocBW:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpPV));
+                        ft->Children[i], new OpPV, nResultSize));
                 break;
             case ocSin:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSin));
+                        ft->Children[i], new OpSin, nResultSize));
                 break;
             case ocTan:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpTan));
+                        ft->Children[i], new OpTan, nResultSize));
                 break;
             case ocTanHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpTanH));
+                        ft->Children[i], new OpTanH, nResultSize));
                 break;
             case ocStandard:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpStandard));
+                        ft->Children[i], new OpStandard, nResultSize));
                 break;
             case ocWeibull:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpWeibull));
+                        ft->Children[i], new OpWeibull, nResultSize));
                 break;
             /*case ocMedian:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2476,15 +2498,15 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;*/
             case ocGDA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDDB));
+                        ft->Children[i], new OpDDB, nResultSize));
                 break;
             case ocZW:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpFV));
+                        ft->Children[i], new OpFV, nResultSize));
                 break;
             case ocSumIfs:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSumIfs));
+                        ft->Children[i], new OpSumIfs, nResultSize));
                 break;
                 /*case ocVBD:
                     mvSubArguments.push_back(SoPHelper(ts,
@@ -2492,7 +2514,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                      break;*/
             case ocKurt:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpKurt));
+                        ft->Children[i], new OpKurt, nResultSize));
                 break;
                 /*case ocZZR:
                     mvSubArguments.push_back(SoPHelper(ts,
@@ -2500,111 +2522,111 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                      break;*/
             case ocNormDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNormdist));
+                        ft->Children[i], new OpNormdist, nResultSize));
                 break;
             case ocArcCos:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcCos));
+                        ft->Children[i], new OpArcCos, nResultSize));
                 break;
             case ocSqrt:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSqrt));
+                        ft->Children[i], new OpSqrt, nResultSize));
                 break;
             case ocArcCosHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcCosHyp));
+                        ft->Children[i], new OpArcCosHyp, nResultSize));
                 break;
             case ocNPV:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNPV));
+                        ft->Children[i], new OpNPV, nResultSize));
                 break;
             case ocStdNormDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNormsdist));
+                        ft->Children[i], new OpNormsdist, nResultSize));
                 break;
             case ocNormInv:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNorminv));
+                        ft->Children[i], new OpNorminv, nResultSize));
                 break;
             case ocSNormInv:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNormsinv));
+                        ft->Children[i], new OpNormsinv, nResultSize));
                 break;
             case ocVariationen:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVariationen));
+                        ft->Children[i], new OpVariationen, nResultSize));
                 break;
             case ocVariationen2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVariationen2));
+                        ft->Children[i], new OpVariationen2, nResultSize));
                 break;
             case ocPhi:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpPhi));
+                        ft->Children[i], new OpPhi, nResultSize));
                 break;
             case ocZinsZ:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpIPMT));
+                        ft->Children[i], new OpIPMT, nResultSize));
                 break;
             case ocConfidence:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpConfidence));
+                        ft->Children[i], new OpConfidence, nResultSize));
                 break;
             case ocIntercept:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpIntercept));
+                        ft->Children[i], new OpIntercept, nResultSize));
                 break;
             case ocGDA2:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                        new OpDB));
+                        new OpDB, nResultSize));
                 break;
             case ocLogInv:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpLogInv));
+                        ft->Children[i], new OpLogInv, nResultSize));
                 break;
             case ocArcCot:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcCot));
+                        ft->Children[i], new OpArcCot, nResultSize));
                 break;
             case ocCosHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCosh));
+                        ft->Children[i], new OpCosh, nResultSize));
                 break;
             case ocKritBinom:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCritBinom));
+                        ft->Children[i], new OpCritBinom, nResultSize));
                 break;
             case ocArcCotHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcCotHyp));
+                        ft->Children[i], new OpArcCotHyp, nResultSize));
                 break;
             case ocArcSin:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcSin));
+                        ft->Children[i], new OpArcSin, nResultSize));
                 break;
             case ocArcSinHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcSinHyp));
+                        ft->Children[i], new OpArcSinHyp, nResultSize));
                 break;
             case ocArcTan:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcTan));
+                        ft->Children[i], new OpArcTan, nResultSize));
                 break;
             case ocArcTanHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcTanH));
+                        ft->Children[i], new OpArcTanH, nResultSize));
                 break;
             case ocBitAnd:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBitAnd));
+                        ft->Children[i], new OpBitAnd, nResultSize));
                 break;
             case ocForecast:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpForecast));
+                        ft->Children[i], new OpForecast, nResultSize));
                 break;
             case ocLogNormDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpLogNormDist));
+                        ft->Children[i], new OpLogNormDist, nResultSize));
                 break;
             /*case ocGammaDist:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2612,27 +2634,27 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;*/
             case ocLn:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpLn));
+                        ft->Children[i], new OpLn, nResultSize));
                 break;
             case ocRound:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpRound));
+                        ft->Children[i], new OpRound, nResultSize));
                 break;
             case ocCot:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCot));
+                        ft->Children[i], new OpCot, nResultSize));
                 break;
             case ocCotHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCoth));
+                        ft->Children[i], new OpCoth, nResultSize));
                 break;
             case ocFDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpFdist));
+                        ft->Children[i], new OpFdist, nResultSize));
                 break;
             case ocVar:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVar));
+                        ft->Children[i], new OpVar, nResultSize));
                 break;
             /*case ocChiDist:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2641,11 +2663,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocPow:
             case ocPower:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpPower));
+                        ft->Children[i], new OpPower, nResultSize));
                 break;
             case ocOdd:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpOdd));
+                        ft->Children[i], new OpOdd, nResultSize));
                 break;
             /*case ocChiSqDist:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2661,7 +2683,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;*/
             case ocFloor:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpFloor));
+                        ft->Children[i], new OpFloor, nResultSize));
                 break;
             /*case ocFInv:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2669,83 +2691,83 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;*/
             case ocFTest:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpFTest));
+                        ft->Children[i], new OpFTest, nResultSize));
                 break;
             case ocB:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpB));
+                        ft->Children[i], new OpB, nResultSize));
                 break;
             case ocBetaDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBetaDist));
+                        ft->Children[i], new OpBetaDist, nResultSize));
                 break;
             case ocCosecantHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCscH));
+                        ft->Children[i], new OpCscH, nResultSize));
                 break;
             case ocExp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpExp));
+                        ft->Children[i], new OpExp, nResultSize));
                 break;
             case ocLog10:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpLog10));
+                        ft->Children[i], new OpLog10, nResultSize));
                 break;
             case ocExpDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpExponDist));
+                        ft->Children[i], new OpExponDist, nResultSize));
                 break;
             case ocAverageIfs:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpAverageIfs));
+                        ft->Children[i], new OpAverageIfs, nResultSize));
                 break;
             case ocCountIfs:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCountIfs));
+                        ft->Children[i], new OpCountIfs, nResultSize));
                 break;
             case ocKombin2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCombina));
+                        ft->Children[i], new OpCombina, nResultSize));
                 break;
             case ocEven:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpEven));
+                        ft->Children[i], new OpEven, nResultSize));
                 break;
             case ocLog:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpLog));
+                        ft->Children[i], new OpLog, nResultSize));
                 break;
             case ocMod:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpMod));
+                        ft->Children[i], new OpMod, nResultSize));
                 break;
             case ocTrunc:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpTrunc));
+                        ft->Children[i], new OpTrunc, nResultSize));
                 break;
             case ocSchiefe:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSkew));
+                        ft->Children[i], new OpSkew, nResultSize));
                 break;
             case ocArcTan2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpArcTan2));
+                        ft->Children[i], new OpArcTan2, nResultSize));
                 break;
             case ocBitOr:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBitOr));
+                        ft->Children[i], new OpBitOr, nResultSize));
                 break;
             case ocBitLshift:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBitLshift));
+                        ft->Children[i], new OpBitLshift, nResultSize));
                 break;
             case ocBitRshift:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBitRshift));
+                        ft->Children[i], new OpBitRshift, nResultSize));
                 break;
             case ocBitXor:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBitXor));
+                        ft->Children[i], new OpBitXor, nResultSize));
                 break;
             /*case ocChiInv:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2753,51 +2775,51 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;*/
             case ocPoissonDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpPoisson));
+                        ft->Children[i], new OpPoisson, nResultSize));
                 break;
             case ocSumSQ:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSumSQ));
+                        ft->Children[i], new OpSumSQ, nResultSize));
                 break;
             case ocSkewp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSkewp));
+                        ft->Children[i], new OpSkewp, nResultSize));
                 break;
             case ocBinomDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpBinomdist));
+                        ft->Children[i], new OpBinomdist, nResultSize));
                 break;
             case ocVarP:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVarP));
+                        ft->Children[i], new OpVarP, nResultSize));
                 break;
             case ocCeil:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCeil));
+                        ft->Children[i], new OpCeil, nResultSize));
                 break;
             case ocKombin:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpKombin));
+                        ft->Children[i], new OpKombin, nResultSize));
                 break;
             case ocDevSq:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDevSq));
+                        ft->Children[i], new OpDevSq, nResultSize));
                 break;
             case ocStDev:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpStDev));
+                        ft->Children[i], new OpStDev, nResultSize));
                 break;
             case ocSlope:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSlope));
+                        ft->Children[i], new OpSlope, nResultSize));
                 break;
             case ocSTEYX:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSTEYX));
+                        ft->Children[i], new OpSTEYX, nResultSize));
                 break;
             case ocZTest:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpZTest));
+                        ft->Children[i], new OpZTest, nResultSize));
                 break;
             case ocPi:
                 mvSubArguments.push_back(
@@ -2811,7 +2833,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;
             case ocProduct:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpProduct));
+                        ft->Children[i], new OpProduct, nResultSize));
                 break;
             /*case ocHypGeomDist:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2819,11 +2841,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;*/
             case ocSumX2MY2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSumX2MY2));
+                        ft->Children[i], new OpSumX2MY2, nResultSize));
                 break;
             case ocSumX2DY2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSumX2PY2));
+                        ft->Children[i], new OpSumX2PY2, nResultSize));
                 break;
             /*case ocBetaInv:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2831,11 +2853,11 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                  break;*/
             case ocTTest:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpTTest));
+                        ft->Children[i], new OpTTest, nResultSize));
                 break;
             case ocTDist:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpTDist));
+                        ft->Children[i], new OpTDist, nResultSize));
                 break;
             /*case ocTInv:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2843,231 +2865,231 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                  break;*/
             case ocSumXMY2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSumXMY2));
+                        ft->Children[i], new OpSumXMY2, nResultSize));
                 break;
             case ocStDevP:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpStDevP));
+                        ft->Children[i], new OpStDevP, nResultSize));
                 break;
             case ocCovar:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCovar));
+                        ft->Children[i], new OpCovar, nResultSize));
                 break;
             case ocAnd:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpAnd));
+                        ft->Children[i], new OpAnd, nResultSize));
                 break;
             case ocVLookup:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVLookup));
+                        ft->Children[i], new OpVLookup, nResultSize));
                 break;
             case ocOr:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpOr));
+                        ft->Children[i], new OpOr, nResultSize));
                 break;
             case ocNot:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNot));
+                        ft->Children[i], new OpNot, nResultSize));
                 break;
             case ocXor:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpXor));
+                        ft->Children[i], new OpXor, nResultSize));
                 break;
             case ocDBMax:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDmax));
+                        ft->Children[i], new OpDmax, nResultSize));
                 break;
             case ocDBMin:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDmin));
+                        ft->Children[i], new OpDmin, nResultSize));
                 break;
             case ocDBProduct:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDproduct));
+                        ft->Children[i], new OpDproduct, nResultSize));
                 break;
             case ocDBAverage:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDaverage));
+                        ft->Children[i], new OpDaverage, nResultSize));
                 break;
             case ocDBStdDev:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDstdev));
+                        ft->Children[i], new OpDstdev, nResultSize));
                 break;
             case ocDBStdDevP:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDstdevp));
+                        ft->Children[i], new OpDstdevp, nResultSize));
                 break;
             case ocDBSum:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDsum));
+                        ft->Children[i], new OpDsum, nResultSize));
                 break;
             case ocDBVar:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDvar));
+                        ft->Children[i], new OpDvar, nResultSize));
                 break;
             case ocDBVarP:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDvarp));
+                        ft->Children[i], new OpDvarp, nResultSize));
                 break;
             case ocAverageIf:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpAverageIf));
+                        ft->Children[i], new OpAverageIf, nResultSize));
                 break;
             case ocDBCount:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDcount));
+                        ft->Children[i], new OpDcount, nResultSize));
                 break;
             case ocDBCount2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDcount2));
+                        ft->Children[i], new OpDcount2, nResultSize));
                 break;
             case ocDeg:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpDeg));
+                        ft->Children[i], new OpDeg, nResultSize));
                 break;
             case ocRoundUp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpRoundUp));
+                        ft->Children[i], new OpRoundUp, nResultSize));
                 break;
             case ocRoundDown:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpRoundDown));
+                        ft->Children[i], new OpRoundDown, nResultSize));
                 break;
             case ocInt:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpInt));
+                        ft->Children[i], new OpInt, nResultSize));
                 break;
             case ocRad:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpRadians));
+                        ft->Children[i], new OpRadians, nResultSize));
                 break;
             case ocCountIf:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCountIf));
+                        ft->Children[i], new OpCountIf, nResultSize));
                 break;
             case ocIsEven:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpIsEven));
+                        ft->Children[i], new OpIsEven, nResultSize));
                 break;
             case ocIsOdd:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpIsOdd));
+                        ft->Children[i], new OpIsOdd, nResultSize));
                 break;
             case ocFact:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpFact));
+                        ft->Children[i], new OpFact, nResultSize));
                 break;
             case ocMinA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpMinA));
+                        ft->Children[i], new OpMinA, nResultSize));
                 break;
             case ocCount2:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCountA));
+                        ft->Children[i], new OpCountA, nResultSize));
                 break;
             case ocMaxA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpMaxA));
+                        ft->Children[i], new OpMaxA, nResultSize));
                 break;
             case ocAverageA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpAverageA));
+                        ft->Children[i], new OpAverageA, nResultSize));
                 break;
             case ocVarA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVarA));
+                        ft->Children[i], new OpVarA, nResultSize));
                 break;
             case ocVarPA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVarPA));
+                        ft->Children[i], new OpVarPA, nResultSize));
                 break;
             case ocStDevA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpStDevA));
+                        ft->Children[i], new OpStDevA, nResultSize));
                 break;
             case ocStDevPA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpStDevPA));
+                        ft->Children[i], new OpStDevPA, nResultSize));
                 break;
             case ocSecant:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSec));
+                        ft->Children[i], new OpSec, nResultSize));
                 break;
             case ocSecantHyp:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSecH));
+                        ft->Children[i], new OpSecH, nResultSize));
                 break;
             case ocSumIf:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpSumIf));
+                        ft->Children[i], new OpSumIf, nResultSize));
                 break;
             case ocNegSub:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpNegSub));
+                        ft->Children[i], new OpNegSub, nResultSize));
                 break;
             case ocAveDev:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpAveDev));
+                        ft->Children[i], new OpAveDev, nResultSize));
                 break;
             case ocIf:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpIf));
+                        ft->Children[i], new OpIf, nResultSize));
                 break;
             case ocExternal:
                 if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getEffect"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEffective));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEffective, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCumipmt"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumipmt));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumipmt, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getNominal"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNominal));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNominal, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCumprinc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumprinc));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumprinc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getXnpv"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpXNPV));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpXNPV, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getPricemat"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPriceMat));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPriceMat, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getReceived"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpReceived));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpReceived, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getTbilleq"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbilleq));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbilleq, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getTbillprice"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillprice));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillprice, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getTbillyield"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillyield));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillyield, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getFvschedule"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFvschedule));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFvschedule, nResultSize));
                 }
                 /*else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getYield"))))
@@ -3077,64 +3099,64 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getYielddisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYielddisc));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYielddisc, nResultSize));
                 }
                 else    if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getYieldmat"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYieldmat));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYieldmat, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAccrintm"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAccrintm));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAccrintm, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupdaybs"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaybs));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaybs, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getDollarde"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarde));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarde, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getDollarfr"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarfr));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarfr, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupdays"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdays));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdays, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupdaysnc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaysnc));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaysnc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getDisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDISC));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDISC, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getIntrate"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpINTRATE));
+                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpINTRATE, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getPrice"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts,
-                            ft->Children[i], new OpPrice));
+                            ft->Children[i], new OpPrice, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupnum"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpCoupnum));
+                            new OpCoupnum, nResultSize));
                 }
                 /*else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getDuration"))))
@@ -3146,115 +3168,115 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                                 "com.sun.star.sheet.addin.Analysis.getAmordegrc"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpAmordegrc));
+                            new OpAmordegrc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAmorlinc"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpAmorlinc));
+                            new OpAmorlinc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getMduration"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpMDuration));
+                            new OpMDuration, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getXirr"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpXirr));
+                            new OpXirr, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getOddlprice"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts,
-                            ft->Children[i], new OpOddlprice));
+                            ft->Children[i], new OpOddlprice, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getOddlyield"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpOddlyield));
+                            new OpOddlyield, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getPricedisc"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts,
-                            ft->Children[i], new OpPriceDisc));
+                            ft->Children[i], new OpPriceDisc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCouppcd"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpCouppcd));
+                            new OpCouppcd, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupncd"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpCoupncd));
+                            new OpCoupncd, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAccrint"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpAccrint));
+                            new OpAccrint, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getSqrtpi"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpSqrtPi));
+                            new OpSqrtPi, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getConvert"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpConvert));
+                            new OpConvert, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getIseven"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpIsEven));
+                            new OpIsEven, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getIsodd"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpIsOdd));
+                            new OpIsOdd, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getMround"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpMROUND));
+                            new OpMROUND, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getQuotient"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpQuotient));
+                            new OpQuotient, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getSeriessum"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpSeriesSum));
+                            new OpSeriesSum, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getBesselj"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpBesselj));
+                            new OpBesselj, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getGestep"))))
                 {
                     mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
-                            new OpGestep));
+                            new OpGestep, nResultSize));
                 }
                 else
                     throw UnhandledToken(pChild, "unhandled opcode");
@@ -3269,17 +3291,19 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
 class DynamicKernel : public CompiledFormula
 {
 public:
-    DynamicKernel( FormulaTreeNodeRef r ) : mpRoot(r),
-        mpProgram(NULL), mpKernel(NULL), mpResClmem(NULL) { }
-    static DynamicKernel* create( ScDocument& rDoc,
-        const ScAddress& rTopPos,
-        ScTokenArray& rCode );
+    DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize ) :
+        mpRoot(r),
+        mpProgram(NULL),
+        mpKernel(NULL),
+        mpResClmem(NULL),
+        mnResultSize(nResultSize) {}
+
+    static DynamicKernel* create( ScTokenArray& rCode, int nResultSize );
     /// OpenCL code generation
     void CodeGen()
     {
         // Travese the tree of expression and declare symbols used
-        const DynamicKernelArgument* DK = mSyms.DeclRefArg<
-                                                               DynamicKernelSoPArguments>(mpRoot, new OpNop);
+        const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mpRoot, new OpNop(mnResultSize), mnResultSize);
 
         std::stringstream decl;
         if (::opencl::gpuEnv.mnKhrFp64Flag)
@@ -3391,6 +3415,8 @@ private:
     cl_mem mpResClmem; // Results
     std::set<std::string> inlineDecl;
     std::set<std::string> inlineFun;
+
+    int mnResultSize;
 };
 
 DynamicKernel::~DynamicKernel()
@@ -3519,7 +3545,7 @@ void DynamicKernel::CreateKernel()
 // The template argument T must be a subclass of DynamicKernelArgument
 template<typename T>
 const DynamicKernelArgument* SymbolTable::DeclRefArg(
-    FormulaTreeNodeRef t, SlidingFunctionBase* pCodeGen )
+    FormulaTreeNodeRef t, SlidingFunctionBase* pCodeGen, int nResultSize )
 {
     FormulaToken* ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
@@ -3528,7 +3554,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(
         // Allocate new symbols
         std::stringstream ss;
         ss << "tmp" << mCurId++;
-        boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t, pCodeGen));
+        boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t, pCodeGen, nResultSize));
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         return new_arg.get();
@@ -3539,14 +3565,17 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(
     }
 }
 
+FormulaGroupInterpreterOpenCL::FormulaGroupInterpreterOpenCL() :
+    FormulaGroupInterpreter() {}
+
+FormulaGroupInterpreterOpenCL::~FormulaGroupInterpreterOpenCL() {}
+
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
 {
     return NULL;
 }
 
-DynamicKernel* DynamicKernel::create( ScDocument& /* rDoc */,
-    const ScAddress& /* rTopPos */,
-    ScTokenArray& rCode )
+DynamicKernel* DynamicKernel::create( ScTokenArray& rCode, int nResultSize )
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
@@ -3587,7 +3616,7 @@ DynamicKernel* DynamicKernel::create( ScDocument& /* rDoc */,
     FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
     Root->Children.push_back(aHashMap[aTokenList.back()]);
 
-    DynamicKernel* pDynamicKernel = new DynamicKernel(Root);
+    DynamicKernel* pDynamicKernel = new DynamicKernel(Root, nResultSize);
 
     if (!pDynamicKernel)
         return NULL;
@@ -3616,13 +3645,10 @@ DynamicKernel* DynamicKernel::create( ScDocument& /* rDoc */,
     return pDynamicKernel;
 }
 
-CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula( ScDocument& rDoc,
-    const ScAddress& rTopPos,
-    ScFormulaCellGroup& rGroup,
-    ScTokenArray& rCode )
+CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(
+    ScFormulaCellGroup& rGroup, ScTokenArray& rCode )
 {
-    SymbolTable::nR = rGroup.mnLength;
-    return DynamicKernel::create(rDoc, rTopPos, rCode);
+    return DynamicKernel::create(rCode, rGroup.mnLength);
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
@@ -3653,11 +3679,11 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     else
     {
         assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
+        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(*xGroup, rCode));
         pLocalKernel.reset(pKernel); // to be deleted when done.
     }
 #else
-    pKernel = static_cast<DynamicKernel*>(createCompiledFormula(rDoc, rTopPos, *xGroup, rCode));
+    pKernel = static_cast<DynamicKernel*>(createCompiledFormula(*xGroup, rCode));
     pLocalKernel.reset(pKernel); // to be deleted when done.
 #endif
 

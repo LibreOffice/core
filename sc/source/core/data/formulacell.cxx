@@ -546,8 +546,8 @@ void ScFormulaCellGroup::compileOpenCLKernel()
     if (meCalcState == sc::GroupCalcDisabled)
         return;
 
-    mpCompiledFormula = sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(
-        *mpTopCell->GetDocument(), mpTopCell->aPos, *this, *mpCode);
+    mpCompiledFormula =
+        sc::FormulaGroupInterpreter::getStatic()->createCompiledFormula(*this, *mpCode);
 
     meKernelState = sc::OpenCLKernelBinaryCreated;
 }

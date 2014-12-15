@@ -17,19 +17,12 @@ namespace sc { namespace opencl {
 class FormulaGroupInterpreterOpenCL : public FormulaGroupInterpreter
 {
 public:
-    FormulaGroupInterpreterOpenCL() :
-        FormulaGroupInterpreter()
-    {
-    }
-    virtual ~FormulaGroupInterpreterOpenCL()
-    {
-    }
+    FormulaGroupInterpreterOpenCL();
+    virtual ~FormulaGroupInterpreterOpenCL();
 
     virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat ) SAL_OVERRIDE;
-    virtual CompiledFormula* createCompiledFormula( ScDocument& rDoc,
-        const ScAddress& rTopPos,
-        ScFormulaCellGroup& rGroup,
-        ScTokenArray& rCode ) SAL_OVERRIDE;
+    virtual CompiledFormula* createCompiledFormula(
+        ScFormulaCellGroup& rGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
     virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
         ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
 };
