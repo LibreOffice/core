@@ -26,10 +26,11 @@ class SfxAlienWarningDialog : public MessageDialog
 {
 private:
     PushButton*             m_pKeepCurrentBtn;
+    PushButton*             m_pUseDefaultFormatBtn;
     CheckBox*               m_pWarningOnBox;
 
 public:
-    SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName);
+    SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName, const OUString& _rDefaultExtension);
     virtual ~SfxAlienWarningDialog();
 };
 

@@ -24,7 +24,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">Use _ODF Format</property>
+                <property name="label" translatable="yes">Use %DEFAULTEXTENSION _Format</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -65,7 +65,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="ask">
-            <property name="label" translatable="yes">_Ask when not saving in ODF format</property>
+            <property name="label" translatable="yes">_Ask when not saving in ODF or default format</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
