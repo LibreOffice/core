@@ -620,7 +620,7 @@ static bool lcl_parseExternalName(
     if (aTmpName[nNameLen-1] == '!')
     {
         // Check against #REF!.
-        if (aTmpName.equalsAscii("#REF!"))
+        if (aTmpName == "#REF!")
             return false;
     }
 
@@ -2930,7 +2930,7 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
 
 bool ScCompiler::IsDBRange( const OUString& rName )
 {
-    if (rName.equalsAscii("[]"))
+    if (rName == "[]")
     {
         if (maRawToken.GetOpCode() == ocDBArea)
         {

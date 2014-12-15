@@ -361,9 +361,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         else if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, true, &pFamItem ) )
         {
             OUString sFamily = static_cast<const SfxStringItem*>(pFamItem)->GetValue();
-            if (sFamily.equalsAscii("CellStyles"))
+            if (sFamily == "CellStyles")
                 eFamily = SFX_STYLE_FAMILY_PARA;
-            else if (sFamily.equalsAscii("PageStyles"))
+            else if (sFamily == "PageStyles")
                 eFamily = SFX_STYLE_FAMILY_PAGE;
         }
 

@@ -101,7 +101,6 @@
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
-#define SC_REPEAT_COLUMN "repeat-column"
 #define SC_REPEAT_ROW "repeat-row"
 #define SC_FILTER "filter"
 #define SC_PRINT_RANGE "print-range"
@@ -2462,20 +2461,20 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
             for (sal_Int32 i = 0; i < nCount; ++i)
             {
                 OUString sName(rChangeProps[i].Name);
-                if (sName.equalsAscii("ShowChanges"))
+                if (sName == "ShowChanges")
                     pViewSettings->SetShowChanges(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowAcceptedChanges"))
+                else if (sName == "ShowAcceptedChanges")
                     pViewSettings->SetShowAccepted(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowRejectedChanges"))
+                else if (sName == "ShowRejectedChanges")
                     pViewSettings->SetShowRejected(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowChangesByDatetime"))
+                else if (sName == "ShowChangesByDatetime")
                     pViewSettings->SetHasDate(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowChangesByDatetimeMode"))
+                else if (sName == "ShowChangesByDatetimeMode")
                 {
                     if (rChangeProps[i].Value >>= nTemp16)
                         pViewSettings->SetTheDateMode(ScChgsDateMode(nTemp16));
                 }
-                else if (sName.equalsAscii("ShowChangesByDatetimeFirstDatetime"))
+                else if (sName == "ShowChangesByDatetimeFirstDatetime")
                 {
                     util::DateTime aDateTime;
                     if (rChangeProps[i].Value >>= aDateTime)
@@ -2485,7 +2484,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                         pViewSettings->SetTheFirstDateTime(aCoreDateTime);
                     }
                 }
-                else if (sName.equalsAscii("ShowChangesByDatetimeSecondDatetime"))
+                else if (sName == "ShowChangesByDatetimeSecondDatetime")
                 {
                     util::DateTime aDateTime;
                     if (rChangeProps[i].Value >>= aDateTime)
@@ -2495,9 +2494,9 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                         pViewSettings->SetTheLastDateTime(aCoreDateTime);
                     }
                 }
-                else if (sName.equalsAscii("ShowChangesByAuthor"))
+                else if (sName == "ShowChangesByAuthor")
                     pViewSettings->SetHasAuthor(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowChangesByAuthorName"))
+                else if (sName == "ShowChangesByAuthorName")
                 {
                     OUString sOUName;
                     if (rChangeProps[i].Value >>= sOUName)
@@ -2506,9 +2505,9 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                         pViewSettings->SetTheAuthorToShow(sAuthorName);
                     }
                 }
-                else if (sName.equalsAscii("ShowChangesByComment"))
+                else if (sName == "ShowChangesByComment")
                     pViewSettings->SetHasComment(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowChangesByCommentText"))
+                else if (sName == "ShowChangesByCommentText")
                 {
                     OUString sOUComment;
                     if (rChangeProps[i].Value >>= sOUComment)
@@ -2517,9 +2516,9 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                         pViewSettings->SetTheComment(sComment);
                     }
                 }
-                else if (sName.equalsAscii("ShowChangesByRanges"))
+                else if (sName == "ShowChangesByRanges")
                     pViewSettings->SetHasRange(::cppu::any2bool(rChangeProps[i].Value));
-                else if (sName.equalsAscii("ShowChangesByRangesList"))
+                else if (sName == "ShowChangesByRangesList")
                 {
                     OUString sRanges;
                     if ((rChangeProps[i].Value >>= sRanges) && !sRanges.isEmpty())
@@ -2546,15 +2545,15 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         OUString sName(aViewProps[i].Name);
-        if (sName.equalsAscii("VisibleAreaHeight"))
+        if (sName == "VisibleAreaHeight")
             aViewProps[i].Value >>= nHeight;
-        else if (sName.equalsAscii("VisibleAreaLeft"))
+        else if (sName == "VisibleAreaLeft")
             aViewProps[i].Value >>= nLeft;
-        else if (sName.equalsAscii("VisibleAreaTop"))
+        else if (sName == "VisibleAreaTop")
             aViewProps[i].Value >>= nTop;
-        else if (sName.equalsAscii("VisibleAreaWidth"))
+        else if (sName == "VisibleAreaWidth")
             aViewProps[i].Value >>= nWidth;
-        else if (sName.equalsAscii("TrackedChangesViewSettings"))
+        else if (sName == "TrackedChangesViewSettings")
         {
             uno::Sequence<beans::PropertyValue> aChangeProps;
             if(aViewProps[i].Value >>= aChangeProps)
@@ -3033,13 +3032,13 @@ sal_Int32 ScXMLImport::GetRangeType(const OUString& sRangeType) const
         if ((i == sRangeType.getLength()) || (sRangeType[i] == ' '))
         {
             OUString sTemp = sBuffer.makeStringAndClear();
-            if (sTemp.equalsAscii(SC_REPEAT_COLUMN))
+            if (sTemp == "repeat-column")
                 nRangeType |= sheet::NamedRangeFlag::COLUMN_HEADER;
-            else if (sTemp.equalsAscii(SC_REPEAT_ROW))
+            else if (sTemp == SC_REPEAT_ROW)
                 nRangeType |= sheet::NamedRangeFlag::ROW_HEADER;
-            else if (sTemp.equalsAscii(SC_FILTER))
+            else if (sTemp == SC_FILTER)
                 nRangeType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
-            else if (sTemp.equalsAscii(SC_PRINT_RANGE))
+            else if (sTemp == SC_PRINT_RANGE)
                 nRangeType |= sheet::NamedRangeFlag::PRINT_AREA;
         }
         else if (i < sRangeType.getLength())
@@ -3198,7 +3197,7 @@ void SAL_CALL ScXMLImport::endDocument()
                         for (sal_Int32 i = 0; i < nCount; ++i)
                         {
                             OUString sName(aSeq[i].Name);
-                            if (sName.equalsAscii(SC_ACTIVETABLE))
+                            if (sName == SC_ACTIVETABLE)
                             {
                                 OUString sValue;
                                 if(aSeq[i].Value >>= sValue)

@@ -133,17 +133,17 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         ScViewOptions aViewOpt(rDoc.GetViewOptions());
 
         /*Stampit enable/disable print cancel */
-        if ( aPropertyName.equalsAscii( SC_UNO_ALLOWPRINTJOBCANCEL ) )
+        if ( aPropertyName == SC_UNO_ALLOWPRINTJOBCANCEL )
             pDocShell->Stamp_SetPrintCancelState( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         /*Stampit enable/disable print cancel */
 
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWZERO ) )
+        else if ( aPropertyName == SC_UNO_SHOWZERO )
             aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWNOTES ) )
+        else if ( aPropertyName == SC_UNO_SHOWNOTES )
             aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWGRID ) )
+        else if ( aPropertyName == SC_UNO_SHOWGRID )
             aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_GRIDCOLOR ) )
+        else if ( aPropertyName == SC_UNO_GRIDCOLOR )
         {
             sal_Int64 nColor = 0;
             if (aValue >>= nColor)
@@ -153,19 +153,19 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 aViewOpt.SetGridColor(aColor, aColorName);
             }
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWPAGEBR ) )
+        else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
             aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNONAME_LINKUPD ) )
+        else if ( aPropertyName == SC_UNONAME_LINKUPD )
             rDoc.SetLinkMode( static_cast<ScLkUpdMode> ( ScUnoHelpFunctions::GetInt16FromAny( aValue ) ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_COLROWHDR ) )
+        else if ( aPropertyName == SC_UNO_COLROWHDR )
             aViewOpt.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHEETTABS ) )
+        else if ( aPropertyName == SC_UNO_SHEETTABS )
             aViewOpt.SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_OUTLSYMB ) )
+        else if ( aPropertyName == SC_UNO_OUTLSYMB )
             aViewOpt.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_AUTOCALC ) )
+        else if ( aPropertyName == SC_UNO_AUTOCALC )
             rDoc.SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_PRINTERNAME ) )
+        else if ( aPropertyName == SC_UNO_PRINTERNAME )
         {
             OUString sPrinterName;
             if ( aValue >>= sPrinterName )
@@ -192,7 +192,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             else
                 throw lang::IllegalArgumentException();
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_PRINTERSETUP ) )
+        else if ( aPropertyName == SC_UNO_PRINTERSETUP )
         {
             uno::Sequence<sal_Int8> aSequence;
             if ( aValue >>= aSequence )
@@ -213,47 +213,47 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 }
             }
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_APPLYDOCINF ) )
+        else if ( aPropertyName == SC_UNO_APPLYDOCINF )
         {
             bool bTmp=true;
             if ( aValue >>= bTmp )
                 pDocShell->SetUseUserData( bTmp );
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_FORBIDDEN ) )
+        else if ( aPropertyName == SC_UNO_FORBIDDEN )
         {
             //  read-only - should not be set
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_CHARCOMP ) )
+        else if ( aPropertyName == SC_UNO_CHARCOMP )
         {
             // Int16 contains CharacterCompressionType values
             sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
             rDoc.SetAsianCompression( (sal_uInt8) nUno );
             bUpdateHeights = true;
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_ASIANKERN ) )
+        else if ( aPropertyName == SC_UNO_ASIANKERN )
         {
             rDoc.SetAsianKerning( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             bUpdateHeights = true;
         }
-        else if ( aPropertyName.equalsAscii( SCSAVEVERSION ) )
+        else if ( aPropertyName == SCSAVEVERSION )
         {
             bool bTmp=false;
             if ( aValue >>= bTmp )
                 pDocShell->SetSaveVersionOnClose( bTmp );
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_UPDTEMPL ) )
+        else if ( aPropertyName == SC_UNO_UPDTEMPL )
         {
             bool bTmp=true;
             if ( aValue >>= bTmp )
                 pDocShell->SetQueryLoadTemplate( bTmp );
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_LOADREADONLY ) )
+        else if ( aPropertyName == SC_UNO_LOADREADONLY )
         {
             bool bTmp=false;
             if ( aValue >>= bTmp )
                 pDocShell->SetLoadReadonly( bTmp );
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHAREDOC ) )
+        else if ( aPropertyName == SC_UNO_SHAREDOC )
         {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
             bool bDocShared = false;
@@ -263,7 +263,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
 #endif
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_MODIFYPASSWORDINFO ) )
+        else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
         {
             uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( aValue >>= aInfo ) )
@@ -276,7 +276,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 throw beans::PropertyVetoException(
                     "The hash is not allowed to be changed now!" );
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_EMBED_FONTS ) )
+        else if ( aPropertyName == SC_UNO_EMBED_FONTS )
         {
             bool bVal = false;
             if ( aValue >>=bVal )
@@ -288,19 +288,19 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         else
         {
             ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
-            if ( aPropertyName.equalsAscii( SC_UNO_SNAPTORASTER ) )
+            if ( aPropertyName == SC_UNO_SNAPTORASTER )
                 aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERVIS ) )
+            else if ( aPropertyName == SC_UNO_RASTERVIS )
                 aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERRESX ) )
+            else if ( aPropertyName == SC_UNO_RASTERRESX )
                 aGridOpt.SetFldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERRESY ) )
+            else if ( aPropertyName == SC_UNO_RASTERRESY )
                 aGridOpt.SetFldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERSUBX ) )
+            else if ( aPropertyName == SC_UNO_RASTERSUBX )
                 aGridOpt.SetFldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERSUBY ) )
+            else if ( aPropertyName == SC_UNO_RASTERSUBY )
                 aGridOpt.SetFldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERSYNC ) )
+            else if ( aPropertyName == SC_UNO_RASTERSYNC )
                 aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else
                 throw beans::UnknownPropertyException();
@@ -335,35 +335,35 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         const ScViewOptions& aViewOpt = rDoc.GetViewOptions();
 
         /*Stampit enable/disable print cancel */
-        if ( aPropertyName.equalsAscii( SC_UNO_ALLOWPRINTJOBCANCEL ) )
+        if ( aPropertyName == SC_UNO_ALLOWPRINTJOBCANCEL )
             ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->Stamp_GetPrintCancelState() );
         /*Stampit enable/disable print cancel */
 
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWZERO ) )
+        else if ( aPropertyName == SC_UNO_SHOWZERO )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_NULLVALS ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWNOTES ) )
+        else if ( aPropertyName == SC_UNO_SHOWNOTES )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_NOTES ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWGRID ) )
+        else if ( aPropertyName == SC_UNO_SHOWGRID )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_GRID ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_GRIDCOLOR ) )
+        else if ( aPropertyName == SC_UNO_GRIDCOLOR )
         {
             OUString aColorName;
             Color aColor = aViewOpt.GetGridColor(&aColorName);
             aRet <<= static_cast<sal_Int64>(aColor.GetColor());
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHOWPAGEBR ) )
+        else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_PAGEBREAKS ) );
-        else if ( aPropertyName.equalsAscii( SC_UNONAME_LINKUPD ) )
+        else if ( aPropertyName == SC_UNONAME_LINKUPD )
             aRet <<= static_cast<sal_Int16> ( rDoc.GetLinkMode() );
-        else if ( aPropertyName.equalsAscii( SC_UNO_COLROWHDR ) )
+        else if ( aPropertyName == SC_UNO_COLROWHDR )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_HEADER ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHEETTABS ) )
+        else if ( aPropertyName == SC_UNO_SHEETTABS )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_TABCONTROLS ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_OUTLSYMB ) )
+        else if ( aPropertyName == SC_UNO_OUTLSYMB )
             ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_OUTLINER ) );
-        else if ( aPropertyName.equalsAscii( SC_UNO_AUTOCALC ) )
+        else if ( aPropertyName == SC_UNO_AUTOCALC )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.GetAutoCalc() );
-        else if ( aPropertyName.equalsAscii( SC_UNO_PRINTERNAME ) )
+        else if ( aPropertyName == SC_UNO_PRINTERNAME )
         {
             // #i75610# don't create the printer, return empty string if no printer created yet
             // (as in SwXDocumentSettings)
@@ -373,7 +373,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
             else
                 aRet <<= OUString();
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_PRINTERSETUP ) )
+        else if ( aPropertyName == SC_UNO_PRINTERSETUP )
         {
             // #i75610# don't create the printer, return empty sequence if no printer created yet
             // (as in SwXDocumentSettings)
@@ -392,31 +392,31 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
             else
                 aRet <<= uno::Sequence<sal_Int8>();
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_APPLYDOCINF ) )
+        else if ( aPropertyName == SC_UNO_APPLYDOCINF )
             aRet <<= pDocShell->IsUseUserData();
-        else if ( aPropertyName.equalsAscii( SC_UNO_FORBIDDEN ) )
+        else if ( aPropertyName == SC_UNO_FORBIDDEN )
         {
             aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_CHARCOMP ) )
+        else if ( aPropertyName == SC_UNO_CHARCOMP )
             aRet <<= static_cast<sal_Int16> ( rDoc.GetAsianCompression() );
-        else if ( aPropertyName.equalsAscii( SC_UNO_ASIANKERN ) )
+        else if ( aPropertyName == SC_UNO_ASIANKERN )
             ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.GetAsianKerning() );
-        else if ( aPropertyName.equalsAscii( SCSAVEVERSION ) )
+        else if ( aPropertyName == SCSAVEVERSION )
             aRet <<= pDocShell->IsSaveVersionOnClose();
-        else if ( aPropertyName.equalsAscii( SC_UNO_UPDTEMPL ) )
+        else if ( aPropertyName == SC_UNO_UPDTEMPL )
             aRet <<= pDocShell->IsQueryLoadTemplate();
-        else if ( aPropertyName.equalsAscii( SC_UNO_LOADREADONLY ) )
+        else if ( aPropertyName == SC_UNO_LOADREADONLY )
             aRet <<= pDocShell->IsLoadReadonly();
-        else if ( aPropertyName.equalsAscii( SC_UNO_SHAREDOC ) )
+        else if ( aPropertyName == SC_UNO_SHAREDOC )
         {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
             ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
 #endif
         }
-        else if ( aPropertyName.equalsAscii( SC_UNO_MODIFYPASSWORDINFO ) )
+        else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
             aRet <<= pDocShell->GetModifyPasswordInfo();
-        else if ( aPropertyName.equalsAscii( SC_UNO_EMBED_FONTS ) )
+        else if ( aPropertyName == SC_UNO_EMBED_FONTS )
         {
             aRet <<= rDoc.IsUsingEmbededFonts();
         }
@@ -424,19 +424,19 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         else
         {
             const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
-            if ( aPropertyName.equalsAscii( SC_UNO_SNAPTORASTER ) )
+            if ( aPropertyName == SC_UNO_SNAPTORASTER )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetUseGridSnap() );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERVIS ) )
+            else if ( aPropertyName == SC_UNO_RASTERVIS )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetGridVisible() );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERRESX ) )
+            else if ( aPropertyName == SC_UNO_RASTERRESX )
                 aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawX() );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERRESY ) )
+            else if ( aPropertyName == SC_UNO_RASTERRESY )
                 aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawY() );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERSUBX ) )
+            else if ( aPropertyName == SC_UNO_RASTERSUBX )
                 aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionX() );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERSUBY ) )
+            else if ( aPropertyName == SC_UNO_RASTERSUBY )
                 aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionY() );
-            else if ( aPropertyName.equalsAscii( SC_UNO_RASTERSYNC ) )
+            else if ( aPropertyName == SC_UNO_RASTERSYNC )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetSynchronize() );
             else
                 throw beans::UnknownPropertyException();

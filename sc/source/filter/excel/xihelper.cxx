@@ -623,7 +623,7 @@ void XclImpUrlHelper::DecodeUrl(
 
     sal_Unicode cCurrDrive = 0;
     OUString aDosBase( INetURLObject( rRoot.GetBasePath() ).getFSysPath( INetURLObject::FSYS_DOS ) );
-    if( (aDosBase.getLength() > 2) && aDosBase.copy(1,2).equalsAscii( ":\\" ) )
+    if( aDosBase.match(":\\", 1) )
         cCurrDrive = aDosBase[0];
 
     const sal_Unicode* pChar = rEncodedUrl.getStr();

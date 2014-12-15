@@ -501,13 +501,13 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
                     const beans::PropertyValue& rProp = pPropArray[i];
                     OUString aPropName(rProp.Name);
 
-                    if (aPropName.equalsAscii( "CellRangeRepresentation" ))
+                    if (aPropName == "CellRangeRepresentation")
                         rProp.Value >>= aRanges;
-                    else if (aPropName.equalsAscii( "DataRowSource" ))
+                    else if (aPropName == "DataRowSource")
                         eDataRowSource = (chart::ChartDataRowSource)ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-                    else if (aPropName.equalsAscii( "HasCategories" ))
+                    else if (aPropName == "HasCategories")
                         bHasCategories = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-                    else if (aPropName.equalsAscii( "FirstCellAsLabel" ))
+                    else if (aPropName == "FirstCellAsLabel")
                         bFirstCellAsLabel = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
                 }
 

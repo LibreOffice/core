@@ -237,9 +237,9 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& Property
 {
     uno::Any aRet;
     OUString aNameStr(PropertyName);
-    if ( aNameStr.equalsAscii( SC_UNO_LINKDISPBIT ) )
+    if ( aNameStr == SC_UNO_LINKDISPBIT )
         SetLinkTargetBitmap( aRet, nType );
-    else if ( aNameStr.equalsAscii( SC_UNO_LINKDISPNAME ) )
+    else if ( aNameStr == SC_UNO_LINKDISPNAME )
         aRet <<= OUString( aName );
 
     return aRet;

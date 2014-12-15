@@ -67,7 +67,7 @@ static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
     ScLinkConfigItem aItem( OUString::createFromAscii(
                                 bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-    pNames[0] = OUString::createFromAscii( DBF_CHAR_SET );
+    pNames[0] = DBF_CHAR_SET;
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
 
@@ -94,7 +94,7 @@ static void save_CharSet( rtl_TextEncoding nCharSet, bool bExport )
     ScLinkConfigItem aItem( OUString::createFromAscii(
                                 bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
 
-    pNames[0] = OUString::createFromAscii( DBF_CHAR_SET );
+    pNames[0] = DBF_CHAR_SET;
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();
     pProperties[0] <<= (sal_Int32) nCharSet;
@@ -158,13 +158,13 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
         const beans::PropertyValue& rProp = pPropArray[i];
         OUString aPropName(rProp.Name);
 
-        if ( aPropName.equalsAscii( SC_UNONAME_FILENAME ) )
+        if ( aPropName == SC_UNONAME_FILENAME )
             rProp.Value >>= aFileName;
-        else if ( aPropName.equalsAscii( SC_UNONAME_FILTERNAME ) )
+        else if ( aPropName == SC_UNONAME_FILTERNAME )
             rProp.Value >>= aFilterName;
-        else if ( aPropName.equalsAscii( SC_UNONAME_FILTEROPTIONS ) )
+        else if ( aPropName == SC_UNONAME_FILTEROPTIONS )
             rProp.Value >>= aFilterOptions;
-        else if ( aPropName.equalsAscii( SC_UNONAME_INPUTSTREAM ) )
+        else if ( aPropName == SC_UNONAME_INPUTSTREAM )
             rProp.Value >>= xInputStream;
     }
 }

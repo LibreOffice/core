@@ -714,7 +714,7 @@ void ScChangeActionIns::GetDescription(
     }
 
     OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
-    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos >= 0)
     {
         // Construct a range string to replace '#1' first.
@@ -965,7 +965,7 @@ void ScChangeActionDel::GetDescription(
     }
 
     OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_DELETE);
-    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos >= 0)
     {
         // Build a string to replace with.
@@ -1195,7 +1195,7 @@ void ScChangeActionMove::GetDescription(
     OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_MOVE);
 
     OUString aTmpStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D);
-    sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
+    sal_Int32 nPos = aRsc.indexOf("#1");
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
@@ -1203,7 +1203,7 @@ void ScChangeActionMove::GetDescription(
     }
 
     aTmpStr = ScChangeAction::GetRefString(GetBigRange(), pDoc, bFlag3D);
-    nPos = nPos >= 0 ? aRsc.indexOfAsciiL("#2", 2, nPos) : -1;
+    nPos = nPos >= 0 ? aRsc.indexOf("#2", nPos) : -1;
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
@@ -1459,7 +1459,7 @@ void ScChangeActionContent::GetDescription(
     GetRefString(aTmpStr, pDoc);
 
     sal_Int32 nPos = 0;
-    nPos = aRsc.indexOfAsciiL("#1", 2, nPos);
+    nPos = aRsc.indexOf("#1", nPos);
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
@@ -1470,7 +1470,7 @@ void ScChangeActionContent::GetDescription(
     if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
 
-    nPos = nPos >= 0 ? aRsc.indexOfAsciiL("#2", 2, nPos) : -1;
+    nPos = nPos >= 0 ? aRsc.indexOf("#2", nPos) : -1;
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
@@ -1481,7 +1481,7 @@ void ScChangeActionContent::GetDescription(
     if (aTmpStr.isEmpty())
         aTmpStr = ScGlobal::GetRscString( STR_CHANGED_BLANK );
 
-    nPos = nPos >= 0 ? aRsc.indexOfAsciiL("#3", 2, nPos) : -1;
+    nPos = nPos >= 0 ? aRsc.indexOf("#3", nPos) : -1;
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);

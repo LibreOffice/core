@@ -134,7 +134,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
         throw beans::UnknownPropertyException();
     if(!pEntry->nWID)
     {
-        if(aPropertyName.equalsAscii(SC_UNO_STANDARDDEC) )
+        if(aPropertyName ==SC_UNO_STANDARDDEC)
         {
             ScDocument& rDoc = pDocShell->GetDocument();
             ScDocOptions aDocOpt(rDoc.GetDocOptions());
@@ -145,7 +145,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
                 rDoc.SetDocOptions(aDocOpt);
             }
         }
-        else if (aPropertyName.equalsAscii(SC_UNO_TABSTOPDIS) )
+        else if (aPropertyName == SC_UNO_TABSTOPDIS)
         {
             ScDocument& rDoc = pDocShell->GetDocument();
             ScDocOptions aDocOpt(rDoc.GetDocOptions());
@@ -220,7 +220,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
 
     if (!pEntry->nWID)
     {
-        if(aPropertyName.equalsAscii(SC_UNO_STANDARDDEC) )
+        if(aPropertyName == SC_UNO_STANDARDDEC)
         {
             ScDocument& rDoc = pDocShell->GetDocument();
             const ScDocOptions& aDocOpt = rDoc.GetDocOptions();
@@ -231,7 +231,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
             if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
                 aRet <<= static_cast<sal_Int16> (nPrec);
         }
-        else if (aPropertyName.equalsAscii(SC_UNO_TABSTOPDIS) )
+        else if (aPropertyName == SC_UNO_TABSTOPDIS)
         {
             ScDocument& rDoc = pDocShell->GetDocument();
             const ScDocOptions& aDocOpt = rDoc.GetDocOptions();

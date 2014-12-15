@@ -168,8 +168,7 @@ bool ScServerObject::GetData(
         ScImportExport aObj( &rDoc, aRange );
         if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( true );
-        if( aDdeTextFmt.equalsAscii( "SYLK" ) ||
-            aDdeTextFmt.equalsAscii( "FSYLK" ) )
+        if( aDdeTextFmt == "SYLK" || aDdeTextFmt == "FSYLK" )
         {
             OString aByteData;
             if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
@@ -181,8 +180,7 @@ bool ScServerObject::GetData(
             }
             return false;
         }
-        if( aDdeTextFmt.equalsAscii( "CSV" ) ||
-            aDdeTextFmt.equalsAscii( "FCSV" ) )
+        if( aDdeTextFmt == "CSV" || aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
         aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
         return aObj.ExportData( rMimeType, rData );

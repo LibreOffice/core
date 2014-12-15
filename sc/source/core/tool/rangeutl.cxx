@@ -254,7 +254,7 @@ bool ScRangeUtil::MakeRangeFromName (
         //first handle ui names like local1 (Sheet1), which point to a local range name
         OUString aName(rName);
         sal_Int32 nEndPos = aName.lastIndexOf(')');
-        sal_Int32 nStartPos = aName.lastIndexOfAsciiL(" (",2);
+        sal_Int32 nStartPos = aName.lastIndexOf(" (");
         SCTAB nTable = nCurTab;
         if (nEndPos != -1 && nStartPos != -1)
         {

@@ -144,9 +144,6 @@ using ::std::vector;
 //  Filter names (like in sclib.cxx)
 
 static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
-static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
-static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
-static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
 static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
 static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
 static const sal_Char pFilterLotus[]        = "Lotus";
@@ -1064,14 +1061,14 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     {
         OUString aFltName = pFilter->GetFilterName();
 
-        bool bCalc3 = ( aFltName.equalsAscii(pFilterSc30) );
-        bool bCalc4 = ( aFltName.equalsAscii(pFilterSc40) );
+        bool bCalc3 = aFltName == "StarCalc 3.0";
+        bool bCalc4 = aFltName == "StarCalc 4.0";
         if (!bCalc3 && !bCalc4)
             aDocument.SetInsertingFromOtherDoc( true );
 
-        if (aFltName.equalsAscii(pFilterXML))
+        if (aFltName == pFilterXML)
             bRet = LoadXML( &rMedium, NULL );
-        else if (aFltName.equalsAscii(pFilterSc10))
+        else if (aFltName == "StarCalc 1.0")
         {
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
@@ -1086,7 +1083,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bRet = true;
             }
         }
-        else if (aFltName.equalsAscii(pFilterLotus))
+        else if (aFltName == pFilterLotus)
         {
             OUString sItStr;
             SfxItemSet*  pSet = rMedium.GetItemSet();
@@ -1119,18 +1116,18 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetRowHeights = true;
         }
-        else if ( aFltName.equalsAscii(pFilterExcel4) || aFltName.equalsAscii(pFilterExcel5) ||
-                   aFltName.equalsAscii(pFilterExcel95) || aFltName.equalsAscii(pFilterExcel97) ||
-                   aFltName.equalsAscii(pFilterEx4Temp) || aFltName.equalsAscii(pFilterEx5Temp) ||
-                   aFltName.equalsAscii(pFilterEx95Temp) || aFltName.equalsAscii(pFilterEx97Temp) )
+        else if ( aFltName == pFilterExcel4 || aFltName == pFilterExcel5 ||
+                   aFltName == pFilterExcel95 || aFltName == pFilterExcel97 ||
+                   aFltName == pFilterEx4Temp || aFltName == pFilterEx5Temp ||
+                   aFltName == pFilterEx95Temp || aFltName == pFilterEx97Temp )
         {
             EXCIMPFORMAT eFormat = EIF_AUTO;
-            if ( aFltName.equalsAscii(pFilterExcel4) || aFltName.equalsAscii(pFilterEx4Temp) )
+            if ( aFltName == pFilterExcel4 || aFltName == pFilterEx4Temp )
                 eFormat = EIF_BIFF_LE4;
-            else if ( aFltName.equalsAscii(pFilterExcel5) || aFltName.equalsAscii(pFilterExcel95) ||
-                      aFltName.equalsAscii(pFilterEx5Temp) || aFltName.equalsAscii(pFilterEx95Temp) )
+            else if ( aFltName == pFilterExcel5 || aFltName == pFilterExcel95 ||
+                      aFltName == pFilterEx5Temp || aFltName == pFilterEx95Temp )
                 eFormat = EIF_BIFF5;
-            else if ( aFltName.equalsAscii(pFilterExcel97) || aFltName.equalsAscii(pFilterEx97Temp) )
+            else if ( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
                 eFormat = EIF_BIFF8;
 
             MakeDrawLayer(); //! In the filter
@@ -1157,7 +1154,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = true;
         }
-        else if (aFltName.equalsAscii(pFilterAscii))
+        else if (aFltName == pFilterAscii)
         {
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
@@ -1228,7 +1225,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
         }
-        else if (aFltName.equalsAscii(pFilterDBase))
+        else if (aFltName == pFilterDBase)
         {
             OUString sItStr;
             SfxItemSet*  pSet = rMedium.GetItemSet();
@@ -1265,7 +1262,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
         }
-        else if (aFltName.equalsAscii(pFilterDif))
+        else if (aFltName == pFilterDif)
         {
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
@@ -1305,7 +1302,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetSimpleTextColWidths = true;
             bSetRowHeights = true;
         }
-        else if (aFltName.equalsAscii(pFilterSylk))
+        else if (aFltName == pFilterSylk)
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
@@ -1334,7 +1331,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetSimpleTextColWidths = true;
             bSetRowHeights = true;
         }
-        else if (aFltName.equalsAscii(pFilterQPro6))
+        else if (aFltName == pFilterQPro6)
         {
             FltError eError = ScFormatFilter::Get().ScImportQuattroPro( rMedium, &aDocument);
             if (eError != eERR_OK)
@@ -1352,7 +1349,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             // wrapping enabled look nicer..
             bSetRowHeights = true;
         }
-        else if (aFltName.equalsAscii(pFilterRtf))
+        else if (aFltName == pFilterRtf)
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
@@ -1388,10 +1385,10 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( eError != eERR_OK && !GetError() )
                 SetError(eError, OUString( OSL_LOG_PREFIX ));
         }
-        else if (aFltName.equalsAscii(pFilterHtml) || aFltName.equalsAscii(pFilterHtmlWebQ))
+        else if (aFltName == pFilterHtml || aFltName == pFilterHtmlWebQ)
         {
             FltError eError = SCERR_IMPORT_UNKNOWN;
-            bool bWebQuery = aFltName.equalsAscii(pFilterHtmlWebQ);
+            bool bWebQuery = aFltName == pFilterHtmlWebQ;
             if( !rMedium.IsStorage() )
             {
                 SvStream* pInStream = rMedium.GetInStream();
@@ -2203,15 +2200,15 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     bool bRet = false;
     OUString aFltName = rMed.GetFilter()->GetFilterName();
 
-    if (aFltName.equalsAscii(pFilterXML))
+    if (aFltName == pFilterXML)
     {
         //TODO/LATER: this shouldn't happen!
         OSL_FAIL("XML filter in ConvertFrom?!");
         bRet = SaveXML( &rMed, NULL );
     }
-    else if (aFltName.equalsAscii(pFilterExcel5) || aFltName.equalsAscii(pFilterExcel95) ||
-             aFltName.equalsAscii(pFilterExcel97) || aFltName.equalsAscii(pFilterEx5Temp) ||
-             aFltName.equalsAscii(pFilterEx95Temp) || aFltName.equalsAscii(pFilterEx97Temp))
+    else if (aFltName == pFilterExcel5 || aFltName == pFilterExcel95 ||
+             aFltName == pFilterExcel97 || aFltName == pFilterEx5Temp ||
+             aFltName == pFilterEx95Temp || aFltName == pFilterEx97Temp)
     {
         WaitObject aWait( GetActiveDialogParent() );
 
@@ -2249,7 +2246,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         if( bDoSave )
         {
             ExportFormatExcel eFormat = ExpBiff5;
-            if( aFltName.equalsAscii( pFilterExcel97 ) || aFltName.equalsAscii( pFilterEx97Temp ) )
+            if( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
                 eFormat = ExpBiff8;
             FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
@@ -2265,7 +2262,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             SetError( ERRCODE_ABORT, OUString( OSL_LOG_PREFIX ) );
         }
     }
-    else if (aFltName.equalsAscii(pFilterAscii))
+    else if (aFltName == pFilterAscii)
     {
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
@@ -2298,7 +2295,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                     rMed.SetError(SCWARN_EXPORT_ASCII, OUString( OSL_LOG_PREFIX ));
         }
     }
-    else if (aFltName.equalsAscii(pFilterDBase))
+    else if (aFltName == pFilterDBase)
     {
         OUString sCharSet;
         SfxItemSet* pSet = rMed.GetItemSet();
@@ -2362,7 +2359,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             }
         }
     }
-    else if (aFltName.equalsAscii(pFilterDif))
+    else if (aFltName == pFilterDif)
     {
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
@@ -2394,7 +2391,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                     rMed.SetError(SCWARN_EXPORT_ASCII, OUString( OSL_LOG_PREFIX ));
         }
     }
-    else if (aFltName.equalsAscii(pFilterSylk))
+    else if (aFltName == pFilterSylk)
     {
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
@@ -2411,7 +2408,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_SYLK );
         }
     }
-    else if (aFltName.equalsAscii(pFilterHtml))
+    else if (aFltName == pFilterHtml)
     {
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
@@ -2603,15 +2600,15 @@ bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
     //  sal_True for those filters that keep the default table name
     //  (which is language specific)
 
-    return rFilter.equalsAscii( pFilterAscii )
-        || rFilter.equalsAscii( pFilterLotus )
-        || rFilter.equalsAscii( pFilterExcel4 )
-        || rFilter.equalsAscii( pFilterEx4Temp )
-        || rFilter.equalsAscii( pFilterDBase )
-        || rFilter.equalsAscii( pFilterDif )
-        || rFilter.equalsAscii( pFilterSylk )
-        || rFilter.equalsAscii( pFilterHtml )
-        || rFilter.equalsAscii( pFilterRtf );
+    return rFilter == pFilterAscii
+        || rFilter == pFilterLotus
+        || rFilter == pFilterExcel4
+        || rFilter == pFilterEx4Temp
+        || rFilter == pFilterDBase
+        || rFilter == pFilterDif
+        || rFilter == pFilterSylk
+        || rFilter == pFilterHtml
+        || rFilter == pFilterRtf;
 }
 
 #if ! ENABLE_TELEPATHY

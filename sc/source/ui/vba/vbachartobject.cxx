@@ -57,7 +57,7 @@ ScVbaChartObject::setShape() throw ( script::BasicErrorException )
         for (int i = 0; i < nItems; i++)
         {
             xShape.set( xDrawPage->getByIndex(i), uno::UNO_QUERY_THROW );
-            if (xShape->getShapeType().equalsAscii("com.sun.star.drawing.OLE2Shape") )
+            if (xShape->getShapeType() == "com.sun.star.drawing.OLE2Shape")
             {
                 uno::Reference< beans::XPropertySet > xShapePropertySet(xShape, uno::UNO_QUERY_THROW );
                 OUString sName;

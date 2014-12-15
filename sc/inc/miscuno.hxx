@@ -34,7 +34,7 @@
 OUString SAL_CALL ClassName::getImplementationName()                      \
     throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
 {                                                                                    \
-    return OUString::createFromAscii(ClassNameAscii);                         \
+    return OUString(ClassNameAscii);                         \
 }                                                                                    \
 sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     throw(::com::sun::star::uno::RuntimeException, std::exception)                                   \
@@ -47,7 +47,7 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
 {                                                                                    \
     ::com::sun::star::uno::Sequence< OUString > aRet(1);                      \
     OUString* pArray = aRet.getArray();                                       \
-    pArray[0] = OUString::createFromAscii(ServiceAscii);                  \
+    pArray[0] = ServiceAscii;                  \
     return aRet;                                                                     \
 }
 

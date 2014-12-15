@@ -53,13 +53,11 @@ using namespace com::sun::star;
 // STATIC DATA
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
-const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
-
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
     // underscore is used in function argument names
     OUString aRet = OUString( comphelper::string::remove(rOld, '_') ) +
-        OUString::createFromAscii( pCalcDelimiters ) +
+        "=()+-*/^&<>" +
         ScCompiler::GetNativeSymbol(ocSep); // argument separator is localized.
     return aRet;
 }

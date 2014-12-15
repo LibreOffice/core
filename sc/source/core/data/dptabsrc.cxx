@@ -1143,15 +1143,15 @@ void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
 {
-    if (aPropertyName.equalsAscii(SC_UNO_DP_COLGRAND))
+    if (aPropertyName == SC_UNO_DP_COLGRAND)
         bColumnGrand = lcl_GetBoolFromAny(aValue);
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_ROWGRAND))
+    else if (aPropertyName == SC_UNO_DP_ROWGRAND)
         bRowGrand = lcl_GetBoolFromAny(aValue);
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_IGNOREEMPTY))
+    else if (aPropertyName == SC_UNO_DP_IGNOREEMPTY)
         setIgnoreEmptyRows( lcl_GetBoolFromAny( aValue ) );
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_REPEATEMPTY))
+    else if (aPropertyName == SC_UNO_DP_REPEATEMPTY)
         setRepeatIfEmpty( lcl_GetBoolFromAny( aValue ) );
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_GRANDTOTAL_NAME))
+    else if (aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME)
     {
         OUString aName;
         if (aValue >>= aName)
@@ -1169,23 +1169,23 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
                         uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_COLGRAND ) )
+    if ( aPropertyName == SC_UNO_DP_COLGRAND )
         lcl_SetBoolInAny(aRet, bColumnGrand);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_ROWGRAND ) )
+    else if ( aPropertyName == SC_UNO_DP_ROWGRAND )
         lcl_SetBoolInAny(aRet, bRowGrand);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_IGNOREEMPTY ) )
+    else if ( aPropertyName == SC_UNO_DP_IGNOREEMPTY )
         lcl_SetBoolInAny(aRet, bIgnoreEmptyRows);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_REPEATEMPTY ) )
+    else if ( aPropertyName == SC_UNO_DP_REPEATEMPTY )
         lcl_SetBoolInAny(aRet, bRepeatIfEmpty);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_DATADESC ) )             // read-only
+    else if ( aPropertyName == SC_UNO_DP_DATADESC )             // read-only
         aRet <<= getDataDescription();
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_ROWFIELDCOUNT ) )        // read-only
+    else if ( aPropertyName == SC_UNO_DP_ROWFIELDCOUNT )        // read-only
         aRet <<= static_cast<sal_Int32>(maRowDims.size());
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_COLUMNFIELDCOUNT ) )     // read-only
+    else if ( aPropertyName == SC_UNO_DP_COLUMNFIELDCOUNT )     // read-only
         aRet <<= static_cast<sal_Int32>(maColDims.size());
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_DATAFIELDCOUNT ) )       // read-only
+    else if ( aPropertyName == SC_UNO_DP_DATAFIELDCOUNT )       // read-only
         aRet <<= static_cast<sal_Int32>(maDataDims.size());
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_GRANDTOTAL_NAME))
+    else if (aPropertyName == SC_UNO_DP_GRANDTOTAL_NAME)
     {
         if (mpGrandTotalName.get())
             aRet <<= *mpGrandTotalName;
@@ -1525,27 +1525,27 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
 {
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_USEDHIERARCHY ) )
+    if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
     {
         sal_Int32 nInt = 0;
         if (aValue >>= nInt)
             setUsedHierarchy( nInt );
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_ORIENTATION ) )
+    else if ( aPropertyName == SC_UNO_DP_ORIENTATION )
     {
         sheet::DataPilotFieldOrientation eEnum;
         if (aValue >>= eEnum)
             setOrientation( sal::static_int_cast<sal_uInt16>(eEnum) );
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_FUNCTION ) )
+    else if ( aPropertyName == SC_UNO_DP_FUNCTION )
     {
         sheet::GeneralFunction eEnum;
         if (aValue >>= eEnum)
             setFunction( sal::static_int_cast<sal_uInt16>(eEnum) );
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_REFVALUE ) )
+    else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aValue >>= aReferenceValue;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_FILTER ) )
+    else if ( aPropertyName == SC_UNO_DP_FILTER )
     {
         bool bDone = false;
         uno::Sequence<sheet::TableFilterField> aSeq;
@@ -1576,19 +1576,19 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
         }
         DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
     }
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
+    else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
     {
         OUString aTmpName;
         if (aValue >>= aTmpName)
             mpLayoutName.reset(new OUString(aTmpName));
     }
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_FIELD_SUBTOTALNAME))
+    else if (aPropertyName == SC_UNO_DP_FIELD_SUBTOTALNAME)
     {
         OUString aTmpName;
         if (aValue >>= aTmpName)
             mpSubtotalName.reset(new OUString(aTmpName));
     }
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_HAS_HIDDEN_MEMBER))
+    else if (aPropertyName == SC_UNO_DP_HAS_HIDDEN_MEMBER)
     {
         bool b = false;
         aValue >>= b;
@@ -1606,25 +1606,25 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
                         uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_POSITION ) )
+    if ( aPropertyName == SC_UNO_DP_POSITION )
         aRet <<= (sal_Int32) getPosition();
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_USEDHIERARCHY ) )
+    else if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
         aRet <<= (sal_Int32) getUsedHierarchy();
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_ORIENTATION ) )
+    else if ( aPropertyName == SC_UNO_DP_ORIENTATION )
     {
         sheet::DataPilotFieldOrientation eVal = (sheet::DataPilotFieldOrientation)getOrientation();
         aRet <<= eVal;
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_FUNCTION ) )
+    else if ( aPropertyName == SC_UNO_DP_FUNCTION )
     {
         sheet::GeneralFunction eVal = (sheet::GeneralFunction)getFunction();
         aRet <<= eVal;
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_REFVALUE ) )
+    else if ( aPropertyName == SC_UNO_DP_REFVALUE )
         aRet <<= aReferenceValue;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_ISDATALAYOUT ) )                 // read-only properties
+    else if ( aPropertyName == SC_UNO_DP_ISDATALAYOUT )                 // read-only properties
         lcl_SetBoolInAny( aRet, getIsDataLayoutDimension() );
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_NUMBERFO ) )
+    else if ( aPropertyName == SC_UNO_DP_NUMBERFO )
     {
         sal_Int32 nFormat = 0;
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)getFunction();
@@ -1650,19 +1650,19 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
 
         aRet <<= nFormat;
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_ORIGINAL ) )
+    else if ( aPropertyName == SC_UNO_DP_ORIGINAL )
     {
         uno::Reference<container::XNamed> xOriginal;
         if (nSourceDim >= 0)
             xOriginal = pSource->GetDimensionsObject()->getByIndex(nSourceDim);
         aRet <<= xOriginal;
     }
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_ORIGINAL_POS))
+    else if (aPropertyName == SC_UNO_DP_ORIGINAL_POS)
     {
         sal_Int32 nPos = static_cast<sal_Int32>(nSourceDim);
         aRet <<= nPos;
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_FILTER ) )
+    else if ( aPropertyName == SC_UNO_DP_FILTER )
     {
         if ( bHasSelectedPage )
         {
@@ -1674,13 +1674,13 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
         else
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
+    else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
         aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString("");
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_FIELD_SUBTOTALNAME))
+    else if (aPropertyName == SC_UNO_DP_FIELD_SUBTOTALNAME)
         aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString("");
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_HAS_HIDDEN_MEMBER))
+    else if (aPropertyName == SC_UNO_DP_HAS_HIDDEN_MEMBER)
         aRet <<= mbHasHiddenMember;
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_FLAGS))
+    else if (aPropertyName == SC_UNO_DP_FLAGS)
     {
         sal_Int32 nFlags = 0;       // tabular data: all orientations are possible
         aRet <<= nFlags;
@@ -2216,15 +2216,15 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
 {
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_SHOWEMPTY ) )
+    if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         bShowEmpty = lcl_GetBoolFromAny(aValue);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_SUBTOTAL ) )
+    else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
         aValue >>= aSubTotals;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_SORTING ) )
+    else if ( aPropertyName == SC_UNO_DP_SORTING )
         aValue >>= aSortInfo;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_AUTOSHOW ) )
+    else if ( aPropertyName == SC_UNO_DP_AUTOSHOW )
         aValue >>= aAutoShowInfo;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_LAYOUT ) )
+    else if ( aPropertyName == SC_UNO_DP_LAYOUT )
         aValue >>= aLayoutInfo;
     else
     {
@@ -2237,20 +2237,20 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
                         uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_SHOWEMPTY ) )
+    if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         lcl_SetBoolInAny(aRet, bShowEmpty);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_SUBTOTAL ) )
+    else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
         uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();        //! avoid extra copy?
         aRet <<= aSeq;
     }
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_SORTING ) )
+    else if ( aPropertyName == SC_UNO_DP_SORTING )
         aRet <<= aSortInfo;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_AUTOSHOW ) )
+    else if ( aPropertyName == SC_UNO_DP_AUTOSHOW )
         aRet <<= aAutoShowInfo;
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_LAYOUT ) )
+    else if ( aPropertyName == SC_UNO_DP_LAYOUT )
         aRet <<= aLayoutInfo;
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
+    else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
     {
         // read only property
         long nSrcDim = pSource->GetSourceDim(nDim);
@@ -2660,13 +2660,13 @@ void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
 {
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_ISVISIBLE ) )
+    if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
         bVisible = lcl_GetBoolFromAny(aValue);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_SHOWDETAILS ) )
+    else if ( aPropertyName == SC_UNO_DP_SHOWDETAILS )
         bShowDet = lcl_GetBoolFromAny(aValue);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_POSITION ) )
+    else if ( aPropertyName == SC_UNO_DP_POSITION )
         aValue >>= nPosition;
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
+    else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
     {
         OUString aName;
         if (aValue >>= aName)
@@ -2683,13 +2683,13 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
                         uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( aPropertyName.equalsAscii( SC_UNO_DP_ISVISIBLE ) )
+    if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
         lcl_SetBoolInAny(aRet, bVisible);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_SHOWDETAILS ) )
+    else if ( aPropertyName == SC_UNO_DP_SHOWDETAILS )
         lcl_SetBoolInAny(aRet, bShowDet);
-    else if ( aPropertyName.equalsAscii( SC_UNO_DP_POSITION ) )
+    else if ( aPropertyName == SC_UNO_DP_POSITION )
         aRet <<= nPosition;
-    else if (aPropertyName.equalsAscii(SC_UNO_DP_LAYOUTNAME))
+    else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
         aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString();
     else
     {

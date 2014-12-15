@@ -94,11 +94,6 @@ extern sal_uInt16 nEditAdjust;      //! Member of ViewData
 
 namespace {
 
-// Delimiters (in addition to ScEditUtil) needed for range finder:
-// only characters that are allowed in formulas next to references
-// and the quotation mark (so string constants can be skipped)
-const sal_Char pMinDelimiters[] = " !\"";
-
 // Formula data replacement character for a pair of parentheses at end of
 // function name, to force sorting parentheses before all other characters.
 // Collation may treat parentheses differently.
@@ -209,8 +204,10 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
     if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
         return;
 
-    OUString aDelimiters = ScEditUtil::ModifyDelimiters(
-                            OUString::createFromAscii( pMinDelimiters ) );
+    OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !\"");
+        // delimiters (in addition to ScEditUtil): only characters that are
+        // allowed in formulas next to references and the quotation mark (so
+        // string constants can be skipped)
 
     sal_Int32 nColon = aDelimiters.indexOf( ':' );
     if ( nColon != -1 )

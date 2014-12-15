@@ -1315,7 +1315,7 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
             }
 
             aFormatStr = pEntry->GetMappedFormatstring( *pKeywordTable, *xFormatter->GetLocaleData() );
-            if( aFormatStr.equalsAscii( "Standard" ) )
+            if( aFormatStr == "Standard" )
                 aFormatStr = "General";
         }
     }

@@ -775,11 +775,11 @@ void Test::testPivotTableCache()
     long nDimCount = aCache.GetColumnCount();
     CPPUNIT_ASSERT_MESSAGE("wrong dimension count.", nDimCount == 3);
     OUString aDimName = aCache.GetDimensionName(0);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F1"));
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName == "F1");
     aDimName = aCache.GetDimensionName(1);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F2"));
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName == "F2");
     aDimName = aCache.GetDimensionName(2);
-    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F3"));
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName == "F3");
 
     // In each dimension, member ID values also represent their sort order (in
     // source dimensions only, not in group dimensions). Value items are
@@ -796,23 +796,23 @@ void Test::testPivotTableCache()
     pItem = aCache.GetItemDataById(0, 1);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("A"));
+                           pItem->GetString() == "A");
     pItem = aCache.GetItemDataById(0, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("F"));
+                           pItem->GetString() == "F");
     pItem = aCache.GetItemDataById(0, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("R"));
+                           pItem->GetString() == "R");
     pItem = aCache.GetItemDataById(0, 4);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("Y"));
+                           pItem->GetString() == "Y");
     pItem = aCache.GetItemDataById(0, 5);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("Z"));
+                           pItem->GetString() == "Z");
     pItem = aCache.GetItemDataById(0, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -822,15 +822,15 @@ void Test::testPivotTableCache()
     pItem = aCache.GetItemDataById(1, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("A"));
+                           pItem->GetString() == "A");
     pItem = aCache.GetItemDataById(1, 1);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("B"));
+                           pItem->GetString() == "B");
     pItem = aCache.GetItemDataById(1, 2);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
                            pItem->GetType() == ScDPItemData::String &&
-                           pItem->GetString().equalsAscii("C"));
+                           pItem->GetString() == "C");
     pItem = aCache.GetItemDataById(1, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
@@ -1104,7 +1104,7 @@ void Test::testPivotTableNormalGrouping()
         // Group A, B and C together.
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
         OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
-        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group1"));
+        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName == "Group1");
 
         ScDPSaveGroupItem aGroup(aGroupName);
         aGroup.AddElement(OUString("A"));
@@ -1146,7 +1146,7 @@ void Test::testPivotTableNormalGrouping()
         ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
         CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
         OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
-        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group2"));
+        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName == "Group2");
 
         ScDPSaveGroupItem aGroup(aGroupName);
         aGroup.AddElement(OUString("D"));

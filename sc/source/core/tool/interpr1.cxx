@@ -2151,25 +2151,25 @@ void ScInterpreter::ScCell()
             ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::GetLocale(), ocCell);
 
 // *** ADDRESS INFO ***
-            if( aInfoType.equalsAscii( "COL" ) )
+            if( aInfoType == "COL" )
             {   // column number (1-based)
                 PushInt( aCellPos.Col() + 1 );
             }
-            else if( aInfoType.equalsAscii( "ROW" ) )
+            else if( aInfoType == "ROW" )
             {   // row number (1-based)
                 PushInt( aCellPos.Row() + 1 );
             }
-            else if( aInfoType.equalsAscii( "SHEET" ) )
+            else if( aInfoType == "SHEET" )
             {   // table number (1-based)
                 PushInt( aCellPos.Tab() + 1 );
             }
-            else if( aInfoType.equalsAscii( "ADDRESS" ) )
+            else if( aInfoType == "ADDRESS" )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
                 sal_uInt16 nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
                 OUString aStr(aCellPos.Format(nFlags, pDok, pDok->GetAddressConvention()));
                 PushString(aStr);
             }
-            else if( aInfoType.equalsAscii( "FILENAME" ) )
+            else if( aInfoType == "FILENAME" )
             {   // file name and table name: 'FILENAME'#$TABLE
                 SCTAB nTab = aCellPos.Tab();
                 OUString aFuncResult;
@@ -2196,7 +2196,7 @@ void ScInterpreter::ScCell()
                 }
                 PushString( aFuncResult );
             }
-            else if( aInfoType.equalsAscii( "COORD" ) )
+            else if( aInfoType == "COORD" )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
                 OUStringBuffer aFuncResult;
@@ -2212,7 +2212,7 @@ void ScInterpreter::ScCell()
             }
 
 // *** CELL PROPERTIES ***
-            else if( aInfoType.equalsAscii( "CONTENTS" ) )
+            else if( aInfoType == "CONTENTS" )
             {   // contents of the cell, no formatting
                 if (aCell.hasString())
                 {
@@ -2223,7 +2223,7 @@ void ScInterpreter::ScCell()
                 else
                     PushDouble(GetCellValue(aCellPos, aCell));
             }
-            else if( aInfoType.equalsAscii( "TYPE" ) )
+            else if( aInfoType == "TYPE" )
             {   // b = blank; l = string (label); v = otherwise (value)
                 sal_Unicode c;
                 if (aCell.hasString())
@@ -2232,7 +2232,7 @@ void ScInterpreter::ScCell()
                     c = aCell.hasNumeric() ? 'v' : 'b';
                 PushString( OUString(c) );
             }
-            else if( aInfoType.equalsAscii( "WIDTH" ) )
+            else if( aInfoType == "WIDTH" )
             {   // column width (rounded off as count of zero characters in standard font and size)
                 Printer*    pPrinter = pDok->GetPrinter();
                 MapMode     aOldMode( pPrinter->GetMapMode() );
@@ -2249,7 +2249,7 @@ void ScInterpreter::ScCell()
                 int nZeroCount = (int)(pDok->GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
                 PushInt( nZeroCount );
             }
-            else if( aInfoType.equalsAscii( "PREFIX" ) )
+            else if( aInfoType == "PREFIX" )
             {   // ' = left; " = right; ^ = centered
                 sal_Unicode c = 0;
                 if (aCell.hasString())
@@ -2268,7 +2268,7 @@ void ScInterpreter::ScCell()
                 }
                 PushString( OUString(c) );
             }
-            else if( aInfoType.equalsAscii( "PROTECT" ) )
+            else if( aInfoType == "PROTECT" )
             {   // 1 = cell locked
                 const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(
                     pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION ));
@@ -2276,19 +2276,19 @@ void ScInterpreter::ScCell()
             }
 
 // *** FORMATTING ***
-            else if( aInfoType.equalsAscii( "FORMAT" ) )
+            else if( aInfoType == "FORMAT" )
             {   // specific format code for standard formats
                 OUString aFuncResult;
                 sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
                 getFormatString(pFormatter, nFormat, aFuncResult);
                 PushString( aFuncResult );
             }
-            else if( aInfoType.equalsAscii( "COLOR" ) )
+            else if( aInfoType == "COLOR" )
             {   // 1 = negative values are colored, otherwise 0
                 const SvNumberformat* pFormat = pFormatter->GetEntry( pDok->GetNumberFormat( aCellPos ) );
                 PushInt( lcl_FormatHasNegColor( pFormat ) ? 1 : 0 );
             }
-            else if( aInfoType.equalsAscii( "PARENTHESES" ) )
+            else if( aInfoType == "PARENTHESES" )
             {   // 1 = format string contains a '(' character, otherwise 0
                 const SvNumberformat* pFormat = pFormatter->GetEntry( pDok->GetNumberFormat( aCellPos ) );
                 PushInt( lcl_FormatHasOpenPar( pFormat ) ? 1 : 0 );

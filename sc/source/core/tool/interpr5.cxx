@@ -3264,15 +3264,15 @@ void ScInterpreter::ScInfo()
     {
         OUString aStr = GetString().getString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::GetLocale(), ocInfo);
-        if( aStr.equalsAscii( "SYSTEM" ) )
+        if( aStr == "SYSTEM" )
             PushString( OUString( SC_INFO_OSVERSION ) );
-        else if( aStr.equalsAscii( "OSVERSION" ) )
+        else if( aStr == "OSVERSION" )
             PushString( OUString( "Windows (32-bit) NT 5.01" ) );
-        else if( aStr.equalsAscii( "RELEASE" ) )
+        else if( aStr == "RELEASE" )
             PushString( ::utl::Bootstrap::getBuildIdData( OUString() ) );
-        else if( aStr.equalsAscii( "NUMFILE" ) )
+        else if( aStr == "NUMFILE" )
             PushDouble( 1 );
-        else if( aStr.equalsAscii( "RECALC" ) )
+        else if( aStr == "RECALC" )
             PushString( ScGlobal::GetRscString( pDok->GetAutoCalc() ? STR_RECALC_AUTO : STR_RECALC_MANUAL ) );
         else
             PushIllegalArgument();

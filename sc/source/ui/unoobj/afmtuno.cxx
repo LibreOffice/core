@@ -584,17 +584,17 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
 
         OUString aPropString(aPropertyName);
         bool bBool;
-        if (aPropString.equalsAscii( SC_UNONAME_INCBACK ) && (aValue >>= bBool))
+        if (aPropString == SC_UNONAME_INCBACK && (aValue >>= bBool))
             pData->SetIncludeBackground( bBool );
-        else if (aPropString.equalsAscii( SC_UNONAME_INCBORD ) && (aValue >>= bBool))
+        else if (aPropString == SC_UNONAME_INCBORD && (aValue >>= bBool))
             pData->SetIncludeFrame( bBool );
-        else if (aPropString.equalsAscii( SC_UNONAME_INCFONT ) && (aValue >>= bBool))
+        else if (aPropString == SC_UNONAME_INCFONT && (aValue >>= bBool))
             pData->SetIncludeFont( bBool );
-        else if (aPropString.equalsAscii( SC_UNONAME_INCJUST ) && (aValue >>= bBool))
+        else if (aPropString == SC_UNONAME_INCJUST && (aValue >>= bBool))
             pData->SetIncludeJustify( bBool );
-        else if (aPropString.equalsAscii( SC_UNONAME_INCNUM ) && (aValue >>= bBool))
+        else if (aPropString == SC_UNONAME_INCNUM && (aValue >>= bBool))
             pData->SetIncludeValueFormat( bBool );
-        else if (aPropString.equalsAscii( SC_UNONAME_INCWIDTH ) && (aValue >>= bBool))
+        else if (aPropString == SC_UNONAME_INCWIDTH && (aValue >>= bBool))
             pData->SetIncludeWidthHeight( bBool );
 
         // else Fehler
@@ -620,17 +620,17 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const OUString& aPropertyNa
         bool bValue;
         bool bError = false;
 
-        if (aPropertyName.equalsAscii( SC_UNONAME_INCBACK ))
+        if (aPropertyName == SC_UNONAME_INCBACK)
             bValue = pData->GetIncludeBackground();
-        else if (aPropertyName.equalsAscii( SC_UNONAME_INCBORD ))
+        else if (aPropertyName == SC_UNONAME_INCBORD)
             bValue = pData->GetIncludeFrame();
-        else if (aPropertyName.equalsAscii( SC_UNONAME_INCFONT ))
+        else if (aPropertyName == SC_UNONAME_INCFONT)
             bValue = pData->GetIncludeFont();
-        else if (aPropertyName.equalsAscii( SC_UNONAME_INCJUST ))
+        else if (aPropertyName == SC_UNONAME_INCJUST)
             bValue = pData->GetIncludeJustify();
-        else if (aPropertyName.equalsAscii( SC_UNONAME_INCNUM ))
+        else if (aPropertyName == SC_UNONAME_INCNUM)
             bValue = pData->GetIncludeValueFormat();
-        else if (aPropertyName.equalsAscii( SC_UNONAME_INCWIDTH ))
+        else if (aPropertyName == SC_UNONAME_INCWIDTH)
             bValue = pData->GetIncludeWidthHeight();
         else
             bError = true;      // unbekannte Property

@@ -175,7 +175,7 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
     for (sal_Int32 i=0; i<nSub; ++i)
     {
         OUString aCode = rSepNums.getToken( i, '/' );
-        if ( aCode.equalsAscii(pStrMrg) )
+        if ( aCode == pStrMrg )
             o_bMergeFieldSeps = true;
         else
         {
@@ -201,7 +201,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         bFixedLen = bMergeFieldSeps = false;
 
         aToken = rString.getToken(0,',');
-        if ( aToken.equalsAscii(pStrFix) )
+        if ( aToken == pStrFix )
             bFixedLen = true;
         aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
     }
@@ -265,14 +265,14 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if (nCount >= 7)
     {
         aToken = rString.getToken(6, ',');
-        bQuotedFieldAsText = aToken.equalsAscii("true");
+        bQuotedFieldAsText = aToken == "true";
     }
 
     // Detect special numbers.
     if (nCount >= 8)
     {
         aToken = rString.getToken(7, ',');
-        bDetectSpecialNumber = aToken.equalsAscii("true");
+        bDetectSpecialNumber = aToken == "true";
     }
     else
         bDetectSpecialNumber = true;    // default of versions that didn't add the parameter

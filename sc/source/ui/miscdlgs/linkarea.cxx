@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
         return 0;
 
     // #i53241# replace HTML filter with DataQuery filter
-    if (aFilter.equalsAscii(FILTERNAME_HTML))
+    if (aFilter == FILTERNAME_HTML)
         aFilter = OUString(FILTERNAME_QUERY);
 
     LoadDocument( aEntered, aFilter, aOptions );

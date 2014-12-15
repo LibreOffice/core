@@ -931,7 +931,7 @@ void ScUndoAutoFilter::DoChange( bool bUndo )
 
     ScDocument& rDoc = pDocShell->GetDocument();
     ScDBData* pDBData=NULL;
-    if (aDBName.equalsAscii(STR_DB_LOCAL_NONAME))
+    if (aDBName == STR_DB_LOCAL_NONAME)
     {
         SCTAB nTab = aOriginalRange.aStart.Tab();
         pDBData = rDoc.GetAnonymousDBData(nTab);

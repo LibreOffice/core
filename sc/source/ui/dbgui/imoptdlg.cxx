@@ -65,11 +65,11 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         {
             // look at the same positions as in ScAsciiOptions
             if ( nTokenCount >= 7 )
-                bQuoteAllText = rStr.getToken(6, ',').equalsAscii("true");
+                bQuoteAllText = rStr.getToken(6, ',') == "true";
             if ( nTokenCount >= 9 )
-                bSaveAsShown = rStr.getToken(8, ',').equalsAscii("true");
+                bSaveAsShown = rStr.getToken(8, ',') == "true";
             if ( nTokenCount >= 10 )
-                bSaveFormulas = rStr.getToken(9, ',').equalsAscii("true");
+                bSaveFormulas = rStr.getToken(9, ',') == "true";
         }
     }
 }

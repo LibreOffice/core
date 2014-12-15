@@ -55,8 +55,6 @@
 
 #include <memory>
 
-#define SC_USERLIST             "UserList"
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -854,7 +852,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                 if (sValue.getLength() > 8)
                 {
                     OUString sTemp = sValue.copy(0, 8);
-                    if (sTemp.equalsAscii(SC_USERLIST))
+                    if (sTemp == "UserList")
                     {
                         pDatabaseRangeContext->SetSubTotalsEnabledUserList(true);
                         sTemp = sValue.copy(8);

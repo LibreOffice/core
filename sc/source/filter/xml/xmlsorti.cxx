@@ -29,8 +29,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#define SC_USERLIST "UserList"
-
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -176,7 +174,7 @@ void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString
     if (sDataType.getLength() > 8)
     {
         OUString sTemp = sDataType.copy(0, 8);
-        if (sTemp.equalsAscii(SC_USERLIST))
+        if (sTemp == "UserList")
         {
             bEnabledUserList = true;
             sTemp = sDataType.copy(8);

@@ -373,72 +373,72 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     bool bSaveInp = false;
     // print options aren't loaded until needed
 
-    if (aString.equalsAscii( SC_UNONAME_DOAUTOCP ))
+    if (aString == SC_UNONAME_DOAUTOCP)
     {
         aAppOpt.SetAutoComplete( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_ENTERED ))
+    else if (aString == SC_UNONAME_ENTERED)
     {
         aInpOpt.SetEnterEdit( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_EXPREF ))
+    else if (aString == SC_UNONAME_EXPREF)
     {
         aInpOpt.SetExpandRefs( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_EXTFMT ))
+    else if (aString == SC_UNONAME_EXTFMT)
     {
         aInpOpt.SetExtendFormat( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_LINKUPD ))
+    else if (aString == SC_UNONAME_LINKUPD)
     {
         aAppOpt.SetLinkMode( (ScLkUpdMode) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_MARKHDR ))
+    else if (aString == SC_UNONAME_MARKHDR)
     {
         aInpOpt.SetMarkHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_MOVESEL ))
+    else if (aString == SC_UNONAME_MOVESEL)
     {
         aInpOpt.SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_RANGEFIN ))
+    else if (aString == SC_UNONAME_RANGEFIN)
     {
         aInpOpt.SetRangeFinder( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_USETABCOL ))
+    else if (aString == SC_UNONAME_USETABCOL)
     {
         aInpOpt.SetUseTabCol( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_PRMETRICS ))
+    else if (aString == SC_UNONAME_PRMETRICS)
     {
         aInpOpt.SetTextWysiwyg( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_REPLWARN ))
+    else if (aString == SC_UNONAME_REPLWARN)
     {
         aInpOpt.SetReplaceCellsWarn( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_METRIC ))
+    else if (aString == SC_UNONAME_METRIC)
     {
         aAppOpt.SetAppMetric( (FieldUnit) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_MOVEDIR ))
+    else if (aString == SC_UNONAME_MOVEDIR)
     {
         aInpOpt.SetMoveDir( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveInp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_SCALE ))
+    else if (aString == SC_UNONAME_SCALE)
     {
         short nVal = ScUnoHelpFunctions::GetInt16FromAny( aValue );
         if ( nVal < 0 )
@@ -459,12 +459,12 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         }
         bSaveApp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_STBFUNC ))
+    else if (aString == SC_UNONAME_STBFUNC)
     {
         aAppOpt.SetStatusFunc( ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
         bSaveApp = true;
     }
-    else if (aString.equalsAscii( SC_UNONAME_ULISTS ))
+    else if (aString == SC_UNONAME_ULISTS)
     {
         ScUserList* pUserList = ScGlobal::GetUserList();
         uno::Sequence<OUString> aSeq;
@@ -485,13 +485,13 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             bSaveApp = true;    // Liste wird mit den App-Optionen gespeichert
         }
     }
-    else if (aString.equalsAscii( SC_UNONAME_PRALLSH ))
+    else if (aString == SC_UNONAME_PRALLSH)
     {
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         pScMod->SetPrintOptions( aPrintOpt );
     }
-    else if (aString.equalsAscii( SC_UNONAME_PREMPTY ))
+    else if (aString == SC_UNONAME_PREMPTY)
     {
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
         aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
@@ -518,21 +518,21 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     ScInputOptions aInpOpt = pScMod->GetInputOptions();
     // print options aren't loaded until needed
 
-    if (aString.equalsAscii( SC_UNONAME_DOAUTOCP ))     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
-    else if (aString.equalsAscii( SC_UNONAME_ENTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
-    else if (aString.equalsAscii( SC_UNONAME_EXPREF ))  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExpandRefs() );
-    else if (aString.equalsAscii( SC_UNONAME_EXTFMT ))  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExtendFormat() );
-    else if (aString.equalsAscii( SC_UNONAME_LINKUPD )) aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
-    else if (aString.equalsAscii( SC_UNONAME_MARKHDR )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMarkHeader() );
-    else if (aString.equalsAscii( SC_UNONAME_MOVESEL )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
-    else if (aString.equalsAscii( SC_UNONAME_RANGEFIN )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetRangeFinder() );
-    else if (aString.equalsAscii( SC_UNONAME_USETABCOL )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetUseTabCol() );
-    else if (aString.equalsAscii( SC_UNONAME_PRMETRICS )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetTextWysiwyg() );
-    else if (aString.equalsAscii( SC_UNONAME_REPLWARN )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetReplaceCellsWarn() );
-    else if (aString.equalsAscii( SC_UNONAME_METRIC ))  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
-    else if (aString.equalsAscii( SC_UNONAME_MOVEDIR )) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
-    else if (aString.equalsAscii( SC_UNONAME_STBFUNC )) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
-    else if (aString.equalsAscii( SC_UNONAME_SCALE ))
+    if (aString == SC_UNONAME_DOAUTOCP)     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
+    else if (aString == SC_UNONAME_ENTERED ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
+    else if (aString == SC_UNONAME_EXPREF )  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExpandRefs() );
+    else if (aString == SC_UNONAME_EXTFMT )  ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetExtendFormat() );
+    else if (aString == SC_UNONAME_LINKUPD ) aRet <<= (sal_Int16) aAppOpt.GetLinkMode();
+    else if (aString == SC_UNONAME_MARKHDR ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMarkHeader() );
+    else if (aString == SC_UNONAME_MOVESEL ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
+    else if (aString == SC_UNONAME_RANGEFIN ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetRangeFinder() );
+    else if (aString == SC_UNONAME_USETABCOL ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetUseTabCol() );
+    else if (aString == SC_UNONAME_PRMETRICS ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetTextWysiwyg() );
+    else if (aString == SC_UNONAME_REPLWARN ) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetReplaceCellsWarn() );
+    else if (aString == SC_UNONAME_METRIC )  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
+    else if (aString == SC_UNONAME_MOVEDIR ) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
+    else if (aString == SC_UNONAME_STBFUNC ) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
+    else if (aString == SC_UNONAME_SCALE )
     {
         sal_Int16 nZoomVal = 0;
         switch ( aAppOpt.GetZoomType() )
@@ -548,7 +548,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
         }
         aRet <<= (sal_Int16) nZoomVal;
     }
-    else if (aString.equalsAscii( SC_UNONAME_ULISTS ))
+    else if (aString == SC_UNONAME_ULISTS )
     {
         ScUserList* pUserList = ScGlobal::GetUserList();
         if (pUserList)
@@ -564,9 +564,9 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
             aRet <<= aSeq;
         }
     }
-    else if (aString.equalsAscii( SC_UNONAME_PRALLSH ))
+    else if (aString == SC_UNONAME_PRALLSH )
         ScUnoHelpFunctions::SetBoolInAny( aRet, pScMod->GetPrintOptions().GetAllSheets() );
-    else if (aString.equalsAscii( SC_UNONAME_PREMPTY ))
+    else if (aString == SC_UNONAME_PREMPTY )
         ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );    // reversed
 
     return aRet;

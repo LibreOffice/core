@@ -220,28 +220,28 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
     OUString aValStr;
-    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString == SC_UNONAME_LINKURL )
     {
         if ( aValue >>= aValStr )
             setFileName( aValStr );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString == SC_UNONAME_FILTER )
     {
         if ( aValue >>= aValStr )
             setFilter( aValStr );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString == SC_UNONAME_FILTOPT )
     {
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString == SC_UNONAME_REFPERIOD )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString == SC_UNONAME_REFDELAY )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
@@ -256,15 +256,15 @@ uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const OUString& aPropertyNam
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
     uno::Any aRet;
-    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString == SC_UNONAME_LINKURL )
         aRet <<= getFileName();
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString == SC_UNONAME_FILTER )
         aRet <<= getFilter();
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString == SC_UNONAME_FILTOPT )
         aRet <<= getFilterOptions();
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString == SC_UNONAME_REFPERIOD )
         aRet <<= getRefreshDelay();
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString == SC_UNONAME_REFDELAY )
         aRet <<= getRefreshDelay();
     return aRet;
 }
@@ -768,28 +768,28 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
     OUString aValStr;
-    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString == SC_UNONAME_LINKURL )
     {
         if ( aValue >>= aValStr )
             setFileName( aValStr );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString == SC_UNONAME_FILTER )
     {
         if ( aValue >>= aValStr )
             setFilter( aValStr );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString == SC_UNONAME_FILTOPT )
     {
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString == SC_UNONAME_REFPERIOD )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString == SC_UNONAME_REFDELAY )
     {
         sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
@@ -804,15 +804,15 @@ uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const OUString& aPropertyName
     SolarMutexGuard aGuard;
     OUString aNameString(aPropertyName);
     uno::Any aRet;
-    if ( aNameString.equalsAscii( SC_UNONAME_LINKURL ) )
+    if ( aNameString == SC_UNONAME_LINKURL )
         aRet <<= getFileName();
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTER ) )
+    else if ( aNameString == SC_UNONAME_FILTER )
         aRet <<= getFilter();
-    else if ( aNameString.equalsAscii( SC_UNONAME_FILTOPT ) )
+    else if ( aNameString == SC_UNONAME_FILTOPT )
         aRet <<= getFilterOptions();
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFPERIOD ) )
+    else if ( aNameString == SC_UNONAME_REFPERIOD )
         aRet <<= getRefreshDelay();
-    else if ( aNameString.equalsAscii( SC_UNONAME_REFDELAY ) )
+    else if ( aNameString == SC_UNONAME_REFDELAY )
         aRet <<= getRefreshDelay();
     return aRet;
 }

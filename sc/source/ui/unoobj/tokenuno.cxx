@@ -192,11 +192,11 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     OUString aString(aPropertyName);
-    if ( aString.equalsAscii( SC_UNO_COMPILEFAP ) )
+    if ( aString == SC_UNO_COMPILEFAP )
     {
         aValue >>= mbCompileFAP;
     }
-    else if ( aString.equalsAscii( SC_UNO_COMPILEENGLISH ) )
+    else if ( aString == SC_UNO_COMPILEENGLISH )
     {
         bool bOldEnglish = mbEnglish;
         if (aValue >>= mbEnglish)
@@ -215,15 +215,15 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         else
             throw lang::IllegalArgumentException();
     }
-    else if ( aString.equalsAscii( SC_UNO_FORMULACONVENTION ) )
+    else if ( aString == SC_UNO_FORMULACONVENTION )
     {
         aValue >>= mnConv;
     }
-    else if ( aString.equalsAscii( SC_UNO_IGNORELEADING ) )
+    else if ( aString == SC_UNO_IGNORELEADING )
     {
         aValue >>= mbIgnoreSpaces;
     }
-    else if ( aString.equalsAscii( SC_UNO_OPCODEMAP ) )
+    else if ( aString == SC_UNO_OPCODEMAP )
     {
         if (aValue >>= maOpCodeMapping)
         {
@@ -235,7 +235,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         else
             throw lang::IllegalArgumentException();
     }
-    else if ( aString.equalsAscii( SC_UNO_EXTERNALLINKS ) )
+    else if ( aString == SC_UNO_EXTERNALLINKS )
     {
         if (!(aValue >>= maExternalLinks))
             throw lang::IllegalArgumentException();
@@ -251,27 +251,27 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropert
     SolarMutexGuard aGuard;
     uno::Any aRet;
     OUString aString(aPropertyName);
-    if ( aString.equalsAscii( SC_UNO_COMPILEFAP ) )
+    if ( aString == SC_UNO_COMPILEFAP )
     {
         aRet <<= mbCompileFAP;
     }
-    else if ( aString.equalsAscii( SC_UNO_COMPILEENGLISH ) )
+    else if ( aString == SC_UNO_COMPILEENGLISH )
     {
         aRet <<= mbEnglish;
     }
-    else if ( aString.equalsAscii( SC_UNO_FORMULACONVENTION ) )
+    else if ( aString == SC_UNO_FORMULACONVENTION )
     {
         aRet <<= mnConv;
     }
-    else if ( aString.equalsAscii( SC_UNO_IGNORELEADING ) )
+    else if ( aString == SC_UNO_IGNORELEADING )
     {
         aRet <<= mbIgnoreSpaces;
     }
-    else if ( aString.equalsAscii( SC_UNO_OPCODEMAP ) )
+    else if ( aString == SC_UNO_OPCODEMAP )
     {
         aRet <<= maOpCodeMapping;
     }
-    else if ( aString.equalsAscii( SC_UNO_EXTERNALLINKS ) )
+    else if ( aString == SC_UNO_EXTERNALLINKS )
     {
         aRet <<= maExternalLinks;
     }

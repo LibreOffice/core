@@ -448,9 +448,9 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName
     if ( pDocShell )
     {
         OUString aNameStr( aName );
-        if ( aNameStr.equalsAscii( SC_FAMILYNAME_CELL ) )
+        if ( aNameStr == SC_FAMILYNAME_CELL )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PARA );
-        else if ( aNameStr.equalsAscii( SC_FAMILYNAME_PAGE ) )
+        else if ( aNameStr == SC_FAMILYNAME_PAGE )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
     }
     // no assertion - called directly from getByName
@@ -520,7 +520,7 @@ sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     OUString aNameStr( aName );
-    return ( aNameStr.equalsAscii( SC_FAMILYNAME_CELL ) || aNameStr.equalsAscii( SC_FAMILYNAME_PAGE ) );
+    return aNameStr == SC_FAMILYNAME_CELL || aNameStr == SC_FAMILYNAME_PAGE;
 }
 
 // style::XStyleLoader
@@ -598,11 +598,11 @@ void ScStyleFamiliesObj::loadStylesFromDocShell( ScDocShell* pSource,
             const beans::PropertyValue& rProp = pPropArray[i];
             OUString aPropName(rProp.Name);
 
-            if (aPropName.equalsAscii( SC_UNONAME_OVERWSTL ))
+            if (aPropName == SC_UNONAME_OVERWSTL)
                 bLoadReplace = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName.equalsAscii( SC_UNONAME_LOADCELL ))
+            else if (aPropName == SC_UNONAME_LOADCELL)
                 bLoadCellStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
-            else if (aPropName.equalsAscii( SC_UNONAME_LOADPAGE ))
+            else if (aPropName == SC_UNONAME_LOADPAGE)
                 bLoadPageStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         }
 
