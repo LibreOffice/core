@@ -168,6 +168,8 @@ endef
 
 define gb_LinkTarget_use_system_darwin_frameworks
 $(call gb_LinkTarget_add_libs,$(1),$(foreach fw,$(2),-framework $(fw)))
+$(if $(call gb_LinkTarget__is_merged,$(1)),\
+  $(call gb_LinkTarget_add_libs,$(call gb_Library_get_linktarget,merged),$(foreach fw,$(2),-framework $(fw))))
 endef
 
 
