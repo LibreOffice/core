@@ -752,7 +752,7 @@ void DummyRectangle::render()
     {
         uno::Any co = itr->second;
         rtl::OUString aGradientValue = co.get<rtl::OUString>();
-        if (aGradientValue.endsWithAsciiL("1", 1))
+        if (aGradientValue.endsWith("1"))
         {
             pChart->m_GLRender.SetChartTransparencyGradient(1);
         }

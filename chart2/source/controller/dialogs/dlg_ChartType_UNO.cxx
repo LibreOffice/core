@@ -71,7 +71,7 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
     beans::PropertyValue aProperty;
     if (_rValue >>= aProperty)
     {
-        if (aProperty.Name.equalsAscii("ChartModel"))
+        if (aProperty.Name == "ChartModel")
             m_xChartModel.set(aProperty.Value,uno::UNO_QUERY);
         else
             ChartTypeUnoDlg_BASE::implInitialize(_rValue);
