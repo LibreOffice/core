@@ -282,7 +282,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     {
         case 1:
         {
-            if (!aConvertedName.equalsAscii(ELEMENT_MANIFEST)) //manifest:manifest
+            if (aConvertedName != ELEMENT_MANIFEST) //manifest:manifest
                 aStack.back().m_bValid = false;
             break;
         }
