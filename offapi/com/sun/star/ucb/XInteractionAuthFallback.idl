@@ -21,7 +21,6 @@ published interface XInteractionAuthFallback: com::sun::star::task::XInteraction
 {
     /* Authentication code submited by the user */
     void setCode( [in] string code );
-    string getCode( );
 };
 
 
