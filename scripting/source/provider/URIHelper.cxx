@@ -113,24 +113,24 @@ ScriptingFrameworkURIHelper::initBaseURI()
     OUString uri, test;
     bool bAppendScriptsPart = false;
 
-    if ( m_sLocation.equalsAscii(USER))
+    if ( m_sLocation == USER )
     {
         test = USER;
         uri = USER_URI;
         bAppendScriptsPart = true;
     }
-    else if ( m_sLocation.equalsAscii(USER_UNO_PACKAGES))
+    else if ( m_sLocation == USER_UNO_PACKAGES )
     {
         test = "uno_packages";
         uri = OUString( USER_URI ) + USER_UNO_PACKAGES_DIR;
     }
-    else if (m_sLocation.equalsAscii(SHARE))
+    else if (m_sLocation == SHARE)
     {
         test = SHARE;
         uri = SHARE_URI;
         bAppendScriptsPart = true;
     }
-    else if (m_sLocation.equalsAscii(SHARE_UNO_PACKAGES))
+    else if (m_sLocation == SHARE_UNO_PACKAGES)
     {
         test = "uno_packages";
         uri = SHARE_UNO_PACKAGES_URI;

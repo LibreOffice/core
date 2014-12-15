@@ -527,7 +527,7 @@ namespace dlgprov
         OUString sScriptURL;
         OUString sScriptCode( aScriptEvent.ScriptCode );
 
-        if ( aScriptEvent.ScriptType.equalsAscii( "StarBasic" ) )
+        if ( aScriptEvent.ScriptType == "StarBasic" )
         {
             // StarBasic script: convert ScriptCode to scriptURL
             sal_Int32 nIndex = sScriptCode.indexOf( ':' );
