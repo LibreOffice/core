@@ -132,25 +132,25 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 {
     MutexGuard aGuard( m_aMutex );
 
-    if( aName.equalsAscii( "body" ) &&  !m_aBody.isEmpty() )
+    if( aName == "body" &&  !m_aBody.isEmpty() )
         return makeAny( m_aBody );
 
-    if( aName.equalsAscii( "from" ) &&  !m_aOriginator.isEmpty() )
+    if( aName == "from" &&  !m_aOriginator.isEmpty() )
         return makeAny( m_aOriginator );
 
-    else if( aName.equalsAscii( "to" ) &&  !m_aRecipient.isEmpty() )
+    else if( aName == "to" &&  !m_aRecipient.isEmpty() )
         return makeAny( m_aRecipient );
 
-    else if( aName.equalsAscii( "cc" ) &&  m_CcRecipients.getLength() )
+    else if( aName == "cc" &&  m_CcRecipients.getLength() )
         return makeAny( m_CcRecipients );
 
-    else if( aName.equalsAscii( "bcc" ) &&  m_BccRecipients.getLength() )
+    else if( aName == "bcc" &&  m_BccRecipients.getLength() )
         return makeAny( m_BccRecipients );
 
-    else if( aName.equalsAscii( "subject" ) &&  !m_aSubject.isEmpty() )
+    else if( aName == "subject" &&  !m_aSubject.isEmpty() )
         return makeAny( m_aSubject );
 
-    else if( aName.equalsAscii( "attachment" ) &&  m_Attachments.getLength() )
+    else if( aName == "attachment" &&  m_Attachments.getLength() )
         return makeAny( m_Attachments );
 
    throw NoSuchElementException("key not found: " + aName,
@@ -195,25 +195,25 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 {
     MutexGuard aGuard( m_aMutex );
 
-    if( aName.equalsAscii( "body" ) &&  !m_aBody.isEmpty() )
+    if( aName == "body" &&  !m_aBody.isEmpty() )
         return sal_True;
 
-    if( aName.equalsAscii( "from" ) &&  !m_aOriginator.isEmpty() )
+    if( aName == "from" &&  !m_aOriginator.isEmpty() )
         return sal_True;
 
-    else if( aName.equalsAscii( "to" ) &&  !m_aRecipient.isEmpty() )
+    else if( aName == "to" &&  !m_aRecipient.isEmpty() )
         return sal_True;
 
-    else if( aName.equalsAscii( "cc" ) &&  m_CcRecipients.getLength() )
+    else if( aName == "cc" &&  m_CcRecipients.getLength() )
         return sal_True;
 
-    else if( aName.equalsAscii( "bcc" ) &&  m_BccRecipients.getLength() )
+    else if( aName == "bcc" &&  m_BccRecipients.getLength() )
         return sal_True;
 
-    else if( aName.equalsAscii( "subject" ) &&  !m_aSubject.isEmpty() )
+    else if( aName == "subject" &&  !m_aSubject.isEmpty() )
         return sal_True;
 
-    else if( aName.equalsAscii( "attachment" ) &&  m_Attachments.getLength() )
+    else if( aName == "attachment" &&  m_Attachments.getLength() )
         return sal_True;
 
     return sal_False;
