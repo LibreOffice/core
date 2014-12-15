@@ -26,7 +26,6 @@
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>

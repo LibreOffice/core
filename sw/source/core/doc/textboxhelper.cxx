@@ -26,9 +26,7 @@
 #include <dflyobj.hxx>
 #include <mvsave.hxx>
 #include <sortedobjs.hxx>
-#include <anchoredobject.hxx>
 #include <cntfrm.hxx>
-#include <docary.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
@@ -38,7 +36,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>

@@ -13,7 +13,6 @@
 #include <docsh.hxx>
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <boost/optional.hpp>
 
 using namespace com::sun::star;
 using namespace oox;

@@ -23,15 +23,12 @@
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"
 #include "fmtcntnt.hxx"
-#include "fchrfmt.hxx"
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/widwitem.hxx>
-#include <editeng/keepitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/kernitem.hxx>
@@ -44,8 +41,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/autokernitem.hxx>
@@ -55,11 +50,8 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/paravertalignitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <editeng/shaditem.hxx>
-#include <editeng/opaqitem.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/rtfutil.hxx>
@@ -68,8 +60,6 @@
 #include <drawdoc.hxx>
 #include <docufld.hxx>
 #include <fmtclds.hxx>
-#include <fmtinfmt.hxx>
-#include <fmtftn.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtline.hxx>
 #include <fmtanchr.hxx>

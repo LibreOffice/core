@@ -10,10 +10,6 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
-#include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/opaqitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <svx/svdogrp.hxx>
@@ -21,14 +17,12 @@
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/token/properties.hxx>
-#include <frmfmt.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtcntnt.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
-#include <fmtautofmt.hxx>
 #include <fmtfsize.hxx>
 #include <drawdoc.hxx>
 #include <docxsdrexport.hxx>

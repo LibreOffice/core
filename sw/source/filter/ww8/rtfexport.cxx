@@ -27,19 +27,12 @@
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
 #include <fmtpdsc.hxx>
-#include <section.hxx>
-#include <pagedesc.hxx>
 #include <ftninfo.hxx>
 #include <fmthdft.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/shaditem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/protitem.hxx>
 #include <numrule.hxx>
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
@@ -49,7 +42,6 @@
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <unotools/docinfohelper.hxx>
-#include <docary.hxx>
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif
