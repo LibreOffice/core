@@ -402,33 +402,150 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 
 void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    GLfloat pPoints[4];
+    if( nX1 == nX2 || nY1 == nY2 )
+    {   // horizontal/vertical, no need for AA
+        GLfloat pPoints[4];
 
-    pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
-    pPoints[1] = 1.0f - 2 * nY1 / GetHeight();
-    pPoints[2] = (2 * nX2) / GetWidth() - 1.0;;
-    pPoints[3] = 1.0f - 2 * nY2 / GetHeight();
+        pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
+        pPoints[1] = 1.0f - 2 * nY1 / GetHeight();
+        pPoints[2] = (2 * nX2) / GetWidth() - 1.0;;
+        pPoints[3] = 1.0f - 2 * nY2 / GetHeight();
 
-    mpProgram->SetVertices( pPoints );
-    glDrawArrays( GL_LINES, 0, 2 );
+        mpProgram->SetVertices( pPoints );
+        glDrawArrays( GL_LINES, 0, 2 );
+        return;
+    }
+
+    // Draw the line anti-aliased. Based on code with the following notice:
+    /* Drawing nearly perfect 2D line segments in OpenGL
+     * You can use this code however you want.
+     * I just hope you to cite my name and the page of this technique:
+     * http://artgrammer.blogspot.com/2011/05/drawing-nearly-perfect-2d-line-segments.html
+     * http://www.codeproject.com/KB/openGL/gllinedraw.aspx
+     *
+     * Enjoy. Chris Tsang.*/
+
+    if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
+        return;
+    mpProgram->SetColorf( "start_color", mnLineColor, 0.0f );
+    mpProgram->SetColorf( "end_color", mnLineColor, 1.0f );
+
+    double x1 = nX1;
+    double y1 = nY1;
+    double x2 = nX2;
+    double y2 = nY2;
+    const int w = 1; // line width
+
+    double t;
+    double R;
+    //determine parameters t,R
+    switch( w )
+    {
+        case 0:
+            return;
+        case 1:
+            t=0.05;
+            R=0.768;
+        break;
+        case 2:
+            t=0.38;
+            R=1.08;
+        break;
+        case 3:
+            t=0.96;
+            R=1.08;
+            break;
+        case 4:
+            t=1.44;
+            R=1.08;
+            break;
+        case 5:
+            t=1.9;
+            R=1.08;
+            break;
+        default:
+            t=2.5+(w-6)*0.50;
+            R=1.08;
+            break;
+    }
+
+    //determine angle of the line to horizontal
+    double tx=0,ty=0; //core thinkness of a line
+    double Rx=0,Ry=0; //fading edge of a line
+    double cx=0,cy=0; //cap of a line
+    double dx=x2-x1;
+    double dy=y2-y1;
+    if ( w < 3)
+    {   //approximate to make things even faster
+        double m=dy/dx;
+        //and calculate tx,ty,Rx,Ry
+        if ( m>-0.4142 && m<=0.4142)
+        {
+            // -22.5< angle <= 22.5, approximate to 0 (degree)
+            tx=t*0.1; ty=t;
+            Rx=R*0.6; Ry=R;
+        }
+        else if ( m>0.4142 && m<=2.4142)
+        {
+            // 22.5< angle <= 67.5, approximate to 45 (degree)
+            tx=t*-0.7071; ty=t*0.7071;
+            Rx=R*-0.7071; Ry=R*0.7071;
+        }
+        else if ( m>2.4142 || m<=-2.4142)
+        {
+            // 67.5 < angle <=112.5, approximate to 90 (degree)
+            tx=t; ty=t*0.1;
+            Rx=R; Ry=R*0.6;
+        }
+        else if ( m>-2.4142 && m<-0.4142)
+        {
+            // 112.5 < angle < 157.5, approximate to 135 (degree)
+            tx=t*0.7071; ty=t*0.7071;
+            Rx=R*0.7071; Ry=R*0.7071;
+        }
+        else
+            assert( false );
+    }
+    else
+    { //calculate to exact
+        dx=y1-y2;
+        dy=x2-x1;
+        double L=sqrt(dx*dx+dy*dy);
+        dx/=L;
+        dy/=L;
+        cx=-0.6*dy; cy=0.6*dx;
+        tx=t*dx; ty=t*dy;
+        Rx=R*dx; Ry=R*dy;
+    }
+
+    GLfloat vertices[]=
+    {
+#define convertX( x ) GLfloat( (2 * (x)) / GetWidth()  - 1.0f)
+#define convertY( y ) GLfloat( 1.0f - (2 * (y)) / GetHeight())
+        convertX(x1-tx-Rx), convertY(y1-ty-Ry), //fading edge1
+        convertX(x2-tx-Rx), convertY(y2-ty-Ry),
+        convertX(x1-tx),convertY(y1-ty),        //core
+        convertX(x2-tx),convertY(y2-ty),
+        convertX(x1+tx),convertY(y1+ty),
+        convertX(x2+tx),convertY(y2+ty),
+        convertX(x1+tx+Rx), convertY(y1+ty+Ry), //fading edge2
+        convertX(x2+tx+Rx), convertY(y2+ty+Ry)
+#undef convertX
+#undef convertY
+    };
+
+    GLfloat aTexCoord[16] = { 0, 0, 1, 0, 2, 1, 3, 1, 4, 1, 5, 1, 6, 0, 7, 0 };
+    mpProgram->SetTextureCoord( aTexCoord );
+    mpProgram->SetVertices( vertices );
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 }
 
 void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
 {
-    std::vector<GLfloat> aPoints(nPoints * 2);
-    sal_uInt32 i, j;
-
-    for( i = 0, j = 0; i < nPoints; i++ )
-    {
-        aPoints[j++] = (2 * pPtAry[i].mnX) / GetWidth()  - 1.0f;
-        aPoints[j++] = 1.0f - (2 * pPtAry[i].mnY) / GetHeight();
-    }
-
-    mpProgram->SetVertices( &aPoints[0] );
+    for( int i = 0; i < int(nPoints) - 1; ++i )
+        DrawLine( pPtAry[ i ].mnX, pPtAry[ i ].mnY, pPtAry[ i + 1 ].mnX, pPtAry[ i + 1 ].mnY );
     if( bClose )
-        glDrawArrays( GL_LINE_LOOP, 0, nPoints );
-    else
-        glDrawArrays( GL_LINE_STRIP, 0, nPoints );
+        DrawLine( pPtAry[ nPoints - 1 ].mnX, pPtAry[ nPoints - 1 ].mnY, pPtAry[ 0 ].mnX, pPtAry[ 0 ].mnY );
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
