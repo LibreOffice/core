@@ -116,13 +116,13 @@ namespace DOM { namespace events {
         CEvent *pEvent = 0; // pointer to internal event representation
 
         OUString const aType = i_xEvent->getType();
-        if (aType.equalsAscii("DOMSubtreeModified")          ||
-            aType.equalsAscii("DOMNodeInserted")             ||
-            aType.equalsAscii("DOMNodeRemoved")              ||
-            aType.equalsAscii("DOMNodeRemovedFromDocument")  ||
-            aType.equalsAscii("DOMNodeInsertedIntoDocument") ||
-            aType.equalsAscii("DOMAttrModified")             ||
-            aType.equalsAscii("DOMCharacterDataModified")    )
+        if (aType == "DOMSubtreeModified"          ||
+            aType == "DOMNodeInserted"             ||
+            aType == "DOMNodeRemoved"              ||
+            aType == "DOMNodeRemovedFromDocument"  ||
+            aType == "DOMNodeInsertedIntoDocument" ||
+            aType == "DOMAttrModified"             ||
+            aType == "DOMCharacterDataModified"    )
         {
                 Reference< XMutationEvent > const aMEvent(i_xEvent,
                         UNO_QUERY_THROW);
@@ -137,9 +137,9 @@ namespace DOM { namespace events {
                     aMEvent->getAttrChange());
                 pEvent = pMEvent;
         } else if ( // UIEvent
-            aType.equalsAscii("DOMFocusIn")  ||
-            aType.equalsAscii("DOMFocusOut") ||
-            aType.equalsAscii("DOMActivate") )
+            aType == "DOMFocusIn"  ||
+            aType == "DOMFocusOut" ||
+            aType == "DOMActivate" )
         {
             Reference< XUIEvent > const aUIEvent(i_xEvent, UNO_QUERY_THROW);
             CUIEvent* pUIEvent = new CUIEvent;
@@ -148,12 +148,12 @@ namespace DOM { namespace events {
                 aUIEvent->getView(), aUIEvent->getDetail());
             pEvent = pUIEvent;
         } else if ( // MouseEvent
-            aType.equalsAscii("click")     ||
-            aType.equalsAscii("mousedown") ||
-            aType.equalsAscii("mouseup")   ||
-            aType.equalsAscii("mouseover") ||
-            aType.equalsAscii("mousemove") ||
-            aType.equalsAscii("mouseout")  )
+            aType == "click"     ||
+            aType == "mousedown" ||
+            aType == "mouseup"   ||
+            aType == "mouseover" ||
+            aType == "mousemove" ||
+            aType == "mouseout"  )
         {
             Reference< XMouseEvent > const aMouseEvent(i_xEvent,
                     UNO_QUERY_THROW);

@@ -969,7 +969,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         throw lang::IllegalArgumentException(
                 "librdf_Repository::importGraph: graph name is null", *this, 2);
     }
-    if (i_xGraphName->getStringValue().matchAsciiL(s_nsOOo, sizeof(s_nsOOo)-1))
+    if (i_xGraphName->getStringValue().startsWith(s_nsOOo))
     {
         throw lang::IllegalArgumentException(
                 "librdf_Repository::importGraph: URI is reserved", *this, 0);
@@ -1291,7 +1291,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     const OUString contextU( i_xGraphName->getStringValue() );
-    if (contextU.matchAsciiL(s_nsOOo, sizeof(s_nsOOo)-1))
+    if (contextU.startsWith(s_nsOOo))
     {
         throw lang::IllegalArgumentException(
                 "librdf_Repository::createGraph: URI is reserved", *this, 0);
@@ -1560,7 +1560,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "ensureMetadataReference did not", *this);
     }
     OUString const sXmlId(mdref.First + "#" + mdref.Second);
-    OUString const sContext(OUString::createFromAscii(s_nsOOo) + sXmlId);
+    OUString const sContext(s_nsOOo + sXmlId);
     OUString const content( (i_rRDFaContent.isEmpty())
             ? xTextRange->getString()
             : i_rRDFaContent );
@@ -1637,8 +1637,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         return; // nothing to do...
     }
 
-    OUString const sXmlId(
-        OUString::createFromAscii(s_nsOOo) + mdref.First + "#" + mdref.Second);
+    OUString const sXmlId(s_nsOOo + mdref.First + "#" + mdref.Second);
 
     clearGraph_NoLock(sXmlId, true);
 }
@@ -1660,8 +1659,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     OUString const sXmlId(mdref.First + "#" + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
     try {
-        xXmlId.set( rdf::URI::create(m_xContext,
-                OUString::createFromAscii(s_nsOOo) + sXmlId),
+        xXmlId.set( rdf::URI::create(m_xContext, s_nsOOo + sXmlId),
             uno::UNO_QUERY_THROW);
     } catch (const lang::IllegalArgumentException & iae) {
         throw lang::WrappedTargetRuntimeException(
