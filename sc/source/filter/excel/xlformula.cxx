@@ -534,7 +534,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR_IMPORT(  ocCosecantHyp,   1,  1,  0,  "CSCH" ),
     EXC_FUNCENTRY_V_VR(         ocGetDiffDate,   2,  2,  0,  "DAYS" ),
     EXC_FUNCENTRY_V_VR(         ocDecimal,       2,  2,  0,  "DECIMAL" ),
-    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  1,  0,  "ENCODEURL" ),
+    EXC_FUNCENTRY_V_VR(         ocEncodeURL,     1,  1,  0,  "ENCODEURL" ),
     // NOTE: this FDIST is not our LEGACY.FDIST
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  4,  0,  "FDIST" ),
     // NOTE: this FINV is not our LEGACY.FINV
