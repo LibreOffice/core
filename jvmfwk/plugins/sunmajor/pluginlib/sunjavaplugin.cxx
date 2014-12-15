@@ -456,13 +456,13 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     vector<rtl::Reference<VendorBase>> vecInfosFromPath;
     addJavaInfosFromPath(infos, vecInfosFromPath);
 
-    vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
+    vector<JavaInfo*> vecVerifiedInfos;
 
-    // copy JREs that meet version requirements to vecVerifiedInfos
+    // copy infos of JREs that meet version requirements to vecVerifiedInfos
     typedef vector<rtl::Reference<VendorBase> >::iterator it;
     for (it i= vecInfosFromPath.begin(); i != vecInfosFromPath.end(); ++i)
     {
-        const rtl::Reference<VendorBase>& cur = *i;
+        const rtl::Reference<VendorBase>& currentInfo = *i;
 
         typedef std::vector<pair<OUString, jfw::VersionInfo>>::const_iterator ci_pl;
         for (ci_pl vendorInfo = vecVendorInfos.begin(); vendorInfo != vecVendorInfos.end(); ++vendorInfo)
@@ -470,10 +470,10 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
             const OUString& vendor = vendorInfo->first;
             jfw::VersionInfo versionInfo = vendorInfo->second;
 
-            if (vendor.equals(cur->getVendor()))
+            if (vendor.equals(currentInfo->getVendor()))
             {
                 javaPluginError errorcode = checkJavaVersionRequirements(
-                    cur,
+                    currentInfo,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
                     versionInfo.getExcludeVersions(),
@@ -481,7 +481,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 
                 if (errorcode == JFW_PLUGIN_E_NONE)
                 {
-                    vecVerifiedInfos.push_back(*i);
+                    vecVerifiedInfos.push_back(createJavaInfo(currentInfo));
                 }
             }
         }
@@ -490,17 +490,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     if (vecVerifiedInfos.empty())
         return JFW_PLUGIN_E_NO_JRE;
 
-    // Now vecVerifiedInfos contains all those JREs which meet the version requirements
-    // Transfer them into the vector that is passed out.
-    vector<JavaInfo*> infosFromPath;
-
-    typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
-    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii)
-    {
-        infosFromPath.push_back(createJavaInfo(*ii));
-    }
-
-    javaInfosFromPath = infosFromPath;
+    javaInfosFromPath = vecVerifiedInfos;
 
     return JFW_PLUGIN_E_NONE;
 }
