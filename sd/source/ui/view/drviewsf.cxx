@@ -640,8 +640,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
             }
             break;
-            //End
-            // Added by Li Hui for story 179.
             case FN_NUM_BULLET_ON:
             case FN_NUM_NUMBERING_ON:
             {
