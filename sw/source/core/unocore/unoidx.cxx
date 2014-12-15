@@ -152,7 +152,7 @@ static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
     }
     // if the version is not English but the alternative index's name is
     // "User-Defined" a " (user)" is appended
-    else if(rTmp.equalsAscii(cUserDefined))
+    else if(rTmp == cUserDefined)
     {
         rTmp += cUserSuffix;
     }
@@ -162,11 +162,11 @@ static void
 lcl_ConvertTOUNameToUserName(OUString& rTmp)
 {
     ShellResource* pShellRes = SwViewShell::GetShellRes();
-    if (rTmp.equalsAscii(cUserDefined))
+    if (rTmp == cUserDefined)
     {
         rTmp = pShellRes->aTOXUserName;
     }
-    else if (!pShellRes->aTOXUserName.equalsAscii(cUserDefined) &&
+    else if (pShellRes->aTOXUserName != cUserDefined &&
         USER_AND_SUFFIXLEN == rTmp.getLength())
     {
         //make sure that in non-English versions the " (user)" suffix is removed

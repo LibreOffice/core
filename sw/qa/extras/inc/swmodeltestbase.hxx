@@ -67,7 +67,7 @@ using namespace css;
 #define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
+    virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -116,7 +116,7 @@ using namespace css;
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
+    virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import); \
@@ -133,7 +133,7 @@ using namespace css;
 #define DECLARE_SW_EXPORT_TEST(TestName, filename, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
-    virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
+    virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
         public:\
     CPPUNIT_TEST_SUITE(TestName); \
     CPPUNIT_TEST(Import_Export); \

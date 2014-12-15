@@ -44,7 +44,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
         for( sal_Int32 index = 0; index < nEntry; ++index )
         {
             OUString sUrl = sEntries[ index ];
-            if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
+            if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCase( ".dot" ) )
             {
                 maAddins.push_back( uno::Reference< word::XAddin >( new SwVbaAddin( xParent, xContext, sUrl, true ) ) );
             }

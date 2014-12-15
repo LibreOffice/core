@@ -4087,11 +4087,11 @@ uno::Any SwXAutoStyles::getByName(const OUString& Name)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
-    if(Name.equalsAscii("CharacterStyles") )
+    if(Name == "CharacterStyles")
         aRet = getByIndex(0);
-    else if(Name.equalsAscii("RubyStyles") )
+    else if(Name == "RubyStyles")
         aRet = getByIndex(1);
-    else if(Name.equalsAscii("ParagraphStyles") )
+    else if(Name == "ParagraphStyles")
         aRet = getByIndex(2);
     else
         throw container::NoSuchElementException();
@@ -4112,9 +4112,9 @@ uno::Sequence< OUString > SwXAutoStyles::getElementNames(void)
 sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
             throw( uno::RuntimeException, std::exception )
 {
-    if( Name.equalsAscii("CharacterStyles") ||
-        Name.equalsAscii("RubyStyles") ||
-        Name.equalsAscii("ParagraphStyles") )
+    if( Name == "CharacterStyles" ||
+        Name == "RubyStyles" ||
+        Name == "ParagraphStyles" )
         return sal_True;
     else
         return sal_False;

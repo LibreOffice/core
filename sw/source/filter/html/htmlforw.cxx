@@ -764,7 +764,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             const OUString& rVal = *(OUString*)aTmp.getValue();
             if( rVal.isEmpty() )
                 bEmptyValue = true;
-            else if( !rVal.equalsAscii( OOO_STRING_SVTOOLS_HTML_on ) )
+            else if( rVal != OOO_STRING_SVTOOLS_HTML_on )
                 sValue = rVal;
         }
         break;
@@ -1204,7 +1204,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( i < nValCnt )
                 {
                     const OUString& rVal = pValues[i];
-                    if( rVal.equalsAscii( "$$$empty$$$" ) )
+                    if( rVal == "$$$empty$$$" )
                         bEmptyVal = true;
                     else
                         sVal = rVal;

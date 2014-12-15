@@ -50,8 +50,7 @@ SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet 
             rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_alt ) )
             nType = SwHtmlOptType::IGNORE;
         else if( bApplet &&
-                 (rName.equalsIgnoreAsciiCaseAscii( sHTML_O_archive ) ||
-                 rName.equalsIgnoreAsciiCaseAscii( sHTML_O_Archives )) )
+                 (rName == sHTML_O_archive || rName == sHTML_O_Archives ) )
             nType = SwHtmlOptType::TAG;
         break;
     case 'C':
@@ -86,7 +85,7 @@ SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet 
         break;
     case 'O':
     case 'o':
-        if( bApplet && rName.equalsIgnoreAsciiCaseAscii( sHTML_O_Object ) )
+        if( bApplet && rName == sHTML_O_Object )
             nType = SwHtmlOptType::TAG;
         break;
     case 'S':

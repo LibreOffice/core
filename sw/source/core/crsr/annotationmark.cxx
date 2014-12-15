@@ -41,7 +41,7 @@ namespace sw { namespace mark
     {
         if ( rName.getLength() == 0 )
         {
-            SetName( MarkBase::GenerateNewName( ::rtl::OUString::createFromAscii("__Annotation__") ) );
+            SetName( MarkBase::GenerateNewName("__Annotation__") );
         }
     }
 

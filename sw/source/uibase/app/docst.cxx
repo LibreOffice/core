@@ -394,19 +394,19 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_FAMILYNAME, false, &pItem ))
                 {
                     OUString aFamily = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if(aFamily.equalsAscii("CharacterStyles"))
+                    if(aFamily == "CharacterStyles")
                         nFamily = SFX_STYLE_FAMILY_CHAR;
                     else
-                    if(aFamily.equalsAscii("ParagraphStyles"))
+                    if(aFamily == "ParagraphStyles")
                         nFamily = SFX_STYLE_FAMILY_PARA;
                     else
-                    if(aFamily.equalsAscii("PageStyles"))
+                    if(aFamily == "PageStyles")
                         nFamily = SFX_STYLE_FAMILY_PAGE;
                     else
-                    if(aFamily.equalsAscii("FrameStyles"))
+                    if(aFamily == "FrameStyles")
                         nFamily = SFX_STYLE_FAMILY_FRAME;
                     else
-                    if(aFamily.equalsAscii("NumberingStyles"))
+                    if(aFamily == "NumberingStyles")
                         nFamily = SFX_STYLE_FAMILY_PSEUDO;
                 }
 

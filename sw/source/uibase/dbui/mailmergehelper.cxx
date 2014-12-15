@@ -635,11 +635,11 @@ uno::Any SwConnectionContext::getValueByName( const OUString& rName )
                                                 throw (uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if( rName.equalsAscii( "ServerName" ))
+    if( rName == "ServerName" )
         aRet <<= m_sMailServer;
-    else if( rName.equalsAscii( "Port" ))
+    else if( rName == "Port" )
         aRet <<= (sal_Int32) m_nPort;
-    else if( rName.equalsAscii( "ConnectionType" ))
+    else if( rName == "ConnectionType" )
         aRet <<= m_sConnectionType;
     return aRet;
 }

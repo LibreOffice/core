@@ -589,17 +589,17 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,
     switch( nLen )
     {
     case 3:
-        if( rClass.matchIgnoreAsciiCaseAsciiL( "cjk", 3, nPos ) )
+        if( rClass.matchIgnoreAsciiCase( "cjk", nPos ) )
         {
             nScriptFlags = CSS1_SCRIPT_CJK;
         }
-        else if( rClass.matchIgnoreAsciiCaseAsciiL( "ctl", 3, nPos ) )
+        else if( rClass.matchIgnoreAsciiCase( "ctl", nPos ) )
         {
             nScriptFlags = CSS1_SCRIPT_CTL;
         }
         break;
     case 7:
-        if( rClass.matchIgnoreAsciiCaseAsciiL( "western", 7, nPos ) )
+        if( rClass.matchIgnoreAsciiCase( "western", nPos ) )
         {
             nScriptFlags = CSS1_SCRIPT_WESTERN;
         }

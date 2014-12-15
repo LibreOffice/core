@@ -174,7 +174,7 @@ bool lcl_IsHeadlineCell( const SwCellFrm& rCellFrm )
 
         OUString sStyleName;
         SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-        bRet = sStyleName.equalsAscii(aTableHeadingName);
+        bRet = sStyleName == aTableHeadingName;
     }
 
     return bRet;
@@ -1081,7 +1081,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Quotations: BlockQuote
 
-                if (sStyleName.equalsAscii(aQuotations))
+                if (sStyleName == aQuotations)
                 {
                     nPDFType = vcl::PDFWriter::BlockQuote;
                     aPDFType = OUString(aBlockQuoteString);
@@ -1089,7 +1089,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Caption: Caption
 
-                else if (sStyleName.equalsAscii(aCaption))
+                else if (sStyleName == aCaption)
                 {
                     nPDFType = vcl::PDFWriter::Caption;
                     aPDFType = OUString(aCaptionString);
@@ -1097,7 +1097,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Caption: Caption
 
-                else if (sParentStyleName.equalsAscii(aCaption))
+                else if (sParentStyleName == aCaption)
                 {
                     nPDFType = vcl::PDFWriter::Caption;
                     aPDFType = sStyleName + aCaptionString;
@@ -1105,7 +1105,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Heading: H
 
-                else if (sStyleName.equalsAscii(aHeading))
+                else if (sStyleName == aHeading)
                 {
                     nPDFType = vcl::PDFWriter::Heading;
                     aPDFType = OUString(aHString);
@@ -1362,12 +1362,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     aPDFType = OUString(aLinkString);
                 }
                 // Check for Quote/Code character style:
-                else if (sStyleName.equalsAscii(aQuotation))
+                else if (sStyleName == aQuotation)
                 {
                     nPDFType = vcl::PDFWriter::Quote;
                     aPDFType = OUString(aQuoteString);
                 }
-                else if (sStyleName.equalsAscii(aSourceText))
+                else if (sStyleName == aSourceText)
                 {
                     nPDFType = vcl::PDFWriter::Code;
                     aPDFType = OUString(aCodeString);

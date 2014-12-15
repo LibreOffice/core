@@ -569,18 +569,18 @@ void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::documen
 {
     SolarMutexGuard g;
 
-    if ( Event.EventName.equalsAscii( "FirstPageShows" ) )
+    if ( Event.EventName == "FirstPageShows" )
     {
         FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
     }
-    else if ( Event.EventName.equalsAscii( "LoadFinished" ) )
+    else if ( Event.EventName == "LoadFinished" )
     {
         // IA2 CWS. MT: OFFSCREEN == !SHOWING, should stay consistent
         // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
         // MT: LoadFinished => Why not SHOWING == TRUE?
         FireStateChangedEvent( AccessibleStateType::SHOWING,false );
     }
-    else if ( Event.EventName.equalsAscii( "FormatFinished" ) )
+    else if ( Event.EventName == "FormatFinished" )
     {
         FireStateChangedEvent( AccessibleStateType::BUSY,false );
         // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );

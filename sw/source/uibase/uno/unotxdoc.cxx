@@ -1083,43 +1083,43 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             const Any& rVal = pProperties[i].Value;
             bool bException;
             sal_uInt32 nVal = lcl_Any_To_ULONG(rVal, bException);
-            if( sName.equalsAscii("PageRows" ) )
+            if( sName == "PageRows" )
             {
                 if(!nVal || nVal > 0xff)
                     throw RuntimeException();
                 aData.SetRow((sal_uInt8)nVal);
             }
-            else if(sName.equalsAscii("PageColumns"))
+            else if(sName == "PageColumns")
             {
                 if(!nVal  || nVal > 0xff)
                     throw RuntimeException();
                 aData.SetCol((sal_uInt8)nVal);
             }
-            else if(sName.equalsAscii("LeftMargin"))
+            else if(sName == "LeftMargin")
             {
                 aData.SetLeftSpace(convertMm100ToTwip(nVal));
             }
-            else if(sName.equalsAscii("RightMargin"))
+            else if(sName == "RightMargin")
             {
                 aData.SetRightSpace(convertMm100ToTwip(nVal));
             }
-            else if(sName.equalsAscii("TopMargin"))
+            else if(sName == "TopMargin")
             {
                 aData.SetTopSpace(convertMm100ToTwip(nVal));
             }
-            else if(sName.equalsAscii("BottomMargin"))
+            else if(sName == "BottomMargin")
             {
                 aData.SetBottomSpace(convertMm100ToTwip(nVal));
             }
-            else if(sName.equalsAscii("HoriMargin"))
+            else if(sName == "HoriMargin")
             {
                 aData.SetHorzSpace(convertMm100ToTwip(nVal));
             }
-            else if(sName.equalsAscii("VertMargin"))
+            else if(sName == "VertMargin")
             {
                 aData.SetVertSpace(convertMm100ToTwip(nVal));
             }
-            else if(sName.equalsAscii("IsLandscape"))
+            else if(sName == "IsLandscape")
             {
                 bException =  (::getBooleanCppuType() != rVal.getValueType());
                 aData.SetLandscape(*(sal_Bool*)rVal.getValue());
@@ -1751,7 +1751,7 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
         OUString* pRet = aRet.getArray();
         for ( sal_Int32 i = 0; i < aRet.getLength(); ++i )
         {
-            if ( pRet[i].equalsAscii( "com.sun.star.drawing.OLE2Shape" ) )
+            if ( pRet[i] == "com.sun.star.drawing.OLE2Shape" )
             {
                 pRet[i] = pRet[aRet.getLength() - 1];
                 aRet.realloc( aRet.getLength() - 1 ); // <pRet> no longer valid.

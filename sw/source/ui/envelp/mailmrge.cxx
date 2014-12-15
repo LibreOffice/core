@@ -375,7 +375,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
             if( !sUIName2.isEmpty() )
             {
                 const sal_Int32 nFilter = m_pFilterLB->InsertEntry( sUIName2 );
-                if( sFilter.equalsAscii("writer8") )
+                if( sFilter == "writer8" )
                     nODT = nFilter;
                 m_pFilterLB->SetEntryData( nFilter, new OUString( sFilter ) );
             }

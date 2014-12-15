@@ -211,7 +211,7 @@ protected:
 #define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass) \
     class TestName : public BaseClass { \
     protected: \
-        virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
+        virtual OUString getTestName() SAL_OVERRIDE { return OUString(#TestName); } \
     public: \
         CPPUNIT_TEST_SUITE(TestName); \
         CPPUNIT_TEST(MailMerge); \
