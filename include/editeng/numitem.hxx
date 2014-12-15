@@ -336,11 +336,14 @@ SvxNodeNum::SvxNodeNum( sal_uInt8 nLevel, sal_uInt16 nSetVal )
 
 inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
 {
-    nSetValue = rCpy.nSetValue;
-    nMyLevel = rCpy.nMyLevel;
-    bStartNum = rCpy.bStartNum;
+    if ( &rCpy != this)
+    {
+        nSetValue = rCpy.nSetValue;
+        nMyLevel = rCpy.nMyLevel;
+        bStartNum = rCpy.bStartNum;
 
-    memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );
+        memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );
+    }
     return *this;
 }
 
