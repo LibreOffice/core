@@ -497,21 +497,6 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
     }
 }
 
-bool Application::ValidateSystemFont()
-{
-    vcl::Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
-    if( ! pWindow )
-        pWindow = ImplGetDefaultWindow();
-
-    if( pWindow )
-    {
-        AllSettings aSettings;
-        pWindow->ImplGetFrame()->UpdateSettings( aSettings );
-        return pWindow->ImplCheckUIFont( aSettings.GetStyleSettings().GetAppFont() );
-    }
-    return false;
-}
-
 void Application::SetSettings( const AllSettings& rSettings )
 {
     const SolarMutexGuard aGuard;

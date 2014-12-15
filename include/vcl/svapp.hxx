@@ -724,18 +724,6 @@ public:
     */
     static const AllSettings&   GetSettings();
 
-    /** Validate that the currently selected system UI font is suitable
-     to display the application's UI.
-
-     A localized test string will be checked if it can be displayed in the currently
-     selected system UI font. If no glyphs are missing it can be assumed that the font
-     is proper for display of the application's UI.
-
-     @returns true if the system font is suitable for our UI and false if the test
-       string could not be displayed with the system font.
-    */
-    static bool                 ValidateSystemFont();
-
     /** Get the application's locale data wrapper.
 
      @returns reference to a LocaleDataWrapper object
