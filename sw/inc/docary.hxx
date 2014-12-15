@@ -140,11 +140,21 @@ public:
     void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
-class SwTOXTypes : public std::vector<SwTOXType*> {
+class SwTOXTypes {
+private:
+    typedef std::vector<SwTOXType*> _SwTOXTypes;
+    _SwTOXTypes items;
 public:
     /// the destructor will free all objects still in the vector
     ~SwTOXTypes();
     sal_uInt16 GetPos(const SwTOXType* pTOXType) const;
+    size_t size() const { return items.size(); };
+    SwTOXType* operator[] (size_t n) { return items[n]; };
+    const SwTOXType* operator[] (size_t n) const { return items[n]; };
+    void push_back ( SwTOXType* value) { items.push_back(value); };
+    void clear() { items.clear(); };
+    _SwTOXTypes::const_iterator begin() const { return items.begin(); };
+    _SwTOXTypes::const_iterator end() const { return items.end(); };
 };
 
 class SW_DLLPUBLIC SwNumRuleTbl : public std::vector<SwNumRule*> {
