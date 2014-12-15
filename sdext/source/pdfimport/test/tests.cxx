@@ -365,9 +365,9 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMask received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawMask got URL param",
-                                    xBitmap[0].Name.equalsAscii( "URL" ) );
+                                    xBitmap[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawMask got InputStream param",
-                                    xBitmap[1].Name.equalsAscii( "InputStream" ) );
+                                    xBitmap[1].Name == "InputStream" );
         }
 
         virtual void drawImage(const uno::Sequence<beans::PropertyValue>& xBitmap ) SAL_OVERRIDE
@@ -375,9 +375,9 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawImage received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawImage got URL param",
-                                    xBitmap[0].Name.equalsAscii( "URL" ) );
+                                    xBitmap[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawImage got InputStream param",
-                                    xBitmap[1].Name.equalsAscii( "InputStream" ) );
+                                    xBitmap[1].Name == "InputStream" );
             m_bImageSeen = true;
         }
 
@@ -387,9 +387,9 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawColorMaskedImage received two properties",
                                     (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawColorMaskedImage got URL param",
-                                    xBitmap[0].Name.equalsAscii( "URL" ) );
+                                    xBitmap[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawColorMaskedImage got InputStream param",
-                                    xBitmap[1].Name.equalsAscii( "InputStream" ) );
+                                    xBitmap[1].Name == "InputStream" );
         }
 
         virtual void drawMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -399,16 +399,16 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #1",
                                     (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got URL param #1",
-                                    xBitmap[0].Name.equalsAscii( "URL" ) );
+                                    xBitmap[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got InputStream param #1",
-                                    xBitmap[1].Name.equalsAscii( "InputStream" ) );
+                                    xBitmap[1].Name == "InputStream" );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawMaskedImage received two properties #2",
                                     (sal_Int32) 3, xMask.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got URL param #2",
-                                    xMask[0].Name.equalsAscii( "URL" ) );
+                                    xMask[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawMaskedImage got InputStream param #2",
-                                    xMask[1].Name.equalsAscii( "InputStream" ) );
+                                    xMask[1].Name == "InputStream" );
         }
 
         virtual void drawAlphaMaskedImage(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -417,16 +417,16 @@ namespace
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #1",
                                     (sal_Int32) 3, xBitmap.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got URL param #1",
-                                    xBitmap[0].Name.equalsAscii( "URL" ) );
+                                    xBitmap[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got InputStream param #1",
-                                    xBitmap[1].Name.equalsAscii( "InputStream" ) );
+                                    xBitmap[1].Name == "InputStream" );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "drawAlphaMaskedImage received two properties #2",
                                     (sal_Int32) 3, xMask.getLength() );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got URL param #2",
-                                    xMask[0].Name.equalsAscii( "URL" ) );
+                                    xMask[0].Name == "URL" );
             CPPUNIT_ASSERT_MESSAGE( "drawAlphaMaskedImage got InputStream param #2",
-                                    xMask[1].Name.equalsAscii( "InputStream" ) );
+                                    xMask[1].Name == "InputStream" );
         }
 
         virtual void setTextRenderMode( sal_Int32 ) SAL_OVERRIDE

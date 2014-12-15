@@ -243,7 +243,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
             rxPaneId,
             rsTitle,
             xParentPane,
-            rxPaneId->getFullResourceURL().Arguments.equalsAscii("Sprite=1") );
+            rxPaneId->getFullResourceURL().Arguments == "Sprite=1");
     }
     catch (Exception&)
     {
