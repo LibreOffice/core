@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_d15cceef",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-15T20:53:34Z",
+      "side": 0,
+      "message": "If you change Help-IDs you also have to adapt the corresponding places in the helpcontent2 git submodule where the IDs are used.\n\nLet\u0027s not do that in this patch, but a follow-up patch instead. It\u0027s not necessary here.",
+      "revId": "cb3b282dac04178ac21334b70f03a4acecb65354",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
