@@ -246,7 +246,7 @@ namespace svgio
                 // of a SVG export with font embedding. Remove this to make font matching work. This
                 // is pretty safe since there should be no font family names ending on ' embedded'.
                 // Remove again when FontEmbedding is implemented in SVG import
-                if(aFontFamily.endsWithAsciiL(" embedded", 9))
+                if(aFontFamily.endsWith(" embedded"))
                 {
                     aFontFamily = aFontFamily.copy(0, aFontFamily.getLength() - 9);
                 }

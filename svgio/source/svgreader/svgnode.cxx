@@ -59,9 +59,7 @@ namespace svgio
                     if(rId.getLength())
                     {
                         const OUString aNewConcatenated(
-                            OUString::createFromAscii("#") +
-                            rId +
-                            aConcatenated);
+                            "#" + rId + aConcatenated);
 
                         if(pParent)
                         {
@@ -113,9 +111,7 @@ namespace svgio
                         for(sal_uInt32 a(0); a < aParts.size(); a++)
                         {
                             const OUString aNewConcatenated(
-                                OUString::createFromAscii(".") +
-                                aParts[a] +
-                                aConcatenated);
+                                "." + aParts[a] + aConcatenated);
 
                             if(pParent)
                             {
