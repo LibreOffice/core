@@ -36,9 +36,10 @@
 
 #include <vector>
 
-OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGeometryProvider* pParent)
+OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider *pProvider)
     : mpContext(0)
-    , mpParent(pParent)
+    , mrParent(rParent)
+    , mpProvider(pProvider)
     , mpFramebuffer(NULL)
     , mpProgram(NULL)
     , mbUseScissor(false)
@@ -381,6 +382,18 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor )
     return UseSolid( nColor, 0.0f );
 }
 
+// Like UseSolid(), but sets up for AA drawing, which uses gradients to create the AA.
+bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor )
+{
+    if( !mrParent.getAntiAliasB2DDraw())
+        return UseSolid( nColor );
+    if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
+        return false;
+    mpProgram->SetColorf( "start_color", nColor, 0.0f );
+    mpProgram->SetColorf( "end_color", nColor, 1.0f );
+    return true;
+}
+
 bool OpenGLSalGraphicsImpl::UseInvert()
 {
     if( !UseSolid( MAKE_SALCOLOR( 255, 255, 255 ) ) )
@@ -402,8 +415,24 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 
 void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
+    GLfloat pPoints[4];
+
+    pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
+    pPoints[1] = 1.0f - 2 * nY1 / GetHeight();
+    pPoints[2] = (2 * nX2) / GetWidth() - 1.0;;
+    pPoints[3] = 1.0f - 2 * nY2 / GetHeight();
+
+    mpProgram->SetVertices( pPoints );
+    glDrawArrays( GL_LINES, 0, 2 );
+}
+
+void OpenGLSalGraphicsImpl::DrawLineAA( long nX1, long nY1, long nX2, long nY2 )
+{
+    if( !mrParent.getAntiAliasB2DDraw())
+        return DrawLine( nX1, nY1, nX2, nY2 );
+
     if( nX1 == nX2 || nY1 == nY2 )
-    {   // horizontal/vertical, no need for AA
+    {   // Horizontal/vertical, no need for AA, both points have normal color.
         GLfloat pPoints[4];
 
         pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
@@ -412,6 +441,10 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
         pPoints[3] = 1.0f - 2 * nY2 / GetHeight();
 
         mpProgram->SetVertices( pPoints );
+        // Still set up for the trivial "gradients", because presumably UseSolidAA() has been called.
+        GLfloat aTexCoord[4] = { 0, 1, 1, 1 };
+        mpProgram->SetTextureCoord( aTexCoord );
+
         glDrawArrays( GL_LINES, 0, 2 );
         return;
     }
@@ -424,11 +457,6 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
      * http://www.codeproject.com/KB/openGL/gllinedraw.aspx
      *
      * Enjoy. Chris Tsang.*/
-
-    if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
-        return;
-    mpProgram->SetColorf( "start_color", mnLineColor, 0.0f );
-    mpProgram->SetColorf( "end_color", mnLineColor, 1.0f );
 
     double x1 = nX1;
     double y1 = nY1;
@@ -544,6 +572,14 @@ void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAr
         DrawLine( pPtAry[ i ].mnX, pPtAry[ i ].mnY, pPtAry[ i + 1 ].mnX, pPtAry[ i + 1 ].mnY );
     if( bClose )
         DrawLine( pPtAry[ nPoints - 1 ].mnX, pPtAry[ nPoints - 1 ].mnY, pPtAry[ 0 ].mnX, pPtAry[ 0 ].mnY );
+}
+
+void OpenGLSalGraphicsImpl::DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
+{
+    for( int i = 0; i < int(nPoints) - 1; ++i )
+        DrawLineAA( pPtAry[ i ].mnX, pPtAry[ i ].mnY, pPtAry[ i + 1 ].mnX, pPtAry[ i + 1 ].mnY );
+    if( bClose )
+        DrawLineAA( pPtAry[ nPoints - 1 ].mnX, pPtAry[ nPoints - 1 ].mnY, pPtAry[ 0 ].mnX, pPtAry[ 0 ].mnY );
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -925,8 +961,8 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
     if( mnLineColor != SALCOLOR_NONE )
     {
         PreDraw();
-        if( UseSolid( mnLineColor ) )
-            DrawLine( nX1, nY1, nX2, nY2 );
+        if( UseSolidAA( mnLineColor ) )
+            DrawLineAA( nX1, nY1, nX2, nY2 );
         PostDraw();
     }
 }
@@ -947,7 +983,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
         const long nY2( nY + nHeight );
         const SalPoint aPoints[] = { { nX1, nY1 }, { nX2, nY1 },
                                      { nX2, nY2 }, { nX1, nY2 } };
-        DrawLines( 4, aPoints, true );
+        DrawLines( 4, aPoints, true ); // No need for AA.
     }
 
     PostDraw();
@@ -960,8 +996,8 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
     if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
     {
         PreDraw();
-        if( UseSolid( mnLineColor ) )
-            DrawLines( nPoints, pPtAry, false );
+        if( UseSolidAA( mnLineColor ) )
+            DrawLinesAA( nPoints, pPtAry, false );
         PostDraw();
     }
 }
@@ -988,8 +1024,8 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     if( UseSolid( mnFillColor ) )
         DrawPolygon( nPoints, pPtAry );
 
-    if( UseSolid( mnLineColor ) )
-        DrawLines( nPoints, pPtAry, true );
+    if( UseSolidAA( mnLineColor ) )
+        DrawLinesAA( nPoints, pPtAry, true );
 
     PostDraw();
 }
@@ -1008,11 +1044,11 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
             DrawPolygon( pPoints[i], pPtAry[i] );
     }
 
-    if( UseSolid( mnLineColor ) )
+    if( UseSolidAA( mnLineColor ) )
     {
         // TODO Use glMultiDrawElements or primitive restart
         for( sal_uInt32 i = 0; i < nPoly; i++ )
-            DrawLines( pPoints[i], pPtAry[i], true );
+            DrawLinesAA( pPoints[i], pPtAry[i], true );
     }
 
     PostDraw();

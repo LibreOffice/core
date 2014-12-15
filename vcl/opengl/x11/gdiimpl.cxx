@@ -26,7 +26,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11OpenGLSalGraphicsImpl::X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent ):
-    OpenGLSalGraphicsImpl(rParent.GetGeometryProvider()),
+    OpenGLSalGraphicsImpl(rParent,rParent.GetGeometryProvider()),
     mrParent(rParent)
 {
 }
@@ -38,7 +38,7 @@ X11OpenGLSalGraphicsImpl::~X11OpenGLSalGraphicsImpl()
 void X11OpenGLSalGraphicsImpl::Init()
 {
     // The m_pFrame and m_pVDev pointers are updated late in X11
-    mpParent = mrParent.GetGeometryProvider();
+    mpProvider = mrParent.GetGeometryProvider();
     OpenGLSalGraphicsImpl::Init();
 }
 
