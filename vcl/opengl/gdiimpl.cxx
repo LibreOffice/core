@@ -472,7 +472,6 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
     //determine angle of the line to horizontal
     double tx=0,ty=0; //core thinkness of a line
     double Rx=0,Ry=0; //fading edge of a line
-    double cx=0,cy=0; //cap of a line
     double dx=x2-x1;
     double dy=y2-y1;
     if ( w < 3)
@@ -513,7 +512,6 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
         double L=sqrt(dx*dx+dy*dy);
         dx/=L;
         dy/=L;
-        cx=-0.6*dy; cy=0.6*dx;
         tx=t*dx; ty=t*dy;
         Rx=R*dx; Ry=R*dy;
     }
