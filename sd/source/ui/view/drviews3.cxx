@@ -492,20 +492,14 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
     const Point aPagePos( GetActiveWindow()->GetViewOrigin() );
     Size aPageSize = mpActualPage->GetSize();
     Size aViewSize = GetActiveWindow()->GetViewSize();
-    SdUndoGroup* pUndoGroup = NULL;
-
-    if ( rReq.GetSlot() == SID_ATTR_LONG_LRSPACE ||
-         rReq.GetSlot() == SID_ATTR_LONG_ULSPACE )
-    {
-        pUndoGroup = new SdUndoGroup(GetDoc());
-        OUString aString(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
-        pUndoGroup->SetComment(aString);
-    }
 
     switch ( rReq.GetSlot() )
     {
         case SID_ATTR_LONG_LRSPACE:
         {
+            SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
+            pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
+
             const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
                     pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE)));
 
@@ -559,10 +553,17 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 InvalidateWindows();
             }
+
+            // give the undo group to the undo manager
+            GetViewFrame()->GetObjectShell()->GetUndoManager()->
+                                                AddUndoAction(pUndoGroup);
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
         {
+            SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
+            pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
+
             const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
                     pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE)));
 
@@ -617,6 +618,11 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 InvalidateWindows();
             }
+
+            // give the undo group to the undo manager
+            GetViewFrame()->GetObjectShell()->GetUndoManager()->
+                                                AddUndoAction(pUndoGroup);
+
             break;
         }
 
@@ -846,10 +852,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             break;
         }
     }
-    if ( pUndoGroup )
-        // give the undo group to the undo manager
-        GetViewFrame()->GetObjectShell()->GetUndoManager()->
-                                            AddUndoAction(pUndoGroup);
 }
 
 void  DrawViewShell::GetRulerState(SfxItemSet& rSet)

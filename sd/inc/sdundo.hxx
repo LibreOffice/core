@@ -33,7 +33,7 @@ public:
                                 : mpDoc(pSdDrawDocument)  {}
     virtual                 ~SdUndoAction() {}
 
-    void                    SetComment(OUString& rStr) { maComment = rStr; }
+    void                    SetComment(const OUString& rStr) { maComment = rStr; }
     virtual OUString        GetComment() const SAL_OVERRIDE { return maComment; }
     virtual SdUndoAction*   Clone() const { return NULL; }
 
