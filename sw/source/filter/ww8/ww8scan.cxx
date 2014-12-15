@@ -3984,7 +3984,7 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
 
         pBook[1] = new WW8PLCFspecial(pTblSt,rFib.fcPlcfbkl,rFib.lcbPlcfbkl,0);
 
-        rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.chseTables);
+        rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.chseTables, rFib.lid);
 
         WW8ReadSTTBF( (7 < rFib.nVersion), *pTblSt, rFib.fcSttbfbkmk,
             rFib.lcbSttbfbkmk, 0, eStructChrSet, aBookNames );
@@ -5944,14 +5944,23 @@ bool WW8Fib::Write(SvStream& rStrm)
     return 0 == rStrm.GetError();
 }
 
-rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs)
+rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
 {
     OSL_ENSURE(chs <= 0x100, "overflowed winword charset set");
-    rtl_TextEncoding eCharSet =
-        (0x0100 == chs)
-        ? RTL_TEXTENCODING_APPLE_ROMAN
-        : rtl_getTextEncodingFromWindowsCharset( static_cast<sal_uInt8>(chs) );
-    return eCharSet;
+    if (chs == 0x0100)
+        return RTL_TEXTENCODING_APPLE_ROMAN;
+    if (chs == 0 && nLidLocale != 0 && nLidLocale >= 999)
+    {
+        /*
+         nLidLocale:
+            language stamp -- localized version In pre-WinWord 2.0 files this
+            value was the nLocale. If value is < 999, then it is the nLocale,
+            otherwise it is the lid.
+        */
+        ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(nLidLocale));
+        return msfilter::util::getBestTextEncodingFromLocale(aLocale);
+    }
+    return rtl_getTextEncodingFromWindowsCharset(static_cast<sal_uInt8>(chs));
 }
 
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
@@ -6334,7 +6343,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                  the font, e.g load the doc in 97 and save to see the unicode
                  ver of the asian fontnames in that example to confirm.
                 */
-                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs);
+                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs, rFib.lid);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
@@ -6364,7 +6373,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                  the font, e.g load the doc in 97 and save to see the unicode
                  ver of the asian fontnames in that example to confirm.
                  */
-                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs);
+                rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->chs, rFib.lid);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
                 p->sFontname = OUString(pVer6->szFfn, rtl_str_getLength(pVer6->szFfn), eEnc);
@@ -6378,7 +6387,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 {
                     //#i18369# if it's a symbol font set Symbol as fallback
                     if (
-                         RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs)
+                         RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs, rFib.lid)
                          && p->sFontname!="Symbol"
                        )
                     {

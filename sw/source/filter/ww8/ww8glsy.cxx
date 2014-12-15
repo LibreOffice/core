@@ -197,7 +197,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
         std::vector<ww::bytes> aData;
 
         rtl_TextEncoding eStructCharSet =
-            WW8Fib::GetFIBCharset(pGlossary->chseTables);
+            WW8Fib::GetFIBCharset(pGlossary->chseTables, pGlossary->lid);
 
         WW8ReadSTTBF(true, *xTableStream, pGlossary->fcSttbfglsy,
             pGlossary->lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );

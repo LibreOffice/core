@@ -1433,7 +1433,7 @@ public:
     WW8Fib( sal_uInt8 nVersion = 6, bool bDot = false );
     bool WriteHeader(SvStream& rStrm);
     bool Write(SvStream& rStrm);
-    static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs);
+    static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale);
     ww::WordVersion GetFIBVersion() const;
     WW8_CP GetBaseCp(ManTypes nType) const;
     sal_Unicode getNumDecimalSep() const { return nNumDecimalSep;}

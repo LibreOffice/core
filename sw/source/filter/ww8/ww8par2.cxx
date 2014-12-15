@@ -4216,7 +4216,7 @@ void WW8RStyle::ImportOldFormatStyles()
     }
 
     rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(
-        pIo->pWwFib->chseTables);
+        pIo->pWwFib->chseTables, pIo->pWwFib->lid);
 
     sal_uInt16 cstcStd(0);
     rSt.ReadUInt16( cstcStd );

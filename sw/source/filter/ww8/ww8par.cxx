@@ -5001,8 +5001,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     bVer67 = bVer6 || bVer7;
     bVer8  = (8 == pWwFib->nVersion);
 
-    eTextCharSet = WW8Fib::GetFIBCharset(pWwFib->chse);
-    eStructCharSet = WW8Fib::GetFIBCharset(pWwFib->chseTables);
+    eTextCharSet = WW8Fib::GetFIBCharset(pWwFib->chse, pWwFib->lid);
+    eStructCharSet = WW8Fib::GetFIBCharset(pWwFib->chseTables, pWwFib->lid);
 
     bWWBugNormal = pWwFib->nProduct == 0xc03d;
 
@@ -5568,7 +5568,7 @@ namespace
             OUString sUniPassword = QueryPasswordForMedium( rMedium );
 
             OString sPassword(OUStringToOString(sUniPassword,
-                WW8Fib::GetFIBCharset(pWwFib->chseTables)));
+                WW8Fib::GetFIBCharset(pWwFib->chseTables, pWwFib->lid)));
 
             sal_Int32 nLen = sPassword.getLength();
             if( nLen <= 15 )
