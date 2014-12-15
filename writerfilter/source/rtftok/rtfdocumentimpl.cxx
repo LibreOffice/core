@@ -1153,7 +1153,7 @@ void RTFDocumentImpl::text(OUString& rString)
     {
         // ; is the end of the entry
         bool bEnd = false;
-        if (rString.endsWithAsciiL(";", 1))
+        if (rString.endsWith(";"))
         {
             rString = rString.copy(0, rString.getLength() - 1);
             bEnd = true;

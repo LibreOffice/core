@@ -1576,9 +1576,9 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     const OUString* pStyleNames = aStyleNames.getConstArray();
     for( sal_Int32 nStyle = 0; nStyle < aStyleNames.getLength(); ++nStyle )
     {
-        if( pStyleNames[nStyle].matchAsciiL( cListLabel, sizeof( cListLabel ) - 1  ))
+        OUString sSuffix;
+        if( pStyleNames[nStyle].startsWith( cListLabel, &sSuffix ) )
         {
-            OUString sSuffix = pStyleNames[nStyle].copy( sizeof( cListLabel ) - 1 );
             sal_Int32 nSuffix = sSuffix.toInt32();
             if( nSuffix > 0 )
             {
@@ -1587,8 +1587,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
             }
         }
     }
-    sListLabel = OUString::createFromAscii( cListLabel );
-    sListLabel += OUString::number( ++nStyleFound );
+    sListLabel = cListLabel + OUString::number( ++nStyleFound );
     //create a new one otherwise
     uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
