@@ -85,7 +85,6 @@ private:
     MetricField*    m_pWindowSizeMF;
     ListBox*        m_pIconSizeLB;
     ListBox*        m_pIconStyleLB;
-    CheckBox*       m_pSystemFont;
 
     CheckBox*       m_pFontAntiAliasing;
     FixedText*      m_pAAPointLimitLabel;
