@@ -800,19 +800,19 @@ namespace frm
                 continue;
             }
 
-            if ( pName->equalsAscii( "MessageParent" ) )
+            if ( *pName == "MessageParent" )
             {
                 // the message parent
                 *pValue >>= m_xMessageParent;
                 OSL_ENSURE( m_xMessageParent.is(), "OFilterControl::initialize: invalid MessageParent!" );
             }
-            else if ( pName->equalsAscii( "NumberFormatter" ) )
+            else if ( *pName == "NumberFormatter" )
             {
                 // the number format. This argument is optional.
                 *pValue >>= m_xFormatter;
                 OSL_ENSURE( m_xFormatter.is(), "OFilterControl::initialize: invalid NumberFormatter!" );
             }
-            else if ( pName->equalsAscii( "ControlModel" ) )
+            else if ( *pName == "ControlModel" )
             {
                 // the control model for which we act as filter control
                 if ( !(*pValue >>= xControlModel ) )

@@ -359,15 +359,15 @@ struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescr
 {
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
-        if ( _rDescriptor.ScriptType.equalsAscii( "StarBasic" ) )
+        if ( _rDescriptor.ScriptType == "StarBasic" )
         {   // it's a starbasic macro
             sal_Int32 nPrefixLength = _rDescriptor.ScriptCode.indexOf( ':' );
             if ( 0 <= nPrefixLength )
             {   // the macro name does not already contain a :
 #ifdef DBG_UTIL
                 const OUString sPrefix = _rDescriptor.ScriptCode.copy( 0, nPrefixLength );
-                DBG_ASSERT( sPrefix.equalsAscii( "document" )
-                        ||  sPrefix.equalsAscii( "application" ),
+                DBG_ASSERT( sPrefix == "document"
+                        ||  sPrefix == "application",
                         "TransformEventTo52Format: invalid (unknown) prefix!" );
 #endif
                 // cut the prefix
@@ -382,7 +382,7 @@ struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescr
 {
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
-        if ( _rDescriptor.ScriptType.equalsAscii( "StarBasic" ) )
+        if ( _rDescriptor.ScriptType == "StarBasic" )
         {   // it's a starbasic macro
             if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
             {   // the macro name does not already contain a :
