@@ -4041,6 +4041,7 @@ StackVar ScInterpreter::Interpret()
                 case ocRate             : ScRate();                     break;
                 case ocFilterXML        : ScFilterXML();                break;
                 case ocWebservice       : ScWebservice();               break;
+                case ocEncodeURL        : ScEncodeURL();                break;
                 case ocColor            : ScColor();                    break;
                 case ocErf_MS           : ScErf();                      break;
                 case ocErfc_MS          : ScErfc();                     break;
