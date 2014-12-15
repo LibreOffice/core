@@ -95,22 +95,6 @@ struct SameOrSubDirJREMap
  */
 rtl::Reference<VendorBase> getJREInfoByPath(const OUString& path);
 
-/* Creates a VendorBase object if a JRE could be found at the specified path.
-
-   The difference to the other getJREInfoByPath is that this function checks
-   first if the path corresponds to one of the VendorBase::getHome path already
-   contained in vecInfo. Only if there is no such entry, then the other
-   getJREInfoByPath is called. Again the created VendorBase is compared to
-   those contained in vecInfos. If it is not in there then it's added.
-
-   @return
-   true a VendorBase was created and added to the end of vecInfos.
-   false - no VendorBase has been created. Either the path did not represent a
-   supported JRE installation or there was already a VendorBase in vecInfos.
- */
-bool getJREInfoByPath(const OUString& path,
-                      std::vector<rtl::Reference<VendorBase> > & vecInfos);
-
 std::vector<rtl::Reference<VendorBase> > getAllJREInfos();
 
 bool getJavaProps(

@@ -138,6 +138,26 @@ bool decodeOutput(const OString& s, OUString* out);
 
 namespace
 {
+
+bool getAndAddJREInfoByPath(const OUString& path,
+                      std::vector<rtl::Reference<VendorBase> > & vecInfos)
+{
+    bool ret = false;
+
+    rtl::Reference<VendorBase> aInfo = getJREInfoByPath(path);
+    if (aInfo.is())
+    {
+        ret = true;
+        vector<rtl::Reference<VendorBase> >::const_iterator it_impl= std::find_if(
+            vecInfos.begin(),vecInfos.end(), InfoFindSame(aInfo->getHome()));
+        if(it_impl == vecInfos.end())
+        {
+            vecInfos.push_back(aInfo);
+        }
+    }
+    return ret;
+}
+
     OUString getLibraryLocation()
     {
         OUString libraryFileUrl;
@@ -563,7 +583,7 @@ void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfo
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
             it_home++)
         {
-            getJREInfoByPath(*it_home, vecInfos);
+            getAndAddJREInfoByPath(*it_home, vecInfos);
         }
     }
 
@@ -574,7 +594,7 @@ void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfo
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
             it_home++)
         {
-            getJREInfoByPath(*it_home, vecInfos);
+            getAndAddJREInfoByPath(*it_home, vecInfos);
         }
    }
 }
@@ -764,7 +784,7 @@ void getJREInfoFromBinPath(
             }
             if (!sHome.isEmpty())
             {
-                if (getJREInfoByPath(sHome, vecInfos))
+                if (getAndAddJREInfoByPath(sHome, vecInfos))
                     return;
             }
         }
@@ -805,24 +825,6 @@ vector<OUString> getVectorFromCharArray(char const * const * ar, int size)
         vec.push_back(s);
     }
     return vec;
-}
-bool getJREInfoByPath(const OUString& path,
-                      std::vector<rtl::Reference<VendorBase> > & vecInfos)
-{
-    bool ret = false;
-
-    rtl::Reference<VendorBase> aInfo = getJREInfoByPath(path);
-    if (aInfo.is())
-    {
-        ret = true;
-        vector<rtl::Reference<VendorBase> >::const_iterator it_impl= std::find_if(
-            vecInfos.begin(),vecInfos.end(), InfoFindSame(aInfo->getHome()));
-        if(it_impl == vecInfos.end())
-        {
-            vecInfos.push_back(aInfo);
-        }
-    }
-    return ret;
 }
 
 /** Checks if the path is a directory. Links are resolved.
@@ -1186,7 +1188,7 @@ bool makeDriveLetterSame(OUString * fileURL)
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
     JFW_TRACE2("Checking /usr/jdk/latest");
-    getJREInfoByPath("file:////usr/jdk/latest", vecInfos);
+    getAndAddJREInfoByPath("file:////usr/jdk/latest", vecInfos);
 }
 
 #elif defined MACOSX && defined X86_64
@@ -1194,7 +1196,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
     // Oracle Java 7
-    getJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", vecInfos);
+    getAndAddJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", vecInfos);
 }
 
 #else
@@ -1271,7 +1273,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         }
                         JFW_TRACE2("Checking if directory: " << aStatus.getFileURL() << " is a Java");
 
-                        getJREInfoByPath(aStatus.getFileURL(),vecInfos);
+                        getAndAddJREInfoByPath(aStatus.getFileURL(),vecInfos);
                     }
 
                     JFW_ENSURE(errNext == File::E_None || errNext == File::E_NOENT,
@@ -1303,7 +1305,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                                     && (islash
                                         > RTL_CONSTASCII_LENGTH("file://")))
                                     usDir3 = usDir3.copy(0, islash);
-                                getJREInfoByPath(usDir3,vecInfos);
+                                getAndAddJREInfoByPath(usDir3,vecInfos);
                             }
                         }
                     }
