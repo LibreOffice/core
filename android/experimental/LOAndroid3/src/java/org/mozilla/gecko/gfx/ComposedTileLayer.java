@@ -128,10 +128,12 @@ public abstract class ComposedTileLayer extends Layer {
         float newZoom = viewportMetrics.zoomFactor;
 
         if (!currentViewport.equals(newCurrentViewPort) || currentZoom != newZoom) {
+            if (newZoom == 1.0f) {
+                Log.i(LOGTAG, "Suspisious zoom 1.0");
+            }
             currentViewport = newCurrentViewPort;
             currentZoom = newZoom;
 
-            clearMarkedTiles();
             addNewTiles(viewportMetrics);
             markTiles(viewportMetrics);
         }
@@ -180,7 +182,7 @@ public abstract class ComposedTileLayer extends Layer {
         float zoom = getZoom(viewportMetrics);
         for (SubTile tile : tiles) {
             if (FloatUtils.fuzzyEquals(tile.id.zoom, zoom)) {
-                RectF tileRect = new RectF(tile.id.x, tile.id.y, tile.id.x + tileSize.width, tile.id.y + tileSize.height);
+                RectF tileRect = tile.id.getRect();
                 if (!RectF.intersects(currentViewport, tileRect)) {
                     tile.markForRemoval();
                     Log.i(LOGTAG, "Mark for remove - " + currentViewport + " " + tileRect);
@@ -198,6 +200,7 @@ public abstract class ComposedTileLayer extends Layer {
     }
 
     public void addTile(SubTile tile) {
+        clearMarkedTiles();
         tile.beginTransaction();
         tiles.add(tile);
     }
