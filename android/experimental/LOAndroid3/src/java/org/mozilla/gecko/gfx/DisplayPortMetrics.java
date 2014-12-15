@@ -20,6 +20,14 @@ public final class DisplayPortMetrics {
     private final RectF mPosition;
     private final float mResolution;
 
+    public RectF getPosition() {
+        return mPosition;
+    }
+
+    public float getResolution() {
+        return mResolution;
+    }
+
     public DisplayPortMetrics() {
         this(0, 0, 0, 0, 1);
     }
