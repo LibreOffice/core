@@ -716,12 +716,11 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 }
 
 
-bool getJREInfoFromBinPath(
+void getJREInfoFromBinPath(
     const OUString& path, vector<rtl::Reference<VendorBase> > & vecInfos)
 {
     // file:///c:/jre/bin
     //map:       jre/bin/java.exe
-    bool ret = false;
 
     for ( sal_Int32 pos = 0;
           gVendorMap[pos].sVendorName != NULL; ++pos )
@@ -765,15 +764,11 @@ bool getJREInfoFromBinPath(
             }
             if (!sHome.isEmpty())
             {
-                ret = getJREInfoByPath(sHome, vecInfos);
-                if (ret)
-                    break;
+                if (getJREInfoByPath(sHome, vecInfos))
+                    return;
             }
         }
-        if (ret)
-            break;
     }
-    return ret;
 }
 
 vector<Reference<VendorBase> > getAllJREInfos()

@@ -35,7 +35,7 @@ std::vector<OUString> getVectorFromCharArray(char const * const * ar, int size);
      argument to getJREInfoByPath. For example usBinDir is
      file:///c:/j2sdk/jre/bin then file:///c:/j2sdk/jre would be derived.
  */
-bool getJREInfoFromBinPath(
+void getJREInfoFromBinPath(
     const OUString& path, std::vector<rtl::Reference<VendorBase> > & vecInfos);
 inline OUString getDirFromFile(const OUString& usFilePath);
 void createJavaInfoFromPath(std::vector<rtl::Reference<VendorBase> >& vecInfos);
