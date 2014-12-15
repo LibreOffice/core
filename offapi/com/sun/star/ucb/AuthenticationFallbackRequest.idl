@@ -18,7 +18,7 @@ module com { module sun { module star { module ucb {
 
     @since LibreOffice 4.4
 */
-published exception AuthenticationFallbackRequest: com::sun::star::task::ClassifiedInteractionRequest
+exception AuthenticationFallbackRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
     /** Instructions to be followed by the user
     */
