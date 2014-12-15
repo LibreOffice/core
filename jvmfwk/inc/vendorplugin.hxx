@@ -44,11 +44,6 @@
    version and vendor as one entity. One without the other does not guarantee
    the existence of a particular set of features or bug fixes. An implementation
    of this API may support multiple vendors. </p>
-   <p>
-   Libraries which implement this interface will be dynamically loaded and
-   unloaded by the java framework (jvmfwk/framework.h). Therefore they must not
-   keep global variables.
-   </p>
  */
 
 typedef enum
