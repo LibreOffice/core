@@ -69,14 +69,14 @@ namespace tools_urlobj
                             ( "file://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            equalsAscii( "10.10.1.1" ) );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            equalsAscii( "/sampledir/sample.file" ) );
-            CPPUNIT_ASSERT( aUrl.getName(  ).
-                            equalsAscii( "sample.file" ) );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "sample" ) );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "file" ) );
+            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE )
+                            == "10.10.1.1" );
+            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE )
+                            == "/sampledir/sample.file" );
+            CPPUNIT_ASSERT( aUrl.getName(  )
+                            == "sample.file" );
+            CPPUNIT_ASSERT( aUrl.getBase(  ) == "sample" );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "file" );
         }
 
         void urlobjTest_002(  )
@@ -95,14 +95,13 @@ namespace tools_urlobj
                             equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            equalsAscii( "137.65.170.24" ) );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            equalsAscii( "/c$/Img0001.jpg" ) );
-            CPPUNIT_ASSERT( aUrl.getName(  ).
-                            equalsAscii( "Img0001.jpg" ) );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "Img0001" ) );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "jpg" ) );
+            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE )
+                            == "137.65.170.24" );
+            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE )
+                            == "/c$/Img0001.jpg" );
+            CPPUNIT_ASSERT( aUrl.getName(  ) == "Img0001.jpg" );
+            CPPUNIT_ASSERT( aUrl.getBase(  ) == "Img0001" );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "jpg" );
         }
 
 
@@ -122,10 +121,10 @@ namespace tools_urlobj
                             equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            equalsAscii( "hive-winxp-x86" ) );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            equalsAscii( "/pmladek/test2.odt" ) );
+            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE )
+                            == "hive-winxp-x86" );
+            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE )
+                            == "/pmladek/test2.odt" );
         }
 
         void urlobjTest_004(  )
@@ -141,14 +140,13 @@ namespace tools_urlobj
                             equalsAscii( "file://10.10.1.1/sampledir/sample.file" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            equalsAscii( "10.10.1.1" ) );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            equalsAscii( "/sampledir/sample.file" ) );
-            CPPUNIT_ASSERT( aUrl.getName(  ).
-                            equalsAscii( "sample.file" ) );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "sample" ) );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "file" ) );
+            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE )
+                            == "10.10.1.1" );
+            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE )
+                            == "/sampledir/sample.file" );
+            CPPUNIT_ASSERT( aUrl.getName(  ) == "sample.file" );
+            CPPUNIT_ASSERT( aUrl.getBase(  ) == "sample" );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "file" );
         }
 
         void urlobjTest_005(  )
@@ -166,13 +164,13 @@ namespace tools_urlobj
                             equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            equalsAscii( "137.65.170.24" ) );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            equalsAscii( "/c$/Img0001.jpg" ) );
-            CPPUNIT_ASSERT( aUrl.getName(  ).equalsAscii( "Img0001.jpg" ) );
-            CPPUNIT_ASSERT( aUrl.getBase(  ).equalsAscii( "Img0001" ) );
-            CPPUNIT_ASSERT( aUrl.getExtension(  ).equalsAscii( "jpg" ) );
+            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE )
+                            == "137.65.170.24" );
+            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE )
+                            == "/c$/Img0001.jpg" );
+            CPPUNIT_ASSERT( aUrl.getName(  ) == "Img0001.jpg" );
+            CPPUNIT_ASSERT( aUrl.getBase(  ) == "Img0001" );
+            CPPUNIT_ASSERT( aUrl.getExtension(  ) == "jpg" );
         }
 
 
@@ -191,10 +189,10 @@ namespace tools_urlobj
                             equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
-            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
-                            equalsAscii( "hive-winxp-x86" ) );
-            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE ).
-                            equalsAscii( "/pmladek/test2.odt" ) );
+            CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE )
+                            == "hive-winxp-x86" );
+            CPPUNIT_ASSERT( aUrl.GetURLPath( INetURLObject::NO_DECODE )
+                            == "/pmladek/test2.odt" );
         }
 
         void urlobjCmisTest(  )
