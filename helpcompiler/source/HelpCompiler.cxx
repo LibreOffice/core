@@ -247,9 +247,9 @@ public:
     std::string documentId;
     std::string fileName;
     std::string title;
-    HashSet *hidlist;
-    Hashtable *keywords;
-    Stringtable *helptexts;
+    std::unique_ptr<HashSet> hidlist;
+    std::unique_ptr<Hashtable> keywords;
+    std::unique_ptr<Stringtable> helptexts;
 private:
     HashSet extendedHelpText;
 public:
@@ -257,9 +257,9 @@ public:
         const std::string &intitle) : documentId(indocumentId), fileName(infileName),
         title(intitle)
     {
-        hidlist = new HashSet;
-        keywords = new Hashtable;
-        helptexts = new Stringtable;
+        hidlist.reset(new HashSet);
+        keywords.reset(new Hashtable);
+        helptexts.reset(new Stringtable);
     }
     void traverse( xmlNodePtr parentNode );
 private:
@@ -461,9 +461,9 @@ bool HelpCompiler::compile()
 
     streamTable.dropappl();
     streamTable.appl_doc = docResolvedDoc;
-    streamTable.appl_hidlist = aparser.hidlist;
-    streamTable.appl_helptexts = aparser.helptexts;
-    streamTable.appl_keywords = aparser.keywords;
+    streamTable.appl_hidlist = aparser.hidlist.release();
+    streamTable.appl_helptexts = aparser.helptexts.release();
+    streamTable.appl_keywords = aparser.keywords.release();
 
     streamTable.document_id = documentId;
     streamTable.document_path = fileName;
