@@ -27,11 +27,13 @@ public class LOKitThread extends Thread {
     }
 
     private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
-        mLayerClient.beginDrawing();
-        CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
-        SubTile tile = new SubTile(image, tileId);
-        composedTileLayer.addTile(tile);
-        mLayerClient.endDrawing(mViewportMetrics);
+        if (composedTileLayer.isStillValid(tileId)) {
+            mLayerClient.beginDrawing();
+            CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
+            SubTile tile = new SubTile(image, tileId);
+            composedTileLayer.addTile(tile);
+            mLayerClient.endDrawing(mViewportMetrics);
+        }
     }
 
     /** Handle the geometry change + draw. */

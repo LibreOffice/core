@@ -201,4 +201,8 @@ public abstract class ComposedTileLayer extends Layer {
         tile.beginTransaction();
         tiles.add(tile);
     }
+
+    public boolean isStillValid(TileIdentifier tileId) {
+        return RectF.intersects(currentViewport, tileId.getRect()) || currentViewport.contains(tileId.getRect());
+    }
 }
