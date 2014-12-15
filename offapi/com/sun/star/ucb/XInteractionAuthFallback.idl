@@ -19,7 +19,7 @@
 
     @since LibreOffice 4.4
  */
-published interface XInteractionAuthFallback: com::sun::star::task::XInteractionContinuation
+interface XInteractionAuthFallback: com::sun::star::task::XInteractionContinuation
 {
     /* Authentication code submited by the user */
     void setCode( [in] string code );
