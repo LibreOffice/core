@@ -49,11 +49,6 @@ public class LOKitThread extends Thread {
 
     /** Invalidate everything + handle the geometry change */
     private void refresh() {
-        Bitmap bitmap = mTileProvider.thumbnail(1000);
-        if (bitmap != null) {
-            mApplication.getLayerClient().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-        }
-
         mLayerClient.clearAndResetlayers();
         redraw();
     }
