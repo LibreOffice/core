@@ -77,6 +77,10 @@ void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, s
     if (!pString)
         return;
 
+    nCol = SanitizeCol(nCol);
+    nRow = SanitizeRow(nRow);
+    nTab = SanitizeTab(nTab);
+
     rContext.pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
