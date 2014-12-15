@@ -580,6 +580,13 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
             if ( nVerNo >= pImp->aVersions.size() )
             {
                 // Add new Version
+                const size_t nMaxRecords = rStream.remainingSize() / sizeof(sal_uInt16);
+                if (nCount > nMaxRecords)
+                {
+                    SAL_WARN("svl", "Parsing error: " << nMaxRecords <<
+                             " max possible entries, but " << nCount << " claimed, truncating");
+                    nCount = nMaxRecords;
+                }
                 sal_uInt16 *pMap = new sal_uInt16[nCount];
                 memset(pMap, 0, nCount * sizeof(sal_uInt16));
                 for ( sal_uInt16 n = 0; n < nCount; ++n )
