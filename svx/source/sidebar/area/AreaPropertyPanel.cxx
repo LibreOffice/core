@@ -581,6 +581,7 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
 
                 switch(rGradient.GetGradientStyle())
                 {
+                    default:
                     case css::awt::GradientStyle_LINEAR:
                     {
                         nEntryPos = 2;
@@ -617,8 +618,6 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
                         pImage = &maImgSquare;
                         break;
                     }
-                    default:
-                        break;
                 }
 
                 const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
