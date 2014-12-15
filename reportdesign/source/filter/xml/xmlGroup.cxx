@@ -138,7 +138,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
                                 else if ( sCompleteFormula.matchIgnoreAsciiCase("rpt:INT((MONTH",0)
-                                       && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",8) )
+                                       && sCompleteFormula.endsWithIgnoreAsciiCase("-1)/3)+1") )
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
                                 }
