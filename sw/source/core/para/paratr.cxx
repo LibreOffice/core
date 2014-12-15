@@ -39,6 +39,7 @@
 #include "paratr.hxx"
 #include "charfmt.hxx"
 #include "cmdid.h"
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 
@@ -235,6 +236,14 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return true;
+}
+
+void SwNumRuleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swNumRuleItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const

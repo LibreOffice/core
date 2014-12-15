@@ -168,6 +168,8 @@ public:
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwParaConnectBorderItem : public SfxBoolItem
