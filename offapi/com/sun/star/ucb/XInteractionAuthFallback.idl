@@ -16,6 +16,8 @@
  module com {  module sun {  module star {  module ucb {
 
 /** An interaction continuation specifying authentication success.
+
+    @since LibreOffice 4.4
  */
 published interface XInteractionAuthFallback: com::sun::star::task::XInteractionContinuation
 {
