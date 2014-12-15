@@ -40,8 +40,9 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 protected:
 
     OpenGLContext* mpContext;
+    SalGraphics& mrParent;
     /// Pointer to the SalFrame or SalVirtualDevice
-    SalGeometryProvider* mpParent;
+    SalGeometryProvider* mpProvider;
     OpenGLFramebuffer* mpFramebuffer;
     OpenGLProgram* mpProgram;
 
@@ -66,11 +67,14 @@ public:
     bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
     bool UseSolid( SalColor nColor, double fTransparency );
     bool UseSolid( SalColor nColor );
+    bool UseSolidAA( SalColor nColor );
     bool UseInvert();
 
     void DrawPoint( long nX, long nY );
     void DrawLine( long nX1, long nY1, long nX2, long nY2 );
     void DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
+    void DrawLineAA( long nX1, long nY1, long nX2, long nY2 );
+    void DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawConvexPolygon( const Polygon& rPolygon );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
@@ -92,13 +96,13 @@ public:
 
 public:
     // get the width of the device
-    GLfloat GetWidth() const { return mpParent ? mpParent->GetWidth() : 1; }
+    GLfloat GetWidth() const { return mpProvider ? mpProvider->GetWidth() : 1; }
 
     // get the height of the device
-    GLfloat GetHeight() const { return mpParent ? mpParent->GetHeight() : 1; }
+    GLfloat GetHeight() const { return mpProvider ? mpProvider->GetHeight() : 1; }
 
     // check whether this instance is used for offscreen rendering
-    bool IsOffscreen() const { return mpParent ? mpParent->IsOffScreen() : true; }
+    bool IsOffscreen() const { return mpProvider ? mpProvider->IsOffScreen() : true; }
 
     // operations to do before painting
     virtual void PreDraw();
@@ -120,7 +124,7 @@ protected:
     virtual bool UseContext( OpenGLContext* pContext ) = 0;
 
 public:
-    OpenGLSalGraphicsImpl(SalGeometryProvider* pParent);
+    OpenGLSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider *pProvider);
     virtual ~OpenGLSalGraphicsImpl ();
 
     OpenGLContext* GetOpenGLContext();

@@ -15,7 +15,7 @@
 
 WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics,
                                                    SalGeometryProvider *mpProvider):
-    OpenGLSalGraphicsImpl(mpProvider),
+    OpenGLSalGraphicsImpl(rGraphics,mpProvider),
     mrParent(rGraphics)
 {
 }
