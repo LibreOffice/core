@@ -27,15 +27,6 @@
 class SwPaM;
 class SwNodeIndex;
 
-// Macros to iterate over all ranges.
-#define PCURCRSR (static_cast<SwPaM *>(&__r))
-
-#define FOREACHPAM_START(pCURSH) \
-    for(SwPaM& __r : (pCURSH)->GetRingContainer()) \
-    {
-
-#define FOREACHPAM_END() }
-
 struct SwPamRange
 {
     sal_uLong nStart, nEnd;
