@@ -55,23 +55,23 @@
 #define PI 3.14159265358979323846
 
 // xmloff/xmlkyd.hxx
-#define sXML_CDATA ascii("CDATA")
+#define sXML_CDATA "CDATA"
 
-#define STARTP  padd( ascii("text:style-name"), ascii("CDATA"), ascii(getPStyleName(((ParaShape &)para->GetParaShape()).index,buf))); \
-    rstartEl( ascii("text:p"),rList ); \
+#define STARTP  padd( "text:style-name", "CDATA", ascii(getPStyleName(((ParaShape &)para->GetParaShape()).index,buf))); \
+    rstartEl( "text:p",rList ); \
     pList->clear(); \
     pstart = true
 #define STARTT \
     curr = para->GetCharShape(n > 0 ? n-1 : 0)->index; \
-    padd( ascii("text:style-name"), ascii("CDATA") , ascii( getTStyleName(curr, buf) ) ); \
-    rstartEl( ascii("text:span"),rList ); \
+    padd( "text:style-name", "CDATA" , ascii( getTStyleName(curr, buf) ) ); \
+    rstartEl( "text:span",rList ); \
     pList->clear(); \
     tstart = true
 #define ENDP \
-    rendEl(ascii("text:p")); \
+    rendEl("text:p"); \
     pstart = false
 #define ENDT \
-    rendEl(ascii("text:span")); \
+    rendEl("text:span"); \
     tstart = false
 
 static hchar *field = 0L;
@@ -152,27 +152,27 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->startDocument();
 
-    padd(ascii("office:class"), sXML_CDATA, ascii("text"));
-    padd(ascii("office:version"), sXML_CDATA, ascii("0.9"));
+    padd("office:class", sXML_CDATA, "text");
+    padd("office:version", sXML_CDATA, "0.9");
 
-    padd(ascii("xmlns:office"), ascii("CDATA"), ascii("http://openoffice.org/2000/office"));
-    padd(ascii("xmlns:style"), ascii("CDATA"), ascii("http://openoffice.org/2000/style"));
-    padd(ascii("xmlns:text"), ascii("CDATA"), ascii("http://openoffice.org/2000/text"));
-    padd(ascii("xmlns:table"), ascii("CDATA"), ascii("http://openoffice.org/2000/table"));
-    padd(ascii("xmlns:draw"), ascii("CDATA"), ascii("http://openoffice.org/2000/drawing"));
-    padd(ascii("xmlns:fo"), ascii("CDATA"), ascii("http://www.w3.org/1999/XSL/Format"));
-    padd(ascii("xmlns:xlink"), ascii("CDATA"), ascii("http://www.w3.org/1999/xlink"));
-    padd(ascii("xmlns:dc"), ascii("CDATA"), ascii("http://purl.org/dc/elements/1.1/"));
-    padd(ascii("xmlns:meta"), ascii("CDATA"), ascii("http://openoffice.org/2000/meta"));
-    padd(ascii("xmlns:number"), ascii("CDATA"), ascii("http://openoffice.org/2000/datastyle"));
-    padd(ascii("xmlns:svg"), ascii("CDATA"), ascii("http://www.w3.org/2000/svg"));
-    padd(ascii("xmlns:chart"), ascii("CDATA"), ascii("http://openoffice.org/2000/chart"));
-    padd(ascii("xmlns:dr3d"), ascii("CDATA"), ascii("http://openoffice.org/2000/dr3d"));
-    padd(ascii("xmlns:math"), ascii("CDATA"), ascii("http://www.w3.org/1998/Math/MathML"));
-    padd(ascii("xmlns:form"), ascii("CDATA"), ascii("http://openoffice.org/2000/form"));
-    padd(ascii("xmlns:script"), ascii("CDATA"), ascii("http://openoffice.org/2000/script"));
+    padd("xmlns:office", "CDATA", "http://openoffice.org/2000/office");
+    padd("xmlns:style", "CDATA", "http://openoffice.org/2000/style");
+    padd("xmlns:text", "CDATA", "http://openoffice.org/2000/text");
+    padd("xmlns:table", "CDATA", "http://openoffice.org/2000/table");
+    padd("xmlns:draw", "CDATA", "http://openoffice.org/2000/drawing");
+    padd("xmlns:fo", "CDATA", "http://www.w3.org/1999/XSL/Format");
+    padd("xmlns:xlink", "CDATA", "http://www.w3.org/1999/xlink");
+    padd("xmlns:dc", "CDATA", "http://purl.org/dc/elements/1.1/");
+    padd("xmlns:meta", "CDATA", "http://openoffice.org/2000/meta");
+    padd("xmlns:number", "CDATA", "http://openoffice.org/2000/datastyle");
+    padd("xmlns:svg", "CDATA", "http://www.w3.org/2000/svg");
+    padd("xmlns:chart", "CDATA", "http://openoffice.org/2000/chart");
+    padd("xmlns:dr3d", "CDATA", "http://openoffice.org/2000/dr3d");
+    padd("xmlns:math", "CDATA", "http://www.w3.org/1998/Math/MathML");
+    padd("xmlns:form", "CDATA", "http://openoffice.org/2000/form");
+    padd("xmlns:script", "CDATA", "http://openoffice.org/2000/script");
 
-    rstartEl(ascii("office:document"), rList);
+    rstartEl("office:document", rList);
     pList->clear();
 
     makeMeta();
@@ -181,7 +181,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
     makeMasterStyles();
     makeBody();
 
-    rendEl(ascii("office:document"));
+    rendEl("office:document");
 
     if (m_rxDocumentHandler.is())
         m_rxDocumentHandler->endDocument();
@@ -194,12 +194,12 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
  */
 void HwpReader::makeBody()
 {
-    rstartEl(ascii("office:body"), rList);
+    rstartEl("office:body", rList);
     makeTextDecls();
     HWPPara *hwppara = hwpfile.GetFirstPara();
     d->bInBody = true;
     parsePara(hwppara);
-    rendEl(ascii("office:body"));
+    rendEl("office:body");
     d->bInBody = false;
 }
 
@@ -209,28 +209,28 @@ void HwpReader::makeBody()
  */
 void HwpReader::makeTextDecls()
 {
-    rstartEl(ascii("text:sequence-decls"), rList);
-    padd(ascii("text:display-outline-level"), sXML_CDATA, ascii("0"));
-    padd(ascii("text:name"), sXML_CDATA, ascii("Illustration"));
-    rstartEl(ascii("text:sequence-decl"), rList);
+    rstartEl("text:sequence-decls", rList);
+    padd("text:display-outline-level", sXML_CDATA, "0");
+    padd("text:name", sXML_CDATA, "Illustration");
+    rstartEl("text:sequence-decl", rList);
     pList->clear();
-    rendEl(ascii("text:sequence-decl"));
-    padd(ascii("text:display-outline-level"), sXML_CDATA, ascii("0"));
-    padd(ascii("text:name"), sXML_CDATA, ascii("Table"));
-    rstartEl(ascii("text:sequence-decl"), rList);
+    rendEl("text:sequence-decl");
+    padd("text:display-outline-level", sXML_CDATA, "0");
+    padd("text:name", sXML_CDATA, "Table");
+    rstartEl("text:sequence-decl", rList);
     pList->clear();
-    rendEl(ascii("text:sequence-decl"));
-    padd(ascii("text:display-outline-level"), sXML_CDATA, ascii("0"));
-    padd(ascii("text:name"), sXML_CDATA, ascii("Text"));
-    rstartEl(ascii("text:sequence-decl"), rList);
+    rendEl("text:sequence-decl");
+    padd("text:display-outline-level", sXML_CDATA, "0");
+    padd("text:name", sXML_CDATA, "Text");
+    rstartEl("text:sequence-decl", rList);
     pList->clear();
-    rendEl(ascii("text:sequence-decl"));
-    padd(ascii("text:display-outline-level"), sXML_CDATA, ascii("0"));
-    padd(ascii("text:name"), sXML_CDATA, ascii("Drawing"));
-    rstartEl(ascii("text:sequence-decl"), rList);
+    rendEl("text:sequence-decl");
+    padd("text:display-outline-level", sXML_CDATA, "0");
+    padd("text:name", sXML_CDATA, "Drawing");
+    rstartEl("text:sequence-decl", rList);
     pList->clear();
-    rendEl(ascii("text:sequence-decl"));
-    rendEl(ascii("text:sequence-decls"));
+    rendEl("text:sequence-decl");
+    rendEl("text:sequence-decls");
 }
 
 
@@ -243,27 +243,27 @@ void HwpReader::makeMeta()
 {
     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
 
-    rstartEl(ascii("office:meta"), rList);
+    rstartEl("office:meta", rList);
 
     if (hwpinfo.summary.title[0])
     {
-        rstartEl(ascii("dc:title"), rList);
+        rstartEl("dc:title", rList);
         rchars((hconv(hwpinfo.summary.title)));
-        rendEl(ascii("dc:title"));
+        rendEl("dc:title");
     }
 
     if (hwpinfo.summary.subject[0])
     {
-        rstartEl(ascii("dc:subject"), rList);
+        rstartEl("dc:subject", rList);
         rchars((hconv(hwpinfo.summary.subject)));
-        rendEl(ascii("dc:subject"));
+        rendEl("dc:subject");
     }
 
     if (hwpinfo.summary.author[0])
     {
-        rstartEl(ascii("meta:initial-creator"), rList);
+        rstartEl("meta:initial-creator", rList);
         rchars((hconv(hwpinfo.summary.author)));
-        rendEl(ascii("meta:initial-creator"));
+        rendEl("meta:initial-creator");
     }
 
     if (hwpinfo.summary.date[0])
@@ -325,47 +325,47 @@ void HwpReader::makeMeta()
         }
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
-        rstartEl( ascii("meta:creation-date"), rList );
+        rstartEl( "meta:creation-date", rList );
         rchars( ascii(buf));
-        rendEl( ascii("meta:creation-date") );
+        rendEl( "meta:creation-date" );
     }
 
     if (hwpinfo.summary.keyword[0][0] || hwpinfo.summary.etc[0][0])
     {
-        rstartEl(ascii("meta:keywords"), rList);
+        rstartEl("meta:keywords", rList);
         if (hwpinfo.summary.keyword[0][0])
         {
-            rstartEl(ascii("meta:keyword"), rList);
+            rstartEl("meta:keyword", rList);
             rchars((hconv(hwpinfo.summary.keyword[0])));
-            rendEl(ascii("meta:keyword"));
+            rendEl("meta:keyword");
         }
         if (hwpinfo.summary.keyword[1][0])
         {
-            rstartEl(ascii("meta:keyword"), rList);
+            rstartEl("meta:keyword", rList);
             rchars((hconv(hwpinfo.summary.keyword[1])));
-            rendEl(ascii("meta:keyword"));
+            rendEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[0][0])
         {
-            rstartEl(ascii("meta:keyword"), rList);
+            rstartEl("meta:keyword", rList);
             rchars((hconv(hwpinfo.summary.etc[0])));
-            rendEl(ascii("meta:keyword"));
+            rendEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[1][0])
         {
-            rstartEl(ascii("meta:keyword"), rList);
+            rstartEl("meta:keyword", rList);
             rchars((hconv(hwpinfo.summary.etc[1])));
-            rendEl(ascii("meta:keyword"));
+            rendEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[2][0])
         {
-            rstartEl(ascii("meta:keyword"), rList);
+            rstartEl("meta:keyword", rList);
             rchars((hconv(hwpinfo.summary.etc[2])));
-            rendEl(ascii("meta:keyword"));
+            rendEl("meta:keyword");
         }
-        rendEl(ascii("meta:keywords"));
+        rendEl("meta:keywords");
     }
-    rendEl(ascii("office:meta"));
+    rendEl("office:meta");
 }
 
 
@@ -419,24 +419,24 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( prop->line_pstyle > 0 && prop->line_pstyle < 5 && prop->line_color <= 0xffffff)
         {
-            padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "LineType%d", buf)));
-            padd( ascii("draw:style"), sXML_CDATA, ascii("round"));
-            padd( ascii("draw:dots1"), sXML_CDATA, ascii("1"));
-            padd( ascii("draw:dots1-length"), sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + ascii("cm"));
+            padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "LineType%d", buf)));
+            padd( "draw:style", sXML_CDATA, "round");
+            padd( "draw:dots1", sXML_CDATA, "1");
+            padd( "draw:dots1-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + "cm");
             if( prop->line_pstyle == 3 )
             {
-                padd( ascii("draw:dots2"), sXML_CDATA, ascii("1"));
-                padd( ascii("draw:dots2-length"), sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width) ) + ascii("cm"));
+                padd( "draw:dots2", sXML_CDATA, "1");
+                padd( "draw:dots2-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width) ) + "cm");
             }
             else if( prop->line_pstyle == 4 )
             {
-                padd( ascii("draw:dots2"), sXML_CDATA, ascii("2"));
-                padd( ascii("draw:dots2-length"), sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width)) + ascii("cm"));
+                padd( "draw:dots2", sXML_CDATA, "2");
+                padd( "draw:dots2-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width)) + "cm");
             }
-            padd( ascii("draw:distance"), sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].distance * WTMM(prop->line_width)) + ascii("cm"));
-            rstartEl( ascii("draw:stroke-dash"), rList);
+            padd( "draw:distance", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].distance * WTMM(prop->line_width)) + "cm");
+            rstartEl( "draw:stroke-dash", rList);
             pList->clear();
-            rendEl( ascii("draw:stroke-dash") );
+            rendEl( "draw:stroke-dash" );
         }
 
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
@@ -445,50 +445,50 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = true;
-                padd(ascii("draw:name"), sXML_CDATA,
+                padd("draw:name", sXML_CDATA,
                     ascii(ArrowShape[prop->line_tstyle].name));
                 if( prop->line_tstyle == 1 )
                 {
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii("0 0 20 30"));
-                    padd(ascii("svg:d"), sXML_CDATA, ascii("m10 0-10 30h20z"));
+                    padd("svg:viewBox", sXML_CDATA, "0 0 20 30");
+                    padd("svg:d", sXML_CDATA, "m10 0-10 30h20z");
                 }
                 else if( prop->line_tstyle == 2 )
                 {
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii("0 0 1122 2243"));
-                    padd(ascii("svg:d"), sXML_CDATA, ascii("m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z"));
+                    padd("svg:viewBox", sXML_CDATA, "0 0 1122 2243");
+                    padd("svg:d", sXML_CDATA, "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z");
                 }
                 else if( prop->line_tstyle == 3 )
                 {
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii("0 0 30 30"));
-                    padd(ascii("svg:d"), sXML_CDATA, ascii("m0 0h30v30h-30z"));
+                    padd("svg:viewBox", sXML_CDATA, "0 0 30 30");
+                    padd("svg:d", sXML_CDATA, "m0 0h30v30h-30z");
                 }
-                rstartEl(ascii("draw:marker"), rList);
+                rstartEl("draw:marker", rList);
                 pList->clear();
-                rendEl(ascii("draw:marker"));
+                rendEl("draw:marker");
             }
             if( prop->line_hstyle && !ArrowShape[prop->line_hstyle].bMade)
             {
                 ArrowShape[prop->line_hstyle].bMade = true;
-                padd(ascii("draw:name"), sXML_CDATA,
+                padd("draw:name", sXML_CDATA,
                     ascii(ArrowShape[prop->line_hstyle].name));
                 if( prop->line_hstyle == 1 )
                 {
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii("0 0 20 30"));
-                    padd(ascii("svg:d"), sXML_CDATA, ascii("m10 0-10 30h20z"));
+                    padd("svg:viewBox", sXML_CDATA, "0 0 20 30");
+                    padd("svg:d", sXML_CDATA, "m10 0-10 30h20z");
                 }
                 else if( prop->line_hstyle == 2 )
                 {
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii("0 0 1122 2243"));
-                    padd(ascii("svg:d"), sXML_CDATA, ascii("m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z"));
+                    padd("svg:viewBox", sXML_CDATA, "0 0 1122 2243");
+                    padd("svg:d", sXML_CDATA, "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z");
                 }
                 else if( prop->line_hstyle == 3 )
                 {
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii("0 0 20 20"));
-                    padd(ascii("svg:d"), sXML_CDATA, ascii("m0 0h20v20h-20z"));
+                    padd("svg:viewBox", sXML_CDATA, "0 0 20 20");
+                    padd("svg:d", sXML_CDATA, "m0 0h20v20h-20z");
                 }
-                rstartEl(ascii("draw:marker"), rList);
+                rstartEl("draw:marker", rList);
                 pList->clear();
-                rendEl(ascii("draw:marker"));
+                rendEl("draw:marker");
             }
         }
 
@@ -496,10 +496,10 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         {
             if( prop->flag >> 18  & 0x01 )
             {
-                padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
+                padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
                 if( !prop->pictype )
                 {
-                    padd( ascii("xlink:href"), sXML_CDATA,
+                    padd( "xlink:href", sXML_CDATA,
                         hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
                 }
                 else
@@ -538,48 +538,48 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 #else
                         sprintf(filename, "file://%s%s",dirname, emp->name );
 #endif
-                        padd( ascii("xlink:href"), sXML_CDATA, ascii(filename));
+                        padd( "xlink:href", sXML_CDATA, ascii(filename));
                     }
                     else
                     {
-                        padd( ascii("xlink:href"), sXML_CDATA,
+                        padd( "xlink:href", sXML_CDATA,
                             hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
                     }
 
                 }
-                padd( ascii("xlink:type"), sXML_CDATA, ascii("simple"));
-                padd( ascii("xlink:show"), sXML_CDATA, ascii("embed"));
-                padd( ascii("xlink:actuate"), sXML_CDATA, ascii("onLoad"));
+                padd( "xlink:type", sXML_CDATA, "simple");
+                padd( "xlink:show", sXML_CDATA, "embed");
+                padd( "xlink:actuate", sXML_CDATA, "onLoad");
 
-                rstartEl( ascii("draw:fill-image"), rList);
+                rstartEl( "draw:fill-image", rList);
                 pList->clear();
-                rendEl( ascii("draw:fill-image"));
+                rendEl( "draw:fill-image");
             }
 /* 그라데이션이 존재해도, 비트맵파일이 존재하면, 이것이 우선이다. */
             else if( prop->flag >> 16  & 0x01 )   /* 그라데이션 존재여부 */
             {
-                padd( ascii("draw:name"), sXML_CDATA, ascii(Int2Str(hdo->index, "Grad%d", buf)));
+                padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "Grad%d", buf)));
                 switch( prop->gstyle )
                 {
                     case 1 :
                         if( prop->center_y == 50 )
-                            padd( ascii("draw:style"), sXML_CDATA, ascii("axial"));
+                            padd( "draw:style", sXML_CDATA, "axial");
                         else
-                            padd( ascii("draw:style"), sXML_CDATA, ascii("linear"));
+                            padd( "draw:style", sXML_CDATA, "linear");
                         break;
                     case 2:
                     case 3:
-                        padd( ascii("draw:style"), sXML_CDATA, ascii("radial"));
+                        padd( "draw:style", sXML_CDATA, "radial");
                         break;
                     case 4:
-                        padd( ascii("draw:style"), sXML_CDATA, ascii("square"));
+                        padd( "draw:style", sXML_CDATA, "square");
                         break;
                     default:
-                        padd( ascii("draw:style"), sXML_CDATA, ascii("linear"));
+                        padd( "draw:style", sXML_CDATA, "linear");
                         break;
                 }
-                padd( ascii("draw:cx"), sXML_CDATA,ascii(Int2Str(prop->center_x, "%d%%", buf)));
-                padd( ascii("draw:cy"), sXML_CDATA,ascii(Int2Str(prop->center_y, "%d%%", buf)));
+                padd( "draw:cx", sXML_CDATA,ascii(Int2Str(prop->center_x, "%d%%", buf)));
+                padd( "draw:cy", sXML_CDATA,ascii(Int2Str(prop->center_y, "%d%%", buf)));
 
                      HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
                      int default_color = 0xffffff;
@@ -602,78 +602,78 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     {
                         sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                             (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
-                        padd( ascii("draw:start-color"), sXML_CDATA, ascii( buf ));
+                        padd( "draw:start-color", sXML_CDATA, ascii( buf ));
                         sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                             (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
-                        padd( ascii("draw:end-color"), sXML_CDATA, ascii( buf ));
+                        padd( "draw:end-color", sXML_CDATA, ascii( buf ));
                     }
                     else
                     {
                         sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                             (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
-                        padd( ascii("draw:start-color"), sXML_CDATA, ascii( buf ));
+                        padd( "draw:start-color", sXML_CDATA, ascii( buf ));
                         sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                             (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
-                        padd( ascii("draw:end-color"), sXML_CDATA, ascii( buf ));
+                        padd( "draw:end-color", sXML_CDATA, ascii( buf ));
                     }
                 }
                 else
                 {
                     sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                         (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
-                    padd( ascii("draw:start-color"), sXML_CDATA,ascii( buf ));
+                    padd( "draw:start-color", sXML_CDATA,ascii( buf ));
 
                     sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                         (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
-                    padd( ascii("draw:end-color"), sXML_CDATA,ascii( buf ));
+                    padd( "draw:end-color", sXML_CDATA,ascii( buf ));
                 }
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
                 {
                     int angle = prop->angle >= 180 ? prop->angle - 180 : prop->angle;
                     angle = 1800 - prop->angle * 10;
-                    padd( ascii("draw:angle"), sXML_CDATA,
+                    padd( "draw:angle", sXML_CDATA,
                         ascii(Int2Str( angle, "%d", buf)));
                 }
-                rstartEl( ascii("draw:gradient"), rList );
+                rstartEl( "draw:gradient", rList );
                 pList->clear();
-                rendEl( ascii("draw:gradient"));
+                rendEl( "draw:gradient");
             }
                                                   /* 해칭 */
             else if( prop->pattern_type >> 24 & 0x01 )
             {
                 int type = prop->pattern_type & 0xffffff;
-                padd( ascii("draw:name"), sXML_CDATA,
+                padd( "draw:name", sXML_CDATA,
                     ascii(Int2Str(hdo->index, "Hatch%d", buf)));
                 if( type < 4 )
-                    padd( ascii("draw:style"), sXML_CDATA, ascii("single") );
+                    padd( "draw:style", sXML_CDATA, "single" );
                 else
-                    padd( ascii("draw:style"), sXML_CDATA, ascii("double") );
+                    padd( "draw:style", sXML_CDATA, "double" );
                 sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(prop->pattern_color & 0xff),
                     sal_uInt16((prop->pattern_color >> 8) & 0xff),
                     sal_uInt16((prop->pattern_color >>16) & 0xff) );
-                padd( ascii("draw:color"), sXML_CDATA, ascii( buf ));
-                padd( ascii("draw:distance"), sXML_CDATA, ascii("0.12cm"));
+                padd( "draw:color", sXML_CDATA, ascii( buf ));
+                padd( "draw:distance", sXML_CDATA, "0.12cm");
                 switch( type )
                 {
                     case 0 :
                     case 4 :
-                        padd( ascii("draw:rotation"), sXML_CDATA, ascii("0"));
+                        padd( "draw:rotation", sXML_CDATA, "0");
                         break;
                     case 1 :
-                        padd( ascii("draw:rotation"), sXML_CDATA, ascii("900"));
+                        padd( "draw:rotation", sXML_CDATA, "900");
                         break;
                     case 2 :
-                        padd( ascii("draw:rotation"), sXML_CDATA, ascii("1350"));
+                        padd( "draw:rotation", sXML_CDATA, "1350");
                         break;
                     case 3 :
                     case 5 :
-                        padd( ascii("draw:rotation"), sXML_CDATA, ascii("450"));
+                        padd( "draw:rotation", sXML_CDATA, "450");
                         break;
                 }
-                rstartEl( ascii("draw:hatch"), rList);
+                rstartEl( "draw:hatch", rList);
                 pList->clear();
-                rendEl( ascii("draw:hatch"));
+                rendEl( "draw:hatch");
             }
         }
         hdo = hdo->next;
@@ -685,7 +685,7 @@ void HwpReader::makeStyles()
 {
     HWPStyle& hwpstyle = hwpfile.GetHWPStyle();
 
-    rstartEl(ascii("office:styles"), rList);
+    rstartEl("office:styles", rList);
 
     int i;
     for (i = 0; i < hwpfile.getFBoxStyleCount(); i++)
@@ -696,107 +696,107 @@ void HwpReader::makeStyles()
         }
     }
 
-    padd(ascii("style:name"), sXML_CDATA, ascii("Standard"));
-    padd(ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-    padd(ascii("style:class"), sXML_CDATA, ascii("text"));
-    rstartEl(ascii("style:style"), rList);
+    padd("style:name", sXML_CDATA, "Standard");
+    padd("style:family", sXML_CDATA, "paragraph");
+    padd("style:class", sXML_CDATA, "text");
+    rstartEl("style:style", rList);
     pList->clear();
 
-    padd(ascii("fo:line-height"), sXML_CDATA, ascii("160%"));
-    padd(ascii("fo:text-align"), sXML_CDATA, ascii("justify"));
-    rstartEl(ascii("style:properties"), rList);
+    padd("fo:line-height", sXML_CDATA, "160%");
+    padd("fo:text-align", sXML_CDATA, "justify");
+    rstartEl("style:properties", rList);
     pList->clear();
-    rstartEl(ascii("style:tab-stops"), rList);
+    rstartEl("style:tab-stops", rList);
 
     for( i = 1 ; i < 40 ; i++)
     {
-        padd(ascii("style:position"), sXML_CDATA,
-            Double2Str( WTI(1000 * i)) + ascii("inch"));
-        rstartEl(ascii("style:tab-stop"), rList);
+        padd("style:position", sXML_CDATA,
+            Double2Str( WTI(1000 * i)) + "inch");
+        rstartEl("style:tab-stop", rList);
         pList->clear();
-        rendEl(ascii("style:tab-stop"));
+        rendEl("style:tab-stop");
     }
-    rendEl(ascii("style:tab-stops"));
-    rendEl(ascii("style:properties"));
+    rendEl("style:tab-stops");
+    rendEl("style:properties");
 
-    rendEl(ascii("style:style"));
+    rendEl("style:style");
 
     for (int ii = 0; ii < hwpstyle.Num(); ii++)
     {
         unsigned char *stylename = (unsigned char *) hwpstyle.GetName(ii);
-        padd(ascii("style:name"), sXML_CDATA, (hconv(kstr2hstr(stylename).c_str())));
-        padd(ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-        padd(ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
+        padd("style:name", sXML_CDATA, (hconv(kstr2hstr(stylename).c_str())));
+        padd("style:family", sXML_CDATA, "paragraph");
+        padd("style:parent-style-name", sXML_CDATA, "Standard");
 
-        rstartEl(ascii("style:style"), rList);
+        rstartEl("style:style", rList);
 
         pList->clear();
 
         parseCharShape(hwpstyle.GetCharShape(ii));
         parseParaShape(hwpstyle.GetParaShape(ii));
 
-        rstartEl(ascii("style:properties"), rList);
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl(ascii("style:properties"));
+        rendEl("style:properties");
 
-        rendEl(ascii("style:style"));
+        rendEl("style:style");
     }
 
     {
-        padd( ascii("style:name"), sXML_CDATA, ascii("Header"));
-        padd( ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-        padd( ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
-        padd( ascii("style:class"), sXML_CDATA, ascii("extra"));
-        rstartEl(ascii("style:style"), rList);
+        padd( "style:name", sXML_CDATA, "Header");
+        padd( "style:family", sXML_CDATA, "paragraph");
+        padd( "style:parent-style-name", sXML_CDATA, "Standard");
+        padd( "style:class", sXML_CDATA, "extra");
+        rstartEl("style:style", rList);
         pList->clear();
-        rendEl(ascii("style:style"));
+        rendEl("style:style");
     }
 
     {
-        padd( ascii("style:name"), sXML_CDATA, ascii("Footer"));
-        padd( ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-        padd( ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
-        padd( ascii("style:class"), sXML_CDATA, ascii("extra"));
-        rstartEl(ascii("style:style"), rList);
+        padd( "style:name", sXML_CDATA, "Footer");
+        padd( "style:family", sXML_CDATA, "paragraph");
+        padd( "style:parent-style-name", sXML_CDATA, "Standard");
+        padd( "style:class", sXML_CDATA, "extra");
+        rstartEl("style:style", rList);
         pList->clear();
 
-        rendEl(ascii("style:style"));
+        rendEl("style:style");
     }
 
     if( hwpfile.linenumber > 0)
     {
-        padd( ascii("style:name"), sXML_CDATA, ascii("Horizontal Line"));
-        padd( ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-        padd( ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
-        padd( ascii("style:class"), sXML_CDATA, ascii("html"));
-        rstartEl( ascii("style:style"), rList);
+        padd( "style:name", sXML_CDATA, "Horizontal Line");
+        padd( "style:family", sXML_CDATA, "paragraph");
+        padd( "style:parent-style-name", sXML_CDATA, "Standard");
+        padd( "style:class", sXML_CDATA, "html");
+        rstartEl( "style:style", rList);
         pList->clear();
-        padd( ascii("fo:font-size"), sXML_CDATA, ascii("6pt"));
-        padd( ascii("fo:margin-top"), sXML_CDATA, ascii("0cm"));
-        padd( ascii("fo:margin-bottom"), sXML_CDATA, ascii("0cm"));
-        padd( ascii("style:border-line-width-bottom"), sXML_CDATA, ascii("0.02cm 0.035cm 0.002cm"));
-        padd( ascii("fo:padding"), sXML_CDATA, ascii("0cm"));
-        padd( ascii("fo:border-bottom"), sXML_CDATA, ascii("0.039cm double #808080"));
-        padd( ascii("text:number-lines"), sXML_CDATA, ascii("false"));
-        padd( ascii("text:line-number"), sXML_CDATA, ascii("0"));
-        padd(ascii("fo:line-height"), sXML_CDATA, ascii("100%"));
-        rstartEl( ascii("style:properties"), rList);
+        padd( "fo:font-size", sXML_CDATA, "6pt");
+        padd( "fo:margin-top", sXML_CDATA, "0cm");
+        padd( "fo:margin-bottom", sXML_CDATA, "0cm");
+        padd( "style:border-line-width-bottom", sXML_CDATA, "0.02cm 0.035cm 0.002cm");
+        padd( "fo:padding", sXML_CDATA, "0cm");
+        padd( "fo:border-bottom", sXML_CDATA, "0.039cm double #808080");
+        padd( "text:number-lines", sXML_CDATA, "false");
+        padd( "text:line-number", sXML_CDATA, "0");
+        padd("fo:line-height", sXML_CDATA, "100%");
+        rstartEl( "style:properties", rList);
         pList->clear();
-        rendEl( ascii("style:properties"));
-        rendEl( ascii("style:style"));
+        rendEl( "style:properties");
+        rendEl( "style:style");
     }
 
     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
 
-    padd(ascii("text:num-suffix"), sXML_CDATA, ascii(")"));
-    padd(ascii("text:num-format"), sXML_CDATA, ascii("1"));
+    padd("text:num-suffix", sXML_CDATA, ")");
+    padd("text:num-format", sXML_CDATA, "1");
     if( hwpinfo.beginfnnum != 1)
-        padd(ascii("text:offset"), sXML_CDATA, ascii(Int2Str(hwpinfo.beginfnnum -1, "%d", buf)));
-    rstartEl(ascii("text:footnotes-configuration"), rList);
+        padd("text:offset", sXML_CDATA, ascii(Int2Str(hwpinfo.beginfnnum -1, "%d", buf)));
+    rstartEl("text:footnotes-configuration", rList);
     pList->clear();
-    rendEl(ascii("text:footnotes-configuration"));
+    rendEl("text:footnotes-configuration");
 
-    rendEl(ascii("office:styles"));
+    rendEl("office:styles");
 }
 
 
@@ -809,7 +809,7 @@ void HwpReader::makeAutoStyles()
 {
     int i;
 
-    rstartEl(ascii("office:automatic-styles"), rList);
+    rstartEl("office:automatic-styles", rList);
 
     for (i = 0; i < hwpfile.getParaShapeCount(); i++)
         makePStyle(hwpfile.getParaShape(i));
@@ -859,47 +859,47 @@ void HwpReader::makeAutoStyles()
             continue;
         if( i == 3 && bIsRight == false )
             continue;
-        padd(ascii("style:name"), sXML_CDATA,
+        padd("style:name", sXML_CDATA,
             ascii(Int2Str(i,"PNPara%d", buf)));
-        padd(ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-        padd(ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
-        rstartEl(ascii("style:style"), rList);
+        padd("style:family", sXML_CDATA, "paragraph");
+        padd("style:parent-style-name", sXML_CDATA, "Standard");
+        rstartEl("style:style", rList);
         pList->clear();
         if( i == 1 )
-            padd(ascii("fo:text-align"), sXML_CDATA, ascii("start"));
+            padd("fo:text-align", sXML_CDATA, "start");
         else if ( i == 2 )
-            padd(ascii("fo:text-align"), sXML_CDATA, ascii("center"));
+            padd("fo:text-align", sXML_CDATA, "center");
         else if ( i == 3 )
-            padd(ascii("fo:text-align"), sXML_CDATA, ascii("end"));
-        rstartEl(ascii("style:properties"), rList);
+            padd("fo:text-align", sXML_CDATA, "end");
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl( ascii("style:properties"));
-        rendEl( ascii("style:style"));
+        rendEl( "style:properties");
+        rendEl( "style:style");
 
-        padd(ascii("style:name"), sXML_CDATA, ascii(Int2Str(i,"PNBox%d",buf)));
-        padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
-        rstartEl(ascii("style:style"), rList);
+        padd("style:name", sXML_CDATA, ascii(Int2Str(i,"PNBox%d",buf)));
+        padd("style:family", sXML_CDATA, "graphics");
+        rstartEl("style:style", rList);
         pList->clear();
 
-        padd(ascii("fo:margin-top"), sXML_CDATA, ascii("0cm"));
-        padd(ascii("fo:margin-bottom"), sXML_CDATA, ascii("0cm"));
-        padd(ascii("style:wrap"), sXML_CDATA, ascii("run-through"));
-        padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("from-top"));
-        padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("paragraph"));
+        padd("fo:margin-top", sXML_CDATA, "0cm");
+        padd("fo:margin-bottom", sXML_CDATA, "0cm");
+        padd("style:wrap", sXML_CDATA, "run-through");
+        padd("style:vertical-pos", sXML_CDATA, "from-top");
+        padd("style:vertical-rel", sXML_CDATA, "paragraph");
 
         if( i == 1 )
-            padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("left"));
+            padd("style:horizontal-pos", sXML_CDATA, "left");
         else if ( i == 2 )
-            padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("center"));
+            padd("style:horizontal-pos", sXML_CDATA, "center");
         else if ( i == 3 )
-            padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("right"));
-        padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("paragraph"));
-        padd(ascii("fo:padding"), sXML_CDATA, ascii("0cm"));
-        padd(ascii("stylefamily"), sXML_CDATA, ascii("graphics"));
-        rstartEl(ascii("style:properties"), rList);
+            padd("style:horizontal-pos", sXML_CDATA, "right");
+        padd("style:horizontal-rel", sXML_CDATA, "paragraph");
+        padd("fo:padding", sXML_CDATA, "0cm");
+        padd("stylefamily", sXML_CDATA, "graphics");
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl(ascii("style:properties"));
-        rendEl(ascii("style:style"));
+        rendEl("style:properties");
+        rendEl("style:style");
     }
 
     for (i = 0; i < hwpfile.getDateFormatCount(); i++)
@@ -907,7 +907,7 @@ void HwpReader::makeAutoStyles()
 
     makePageStyle();
 
-    rendEl(ascii("office:automatic-styles"));
+    rendEl("office:automatic-styles");
 }
 
 
@@ -936,7 +936,7 @@ struct PageSetting
 
 void HwpReader::makeMasterStyles()
 {
-    rstartEl(ascii("office:master-styles"), rList);
+    rstartEl("office:master-styles", rList);
 
     int i;
     int nMax = hwpfile.getMaxSettedPage();
@@ -1018,18 +1018,18 @@ void HwpReader::makeMasterStyles()
     for( i = 1; i <= nMax ; i++ )
     {
         if( i == 1 )
-            padd(ascii("style:name"), sXML_CDATA, ascii("Standard"));
+            padd("style:name", sXML_CDATA, "Standard");
         else
-            padd(ascii("style:name"), sXML_CDATA,
+            padd("style:name", sXML_CDATA,
                 ascii(Int2Str(i, "p%d", buf)));
-        padd(ascii("style:page-master-name"), sXML_CDATA,
+        padd("style:page-master-name", sXML_CDATA,
                 ascii(Int2Str(hwpfile.GetPageMasterNum(i), "pm%d", buf)));
         if( i < nMax )
-            padd(ascii("style:next-style-name"), sXML_CDATA,
+            padd("style:next-style-name", sXML_CDATA,
                 ascii(Int2Str(i+1, "p%d", buf)));
-        padd(ascii("draw:style-name"), sXML_CDATA,
+        padd("draw:style-name", sXML_CDATA,
             ascii(Int2Str(i, "master%d", buf)));
-        rstartEl(ascii("style:master-page"), rList);
+        rstartEl("style:master-page", rList);
         pList->clear();
 
         if( pSet[i].bIsSet )                      /* 현재 설정이 바뀌었으면 */
@@ -1080,28 +1080,28 @@ void HwpReader::makeMasterStyles()
         }
         else                                      /* 아직 설정이 없다면 기본설정으로 */
         {
-            rstartEl(ascii("style:header"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:header", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:header"));
+            rendEl("text:p");
+            rendEl("style:header");
 
-            rstartEl(ascii("style:footer"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:footer", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:footer"));
+            rendEl("text:p");
+            rendEl("style:footer");
 
-            rendEl(ascii("style:master-page"));
+            rendEl("style:master-page");
 
             continue;
         }
 // ------------- header -------------
         if( pPage->header )
         {
-            rstartEl(ascii("style:header"), rList);
+            rstartEl("style:header", rList);
             if( pPage->pagenumber && pPage->pagenumber->where < 4 )
             {
                 d->bInHeader = true;
@@ -1110,11 +1110,11 @@ void HwpReader::makeMasterStyles()
             parsePara(pPage->header->plist.front());
             d->bInHeader = false;
             d->pPn = 0L;
-            rendEl(ascii("style:header"));
+            rendEl("style:header");
         }
         if( pPage->header_even )
         {
-            rstartEl(ascii("style:header"), rList);
+            rstartEl("style:header", rList);
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4
                 || pPage->pagenumber->where == 7 ) )
             {
@@ -1126,14 +1126,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
-            rendEl(ascii("style:header"));
+            rendEl("style:header");
         }
                                                   /* 기본으로 한다. */
         else if( pPage->header_odd && !pPage->header_even )
         {
-            rstartEl(ascii("style:header"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:header", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4 ||
                 pPage->pagenumber->where == 7 ) )
@@ -1144,12 +1144,12 @@ void HwpReader::makeMasterStyles()
                 d->pPn = 0L;
                 d->nPnPos = 0;
             }
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:header"));
+            rendEl("text:p");
+            rendEl("style:header");
         }
         if( pPage->header_odd )
         {
-            rstartEl(ascii("style:header-left"), rList);
+            rstartEl("style:header-left", rList);
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4
                 || pPage->pagenumber->where == 7 ) )
             {
@@ -1161,14 +1161,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
-            rendEl(ascii("style:header-left"));
+            rendEl("style:header-left");
         }
                                                   /* 기본으로 한다. */
         else if( pPage->header_even && !pPage->header_odd )
         {
-            rstartEl(ascii("style:header-left"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:header-left", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4 ||
                 pPage->pagenumber->where == 7 ) )
@@ -1179,14 +1179,14 @@ void HwpReader::makeMasterStyles()
                 d->pPn = 0L;
                 d->nPnPos = 0;
             }
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:header-left"));
+            rendEl("text:p");
+            rendEl("style:header-left");
         }
         if( !pPage->header && !pPage->header_even && !pPage->header_odd )
         {
-            rstartEl(ascii("style:header"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:header", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
             if( pPage->pagenumber && (pPage->pagenumber->where < 4 ||
                 pPage->pagenumber->where == 7 ) )
@@ -1195,13 +1195,13 @@ void HwpReader::makeMasterStyles()
                 makeShowPageNum();
                 d->pPn = 0L;
             }
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:header"));
+            rendEl("text:p");
+            rendEl("style:header");
         }
 // ------------- footer -------------
         if( pPage->footer )
         {
-            rstartEl(ascii("style:footer"), rList);
+            rstartEl("style:footer", rList);
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
@@ -1211,11 +1211,11 @@ void HwpReader::makeMasterStyles()
             parsePara(pPage->footer->plist.front());
             d->bInHeader = false;
             d->pPn = 0L;
-            rendEl(ascii("style:footer"));
+            rendEl("style:footer");
         }
         if( pPage->footer_even )
         {
-            rstartEl(ascii("style:footer"), rList);
+            rstartEl("style:footer", rList);
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
@@ -1227,14 +1227,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
-            rendEl(ascii("style:footer"));
+            rendEl("style:footer");
         }
                                                   /* 기본으로 한다. */
         else if( pPage->footer_odd && !pPage->footer_even )
         {
-            rstartEl(ascii("style:footer"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:footer", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
@@ -1245,12 +1245,12 @@ void HwpReader::makeMasterStyles()
                 d->pPn = 0L;
                 d->nPnPos = 0;
             }
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:footer"));
+            rendEl("text:p");
+            rendEl("style:footer");
         }
         if( pPage->footer_odd )
         {
-            rstartEl(ascii("style:footer-left"), rList);
+            rstartEl("style:footer-left", rList);
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
@@ -1262,14 +1262,14 @@ void HwpReader::makeMasterStyles()
             d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
-            rendEl(ascii("style:footer-left"));
+            rendEl("style:footer-left");
         }
                                                   /* 기본으로 한다. */
         else if( pPage->footer_even && !pPage->footer_odd )
         {
-            rstartEl(ascii("style:footer-left"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:footer-left", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
@@ -1280,14 +1280,14 @@ void HwpReader::makeMasterStyles()
                 d->pPn = 0L;
                 d->nPnPos = 0;
             }
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:footer-left"));
+            rendEl("text:p");
+            rendEl("style:footer-left");
         }
         if( !pPage->footer && !pPage->footer_even && !pPage->footer_odd )
         {
-            rstartEl(ascii("style:footer"), rList);
-            padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-            rstartEl(ascii("text:p"), rList);
+            rstartEl("style:footer", rList);
+            padd("text:style-name", sXML_CDATA, "Standard");
+            rstartEl("text:p", rList);
             pList->clear();
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
@@ -1296,13 +1296,13 @@ void HwpReader::makeMasterStyles()
                 makeShowPageNum();
                 d->pPn = 0L;
             }
-            rendEl(ascii("text:p"));
-            rendEl(ascii("style:footer"));
+            rendEl("text:p");
+            rendEl("style:footer");
         }
 
-        rendEl(ascii("style:master-page"));
+        rendEl("style:master-page");
     }
-    rendEl(ascii("office:master-styles"));
+    rendEl("office:master-styles");
 }
 
 
@@ -1317,9 +1317,9 @@ void HwpReader::parseCharShape(CharShape * cshape)
 {
     HWPFont& hwpfont = hwpfile.GetHWPFont();
 
-    padd(ascii("fo:font-size"), sXML_CDATA,
+    padd("fo:font-size", sXML_CDATA,
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
-    padd(ascii("style:font-size-asian"), sXML_CDATA,
+    padd("style:font-size-asian", sXML_CDATA,
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
 
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
@@ -1327,55 +1327,55 @@ void HwpReader::parseCharShape(CharShape * cshape)
     double fRatio = 1.0;
     int size = getRepFamilyName(tmp.c_str(), buf, fRatio);
 
-    padd(ascii("fo:font-family"), sXML_CDATA,
+    padd("fo:font-family", sXML_CDATA,
         OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
-    padd(ascii("style:font-family-asian"), sXML_CDATA,
+    padd("style:font-family-asian", sXML_CDATA,
         OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
 
-    padd(ascii("style:text-scale"), sXML_CDATA,
+    padd("style:text-scale", sXML_CDATA,
         ascii(Int2Str((int)(cshape->ratio[0] * fRatio), "%d%%", buf)));
 
     double sspace = (cshape->size / 25) * cshape->space[0] / 100.;
 
     if (sspace != 0.)
     {
-        padd(ascii("fo:letter-spacing"), sXML_CDATA,
-            Double2Str(sspace) + ascii("pt"));
+        padd("fo:letter-spacing", sXML_CDATA,
+            Double2Str(sspace) + "pt");
     }
     if (cshape->color[1] != 0)
-        padd(ascii("fo:color"), sXML_CDATA,
+        padd("fo:color", sXML_CDATA,
             ascii(hcolor2str(cshape->color[1], 100, buf, true)));
     if (cshape->shade != 0)
-        padd(ascii("style:text-background-color"), sXML_CDATA,
+        padd("style:text-background-color", sXML_CDATA,
             ascii(hcolor2str(cshape->color[0], cshape->shade, buf)));
     if (cshape->attr & 0x01)
     {
-        padd(ascii("fo:font-style"), sXML_CDATA, ascii("italic"));
-        padd(ascii("style:font-style-asian"), sXML_CDATA, ascii("italic"));
+        padd("fo:font-style", sXML_CDATA, "italic");
+        padd("style:font-style-asian", sXML_CDATA, "italic");
     }
      else{
-        padd(ascii("fo:font-style"), sXML_CDATA, ascii("normal"));
-        padd(ascii("style:font-style-asian"), sXML_CDATA, ascii("normal"));
+        padd("fo:font-style", sXML_CDATA, "normal");
+        padd("style:font-style-asian", sXML_CDATA, "normal");
      }
     if (cshape->attr >> 1 & 0x01)
     {
-        padd(ascii("fo:font-weight"), sXML_CDATA, ascii("bold"));
-        padd(ascii("style:font-weight-asian"), sXML_CDATA, ascii("bold"));
+        padd("fo:font-weight", sXML_CDATA, "bold");
+        padd("style:font-weight-asian", sXML_CDATA, "bold");
     }
      else{
-        padd(ascii("fo:font-weight"), sXML_CDATA, ascii("normal"));
-        padd(ascii("style:font-weight-asian"), sXML_CDATA, ascii("normal"));
+        padd("fo:font-weight", sXML_CDATA, "normal");
+        padd("style:font-weight-asian", sXML_CDATA, "normal");
      }
     if (cshape->attr >> 2 & 0x01)
-        padd(ascii("style:text-underline"), sXML_CDATA, ascii("single"));
+        padd("style:text-underline", sXML_CDATA, "single");
     if (cshape->attr >> 3 & 0x01)
-        padd(ascii("style:text-outline"), sXML_CDATA, ascii("true"));
+        padd("style:text-outline", sXML_CDATA, "true");
     if (cshape->attr >> 4 & 0x01)
-        padd(ascii("fo:text-shadow"), sXML_CDATA, ascii("1pt 1pt"));
+        padd("fo:text-shadow", sXML_CDATA, "1pt 1pt");
     if (cshape->attr >> 5 & 0x01)
-        padd(ascii("style:text-position"), sXML_CDATA, ascii("super 58%"));
+        padd("style:text-position", sXML_CDATA, "super 58%");
     if (cshape->attr >> 6 & 0x01)
-        padd(ascii("style:text-position"), sXML_CDATA, ascii("sub 58%"));
+        padd("style:text-position", sXML_CDATA, "sub 58%");
 
 }
 
@@ -1391,22 +1391,22 @@ void HwpReader::parseParaShape(ParaShape * pshape)
 {
 
     if (pshape->left_margin != 0)
-        padd(ascii("fo:margin-left"), sXML_CDATA, Double2Str
-            (WTI(pshape->left_margin )) + ascii("inch"));
+        padd("fo:margin-left", sXML_CDATA, Double2Str
+            (WTI(pshape->left_margin )) + "inch");
     if (pshape->right_margin != 0)
-        padd(ascii("fo:margin-right"), sXML_CDATA, Double2Str
-            (WTI(pshape->right_margin)) + ascii("inch"));
+        padd("fo:margin-right", sXML_CDATA, Double2Str
+            (WTI(pshape->right_margin)) + "inch");
     if (pshape->pspacing_prev != 0)
-        padd(ascii("fo:margin-top"), sXML_CDATA, Double2Str
-            (WTI(pshape->pspacing_prev)) + ascii("inch"));
+        padd("fo:margin-top", sXML_CDATA, Double2Str
+            (WTI(pshape->pspacing_prev)) + "inch");
     if (pshape->pspacing_next != 0)
-        padd(ascii("fo:margin-bottom"), sXML_CDATA, Double2Str
-            (WTI(pshape->pspacing_next)) + ascii("inch"));
+        padd("fo:margin-bottom", sXML_CDATA, Double2Str
+            (WTI(pshape->pspacing_next)) + "inch");
     if (pshape->indent != 0)
-        padd(ascii("fo:text-indent"), sXML_CDATA, Double2Str
-            (WTI(pshape->indent)) + ascii("inch"));
+        padd("fo:text-indent", sXML_CDATA, Double2Str
+            (WTI(pshape->indent)) + "inch");
     if (pshape->lspacing != 0)
-        padd(ascii("fo:line-height"), sXML_CDATA,
+        padd("fo:line-height", sXML_CDATA,
             ascii(Int2Str (pshape->lspacing, "%d%%", buf)));
 
     unsigned char set_align = 0;
@@ -1434,20 +1434,20 @@ void HwpReader::parseParaShape(ParaShape * pshape)
     }
 
     if (set_align)
-        padd(ascii("fo:text-align"), sXML_CDATA, ascii(buf));
+        padd("fo:text-align", sXML_CDATA, ascii(buf));
 
     if (pshape->outline)
-        padd(ascii("fo:border"), sXML_CDATA, ascii("0.002cm solid #000000"));
+        padd("fo:border", sXML_CDATA, "0.002cm solid #000000");
     if( pshape->shade > 0 )
     {
-        padd(ascii("fo:background-color"), sXML_CDATA,
+        padd("fo:background-color", sXML_CDATA,
             ascii(hcolor2str(0, pshape->shade, buf)));
     }
 
     if( pshape->pagebreak & 0x02 || pshape->pagebreak & 0x04)
-        padd(ascii("fo:break-before"), sXML_CDATA, ascii("page"));
+        padd("fo:break-before", sXML_CDATA, "page");
      else if( pshape->pagebreak & 0x01 )
-        padd(ascii("fo:break-before"), sXML_CDATA, ascii("column"));
+        padd("fo:break-before", sXML_CDATA, "column");
 
 }
 
@@ -1458,20 +1458,20 @@ void HwpReader::parseParaShape(ParaShape * pshape)
 void HwpReader::makePStyle(ParaShape * pshape)
 {
     int nscount = pshape->tabs[MAXTABS -1].type;
-    padd(ascii("style:name"), sXML_CDATA,
+    padd("style:name", sXML_CDATA,
         ascii(Int2Str(pshape->index, "P%d", buf)));
-    padd(ascii("style:family"), sXML_CDATA, ascii("paragraph"));
-    rstartEl(ascii("style:style"), rList);
+    padd("style:family", sXML_CDATA, "paragraph");
+    rstartEl("style:style", rList);
     pList->clear();
     parseParaShape(pshape);
     parseCharShape(pshape->cshape);
-    rstartEl(ascii("style:properties"), rList);
+    rstartEl("style:properties", rList);
     pList->clear();
 
     if( nscount )
     {
         unsigned char tf = 0;
-        rstartEl(ascii("style:tab-stops"),rList);
+        rstartEl("style:tab-stops",rList);
 
           int tab_margin = pshape->left_margin + pshape->indent;
           if( tab_margin < 0 )
@@ -1482,43 +1482,43 @@ void HwpReader::makePStyle(ParaShape * pshape)
                 break;
             if( pshape->tabs[i].position <= tab_margin )
                 continue;
-            padd(ascii("style:position"), sXML_CDATA,
-                Double2Str(WTMM(pshape->tabs[i].position - tab_margin )) + ascii("mm"));
+            padd("style:position", sXML_CDATA,
+                Double2Str(WTMM(pshape->tabs[i].position - tab_margin )) + "mm");
             if( pshape->tabs[i].type )
             {
                 tf = 1;
                 switch(pshape->tabs[i].type)
                 {
                     case 1 :
-                        padd(ascii("style:type"), sXML_CDATA, ascii("right"));
+                        padd("style:type", sXML_CDATA, "right");
                         break;
                     case 2:
-                        padd(ascii("style:type"), sXML_CDATA, ascii("center"));
+                        padd("style:type", sXML_CDATA, "center");
                         break;
                     case 3:
-                        padd(ascii("style:type"), sXML_CDATA, ascii("char"));
-                        padd(ascii("style:char"), sXML_CDATA, ascii("."));
+                        padd("style:type", sXML_CDATA, "char");
+                        padd("style:char", sXML_CDATA, ".");
                         break;
                 }
             }
             if( pshape->tabs[i].dot_continue )
             {
                 tf = 1;
-                padd(ascii("style:leader-char"), sXML_CDATA, ascii("."));
+                padd("style:leader-char", sXML_CDATA, ".");
             }
-            rstartEl( ascii("style:tab-stop"), rList);
+            rstartEl( "style:tab-stop", rList);
             pList->clear();
-            rendEl( ascii("style:tab-stop") );
+            rendEl( "style:tab-stop" );
 
             if( (pshape->tabs[i].position != 1000 * i ) || tf )
             {
                 if( !--nscount ) break;
             }
         }
-        rendEl( ascii("style:tab-stops"));
+        rendEl( "style:tab-stops");
     }
-    rendEl(ascii("style:properties"));
-    rendEl(ascii("style:style"));
+    rendEl("style:properties");
+    rendEl("style:style");
 }
 
 
@@ -1532,8 +1532,8 @@ void HwpReader::makePageStyle()
      int pmCount = hwpfile.getColumnCount();
 
      for( int i = 0 ; i < pmCount ; i++ ){
-         padd(ascii("style:name"), sXML_CDATA, ascii(Int2Str(i + 1, "pm%d", buf)));
-         rstartEl(ascii("style:page-master"),rList);
+         padd("style:name", sXML_CDATA, ascii(Int2Str(i + 1, "pm%d", buf)));
+         rstartEl("style:page-master",rList);
          pList->clear();
 
 
@@ -1542,73 +1542,73 @@ void HwpReader::makePageStyle()
               case 3:                                   // A4
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("210mm"));
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("297mm"));
+                         padd("fo:page-height",sXML_CDATA, "210mm");
+                         padd("fo:page-width",sXML_CDATA, "297mm");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("210mm"));
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("297mm"));
+                         padd("fo:page-width",sXML_CDATA, "210mm");
+                         padd("fo:page-height",sXML_CDATA, "297mm");
                     }
                     break;
               case 4:                                   // 80 column
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("8.5inch"));
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("11inch"));
+                         padd("fo:page-height",sXML_CDATA, "8.5inch");
+                         padd("fo:page-width",sXML_CDATA, "11inch");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("8.5inch"));
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("11inch"));
+                         padd("fo:page-width",sXML_CDATA, "8.5inch");
+                         padd("fo:page-height",sXML_CDATA, "11inch");
                     }
                     break;
               case 5:                                   // B5
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("176mm"));
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("250mm"));
+                         padd("fo:page-height",sXML_CDATA, "176mm");
+                         padd("fo:page-width",sXML_CDATA, "250mm");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("176mm"));
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("250mm"));
+                         padd("fo:page-width",sXML_CDATA, "176mm");
+                         padd("fo:page-height",sXML_CDATA, "250mm");
                     }
                     break;
               case 6:                                   // B4
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("250mm"));
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("353mm"));
+                         padd("fo:page-height",sXML_CDATA, "250mm");
+                         padd("fo:page-width",sXML_CDATA, "353mm");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("250mm"));
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("353mm"));
+                         padd("fo:page-width",sXML_CDATA, "250mm");
+                         padd("fo:page-height",sXML_CDATA, "353mm");
                     }
                     break;
               case 7:
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("8.5inch"));
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("14inch"));
+                         padd("fo:page-height",sXML_CDATA, "8.5inch");
+                         padd("fo:page-width",sXML_CDATA, "14inch");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("8.5inch"));
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("14inch"));
+                         padd("fo:page-width",sXML_CDATA, "8.5inch");
+                         padd("fo:page-height",sXML_CDATA, "14inch");
                     }
                     break;
               case 8:
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("297mm"));
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("420mm"));
+                         padd("fo:page-height",sXML_CDATA, "297mm");
+                         padd("fo:page-width",sXML_CDATA, "420mm");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA, ascii("297mm"));
-                         padd(ascii("fo:page-height"),sXML_CDATA, ascii("420mm"));
+                         padd("fo:page-width",sXML_CDATA, "297mm");
+                         padd("fo:page-height",sXML_CDATA, "420mm");
                     }
                     break;
               case 0:
@@ -1617,74 +1617,74 @@ void HwpReader::makePageStyle()
               default:
                     if( hwpinfo.paper.paper_direction )
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_height)) + ascii("inch"));
-                         padd(ascii("fo:page-height"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_width)) + ascii("inch"));
+                         padd("fo:page-width",sXML_CDATA,
+                              Double2Str(WTI(hwpinfo.paper.paper_height)) + "inch");
+                         padd("fo:page-height",sXML_CDATA,
+                              Double2Str(WTI(hwpinfo.paper.paper_width)) + "inch");
                     }
                     else
                     {
-                         padd(ascii("fo:page-width"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_width)) + ascii("inch"));
-                         padd(ascii("fo:page-height"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_height)) + ascii("inch"));
+                         padd("fo:page-width",sXML_CDATA,
+                              Double2Str(WTI(hwpinfo.paper.paper_width)) + "inch");
+                         padd("fo:page-height",sXML_CDATA,
+                              Double2Str(WTI(hwpinfo.paper.paper_height)) + "inch");
                     }
                     break;
 
          }
 
-         padd(ascii("style:print-orientation"),sXML_CDATA,
+         padd("style:print-orientation",sXML_CDATA,
               ascii(hwpinfo.paper.paper_direction ? "landscape" : "portrait"));
          if( hwpinfo.beginpagenum != 1)
-              padd(ascii("style:first-page-number"),sXML_CDATA,
+              padd("style:first-page-number",sXML_CDATA,
                     ascii(Int2Str(hwpinfo.beginpagenum, "%d", buf)));
 
          if( hwpinfo.borderline ){
-             padd(ascii("fo:margin-left"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.left_margin - hwpinfo.bordermargin[0] + hwpinfo.paper.gutter_length)) + ascii("inch"));
-             padd(ascii("fo:margin-right"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.right_margin - hwpinfo.bordermargin[1])) + ascii("inch"));
-             padd(ascii("fo:margin-top"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.top_margin - hwpinfo.bordermargin[2])) + ascii("inch"));
-             padd(ascii("fo:margin-bottom"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.bottom_margin - hwpinfo.bordermargin[3])) + ascii("inch"));
+             padd("fo:margin-left",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.left_margin - hwpinfo.bordermargin[0] + hwpinfo.paper.gutter_length)) + "inch");
+             padd("fo:margin-right",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.right_margin - hwpinfo.bordermargin[1])) + "inch");
+             padd("fo:margin-top",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.top_margin - hwpinfo.bordermargin[2])) + "inch");
+             padd("fo:margin-bottom",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.bottom_margin - hwpinfo.bordermargin[3])) + "inch");
          }
          else{
-             padd(ascii("fo:margin-left"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.left_margin + hwpinfo.paper.gutter_length)) + ascii("inch"));
-             padd(ascii("fo:margin-right"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.right_margin)) + ascii("inch"));
-             padd(ascii("fo:margin-top"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.top_margin)) + ascii("inch"));
-             padd(ascii("fo:margin-bottom"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.bottom_margin)) + ascii("inch"));
+             padd("fo:margin-left",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.left_margin + hwpinfo.paper.gutter_length)) + "inch");
+             padd("fo:margin-right",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.right_margin)) + "inch");
+             padd("fo:margin-top",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.top_margin)) + "inch");
+             padd("fo:margin-bottom",sXML_CDATA,
+                  Double2Str(WTI(hwpinfo.paper.bottom_margin)) + "inch");
          }
 
          switch( hwpinfo.borderline )
          {
               case 1:
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
               case 3:
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm dotted #000000"));
+                    padd("fo:border", sXML_CDATA,"0.002cm dotted #000000");
                     break;
               case 2:
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
               case 4:
-                    padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
          }
 
-         padd(ascii("fo:padding-left"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[0])) + ascii("inch"));
-         padd(ascii("fo:padding-right"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[1])) + ascii("inch"));
-         padd(ascii("fo:padding-top"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[2])) + ascii("inch"));
-         padd(ascii("fo:padding-bottom"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[3])) + ascii("inch"));
+         padd("fo:padding-left", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.bordermargin[0])) + "inch");
+         padd("fo:padding-right", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.bordermargin[1])) + "inch");
+         padd("fo:padding-top", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.bordermargin[2])) + "inch");
+         padd("fo:padding-bottom", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.bordermargin[3])) + "inch");
 
      /* background color */
          if( hwpinfo.back_info.isset )
@@ -1693,11 +1693,11 @@ void HwpReader::makePageStyle()
                      || hwpinfo.back_info.color[2] > 0 ){
                  sprintf(buf,"#%02x%02x%02x",hwpinfo.back_info.color[0],
                          hwpinfo.back_info.color[1],hwpinfo.back_info.color[2] );
-                 padd(ascii("fo:background-color"), sXML_CDATA, ascii(buf));
+                 padd("fo:background-color", sXML_CDATA, ascii(buf));
              }
          }
 
-         rstartEl(ascii("style:properties"),rList);
+         rstartEl("style:properties",rList);
          pList->clear();
 
      /* background image */
@@ -1705,149 +1705,149 @@ void HwpReader::makePageStyle()
          {
              if( hwpinfo.back_info.type == 1 ){
 #ifdef _WIN32
-                 padd(ascii("xlink:href"), sXML_CDATA,
+                 padd("xlink:href", sXML_CDATA,
                       hconv(kstr2hstr((uchar*) urltowin(hwpinfo.back_info.filename).c_str()).c_str()));
 #else
-                 padd(ascii("xlink:href"), sXML_CDATA,
+                 padd("xlink:href", sXML_CDATA,
                     hconv(kstr2hstr( (uchar *)urltounix(hwpinfo.back_info.filename).c_str()).c_str()));
 #endif
-                 padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
-                 padd(ascii("xlink:actuate"), sXML_CDATA, ascii("onLoad"));
+                 padd("xlink:type", sXML_CDATA, "simple");
+                 padd("xlink:actuate", sXML_CDATA, "onLoad");
              }
              if( hwpinfo.back_info.flag >= 2)
-                 padd(ascii("style:repeat"), sXML_CDATA, ascii("stretch"));
+                 padd("style:repeat", sXML_CDATA, "stretch");
              else if( hwpinfo.back_info.flag == 1 ){
-                 padd(ascii("style:repeat"), sXML_CDATA, ascii("no-repeat"));
-                 padd(ascii("style:position"), sXML_CDATA, ascii("center"));
+                 padd("style:repeat", sXML_CDATA, "no-repeat");
+                 padd("style:position", sXML_CDATA, "center");
              }
-             rstartEl(ascii("style:background-image"),rList);
+             rstartEl("style:background-image",rList);
 
              if( hwpinfo.back_info.type == 2 ){
-                 rstartEl(ascii("office:binary-data"), rList);
+                 rstartEl("office:binary-data", rList);
                  pList->clear();
                  boost::shared_ptr<char> pStr(base64_encode_string((unsigned char *) hwpinfo.back_info.data, hwpinfo.back_info.size ), Free<char>());
                  rchars(ascii(pStr.get()));
-                 rendEl(ascii("office:binary-data"));
+                 rendEl("office:binary-data");
              }
-             rendEl(ascii("style:background-image"));
+             rendEl("style:background-image");
          }
 
          makeColumns( hwpfile.GetColumnDef(i) );
 
-         rendEl(ascii("style:properties"));
+         rendEl("style:properties");
 
     /* header style */
-         rstartEl(ascii("style:header-style"), rList);
-         padd(ascii("svg:height"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.paper.header_length)) + ascii("inch"));
-         padd(ascii("fo:margin-bottom"), sXML_CDATA, ascii("0mm"));
+         rstartEl("style:header-style", rList);
+         padd("svg:height", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.paper.header_length)) + "inch");
+         padd("fo:margin-bottom", sXML_CDATA, "0mm");
 
-         rstartEl(ascii("style:properties"),rList);
+         rstartEl("style:properties",rList);
          pList->clear();
-         rendEl(ascii("style:properties"));
-         rendEl(ascii("style:header-style"));
+         rendEl("style:properties");
+         rendEl("style:header-style");
 
     /* footer style */
-         rstartEl(ascii("style:footer-style"), rList);
-         padd(ascii("svg:height"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.paper.footer_length)) + ascii("inch"));
-         padd(ascii("fo:margin-top"), sXML_CDATA, ascii("0mm"));
-         rstartEl(ascii("style:properties"),rList);
+         rstartEl("style:footer-style", rList);
+         padd("svg:height", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.paper.footer_length)) + "inch");
+         padd("fo:margin-top", sXML_CDATA, "0mm");
+         rstartEl("style:properties",rList);
          pList->clear();
-         rendEl(ascii("style:properties"));
-         rendEl(ascii("style:footer-style"));
+         rendEl("style:properties");
+         rendEl("style:footer-style");
 
     /* footnote style 이건 dtd에서는 빠졌으나, 스펙에는 정의되어 있다. REALKING */
-         rstartEl(ascii("style:footnote-layout"), rList);
+         rstartEl("style:footnote-layout", rList);
 
-         padd(ascii("style:distance-before-sep"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.splinetext)) + ascii("inch"));
-         padd(ascii("style:distance-after-sep"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo.splinefn)) + ascii("inch"));
-         rstartEl(ascii("style:properties"),rList);
+         padd("style:distance-before-sep", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.splinetext)) + "inch");
+         padd("style:distance-after-sep", sXML_CDATA,
+              Double2Str(WTI(hwpinfo.splinefn)) + "inch");
+         rstartEl("style:properties",rList);
          pList->clear();
-         rendEl(ascii("style:properties"));
+         rendEl("style:properties");
          if ( hwpinfo.fnlinetype == 2 )
-              padd(ascii("style:width"), sXML_CDATA, ascii("15cm"));
+              padd("style:width", sXML_CDATA, "15cm");
          else if ( hwpinfo.fnlinetype == 1)
-              padd(ascii("style:width"), sXML_CDATA, ascii("2cm"));
+              padd("style:width", sXML_CDATA, "2cm");
          else if ( hwpinfo.fnlinetype == 3)
-              padd(ascii("style:width"), sXML_CDATA, ascii("0cm"));
+              padd("style:width", sXML_CDATA, "0cm");
          else
-              padd(ascii("style:width"), sXML_CDATA, ascii("5cm"));
+              padd("style:width", sXML_CDATA, "5cm");
 
-         rstartEl(ascii("style:footnote-sep"),rList);
+         rstartEl("style:footnote-sep",rList);
          pList->clear();
-         rendEl(ascii("style:footnote-sep"));
+         rendEl("style:footnote-sep");
 
-         rendEl(ascii("style:footnote-layout"));
+         rendEl("style:footnote-layout");
 
-         rendEl(ascii("style:page-master"));
+         rendEl("style:page-master");
      }
 }
 
 void HwpReader::makeColumns(ColumnDef *coldef)
 {
     if( !coldef ) return;
-  padd(ascii("fo:column-count"), sXML_CDATA, ascii(Int2Str(coldef->ncols, "%d", buf)));
-  rstartEl(ascii("style:columns"),rList);
+  padd("fo:column-count", sXML_CDATA, ascii(Int2Str(coldef->ncols, "%d", buf)));
+  rstartEl("style:columns",rList);
   pList->clear();
   if( coldef->separator != 0 )
   {
         switch( coldef->separator )
         {
              case 1:                           /* 얇은선 */
-                  padd(ascii("style:width"), sXML_CDATA, ascii("0.02mm"));
+                  padd("style:width", sXML_CDATA, "0.02mm");
                   //fall-through
              case 3:                           /* 점선 */
-                  padd(ascii("style:style"), sXML_CDATA, ascii("dotted"));
-                  padd(ascii("style:width"), sXML_CDATA, ascii("0.02mm"));
+                  padd("style:style", sXML_CDATA, "dotted");
+                  padd("style:width", sXML_CDATA, "0.02mm");
                   break;
              case 2:                           /* 두꺼운선 */
              case 4:                           /* 2중선 */
-                  padd(ascii("style:width"), sXML_CDATA, ascii("0.35mm"));
+                  padd("style:width", sXML_CDATA, "0.35mm");
                   break;
              case 0:                           /* 없음 */
              default:
-                  padd(ascii("style:style"), sXML_CDATA, ascii("none"));
+                  padd("style:style", sXML_CDATA, "none");
                   break;
         }
-        rstartEl(ascii("style:column-sep"),rList);
+        rstartEl("style:column-sep",rList);
         pList->clear();
-        rendEl(ascii("style:column-sep"));
+        rendEl("style:column-sep");
   }
   double spacing = WTI(coldef->spacing)/ 2. ;
   for(int ii = 0 ; ii < coldef->ncols ; ii++)
   {
         if( ii == 0 )
-             padd(ascii("fo:margin-left"), sXML_CDATA, ascii("0mm"));
+             padd("fo:margin-left", sXML_CDATA, "0mm");
         else
-             padd(ascii("fo:margin-left"), sXML_CDATA,
-                  Double2Str( spacing) + ascii("inch"));
+             padd("fo:margin-left", sXML_CDATA,
+                  Double2Str( spacing) + "inch");
         if( ii == ( coldef->ncols -1) )
-             padd(ascii("fo:margin-right"), sXML_CDATA,ascii("0mm"));
+             padd("fo:margin-right", sXML_CDATA,"0mm");
         else
-             padd(ascii("fo:margin-right"), sXML_CDATA,
-                  Double2Str( spacing) + ascii("inch"));
-        rstartEl(ascii("style:column"),rList);
+             padd("fo:margin-right", sXML_CDATA,
+                  Double2Str( spacing) + "inch");
+        rstartEl("style:column",rList);
         pList->clear();
-        rendEl(ascii("style:column"));
+        rendEl("style:column");
   }
-  rendEl(ascii("style:columns"));
+  rendEl("style:columns");
 }
 
 void HwpReader::makeTStyle(CharShape * cshape)
 {
-    padd(ascii("style:name"), sXML_CDATA,
+    padd("style:name", sXML_CDATA,
         ascii(Int2Str(cshape->index, "T%d", buf)));
-    padd(ascii("style:family"), sXML_CDATA, ascii("text"));
-    rstartEl(ascii("style:style"), rList);
+    padd("style:family", sXML_CDATA, "text");
+    rstartEl("style:style", rList);
     pList->clear();
     parseCharShape(cshape);
-    rstartEl(ascii("style:properties"), rList);
+    rstartEl("style:properties", rList);
     pList->clear();
-    rendEl(ascii("style:properties"));
-    rendEl(ascii("style:style"));
+    rendEl("style:properties");
+    rendEl("style:style");
 }
 
 
@@ -1856,50 +1856,50 @@ void HwpReader::makeTableStyle(Table *tbl)
 // --------------- table ----------------
     TxtBox *hbox = tbl->box;
 
-    padd(ascii("style:name"), sXML_CDATA,
+    padd("style:name", sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Table%d", buf)));
-    padd(ascii("style:family"), sXML_CDATA,ascii("table"));
-    rstartEl(ascii("style:style"), rList);
+    padd("style:family", sXML_CDATA,"table");
+    rstartEl("style:style", rList);
     pList->clear();
-    padd(ascii("style:width"), sXML_CDATA,
-        Double2Str(WTMM(hbox->box_xs)) + ascii("mm"));
-    padd(ascii("table:align"), sXML_CDATA,ascii("left"));
-    padd(ascii("fo:keep-with-next"), sXML_CDATA,ascii("false"));
-    rstartEl(ascii("style:properties"), rList);
+    padd("style:width", sXML_CDATA,
+        Double2Str(WTMM(hbox->box_xs)) + "mm");
+    padd("table:align", sXML_CDATA,"left");
+    padd("fo:keep-with-next", sXML_CDATA,"false");
+    rstartEl("style:properties", rList);
     pList->clear();
-    rendEl(ascii("style:properties"));
-    rendEl(ascii("style:style"));
+    rendEl("style:properties");
+    rendEl("style:style");
 
 // --------------- column ----------------
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
-        padd(ascii("style:family"), sXML_CDATA,ascii("table-column"));
-        rstartEl(ascii("style:style"), rList);
+        padd("style:name", sXML_CDATA, ascii( buf ));
+        padd("style:family", sXML_CDATA,"table-column");
+        rstartEl("style:style", rList);
         pList->clear();
-        padd(ascii("style:column-width"), sXML_CDATA,
-            Double2Str(WTMM(tbl->columns.data[i+1] - tbl->columns.data[i])) + ascii("mm"));
-        rstartEl(ascii("style:properties"), rList);
+        padd("style:column-width", sXML_CDATA,
+            Double2Str(WTMM(tbl->columns.data[i+1] - tbl->columns.data[i])) + "mm");
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl(ascii("style:properties"));
-        rendEl(ascii("style:style"));
+        rendEl("style:properties");
+        rendEl("style:style");
     }
 
 // --------------- row ----------------
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
-        padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
-        padd(ascii("style:family"), sXML_CDATA,ascii("table-row"));
-        rstartEl(ascii("style:style"), rList);
+        padd("style:name", sXML_CDATA, ascii( buf ));
+        padd("style:family", sXML_CDATA,"table-row");
+        rstartEl("style:style", rList);
         pList->clear();
-        padd(ascii("style:row-height"), sXML_CDATA,
-            Double2Str(WTMM(tbl->rows.data[i+1] - tbl->rows.data[i])) + ascii("mm"));
-        rstartEl(ascii("style:properties"), rList);
+        padd("style:row-height", sXML_CDATA,
+            Double2Str(WTMM(tbl->rows.data[i+1] - tbl->rows.data[i])) + "mm");
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl(ascii("style:properties"));
-        rendEl(ascii("style:style"));
+        rendEl("style:properties");
+        rendEl("style:style");
     }
 
 // --------------- cell ---------------------
@@ -1907,13 +1907,13 @@ void HwpReader::makeTableStyle(Table *tbl)
     {
         TCell *tcell = *it;
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
-        padd(ascii("style:family"), sXML_CDATA,ascii("table-cell"));
-        rstartEl(ascii("style:style"), rList);
+        padd("style:name", sXML_CDATA, ascii( buf ));
+        padd("style:family", sXML_CDATA,"table-cell");
+        rstartEl("style:style", rList);
         pList->clear();
         Cell *cl = tcell->pCell;
         if( cl->ver_align == 1 )
-            padd(ascii("fo:vertical-align"), sXML_CDATA,ascii("middle"));
+            padd("fo:vertical-align", sXML_CDATA,"middle");
 
         if(cl->linetype[2] == cl->linetype[3] && cl->linetype[2] == cl->linetype[0]
             && cl->linetype[2] == cl->linetype[1])
@@ -1922,14 +1922,14 @@ void HwpReader::makeTableStyle(Table *tbl)
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
         }
@@ -1939,69 +1939,69 @@ void HwpReader::makeTableStyle(Table *tbl)
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-left"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-left", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cl->linetype[1] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-right"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-right", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cl->linetype[2] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-top"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-top", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cl->linetype[3] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-bottom"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
         }
         if(cl->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA,
+            padd("fo:background-color", sXML_CDATA,
                 ascii(hcolor2str(sal::static_int_cast<uchar>(cl->color),
                                 sal::static_int_cast<uchar>(cl->shade), buf)));
 
-        rstartEl(ascii("style:properties"), rList);
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl(ascii("style:properties"));
+        rendEl("style:properties");
 
-        rendEl(ascii("style:style"));
+        rendEl("style:style");
     }
 }
 
@@ -2010,11 +2010,11 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 {
     while( hdo )
     {
-        padd(ascii("style:name"), sXML_CDATA,
+        padd("style:name", sXML_CDATA,
             ascii(Int2Str(hdo->index, "Draw%d", buf)));
-        padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
+        padd("style:family", sXML_CDATA, "graphics");
 
-        rstartEl(ascii("style:style"), rList);
+        rstartEl("style:style", rList);
         pList->clear();
 
         switch (fstyle->txtflow)
@@ -2022,37 +2022,37 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             case 0:
                 break;
             case 1:
-                padd(ascii("style:wrap"), sXML_CDATA, ascii("run-through"));
+                padd("style:wrap", sXML_CDATA, "run-through");
                 break;
             case 2:
-                padd(ascii("style:wrap"), sXML_CDATA, ascii("dynamic"));
+                padd("style:wrap", sXML_CDATA, "dynamic");
                 break;
         }
         long color;
 // invisible line
         if( hdo->property.line_color > 0xffffff )
         {
-            padd(ascii("draw:stroke"), sXML_CDATA, ascii("none") );
+            padd("draw:stroke", sXML_CDATA, "none" );
         }
         else
         {
 
             if( hdo->property.line_pstyle == 0 )
-                padd(ascii("draw:stroke"), sXML_CDATA, ascii("solid") );
+                padd("draw:stroke", sXML_CDATA, "solid" );
             else if( hdo->property.line_pstyle < 5 )
             {
-                padd(ascii("draw:stroke"), sXML_CDATA, ascii("dash") );
-                padd(ascii("draw:stroke-dash"), sXML_CDATA,
+                padd("draw:stroke", sXML_CDATA, "dash" );
+                padd("draw:stroke-dash", sXML_CDATA,
                     ascii(Int2Str(hdo->index, "LineType%d", buf)));
             }
-            padd(ascii("svg:stroke-width"), sXML_CDATA,
-                Double2Str( WTMM(hdo->property.line_width)) + ascii("mm" ));
+            padd("svg:stroke-width", sXML_CDATA,
+                Double2Str( WTMM(hdo->property.line_width)) + "mm");
             color = hdo->property.line_color;
             sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(color & 0xff),
                     sal_uInt16((color >> 8) & 0xff),
                     sal_uInt16((color >>16) & 0xff) );
-            padd(ascii("svg:stroke-color"), sXML_CDATA, ascii( buf) );
+            padd("svg:stroke-color", sXML_CDATA, ascii( buf) );
         }
 
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC ||
@@ -2061,44 +2061,44 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 
             if( hdo->property.line_tstyle > 0 )
             {
-                padd(ascii("draw:marker-start"), sXML_CDATA,
+                padd("draw:marker-start", sXML_CDATA,
                     ascii(ArrowShape[hdo->property.line_tstyle].name) );
                      if( hdo->property.line_width > 100 )
-                         padd(ascii("draw:marker-start-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 3)) + ascii("mm" ));
+                         padd("draw:marker-start-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 3)) + "mm");
                      else if( hdo->property.line_width > 80 )
-                         padd(ascii("draw:marker-start-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 4)) + ascii("mm" ));
+                         padd("draw:marker-start-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 4)) + "mm");
                      else if( hdo->property.line_width > 60 )
-                         padd(ascii("draw:marker-start-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 5)) + ascii("mm" ));
+                         padd("draw:marker-start-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 5)) + "mm");
                      else if( hdo->property.line_width > 40 )
-                         padd(ascii("draw:marker-start-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 6)) + ascii("mm" ));
+                         padd("draw:marker-start-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 6)) + "mm");
                      else
-                         padd(ascii("draw:marker-start-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 7)) + ascii("mm" ));
+                         padd("draw:marker-start-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
             }
 
             if( hdo->property.line_hstyle > 0 )
             {
-                padd(ascii("draw:marker-end"), sXML_CDATA,
+                padd("draw:marker-end", sXML_CDATA,
                     ascii(ArrowShape[hdo->property.line_hstyle].name) );
                      if( hdo->property.line_width > 100 )
-                         padd(ascii("draw:marker-end-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 3)) + ascii("mm" ));
+                         padd("draw:marker-end-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 3)) + "mm");
                      else if( hdo->property.line_width > 80 )
-                         padd(ascii("draw:marker-end-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 4)) + ascii("mm" ));
+                         padd("draw:marker-end-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 4)) + "mm");
                      else if( hdo->property.line_width > 60 )
-                         padd(ascii("draw:marker-end-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 5)) + ascii("mm" ));
+                         padd("draw:marker-end-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 5)) + "mm");
                      else if( hdo->property.line_width > 40 )
-                         padd(ascii("draw:marker-end-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 6)) + ascii("mm" ));
+                         padd("draw:marker-end-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 6)) + "mm");
                      else
-                         padd(ascii("draw:marker-end-width"), sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 7)) + ascii("mm" ));
+                         padd("draw:marker-end-width", sXML_CDATA,
+                              Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
             }
         }
 
@@ -2106,31 +2106,31 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
         {
             if( hdo->property.flag >> 19 & 0x01 )
             {
-                padd( ascii("draw:textarea-horizontal-align"), sXML_CDATA, ascii("center"));
+                padd( "draw:textarea-horizontal-align", sXML_CDATA, "center");
             }
 
             color = hdo->property.fill_color;
 
             if( hdo->property.flag >> 18 & 0x01 ) // bitmap pattern
             {
-                padd(ascii("draw:fill"), sXML_CDATA, ascii("bitmap"));
-                padd(ascii("draw:fill-image-name"), sXML_CDATA,
+                padd("draw:fill", sXML_CDATA, "bitmap");
+                padd("draw:fill-image-name", sXML_CDATA,
                     ascii(Int2Str(hdo->index, "fillimage%d", buf)));
                                                   // bitmap resizing
                 if( hdo->property.flag >> 3 & 0x01 )
                 {
-                    padd(ascii("style:repeat"), sXML_CDATA, ascii("stretch"));
+                    padd("style:repeat", sXML_CDATA, "stretch");
                 }
                 else
                 {
-                    padd(ascii("style:repeat"), sXML_CDATA, ascii("repeat"));
-                    padd(ascii("draw:fill-image-ref-point"), sXML_CDATA, ascii("top-left"));
+                    padd("style:repeat", sXML_CDATA, "repeat");
+                    padd("draw:fill-image-ref-point", sXML_CDATA, "top-left");
                 }
                 if( hdo->property.flag >> 20 & 0x01 )
                 {
                     if( hdo->property.luminance > 0 )
                     {
-                        padd(ascii("draw:transparency"), sXML_CDATA,
+                        padd("draw:transparency", sXML_CDATA,
                             ascii(Int2Str(hdo->property.luminance, "%d%%", buf)));
                     }
                 }
@@ -2139,18 +2139,18 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                                                   // Gradation
             else if( hdo->property.flag >> 16 & 0x01 )
             {
-                padd(ascii("draw:fill"), sXML_CDATA, ascii("gradient"));
-                padd(ascii("draw:fill-gradient-name"), sXML_CDATA,
+                padd("draw:fill", sXML_CDATA, "gradient");
+                padd("draw:fill-gradient-name", sXML_CDATA,
                     ascii(Int2Str(hdo->index, "Grad%d", buf)));
-                padd(ascii("draw:gradient-step-count"), sXML_CDATA,
+                padd("draw:gradient-step-count", sXML_CDATA,
                     ascii(Int2Str(hdo->property.nstep, "%d", buf)));
 
             }
                                                   // Hatching
             else if( hdo->property.pattern_type >> 24 & 0x01 )
             {
-                padd(ascii("draw:fill"), sXML_CDATA, ascii("hatch"));
-                padd(ascii("draw:fill-hatch-name"), sXML_CDATA,
+                padd("draw:fill", sXML_CDATA, "hatch");
+                padd("draw:fill-hatch-name", sXML_CDATA,
                     ascii(Int2Str(hdo->index, "Hatch%d", buf)));
                 if( color < 0xffffff )
                 {
@@ -2158,33 +2158,33 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                         sal_uInt16(color & 0xff),
                         sal_uInt16((color >> 8) & 0xff),
                         sal_uInt16((color >>16) & 0xff) );
-                    padd(ascii("draw:fill-color"), sXML_CDATA, ascii( buf) );
-                    padd(ascii("draw:fill-hatch-solid"), sXML_CDATA, ascii("true"));
+                    padd("draw:fill-color", sXML_CDATA, ascii( buf) );
+                    padd("draw:fill-hatch-solid", sXML_CDATA, "true");
                 }
             }
             else if( color <= 0xffffff )
             {
-                padd(ascii("draw:fill"), sXML_CDATA, ascii("solid"));
+                padd("draw:fill", sXML_CDATA, "solid");
                 sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(color & 0xff),
                     sal_uInt16((color >> 8) & 0xff),
                     sal_uInt16((color >>16) & 0xff) );
-                padd(ascii("draw:fill-color"), sXML_CDATA, ascii( buf) );
+                padd("draw:fill-color", sXML_CDATA, ascii( buf) );
             }
             else
-                padd(ascii("draw:fill"), sXML_CDATA, ascii("none"));
+                padd("draw:fill", sXML_CDATA, "none");
         }
 
         if( fstyle->anchor_type == CHAR_ANCHOR )
         {
-            padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("top"));
-            padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("baseline"));
+            padd("style:vertical-pos", sXML_CDATA, "top");
+            padd("style:vertical-rel", sXML_CDATA, "baseline");
         }
 
-        rstartEl(ascii("style:properties"), rList);
+        rstartEl("style:properties", rList);
         pList->clear();
-        rendEl(ascii("style:properties"));
-        rendEl(ascii("style:style"));
+        rendEl("style:properties");
+        rendEl("style:style");
 
         if( hdo->type == 0 )
         {
@@ -2197,36 +2197,36 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 
 void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
 {
-    padd(ascii("style:name"), sXML_CDATA,
+    padd("style:name", sXML_CDATA,
         ascii(Int2Str(fstyle->boxnum, "CapBox%d", buf)));
-    padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
-    rstartEl(ascii("style:style"), rList);
+    padd("style:family", sXML_CDATA, "graphics");
+    rstartEl("style:style", rList);
     pList->clear();
-    padd(ascii("fo:margin-left"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:margin-right"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:margin-top"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:margin-bottom"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:padding"), sXML_CDATA, ascii("0cm"));
+    padd("fo:margin-left", sXML_CDATA, "0cm");
+    padd("fo:margin-right", sXML_CDATA, "0cm");
+    padd("fo:margin-top", sXML_CDATA, "0cm");
+    padd("fo:margin-bottom", sXML_CDATA, "0cm");
+    padd("fo:padding", sXML_CDATA, "0cm");
     switch (fstyle->txtflow)
     {
         case 0:
-            padd(ascii("style:wrap"), sXML_CDATA, ascii("none"));
+            padd("style:wrap", sXML_CDATA, "none");
             break;
         case 1:
             if( fstyle->boxtype == 'G' )
-                padd(ascii("style:run-through"), sXML_CDATA, ascii("background"));
-            padd(ascii("style:wrap"), sXML_CDATA, ascii("run-through"));
+                padd("style:run-through", sXML_CDATA, "background");
+            padd("style:wrap", sXML_CDATA, "run-through");
             break;
         case 2:
-            padd(ascii("style:wrap"), sXML_CDATA, ascii("dynamic"));
+            padd("style:wrap", sXML_CDATA, "dynamic");
             break;
     }
     if (fstyle->anchor_type == CHAR_ANCHOR)
     {
-        padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("top"));
-        padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("baseline"));
-        padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("center"));
-        padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("paragraph"));
+        padd("style:vertical-pos", sXML_CDATA, "top");
+        padd("style:vertical-rel", sXML_CDATA, "baseline");
+        padd("style:horizontal-pos", sXML_CDATA, "center");
+        padd("style:horizontal-rel", sXML_CDATA, "paragraph");
     }
     else
     {
@@ -2234,82 +2234,82 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         switch (-(fstyle->xpos))
         {
             case 2:
-                padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("right"));
+                padd("style:horizontal-pos", sXML_CDATA, "right");
                 break;
             case 3:
-                padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("center"));
+                padd("style:horizontal-pos", sXML_CDATA, "center");
                 break;
             case 1:
             default:
-                padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("from-left"));
+                padd("style:horizontal-pos", sXML_CDATA, "from-left");
                 break;
         }
         switch (-(fstyle->ypos))
         {
             case 2:
-                padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("bottom"));
+                padd("style:vertical-pos", sXML_CDATA, "bottom");
                 break;
             case 3:
-                padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("middle"));
+                padd("style:vertical-pos", sXML_CDATA, "middle");
                 break;
             case 1:
             default:
-                padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("from-top"));
+                padd("style:vertical-pos", sXML_CDATA, "from-top");
                 break;
         }
         if ( fstyle->anchor_type == PARA_ANCHOR )
         {
-            padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("paragraph"));
-            padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("paragraph"));
+            padd("style:vertical-rel", sXML_CDATA, "paragraph");
+            padd("style:horizontal-rel", sXML_CDATA, "paragraph");
         }
         else
         {
-            padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("page-content"));
-            padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("page-content"));
+            padd("style:vertical-rel", sXML_CDATA, "page-content");
+            padd("style:horizontal-rel", sXML_CDATA, "page-content");
         }
     }
-    rstartEl(ascii("style:properties"), rList);
+    rstartEl("style:properties", rList);
     pList->clear();
-    rendEl(ascii("style:properties"));
-    rendEl(ascii("style:style"));
+    rendEl("style:properties");
+    rendEl("style:style");
     if( fstyle->boxtype == 'G' )
     {
-        padd(ascii("style:name"), sXML_CDATA,
+        padd("style:name", sXML_CDATA,
             ascii(Int2Str(fstyle->boxnum, "G%d", buf)));
     }
     else
     {
-        padd(ascii("style:name"), sXML_CDATA,
+        padd("style:name", sXML_CDATA,
             ascii(Int2Str(fstyle->boxnum, "Txtbox%d", buf)));
     }
 
-    padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
-    rstartEl(ascii("style:style"), rList);
+    padd("style:family", sXML_CDATA, "graphics");
+    rstartEl("style:style", rList);
     pList->clear();
 
-    padd(ascii("fo:margin-left"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:margin-right"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:margin-top"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:margin-bottom"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("fo:padding"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("style:wrap"), sXML_CDATA, ascii("none"));
-    padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("from-top"));
-    padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("paragraph"));
-    padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("from-left"));
-    padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("paragraph"));
+    padd("fo:margin-left", sXML_CDATA, "0cm");
+    padd("fo:margin-right", sXML_CDATA, "0cm");
+    padd("fo:margin-top", sXML_CDATA, "0cm");
+    padd("fo:margin-bottom", sXML_CDATA, "0cm");
+    padd("fo:padding", sXML_CDATA, "0cm");
+    padd("style:wrap", sXML_CDATA, "none");
+    padd("style:vertical-pos", sXML_CDATA, "from-top");
+    padd("style:vertical-rel", sXML_CDATA, "paragraph");
+    padd("style:horizontal-pos", sXML_CDATA, "from-left");
+    padd("style:horizontal-rel", sXML_CDATA, "paragraph");
     if( fstyle->boxtype == 'G' )
     {
         char *cell = (char *)fstyle->cell;
-        padd(ascii("draw:luminance"), sXML_CDATA,
+        padd("draw:luminance", sXML_CDATA,
             ascii(Int2Str(cell[0], "%d%%", buf)));
-        padd(ascii("draw:contrast"), sXML_CDATA,
+        padd("draw:contrast", sXML_CDATA,
             ascii(Int2Str(cell[1], "%d%%", buf)));
         if( cell[2] == 0 )
-            padd(ascii("draw:color-mode"), sXML_CDATA, ascii("standard"));
+            padd("draw:color-mode", sXML_CDATA, "standard");
         else if( cell[2] == 1 )
-            padd(ascii("draw:color-mode"), sXML_CDATA, ascii("greyscale"));
+            padd("draw:color-mode", sXML_CDATA, "greyscale");
         else if( cell[2] == 2 )
-            padd(ascii("draw:color-mode"), sXML_CDATA, ascii("mono"));
+            padd("draw:color-mode", sXML_CDATA, "mono");
     }
     else
     {
@@ -2321,18 +2321,18 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
             switch( cell->linetype[0] )
             {
                 case 0:
-                    padd(ascii("fo:padding"), sXML_CDATA,ascii("0mm"));
+                    padd("fo:padding", sXML_CDATA,"0mm");
                     break;
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
         }
@@ -2342,68 +2342,68 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-left"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-left", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[1] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-right"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-right", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[2] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-top"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-top", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[3] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-bottom"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
         }
         if(cell->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA, ascii(hcolor2str(
+            padd("fo:background-color", sXML_CDATA, ascii(hcolor2str(
             sal::static_int_cast<uchar>(cell->color),
             sal::static_int_cast<uchar>(cell->shade), buf)));
     }
-    rstartEl(ascii("style:properties"), rList);
+    rstartEl("style:properties", rList);
     pList->clear();
-    rendEl(ascii("style:properties"));
-    rendEl(ascii("style:style"));
+    rendEl("style:properties");
+    rendEl("style:style");
 }
 
 
@@ -2425,62 +2425,62 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         case 'B' :                                // button
         case 'O' :                                // other
         case 'T' :                                // table
-            padd(ascii("style:name"), sXML_CDATA,
+            padd("style:name", sXML_CDATA,
                 ascii(Int2Str(fstyle->boxnum, "Txtbox%d", buf)));
-            padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
+            padd("style:family", sXML_CDATA, "graphics");
             break;
         case 'G' :                                // graphics
-            padd(ascii("style:name"), sXML_CDATA,
+            padd("style:name", sXML_CDATA,
                 ascii(Int2Str(fstyle->boxnum, "G%d", buf)));
-            padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
+            padd("style:family", sXML_CDATA, "graphics");
             break;
         case 'L' :                                // line TODO : all
-            padd(ascii("style:name"), sXML_CDATA,
+            padd("style:name", sXML_CDATA,
                 ascii(Int2Str(fstyle->boxnum, "L%d", buf)));
-            padd( ascii("style:family") , sXML_CDATA , ascii("paragraph") );
+            padd( "style:family" , sXML_CDATA , "paragraph" );
             break;
     }
 
-    rstartEl(ascii("style:style"), rList);
+    rstartEl("style:style", rList);
     pList->clear();
 
     if ( fstyle->boxtype == 'T')
     {
-        padd(ascii("fo:padding"), sXML_CDATA, ascii("0cm"));
+        padd("fo:padding", sXML_CDATA, "0cm");
     }
 
     if( !(fstyle->boxtype == 'G' && fstyle->cap_len > 0 ))
     {
-        padd(ascii("fo:margin-left"), sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][0]) ) + ascii("mm"));
-        padd(ascii("fo:margin-right"), sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][1])) + ascii("mm"));
-        padd(ascii("fo:margin-top"), sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][2])) + ascii("mm"));
-        padd(ascii("fo:margin-bottom"), sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][3])) + ascii("mm"));
+        padd("fo:margin-left", sXML_CDATA,
+            Double2Str(WTMM(fstyle->margin[0][0]) ) + "mm");
+        padd("fo:margin-right", sXML_CDATA,
+            Double2Str(WTMM(fstyle->margin[0][1])) + "mm");
+        padd("fo:margin-top", sXML_CDATA,
+            Double2Str(WTMM(fstyle->margin[0][2])) + "mm");
+        padd("fo:margin-bottom", sXML_CDATA,
+            Double2Str(WTMM(fstyle->margin[0][3])) + "mm");
     }
 
     switch (fstyle->txtflow)
     {
         case 0:
-            padd(ascii("style:wrap"), sXML_CDATA, ascii("none"));
+            padd("style:wrap", sXML_CDATA, "none");
             break;
         case 1:
             if( fstyle->boxtype == 'G' || fstyle->boxtype == 'B' || fstyle->boxtype == 'O')
-                padd(ascii("style:run-through"), sXML_CDATA, ascii("background"));
-            padd(ascii("style:wrap"), sXML_CDATA, ascii("run-through"));
+                padd("style:run-through", sXML_CDATA, "background");
+            padd("style:wrap", sXML_CDATA, "run-through");
             break;
         case 2:
-            padd(ascii("style:wrap"), sXML_CDATA, ascii("dynamic"));
+            padd("style:wrap", sXML_CDATA, "dynamic");
             break;
     }
     if (fstyle->anchor_type == CHAR_ANCHOR)
     {
-        padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("top"));
-        padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("baseline"));
-        padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("center"));
-        padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("paragraph"));
+        padd("style:vertical-pos", sXML_CDATA, "top");
+        padd("style:vertical-rel", sXML_CDATA, "baseline");
+        padd("style:horizontal-pos", sXML_CDATA, "center");
+        padd("style:horizontal-rel", sXML_CDATA, "paragraph");
     }
     else
     {
@@ -2488,38 +2488,38 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         switch (-(fstyle->xpos))
         {
             case 2:
-                padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("right"));
+                padd("style:horizontal-pos", sXML_CDATA, "right");
                 break;
             case 3:
-                padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("center"));
+                padd("style:horizontal-pos", sXML_CDATA, "center");
                 break;
             case 1:
             default:
-                padd(ascii("style:horizontal-pos"), sXML_CDATA, ascii("from-left"));
+                padd("style:horizontal-pos", sXML_CDATA, "from-left");
                 break;
         }
         switch (-(fstyle->ypos))
         {
             case 2:
-                padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("bottom"));
+                padd("style:vertical-pos", sXML_CDATA, "bottom");
                 break;
             case 3:
-                padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("middle"));
+                padd("style:vertical-pos", sXML_CDATA, "middle");
                 break;
             case 1:
             default:
-                padd(ascii("style:vertical-pos"), sXML_CDATA, ascii("from-top"));
+                padd("style:vertical-pos", sXML_CDATA, "from-top");
                 break;
         }
         if ( fstyle->anchor_type == PARA_ANCHOR )
         {
-            padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("paragraph"));
-            padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("paragraph"));
+            padd("style:vertical-rel", sXML_CDATA, "paragraph");
+            padd("style:horizontal-rel", sXML_CDATA, "paragraph");
         }
         else
         {
-            padd(ascii("style:vertical-rel"), sXML_CDATA, ascii("page-content"));
-            padd(ascii("style:horizontal-rel"), sXML_CDATA, ascii("page-content"));
+            padd("style:vertical-rel", sXML_CDATA, "page-content");
+            padd("style:horizontal-rel", sXML_CDATA, "page-content");
         }
     }
     if( fstyle->boxtype == 'X' || fstyle->boxtype == 'B' )
@@ -2532,18 +2532,18 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
             switch( cell->linetype[0] )
             {
                 case 0:
-                          padd(ascii("fo:border"), sXML_CDATA, ascii("none"));
+                          padd("fo:border", sXML_CDATA, "none");
                     break;
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
         }
@@ -2553,76 +2553,76 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-left"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-left"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-left", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[1] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-right"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-right"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-right", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[2] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-top"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-top"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-top", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[3] )
             {
                 case 1:                           /* 가는실선 */
                 case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.002cm solid #000000"));
+                    padd("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
                     break;
                 case 2:                           /* 굵은실선 */
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.035cm solid #000000"));
+                    padd("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
                     break;
                 case 4:                           /* 2중선 */
-                    padd(ascii("style:border-line-width-bottom"), sXML_CDATA,ascii("0.002cm 0.035cm 0.002cm"));
-                    padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #000000"));
+                    padd("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
+                    padd("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
         }
 
           if( cell->linetype[0] == 0 && cell->linetype[1] == 0 &&
                   cell->linetype[2] == 0 && cell->linetype[3] == 0 ){
-              padd(ascii("fo:padding"), sXML_CDATA,ascii("0mm"));
+              padd("fo:padding", sXML_CDATA,"0mm");
           }
           else{
-              padd(ascii("fo:padding-left"), sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][0])) + ascii("mm"));
-              padd(ascii("fo:padding-right"), sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][1])) + ascii("mm"));
-              padd(ascii("fo:padding-top"), sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][2])) + ascii("mm"));
-              padd(ascii("fo:padding-bottom"), sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][3])) + ascii("mm"));
+              padd("fo:padding-left", sXML_CDATA,
+                      Double2Str(WTMM(fstyle->margin[1][0])) + "mm");
+              padd("fo:padding-right", sXML_CDATA,
+                      Double2Str(WTMM(fstyle->margin[1][1])) + "mm");
+              padd("fo:padding-top", sXML_CDATA,
+                      Double2Str(WTMM(fstyle->margin[1][2])) + "mm");
+              padd("fo:padding-bottom", sXML_CDATA,
+                      Double2Str(WTMM(fstyle->margin[1][3])) + "mm");
           }
         if(cell->shade != 0)
-            padd(ascii("fo:background-color"), sXML_CDATA,
+            padd("fo:background-color", sXML_CDATA,
             ascii(hcolor2str(
                 sal::static_int_cast<uchar>(cell->color),
                 sal::static_int_cast<uchar>(cell->shade),
@@ -2630,41 +2630,41 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     }
     else if( fstyle->boxtype == 'E' )
      {
-          padd(ascii("fo:padding"), sXML_CDATA,ascii("0mm"));
+          padd("fo:padding", sXML_CDATA,"0mm");
      }
     else if( fstyle->boxtype == 'L' )
     {
-        padd( ascii("style:border-line-width-bottom"), sXML_CDATA, ascii("0.02mm 0.35mm 0.02mm"));
-        padd(ascii("fo:border-bottom"), sXML_CDATA,ascii("0.039cm double #808080"));
+        padd( "style:border-line-width-bottom", sXML_CDATA, "0.02mm 0.35mm 0.02mm");
+        padd("fo:border-bottom", sXML_CDATA,"0.039cm double #808080");
     }
     else if( fstyle->boxtype == 'G' )
     {
          if( fstyle->margin[1][0] || fstyle->margin[1][1] || fstyle->margin[1][2] || fstyle->margin[1][3] ){
-             OUString clip = ascii("rect(");
-             clip += Double2Str(WTMM(-fstyle->margin[1][0]) ) + ascii("mm ");
-             clip += Double2Str(WTMM(-fstyle->margin[1][1]) ) + ascii("mm ");
-             clip += Double2Str(WTMM(-fstyle->margin[1][2]) ) + ascii("mm ");
-             clip += Double2Str(WTMM(-fstyle->margin[1][3]) ) + ascii("mm)");
-             padd(ascii("style:mirror"), sXML_CDATA, ascii("none"));
-             padd(ascii("fo:clip"), sXML_CDATA, clip);
+             OUString clip = "rect(";
+             clip += Double2Str(WTMM(-fstyle->margin[1][0]) ) + "mm ";
+             clip += Double2Str(WTMM(-fstyle->margin[1][1]) ) + "mm ";
+             clip += Double2Str(WTMM(-fstyle->margin[1][2]) ) + "mm ";
+             clip += Double2Str(WTMM(-fstyle->margin[1][3]) ) + "mm)";
+             padd("style:mirror", sXML_CDATA, "none");
+             padd("fo:clip", sXML_CDATA, clip);
          }
         char *cell = (char *)fstyle->cell;
-        padd(ascii("draw:luminance"), sXML_CDATA,
+        padd("draw:luminance", sXML_CDATA,
             ascii(Int2Str(cell[0], "%d%%", buf)));
-        padd(ascii("draw:contrast"), sXML_CDATA,
+        padd("draw:contrast", sXML_CDATA,
             ascii(Int2Str(cell[1], "%d%%", buf)));
         if( cell[2] == 0 )
-            padd(ascii("draw:color-mode"), sXML_CDATA, ascii("standard"));
+            padd("draw:color-mode", sXML_CDATA, "standard");
         else if( cell[2] == 1 )
-            padd(ascii("draw:color-mode"), sXML_CDATA, ascii("greyscale"));
+            padd("draw:color-mode", sXML_CDATA, "greyscale");
         else if( cell[2] == 2 )
-            padd(ascii("draw:color-mode"), sXML_CDATA, ascii("mono"));
+            padd("draw:color-mode", sXML_CDATA, "mono");
 
     }
-    rstartEl(ascii("style:properties"), rList);
+    rstartEl("style:properties", rList);
     pList->clear();
-    rendEl(ascii("style:properties"));
-    rendEl(ascii("style:style"));
+    rendEl("style:properties");
+    rendEl("style:style");
 }
 
 
@@ -2699,18 +2699,18 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     unsigned char firstspace = 0;
     if( !bParaStart)
     {
-        padd(ascii("text:style-name"), sXML_CDATA,
+        padd("text:style-name", sXML_CDATA,
             ascii(getPStyleName(para->GetParaShape().index, buf)));
-        rstartEl(ascii("text:p"), rList);
+        rstartEl("text:p", rList);
         pList->clear();
     }
     if( d->bFirstPara && d->bInBody )
     {
         strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
-        padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
-        rstartEl(ascii("text:bookmark"), rList);
+        padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+        rstartEl("text:bookmark", rList);
         pList->clear();
-        rendEl(ascii("text:bookmark"));
+        rendEl("text:bookmark");
         d->bFirstPara = false;
     }
     if( d->bInHeader )
@@ -2718,9 +2718,9 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         makeShowPageNum();
         d->bInHeader = false;
     }
-    padd(ascii("text:style-name"), sXML_CDATA,
+    padd("text:style-name", sXML_CDATA,
         ascii(getTStyleName(para->cshape.index, buf)));
-    rstartEl(ascii("text:span"), rList);
+    rstartEl("text:span", rList);
     pList->clear();
 
     for (n = 0; n < para->nch && para->hhstr[n]->hh;
@@ -2729,14 +2729,14 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         if (para->hhstr[n]->hh == CH_SPACE && !firstspace)
         {
             makeChars(str);
-            rstartEl(ascii("text:s"), rList);
-            rendEl(ascii("text:s"));
+            rstartEl("text:s", rList);
+            rendEl("text:s");
         }
         else if (para->hhstr[n]->hh == CH_END_PARA)
         {
             makeChars(str);
-            rendEl(ascii("text:span"));
-            rendEl(ascii("text:p"));
+            rendEl("text:span");
+            rendEl("text:p");
             break;
         }
         else
@@ -2769,19 +2769,19 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
 
     if( !bParaStart )
     {
-        padd(ascii("text:style-name"), sXML_CDATA,
+        padd("text:style-name", sXML_CDATA,
             ascii(getPStyleName(para->GetParaShape().index, buf)));
-        rstartEl(ascii("text:p"), rList);
+        rstartEl("text:p", rList);
         pList->clear();
     }
     if( d->bFirstPara && d->bInBody )
     {
 /* for HWP's Bookmark */
         strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
-        padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
-        rstartEl(ascii("text:bookmark"), rList);
+        padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+        rstartEl("text:bookmark", rList);
         pList->clear();
-        rendEl(ascii("text:bookmark"));
+        rendEl("text:bookmark");
         d->bFirstPara = false;
     }
     if( d->bInHeader )
@@ -2789,9 +2789,9 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
         makeShowPageNum();
         d->bInHeader = false;
     }
-    padd(ascii("text:style-name"), sXML_CDATA,
+    padd("text:style-name", sXML_CDATA,
         ascii(getTStyleName(curr, buf)));
-    rstartEl(ascii("text:span"), rList);
+    rstartEl("text:span", rList);
     pList->clear();
 
     for (n = 0; n < para->nch && para->hhstr[n]->hh;
@@ -2800,24 +2800,24 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
         if (para->GetCharShape(n)->index != curr)
         {
             makeChars(str);
-            rendEl(ascii("text:span"));
+            rendEl("text:span");
             curr = para->GetCharShape(n)->index;
-            padd(ascii("text:style-name"), sXML_CDATA,
+            padd("text:style-name", sXML_CDATA,
                 ascii(getTStyleName(curr, buf)));
-            rstartEl(ascii("text:span"), rList);
+            rstartEl("text:span", rList);
             pList->clear();
         }
         if (para->hhstr[n]->hh == CH_SPACE && !firstspace)
         {
             makeChars(str);
-            rstartEl(ascii("text:s"), rList);
-            rendEl(ascii("text:s"));
+            rstartEl("text:s", rList);
+            rendEl("text:s");
         }
         else if (para->hhstr[n]->hh == CH_END_PARA)
         {
             makeChars(str);
-            rendEl(ascii("text:span"));
-            rendEl(ascii("text:p"));
+            rendEl("text:span");
+            rendEl("text:p");
             break;
         }
         else
@@ -2857,10 +2857,10 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             STARTP;
         }
         strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
-        padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
-        rstartEl(ascii("text:bookmark"), rList);
+        padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+        rstartEl("text:bookmark", rList);
         pList->clear();
-        rendEl(ascii("text:bookmark"));
+        rendEl("text:bookmark");
         d->bFirstPara = false;
     }
     if( d->bInHeader )
@@ -2893,9 +2893,9 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             if( !pstart ) {STARTP;}
             if( !tstart ) {STARTT;}
             makeChars(str);
-            rstartEl(ascii("text:s"), rList);
+            rstartEl("text:s", rList);
             pList->clear();
-            rendEl(ascii("text:s"));
+            rendEl("text:s");
         }
         else if ( para->hhstr[n]->hh >= CH_SPACE )
         {
@@ -3111,40 +3111,40 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
 /* 누름틀 */
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
-        padd(ascii("text:placeholder-type"), sXML_CDATA, ascii("text"));
+        padd("text:placeholder-type", sXML_CDATA, "text");
           if( field )
-              padd(ascii("text:description"), sXML_CDATA, hconv(field));
-        rstartEl( ascii("text:placeholder"), rList);
+              padd("text:description", sXML_CDATA, hconv(field));
+        rstartEl( "text:placeholder", rList);
         pList->clear();
         rchars( OUString(rStr.c_str()));
-        rendEl( ascii("text:placeholder") );
+        rendEl( "text:placeholder" );
     }
 /* 문서요약 */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
         if (hconv(hbox->str3) == "title")
         {
-            rstartEl( ascii("text:title"), rList );
+            rstartEl( "text:title", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:title") );
+            rendEl( "text:title" );
         }
         else if (hconv(hbox->str3) == "subject")
         {
-            rstartEl( ascii("text:subject"), rList );
+            rstartEl( "text:subject", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:subject") );
+            rendEl( "text:subject" );
         }
         else if (hconv(hbox->str3) == "author")
         {
-            rstartEl( ascii("text:author-name"), rList );
+            rstartEl( "text:author-name", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:author-name") );
+            rendEl( "text:author-name" );
         }
         else if (hconv(hbox->str3) == "keywords")
         {
-            rstartEl( ascii("text:keywords"), rList );
+            rstartEl( "text:keywords", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:keywords") );
+            rendEl( "text:keywords" );
         }
     }
 /* 개인정보 */
@@ -3152,75 +3152,75 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
     {
         if (hconv(hbox->str3) == "User")
         {
-            rstartEl( ascii("text:sender-lastname"), rList );
+            rstartEl( "text:sender-lastname", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-lastname") );
+            rendEl( "text:sender-lastname" );
         }
         else if (hconv(hbox->str3) == "Company")
         {
-            rstartEl( ascii("text:sender-company"), rList );
+            rstartEl( "text:sender-company", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-company") );
+            rendEl( "text:sender-company" );
         }
         else if (hconv(hbox->str3) == "Position")
         {
-            rstartEl( ascii("text:sender-title"), rList );
+            rstartEl( "text:sender-title", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-title") );
+            rendEl( "text:sender-title" );
         }
         else if (hconv(hbox->str3) == "Division")
         {
-            rstartEl( ascii("text:sender-position"), rList );
+            rstartEl( "text:sender-position", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-position") );
+            rendEl( "text:sender-position" );
         }
         else if (hconv(hbox->str3) == "Fax")
         {
-            rstartEl( ascii("text:sender-fax"), rList );
+            rstartEl( "text:sender-fax", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-fax") );
+            rendEl( "text:sender-fax" );
         }
         else if (hconv(hbox->str3) == "Pager")
         {
-            rstartEl( ascii("text:phone-private"), rList );
+            rstartEl( "text:phone-private", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:phone-private") );
+            rendEl( "text:phone-private" );
         }
         else if (hconv(hbox->str3) == "E-mail")
         {
-            rstartEl( ascii("text:sender-email"), rList );
+            rstartEl( "text:sender-email", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-email") );
+            rendEl( "text:sender-email" );
         }
         else if (hconv(hbox->str3) == "Zipcode(office)")
         {
-            rstartEl( ascii("text:sender-postal-code"), rList );
+            rstartEl( "text:sender-postal-code", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-postal-code") );
+            rendEl( "text:sender-postal-code" );
         }
         else if (hconv(hbox->str3) == "Phone(office)")
         {
-            rstartEl( ascii("text:sender-phone-work"), rList );
+            rstartEl( "text:sender-phone-work", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-phone-work") );
+            rendEl( "text:sender-phone-work" );
         }
         else if (hconv(hbox->str3) == "Address(office)")
         {
-            rstartEl( ascii("text:sender-street"), rList );
+            rstartEl( "text:sender-street", rList );
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:sender-street") );
+            rendEl( "text:sender-street" );
         }
 
     }
     else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* 만든날짜 */
      {
          if( hbox->m_pDate )
-             padd(ascii("style:data-style-name"), sXML_CDATA,
+             padd("style:data-style-name", sXML_CDATA,
                      ascii(Int2Str(hbox->m_pDate->key, "N%d", buf)));
-            rstartEl( ascii("text:creation-date"), rList );
+            rstartEl( "text:creation-date", rList );
             pList->clear();
             rchars(  hconv(hbox->str2) );
-            rendEl( ascii("text:creation-date") );
+            rendEl( "text:creation-date" );
      }
 }
 
@@ -3233,24 +3233,24 @@ void HwpReader::makeBookmark(Bookmark * hbox)
 {
     if (hbox->type == 0)
     {
-        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id)));
-        rstartEl(ascii("text:bookmark"), rList);
+        padd("text:name", sXML_CDATA, (hconv(hbox->id)));
+        rstartEl("text:bookmark", rList);
         pList->clear();
-        rendEl(ascii("text:bookmark"));
+        rendEl("text:bookmark");
     }
     else if (hbox->type == 1)                     /* 블록 북마크일 경우 시작과 끝이 있다 */
     {
-        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id)));
-        rstartEl(ascii("text:bookmark-start"), rList);
+        padd("text:name", sXML_CDATA, (hconv(hbox->id)));
+        rstartEl("text:bookmark-start", rList);
         pList->clear();
-        rendEl(ascii("text:bookmark-start"));
+        rendEl("text:bookmark-start");
     }
     else if (hbox->type == 2)
     {
-        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id)));
-        rstartEl(ascii("text:bookmark-end"), rList);
+        padd("text:name", sXML_CDATA, (hconv(hbox->id)));
+        rstartEl("text:bookmark-end", rList);
         pList->clear();
-        rendEl(ascii("text:bookmark-end"));
+        rendEl("text:bookmark-end");
     }
 }
 
@@ -3259,13 +3259,13 @@ void HwpReader::makeBookmark(Bookmark * hbox)
 
 void HwpReader::makeDateFormat(DateCode * hbox)
 {
-    padd(ascii("style:name"), sXML_CDATA,
+    padd("style:name", sXML_CDATA,
         ascii(Int2Str(hbox->key, "N%d", buf)));
-    padd(ascii("style:family"), sXML_CDATA,ascii("data-style"));
-    padd(ascii("number:language"), sXML_CDATA,ascii("ko"));
-    padd(ascii("number:country"), sXML_CDATA,ascii("KR"));
+    padd("style:family", sXML_CDATA,"data-style");
+    padd("number:language", sXML_CDATA,"ko");
+    padd("number:country", sXML_CDATA,"KR");
 
-    rstartEl(ascii("number:date-style"), rList);
+    rstartEl("number:date-style", rList);
     pList->clear();
 
     bool add_zero = false;
@@ -3290,104 +3290,104 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 add_zero = true;
                 break;
             case '1':
-                padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:year"), rList);
+                padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:year", rList);
                 pList->clear();
-                rendEl(ascii("number:year"));
+                rendEl("number:year");
                 break;
             case '!':
-                rstartEl(ascii("number:year"), rList);
+                rstartEl("number:year", rList);
                 pList->clear();
-                rendEl(ascii("number:year"));
+                rendEl("number:year");
                 break;
             case '2':
                 if( add_zero )
-                    padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:month"), rList);
+                    padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:month", rList);
                 pList->clear();
-                rendEl(ascii("number:month"));
+                rendEl("number:month");
                 break;
             case '@':
-                padd(ascii("number:textual"), sXML_CDATA, ascii("true"));
-                rstartEl(ascii("number:month"), rList);
+                padd("number:textual", sXML_CDATA, "true");
+                rstartEl("number:month", rList);
                 pList->clear();
-                rendEl(ascii("number:month"));
+                rendEl("number:month");
                 break;
             case '*':
-                padd(ascii("number:textual"), sXML_CDATA, ascii("true"));
-                padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:month"), rList);
+                padd("number:textual", sXML_CDATA, "true");
+                padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:month", rList);
                 pList->clear();
-                rendEl(ascii("number:month"));
+                rendEl("number:month");
                 break;
             case '3':
                 if( add_zero )
-                    padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:day"), rList);
+                    padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:day", rList);
                 pList->clear();
-                rendEl(ascii("number:day"));
+                rendEl("number:day");
                 break;
             case '#':
                 if( add_zero )
-                    padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:day"), rList);
+                    padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:day", rList);
                 pList->clear();
-                rendEl(ascii("number:day"));
+                rendEl("number:day");
                 switch( hbox->date[DateCode::DAY]  % 10)
                 {
                     case 1:
-                        rstartEl(ascii("number:text"), rList);
-                        rchars(ascii("st"));
-                        rendEl(ascii("number:text"));
+                        rstartEl("number:text", rList);
+                        rchars("st");
+                        rendEl("number:text");
                         break;
                     case 2:
-                        rstartEl(ascii("number:text"), rList);
-                        rchars(ascii("nd"));
-                        rendEl(ascii("number:text"));
+                        rstartEl("number:text", rList);
+                        rchars("nd");
+                        rendEl("number:text");
                         break;
                     case 3:
-                        rstartEl(ascii("number:text"), rList);
-                        rchars(ascii("rd"));
-                        rendEl(ascii("number:text"));
+                        rstartEl("number:text", rList);
+                        rchars("rd");
+                        rendEl("number:text");
                         break;
                     default:
-                        rstartEl(ascii("number:text"), rList);
-                        rchars(ascii("th"));
-                        rendEl(ascii("number:text"));
+                        rstartEl("number:text", rList);
+                        rchars("th");
+                        rendEl("number:text");
                         break;
                 }
                 break;
             case '4':
             case '$':
                 if( add_zero )
-                    padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:hours"), rList);
+                    padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:hours", rList);
                 pList->clear();
-                rendEl(ascii("number:hours"));
+                rendEl("number:hours");
                 break;
             case '5':
             case '%':
                 if( add_zero )
-                    padd(ascii("number:style"), sXML_CDATA, ascii("long"));
-                rstartEl(ascii("number:minutes"), rList);
+                    padd("number:style", sXML_CDATA, "long");
+                rstartEl("number:minutes", rList);
                 pList->clear();
-                rendEl(ascii("number:minutes"));
+                rendEl("number:minutes");
                 break;
             case '_':
-                padd(ascii("number:style"), sXML_CDATA, ascii("long"));
+                padd("number:style", sXML_CDATA, "long");
                 //fall-through
             case '6':
             case '^':
-                rstartEl(ascii("number:day-of-week"), rList);
+                rstartEl("number:day-of-week", rList);
                 pList->clear();
-                rendEl(ascii("number:day-of-week"));
+                rendEl("number:day-of-week");
                 break;
             case '7':
             case '&':
             case '+':
-                rstartEl(ascii("number:am-pm"), rList);
+                rstartEl("number:am-pm", rList);
                 pList->clear();
-                rendEl(ascii("number:am-pm"));
+                rendEl("number:am-pm");
                 break;
             case '~':                             // Chinese Locale
                 break;
@@ -3395,43 +3395,43 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 hchar sbuf[2];
                 sbuf[0] = *fmt;
                 sbuf[1] = 0;
-                rstartEl(ascii("number:text"), rList);
+                rstartEl("number:text", rList);
                 rchars((hconv(sbuf)));
-                rendEl(ascii("number:text"));
+                rendEl("number:text");
                 break;
         }
     }
     pList->clear();
-    rendEl(ascii("number:date-style"));
+    rendEl("number:date-style");
 }
 
 
 void HwpReader::makeDateCode(DateCode * hbox)
 {
-    padd(ascii("style:data-style-name"), sXML_CDATA,
+    padd("style:data-style-name", sXML_CDATA,
         ascii(Int2Str(hbox->key, "N%d", buf)));
-    rstartEl( ascii("text:date"), rList );
+    rstartEl( "text:date", rList );
     pList->clear();
     hchar_string const boxstr = hbox->GetString();
     rchars((hconv(boxstr.c_str())));
-    rendEl( ascii("text:date") );
+    rendEl( "text:date" );
 }
 
 
 void HwpReader::makeTab(Tab *  )                  /*hbox */
 {
-    rstartEl(ascii("text:tab-stop"), rList);
-    rendEl(ascii("text:tab-stop"));
+    rstartEl("text:tab-stop", rList);
+    rendEl("text:tab-stop");
 }
 
 
 void HwpReader::makeTable(TxtBox * hbox)
 {
-    padd(ascii("table:name"), sXML_CDATA,
+    padd("table:name", sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Table%d", buf)));
-    padd(ascii("table:style-name"), sXML_CDATA,
+    padd("table:style-name", sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Table%d", buf)));
-    rstartEl(ascii("table:table"), rList);
+    rstartEl("table:table", rList);
     pList->clear();
 
     Table *tbl = hbox->m_pTable;
@@ -3439,10 +3439,10 @@ void HwpReader::makeTable(TxtBox * hbox)
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        padd(ascii("table:style-name"), sXML_CDATA, ascii( buf ));
-        rstartEl(ascii("table:table-column"), rList);
+        padd("table:style-name", sXML_CDATA, ascii( buf ));
+        rstartEl("table:table-column", rList);
         pList->clear();
-        rendEl(ascii("table:table-column"));
+        rendEl("table:table-column");
     }
 
 // ----------- cell ----------------
@@ -3454,35 +3454,35 @@ void HwpReader::makeTable(TxtBox * hbox)
         {
             if( j > k )
             {
-                rendEl(ascii("table:table-row"));
+                rendEl("table:table-row");
                 k = j;
             }
 // --------------- row ----------------
             sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
-            padd(ascii("table:style-name"), sXML_CDATA, ascii( buf ));
-            rstartEl(ascii("table:table-row"), rList);
+            padd("table:style-name", sXML_CDATA, ascii( buf ));
+            rstartEl("table:table-row", rList);
             pList->clear();
             j = tcell->nRowIndex;
         }
 
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        padd(ascii("table:style-name"), sXML_CDATA, ascii( buf ));
+        padd("table:style-name", sXML_CDATA, ascii( buf ));
         if( tcell->nColumnSpan > 1 )
-            padd(ascii("table:number-columns-spanned"), sXML_CDATA,
+            padd("table:number-columns-spanned", sXML_CDATA,
                 ascii(Int2Str(tcell->nColumnSpan, "%d", buf)));
         if( tcell->nRowSpan > 1 )
-            padd(ascii("table:number-rows-spanned"), sXML_CDATA,
+            padd("table:number-rows-spanned", sXML_CDATA,
                 ascii(Int2Str(tcell->nRowSpan, "%d", buf)));
-        padd(ascii("table:value-type"), sXML_CDATA,ascii("string"));
+        padd("table:value-type", sXML_CDATA,"string");
         if( tcell->pCell->protect )
-            padd(ascii("table:protected"), sXML_CDATA,ascii("true"));
-        rstartEl(ascii("table:table-cell"), rList);
+            padd("table:protected", sXML_CDATA,"true");
+        rstartEl("table:table-cell", rList);
         pList->clear();
         parsePara(hbox->plists[tcell->pCell->key].front());
-        rendEl(ascii("table:table-cell"));
+        rendEl("table:table-cell");
     }
-    rendEl(ascii("table:table-row"));
-    rendEl(ascii("table:table"));
+    rendEl("table:table-row");
+    rendEl("table:table");
 }
 
 
@@ -3496,58 +3496,58 @@ void HwpReader::makeTextBox(TxtBox * hbox)
 {
     if( hbox->style.cap_len > 0  && hbox->type == TXT_TYPE)
     {
-        padd(ascii("draw:style-name"), sXML_CDATA,
+        padd("draw:style-name", sXML_CDATA,
             ascii(Int2Str(hbox->style.boxnum, "CapBox%d", buf)));
-        padd(ascii("draw:name"), sXML_CDATA,
+        padd("draw:name", sXML_CDATA,
             ascii(Int2Str(hbox->style.boxnum, "CaptionBox%d", buf)));
-         padd(ascii("draw:z-index"), sXML_CDATA,
+         padd("draw:z-index", sXML_CDATA,
               ascii(Int2Str(hbox->zorder, "%d", buf)));
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
+                padd("text:anchor-type", sXML_CDATA, "as-char");
                 break;
             case PARA_ANCHOR:
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("paragraph"));
+                padd("text:anchor-type", sXML_CDATA, "paragraph");
                 break;
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
-                padd(ascii("text:anchor-page-number"), sXML_CDATA,
+                padd("text:anchor-type", sXML_CDATA, "page");
+                padd("text:anchor-page-number", sXML_CDATA,
                     ascii(Int2Str(hbox->pgno +1, "%d", buf)));
                 break;
             }
         }
         if (hbox->style.anchor_type != CHAR_ANCHOR)
         {
-            padd(ascii("svg:x"), sXML_CDATA,
-                Double2Str(WTMM( ( hbox->pgx + hbox->style.margin[0][0] ) )) + ascii("mm"));
-            padd(ascii("svg:y"), sXML_CDATA,
-                Double2Str(WTMM( ( hbox->pgy + hbox->style.margin[0][2] ) )) + ascii("mm"));
+            padd("svg:x", sXML_CDATA,
+                Double2Str(WTMM( ( hbox->pgx + hbox->style.margin[0][0] ) )) + "mm");
+            padd("svg:y", sXML_CDATA,
+                Double2Str(WTMM( ( hbox->pgy + hbox->style.margin[0][2] ) )) + "mm");
         }
-        padd(ascii("svg:width"), sXML_CDATA,
-            Double2Str(WTMM(( hbox->box_xs + hbox->cap_xs) )) + ascii("mm"));
-        padd(ascii("fo:min-height"), sXML_CDATA,
-            Double2Str(WTMM(( hbox->box_ys + hbox->cap_ys) )) + ascii("mm"));
-        rstartEl(ascii("draw:text-box"), rList);
+        padd("svg:width", sXML_CDATA,
+            Double2Str(WTMM(( hbox->box_xs + hbox->cap_xs) )) + "mm");
+        padd("fo:min-height", sXML_CDATA,
+            Double2Str(WTMM(( hbox->box_ys + hbox->cap_ys) )) + "mm");
+        rstartEl("draw:text-box", rList);
         pList->clear();
         if( hbox->cap_pos % 2 )                   /* 캡션이 위쪽에 위치한다 */
         {
             parsePara(hbox->caption.front());
         }
-        padd( ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-        rstartEl(ascii("text:p"), rList);
+        padd( "text:style-name", sXML_CDATA, "Standard");
+        rstartEl("text:p", rList);
         pList->clear();
     }
      else{
-         padd(ascii("draw:z-index"), sXML_CDATA,
+         padd("draw:z-index", sXML_CDATA,
               ascii(Int2Str(hbox->zorder, "%d", buf)));
      }
 
-    padd(ascii("draw:style-name"), sXML_CDATA,
+    padd("draw:style-name", sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Txtbox%d", buf)));
-    padd(ascii("draw:name"), sXML_CDATA,
+    padd("draw:name", sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Frame%d", buf)));
 
     if( hbox->style.cap_len <= 0 || hbox->type != TXT_TYPE )
@@ -3557,16 +3557,16 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
+                padd("text:anchor-type", sXML_CDATA, "as-char");
                 break;
             case PARA_ANCHOR:
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("paragraph"));
+                padd("text:anchor-type", sXML_CDATA, "paragraph");
                 break;
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
-                padd(ascii("text:anchor-page-number"), sXML_CDATA,
+                padd("text:anchor-type", sXML_CDATA, "page");
+                padd("text:anchor-page-number", sXML_CDATA,
                     ascii(Int2Str(hbox->pgno +1, "%d", buf)));
                 break;
             }
@@ -3576,28 +3576,28 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             x += hbox->style.margin[0][0];
             y += hbox->style.margin[0][2];
         }
-        padd(ascii("svg:x"), sXML_CDATA,
-            Double2Str(WTMM( hbox->pgx + x )) + ascii("mm"));
-        padd(ascii("svg:y"), sXML_CDATA,
-            Double2Str(WTMM( hbox->pgy + y )) + ascii("mm"));
+        padd("svg:x", sXML_CDATA,
+            Double2Str(WTMM( hbox->pgx + x )) + "mm");
+        padd("svg:y", sXML_CDATA,
+            Double2Str(WTMM( hbox->pgy + y )) + "mm");
     }
     else
     {
-        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
-        padd(ascii("svg:y"), sXML_CDATA, ascii("0cm"));
+        padd("text:anchor-type", sXML_CDATA, "as-char");
+        padd("svg:y", sXML_CDATA, "0cm");
     }
-    padd(ascii("svg:width"), sXML_CDATA,
-        Double2Str(WTMM( hbox->box_xs )) + ascii("mm"));
+    padd("svg:width", sXML_CDATA,
+        Double2Str(WTMM( hbox->box_xs )) + "mm");
     if( hbox->style.cap_len > 0 && hbox->type != TXT_TYPE)
-        padd(ascii("fo:min-height"), sXML_CDATA,
-            Double2Str(WTMM( hbox->box_ys + hbox->cap_ys)) + ascii("mm"));
+        padd("fo:min-height", sXML_CDATA,
+            Double2Str(WTMM( hbox->box_ys + hbox->cap_ys)) + "mm");
     else
-        padd(ascii("svg:height"), sXML_CDATA,
-            Double2Str(WTMM(hbox->box_ys )) + ascii("mm"));
+        padd("svg:height", sXML_CDATA,
+            Double2Str(WTMM(hbox->box_ys )) + "mm");
 
     if( hbox->type != EQU_TYPE )
     {
-        rstartEl(ascii("draw:text-box"), rList);
+        rstartEl("draw:text-box", rList);
         pList->clear();
 /* 캡션이 존재하고, 위쪽에 있으면 */
         if( hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE )
@@ -3617,24 +3617,24 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         {
             parsePara(hbox->caption.front());
         }
-        rendEl(ascii("draw:text-box"));
+        rendEl("draw:text-box");
 // Caption exist and it is text-box
         if( hbox->style.cap_len > 0 && hbox->type == TXT_TYPE)
         {
-            rendEl( ascii("text:p"));
+            rendEl( "text:p");
             if( !(hbox->cap_pos % 2))
             {
                 parsePara(hbox->caption.front());
             }
-            rendEl( ascii("draw:text-box"));
+            rendEl( "draw:text-box");
         }
     }
     else                                          // is Formula
     {
-        rstartEl(ascii("draw:object"), rList);
+        rstartEl("draw:object", rList);
         pList->clear();
         makeFormula(hbox);
-        rendEl(ascii("draw:object"));
+        rendEl("draw:object");
     }
 }
 
@@ -3711,33 +3711,33 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 #else
                   (uchar *) urltounix((char *)hypert->filename).c_str()).c_str());
 #endif
-          padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
+          padd("xlink:type", sXML_CDATA, "simple");
           if (tmp.size() > 0 && strcmp(tmp.c_str(), "[HTML]")) {
               ::std::string tmp3(tmp2);
               tmp3.push_back('#');
               tmp3.append(tmp);
-              padd(ascii("xlink:href"), sXML_CDATA,
+              padd("xlink:href", sXML_CDATA,
                   OUString(tmp3.c_str(), tmp3.size()+1, RTL_TEXTENCODING_EUC_KR));
           }
           else{
-              padd(ascii("xlink:href"), sXML_CDATA,
+              padd("xlink:href", sXML_CDATA,
                   OUString(tmp2.c_str(), tmp2.size()+1, RTL_TEXTENCODING_EUC_KR));
 
           }
      }
     else
     {
-        padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
+        padd("xlink:type", sXML_CDATA, "simple");
         ::std::string tmp;
         tmp.push_back('#');
         tmp.append(hstr2ksstr(hypert->bookmark));
-        padd(ascii("xlink:href"), sXML_CDATA,
+        padd("xlink:href", sXML_CDATA,
                 OUString(tmp.c_str(), tmp.size()+1, RTL_TEXTENCODING_EUC_KR));
     }
-    rstartEl(ascii("draw:a"), rList);
+    rstartEl("draw:a", rList);
     pList->clear();
     makeTextBox(hbox);
-    rendEl(ascii("draw:a"));
+    rendEl("draw:a");
 }
 
 
@@ -3756,134 +3756,134 @@ void HwpReader::makePicture(Picture * hbox)
         {
             if( hbox->style.cap_len > 0 )
             {
-                padd(ascii("draw:style-name"), sXML_CDATA,
+                padd("draw:style-name", sXML_CDATA,
                     ascii(Int2Str(hbox->style.boxnum, "CapBox%d", buf)));
-                padd(ascii("draw:name"), sXML_CDATA,
+                padd("draw:name", sXML_CDATA,
                     ascii(Int2Str(hbox->style.boxnum, "CaptionBox%d", buf)));
-                     padd(ascii("draw:z-index"), sXML_CDATA,
+                     padd("draw:z-index", sXML_CDATA,
                     ascii(Int2Str(hbox->zorder, "%d", buf)));
                 switch (hbox->style.anchor_type)
                 {
                     case CHAR_ANCHOR:
-                        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
+                        padd("text:anchor-type", sXML_CDATA, "as-char");
                         break;
                     case PARA_ANCHOR:
-                        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("paragraph"));
+                        padd("text:anchor-type", sXML_CDATA, "paragraph");
                         break;
                     case PAGE_ANCHOR:
                     case PAPER_ANCHOR:
                     {
-                        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
-                        padd(ascii("text:anchor-page-number"), sXML_CDATA,
+                        padd("text:anchor-type", sXML_CDATA, "page");
+                        padd("text:anchor-page-number", sXML_CDATA,
                             ascii(Int2Str(hbox->pgno +1, "%d", buf)));
                         break;
                     }
                 }
                 if (hbox->style.anchor_type != CHAR_ANCHOR)
                 {
-                    padd(ascii("svg:x"), sXML_CDATA,
-                        Double2Str(WTMM(  hbox->pgx + hbox->style.margin[0][0] )) + ascii("mm"));
-                    padd(ascii("svg:y"), sXML_CDATA,
-                        Double2Str(WTMM(  hbox->pgy + hbox->style.margin[0][2] )) + ascii("mm"));
+                    padd("svg:x", sXML_CDATA,
+                        Double2Str(WTMM(  hbox->pgx + hbox->style.margin[0][0] )) + "mm");
+                    padd("svg:y", sXML_CDATA,
+                        Double2Str(WTMM(  hbox->pgy + hbox->style.margin[0][2] )) + "mm");
                 }
-                padd(ascii("svg:width"), sXML_CDATA,
-                    Double2Str(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1] )) + ascii("mm"));
-                padd(ascii("fo:min-height"), sXML_CDATA,
-                    Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + ascii("mm"));
-                rstartEl(ascii("draw:text-box"), rList);
+                padd("svg:width", sXML_CDATA,
+                    Double2Str(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1] )) + "mm");
+                padd("fo:min-height", sXML_CDATA,
+                    Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + "mm");
+                rstartEl("draw:text-box", rList);
                 pList->clear();
                 if( hbox->cap_pos % 2 )           /* 캡션이 위쪽에 위치한다 */
                 {
                     parsePara(hbox->caption.front());
                 }
-                padd( ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
-                rstartEl(ascii("text:p"), rList);
+                padd( "text:style-name", sXML_CDATA, "Standard");
+                rstartEl("text:p", rList);
                 pList->clear();
             }
             if( hbox->ishyper )
             {
-                padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
+                padd("xlink:type", sXML_CDATA, "simple");
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
-                    padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 4).c_str())));
+                    padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 4).c_str())));
                 else
-                    padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 5).c_str())));
+                    padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 5).c_str())));
 #else
                 if( hbox->follow[4] != 0 )
-                    padd(ascii("xlink:href"), sXML_CDATA,
+                    padd("xlink:href", sXML_CDATA,
                         (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 4)).c_str()).c_str())));
                 else
-                    padd(ascii("xlink:href"), sXML_CDATA,
+                    padd("xlink:href", sXML_CDATA,
                         (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 5)).c_str()).c_str())));
 #endif
-                rstartEl(ascii("draw:a"), rList);
+                rstartEl("draw:a", rList);
                 pList->clear();
             }
-            padd(ascii("draw:style-name"), sXML_CDATA,
+            padd("draw:style-name", sXML_CDATA,
                 ascii(Int2Str(hbox->style.boxnum, "G%d", buf)));
-            padd(ascii("draw:name"), sXML_CDATA,
+            padd("draw:name", sXML_CDATA,
                 ascii(Int2Str(hbox->style.boxnum, "Image%d", buf)));
 
             if( hbox->style.cap_len <= 0 )
             {
-                     padd(ascii("draw:z-index"), sXML_CDATA,
+                     padd("draw:z-index", sXML_CDATA,
                     ascii(Int2Str(hbox->zorder, "%d", buf)));
                 switch (hbox->style.anchor_type)
                 {
                     case CHAR_ANCHOR:
-                        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
+                        padd("text:anchor-type", sXML_CDATA, "as-char");
                         break;
                     case PARA_ANCHOR:
-                        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("paragraph"));
+                        padd("text:anchor-type", sXML_CDATA, "paragraph");
                         break;
                     case PAGE_ANCHOR:
                     case PAPER_ANCHOR:
                     {
-                        padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
-                        padd(ascii("text:anchor-page-number"), sXML_CDATA,
+                        padd("text:anchor-type", sXML_CDATA, "page");
+                        padd("text:anchor-page-number", sXML_CDATA,
                             ascii(Int2Str(hbox->pgno +1, "%d", buf)));
                         break;
                     }
                 }
                 if (hbox->style.anchor_type != CHAR_ANCHOR)
                 {
-                    padd(ascii("svg:x"), sXML_CDATA,
-                        Double2Str(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + ascii("mm"));
-                    padd(ascii("svg:y"), sXML_CDATA,
-                        Double2Str(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + ascii("mm"));
+                    padd("svg:x", sXML_CDATA,
+                        Double2Str(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + "mm");
+                    padd("svg:y", sXML_CDATA,
+                        Double2Str(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + "mm");
                 }
             }
             else
             {
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
-                padd(ascii("svg:y"), sXML_CDATA, ascii("0cm"));
+                padd("text:anchor-type", sXML_CDATA, "as-char");
+                padd("svg:y", sXML_CDATA, "0cm");
             }
-            padd(ascii("svg:width"), sXML_CDATA,
-                Double2Str(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1])) + ascii("mm"));
-            padd(ascii("svg:height"), sXML_CDATA,
-                Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3])) + ascii("mm"));
+            padd("svg:width", sXML_CDATA,
+                Double2Str(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1])) + "mm");
+            padd("svg:height", sXML_CDATA,
+                Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3])) + "mm");
 
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr((uchar *) buf).c_str())));
+                padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr((uchar *) buf).c_str())));
 #else
-                padd(ascii("xlink:href"), sXML_CDATA,
+                padd("xlink:href", sXML_CDATA,
                     (hconv(kstr2hstr((uchar *) urltounix(hbox->picinfo.picun.path).c_str()).c_str())));
 #endif
-                padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
-                padd(ascii("xlink:show"), sXML_CDATA, ascii("embed"));
-                padd(ascii("xlink:actuate"), sXML_CDATA, ascii("onLoad"));
+                padd("xlink:type", sXML_CDATA, "simple");
+                padd("xlink:show", sXML_CDATA, "embed");
+                padd("xlink:actuate", sXML_CDATA, "onLoad");
             }
 
                 if( hbox->pictype == PICTYPE_OLE )
-                    rstartEl(ascii("draw:object-ole"), rList);
+                    rstartEl("draw:object-ole", rList);
                 else
-                    rstartEl(ascii("draw:image"), rList);
+                    rstartEl("draw:image", rList);
             pList->clear();
             if (hbox->pictype == PICTYPE_EMBED || hbox->pictype == PICTYPE_OLE)
             {
-                rstartEl(ascii("office:binary-data"), rList);
+                rstartEl("office:binary-data", rList);
                 pList->clear();
                      if( hbox->pictype == PICTYPE_EMBED ){
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
@@ -3904,13 +3904,13 @@ void HwpReader::makePicture(Picture * hbox)
                              int rc = hwpfile.oledata->pis->OpenStorage(pathname, 0,
                                      STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_TRANSACTED, NULL, 0, &srcsto);
                              if (rc != S_OK) {
-                                 rchars(ascii(""));
+                                 rchars("");
                              }
                              else{
                                  rc = OleLoad(srcsto, IID_IUnknown, NULL, (LPVOID*)&pObj);
                                  if( rc != S_OK ){
                                      srcsto->Release();
-                                     rchars(ascii(""));
+                                     rchars("");
                                  }
                                  else{
                                      boost::shared_ptr<char> pStr(base64_encode_string( (uchar *)pObj, strlen((char *)pObj)), Free<char>());
@@ -3920,34 +3920,34 @@ void HwpReader::makePicture(Picture * hbox)
                                  }
                              }
 #else
-                             rchars(ascii(""));
+                             rchars("");
 #endif
                          }
                      }
-                rendEl(ascii("office:binary-data"));
+                rendEl("office:binary-data");
             }
                 if( hbox->pictype == PICTYPE_OLE )
-                    rendEl(ascii("draw:object-ole"));
+                    rendEl("draw:object-ole");
                 else
-                    rendEl(ascii("draw:image"));
+                    rendEl("draw:image");
             if( hbox->ishyper )
             {
-                rendEl(ascii("draw:a"));
+                rendEl("draw:a");
             }
             if( hbox->style.cap_len > 0 )
             {
-                rendEl( ascii("text:p"));
+                rendEl( "text:p");
                 if( !(hbox->cap_pos % 2))         /* 캡션이 아래쪽에 위치하면, */
                 {
                     parsePara(hbox->caption.front());
                 }
-                rendEl( ascii("draw:text-box"));
+                rendEl( "draw:text-box");
             }
             break;
         }
         case PICTYPE_DRAW:
               if( hbox->picinfo.picdraw.zorder > 0 )
-                 padd(ascii("draw:z-index"), sXML_CDATA,
+                 padd("draw:z-index", sXML_CDATA,
                       ascii(Int2Str( hbox->picinfo.picdraw.zorder + 10000, "%d", buf)));
             makePictureDRAW( (HWPDrawingObject *) hbox->picinfo.picdraw.hdo, hbox);
             break;
@@ -3967,24 +3967,24 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
     while (drawobj)
     {
-        padd(ascii("draw:style-name"), sXML_CDATA,
+        padd("draw:style-name", sXML_CDATA,
             ascii(Int2Str(drawobj->index, "Draw%d", buf)));
           a = 0; b = 0;
 
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("as-char"));
+                padd("text:anchor-type", sXML_CDATA, "as-char");
                 break;
             case PARA_ANCHOR:
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("paragraph"));
+                padd("text:anchor-type", sXML_CDATA, "paragraph");
                 break;
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
                 HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
-                padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
-                padd(ascii("text:anchor-page-number"), sXML_CDATA,
+                padd("text:anchor-type", sXML_CDATA, "page");
+                padd("text:anchor-page-number", sXML_CDATA,
                     ascii(Int2Str(hbox->pgno +1, "%d", buf)));
                 a = hwpinfo.paper.left_margin;
                 b = hwpinfo.paper.top_margin + hwpinfo.paper.header_length;
@@ -3994,10 +3994,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
         if (drawobj->type == HWPDO_CONTAINER)
         {
-            rstartEl(ascii("draw:g"), rList);
+            rstartEl("draw:g", rList);
             pList->clear();
             makePictureDRAW(drawobj->child, hbox);
-            rendEl(ascii("draw:g"));
+            rendEl("draw:g");
         }
         else
         {
@@ -4050,28 +4050,28 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                      OUString trans;
                      if( skewX != 0.0 && rotate != 0.0 ){
-                         trans = ascii("skewX (") + Double2Str(skewX)
-                                  + ascii(") rotate (") + Double2Str(rotate)
-                                  + ascii(") translate (") + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + ascii("mm ")
-                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + ascii("mm)");
+                         trans = "skewX (" + Double2Str(skewX)
+                                  + ") rotate (" + Double2Str(rotate)
+                                  + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
                           bIsRotate = true;
                      }
                      else if( skewX != 0.0 ){
-                         trans = ascii("skewX (") + Double2Str(skewX)
-                                  + ascii(") translate (") + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + ascii("mm ")
-                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + ascii("mm)");
+                         trans = "skewX (" + Double2Str(skewX)
+                                  + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
                           bIsRotate = true;
                      }
                      else if( rotate != 0.0 ){
-                         trans = ascii("rotate (") + Double2Str(rotate)
-                                  + ascii(") translate (") + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + ascii("mm ")
-                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + ascii("mm)");
+                         trans = "rotate (" + Double2Str(rotate)
+                                  + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                                  + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
                           bIsRotate = true;
                      }
                      if( bIsRotate ){
                          drawobj->extent.w = (int)sqrt(double(DBL(pt[1].x-pt[0].x)+DBL(pt[1].y-pt[0].y)));
                          drawobj->extent.h = (int)sqrt(double(DBL(pt[2].x-pt[1].x)+DBL(pt[2].y-pt[1].y)));
-                         padd(ascii("draw:transform"), sXML_CDATA, trans);
+                         padd("draw:transform", sXML_CDATA, trans);
                      }
             }
             switch (drawobj->type)
@@ -4079,65 +4079,65 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 case HWPDO_LINE:                  /* 선 - 시작좌표, 끝좌표. */
                     if( drawobj->u.line_arc.flip & 0x01 )
                     {
-                        padd(ascii("svg:x1"), sXML_CDATA,
-                            Double2Str (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + ascii("mm"));
-                        padd(ascii("svg:x2"), sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x )) + ascii("mm"));
+                        padd("svg:x1", sXML_CDATA,
+                            Double2Str (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
+                        padd("svg:x2", sXML_CDATA,
+                            Double2Str (WTMM( x + a + drawobj->offset2.x )) + "mm");
                     }
                     else
                     {
-                        padd(ascii("svg:x1"), sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x )) + ascii("mm"));
-                        padd(ascii("svg:x2"), sXML_CDATA,
-                            Double2Str (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + ascii("mm"));
+                        padd("svg:x1", sXML_CDATA,
+                            Double2Str (WTMM( x + a + drawobj->offset2.x )) + "mm");
+                        padd("svg:x2", sXML_CDATA,
+                            Double2Str (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
                     }
                     if( drawobj->u.line_arc.flip & 0x02 )
                     {
-                        padd(ascii("svg:y1"), sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y + drawobj->extent.h ) ) + ascii("mm"));
-                        padd(ascii("svg:y2"), sXML_CDATA,
-                            Double2Str (WTMM( y + b  + drawobj->offset2.y )) + ascii("mm"));
+                        padd("svg:y1", sXML_CDATA,
+                            Double2Str (WTMM( y + b + drawobj->offset2.y + drawobj->extent.h ) ) + "mm");
+                        padd("svg:y2", sXML_CDATA,
+                            Double2Str (WTMM( y + b  + drawobj->offset2.y )) + "mm");
                     }
                     else
                     {
-                        padd(ascii("svg:y1"), sXML_CDATA,
-                            Double2Str (WTMM( y + b  + drawobj->offset2.y)) + ascii("mm"));
-                        padd(ascii("svg:y2"), sXML_CDATA,
-                            Double2Str (WTMM(y + b + drawobj->offset2.y + drawobj->extent.h)) + ascii("mm"));
+                        padd("svg:y1", sXML_CDATA,
+                            Double2Str (WTMM( y + b  + drawobj->offset2.y)) + "mm");
+                        padd("svg:y2", sXML_CDATA,
+                            Double2Str (WTMM(y + b + drawobj->offset2.y + drawobj->extent.h)) + "mm");
                     }
 
-                    rstartEl(ascii("draw:line"), rList);
+                    rstartEl("draw:line", rList);
                     pList->clear();
-                    rendEl(ascii("draw:line"));
+                    rendEl("draw:line");
                     break;
                 case HWPDO_RECT:                  /* 사각형 - 시작위치, 가로/세로 */
                     if( !bIsRotate )
                     {
-                        padd(ascii("svg:x"), sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + ascii("mm"));
-                        padd(ascii("svg:y"), sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + ascii("mm"));
+                        padd("svg:x", sXML_CDATA,
+                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                        padd("svg:y", sXML_CDATA,
+                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
-                    padd(ascii("svg:width"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + ascii("mm"));
-                    padd(ascii("svg:height"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + ascii("mm"));
+                    padd("svg:width", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                    padd("svg:height", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->property.flag & 0x01 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        padd(ascii("draw:corner-radius"), sXML_CDATA,
-                            Double2Str (WTMM( value/10 )) + ascii("mm"));
+                        padd("draw:corner-radius", sXML_CDATA,
+                            Double2Str (WTMM( value/10 )) + "mm");
                     }
                     else if( drawobj->property.flag & 0x04 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        padd(ascii("draw:corner-radius"), sXML_CDATA,
-                            Double2Str (WTMM( value / 2)) + ascii("mm"));
+                        padd("draw:corner-radius", sXML_CDATA,
+                            Double2Str (WTMM( value / 2)) + "mm");
                     }
 
-                    rstartEl(ascii("draw:rect"), rList);
+                    rstartEl("draw:rect", rList);
                     pList->clear();
                     if( (drawobj->property.flag & HWPDO_FLAG_AS_TEXTBOX) &&
                         drawobj->property.pPara ) // As Textbox
@@ -4150,23 +4150,23 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    rendEl(ascii("draw:rect"));
+                    rendEl("draw:rect");
                     break;
                 case HWPDO_ELLIPSE:               /* 타원 - 시작위치, 가로/세로 */
                 case HWPDO_ADVANCED_ELLIPSE:      /* 변형된 타원 */
                 {
                     if( !bIsRotate )
                     {
-                        padd(ascii("svg:x"), sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + ascii("mm"));
-                        padd(ascii("svg:y"), sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + ascii("mm"));
+                        padd("svg:x", sXML_CDATA,
+                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                        padd("svg:y", sXML_CDATA,
+                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
-                            padd(ascii("svg:width"), sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.w )) + ascii("mm"));
-                            padd(ascii("svg:height"), sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.h )) + ascii("mm"));
+                            padd("svg:width", sXML_CDATA,
+                                 Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                            padd("svg:height", sXML_CDATA,
+                                 Double2Str (WTMM( drawobj->extent.h )) + "mm");
                             if( drawobj->type == HWPDO_ADVANCED_ELLIPSE ){
                                 if( drawobj->u.arc.radial[0].x != drawobj->u.arc.radial[1].x
                                         || drawobj->u.arc.radial[0].y != drawobj->u.arc.radial[1].y ){
@@ -4178,14 +4178,14 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                     start_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[0].x, drawobj->u.arc.radial[0].y );
                                     end_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[1].x, drawobj->u.arc.radial[1].y );
                                     if( drawobj->property.fill_color < 0xffffff )
-                                        padd(ascii("draw:kind"), sXML_CDATA, ascii("section"));
+                                        padd("draw:kind", sXML_CDATA, "section");
                                     else
-                                        padd(ascii("draw:kind"), sXML_CDATA, ascii("arc"));
-                                    padd(ascii("draw:start-angle"), sXML_CDATA, Double2Str(start_angle ));
-                                    padd(ascii("draw:end-angle"), sXML_CDATA, Double2Str(end_angle));
+                                        padd("draw:kind", sXML_CDATA, "arc");
+                                    padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle ));
+                                    padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle));
                                 }
                           }
-                    rstartEl(ascii("draw:ellipse"), rList);
+                    rstartEl("draw:ellipse", rList);
                     pList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
                         drawobj->property.pPara ) // As Textbox
@@ -4198,7 +4198,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    rendEl(ascii("draw:ellipse"));
+                    rendEl("draw:ellipse");
                     break;
 
                 }
@@ -4210,28 +4210,28 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     if( !bIsRotate )
                     {
                               if( ( flip == 0 || flip == 2 ) && drawobj->type == HWPDO_ARC)
-                                    padd(ascii("svg:x"), sXML_CDATA,
-                                         Double2Str (WTMM( x + a + drawobj->offset2.x - drawobj->extent.w)) + ascii("mm"));
+                                    padd("svg:x", sXML_CDATA,
+                                         Double2Str (WTMM( x + a + drawobj->offset2.x - drawobj->extent.w)) + "mm");
                               else
-                                    padd(ascii("svg:x"), sXML_CDATA,
-                                         Double2Str (WTMM( x + a + drawobj->offset2.x)) + ascii("mm"));
+                                    padd("svg:x", sXML_CDATA,
+                                         Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
                               if( ( flip == 0 || flip == 1 ) && drawobj->type == HWPDO_ARC)
-                                    padd(ascii("svg:y"), sXML_CDATA,
-                                         Double2Str (WTMM( y + b + drawobj->offset2.y - drawobj->extent.h)) + ascii("mm"));
+                                    padd("svg:y", sXML_CDATA,
+                                         Double2Str (WTMM( y + b + drawobj->offset2.y - drawobj->extent.h)) + "mm");
                               else
-                                    padd(ascii("svg:y"), sXML_CDATA,
-                                         Double2Str (WTMM( y + b + drawobj->offset2.y)) + ascii("mm"));
+                                    padd("svg:y", sXML_CDATA,
+                                         Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
-                            padd(ascii("svg:width"), sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.w * 2)) + ascii("mm"));
-                            padd(ascii("svg:height"), sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.h * 2)) + ascii("mm"));
+                            padd("svg:width", sXML_CDATA,
+                                 Double2Str (WTMM( drawobj->extent.w * 2)) + "mm");
+                            padd("svg:height", sXML_CDATA,
+                                 Double2Str (WTMM( drawobj->extent.h * 2)) + "mm");
                             if( drawobj->property.flag & HWPDO_FLAG_DRAW_PIE ||
                                      drawobj->property.fill_color < 0xffffff )
-                                padd(ascii("draw:kind"), sXML_CDATA, ascii("section"));
+                                padd("draw:kind", sXML_CDATA, "section");
                             else
-                                padd(ascii("draw:kind"), sXML_CDATA, ascii("arc"));
+                                padd("draw:kind", sXML_CDATA, "arc");
 
                             if( drawobj->type == HWPDO_ADVANCED_ARC ){
                                 double start_angle, end_angle;
@@ -4269,33 +4269,33 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                     start_angle = end_angle;
                                     end_angle = tmp_angle;
                                 }
-                                 padd(ascii("draw:start-angle"), sXML_CDATA, Double2Str(start_angle * 180. / PI));
-                                 padd(ascii("draw:end-angle"), sXML_CDATA, Double2Str(end_angle * 180. / PI));
+                                 padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle * 180. / PI));
+                                 padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle * 180. / PI));
 
                             }
                             else{
                             if( drawobj->u.line_arc.flip == 0 )
                             {
-                                 padd(ascii("draw:start-angle"), sXML_CDATA, ascii("270"));
-                                 padd(ascii("draw:end-angle"), sXML_CDATA, ascii("0"));
+                                 padd("draw:start-angle", sXML_CDATA, "270");
+                                 padd("draw:end-angle", sXML_CDATA, "0");
                             }
                             else if( drawobj->u.line_arc.flip == 1 )
                             {
-                                 padd(ascii("draw:start-angle"), sXML_CDATA, ascii("180"));
-                                 padd(ascii("draw:end-angle"), sXML_CDATA, ascii("270"));
+                                 padd("draw:start-angle", sXML_CDATA, "180");
+                                 padd("draw:end-angle", sXML_CDATA, "270");
                             }
                             else if( drawobj->u.line_arc.flip == 2 )
                             {
-                                 padd(ascii("draw:start-angle"), sXML_CDATA, ascii("0"));
-                                 padd(ascii("draw:end-angle"), sXML_CDATA, ascii("90"));
+                                 padd("draw:start-angle", sXML_CDATA, "0");
+                                 padd("draw:end-angle", sXML_CDATA, "90");
                             }
                             else
                             {
-                                 padd(ascii("draw:start-angle"), sXML_CDATA, ascii("90"));
-                                 padd(ascii("draw:end-angle"), sXML_CDATA, ascii("180"));
+                                 padd("draw:start-angle", sXML_CDATA, "90");
+                                 padd("draw:end-angle", sXML_CDATA, "180");
                             }
                             }
-                    rstartEl(ascii("draw:ellipse"), rList);
+                    rstartEl("draw:ellipse", rList);
                     pList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
                         drawobj->property.pPara ) // As Textbox
@@ -4308,7 +4308,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    rendEl(ascii("draw:ellipse"));
+                    rendEl("draw:ellipse");
                     break;
 
                 }
@@ -4320,17 +4320,17 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     }
                     if( !bIsRotate )
                     {
-                        padd(ascii("svg:x"), sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + ascii("mm"));
-                        padd(ascii("svg:y"), sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + ascii("mm"));
+                        padd("svg:x", sXML_CDATA,
+                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                        padd("svg:y", sXML_CDATA,
+                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
-                    padd(ascii("svg:width"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + ascii("mm"));
-                    padd(ascii("svg:height"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + ascii("mm"));
+                    padd("svg:width", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                    padd("svg:height", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii(buf) );
+                    padd("svg:viewBox", sXML_CDATA, ascii(buf) );
 
                     OUString oustr;
 
@@ -4410,9 +4410,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               delete[] darr;
                           }
 
-                    padd(ascii("svg:d"), sXML_CDATA, oustr);
+                    padd("svg:d", sXML_CDATA, oustr);
 
-                    rstartEl(ascii("draw:path"), rList);
+                    rstartEl("draw:path", rList);
                     pList->clear();
                                                   // As Textbox
                     if( drawobj->property.flag >> 19 & 0x01 && drawobj->property.pPara )
@@ -4424,7 +4424,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             pPara = pPara->Next();
                         }
                     }
-                    rendEl(ascii("draw:path"));
+                    rendEl("draw:path");
                     break;
                 }
                 case HWPDO_CLOSED_FREEFORM:
@@ -4432,18 +4432,18 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 {
                     bool bIsPolygon = false;
 
-                            padd(ascii("svg:x"), sXML_CDATA,
-                                 Double2Str (WTMM( x + a + drawobj->offset2.x)) + ascii("mm"));
-                            padd(ascii("svg:y"), sXML_CDATA,
-                                 Double2Str (WTMM( y + b + drawobj->offset2.y)) + ascii("mm"));
+                            padd("svg:x", sXML_CDATA,
+                                 Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                            padd("svg:y", sXML_CDATA,
+                                 Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
 
-                    padd(ascii("svg:width"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + ascii("mm"));
-                    padd(ascii("svg:height"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + ascii("mm"));
+                    padd("svg:width", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                    padd("svg:height", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
 
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
-                    padd(ascii("svg:viewBox"), sXML_CDATA, ascii(buf) );
+                    padd("svg:viewBox", sXML_CDATA, ascii(buf) );
 
                     OUString oustr;
 
@@ -4465,7 +4465,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                             bIsPolygon = true;
                         }
                     }
-                    padd(ascii("draw:points"), sXML_CDATA, oustr);
+                    padd("draw:points", sXML_CDATA, oustr);
 
                     if( drawobj->property.fill_color <=  0xffffff ||
                         drawobj->property.pattern_type != 0)
@@ -4475,7 +4475,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     if(bIsPolygon)
                     {
-                        rstartEl(ascii("draw:polygon"), rList);
+                        rstartEl("draw:polygon", rList);
                         pList->clear();
                         if( drawobj->property.flag >> 19 & 0x01 &&
                                                   // As Textbox
@@ -4489,11 +4489,11 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 pPara = pPara->Next();
                             }
                         }
-                        rendEl(ascii("draw:polygon"));
+                        rendEl("draw:polygon");
                     }
                     else
                     {
-                        rstartEl(ascii("draw:polyline"), rList);
+                        rstartEl("draw:polyline", rList);
                         pList->clear();
                         if( drawobj->property.flag >> 19 & 0x01 &&
                                                   // As Textbox
@@ -4507,38 +4507,38 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                 pPara = pPara->Next();
                             }
                         }
-                        rendEl(ascii("draw:polyline"));
+                        rendEl("draw:polyline");
                     }
                     break;
                 }
                 case HWPDO_TEXTBOX:
                     if( !bIsRotate )
                     {
-                        padd(ascii("svg:x"), sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + ascii("mm"));
-                        padd(ascii("svg:y"), sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + ascii("mm"));
+                        padd("svg:x", sXML_CDATA,
+                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                        padd("svg:y", sXML_CDATA,
+                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
-                    padd(ascii("svg:width"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + ascii("mm"));
-                    padd(ascii("svg:height"), sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + ascii("mm"));
+                    padd("svg:width", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                    padd("svg:height", sXML_CDATA,
+                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->property.flag & 0x01 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        padd(ascii("draw:corner-radius"), sXML_CDATA,
-                            Double2Str (WTMM( value/10 )) + ascii("mm"));
+                        padd("draw:corner-radius", sXML_CDATA,
+                            Double2Str (WTMM( value/10 )) + "mm");
                     }
                     else if( drawobj->property.flag & 0x04 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
-                        padd(ascii("draw:corner-radius"), sXML_CDATA,
-                            Double2Str (WTMM( value / 2)) + ascii("mm"));
+                        padd("draw:corner-radius", sXML_CDATA,
+                            Double2Str (WTMM( value / 2)) + "mm");
                     }
 
-                    rstartEl(ascii("draw:text-box"), rList);
+                    rstartEl("draw:text-box", rList);
                     pList->clear();
 
                     HWPPara *pPara = drawobj->u.textbox.h;
@@ -4549,7 +4549,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                         pPara = pPara->Next();
                     }
 
-                    rendEl(ascii("draw:text-box"));
+                    rendEl("draw:text-box");
                     break;
             }
         }
@@ -4564,8 +4564,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
  */
 void HwpReader::makeLine(Line *   )
 {
-    padd(ascii("text:style-name"), sXML_CDATA, ascii("Horizontal Line"));
-    rstartEl( ascii("text:p"), rList);
+    padd("text:style-name", sXML_CDATA, "Horizontal Line");
+    rstartEl( "text:p", rList);
     pList->clear();
 }
 
@@ -4580,9 +4580,9 @@ void HwpReader::makeHidden(Hidden * hbox)
     int res;
      hchar dest[3];
 
-    padd(ascii("text:condition"), sXML_CDATA, ascii(""));
-    padd(ascii("text:string-value"), sXML_CDATA, ascii(""));
-    rstartEl(ascii("text:hidden-text"), rList);
+    padd("text:condition", sXML_CDATA, "");
+    padd("text:string-value", sXML_CDATA, "");
+    rstartEl("text:hidden-text", rList);
     pList->clear();
     HWPPara *para = hbox->plist.front();
 
@@ -4600,7 +4600,7 @@ void HwpReader::makeHidden(Hidden * hbox)
         para = para->Next();
     }
     makeChars(str);
-    rendEl(ascii("text:hidden-text"));
+    rendEl("text:hidden-text");
 }
 
 
@@ -4611,37 +4611,37 @@ void HwpReader::makeFootnote(Footnote * hbox)
 {
     if (hbox->type)
     {
-        padd(ascii("text:id"), sXML_CDATA,
+        padd("text:id", sXML_CDATA,
             ascii(Int2Str(hbox->number, "edn%d", buf)));
-        rstartEl(ascii("text:endnote"), rList);
+        rstartEl("text:endnote", rList);
         pList->clear();
-        padd(ascii("text:label"), sXML_CDATA,
+        padd("text:label", sXML_CDATA,
             ascii(Int2Str(hbox->number, "%d", buf)));
-        rstartEl(ascii("text:endnote-citation"), rList);
+        rstartEl("text:endnote-citation", rList);
         pList->clear();
         rchars(ascii(Int2Str(hbox->number, "%d", buf)));
-        rendEl(ascii("text:endnote-citation"));
-        rstartEl(ascii("text:endnote-body"), rList);
+        rendEl("text:endnote-citation");
+        rstartEl("text:endnote-body", rList);
         parsePara(hbox->plist.front());
-        rendEl(ascii("text:endnote-body"));
-        rendEl(ascii("text:endnote"));
+        rendEl("text:endnote-body");
+        rendEl("text:endnote");
     }
     else
     {
-        padd(ascii("text:id"), sXML_CDATA,
+        padd("text:id", sXML_CDATA,
             ascii(Int2Str(hbox->number, "ftn%d", buf)));
-        rstartEl(ascii("text:footnote"), rList);
+        rstartEl("text:footnote", rList);
         pList->clear();
-        padd(ascii("text:label"), sXML_CDATA,
+        padd("text:label", sXML_CDATA,
             ascii(Int2Str(hbox->number, "%d", buf)));
-        rstartEl(ascii("text:footnote-citation"), rList);
+        rstartEl("text:footnote-citation", rList);
         pList->clear();
         rchars(ascii(Int2Str(hbox->number, "%d", buf)));
-        rendEl(ascii("text:footnote-citation"));
-        rstartEl(ascii("text:footnote-body"), rList);
+        rendEl("text:footnote-citation");
+        rstartEl("text:footnote-body", rList);
         parsePara(hbox->plist.front());
-        rendEl(ascii("text:footnote-body"));
-        rendEl(ascii("text:footnote"));
+        rendEl("text:footnote-body");
+        rendEl("text:footnote");
     }
 }
 
@@ -4654,9 +4654,9 @@ void HwpReader::makeAutoNum(AutoNum * hbox)
     switch (hbox->type)
     {
         case PGNUM_AUTO:
-            rstartEl(ascii("text:page-number"), rList);
+            rstartEl("text:page-number", rList);
             rchars(ascii(Int2Str(hbox->number, "%d", buf)));
-            rendEl(ascii("text:page-number"));
+            rendEl("text:page-number");
             break;
         case FNNUM_AUTO:
             break;
@@ -4664,22 +4664,22 @@ void HwpReader::makeAutoNum(AutoNum * hbox)
             break;
         case EQUNUM_AUTO:
         case PICNUM_AUTO:
-            padd(ascii("text:ref-name"),sXML_CDATA,
+            padd("text:ref-name",sXML_CDATA,
                 ascii(Int2Str(hbox->number, "refIllustration%d", buf)));
-            padd(ascii("text:name"),sXML_CDATA, ascii("Illustration"));
-            padd(ascii("style:num-format"),sXML_CDATA, ascii("1"));
-            rstartEl(ascii("text:sequence"), rList);
+            padd("text:name",sXML_CDATA, "Illustration");
+            padd("style:num-format",sXML_CDATA, "1");
+            rstartEl("text:sequence", rList);
             rchars(ascii(Int2Str(hbox->number, "%d", buf)));
-            rendEl(ascii("text:sequence"));
+            rendEl("text:sequence");
             break;
         case TBLNUM_AUTO:
-            padd(ascii("text:ref-name"),sXML_CDATA,
+            padd("text:ref-name",sXML_CDATA,
                 ascii(Int2Str(hbox->number, "refTable%d", buf)));
-            padd(ascii("text:name"),sXML_CDATA, ascii("Table"));
-            padd(ascii("style:num-format"),sXML_CDATA, ascii("1"));
-            rstartEl(ascii("text:sequence"), rList);
+            padd("text:name",sXML_CDATA, "Table");
+            padd("style:num-format",sXML_CDATA, "1");
+            rstartEl("text:sequence", rList);
             rchars(ascii(Int2Str(hbox->number, "%d", buf)));
-            rendEl(ascii("text:sequence"));
+            rendEl("text:sequence");
             break;
     }
 }
@@ -4703,38 +4703,38 @@ void HwpReader::makeShowPageNum()
             nPos = 3;
     }
 
-    padd(ascii("draw:style-name"), sXML_CDATA,
+    padd("draw:style-name", sXML_CDATA,
         ascii(Int2Str(nPos, "PNBox%d", buf)));
-    padd(ascii("draw:name"), sXML_CDATA,
+    padd("draw:name", sXML_CDATA,
         ascii(Int2Str(nPos, "PageNumber%d", buf)));
-    padd(ascii("text:anchor-type"), sXML_CDATA, ascii("paragraph"));
-    padd(ascii("svg:y"), sXML_CDATA, ascii("0cm"));
-    padd(ascii("svg:width"), sXML_CDATA, ascii("2.0cm"));
-    padd(ascii("fo:min-height"), sXML_CDATA, ascii("0.5cm"));
-    rstartEl(ascii("draw:text-box"), rList);
+    padd("text:anchor-type", sXML_CDATA, "paragraph");
+    padd("svg:y", sXML_CDATA, "0cm");
+    padd("svg:width", sXML_CDATA, "2.0cm");
+    padd("fo:min-height", sXML_CDATA, "0.5cm");
+    rstartEl("draw:text-box", rList);
     pList->clear();
 
-    padd(ascii("text:style-name"), sXML_CDATA,
+    padd("text:style-name", sXML_CDATA,
         ascii(Int2Str(nPos, "PNPara%d", buf)));
-    rstartEl(ascii("text:p"), rList);
+    rstartEl("text:p", rList);
     pList->clear();
     if( hbox->shape > 2 )
-        rchars(ascii("- "));
+        rchars("- ");
     if( hbox->shape % 3 == 0 )
-        padd(ascii("style:num-format"), sXML_CDATA, ascii("1"));
+        padd("style:num-format", sXML_CDATA, "1");
     else if( hbox->shape % 3 == 1 )
-        padd(ascii("style:num-format"), sXML_CDATA, ascii("I"));
+        padd("style:num-format", sXML_CDATA, "I");
     else
-        padd(ascii("style:num-format"), sXML_CDATA, ascii("i"));
-    padd(ascii("text:select-page"), sXML_CDATA, ascii("current"));
-    rstartEl(ascii("text:page-number"), rList);
+        padd("style:num-format", sXML_CDATA, "i");
+    padd("text:select-page", sXML_CDATA, "current");
+    rstartEl("text:page-number", rList);
     pList->clear();
-    rchars(ascii("2"));
-    rendEl(ascii("text:page-number"));
+    rchars("2");
+    rendEl("text:page-number");
     if( hbox->shape > 2 )
-        rchars(ascii(" -"));
-    rendEl(ascii("text:p"));
-    rendEl(ascii("draw:text-box"));
+        rchars(" -");
+    rendEl("text:p");
+    rendEl("draw:text-box");
 }
 
 
@@ -4783,19 +4783,19 @@ void HwpReader::parsePara(HWPPara * para, bool bParaStart)
         {
             if( !bParaStart )
             {
-                padd(ascii("text:style-name"), sXML_CDATA,
+                padd("text:style-name", sXML_CDATA,
                     ascii(getPStyleName(para->GetParaShape().index, buf)));
-                rstartEl( ascii("text:p"),rList);
+                rstartEl( "text:p",rList);
                 pList->clear();
             }
             if( d->bFirstPara && d->bInBody )
             {
 /* for HWP's Bookmark */
                 strcpy(buf,"[문서의 처음]"); /* "Begin of Document" */
-                padd(ascii("text:name"), sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
-                rstartEl(ascii("text:bookmark"), rList);
+                padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+                rstartEl("text:bookmark", rList);
                 pList->clear();
-                rendEl(ascii("text:bookmark"));
+                rendEl("text:bookmark");
                 d->bFirstPara = false;
             }
             if( d->bInHeader )
@@ -4804,7 +4804,7 @@ void HwpReader::parsePara(HWPPara * para, bool bParaStart)
                 d->bInHeader = false;
             }
 
-            rendEl( ascii("text:p") );
+            rendEl( "text:p" );
         }
         else
         {
