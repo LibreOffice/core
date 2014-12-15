@@ -2311,7 +2311,8 @@ void Sc10Import::LoadObjects()
         double nPPTY = ScGlobal::nScreenPPTY;
 
         long nStartX = 0;
-        for (SCsCOL nX=0; nX<GraphHeader.CarretX; nX++)
+        SCCOL nMaxCol = SanitizeCol(GraphHeader.CarretX);
+        for (SCCOL nX = 0; nX < nMaxCol; ++nX)
             nStartX += pDoc->GetColWidth(nX, static_cast<SCTAB>(GraphHeader.CarretZ));
         nStartX = (long) ( nStartX * HMM_PER_TWIPS );
         nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
