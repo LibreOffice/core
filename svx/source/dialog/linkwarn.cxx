@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/file.hxx>
 #include <svx/linkwarn.hxx>
 #include <svtools/miscopt.hxx>
 
@@ -27,7 +28,10 @@ SvxLinkWarningDialog::SvxLinkWarningDialog( Window* pParent, const OUString& _rF
 
     // replace filename
     OUString sInfoText = get_primary_text();
-    sInfoText = sInfoText.replaceAll("%FILENAME", _rFileName);
+    OUString aPath;
+    if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( _rFileName, aPath ) )
+        aPath = _rFileName;
+    sInfoText = sInfoText.replaceAll("%FILENAME", aPath);
     set_primary_text( sInfoText );
 
     // load state of "warning on" checkbox from misc options
