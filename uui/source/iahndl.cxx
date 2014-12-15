@@ -322,7 +322,7 @@ namespace
         }
         const ::com::sun::star::uno::Type aType( pTypeDesc->pWeakRef );
 
-        const bool bExactMatch = i_rPropagation.equalsAscii( "named-only" );
+        const bool bExactMatch = i_rPropagation == "named-only";
         if ( bExactMatch )
             return i_rRequest.getValueType().equals( aType );
 
