@@ -1067,6 +1067,7 @@ bool ImplSdPPTImport::Import()
                             case PptPlaceholder::VERTICALTEXTBODY :
                                 eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE;
                             break;
+                            default: break;
                         }
                     }
                     break;
@@ -2151,6 +2152,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             case PptPlaceholder::MASTERSLIDENUMBER :    ePresKind = PRESOBJ_SLIDENUMBER;break;
             case PptPlaceholder::MASTERFOOTER :         ePresKind = PRESOBJ_FOOTER;     break;
             case PptPlaceholder::MASTERHEADER :         ePresKind = PRESOBJ_HEADER;     break;
+            default: break;
         }
     }
     switch ( pTextObj->GetDestinationInstance() )
@@ -2328,6 +2330,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                         case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_TABLE; break;
                                         case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
                                         case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
+                                        default: break;
                                     }
                                 }
                             };
@@ -2346,6 +2349,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                 case PptPlaceholder::TABLE : ePresObjKind = PRESOBJ_CALC; break;
                                 case PptPlaceholder::CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
                                 case PptPlaceholder::ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
+                                default: break;
                             }
                         }
                     }
