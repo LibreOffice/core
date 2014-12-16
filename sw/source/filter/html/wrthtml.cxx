@@ -30,6 +30,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svx/xoutbmp.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/colritem.hxx>
@@ -1047,7 +1048,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
 
-        OutBackground( rItemSet, true );
+        // fdo#86857 page styles now contain the XATTR_*, not RES_BACKGROUND
+        SvxBrushItem const aBrushItem(
+                getSvxBrushItemFromSourceSet(rItemSet, RES_BACKGROUND));
+        OutBackground(&aBrushItem, true);
 
         nDirection = GetHTMLDirection( rItemSet );
         OutDirection( nDirection );
