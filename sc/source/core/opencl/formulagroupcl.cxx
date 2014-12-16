@@ -3726,10 +3726,12 @@ public:
         mpKernel = pKernel;
     }
 
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     void setUnmanagedKernel( DynamicKernel* pKernel )
     {
         mpKernel = pKernel;
     }
+#endif
 
     CLInterpreterResult launchKernel()
     {
