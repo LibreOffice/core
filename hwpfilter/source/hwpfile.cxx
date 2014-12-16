@@ -270,13 +270,10 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
 
 bool HWPFile::TagsRead(void)
 {
-    ulong tag;
-    long size;
-
     while (true)
     {
-        tag = Read4b();
-        size = Read4b();
+        ulong tag = Read4b();
+        long size = Read4b();
         if (size <= 0 && tag > 0){
             continue;
           }
@@ -374,11 +371,10 @@ ColumnDef *HWPFile::GetColumnDef(int num)
 int HWPFile::GetPageMasterNum(int page)
 {
     std::list<ColumnInfo*>::iterator it = columnlist.begin();
-    ColumnInfo *now = 0;
     int i;
 
     for( i = 1 ; it != columnlist.end() ; ++it, i++){
-        now = *it;
+        ColumnInfo *now = *it;
         if( page < now->start_page )
             return i-1;
     }
@@ -619,10 +615,9 @@ int HWPFile::compareCharShape(CharShape *shape)
     int count = cslist.size();
     if( count > 0 )
     {
-        CharShape *cshape=0;
         for(int i = 0; i< count; i++)
         {
-            cshape = getCharShape(i);
+            CharShape *cshape = getCharShape(i);
 
             if( shape->size == cshape->size &&
                 shape->font[0] == cshape->font[0] &&
@@ -646,10 +641,9 @@ int HWPFile::compareParaShape(ParaShape *shape)
     int count = pslist.size();
     if( count > 0 )
     {
-        ParaShape *pshape=0;
         for(int i = 0; i< count; i++)
         {
-            pshape = getParaShape(i);
+            ParaShape *pshape = getParaShape(i);
             if( shape->left_margin == pshape->left_margin &&
                 shape->right_margin == pshape->right_margin &&
                 shape->pspacing_prev == pshape->pspacing_prev &&

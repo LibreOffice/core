@@ -638,12 +638,11 @@ int Formula::parse()
      if( res ){
           makeMathML( res );
      }
-     Node *tmpNode;
      int count = nodelist.size();
      for( int i = 0 ; i < count ; i++ ){
-	  tmpNode = nodelist.front();
-	  nodelist.pop_front();
-          delete tmpNode;
+         const Node *tmpNode = nodelist.front();
+         nodelist.pop_front();
+         delete tmpNode;
      }
 
      return 0;

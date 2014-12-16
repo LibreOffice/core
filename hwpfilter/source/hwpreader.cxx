@@ -3962,14 +3962,14 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 {
     int x = hbox->pgx;
     int y = hbox->pgy;
-    int a, b;
     bool bIsRotate = false;
 
     while (drawobj)
     {
         padd("draw:style-name", sXML_CDATA,
             ascii(Int2Str(drawobj->index, "Draw%d", buf)));
-          a = 0; b = 0;
+        int a = 0;
+        int b = 0;
 
         switch (hbox->style.anchor_type)
         {
