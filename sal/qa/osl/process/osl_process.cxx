@@ -439,9 +439,9 @@ public:
     {
         oslProcess process;
 #if defined(WNT)
-        rtl::OUString suBatch = suCWD + rtl::OUString("/") + rtl::OUString("batch.bat");
+        rtl::OUString suBatch = suCWD + "/batch.bat";
 #else
-        rtl::OUString suBatch = suCWD + rtl::OUString("/") + rtl::OUString("batch.sh");
+        rtl::OUString suBatch = suCWD + "/batch.sh";
 #endif
         oslProcessError osl_error = osl_executeProcess(
             suBatch.pData,

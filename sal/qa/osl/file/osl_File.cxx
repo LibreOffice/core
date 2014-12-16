@@ -572,9 +572,9 @@ namespace osl_FileBase
     void getAbsoluteFileURL::getAbsoluteFileURL_004()
     {
         //create two level directories under $Temp/PID/
-        ::rtl::OUString aUStrUpBase = aUserDirectoryURL + ::rtl::OUString("/test1");
+        ::rtl::OUString aUStrUpBase = aUserDirectoryURL + "/test1";
         createTestDirectory( aUStrUpBase );
-        ::rtl::OUString aUStrBase = aUserDirectoryURL + ::rtl::OUString("/test1/dir1");
+        ::rtl::OUString aUStrBase = aUserDirectoryURL + "/test1/dir1";
         createTestDirectory( aUStrBase );
 
         ::rtl::OUString suAssume = aUserDirectoryURL.concat( ::rtl::OUString("/mytestfile") );

@@ -92,7 +92,7 @@ public:
             :m_nOK(0),
              m_nFails(0)
         {
-            m_sConstStr = rtl::OUString( CONST_TEST_STRING );
+            m_sConstStr = CONST_TEST_STRING;
         }
 
     sal_Int32 getOK() { return m_nOK; }
