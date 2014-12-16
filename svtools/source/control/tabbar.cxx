@@ -1191,16 +1191,25 @@ public:
 
     void drawPlusImage()
     {
-        SvtResId id( BMP_LIST_ADD );
-        Image aPlusImg( id );
+        SvtResId aPlusImageId(BMP_LIST_ADD);
+        Image aPlusImage(aPlusImageId);
+
+        sal_Int32 aScaleFactor = mrParent.GetDPIScaleFactor();
+        if (aScaleFactor > 1)
+        {
+            BitmapEx aBitmap = aPlusImage.GetBitmapEx();
+            aBitmap.Scale(aScaleFactor, aScaleFactor, BMP_SCALE_FAST);
+            aPlusImage = Image(aBitmap);
+        }
+
         // Center the image within the bounding rectangle.
-        Size aSize = aPlusImg.GetSizePixel();
-        Point pt = maRect.TopLeft();
+        Size aSize = aPlusImage.GetSizePixel();
+        Point aPosition = maRect.TopLeft();
         long nXOffSet = (maRect.GetWidth() - aSize.Width()) / 2;
         long nYOffset = (maRect.GetHeight() - aSize.Height()) / 2;
-        pt += Point(nXOffSet, nYOffset);
-        pt.X() += 1;
-        mrParent.DrawImage(pt, aPlusImg);
+        aPosition += Point(nXOffSet, nYOffset);
+        aPosition.X() += 1;
+        mrParent.DrawImage(aPosition, aPlusImage);
     }
 
     void setRect(const Rectangle& rRect)
