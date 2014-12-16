@@ -402,7 +402,10 @@ public:
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
 
-    // 23
+#define sCSS2_P_CLASS_leaders "leaders"
+    bool bCfgPrintLayout : 1;       // PrintLayout option for TOC dot leaders
+    bool bParaDotLeaders : 1;       // for TOC dot leaders
+    // 25
 
     SwHTMLWriter( const OUString& rBaseURL );
     virtual ~SwHTMLWriter();
@@ -576,6 +579,8 @@ public:
     static sal_uInt16 GetLangWhichIdFromScript( sal_uInt16 nScript );
 
     FieldUnit GetCSS1Unit() const { return eCSS1Unit; }
+
+    sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rTxt );
 };
 
 inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const

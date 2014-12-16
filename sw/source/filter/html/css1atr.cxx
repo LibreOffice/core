@@ -112,6 +112,8 @@ using editeng::SvxBorderLine;
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
 
+#define DOT_LEADERS_MAX_WIDTH   18
+
 extern SwAttrFnTab aCSS1AttrFnTab;
 
 static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
@@ -220,6 +222,48 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         OutNewLine();
         sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_style) + " " +
                     OString(OOO_STRING_SVTOOLS_HTML_O_type) + "=\"text/css\">");
+    //  Optional CSS2 code for dot leaders (dotted line between the Table of Contents titles and page numbers):
+    //  (More inforation: http://www.w3.org/Style/Examples/007/leaders.en.html)
+    //
+    //  p.leaders {
+    //      /* FIXME:
+    //         (1) dots line up vertically only in the paragraphs with the same alignation/level
+    //         (2) max-width = 18 cm instead of 80em; possible improvement with the new CSS3 calc() */
+    //      max-width: 18cm; /* note: need to overwrite max-width with max-width - border-left_of_the_actual_paragraph */
+    //      padding: 0;
+    //      overflow-x: hidden;
+    //      line-height: 120%; /* note: avoid HTML scrollbars and missing descenders of the letters */
+    //  }
+    //  p.leaders:after {
+    //      float: left;
+    //      width: 0;
+    //      white-space: nowrap;
+    //      content: ". . . . . . . . . . . . . . . . . . ...";
+    //  }
+    //  p.leaders span:first-child {
+    //      padding-right: 0.33em;
+    //      background: white;
+    //  }
+    //  p.leaders span + span {
+    //      float: right;
+    //      padding-left: 0.33em;
+    //      background: white;
+    //      position: relative;
+    //      z-index: 1
+    //  }
+
+        if (bCfgPrintLayout) {
+            sOut.append(
+                "p." + OString(sCSS2_P_CLASS_leaders) + "{max-width:" + OString::number(DOT_LEADERS_MAX_WIDTH) +
+                    "cm;padding:0;overflow-x:hidden;line-height:120%}" +
+                "p." + OString(sCSS2_P_CLASS_leaders) + ":after{float:left;width:0;white-space:nowrap;content:\"");
+                for (int i = 0; i < 100; i++ )
+                    sOut.append(". ");
+                sOut.append(
+                    "\"}p." + OString(sCSS2_P_CLASS_leaders) + " span:first-child{padding-right:0.33em;background:white}" +
+                    "p." + OString(sCSS2_P_CLASS_leaders) + " span+span{float:right;padding-left:0.33em;" +
+                    "background:white;position:relative;z-index:1}");
+        }
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
         IncIndentLevel();
@@ -2739,7 +2783,8 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( nHeight )
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, (long)nHeight );
-    else if( nPrcHeight )
+    else if( nPrcHeight &&
+        !(nPrcHeight < 115 && rHTMLWrt.bParaDotLeaders )) // avoid HTML scrollbars and missing descenders
     {
         OString sHeight(OString::number(nPrcHeight) + "%");
         rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_line_height, sHeight);
@@ -2954,6 +2999,11 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.nDfltLeftMargin != nLeftMargin )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_left, nLeftMargin );
+
+        // max-width = max-width - margin-left for TOC paragraphs with dot leaders
+        if( rHTMLWrt.bParaDotLeaders )
+            rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, (long)(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin );
+
     }
 
     if( rHTMLWrt.nDfltRightMargin != rLRItem.GetRight() )

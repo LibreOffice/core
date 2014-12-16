@@ -948,10 +948,21 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( !rHWrt.bNoAlign && pAdjItem )
             OutHTML_SvxAdjust( rWrt, *pAdjItem );
 
+        rHWrt.bParaDotLeaders = bPara && rHWrt.bCfgPrintLayout && rHWrt.indexOfDotLeaders(
+                pTxtNd->GetAnyFmtColl().GetPoolFmtId(), pTxtNd->GetTxt()) > -1;
+
         // und nun ggf. noch die STYLE-Option
         if( rHWrt.bCfgOutStyles && rInfo.pItemSet && !bNoStyle)
         {
             OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.pItemSet );
+        }
+
+        if (rHWrt.bParaDotLeaders) {
+            sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_class) + "=\"" +
+                OString(sCSS2_P_CLASS_leaders) + "\"><" +
+                OString(OOO_STRING_SVTOOLS_HTML_O_span);
+            rWrt.Strm().WriteOString( sOut );
+            sOut = "";
         }
 
         rWrt.Strm().WriteChar( '>' );
@@ -2300,6 +2311,12 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         aFullText += aFootEndNoteSym;
     }
 
+    // Table of Contents or other paragraph with dot leaders?
+    sal_Int32 nIndexTab = rHTMLWrt.indexOfDotLeaders( nPoolId, rStr );
+    if (nIndexTab > -1)
+        // skip part after the tabulator (page number)
+        nEnd = nIndexTab;
+
     // gibt es harte Attribute, die als Tags geschrieben werden muessen?
     aFullText += rStr;
     HTMLEndPosLst aEndPosLst( rWrt.pDoc, rHTMLWrt.pTemplate,
@@ -2629,6 +2646,12 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     if( !rHTMLWrt.bLFPossible && !rHTMLWrt.nLastParaToken &&
         nEnd > 0 && ' ' == rStr[nEnd-1] )
         rHTMLWrt.bLFPossible = true;
+
+    // dot leaders: print the skipped page number in a different span element
+    if (nIndexTab > -1) {
+        OString sOut = OUStringToOString(rStr.copy(nIndexTab + 1), RTL_TEXTENCODING_ASCII_US);
+        rWrt.Strm().WriteOString( "</span><span>" + sOut + "</span>" );
+    }
 
     rHTMLWrt.bTagOn = false;
     OutHTML_SwFmtOff( rWrt, aFmtInfo );
