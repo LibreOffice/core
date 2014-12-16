@@ -86,6 +86,9 @@ public:
     /** Returns a BIFF error code from the passed error string. */
     sal_uInt8           calcBiffErrorCode( const OUString& rErrorCode ) const;
 
+    /** Returns an error string from the passed BIFF error code. */
+    const OUString&     calcErrorString( sal_uInt8 nErrorCode ) const;
+
 private:
     /** Adds an error code to the internal maps. */
     void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
