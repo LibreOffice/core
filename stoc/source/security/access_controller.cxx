@@ -945,7 +945,7 @@ Sequence< OUString > AccessController::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString(SERVICE_NAME);
+    aSNS[0] = SERVICE_NAME;
     return aSNS;
 }
 

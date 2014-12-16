@@ -44,13 +44,12 @@ namespace stoc_corefl
 
 static const sal_Int32 CACHE_SIZE = 256;
 
-#define SERVICENAME "com.sun.star.reflection.CoreReflection"
 #define IMPLNAME    "com.sun.star.comp.stoc.CoreReflection"
 
 static Sequence< OUString > core_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString( SERVICENAME );
+    seqNames.getArray()[0] = "com.sun.star.reflection.CoreReflection";
     return seqNames;
 }
 

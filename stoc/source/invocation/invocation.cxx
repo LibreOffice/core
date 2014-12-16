@@ -523,8 +523,7 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
     {
     }
 
-    throw UnknownPropertyException(
-        OUString("cannot get value ") + PropertyName );
+    throw UnknownPropertyException( "cannot get value " + PropertyName );
 }
 
 
@@ -621,7 +620,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         if (nFParamsLen != InParams.getLength())
         {
             throw IllegalArgumentException(
-                OUString("incorrect number of parameters passed invoking function ") + FunctionName,
+                "incorrect number of parameters passed invoking function " + FunctionName,
                 (OWeakObject *) this, (sal_Int16) 1 );
         }
 

@@ -776,7 +776,7 @@ void OServiceManager::setPropertyValue(
     else
     {
         throw UnknownPropertyException(
-            OUString("unknown property ") + PropertyName,
+            "unknown property " + PropertyName,
             (OWeakObject *)this );
     }
 }
@@ -1238,8 +1238,8 @@ void OServiceManager::remove( const Any & Element )
         if (iFind == m_ImplementationNameMap.end())
         {
             throw NoSuchElementException(
-                OUString("element is not in: ")
-                + implName, static_cast< OWeakObject * >(this) );
+                "element is not in: " + implName,
+                static_cast< OWeakObject * >(this) );
         }
         xEle = iFind->second;
     }

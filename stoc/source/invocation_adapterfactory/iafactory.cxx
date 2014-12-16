@@ -48,7 +48,6 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#define SERVICENAME "com.sun.star.script.InvocationAdapterFactory"
 #define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
 
 
@@ -63,8 +62,7 @@ namespace stoc_invadp
 static Sequence< OUString > invadp_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] =
-        OUString(SERVICENAME);
+    seqNames.getArray()[0] = "com.sun.star.script.InvocationAdapterFactory";
     return seqNames;
 }
 

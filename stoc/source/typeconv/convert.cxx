@@ -50,7 +50,7 @@ using namespace css::script;
 using namespace css::registry;
 using namespace cppu;
 using namespace osl;
-#define SERVICENAME "com.sun.star.script.Converter"
+
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 
 namespace stoc_services
@@ -58,7 +58,7 @@ namespace stoc_services
 Sequence< OUString > tcv_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(SERVICENAME);
+    seqNames.getArray()[0] = "com.sun.star.script.Converter";
     return seqNames;
 }
 

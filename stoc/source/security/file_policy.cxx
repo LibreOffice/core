@@ -510,7 +510,7 @@ Sequence< OUString > FilePolicy::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS[0] = OUString("com.sun.star.security.Policy");
+    aSNS[0] = "com.sun.star.security.Policy";
     return aSNS;
 }
 

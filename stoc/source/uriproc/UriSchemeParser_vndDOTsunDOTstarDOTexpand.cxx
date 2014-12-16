@@ -230,8 +230,7 @@ OUString getImplementationName() {
 
 css::uno::Sequence< OUString > getSupportedServiceNames() {
     css::uno::Sequence< OUString > s(1);
-    s[0] = OUString(
-            "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand");
+    s[0] = "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand";
     return s;
 }
 
