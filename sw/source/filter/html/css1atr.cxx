@@ -255,13 +255,13 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         if (bCfgPrintLayout) {
             sOut.append(
                 "p." + OString(sCSS2_P_CLASS_leaders) + "{max-width:" + OString::number(DOT_LEADERS_MAX_WIDTH) +
-                    "cm;padding:0;overflow-x:hidden;line-height:120%}" +
+                    "cm;padding:0;overflow-x:hidden;line-height:120%}"
                 "p." + OString(sCSS2_P_CLASS_leaders) + ":after{float:left;width:0;white-space:nowrap;content:\"");
                 for (int i = 0; i < 100; i++ )
                     sOut.append(". ");
                 sOut.append(
-                    "\"}p." + OString(sCSS2_P_CLASS_leaders) + " span:first-child{padding-right:0.33em;background:white}" +
-                    "p." + OString(sCSS2_P_CLASS_leaders) + " span+span{float:right;padding-left:0.33em;" +
+                    "\"}p." + OString(sCSS2_P_CLASS_leaders) + " span:first-child{padding-right:0.33em;background:white}"
+                    "p." + OString(sCSS2_P_CLASS_leaders) + " span+span{float:right;padding-left:0.33em;"
                     "background:white;position:relative;z-index:1}");
         }
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
