@@ -30,20 +30,20 @@ const sal_uInt32 SdrInventor=sal_uInt32('S')*0x00000001+
                          sal_uInt32('D')*0x00010000+
                          sal_uInt32('r')*0x01000000;
 
-// Kommandos fuer EndCreate()
-enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // Naechster Polygonpunkt, Kreissegment: Naechste Koordinate
-                   SDRCREATE_NEXTOBJECT,    // Naechstes Polygon im PolyPolygon
-                   SDRCREATE_FORCEEND};     // Ende erzwungen
+// commands for EndCreate()
+enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // next traverse station, segment of a circle: next coordinate
+                   SDRCREATE_NEXTOBJECT,    // next polygon in PolyPolygon
+                   SDRCREATE_FORCEEND};     // forced end
 
 enum SdrDragMode
 {
-    SDRDRAG_MOVE,       // Verschieben
-    SDRDRAG_RESIZE,     // Groesse aendern
-    SDRDRAG_ROTATE,     // Drehen
-    SDRDRAG_MIRROR,     // Spiegeln
-    SDRDRAG_SHEAR,      // Schraegstellen
-    SDRDRAG_CROOK,      // Kreisfoermig verbiegen
-    SDRDRAG_DISTORT,    // Freies verzerren (Rect in beliebiges Viereck transformieren)
+    SDRDRAG_MOVE,
+    SDRDRAG_RESIZE,
+    SDRDRAG_ROTATE,
+    SDRDRAG_MIRROR,
+    SDRDRAG_SHEAR,
+    SDRDRAG_CROOK,
+    SDRDRAG_DISTORT,    // Free deform (transform Rect in arbitrary quad)
 
     // new modes for interactive transparence and gradient tools
     SDRDRAG_TRANSPARENCE,
@@ -55,36 +55,35 @@ enum SdrDragMode
 
 
 // fuer SdrObject::ConvertToPoly()
-enum SdrConvertType {SDRCONVERT_POLY,   // reines Polygon erzeugen
-                     SDRCONVERT_BEZIER, // alles Beziersegmente
-                     SDRCONVERT_MIXED}; // Gemischtes Objekt (optimal)
+enum SdrConvertType {SDRCONVERT_POLY,   // create pure polygon
+                     SDRCONVERT_BEZIER, // Beziersegment
+                     SDRCONVERT_MIXED}; // mixed object (optimal)
 
 /*
  * Layer
  */
-// Bei der Identifikation eines Layer kann es vorkommen, das dieser nicht
-// vorhanden ist. SdrLayerAdmin::GetLayerID(const String&) liefert
-// dann diesen Wert:
+// If there is no layer when it should be identified, then
+// drLayerAdmin::GetLayerID(const String&) returns a value.
 #define SDRLAYER_NOTFOUND 0xFF
-// Man kann diesen Wert jodoch ohne Bedenken den Methoden des SdrLayerSet
-// zuwerfen, bekommt dann jedoch immer sal_False, bzw. tut die Methode nix.
-// Typdeklaration fuer Layer-IDs
+// You can use this value in the methods of SdrLayerSet, but sal_False is returned
+// everytime or the methode does nothing.
+// type deklaration for Layer-IDs
 typedef sal_uInt8 SdrLayerID;
 
 /*
  * Page + ObjList
  */
-enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,    // Unbekannt
+enum SdrObjListKind {SDROBJLIST_UNKNOWN    =0x00,
                      // reine Objektlisten:
-                     SDROBJLIST_GROUPOBJ   =0x01,    // Objektliste eines Gruppenobjekts
-                     SDROBJLIST_VIRTOBJECTS=0x02,    // Liste ist die Liste der virtuellen Objekte
-                     SDROBJLIST_SYMBOLTABLE=0x03,    // Liste ist die Symboltabelle
-                     // Hier haben zur Not noch 12 weitere Listentypen Platz
+                     SDROBJLIST_GROUPOBJ   =0x01,
+                     SDROBJLIST_VIRTOBJECTS=0x02,
+                     SDROBJLIST_SYMBOLTABLE=0x03,
+                     // Here is space for 12 more types of lists
                      // Pages:
-                     SDROBJLIST_DRAWPAGE   =0x10,    // Liste ist eine Zeichenseite
-                     SDROBJLIST_MASTERPAGE =0x11    // Liste ist eine Masterpage
-                     // Hier haben zur Not noch 8 weitere Pagetypen Platz
-};   // fuer die Surrogate reserviert
+                     SDROBJLIST_DRAWPAGE   =0x10,
+                     SDROBJLIST_MASTERPAGE =0x11
+                     // Here is space for 8 more types of pages
+};   // reserved for Surrogate
 
 inline bool SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE && eK<=0x1A; }
 
@@ -92,20 +91,20 @@ inline bool SdrIsPageKind(SdrObjListKind eK) { return eK>=SDROBJLIST_DRAWPAGE &&
  * Repeat
  */
 enum SdrRepeatFunc {SDRREPFUNC_OBJ_NONE,
-                    // Mit Parameter
-                    SDRREPFUNC_OBJ_MOVE,         // Distanz
-                    SDRREPFUNC_OBJ_RESIZE,       // Faktor, Referenz(%) bezogen auf MarkRect
-                    SDRREPFUNC_OBJ_SETSNAPRECT,  // Rectangle
-                    SDRREPFUNC_OBJ_SETLOGICRECT, // Rectangle
-                    SDRREPFUNC_OBJ_ROTATE,       // Drehwinkel, Referenz(%) bezogen auf MarkRect
-                    SDRREPFUNC_OBJ_SHEAR,        // Winkel,Faktor, Referenz(%) bezogen auf MarkRect
+                    // with parameter
+                    SDRREPFUNC_OBJ_MOVE,         // distance
+                    SDRREPFUNC_OBJ_RESIZE,       // factor, reference(%) related to MarkRect
+                    SDRREPFUNC_OBJ_SETSNAPRECT,  // rectangle
+                    SDRREPFUNC_OBJ_SETLOGICRECT, // rectangle
+                    SDRREPFUNC_OBJ_ROTATE,       // rotation angle, reference(%) related to MarkRect
+                    SDRREPFUNC_OBJ_SHEAR,        // angle, factor, reference(%) related to MarkRect
                     SDRREPFUNC_OBJ_CROOKROTATE,
                     SDRREPFUNC_OBJ_CROOKSLANT,
                     SDRREPFUNC_OBJ_CROOKSTRETCH,
                     SDRREPFUNC_OBJ_ALIGN,        // Hor/Vert/bBound
                     SDRREPFUNC_OBJ_SETATTRIBUTES,// ItemSet
                     SDRREPFUNC_OBJ_SETSTYLESHEET,// StyleSheet*
-                    // Ohne Parameter
+                    // Without parameter
                     SDRREPFUNC_OBJ_DELETE,
                     SDRREPFUNC_OBJ_COMBINE_POLYPOLY,
                     SDRREPFUNC_OBJ_COMBINE_ONEPOLY,

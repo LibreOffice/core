@@ -27,8 +27,8 @@
 
 
 /*
-  Deklaration eines statischen Mengentyps. Die Menge kann die Elemente
-  0..255 aufnehmen und verbraucht stets 32 Bytes.
+  Declaration of a static set type. The set can collect elements
+  from 0 to 255 and it takes always 32 Bytes.
 */
 
 class SVX_DLLPUBLIC SetOfByte

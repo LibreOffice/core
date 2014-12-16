@@ -30,7 +30,7 @@
 #define SDRSNAP_YSNAPPED    0x0002
 #define SDRSNAP_XYSNAPPED   0x0003
 
-// SDRCROOK_STRETCH ist noch nicht implementiert!
+// SDRCROOK_STRETCH is not implemented yet!
 enum SdrCrookMode {
     SDRCROOK_ROTATE,
     SDRCROOK_SLANT,
@@ -62,7 +62,7 @@ protected:
 
     bool                        bSnapEnab : 1;
     bool                        bGridSnap : 1;
-    bool                        bSnapTo1Pix : 1;             // Wenn GridSnap aus, auf ein Pixel fangen um Werte wie 10.01 zu vermeiden
+    bool                        bSnapTo1Pix : 1;             // If GridSnap off, snap to one Pixel to avoid values like 10.01
     bool                        bBordSnap : 1;
     bool                        bHlplSnap : 1;
     bool                        bOFrmSnap : 1;
@@ -72,14 +72,14 @@ protected:
     bool                        bMoveOFrmSnap : 1;
     bool                        bMoveOPntSnap : 1;
     bool                        bMoveOConSnap : 1;
-    bool                        bMoveSnapOnlyTopLeft : 1;    //  Speacial fuer den Dialogeditor
+    bool                        bMoveSnapOnlyTopLeft : 1;    //  Special for dialogeditor
     bool                        bOrtho : 1;
     bool                        bBigOrtho : 1;
     bool                        bAngleSnapEnab : 1;
-    bool                        bMoveOnlyDragging : 1;       // Objekte nur verschieben bei Resize/Rotate/...
-    bool                        bSlantButShear : 1;          // Slant anstelle von Shear anwenden
-    bool                        bCrookNoContortion : 1;      // Objekte bei Crook nicht verzerren
-    bool                        bHlplFixed : 1;       // sal_True=Hilfslinien fixiert, also nicht verschiebbar
+    bool                        bMoveOnlyDragging : 1;       // only move objects while Resize/Rotate/...
+    bool                        bSlantButShear : 1;          // use slant instead of shear
+    bool                        bCrookNoContortion : 1;      // no contorsion while Crook
+    bool                        bHlplFixed : 1;              // sal_True= fixed auxiliary lines, so it isn't movable
     bool                        bEliminatePolyPoints : 1;
 
 private:
@@ -95,7 +95,7 @@ public:
     virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
     virtual void EndAction() SAL_OVERRIDE;
     virtual void BckAction() SAL_OVERRIDE;
-    virtual void BrkAction() SAL_OVERRIDE; // f.abg.Klassen Actions z,B, Draggen abbrechen.
+    virtual void BrkAction() SAL_OVERRIDE; // break actions for derived classes e.g. interrupt dragging.
     virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
     void SetSnapGridWidth(const Fraction& rX, const Fraction& rY) { aSnapWdtX=rX; aSnapWdtY=rY; }
@@ -107,26 +107,25 @@ public:
     void SetSnapMagneticPixel(sal_uInt16 nPix) { nMagnSizPix=nPix; }
     sal_uInt16 GetSnapMagneticPixel() const { return nMagnSizPix; }
 
-    // RecalcLogicSnapMagnetic muss bei jedem Wechsel des OutputDevices
-    // sowie bei jedem Wechsel des MapModes gerufen werden!
+    // RecalcLogicSnapMagnetic has to be called for every change of OutputDevices and every change of the MapMode!
     void RecalcLogicSnapMagnetic(const OutputDevice& rOut) { SetSnapMagnetic(rOut.PixelToLogic(Size(nMagnSizPix,nMagnSizPix))); }
     void SetActualWin(const OutputDevice* pWin) { SdrPaintView::SetActualWin(pWin); if (pWin!=NULL) RecalcLogicSnapMagnetic(*pWin); }
 
-    // Auf die View bezogene Koordinaten!
-    // Rueckgabewerte sind SDRSNAP_NOTSNAPPED,SDRSNAP_XSNAPPED,
-    // SDRSNAP_YSNAPPED oder SDRSNAP_XYSNAPPED
+    // Coordinates refered to the view!
+    // Returnvalues are SDRSNAP_NOTSNAPPED,SDRSNAP_XSNAPPED,
+    // SDRSNAP_YSNAPPED or SDRSNAP_XYSNAPPED
     sal_uInt16 SnapPos(Point& rPnt, const SdrPageView* pPV) const;
     Point GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const;
     void CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
-    // Alle Fangeinstellungen sind Persistent.
+    // All attitudes to snap are persistent.
     bool IsSnapEnabled() const { return bSnapEnab; }
-    bool IsGridSnap() const { return bGridSnap; } // Fang auf Rastergitter
-    bool IsBordSnap() const { return bBordSnap; } // Fang auf Seitenraender
-    bool IsHlplSnap() const { return bHlplSnap; } // Fang auf Hilfslinien
-    bool IsOFrmSnap() const { return bOFrmSnap; } // Fang auf LogFram von umgebenden Zeichenobjekten
-    bool IsOPntSnap() const { return bOPntSnap; } // Fang auf ausgepraegte Punkte von umgebenden Zeichenobjekten
-    bool IsOConSnap() const { return bOConSnap; } // Fang auf Konnektoren der Zeichenobjekte
+    bool IsGridSnap() const { return bGridSnap; } // Snap to grid
+    bool IsBordSnap() const { return bBordSnap; } // Snap to border
+    bool IsHlplSnap() const { return bHlplSnap; } // Snap to auxiliary line
+    bool IsOFrmSnap() const { return bOFrmSnap; } // Snap to LogFram from surrounding drawing objects
+    bool IsOPntSnap() const { return bOPntSnap; } // Snap to distinct points from surrounding drawing objects
+    bool IsOConSnap() const { return bOConSnap; } // Snap to connectors of the drawing objects
     void SetSnapEnabled(bool bOn) { bSnapEnab=bOn; }
     void SetGridSnap(bool bOn) { bGridSnap=bOn; }
     void SetBordSnap(bool bOn) { bBordSnap=bOn; }
@@ -135,15 +134,14 @@ public:
     void SetOPntSnap(bool bOn) { bOPntSnap=bOn; }
     void SetOConSnap(bool bOn) { bOConSnap=bOn; }
 
-    // Normalerweise werden beim Move-Dragging von Zeichenobjekten alle
-    // 4 Ecken des Object-SnapRects gefangen. Folgende Einstellmoeglichkeit,
-    // wenn man nur auf die linke obere Ecke fangen will (z.B. DialogEditor):
-    // Persistent, Default=FALSE.
+    // Usually every 4 corners of Object-SnapRects are snapped for Move-Dragging.
+    // The following attitudes e.g. if you only want to snap the left corner on the top (e.g. DialogEditor)
+    // persistent, Default=FALSE.
     void SetMoveSnapOnlyTopLeft(bool bOn) { bMoveSnapOnlyTopLeft=bOn; }
     bool IsMoveSnapOnlyTopLeft() const { return bMoveSnapOnlyTopLeft; }
 
-    // Hilfslinien fixiert (nicht verschiebbar)
-    // Persistent, Default=FALSE.
+    // auxiliary lines fixed (not moveable)
+    // persistent, Default=FALSE.
     bool IsHlplFixed() const { return bHlplFixed; }
     void SetHlplFixed(bool bOn) { bHlplFixed=bOn; }
 
@@ -164,108 +162,105 @@ public:
     void BrkSetPageOrg();
     bool IsSetPageOrg() const { return (0L != mpPageOriginOverlay); }
 
-    // HitTest. Bei sal_True steht in rnHelpLineNum die Nummer der Hilfslinie und in rpPV
-    // die zugehoerige PageView.
+    // HitTest. If sal_True, in rnHelpLineNum is the number of the auxiliary line and in rpPv
+    // the appendent PageView.
     bool PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const;
 
-    // Verschieben einer vorhandenen Hilfslinie. nHelpLineNum und pPV von PickHelpLine verwenden.
+    // Move of an available auxiliary line. Use nHelpLineNum and pPV from PickHelpLine.
     bool BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV);
-    // Interaktives einfuegen einer neuen Hilfslinie
+    // interactive insertionof a new auxiliary line
     bool BegDragHelpLine(const Point& rPnt, SdrHelpLineKind eNewKind);
     Pointer GetDraggedHelpLinePointer() const;
 
-    // Aendern des Hilfslinientyps waerend des draggens
+    // change the type of auxiliary line while dragging
     // void SetDraggedHelpLineKind(SdrHelpLineKind eNewKind);
     void MovDragHelpLine(const Point& rPnt);
     bool EndDragHelpLine();
     void BrkDragHelpLine();
     bool IsDragHelpLine() const { return (0L != mpHelpLineOverlay); }
 
-    // SnapAngle ist fuer Winkel im Kreis, RotateDragging, ...
-    // Der Winkelfang wird unterdrueckt, wenn er mit
-    // durch SetAngleSnapEnabled(sal_False) ausgeschaltet ist.
-    // Der Winkelfang ist unabhaengig vom Koordinatenfang
-    // und somit von der Einstellung IsSnapEnabled()
-    // Es sollten nur Werte angegeben werden fuer die gilt:
+    // SnapAngle is for angles in circle, RotateDragging, ...
+    // The snapping of an angle is beared down, if it is swiched off
+    // with SetAngleSnapEnabled(sal_False)
+    // The snapping angles is independent of snapping coordinates
+    // and so independent of the attitude IsSnapEnabled()
+    // Only values should be specified for them is applied:
     //     36000 modulu nAngle = 0
-    // Implementiert fuer:
+    // Implemented for:
     // - Rotate (Dragging)
     // - Shear (Dragging)
-    // - Kreisbogen/-sektor/-abschnitt Winkel (Create und Dragging)
-    // Persistent.
+    // - circular arc/-sector/-section angle (Create and Dragging)
+    // persistent.
     void SetAngleSnapEnabled(bool bOn) { bAngleSnapEnab=bOn; }
     bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
     void SetSnapAngle(long nAngle) { nSnapAngle=nAngle; }
     long GetSnapAngle() const { return nSnapAngle; }
 
-    // Ortho hat je nach Kontext verschiedene Effekte:
+    // different effects from Ortho (depending on the context):
     // - Create
-    //   - Linien werden nur im 45deg Raster zugelassen
-    //   - Statt Rechtecke werden Quadrate erzeugt
-    //   - Statt Ellipsen werden Kreise erzeugt
+    //   - only lines in 45deg grid
+    //   - instead of rectangles squares are created
+    //   - instead of ellipse circles are created
     // - Dragging
-    //   - allgemeines Dragging
-    //     - Move nur Hor, Vert oder 45deg
+    //   - general Dragging
+    //     - Move only horizontal, vertical or 45deg
     //     - Resize proportional
-    //     - Mirror: nichts
-    //     - Shear ohne Resize
-    //     - Crook ohne Resize
-    //   - verschieben der Handles
-    //     - Spiegelachse nur 45deg Raster
-    //   - Objekteigenes Dragging
-    //     - Rechteck Eckenradius: nichts
-    //     - Kreisobjekt Winkel: nichts
-    //     - Linie behaelt beim Draggen ihren Winkel bei und wird nur    (ni)
-    //       verlaengert bzw. verkuerzt.
-    // Defaultmaessig ist Ortho ausgeschaltet. Persistent.
+    //     - Mirror: nothing
+    //     - Shear without Resize
+    //     - Crook without Resize
+    //   - move handles
+    //     - mirror axis only 45deg grid
+    //   - object-specific Dragging
+    //     - rectangle corner radius: nothing
+    //     - circle object angle: nothing
+    //     - line keeps while Dragging the angle and is only streched/ contracted
+    // Default value for Ortho is off. persistent.
     void SetOrtho(bool bOn) { bOrtho=bOn; } // unvollstaendig
     bool IsOrtho() const { return bOrtho; }
 
-    // BigOrtho hat nur Relevanz wenn Ortho eingeschaltet ist.
-    // Beispiel: Ein Rechteck wird mit eingeschaltetem Ortho (also ein Quadrat)
-    //   erzeugt und die Maus wurde dabei vom Nullpunkt zu den Koordinaten
-    //   (80,30) gedraggt. Dann stuenden nun 2 Alternativen zur Bestimmung der
-    //   Kantenlaenge des Quadrats zur Wahl: 30 und 80.
-    //   Die normale Ortho-Funktuionalitaet brachte hierbei ein Quadrat mit
-    //   Kantenlaenge 30 (also immer die kleinere Groesse). Bei hinzugeschal-
-    //   tetem BigOrtho bekaeme man dagegen ein Quadrat der Kantenlaenge 80.
-    // Gleiches gilt auch fuer Resize.
-    // Defaultmaessig ist BigOrtho eingeschaltet. Persistent.
+    // BigOrtho is only relevant if Ortho is switched on.
+    // Example: rectangle is created and ortho is switched on (--> square)
+    //   and the Mouse was dragged from zero to the coordinates
+    //   (80,30). Now there are 2 alternatives to determine the edge length
+    //   of the square: 30 and 80.
+    //   The standard Ortho-Function took 30 ( everytime the smaller length)
+    //   If BigOrtho is switched on, you get a square with edge length of 80.
+    // The same also applies to Resize.
+    // Default value for BigOrtho is on. persistent.
     void SetBigOrtho(bool bOn) { bBigOrtho=bOn; }
     bool IsBigOrtho() const { return bBigOrtho; }
 
-    // bei MoveOnlyDragging=sal_True wird bei Resize/Rotate/Shear/Mirror/Crook
-    // nur das Zentrum der markierten Objekte transformiert. Groesse, Form
-    // und Drehwinkel der Objekte bleiben erhalten, nur ihre Positionen
-    // aendern sich. Persistent. Default=FALSE. (ni)
+    // If MoveOnlyDragging=sal_True only the center of the marked objects is
+    // transformed when Resize/Rotate/Shear/Mirror/Crook is executed.
+    // Size, form and rotation angle of the objects are conserved only their positions
+    // are changed. persistent. Default=FALSE. (ni)
     void SetMoveOnlyDragging(bool bOn) { bMoveOnlyDragging=bOn; }
     bool IsMoveOnlyDragging() const { return bMoveOnlyDragging; }
 
-    // Slant anstelle von Shear anwenden. Persistent. Default=FALSE.
+    // Use Slant instead of Shear. persistent. Default=FALSE.
     void SetSlantButShear(bool bOn) { bSlantButShear=bOn; }
     bool IsSlantButShear() const { return bSlantButShear; }
 
-    // Objekte bei Crook nicht verzerren. Persistent. Default=FALSE. (ni)
+    // Don't contort objecte while Crook. persistent. Default=FALSE. (ni)
     void SetCrookNoContortion(bool bOn) { bCrookNoContortion=bOn; }
     bool IsCrookNoContortion() const { return bCrookNoContortion; }
 
-    // Crook-Modus. Persistent. Default=SDRCROOK_ROTATE. (ni)
+    // Crook-Mode. persistent. Default=SDRCROOK_ROTATE. (ni)
     void SetCrookMode(SdrCrookMode eMode) { eCrookMode=eMode; }
     SdrCrookMode GetCrookMode() const { return eCrookMode; }
 
-    // Special fuer IBM: Beim Draggen eines Polygonpunkts wird dieser
-    // geloescht, wenn seine beiden angrenzenden Linien eh' fast eine
-    // durchgehende Linie sind.
+    // Special for IBM: While Dragging of a traverse station, it is deleted
+    // if its adjacent lines are almost a solid line.
     void SetEliminatePolyPoints(bool bOn) { bEliminatePolyPoints=bOn; }
     bool IsEliminatePolyPoints() const { return bEliminatePolyPoints; }
     void SetEliminatePolyPointLimitAngle(long nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
     long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
 };
 
-// Begriffsdefinition:
-//   - Etwas fangen=Gefangen werden kann z.B. der Mauszeiger oder die z.Zt. im
-//     Drag befindlichen markierten Objekte.
-//   - Auf etwas fangen=Man kann z.B. auf das Grid oder auf Hilfslinien fangen.
+// definition:
+//   - snap something= e.g. the mouse pointer or some marked objects in drag can be snapped
+//   - snap on sth.= you can e.g. snap on the grid or on auxiliary lines.
+//
 //
 // Grundsaetzlich wird nur gefangen auf sichtbare Elemente (-> Border,
 // Hilfslinien, Konnektoren; Ausnahme: Grid). Ebenso koennen nur sichtbare
