@@ -431,7 +431,7 @@ void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeExceptio
 OUString Impl2::fn12( const OUString& arg )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return OUString("12") + arg;
+    return "12" + arg;
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(

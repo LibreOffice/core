@@ -50,7 +50,7 @@ public:
 
     virtual OUString SAL_CALL fn12(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return OUString("12") + arg; }
+    { return "12" + arg; }
 
     virtual sal_Int32 SAL_CALL fn21(sal_Int32 arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -58,7 +58,7 @@ public:
 
     virtual OUString SAL_CALL fn22(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return OUString("22") + arg; }
+    { return "22" + arg; }
 
     virtual double SAL_CALL getatt3()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -74,7 +74,7 @@ public:
 
     virtual OUString SAL_CALL fn32(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return OUString("32") + arg; }
+    { return "32" + arg; }
 
     virtual sal_Int32 SAL_CALL fn33()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -90,7 +90,7 @@ public:
 
     virtual OUString SAL_CALL fn62(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return OUString("62") + arg; }
+    { return "62" + arg; }
 
     virtual sal_Int32 SAL_CALL fn71(sal_Int32 arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -98,7 +98,7 @@ public:
 
     virtual OUString SAL_CALL fn72(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return OUString("72") + arg; }
+    { return "72" + arg; }
 
     virtual sal_Int32 SAL_CALL fn73()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
