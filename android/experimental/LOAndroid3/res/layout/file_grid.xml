@@ -19,7 +19,6 @@
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
-        android:background="#ffeeeeee"
         android:gravity="center">
     </GridView>
 
