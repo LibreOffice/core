@@ -3687,7 +3687,7 @@ public:
 
         if (err != CL_SUCCESS)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err << " at " << __FILE__ << ":" << __LINE__);
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
             return false;
         }
 
@@ -3696,7 +3696,7 @@ public:
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
         {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err << " at " << __FILE__ << ":" << __LINE__);
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
             return false;
         }
 
