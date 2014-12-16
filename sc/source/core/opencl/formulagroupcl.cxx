@@ -3690,27 +3690,14 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     if (!pKernel)
         return false;
 
+    // Obtain cl context
+    ::opencl::KernelEnv kEnv;
+    ::opencl::setKernelEnv(&kEnv);
+
     try
     {
-        // Obtain cl context
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
         // Run the kernel.
         pKernel->Launch(xGroup->mnLength);
-        // Map results back
-        cl_mem res = pKernel->GetResultBuffer();
-        cl_int err;
-        double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-            res,
-            CL_TRUE, CL_MAP_READ, 0,
-            xGroup->mnLength * sizeof(double), 0, NULL, NULL,
-            &err);
-        if (err != CL_SUCCESS)
-            throw OpenCLError(err, __FILE__, __LINE__);
-        rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
-        if (err != CL_SUCCESS)
-            throw OpenCLError(err, __FILE__, __LINE__);
     }
     catch (const UnhandledToken& ut)
     {
@@ -3752,6 +3739,25 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         return false;
 #endif
     }
+
+    // Map results back
+    cl_mem res = pKernel->GetResultBuffer();
+    cl_int err;
+    double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+        res,
+        CL_TRUE, CL_MAP_READ, 0,
+        xGroup->mnLength * sizeof(double), 0, NULL, NULL,
+        &err);
+    if (err != CL_SUCCESS)
+        throw OpenCLError(err, __FILE__, __LINE__);
+    rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
+    err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
+    if (err != CL_SUCCESS)
+    {
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err << " at " << __FILE__ << ":" << __LINE__);
+        return false;
+    }
+
     return true;
 }
 
