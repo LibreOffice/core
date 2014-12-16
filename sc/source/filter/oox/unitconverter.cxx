@@ -120,7 +120,7 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     addErrorCode( BIFF_ERR_REF,   "#REF!" );
     addErrorCode( BIFF_ERR_NAME,  "#NAME?" );
     addErrorCode( BIFF_ERR_NUM,   "#NUM!" );
-    addErrorCode( BIFF_ERR_NA,    "#NA" );
+    addErrorCode( BIFF_ERR_NA,    "#N/A" );
 }
 
 void UnitConverter::finalizeImport()
@@ -224,6 +224,20 @@ sal_uInt8 UnitConverter::calcBiffErrorCode( const OUString& rErrorCode ) const
 {
     OoxErrorCodeMap::const_iterator aIt = maOoxErrCodes.find( rErrorCode );
     return (aIt == maOoxErrCodes.end()) ? BIFF_ERR_NA : aIt->second;
+}
+
+const OUString& UnitConverter::calcErrorString( sal_uInt8 nErrorCode ) const
+{
+    OoxErrorCodeMap::const_iterator iFail( maOoxErrCodes.end());
+    for (OoxErrorCodeMap::const_iterator aIt( maOoxErrCodes.begin()); aIt != maOoxErrCodes.end(); ++aIt)
+    {
+        if (aIt->second == nErrorCode)
+            return aIt->first;
+        if (aIt->second == BIFF_ERR_NA)
+            iFail = aIt;
+    }
+    assert(iFail != maOoxErrCodes.end());   // BIFF_ERR_NA really should be in the map..
+    return iFail->first;
 }
 
 void UnitConverter::addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode )
