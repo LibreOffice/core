@@ -570,6 +570,8 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pFontHistoryCB, "showfonthistory");
     get(m_pUseHardwareAccell, "useaccel");
     get(m_pUseAntiAliase, "useaa");
+    get(m_pUseOpenGL, "useopengl");
+    get(m_pForceOpenGL, "forceopengl");
     get(m_pMousePosLB, "mousepos");
     get(m_pMouseMiddleLB, "mousemiddle");
     // #i97672#

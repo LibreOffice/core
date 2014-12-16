@@ -97,6 +97,8 @@ private:
 
     CheckBox*       m_pUseHardwareAccell;
     CheckBox*       m_pUseAntiAliase;
+    CheckBox*       m_pUseOpenGL;
+    CheckBox*       m_pForceOpenGL;
 
     ListBox*        m_pMousePosLB;
     ListBox*        m_pMouseMiddleLB;
