@@ -3657,13 +3657,16 @@ class CLInterpreterResult
 {
     DynamicKernel* mpKernel;
 
+    SCROW mnGroupLength;
+
 public:
-    CLInterpreterResult() : mpKernel(NULL) {}
-    CLInterpreterResult( DynamicKernel* pKernel ) : mpKernel(pKernel) {}
+    CLInterpreterResult() : mpKernel(NULL), mnGroupLength(0) {}
+    CLInterpreterResult( DynamicKernel* pKernel, SCROW nGroupLength ) :
+        mpKernel(pKernel), mnGroupLength(nGroupLength) {}
 
     bool isValid() const { return mpKernel != NULL; }
 
-    bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos, SCROW nLength )
+    bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos )
     {
         if (!isValid())
             return false;
@@ -3679,7 +3682,7 @@ public:
         double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
             res,
             CL_TRUE, CL_MAP_READ, 0,
-            nLength * sizeof(double), 0, NULL, NULL,
+            mnGroupLength * sizeof(double), 0, NULL, NULL,
             &err);
 
         if (err != CL_SUCCESS)
@@ -3688,7 +3691,7 @@ public:
             return false;
         }
 
-        rDoc.SetFormulaResults(rTopPos, resbuf, nLength);
+        rDoc.SetFormulaResults(rTopPos, resbuf, mnGroupLength);
 
         err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
@@ -3706,7 +3709,11 @@ class CLInterpreterContext
     std::shared_ptr<DynamicKernel> mpKernelStore; /// for managed kernel instance.
     DynamicKernel* mpKernel;
 
+    SCROW mnGroupLength;
+
 public:
+    CLInterpreterContext( SCROW nGroupLength ) :
+        mpKernel(NULL), mnGroupLength(nGroupLength) {}
 
     bool isValid() const
     {
@@ -3724,7 +3731,7 @@ public:
         mpKernel = pKernel;
     }
 
-    CLInterpreterResult launchKernel( SCROW nLength )
+    CLInterpreterResult launchKernel()
     {
         CLInterpreterResult aRes; // invalid by default.
 
@@ -3734,7 +3741,7 @@ public:
         try
         {
             // Run the kernel.
-            mpKernel->Launch(nLength);
+            mpKernel->Launch(mnGroupLength);
         }
         catch (const UnhandledToken& ut)
         {
@@ -3757,7 +3764,7 @@ public:
             return CLInterpreterResult();
         }
 
-        return CLInterpreterResult(mpKernel);
+        return CLInterpreterResult(mpKernel, mnGroupLength);
     }
 };
 
@@ -3765,7 +3772,7 @@ public:
 CLInterpreterContext createCLInterpreterContext(
     ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode )
 {
-    CLInterpreterContext aCxt;
+    CLInterpreterContext aCxt(xGroup->mnLength);
 
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (rGroup.meKernelState == sc::OpenCLKernelCompilationScheduled ||
@@ -3813,11 +3820,11 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     if (!aCxt.isValid())
         return false;
 
-    CLInterpreterResult aRes = aCxt.launchKernel(xGroup->mnLength);
+    CLInterpreterResult aRes = aCxt.launchKernel();
     if (!aRes.isValid())
         return false;
 
-    return aRes.pushResultToDocument(rDoc, rTopPos, xGroup->mnLength);
+    return aRes.pushResultToDocument(rDoc, rTopPos);
 }
 
 }} // namespace sc::opencl
