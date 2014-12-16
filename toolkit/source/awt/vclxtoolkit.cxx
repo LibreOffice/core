@@ -41,7 +41,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XToolkitExperimental.hpp>
+#include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 
 #include <cppuhelper/compbase2.hxx>
@@ -62,11 +62,6 @@
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
-#endif
-
-#ifdef ANDROID
-#include <sal/ByteBufferWrapper.hxx>
-using org::libreoffice::touch::ByteBufferWrapper;
 #endif
 
 #include <vcl/sysdata.hxx>
@@ -151,7 +146,7 @@ protected:
 
 class VCLXToolkit : public VCLXToolkit_Impl,
                     public cppu::WeakComponentImplHelper2<
-                    css::awt::XToolkitExperimental,
+                    css::awt::XToolkit2,
                     css::lang::XServiceInfo >
 {
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
@@ -193,12 +188,6 @@ public:
 
     VCLXToolkit();
     virtual ~VCLXToolkit();
-
-    // css::awt::XToolkitExperimental
-    css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
-(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL processEventsToIdle()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -634,7 +623,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit():
     cppu::WeakComponentImplHelper2<
-    ::com::sun::star::awt::XToolkitExperimental,
+    ::com::sun::star::awt::XToolkit2,
     ::com::sun::star::lang::XServiceInfo>( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),
     m_aKeyHandlers(rBHelper.rMutex),
@@ -730,11 +719,6 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return createScreenCompatibleDeviceUsingBuffer( Width, Height, 1, 1, 0, 0, 0 );
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-{
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
@@ -743,18 +727,7 @@ void SAL_CALL VCLXToolkit::disposing()
     SolarMutexGuard aSolarGuard;
 
     VirtualDevice* pV = new VirtualDevice;
-    if ( addressOfMemoryBufferForSharedArrayWrapper != 0 ) {
-#if defined(ANDROID)
-        ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
-#else
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ),
-            Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset),
-            basebmp::RawMemorySharedArray( reinterpret_cast<sal_uInt8*>( addressOfMemoryBufferForSharedArrayWrapper )));
-#endif
-    } else {
-        pV->SetOutputSizePixel( Size( Width, Height ) );
-    }
+    pV->SetOutputSizePixel( Size( Width, Height ) );
     pVDev->SetVirtualDevice( pV );
 
     xRef = pVDev;
@@ -1885,13 +1858,6 @@ void SAL_CALL VCLXToolkit::reschedule()
 {
     SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
-}
-
-void SAL_CALL VCLXToolkit::processEventsToIdle()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aSolarGuard;
-    Timer::ProcessAllIdleHandlers();
 }
 
 }

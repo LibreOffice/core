@@ -1876,7 +1876,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/awt,\
 	XToggleButton \
 	XToolkit \
 	XToolkit2 \
-	XToolkitExperimental \
 	XTopWindow \
 	XTopWindow2 \
 	XTopWindowListener \
