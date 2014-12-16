@@ -22,6 +22,8 @@ cmd/sc_objectbackone.png cmd/sc_backward.png
 cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
 
+cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
+
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png

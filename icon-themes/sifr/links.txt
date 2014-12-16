@@ -55,3 +55,7 @@ cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
 # paragraph line spacing drop down
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
+
+# image icon duplicates
+cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
+
