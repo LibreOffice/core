@@ -153,6 +153,8 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , bCfgNetscape4( false )
     , mbSkipImages(false)
     , mbSkipHeaderFooter(false)
+    , bCfgPrintLayout( false )
+    , bParaDotLeaders( false )
 {
     SetBaseURL(rBaseURL);
 }
@@ -253,6 +255,8 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     bCfgFormFeed = !IsHTMLMode(HTMLMODE_PRINT_EXT);
     bCfgCpyLinkedGrfs = rHtmlOptions.IsSaveGraphicsLocal();
+
+    bCfgPrintLayout = rHtmlOptions.IsPrintLayoutExtension();
 
     // die HTML-Vorlage holen
     bool bOldHTMLMode = false;
@@ -1370,6 +1374,24 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
     }
 
     return nSize;
+}
+
+// Paragraphs with Table of Contents and other index styles will be typeset with
+// dot leaders at the position of the last tabulator in PrintLayout (CSS2) mode
+sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rStr )
+{
+    if (bCfgPrintLayout && ((nPoolId >= RES_POOLCOLL_TOX_CNTNT1 && nPoolId <= RES_POOLCOLL_TOX_CNTNT5) ||
+        (nPoolId >= RES_POOLCOLL_TOX_IDX1 && nPoolId <= RES_POOLCOLL_TOX_IDX3) ||
+        (nPoolId >= RES_POOLCOLL_TOX_USER1 && nPoolId <= RES_POOLCOLL_TOX_CNTNT10) ||
+        nPoolId == RES_POOLCOLL_TOX_ILLUS1 || nPoolId == RES_POOLCOLL_TOX_TABLES1 ||
+        nPoolId == RES_POOLCOLL_TOX_OBJECT1 ||
+        (nPoolId >= RES_POOLCOLL_TOX_AUTHORITIES1 && nPoolId <= RES_POOLCOLL_TOX_USER10))) {
+             sal_Int32 i = rStr.lastIndexOf('\t');
+             // there are only ASCII (Latin-1) characters after the tabulator
+             if (i > -1 && OUStringToOString(rStr.copy(i + 1), RTL_TEXTENCODING_ASCII_US).indexOf('?') == -1)
+                 return i;
+    }
+    return -1;
 }
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um

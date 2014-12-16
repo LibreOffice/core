@@ -189,6 +189,7 @@ const sal_Char* sCSS1_PV_inset = "inset";
 const sal_Char* sCSS1_PV_outset = "outset";
 
 const sal_Char* sCSS1_P_width = "width";
+const sal_Char* sCSS1_P_max_width = "max-width";
 
 const sal_Char* sCSS1_P_height = "height";
 

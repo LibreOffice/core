@@ -191,6 +191,7 @@ extern const sal_Char* sCSS1_PV_inset;
 extern const sal_Char* sCSS1_PV_outset;
 
 extern const sal_Char* sCSS1_P_width;
+extern const sal_Char* sCSS1_P_max_width;
 
 extern const sal_Char* sCSS1_P_height;
 
