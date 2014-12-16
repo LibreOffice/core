@@ -498,7 +498,6 @@ static hchar lineCharConv(hchar ch)
 static int KsSearch(hchar c)
 {
     int lo, hi, mid;
-    hchar c2;
 
     lo = mid = 0;
     hi = 2350 - 1;
@@ -506,7 +505,7 @@ static int KsSearch(hchar c)
     while (lo <= hi)
     {
         mid = (lo + hi) >> 1;
-        c2 = ksTbl[mid];
+        hchar c2 = ksTbl[mid];
         if (c == c2)
             break;
         if (c < c2)
@@ -1187,11 +1186,11 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 ::std::string hstr2ksstr(hchar const* hstr)
 {
     ::std::string ret;
-    int res, j;
+    int j;
      hchar dest[3];
     for( ; *hstr ; )
     {
-        res = hcharconv(*hstr++, dest, KS);
+        int res = hcharconv(*hstr++, dest, KS);
           for( j = 0 ; j < res ; j++ ){
               int c = dest[j];
               if( c < 32 )
@@ -1397,7 +1396,7 @@ char* base64_encode_string( const uchar *buf, unsigned int len )
     char * out;
     int inPos  = 0;
     int outPos = 0;
-    int c1, c2, c3;
+    int c1, c2;
     unsigned int i;
 
     out=(char *)malloc( (len*4/3)+8 );
@@ -1407,7 +1406,7 @@ char* base64_encode_string( const uchar *buf, unsigned int len )
     {
         c1 = buf[inPos++] & 0xFF;
         c2 = buf[inPos++] & 0xFF;
-        c3 = buf[inPos++] & 0xFF;
+        int c3 = buf[inPos++] & 0xFF;
         out[outPos++] = basis_64[(c1 & 0xFC) >> 2];
         out[outPos++] = basis_64[((c1 & 0x03) << 4) | ((c2 & 0xF0) >> 4)];
         out[outPos++] = basis_64[((c2 & 0x0F) << 2) | ((c3 & 0xC0) >> 6)];

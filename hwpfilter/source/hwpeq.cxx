@@ -383,12 +383,12 @@ static const hwpeq eq_tbl[] = {
 static const hwpeq *lookup_eqn(char *str)
 {
   static const int eqCount = SAL_N_ELEMENTS(eq_tbl);
-  int       m, k, l = 0, r = eqCount;
+  int l = 0, r = eqCount;
   const hwpeq *result = 0;
 
   while( l < r ) {
-    m = (l + r) / 2;
-    k = strcmp(eq_tbl[m].key, str);
+    const int m = (l + r) / 2;
+    const int k = strcmp(eq_tbl[m].key, str);
     if( k == 0 ) {
       result = eq_tbl + m;
       break;
@@ -613,9 +613,8 @@ static int eq_word(MzString& outs, istream *strm, int status)
 
       if( 0 != (eq = lookup_eqn(keyword)) ) {
         int nargs = eq->nargs;
-        int ch;
         while( nargs-- ) {
-          ch = read_white_space(state, strm);
+          const int ch = read_white_space(state, strm);
           if( ch != '{' ) state << '{';
           eq_word(state, strm, script_status);
           if( ch != '{' ) state << '}';

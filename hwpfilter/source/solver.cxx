@@ -81,14 +81,14 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
   int i, j, k;
   int irow = 0;
   int icol = 0;
-  double big, pivinv, save;
+  double save;
 
   for (j = 0; j < n; j++)
     ipiv[j] = 0;
 
   for (i = 0; i < n; i++)
   {
-    big = 0;
+    double big = 0;
     for (j = 0; j < n; j++)
     {
       if ( ipiv[j] != 1 )
@@ -137,7 +137,7 @@ int mgcLinearSystemD::Solve (int n, double** a, double* b)
       return 0;
     }
 
-    pivinv = 1/a[icol][icol];
+    double pivinv = 1/a[icol][icol];
     a[icol][icol] = 1;
     for (k = 0; k < n; k++)
       a[icol][k] *= pivinv;
