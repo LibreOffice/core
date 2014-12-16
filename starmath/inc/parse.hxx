@@ -119,7 +119,7 @@ public:
     size_t      AddError(SmParseError Type, SmNode *pNode);
     const SmErrorDesc*  NextError();
     const SmErrorDesc*  PrevError();
-    const SmErrorDesc*  GetError(size_t i = size_t(-1) );
+    const SmErrorDesc*  GetError(size_t i);
     static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
     bool    IsUsedSymbol( const OUString &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
     std::set< OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
