@@ -128,8 +128,7 @@ void WeakComponentImplHelperBase::dispose()
         catch (Exception & exc)
         {
             throw RuntimeException(
-                OUString("unexpected UNO exception caught: ") +
-                exc.Message );
+                "unexpected UNO exception caught: " + exc.Message );
         }
     }
 }
@@ -261,8 +260,7 @@ void WeakAggComponentImplHelperBase::dispose()
         catch (Exception & exc)
         {
             throw RuntimeException(
-                OUString("unexpected UNO exception caught: ") +
-                exc.Message );
+                "unexpected UNO exception caught: " + exc.Message );
         }
     }
 }

@@ -197,8 +197,7 @@ void OComponentHelper::dispose()
         catch (Exception & exc)
         {
             throw RuntimeException(
-                OUString("unexpected UNO exception caught: ") +
-                exc.Message );
+                "unexpected UNO exception caught: " + exc.Message );
         }
     }
     else
