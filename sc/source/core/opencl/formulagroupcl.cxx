@@ -3659,28 +3659,31 @@ class CLInterpreterResult
 
     SCROW mnGroupLength;
 
+    cl_mem mpCLResBuf;
+    double* mpResBuf;
+
 public:
-    CLInterpreterResult() : mpKernel(NULL), mnGroupLength(0) {}
+    CLInterpreterResult() : mpKernel(NULL), mnGroupLength(0), mpCLResBuf(NULL), mpResBuf(NULL) {}
     CLInterpreterResult( DynamicKernel* pKernel, SCROW nGroupLength ) :
-        mpKernel(pKernel), mnGroupLength(nGroupLength) {}
+        mpKernel(pKernel), mnGroupLength(nGroupLength), mpCLResBuf(NULL), mpResBuf(NULL) {}
 
     bool isValid() const { return mpKernel != NULL; }
 
-    bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos )
+    void waitForResult()
     {
         if (!isValid())
-            return false;
+            return;
 
         // Map results back
-        cl_mem res = mpKernel->GetResultBuffer();
+        mpCLResBuf = mpKernel->GetResultBuffer();
 
         // Obtain cl context
         ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
 
         cl_int err;
-        double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-            res,
+        mpResBuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+            mpCLResBuf,
             CL_TRUE, CL_MAP_READ, 0,
             mnGroupLength * sizeof(double), 0, NULL, NULL,
             &err);
@@ -3688,12 +3691,22 @@ public:
         if (err != CL_SUCCESS)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
-            return false;
+            mpResBuf = NULL;
         }
+    }
 
-        rDoc.SetFormulaResults(rTopPos, resbuf, mnGroupLength);
+    bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos )
+    {
+        if (!mpResBuf)
+            return false;
 
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
+        rDoc.SetFormulaResults(rTopPos, mpResBuf, mnGroupLength);
+
+        // Obtain cl context
+        ::opencl::KernelEnv kEnv;
+        ::opencl::setKernelEnv(&kEnv);
+
+        cl_int err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, NULL, NULL);
         if (err != CL_SUCCESS)
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
@@ -3825,6 +3838,8 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     CLInterpreterResult aRes = aCxt.launchKernel();
     if (!aRes.isValid())
         return false;
+
+    aRes.waitForResult();
 
     return aRes.pushResultToDocument(rDoc, rTopPos);
 }
