@@ -71,7 +71,8 @@ public class LOKitTileProvider implements TileProvider {
 
         LibreOfficeMainActivity.mAppContext.getDocumentPartView().clear();
 
-        if (parts > 1) {
+        // Writer documents always have one part, so hide the navigation drawer.
+        if (mDocument.getDocumentType() != Document.DOCTYPE_TEXT) {
             for (int i = 0; i < parts; i++) {
                 String partName = mDocument.getPartName(i);
                 if (partName.isEmpty()) {
@@ -84,6 +85,8 @@ public class LOKitTileProvider implements TileProvider {
                 final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
                 LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
             }
+        } else {
+            LibreOfficeMainActivity.mAppContext.disableNavigationDrawer();
         }
 
         mDocument.setPart(0);

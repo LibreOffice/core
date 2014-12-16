@@ -72,7 +72,9 @@ public class LibreOfficeMainActivity extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_parts).setVisible(!isDrawerOpen);
+        // Do the same in case the drawer is locked.
+        boolean isDrawerLocked = mDrawerLayout.getDrawerLockMode(mDrawerList) != DrawerLayout.LOCK_MODE_UNLOCKED;
+        menu.findItem(R.id.action_parts).setVisible(!isDrawerOpen && !isDrawerLocked);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -167,6 +169,16 @@ public class LibreOfficeMainActivity extends Activity {
 
     public List<DocumentPartView> getDocumentPartView() {
         return mDocumentPartView;
+    }
+
+    public void disableNavigationDrawer() {
+        // Only the original thread that created mDrawerLayout should touch its views.
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mDrawerList);
+            }
+        });
     }
 
     public DocumentPartViewListAdapter getDocumentPartViewListAdapter() {
