@@ -2389,12 +2389,8 @@ static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
 
 void WinSalFrame::EndExtTextInput( sal_uInt16 nFlags )
 {
-
-    SalData* pSalData = GetSalData();
-    if ( pSalData->mnAppThreadId != GetCurrentThreadId() )
-        ImplSalFrameEndExtTextInput( mhWnd, nFlags);
-    else
-        ImplSendMessage( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
+    // Must be called in the main thread!
+    ImplSendMessage( mhWnd, SAL_MSG_ENDEXTTEXTINPUT, (WPARAM)nFlags, 0 );
 }
 
 // -----------------------------------------------------------------------
