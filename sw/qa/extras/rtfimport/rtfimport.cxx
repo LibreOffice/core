@@ -30,6 +30,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XDocumentIndexMark.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
@@ -2021,6 +2022,25 @@ DECLARE_RTFIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.rtf")
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was false, last section was balanced, but it's unbalanced in Word.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
+}
+
+DECLARE_RTFIMPORT_TEST(testFdo84685, "fdo84685.rtf")
+{
+    // index mark was not imported
+    uno::Reference<text::XDocumentIndexMark> xMark(
+        getProperty<uno::Reference<text::XDocumentIndexMark>>(
+            getRun(getParagraph(1), 1),
+            "DocumentIndexMark"));
+    CPPUNIT_ASSERT(xMark.is());
+    CPPUNIT_ASSERT_EQUAL(OUString("Key the 1st"), getProperty<OUString>(xMark, "PrimaryKey"));
+    // let's test toc entry too
+    uno::Reference<text::XDocumentIndexMark> xTOCMark(
+        getProperty<uno::Reference<text::XDocumentIndexMark>>(
+            getRun(getParagraph(2), 1),
+            "DocumentIndexMark"));
+    CPPUNIT_ASSERT(xTOCMark.is());
+    uno::Reference<lang::XServiceInfo> xTOCSI(xTOCMark, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTOCSI->supportsService("com.sun.star.text.ContentIndexMark"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo83204, "fdo83204.rtf")
