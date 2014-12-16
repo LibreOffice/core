@@ -197,11 +197,16 @@ void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rErrorCode )
 {
-    setErrorCell( rModel, getUnitConverter().calcBiffErrorCode( rErrorCode ) );
+    // Using the formula compiler now we can simply pass on the error string.
+    getFormulaBuffer().setCellFormula( rModel.maCellAddr, rErrorCode);
+    setCellFormat( rModel );
 }
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode )
 {
+    assert(!"stringizing any NaN will only give 'nan'");
+    /* FIXME: map nErrorCode to error string and call setErrorCell() above. */
+
     OUStringBuffer aBuf;
     aBuf.append('{');
     aBuf.append(BiffHelper::calcDoubleFromError(nErrorCode));
