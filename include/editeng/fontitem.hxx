@@ -87,6 +87,7 @@ public:
 
     static void EnableStoreUnicodeNames( bool bEnable );
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 EDITENG_DLLPUBLIC void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian,

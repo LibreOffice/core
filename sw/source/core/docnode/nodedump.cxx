@@ -413,6 +413,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_PARATR_NUMRULE:
                 static_cast<const SwNumRuleItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_CHRATR_FONT:
+                static_cast<const SvxFontItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -427,7 +430,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_CHRATR_FONT: pWhich = "character font"; oValue = OUStringToOString(static_cast<const SvxFontItem*>(pItem)->GetFamilyName(), RTL_TEXTENCODING_UTF8); break;
             case RES_CHRATR_BACKGROUND: pWhich = "character background"; break;
             case RES_CHRATR_CTL_FONT: pWhich = "character ctl font"; break;
             case RES_CHRATR_FONTSIZE:
