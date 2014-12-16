@@ -129,8 +129,8 @@ private:
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
-    sal_uInt8       cMatrixFlag;        // One of ScMatrixMode
     short           nFormatType;
+    sal_uInt8       cMatrixFlag    : 2; // One of ScMatrixMode
     bool            bDirty         : 1; // Must be (re)calculated
     bool            bChanged       : 1; // Whether something changed regarding display/representation
     bool            bRunning       : 1; // Already interpreting right now
