@@ -179,7 +179,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
         {
             // last try if is not the global scope and the scopeName isn't specify global too
             pDecl = scopeAsDecl(this);
-            if ( pDecl && (pDecl->getLocalName() != "") )
+            if ( pDecl && !pDecl->getLocalName().isEmpty() )
             {
                 pScope = pDecl->getScope();
                 if ( pScope )
