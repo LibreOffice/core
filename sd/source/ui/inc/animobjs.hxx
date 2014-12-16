@@ -125,7 +125,7 @@ private:
 
     vcl::Window*       pWin;
     ::std::vector< ::std::pair<BitmapEx*, ::tools::Time*> > m_FrameList;
-    static const size_t EMPTY_FRAMELIST = ULONG_MAX;
+    static const size_t EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
     size_t          m_nCurrentFrame;
     SdDrawDocument* pMyDoc;
 
