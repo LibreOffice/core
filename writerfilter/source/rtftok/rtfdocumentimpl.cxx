@@ -1248,6 +1248,8 @@ void RTFDocumentImpl::text(OUString& rString)
     case DESTINATION_MSUPHIDE:
     case DESTINATION_MTYPE:
     case DESTINATION_MGROW:
+    case DESTINATION_INDEXENTRY:
+    case DESTINATION_TOCENTRY:
         m_aStates.top().pDestinationText->append(rString);
         break;
     default:
@@ -1716,6 +1718,13 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     case RTF_BKMKEND:
         m_aStates.top().nDestinationState = DESTINATION_BOOKMARKEND;
         break;
+        case RTF_XE:
+            m_aStates.top().nDestinationState = DESTINATION_INDEXENTRY;
+            break;
+        case RTF_TC:
+        case RTF_TCN:
+            m_aStates.top().nDestinationState = DESTINATION_TOCENTRY;
+            break;
     case RTF_REVTBL:
         m_aStates.top().nDestinationState = DESTINATION_REVISIONTABLE;
         break;
@@ -5047,6 +5056,23 @@ int RTFDocumentImpl::popState()
             break; // not for nested group
         Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aStates.top().pDestinationText->makeStringAndClear()]));
         break;
+    case DESTINATION_INDEXENTRY:
+    case DESTINATION_TOCENTRY:
+    {
+        if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
+            break; // not for nested group
+        OUString str(m_aStates.top().pDestinationText->makeStringAndClear());
+        // dmapper expects this as a field, so let's fake something...
+        OUString const field = OUString::createFromAscii(
+            (DESTINATION_INDEXENTRY == aState.nDestinationState) ? "XE" : "TC");
+        str = field + " \"" + str.replaceAll("\"", "\\\"") + "\"";
+        singleChar(0x13);
+        Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());
+        singleChar(0x14);
+        // no result
+        singleChar(0x15);
+    }
+    break;
     case DESTINATION_FORMFIELDNAME:
     {
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
