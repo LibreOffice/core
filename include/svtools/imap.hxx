@@ -41,11 +41,11 @@ private:
 
 protected:
 
-    // Binaer laden/speichern
+    // binary saving/loading
     void                ImpWriteImageMap( SvStream& rOStm, const OUString& ) const ;
     void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& );
 
-    // Im-/Export
+    // Import/Export
     void                ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const;
     void                ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const;
     sal_uLong           ImpReadCERN( SvStream& rOStm, const OUString& rBaseURL );
@@ -70,56 +70,52 @@ public:
                         ImageMap( const OUString& rName );
                         ImageMap( const ImageMap& rImageMap );
 
-                        // Der Dtor gibt den intern belegten
-                        // Speicher wieder frei;
-                        //  alle IMapObjekte werden im Dtor zerstoert;
+                        // all IMapObjects are destroyed in the destructor
     virtual             ~ImageMap();
 
-    // Zuweisungsoperator
     ImageMap&           operator=( const ImageMap& rImageMap );
 
-    // Vergleichsoperator (es wird alles auf Gleichheit geprueft)
+    // comparison (everything is checked for equality)
     bool                operator==( const ImageMap& rImageMap );
     bool                operator!=( const ImageMap& rImageMap );
 
-    // In die Map wird ein neues IMap-Obkekt ans Ende eingefuegt
+    // a new IMap object is inserted at the end of the Map
     void                InsertIMapObject( const IMapObject& rIMapObject );
 
-    // Zugriff auf einzelne IMapObjekte; die Objekte
-    // duerfen von aussen _nicht_ zerstoert werden
+    // access to the single ImapObjects; the objects may
+    // not be destroyed from outside
     IMapObject*         GetIMapObject( size_t nPos ) const
                         {
                             return ( nPos < maList.size() ) ? maList[ nPos ] : NULL;
                         }
 
-    // Gibt das Objekt zurueck, das zuerst getroffen wurde oder NULL;
-    // Groessen- und Positionsangaben sind in 1/100mm;
-    // rTotalSize ist die Originalgroesse des Bildes;
-    // rDisplaySize die aktuelle Darstellungsgroesse;
-    // rRelPoint bezieht sich auf die Darstellungsgroesse
-    // und die linke oebere Ecke des Bildes
+    // returns the object which was hit first or NULL;
+    // size and position values are in 1/100mm;
+    // rTotalSize is the original size of the image
+    // rDisplaySize is the current size;
+    // rRelPoint relates to the display size and the upper left
+    // corener of the image
     IMapObject*         GetHitIMapObject( const Size& rOriginalSize,
                                           const Size& rDisplaySize,
                                           const Point& rRelHitPoint,
                                           sal_uLong nFlags = 0 );
 
-    // Gibt die Gesamtanzahl der IMap-Objekte zurueck
+    // returns the total amount of IMap objects
     size_t              GetIMapObjectCount() const { return maList.size(); }
 
-    // Loescht alle internen Objekte
+    // deletes all internal objects
     void                ClearImageMap();
 
-    // liefert die aktuelle Versionsnummer
+    // returns the current version number
     sal_uInt16          GetVersion() const;
 
-    // liefert / setzt den Namen der ImageMap
     const OUString&     GetName() const { return aName; }
     void                SetName( const OUString& rName ) { aName = rName; }
 
-    // skaliert alle Objekte der ImageMap entpr. dem uebergebenen Faktor
+    // scales all objects of the ImageMap according to the given factor
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
-    // Im-/Export
+    // Import/Export
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
     void                Read( SvStream& rIStm, const OUString& rBaseURL );
 

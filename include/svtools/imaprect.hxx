@@ -33,7 +33,7 @@ class SVT_DLLPUBLIC IMapRectangleObject : public IMapObject
 
 protected:
 
-    // Binaer-Im-/Export
+    // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const SAL_OVERRIDE;
     virtual void        ReadIMapObject(  SvStream& rIStm ) SAL_OVERRIDE;
 
@@ -55,7 +55,7 @@ public:
 
     Rectangle           GetRectangle( bool bPixelCoords = true ) const;
 
-    // liefert das BoundRect des Rechteck-Objektes in 1/100mm
+    // returns the BoundRect of the rectangle object in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE { return aRect; }
 
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
@@ -63,7 +63,7 @@ public:
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapRectangleObject& rEqObj );
 
-    // Im-/Export
+    // import/export
     void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;
     void                WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const;
 };

@@ -34,7 +34,7 @@ class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 
 protected:
 
-    // Binaer-Im-/Export
+    // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const SAL_OVERRIDE;
     virtual void        ReadIMapObject(  SvStream& rIStm ) SAL_OVERRIDE;
 
@@ -57,7 +57,7 @@ public:
     Point               GetCenter( bool bPixelCoords = true ) const;
     sal_uLong           GetRadius( bool bPixelCoords = true ) const;
 
-    // liefert das BoundRect des Kreis-Objektes in 1/100mm
+    // returns the BoundRect of the circle object in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE;
 
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
@@ -65,7 +65,7 @@ public:
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapCircleObject& rEqObj );
 
-    // Im-/Export
+    // import/export
     void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;
     void                WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const;
 };
