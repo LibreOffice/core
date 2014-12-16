@@ -60,7 +60,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     m_xProgressBar->setVisible( true );
     // Reset to defaults !!!
     // (progressbar take automatically its own defaults)
-    m_xText->setText( STATUSINDICATOR_DEFAULT_TEXT );
+    m_xText->setText( "" );
 
     --m_refCount;
 }
