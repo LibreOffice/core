@@ -136,11 +136,12 @@ void BmkMenu::Initialize()
             InsertSeparator();
         else
         {
-            bool    bImageSet = false;
             sal_uInt16      nId = CreateMenuId();
 
             if ( bShowMenuImages )
             {
+                bool    bImageSet = false;
+
                 if ( !aImageId.isEmpty() )
                 {
                     Image aImage = GetImageFromURL( m_xFrame, aImageId, false );

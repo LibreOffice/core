@@ -1620,8 +1620,6 @@ void MenuBarManager::FillMenu(
         OUString                   aLabel;
         OUString                   aHelpURL;
         OUString                   aModuleIdentifier( rModuleIdentifier );
-        bool                        bShow(true);
-        bool                        bEnabled(true);
         sal_uInt16                      nType = 0;
         Reference< XIndexAccess >       xIndexContainer;
         Reference< XDispatchProvider >  xDispatchProvider( rDispatchProvider );
@@ -1630,6 +1628,9 @@ void MenuBarManager::FillMenu(
         {
             if ( rItemContainer->getByIndex( n ) >>= aProp )
             {
+                bool bShow = true;
+                bool bEnabled = true;
+
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     OUString aPropName = aProp[i].Name;

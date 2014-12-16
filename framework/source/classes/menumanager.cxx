@@ -507,11 +507,12 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         {
             SolarMutexGuard g;
 
-            int nRemoveItemCount = 0;
             int nItemCount       = pMenu->GetItemCount();
 
             if ( nItemCount > 0 )
             {
+                int nRemoveItemCount = 0;
+
                 // remove all old picklist entries from menu
                 sal_uInt16 nPos = pMenu->GetItemPos( START_ITEMID_PICKLIST );
                 for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
