@@ -817,14 +817,12 @@ vector<Reference<VendorBase> > addAllJREInfos(
     addJavaInfoFromWinReg(allInfos, addedInfos);
 #endif // WNT
 
-#ifndef JVM_ONE_PATH_CHECK
     if (checkJavaHomeAndPath) {
         addJavaInfoFromJavaHome(allInfos, addedInfos);
         //this function should be called after addJavaInfosDirScan.
         //Otherwise in SDKs Java may be started twice
         addJavaInfosFromPath(allInfos, addedInfos);
     }
-#endif
 
 #ifdef UNX
     addJavaInfosDirScan(allInfos, addedInfos);
@@ -1103,6 +1101,7 @@ void addJavaInfosFromPath(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
+#if !defined JVM_ONE_PATH_CHECK
 // Get Java from PATH environment variable
     static const char sCurDir[] = ".";
     static const char sParentDir[] = "..";
@@ -1147,6 +1146,7 @@ void addJavaInfosFromPath(
         }
         while ( nIndex >= 0 );
     }
+#endif
 }
 
 
@@ -1154,6 +1154,7 @@ void addJavaInfoFromJavaHome(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
 {
+#if !defined JVM_ONE_PATH_CHECK
     // Get Java from JAVA_HOME environment
 
     // Note that on OS X is it not normal at all to have a JAVA_HOME environment
@@ -1170,6 +1171,7 @@ void addJavaInfoFromJavaHome(
             getAndAddJREInfoByPath(sHomeUrl, allInfos, addedInfos);
         }
     }
+#endif
 }
 
 bool makeDriveLetterSame(OUString * fileURL)
