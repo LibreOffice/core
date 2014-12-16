@@ -216,16 +216,7 @@ void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rEr
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode )
 {
-    assert(!"stringizing any NaN will only give 'nan'");
-    /* FIXME: map nErrorCode to error string and call setErrorCell() above. */
-
-    OUStringBuffer aBuf;
-    aBuf.append('{');
-    aBuf.append(BiffHelper::calcDoubleFromError(nErrorCode));
-    aBuf.append('}');
-
-    getFormulaBuffer().setCellFormula(rModel.maCellAddr, aBuf.makeStringAndClear());
-    setCellFormat( rModel );
+    setErrorCell( rModel, getUnitConverter().calcErrorString( nErrorCode));
 }
 
 void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDateString )
