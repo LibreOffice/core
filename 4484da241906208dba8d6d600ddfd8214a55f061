@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_37f16ace",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-12-16T23:53:06Z",
+      "side": 1,
+      "message": "This one is not _exactly_ the same, the last addition being performed in 16bit instead of 64bit as the original",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_57ee6eed",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-12-16T23:53:06Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_f7b9c2ed",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-12-16T23:53:06Z",
+      "side": 1,
+      "message": "Why long here?",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
