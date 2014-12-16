@@ -13,10 +13,7 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
-import java.io.File;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 // final because subclassing would be meaningless.
 public final class Bootstrap
@@ -58,21 +55,6 @@ public final class Bootstrap
     // A method that starts a thread to redirect stdout and stderr writes to
     // the Android logging mechanism, or stops the redirection.
     public static native void redirect_stdio(boolean state);
-
-    // The DIB returned by css.awt.XBitmap.getDIB is in BGR_888 form, at least
-    // for Writer documents. We need it in Android's Bitmap.Config.ARGB_888
-    // format, which actually is RGBA_888, whee... At least in Android 4.0.3,
-    // at least on my device. No idea if it is always like that or not, the
-    // documentation sucks.
-    public static native void twiddle_BGR_to_RGBA(byte[] source, int offset, int width, int height, ByteBuffer destination);
-
-    public static native void force_full_alpha_array(byte[] array, int offset, int length);
-
-    public static native void force_full_alpha_bb(ByteBuffer buffer, int offset, int length);
-
-    public static native long new_byte_buffer_wrapper(ByteBuffer bbuffer);
-
-    public static native void delete_byte_buffer_wrapper(long bbw);
 
     static boolean setup_done = false;
 
