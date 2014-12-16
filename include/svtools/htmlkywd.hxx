@@ -25,7 +25,7 @@
 #define OOO_STRING_SVTOOLS_HTML_doctype40 \
     "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\""
 
-// diese werden nur eingeschaltet
+// these are only switched on
 #define OOO_STRING_SVTOOLS_HTML_area "area"
 #define OOO_STRING_SVTOOLS_HTML_base "base"
 #define OOO_STRING_SVTOOLS_HTML_comment "!--"
@@ -43,7 +43,7 @@
 #define OOO_STRING_SVTOOLS_HTML_param "param"
 #define OOO_STRING_SVTOOLS_HTML_spacer "spacer"
 
-// diese werden wieder abgeschaltet
+// these are switched off again
 #define OOO_STRING_SVTOOLS_HTML_abbreviation "abbrev"
 #define OOO_STRING_SVTOOLS_HTML_acronym "acronym"
 #define OOO_STRING_SVTOOLS_HTML_address "address"
@@ -143,7 +143,7 @@
 #define OOO_STRING_SVTOOLS_HTML_plaintext2 "plaintext"
 #define OOO_STRING_SVTOOLS_HTML_sdfield "sdfield"
 
-// die Namen fuer alle Zeichen
+// names for all characters
 #define OOO_STRING_SVTOOLS_HTML_C_lt "lt"
 #define OOO_STRING_SVTOOLS_HTML_C_gt "gt"
 #define OOO_STRING_SVTOOLS_HTML_C_amp "amp"
@@ -400,9 +400,9 @@
 #define OOO_STRING_SVTOOLS_HTML_S_zwj "zwj"
 #define OOO_STRING_SVTOOLS_HTML_S_zwnj "zwnj"
 
-// HTML Attribut-Token (=Optionen)
+// HTML attribute tokens (=options)
 
-// Attribute ohne Wert
+// attributes without value
 #define OOO_STRING_SVTOOLS_HTML_O_checked "checked"
 #define OOO_STRING_SVTOOLS_HTML_O_compact "compact"
 #define OOO_STRING_SVTOOLS_HTML_O_declare "declare"
@@ -417,7 +417,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_sdfixed "sdfixed"
 #define OOO_STRING_SVTOOLS_HTML_O_selected "selected"
 
-// Attribute mit einem String als Wert
+// attributes with a string as value
 #define OOO_STRING_SVTOOLS_HTML_O_accesskey "accesskey"
 #define OOO_STRING_SVTOOLS_HTML_O_accept "accept"
 #define OOO_STRING_SVTOOLS_HTML_O_alt "alt"
@@ -447,12 +447,12 @@
 #define OOO_STRING_SVTOOLS_HTML_O_sdevent "sdevent-"
 #define OOO_STRING_SVTOOLS_HTML_O_sdaddparam "sdaddparam-"
 
-// Attribute mit einem SGML-Identifier als Wert
+// attributes with an SGML identifier as value
 #define OOO_STRING_SVTOOLS_HTML_O_id "id"
 #define OOO_STRING_SVTOOLS_HTML_O_target "target"
 #define OOO_STRING_SVTOOLS_HTML_O_to "to"
 
-// Attribute mit einem URI als Wert
+// attributes with an URI as value
 #define OOO_STRING_SVTOOLS_HTML_O_action "action"
 #define OOO_STRING_SVTOOLS_HTML_O_archive "archive"
 #define OOO_STRING_SVTOOLS_HTML_O_background "background"
@@ -464,7 +464,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_src "src"
 #define OOO_STRING_SVTOOLS_HTML_O_usemap "usemap"
 
-// Attribute mit einer Farbe als Wert (alle Netscape)
+// attributes with a colour as value (all Netscape)
 #define OOO_STRING_SVTOOLS_HTML_O_alink "alink"
 #define OOO_STRING_SVTOOLS_HTML_O_bgcolor "bgcolor"
 #define OOO_STRING_SVTOOLS_HTML_O_bordercolor "bordercolor"
@@ -475,7 +475,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_text "text"
 #define OOO_STRING_SVTOOLS_HTML_O_vlink "vlink"
 
-// Attribute mit einem numerischen Wert
+// attributes with a numerical value
 #define OOO_STRING_SVTOOLS_HTML_O_border "border"
 #define OOO_STRING_SVTOOLS_HTML_O_cellspacing "cellspacing"
 #define OOO_STRING_SVTOOLS_HTML_O_cellpadding "cellpadding"
@@ -499,7 +499,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_width "width"
 #define OOO_STRING_SVTOOLS_HTML_O_zindex "z-index"
 
-// Attribute mit Enum-Werten
+// attributes with enum values
 #define OOO_STRING_SVTOOLS_HTML_O_behavior "behavior"
 #define OOO_STRING_SVTOOLS_HTML_O_clear "clear"
 #define OOO_STRING_SVTOOLS_HTML_O_dir "dir"
@@ -519,7 +519,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_valuetype "valuetype"
 #define OOO_STRING_SVTOOLS_HTML_O_wrap "wrap"
 
-// Attribute mit Script-Code als Wert
+// attributes with script code as value
 #define OOO_STRING_SVTOOLS_HTML_O_onblur "onblur"
 #define OOO_STRING_SVTOOLS_HTML_O_onchange "onchange"
 #define OOO_STRING_SVTOOLS_HTML_O_onclick "onclick"
@@ -547,7 +547,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_SDonerror "sdonerror"
 #define OOO_STRING_SVTOOLS_HTML_O_SDonmouseout "sdonmouseout"
 
-// Attribute mit Kontext-abhaengigen Werten
+// attributes with context-dependent values
 #define OOO_STRING_SVTOOLS_HTML_O_align "align"
 #define OOO_STRING_SVTOOLS_HTML_O_cols "cols"
 #define OOO_STRING_SVTOOLS_HTML_O_rows "rows"
@@ -555,7 +555,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_size "size"
 #define OOO_STRING_SVTOOLS_HTML_O_units "units"
 
-// Werte von <INPUT TYPE=...>
+// values of <INPUT TYPE=...>
 #define OOO_STRING_SVTOOLS_HTML_IT_text "text"
 #define OOO_STRING_SVTOOLS_HTML_IT_password "password"
 #define OOO_STRING_SVTOOLS_HTML_IT_checkbox "checkbox"
@@ -569,7 +569,7 @@
 #define OOO_STRING_SVTOOLS_HTML_IT_reset "reset"
 #define OOO_STRING_SVTOOLS_HTML_IT_button "button"
 
-// Werte von <TABLE FRAME=...>
+// values of <TABLE FRAME=...>
 #define OOO_STRING_SVTOOLS_HTML_TF_void "void"
 #define OOO_STRING_SVTOOLS_HTML_TF_above "above"
 #define OOO_STRING_SVTOOLS_HTML_TF_below "below"
@@ -580,14 +580,14 @@
 #define OOO_STRING_SVTOOLS_HTML_TF_box "box"
 #define OOO_STRING_SVTOOLS_HTML_TF_border "border"
 
-// Werte von <TABLE RULES=...>
+// values of <TABLE RULES=...>
 #define OOO_STRING_SVTOOLS_HTML_TR_none "none"
 #define OOO_STRING_SVTOOLS_HTML_TR_groups "groups"
 #define OOO_STRING_SVTOOLS_HTML_TR_rows "rows"
 #define OOO_STRING_SVTOOLS_HTML_TR_cols "cols"
 #define OOO_STRING_SVTOOLS_HTML_TR_all "all"
 
-// Werte von <P, H?, TR, TH, TD ALIGN=...>
+// values of <P, H?, TR, TH, TD ALIGN=...>
 #define OOO_STRING_SVTOOLS_HTML_AL_left "left"
 #define OOO_STRING_SVTOOLS_HTML_AL_center "center"
 #define OOO_STRING_SVTOOLS_HTML_AL_middle "middle"
@@ -597,7 +597,7 @@
 #define OOO_STRING_SVTOOLS_HTML_AL_all "all"
 #define OOO_STRING_SVTOOLS_HTML_AL_none "none"
 
-// Werte von <TR VALIGN=...>, <IMG ALIGN=...>
+// values of <TR VALIGN=...>, <IMG ALIGN=...>
 #define OOO_STRING_SVTOOLS_HTML_VA_top "top"
 #define OOO_STRING_SVTOOLS_HTML_VA_middle "middle"
 #define OOO_STRING_SVTOOLS_HTML_VA_bottom "bottom"
@@ -606,7 +606,7 @@
 #define OOO_STRING_SVTOOLS_HTML_VA_absmiddle "absmiddle"
 #define OOO_STRING_SVTOOLS_HTML_VA_absbottom "absbottom"
 
-// Werte von <AREA SHAPE=...>
+// values of <AREA SHAPE=...>
 #define OOO_STRING_SVTOOLS_HTML_SH_rect "rect"
 #define OOO_STRING_SVTOOLS_HTML_SH_rectangle "rectangle"
 #define OOO_STRING_SVTOOLS_HTML_SH_circ "circ"
@@ -620,15 +620,15 @@
 #define OOO_STRING_SVTOOLS_HTML_LG_javascript11 "javascript1.1"
 #define OOO_STRING_SVTOOLS_HTML_LG_livescript "livescript"
 
-// ein par Werte fuer unser StarBASIC-Support
+// a few values for StarBASIC-Support
 #define OOO_STRING_SVTOOLS_HTML_SB_library "$LIBRARY:"
 #define OOO_STRING_SVTOOLS_HTML_SB_module "$MODULE:"
 
-// Werte von <FORM METHOD=...>
+// values of <FORM METHOD=...>
 #define OOO_STRING_SVTOOLS_HTML_METHOD_get "get"
 #define OOO_STRING_SVTOOLS_HTML_METHOD_post "post"
 
-// Werte von <META CONTENT/HTTP-EQUIV=...>
+// values of <META CONTENT/HTTP-EQUIV=...>
 #define OOO_STRING_SVTOOLS_HTML_META_refresh "refresh"
 #define OOO_STRING_SVTOOLS_HTML_META_generator "generator"
 #define OOO_STRING_SVTOOLS_HTML_META_author "author"
@@ -643,33 +643,33 @@
 #define OOO_STRING_SVTOOLS_HTML_META_sdendnote "sdendnote"
 #define OOO_STRING_SVTOOLS_HTML_META_sdfootnote "sdfootnote"
 
-// Werte von <UL TYPE=...>
+// values of <UL TYPE=...>
 #define OOO_STRING_SVTOOLS_HTML_ULTYPE_disc "disc"
 #define OOO_STRING_SVTOOLS_HTML_ULTYPE_square "square"
 #define OOO_STRING_SVTOOLS_HTML_ULTYPE_circle "circle"
 
-// Werte von <FRAMESET SCROLLING=...>
+// values of <FRAMESET SCROLLING=...>
 #define OOO_STRING_SVTOOLS_HTML_SCROLL_yes "yes"
 #define OOO_STRING_SVTOOLS_HTML_SCROLL_no "no"
 #define OOO_STRING_SVTOOLS_HTML_SCROLL_auto "auto"
 
-// Werte von <MULTICOL TYPE=...>
+// values of <MULTICOL TYPE=...>
 #define OOO_STRING_SVTOOLS_HTML_MCTYPE_horizontal "horizontal"
 #define OOO_STRING_SVTOOLS_HTML_MCTYPE_vertical "vertical"
 #define OOO_STRING_SVTOOLS_HTML_MCTYPE_box "box"
 
-// Werte von <MARQUEE BEHAVIOUR=...>
+// values of <MARQUEE BEHAVIOUR=...>
 #define OOO_STRING_SVTOOLS_HTML_BEHAV_scroll "scroll"
 #define OOO_STRING_SVTOOLS_HTML_BEHAV_slide "slide"
 #define OOO_STRING_SVTOOLS_HTML_BEHAV_alternate "alternate"
 
-// Werte von <MARQUEE LOOP=...>
+// values of <MARQUEE LOOP=...>
 #define OOO_STRING_SVTOOLS_HTML_LOOP_infinite "infinite"
 #define OOO_STRING_SVTOOLS_HTML_SPTYPE_block "block"
 #define OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal "horizontal"
 #define OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical "vertical"
 
-// interne Grafik-Namen
+// internal graphics names
 #define OOO_STRING_SVTOOLS_HTML_private_image "private:image/"
 #define OOO_STRING_SVTOOLS_HTML_internal_gopher "internal-gopher-"
 #define OOO_STRING_SVTOOLS_HTML_internal_icon "internal-icon-"

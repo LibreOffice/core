@@ -91,8 +91,8 @@ struct HTMLOutFuncs
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         OUString *pNonConvertableChars = 0 );
 
-    // der 3. Parameter ist ein Array von HTMLOutEvents, das mit einem
-    // nur aus 0 bestehen Eintrag terminiert ist.
+    // the 3rd parameter is an array of HTMLOutEvents which is terminated
+    // by an entry that consists only of 0s
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
                                  const HTMLOutEvent*, bool bOutStarBasic,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
