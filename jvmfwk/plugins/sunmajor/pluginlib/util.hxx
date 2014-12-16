@@ -84,7 +84,7 @@ struct SameOrSubDirJREMap
         if (s1 == s2.first)
             return true;
         OUString sSub;
-        sSub = s2.first + OUString("/");
+        sSub = s2.first + "/";
         if (s1.match(sSub))
             return true;
         return false;

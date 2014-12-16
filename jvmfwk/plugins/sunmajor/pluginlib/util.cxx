@@ -946,8 +946,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             if (path.getLength() == sizeof("file:///") - 1)
                 sFullPath = sResolvedDir + (*i);
             else
-                sFullPath = sResolvedDir +
-                OUString("/") + (*i);
+                sFullPath = sResolvedDir + "/" + (*i);
 
             sFilePath = resolveFilePath(sFullPath);
 
@@ -1103,8 +1102,6 @@ void addJavaInfosFromPath(
 {
 #if !defined JVM_ONE_PATH_CHECK
 // Get Java from PATH environment variable
-    static const char sCurDir[] = ".";
-    static const char sParentDir[] = "..";
     char *szPath= getenv("PATH");
     if(szPath)
     {
@@ -1119,15 +1116,13 @@ void addJavaInfosFromPath(
                 if(!usTokenUrl.isEmpty())
                 {
                     OUString usBin;
-                    // "."
-                    if(usTokenUrl.equals(sCurDir))
+                    if(usTokenUrl == ".")
                     {
                         OUString usWorkDirUrl;
                         if(osl_Process_E_None == osl_getProcessWorkingDir(&usWorkDirUrl.pData))
                             usBin= usWorkDirUrl;
                     }
-                    // ".."
-                    else if(usTokenUrl.equals(sParentDir))
+                    else if(usTokenUrl == "..")
                     {
                         OUString usWorkDir;
                         if(osl_Process_E_None == osl_getProcessWorkingDir(&usWorkDir.pData))

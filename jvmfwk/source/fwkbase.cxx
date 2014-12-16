@@ -232,7 +232,7 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
 
     for (sal_Int32 i = 1; ; i++)
     {
-        OUString sName = OUString(UNO_JAVA_JFW_PARAMETER) + OUString::number(i);
+        OUString sName = UNO_JAVA_JFW_PARAMETER + OUString::number(i);
         OUString sValue;
         if (Bootstrap::get()->getFrom(sName, sValue))
         {
@@ -436,8 +436,7 @@ JFW_MODE getMode()
                     OUString sEnvClasspath(UNO_JAVA_JFW_ENV_CLASSPATH);
                     if (!aBoot->getFrom(sEnvClasspath, sValue))
                     {
-                        OUString sParams = OUString(
-                            UNO_JAVA_JFW_PARAMETER) +
+                        OUString sParams = UNO_JAVA_JFW_PARAMETER +
                             OUString::number(1);
                         if (!aBoot->getFrom(sParams, sValue))
                         {
