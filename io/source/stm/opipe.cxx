@@ -47,7 +47,6 @@ using namespace ::com::sun::star::lang;
 
 // Implementation and service names
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.stm.Pipe"
-#define SERVICE_NAME "com.sun.star.io.Pipe"
 
 namespace io_stm{
 
@@ -447,7 +446,7 @@ OUString    OPipeImpl_getImplementationName()
 Sequence<OUString> OPipeImpl_getSupportedServiceNames(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = OUString( SERVICE_NAME );
+    aRet.getArray()[0] = "com.sun.star.io.Pipe";
     return aRet;
 }
 }
