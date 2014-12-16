@@ -2093,6 +2093,14 @@ DECLARE_RTFIMPORT_TEST(testFdo84685, "fdo84685.rtf")
             "DocumentIndexMark"));
     CPPUNIT_ASSERT(xMark.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Key the 1st"), getProperty<OUString>(xMark, "PrimaryKey"));
+    // let's test toc entry too
+    uno::Reference<text::XDocumentIndexMark> xTOCMark(
+        getProperty<uno::Reference<text::XDocumentIndexMark>>(
+            getRun(getParagraph(2), 1),
+            "DocumentIndexMark"));
+    CPPUNIT_ASSERT(xTOCMark.is());
+    uno::Reference<lang::XServiceInfo> xTOCSI(xTOCMark, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTOCSI->supportsService("com.sun.star.text.ContentIndexMark"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo83204, "fdo83204.rtf")
