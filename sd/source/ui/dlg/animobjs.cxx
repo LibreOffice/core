@@ -556,7 +556,8 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 
     if (!m_FrameList.empty() && !bMovie)
     {
-        aNumFldBitmap.SetValue(m_nCurrentFrame + 1);
+        size_t nIndex = m_nCurrentFrame + 1;
+        aNumFldBitmap.SetValue(nIndex);
 
         // if there is at least 1 object in the list
         aBtnFirst.Enable();
@@ -847,8 +848,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                         long nTime = rAnimBmp.nWait;
                         ::tools::Time* pTime = new ::tools::Time( 0, 0, nTime / 100, nTime % 100 );
+                        size_t nIndex = m_nCurrentFrame + 1;
                         m_FrameList.insert(
-                                m_FrameList.begin() + m_nCurrentFrame + 1,
+                                m_FrameList.begin() + nIndex,
                                 ::std::make_pair(pBitmapEx, pTime));
 
                         // increment => next one inserted after this one
@@ -874,9 +876,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             pSnapShot->GetModel(), pSnapShot).GetBitmapEx() );
 
                     ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
-
+                    size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
-                            m_FrameList.begin() + m_nCurrentFrame + 1,
+                            m_FrameList.begin() + nIndex,
                             ::std::make_pair(pBitmapEx, pTime));
 
                     // increment => next one inserted after this one
@@ -896,8 +898,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
             ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
 
+            size_t nIndex = m_nCurrentFrame + 1;
             m_FrameList.insert(
-                    m_FrameList.begin() + m_nCurrentFrame + 1,
+                    m_FrameList.begin() + nIndex,
                     ::std::make_pair(pBitmapEx, pTime));
         }
 
@@ -907,7 +910,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
             SdrMark*    pMark   = rMarkList.GetMark(0);
             SdrObject*  pObject = pMark->GetMarkedSdrObj();
             SdrObject*  pClone  = pObject->Clone();
-            pPage->InsertObject(pClone, m_nCurrentFrame + 1);
+            size_t nIndex = m_nCurrentFrame + 1;
+            pPage->InsertObject(pClone, nIndex);
         }
         // several objects: group the clones
         else if (nMarkCount > 1)
@@ -926,8 +930,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
 
                     ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
 
+                    size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
-                        m_FrameList.begin() + m_nCurrentFrame + 1,
+                        m_FrameList.begin() + nIndex,
                         ::std::make_pair(pBitmapEx, pTime));
 
                     // increment => next one inserted after this one
@@ -945,7 +950,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
                 for (size_t nObject= 0; nObject < nMarkCount; ++nObject)
                     pObjList->InsertObject(rMarkList.GetMark(nObject)->GetMarkedSdrObj()->Clone());
 
-                pPage->InsertObject(pCloneGroup, m_nCurrentFrame + 1);
+                size_t nIndex = m_nCurrentFrame + 1;
+                pPage->InsertObject(pCloneGroup, nIndex);
             }
         }
 
