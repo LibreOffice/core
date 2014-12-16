@@ -482,8 +482,6 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
         }
         implts_setToolbarCreation( false );
 
-        bool bVisible( false );
-        bool bFloating( false );
         if ( xUIElement.is() )
         {
             uno::Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), uno::UNO_QUERY );
@@ -502,6 +500,9 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
                 {
                 }
             }
+
+            bool bVisible =  false;
+            bool bFloating = false;
 
             /* SAFE AREA ----------------------------------------------------------------------------------------------- */
             SolarMutexClearableGuard aWriteLock;
@@ -1752,11 +1753,10 @@ awt::Point ToolbarLayoutManager::implts_findNextCascadeFloatingPos()
     awt::Point aCurrPos( aStartPos );
     awt::Rectangle aRect;
 
-    vcl::Window* pContainerWindow( 0 );
     if ( xContainerWindow.is() )
     {
         SolarMutexGuard aGuard;
-        pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         if ( pContainerWindow )
             aStartPos = AWTPoint(pContainerWindow->OutputToScreenPixel(VCLPoint(aStartPos)));
     }
@@ -2608,7 +2608,6 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
         aContainerWinSize = pContainerWindow->GetOutputSizePixel();
     }
 
-    vcl::Window*                        pDockWindow( 0 );
     vcl::Window*                        pDockingAreaWindow( 0 );
     ToolBox*                       pToolBox( 0 );
     uno::Reference< awt::XWindow > xWindow( rUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
@@ -2633,7 +2632,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     {
         SolarMutexGuard aGuard;
         pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
-        pDockWindow        = VCLUnoHelper::GetWindow( xWindow );
+        vcl::Window* pDockWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pDockWindow && pDockWindow->GetType() == WINDOW_TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pDockWindow);
 
@@ -3068,11 +3067,10 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
 
         sal_Int32 nDockPosY( 0 );
         vcl::Window* pDockingAreaWindow( 0 );
-        vcl::Window* pContainerWindow( 0 );
         {
             SolarMutexGuard aGuard;
             pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
-            pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            vcl::Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
         }
 
@@ -3263,7 +3261,6 @@ throw (uno::RuntimeException, std::exception)
     aReadGuard.clear();
 
     vcl::Window* pContainerWindow( 0 );
-    vcl::Window* pWindow( 0 );
     ::Point aMousePos;
     {
         SolarMutexGuard aGuard;
@@ -3289,7 +3286,7 @@ throw (uno::RuntimeException, std::exception)
 
             SolarMutexGuard aGuard;
 
-            pWindow = VCLUnoHelper::GetWindow( xWindow );
+            vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
                 ToolBox* pToolBox = static_cast<ToolBox *>(pWindow);

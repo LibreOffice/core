@@ -1204,7 +1204,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         OUString               aTooltip;
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
-        bool                    bIsVisible( true );
         sal_uInt32                  nStyle( 0 );
 
         Reference< XIndexAccess >   aMenuDesc;
@@ -1212,6 +1211,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         {
             if ( rItemContainer->getByIndex( n ) >>= aProp )
             {
+                bool bIsVisible( true );
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )

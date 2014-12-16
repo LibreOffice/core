@@ -379,10 +379,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             OUString aUIName = pIter->second;
             bool      bHideFromMenu( false );
             bool      bContextSensitive( false );
-            bool      bVisible( false );
             if ( aUIName.isEmpty() &&
                  m_xPersistentWindowState.is() )
             {
+                bool bVisible( false );
+
                 try
                 {
                     Sequence< PropertyValue > aWindowState;
