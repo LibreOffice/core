@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -423,38 +422,27 @@ static LibreOfficeKitDocumentType doc_getDocumentType (LibreOfficeKitDocument* p
 
     try
     {
-        uno::Reference<frame::XModel> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-        uno::Sequence<beans::PropertyValue> aSequence = xDocument->getArgs();
+        uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
 
-        MediaDescriptor aMediaDescriptor(aSequence);
-        OUString sPropertyName = MediaDescriptor::PROP_DOCUMENTSERVICE();
-        OUString aDocumentService = aMediaDescriptor.getUnpackedValueOrDefault(sPropertyName, OUString());
-
-        if (aDocumentService.isEmpty())
-        {
-            gImpl->maLastExceptionMsg = "unknown document type";
-            return LOK_DOCTYPE_OTHER;
-        }
-
-        if (aDocumentService == "com.sun.star.sheet.SpreadsheetDocument")
+        if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
         {
             return LOK_DOCTYPE_SPREADSHEET;
         }
-        else if (aDocumentService == "com.sun.star.presentation.PresentationDocument")
+        else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
         {
             return LOK_DOCTYPE_PRESENTATION;
         }
-        else if (aDocumentService == "com.sun.star.drawing.DrawingDocument")
+        else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
         {
             return LOK_DOCTYPE_DRAWING;
         }
-        else if (aDocumentService == "com.sun.star.text.TextDocument")
+        else if (xDocument->supportsService("com.sun.star.text.TextDocument"))
         {
             return LOK_DOCTYPE_TEXT;
         }
         else
         {
-            gImpl->maLastExceptionMsg = "unknown document mapping";
+            gImpl->maLastExceptionMsg = "unknown document type";
         }
     }
     catch (const uno::Exception& exception)
