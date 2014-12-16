@@ -750,7 +750,6 @@ void ProgressMonitor::impl_rebuildFixedText ()
             aCollectString  +=  pSearchItem->sTopic;
             aCollectString  +=  "\n";
         }
-        aCollectString  +=  "\0";   // It's better :-)
 
         m_xTopic_Top->setText ( aCollectString );
     }
@@ -768,7 +767,6 @@ void ProgressMonitor::impl_rebuildFixedText ()
             aCollectString  +=  pSearchItem->sText;
             aCollectString  +=  "\n";
         }
-        aCollectString  +=  "\0";   // It's better :-)
 
         m_xText_Top->setText ( aCollectString );
     }
@@ -788,7 +786,6 @@ void ProgressMonitor::impl_rebuildFixedText ()
             aCollectString  +=  pSearchItem->sTopic;
             aCollectString  +=  "\n";
         }
-        aCollectString  +=  "\0";   // It's better :-)
 
         m_xTopic_Bottom->setText ( aCollectString );
     }
@@ -806,7 +803,6 @@ void ProgressMonitor::impl_rebuildFixedText ()
             aCollectString  +=  pSearchItem->sText;
             aCollectString  +=  "\n";
         }
-        aCollectString  +=  "\0";   // It's better :-)
 
         m_xText_Bottom->setText ( aCollectString );
     }
