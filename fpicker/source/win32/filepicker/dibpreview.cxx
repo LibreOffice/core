@@ -213,26 +213,20 @@ HWND SAL_CALL CDIBPreview::getWindowHandle() const
 
 void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
 {
-    BITMAPFILEHEADER*  pbmfh;
-    BITMAPINFO      *  pbmi;
-    sal_uInt8            *  pBits;
-    int                cxDib;
-    int                cyDib;
-
     osl::MutexGuard aGuard(m_PaintLock);
 
     try
     {
-        pbmfh = reinterpret_cast<BITMAPFILEHEADER*>(m_Image.getArray());
+        BITMAPFILEHEADER* pbmfh = reinterpret_cast<BITMAPFILEHEADER*>(m_Image.getArray());
 
         if ( !IsBadReadPtr( pbmfh, sizeof(BITMAPFILEHEADER)) &&
              (pbmfh->bfType == ('B' | ('M' << 8))) )
         {
-            pbmi  = reinterpret_cast<BITMAPINFO*>((pbmfh + 1));
-            pBits = reinterpret_cast<sal_uInt8*>(((DWORD_PTR)pbmfh) + pbmfh->bfOffBits);
+            BITMAPINFO * pbmi  = reinterpret_cast<BITMAPINFO*>((pbmfh + 1));
+            sal_uInt8 * pBits = reinterpret_cast<sal_uInt8*>(((DWORD_PTR)pbmfh) + pbmfh->bfOffBits);
 
-            cxDib =      pbmi->bmiHeader.biWidth;
-            cyDib = abs (pbmi->bmiHeader.biHeight);
+            int cxDib = pbmi->bmiHeader.biWidth;
+            int cyDib = abs (pbmi->bmiHeader.biHeight);
 
             SetStretchBltMode(hDC, COLORONCOLOR);
 

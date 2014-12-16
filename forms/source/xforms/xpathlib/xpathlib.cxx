@@ -153,10 +153,9 @@ void xforms_minFunction(xmlXPathParserContextPtr ctxt, int nargs)
     xmlNodeSetPtr pNodeSet = xmlXPathPopNodeSet(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     double nMinimum = 0;
-    double nNumber = 0;
     for (int i = 0; i <  xmlXPathNodeSetGetLength(pNodeSet); i++)
     {
-        nNumber = xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pNodeSet, i));
+        double nNumber = xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pNodeSet, i));
         if (xmlXPathIsNaN(nNumber))
         {
             xmlXPathReturnNumber(ctxt, xmlXPathNAN);
@@ -176,10 +175,9 @@ void xforms_maxFunction(xmlXPathParserContextPtr ctxt, int nargs)
     xmlNodeSetPtr pNodeSet = xmlXPathPopNodeSet(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     double nMaximum = 0;
-    double nNumber = 0;
     for (int i = 0; i <  xmlXPathNodeSetGetLength(pNodeSet); i++)
     {
-        nNumber = xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pNodeSet, i));
+        double nNumber = xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pNodeSet, i));
         if (xmlXPathIsNaN(nNumber))
         {
             xmlXPathReturnNumber(ctxt, xmlXPathNAN);
@@ -197,11 +195,10 @@ void xforms_countNonEmptyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlNodeSetPtr pNodeSet = xmlXPathPopNodeSet(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    xmlChar *aString;
     sal_Int32 nNotEmpty = 0;
     for (int i = 0; i <  xmlXPathNodeSetGetLength(pNodeSet); i++)
     {
-        aString = xmlXPathCastNodeToString(xmlXPathNodeSetItem(pNodeSet, i));
+        const xmlChar *aString = xmlXPathCastNodeToString(xmlXPathNodeSetItem(pNodeSet, i));
         if (*aString != 0) nNotEmpty++;
     }
     xmlXPathReturnNumber(ctxt, nNotEmpty);

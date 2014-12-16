@@ -471,7 +471,6 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
     const sal_Unicode sep = m_pHelper->getFunctionManager()->getSingleToken(IFunctionManager::eSep);
 
     sal_Int32 nFuncPos = SAL_MAX_INT32;
-    bool  bFlag = false;
     OUString  aFormString = m_aFormulaHelper.GetCharClass()->uppercase(pMEdit->GetText());
 
     const uno::Reference< sheet::XFormulaParser > xParser(m_pHelper->getFormulaParser());
@@ -481,6 +480,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
     const sheet::FormulaToken* pEnd = pIter + m_aTokenList.getLength();
     try
     {
+        bool  bFlag = false;
         sal_Int32 nTokPos = 1;
         sal_Int32 nOldTokPos = 1;
         sal_Int32 nPrevFuncPos = 1;
@@ -834,12 +834,11 @@ void FormulaDlg_Impl::FillControls(bool &rbNext, bool &rbPrev)
 
     DeleteArgs();
     const IFunctionDescription* pOldFuncDesc = pFuncDesc;
-    bool bTestFlag = false;
 
     if ( m_aFormulaHelper.GetNextFunc( aFormula, false,
                                      nNextFStart, &nNextFEnd, &pFuncDesc, &m_aArguments ) )
     {
-        bTestFlag = (pOldFuncDesc != pFuncDesc);
+        const bool bTestFlag = (pOldFuncDesc != pFuncDesc);
         if(bTestFlag)
         {
             m_pFtHeadLine->Hide();
