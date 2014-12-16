@@ -42,8 +42,6 @@ using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::registry;
 
-
-#define SERVICENAME     "com.sun.star.bridge.UnoUrlResolver"
 #define IMPLNAME        "com.sun.star.comp.bridge.UnoUrlResolver"
 
 namespace unourl_resolver
@@ -52,7 +50,7 @@ namespace unourl_resolver
 Sequence< OUString > resolver_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = OUString(SERVICENAME);
+    seqNames.getArray()[0] = "com.sun.star.bridge.UnoUrlResolver";
     return seqNames;
 }
 
