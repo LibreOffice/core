@@ -203,10 +203,10 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
     sal_Int32  nFStart = FUNC_NOTFOUND;
     sal_Int32  nParPos = nStart;
 
-    bool bRepeat, bFound;
+    bool bRepeat;
     do
     {
-        bFound  = false;
+        bool bFound  = false;
         bRepeat = false;
 
         if ( bBack )

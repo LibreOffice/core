@@ -1040,11 +1040,11 @@ namespace frm
 
         if ( m_xCursor.is() && ( m_xCursor == _rEvent.Source ) )
         {
-            bool bIs = false;
             if  ( ( _rEvent.PropertyName == PROPERTY_ISMODIFIED )
                || ( _rEvent.PropertyName == PROPERTY_ISNEW )
                 )
             {
+                bool bIs = false;
                 if ( ( _rEvent.NewValue >>= bIs ) && !bIs )
                     m_bActiveControlModified = false;
             }
