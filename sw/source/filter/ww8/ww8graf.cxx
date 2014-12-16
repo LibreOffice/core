@@ -597,7 +597,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
     pPlcxMan = new WW8PLCFMan(pSBase, eType, nStartCp, true);
 
     WW8_CP nStart = pPlcxMan->Where();
-    WW8_CP nNext, nEnd, nStartReplace=0;
+    WW8_CP nNext, nStartReplace=0;
 
     bool bDoingSymbol = false;
     sal_Unicode cReplaceSymbol = cSymbol;
@@ -616,6 +616,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
         WW8_CP nTxtStart = nStart;
         if (nTxtStart < nStartCp)
             nTxtStart = nStartCp;
+
         // get position of next SPRM
         bool bStartAttr = pPlcxMan->Get(&aRes);
         nAktColl = pPlcxMan->GetColl();
@@ -696,9 +697,9 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
         pPlcxMan->advance();
         nNext = pPlcxMan->Where();
 
-        if( (nNext != nStart) && !bONLYnPicLocFc )
+        const WW8_CP nEnd = ( nNext < nEndCp ) ? nNext : nEndCp;
+        if (!bONLYnPicLocFc && nNext != nStart && nEnd >= nStartCp)
         {
-            nEnd = ( nNext < nEndCp ) ? nNext : nEndCp;
             SfxItemPool *pEditPool = pS->GetPool();
 
             // Here read current properties and convert them into pS
