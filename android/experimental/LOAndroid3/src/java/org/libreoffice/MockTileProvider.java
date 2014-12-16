@@ -19,12 +19,12 @@ public class MockTileProvider implements TileProvider {
         for (int i = 0; i < 5; i++) {
             String partName = "Part " + i;
             DocumentPartView partView = new DocumentPartView(i, partName, null);
-            LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().add(partView);
+            LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdapter().add(partView);
         }
         LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
             @Override
             public void run() {
-                LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
+                LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdapter().notifyDataSetChanged();
             }
         });
     }

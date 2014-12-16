@@ -91,7 +91,7 @@ public class LOKitTileProvider implements TileProvider {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
+                LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdapter().notifyDataSetChanged();
             }
         });
     }

@@ -40,7 +40,7 @@ public class LibreOfficeMainActivity extends Activity {
     private RelativeLayout mGeckoLayout;
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
-    private DocumentPartViewListAdpater mDocumentPartViewListAdpater;
+    private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
 
     public static GeckoLayerClient getLayerClient() {
@@ -106,11 +106,11 @@ public class LibreOfficeMainActivity extends Activity {
         mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        if (mDocumentPartViewListAdpater == null) {
+        if (mDocumentPartViewListAdapter == null) {
             mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-            mDocumentPartViewListAdpater = new DocumentPartViewListAdpater(this, R.layout.document_part_list_layout, mDocumentPartView);
-            mDrawerList.setAdapter(mDocumentPartViewListAdpater);
+            mDocumentPartViewListAdapter = new DocumentPartViewListAdapter(this, R.layout.document_part_list_layout, mDocumentPartView);
+            mDrawerList.setAdapter(mDocumentPartViewListAdapter);
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
 
@@ -169,8 +169,8 @@ public class LibreOfficeMainActivity extends Activity {
         return mDocumentPartView;
     }
 
-    public DocumentPartViewListAdpater getDocumentPartViewListAdpater() {
-        return mDocumentPartViewListAdpater;
+    public DocumentPartViewListAdapter getDocumentPartViewListAdapter() {
+        return mDocumentPartViewListAdapter;
     }
 
     private void showAbout() {
@@ -237,7 +237,7 @@ public class LibreOfficeMainActivity extends Activity {
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            DocumentPartView partView = mDocumentPartViewListAdpater.getItem(position);
+            DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
             LOKitShell.sendEvent(LOEventFactory.changePart(partView.getPartIndex()));
             mDrawerLayout.closeDrawer(mDrawerList);
         }

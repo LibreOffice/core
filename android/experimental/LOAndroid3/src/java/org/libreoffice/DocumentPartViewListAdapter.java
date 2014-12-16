@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class DocumentPartViewListAdpater extends ArrayAdapter<DocumentPartView> {
-    private static final String LOGTAG = DocumentPartViewListAdpater.class.getSimpleName();
+public class DocumentPartViewListAdapter extends ArrayAdapter<DocumentPartView> {
+    private static final String LOGTAG = DocumentPartViewListAdapter.class.getSimpleName();
 
     private final Activity activity;
 
-    public DocumentPartViewListAdpater(Activity activity, int resource, List<DocumentPartView> objects) {
+    public DocumentPartViewListAdapter(Activity activity, int resource, List<DocumentPartView> objects) {
         super(activity, resource, objects);
         this.activity = activity;
     }
