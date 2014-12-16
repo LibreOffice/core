@@ -14,6 +14,7 @@ cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
+cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 
 cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
