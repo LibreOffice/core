@@ -127,7 +127,7 @@ sal_Int32 Data::parseSegment(
     }
     if (templateName != 0) {
         if (i - index == 1 && path[index] == '*') {
-            *templateName = "";
+            templateName->clear();
         } else {
             *templateName = path.copy(index, i - index);
         }
@@ -245,7 +245,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
             return p;
         }
         parent = p;
-        templateName = "";
+        templateName.clear();
         n = parseSegment(
             pathRepresentation, n, &seg, &setElement, &templateName);
         if (n == -1) {

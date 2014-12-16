@@ -113,7 +113,7 @@ bool XcdParser::startElement(
                 return false;
             }
             state_ = STATE_DEPENDENCY;
-            dependencyFile_ = "";
+            dependencyFile_.clear();
             return true;
         }
         state_ = STATE_COMPONENTS;
