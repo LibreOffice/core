@@ -751,7 +751,7 @@ ScFormulaCell::ScFormulaCell(
     nSeenInIteration(0),
     cMatrixFlag ( cInd ),
     nFormatType(xGroup->mnFormatType),
-    bDirty(false),
+    bDirty(true),
     bChanged( false ),
     bRunning( false ),
     bCompile( false ),
