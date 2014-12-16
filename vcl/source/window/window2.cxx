@@ -1019,7 +1019,7 @@ vcl::Window* Window::ImplGetFrameWindow() const
     return mpWindowImpl->mpFrameWindow;
 }
 
-bool Window::ImplIsDockingWindow() const
+bool Window::IsDockingWindow() const
 {
     return mpWindowImpl->mbDockWin;
 }

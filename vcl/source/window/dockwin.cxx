@@ -22,6 +22,7 @@
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/unowrap.hxx>
@@ -324,6 +325,10 @@ void DockingWindow::ImplInitDockingWindowData()
     mbRollUp       = false;
     mbDockBtn      = false;
     mbHideBtn      = false;
+    mbIsDefferedInit = false;
+    mbIsCalculatingInitialLayoutSize = false;
+    mbInitialLayoutDone = false;
+    mpDialogParent = NULL;
 }
 
 void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -426,6 +431,31 @@ DockingWindow::DockingWindow( vcl::Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+//Find the real parent stashed in mpDialogParent.
+void DockingWindow::doDeferredInit(WinBits nBits)
+{
+    vcl::Window *pParent = mpDialogParent;
+    mpDialogParent = NULL;
+    ImplInit(pParent, nBits);
+    mbIsDefferedInit = false;
+}
+
+void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+{
+    mbIsDefferedInit = true;
+    mpDialogParent = pParent; //should be unset in doDeferredInit
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+}
+
+DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rID,
+    const OUString& rUIXMLDescription)
+    : Window(WINDOW_DOCKINGWINDOW)
+{
+    ImplInitDockingWindowData();
+
+    loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
+}
+
 DockingWindow::~DockingWindow()
 {
     if ( IsFloatingMode() )
@@ -434,6 +464,7 @@ DockingWindow::~DockingWindow()
         SetFloatingMode( false );
     }
     delete mpImplData;
+    mpImplData = NULL;
 }
 
 void DockingWindow::Tracking( const TrackingEvent& rTEvt )
@@ -687,10 +718,29 @@ void DockingWindow::Resizing( Size& )
 {
 }
 
+void DockingWindow::DoInitialLayout()
+{
+    if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
+       ImplWindowAutoMnemonic( this );
+
+    if (isLayoutEnabled())
+    {
+        mbIsCalculatingInitialLayoutSize = true;
+        setDeferredProperties();
+        setOptimalLayoutSize();
+        mbIsCalculatingInitialLayoutSize = false;
+        mbInitialLayoutDone = true;
+    }
+}
+
 void DockingWindow::StateChanged( StateChangedType nType )
 {
     switch(nType)
     {
+        case StateChangedType::INITSHOW:
+            DoInitialLayout();
+            break;
+
         case StateChangedType::CONTROLBACKGROUND:
             ImplInitSettings();
             Invalidate();
@@ -737,6 +787,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
             {
                 Show( false, SHOW_NOFOCUSCHANGE );
 
+                sal_Int32 nBorderWidth = get_border_width();
+
                 maDockPos = Window::GetPosPixel();
 
                 vcl::Window* pRealParent = mpWindowImpl->mpRealParent;
@@ -767,7 +819,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 pWin->mpWindowImpl->mpClientWindow = this;
                 mpWindowImpl->mpRealParent = pRealParent;
                 pWin->SetText( Window::GetText() );
-                pWin->SetOutputSizePixel( Window::GetSizePixel() );
+                Size aSize(Window::GetSizePixel());
+                pWin->SetOutputSizePixel(aSize);
                 pWin->SetPosPixel( maFloatPos );
                 // pass on DockingData to FloatingWindow
                 pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, mbDockBtn );
@@ -779,16 +832,26 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                     pWin->RollDown();
                 pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
                 pWin->SetMinOutputSizePixel( maMinOutSize );
+
+                pWin->set_width_request(std::max(aSize.Width(), maMinOutSize.Width()));
+                pWin->set_height_request(std::max(aSize.Height(), maMinOutSize.Height()));
+
                 pWin->SetMaxOutputSizePixel( mpImplData->maMaxOutSize );
 
                 ToggleFloatingMode();
 
+                set_border_width(nBorderWidth);
+
                 if ( bVisible )
                     Show();
+
+                mpFloatWin->queue_resize();
             }
             else
             {
                 Show( false, SHOW_NOFOCUSCHANGE );
+
+                sal_Int32 nBorderWidth = get_border_width();
 
                 // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();
@@ -816,6 +879,8 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 SetPosPixel( maDockPos );
 
                 ToggleFloatingMode();
+
+                set_border_width(nBorderWidth);
 
                 if ( bVisible )
                     Show();
@@ -852,19 +917,31 @@ void DockingWindow::setPosSizePixel( long nX, long nY,
                                      sal_uInt16 nFlags )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-    if( pWrapper )
+    if (pWrapper)
     {
-        if ( pWrapper->mpFloatWin )
-            pWrapper->mpFloatWin->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-        else
+        if (!pWrapper->mpFloatWin)
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-        return;
+    }
+    else
+    {
+        if (!mpFloatWin)
+            Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
     }
 
-    if ( mpFloatWin )
-        mpFloatWin->setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-    else
-        Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    if (::isLayoutEnabled(this))
+    {
+        Size aSize(GetSizePixel());
+
+        sal_Int32 nBorderWidth = get_border_width();
+
+        aSize.Width() -= 2 * nBorderWidth;
+        aSize.Height() -= 2 * nBorderWidth;
+
+        Point aPos(nBorderWidth, nBorderWidth);
+        Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+        assert(pBox);
+        VclContainer::setLayoutAllocation(*pBox, aPos, aSize);
+    }
 }
 
 Point DockingWindow::GetPosPixel() const
@@ -981,6 +1058,52 @@ void DockingWindow::SetMaxOutputSizePixel( const Size& rSize )
     if ( mpFloatWin )
         mpFloatWin->SetMaxOutputSizePixel( rSize );
     mpImplData->maMaxOutSize = rSize;
+}
+
+void DockingWindow::SetText(const OUString& rStr)
+{
+    setDeferredProperties();
+    Window::SetText(rStr);
+}
+
+OUString DockingWindow::GetText() const
+{
+    const_cast<DockingWindow*>(this)->setDeferredProperties();
+    return Window::GetText();
+}
+
+bool DockingWindow::isLayoutEnabled() const
+{
+    //pre dtor called, and single child is a container => we're layout enabled
+    return mpImplData && ::isLayoutEnabled(this);
+}
+
+void DockingWindow::setOptimalLayoutSize()
+{
+    //resize DockingWindow to fit requisition on initial show
+    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+
+    Size aSize = get_preferred_size();
+
+    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
+
+    aSize.Width() = std::min(aMax.Width(), aSize.Width());
+    aSize.Height() = std::min(aMax.Height(), aSize.Height());
+
+    SetMinOutputSizePixel(aSize);
+    SetSizePixel(aSize);
+    setPosSizeOnContainee(aSize, *pBox);
+}
+
+void DockingWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
+{
+    sal_Int32 nBorderWidth = get_border_width();
+
+    aSize.Width() -= 2 * nBorderWidth;
+    aSize.Height() -= 2 * nBorderWidth;
+
+    Point aPos(nBorderWidth, nBorderWidth);
+    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

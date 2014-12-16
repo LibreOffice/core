@@ -22,6 +22,7 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/builder.hxx>
 #include <vcl/floatwin.hxx>
 #include <vector>
 
@@ -222,7 +223,9 @@ public:
 // - DockingWindow -
 
 
-class VCL_DLLPUBLIC DockingWindow : public vcl::Window
+class VCL_DLLPUBLIC DockingWindow
+    : public vcl::Window
+    , public VclBuilderContainer
 {
     class   ImplData;
 private:
@@ -256,9 +259,15 @@ private:
                     mbPinned:1,
                     mbRollUp:1,
                     mbDockBtn:1,
-                    mbHideBtn:1;
+                    mbHideBtn:1,
+                    mbIsDefferedInit:1,
+                    mbIsCalculatingInitialLayoutSize:1,
+                    mbInitialLayoutDone:1;
+
+    vcl::Window*    mpDialogParent;
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
+    SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         DockingWindow (const DockingWindow &);
@@ -270,16 +279,26 @@ protected:
     SAL_DLLPRIVATE void    ImplInitSettings();
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
-public:
-    SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
+    SAL_DLLPRIVATE void DoInitialLayout();
 
+    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+
+public:
+    bool            isLayoutEnabled() const;
+    void            setOptimalLayoutSize();
+    bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
+
+    SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
+    SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDefferedInit; }
+    void                   doDeferredInit(WinBits nBits);
 protected:
                     DockingWindow( WindowType nType );
 
 public:
-                    DockingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDDOCKWIN );
-                    DockingWindow( vcl::Window* pParent, const ResId& rResId );
-                    virtual ~DockingWindow();
+    DockingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDDOCKWIN);
+    DockingWindow(vcl::Window* pParent, const ResId& rResId);
+    DockingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription);
+    virtual ~DockingWindow();
 
     virtual void    StartDocking();
     virtual bool    Docking( const Point& rPos, Rectangle& rRect );
@@ -339,6 +358,9 @@ public:
     Size            GetSizePixel() const SAL_OVERRIDE;
     void            SetOutputSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
     Size            GetOutputSizePixel() const;
+
+    virtual void     SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual OUString GetText() const SAL_OVERRIDE;
 };
 
 inline void DockingWindow::SetPin( bool bPin )

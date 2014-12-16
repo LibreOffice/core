@@ -776,7 +776,8 @@ VCL_DLLPUBLIC bool isLayoutEnabled(const vcl::Window *pWindow);
 inline bool isContainerWindow(const vcl::Window &rWindow)
 {
     WindowType eType = rWindow.GetType();
-    return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
+    return eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW ||
+           (eType == WINDOW_DOCKINGWINDOW && ::isLayoutEnabled(&rWindow));
 }
 
 inline bool isContainerWindow(const vcl::Window *pWindow)

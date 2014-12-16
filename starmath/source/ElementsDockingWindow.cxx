@@ -216,8 +216,8 @@ const sal_uInt16 SmElementsControl::aOthers[][2] =
     {RID_DOTSUP, RID_DOTSUP_HELP}, {RID_DOTSDOWN, RID_DOTSDOWN_HELP}
 };
 
-SmElementsControl::SmElementsControl(vcl::Window *pParent, const ResId& rResId)
-    : Control(pParent, rResId)
+SmElementsControl::SmElementsControl(vcl::Window *pParent)
+    : Control(pParent, WB_TABSTOP)
     , mpDocShell(new SmDocShell(SFXOBJECTSHELL_STD_NORMAL))
     , maCurrentSetId(0)
     , mpCurrentElement(NULL)
@@ -622,6 +622,11 @@ void SmElementsControl::build()
     Invalidate();
 }
 
+Size SmElementsControl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(300, 300), MapMode(MAP_APPFONT));
+}
+
 const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
     RID_CATEGORY_UNARY_BINARY_OPERATORS,
     RID_CATEGORY_RELATIONS,
@@ -636,32 +641,36 @@ const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
 };
 
 SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, vcl::Window* pParent) :
-    SfxDockingWindow(pInputBindings, pChildWindow, pParent, SmResId(RID_ELEMENTSDOCKINGWINDOW)),
-    maElementsControl   (this, SmResId(1)),
-    maElementListBox    (this, SmResId(1))
+    SfxDockingWindow(pInputBindings, pChildWindow, pParent, "DockingElements",
+        "modules/smath/ui/dockingelements.ui")
 {
-    maElementsControl.SetBorderStyle( WindowBorderStyle::MONO );
+    mpElementsControl = new SmElementsControl(get<vcl::Window>("box"));
+    mpElementsControl->set_hexpand(true);
+    mpElementsControl->set_vexpand(true);
+    mpElementsControl->Show();
+    get(mpElementListBox, "listbox");
 
-    maElementListBox.SetDropDownLineCount( SAL_N_ELEMENTS(aCategories) );
+    mpElementsControl->SetBorderStyle( WindowBorderStyle::MONO );
+
+    mpElementListBox->SetDropDownLineCount( SAL_N_ELEMENTS(aCategories) );
 
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aCategories) ; i++)
     {
-        maElementListBox.InsertEntry(SM_RESSTR(aCategories[i]));
+        mpElementListBox->InsertEntry(SM_RESSTR(aCategories[i]));
     }
 
-    maElementListBox.SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
-    maElementListBox.SelectEntry(SM_RESSTR(RID_CATEGORY_UNARY_BINARY_OPERATORS));
+    mpElementListBox->SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
+    mpElementListBox->SelectEntry(SM_RESSTR(RID_CATEGORY_UNARY_BINARY_OPERATORS));
 
-    maElementsControl.SetBackground( Color( COL_WHITE ) );
-    maElementsControl.SetTextColor( Color( COL_BLACK ) );
-    maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
-    maElementsControl.selectedSignal.connect( boost::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
-
-    FreeResource();
+    mpElementsControl->SetBackground( Color( COL_WHITE ) );
+    mpElementsControl->SetTextColor( Color( COL_BLACK ) );
+    mpElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
+    mpElementsControl->selectedSignal.connect( boost::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
 {
+    delete mpElementsControl;
 }
 
 void SmElementsDockingWindow::ToggleFloatingMode()
@@ -678,7 +687,7 @@ void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFl
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
     bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );
-    maElementsControl.setVerticalMode(bVertical);
+    mpElementsControl->setVerticalMode(bVertical);
 }
 
 void SmElementsDockingWindow::SelectClickHandler( SmElement* pElement )
@@ -701,7 +710,7 @@ IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox*, pList)
         OUString aCurrentCategoryString = SM_RESSTR(aCurrentCategory);
         if (aCurrentCategoryString == pList->GetSelectEntry())
         {
-            maElementsControl.setElementSetId(aCurrentCategory);
+            mpElementsControl->setElementSetId(aCurrentCategory);
             return 0;
         }
     }
@@ -717,8 +726,8 @@ SmViewShell* SmElementsDockingWindow::GetView()
 void SmElementsDockingWindow::Resize()
 {
     bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );
-    maElementsControl.setVerticalMode(bVertical);
-
+    mpElementsControl->setVerticalMode(bVertical);
+#if 0
     sal_uInt32 aWidth  = GetOutputSizePixel().Width();
     sal_uInt32 aHeight = GetOutputSizePixel().Height();
 
@@ -727,12 +736,12 @@ void SmElementsDockingWindow::Resize()
 
     Rectangle aRect1 = Rectangle(aPadding, aPadding, aWidth - aPadding, aElementsSetsHeight + aPadding);
 
-    maElementListBox.SetPosSizePixel(aRect1.TopLeft(), aRect1.GetSize());
+    mpElementListBox->SetPosSizePixel(aRect1.TopLeft(), aRect1.GetSize());
 
     Rectangle aRect = Rectangle(aPadding, aElementsSetsHeight + aPadding + aPadding, aWidth - aPadding, aHeight - aPadding);
 
-    maElementsControl.SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
-
+    mpElementsControl->SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
+#endif
     SfxDockingWindow::Resize();
     Invalidate();
 }
@@ -744,8 +753,9 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
                             SfxBindings *pBindings, SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {
-    pWindow = new SmElementsDockingWindow(pBindings, this, pParentWindow);
-    SmElementsDockingWindow* pDialog = static_cast<SmElementsDockingWindow*>(pWindow);
+    SmElementsDockingWindow* pDialog = new SmElementsDockingWindow(pBindings, this, pParentWindow);
+    pWindow = pDialog;
+    pDialog->setDeferredProperties();
     pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
     pDialog->Show();
 

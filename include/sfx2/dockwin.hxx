@@ -79,6 +79,10 @@ public:
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,
                                           const ResId& rResId);
+                        SfxDockingWindow( SfxBindings *pBindings,
+                                          SfxChildWindow *pCW,
+                                          vcl::Window* pParent,
+                                          const OUString& rID, const OUString& rUIXMLDescription );
                         virtual ~SfxDockingWindow();
 
     void                Initialize (SfxChildWinInfo* pInfo);

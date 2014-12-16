@@ -186,7 +186,9 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
-    m_bToplevelHasDeferredInit = pParent && pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit();
+    m_bToplevelHasDeferredInit = pParent &&
+        ((pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit()) ||
+         (pParent->IsDockingWindow() && static_cast<DockingWindow*>(pParent)->isDeferredInit()));
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
 
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
@@ -994,6 +996,8 @@ namespace
             nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_MOVEABLE;
         else if (sType == "popup-menu")
             nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP;
+        else if (sType == "dock")
+            nBits |= WB_DOCKABLE;
         else
             nBits |= WB_MOVEABLE;
         return nBits;
@@ -1667,7 +1671,10 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     else if (name == "GtkWindow")
     {
         WinBits nBits = extractDeferredBits(rMap);
-        pWindow = new FloatingWindow(pParent, nBits|WB_MOVEABLE);
+        if (nBits | WB_DOCKABLE)
+            pWindow = new DockingWindow(pParent, nBits|WB_MOVEABLE);
+        else
+            pWindow = new FloatingWindow(pParent, nBits|WB_MOVEABLE);
     }
     else
     {
@@ -1766,6 +1773,12 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
         {
             SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
             pSysWin->doDeferredInit(extractDeferredBits(rProps));
+            m_bToplevelHasDeferredInit = false;
+        }
+        else if (pParent && pParent->IsDockingWindow())
+        {
+            DockingWindow *pDockWin = static_cast<DockingWindow*>(pCurrentChild);
+            pDockWin->doDeferredInit(extractDeferredBits(rProps));
             m_bToplevelHasDeferredInit = false;
         }
 

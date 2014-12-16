@@ -31,7 +31,7 @@
 Point ImplTaskPaneListGetPos( const vcl::Window *w )
 {
     Point pos;
-    if( w->ImplIsDockingWindow() )
+    if( w->IsDockingWindow() )
     {
         pos = static_cast<const DockingWindow*>(w)->GetPosPixel();
         vcl::Window *pF = static_cast<const DockingWindow*>(w)->GetFloatingWindow();

@@ -1048,7 +1048,7 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
     // notify dockingwindow/toolbox
     // note: this must be done *before* notifying the
     //       listeners to have the toolbox in the proper state
-    if( GetWindow()->ImplIsDockingWindow() )
+    if( GetWindow()->IsDockingWindow() )
         static_cast<DockingWindow*>(GetWindow())->ToggleFloatingMode();
 
     // now notify listeners

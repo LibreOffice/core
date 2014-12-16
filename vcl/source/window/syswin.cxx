@@ -1028,7 +1028,7 @@ Size SystemWindow::GetOptimalSize() const
     return Window::CalcWindowSize(aSize);
 }
 
-void SystemWindow::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
+void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
 {
     sal_Int32 nBorderWidth = get_border_width();
 
@@ -1047,7 +1047,7 @@ IMPL_LINK( SystemWindow, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
         return 0;
     }
 
-    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
     return 0;

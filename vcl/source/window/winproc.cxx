@@ -1841,7 +1841,7 @@ static long DelayedCloseEventLink( void* pCEvent, void* )
         // dispatch to correct window type
         if( pEv->pWindow->IsSystemWindow() )
             static_cast<SystemWindow*>(pEv->pWindow)->Close();
-        else if( pEv->pWindow->ImplIsDockingWindow() )
+        else if( pEv->pWindow->IsDockingWindow() )
             static_cast<DockingWindow*>(pEv->pWindow)->Close();
     }
     delete pEv;

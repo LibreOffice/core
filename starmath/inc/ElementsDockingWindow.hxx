@@ -107,12 +107,14 @@ class SmElementsControl : public Control
     void build();
 
 public:
-    SmElementsControl(vcl::Window *pParent, const ResId& rResId);
+    SmElementsControl(vcl::Window *pParent);
     virtual ~SmElementsControl();
 
     void setElementSetId(sal_uInt16 aSetId);
 
     void setVerticalMode(bool bVertical);
+
+    Size GetOptimalSize() const SAL_OVERRIDE;
 
     DECL_LINK( ScrollHdl, void* );
     void DoScroll(long nDelta);
@@ -124,8 +126,8 @@ class SmElementsDockingWindow : public SfxDockingWindow
 {
     static const sal_uInt16 aCategories[];
 
-    SmElementsControl   maElementsControl;
-    ListBox             maElementListBox;
+    SmElementsControl*  mpElementsControl;
+    ListBox*            mpElementListBox;
 
     virtual void Resize() SAL_OVERRIDE;
     SmViewShell* GetView();

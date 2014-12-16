@@ -943,7 +943,53 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
+SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
+    vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
+    : DockingWindow(pParent, rID, rUIXMLDescription)
+    , pBindings(pBindinx)
+    , pMgr(pCW)
+    , pImp(NULL)
 
+/*  [Description]
+
+    Constructor for the SfxDockingWindow class. A SfxChildWindow will be
+    required because the docking is implemented in Sfx through SfxChildWindows.
+*/
+{
+    if ( !GetHelpId().isEmpty() )
+    {
+        SetUniqueId( GetHelpId() );
+        SetHelpId("");
+    }
+    else
+    {
+        SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
+        SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
+        const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
+        if ( pSlot )
+        {
+            OString aCmd("SFXDOCKINGWINDOW_");
+            aCmd += pSlot->GetUnoName();
+            SetUniqueId( aCmd );
+        }
+    }
+
+    pImp = new SfxDockingWindow_Impl;
+    pImp->bConstructed = false;
+    pImp->pSplitWin = 0;
+    pImp->bEndDocked = false;
+    pImp->bDockingPrevented = false;
+
+    pImp->bSplitable = true;
+
+    // Initially set to default, the alignment is set in the subclass
+    pImp->nLine = pImp->nDockLine = 0;
+    pImp->nPos  = pImp->nDockPos = 0;
+    pImp->bNewLine = false;
+    pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
+    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+}
 
 void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 /*  [Description]
@@ -1162,6 +1208,9 @@ void SfxDockingWindow::Initialize_Impl()
 
         // trick: use VCL method SetWindowState to adjust position and size
         pFloatWin->SetWindowState( pImp->aWinState );
+        Size aSize(pFloatWin->GetSizePixel());
+        pFloatWin->set_width_request(aSize.Width());
+        pFloatWin->set_height_request(aSize.Height());
 
         // remember floating size for calculating alignment and tracking rectangle
         SetFloatingSize( pFloatWin->GetSizePixel() );

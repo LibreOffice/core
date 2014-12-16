@@ -440,7 +440,6 @@ public:
     SAL_DLLPRIVATE bool                 ImplIsFloatingWindow() const;
     SAL_DLLPRIVATE bool                 ImplIsPushButton() const;
     SAL_DLLPRIVATE bool                 ImplIsSplitter() const;
-    SAL_DLLPRIVATE bool                 ImplIsDockingWindow() const;
     SAL_DLLPRIVATE bool                 ImplIsOverlapWindow() const;
 
     SAL_DLLPRIVATE void                 ImplIsInTaskPaneList( bool mbIsInTaskList );
@@ -763,6 +762,7 @@ public:
     void                                SetType( WindowType nType );
     WindowType                          GetType() const;
     bool                                IsSystemWindow() const;
+    bool                                IsDockingWindow() const;
     bool                                IsDialog() const;
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;

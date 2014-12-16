@@ -121,35 +121,6 @@ DockingWindow RID_CMDBOXWINDOW\
     CMDBOXWINDOW_TEXT
 };
 
-DockingWindow RID_ELEMENTSDOCKINGWINDOW
-{
-    OutputSize = TRUE ;
-    Hide = FALSE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 300 , 300 ) ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-
-    Control 1
-    {
-        Border = FALSE ;
-    };
-
-    ListBox 1
-    {
-        Border = TRUE ;
-        TabStop = TRUE ;
-        Sort = FALSE ;
-        DropDown = TRUE ;
-        VScroll = TRUE ;
-    };
-
-    Text [ en-US ] = "Elements Dock" ;
-};
-
 String STR_BLACK
 {
     Text [ en-US ] = "black" ;
