@@ -337,176 +337,175 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
     // catch HelpProcessingException to avoid locking data bases
     try
     {
+        // lastly, initialize the indexBuilder
+        if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
+            initIndexerPreProcessor();
 
-    // lastly, initialize the indexBuilder
-    if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
-        initIndexerPreProcessor();
-
-    // here we start our loop over the hzip files.
-    HashSet::iterator end = helpFiles.end();
-    for (HashSet::iterator iter = helpFiles.begin(); iter != end; ++iter)
-    {
-        // process one file
-        // streamTable contains the streams in the hzip file
-        StreamTable streamTable;
-        const std::string &xhpFileName = *iter;
-
-        if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
+        // here we start our loop over the hzip files.
+        HashSet::iterator end = helpFiles.end();
+        for (HashSet::iterator iter = helpFiles.begin(); iter != end; ++iter)
         {
-            // only work on .xhp - files
-            SAL_WARN("helpcompiler",
-                "ERROR: input list entry '"
-                    << xhpFileName
-                    << "' has the wrong extension (only files with extension .xhp are accepted)");
+            // process one file
+            // streamTable contains the streams in the hzip file
+            StreamTable streamTable;
+            const std::string &xhpFileName = *iter;
 
-            continue;
-        }
-
-        fs::path langsourceRoot(sourceRoot);
-        fs::path xhpFile;
-
-        if( bExtensionMode )
-        {
-            // langsourceRoot == sourceRoot for extensions
-            std::string xhpFileNameComplete( extensionPath );
-            xhpFileNameComplete.append( '/' + xhpFileName );
-            xhpFile = fs::path( xhpFileNameComplete );
-        }
-        else
-        {
-            langsourceRoot.append( "/" );
-            if ( m_bUseLangRoot )
-                langsourceRoot.append( lang + '/' );
-            xhpFile = fs::path(xhpFileName, fs::native);
-        }
-
-        HelpCompiler hc( streamTable, xhpFile, langsourceRoot, zipdir,
-            compactStylesheet, embeddStylesheet, module, lang, bExtensionMode );
-
-        HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
-        bool success = hc.compile();
-        HCDBG(std::cerr << "after compile of " << xhpFileName << std::endl);
-
-        if (!success && !bExtensionMode)
-        {
-            std::stringstream aStrStream;
-            aStrStream <<
-                "\nERROR: compiling help particle '"
-                    << xhpFileName
-                    << "' for language '"
-                    << lang
-                    << "' failed!";
-            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
-        }
-
-        if (!m_bCreateIndex)
-            continue;
-
-        std::string documentPath = streamTable.document_path;
-        if (documentPath.find("/") == 0)
-            documentPath = documentPath.substr(1);
-
-        std::string documentJarfile = streamTable.document_module + ".jar";
-
-        std::string documentTitle = streamTable.document_title;
-        if (documentTitle.empty())
-            documentTitle = "<notitle>";
-
-        const std::string& fileB = documentPath;
-        const std::string& jarfileB = documentJarfile;
-        std::string& titleB = documentTitle;
-
-        // add once this as its own id.
-        addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
-
-        const HashSet *hidlist = streamTable.appl_hidlist;
-        if (!hidlist)
-            hidlist = streamTable.default_hidlist;
-        if (hidlist && !hidlist->empty())
-        {
-            // now iterate over all elements of the hidlist
-            HashSet::const_iterator aEnd = hidlist->end();
-            for (HashSet::const_iterator hidListIter = hidlist->begin();
-                hidListIter != aEnd; ++hidListIter)
+            if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
             {
-                std::string thishid = *hidListIter;
+                // only work on .xhp - files
+                SAL_WARN("helpcompiler",
+                    "ERROR: input list entry '"
+                        << xhpFileName
+                        << "' has the wrong extension (only files with extension .xhp are accepted)");
 
-                std::string anchorB;
-                size_t index = thishid.rfind('#');
-                if (index != std::string::npos)
-                {
-                    anchorB = thishid.substr(1 + index);
-                    thishid = thishid.substr(0, index);
-                }
-                addBookmark( pFileDbBase_DBHelp, thishid, fileB, anchorB, jarfileB, titleB);
+                continue;
             }
-        }
 
-        // now the keywords
-        const Hashtable *anchorToLL = streamTable.appl_keywords;
-        if (!anchorToLL)
-            anchorToLL = streamTable.default_keywords;
-        if (anchorToLL && !anchorToLL->empty())
-        {
-            std::string fakedHid = URLEncoder::encode(documentPath);
-            Hashtable::const_iterator aEnd = anchorToLL->end();
-            for (Hashtable::const_iterator enumer = anchorToLL->begin();
-                enumer != aEnd; ++enumer)
+            fs::path langsourceRoot(sourceRoot);
+            fs::path xhpFile;
+
+            if( bExtensionMode )
             {
-                const std::string &anchor = enumer->first;
-                addBookmark(pFileDbBase_DBHelp, documentPath, fileB,
-                            anchor, jarfileB, titleB);
-                std::string totalId = fakedHid + "#" + anchor;
-                // std::cerr << hzipFileName << std::endl;
-                const LinkedList& ll = enumer->second;
-                LinkedList::const_iterator aOtherEnd = ll.end();
-                for (LinkedList::const_iterator llIter = ll.begin();
-                    llIter != aOtherEnd; ++llIter)
+                // langsourceRoot == sourceRoot for extensions
+                std::string xhpFileNameComplete( extensionPath );
+                xhpFileNameComplete.append( '/' + xhpFileName );
+                xhpFile = fs::path( xhpFileNameComplete );
+            }
+            else
+            {
+                langsourceRoot.append( "/" );
+                if ( m_bUseLangRoot )
+                    langsourceRoot.append( lang + '/' );
+                xhpFile = fs::path(xhpFileName, fs::native);
+            }
+
+            HelpCompiler hc( streamTable, xhpFile, langsourceRoot, zipdir,
+                compactStylesheet, embeddStylesheet, module, lang, bExtensionMode );
+
+            HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
+            bool success = hc.compile();
+            HCDBG(std::cerr << "after compile of " << xhpFileName << std::endl);
+
+            if (!success && !bExtensionMode)
+            {
+                std::stringstream aStrStream;
+                aStrStream <<
+                    "\nERROR: compiling help particle '"
+                        << xhpFileName
+                        << "' for language '"
+                        << lang
+                        << "' failed!";
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+            }
+
+            if (!m_bCreateIndex)
+                continue;
+
+            std::string documentPath = streamTable.document_path;
+            if (documentPath.find("/") == 0)
+                documentPath = documentPath.substr(1);
+
+            std::string documentJarfile = streamTable.document_module + ".jar";
+
+            std::string documentTitle = streamTable.document_title;
+            if (documentTitle.empty())
+                documentTitle = "<notitle>";
+
+            const std::string& fileB = documentPath;
+            const std::string& jarfileB = documentJarfile;
+            std::string& titleB = documentTitle;
+
+            // add once this as its own id.
+            addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
+
+            const HashSet *hidlist = streamTable.appl_hidlist;
+            if (!hidlist)
+                hidlist = streamTable.default_hidlist;
+            if (hidlist && !hidlist->empty())
+            {
+                // now iterate over all elements of the hidlist
+                HashSet::const_iterator aEnd = hidlist->end();
+                for (HashSet::const_iterator hidListIter = hidlist->begin();
+                    hidListIter != aEnd; ++hidListIter)
                 {
-                        helpKeyword.insert(*llIter, totalId);
+                    std::string thishid = *hidListIter;
+
+                    std::string anchorB;
+                    size_t index = thishid.rfind('#');
+                    if (index != std::string::npos)
+                    {
+                        anchorB = thishid.substr(1 + index);
+                        thishid = thishid.substr(0, index);
+                    }
+                    addBookmark( pFileDbBase_DBHelp, thishid, fileB, anchorB, jarfileB, titleB);
                 }
             }
 
-        }
-
-        // and last the helptexts
-        const Stringtable *helpTextHash = streamTable.appl_helptexts;
-        if (!helpTextHash)
-            helpTextHash = streamTable.default_helptexts;
-        if (helpTextHash && !helpTextHash->empty())
-        {
-            Stringtable::const_iterator aEnd = helpTextHash->end();
-            for (Stringtable::const_iterator helpTextIter = helpTextHash->begin();
-                helpTextIter != aEnd; ++helpTextIter)
+            // now the keywords
+            const Hashtable *anchorToLL = streamTable.appl_keywords;
+            if (!anchorToLL)
+                anchorToLL = streamTable.default_keywords;
+            if (anchorToLL && !anchorToLL->empty())
             {
-                std::string helpTextId = helpTextIter->first;
-                const std::string& helpTextText = helpTextIter->second;
+                std::string fakedHid = URLEncoder::encode(documentPath);
+                Hashtable::const_iterator aEnd = anchorToLL->end();
+                for (Hashtable::const_iterator enumer = anchorToLL->begin();
+                    enumer != aEnd; ++enumer)
+                {
+                    const std::string &anchor = enumer->first;
+                    addBookmark(pFileDbBase_DBHelp, documentPath, fileB,
+                                anchor, jarfileB, titleB);
+                    std::string totalId = fakedHid + "#" + anchor;
+                    // std::cerr << hzipFileName << std::endl;
+                    const LinkedList& ll = enumer->second;
+                    LinkedList::const_iterator aOtherEnd = ll.end();
+                    for (LinkedList::const_iterator llIter = ll.begin();
+                        llIter != aOtherEnd; ++llIter)
+                    {
+                            helpKeyword.insert(*llIter, totalId);
+                    }
+                }
 
-                helpTextId = URLEncoder::encode(helpTextId);
-
-                if( pFileHelpText_DBHelp != NULL )
-                    writeKeyValue_DBHelp( pFileHelpText_DBHelp, helpTextId, helpTextText );
             }
-        }
 
-        //IndexerPreProcessor
-        if( !bExtensionMode || bIndexForExtension )
-        {
-            // now the indexing
-            xmlDocPtr document = streamTable.appl_doc;
-            if (!document)
-                document = streamTable.default_doc;
-            if (document)
+            // and last the helptexts
+            const Stringtable *helpTextHash = streamTable.appl_helptexts;
+            if (!helpTextHash)
+                helpTextHash = streamTable.default_helptexts;
+            if (helpTextHash && !helpTextHash->empty())
             {
-                std::string temp = module;
-                std::transform (temp.begin(), temp.end(), temp.begin(), tocharlower);
-                m_pIndexerPreProcessor->processDocument(document, URLEncoder::encode(documentPath) );
+                Stringtable::const_iterator aEnd = helpTextHash->end();
+                for (Stringtable::const_iterator helpTextIter = helpTextHash->begin();
+                    helpTextIter != aEnd; ++helpTextIter)
+                {
+                    std::string helpTextId = helpTextIter->first;
+                    const std::string& helpTextText = helpTextIter->second;
+
+                    helpTextId = URLEncoder::encode(helpTextId);
+
+                    if( pFileHelpText_DBHelp != NULL )
+                        writeKeyValue_DBHelp( pFileHelpText_DBHelp, helpTextId, helpTextText );
+                }
             }
+
+            //IndexerPreProcessor
+            if( !bExtensionMode || bIndexForExtension )
+            {
+                // now the indexing
+                xmlDocPtr document = streamTable.appl_doc;
+                if (!document)
+                    document = streamTable.default_doc;
+                if (document)
+                {
+                    std::string temp = module;
+                    std::transform (temp.begin(), temp.end(), temp.begin(), tocharlower);
+                    m_pIndexerPreProcessor->processDocument(document, URLEncoder::encode(documentPath) );
+                }
+            }
+
         }
 
-    } // while loop over hzip files ending
-
-    } // try
+    }
     catch( const HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
