@@ -52,14 +52,14 @@ void generateImports(std::ostream & o, ProgramOptions const & options,
         o << "import com.sun.star.registry.XRegistryKey;\n";
     }
 
-    if  (!propertyhelper.equals("_")) {
+    if  (propertyhelper != "_") {
         if (supportxcomponent)
             o << "import com.sun.star.lib.uno.helper.ComponentBase;\n";
         else
             o << "import com.sun.star.lib.uno.helper.WeakBase;\n";
     }
     if (!propertyhelper.isEmpty()) {
-        if (propertyhelper.equals("_")) {
+        if (propertyhelper == "_") {
             o << "import com.sun.star.lib.uno.helper.PropertySet;\n";
             o << "import com.sun.star.beans.PropertyAttribute;\n";
         } else {
@@ -503,18 +503,18 @@ void generateMethodBodies(std::ostream& o,
     while (iter != interfaces.end()) {
         OUString type(*iter);
         ++iter;
-        if (type.equals("com.sun.star.lang.XServiceInfo")) {
+        if (type == "com.sun.star.lang.XServiceInfo") {
             generateXServiceInfoBodies(o);
             generated.add(u2b(type));
         } else {
             if (options.componenttype == 2) {
-                if (type.equals("com.sun.star.lang.XServiceName")) {
+                if (type == "com.sun.star.lang.XServiceName") {
                     o << "    // com.sun.star.lang.XServiceName:\n"
                         "    public String getServiceName() {\n"
                         "        return sADDIN_SERVICENAME;\n    }\n";
                     generated.add(u2b(type));
                     continue;
-                } else if (type.equals("com.sun.star.sheet.XAddIn")) {
+                } else if (type == "com.sun.star.sheet.XAddIn") {
                     generateXAddInBodies(o, options);
                     generated.add(u2b(type));
 
@@ -524,26 +524,26 @@ void generateMethodBodies(std::ostream& o,
                         generated.add("com.sun.star.lang.XLocalizable");
                     }
                     continue;
-                } else if (type.equals("com.sun.star.lang.XLocalizable")) {
+                } else if (type == "com.sun.star.lang.XLocalizable") {
                     generateXLocalizableBodies(o);
                     generated.add(u2b(type));
                     continue;
-                } else if (type.equals("com.sun.star.sheet.XCompatibilityNames")) {
+                } else if (type == "com.sun.star.sheet.XCompatibilityNames") {
                     generateXCompatibilityNamesBodies(o);
                     generated.add(u2b(type));
                     continue;
                 }
             }
             if (options.componenttype == 3) {
-                if (type.equals("com.sun.star.lang.XInitialization")) {
+                if (type == "com.sun.star.lang.XInitialization") {
                     generateXInitializationBodies(o);
                     generated.add(u2b(type));
                     continue;
-                } else if (type.equals("com.sun.star.frame.XDispatch")) {
+                } else if (type == "com.sun.star.frame.XDispatch") {
                     generateXDispatchBodies(o, options);
                     generated.add(u2b(type));
                     continue;
-                } else if (type.equals("com.sun.star.frame.XDispatchProvider")) {
+                } else if (type == "com.sun.star.frame.XDispatchProvider") {
                     generateXDispatchProviderBodies(o, options);
                     generated.add(u2b(type));
                     continue;
@@ -712,7 +712,7 @@ void generateClassDefinition(std::ostream& o,
     o << "\n\npublic final class " << classname << " extends ";
 
     if (!interfaces.empty()) {
-        if (propertyhelper.equals("_")) {
+        if (propertyhelper == "_") {
                 o << "PropertySet\n";
         } else {
             if (supportxcomponent)
@@ -791,7 +791,7 @@ void generateClassDefinition(std::ostream& o,
     } else {
         o << "\n    public " << classname << "( XComponentContext context )\n"
             "    {\n        m_xContext = context;\n";
-        if (propertyhelper.equals("_")) {
+        if (propertyhelper == "_") {
             registerProperties(o, properties, "        ");
         } else {
             if (propertyhelper.getLength() > 1) {

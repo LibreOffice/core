@@ -51,7 +51,7 @@ void generateIncludes(std::ostream & o,
     }
 
     if (propertyhelper.getLength() > 1) {
-        if (propertyhelper.equals("_"))
+        if (propertyhelper == "_")
             o << "#include \"cppuhelper/rpopshlp.hxx\"\n";
         else
             o << "#include \"cppuhelper/propertysetmixin.hxx\"\n";
@@ -882,7 +882,7 @@ void generateMethodBodies(std::ostream& o,
     std::set< OUString >::const_iterator iter = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
     while (iter != interfaces.end()) {
-        if ( (*iter).equals("com.sun.star.lang.XServiceInfo") ) {
+        if ( *iter == "com.sun.star.lang.XServiceInfo" ) {
             generateXServiceInfoBodies(o, name, comphelpernamespace);
             generated.add(u2b(*iter));
         } else {
@@ -930,7 +930,7 @@ void generateQueryInterface(std::ostream& o,
     } else {
         o << "::queryInterface(type));\n";
         o << "    return a.hasValue() ? a\n        : (";
-        if (propertyhelper.equals("_")) {
+        if (propertyhelper == "_") {
             o << "::cppu::OPropertySetHelper::queryInterface(type));\n";
         } else {
             o << "::cppu::PropertySetMixin<\n            ";
@@ -1109,7 +1109,7 @@ void generateCalcAddin(ProgramOptions const & options,
     // get the one and only add-in service for later use
     std::set< OUString >::const_iterator iter2 = services.begin();
     sAddinService = *iter2;
-    if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
+    if (sAddinService == "com.sun.star.sheet.AddIn") {
         sAddinService = *(++iter2);
     }
 

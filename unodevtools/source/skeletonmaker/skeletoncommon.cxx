@@ -279,7 +279,7 @@ void checkDefaultInterfaces(
             interfaces.insert("com.sun.star.lang.XServiceInfo");
     }
 
-    if ( propertyhelper.equals("_") ) {
+    if ( propertyhelper == "_" ) {
         interfaces.erase("com.sun.star.beans.XPropertySet");
         interfaces.erase("com.sun.star.beans.XFastPropertySet");
         interfaces.erase("com.sun.star.beans.XPropertyAccess");
@@ -406,7 +406,7 @@ bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
 
     std::set< OUString >::const_iterator iter = interfaces.begin();
     while ( iter != interfaces.end() ) {
-        if ( (*iter).equals("com.sun.star.lang.XComponent") ) {
+        if ( *iter == "com.sun.star.lang.XComponent" ) {
             interfaces.erase("com.sun.star.lang.XComponent");
             return true;
         }
