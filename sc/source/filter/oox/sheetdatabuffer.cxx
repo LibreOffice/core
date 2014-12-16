@@ -197,18 +197,14 @@ void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rErrorCode )
 {
-    setErrorCell( rModel, getUnitConverter().calcBiffErrorCode( rErrorCode ) );
+    // Using the formula compiler now we can simply pass on the error string.
+    getFormulaBuffer().setCellFormula( rModel.maCellAddr, rErrorCode);
+    setCellFormat( rModel );
 }
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode )
 {
-    OUStringBuffer aBuf;
-    aBuf.append('{');
-    aBuf.append(BiffHelper::calcDoubleFromError(nErrorCode));
-    aBuf.append('}');
-
-    getFormulaBuffer().setCellFormula(rModel.maCellAddr, aBuf.makeStringAndClear());
-    setCellFormat( rModel );
+    setErrorCell( rModel, getUnitConverter().calcErrorString( nErrorCode));
 }
 
 void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDateString )
