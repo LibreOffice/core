@@ -3651,114 +3651,173 @@ CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(
     return DynamicKernel::create(rCode, rGroup.mnLength);
 }
 
-bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
-    const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
-    ScTokenArray& rCode )
+namespace {
+
+class CLInterpreterResult
+{
+    DynamicKernel* mpKernel;
+
+public:
+    CLInterpreterResult() : mpKernel(NULL) {}
+    CLInterpreterResult( DynamicKernel* pKernel ) : mpKernel(pKernel) {}
+
+    bool isValid() const { return mpKernel != NULL; }
+
+    bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos, SCROW nLength )
+    {
+        if (!isValid())
+            return false;
+
+        // Map results back
+        cl_mem res = mpKernel->GetResultBuffer();
+
+        // Obtain cl context
+        ::opencl::KernelEnv kEnv;
+        ::opencl::setKernelEnv(&kEnv);
+
+        cl_int err;
+        double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+            res,
+            CL_TRUE, CL_MAP_READ, 0,
+            nLength * sizeof(double), 0, NULL, NULL,
+            &err);
+
+        if (err != CL_SUCCESS)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err << " at " << __FILE__ << ":" << __LINE__);
+            return false;
+        }
+
+        rDoc.SetFormulaResults(rTopPos, resbuf, nLength);
+
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
+        if (err != CL_SUCCESS)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err << " at " << __FILE__ << ":" << __LINE__);
+            return false;
+        }
+
+        return true;
+    }
+};
+
+class CLInterpreterContext
+{
+    std::shared_ptr<DynamicKernel> mpKernelStore; /// for managed kernel instance.
+    DynamicKernel* mpKernel;
+
+public:
+
+    bool isValid() const
+    {
+        return mpKernel != NULL;
+    }
+
+    void setManagedKernel( DynamicKernel* pKernel )
+    {
+        mpKernelStore.reset(pKernel);
+        mpKernel = pKernel;
+    }
+
+    void setUnmanagedKernel( DynamicKernel* pKernel )
+    {
+        mpKernel = pKernel;
+    }
+
+    CLInterpreterResult launchKernel( SCROW nLength )
+    {
+        CLInterpreterResult aRes; // invalid by default.
+
+        if (!isValid())
+            return CLInterpreterResult();
+
+        try
+        {
+            // Run the kernel.
+            mpKernel->Launch(nLength);
+        }
+        catch (const UnhandledToken& ut)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
+            return CLInterpreterResult();
+        }
+        catch (const OpenCLError& oce)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << oce.mError << " at " << oce.mFile << ":" << oce.mLineNumber);
+            return CLInterpreterResult();
+        }
+        catch (const Unhandled& uh)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled case at " << uh.mFile << ":" << uh.mLineNumber);
+            return CLInterpreterResult();
+        }
+        catch (...)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
+            return CLInterpreterResult();
+        }
+
+        return CLInterpreterResult(mpKernel);
+    }
+};
+
+
+CLInterpreterContext createCLInterpreterContext(
+    ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode )
+{
+    CLInterpreterContext aCxt;
+
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
+    if (rGroup.meKernelState == sc::OpenCLKernelCompilationScheduled ||
+        rGroup.meKernelState == sc::OpenCLKernelBinaryCreated)
+    {
+        if (rGroup.meKernelState == sc::OpenCLKernelCompilationScheduled)
+        {
+            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.wait();
+            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.reset();
+        }
+
+        // Kernel instance is managed by the formula group.
+        aCxt.setUnmanagedKernel(static_cast<DynamicKernel*>(xGroup->mpCompiledFormula));
+    }
+    else
+    {
+        assert(xGroup->meCalcState == sc::GroupCalcRunning);
+        aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rCode, xGroup->mnLength)));
+    }
+#else
+    aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rCode, xGroup->mnLength)));
+#endif
+
+    return aCxt;
+}
+
+void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCode )
 {
     ScCompiler aComp(&rDoc, rTopPos, rCode);
     aComp.SetGrammar(rDoc.GetGrammar());
     // Disable special ordering for jump commands for the OpenCL interpreter.
     aComp.EnableJumpCommandReorder(false);
     aComp.CompileTokenArray(); // Regenerate RPN tokens.
+}
 
-    DynamicKernel* pKernel = NULL;
-    boost::scoped_ptr<DynamicKernel> pLocalKernel;
+}
 
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled ||
-        xGroup->meKernelState == sc::OpenCLKernelBinaryCreated)
-    {
-        if (xGroup->meKernelState == sc::OpenCLKernelCompilationScheduled)
-        {
-            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.wait();
-            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.reset();
-        }
+bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
+    const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
+    ScTokenArray& rCode )
+{
+    genRPNTokens(rDoc, rTopPos, rCode);
 
-        pKernel = static_cast<DynamicKernel*>(xGroup->mpCompiledFormula);
-    }
-    else
-    {
-        assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        pKernel = static_cast<DynamicKernel*>(createCompiledFormula(*xGroup, rCode));
-        pLocalKernel.reset(pKernel); // to be deleted when done.
-    }
-#else
-    pKernel = static_cast<DynamicKernel*>(createCompiledFormula(*xGroup, rCode));
-    pLocalKernel.reset(pKernel); // to be deleted when done.
-#endif
-
-    if (!pKernel)
+    CLInterpreterContext aCxt = createCLInterpreterContext(xGroup, rCode);
+    if (!aCxt.isValid())
         return false;
 
-    // Obtain cl context
-    ::opencl::KernelEnv kEnv;
-    ::opencl::setKernelEnv(&kEnv);
+    CLInterpreterResult aRes = aCxt.launchKernel(xGroup->mnLength);
+    if (!aRes.isValid())
+        return false;
 
-    try
-    {
-        // Run the kernel.
-        pKernel->Launch(xGroup->mnLength);
-    }
-    catch (const UnhandledToken& ut)
-    {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
-#ifdef NO_FALLBACK_TO_SWINTERP
-        assert(false);
-        return true;
-#else
-        return false;
-#endif
-    }
-    catch (const OpenCLError& oce)
-    {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << oce.mError << " at " << oce.mFile << ":" << oce.mLineNumber);
-#ifdef NO_FALLBACK_TO_SWINTERP
-        assert(false);
-        return true;
-#else
-        return false;
-#endif
-    }
-    catch (const Unhandled& uh)
-    {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled case at " << uh.mFile << ":" << uh.mLineNumber);
-#ifdef NO_FALLBACK_TO_SWINTERP
-        assert(false);
-        return true;
-#else
-        return false;
-#endif
-    }
-    catch (...)
-    {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
-#ifdef NO_FALLBACK_TO_SWINTERP
-        assert(false);
-        return true;
-#else
-        return false;
-#endif
-    }
-
-    // Map results back
-    cl_mem res = pKernel->GetResultBuffer();
-    cl_int err;
-    double* resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
-        res,
-        CL_TRUE, CL_MAP_READ, 0,
-        xGroup->mnLength * sizeof(double), 0, NULL, NULL,
-        &err);
-    if (err != CL_SUCCESS)
-        throw OpenCLError(err, __FILE__, __LINE__);
-    rDoc.SetFormulaResults(rTopPos, resbuf, xGroup->mnLength);
-    err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, res, resbuf, 0, NULL, NULL);
-    if (err != CL_SUCCESS)
-    {
-        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err << " at " << __FILE__ << ":" << __LINE__);
-        return false;
-    }
-
-    return true;
+    return aRes.pushResultToDocument(rDoc, rTopPos, xGroup->mnLength);
 }
 
 }} // namespace sc::opencl
