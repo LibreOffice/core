@@ -65,9 +65,6 @@ public:
     virtual void    PopupModeEnd() SAL_OVERRIDE;
     virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
-    virtual void    setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight,
-                                     sal_uInt16 nFlags = WINDOW_POSSIZE_ALL ) SAL_OVERRIDE;
 };
 
 ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
@@ -254,13 +251,6 @@ void ImplDockFloatWin2::Resize()
         Size aSize( GetSizePixel() );
         mpDockWin->GetWindow()->ImplPosSizeWindow( 0, 0, aSize.Width(), aSize.Height(), WINDOW_POSSIZE_POSSIZE ); // TODO: is this needed ???
     }
-}
-
-void ImplDockFloatWin2::setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight,
-                                     sal_uInt16 nFlags )
-{
-    FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 }
 
 void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
