@@ -31,7 +31,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//  Klassenhierarchie der View:
+//  class hierarchy of View:
 //         SfxListener
 //         SdrPaintView    PntV   Action            ModChg   Attr   Notify
 //         SdrSnapView     SnpV   Action
@@ -91,7 +91,7 @@ struct SVX_DLLPUBLIC SdrViewEvent
 {
     SdrHdl*                     pHdl;
     SdrObject*                  pObj;
-    SdrObject*                  pRootObj;        // Dieses Markieren bei SdrBeginTextEdit
+    SdrObject*                  pRootObj;        // mark this when SdrBeginTextEdit is executed
     SdrPageView*                pPV;
     const SvxURLField*          pURLField;
 
@@ -99,7 +99,7 @@ struct SVX_DLLPUBLIC SdrViewEvent
     SdrHitKind                  eHit;
     SdrEventKind                eEvent;
     SdrHdlKind                  eHdlKind;
-    SdrCreateCmd                eEndCreateCmd;   // auch fuer EndInsPoint
+    SdrCreateCmd                eEndCreateCmd;   // for EndInsPoint too
 
     sal_uInt16                  nMouseClicks;
     MouseEventModifiers         nMouseMode;
@@ -109,10 +109,10 @@ struct SVX_DLLPUBLIC SdrViewEvent
 
     bool                        bMouseDown : 1;
     bool                        bMouseUp : 1;
-    bool                        bDoubleHdlSize : 1;  // Doppelte Handlegroesse wg. TextEdit
-    bool                        bIsAction : 1;       // Action ist aktiv
-    bool                        bIsTextEdit : 1;     // TextEdit laeuft zur Zeit
-    bool                        bTextEditHit : 1;    // offene OutlinerView getroffen
+    bool                        bDoubleHdlSize : 1;  // Double Handlesize because of TextEdit
+    bool                        bIsAction : 1;       // Action is active
+    bool                        bIsTextEdit : 1;     // TextEdit runs currently
+    bool                        bTextEditHit : 1;    // hit open OutlinerView?
     bool                        bAddMark : 1;
     bool                        bUnmark : 1;
     bool                        bPrevNextMark : 1;
@@ -126,7 +126,7 @@ public:
     SdrViewEvent();
     ~SdrViewEvent();
 
-    // nEventKind ist SDRMOUSEBUTTONDOWN, SDRMOUSEMOVE oder SDRMOUSEBUTTONUP
+    // nEventKind is SDRMOUSEBUTTONDOWN, SDRMOUSEMOVE oder SDRMOUSEBUTTONUP
     void SetMouseEvent(const MouseEvent& rMEvt, sal_uInt16 nEventKind);
 };
 
@@ -169,10 +169,10 @@ public:
     explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
     virtual ~SdrView();
 
-    // Default sind alle Dispatcher aktiviert. Will die App z.B. fuer
-    // Sonderbehandlungen im MouseDispatcher eingreifen, so muss sie
-    // den erweiterten MouseDispather mit unten stehender Methode deaktivieren
-    // und selbst nachimplementieren. Beispiel fuer MouseButtonDown:
+    // The default value for all dispatchers is activated. If the app for example
+    // wants to intervene in MouseDispatcher for special treatment, you have to
+    // deactivate the MouseDispatcher with the help of the methode below and you have
+    // to implement it yourself. Example for MouseButtonDown:
     //      SdrViewEvent aVEvt;
     //      SdrHitKind eHit=pSdrView->PickAnything(rMEvt,SDRMOUSEBUTTONDOWN,aVEvt);
     //      ... hier Applikationsspezifischer Eingriff ...
@@ -210,19 +210,19 @@ public:
 
     SfxStyleSheet* GetStyleSheet() const;
 
-    // unvollstaendige Implementation:
-    // Das OutputDevice ist notwendig, damit ich die HandleSize ermitteln kann.
-    // Bei NULL wird das 1. angemeldete Win verwendet.
+    // incomplete implementation:
+    // OutputDevice is necessary to determine HandleSize.
+    // If NULL the first signed on Win is used.
     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nModifier=0, bool bLeftDown=false) const;
     SdrHitKind PickAnything(const MouseEvent& rMEvt, sal_uInt16 nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
     bool DoMouseEvent(const SdrViewEvent& rVEvt);
     virtual SdrViewContext GetContext() const;
 
-    // Die Methoden beruecksichtigen den jeweiligen Kontex:
-    // - Einfaches Zeichnen
-    // - Punktbearbeitungs-Mode
-    // - Klebepunkt-Editmode
+    // The methods consider the particular context:
+    // - simple drawing
+    // - mode for editing points
+    // - mode for editing glue points
     // - TextEdit
     // - ... to be continued
     void MarkAll();
@@ -232,19 +232,19 @@ public:
 
     virtual void DeleteMarked();
 
-    // Markieren von Objekten, Polygonpunkten oder Klebepunkten (je nach View-
-    // Kontext) durch Aufziehen eines Selektionsrahmens.
-    //   bAddMark=TRUE: zur bestehenden Selektion hinzumarkieren (->Shift)
-    //   bUnmark=TRUE: Bereits selektierte Objekte/Punkte/Klebepunkte die innerhalb
-    //                 des aufgezogenen Rahmens liegen werden deselektiert.
+    // Marking objects, traverse stations or glue points (depending on view-
+    // context) by enveloping the selection frame.
+    //   bAddMark=TRUE: add to existing selection (->Shift)
+    //   bUnmark=TRUE: remove objects from selection which are inside of
+    //                 the enveloped frame.
     bool BegMark(const Point& rPnt, bool bAddMark=false, bool bUnmark=false);
 
-    // Folgende Actions sind moeglich:
+    // The following actions are possible:
     //   - ObjectCreating
     //   - ObjectMarking
     //   - Object-specific dragging
     //   - General dragging
-    // und mehr...
+    // and more...
     OUString GetStatusText();
 
     SvtAccessibilityOptions& getAccessibilityOptions() { return maAccessibilityOptions;}
@@ -254,21 +254,20 @@ public:
 
 #endif // INCLUDED_SVX_SVDVIEW_HXX
 
-// Die App macht sich zunaechst ein SdrModel.
-// Anschliessend oeffnet sie ein Win und erzeugt dann eine SdrView.
-// An der SdrView meldet sie dann mit der Methode ShowSdrPage() eine Seite an.
-// Eine SdrView kann in beliebig vielen Fenstern gleichzeitig angezeigt werden.
-// Intern:
-// Eine SdrView kann beliebig viele Seiten gleichzeitig anzeigen. Seiten
-// werden an- und abgemeldet mit ShowSdrPage()/HideSdrPage(). Fuer jede angemeldete
-// Seite wird eine SdrPageView-Instanz im Container aPages angelegt. Bei
-// gleichzeitiger Anzeige mehrerer Seiten ist darauf zu achten, dass der Offset-
-// Parameter von ShowSdrPage() der Seitengroesse angepasst ist, da sich sonst die
-// Seiten ueberlappen koennten.
+// First of all the app creates a SdrModel.
+// Then it opens a Win and creates a SdrView.
+// ShowSdrPage() announces a page at SdrView.
+// It's possible to show SdrView in any Wins at once.
+// internal:
+// SdrView can show as many Wins as it wants at once. Pages are announced
+// or checked out with the help of ShowSdrPage()/HideSdrPage(). For every announced
+// page there is a SdrPageView instance in container aPages. If more than one page
+// is showed, you have to pay attention that the offset parameter of ShowSdrPage()
+// is conformed to the size of the page (to prevent overlapping of two pages).
 //
-// Elementare Methoden:
+// elementary methods:
 // ~~~~~~~~~~~~~~~~~~~~
-//   Einfache Events:
+//   simple events:
 //   ~~~~~~~~~~~~~~~~
 //     sal_Bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
 //     sal_Bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin);
@@ -289,7 +288,7 @@ public:
 //     SfxStyleSheet* GetStyleSheet() const;
 //     sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
 //
-//   Sonstiges:
+//   others:
 //   ~~~~~~~~~~
 //     Pointer GetPreferredPointer(const Point& rMousePos, const OutputDevice* pOut, sal_uInt16 nTol=0) const;
 //     OUString GetStatusText();
