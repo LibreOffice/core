@@ -19,7 +19,6 @@
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.text.Document;
 
 class TextLogger
     extends JEditorPane
@@ -52,11 +51,9 @@ class TextLogger
     {
         try
         {
-            maDocument.insertString (maDocument.getLength(), sText, null);
+            getDocument().insertString (getDocument().getLength(), sText, null);
         }
         catch (javax.swing.text.BadLocationException e)
         {}
     }
-
-    private Document maDocument;
 }
