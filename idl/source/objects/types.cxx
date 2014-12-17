@@ -92,15 +92,8 @@ bool SvMetaAttribute::GetAutomation() const
 
 bool SvMetaAttribute::GetIsCollection() const
 {
-    bool bRet;
     if( aIsCollection.IsSet() || !GetRef() )
     {
-        if ( aIsCollection.IsSet() )
-        {
-            bRet = aIsCollection;
-            return bRet;
-        }
-
         return aIsCollection;
     }
 
