@@ -1,0 +1,7 @@
+
+const sal_Int32 XML_TOKEN_INVALID = css::xml::sax::FastToken::DONTKNOW;
+
+} // namespace xmloff
+
+#endif
+

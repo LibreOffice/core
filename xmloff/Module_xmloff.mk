@@ -20,6 +20,7 @@
 $(eval $(call gb_Module_Module,xmloff))
 
 $(eval $(call gb_Module_add_targets,xmloff,\
+	CustomTarget_generated \
     Library_xo \
     Library_xof \
     Package_dtd \

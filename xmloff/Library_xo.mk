@@ -36,6 +36,7 @@ $(eval $(call gb_Library_use_external,xo,boost_headers))
 
 $(eval $(call gb_Library_use_custom_headers,xo,\
 	officecfg/registry \
+	xmloff/generated \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,xo))
@@ -90,6 +91,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/DocumentSettingsContext \
     xmloff/source/core/DomBuilderContext \
     xmloff/source/core/DomExport \
+	xmloff/source/core/fasttokenhandler \
     xmloff/source/core/ProgressBarHelper \
     xmloff/source/core/PropertySetMerger \
     xmloff/source/core/RDFaExportHelper \
