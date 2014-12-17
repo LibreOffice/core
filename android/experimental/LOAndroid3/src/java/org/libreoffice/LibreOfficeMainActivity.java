@@ -218,6 +218,15 @@ public class LibreOfficeMainActivity extends Activity {
             }
         });
 
+        builder.setNeutralButton(R.string.about_moreinfo, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                LOKitShell.sendEvent(LOEventFactory.close());
+                LOKitShell.sendEvent(LOEventFactory.load(DEFAULT_DOC_PATH));
+                dialog.dismiss();
+            }
+        });
+
         AlertDialog dialog = builder.create();
         dialog.show();
     }
