@@ -47,24 +47,4 @@ void ByteBufferWrapper::operator()(sal_uInt8 * /* p */)
     get_env()->DeleteGlobalRef(object);
 }
 
-extern "C"
-__attribute__ ((visibility("default")))
-jlong
-Java_org_libreoffice_android_Bootstrap_new_1byte_1buffer_1wrapper(JNIEnv *env,
-                                                                  jobject /* clazz */,
-                                                                  jobject bytebuffer)
-{
-  return (jlong) (intptr_t) new ByteBufferWrapper(env, bytebuffer);
-}
-
-extern "C"
-__attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_Bootstrap_delete_1byte_1buffer_1wrapper(JNIEnv * /* env */,
-                                                                     jobject /* clazz */,
-                                                                     jlong bbw)
-{
-  delete (ByteBufferWrapper*) (intptr_t) bbw;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
