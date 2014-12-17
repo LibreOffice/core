@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 import test.lib.TestBed;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.comp.helper.Bootstrap;
