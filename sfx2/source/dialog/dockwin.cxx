@@ -866,7 +866,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     {
         SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
         SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
-        const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
+        const SfxSlot* pSlot = pCW ? pSlotPool->GetSlot( pCW->GetType() ) : NULL;
         if ( pSlot )
         {
             OString aCmd("SFXDOCKINGWINDOW_");
@@ -917,7 +917,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     {
         SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
         SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
-        const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
+        const SfxSlot* pSlot = pCW ? pSlotPool->GetSlot( pCW->GetType() ) : NULL;
         if ( pSlot )
         {
             OString aCmd("SFXDOCKINGWINDOW_");
@@ -965,7 +965,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     {
         SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
         SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
-        const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
+        const SfxSlot* pSlot = pCW ? pSlotPool->GetSlot( pCW->GetType() ) : NULL;
         if ( pSlot )
         {
             OString aCmd("SFXDOCKINGWINDOW_");
