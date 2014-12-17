@@ -88,7 +88,6 @@ public class FormHandler
     private XNameAccess xNamedForms;
     XControlAccess xControlAccess;
     XShapeGrouper xShapeGrouper;
-    private XNameContainer xNamedFormContainer;
 
     public static class ControlData
     {
@@ -224,7 +223,7 @@ public class FormHandler
 
     private boolean hasFormByName(String _FormName)
     {
-        xNamedFormContainer = getDocumentForms();
+        XNameContainer xNamedFormContainer = getDocumentForms();
         xNamedForms = UnoRuntime.queryInterface(XNameAccess.class, xNamedFormContainer);
         return xNamedForms.hasByName(_FormName);
     }

@@ -38,11 +38,8 @@ public abstract class ControlScroller
     protected int iCompPosY;
     protected int iCompWidth;
     protected int iCompHeight;
-    private int iStartPosY;
     protected short curtabindex;
-    private int iStep;
     protected Integer IStep;
-    private int linedistance;
     int iScrollBarWidth = 10;
     private int SORELFIRSTPOSY = 3;
     protected int curHelpIndex;
@@ -77,16 +74,14 @@ public abstract class ControlScroller
     {
         this.nblockincrement = _nblockincrement;
         this.CurUnoDialog = _CurUnoDialog;
-        this.iStep = _iStep;
         this.curHelpIndex = _firsthelpindex;
-        curtabindex = UnoDialog.setInitialTabindex(iStep);
-        this.linedistance = _nlinedistance;
-        IStep = Integer.valueOf(iStep);
+        curtabindex = UnoDialog.setInitialTabindex(_iStep);
+        IStep = Integer.valueOf(_iStep);
         this.iCompPosX = _iCompPosX;
         this.iCompPosY = _iCompPosY;
         this.iCompWidth = _iCompWidth;
-        this.iCompHeight = 2 * SORELFIRSTPOSY + nblockincrement * linedistance;
-        iStartPosY = iCompPosY + SORELFIRSTPOSY;
+        this.iCompHeight = 2 * SORELFIRSTPOSY + nblockincrement * _nlinedistance;
+        int iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;
         nlineincrement = 1;
         sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "TitleScrollBar");
@@ -105,7 +100,7 @@ public abstract class ControlScroller
         for (int i = 0; i < nblockincrement; i++)
         {
             insertControlGroup(i, ypos);
-            ypos += linedistance;
+            ypos += _nlinedistance;
         }
     }
 

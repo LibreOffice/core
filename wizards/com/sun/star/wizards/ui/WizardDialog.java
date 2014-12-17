@@ -51,7 +51,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private int nNewStep = 1;
     private int nOldStep = 1;
     private int nMaxStep = 1;
-    private XItemEventBroadcaster xRoadmapBroadcaster;
     private String[] sRMItemLabels;
     private Object oRoadmap;
     private XSingleServiceFactory xSSFRoadmap;
@@ -221,7 +220,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             xIndexContRoadmap = UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
 
             XControl xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
-            xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
+            XItemEventBroadcaster xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
             xRoadmapBroadcaster.addItemListener(new XItemListenerAdapter() {
                 public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
                     try

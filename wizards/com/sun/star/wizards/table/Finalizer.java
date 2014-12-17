@@ -33,7 +33,6 @@ public class Finalizer
 {
 
     private TableWizard CurUnoDialog;
-    private short curtabindex;
     private XRadioButton optModifyTable;
     private XRadioButton optWorkWithTable;
     private XTextComponent txtTableName;
@@ -50,7 +49,7 @@ public class Finalizer
         {
             this.CurUnoDialog = _CurUnoDialog;
             this.curtabledescriptor = _curtabledescriptor;
-            curtabindex = (short) (TableWizard.SOFINALPAGE * 100);
+            short curtabindex = (short) (TableWizard.SOFINALPAGE * 100);
             Integer IFINALSTEP = Integer.valueOf(TableWizard.SOFINALPAGE);
             String slblTableName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 34);
             String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 36);

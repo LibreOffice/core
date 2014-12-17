@@ -38,7 +38,6 @@ public class ReportFinalizer
     private WizardDialog CurUnoDialog;
     private XTextComponent xTitleTextBox;
     private String StoreName;
-    private String DefaultName;
     private String OldDefaultName;
     private IReportDocument CurReportDocument;
     public static final int SOCREATEDOCUMENT = 1;
@@ -189,7 +188,7 @@ public class ReportFinalizer
     public void initialize(RecordParser _CurDBMetaData)
     {
         String FirstCommandName = (_CurDBMetaData.getIncludedCommandNames())[0];
-        DefaultName = Desktop.getUniqueName(_CurDBMetaData.getReportDocuments(), FirstCommandName);
+        String DefaultName = Desktop.getUniqueName(_CurDBMetaData.getReportDocuments(), FirstCommandName);
         if (!DefaultName.equals(OldDefaultName))
         {
             OldDefaultName = DefaultName;

@@ -52,7 +52,6 @@ public class AggregateComponent extends ControlScroller
     private static final int SOADDROW = 1;
     private static final int SOREMOVEROW = 2;
     private ArrayList<ControlRow> ControlRowVector;
-    private int curHelpID;
     private int lastHelpIndex;
 
     /** Creates a new instance of AggrgateComponent */
@@ -61,7 +60,6 @@ public class AggregateComponent extends ControlScroller
         super(_CurUnoDialog, _iStep, _iPosX + 10, _iPosY, _iWidth - 12, _uitextfieldcount, 18, _firstHelpID + 2);
         try
         {
-            curHelpID = _firstHelpID;
             this.CurDBMetaData = _CurDBMetaData;
             Count = 1;
             CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
@@ -71,7 +69,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        8, HelpIds.getHelpIdString(curHelpID), soptDetailQuery, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 42), Short.valueOf((short) 1), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
+                        8, HelpIds.getHelpIdString(_firstHelpID), soptDetailQuery, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 42), Short.valueOf((short) 1), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
                     });
 
             CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
@@ -81,7 +79,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        16, HelpIds.getHelpIdString(curHelpID + 1), soptSummaryQuery, Boolean.TRUE, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 32), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
+                        16, HelpIds.getHelpIdString(_firstHelpID + 1), soptSummaryQuery, Boolean.TRUE, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 32), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
                     });
             CurUnoDialog.insertLabel("lblAggregate",
                     new String[]

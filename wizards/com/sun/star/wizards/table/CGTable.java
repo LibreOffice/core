@@ -28,7 +28,6 @@ public class CGTable
 
     private XMultiServiceFactory xMSF;
     XNameAccess xNameAccessFieldsNode;
-    private XNameAccess xNameAccessTableNode;
 
     public CGTable(XMultiServiceFactory _xMSF)
     {
@@ -39,7 +38,7 @@ public class CGTable
     {
         try
         {
-            xNameAccessTableNode = Configuration.getChildNodebyIndex(_xNameAccessParentNode, _index);
+            XNameAccess xNameAccessTableNode = Configuration.getChildNodebyIndex(_xNameAccessParentNode, _index);
             xNameAccessFieldsNode = Configuration.getChildNodebyName(xNameAccessTableNode, "Fields");
         }
         catch (Exception e)

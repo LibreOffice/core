@@ -33,10 +33,8 @@ public class DatabaseDocument
 {
     protected DatabaseDocument( final DataSource _dataSource )
     {
-        m_dataSource = _dataSource;
-
         XDocumentDataSource docDataSource = UnoRuntime.queryInterface(
-            XDocumentDataSource.class, m_dataSource.getDataSource() );
+            XDocumentDataSource.class, _dataSource.getDataSource() );
         m_databaseDocument = UnoRuntime.queryInterface(XOfficeDatabaseDocument.class,
             docDataSource.getDatabaseDocument() );
 
@@ -67,7 +65,6 @@ public class DatabaseDocument
         m_storeDoc.storeAsURL( _url, new PropertyValue[] { } );
     }
 
-    private final DataSource              m_dataSource;
     private final XOfficeDatabaseDocument m_databaseDocument;
     private final XModel                  m_model;
     private final XStorable               m_storeDoc;

@@ -27,22 +27,16 @@ import com.sun.star.uno.UnoRuntime;
 public class Resource
 {
 
-    private XMultiServiceFactory xMSF;
-    private String Module;
     private XIndexAccess xStringIndexAccess;
-    private XIndexAccess xStringListIndexAccess;
 
     /** Creates a new instance of Resource
      */
     public Resource(XMultiServiceFactory _xMSF, String _Module)
     {
-        this.xMSF = _xMSF;
-        this.Module = _Module;
         try
         {
-            Object[] aArgs = new Object[1];
-            aArgs[0] = this.Module;
-            XInterface xResource = (XInterface) xMSF.createInstanceWithArguments(
+            Object[] aArgs = new Object[] { _Module };
+            XInterface xResource = (XInterface) _xMSF.createInstanceWithArguments(
                 "org.libreoffice.resource.ResourceIndexAccess",
                 aArgs);
             if (xResource == null)
@@ -55,10 +49,10 @@ public class Resource
             this.xStringIndexAccess = UnoRuntime.queryInterface(
                 XIndexAccess.class,
                 xNameAccess.getByName("String"));
-            this.xStringListIndexAccess = UnoRuntime.queryInterface(
+            XIndexAccess xStringListIndexAccess = UnoRuntime.queryInterface(
                 XIndexAccess.class,
                 xNameAccess.getByName("StringList"));
-            if(this.xStringListIndexAccess == null)
+            if(xStringListIndexAccess == null)
                 throw new Exception("could not initialize xStringListIndexAccess");
             if(this.xStringIndexAccess == null)
                 throw new Exception("could not initialize xStringIndexAccess");
@@ -66,7 +60,7 @@ public class Resource
         catch (Exception exception)
         {
             exception.printStackTrace();
-            showCommonResourceError(xMSF);
+            showCommonResourceError(_xMSF);
         }
     }
 

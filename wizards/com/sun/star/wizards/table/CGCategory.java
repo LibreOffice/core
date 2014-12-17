@@ -34,7 +34,6 @@ public class CGCategory
     private XMultiServiceFactory xMSF;
     XNameAccess xNameAccessTablesNode;
     private XNameAccess xNameAccessCurBusinessNode;
-    private Object oconfigView;
 
     public CGCategory(XMultiServiceFactory _xMSF)
     {
@@ -45,7 +44,7 @@ public class CGCategory
     {
         try
         {
-            oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
+            Object oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
             xNameAccessCurBusinessNode = Configuration.getChildNodebyName(
                 UnoRuntime.queryInterface(XNameAccess.class, oconfigView),
                 category);

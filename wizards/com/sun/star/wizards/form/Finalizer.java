@@ -34,7 +34,6 @@ public class Finalizer
 {
 
     private WizardDialog CurUnoDialog;
-    private short curtabindex;
     private XRadioButton optModifyForm;
     private XTextComponent txtFormName;
     private FormDocument oFormDocument;
@@ -42,7 +41,7 @@ public class Finalizer
     public Finalizer(WizardDialog _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
-        curtabindex = (short) (FormWizard.SOSTORE_PAGE * 100);
+        short curtabindex = (short) (FormWizard.SOSTORE_PAGE * 100);
 
         String slblFormName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 50);
         String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 51);

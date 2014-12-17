@@ -43,7 +43,6 @@ public class Control extends Shape
     private XControl xControl;
     public XPropertySet xPropertySet;
     XWindowPeer xWindowPeer;
-    private String sServiceName;
     private static final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
     private XNameContainer xFormName;
@@ -76,7 +75,7 @@ public class Control extends Shape
         try
         {
             icontroltype = _icontroltype;
-            sServiceName = oFormHandler.sModelServices[getControlType()];
+            String sServiceName = oFormHandler.sModelServices[getControlType()];
             Object oControlModel = oFormHandler.xMSFDoc.createInstance(sServiceName);
             xControlModel = UnoRuntime.queryInterface( XControlModel.class, oControlModel );
             xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oControlModel );

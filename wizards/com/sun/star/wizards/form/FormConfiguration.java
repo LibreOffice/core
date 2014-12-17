@@ -41,7 +41,6 @@ public class FormConfiguration
 {
 
     private WizardDialog CurUnoDialog;
-    private short curtabindex;
     private XRadioButton optOnExistingRelation;
     private XCheckBox chkcreateSubForm;
     private XRadioButton optSelectManually;
@@ -55,7 +54,7 @@ public class FormConfiguration
     public FormConfiguration(WizardDialog _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
-        curtabindex = (short) (FormWizard.SOSUBFORM_PAGE * 100);
+        short curtabindex = (short) (FormWizard.SOSUBFORM_PAGE * 100);
         Integer ISubFormStep = Integer.valueOf(FormWizard.SOSUBFORM_PAGE);
         String sOnExistingRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 5);
         String sOnManualRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 7);

@@ -34,9 +34,6 @@ public class QueryMetaData extends CommandMetaData
     public PropertyValue[][] GroupByFilterConditions = new PropertyValue[][]
     {
     };
-    private String[] UniqueAggregateFieldNames = new String[]
-    {
-    };
     public int Type = QueryType.SODETAILQUERY;
 
     public interface QueryType
@@ -212,9 +209,7 @@ public class QueryMetaData extends CommandMetaData
                 UniqueAggregateFieldVector.add(AggregateFieldNames[i][0]);
             }
         }
-        UniqueAggregateFieldNames = new String[UniqueAggregateFieldVector.size()];
-        UniqueAggregateFieldVector.toArray(UniqueAggregateFieldNames);
-        return UniqueAggregateFieldNames;
+        return UniqueAggregateFieldVector.toArray(new String[UniqueAggregateFieldVector.size()]);
     }
 
     public boolean hasNumericalFields()

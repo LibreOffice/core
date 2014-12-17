@@ -35,12 +35,10 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class GridControl extends Shape
 {
 
-    private FieldColumn[] fieldcolumns;
     public XNameContainer xNameContainer;
     public XGridColumnFactory xGridColumnFactory;
     public XPropertySet xPropertySet;
     XNameAccess xNameAccess;
-    private XControlModel xControlModel;
     public XComponent xComponent;
 
     public GridControl(XMultiServiceFactory _xMSF, String _sname, FormHandler _oFormHandler, XNameContainer _xFormName, FieldColumn[] _fieldcolumns, Point _aPoint, Size _aSize)
@@ -48,21 +46,20 @@ public class GridControl extends Shape
         super(_oFormHandler, _aPoint, _aSize);
         try
         {
-            fieldcolumns = _fieldcolumns;
             Object oGridModel = oFormHandler.xMSFDoc.createInstance(oFormHandler.sModelServices[FormHandler.SOGRIDCONTROL]);
             xNameContainer = UnoRuntime.queryInterface( XNameContainer.class, oGridModel );
             xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, oGridModel );
             _xFormName.insertByName(_sname, oGridModel);
-            xControlModel = UnoRuntime.queryInterface( XControlModel.class, oGridModel );
+            XControlModel xControlModel = UnoRuntime.queryInterface( XControlModel.class, oGridModel );
             xControlShape.setControl(xControlModel);
             xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, oGridModel );
             oFormHandler.xDrawPage.add(xShape);
             xGridColumnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, oGridModel );
             xComponent = UnoRuntime.queryInterface( XComponent.class, oGridModel );
 
-            for (int i = 0; i < fieldcolumns.length; i++)
+            for (int i = 0; i < _fieldcolumns.length; i++)
             {
-                FieldColumn curfieldcolumn = fieldcolumns[i];
+                FieldColumn curfieldcolumn = _fieldcolumns[i];
                 if (curfieldcolumn.getFieldType() == DataType.TIMESTAMP)
                 {
                     new TimeStampControl(new Resource(_xMSF, "dbw"), this, curfieldcolumn);

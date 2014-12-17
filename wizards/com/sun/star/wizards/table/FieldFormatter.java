@@ -46,7 +46,6 @@ public class FieldFormatter implements XItemListener
     private Object oColumnDescriptorModel;
     private XTextComponent txtfieldname;
     private XListBox xlstFieldNames;
-    private XButton btnplus;
     private XButton btnminus;
     private XButton btnShiftUp;
     private XButton btnShiftDown;
@@ -144,7 +143,7 @@ public class FieldFormatter implements XItemListener
                     oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", 118, 175, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
 
-        btnplus = CurUnoDialog.insertButton("btnplus", new XActionListenerAdapter() {
+        XButton btnplus = CurUnoDialog.insertButton("btnplus", new XActionListenerAdapter() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
                         addFieldName();

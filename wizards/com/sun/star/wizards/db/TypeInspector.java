@@ -45,7 +45,6 @@ public class TypeInspector
         DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
     };
     static final int INVALID = 999999;
-    private XResultSet xResultSet;
 
     public class TypeInfo
     {
@@ -61,7 +60,6 @@ public class TypeInspector
     {
         try
         {
-            xResultSet = _xResultSet;
             ArrayList<String> aTypeNameVector = new ArrayList<String>();
             ArrayList<Integer> aTypeVector = new ArrayList<Integer>();
             ArrayList<Integer> aNullableVector = new ArrayList<Integer>();
@@ -70,8 +68,8 @@ public class TypeInspector
             ArrayList<Integer> aMinScaleVector = new ArrayList<Integer>();
             ArrayList<Integer> aMaxScaleVector = new ArrayList<Integer>();
             ArrayList<Integer> aSearchableVector = new ArrayList<Integer>();
-            XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
-            while (xResultSet.next())
+            XRow xRow = UnoRuntime.queryInterface(XRow.class, _xResultSet);
+            while (_xResultSet.next())
             {
                 aTypeNameVector.add(xRow.getString(1));
                 aTypeVector.add(Integer.valueOf(xRow.getShort(2)));

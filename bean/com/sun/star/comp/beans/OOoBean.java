@@ -102,7 +102,9 @@ public class OOoBean
         Neither a connection is established nor any document loaded.
      */
     public OOoBean()
-    {}
+    {
+        setLayout(new java.awt.BorderLayout());
+    }
 
        // @requirement FUNC.CON.MULT/0.3
     /** Constructor for an OOoBean which uses a specific office connection.
@@ -120,6 +122,7 @@ public class OOoBean
     public OOoBean( OfficeConnection iConnection )
         throws NoConnectionException
     {
+        setLayout(new java.awt.BorderLayout());
         try { setOOoConnection( iConnection ); }
         catch ( HasConnectionException aExc )
         { /* impossible here */ }
@@ -1304,11 +1307,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
 
     // Helper Methods / Internal Methods
 
-
-    // general instance intializer
-    {
-        setLayout(new java.awt.BorderLayout());
-    }
 
     @Deprecated
     @Override
