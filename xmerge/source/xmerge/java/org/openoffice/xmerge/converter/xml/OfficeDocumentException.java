@@ -33,16 +33,22 @@ import org.openoffice.xmerge.util.Resources;
  */
 public final class OfficeDocumentException extends IOException {
 
-    private StringBuffer message = null;
-
    /**
     * Constructor, capturing additional information from the {@code SAXException}.
     *
     * @param  e  The {@code SAXException}.
     */
     public OfficeDocumentException(SAXException e) {
-        super(e.toString());
-        message = new StringBuffer();
+        super(constructMessage(e));
+        if (e.getException() != null) {
+            initCause(e.getException());
+        } else {
+            initCause(e);
+        }
+    }
+
+    private static String constructMessage(SAXException e) {
+        StringBuffer message = new StringBuffer();
         if (e instanceof SAXParseException) {
             String msgParseError =
                 Resources.getInstance().getString("PARSE_ERROR");
@@ -80,6 +86,7 @@ public final class OfficeDocumentException extends IOException {
         if (ex != null) {
             message.append(ex.getMessage());
         }
+        return message.toString();
     }
 
    /**
@@ -99,15 +106,7 @@ public final class OfficeDocumentException extends IOException {
     */
     public OfficeDocumentException(Exception e) {
         super(e.getMessage());
+        initCause(e);
     }
 
-   /**
-    * Returns the message value for the {@code Exception}.
-    *
-    * @return  The message value for the {@code Exception}.
-    */
-    @Override
-    public String getMessage() {
-        return message.toString() + super.getMessage();
-    }
 }
