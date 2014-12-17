@@ -24,7 +24,7 @@ import org.mozilla.gecko.gfx.LayerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibreOfficeMainActivity extends Activity {
+public class LibreOfficeMainActivity extends LOAbout {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
@@ -183,52 +183,6 @@ public class LibreOfficeMainActivity extends Activity {
 
     public DocumentPartViewListAdapter getDocumentPartViewListAdapter() {
         return mDocumentPartViewListAdapter;
-    }
-
-    private void showAbout() {
-        // Inflate the about message contents
-        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
-
-        // When linking text, force to always use default color. This works
-        // around a pressed color state bug.
-        TextView textView = (TextView) messageView.findViewById(R.id.about_credits);
-        int defaultColor = textView.getTextColors().getDefaultColor();
-        textView.setTextColor(defaultColor);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(R.drawable.lo_icon);
-        builder.setTitle(R.string.app_name);
-        builder.setView(messageView);
-
-        builder.setNegativeButton(R.string.about_license, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                LOKitShell.sendEvent(LOEventFactory.close());
-                LOKitShell.sendEvent(LOEventFactory.load("/assets/license.txt"));
-                dialog.dismiss();
-            }
-        });
-
-        builder.setPositiveButton(R.string.about_notice, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                LOKitShell.sendEvent(LOEventFactory.close());
-                LOKitShell.sendEvent(LOEventFactory.load("/assets/notice.txt"));
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNeutralButton(R.string.about_moreinfo, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                LOKitShell.sendEvent(LOEventFactory.close());
-                LOKitShell.sendEvent(LOEventFactory.load(DEFAULT_DOC_PATH));
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     public void showProgressSpinner() {
