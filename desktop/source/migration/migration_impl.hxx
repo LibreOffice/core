@@ -116,13 +116,15 @@ struct MigrationItem
 
     bool operator==(const MigrationItem& aMigrationItem)
     {
-        return ( aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
-            aMigrationItem.m_sPrevSibling    == m_sPrevSibling     &&
-            aMigrationItem.m_sCommandURL     == m_sCommandURL      &&
-            aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
-    }
+        bool equal = aMigrationItem.m_sCommandURL == m_sCommandURL;
+        bool match = m_sCommandURL.match(".uno:OpenFrom") && m_sCommandURL.match(aMigrationItem.m_sCommandURL);
+        equal     ^= match;
 
-    OUString GetPrevSibling() const { return m_sPrevSibling; }
+        return (equal  &&
+            aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
+            aMigrationItem.m_sPrevSibling    == m_sPrevSibling    &&
+            aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is() );
+    }
 };
 
 typedef std::unordered_map< OUString, std::vector< MigrationItem >,
