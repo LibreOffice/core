@@ -38,6 +38,8 @@ $(eval $(call gb_CppunitTest_use_ure,configmgr_unit))
 
 $(eval $(call gb_CppunitTest_use_configuration,configmgr_unit))
 
+$(eval $(call gb_CppunitTest_use_unittest_configuration,configmgr_unit))
+
 $(eval $(call gb_CppunitTest_use_components,configmgr_unit,\
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \

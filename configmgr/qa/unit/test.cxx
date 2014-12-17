@@ -109,7 +109,7 @@ public:
     CPPUNIT_TEST(testKeyReset);
     CPPUNIT_TEST(testSetSetMemberName);
     CPPUNIT_TEST(testReadCommands);
-    CPPUNIT_TEST(testThreads);
+   /* CPPUNIT_TEST(testThreads);*/
     CPPUNIT_TEST(testRecursive);
     CPPUNIT_TEST(testCrossThreads);
     CPPUNIT_TEST_SUITE_END();
@@ -215,6 +215,7 @@ bool WriterThread::iteration() {
         OUString("chips"),
         OUString("kippers"),
         OUString("bloaters") };
+
     test_.setKey(path_, name_, css::uno::makeAny(options[index_]));
     index_ = (index_ + 1) % (sizeof options / sizeof (OUString));
     return true;
@@ -257,8 +258,8 @@ void RecursiveTest::test()
 {
     properties_ = css::uno::Reference< css::beans::XPropertySet >(
         test_.createUpdateAccess(
-            OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                     "dotuno:WebHtml")),
+            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                     ".uno:WebHtml")),
         css::uno::UNO_QUERY_THROW);
     properties_->addPropertyChangeListener(
         OUString("Label"), this);
@@ -306,8 +307,8 @@ SimpleRecursiveTest::SimpleRecursiveTest(
 void SimpleRecursiveTest::step() const
 {
     test_.setKey(
-        OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                 "dotuno:WebHtml"),
+        OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
+                 ".uno:WebHtml"),
         OUString("Label"),
         css::uno::makeAny(OUString("step")));
 }
@@ -327,44 +328,44 @@ void Test::testKeyFetch()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.Setup"),
-            OUString("L10N/ooLocale")) >>=
+            OUString("/org.openoffice.System"),
+            OUString("L10N/Locale")) >>=
         s);
-    CPPUNIT_ASSERT(
-        getKey(
-            OUString("/org.openoffice.Setup"),
-            OUString("Test/AString")) >>=
-        s);
+/*    CPPUNIT_ASSERT(
+         getKey(
+             OUString("/org.openoffice.Setup"),
+             OUString("Test/AString")) >>=
+        s);*/
 }
 
 void Test::testKeySet()
 {
     setKey(
-        OUString("/org.openoffice.Setup/Test"),
-        OUString("AString"),
-        css::uno::makeAny(OUString("baa")));
+        OUString("/org.openoffice.System/L10N"),
+        OUString("Locale"),
+        css::uno::makeAny(OUString("com.sun.star.configuration.backend.LocaleBackend UILocale")));
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.Setup/Test"),
-            OUString("AString")) >>=
+            OUString("/org.openoffice.System/L10N"),
+            OUString("Locale")) >>=
         s);
-    CPPUNIT_ASSERT( s == "baa" );
+    CPPUNIT_ASSERT( s == "com.sun.star.configuration.backend.LocaleBackend UILocale" );
 }
 
 void Test::testKeyReset()
 {
     if (resetKey(
-            OUString("/org.openoffice.Setup/Test"),
-            OUString("AString")))
+            OUString("/org.openoffice.System/L10N"),
+            OUString("Locale")))
     {
         OUString s;
         CPPUNIT_ASSERT(
             getKey(
-                OUString("/org.openoffice.Setup/Test"),
-                OUString("AString")) >>=
+                OUString("/org.openoffice.System/L10N"),
+                OUString("Locale")) >>=
             s);
-        CPPUNIT_ASSERT( s == "Foo" );
+        CPPUNIT_ASSERT( s == "com.sun.star.configuration.backend.LocaleBackend Locale" );
     }
 }
 
@@ -373,7 +374,7 @@ void Test::testSetSetMemberName()
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
                      ".uno:FontworkShapeType"),
             OUString("Label")) >>=
         s);
@@ -381,7 +382,7 @@ void Test::testSetSetMemberName()
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
-            OUString("/org.openoffice.UI.GenericCommands/UserInterface/"
+            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/"
                      "Commands")),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
@@ -398,23 +399,24 @@ void Test::testSetSetMemberName()
 
     CPPUNIT_ASSERT(
         getKey(
-            OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
+            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
                     ".uno:FontworkShapeType"),
             OUString("Label")) >>=
         s);
-    CPPUNIT_ASSERT( s == "Fontwork Gallery" );
+    CPPUNIT_ASSERT( s == "Fontwork Gallery..." );
 }
 
 void Test::testReadCommands()
 {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
-            OUString("/org.openoffice.UI.GenericCommands/UserInterface/"
+            OUString("/org.openoffice.Office.UI.GenericCommands/UserInterface/"
                      "Commands")),
         css::uno::UNO_QUERY_THROW);
     css::uno::Sequence< OUString > names(access->getElementNames());
-    CPPUNIT_ASSERT(names.getLength() == 695);
-        // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
+
+    CPPUNIT_ASSERT(names.getLength() == 749);
+    // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
     sal_uInt32 n = osl_getGlobalTimer();
     for (int i = 0; i < 8; ++i) {
         for (sal_Int32 j = 0; j < names.getLength(); ++j) {
@@ -440,26 +442,20 @@ void Test::testThreads()
 {
     struct Entry { OUString path; OUString relative; };
     Entry list[] = {
-        { OUString("/org.openoffice.Setup"),
-          OUString("Test/AString") },
-        { OUString("/org.openoffice.Setup"),
-          OUString("Test/AString") },
         { OUString(
-                  "/org.openoffice.UI.GenericCommands"),
+                  "/org.openoffice.Office.UI.GenericCommands"),
           OUString(
-                  "UserInterface/Commands/dotuno:WebHtml/Label") },
+                  "UserInterface/Commands/.uno:WebHtml") },
         { OUString(
-                  "/org.openoffice.UI.GenericCommands"),
+                  "/org.openoffice.Office.UI.GenericCommands"),
           OUString(
-                  "UserInterface/Commands/dotuno:NewPresentation/Label") },
+                  "UserInterface/Commands/.uno:NewPresentation") },
         { OUString(
-                  "/org.openoffice.UI.GenericCommands"),
+                  "/org.openoffice.Office.UI.GenericCommands"),
           OUString(
-                  "UserInterface/Commands/dotuno:RecentFileList/Label") },
-        { OUString("/org.openoffice.Setup"),
-          OUString("L10N/ooLocale") },
-        { OUString("/org.openoffice.Setup"),
-          OUString("Test/ABoolean") }
+                  "UserInterface/Commands/.uno:RecentFileList") },
+        { OUString("/org.openoffice.System"),
+          OUString("L10N/Locale") }
     };
     std::size_t const numReaders = sizeof list / sizeof (Entry);
     std::size_t const numWriters = numReaders - 2;
@@ -488,14 +484,15 @@ void Test::testThreads()
     bool success = true;
     for (std::size_t i = 0; i < numReaders; ++i) {
         readers[i]->join();
-        success = success && readers[i]->getSuccess();
+        CPPUNIT_ASSERT(readers[i]->getSuccess());
         delete readers[i];
     }
     for (std::size_t i = 0; i < numWriters; ++i) {
         writers[i]->join();
-        success = success && writers[i]->getSuccess();
+        CPPUNIT_ASSERT(writers[i]->getSuccess());
         delete writers[i];
     }
+
     CPPUNIT_ASSERT(success);
 }
 
