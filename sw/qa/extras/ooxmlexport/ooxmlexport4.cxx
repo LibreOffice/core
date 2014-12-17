@@ -589,7 +589,12 @@ DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date", "fullDate", "2014-03-05T00:00:00Z");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dddd, dd' de 'MMMM' de 'yyyy");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:lid", "val", "es-ES");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", "miércoles, 05 de marzo de 2014");
+    static sal_Unicode const Broken[] = {
+        'm', 'i', static_cast<sal_Unicode>('\xC3'),
+        static_cast<sal_Unicode>('\xA9'), 'r', 'c', 'o', 'l', 'e', 's', ',',
+        ' ', '0', '5', ' ', 'd', 'e', ' ', 'm', 'a', 'r', 'z', 'o', ' ', 'd',
+        'e', ' ', '2', '0', '1', '4' };
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", OUString(Broken, SAL_N_ELEMENTS(Broken)));
 
     // check imported control
     uno::Reference<drawing::XControlShape> xControl(getShape(1), uno::UNO_QUERY);
