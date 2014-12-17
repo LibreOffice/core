@@ -25,11 +25,17 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 // predeclarations
 class CanvasSettings;
 class SvtOptionsDrawinglayer;
 namespace vcl {
 class IconThemeInfo;
+}
+
+namespace svt {
+    class OpenGLCfg;
 }
 
 // class OfaMiscTabPage --------------------------------------------------
@@ -113,6 +119,7 @@ private:
     SvtTabAppearanceCfg*    pAppearanceCfg;
     CanvasSettings*         pCanvasSettings;
     SvtOptionsDrawinglayer* mpDrawinglayerOpt;
+    boost::scoped_ptr<svt::OpenGLCfg> mpOpenGLConfig;
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 

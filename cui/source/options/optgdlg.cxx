@@ -69,6 +69,7 @@
 #include <unotools/searchopt.hxx>
 #include <sal/macros.h>
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/configuration.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -102,6 +103,81 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
+
+namespace svt {
+
+class OpenGLCfg
+{
+private:
+    bool mbUseOpenGL;
+    bool mbForceOpenGL;
+    bool mbModified;
+
+public:
+    OpenGLCfg();
+    ~OpenGLCfg();
+
+    bool useOpenGL() const;
+    bool forceOpenGL() const;
+
+    void setUseOpenGL(bool bOpenGL);
+    void setForceOpenGL(bool bOpenGL);
+
+    void reset();
+};
+
+OpenGLCfg::OpenGLCfg():
+    mbModified(false)
+{
+    reset();
+}
+
+void OpenGLCfg::reset()
+{
+    mbUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
+    mbForceOpenGL = officecfg::Office::Common::VCL::ForceOpenGL::get();
+}
+
+OpenGLCfg::~OpenGLCfg()
+{
+    if (mbModified)
+    {
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+        officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
+        officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
+
+    }
+}
+
+bool OpenGLCfg::useOpenGL() const
+{
+    return mbUseOpenGL;
+}
+
+bool OpenGLCfg::forceOpenGL() const
+{
+    return mbForceOpenGL;
+}
+
+void OpenGLCfg::setUseOpenGL(bool bOpenGL)
+{
+    if (bOpenGL != mbUseOpenGL)
+    {
+        mbUseOpenGL = bOpenGL;
+        mbModified = true;
+    }
+}
+
+void OpenGLCfg::setForceOpenGL(bool bOpenGL)
+{
+    if (mbForceOpenGL != bOpenGL)
+    {
+        mbForceOpenGL = bOpenGL;
+        mbModified = true;
+    }
+}
+
+}
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -557,6 +633,7 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
     , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
+    , mpOpenGLConfig(new svt::OpenGLCfg)
 {
     get(m_pWindowSizeMF, "windowsize");
     get(m_pIconSizeLB, "iconsize");
@@ -785,6 +862,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         }
     }
 
+    mpOpenGLConfig->setUseOpenGL(m_pUseOpenGL->IsChecked());
+    mpOpenGLConfig->setForceOpenGL(m_pForceOpenGL->IsChecked());
+
     // #i97672#
     if(m_pSelectionCB->IsEnabled())
     {
@@ -843,6 +923,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 void OfaViewTabPage::Reset( const SfxItemSet* )
 {
     SvtMiscOptions aMiscOptions;
+    mpOpenGLConfig->reset();
 
     if( aMiscOptions.GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO )
         nSizeLB_InitialSelection = ( aMiscOptions.AreCurrentSymbolsLarge() )? 2 : 1;
@@ -912,6 +993,8 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
         m_pUseAntiAliase->SaveValue();
     }
+    m_pUseOpenGL->Check(mpOpenGLConfig->useOpenGL());
+    m_pForceOpenGL->Check(mpOpenGLConfig->forceOpenGL());
 
     {
         // #i97672# Selection
