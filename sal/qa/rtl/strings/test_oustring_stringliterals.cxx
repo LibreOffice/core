@@ -194,7 +194,7 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
 {
     rtl::OUString s1;
     s1 = rtlunittest::OUStringLiteral1<'A'>();
-    CPPUNIT_ASSERT_EQUAL(1, s1.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s1.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s1[0]);
 
     CPPUNIT_ASSERT_EQUAL(
@@ -207,7 +207,7 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
         true, rtl::OUString("AB") != rtlunittest::OUStringLiteral1<'A'>());
 
     rtl::OUString s2("A" + rtlunittest::OUStringLiteral1<'b'>());
-    CPPUNIT_ASSERT_EQUAL(2, s2.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), s2.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s2[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Unicode('b'), s2[1]);
 }
