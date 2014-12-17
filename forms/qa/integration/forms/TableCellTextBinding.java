@@ -102,14 +102,11 @@ public class TableCellTextBinding
             throw new com.sun.star.form.binding.IncompatibleTypesException();
         }
         // remember the new text
-        synchronized( m_newCellText )
-        {
-            m_newCellText = text;
-            m_haveNewCellText = true;
-        }
         // and wake up the thread which is waiting for it
         synchronized( m_writeSignal )
         {
+            m_newCellText = text;
+            m_haveNewCellText = true;
             m_writeSignal.notify();
         }
     }
@@ -142,11 +139,7 @@ public class TableCellTextBinding
                 synchronized( m_writeSignal )
                 {
                     m_writeSignal.wait( 200 );
-                }
-
-                // if there's new text in the control, propagate it to the cell
-                synchronized ( m_newCellText )
-                {
+                    // if there's new text in the control, propagate it to the cell
                     if ( m_haveNewCellText )
                     {
                         m_cellText.setString( m_newCellText );
