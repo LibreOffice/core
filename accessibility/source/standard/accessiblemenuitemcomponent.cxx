@@ -202,6 +202,10 @@ OUString OAccessibleMenuItemComponent::GetAccessibleName()
         if ( sName.isEmpty() )
             sName = m_pParent->GetItemText( nItemId );
         sName = OutputDevice::GetNonMnemonicString( sName );
+#if defined WNT
+        if ( m_pParent->GetAccelKey( nItemId ).GetName().getLength() )
+            sName = sName + "\t" + m_pParent->GetAccelKey(nItemId).GetName();
+#endif
     }
 
     return sName;
