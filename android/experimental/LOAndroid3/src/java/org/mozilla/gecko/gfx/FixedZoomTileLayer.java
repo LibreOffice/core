@@ -15,6 +15,11 @@ public class FixedZoomTileLayer extends ComposedTileLayer {
         return 1.0f / 32.0f;
     }
 
+    @Override
+    protected int getTilePriority() {
+        return -1;
+    }
+
     private IntSize getInflateFactor() {
         return tileSize.scale(3);
     }

@@ -1,22 +1,17 @@
 package org.libreoffice;
 
-import android.graphics.Bitmap;
-import android.graphics.RectF;
-import android.util.DisplayMetrics;
-import android.util.Log;
-
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.SubTile;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
-    private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
+    private PriorityBlockingQueue<LOEvent> mEventQueue = new PriorityBlockingQueue<LOEvent>();
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;

@@ -4,6 +4,7 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 
+import org.libreoffice.LOEvent;
 import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.TileIdentifier;
@@ -143,6 +144,8 @@ public abstract class ComposedTileLayer extends Layer {
 
     protected abstract float getZoom(ImmutableViewportMetrics viewportMetrics);
 
+    protected abstract int getTilePriority();
+
     private void addNewTiles(ImmutableViewportMetrics viewportMetrics) {
         float zoom = getZoom(viewportMetrics);
 
@@ -161,7 +164,9 @@ public abstract class ComposedTileLayer extends Layer {
                     }
                 }
                 if (!contains) {
-                    LOKitShell.sendEvent(LOEventFactory.tileRequest(this, new TileIdentifier((int) x, (int) y, zoom, tileSize)));
+                    LOEvent event = LOEventFactory.tileRequest(this, new TileIdentifier((int) x, (int) y, zoom, tileSize));
+                    event.mPriority = getTilePriority();
+                    LOKitShell.sendEvent(event);
                 }
             }
         }

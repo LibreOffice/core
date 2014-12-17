@@ -3,7 +3,7 @@ package org.libreoffice;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
 
-public class LOEvent {
+public class LOEvent implements Comparable<LOEvent> {
 
     public static final int SIZE_CHANGED = 1;
     public static final int TILE_SIZE = 2;
@@ -14,6 +14,7 @@ public class LOEvent {
     public static final int TILE_REQUEST = 7;
 
     public final int mType;
+    public int mPriority = 0;
 
     public String mTypeString;
     public int mPartIndex;
@@ -59,5 +60,10 @@ public class LOEvent {
             return "Event type: " + mType;
         }
         return mTypeString;
+    }
+
+    @Override
+    public int compareTo(LOEvent another) {
+        return mPriority - another.mPriority;
     }
 }

@@ -14,6 +14,11 @@ public class DynamicTileLayer extends ComposedTileLayer {
         return viewportMetrics.zoomFactor;
     }
 
+    @Override
+    protected int getTilePriority() {
+        return 0;
+    }
+
     protected IntSize getInflateFactor() {
         return tileSize;
     }
