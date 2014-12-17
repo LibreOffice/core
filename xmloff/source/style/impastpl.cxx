@@ -415,7 +415,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     OUString aPrefix( rStrPrefix );
     if( bStylesOnly )
     {
-        aPrefix = OUString( 'M' );
+        aPrefix = "M";
         aPrefix += rStrPrefix;
     }
 

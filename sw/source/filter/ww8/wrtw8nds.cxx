@@ -2234,7 +2234,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             {
                 // Insert tab for aesthetic purposes #i24762#
                 if ( aSnippet[0] != 0x09 )
-                    aSnippet = OUString( 0x09 ) + aSnippet;
+                    aSnippet = "\x09" + aSnippet;
             }
 
             if ( bPostponeWritingText && ( FLY_POSTPONED != nStateOfFlyFrame ) )

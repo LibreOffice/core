@@ -1441,7 +1441,7 @@ XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, const OUString& r
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
     // reference to own sheet: \03<sheetname>
-    Init(OUString(EXC_EXTSH_TABNAME) + rTabName);
+    Init(OUStringLiteral1<EXC_EXTSH_TABNAME>() + rTabName);
 }
 
 void XclExpExternSheet::Save( XclExpStream& rStrm )

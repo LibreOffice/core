@@ -1122,7 +1122,7 @@ void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet, bool bShowSe
     // label value separator
     maData.maSeparator = rPropSet.GetStringProperty( EXC_CHPROP_LABELSEPARATOR );
     if( maData.maSeparator.isEmpty() )
-        maData.maSeparator = OUString(' ');
+        maData.maSeparator = " ";
 }
 
 void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )

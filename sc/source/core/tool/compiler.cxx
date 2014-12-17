@@ -3261,7 +3261,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
         }
         else if ( c1 != cQuote && c2 == cQuote )
         {   // ..."
-            aCorrectedSymbol = OUString(cQuote) + aCorrectedSymbol;
+            aCorrectedSymbol = OUStringLiteral1<cQuote>() + aCorrectedSymbol;
             bCorrected = true;
         }
         else if ( nPos == 0 && (c1 == cx || c1 == cX) )

@@ -437,7 +437,7 @@ UUIInteractionHelper::handleRequest_impl(
                 for ( sal_Int32 index=0; index< sModules.getLength(); ++index )
                 {
                     if ( index )
-                        aName = aName + OUString( ',' ) + sModules[index];
+                        aName = aName + "," + sModules[index];
                     else
                         aName = sModules[index]; // 1st name
                 }

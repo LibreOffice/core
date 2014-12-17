@@ -1214,7 +1214,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
         OUString sFields;
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
-            sFields += m_sFields[i] + OUString(TOX_STYLE_DELIMITER);
+            sFields += m_sFields[i] + OUStringLiteral1<TOX_STYLE_DELIMITER>();
         }
         if(bNewEntry)
         {

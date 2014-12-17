@@ -126,9 +126,9 @@ void LangGuess_Impl::EnsureInitialized()
         OUString aURL( SvtPathOptions().GetFingerprintPath() );
         utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
 #ifdef WNT
-        aPhysPath = aPhysPath + OUString(static_cast<sal_Unicode>('\\'));
+        aPhysPath += "\\";
 #else
-        aPhysPath = aPhysPath + OUString(static_cast<sal_Unicode>('/'));
+        aPhysPath += "/";
 #endif
 
         SetFingerPrintsDB( aPhysPath );

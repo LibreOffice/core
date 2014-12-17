@@ -53,6 +53,21 @@ namespace rtl
 #undef rtl
 #endif
 
+#if defined RTL_FAST_STRING
+/// @cond INTERNAL
+/** A simple wrapper around an ASCII character literal, for use in certain
+    OUString functions designed for efficient processing of string literals.
+
+    @since LibreOffice 4.5
+*/
+template<char C> struct SAL_WARN_UNUSED OUStringLiteral1 {
+    static_assert(
+        static_cast<unsigned char>(C) < 0x80,
+        "non-ASCII character in OUStringLiteral1");
+};
+/// @endcond
+#endif
+
 /* ======================================================================= */
 
 /**
@@ -343,6 +358,20 @@ public:
             rtl_uString_newFromLiteral( &pData, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, 0 );
         return *this;
     }
+
+#if defined RTL_FAST_STRING
+    /// @cond INTERNAL
+    /** Assign a new string from a single ASCII character literal.
+
+        @since LibreOffice 4.5
+    */
+    template<char C> OUString & operator =(OUStringLiteral1<C>) {
+        sal_Unicode const c = C;
+        rtl_uString_newFromStr_WithLength(&pData, &c, 1);
+        return *this;
+    }
+    /// @endcond
+#endif
 
     /**
       Append a string to this string.
@@ -2343,6 +2372,32 @@ public:
     }
 };
 
+#if defined RTL_FAST_STRING
+/// @cond INTERNAL
+
+/** Compare a string and an ASCII character literal for equality.
+
+    @since LibreOffice 4.5
+*/
+template<char C> bool operator ==(OUString const & string, OUStringLiteral1<C>)
+{
+    char const c = C;
+    return string.equalsAsciiL(&c, 1);
+}
+
+/** Compare a string and an ASCII character literal for inequality.
+
+    @since LibreOffice 4.5
+*/
+template<char C> bool operator !=(
+    OUString const & string, OUStringLiteral1<C> literal)
+{
+    return !(string == literal);
+}
+
+/// @endcond
+#endif
+
 /* ======================================================================= */
 
 #ifdef RTL_FAST_STRING
@@ -2385,6 +2440,18 @@ struct ToStringHelper< OUStringLiteral >
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = true;
     };
+
+/**
+ @internal
+*/
+template<char C> struct ToStringHelper<OUStringLiteral1<C>>
+{
+    static int length(OUStringLiteral1<C>) { return 1; }
+    static sal_Unicode * addData(sal_Unicode * buffer, OUStringLiteral1<C>)
+    { *buffer++ = C; return buffer; }
+    static const bool allowOStringConcat = false;
+    static const bool allowOUStringConcat = true;
+};
 
 /**
  @internal
@@ -2511,6 +2578,9 @@ using ::rtl::OUStringHash;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
+#if defined RTL_FAST_STRING
+using ::rtl::OUStringLiteral1;
+#endif
 #endif
 
 #endif /* _RTL_USTRING_HXX */

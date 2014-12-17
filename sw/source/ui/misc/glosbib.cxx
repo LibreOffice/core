@@ -198,7 +198,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
 {
     OUString sGroup = m_pNameED->GetText()
-        + OUString(GLOS_DELIM)
+        + OUStringLiteral1<GLOS_DELIM>()
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
     m_InsertedArr.push_back(sGroup);
@@ -274,7 +274,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 
     const OUString sNewTitle(m_pNameED->GetText());
     OUString sNewName = sNewTitle
-        + OUString(GLOS_DELIM)
+        + OUStringLiteral1<GLOS_DELIM>()
         + OUString::number(m_pPathLB->GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sNewName), "group already available!");
 
@@ -293,8 +293,8 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
     }
     if(!bDone)
     {
-        sEntry += OUString(RENAME_TOKEN_DELIM) + sNewName
-                + OUString(RENAME_TOKEN_DELIM) + sNewTitle;
+        sEntry += OUStringLiteral1<RENAME_TOKEN_DELIM>() + sNewName
+                + OUStringLiteral1<RENAME_TOKEN_DELIM>() + sNewTitle;
         m_RenamedArr.push_back(sEntry);
     }
     delete (GlosBibUserData*)pEntry->GetUserData();

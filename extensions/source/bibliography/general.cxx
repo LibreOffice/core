@@ -139,7 +139,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
                     if (!nTempVal || xCol->wasNull())
                     {
                         OUString sTempVal = xCol->getString();
-                        if(sTempVal != OUString('0'))
+                        if(sTempVal != "0")
                             nTempVal = -1;
                     }
                 }

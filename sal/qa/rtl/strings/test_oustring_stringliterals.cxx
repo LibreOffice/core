@@ -31,6 +31,7 @@ private:
     void checkExtraIntArgument();
     void checkNonconstChar();
     void checkBuffer();
+    void checkOUStringLiteral1();
 
     void testcall( const char str[] );
 
@@ -40,6 +41,7 @@ CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkExtraIntArgument);
 CPPUNIT_TEST(checkNonconstChar);
 CPPUNIT_TEST(checkBuffer);
+CPPUNIT_TEST(checkOUStringLiteral1);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -168,6 +170,28 @@ void test::oustring::StringLiterals::checkBuffer()
     char d[] = "d";
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUString( d ))));
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUStringBuffer( d ))));
+}
+
+void test::oustring::StringLiterals::checkOUStringLiteral1()
+{
+    rtl::OUString s1;
+    s1 = rtlunittest::OUStringLiteral1<'A'>();
+    CPPUNIT_ASSERT_EQUAL(1, s1.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s1[0]);
+
+    CPPUNIT_ASSERT_EQUAL(
+        true, rtl::OUString("A") == rtlunittest::OUStringLiteral1<'A'>());
+    CPPUNIT_ASSERT_EQUAL(
+        false, rtl::OUString("AB") == rtlunittest::OUStringLiteral1<'A'>());
+    CPPUNIT_ASSERT_EQUAL(
+        false, rtl::OUString("A") != rtlunittest::OUStringLiteral1<'A'>());
+    CPPUNIT_ASSERT_EQUAL(
+        true, rtl::OUString("AB") != rtlunittest::OUStringLiteral1<'A'>());
+
+    rtl::OUString s2("A" + rtlunittest::OUStringLiteral1<'b'>());
+    CPPUNIT_ASSERT_EQUAL(2, s2.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode('A'), s2[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode('b'), s2[1]);
 }
 
 }} // namespace

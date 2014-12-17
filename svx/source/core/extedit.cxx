@@ -99,7 +99,7 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     osl::FileBase::createTempFile(0, &pHandle, &aTempFileBase);
 
     // Move it to a file name with image extension properly set
-    aTempFileName = aTempFileBase + OUString('.') + OUString(fExtension);
+    aTempFileName = aTempFileBase + "." + OUString(fExtension);
     osl::File::move(aTempFileBase, aTempFileName);
 
     //Write Graphic to the Temp File

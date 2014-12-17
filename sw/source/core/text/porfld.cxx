@@ -438,7 +438,7 @@ bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
         !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() &&
             SwViewOption::IsFieldShadings() &&
             !HasFollow() )
-        rTxt = OUString(' ');
+        rTxt = " ";
     return true;
 }
 

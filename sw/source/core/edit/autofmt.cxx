@@ -936,8 +936,7 @@ CHECK_ROMAN_5:
             {
                 eScan |= CHG;
                 if( pPrefix )
-                    *pPrefix += OUString((sal_Unicode)1)
-                              + OUString::number( nStart );
+                    *pPrefix += "\x01" + OUString::number( nStart );
             }
             eScan &= ~NO_DELIM;     // remove Delim
             eScan |= DELIM;         // add Digit
@@ -954,7 +953,7 @@ CHECK_ROMAN_5:
         return USHRT_MAX;
 
     if( (NO_DELIM & eScan) && pPrefix )     // do not forget the last one
-        *pPrefix += OUString((sal_Unicode)1) + OUString::number( nStart );
+        *pPrefix += "\x01" + OUString::number( nStart );
 
     rPos = nPos;
     return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)

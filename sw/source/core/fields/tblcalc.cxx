@@ -56,7 +56,7 @@ SwTblField::SwTblField( SwTblFieldType* pInitType, const OUString& rFormel,
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
     nSubType(nType)
 {
-    sExpand = OUString('0');
+    sExpand = "0";
 }
 
 SwField* SwTblField::Copy() const

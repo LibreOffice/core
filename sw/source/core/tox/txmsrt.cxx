@@ -586,7 +586,7 @@ OUString SwTOXPara::GetURL() const
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
             {
-                aTxt = "#" + pFly->GetName() + OUString(cMarkSeparator);
+                aTxt = "#" + pFly->GetName() + OUStringLiteral1<cMarkSeparator>();
                 const sal_Char* pStr;
                 switch( eType )
                 {
@@ -602,7 +602,7 @@ OUString SwTOXPara::GetURL() const
         break;
     case nsSwTOXElement::TOX_SEQUENCE:
         {
-            aTxt = "#" + m_sSequenceName + OUString(cMarkSeparator)
+            aTxt = "#" + m_sSequenceName + OUStringLiteral1<cMarkSeparator>()
                  + "sequence";
         }
         break;
@@ -654,7 +654,7 @@ OUString SwTOXTable::GetURL() const
     if ( sName.isEmpty() )
         return OUString();
 
-    return "#" + sName + OUString(cMarkSeparator) + "table";
+    return "#" + sName + OUStringLiteral1<cMarkSeparator>() + "table";
 }
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,

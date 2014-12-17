@@ -402,7 +402,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideInvisible()
     ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAAA CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
+        OUString("AAAAA CCCCC " + OUStringLiteral1<CH_TXTATR_BREAKWORD>() + " DDDDD"),
         sViewText);
 }
 
@@ -413,7 +413,7 @@ void SwDocTest::testModelToViewHelperExpandFieldsHideRedlined()
     ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEDELETIONS);
     OUString sViewText = aModelToViewHelper.getViewText();
     CPPUNIT_ASSERT_EQUAL(
-        OUString("AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
+        OUString("AAAABB " + OUStringLiteral1<CH_TXTATR_BREAKWORD>() + " CCCCC " + OUStringLiteral1<CH_TXTATR_BREAKWORD>() + " DDDDD"),
         sViewText);
 }
 

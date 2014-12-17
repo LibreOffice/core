@@ -573,7 +573,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
                 // first delete the existing selection
                 aStr = aStr.replaceAt( nPos, nSel, "" );
 
-            aFld = OUString(cDBFldStart) + aFld + OUString(cDBFldEnd);
+            aFld = OUStringLiteral1<cDBFldStart>() + aFld + OUStringLiteral1<cDBFldEnd>();
             if( !aStr.isEmpty() )
             {
                 if( nPos )                          // one blank in front

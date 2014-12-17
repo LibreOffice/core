@@ -6351,7 +6351,7 @@ bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
 
     if( bRet )
     {
-        rStorageName = OUString('_');
+        rStorageName = "_";
         rStorageName += OUString::number(nPictureId);
         rSrcStorage = rReader.pStg->OpenSotStorage(OUString(
             SL::aObjectPool));

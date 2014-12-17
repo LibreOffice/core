@@ -197,7 +197,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     OUString sGroup(aGroupName);
     if (sGroup.indexOf(GLOS_DELIM)<0)
     {
-        sGroup += OUString(GLOS_DELIM) + "0";
+        sGroup += OUStringLiteral1<GLOS_DELIM>() + "0";
     }
     pGlossaries->NewGroupDoc(sGroup, sGroup.getToken(0, GLOS_DELIM));
 
@@ -505,7 +505,7 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
     OUString sNewGroup(rName);
     if (sNewGroup.indexOf(GLOS_DELIM)<0)
     {
-        sNewGroup += OUString(GLOS_DELIM) + "0";
+        sNewGroup += OUStringLiteral1<GLOS_DELIM>() + "0";
     }
 
     //the name must be saved, the group may be invalidated while in RenameGroupDoc()

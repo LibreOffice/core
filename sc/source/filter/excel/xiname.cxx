@@ -99,7 +99,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     if( (GetBiff() == EXC_BIFF5) && (maXclName == XclTools::GetXclBuiltInDefName(EXC_BUILTIN_FILTERDATABASE)) )
     {
         bBuiltIn = true;
-        maXclName = OUString(EXC_BUILTIN_FILTERDATABASE);
+        maXclName = OUStringLiteral1<EXC_BUILTIN_FILTERDATABASE>();
     }
 
     // convert Excel name to Calc name

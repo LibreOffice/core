@@ -856,12 +856,12 @@ static OUString lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
 
         const OUString sCpy = sTmp;        //JP 01.11.95: add rest from box name
 
-        sTmp = OUString(cRelIdentifier) + OUString::number( nBox )
-             + OUString(cRelSeparator) + OUString::number( nLine );
+        sTmp = OUStringLiteral1<cRelIdentifier>() + OUString::number( nBox )
+             + OUStringLiteral1<cRelSeparator>() + OUString::number( nLine );
 
         if (!sCpy.isEmpty())
         {
-            sTmp += OUString(cRelSeparator) + sCpy;
+            sTmp += OUStringLiteral1<cRelSeparator>() + sCpy;
         }
     }
 

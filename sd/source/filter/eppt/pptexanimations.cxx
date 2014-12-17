@@ -106,7 +106,7 @@ void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMo
             {
                 if ( eTranslateMode & TRANSLATE_VALUE )
                 {
-                    rString = OUString( (sal_Unicode)'#' );
+                    rString = "#";
                     rString += OUString::createFromAscii( p->mpMSName );
                 }
                 else

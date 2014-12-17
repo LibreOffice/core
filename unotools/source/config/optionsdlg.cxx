@@ -162,15 +162,15 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
 
 OUString getGroupPath( const OUString& _rGroup )
 {
-    return OUString( ROOT_NODE + OUString('/') + _rGroup + OUString('/') );
+    return OUString( ROOT_NODE + "/" + _rGroup + "/" );
 }
 OUString getPagePath( const OUString& _rPage )
 {
-    return OUString( PAGES_NODE + OUString('/') + _rPage + OUString('/') );
+    return OUString( PAGES_NODE + "/" + _rPage + "/" );
 }
 OUString getOptionPath( const OUString& _rOption )
 {
-    return OUString( OPTIONS_NODE + OUString('/') + _rOption + OUString('/') );
+    return OUString( OPTIONS_NODE + "/" + _rOption + "/" );
 }
 
 bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const

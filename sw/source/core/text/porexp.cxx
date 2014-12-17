@@ -232,7 +232,7 @@ bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
 bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsPostIts() )
-        rTxt = OUString(' ');
+        rTxt = " ";
     else
         rTxt.clear();
     return true;

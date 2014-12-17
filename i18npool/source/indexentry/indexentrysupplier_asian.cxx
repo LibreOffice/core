@@ -89,7 +89,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
         if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 )
             func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_TW_"+rAlgorithm).pData);
         if (!func)
-            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+OUString('_')+rAlgorithm).pData);
+            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_"+rAlgorithm).pData);
     }
 #else
     if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 ) {

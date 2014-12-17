@@ -437,7 +437,7 @@ void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
     if( nPos != -1 )
         aStrURL = aStrURL.copy(0, nPos);
 
-    aStrURL += OUString(sUHash) + aStrMark;
+    aStrURL += OUStringLiteral1<sUHash>() + aStrMark;
 
     m_pCbbTarget->SetText ( aStrURL );
 }

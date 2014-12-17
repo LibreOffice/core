@@ -536,9 +536,9 @@ void ControlConverter::convertToAxState( PropertySet& rPropSet,
 
     rValue.clear(); // empty e.g. 'don't know'
     if ( nState == API_STATE_UNCHECKED )
-        rValue = OUString('0');
+        rValue = "0";
     else if ( nState == API_STATE_CHECKED )
-        rValue = OUString('1');
+        rValue = "1";
 
     // tristate
     if( bSupportsTriState && rPropSet.getProperty( bTmp, PROP_TriState ) )

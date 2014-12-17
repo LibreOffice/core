@@ -81,14 +81,14 @@ namespace DOM
             OUString prefix = pNode->getPrefix();
             OUString name = (prefix.isEmpty())
                 ? pNode->getLocalName()
-                : prefix + OUString(':') + pNode->getLocalName();
+                : prefix + ":" + pNode->getLocalName();
             OUString val  = pNode->getNodeValue();
             pAttrs->AddAttribute(name, type, val);
         }
         OUString prefix = getPrefix();
         OUString name = (prefix.isEmpty())
             ? getLocalName()
-            : prefix + OUString(':') + getLocalName();
+            : prefix + ":" + getLocalName();
         Reference< XAttributeList > xAttrList(pAttrs);
         i_xHandler->startElement(name, xAttrList);
         // recurse

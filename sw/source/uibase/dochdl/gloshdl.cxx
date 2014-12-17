@@ -106,7 +106,7 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
     OUString sGroup(rGrp);
     if (sGroup.indexOf(GLOS_DELIM)<0 && !FindGroupName(sGroup))
     {
-        sGroup += OUString(GLOS_DELIM) + "0";
+        sGroup += OUStringLiteral1<GLOS_DELIM>() + "0";
     }
     if(pCurGrp)
     {
@@ -204,7 +204,7 @@ bool SwGlossaryHdl::RenameGroup(const OUString& rOld, OUString& rNew, const OUSt
         OUString sNewGroup(rNew);
         if (sNewGroup.indexOf(GLOS_DELIM)<0)
         {
-            sNewGroup += OUString(GLOS_DELIM) + "0";
+            sNewGroup += OUStringLiteral1<GLOS_DELIM>() + "0";
         }
         bRet = rStatGlossaries.RenameGroupDoc(sOldGroup, sNewGroup, rNewTitle);
         rNew = sNewGroup;

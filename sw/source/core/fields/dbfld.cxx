@@ -474,7 +474,7 @@ OUString SwDBNameInfField::GetFieldName() const
     OUString sStr( SwField::GetFieldName() );
     if (!aDBData.sDataSource.isEmpty())
     {
-        sStr += OUString(':')
+        sStr += ":"
             + aDBData.sDataSource
             + OUString(DB_DELIM)
             + aDBData.sCommand;

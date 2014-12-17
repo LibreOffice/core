@@ -122,7 +122,7 @@ Reference< XFormattedString > TextConverter::appendFormattedString(
     try
     {
         xFmtStr = FormattedString::create( ConverterRoot::getComponentContext() );
-        xFmtStr->setString( bAddNewLine ? (rString + OUString( '\n' )) : rString );
+        xFmtStr->setString( bAddNewLine ? (rString + "\n") : rString );
         orStringVec.push_back( xFmtStr );
     }
     catch( Exception& )

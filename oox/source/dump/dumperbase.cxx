@@ -1877,7 +1877,7 @@ OUString StorageObjectBase::getSysFileName( const OUString& rStrmName, const OUS
         aFileName = aFileName.replace( *pcChar, '_' );
 
     // build full path
-    return rSysOutPath + OUString( '/' ) + aFileName;
+    return rSysOutPath + "/" + aFileName;
 }
 
 void StorageObjectBase::extractStream( StorageBase& rStrg, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
