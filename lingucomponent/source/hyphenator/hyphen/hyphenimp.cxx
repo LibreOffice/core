@@ -255,10 +255,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
        const ::com::sun::star::beans::PropertyValues& aProperties )
        throw (com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException, std::exception)
 {
-    int nHyphenationPos = -1;
-    int nHyphenationPosAlt = -1;
-    int nHyphenationPosAltHyph = -1;
-    int wordlen;
     int k = 0;
 
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
@@ -269,7 +265,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
     HyphenDict *dict = NULL;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-    CharClass * pCC = NULL;
 
     Reference< XHyphenatedWord > xRes;
 
@@ -283,6 +278,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     // if we have a hyphenation dictionary matching this locale
     if (k != -1)
     {
+        int nHyphenationPos = -1;
+        int nHyphenationPosAlt = -1;
+        int nHyphenationPosAltHyph = -1;
+
         // if this dictinary has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
@@ -310,7 +309,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         // other wise hyphenate the word with that dictionary
         dict = aDicts[k].aPtr;
         eEnc = aDicts[k].eEnc;
-        pCC =  aDicts[k].apCC;
+        CharClass * pCC =  aDicts[k].apCC;
 
         // we don't want to work with a default text encoding since following incorrect
         // results may occur only for specific text and thus may be hard to notice.
@@ -342,7 +341,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         // now convert word to needed encoding
         OString encWord(OU2ENC(nTerm,eEnc));
 
-        wordlen = encWord.getLength();
+        int wordlen = encWord.getLength();
         boost::scoped_array<char> lcword(new char[wordlen + 1]);
         boost::scoped_array<char> hyphens(new char[wordlen + 5]);
 

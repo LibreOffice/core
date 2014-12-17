@@ -89,10 +89,9 @@ XMLParentNode::XMLParentNode( const XMLParentNode& rObj)
     if( rObj.m_pChildList )
     {
         m_pChildList=new XMLChildNodeList();
-        XMLChildNode* pNode = NULL;
         for ( size_t i = 0; i < rObj.m_pChildList->size(); i++ )
         {
-            pNode = (*rObj.m_pChildList)[ i ];
+            XMLChildNode* pNode = (*rObj.m_pChildList)[ i ];
             if( pNode != NULL)
             {
                 switch(pNode->GetNodeType())
@@ -529,12 +528,11 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
         {
             case XML_NODE_TYPE_FILE:
             {
-                XMLParentNode* pElement;
                 if( GetChildList())
                 {
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                     {
-                        pElement = static_cast<XMLParentNode*>((*GetChildList())[ i ]);
+                        XMLParentNode* pElement = static_cast<XMLParentNode*>((*GetChildList())[ i ]);
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) CheckExportStatus( pElement );//, i);
                     }
                 }
@@ -660,18 +658,16 @@ void XMLElement::ChangeLanguageTag( const OString &rValue )
                 (*m_pAttributes)[ i ]->setValue(rValue);
         }
     }
-    XMLChildNode* pNode  = NULL;
-    XMLElement*   pElem  = NULL;
     XMLChildNodeList* pCList = GetChildList();
 
     if( pCList )
     {
         for ( size_t i = 0; i < pCList->size(); i++ )
         {
-            pNode = (*pCList)[ i ];
+            XMLChildNode* pNode = (*pCList)[ i ];
             if( pNode && pNode->GetNodeType() == XML_NODE_TYPE_ELEMENT )
             {
-                pElem = static_cast< XMLElement* >(pNode);
+                XMLElement* pElem = static_cast< XMLElement* >(pNode);
                 pElem->ChangeLanguageTag( rValue );
                 pElem->SetLanguageId(rValue);
                 pElem  = NULL;
@@ -712,10 +708,9 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
             {
                 if ( pElement->GetChildList())
                 {
-                    XMLChildNode* pTmp = 0;
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                     {
-                        pTmp = (*pElement->GetChildList())[ k ];
+                        XMLChildNode* pTmp = (*pElement->GetChildList())[ k ];
                         Print( pTmp, rBuffer , false);
                     }
                 }
@@ -751,10 +746,9 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
                         else
                         {
                             rBuffer.append( ">" );
-                            XMLChildNode* pTmp = 0;
                             for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                             {
-                                pTmp = (*pElement->GetChildList())[ k ];
+                                XMLChildNode* pTmp = (*pElement->GetChildList())[ k ];
                                 Print( pTmp, rBuffer , false);
                             }
                             rBuffer.append( "</" + pElement->GetName() + ">" );

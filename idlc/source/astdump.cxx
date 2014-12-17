@@ -69,11 +69,10 @@ bool AstModule::dump(RegistryKey& rKey)
 
         DeclList::const_iterator iter = getIteratorBegin();
         DeclList::const_iterator end = getIteratorEnd();
-        AstDeclaration* pDecl = NULL;
         sal_uInt16 index = 0;
         while ( iter != end )
         {
-            pDecl = *iter;
+            AstDeclaration* pDecl = *iter;
             if ( pDecl->getNodeType() == NT_const &&
                  pDecl->isInMainfile() )
             {

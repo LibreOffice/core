@@ -700,10 +700,9 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicE
         // look for position to insert entry at
         // if there is already an entry do not insert the new one
         sal_Int32 nPos = 0;
-        bool bFound = false;
         if (bAddEntry)
         {
-            bFound = seekEntry( xDicEntry->getDictionaryWord(), &nPos );
+            const bool bFound = seekEntry( xDicEntry->getDictionaryWord(), &nPos );
             if (bFound)
                 bAddEntry = false;
         }
