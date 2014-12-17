@@ -38,6 +38,7 @@
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/fasttokenhandler.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
 
@@ -48,10 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace css::xml::sax;
 using namespace xmloff::token;
-
-using ::xmloff::token::XML_BLOCK_LIST;
-using ::xmloff::token::XML_UNFORMATTED_TEXT;
-using ::xmloff::token::GetXMLToken;
 
 sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 {
@@ -108,7 +105,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             // get filter
             // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
             uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
-            uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
+            uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new xmloff::token::FastTokenHandler();
 
             // connect parser and filter
             uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
@@ -303,7 +300,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
         // #110680#
         // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
         uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, rText, bTextOnly );
-        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new FastTokenHandler();
 
         // connect parser and filter
         uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
@@ -435,7 +432,7 @@ void SwXMLTextBlocks::ReadInfo()
 
         // get filter
         uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
-        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLBlockListTokenHandler();
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new FastTokenHandler();
 
         // connect parser and filter
         uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);

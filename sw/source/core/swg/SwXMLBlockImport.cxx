@@ -23,22 +23,14 @@
 #include <unotools/charclass.hxx>
 #include <swtypes.hxx>
 
-#if defined __clang__
-#if __has_warning("-Wdeprecated-register")
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-register"
-#endif
-#endif
-#include <tokens.cxx>
-#if defined __clang__
-#if __has_warning("-Wdeprecated-register")
-#pragma GCC diagnostic pop
-#endif
-#endif
+#include <xmloff/token/tokens.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace css::xml::sax;
+using namespace xmloff;
 
 class SwXMLBlockListImport;
 class SwXMLTextBlockImport;
@@ -130,62 +122,6 @@ public:
     virtual ~SwXMLTextBlockParContext();
 };
 
-SwXMLTextBlockTokenHandler::SwXMLTextBlockTokenHandler()
-{
-}
-
-SwXMLTextBlockTokenHandler::~SwXMLTextBlockTokenHandler()
-{
-}
-
-sal_Int32 SAL_CALL SwXMLTextBlockTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
-    throw (css::uno::RuntimeException, std::exception)
-{
-    return getTokenDirect( reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength() );
-}
-
-Sequence< sal_Int8 > SAL_CALL SwXMLTextBlockTokenHandler::getUTF8Identifier( sal_Int32 )
-    throw (css::uno::RuntimeException, std::exception)
-{
-    return Sequence< sal_Int8 >();
-}
-
-sal_Int32 SwXMLTextBlockTokenHandler::getTokenDirect( const char *pTag, sal_Int32 nLength ) const
-{
-    if( !nLength )
-        nLength = strlen( pTag );
-    const struct xmltoken* pToken = TextBlockTokens::in_word_set( pTag, nLength );
-    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
-}
-
-SwXMLBlockListTokenHandler::SwXMLBlockListTokenHandler()
-{
-}
-
-SwXMLBlockListTokenHandler::~SwXMLBlockListTokenHandler()
-{
-}
-
-sal_Int32 SAL_CALL SwXMLBlockListTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
-    throw (css::uno::RuntimeException, std::exception)
-{
-    return getTokenDirect( reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength() );
-}
-
-Sequence< sal_Int8 > SAL_CALL SwXMLBlockListTokenHandler::getUTF8Identifier( sal_Int32 )
-    throw (css::uno::RuntimeException, std::exception)
-{
-    return Sequence< sal_Int8 >();
-}
-
-sal_Int32 SwXMLBlockListTokenHandler::getTokenDirect( const char *pTag, sal_Int32 nLength ) const
-{
-    if( !nLength )
-        nLength = strlen( pTag );
-    const struct xmltoken* pToken = BlockListTokens::in_word_set( pTag, nLength );
-    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
-}
-
 SwXMLBlockListContext::SwXMLBlockListContext(
     SwXMLBlockListImport& rImport,
     sal_Int32 /*Element*/,
@@ -193,8 +129,8 @@ SwXMLBlockListContext::SwXMLBlockListContext(
     SvXMLImportContext( rImport ),
     rLocalRef( rImport )
 {
-    if( xAttrList.is() && xAttrList->hasAttribute( SwXMLBlockListToken::LIST_NAME ) )
-        rImport.getBlockList().SetName( xAttrList->getValue( SwXMLBlockListToken::LIST_NAME ) );
+    if( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_list_name) )
+        rImport.getBlockList().SetName( xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_list_name ) );
 }
 
 SwXMLBlockListContext::~SwXMLBlockListContext()
@@ -206,7 +142,7 @@ SwXMLBlockListContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    if ( Element == SwXMLBlockListToken::BLOCK )
+    if ( Element == (FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_block) )
         return new SwXMLBlockContext( rLocalRef, Element, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
@@ -223,16 +159,16 @@ SwXMLBlockContext::SwXMLBlockContext(
     bool bTextOnly = false;
     if( xAttrList.is() )
     {
-        if( xAttrList->hasAttribute( SwXMLBlockListToken::ABBREVIATED_NAME ) )
-            aShort = rCC.uppercase( xAttrList->getValue( SwXMLBlockListToken::ABBREVIATED_NAME ) );
-        if( xAttrList->hasAttribute( SwXMLBlockListToken::NAME ) )
-            aLong = xAttrList->getValue( SwXMLBlockListToken::NAME );
-        if( xAttrList->hasAttribute( SwXMLBlockListToken::PACKAGE_NAME ) )
-            aPackageName = xAttrList->getValue( SwXMLBlockListToken::PACKAGE_NAME );
-        if( xAttrList->hasAttribute( SwXMLBlockListToken::UNFORMATTED_TEXT ) )
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_abbreviated_name ) )
+            aShort = rCC.uppercase( xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_abbreviated_name ) );
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_name ) )
+            aLong = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_name );
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_package_name ) )
+            aPackageName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_package_name );
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_unformatted_text ) )
         {
-            OUString rAttrValue( xAttrList->getValue( SwXMLBlockListToken::UNFORMATTED_TEXT ) );
-            if( IsXMLToken( rAttrValue, XML_TRUE ) )
+            OUString rAttrValue( xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_unformatted_text ) );
+            if( rAttrValue.equals( OUString("true")) )
                 bTextOnly = true;
         }
     }
@@ -259,7 +195,7 @@ SwXMLTextBlockDocumentContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    if ( Element == SwXMLTextBlockToken::OFFICE_BODY )
+    if ( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_body) )
         return new SwXMLTextBlockBodyContext( rLocalRef, Element, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
@@ -283,7 +219,7 @@ SwXMLTextBlockTextContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    if ( Element == SwXMLTextBlockToken::TEXT_P )
+    if ( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_p) )
         return new SwXMLTextBlockParContext( rLocalRef, Element, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
@@ -307,9 +243,9 @@ SwXMLTextBlockBodyContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    if( Element == SwXMLTextBlockToken::OFFICE_TEXT )
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_text) )
         return new SwXMLTextBlockTextContext( rLocalRef, Element, xAttrList );
-    else if( Element == SwXMLTextBlockToken::TEXT_P )
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_p) )
         return new SwXMLTextBlockParContext( rLocalRef, Element, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
@@ -362,7 +298,7 @@ SwXMLBlockListImport::~SwXMLBlockListImport()
 SvXMLImportContext* SwXMLBlockListImport::CreateFastContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    if( Element == SwXMLBlockListToken::BLOCK_LIST )
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_block_list) )
         return new SwXMLBlockListContext( *this, Element, xAttrList );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
@@ -388,8 +324,8 @@ SwXMLTextBlockImport::~SwXMLTextBlockImport()
 SvXMLImportContext* SwXMLTextBlockImport::CreateFastContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    if( Element == SwXMLTextBlockToken::OFFICE_DOCUMENT ||
-        Element == SwXMLTextBlockToken::OFFICE_DOCUMENT_CONTENT )
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_document) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_document_content) )
         return new SwXMLTextBlockDocumentContext( *this, Element, xAttrList );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
