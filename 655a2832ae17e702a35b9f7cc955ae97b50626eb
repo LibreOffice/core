@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_d7483e8a",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3417,
+      "author": {
+        "id": 1000857
+      },
+      "writtenOn": "2014-12-17T22:19:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_577e6eaf",
+      "revId": "655a2832ae17e702a35b9f7cc955ae97b50626eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_f749c28f",
         "filename": "configure.ac",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_775e1247",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3449,
+      "author": {
+        "id": 1000857
+      },
+      "writtenOn": "2014-12-17T22:19:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_f749c28f",
+      "revId": "655a2832ae17e702a35b9f7cc955ae97b50626eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_174f8693",
         "filename": "configure.ac",
         "patchSetId": 3
@@ -47,6 +83,30 @@
       "writtenOn": "2014-12-17T22:16:26Z",
       "side": 1,
       "message": "Trailing blank.",
+      "range": {
+        "startLine": 3516,
+        "startChar": 20,
+        "endLine": 3516,
+        "endChar": 21
+      },
+      "revId": "655a2832ae17e702a35b9f7cc955ae97b50626eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_975b9654",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 3516,
+      "author": {
+        "id": 1000857
+      },
+      "writtenOn": "2014-12-17T22:19:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_174f8693",
       "range": {
         "startLine": 3516,
         "startChar": 20,
