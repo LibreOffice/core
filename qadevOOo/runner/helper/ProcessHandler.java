@@ -120,7 +120,6 @@ public class ProcessHandler
     private boolean isFinished = false;
     private boolean isStarted = false;
     private long mTimeOut = 0;
-    private String stdInBuff = "";
     private Pump stdout = null;
     private Pump stderr = null;
     private PrintStream stdIn = null;
@@ -546,11 +545,9 @@ public class ProcessHandler
             return;
         }
 
-        synchronized(stdInBuff)
+        synchronized(this)
         {
-            stdIn.print(stdInBuff);
             stdIn.flush();
-            stdInBuff = "";
         }
     }
 
