@@ -213,7 +213,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
         {
             // VarSize is determined based on the content plus the borders
             SwTwips nRemaining = 0;
-            SwFrm *pFrm = pLower;
+            SwFrm *pFrm = m_pLower;
             while ( pFrm )
             {   // lcl_Undersize(..) respects (recursively) TxtFrms, which
                 // would like to be bigger. They are created especially in

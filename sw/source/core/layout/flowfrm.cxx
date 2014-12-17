@@ -384,7 +384,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     // Just cut quickly and take care that we don't cause problems with the
     // left-behinds. The pointers of the chain being cut can point who-knows where.
     if ( pStart == pStart->GetUpper()->Lower() )
-        pStart->GetUpper()->pLower = 0;
+        pStart->GetUpper()->m_pLower = nullptr;
     if ( pStart->GetPrev() )
     {
         pStart->GetPrev()->mpNext = 0;
@@ -445,14 +445,14 @@ bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         if ( 0 != (pStart->mpPrev = pSibling->GetPrev()) )
             pStart->GetPrev()->mpNext = pStart;
         else
-            pParent->pLower = pStart;
+            pParent->m_pLower = pStart;
         pSibling->_InvalidatePos();
         pSibling->_InvalidatePrt();
     }
     else
     {
         if ( 0 == (pStart->mpPrev = pParent->Lower()) )
-            pParent->pLower = pStart;
+            pParent->m_pLower = pStart;
         else
         //Modified for #i100782#,04/03/2009
         //If the pParent has more than 1 child nodes, former design will
@@ -462,7 +462,7 @@ bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         //add the pStart after the last child.
         //  pParent->Lower()->pNext = pStart;
         {
-            SwFrm* pTemp = pParent->pLower;
+            SwFrm* pTemp = pParent->m_pLower;
             while (pTemp)
             {
                 if (pTemp->mpNext)

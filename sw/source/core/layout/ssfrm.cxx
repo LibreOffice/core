@@ -369,9 +369,9 @@ void SwFrm::Destroy()
     }
 
     SwLayoutFrm *pFrm = GetUpper();
-    if (pFrm && pFrm->pLower == this)
+    if (pFrm && pFrm->m_pLower == this)
     {
-        pFrm->pLower = NULL;
+        pFrm->m_pLower = nullptr;
     }
 }
 
@@ -446,7 +446,7 @@ void SwLayoutFrm::Destroy()
 
     assert(aVertPosOrientFrmsFor.empty());
 
-    SwFrm *pFrm = pLower;
+    SwFrm *pFrm = m_pLower;
 
     if( GetFmt() && !GetFmt()->GetDoc()->IsInDtor() )
     {
@@ -488,7 +488,7 @@ void SwLayoutFrm::Destroy()
             }
             pFrm->Remove();
             delete pFrm;
-            pFrm = pLower;
+            pFrm = m_pLower;
         }
         //Delete the Flys, the last one also deletes the array.
         while ( GetDrawObjs() && GetDrawObjs()->size() )

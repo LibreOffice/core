@@ -1291,7 +1291,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         if ( !bMaximize )
         {
             SwTwips nRemaining = (this->*fnRect->fnGetTopMargin)();
-            SwFrm *pFrm = pLower;
+            SwFrm *pFrm = m_pLower;
             if( pFrm )
             {
                 if( pFrm->IsColumnFrm() && pFrm->GetNext() )
@@ -1362,12 +1362,12 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                 (Frm().*fnRect->fnAddBottom)( nTmp );
                 (this->*fnRect->fnSetYMargins)( nTop, 0 );
                 InvalidateNextPos();
-                if( pLower && ( !pLower->IsColumnFrm() || !pLower->GetNext() ) )
+                if (m_pLower && (!m_pLower->IsColumnFrm() || !m_pLower->GetNext()))
                 {
                     // If a single-column section just created the space that
                     // was requested by the "undersized" paragraphs, then they
                     // have to be invalidated and calculated, so they fully cover it
-                    pFrm = pLower;
+                    pFrm = m_pLower;
                     if( pFrm->IsColumnFrm() )
                     {
                         pFrm->_InvalidateSize();

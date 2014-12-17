@@ -2881,7 +2881,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 
         //The size is defined by the content plus the borders.
         SwTwips nRemaining = 0, nDiff;
-        SwFrm *pFrm = pLower;
+        SwFrm *pFrm = m_pLower;
         while ( pFrm )
         {
             nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
@@ -3160,7 +3160,7 @@ bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 
 SwCntntFrm *SwTabFrm::FindLastCntnt()
 {
-    SwFrm *pRet = pLower;
+    SwFrm *pRet = m_pLower;
 
     while ( pRet && !pRet->IsCntntFrm() )
     {

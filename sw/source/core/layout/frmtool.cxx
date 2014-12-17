@@ -2435,7 +2435,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
     do
     {
         if( bGo )
-            pFloat->GetUpper()->pLower = 0; // detach the chain part
+            pFloat->GetUpper()->m_pLower = nullptr; // detach the chain part
 
         // search the end of the chain part, remove Flys on the way
         do
@@ -2586,8 +2586,8 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
             pSibling->Prepare( PREP_CLEAR, 0, false );
     }
     else
-    {   pNxt = pParent->pLower;
-        pParent->pLower = pSav;
+    {   pNxt = pParent->m_pLower;
+        pParent->m_pLower = pSav;
         pSav->mpUpper = pParent; // set here already, so that it is explicit when invalidating
 
         if ( pSav->IsCntntFrm() )

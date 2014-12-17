@@ -53,7 +53,7 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void MakeAll() SAL_OVERRIDE;
 
-    SwFrm           *pLower;
+    SwFrm * m_pLower;
     std::vector<SwAnchoredObject*> aVertPosOrientFrmsFor;
 
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
@@ -104,8 +104,8 @@ public:
 
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
-    const SwFrm *Lower() const { return pLower; }
-          SwFrm *Lower()       { return pLower; }
+    const SwFrm *Lower() const { return m_pLower; }
+          SwFrm *Lower()       { return m_pLower; }
     const SwCntntFrm *ContainsCntnt() const;
     inline SwCntntFrm *ContainsCntnt();
     const SwCellFrm *FirstCell() const;

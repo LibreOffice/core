@@ -536,7 +536,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
         if( 0 != (mpPrev = pBehind->mpPrev) )
             mpPrev->mpNext = this;
         else
-            mpUpper->pLower = this;
+            mpUpper->m_pLower = this;
         pBehind->mpPrev = this;
     }
     else
@@ -549,7 +549,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
             mpPrev->mpNext = this;
         }
         else
-            mpUpper->pLower = this;
+            mpUpper->m_pLower = this;
     }
 }
 
@@ -579,7 +579,7 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
         mpNext = pParent->Lower();
         if ( pParent->Lower() )
             pParent->Lower()->mpPrev = this;
-        pParent->pLower = this;
+        pParent->m_pLower = this;
     }
 }
 
@@ -637,7 +637,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             if( pBehind->GetPrev() )
                 pBehind->GetPrev()->mpNext = NULL;
             else
-                pBehind->GetUpper()->pLower = NULL;
+                pBehind->GetUpper()->m_pLower = nullptr;
             pBehind->mpPrev = NULL;
             SwLayoutFrm* pTmp = static_cast<SwLayoutFrm*>(pSct);
             if( pTmp->Lower() )
@@ -647,7 +647,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
                 OSL_ENSURE( pTmp, "InsertGrp: Missing ColBody" );
             }
             pBehind->mpUpper = pTmp;
-            pBehind->GetUpper()->pLower = pBehind;
+            pBehind->GetUpper()->m_pLower = pBehind;
             pLast = pBehind->GetNext();
             while ( pLast )
             {
@@ -676,7 +676,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             if( 0 != (mpPrev = pBehind->mpPrev) )
                 mpPrev->mpNext = this;
             else
-                mpUpper->pLower = this;
+                mpUpper->m_pLower = this;
             pBehind->mpPrev = pLast;
         }
         else
@@ -690,7 +690,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
                 mpPrev->mpNext = this;
             }
             else
-                mpUpper->pLower = this;
+                mpUpper->m_pLower = this;
         }
     }
 }
@@ -704,8 +704,8 @@ void SwFrm::Remove()
         mpPrev->mpNext = mpNext;
     else
     {   // the first in a list is removed //TODO
-        OSL_ENSURE( mpUpper->pLower == this, "Layout is inconsistent." );
-        mpUpper->pLower = mpNext;
+        OSL_ENSURE( mpUpper->m_pLower == this, "Layout is inconsistent." );
+        mpUpper->m_pLower = mpNext;
     }
     if( mpNext )
         mpNext->mpPrev = mpPrev;
@@ -2142,9 +2142,9 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
     }
 }
 
-SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
-    SwFrm( pFmt, pSib ),
-    pLower( 0 )
+SwLayoutFrm::SwLayoutFrm(SwFrmFmt *const pFmt, SwFrm *const pSib)
+    : SwFrm(pFmt, pSib)
+    , m_pLower(nullptr)
 {
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
     if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )

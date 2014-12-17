@@ -291,7 +291,7 @@ void SwFlyFrm::DeleteCnt()
     if ( IsLockDeleteContent() )
         return;
 
-    SwFrm* pFrm = pLower;
+    SwFrm* pFrm = m_pLower;
     while ( pFrm )
     {
         while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->size() )
@@ -323,7 +323,7 @@ void SwFlyFrm::DeleteCnt()
 
         pFrm->Remove();
         delete pFrm;
-        pFrm = pLower;
+        pFrm = m_pLower;
     }
 
     InvalidatePage();
