@@ -75,7 +75,7 @@ public class RDFRepositoryTest
     /**
      * The test parameters
      */
-    private static TestParameters param = null;
+    private TestParameters param = null;
 
     @Before public void before()
     {

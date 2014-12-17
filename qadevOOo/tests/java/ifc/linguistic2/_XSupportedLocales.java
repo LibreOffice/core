@@ -35,7 +35,7 @@ import com.sun.star.linguistic2.XSupportedLocales;
 public class _XSupportedLocales extends MultiMethodTest {
 
     public XSupportedLocales oObj = null;
-    public static Locale[] locales = new Locale[0];
+    public Locale[] locales = new Locale[0];
 
     /**
     * Test calls the method, stores returned value and checks it. <p>

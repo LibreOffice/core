@@ -103,7 +103,7 @@ public class CheckMemoryUsage
     /**
      * The test parameters
      */
-    private static TestParameters param = null;
+    private TestParameters param = null;
 
     /**
      * Collect all documents to load and all filters used for export.

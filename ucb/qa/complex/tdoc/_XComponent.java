@@ -110,7 +110,7 @@ public class _XComponent {
         return true;
     } // finished _removeEventListener()
 
-    private static boolean disposed = false;
+    private boolean disposed = false;
 
     /**
     * Disposes the object and then check appropriate listeners were

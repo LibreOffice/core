@@ -33,14 +33,13 @@ import lib.MultiMethodTest;
 public class _XAvailableLocales extends MultiMethodTest {
 
     public XAvailableLocales oObj = null;
-    public static Locale[] locales = new Locale[0];
 
     /**
     * Test calls the method, stores returned value and checks it. <p>
     * Has <b> OK </b> status if length of returned array isn't zero. <p>
     */
     public void _getAvailableLocales() {
-        locales = oObj.getAvailableLocales("com.sun.star.linguistic2.Hyphenator");
+        Locale[] locales = oObj.getAvailableLocales("com.sun.star.linguistic2.Hyphenator");
         tRes.tested("getAvailableLocales()", locales.length > 0);
     }
 

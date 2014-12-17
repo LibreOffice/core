@@ -32,9 +32,9 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
 {
 
     /** The test parameters **/
-    protected static TestParameters param = null;
+    protected TestParameters param = null;
     /** Log writer **/
-    protected static LogWriter log = null;
+    protected LogWriter log = null;
     /**
      * The method name which will be written into f.e. the data base
      **/

@@ -24,18 +24,18 @@ import java.io.StringWriter;
  * Write all logs into a java.io.PrintWriter, i.e. a StringBuffer.
  * Log is gathered there.
  */
-public class InternalLogWriter extends PrintWriter
-                                            implements share.LogWriter {
+public class InternalLogWriter implements share.LogWriter {
     /** log active **/
     private boolean active;
     /** write all output to a StringBuffer **/
-    private static StringWriter writer = new StringWriter();
+    private StringWriter writer = new StringWriter();
+    private PrintWriter printWriter;
 
     /**
      * c'*tor
      */
     public InternalLogWriter() {
-         super(new PrintWriter(writer));
+         printWriter = new PrintWriter(writer);
          active = true;
     }
 
@@ -54,21 +54,9 @@ public class InternalLogWriter extends PrintWriter
      * Method to print a line that is added to the StringBuffer.
      * @param msg The message that is printed.
      */
-    @Override
     public void println(String msg) {
         if (active)
-            super.println(msg);
-    }
-
-    /**
-     * Method to print to the StringBuffer.
-     * @param msg The message that is printed.
-     */
-    @Override
-    public void print(String msg) {
-        if (active)
-            super.print(msg);
-
+            printWriter.println(msg);
     }
 
     /**
@@ -80,17 +68,17 @@ public class InternalLogWriter extends PrintWriter
     public boolean summary(share.DescEntry entry) {
 //        linePrefix = "";
         String header = "***** State for "+entry.longName+" ******";
-        println(header);
+        printWriter.println(header);
         if (entry.hasErrorMsg) {
-            println(entry.ErrorMsg);
-            println("Whole "+entry.EntryType+": "+entry.State);
+            printWriter.println(entry.ErrorMsg);
+            printWriter.println("Whole "+entry.EntryType+": "+entry.State);
         } else {
-            println("Whole "+entry.EntryType+": "+entry.State);
+            printWriter.println("Whole "+entry.EntryType+": "+entry.State);
         }
         for (int i=0;i<header.length();i++) {
-            print("*");
+            printWriter.print("*");
         }
-        println("");
+        printWriter.println("");
         return true;
     }
 

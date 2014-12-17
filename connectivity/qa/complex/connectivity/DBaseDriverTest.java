@@ -50,7 +50,7 @@ public class DBaseDriverTest extends ComplexTestCase implements TestCase
 
     public LogWriter getLog()
     {
-        return ComplexTestCase.log;
+        return log;
     }
 
     public void Functions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException

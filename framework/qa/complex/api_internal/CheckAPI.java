@@ -50,7 +50,7 @@ public class CheckAPI  {
     /**
      * The test parameters
      */
-    private static TestParameters param = null;
+    private TestParameters param = null;
 
     /**
      *

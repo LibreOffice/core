@@ -34,10 +34,10 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     // ReportTextDocument CurReportDocument;
     IReportDocument CurReportDocument;
 
-    private static String sProgressDBConnection;
-    private static String sProgressDataImport;
-    private static String sProgressTitle;
-    private static String sStop;
+    private String sProgressDBConnection;
+    private String sProgressDataImport;
+    private String sProgressTitle;
+    private String sStop;
 
     public Dataimport(XMultiServiceFactory _xMSF)
     {

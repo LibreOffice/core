@@ -38,7 +38,7 @@ import com.sun.star.util.XStringSubstitution;
 public class PathSubstitutionTest
 {
 
-    private static XMultiServiceFactory xMSF;
+    private XMultiServiceFactory xMSF;
     // all substitution variables
     private VariableContainer substVars = null;
 

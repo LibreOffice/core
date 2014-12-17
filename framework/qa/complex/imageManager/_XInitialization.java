@@ -41,12 +41,12 @@ public class _XInitialization {
 
 
     private final TestParameters tEnv;
-    private static XInitialization oObj = null;
+    private XInitialization oObj = null;
 
     public _XInitialization(TestParameters tEnv, XInitialization oObj) {
 
         this.tEnv = tEnv;
-        _XInitialization.oObj = oObj;
+        this.oObj = oObj;
     }
 
     /**

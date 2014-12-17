@@ -54,8 +54,7 @@ import com.sun.star.uno.UnoRuntime;
 */
 public class _XCellCursor extends MultiMethodTest {
 
-    public static XCellCursor oObj = null;
-    public static XSpreadsheet oSheet = null;
+    public XCellCursor oObj = null;
 
     /**
      * <code>XCellRangeAddressable</code> interface is queried
@@ -174,7 +173,7 @@ public class _XCellCursor extends MultiMethodTest {
      */
     public void _gotoEnd(){
         //gotoEnd gets it's own cursor to see a change
-        oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
+        XSpreadsheet oSheet = (XSpreadsheet) tEnv.getObjRelation("SHEET");
         XCellRange testRange = oSheet.getCellRangeByName("$A$1:$g$7") ;
         XSheetCellRange testSheetRange = UnoRuntime.queryInterface(XSheetCellRange.class,testRange);
         XSheetCellCursor oCellCursor = oSheet.createCursorByRange

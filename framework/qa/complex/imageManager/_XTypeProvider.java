@@ -38,11 +38,10 @@ public class _XTypeProvider {
 
 
 
-    private static XTypeProvider oObj = null;
-    private static Type[] types = null;
+    private XTypeProvider oObj = null;
 
     public _XTypeProvider(TestParameters tEnv, XTypeProvider oObj) {
-        _XTypeProvider.oObj = oObj;
+        this.oObj = oObj;
     }
 
     /**
@@ -69,7 +68,7 @@ public class _XTypeProvider {
     public boolean _getTypes() {
         boolean result = false;
         System.out.println("getting Types...");
-        types = oObj.getTypes();
+        Type[] types = oObj.getTypes();
         for (int i=0;i<types.length;i++) {
             int k = i+1;
             System.out.println(k+". Type is "+types[i].toString());

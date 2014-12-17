@@ -113,7 +113,7 @@ public class _XComponent extends MultiMethodTest {
         log.println(Thread.currentThread() + " is removing EL " + listener2);
     } // finished _removeEventListener()
 
-    static boolean disposed = false;
+    boolean disposed = false;
 
     /**
     * Disposes the object and then check appropriate listeners were

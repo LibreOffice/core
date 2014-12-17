@@ -45,10 +45,10 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class java_fat implements TestBase
 {
 
-    private static boolean m_isDebug = false;
-    private static boolean keepdocument = false;
-    private static boolean logging = true;
-    private static boolean newOffice = false;
+    private boolean m_isDebug = false;
+    private boolean keepdocument = false;
+    private boolean logging = true;
+    private boolean newOffice = false;
     private DynamicClassLoader m_aDynamicClassLoader = null;
 
     private lib.TestParameters m_aParams;

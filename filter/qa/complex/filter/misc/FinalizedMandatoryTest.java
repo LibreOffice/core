@@ -71,7 +71,7 @@ import static org.junit.Assert.*;
 public class FinalizedMandatoryTest
 {
 
-    static XMultiServiceFactory xMSF;
+    XMultiServiceFactory xMSF;
 
     /** Create the environment for following tests.
      * Use either a component loader from desktop or

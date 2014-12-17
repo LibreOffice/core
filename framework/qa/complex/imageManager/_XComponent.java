@@ -38,7 +38,7 @@ import lib.TestParameters;
 */
 public class _XComponent {
 
-    private static XComponent oObj = null;
+    private XComponent oObj = null;
     private XComponent altDispose = null;
     private final TestParameters tEnv;
     private boolean listenerDisposed[] = new boolean[2];
@@ -66,7 +66,7 @@ public class _XComponent {
 
     public _XComponent(TestParameters tEnv, XComponent oObj) {
         this.tEnv = tEnv;
-        _XComponent.oObj = oObj;
+        this.oObj = oObj;
     }
 
     /**
@@ -115,7 +115,7 @@ public class _XComponent {
         return true;
     } // finished _removeEventListener()
 
-    private static boolean disposed = false;
+    private boolean disposed = false;
 
     /**
     * Disposes the object and then check appropriate listeners were

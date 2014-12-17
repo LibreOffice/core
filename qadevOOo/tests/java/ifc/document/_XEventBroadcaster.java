@@ -29,8 +29,8 @@ import com.sun.star.uno.UnoRuntime;
 public class _XEventBroadcaster extends MultiMethodTest {
 
     public XEventBroadcaster oObj;
-    protected static boolean listenerCalled=false;
-    private static XEventListener listener=null;
+    protected boolean listenerCalled = false;
+    private XEventListener listener = null;
 
     public class MyEventListener implements XEventListener {
 
