@@ -74,6 +74,8 @@ namespace
             eRet = SymbolType::PREV;
         else if (sType == "gtk-media-play")
             eRet = SymbolType::PLAY;
+        else if (sType == "gtk-media-stop")
+            eRet = SymbolType::STOP;
         else if (sType == "gtk-goto-first")
             eRet = SymbolType::FIRST;
         else if (sType == "gtk-goto-last")
