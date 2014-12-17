@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_f7bb0274",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3417,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-17T21:48:33Z",
+      "side": 1,
+      "message": "Similar var was already defined on line 3410 above, so that you should reuse this var instead of defining a new one.",
+      "range": {
+        "startLine": 3417,
+        "startChar": 0,
+        "endLine": 3417,
+        "endChar": 11
+      },
+      "revId": "6017c4f906ee135fcd686c31edfd4ec2691a18d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
