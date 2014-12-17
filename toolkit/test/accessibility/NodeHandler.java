@@ -43,7 +43,7 @@ abstract class NodeHandler
     {
         synchronized (maChildList)
         {
-            maChildList = new Vector<AccessibleTreeNode> ();
+            maChildList.clear();
         }
     }
 
