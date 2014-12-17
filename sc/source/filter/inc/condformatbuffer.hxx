@@ -20,15 +20,11 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_CONDFORMATBUFFER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_CONDFORMATBUFFER_HXX
 
-#include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
 #include <boost/scoped_ptr.hpp>
 #include <tools/color.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace sheet { class XSheetConditionalEntries; }
-} } }
 class ScColorScaleFormat;
 class ScDataBarFormat;
 struct ScDataBarFormatData;

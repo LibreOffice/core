@@ -19,20 +19,9 @@
 
 #include "condformatbuffer.hxx"
 
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
-#include <com/sun/star/sheet/XSheetCellRanges.hpp>
-#include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <svl/intitem.hxx>
@@ -57,8 +46,6 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
