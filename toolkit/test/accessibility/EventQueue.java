@@ -66,7 +66,6 @@ class EventQueue
 
     private EventQueue ()
     {
-        maMonitor = Boolean.TRUE;
         maRegularQueue = new LinkedList<Runnable>();
         maDisposingQueue = new LinkedList<Runnable>();
         new Thread(this, "AWB.EventQueue").start();
@@ -133,7 +132,7 @@ class EventQueue
     }
 
     private static EventQueue maInstance = null;
-    private final Object maMonitor;
+    private final Object maMonitor = new Object();
     private final LinkedList<Runnable> maRegularQueue;
     private final LinkedList<Runnable> maDisposingQueue;
 }
