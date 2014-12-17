@@ -116,10 +116,15 @@ struct MigrationItem
 
     bool operator==(const MigrationItem& aMigrationItem)
     {
-        return ( aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
-            aMigrationItem.m_sPrevSibling    == m_sPrevSibling     &&
-            aMigrationItem.m_sCommandURL     == m_sCommandURL      &&
-            aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
+        bool equal = aMigrationItem.m_sCommandURL == m_sCommandURL;                                             // if  old-cmd == new-cmd
+        bool match = m_sCommandURL.match(".uno:OpenFrom") && m_sCommandURL.match(aMigrationItem.m_sCommandURL); // new-cmd must begin with ".uno:OpenFrom" and is the
+                                                                                                                //   old-cmd in new-cmd  (.uno:Open)
+        equal     |= match;                                                                                     // when one of that true then the cmd not migrate (use only the new-cmd)
+
+        return (equal  &&
+            aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
+            aMigrationItem.m_sPrevSibling    == m_sPrevSibling    &&
+            aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is() );
     }
 
     OUString GetPrevSibling() const { return m_sPrevSibling; }
