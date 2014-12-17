@@ -43,12 +43,12 @@ public class ReportLayouter
     private static final int SOLAYOUTLST = 32;
     private XListBox xContentListBox;
     private XListBox xLayoutListBox;
-    int iOldContentPos;
-    int iOldLayoutPos;
+    private int iOldContentPos;
+    private int iOldLayoutPos;
     private IReportDocument CurReportDocument;
     private String[][] LayoutFiles;
     private String[][] ContentFiles;
-    Object aOrientationImage;
+    private Object aOrientationImage;
     private final XMultiServiceFactory m_xMSF;
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;

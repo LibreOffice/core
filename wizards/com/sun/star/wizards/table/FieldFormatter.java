@@ -49,8 +49,8 @@ public class FieldFormatter implements XItemListener
     private XButton btnminus;
     private XButton btnShiftUp;
     private XButton btnShiftDown;
-    short curtabindex;
-    String suntitled;
+    private short curtabindex;
+    private String suntitled;
     private Integer IFieldFormatStep;
 
     public FieldFormatter(TableWizard _CurUnoDialog)

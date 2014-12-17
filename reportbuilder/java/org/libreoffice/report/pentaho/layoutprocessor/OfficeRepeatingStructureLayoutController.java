@@ -25,7 +25,7 @@ import org.jfree.report.flow.layoutprocessor.LayoutController;
  *
  * @since 22.03.2007
  */
-public interface OfficeRepeatingStructureLayoutController extends LayoutController
+interface OfficeRepeatingStructureLayoutController extends LayoutController
 {
 
     boolean isNormalFlowProcessing();

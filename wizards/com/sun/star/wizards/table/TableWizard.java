@@ -44,12 +44,12 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     private ScenarioSelector curScenarioSelector;
     private FieldFormatter curFieldFormatter;
     private PrimaryKeyHandler curPrimaryKeyHandler;
-    public HashMap<String, FieldDescription> fielditems;
+    HashMap<String, FieldDescription> fielditems;
     int wizardmode;
-    String tablename;
-    String serrToManyFields;
-    String serrTableNameexists;
-    String scomposedtablename;
+    private String tablename;
+    private String serrToManyFields;
+    private String serrTableNameexists;
+    private String scomposedtablename;
     private TableDescriptor curTableDescriptor;
     public static final int SOMAINPAGE = 1;
     public static final int SOFIELDSFORMATPAGE = 2;

@@ -2897,7 +2897,7 @@ public class DOMTest
     }
     class MockNodeMap implements XNamedNodeMap
     {
-        MockAttr[] m_attributes;
+        private MockAttr[] m_attributes;
 
         MockNodeMap(MockAttr[] attrs) { m_attributes = attrs; }
 
@@ -2932,7 +2932,7 @@ public class DOMTest
     }
     class MockElement extends MockNode implements XElement
     {
-        MockAttr[] m_attributes;
+        private MockAttr[] m_attributes;
 
         MockElement(String name, MockAttr[] attrs) {
             m_localname = name; m_attributes = attrs;

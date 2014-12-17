@@ -1624,7 +1624,7 @@ XPropertiesChangeListener
     int nChangeCalled;
     int nPropertiesChange;
     int nVetoCalled;
-    int nDisposingCalled;
+    private int nDisposingCalled;
     boolean bVeto= false;
     PropertyChangeEvent evt;
     PropertyChangeEvent[] arEvt;

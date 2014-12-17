@@ -99,9 +99,9 @@ public class FilterComponent
     private static final int SO_SECONDBOOLFIELDNAME = 256 + 2;
     private static final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     private static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
-    int SOI_MATCHALL = 0;
-    int SOI_MATCHANY = 1;
-    int curHelpID;
+    private int SOI_MATCHALL = 0;
+    private int SOI_MATCHANY = 1;
+    private int curHelpID;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {

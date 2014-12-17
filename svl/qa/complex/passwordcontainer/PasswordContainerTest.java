@@ -18,6 +18,6 @@
 
 package complex.passwordcontainer;
 
-public interface PasswordContainerTest {
+interface PasswordContainerTest {
     boolean test();
 }

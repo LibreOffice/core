@@ -61,8 +61,8 @@ public class CommandMetaData extends DBMetaData
     private int CommandType;
     private String Command;
     private boolean bCatalogAtStart = true;
-    String sCatalogSep = PropertyNames.EMPTY_STRING;
-    String sIdentifierQuote = PropertyNames.EMPTY_STRING;
+    private String sCatalogSep = PropertyNames.EMPTY_STRING;
+    private String sIdentifierQuote = PropertyNames.EMPTY_STRING;
     private boolean bCommandComposerAttributesalreadyRetrieved = false;
 
     public CommandMetaData(XMultiServiceFactory xMSF)

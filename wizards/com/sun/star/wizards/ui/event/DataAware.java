@@ -152,7 +152,7 @@ public abstract class DataAware {
      * using JavaBeans properties reflection, and DataAwareFields classes
      * which implement different member types.
      */
-    public interface Value {
+    interface Value {
         /**
          * gets a value from the given object.
          * @param target the object to get the value from.

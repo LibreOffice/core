@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 public class CallReportWizard
 {
 
-    static boolean bWizardstartedalready;
+    private static boolean bWizardstartedalready;
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>

@@ -32,11 +32,11 @@ import com.sun.star.wizards.text.ViewHandler;
 public class RecordTable
 {
 
-    public XNamed xTableName;
-    public XCellRange xCellRange;
+    XNamed xTableName;
+    XCellRange xCellRange;
     public XTextTable xTextTable;
     private TextTableHandler oTextTableHandler;
-    public XTableColumns xTableColumns;
+    XTableColumns xTableColumns;
 
     public RecordTable(TextTableHandler _oTextTableHandler)
     {

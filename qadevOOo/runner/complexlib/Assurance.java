@@ -134,7 +134,7 @@ public class Assurance
         assure(msg, false, cont);
     }
 
-    public class AssureException extends RuntimeException {
+    public static class AssureException extends RuntimeException {
 
         private AssureException(String msg) {
             super(msg);

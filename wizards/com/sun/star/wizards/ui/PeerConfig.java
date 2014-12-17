@@ -43,7 +43,7 @@ public class PeerConfig implements XWindowListener
         oUnoDialog.xWindow.addWindowListener(this);
     }
 
-    class PeerTask
+    private static class PeerTask
     {
 
         private XControl xControl;
@@ -58,7 +58,7 @@ public class PeerConfig implements XWindowListener
         }
     }
 
-    class ControlTask
+    private static class ControlTask
     {
 
         Object oModel;
@@ -67,7 +67,7 @@ public class PeerConfig implements XWindowListener
 
     }
 
-    class ImageUrlTask
+    private static class ImageUrlTask
     {
 
         Object oModel;

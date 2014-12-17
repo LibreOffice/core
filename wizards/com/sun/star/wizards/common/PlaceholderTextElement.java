@@ -27,7 +27,7 @@ public class PlaceholderTextElement extends TextElement
 {
 
     private String hint;
-    String placeHolderText;
+    private String placeHolderText;
     private XMultiServiceFactory xmsf;
 
     public PlaceholderTextElement(XTextRange textRange, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)

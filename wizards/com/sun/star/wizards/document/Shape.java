@@ -44,7 +44,7 @@ public class Shape
     private Size aSize;
     protected XControlShape xControlShape;
     private XMultiServiceFactory xMSF;
-    public XShapes xShapes;
+    XShapes xShapes;
 
     public Shape(FormHandler _oFormHandler, Point _aPoint, Size _aSize)
     {

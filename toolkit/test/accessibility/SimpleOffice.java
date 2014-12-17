@@ -50,7 +50,7 @@ public class SimpleOffice
 {
     private XDesktop mxDesktop = null;
     private OfficeConnection aConnection;
-    int mnPortNumber;
+    private int mnPortNumber;
 
     public SimpleOffice (int nPortNumber)
     {

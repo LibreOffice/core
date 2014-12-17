@@ -100,8 +100,8 @@ public class TestCacheSize {
     private int     deleteWhileInsertInterval = 10000;
 
     // size of the tables used in test
-    int bigrows   = 10000;
-    int smallrows = 0xfff;
+    private int bigrows   = 10000;
+    private int smallrows = 0xfff;
 
     // if the extra table needs to be created and filled up
     private boolean multikeytable = false;

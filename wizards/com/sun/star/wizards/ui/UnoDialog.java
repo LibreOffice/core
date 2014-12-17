@@ -35,9 +35,9 @@ public class UnoDialog
 {
 
     public XMultiServiceFactory xMSF;
-    public XMultiServiceFactory MSFDialogModel;
+    XMultiServiceFactory MSFDialogModel;
     private XNameContainer xDlgNames;
-    public XControlContainer xDlgContainer;
+    XControlContainer xDlgContainer;
     private XNameAccess m_xDlgNameAccess;
     public XControl xControl;
     public XDialog xDialog;

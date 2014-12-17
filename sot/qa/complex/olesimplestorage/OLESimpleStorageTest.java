@@ -1,5 +1,5 @@
 package complex.olesimplestorage;
 
-public interface OLESimpleStorageTest {
+interface OLESimpleStorageTest {
     boolean test();
 }

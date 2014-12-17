@@ -40,7 +40,7 @@ public class TimeStampControl extends DatabaseControl
     private double nreldatewidth;
     private double nreltimewidth;
     private int nDBWidth;
-    XShape xShapeGroup;
+    private XShape xShapeGroup;
 
     public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint)
     {
