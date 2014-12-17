@@ -23,8 +23,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:PreviousTrackedChange" toolbar:text="Previous"/>
  <toolbar:toolbaritem xlink:href=".uno:NextTrackedChange" toolbar:text="Next"/>
- <toolbar:toolbaritem xlink:href=".uno:AcceptTracedChange" toolbar:text="Accept" toolbar:helpid="10625"/>
- <toolbar:toolbaritem xlink:href=".uno:RejectTracedChange" toolbar:text="Reject" toolbar:helpid="10626"/>
+ <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChange" toolbar:text="Accept" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:RejectTrackedChange" toolbar:text="Reject" toolbar:helpid="10626"/>
  <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges" toolbar:text="List" toolbar:helpid="10622"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CommentChangeTracking" toolbar:text="Comment" toolbar:helpid="10625"/>

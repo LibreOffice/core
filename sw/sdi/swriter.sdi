@@ -9799,7 +9799,7 @@ SfxBoolItem SpellingAndGrammarDialog FN_SPELL_GRAMMAR_DIALOG
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem AcceptTracedChange FN_REDLINE_ACCEPT_DIRECT
+SfxVoidItem AcceptTrackedChange FN_REDLINE_ACCEPT_DIRECT
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9824,7 +9824,7 @@ SfxVoidItem AcceptTracedChange FN_REDLINE_ACCEPT_DIRECT
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem RejectTracedChange FN_REDLINE_REJECT_DIRECT
+SfxVoidItem RejectTrackedChange FN_REDLINE_REJECT_DIRECT
 [
     /* flags: */
     AutoUpdate = FALSE,

@@ -164,7 +164,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:RejectTracedChange" oor:op="replace">
+      <node oor:name=".uno:RejectTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Reject Change</value>
         </prop>
@@ -172,7 +172,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:AcceptTracedChange" oor:op="replace">
+      <node oor:name=".uno:AcceptTrackedChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Accept Change</value>
         </prop>
