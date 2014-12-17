@@ -167,7 +167,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             && nSPMin <= (bSplitCount ? 2 * nLimit : nLimit) )
     {
         sal_Unicode c;
-        int nP, nQ, nR, nPij, d1, d2;
+        int nP, nQ, nR, nPij, d2;
 
         j++;
         c = cpPattern[j];
@@ -193,7 +193,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         // for each pattern column run though the string
         for ( sal_Int32 i=1; i <= nStringLen; i++ )
         {
-            d1 = d2;                // WLD( X(i-1), Y(j-1) )
+            int d1 = d2;                // WLD( X(i-1), Y(j-1) )
             d2 = npDistance[i];     // WLD( X(i)  , Y(j-1) )
             if ( cString[i-1] == c )
             {
