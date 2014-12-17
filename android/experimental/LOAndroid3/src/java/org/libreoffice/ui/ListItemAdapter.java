@@ -112,14 +112,22 @@ public class ListItemAdapter implements ListAdapter{
 
         // set image based on selected text
         ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
-        if( filePaths[position].getName().endsWith(".odt") ){
-            imageView.setImageResource(R.drawable.writer);
-        }
-        if( filePaths[position].getName().endsWith(".ods") ){
-            imageView.setImageResource(R.drawable.calc);
-        }
-        if( filePaths[position].getName().endsWith(".odp") ){
-            imageView.setImageResource(R.drawable.impress);
+        switch (FileUtilities.getType(filePaths[position].getName()))
+        {
+            case FileUtilities.DOC:
+                imageView.setImageResource(R.drawable.writer);
+                break;
+            /*case FileUtilities.CALC:
+                imageView.setImageResource(R.drawable.calc);
+                break;*/
+            case FileUtilities.DRAWING:
+                imageView.setImageResource(R.drawable.draw);
+                break;
+            case FileUtilities.IMPRESS:
+                imageView.setImageResource(R.drawable.impress);
+                break;
+            default:
+                break;
         }
         if( filePaths[position].isDirectory() ){
             //Eventually have thumbnails of each sub file on a black circle

@@ -241,70 +241,6 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         return true;
     }
 
-    public void createDummyFileSystem(){
-        boolean mExternalStorageAvailable = false;
-        boolean mExternalStorageWriteable = false;
-        String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            mExternalStorageAvailable = mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            mExternalStorageAvailable = mExternalStorageWriteable = false;
-        }
-        if( mExternalStorageAvailable && mExternalStorageWriteable ){//can also check if its writeable
-            Log.d(tag, Boolean.toString( currentDirectory.mkdir() ) );
-            try {
-                File[] removeList = currentDirectory.listFiles();
-                for(File item : removeList){
-                    if(item.isDirectory())
-                        continue;//Log.d(tag, item.getPath());
-                    item.delete();
-                }
-                new File( currentDirectory , "d0.odp" ).createNewFile();
-                new File( currentDirectory , "d1.odt" ).createNewFile();
-                new File( currentDirectory , "d2.odt" ).createNewFile();
-                new File( currentDirectory , "d3.odp" ).createNewFile();
-                new File( currentDirectory , "d4.ods" ).createNewFile();
-                new File( currentDirectory , "d5.odt" ).createNewFile();
-                new File( currentDirectory , "d6.odp" ).createNewFile();
-                new File( currentDirectory , "d7.odt" ).createNewFile();
-                new File( currentDirectory , "d8.odt" ).createNewFile();
-                new File( currentDirectory , "d9.odp" ).createNewFile();
-                new File( currentDirectory , "d10.odp" ).createNewFile();
-                new File( currentDirectory , "d11.odt" ).createNewFile();
-                new File( currentDirectory , "d12.odt" ).createNewFile();
-                new File( currentDirectory , "d13.odp" ).createNewFile();
-                new File( currentDirectory , "d14.ods" ).createNewFile();
-                new File( currentDirectory , "d15.odt" ).createNewFile();
-                File templatesDirectory = new File( currentDirectory , "Templates" );
-                templatesDirectory.mkdir();
-                new File( templatesDirectory , "template1.odt" ).createNewFile();
-                new File( templatesDirectory , "template2.odt" ).createNewFile();
-                new File( templatesDirectory , "template3.ods" ).createNewFile();
-                new File( templatesDirectory , "template4.odp" ).createNewFile();
-                File regularDirectory = new File( currentDirectory , "Folder" );
-                regularDirectory.mkdir();
-                new File( regularDirectory , "yetAnotherDoc.odt" ).createNewFile();
-                new File( regularDirectory , "some really long file name.ods" ).createNewFile();
-                File anotherRegularDirectory = new File( regularDirectory , "AnotherFolder" );
-                anotherRegularDirectory.mkdir();
-                new File( anotherRegularDirectory , "yetAnotherDoc2.odt" ).createNewFile();
-                //Should put a folder in at some stage.
-
-            } catch (IOException e) {
-                Log.d(tag, "file io failure");
-                e.printStackTrace();
-            }
-            //Log.d(tag, fileStore.toString());
-        }
-        else{
-            Log.d(tag, "No External Storage");
-        }
-    }
-
     @SuppressWarnings("unused")//see android:onClick properties in view_menu.xml
     public void sortFiles(MenuItem item){
         switch ( item.getItemId() ) {
@@ -527,14 +463,22 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
             // set image based on selected text
             ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
-            if( filePaths[position].getName().endsWith(".odt") ){
-                imageView.setImageResource(R.drawable.writer);
-            }
-            if( filePaths[position].getName().endsWith(".ods") ){
-                imageView.setImageResource(R.drawable.calc);
-            }
-            if( filePaths[position].getName().endsWith(".odp") ){
-                imageView.setImageResource(R.drawable.impress);
+            switch (FileUtilities.getType(filePaths[position].getName()))
+            {
+                case FileUtilities.DOC:
+                    imageView.setImageResource(R.drawable.writer);
+                    break;
+                /*case FileUtilities.CALC:
+                    imageView.setImageResource(R.drawable.calc);
+                    break;*/
+                case FileUtilities.DRAWING:
+                    imageView.setImageResource(R.drawable.draw);
+                    break;
+                case FileUtilities.IMPRESS:
+                    imageView.setImageResource(R.drawable.impress);
+                    break;
+                default:
+                    break;
             }
             if( filePaths[position].isDirectory() ){
                 //Eventually have thumbnails of each sub file on a black circle
