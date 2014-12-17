@@ -395,7 +395,7 @@ public class _XUserInputInterception extends MultiMethodTest {
      * press a key with the <CODE>Robot</CODE> class
      * @see java.awt.Robot
      */
-    private class EventTrigger extends Thread{
+    private class EventTrigger implements Runnable {
 
         /**
          * represents an <CODE>EventType</CODE>
@@ -434,7 +434,6 @@ public class _XUserInputInterception extends MultiMethodTest {
          *    </LI>
          * </UL>
          */
-        @Override
         public void run(){
 
             switch (this.eventType){
