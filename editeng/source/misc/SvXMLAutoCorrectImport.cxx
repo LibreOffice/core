@@ -18,10 +18,13 @@
  */
 
 #include <SvXMLAutoCorrectImport.hxx>
-#include <SvXMLAutoCorrectTokenHandler.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::css;
 using namespace ::css::xml::sax;
+using namespace xmloff;
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< uno::XComponentContext > xContext,
@@ -42,7 +45,7 @@ SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport() throw ()
 SvXMLImportContext *SvXMLAutoCorrectImport::CreateFastContext( sal_Int32 Element,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_block_list) )
         return new SvXMLWordListContext( *this, Element, xAttrList );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
@@ -63,7 +66,7 @@ com::sun::star::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContex
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
-    if ( Element == SvXMLAutoCorrectToken::BLOCK )
+    if ( Element == (FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_block) )
         return new SvXMLWordContext (rLocalRef, Element, xAttrList);
     else
         return new SvXMLImportContext( rLocalRef );
@@ -82,11 +85,11 @@ SvXMLWordContext::SvXMLWordContext(
    rLocalRef(rImport)
 {
     OUString sWrong, sRight;
-    if ( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::ABBREVIATED_NAME ) )
-        sWrong = xAttrList->getValue( SvXMLAutoCorrectToken::ABBREVIATED_NAME );
+    if ( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_abbreviated_name ) )
+        sWrong = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_abbreviated_name );
 
-    if ( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::NAME ) )
-        sRight = xAttrList->getValue( SvXMLAutoCorrectToken::NAME );
+    if ( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_name ) )
+        sRight = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_name );
 
    if ( sWrong.isEmpty() || sRight.isEmpty())
         return;
@@ -124,7 +127,7 @@ SvXMLExceptionListImport::~SvXMLExceptionListImport() throw ()
 SvXMLImportContext *SvXMLExceptionListImport::CreateFastContext(sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_block_list) )
         return new SvXMLExceptionListContext( *this, Element, xAttrList );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
@@ -144,7 +147,7 @@ com::sun::star::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExce
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
-    if ( Element == SvXMLAutoCorrectToken::BLOCK )
+    if ( Element == (FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_block) )
         return new SvXMLExceptionContext (rLocalRef, Element, xAttrList);
     else
         return new SvXMLImportContext( rLocalRef );
@@ -163,8 +166,8 @@ SvXMLExceptionContext::SvXMLExceptionContext(
    rLocalRef(rImport)
 {
     OUString sWord;
-    if( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::ABBREVIATED_NAME ) )
-        sWord = xAttrList->getValue( SvXMLAutoCorrectToken::ABBREVIATED_NAME );
+    if( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_abbreviated_name ) )
+        sWord = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_abbreviated_name );
 
     if (sWord.isEmpty())
         return;

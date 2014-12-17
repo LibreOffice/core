@@ -57,12 +57,12 @@
 #include <unotools/streamwrap.hxx>
 #include <SvXMLAutoCorrectImport.hxx>
 #include <SvXMLAutoCorrectExport.hxx>
-#include <SvXMLAutoCorrectTokenHandler.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/fasttokenhandler.hxx>
 #include <vcl/help.hxx>
 #include <set>
 #include <unordered_map>
@@ -2028,9 +2028,9 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
                 // connect parser and filter
                 uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create( xContext );
-                uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = static_cast< xml::sax::XFastTokenHandler* >( new SvXMLAutoCorrectTokenHandler );
+                uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new xmloff::token::FastTokenHandler();
                 xParser->setFastDocumentHandler( xFilter );
-                xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+                xParser->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
                 xParser->setTokenHandler( xTokenHandler );
 
                 // parse
@@ -2142,11 +2142,11 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
         SAL_INFO("editeng", "AutoCorrect Import" );
         uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List, rAutoCorrect, xStg );
-        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = static_cast< xml::sax::XFastTokenHandler* >( new SvXMLAutoCorrectTokenHandler );
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new xmloff::token::FastTokenHandler();
 
         // connect parser and filter
         xParser->setFastDocumentHandler( xFilter );
-        xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+        xParser->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
         xParser->setTokenHandler(xTokenHandler);
 
         // parse
