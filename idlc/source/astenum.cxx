@@ -37,13 +37,11 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
 {
     DeclList::const_iterator iter = getIteratorBegin();
     DeclList::const_iterator end = getIteratorEnd();
-    AstConstant*        pConst = NULL;
-    AstDeclaration*     pDecl = NULL;
 
     while ( iter != end)
     {
-        pDecl = *iter;
-        pConst = static_cast<AstConstant*>(pDecl);
+        AstDeclaration* pDecl = *iter;
+        AstConstant* pConst = static_cast<AstConstant*>(pDecl);
 
         if (pConst->getConstValue()->compare(pExpr))
             return pConst;
@@ -80,11 +78,10 @@ bool AstEnum::dump(RegistryKey& rKey)
 
         DeclList::const_iterator iter = getIteratorBegin();
         DeclList::const_iterator end = getIteratorEnd();
-        AstDeclaration* pDecl = NULL;
         sal_uInt16 index = 0;
         while ( iter != end )
         {
-            pDecl = *iter;
+            AstDeclaration* pDecl = *iter;
             if ( pDecl->getNodeType() == NT_enum_val )
                 static_cast<AstConstant*>(pDecl)->dumpBlob(aBlob, index++, false);
 

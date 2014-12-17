@@ -60,12 +60,11 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     {
         DeclList::const_iterator iter = getIteratorBegin();
         DeclList::const_iterator end = getIteratorEnd();
-        AstDeclaration* pDecl = NULL;
         RTParamMode paramMode;
         sal_uInt16 paramIndex = 0;
         while ( iter != end )
         {
-            pDecl = *iter;
+            AstDeclaration* pDecl = *iter;
             if ( pDecl->getNodeType() == NT_parameter )
             {
                 AstParameter* pParam = static_cast<AstParameter*>(pDecl);

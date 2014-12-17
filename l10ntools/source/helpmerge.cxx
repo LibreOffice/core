@@ -103,9 +103,7 @@ bool HelpParser::CreatePO(
         return false;
     }
 
-    XMLHashMap*  aXMLStrHM   = file->GetStrings();
-    LangHashMap* pElem;
-    XMLElement*  pXMLElement  = NULL;
+    XMLHashMap* aXMLStrHM = file->GetStrings();
 
     std::vector<OString> order = file->getOrder();
     std::vector<OString>::iterator pos;
@@ -114,9 +112,9 @@ bool HelpParser::CreatePO(
     for( pos = order.begin(); pos != order.end() ; ++pos )
     {
         posm = aXMLStrHM->find( *pos );
-        pElem = posm->second;
+        LangHashMap* pElem = posm->second;
 
-        pXMLElement = (*pElem)[ "en-US" ];
+        XMLElement* pXMLElement = (*pElem)[ "en-US" ];
 
         if( pXMLElement != NULL )
         {
@@ -167,8 +165,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
 {
     file->Extract();
 
-       XMLHashMap*   aXMLStrHM     = file->GetStrings();
-    LangHashMap*  aLangHM;
+    XMLHashMap* aXMLStrHM = file->GetStrings();
     static  ResData pResData("","");
     pResData.sResTyp   = "help";
 
@@ -179,7 +176,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     for( pos = order.begin(); pos != order.end() ; ++pos ) // Merge every l10n related string in the same order as export
     {
         posm = aXMLStrHM->find( *pos );
-        aLangHM = posm->second;
+        LangHashMap*  aLangHM = posm->second;
 #if OSL_DEBUG_LEVEL > 2
         printf("*********************DUMPING HASHMAP***************************************");
         Dump(aXMLStrHM);

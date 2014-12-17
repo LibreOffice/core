@@ -529,7 +529,6 @@ void GrammarCheckingIterator::DequeueAndCheck()
             uno::Reference< text::XFlatParagraph > xFlatPara;
             FPEntry aFPEntryItem;
             OUString aCurDocId;
-            bool bModified = false;
             // ---- THREAD SAFE START ----
             {
                 ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
@@ -548,7 +547,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                 OUString aCurTxt( xFlatPara->getText() );
                 lang::Locale aCurLocale = lcl_GetPrimaryLanguageOfSentence( xFlatPara, aFPEntryItem.m_nStartIndex );
 
-                bModified = xFlatPara->isModified();
+                const bool bModified = xFlatPara->isModified();
                 if (!bModified)
                 {
                     // ---- THREAD SAFE START ----
