@@ -401,13 +401,13 @@ static void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
 
                     lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
                     pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
-                    pTmpSourceRow->Remove();
+                    pTmpSourceRow->RemoveFromLayout();
                     delete pTmpSourceRow;
                 }
                 else
                 {
                     // move complete row:
-                    pTmpSourceRow->Remove();
+                    pTmpSourceRow->RemoveFromLayout();
                     pTmpSourceRow->InsertBefore( pCurrDestCell, 0 );
                 }
 
@@ -538,7 +538,7 @@ static void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
             {
                 SwRowFrm* pTmp = static_cast<SwRowFrm*>(pTmpLastLineRow->GetNext());
                 lcl_MoveFootnotes( rTab, *rTab.GetFollow(), *pTmpLastLineRow );
-                pTmpLastLineRow->Remove();
+                pTmpLastLineRow->RemoveFromLayout();
                 pTmpLastLineRow->InsertBefore( pCurrFollowFlowLineCell, 0 );
                 pTmpLastLineRow->Shrink( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
                 pCurrFollowFlowLineCell->Grow( ( pTmpLastLineRow->Frm().*fnRect->fnGetHeight)() );
@@ -822,7 +822,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
             // The footnotes have to be moved:
             lcl_MoveFootnotes( *GetFollow(), *this, static_cast<SwRowFrm&>(*pRow) );
 
-            pRow->Remove();
+            pRow->RemoveFromLayout();
             pRow->InsertBehind( this, pInsertBehind );
             pRow->_InvalidateAll();
             pRow->CheckDirChange();
@@ -1156,7 +1156,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
             nRet += (pRow->Frm().*fnRect->fnGetHeight)();
             // The footnotes do not have to be moved, this is done in the
             // MoveFwd of the follow table!!!
-            pRow->Remove();
+            pRow->RemoveFromLayout();
             pRow->InsertBehind( pFoll, pInsertBehind );
             pRow->_InvalidateAll();
             pInsertBehind = pRow;
@@ -1178,7 +1178,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
             // The footnotes have to be moved:
             lcl_MoveFootnotes( *this, *GetFollow(), *pRow );
 
-            pRow->Remove();
+            pRow->RemoveFromLayout();
             pRow->Paste( pFoll, pPasteBefore );
 
             pRow->CheckDirChange();
@@ -1231,7 +1231,7 @@ bool SwTabFrm::Join()
         {
             pNxt = pRow->GetNext();
             nHeight += (pRow->Frm().*fnRect->fnGetHeight)();
-            pRow->Remove();
+            pRow->RemoveFromLayout();
             pRow->_InvalidateAll();
             pRow->InsertBehind( this, pPrv );
             pRow->CheckDirChange();
@@ -3384,7 +3384,7 @@ void SwTabFrm::Cut()
     //First remove, then shrink the upper.
     SwLayoutFrm *pUp = GetUpper();
     SWRECTFN( this )
-    Remove();
+    RemoveFromLayout();
     if ( pUp )
     {
         OSL_ENSURE( !pUp->IsFtnFrm(), "Table in Footnote." );

@@ -1505,7 +1505,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     SwFrm *pTmpFrm = pLay;
                     pLay = pTmpFrm->GetUpper();
                     pPrv = pTmpFrm->GetPrev();
-                    pTmpFrm->Remove();
+                    pTmpFrm->RemoveFromLayout();
                     delete pTmpFrm;
                 }
                 else
@@ -1583,7 +1583,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         // Might happen that an empty (Follow-)Section is left over.
         if ( !(pLay = pActualSection->GetSectionFrm())->ContainsCntnt() )
         {
-            pLay->Remove();
+            pLay->RemoveFromLayout();
             delete pLay;
         }
         delete pActualSection;

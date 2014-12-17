@@ -504,7 +504,7 @@ void SwFtnFrm::Cut()
     pFtn->SetMaster( 0 );
 
     // cut all connections
-    Remove();
+    RemoveFromLayout();
 
     if ( pUp )
     {

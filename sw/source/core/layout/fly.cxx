@@ -321,7 +321,7 @@ void SwFlyFrm::DeleteCnt()
             }
         }
 
-        pFrm->Remove();
+        pFrm->RemoveFromLayout();
         delete pFrm;
         pFrm = m_pLower;
     }

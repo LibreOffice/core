@@ -1798,7 +1798,7 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                              (SwFrm*)pFrm->FindFtnFrm() : pFrm;
             SwLayoutFrm *pUp = pTmpFrm->GetUpper();
             SwFrm *pOldNext = pTmpFrm->GetNext();
-            pTmpFrm->Remove();
+            pTmpFrm->RemoveFromLayout();
             pTmpFrm->InsertBefore( pNewUpper, 0 );
             if ( pFrm->IsTxtFrm() &&
                  ( bTstMove ||
@@ -1815,7 +1815,7 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             else
                 bRet = pFrm->WouldFit( nSpace, bSplit, false );
 
-            pTmpFrm->Remove();
+            pTmpFrm->RemoveFromLayout();
             pTmpFrm->InsertBefore( pUp, pOldNext );
         }
         else

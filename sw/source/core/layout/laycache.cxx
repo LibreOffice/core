@@ -818,7 +818,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                             while ( pRow )
                             {
                                 SwFrm* pNxt = pRow->GetNext();
-                                pRow->Remove();
+                                pRow->RemoveFromLayout();
                                 pRow->InsertBehind( pFoll, pPrv );
                                 pPrv = pRow;
                                 pRow = pNxt;
@@ -859,7 +859,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     if ( !rpActualSection->GetSectionFrm()->ContainsCntnt())
                     {
                         pSct = rpActualSection->GetSectionFrm();
-                        pSct->Remove();
+                        pSct->RemoveFromLayout();
                     }
                     else
                     {

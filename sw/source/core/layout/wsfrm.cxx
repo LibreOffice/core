@@ -695,7 +695,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
     }
 }
 
-void SwFrm::Remove()
+void SwFrm::RemoveFromLayout()
 {
     OSL_ENSURE( mpUpper, "Remove without upper?" );
 
@@ -932,7 +932,7 @@ void SwCntntFrm::Cut()
     }
     //Remove first, then shrink the upper.
     SwLayoutFrm *pUp = GetUpper();
-    Remove();
+    RemoveFromLayout();
     if ( pUp )
     {
         SwSectionFrm *pSct = 0;
@@ -1130,16 +1130,16 @@ void SwLayoutFrm::Cut()
                 if( NA_GROW_ADJUST == nAdjust && nReal < nShrink )
                     AdjustNeighbourhood( nReal - nShrink );
             }
-            Remove();
+            RemoveFromLayout();
         }
         else
         {
-            Remove();
+            RemoveFromLayout();
             pUp->Shrink( nShrink );
         }
     }
     else
-        Remove();
+        RemoveFromLayout();
 
     if( pUp && !pUp->Lower() )
     {

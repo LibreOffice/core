@@ -257,7 +257,7 @@ void SwSectionFrm::_Cut( bool bRemove )
     SwLayoutFrm *pUp = GetUpper();
     if( bRemove )
     {
-        Remove();
+        RemoveFromLayout();
         if( pUp && !pUp->Lower() && pUp->IsFtnFrm() && !pUp->IsColLocked() &&
             pUp->GetUpper() )
         {
@@ -2563,7 +2563,7 @@ void SwRootFrm::_DeleteEmptySct()
         if( !pSect->Frm().HasArea() && !pSect->ContainsCntnt() )
         {
             SwLayoutFrm* pUp = pSect->GetUpper();
-            pSect->Remove();
+            pSect->RemoveFromLayout();
             delete pSect;
             if( pUp && !pUp->Lower() )
             {

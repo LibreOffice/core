@@ -486,7 +486,7 @@ void SwLayoutFrm::Destroy()
                     }
                 }
             }
-            pFrm->Remove();
+            pFrm->RemoveFromLayout();
             delete pFrm;
             pFrm = m_pLower;
         }

@@ -838,7 +838,7 @@ void SwPageFrm::Cut()
     SwFrm* pRootFrm = GetUpper();
 
     // cut all connections
-    Remove();
+    RemoveFromLayout();
 
     if ( pRootFrm )
         static_cast<SwRootFrm*>(pRootFrm)->CheckViewLayout( 0, 0 );

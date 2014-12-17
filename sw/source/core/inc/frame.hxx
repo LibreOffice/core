@@ -464,7 +464,7 @@ public:
     // insert before pBehind or at the end of the chain while considering
     // the siblings of pSct
     void InsertGroupBefore( SwFrm* pParent, SwFrm* pWhere, SwFrm* pSct );
-    void Remove();
+    void RemoveFromLayout();
 
     // For internal use only - who ignores this will be put in a sack and has
     // to stay there for two days
