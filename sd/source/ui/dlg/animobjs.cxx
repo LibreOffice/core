@@ -121,6 +121,9 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
 /**
  *  AnimationWindow - FloatingWindow
  */
+
+const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
+
 AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, vcl::Window* pParent, const SdResId& rSdResId ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent, rSdResId ),
