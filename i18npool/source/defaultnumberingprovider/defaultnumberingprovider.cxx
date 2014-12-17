@@ -395,7 +395,6 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
     throw( IllegalArgumentException, RuntimeException )
 {
     OUStringBuffer aTemp(64);
-    unsigned int nDigit;
     static const sal_Unicode asPersianWord_conjunction_data[] = {0x20,0x0648,0x20,0};
     OUString asPersianWord_conjunction( asPersianWord_conjunction_data );
     unsigned char nSection = 0;
@@ -409,6 +408,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
             aTemp.insert( 0, asPersianWord_conjunction).insert( 0, table_PersianWord_decadeX[nSection-1]);
         }
 
+        unsigned int nDigit;
         if ((nDigit = nPart % 100) < 20)
         {
             if (!aTemp.isEmpty())

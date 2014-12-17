@@ -92,7 +92,6 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     sal_Int32 realCount;
     int i;  // loop variable
     const sal_Unicode * s1, * s2;
-    const sal_Unicode *pron1, *pron2;
 
     if (nCount1 + pos1 > str1.getLength())
         nCount1 = str1.getLength() - pos1;
@@ -105,8 +104,8 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
     s1 = str1.getStr() + pos1;
     s2 = str2.getStr() + pos2;
     for (i = 0; i < realCount; i++) {
-        pron1=getPronounce(*s1++);
-        pron2=getPronounce(*s2++);
+        const sal_Unicode *pron1 = getPronounce(*s1++);
+        const sal_Unicode *pron2 = getPronounce(*s2++);
         if (pron1 != pron2) {
             nMatch1 = nMatch2 = i;
             return sal_False;

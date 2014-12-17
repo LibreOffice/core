@@ -38,10 +38,9 @@ sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const
         // binary search
         int bottom = 0;
         int top = mnSize - 1;
-        int current;
 
         for (;;) {
-            current = (top + bottom) / 2;
+            const int current = (top + bottom) / 2;
             if( nKey < mpTable[current].first )
                 top = current - 1;
             else if( nKey > mpTable[current].first )
@@ -78,15 +77,15 @@ void oneToOneMappingWithFlag::makeIndex()
 {
     if( !mbHasIndex && mpTableWF )
     {
-        int i, j, high, low, current = -1;
+        int i, j, current = -1;
 
         for( i = 0; i < 256; i++ )
             mpIndex[i] = NULL;
 
         for( size_t k = 0; k < mnSize; k++ )
         {
-            high = (mpTableWF[k].first >> 8) & 0xFF;
-            low  = (mpTableWF[k].first)      & 0xFF;
+            const int high = (mpTableWF[k].first >> 8) & 0xFF;
+            const int low  = (mpTableWF[k].first)      & 0xFF;
             if( high != current )
             {
                 current = high;
@@ -124,10 +123,9 @@ sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
             // binary search
             int bottom = 0;
             int top = mnSize - 1;
-            int current;
 
             for (;;) {
-                current = (top + bottom) / 2;
+                const int current = (top + bottom) / 2;
                 if( nKey < mpTableWF[current].first )
                     top = current - 1;
                 else if( nKey > mpTableWF[current].first )
