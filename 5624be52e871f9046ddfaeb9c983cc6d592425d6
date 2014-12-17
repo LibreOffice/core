@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_7777f2d4",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1000857
+      },
+      "writtenOn": "2014-12-17T22:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_97add633",
+      "range": {
+        "startLine": 3443,
+        "startChar": 42,
+        "endLine": 3443,
+        "endChar": 62
+      },
+      "revId": "5624be52e871f9046ddfaeb9c983cc6d592425d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_57a74e4f",
         "filename": "configure.ac",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2014-12-17T22:03:27Z",
       "side": 1,
       "message": "This looks wrong. You are missing the check for express version. You override hard coded both cases: express and non express versions.",
+      "range": {
+        "startLine": 3512,
+        "startChar": 0,
+        "endLine": 3513,
+        "endChar": 61
+      },
+      "revId": "5624be52e871f9046ddfaeb9c983cc6d592425d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_9774f6cf",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3513,
+      "author": {
+        "id": 1000857
+      },
+      "writtenOn": "2014-12-17T22:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_57a74e4f",
       "range": {
         "startLine": 3512,
         "startChar": 0,
