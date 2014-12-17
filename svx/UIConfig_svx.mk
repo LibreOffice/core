@@ -25,6 +25,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/datanavigator \
 	svx/uiconfig/ui/deleteheaderdialog \
 	svx/uiconfig/ui/deletefooterdialog \
+	svx/uiconfig/ui/dockingcolorreplace \
 	svx/uiconfig/ui/docrecoverybrokendialog \
 	svx/uiconfig/ui/docrecoveryprogressdialog \
 	svx/uiconfig/ui/docrecoveryrecoverdialog \

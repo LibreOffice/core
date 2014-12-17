@@ -81,43 +81,37 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     friend class MaskData;
     friend class MaskSet;
 
-    ToolBox             aTbxPipette;
-    ColorWindow*        pCtlPipette;
-    PushButton          aBtnExec;
-    FixedLine           aGrpQ;
+    ToolBox*            m_pTbxPipette;
+    ColorWindow*        m_pCtlPipette;
+    PushButton*         m_pBtnExec;
 
-    FixedText           aFt1;
-    FixedText           aFt2;
-    FixedText           aFt3;
-    CheckBox            aCbx1;
-    MaskSet*            pQSet1;
-    MetricField         aSp1;
-    ColorLB             aLbColor1;
+    CheckBox*           m_pCbx1;
+    MaskSet*            m_pQSet1;
+    MetricField*        m_pSp1;
+    ColorLB*            m_pLbColor1;
 
-    CheckBox            aCbx2;
-    MaskSet*            pQSet2;
-    MetricField         aSp2;
-    ColorLB             aLbColor2;
+    CheckBox*           m_pCbx2;
+    MaskSet*            m_pQSet2;
+    MetricField*        m_pSp2;
+    ColorLB*            m_pLbColor2;
 
-    CheckBox            aCbx3;
-    MaskSet*            pQSet3;
-    MetricField         aSp3;
-    ColorLB             aLbColor3;
+    CheckBox*           m_pCbx3;
+    MaskSet*            m_pQSet3;
+    MetricField*        m_pSp3;
+    ColorLB*            m_pLbColor3;
 
-    CheckBox            aCbx4;
-    MaskSet*            pQSet4;
-    MetricField         aSp4;
-    ColorLB             aLbColor4;
+    CheckBox*           m_pCbx4;
+    MaskSet*            m_pQSet4;
+    MetricField*        m_pSp4;
+    ColorLB*            m_pLbColor4;
 
     MaskData*           pData;
-    CheckBox            aCbxTrans;
-    ColorLB             aLbColorTrans;
+    CheckBox*           m_pCbxTrans;
+    ColorLB*            m_pLbColorTrans;
 
     XColorListRef       pColLst;
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;
-
-    Image               maImgPipette;
 
     virtual bool        Close() SAL_OVERRIDE;
 
@@ -143,11 +137,8 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
 
 public:
 
-                        SvxBmpMask( SfxBindings *pBindinx,
-                                    SfxChildWindow *pCW,
-                                    vcl::Window* pParent,
-                                    const ResId& rResId );
-                        virtual ~SvxBmpMask();
+    SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent);
+    virtual ~SvxBmpMask();
 
     void                SetColor( const Color& rColor );
     void                PipetteClicked();
@@ -162,9 +153,6 @@ public:
     bool                IsEyedropping() const;
 
     void                onSelect( MaskSet* pSet );
-
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    void ApplyStyle();
 
 private:
 

@@ -16,38 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define RID_SVXDLG_BMPMASK              (RID_SVX_BMPMASK_START)
 #define RID_SVXDLG_BMPMASK_STR_TRANSP   (RID_SVX_BMPMASK_START + 1)
 #define RID_SVXDLG_BMPMASK_STR_SOURCECOLOR  (RID_SVX_BMPMASK_START + 2)
 #define RID_SVXDLG_BMPMASK_STR_PALETTE (RID_SVX_BMPMASK_START + 3)
 #define RID_SVXDLG_BMPMASK_STR_TOLERANCE (RID_SVX_BMPMASK_START + 4)
 #define RID_SVXDLG_BMPMASK_STR_REPLACEWITH (RID_SVX_BMPMASK_START + 5)
-#define GRP_Q 1
-#define CBX_1 1
-#define CBX_2 4
-#define CBX_3 3
-#define CBX_4 2
-#define CBX_TRANS 5
-#define QCOL_1 2
-#define QCOL_2 5
-#define QCOL_3 4
-#define QCOL_4 3
-#define SP_1 2
-#define SP_2 4
-#define SP_3 1
-#define SP_4 3
-#define TBX_PIPETTE 1
-#define TBI_PIPETTE 1
-#define WND_PIPETTE 10
-#define BTN_EXEC 1
-#define LB_1 1
-#define LB_2 2
-#define LB_3 3
-#define LB_4 4
-#define LB_TRANS 5
-#define FT_1 1
-#define FT_2 2
-#define FT_3 3
-#define IMG_PIPETTE     11
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
