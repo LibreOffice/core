@@ -43,6 +43,10 @@ public class LibreOfficeMainActivity extends LOAbout {
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
 
+    public LibreOfficeMainActivity() {
+        super(/*newActivity=*/false);
+    }
+
     public static GeckoLayerClient getLayerClient() {
         return mLayerClient;
     }

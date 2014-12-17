@@ -125,6 +125,10 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     int currentPage;
     XRenderable renderable;
 
+    public LibreOfficeUIActivity() {
+        super(/*newActivity=*/true);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
