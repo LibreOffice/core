@@ -408,7 +408,7 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
      *  * SAL_ENABLEGL overrides VCL_HIDE_WINDOWS and the configuration variable
      *  * the configuration variable is checked if no environment variable is set
      */
-    static bool bForceOpenGL = !!getenv("SAL_FORCEGL");
+    static bool bForceOpenGL = !!getenv("SAL_FORCEGL") || officecfg::Office::Common::VCL::ForceOpenGL::get();
     if (bForceOpenGL)
         return true;
 
