@@ -12,7 +12,7 @@ public class FixedZoomTileLayer extends ComposedTileLayer {
 
     @Override
     protected float getZoom(ImmutableViewportMetrics viewportMetrics) {
-        return 1.0f / 32.0f;
+        return 1.0f / 16.0f;
     }
 
     @Override
@@ -21,6 +21,6 @@ public class FixedZoomTileLayer extends ComposedTileLayer {
     }
 
     private IntSize getInflateFactor() {
-        return tileSize.scale(3);
+        return new IntSize(tileSize.width, tileSize.height*6);
     }
 }
