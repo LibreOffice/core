@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
@@ -28,6 +29,11 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+
+#include <editeng/eeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/wghtitem.hxx>
 
 #include "UndoManager.hxx"
 
@@ -65,6 +71,7 @@ public:
     void testMergeDoc();
     void testCreatePortions();
     void testBookmarkUndo();
+    void testFdo85876();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -93,6 +100,7 @@ public:
     CPPUNIT_TEST(testMergeDoc);
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
+    CPPUNIT_TEST(testFdo85876);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -714,6 +722,42 @@ void SwUiWriterTest::testBookmarkUndo()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+}
+
+static void lcl_setWeight(SwWrtShell* pWrtShell, FontWeight aWeight)
+{
+    SvxWeightItem aWeightItem(aWeight, EE_CHAR_WEIGHT);
+    SvxScriptSetItem aScriptSetItem(SID_ATTR_CHAR_WEIGHT, pWrtShell->GetAttrPool());
+    aScriptSetItem.PutItemForScriptType(SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX, aWeightItem);
+    pWrtShell->SetAttrSet(aScriptSetItem.GetItemSet());
+}
+
+void SwUiWriterTest::testFdo85876()
+{
+    SwDoc* const pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    lcl_setWeight(pWrtShell, WEIGHT_BOLD);
+    pWrtShell->Insert("test");
+    lcl_setWeight(pWrtShell, WEIGHT_NORMAL);
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+    pWrtShell->Up(false);
+    pWrtShell->Insert("test");
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getParagraph(1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        xCursor->collapseToStart();
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    }
+    {
+        auto xCursor(xText->createTextCursorByRange(getParagraph(2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        xCursor->collapseToStart();
+        // this used to be BOLD too with fdo#85876
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
