@@ -51,7 +51,7 @@ public:
     SvxMacro( const OUString &rMacName, const OUString &rLanguage);
 
     SvxMacro( const OUString &rMacName, const OUString &rLibName,
-                ScriptType eType); //  = STARBASIC entfernt
+                ScriptType eType); //  = STARBASIC removes
 
     const OUString &GetLibName() const        { return aLibName; }
     const OUString &GetMacName() const        { return aMacName; }
@@ -69,8 +69,7 @@ inline SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLibName,
     : aMacName( rMacName ), aLibName( rLibName ), eType( eTyp )
 {}
 
-//Macro Table, zerstoert die Pointer im DTor!
-
+// Macro Table, destroys the pointers in the DTor!
 typedef std::map<sal_uInt16, SvxMacro> SvxMacroTable;
 
 #define SVX_MACROTBL_VERSION31  0
@@ -89,7 +88,7 @@ public:
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
     int operator==( const SvxMacroTableDtor& rOther ) const;
 
-    // loescht alle Eintraege
+    // deletes all entries
     void clear() { aSvxMacroTable.clear(); }
 
     SvStream&   Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
@@ -118,8 +117,7 @@ public:
 
 
 /*
-[Beschreibung]
-Dieses Item beschreibt eine Makro-Tabelle.
+This item describes a Macro table.
 */
 
 class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
@@ -129,7 +127,7 @@ public:
 
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

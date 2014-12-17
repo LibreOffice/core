@@ -78,18 +78,18 @@ private:
     SVL_DLLPRIVATE static SfxStyleSheetBasePool& implGetStaticPool();
 
 protected:
-    SfxStyleSheetBasePool*  pPool;          // zugehoeriger Pool
-    SfxStyleFamily          nFamily;        // Familie
+    SfxStyleSheetBasePool*  pPool;          // related pool
+    SfxStyleFamily          nFamily;
 
     OUString                aName, aParent, aFollow;
     OUString                maDisplayName;
-    OUString                aHelpFile;      // Name der Hilfedatei
+    OUString                aHelpFile;      // name of the help file
     SfxItemSet*             pSet;           // ItemSet
     sal_uInt16              nMask;          // Flags
 
-    sal_uLong               nHelpId;        // Hilfe-ID
+    sal_uLong               nHelpId;        // help ID
 
-    bool                    bMySet;         // sal_True: Set loeschen im dtor
+    bool                    bMySet;         // sal_True: delete Set in dtor
     bool                    bHidden;
 
     SfxStyleSheetBase( const OUString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, sal_uInt16 mask );
@@ -127,8 +127,8 @@ public:
     virtual bool HasParentSupport() const;      // Default true
     virtual bool HasClearParentSupport() const; // Default false
     virtual bool IsUsed() const;                // Default true
-        // Default aus dem Itemset; entweder dem uebergebenen
-        // oder aus dem per GetItemSet() zurueckgelieferten Set
+    // Default from the Itemset; either from the passed one
+    // or from the Set returned by GetItemSet()
     virtual OUString GetDescription();
     virtual OUString GetDescription( SfxMapUnit eMetric );
 

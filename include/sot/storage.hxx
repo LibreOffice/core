@@ -52,7 +52,7 @@ class BaseStorageStream;
 class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
 {
 friend class SotStorage;
-    BaseStorageStream * pOwnStm;// Zeiger auf den eigenen Stream
+    BaseStorageStream * pOwnStm; // pointer to the own stream
 protected:
     virtual sal_uLong       GetData( void* pData, sal_uLong nSize ) SAL_OVERRIDE;
     virtual sal_uLong       PutData( const void* pData, sal_uLong nSize ) SAL_OVERRIDE;
@@ -103,13 +103,13 @@ class SOT_DLLPUBLIC SotStorage : virtual public SotObject
 friend class SotStorageStream;
 friend class SvStorage;
 
-    BaseStorage *   m_pOwnStg;   // Zielstorage
-    SvStream *      m_pStorStm;  // nur fuer SDSTORAGES
+    BaseStorage *   m_pOwnStg;   // target storage
+    SvStream *      m_pStorStm;  // only for SDSTORAGES
     sal_uLong       m_nError;
-    OUString        m_aName;     // Name des Storage
-    bool            m_bIsRoot;   // z.B.: File-Storage
+    OUString        m_aName;     // name of the storage
+    bool            m_bIsRoot;   // e.g.: File Storage
     bool            m_bDelStm;
-    OString         m_aKey;      // aKey.Len != 0  -> Verschluesselung
+    OString         m_aKey;      // aKey.Len != 0  -> encryption
     long            m_nVersion;
 
 protected:
@@ -170,40 +170,39 @@ public:
     void                SignAsRoot( bool b = true ) { m_bIsRoot = b; }
     void                SetDeleteStream( bool bDelete ) { m_bDelStm = bDelete; }
 
-                        // eigener Datenbereich
+                        // own data sector
     virtual void        SetClass( const SvGlobalName & rClass,
                                   sal_uLong bOriginalClipFormat,
                                   const OUString & rUserTypeName );
     virtual void        SetConvertClass( const SvGlobalName & rConvertClass,
                                          sal_uLong bOriginalClipFormat,
                                          const OUString & rUserTypeName );
-    virtual SvGlobalName GetClassName();// Typ der Daten im Storage
+    virtual SvGlobalName GetClassName(); // type of data in the storage
     virtual sal_uLong   GetFormat();
     virtual OUString    GetUserName();
     virtual bool        ShouldConvert();
 
-                        // Liste aller Elemente
+                        // list of all elements
     virtual void        FillInfoList( SvStorageInfoList * ) const;
     virtual bool        CopyTo( SotStorage * pDestStg );
     virtual bool        Commit();
     virtual bool        Revert();
 
-                        /* Element Methoden     */
-                        // Stream mit Verbindung zu Storage erzeugen,
-                        // in etwa eine Parent-Child Beziehung
+                        // create stream with connection to Storage,
+                        // more or less a Parent-Child relationship
     SotStorageStream *  OpenSotStream( const OUString & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        StorageMode = 0 );
     SotStorage *        OpenSotStorage( const OUString & rEleName,
                                         StreamMode = STREAM_STD_READWRITE,
                                         bool transacted = true );
-                        // Abfrage auf Storage oder Stream
+                        // query whether Storage or Stream
     virtual bool        IsStream( const OUString & rEleName ) const;
     virtual bool        IsStorage( const OUString & rEleName ) const;
     virtual bool        IsContained( const OUString & rEleName ) const;
-                        // Element loeschen
+                        // remove element
     virtual bool        Remove( const OUString & rEleName );
-                        // Elementnamen aendern
+                        // change element's name
     virtual bool        Rename( const OUString & rEleName,
                                 const OUString & rNewName );
     virtual bool        CopyTo( const OUString & rEleName, SotStorage * pDest,

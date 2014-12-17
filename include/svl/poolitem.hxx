@@ -48,7 +48,7 @@ enum SfxItemKind {
 #define SFX_ITEMS_MAXREF                    0xfffffffe
 #define SFX_ITEMS_SPECIAL                   0xffffffff
 
-#define CONVERT_TWIPS                       0x80    //Uno-Konvertierung fuer Massangaben (fuer MemberId)
+#define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
 
 
 
@@ -81,8 +81,6 @@ inline ::com::sun::star::uno::Any Bool2Any( bool bValue )
 }
 
 
-
-//! Notloesung!!!
 enum SfxFieldUnit
 {
     SFX_FUNIT_NONE, SFX_FUNIT_TWIP
@@ -111,13 +109,11 @@ enum SfxMapUnit
 
 enum SfxItemPresentation
 
-/*  [Beschreibung]
-
-    Die Werte dieses Enums bezeichnen den Grad der textuellen
-    Presentation eines Items nach Aufruf der virtuellen Methode
-    <SfxPoolItem::GetPresentation()const>.
-*/
-
+/*
+ * The values of this enum describe the degree of textual
+ * representation of an item after calling the virtual
+ * method <SfxPoolItem::GetPresentation()const>.
+ */
 {
     SFX_ITEM_PRESENTATION_NAMELESS,
     SFX_ITEM_PRESENTATION_COMPLETE
