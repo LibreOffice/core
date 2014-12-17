@@ -75,13 +75,24 @@ if __name__ == '__main__':
     print "saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total)
 
     # Don't do pointless Word -> Writer and similar conversions when we have no UI.
-    microsoftImport = '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Filter"]/group[@%(name)s="Microsoft"]/group[@%(name)s="Import"]/prop' % {
+    nsDict = {
         "component-schema": "{http://openoffice.org/2001/registry}component-schema",
         "name": "{http://openoffice.org/2001/registry}name",
     }
+    microsoftImport = '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Filter"]/group[@%(name)s="Microsoft"]/group[@%(name)s="Import"]/prop' % nsDict
     props = root.findall(microsoftImport)
     for prop in props:
         prop.findall("value")[0].text = "false"
+
+    # Disable View -> Text Boundaries
+    for prop in root.findall('%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(name)s="DocBoundaries"]/prop' % nsDict):
+        for value in prop.findall("value"):
+            value.text = "false"
+
+    # Disable Table -> Table Boundaries
+    for prop in root.findall('%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(name)s="TableBoundaries"]/prop' % nsDict):
+        for value in prop.findall("value"):
+            value.text = "false"
 
     # The namespace prefixes xs and oor are present in attribute *values*, and namespace
     # declarations for them are needed, even if no actual elements or attributes with these
