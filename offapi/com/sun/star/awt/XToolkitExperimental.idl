@@ -19,19 +19,7 @@ module com {  module sun {  module star {  module awt {
 
 interface XToolkitExperimental : XToolkit2
 {
-  /** Create a bitmap device using a byte buffer allocated outside of UNO territory.
-   *
-   *  @returns the device
-   *
-   *  @param AddressOfMemoryBufferForSharedArrayWrapper is the address of a
-   *  (C++) object the exact type of which is to be determined, but the point
-   *  is that it will then be rewrapped into a boost::shared_array of bytes to
-   *  be passed to the basebmp code. shared_array has its own style of
-   *  reference counting, naturally not related to UNO's or Java's, so lots of
-   *  fun stuff to take care of. I won't bother complicating stuff with
-   *  XUnoTunnel here (if it would even be possible to use it), this isn't in
-   *  any way intended to be "generic" anyway, but is experimental work in
-   *  progress, indented just for Android so far, and probably for iOS, too.
+  /** Don't use this.
    */
 
   com::sun::star::awt::XDevice createScreenCompatibleDeviceUsingBuffer( [in] long Width,
