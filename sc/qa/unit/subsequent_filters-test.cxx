@@ -2248,7 +2248,7 @@ void ScFiltersTest::testNewCondFormatODS()
 {
     ScDocShellRef xDocSh = ScBootstrapFixture::loadDoc( "new_cond_format_test.", ODS );
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.xlsx", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.ods", xDocSh.Is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
