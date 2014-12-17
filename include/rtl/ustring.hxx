@@ -55,6 +55,23 @@ namespace rtl
 
 #if defined RTL_FAST_STRING
 /// @cond INTERNAL
+
+/**
+A simple wrapper around string literal. It is usually not necessary to use, can
+be mostly used to force OUString operator+ working with operands that otherwise would
+not trigger it.
+
+This class is not part of public API and is meant to be used only in LibreOffice code.
+@since LibreOffice 4.0
+*/
+struct SAL_WARN_UNUSED OUStringLiteral
+{
+    template< int N >
+    OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
+    int size;
+    const char* data;
+};
+
 /** A simple wrapper around an ASCII character literal, for use in certain
     OUString functions designed for efficient processing of string literals.
 
@@ -65,6 +82,7 @@ template<char C> struct SAL_WARN_UNUSED OUStringLiteral1 {
         static_cast<unsigned char>(C) < 0x80,
         "non-ASCII character in OUStringLiteral1");
 };
+
 /// @endcond
 #endif
 
@@ -230,6 +248,29 @@ public:
         rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
         rtl_string_unittest_invalid_conversion = true;
     }
+#endif
+
+#ifdef RTL_FAST_STRING
+    /// @cond INTERNAL
+    /**
+      New string from an 8-Bit string literal that is expected to contain only
+      characters in the ASCII set (i.e. first 128 characters).
+
+      This constructor is similar to the "direct template" one, but can be
+      useful in cases where the latter does not work, like in
+
+        OUString(flag ? "a" : "bb")
+
+      written as
+
+        OUString(flag ? OUStringLiteral("a") : OUStringLiteral("bb"))
+
+      @since LibreOffice 4.5
+    */
+    OUString(OUStringLiteral literal): pData(0) {
+        rtl_uString_newFromLiteral(&pData, literal.data, literal.size, 0);
+    }
+    /// @endcond
 #endif
 
     /**
@@ -2401,22 +2442,6 @@ template<char C> bool operator !=(
 /* ======================================================================= */
 
 #ifdef RTL_FAST_STRING
-/**
-A simple wrapper around string literal. It is usually not necessary to use, can
-be mostly used to force OUString operator+ working with operands that otherwise would
-not trigger it.
-
-This class is not part of public API and is meant to be used only in LibreOffice code.
-@since LibreOffice 4.0
-*/
-struct SAL_WARN_UNUSED OUStringLiteral
-{
-    template< int N >
-    OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
-    int size;
-    const char* data;
-};
-
 /**
  @internal
 */

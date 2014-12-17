@@ -5202,8 +5202,8 @@ int RTFDocumentImpl::popState()
             break; // not for nested group
         OUString str(m_aStates.top().pDestinationText->makeStringAndClear());
         // dmapper expects this as a field, so let's fake something...
-        OUString const field = OUString::createFromAscii(
-            (DESTINATION_INDEXENTRY == aState.nDestinationState) ? "XE" : "TC");
+        OUString const field(
+            (DESTINATION_INDEXENTRY == aState.nDestinationState) ? OUStringLiteral("XE") : OUStringLiteral("TC"));
         str = field + " \"" + str.replaceAll("\"", "\\\"") + "\"";
         singleChar(0x13);
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());

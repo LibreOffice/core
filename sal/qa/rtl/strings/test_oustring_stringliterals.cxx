@@ -31,6 +31,7 @@ private:
     void checkExtraIntArgument();
     void checkNonconstChar();
     void checkBuffer();
+    void checkOUStringLiteral();
     void checkOUStringLiteral1();
 
     void testcall( const char str[] );
@@ -41,6 +42,7 @@ CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkExtraIntArgument);
 CPPUNIT_TEST(checkNonconstChar);
 CPPUNIT_TEST(checkBuffer);
+CPPUNIT_TEST(checkOUStringLiteral);
 CPPUNIT_TEST(checkOUStringLiteral1);
 CPPUNIT_TEST_SUITE_END();
 };
@@ -170,6 +172,22 @@ void test::oustring::StringLiterals::checkBuffer()
     char d[] = "d";
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUString( d ))));
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( rtl::OUStringBuffer( d ))));
+}
+
+namespace {
+
+rtl::OUString conditional(bool flag) {
+    return flag
+        ? rtlunittest::OUStringLiteral("a")
+        : rtlunittest::OUStringLiteral("bb");
+}
+
+}
+
+void test::oustring::StringLiterals::checkOUStringLiteral()
+{
+    CPPUNIT_ASSERT(conditional(true) == "a");
+    CPPUNIT_ASSERT(conditional(false) == "bb");
 }
 
 void test::oustring::StringLiterals::checkOUStringLiteral1()
