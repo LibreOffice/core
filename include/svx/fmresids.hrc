@@ -60,9 +60,6 @@
 #define RID_SVXIMG_SPINBUTTON                       SID_FM_SPINBUTTON
 #define RID_SVXIMG_NAVIGATIONBAR                    SID_FM_NAVIGATIONBAR
 
-// Dialog-Id's -----------------------------------------------------------
-#define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
-
 // Toolbars ------------------------------------------------------------
 #define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)
 #define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START +  2)

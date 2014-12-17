@@ -289,15 +289,4 @@ ImageList RID_SVXIMGLIST_FMEXPL
     NAVIGATOR_IMAGEIDS;
 };
 
-DockingWindow RID_SVX_FMEXPLORER
-{
-    HelpID = "svx:DockingWindow:RID_SVX_FMEXPLORER";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 200 ) ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Text [ en-US ] = "Form Navigator" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
