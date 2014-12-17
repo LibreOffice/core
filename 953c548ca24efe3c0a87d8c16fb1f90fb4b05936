@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_7754d253",
+        "filename": "sw/source/core/layout/ssfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-12-17T15:45:49Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right - there could be a chain of frames following \"this\" via mpNext / mpPrev and that would become unreachable?  perhaps call SwFrm::Remove()?",
+      "revId": "953c548ca24efe3c0a87d8c16fb1f90fb4b05936",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
