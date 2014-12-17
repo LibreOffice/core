@@ -21,7 +21,6 @@
 
 #include "app.hrc"
 #include "animobjs.hxx"
-#include "animobjs.hrc"
 #include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dockwin.hxx>
@@ -40,8 +39,7 @@ AnimationChildWindow::AnimationChildWindow(
     SfxChildWinInfo* pInfo )
     : SfxChildWindow( _pParent, nId )
 {
-    AnimationWindow* pAnimWin = new AnimationWindow(
-        pBindings, this, _pParent, SdResId( FLT_WIN_ANIMATION ) );
+    AnimationWindow* pAnimWin = new AnimationWindow(pBindings, this, _pParent);
     pWindow = pAnimWin;
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;

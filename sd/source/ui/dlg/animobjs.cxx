@@ -31,7 +31,6 @@
 
 #include "anminfo.hxx"
 #include "animobjs.hxx"
-#include "animobjs.hrc"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -56,9 +55,9 @@ namespace sd {
 /**
  *  SdDisplay - Control
  */
-SdDisplay::SdDisplay( vcl::Window* pWin, SdResId Id ) :
-        Control( pWin, Id ),
-        aScale( 1, 1 )
+SdDisplay::SdDisplay(vcl::Window* pWin)
+    : Control(pWin, 0)
+    , aScale(1, 1)
 {
     SetMapMode( MAP_PIXEL );
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
@@ -104,6 +103,11 @@ void SdDisplay::SetScale( const Fraction& rFrac )
     aScale = rFrac;
 }
 
+Size SdDisplay::GetOptimalSize() const
+{
+    return LogicToPixel(Size(147, 87), MAP_APPFONT);
+}
+
 void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Control::DataChanged( rDCEvt );
@@ -118,49 +122,47 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
+
 /**
  *  AnimationWindow - FloatingWindow
  */
-
-const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
-
-AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
-                SfxChildWindow *pCW, vcl::Window* pParent, const SdResId& rSdResId ) :
-        SfxDockingWindow    ( pInBindings, pCW, pParent, rSdResId ),
-        aCtlDisplay         ( this, SdResId( CTL_DISPLAY ) ),
-        aBtnFirst           ( this, SdResId( BTN_FIRST ) ),
-        aBtnReverse         ( this, SdResId( BTN_REVERSE ) ),
-        aBtnStop            ( this, SdResId( BTN_STOP ) ),
-        aBtnPlay            ( this, SdResId( BTN_PLAY ) ),
-        aBtnLast            ( this, SdResId( BTN_LAST ) ),
-        aNumFldBitmap       ( this, SdResId( NUM_FLD_BITMAP ) ),
-        aTimeField          ( this, SdResId( TIME_FIELD ) ),
-        aLbLoopCount        ( this, SdResId( LB_LOOP_COUNT ) ),
-        aGrpBitmap          ( this, SdResId( GRP_BITMAP ) ),
-        aBtnGetOneObject    ( this, SdResId( BTN_GET_ONE_OBJECT ) ),
-        aBtnGetAllObjects   ( this, SdResId( BTN_GET_ALL_OBJECTS ) ),
-        aBtnRemoveBitmap    ( this, SdResId( BTN_REMOVE_BITMAP ) ),
-        aBtnRemoveAll       ( this, SdResId( BTN_REMOVE_ALL ) ),
-        aFtCount            ( this, SdResId( FT_COUNT ) ),
-        aFiCount            ( this, SdResId( FI_COUNT ) ),
-        aGrpAnimation       ( this, SdResId( GRP_ANIMATION_GROUP ) ),
-        aRbtGroup           ( this, SdResId( RBT_GROUP ) ),
-        aRbtBitmap          ( this, SdResId( RBT_BITMAP ) ),
-        aFtAdjustment       ( this, SdResId( FT_ADJUSTMENT ) ),
-        aLbAdjustment       ( this, SdResId( LB_ADJUSTMENT ) ),
-        aBtnCreateGroup     ( this, SdResId( BTN_CREATE_GROUP ) ),
-        aBtnHelp            ( this, SdResId( BTN_HELP ) ),
-
-        pWin                ( pParent ),
-        m_nCurrentFrame     ( EMPTY_FRAMELIST ),
-
-        bMovie              ( false ),
-        bAllObjects         ( false ),
-
-        pBindings           ( pInBindings )
+AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
+    : SfxDockingWindow(pInBindings, pCW, pParent,
+        "DockingAnimation", "modules/simpress/ui/dockinganimation.ui")
+    , pWin(pParent)
+    , m_nCurrentFrame(EMPTY_FRAMELIST)
+    , bMovie(false)
+    , bAllObjects(false)
+    , pBindings(pInBindings)
 {
-    aCtlDisplay.SetAccessibleName(SD_RESSTR(STR_DISPLAY));
-    FreeResource();
+    get(m_pBtnFirst, "first");
+    get(m_pBtnReverse, "prev");
+    get(m_pBtnStop, "stop");
+    get(m_pBtnPlay, "next");
+    get(m_pBtnLast, "last");
+    get(m_pNumFldBitmap, "numbitmap");
+    get(m_pTimeField, "duration");
+    m_pTimeField->SetDuration(true);
+    m_pTimeField->EnforceValidValue(true);
+    m_pTimeField->SetMax(tools::Time(0, 0, 59, 99*tools::Time::nanoPerCenti));
+    get(m_pLbLoopCount, "loopcount");
+    get(m_pBtnGetOneObject, "getone");
+    get(m_pBtnGetAllObjects, "getall");
+    get(m_pBtnRemoveBitmap, "delone");
+    get(m_pBtnRemoveAll, "delall");
+    get(m_pFiCount, "count");
+    get(m_pRbtGroup, "group");
+    get(m_pRbtBitmap, "bitmap");
+    get(m_pFtAdjustment, "alignmentft");
+    get(m_pLbAdjustment, "alignment");
+    get(m_pBtnCreateGroup, "create");
+
+    m_pCtlDisplay = new SdDisplay(get<Window>("box"));
+    m_pCtlDisplay->set_hexpand(true);
+    m_pCtlDisplay->set_vexpand(true);
+    m_pCtlDisplay->Show();
+
     //undo SfxDockingWindow HelpId clear hack
     reverseUniqueHelpIdHack(*this);
 
@@ -172,41 +174,34 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
     pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
 
     // as long as not in the resource
-    aTimeField.SetFormat( TimeFieldFormat::F_SEC_CS );
+    m_pTimeField->SetFormat( TimeFieldFormat::F_SEC_CS );
 
-    aBtnFirst.SetClickHdl( LINK( this, AnimationWindow, ClickFirstHdl ) );
-    aBtnReverse.SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
-    aBtnStop.SetClickHdl( LINK( this, AnimationWindow, ClickStopHdl ) );
-    aBtnPlay.SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
-    aBtnLast.SetClickHdl( LINK( this, AnimationWindow, ClickLastHdl ) );
+    m_pBtnFirst->SetClickHdl( LINK( this, AnimationWindow, ClickFirstHdl ) );
+    m_pBtnReverse->SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
+    m_pBtnStop->SetClickHdl( LINK( this, AnimationWindow, ClickStopHdl ) );
+    m_pBtnPlay->SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );
+    m_pBtnLast->SetClickHdl( LINK( this, AnimationWindow, ClickLastHdl ) );
 
-    aBtnGetOneObject.SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
-    aBtnGetAllObjects.SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
-    aBtnRemoveBitmap.SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
-    aBtnRemoveAll.SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
+    m_pBtnGetOneObject->SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
+    m_pBtnGetAllObjects->SetClickHdl( LINK( this, AnimationWindow, ClickGetObjectHdl ) );
+    m_pBtnRemoveBitmap->SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
+    m_pBtnRemoveAll->SetClickHdl( LINK( this, AnimationWindow, ClickRemoveBitmapHdl ) );
 
-    aRbtGroup.SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
-    aRbtBitmap.SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
-    aBtnCreateGroup.SetClickHdl( LINK( this, AnimationWindow, ClickCreateGroupHdl ) );
-    aNumFldBitmap.SetModifyHdl( LINK( this, AnimationWindow, ModifyBitmapHdl ) );
-    aTimeField.SetModifyHdl( LINK( this, AnimationWindow, ModifyTimeHdl ) );
+    m_pRbtGroup->SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    m_pRbtBitmap->SetClickHdl( LINK( this, AnimationWindow, ClickRbtHdl ) );
+    m_pBtnCreateGroup->SetClickHdl( LINK( this, AnimationWindow, ClickCreateGroupHdl ) );
+    m_pNumFldBitmap->SetModifyHdl( LINK( this, AnimationWindow, ModifyBitmapHdl ) );
+    m_pTimeField->SetModifyHdl( LINK( this, AnimationWindow, ModifyTimeHdl ) );
 
     // disable 3D border
-    aCtlDisplay.SetBorderStyle(WindowBorderStyle::MONO);
-    aDisplaySize = aCtlDisplay.GetOutputSize();
+    m_pCtlDisplay->SetBorderStyle(WindowBorderStyle::MONO);
 
-    aSize = GetOutputSizePixel();
-    SetMinOutputSizePixel( aSize );
+    SetMinOutputSizePixel(GetOptimalSize());
 
     ResetAttrs();
 
     // the animator is empty; no animation group can be created
-    aBtnCreateGroup.Disable();
-
-    aBtnGetOneObject.SetAccessibleRelationMemberOf( &aGrpBitmap );
-    aBtnGetAllObjects.SetAccessibleRelationMemberOf( &aGrpBitmap );
-    aBtnRemoveBitmap.SetAccessibleRelationMemberOf( &aGrpBitmap );
-    aBtnRemoveAll.SetAccessibleRelationMemberOf( &aGrpBitmap );
+    m_pBtnCreateGroup->Disable();
 }
 
 AnimationWindow::~AnimationWindow()
@@ -223,6 +218,8 @@ AnimationWindow::~AnimationWindow()
 
     // delete the clones
     delete pMyDoc;
+
+    delete m_pCtlDisplay;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
@@ -246,17 +243,17 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     bMovie = true;
     bool bDisableCtrls = false;
     size_t const nCount = m_FrameList.size();
-    bool bReverse = p == &aBtnReverse;
+    bool bReverse = p == m_pBtnReverse;
 
     // it is difficult to find it later on
-    bool bRbtGroupEnabled = aRbtGroup.IsEnabled();
-    bool bBtnGetAllObjectsEnabled = aBtnGetAllObjects.IsEnabled();
-    bool bBtnGetOneObjectEnabled = aBtnGetOneObject.IsEnabled();
+    bool bRbtGroupEnabled = m_pRbtGroup->IsEnabled();
+    bool bBtnGetAllObjectsEnabled = m_pBtnGetAllObjects->IsEnabled();
+    bool bBtnGetOneObjectEnabled = m_pBtnGetOneObject->IsEnabled();
 
     // calculate overall time
     tools::Time aTime( 0 );
     long nFullTime;
-    if( aRbtBitmap.IsChecked() )
+    if( m_pRbtBitmap->IsChecked() )
     {
         for (size_t i = 0; i < nCount; ++i)
         {
@@ -275,8 +272,8 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     if( nFullTime >= 1000 )
     {
         bDisableCtrls = true;
-        aBtnStop.Enable();
-        aBtnStop.Update();
+        m_pBtnStop->Enable();
+        m_pBtnStop->Update();
         OUString aStr("Animator:"); // here we should think about something smart
         pProgress = new SfxProgress( NULL, aStr, nFullTime );
     }
@@ -296,12 +293,12 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
         UpdateControl(bDisableCtrls);
 
-        if( aRbtBitmap.IsChecked() )
+        if( m_pRbtBitmap->IsChecked() )
         {
             tools::Time *const pTime = m_FrameList[i].second;
             assert(pTime);
 
-            aTimeField.SetTime( *pTime );
+            m_pTimeField->SetTime( *pTime );
             sal_uLong nTime = pTime->GetMSFromTime();
 
             WaitInEffect( nTime, nTmpTime, pProgress );
@@ -348,12 +345,12 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     if( pProgress )
     {
         delete pProgress;
-        aBtnStop.Disable();
+        m_pBtnStop->Disable();
     }
 
-    aRbtGroup.Enable( bRbtGroupEnabled );
-    aBtnGetAllObjects.Enable( bBtnGetAllObjectsEnabled );
-    aBtnGetOneObject.Enable( bBtnGetOneObjectEnabled );
+    m_pRbtGroup->Enable( bRbtGroupEnabled );
+    m_pBtnGetAllObjects->Enable( bBtnGetAllObjectsEnabled );
+    m_pBtnGetOneObject->Enable( bBtnGetOneObjectEnabled );
 
     return( 0L );
 }
@@ -369,23 +366,23 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 
 IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
 {
-    if (m_FrameList.empty() || p == &aRbtGroup || aRbtGroup.IsChecked())
+    if (m_FrameList.empty() || p == m_pRbtGroup || m_pRbtGroup->IsChecked())
     {
-        aTimeField.SetText( OUString() );
-        aTimeField.Enable( false );
-        aLbLoopCount.Enable( false );
+        m_pTimeField->SetText( OUString() );
+        m_pTimeField->Enable( false );
+        m_pLbLoopCount->Enable( false );
     }
-    else if( p == &aRbtBitmap || aRbtBitmap.IsChecked() )
+    else if( p == m_pRbtBitmap || m_pRbtBitmap->IsChecked() )
     {
-        sal_uLong n = static_cast<sal_uLong>(aNumFldBitmap.GetValue());
+        sal_uLong n = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue());
         if( n > 0 )
         {
             tools::Time *const pTime = m_FrameList[n - 1].second;
             if( pTime )
-                aTimeField.SetTime( *pTime );
+                m_pTimeField->SetTime( *pTime );
         }
-        aTimeField.Enable();
-        aLbLoopCount.Enable();
+        m_pTimeField->Enable();
+        m_pLbLoopCount->Enable();
     }
 
     return( 0L );
@@ -393,7 +390,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
 
 IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 {
-    bAllObjects = pBtn == &aBtnGetAllObjects;
+    bAllObjects = pBtn == m_pBtnGetAllObjects;
 
     // Code now in AddObj()
     SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
@@ -408,7 +405,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     SdPage*     pPage = pMyDoc->GetSdPage(0, PK_STANDARD);
     SdrObject*  pObject;
 
-    if( pBtn == &aBtnRemoveBitmap )
+    if (pBtn == m_pBtnRemoveBitmap)
     {
         delete m_FrameList[m_nCurrentFrame].first;
         delete m_FrameList[m_nCurrentFrame].second;
@@ -463,15 +460,15 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     // can we create a animation group
     if (m_FrameList.empty())
     {
-        aBtnCreateGroup.Disable();
+        m_pBtnCreateGroup->Disable();
         // if previous disabled by acquisition of AnimatedGIFs:
-        //aRbtBitmap.Enable();
-        aRbtGroup.Enable();
+        //m_pRbtBitmap->Enable();
+        m_pRbtGroup->Enable();
     }
 
     // calculate and set zoom for DisplayWin
-    Fraction aFrac( GetScale() );
-    aCtlDisplay.SetScale( aFrac );
+    Fraction aFrac(GetScale());
+    m_pCtlDisplay->SetScale(aFrac);
 
     UpdateControl();
 
@@ -490,7 +487,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
 {
-    sal_uLong nBmp = static_cast<sal_uLong>(aNumFldBitmap.GetValue());
+    sal_uLong nBmp = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue());
 
     if (nBmp > m_FrameList.size())
     {
@@ -506,11 +503,11 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
-    sal_uLong nPos = static_cast<sal_uLong>(aNumFldBitmap.GetValue() - 1);
+    sal_uLong nPos = static_cast<sal_uLong>(m_pNumFldBitmap->GetValue() - 1);
 
     tools::Time *const pTime = m_FrameList[nPos].second;
 
-    *pTime = aTimeField.GetTime();
+    *pTime = m_pTimeField->GetTime();
 
     return( 0L );
 }
@@ -545,73 +542,70 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 
-        aCtlDisplay.SetBitmapEx( &aBmp );
+        m_pCtlDisplay->SetBitmapEx(&aBmp);
     }
     else
     {
-        aCtlDisplay.SetBitmapEx(0);
+        m_pCtlDisplay->SetBitmapEx(0);
     }
-    aCtlDisplay.Invalidate();
-    aCtlDisplay.Update();
+    m_pCtlDisplay->Invalidate();
+    m_pCtlDisplay->Update();
 
-    aFiCount.SetText(OUString::number(
+    m_pFiCount->SetText(OUString::number(
                 m_FrameList.size()));
 
     if (!m_FrameList.empty() && !bMovie)
     {
         size_t nIndex = m_nCurrentFrame + 1;
-        aNumFldBitmap.SetValue(nIndex);
+        m_pNumFldBitmap->SetValue(nIndex);
 
         // if there is at least 1 object in the list
-        aBtnFirst.Enable();
-        aBtnReverse.Enable();
-        aBtnPlay.Enable();
-        aBtnLast.Enable();
-        aNumFldBitmap.Enable();
-        aTimeField.Enable();
-        aLbLoopCount.Enable();
-        aBtnRemoveBitmap.Enable();
-        aBtnRemoveAll.Enable();
+        m_pBtnFirst->Enable();
+        m_pBtnReverse->Enable();
+        m_pBtnPlay->Enable();
+        m_pBtnLast->Enable();
+        m_pNumFldBitmap->Enable();
+        m_pTimeField->Enable();
+        m_pLbLoopCount->Enable();
+        m_pBtnRemoveBitmap->Enable();
+        m_pBtnRemoveAll->Enable();
     }
     else
     {
         // if no object is in the list
-        aBtnFirst.Enable( false );
-        aBtnReverse.Enable( false );
-        aBtnPlay.Enable( false );
-        aBtnLast.Enable( false );
-        aNumFldBitmap.Enable( false );
-        aTimeField.Enable( false );
-        aLbLoopCount.Enable( false );
-        aBtnRemoveBitmap.Enable( false );
-        aBtnRemoveAll.Enable( false );
-
-        //aFtAdjustment.Enable();
-        //aLbAdjustment.Enable();
+        m_pBtnFirst->Enable( false );
+        m_pBtnReverse->Enable( false );
+        m_pBtnPlay->Enable( false );
+        m_pBtnLast->Enable( false );
+        m_pNumFldBitmap->Enable( false );
+        m_pTimeField->Enable( false );
+        m_pLbLoopCount->Enable( false );
+        m_pBtnRemoveBitmap->Enable( false );
+        m_pBtnRemoveAll->Enable( false );
     }
 
     if( bMovie && bDisableCtrls )
     {
-        aBtnGetOneObject.Enable( false );
-        aBtnGetAllObjects.Enable( false );
-        aRbtGroup.Enable( false );
-        aRbtBitmap.Enable( false );
-        aBtnCreateGroup.Enable( false );
-        aFtAdjustment.Enable( false );
-        aLbAdjustment.Enable( false );
+        m_pBtnGetOneObject->Enable( false );
+        m_pBtnGetAllObjects->Enable( false );
+        m_pRbtGroup->Enable( false );
+        m_pRbtBitmap->Enable( false );
+        m_pBtnCreateGroup->Enable( false );
+        m_pFtAdjustment->Enable( false );
+        m_pLbAdjustment->Enable( false );
     }
     else
     {
         // enable 'group object' only if it is not a Animated GIF
         if (m_FrameList.empty())
         {
-            aRbtGroup.Enable();
+            m_pRbtGroup->Enable();
         }
 
-        aRbtBitmap.Enable();
-        aBtnCreateGroup.Enable(!m_FrameList.empty());
-        aFtAdjustment.Enable( true );
-        aLbAdjustment.Enable( true );
+        m_pRbtBitmap->Enable();
+        m_pBtnCreateGroup->Enable(!m_FrameList.empty());
+        m_pFtAdjustment->Enable( true );
+        m_pLbAdjustment->Enable( true );
     }
 
     ClickRbtHdl( NULL );
@@ -619,10 +613,10 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 
 void AnimationWindow::ResetAttrs()
 {
-    aRbtGroup.Check();
-    aLbAdjustment.SelectEntryPos( BA_CENTER );
+    m_pRbtGroup->Check();
+    m_pLbAdjustment->SelectEntryPos( BA_CENTER );
     // LoopCount
-    aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
+    m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
 
     UpdateControl();
 }
@@ -652,8 +646,7 @@ Fraction AnimationWindow::GetScale()
     size_t const nCount = m_FrameList.size();
     if (nCount > 0)
     {
-        aBmpSize.Width() = 0;
-        aBmpSize.Height() = 0;
+        Size aBmpSize(0, 0);
         for (size_t i = 0; i < nCount; i++)
         {
             BitmapEx *const pBitmap = m_FrameList[i].first;
@@ -665,107 +658,19 @@ Fraction AnimationWindow::GetScale()
         aBmpSize.Width() += 10;
         aBmpSize.Height() += 10;
 
+        Size aDisplaySize(m_pCtlDisplay->GetOutputSize());
+
         aFrac = Fraction( std::min( (double)aDisplaySize.Width() / (double)aBmpSize.Width(),
                              (double)aDisplaySize.Height() / (double)aBmpSize.Height() ) );
     }
-    return( aFrac );
+    return aFrac;
 }
 
 void AnimationWindow::Resize()
 {
-    if ( !IsFloatingMode() ||
-         !GetFloatingWindow()->IsRollUp() )
-    {
-        Size aWinSize( GetOutputSizePixel() ); // former rSize in Resizing()
-
-        Size aDiffSize;
-        aDiffSize.Width() = aWinSize.Width() - aSize.Width();
-        aDiffSize.Height() = aWinSize.Height() - aSize.Height();
-
-        // resize display controls
-        aDisplaySize.Width() += aDiffSize.Width();
-        aDisplaySize.Height() += aDiffSize.Height();
-        aCtlDisplay.SetOutputSizePixel( aDisplaySize );
-
-        Point aPt;
-        aPt.Y() = aDiffSize.Height();
-
-        // move other controls
-        aBtnFirst.Hide();
-        aBtnReverse.Hide();
-        aBtnStop.Hide();
-        aBtnPlay.Hide();
-        aBtnLast.Hide();
-        aTimeField.Hide();
-        aLbLoopCount.Hide();
-        aNumFldBitmap.Hide();
-        aFtCount.Hide();
-        aFiCount.Hide();
-        aBtnGetOneObject.Hide();
-        aBtnGetAllObjects.Hide();
-        aBtnRemoveBitmap.Hide();
-        aBtnRemoveAll.Hide();
-        aGrpBitmap.Hide();
-        aRbtGroup.Hide();
-        aRbtBitmap.Hide();
-        aFtAdjustment.Hide();
-        aLbAdjustment.Hide();
-        aBtnCreateGroup.Hide();
-        aGrpAnimation.Hide();
-
-        aBtnFirst.SetPosPixel( aBtnFirst.GetPosPixel() + aPt );
-        aBtnReverse.SetPosPixel( aBtnReverse.GetPosPixel() + aPt );
-        aBtnStop.SetPosPixel( aBtnStop.GetPosPixel() + aPt );
-        aBtnPlay.SetPosPixel( aBtnPlay.GetPosPixel() + aPt );
-        aBtnLast.SetPosPixel( aBtnLast.GetPosPixel() + aPt );
-        aNumFldBitmap.SetPosPixel( aNumFldBitmap.GetPosPixel() + aPt );
-        aTimeField.SetPosPixel( aTimeField.GetPosPixel() + aPt );
-        aLbLoopCount.SetPosPixel( aLbLoopCount.GetPosPixel() + aPt );
-        aFtCount.SetPosPixel( aFtCount.GetPosPixel() + aPt );
-        aFiCount.SetPosPixel( aFiCount.GetPosPixel() + aPt );
-        aRbtGroup.SetPosPixel( aRbtGroup.GetPosPixel() + aPt );
-        aRbtBitmap.SetPosPixel( aRbtBitmap.GetPosPixel() + aPt );
-        aFtAdjustment.SetPosPixel( aFtAdjustment.GetPosPixel() + aPt );
-        aLbAdjustment.SetPosPixel( aLbAdjustment.GetPosPixel() + aPt );
-        aBtnGetOneObject.SetPosPixel( aBtnGetOneObject.GetPosPixel() + aPt );
-        aBtnGetAllObjects.SetPosPixel( aBtnGetAllObjects.GetPosPixel() + aPt );
-        aBtnRemoveBitmap.SetPosPixel( aBtnRemoveBitmap.GetPosPixel() + aPt );
-        aBtnRemoveAll.SetPosPixel( aBtnRemoveAll.GetPosPixel() + aPt );
-        aBtnCreateGroup.SetPosPixel( aBtnCreateGroup.GetPosPixel() + aPt );
-        aGrpBitmap.SetPosPixel( aGrpBitmap.GetPosPixel() + aPt );
-        aGrpAnimation.SetPosPixel( aGrpAnimation.GetPosPixel() + aPt );
-
-        // calculate and set zoom for DisplayWin
-        Fraction aFrac( GetScale() );
-        aCtlDisplay.SetScale( aFrac );
-
-        aBtnFirst.Show();
-        aBtnReverse.Show();
-        aBtnStop.Show();
-        aBtnPlay.Show();
-        aBtnLast.Show();
-        aNumFldBitmap.Show();
-        aTimeField.Show();
-        aLbLoopCount.Show();
-        aFtCount.Show();
-        aFiCount.Show();
-        aFtAdjustment.Show();
-        aLbAdjustment.Show();
-        aBtnGetOneObject.Show();
-        aBtnGetAllObjects.Show();
-        aBtnRemoveBitmap.Show();
-        aBtnRemoveAll.Show();
-        aGrpBitmap.Show();
-        aRbtGroup.Show();
-        aRbtBitmap.Show();
-        aFtAdjustment.Show();
-        aLbAdjustment.Show();
-        aBtnCreateGroup.Show();
-        aGrpAnimation.Show();
-
-        aSize = aWinSize;
-    }
     SfxDockingWindow::Resize();
+    Fraction aFrac(GetScale());
+    m_pCtlDisplay->SetScale(aFrac);
 }
 
 bool AnimationWindow::Close()
@@ -844,9 +749,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             long nLoopCount = aAnimation.GetLoopCount();
 
                             if( !nLoopCount ) // endless
-                                aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
+                                m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
                             else
-                                aLbLoopCount.SelectEntry(OUString::number( nLoopCount ) );
+                                m_pLbLoopCount->SelectEntry(OUString::number( nLoopCount ) );
                         }
 
                         long nTime = rAnimBmp.nWait;
@@ -860,8 +765,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         ++m_nCurrentFrame;
                     }
                     // if a animated GIF is taken, only such one can be created
-                    aRbtBitmap.Check();
-                    aRbtGroup.Enable( false );
+                    m_pRbtBitmap->Check();
+                    m_pRbtGroup->Enable( false );
                     bAnimObj = true;
                 }
             }
@@ -878,7 +783,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         SdrExchangeView::GetObjGraphic(
                             pSnapShot->GetModel(), pSnapShot).GetBitmapEx() );
 
-                    ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
+                    ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
                             m_FrameList.begin() + nIndex,
@@ -899,7 +804,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             BitmapEx *const pBitmapEx =
                 new BitmapEx(rView.GetAllMarkedGraphic().GetBitmapEx());
 
-            ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
+            ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
 
             size_t nIndex = m_nCurrentFrame + 1;
             m_FrameList.insert(
@@ -931,7 +836,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         SdrExchangeView::GetObjGraphic(
                             pObject->GetModel(), pObject).GetBitmapEx() );
 
-                    ::tools::Time* pTime = new ::tools::Time( aTimeField.GetTime() );
+                    ::tools::Time* pTime = new ::tools::Time( m_pTimeField->GetTime() );
 
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
@@ -967,12 +872,12 @@ void AnimationWindow::AddObj (::sd::View& rView )
         // there, we can create a animation group
         if (nCloneCount == 0 && !m_FrameList.empty())
         {
-            aBtnCreateGroup.Enable();
+            m_pBtnCreateGroup->Enable();
         }
 
         // calculate and set zoom for DisplayWin
         Fraction aFrac( GetScale() );
-        aCtlDisplay.SetScale( aFrac );
+        m_pCtlDisplay->SetScale(aFrac);
 
         UpdateControl();
     }
@@ -991,7 +896,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
     const Point         aWindowCenter( pOutWin->PixelToLogic( Point( aTemp.Width() >> 1, aTemp.Height() >> 1 ) ) );
     const OutputDevice* pDefDev = Application::GetDefaultDevice();
     const size_t nCount = m_FrameList.size();
-    BitmapAdjustment    eBA = (BitmapAdjustment) aLbAdjustment.GetSelectEntryPos();
+    BitmapAdjustment    eBA = (BitmapAdjustment) m_pLbAdjustment->GetSelectEntryPos();
 
     // find biggest bitmap
     for (size_t i = 0; i < nCount; ++i)
@@ -1015,7 +920,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
     SdrPageView* pPV = rView.GetSdrPageView();
 
-    if( aRbtBitmap.IsChecked() )
+    if( m_pRbtBitmap->IsChecked() )
     {
         // create bitmap group (Animated GIF)
         Animation   aAnimation;
@@ -1078,10 +983,10 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             // find LoopCount (number of passes)
             AnimationBitmap aAnimBmp;
             long            nLoopCount = 0L;
-            sal_Int32          nPos = aLbLoopCount.GetSelectEntryPos();
+            sal_Int32          nPos = m_pLbLoopCount->GetSelectEntryPos();
 
-            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != aLbLoopCount.GetEntryCount() - 1 ) // endless
-                nLoopCount = (long) aLbLoopCount.GetSelectEntry().toInt32();
+            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
+                nLoopCount = (long) m_pLbLoopCount->GetSelectEntry().toInt32();
 
             aAnimBmp.aBmpEx = *pBitmapEx;
             aAnimBmp.aPosPix = aPt;
@@ -1235,8 +1140,8 @@ void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
         if (pStateItem)
         {
             sal_uInt16 nState = pStateItem->GetValue();
-            pAnimationWin->aBtnGetOneObject.Enable( nState & 1 );
-            pAnimationWin->aBtnGetAllObjects.Enable( nState & 2 );
+            pAnimationWin->m_pBtnGetOneObject->Enable( nState & 1 );
+            pAnimationWin->m_pBtnGetAllObjects->Enable( nState & 2 );
         }
     }
 }

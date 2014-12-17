@@ -65,7 +65,7 @@ private:
     Fraction    aScale;
 
 public:
-    SdDisplay( vcl::Window* pWin, SdResId Id );
+    SdDisplay(vcl::Window* pWin);
     virtual ~SdDisplay();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -74,6 +74,7 @@ public:
     void    SetScale( const Fraction& rFrac );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 class AnimationWindow : public SfxDockingWindow
@@ -82,8 +83,7 @@ class AnimationWindow : public SfxDockingWindow
  friend class AnimationControllerItem;
 
 public:
-    AnimationWindow( SfxBindings* pBindings, SfxChildWindow *pCW,
-        vcl::Window* pParent, const SdResId& rSdResId );
+    AnimationWindow(SfxBindings* pBindings, SfxChildWindow *pCW, vcl::Window* pParent);
     virtual ~AnimationWindow();
 
     void    AddObj( ::sd::View& rView );
@@ -97,31 +97,26 @@ protected:
     virtual void    FillInfo( SfxChildWinInfo& ) const SAL_OVERRIDE;
 
 private:
-    SdDisplay       aCtlDisplay;
-    ImageButton     aBtnFirst;
-    ImageButton     aBtnReverse;
-    ImageButton     aBtnStop;
-    ImageButton     aBtnPlay;
-    ImageButton     aBtnLast;
-    NumericField    aNumFldBitmap;
-    TimeField       aTimeField;
-    ListBox         aLbLoopCount;
-    FixedLine       aGrpBitmap;
-    ImageButton     aBtnGetOneObject;
-    ImageButton     aBtnGetAllObjects;
-    ImageButton     aBtnRemoveBitmap;
-    ImageButton     aBtnRemoveAll;
-    FixedText       aFtCount;
-    FixedInfo       aFiCount;
-    FixedLine       aGrpAnimation;
+    SdDisplay*      m_pCtlDisplay;
+    PushButton*     m_pBtnFirst;
+    PushButton*     m_pBtnReverse;
+    PushButton*     m_pBtnStop;
+    PushButton*     m_pBtnPlay;
+    PushButton*     m_pBtnLast;
+    NumericField*   m_pNumFldBitmap;
+    TimeField*      m_pTimeField;
+    ListBox*        m_pLbLoopCount;
+    PushButton*     m_pBtnGetOneObject;
+    PushButton*     m_pBtnGetAllObjects;
+    PushButton*     m_pBtnRemoveBitmap;
+    PushButton*     m_pBtnRemoveAll;
+    FixedText*      m_pFiCount;
 
-    RadioButton     aRbtGroup;
-    RadioButton     aRbtBitmap;
-    FixedText       aFtAdjustment;
-    ListBox         aLbAdjustment;
-    PushButton      aBtnCreateGroup;
-
-    HelpButton      aBtnHelp;
+    RadioButton*    m_pRbtGroup;
+    RadioButton*    m_pRbtBitmap;
+    FixedText*      m_pFtAdjustment;
+    ListBox*        m_pLbAdjustment;
+    PushButton*     m_pBtnCreateGroup;
 
     vcl::Window*       pWin;
     ::std::vector< ::std::pair<BitmapEx*, ::tools::Time*> > m_FrameList;
@@ -129,10 +124,6 @@ private:
     size_t          m_nCurrentFrame;
     SdDrawDocument* pMyDoc;
 
-    Size            aSize;
-    Size            aFltWinSize;
-    Size            aDisplaySize;
-    Size            aBmpSize;
     bool            bMovie;
     bool            bAllObjects;
 
