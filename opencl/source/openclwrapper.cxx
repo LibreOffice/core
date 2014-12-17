@@ -762,7 +762,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     }
 
     cl_command_queue command_queue = clCreateCommandQueue(
-            context, pDeviceId, 0, &nState);
+            context, pDeviceId, CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, &nState);
 
     if(command_queue == NULL || nState != CL_SUCCESS)
     {
