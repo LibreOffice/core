@@ -114,12 +114,20 @@ struct MigrationItem
         return *this;
     }
 
+    bool areBothOpenFrom(OUString const & cmd1, OUString const & cmd2)
+    {
+        return cmd1 == ".uno:Open" && cmd2.startsWith(".uno:OpenFrom");
+    }
+
+
     bool operator==(const MigrationItem& aMigrationItem)
     {
-        return ( aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
-            aMigrationItem.m_sPrevSibling    == m_sPrevSibling     &&
-            aMigrationItem.m_sCommandURL     == m_sCommandURL      &&
-            aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
+        return ((aMigrationItem.m_sCommandURL == m_sCommandURL
+            || (areBothOpenFrom(aMigrationItem.m_sCommandURL, m_sCommandURL)
+            ||  areBothOpenFrom(m_sCommandURL, aMigrationItem.m_sCommandURL)))
+            && aMigrationItem.m_sParentNodeName == m_sParentNodeName
+            && aMigrationItem.m_sPrevSibling    == m_sPrevSibling
+            && aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is() );
     }
 };
 
