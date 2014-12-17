@@ -20,30 +20,6 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
- // RID_SVXCTRL_COLOR -----------------------------------------------------
-DockingWindow RID_SVXCTRL_COLOR
-{
-    HelpID = HID_CTRL_COLOR ;
-    Border = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-    Size = MAP_APPFONT ( 150 , 22 ) ;
-    Text [ en-US ] = "Colors" ;
-    Control 1
-    {
-        HelpId = HID_COLOR_CTL_COLORS ;
-        Pos = MAP_APPFONT ( 2 , 2 ) ;
-        Size = MAP_APPFONT ( 146 , 18 ) ;
-        Border = FALSE ;
-    };
-};
-
 String STR_COLORTABLE
 {
     Text [ en-US ] = "Color Palette" ;

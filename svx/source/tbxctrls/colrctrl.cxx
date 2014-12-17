@@ -34,6 +34,7 @@
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include "svx/xexch.hxx"
+#include "helpid.hrc"
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
@@ -81,16 +82,14 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
     return bRet;
 }
 
-
-
 bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
 {
     WriteXFillExchangeData( *rxOStm, maData );
     return( rxOStm->GetError() == ERRCODE_NONE );
 }
 
-SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent, const ResId& rResId ) :
-    SvxColorValueSet( _pParent, rResId ),
+SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent, WinBits nWinStyle ) :
+    SvxColorValueSet( _pParent, nWinStyle ),
     DragSourceHelper( this ),
     mbLeftButton(true)
 {
@@ -182,23 +181,26 @@ SvxColorDockingWindow::SvxColorDockingWindow
 (
     SfxBindings* _pBindings,
     SfxChildWindow* pCW,
-    vcl::Window* _pParent,
-    const ResId& rResId
+    vcl::Window* _pParent
 ) :
 
-    SfxDockingWindow( _pBindings, pCW, _pParent, rResId ),
+    SfxDockingWindow( _pBindings, pCW, _pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE ),
     pColorList      (),
-    aColorSet       ( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aColorSet       ( this ),
     nLeftSlot       ( SID_ATTR_FILL_COLOR ),
     nRightSlot      ( SID_ATTR_LINE_COLOR ),
     nCols           ( 20 ),
     nLines          ( 1 ),
     nCount          ( 0 )
 {
-    FreeResource();
+    SetText(SVX_RESSTR(STR_COLORTABLE));
+    SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MAP_APPFONT)));
+    SetHelpId(HID_CTRL_COLOR);
 
-    aColorSet.SetStyle( aColorSet.GetStyle() | WB_ITEMBORDER );
     aColorSet.SetSelectHdl( LINK( this, SvxColorDockingWindow, SelectHdl ) );
+    aColorSet.SetHelpId(HID_COLOR_CTL_COLORS);
+    aColorSet.SetPosSizePixel(LogicToPixel(Point(2, 2), MapMode(MAP_APPFONT)),
+                              LogicToPixel(Size(146, 18), MapMode(MAP_APPFONT)));
 
     // Get the model from the view shell.  Using SfxObjectShell::Current()
     // is unreliable when called at the wrong times.

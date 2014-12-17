@@ -180,8 +180,6 @@
 // FontWork dialog
 #define RID_SVXDLG_FONTWORK                 (RID_SVX_START +  93)
 
-#define RID_SVXCTRL_COLOR                   (RID_SVX_START + 117)
-
 // for Toolbox-Control style
 #define RID_SVXTBX_STYLE                    (RID_SVX_START + 120)
 #define RID_SVX_STYLE_MENU                  (RID_SVX_START + 121)
