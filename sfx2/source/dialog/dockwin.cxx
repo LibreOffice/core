@@ -1209,19 +1209,15 @@ void SfxDockingWindow::Initialize_Impl()
         // trick: use VCL method SetWindowState to adjust position and size
         pFloatWin->SetWindowState( pImp->aWinState );
         Size aSize(pFloatWin->GetSizePixel());
-        pFloatWin->set_width_request(aSize.Width());
-        pFloatWin->set_height_request(aSize.Height());
 
         // remember floating size for calculating alignment and tracking rectangle
-        SetFloatingSize( pFloatWin->GetSizePixel() );
+        SetFloatingSize(aSize);
 
     }
 
     // allow calling of docking handlers
     pImp->bConstructed = true;
 }
-
-
 
 void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 

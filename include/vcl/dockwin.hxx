@@ -361,6 +361,7 @@ public:
 
     virtual void     SetText( const OUString& rStr ) SAL_OVERRIDE;
     virtual OUString GetText() const SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 inline void DockingWindow::SetPin( bool bPin )

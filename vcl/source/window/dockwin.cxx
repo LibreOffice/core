@@ -833,9 +833,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
                 pWin->SetMinOutputSizePixel( maMinOutSize );
 
-                pWin->set_width_request(std::max(aSize.Width(), maMinOutSize.Width()));
-                pWin->set_height_request(std::max(aSize.Height(), maMinOutSize.Height()));
-
                 pWin->SetMaxOutputSizePixel( mpImplData->maMaxOutSize );
 
                 ToggleFloatingMode();
@@ -1104,6 +1101,23 @@ void DockingWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
 
     Point aPos(nBorderWidth, nBorderWidth);
     VclContainer::setLayoutAllocation(rBox, aPos, aSize);
+}
+
+Size DockingWindow::GetOptimalSize() const
+{
+    if (!isLayoutEnabled())
+        return Window::GetOptimalSize();
+
+    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+
+    sal_Int32 nBorderWidth = get_border_width();
+
+    aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2*nBorderWidth;
+    aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2*nBorderWidth;
+
+    return Window::CalcWindowSize(aSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

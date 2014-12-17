@@ -624,7 +624,7 @@ void SmElementsControl::build()
 
 Size SmElementsControl::GetOptimalSize() const
 {
-    return LogicToPixel(Size(300, 300), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(100, 100), MapMode(MAP_APPFONT));
 }
 
 const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
