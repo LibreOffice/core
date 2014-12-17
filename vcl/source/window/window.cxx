@@ -854,7 +854,8 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-    DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
+    DBG_ASSERT( mpWindowImpl->mbFrame || pParent || GetType() == WINDOW_FIXEDIMAGE,
+        "Window::Window(): pParent == NULL" );
 
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window*     pRealParent = pParent;
