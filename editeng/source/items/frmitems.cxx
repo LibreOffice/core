@@ -81,6 +81,7 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.hrc>
 #include <editeng/editerr.hxx>
+#include <libxml/xmlwriter.h>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -4100,6 +4101,19 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
                             pImpl->nGraphicTransparency));
         pImpl->pGraphicObject->SetAttr(aAttr);
     }
+}
+
+void SvxBrushItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxBrushItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("color"), BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("shadingValue"), BAD_CAST(OString::number(nShadingValue).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("link"), BAD_CAST(maStrLink.toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("filter"), BAD_CAST(maStrFilter.toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("graphicPos"), BAD_CAST(OString::number(eGraphicPos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("loadAgain"), BAD_CAST(OString::boolean(bLoadAgain).getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 // class SvxFrameDirectionItem ----------------------------------------------

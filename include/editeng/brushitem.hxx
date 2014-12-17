@@ -127,6 +127,8 @@ public:
     static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
     static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
     static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif // INCLUDED_EDITENG_BRUSHITEM_HXX
