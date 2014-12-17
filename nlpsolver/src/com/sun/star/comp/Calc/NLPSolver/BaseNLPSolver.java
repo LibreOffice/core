@@ -460,7 +460,7 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
     public boolean hasPropertyByName(String property) {
-        return m_properties.contains(property);
+        return m_propertyMap.containsKey(property);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Helper functions">
