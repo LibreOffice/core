@@ -302,7 +302,6 @@ bool MigrationImpl::doMigration()
             }
 
             m_aOldVersionItemsHashMap.clear();
-            m_aNewVersionItemsHashMap.clear();
         }
 
         // execute the migration items from Setup.xcu
@@ -1151,36 +1150,6 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
 
         sSibling = it->m_sCommandURL;
     }
-
-    uno::Reference< container::XIndexContainer > xPopup;
-    for (it = vNewItems.begin(); it!=vNewItems.end(); ++it)
-    {
-        ::std::vector< MigrationItem >::iterator pFound = ::std::find(vOldItems.begin(), vOldItems.end(), *it);
-        if (pFound != vOldItems.end() && it->m_xPopupMenu.is())
-        {
-            OUString sName;
-            if (!sParent.isEmpty())
-                sName = sParent + MENU_SEPARATOR + it->m_sCommandURL;
-            else
-                sName = it->m_sCommandURL;
-            compareOldAndNewConfig(sName, pFound->m_xPopupMenu, it->m_xPopupMenu, sResourceURL);
-        }
-        else if (::std::find(vOldItems.begin(), vOldItems.end(), *it) == vOldItems.end())
-        {
-            MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
-            if (m_aNewVersionItemsHashMap.find(sResourceURL)==m_aNewVersionItemsHashMap.end())
-            {
-                ::std::vector< MigrationItem > vMigrationItems;
-                m_aNewVersionItemsHashMap.insert(MigrationHashMap::value_type(sResourceURL, vMigrationItems));
-                m_aNewVersionItemsHashMap[sResourceURL].push_back(aMigrationItem);
-            }
-            else
-            {
-                if (::std::find(m_aNewVersionItemsHashMap[sResourceURL].begin(), m_aNewVersionItemsHashMap[sResourceURL].end(), aMigrationItem)==m_aNewVersionItemsHashMap[sResourceURL].end())
-                    m_aNewVersionItemsHashMap[sResourceURL].push_back(aMigrationItem);
-            }
-        }
-    }
 }
 
 void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurationManager >& xCfgManager,
@@ -1247,7 +1216,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
 
             if (it->m_sPrevSibling.isEmpty())
                 xTemp->insertByIndex(0, uno::makeAny(aPropSeq));
-            else if (!it->m_sPrevSibling.isEmpty())
+            else
             {
                 sal_Int32 nCount = xTemp->getCount();
                 sal_Int32 i = 0;
