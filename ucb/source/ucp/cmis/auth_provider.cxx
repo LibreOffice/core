@@ -70,9 +70,9 @@ namespace cmis
             const char* /*username*/,
             const char* /*password*/ )
     {
-        OUString instructions = "Please open the following link in your browser and\n"
-            "paste the code from the URL you have been redirected to\n"
-            "in the box bellow. For example:\n"
+        OUString instructions = "Open the following link in your browser and "
+            "paste the code from the URL you have been redirected to in the "
+            "box below. For example:\n"
             "https://login.live.com/oauth20_desktop.srf?code=YOUR_CODE&lc=1033";
         OUString url_oustr( url, strlen( url ), RTL_TEXTENCODING_UTF8 );
         const com::sun::star::uno::Reference< 
