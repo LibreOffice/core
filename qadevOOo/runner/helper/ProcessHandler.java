@@ -129,7 +129,6 @@ public class ProcessHandler
     private boolean bUseOutput = true;
 
     private int m_nProcessTimeout = 0;
-    private String m_sProcessKiller;
     private ProcessWatcher m_aWatcher;
 
     /**
@@ -645,13 +644,11 @@ public class ProcessHandler
     {
 
         private int m_nTimeoutInSec;
-        private final String m_sProcessToStart;
         private final boolean m_bInterrupt;
 
-        private ProcessWatcher(int _nTimeOut, String _sProcess)
+        private ProcessWatcher(int _nTimeOut)
         {
             m_nTimeoutInSec = _nTimeOut;
-            m_sProcessToStart = _sProcess;
             m_bInterrupt = false;
         }
 
@@ -681,55 +678,8 @@ public class ProcessHandler
                     break;
                 }
             }
-            if (m_nTimeoutInSec <= 0 && !isInHoldOn())       // not zero, so we are interrupted.
-            {
-                system(m_sProcessToStart);
-            }
         }
 
-        /**
-         * Start an external Process
-         * @param _sProcess
-         */
-        private void system(String _sProcess)
-        {
-            if (_sProcess == null)
-            {
-                return;
-            }
-
-            try
-            {
-
-                // run a _sProcess command
-                // using the Runtime exec method:
-                Process p = Runtime.getRuntime().exec(_sProcess);
-
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-                // read the output from the command
-                String s;
-                while ((s = stdInput.readLine()) != null)
-                {
-                    System.out.println("out:" + s);
-                }
-
-                // read any errors from the attempted command
-                while ((s = stdError.readLine()) != null)
-                {
-                    System.out.println("err:" + s);
-                }
-
-            }
-            catch (java.io.IOException e)
-            {
-                System.out.println("exception caught: ");
-                e.printStackTrace();
-            }
-
-        }
     }
 
     /**
@@ -742,7 +692,7 @@ public class ProcessHandler
     {
         if (m_nProcessTimeout != 0)
         {
-            m_aWatcher = new ProcessWatcher(m_nProcessTimeout, m_sProcessKiller);
+            m_aWatcher = new ProcessWatcher(m_nProcessTimeout);
             m_aWatcher.start();
         }
     }
