@@ -702,29 +702,29 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
     SfxControllerItem::StateChanged (nSID, eState, pState);
 }
 
-
 /**************************************************************************/
-
 SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWindow,
                                vcl::Window *pParent) :
-    SfxDockingWindow(pBindings_, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
+    SfxDockingWindow(pBindings_, pChildWindow, pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_SIZEABLE|WB_DOCKABLE),
     aEdit       (*this),
     aController (aEdit, SID_TEXT, *pBindings_),
     bExiting    (false)
 {
+    SetHelpId( HID_SMA_COMMAND_WIN );
+    SetSizePixel(LogicToPixel(Size(292 , 94), MapMode(MAP_APPFONT)));
+    SetText(SM_RESSTR(STR_CMDBOXWINDOW));
+
     Hide ();
 
     aInitialFocusTimer.SetTimeoutHdl(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
     aInitialFocusTimer.SetTimeout(100);
 }
 
-
 SmCmdBoxWindow::~SmCmdBoxWindow ()
 {
     aInitialFocusTimer.Stop();
     bExiting = true;
 }
-
 
 SmViewShell * SmCmdBoxWindow::GetView()
 {
@@ -749,7 +749,6 @@ void SmCmdBoxWindow::Resize()
     Invalidate();
 }
 
-
 void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
@@ -761,7 +760,6 @@ void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
     DecorationView aView(this);
     aView.DrawFrame( aRect, FRAME_DRAW_IN );
 }
-
 
 Size SmCmdBoxWindow::CalcDockingSize(SfxChildAlignment eAlign)
 {
@@ -775,7 +773,6 @@ Size SmCmdBoxWindow::CalcDockingSize(SfxChildAlignment eAlign)
     }
     return SfxDockingWindow::CalcDockingSize(eAlign);
 }
-
 
 SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
                                              SfxChildAlignment eWish)

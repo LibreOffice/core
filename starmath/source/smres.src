@@ -104,23 +104,6 @@ Menu RID_VIEWMENU
     };
 };
 
-#define CMDBOXWINDOW_TEXT           \
-    Text [ en-US ] = "Commands" ;              \
-
-DockingWindow RID_CMDBOXWINDOW\
-{
-    HelpId = HID_SMA_COMMAND_WIN ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Sizeable = TRUE ;
-    OutputSize = TRUE ;
-    HideWhenDeactivate = FALSE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 292 , 94 ) ;
-    Dockable = TRUE ;
-    CMDBOXWINDOW_TEXT
-};
-
 String STR_BLACK
 {
     Text [ en-US ] = "black" ;
@@ -218,7 +201,7 @@ String STR_ALIGN_RIGHT
 
 String STR_CMDBOXWINDOW
 {
-    CMDBOXWINDOW_TEXT
+    Text [ en-US ] = "Commands" ;
 };
 
 String RID_DOCUMENTSTR
