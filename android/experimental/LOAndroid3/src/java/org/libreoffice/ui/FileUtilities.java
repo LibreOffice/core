@@ -40,33 +40,60 @@ public class FileUtilities {
 
     private static final Map<String,Integer> mExtnMap = new HashMap<String,Integer>();
     static {
-        mExtnMap.put(".odt",  DOC);
-        mExtnMap.put(".sxw",  DOC);
+        // Please keep this in sync with AndroidManifest.xml
+
+        // ODF
+        mExtnMap.put(".odt", DOC);
+        mExtnMap.put(".odg", DRAWING);
+        mExtnMap.put(".odp",  IMPRESS);
+        // mExtnMap.put(".ods",  CALC);
+        mExtnMap.put(".fodt", DOC);
+        mExtnMap.put(".fodg", DRAWING);
+        mExtnMap.put(".fodp",  IMPRESS);
+        // mExtnMap.put(".fods",  CALC);
+
+        // ODF templates
+        mExtnMap.put(".ott", DOC);
+        mExtnMap.put(".otg", DRAWING);
+        mExtnMap.put(".otp",  IMPRESS);
+        // mExtnMap.put(".ots",  CALC);
+
+        // MS
         mExtnMap.put(".rtf",  DOC);
         mExtnMap.put(".doc",  DOC);
-        mExtnMap.put(".docx", DOC);
-        mExtnMap.put(".html", DOC);
-        mExtnMap.put(".txt",  DOC);
-        mExtnMap.put(".wpd",  DOC);
-        mExtnMap.put(".wps",  DOC);
-        mExtnMap.put(".lwp",  DOC);
-
-        mExtnMap.put(".ods",  CALC);
-        mExtnMap.put(".sxc",  CALC);
-        mExtnMap.put(".xls",  CALC);
-        mExtnMap.put(".xlsx", CALC);
-
-        mExtnMap.put(".odp",  IMPRESS);
-        mExtnMap.put(".sxi",  IMPRESS);
+        mExtnMap.put(".vsd", DRAWING);
+        mExtnMap.put(".vsdx", DRAWING);
+        mExtnMap.put(".pub", DRAWING);
         mExtnMap.put(".ppt",  IMPRESS);
-        mExtnMap.put(".pptx", IMPRESS);
+        // mExtnMap.put(".pps",  IMPRESS);
+        // mExtnMap.put(".xls",  CALC);
 
-        mExtnMap.put(".odd",  DRAWING);
-        mExtnMap.put(".sxd",  DRAWING);
+        // MS templates
+        mExtnMap.put(".dot",  DOC);
+        mExtnMap.put(".pot",  IMPRESS);
+        // mExtnMap.put(".xlt",  CALC);
+
+        // OOXML
+        mExtnMap.put(".docx", DOC);
+        mExtnMap.put(".pptx", IMPRESS);
+        // mExtnMap.put(".ppsx", IMPRESS);
+        // mExtnMap.put(".xlsx", CALC);
+
+        // OOXML templates
+        mExtnMap.put(".dotx", DOC);
+        mExtnMap.put(".potx", IMPRESS);
+        // mExtnMap.put(".xltx", CALC);
+
+        // Other
+        //mExtnMap.put(".csv",  CALC);
+        mExtnMap.put(".wps",  DOC);
+        mExtnMap.put(".key",  IMPRESS);
+        mExtnMap.put(".abw",  DOC);
+        mExtnMap.put(".pmd",  DRAWING);
+        mExtnMap.put(".emf",  DRAWING);
+        mExtnMap.put(".svm",  DRAWING);
+        mExtnMap.put(".wmf",  DRAWING);
         mExtnMap.put(".svg",  DRAWING);
-        mExtnMap.put(".vsd",  DRAWING);
-        mExtnMap.put(".wpg",  DRAWING);
-        // FIXME: we need to expand this ...
     }
 
     private static final String getExtension(String filename)

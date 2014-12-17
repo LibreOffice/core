@@ -28,6 +28,8 @@
                 <action android:name="android.intent.action.PICK" />
                 <category android:name="android.intent.category.DEFAULT" />
 
+                <!-- Please keep this in sync with FileUtilities.java. -->
+
                 <!-- ODF -->
                 <data android:mimeType="application/vnd.oasis.opendocument.text" />
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics" />
@@ -68,7 +70,6 @@
 
                 <!-- OTHER -->
                 <!-- Calc. <data android:mimeType="text/csv"/>-->
-                <!-- Calc. <data android:mimeType="text/spreadsheet"/> -->
                 <data android:mimeType="application/vnd.ms-works" />
                 <data android:mimeType="application/vnd.apple.keynote" />
                 <data android:mimeType="application/x-abiword" />
