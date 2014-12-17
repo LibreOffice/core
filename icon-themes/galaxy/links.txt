@@ -14,6 +14,10 @@ cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
+cmd/lc_objectforwardone.png cmd/lc_forward.png
+cmd/sc_objectforwardone.png cmd/sc_forward.png
+cmd/lc_objectbackone.png cmd/lc_backward.png
+cmd/sc_objectbackone.png cmd/sc_backward.png
 
 cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
