@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_b7825ac7",
+        "filename": "sw/inc/docary.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-12-17T12:37:17Z",
+      "side": 1,
+      "message": "identifiers starting with underscore are reserved and our code should not define such identifiers.",
+      "revId": "7c181e5e0aa218ba0abff6c8ea42e107f59bf3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
