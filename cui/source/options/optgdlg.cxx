@@ -135,6 +135,7 @@ void OpenGLCfg::reset()
 {
     mbUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
     mbForceOpenGL = officecfg::Office::Common::VCL::ForceOpenGL::get();
+    mbModified = false;
 }
 
 OpenGLCfg::~OpenGLCfg()
