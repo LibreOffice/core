@@ -10,6 +10,7 @@
 package org.libreoffice.ui;
 
 import org.libreoffice.R;
+import org.libreoffice.LOAbout;
 import org.libreoffice.android.Bootstrap;
 
 import java.io.File;
@@ -84,7 +85,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ByteOrder;
 
-public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavigationListener {
+public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
     private SharedPreferences prefs;
     private File homeDirectory;
@@ -275,6 +276,9 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             case R.id.menu_sort_modified:
                 sortFiles(item);
                 break;
+            case R.id.action_about:
+                showAbout();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
