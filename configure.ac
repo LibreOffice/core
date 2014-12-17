@@ -3414,6 +3414,7 @@ find_msvc()
 
 SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
+VC_EXPRESS=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([Visual C++])
@@ -3438,9 +3439,15 @@ if test "$_os" = "WINNT"; then
             if test -f "$vctest/bin/amd64/cl.exe"; then
                 VC_PRODUCT_DIR=$vctest
             else
-                AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/amd64/cl.exe])
+                if test -f "$vctest/bin/x86_amd64/cl.exe"; then
+                    VC_PRODUCT_DIR=$vctest
+                    VC_EXPRESS=TRUE
+                else
+                    AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/amd64/cl.exe and $vctest/bin/x86_amd64/cl.exe])
+                fi
             fi
         fi
+
 
         VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
         AC_MSG_RESULT([$VC_PRODUCT_DIR])
@@ -3471,7 +3478,11 @@ if test "$_os" = "WINNT"; then
                 MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
             fi
         else
-            MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
+            if test "$VC_EXPRESS" = TRUE; then
+                MSPDB_PATH="$VC_PRODUCT_DIR/bin"
+            else
+                MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
+            fi
         fi
 
         mspdbnum=$vcnum
@@ -3499,8 +3510,8 @@ if test "$_os" = "WINNT"; then
                     CC="$VC_PRODUCT_DIR/bin/cl.exe"
                 fi
             else
-                if test -f "$VC_PRODUCT_DIR/bin/amd64/cl.exe"; then
-                    CC="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
+                if test -f "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"; then
+                    CC="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
                 fi
             fi
 
@@ -9712,8 +9723,13 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         assembler=ml.exe
         assembler_bin=bin
     else
-        assembler=ml64.exe
-        assembler_bin=bin/amd64
+        if test "$VC_EXPRESS" = TRUE; then
+            assembler=ml64.exe
+            assembler_bin=bin/x86_amd64
+        else
+            assembler=ml64.exe
+            assembler_bin=bin/amd64
+        fi
     fi
 
     AC_MSG_CHECKING([$VC_PRODUCT_DIR/$assembler_bin/$assembler])
@@ -12712,8 +12728,13 @@ else
             pathmunge "$MSBUILD_PATH" "before"
         fi
         if test "$BITNESS_OVERRIDE" = 64; then
-            pathmunge "$COMPATH/bin/amd64" "before"
-            pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
+            if test "$VC_EXPRESS" = TRUE; then
+                pathmunge "$COMPATH/bin/x86_amd64" "before"
+                pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
+            else
+                pathmunge "$COMPATH/bin/amd64" "before"
+                pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
+            fi
         else
             pathmunge "$COMPATH/bin" "before"
             pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
