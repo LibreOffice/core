@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,clew))
 
-$(eval $(call gb_Library_use_unpacked,clew,clcc))
-
 $(eval $(call gb_Library_add_defs,clew,\
 	-DCLEW_BUILD \
 ))
