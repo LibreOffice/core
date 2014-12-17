@@ -291,7 +291,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     while( bCount && bMovie )
     {
         // make list and view consistent
-        assert(0 < i && i < m_FrameList.size());
+        assert(i < m_FrameList.size());
         m_nCurrentFrame = i;
 
         UpdateControl(bDisableCtrls);
