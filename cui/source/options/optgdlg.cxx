@@ -260,8 +260,6 @@ namespace
         }
 }
 
-
-
 OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
 {
@@ -308,20 +306,14 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pToolTipsCB->SetClickHdl( aLink );
 }
 
-
-
 OfaMiscTabPage::~OfaMiscTabPage()
 {
 }
-
-
 
 SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaMiscTabPage( pParent, *rAttrSet );
 }
-
-
 
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -383,8 +375,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-
-
 void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 {
     SvtHelpOptions aHelpOptions;
@@ -421,8 +411,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     m_pCollectUsageInfo->SaveValue();
 }
 
-
-
 IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
     (void)pEd;
@@ -445,8 +433,6 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
     return 0;
 }
 
-
-
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
     sal_Int64 nNum = m_pYearValueField->GetValue();
@@ -457,15 +443,11 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
 {
     m_pExtHelpCB->Enable( m_pToolTipsCB->IsChecked() );
     return 0;
 }
-
-
 
 class CanvasSettings
 {
@@ -484,7 +466,6 @@ private:
     mutable bool           mbHWAccelAvailable;
     mutable bool           mbHWAccelChecked;
 };
-
 
 CanvasSettings::CanvasSettings() :
     mxForceFlagNameAccess(),
@@ -544,7 +525,6 @@ CanvasSettings::CanvasSettings() :
     }
 }
 
-
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
     if( !mbHWAccelChecked )
@@ -591,7 +571,6 @@ bool CanvasSettings::IsHardwareAccelerationAvailable() const
     return mbHWAccelAvailable;
 }
 
-
 bool CanvasSettings::IsHardwareAccelerationEnabled() const
 {
     bool bForceLastEntry(false);
@@ -603,7 +582,6 @@ bool CanvasSettings::IsHardwareAccelerationEnabled() const
 
     return !bForceLastEntry;
 }
-
 
 void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 {
