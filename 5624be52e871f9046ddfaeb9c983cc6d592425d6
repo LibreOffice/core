@@ -22,6 +22,29 @@
       "revId": "5624be52e871f9046ddfaeb9c983cc6d592425d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_57a74e4f",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3513,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-17T22:03:27Z",
+      "side": 1,
+      "message": "This looks wrong. You are missing the check for express version. You override hard coded both cases: express and non express versions.",
+      "range": {
+        "startLine": 3512,
+        "startChar": 0,
+        "endLine": 3513,
+        "endChar": 61
+      },
+      "revId": "5624be52e871f9046ddfaeb9c983cc6d592425d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
