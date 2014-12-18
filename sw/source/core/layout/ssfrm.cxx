@@ -367,12 +367,6 @@ void SwFrm::Destroy()
         delete mpDrawObjs;
         mpDrawObjs = 0;
     }
-
-    SwLayoutFrm *pFrm = GetUpper();
-    if (pFrm && pFrm->m_pLower == this)
-    {
-        pFrm->m_pLower = nullptr;
-    }
 }
 
 SwFrm::~SwFrm()
