@@ -47,6 +47,9 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mbOffscreen(false)
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
+#ifdef DBG_UTIL
+    , mProgramIsSolidLineColor(false)
+#endif
 {
 }
 
@@ -162,6 +165,9 @@ void OpenGLSalGraphicsImpl::PostDraw()
     {
         mpProgram->Clean();
         mpProgram = NULL;
+#ifdef DBG_UTIL
+        mProgramIsSolidLineColor = false;
+#endif
     }
 
     CHECK_GL_ERROR();
@@ -192,7 +198,7 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
         if( rClip.getRegionBand() )
             DrawRegionBand( *rClip.getRegionBand() );
         else
-            DrawPolyPolygon( rClip.GetAsB2DPolyPolygon() );
+            DrawPolyPolygon( rClip.GetAsB2DPolyPolygon(), true );
     }
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
@@ -354,6 +360,9 @@ bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUS
     if( mpProgram != NULL )
         mpProgram->Clean();
     mpProgram = mpContext->UseProgram( rVertexShader, rFragmentShader );
+#ifdef DBG_UTIL
+    mProgramIsSolidLineColor = false; // UseSolid() will set to true if needed
+#endif
     return ( mpProgram != NULL );
 }
 
@@ -364,6 +373,9 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
     if( !UseProgram( "dumbVertexShader", "solidFragmentShader" ) )
         return false;
     mpProgram->SetColor( "color", nColor, nTransparency );
+#ifdef DBG_UTIL
+    mProgramIsSolidLineColor = true;
+#endif
     return true;
 }
 
@@ -374,6 +386,9 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, double fTransparency )
     if( !UseProgram( "dumbVertexShader", "solidFragmentShader" ) )
         return false;
     mpProgram->SetColorf( "color", nColor, fTransparency );
+#ifdef DBG_UTIL
+    mProgramIsSolidLineColor = true;
+#endif
     return true;
 }
 
@@ -383,15 +398,20 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor )
 }
 
 // Like UseSolid(), but sets up for AA drawing, which uses gradients to create the AA.
-bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor )
+bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor, double fTransparency )
 {
     if( !mrParent.getAntiAliasB2DDraw())
         return UseSolid( nColor );
     if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
         return false;
     mpProgram->SetColorf( "start_color", nColor, 0.0f );
-    mpProgram->SetColorf( "end_color", nColor, 1.0f );
+    mpProgram->SetColorf( "end_color", nColor, fTransparency );
     return true;
+}
+
+bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor )
+{
+    return UseSolidAA( nColor, 1.0 );
 }
 
 bool OpenGLSalGraphicsImpl::UseInvert()
@@ -413,7 +433,7 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
     glDrawArrays( GL_POINTS, 0, 1 );
 }
 
-void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
+void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double nY2 )
 {
     GLfloat pPoints[4];
 
@@ -426,7 +446,7 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
     glDrawArrays( GL_LINES, 0, 2 );
 }
 
-void OpenGLSalGraphicsImpl::DrawLineAA( long nX1, long nY1, long nX2, long nY2 )
+void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, double nY2 )
 {
     if( !mrParent.getAntiAliasB2DDraw())
         return DrawLine( nX1, nY1, nX2, nY2 );
@@ -612,6 +632,27 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
 
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+
+    if( mrParent.getAntiAliasB2DDraw())
+    {
+        // Make the edges antialiased by drawing the edge lines again with AA.
+        // TODO: If transparent drawing is set up, drawing the lines themselves twice
+        // may be a problem, if that is a real problem, the polygon areas itself needs to be
+        // masked out for this or something.
+#ifdef DBG_UTIL
+        assert( mProgramIsSolidLineColor );
+#endif
+        UseSolidAA( mnLineColor );
+        for( i = 0; i < nPoints; ++i )
+        {
+            const Point& rPt1 = rPolygon.GetPoint( i );
+            const Point& rPt2 = rPolygon.GetPoint(( i + 1 ) % nPoints );
+            if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
+                continue; //horizontal/vertical, no need for AA
+            DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+        }
+        UseSolid( mnLineColor );
+    }
 }
 
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
@@ -658,7 +699,7 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     }
 }
 
-void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
+void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
 {
     ::std::vector< GLfloat > aVertices;
     GLfloat nWidth = GetWidth();
@@ -681,6 +722,31 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
 
     mpProgram->SetVertices( aVertices.data() );
     glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
+
+    if( !blockAA && mrParent.getAntiAliasB2DDraw())
+    {
+        // Make the edges antialiased by drawing the edge lines again with AA.
+        // TODO: If transparent drawing is set up, drawing the lines themselves twice
+        // may be a problem, if that is a real problem, the polygon areas itself needs to be
+        // masked out for this or something.
+#ifdef DBG_UTIL
+        assert( mProgramIsSolidLineColor );
+#endif
+        UseSolidAA( mnLineColor );
+        for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
+        {
+            const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
+            for( sal_uInt32 j = 0; j < rPolygon.count(); j++ )
+            {
+                const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
+                const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 ) % rPolygon.count()) );
+                if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
+                    continue; //horizontal/vertical, no need for AA
+                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+            }
+        }
+        UseSolid( mnLineColor );
+    }
 
     CHECK_GL_ERROR();
 }
