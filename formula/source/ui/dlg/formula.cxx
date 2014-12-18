@@ -600,12 +600,12 @@ void FormulaDlg_Impl::UpdateValues()
     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
         m_pWndResult->SetText( aStrResult );
 
-    aStrResult = "";
+    aStrResult.clear();
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
         m_pWndFormResult->SetText( aStrResult );
     else
     {
-        aStrResult = "";
+        aStrResult.clear();
         m_pWndFormResult->SetText( aStrResult );
     }
     CalcStruct(pMEdit->GetText());
@@ -780,7 +780,7 @@ void FormulaDlg_Impl::FillDialog(bool nFlag)
         m_pWndFormResult->SetText( aStrResult );
     else
     {
-        aStrResult = "";
+        aStrResult.clear();
         m_pWndFormResult->SetText( aStrResult );
     }
 }
@@ -1189,7 +1189,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
 
         for(sal_uInt16 i=nClearPos; i<nArgs; i++)
         {
-            m_aArguments[i] = "";
+            m_aArguments[i].clear();
         }
     }
 }
@@ -1285,7 +1285,7 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
         m_pWndFormResult->SetText( aStrResult );
     else
     {
-        aStrResult = "";
+        aStrResult.clear();
         m_pWndFormResult->SetText( aStrResult );
     }
     CalcStruct(aString);
@@ -1478,7 +1478,7 @@ void FormulaDlg_Impl::Update()
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     const OUString sExpression = pMEdit->GetText();
-    aOldFormula = "";
+    aOldFormula.clear();
     UpdateTokenArray(sExpression);
     FormulaCursorHdl(m_pMEFormula);
     CalcStruct(sExpression);
@@ -1897,7 +1897,7 @@ void FormEditData::Reset()
     aUniqueId=OString();
     aSelection.Min()=0;
     aSelection.Max()=0;
-    aUndoStr = "";
+    aUndoStr.clear();
 }
 
 const FormEditData& FormEditData::operator=( const FormEditData& r )

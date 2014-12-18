@@ -274,7 +274,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
         {
             nFStart = FUNC_NOTFOUND;
             if ( pFuncName )
-                (*pFuncName) = "";
+                pFuncName->clear();
         }
     }
     while(bRepeat);

@@ -1041,7 +1041,7 @@ bool FormulaCompiler::GetToken()
     if ( bAutoCorrect && !pStack )
     {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
-        aCorrectedSymbol = "";
+        aCorrectedSymbol.clear();
     }
     bool bStop = false;
     if (pArr->GetCodeError() && mbStopOnError)
@@ -1423,7 +1423,7 @@ void FormulaCompiler::Factor()
             SetError( errParameterExpected );
             if ( bAutoCorrect && !pStack )
             {
-                aCorrectedSymbol = "";
+                aCorrectedSymbol.clear();
                 bCorrected = true;
             }
         }
@@ -1442,7 +1442,7 @@ void FormulaCompiler::Factor()
                     sal_Int32 nLen = aCorrectedFormula.getLength();
                     if ( nLen )
                         aCorrectedFormula = aCorrectedFormula.copy( 0, nLen - 1 );
-                    aCorrectedSymbol = "";
+                    aCorrectedSymbol.clear();
                     bCorrected = true;
                 }
             }
@@ -1649,8 +1649,8 @@ bool FormulaCompiler::CompileTokenArray()
     {
         if ( bAutoCorrect )
         {
-            aCorrectedFormula = "";
-            aCorrectedSymbol = "";
+            aCorrectedFormula.clear();
+            aCorrectedSymbol.clear();
         }
         pArr->nRefs = 0;    // count from start
         pArr->DelRPN();
@@ -1998,7 +1998,7 @@ OpCode FormulaCompiler::NextToken()
             {
                 if ( eOp == eLastOp || eLastOp == ocOpen )
                 {   // throw away duplicated operator
-                    aCorrectedSymbol = "";
+                    aCorrectedSymbol.clear();
                     bCorrected = true;
                 }
                 else
@@ -2136,7 +2136,7 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     if ( bAutoCorrect && !pStack )
     {   // don't merge stacked subroutine code into entered formula
         aCorrectedFormula += aCorrectedSymbol;
-        aCorrectedSymbol = "";
+        aCorrectedSymbol.clear();
     }
     FormulaArrayStack* p = new FormulaArrayStack;
     p->pNext      = pStack;
