@@ -28,8 +28,7 @@
 namespace test {
 
 bool getTestArgument(OUString const & name, OUString * value) {
-    return detail::getArgument(
-        OUString("testarg.") + name, value);
+    return detail::getArgument("testarg." + name, value);
 }
 
 }

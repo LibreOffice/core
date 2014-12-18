@@ -68,8 +68,7 @@ bool Prot::protect(
             context,
             CppUnit::Message(
                 convert(
-                    OUString("An uncaught exception of type ")
-                    + a.getValueTypeName()),
+                    "An uncaught exception of type " + a.getValueTypeName()),
                 convert(e.Message)));
     }
     return false;

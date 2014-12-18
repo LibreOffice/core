@@ -65,9 +65,7 @@ void OfficeConnection::setUp() {
         OUString argUser;
         CPPUNIT_ASSERT(
             detail::getArgument(OUString("user"), &argUser));
-        OUString userArg(
-            OUString("-env:UserInstallation=") +
-            toAbsoluteFileUrl(argUser));
+        OUString userArg("-env:UserInstallation=" + toAbsoluteFileUrl(argUser));
         OUString jreArg(
             "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
         OUString classpathArg("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
@@ -101,9 +99,7 @@ void OfficeConnection::setUp() {
             context_ =
                 css::uno::Reference< css::uno::XComponentContext >(
                     resolver->resolve(
-                        OUString("uno:") +
-                        desc +
-                        OUString(";urp;StarOffice.ComponentContext")),
+                        "uno:" + desc + ";urp;StarOffice.ComponentContext"),
                     css::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}

@@ -34,15 +34,14 @@ OUString toAbsoluteFileUrl(OUString const & relativePathname) {
     oslProcessError e1 = osl_getProcessWorkingDir(&cwd.pData);
     if (e1 != osl_Process_E_None) {
         throw css::uno::RuntimeException(
-            OUString("osl_getProcessWorkingDir failed with ") +
-            OUString::number(e1));
+            "osl_getProcessWorkingDir failed with " + OUString::number(e1));
     }
     OUString url;
     osl::FileBase::RC e2 = osl::FileBase::getFileURLFromSystemPath(
         relativePathname, url);
     if (e2 != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            OUString("osl::FileBase::getFileURLFromSystemPath(") +
+            "osl::FileBase::getFileURLFromSystemPath(" +
             relativePathname +
             ") failed with " +
             OUString::number(e2));
@@ -51,7 +50,7 @@ OUString toAbsoluteFileUrl(OUString const & relativePathname) {
     e2 = osl::FileBase::getAbsoluteFileURL(cwd, url, absUrl);
     if (e2 != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            OUString("osl::FileBase::getAbsoluteFileURL(") +
+            "osl::FileBase::getAbsoluteFileURL(" +
             cwd + ", " + url +
             ") failed with " +
             OUString::number(e2));
