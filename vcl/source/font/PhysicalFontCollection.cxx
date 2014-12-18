@@ -264,7 +264,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
                 // apply outdev3.cxx specific fontname normalization
                 rFontSelData.maSearchName = GetEnglishSearchFontName( rFontSelData.maSearchName );
             else
-                rFontSelData.maSearchName = "";
+                rFontSelData.maSearchName.clear();
 
             // See fdo#32665 for an example. FreeSerif that has glyphs in normal
             // font, but not in the italic or bold version

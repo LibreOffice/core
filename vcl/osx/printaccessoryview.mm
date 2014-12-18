@@ -1251,7 +1251,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
                 
                 // new tab item
                 if( ! aText.getLength() )
-                    aText = OUString( "OOo" );
+                    aText = "OOo";
                 NSString* pLabel = CreateNSString( aGroupTitle );
                 NSTabViewItem* pItem = [[NSTabViewItem alloc] initWithIdentifier: pLabel ];
                 [pItem setLabel: pLabel];

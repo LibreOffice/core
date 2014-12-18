@@ -875,13 +875,13 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
                     aSelection.Min() = nChgPos; // position for new text to be inserted
                 }
                 else
-                    aNewText = "";
+                    aNewText.clear();
             }
             else
             {
                 // should the character be ignored (i.e. not get inserted) ?
                 if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, cChar, nCheckMode ))
-                    aNewText = "";
+                    aNewText.clear();
             }
         }
 

@@ -2281,7 +2281,7 @@ void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
     m_sSecondaryString = rSecondaryString;
     if (m_pSecondaryMessage)
     {
-        m_pSecondaryMessage->SetText(OUString("\n") + m_sSecondaryString);
+        m_pSecondaryMessage->SetText("\n" + m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
     }
 }

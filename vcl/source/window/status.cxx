@@ -1361,7 +1361,7 @@ void StatusBar::EndProgressMode()
     DBG_ASSERT( mbProgressMode, "StatusBar::EndProgressMode(): no progress mode" );
 
     mbProgressMode = false;
-    maPrgsTxt = "";
+    maPrgsTxt.clear();
 
     // re-trigger Paint to recreate StatusBar
     SetFillColor( GetSettings().GetStyleSettings().GetFaceColor() );

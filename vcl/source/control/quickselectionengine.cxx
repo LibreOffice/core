@@ -58,7 +58,7 @@ namespace vcl
     {
         static void lcl_reset( QuickSelectionEngine_Data& _data )
         {
-            _data.sCurrentSearchString = "";
+            _data.sCurrentSearchString.clear();
             _data.aSingleSearchChar.reset();
             _data.aSearchTimeout.Stop();
         }

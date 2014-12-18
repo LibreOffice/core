@@ -312,7 +312,7 @@ void Application::Abort( const OUString& rErrorText )
     bool dumpCore = false;
     sal_uInt16 n = GetCommandLineParamCount();
     for (sal_uInt16 i = 0; i != n; ++i) {
-        if (GetCommandLineParam(i).equals("--norestore")) {
+        if (GetCommandLineParam(i) == "--norestore") {
             dumpCore = true;
             break;
         }

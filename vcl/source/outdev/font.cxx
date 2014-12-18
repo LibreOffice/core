@@ -1352,7 +1352,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFon
         // override the font name
         rFontSelData.SetFamilyName( pFallbackData->GetFamilyName() );
         // clear the cached normalized name
-        rFontSelData.maSearchName = "";
+        rFontSelData.maSearchName.clear();
     }
 
     ImplFontEntry* pFallbackFont = GetFontEntry( pFontCollection, rFontSelData );

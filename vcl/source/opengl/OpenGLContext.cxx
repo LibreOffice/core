@@ -1008,7 +1008,7 @@ void OpenGLContext::renderToFile()
     int iWidth = m_aGLWin.Width;
     int iHeight = m_aGLWin.Height;
     static int nIdx = 0;
-    OUString aName = OUString( "file:///home/moggi/Documents/work/output" ) + OUString::number( nIdx++ ) + ".png";
+    OUString aName = "file:///home/moggi/Documents/work/output" + OUString::number( nIdx++ ) + ".png";
     OpenGLHelper::renderToFile(iWidth, iHeight, aName);
 }
 
