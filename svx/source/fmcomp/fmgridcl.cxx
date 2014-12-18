@@ -91,16 +91,16 @@ OUString FieldServiceFromId(sal_Int32 nID)
 {
     switch (nID)
     {
-        case SID_FM_EDIT            : return FM_COL_TEXTFIELD;
-        case SID_FM_COMBOBOX        : return FM_COL_COMBOBOX;
-        case SID_FM_LISTBOX         : return FM_COL_LISTBOX;
-        case SID_FM_CHECKBOX        : return FM_COL_CHECKBOX;
-        case SID_FM_DATEFIELD       : return FM_COL_DATEFIELD;
-        case SID_FM_TIMEFIELD       : return FM_COL_TIMEFIELD;
-        case SID_FM_NUMERICFIELD    : return FM_COL_NUMERICFIELD;
-        case SID_FM_CURRENCYFIELD   : return FM_COL_CURRENCYFIELD;
-        case SID_FM_PATTERNFIELD    : return FM_COL_PATTERNFIELD;
-        case SID_FM_FORMATTEDFIELD  : return FM_COL_FORMATTEDFIELD;
+        case SID_FM_EDIT            : return OUString(FM_COL_TEXTFIELD);
+        case SID_FM_COMBOBOX        : return OUString(FM_COL_COMBOBOX);
+        case SID_FM_LISTBOX         : return OUString(FM_COL_LISTBOX);
+        case SID_FM_CHECKBOX        : return OUString(FM_COL_CHECKBOX);
+        case SID_FM_DATEFIELD       : return OUString(FM_COL_DATEFIELD);
+        case SID_FM_TIMEFIELD       : return OUString(FM_COL_TIMEFIELD);
+        case SID_FM_NUMERICFIELD    : return OUString(FM_COL_NUMERICFIELD);
+        case SID_FM_CURRENCYFIELD   : return OUString(FM_COL_CURRENCYFIELD);
+        case SID_FM_PATTERNFIELD    : return OUString(FM_COL_PATTERNFIELD);
+        case SID_FM_FORMATTEDFIELD  : return OUString(FM_COL_FORMATTEDFIELD);
     }
     return OUString();
 }
