@@ -197,7 +197,7 @@ public:
     {
         Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = OUString("com.sun.star.awt.UnoControlSpinButtonModel");
+        aServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.UnoControlSpinButtonModel";
         return aServices;
     }
 
@@ -260,7 +260,7 @@ public:
     {
         Sequence< OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = OUString("com.sun.star.awt.UnoControlSpinButton");
+        aServices[ aServices.getLength() - 1 ] = "com.sun.star.awt.UnoControlSpinButton";
         return aServices;
     }
 

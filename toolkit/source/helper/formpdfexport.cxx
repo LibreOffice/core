@@ -543,7 +543,7 @@ namespace toolkitform
                 }
                 catch(...)
                 {
-                    pRadioWidget->OnValue = OUString( "On" );
+                    pRadioWidget->OnValue = "On";
                 }
             }
 

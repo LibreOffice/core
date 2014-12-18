@@ -2698,7 +2698,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 
 #define ADD_PROP( seq, i, name, val ) {                                \
         beans::NamedValue value;                                                  \
-        value.Name = OUString( name ); \
+        value.Name = name; \
         value.Value = uno::makeAny( val );                                      \
         seq[i] = value;                                                    \
     }

@@ -69,7 +69,7 @@ css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServ
 {
     css::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
-    aNames[ aNames.getLength() - 1 ] = OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
+    aNames[ aNames.getLength() - 1 ] = "com.sun.star.awt.tab.UnoControlTabPageModel";
     return aNames;
 }
 
@@ -197,7 +197,7 @@ css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceName
     throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aSeq(1);
-    aSeq[0] = OUString("com.sun.star.awt.tab.UnoControlTabPage");
+    aSeq[0] = "com.sun.star.awt.tab.UnoControlTabPage";
     return aSeq;
 }
 
