@@ -267,7 +267,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].text.isEmpty()); // Can't start symbol with a digit
     CPPUNIT_ASSERT(symbols[0].number == 1);
     CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("asfdasfd"));
+    CPPUNIT_ASSERT(symbols[1].text == "asfdasfd");
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
@@ -302,15 +302,15 @@ namespace
 
     symbols = getSymbols(source7);
     CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("joxclk_"));
+    CPPUNIT_ASSERT(symbols[0].text == "joxclk_");
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
-    CPPUNIT_ASSERT(source7 == OUString("joxclk ")); // Change the trailing '_' to a ' '
+    CPPUNIT_ASSERT(source7 == "joxclk "); // Change the trailing '_' to a ' '
     CPPUNIT_ASSERT(symbols[1].text == cr);
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
 
     symbols = getSymbols(source8);
     CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("asdf"));
+    CPPUNIT_ASSERT(symbols[0].text == "asdf");
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].text == cr);
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
@@ -320,7 +320,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].text.isEmpty());
     CPPUNIT_ASSERT(symbols[0].number == 19395);
     CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("asdfa"));
+    CPPUNIT_ASSERT(symbols[1].text == "asdfa");
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
@@ -342,7 +342,7 @@ namespace
     CPPUNIT_ASSERT(symbols[5].text.getLength() == 1);
     CPPUNIT_ASSERT(symbols[5].text[0] == 'a');
     CPPUNIT_ASSERT(symbols[5].type == SbxVARIANT);
-    CPPUNIT_ASSERT(symbols[6].text == OUString("sdf"));
+    CPPUNIT_ASSERT(symbols[6].text == "sdf");
     CPPUNIT_ASSERT(symbols[6].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[7].text == cr);
     CPPUNIT_ASSERT(symbols[7].type == SbxVARIANT);
@@ -387,7 +387,7 @@ namespace
 
     symbols = getSymbols(source2);
     CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("REMasdf"));
+    CPPUNIT_ASSERT(symbols[0].text == "REMasdf");
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].text == cr);
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
@@ -451,20 +451,20 @@ namespace
 
     symbols = getSymbols(source2);
     CPPUNIT_ASSERT(symbols.size() == 3);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("go"));
+    CPPUNIT_ASSERT(symbols[0].text == "go");
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("to"));
+    CPPUNIT_ASSERT(symbols[1].text == "to");
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
 
     symbols = getSymbols(source3);
     CPPUNIT_ASSERT(symbols.size() == 4);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("go"));
+    CPPUNIT_ASSERT(symbols[0].text == "go");
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].text == cr);
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
-    CPPUNIT_ASSERT(symbols[2].text == OUString("to"));
+    CPPUNIT_ASSERT(symbols[2].text == "to");
     CPPUNIT_ASSERT(symbols[2].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[3].text == cr);
     CPPUNIT_ASSERT(symbols[3].type == SbxVARIANT);
@@ -485,14 +485,14 @@ namespace
 
     symbols = getSymbols(source2, true);
     CPPUNIT_ASSERT(symbols.size() == 2);
-    CPPUNIT_ASSERT(symbols[0].text == OUString(goto_));
+    CPPUNIT_ASSERT(symbols[0].text == goto_);
     CPPUNIT_ASSERT(symbols[1].text == cr);
 
     symbols = getSymbols(source3, true);
     CPPUNIT_ASSERT(symbols.size() == 4);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("go"));
+    CPPUNIT_ASSERT(symbols[0].text == "go");
     CPPUNIT_ASSERT(symbols[1].text == cr);
-    CPPUNIT_ASSERT(symbols[2].text == OUString("to"));
+    CPPUNIT_ASSERT(symbols[2].text == "to");
     CPPUNIT_ASSERT(symbols[3].text == cr);
   }
 
@@ -524,19 +524,19 @@ namespace
     symbols = getSymbols(source3);
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].text == excl);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("_3"));
+    CPPUNIT_ASSERT(symbols[1].text == "_3");
     CPPUNIT_ASSERT(symbols[2].text == cr);
 
     symbols = getSymbols(source4);
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].text == excl);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("$"));
+    CPPUNIT_ASSERT(symbols[1].text == "$");
     CPPUNIT_ASSERT(symbols[2].text == cr);
 
     symbols = getSymbols(source5);
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].text == excl);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("%"));
+    CPPUNIT_ASSERT(symbols[1].text == "%");
     CPPUNIT_ASSERT(symbols[2].text == cr);
 
     symbols = getSymbols(source6);
@@ -614,7 +614,7 @@ namespace
 
     symbols = getSymbols(source7, errors);
     CPPUNIT_ASSERT(symbols.size() == 3);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("-"));
+    CPPUNIT_ASSERT(symbols[0].text == "-");
     CPPUNIT_ASSERT(symbols[1].number == 3);
     CPPUNIT_ASSERT(symbols[1].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[2].text == cr);
@@ -622,7 +622,7 @@ namespace
 
     symbols = getSymbols(source8, errors);
     CPPUNIT_ASSERT(symbols.size() == 3);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("-"));
+    CPPUNIT_ASSERT(symbols[0].text == "-");
     CPPUNIT_ASSERT(symbols[1].number == 0);
     CPPUNIT_ASSERT(symbols[1].type == SbxDOUBLE);
     CPPUNIT_ASSERT(symbols[2].text == cr);
@@ -632,7 +632,7 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].number == 12);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("dE3"));
+    CPPUNIT_ASSERT(symbols[1].text == "dE3");
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(errors == 1);
 
@@ -654,9 +654,9 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 6);
     CPPUNIT_ASSERT(symbols[0].number == 12);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("e"));
-    CPPUNIT_ASSERT(symbols[2].text == OUString("+"));
-    CPPUNIT_ASSERT(symbols[3].text == OUString("+"));
+    CPPUNIT_ASSERT(symbols[1].text == "e");
+    CPPUNIT_ASSERT(symbols[2].text == "+");
+    CPPUNIT_ASSERT(symbols[3].text == "+");
     CPPUNIT_ASSERT(symbols[4].number == 3);
     CPPUNIT_ASSERT(symbols[4].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[5].text == cr);
@@ -673,7 +673,7 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 3);
     CPPUNIT_ASSERT(symbols[0].number == .012);
     CPPUNIT_ASSERT(symbols[0].type == SbxDOUBLE);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("+"));
+    CPPUNIT_ASSERT(symbols[1].text == "+");
     CPPUNIT_ASSERT(symbols[2].text == cr);
     CPPUNIT_ASSERT(errors == 0);
 
@@ -681,10 +681,10 @@ namespace
     CPPUNIT_ASSERT(symbols.size() == 6);
     CPPUNIT_ASSERT(symbols[0].number == 1);
     CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
-    CPPUNIT_ASSERT(symbols[1].text == OUString(","));
+    CPPUNIT_ASSERT(symbols[1].text == ",");
     CPPUNIT_ASSERT(symbols[2].number == 2);
     CPPUNIT_ASSERT(symbols[2].type == SbxINTEGER);
-    CPPUNIT_ASSERT(symbols[3].text == OUString(","));
+    CPPUNIT_ASSERT(symbols[3].text == ",");
     CPPUNIT_ASSERT(symbols[4].number == 3);
     CPPUNIT_ASSERT(symbols[4].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[5].text == cr);
@@ -795,7 +795,7 @@ namespace
     symbols = getSymbols(source4);
     CPPUNIT_ASSERT(symbols.size() == 6);
     CPPUNIT_ASSERT(symbols[0].number == 0);
-    CPPUNIT_ASSERT(symbols[0].text == OUString("&"));
+    CPPUNIT_ASSERT(symbols[0].text == "&");
     CPPUNIT_ASSERT(symbols[0].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[1].number == 0);
     CPPUNIT_ASSERT(symbols[1].text == OUString());
@@ -804,10 +804,10 @@ namespace
     CPPUNIT_ASSERT(symbols[2].text == OUString());
     CPPUNIT_ASSERT(symbols[2].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[3].number == 1);
-    CPPUNIT_ASSERT(symbols[3].text == OUString("H1"));
+    CPPUNIT_ASSERT(symbols[3].text == "H1");
     CPPUNIT_ASSERT(symbols[3].type == SbxLONG);
     CPPUNIT_ASSERT(symbols[4].number == 1);
-    CPPUNIT_ASSERT(symbols[4].text == OUString("H1"));
+    CPPUNIT_ASSERT(symbols[4].text == "H1");
     CPPUNIT_ASSERT(symbols[4].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[5].text == cr);
 
@@ -817,7 +817,7 @@ namespace
     CPPUNIT_ASSERT(symbols[0].text == OUString());
     CPPUNIT_ASSERT(symbols[0].type == SbxINTEGER);
     CPPUNIT_ASSERT(symbols[1].number == 0);
-    CPPUNIT_ASSERT(symbols[1].text == OUString("O12"));
+    CPPUNIT_ASSERT(symbols[1].text == "O12");
     CPPUNIT_ASSERT(symbols[1].type == SbxVARIANT);
     CPPUNIT_ASSERT(symbols[2].text == cr);
 

@@ -210,7 +210,7 @@ bool SbiScanner::NextSym()
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
 
     eScanType = SbxVARIANT;
-    aSym = "";
+    aSym.clear();
     bHash = bSymbol = bNumber = bSpaces = false;
 
     // read in line?

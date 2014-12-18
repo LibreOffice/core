@@ -1031,7 +1031,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
     OUString aName;
     while( !bError )
     {
-        aName = "";
+        aName.clear();
         // missing argument
         if( eTok == COMMA )
         {

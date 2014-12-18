@@ -1852,7 +1852,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             if ( bInplaceStorage )
             {
                 // create a temporary target storage
-                const OUStringBuffer aTempTargetNameBase = maLibrariesDir + OUString( "_temp_" );
+                const OUStringBuffer aTempTargetNameBase = maLibrariesDir + "_temp_";
                 sal_Int32 index = 0;
                 do
                 {
@@ -2070,7 +2070,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             xTargetLibrariesStor->dispose();
             i_rStorage->removeElement( sTempTargetStorName );
             xTargetLibrariesStor.clear();
-            sTempTargetStorName = "";
+            sTempTargetStorName.clear();
 
             // adjust target
             xTargetLibrariesStor = xSourceLibrariesStor;

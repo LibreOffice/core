@@ -500,7 +500,7 @@ SbiConstDef::SbiConstDef( const OUString& rName )
 
 void SbiConstDef::Set( double n, SbxDataType t )
 {
-    aVal = ""; nVal = n; eType = t;
+    aVal.clear(); nVal = n; eType = t;
 }
 
 void SbiConstDef::Set( const OUString& n )

@@ -881,8 +881,8 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
             Error( SbERR_UNEXPECTED, _CDECL_ );
         }
         pDef->SetCdecl( false );
-        pDef->GetLib() = "";
-        pDef->GetAlias() = "";
+        pDef->GetLib().clear();
+        pDef->GetAlias().clear();
     }
     else if( pDef->GetLib().isEmpty() )
     {
@@ -896,7 +896,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
             Error( SbERR_UNEXPECTED, _CDECL_ );
         }
         pDef->SetCdecl( false );
-        pDef->GetAlias() = "";
+        pDef->GetAlias().clear();
     }
     // Brackets?
     if( Peek() == LPAREN )

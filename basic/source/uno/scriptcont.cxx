@@ -118,7 +118,7 @@ void SfxScriptLibraryContainer::clearLibraryPassword( const OUString& rLibraryNa
         SfxLibrary* pImplLib = getImplLib( rLibraryName );
         pImplLib->mbDoc50Password = false;
         pImplLib->mbPasswordProtected = false;
-        pImplLib->maPassword = "";
+        pImplLib->maPassword.clear();
     }
     catch(const NoSuchElementException& ) {}
 }
@@ -495,7 +495,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
         {
             pImplLib->mbPasswordProtected = false;
             pImplLib->mbPasswordVerified = false;
-            pImplLib->maPassword = "";
+            pImplLib->maPassword.clear();
 
             maModifiable.setModified( true );
             pImplLib->implSetModified( true );

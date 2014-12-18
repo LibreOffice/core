@@ -416,7 +416,7 @@ const OUString& SbxValue::GetCoreString() const
     }
     else
     {
-        ((SbxValue*) this)->aToolString = "";
+        ((SbxValue*) this)->aToolString.clear();
     }
     return aToolString;
 }

@@ -1672,7 +1672,7 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     }
     else
     {
-        GetSbData()->aErrMsg = "";
+        GetSbData()->aErrMsg.clear();
     }
 }
 

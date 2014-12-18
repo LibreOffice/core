@@ -2653,7 +2653,7 @@ void SbiRuntime::StepENDCASE()
 void SbiRuntime::StepSTDERROR()
 {
     pError = NULL; bError = true;
-    pInst->aErrorMsg = "";
+    pInst->aErrorMsg.clear();
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
@@ -2662,7 +2662,7 @@ void SbiRuntime::StepSTDERROR()
 
 void SbiRuntime::StepNOERROR()
 {
-    pInst->aErrorMsg = "";
+    pInst->aErrorMsg.clear();
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
@@ -3143,7 +3143,7 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
     StepJUMP( nOp1 );
     pError = pCode;
     pCode = p;
-    pInst->aErrorMsg = "";
+    pInst->aErrorMsg.clear();
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
@@ -3173,7 +3173,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 
     if( nOp1 > 1 )
         StepJUMP( nOp1 );
-    pInst->aErrorMsg = "";
+    pInst->aErrorMsg.clear();
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
@@ -4182,7 +4182,7 @@ void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pArgs = refArgv;
     }
     DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, false );
-    aLibName = "";
+    aLibName.clear();
     if( nOp1 & 0x8000 )
     {
         PopArgv();
@@ -4200,7 +4200,7 @@ void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         pArgs = refArgv;
     }
     DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, true );
-    aLibName = "";
+    aLibName.clear();
     if( nOp1 & 0x8000 )
     {
         PopArgv();

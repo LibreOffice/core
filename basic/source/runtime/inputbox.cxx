@@ -132,7 +132,7 @@ IMPL_LINK_INLINE_START( SvRTLInputBox, CancelHdl, Button *, pButton )
 {
     (void)pButton;
 
-    aText="";
+    aText.clear();
     EndDialog( 0 );
     return 0;
 }

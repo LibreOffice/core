@@ -4371,7 +4371,7 @@ public:
 };
 
 ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj )
-    : m_aPrefix( aPrefix + OUString( "_" ) )
+    : m_aPrefix( aPrefix + "_" )
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {

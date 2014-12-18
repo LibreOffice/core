@@ -2717,7 +2717,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
 
     delete pRTLData->pWildCard;
     pRTLData->pWildCard = NULL;
-    pRTLData->sFullNameToBeChecked = "";
+    pRTLData->sFullNameToBeChecked.clear();
 
     OUString aFileParam = rFileParam;
     sal_Int32 nLastWild = aFileParam.lastIndexOf( cWild1 );
@@ -2755,7 +2755,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     if( nLastDelim < 0 )
     {
         aPureFileName = aFileParam;
-        aFileParam = "";
+        aFileParam.clear();
     }
     else
     {
@@ -2940,7 +2940,7 @@ RTLFUNC(Dir)
                         else if( pRTLData->nCurDirPos >= pRTLData->aDirSeq.getLength() )
                         {
                             pRTLData->aDirSeq.realloc( 0 );
-                            aPath = "";
+                            aPath.clear();
                             break;
                         }
                         else
@@ -3061,7 +3061,7 @@ RTLFUNC(Dir)
                         {
                             delete pRTLData->pDir;
                             pRTLData->pDir = NULL;
-                            aPath = "";
+                            aPath.clear();
                             break;
                         }
 

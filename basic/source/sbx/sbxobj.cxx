@@ -802,7 +802,7 @@ static bool CollectAttrs( const SbxBase* p, OUString& rRes )
     }
     else
     {
-        rRes = "";
+        rRes.clear();
         return false;
     }
 }
