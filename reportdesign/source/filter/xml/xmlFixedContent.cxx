@@ -164,11 +164,11 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
                                                 0x0020, true );
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sPageText += OUString(s_sStringConcat) + " PageNumber()";
+            m_sPageText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
             m_bFormattedField = true;
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sPageText += OUString(s_sStringConcat) + " PageCount()";
+            m_sPageText += OUStringLiteral(s_sStringConcat) + " PageCount()";
             m_bFormattedField = true;
             break;
         default:
@@ -186,7 +186,7 @@ void OXMLFixedContent::EndElement()
         {
             uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
             Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-            xControl->setDataField(OUString("rpt:") + m_sPageText);
+            xControl->setDataField("rpt:" + m_sPageText);
              OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
             m_pInP->m_xComponent = xControl.get();
             m_xComponent = xControl.get();

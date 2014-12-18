@@ -120,7 +120,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     if ( xSection.is() )
     {
         const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
-        if ( _rEvent.PropertyName.equals(PROPERTY_HEIGHT) )
+        if ( _rEvent.PropertyName == PROPERTY_HEIGHT )
         {
             m_pParent->getView()->SetUpdateMode(false);
             //Resize();
@@ -129,7 +129,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             m_pParent->getView()->SetUpdateMode(true);
             // getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
         }
-        else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
+        else if ( _rEvent.PropertyName == PROPERTY_NAME && !xSection->getGroup().is() )
         {
             uno::Reference< report::XReportDefinition > xReport = xSection->getReportDefinition();
             if (    setReportSectionTitle(xReport,RID_STR_REPORT_HEADER,::std::mem_fun(&OReportHelper::getReportHeader),::std::mem_fun(&OReportHelper::getReportHeaderOn))
@@ -147,7 +147,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             }
         }
     }
-    else if ( _rEvent.PropertyName.equals(PROPERTY_EXPRESSION) )
+    else if ( _rEvent.PropertyName == PROPERTY_EXPRESSION )
     {
         uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
         if ( xGroup.is() && !setGroupSectionTitle(xGroup,RID_STR_HEADER,::std::mem_fun(&OGroupHelper::getHeader),::std::mem_fun(&OGroupHelper::getHeaderOn)))

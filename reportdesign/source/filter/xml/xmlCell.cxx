@@ -117,10 +117,10 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             }
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sText += OUString(s_sStringConcat) + " PageNumber()";
+            m_sText += OUStringLiteral(s_sStringConcat) + " PageNumber()";
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sText += OUString(s_sStringConcat) + " PageCount()";
+            m_sText += OUStringLiteral(s_sStringConcat) + " PageCount()";
             break;
         case XML_TOK_FORMATTED_TEXT:
             {
@@ -201,7 +201,7 @@ void OXMLCell::EndElement()
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
         uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
         Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-        xControl->setDataField(OUString("rpt:") + m_sText);
+        xControl->setDataField("rpt:" + m_sText);
 
         OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
         setComponent(xControl.get());

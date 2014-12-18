@@ -1003,7 +1003,7 @@ OUString ORptExport::convertFormula(const OUString& _sFormula)
 {
     OUString sFormula = _sFormula;
     if ( _sFormula == "rpt:" )
-        sFormula = "";
+        sFormula.clear();
     return sFormula;
 }
 

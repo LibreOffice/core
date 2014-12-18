@@ -2205,7 +2205,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
         evt.NewValue >>= bShow;
         if ( evt.Source == m_xReportDefinition )
         {
-            if ( evt.PropertyName.equals( PROPERTY_REPORTHEADERON ) )
+            if ( evt.PropertyName == PROPERTY_REPORTHEADERON )
             {
                 const sal_uInt16 nPosition = m_xReportDefinition->getPageHeaderOn() ? 1 : 0;
                 if ( bShow )
@@ -2218,7 +2218,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                     getDesignView()->removeSection(nPosition);
                 }
             }
-            else if ( evt.PropertyName.equals( PROPERTY_REPORTFOOTERON ) )
+            else if ( evt.PropertyName == PROPERTY_REPORTFOOTERON )
             {
                 sal_uInt16 nPosition = getDesignView()->getSectionCount();
                 if ( m_xReportDefinition->getPageFooterOn() )
@@ -2233,7 +2233,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                     getDesignView()->removeSection(nPosition - 1);
                 }
             }
-            else if ( evt.PropertyName.equals( PROPERTY_PAGEHEADERON ) )
+            else if ( evt.PropertyName == PROPERTY_PAGEHEADERON )
             {
                 if ( bShow )
                 {
@@ -2245,7 +2245,7 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                     getDesignView()->removeSection(sal_uInt16(0));
                 }
             }
-            else if ( evt.PropertyName.equals( PROPERTY_PAGEFOOTERON ) )
+            else if ( evt.PropertyName == PROPERTY_PAGEFOOTERON )
             {
                 if ( bShow )
                 {
@@ -2257,10 +2257,10 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                     getDesignView()->removeSection(getDesignView()->getSectionCount() - 1);
                 }
             }
-            else if (   evt.PropertyName.equals( PROPERTY_COMMAND )
-                    ||  evt.PropertyName.equals( PROPERTY_COMMANDTYPE )
-                    ||  evt.PropertyName.equals( PROPERTY_ESCAPEPROCESSING )
-                    ||  evt.PropertyName.equals( PROPERTY_FILTER )
+            else if (   evt.PropertyName == PROPERTY_COMMAND
+                    ||  evt.PropertyName == PROPERTY_COMMANDTYPE
+                    ||  evt.PropertyName == PROPERTY_ESCAPEPROCESSING
+                    ||  evt.PropertyName == PROPERTY_FILTER
                     )
             {
                 m_xColumns.clear();
@@ -2323,13 +2323,13 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     OUString sColor(DBGROUPHEADER);
     sal_uInt16 nPosition = 0;
     bool bHandle = false;
-    if ( _sPropName.equals( PROPERTY_HEADERON ) )
+    if ( _sPropName == PROPERTY_HEADERON )
     {
         nPosition = m_xReportDefinition->getPageHeaderOn() ? (m_xReportDefinition->getReportHeaderOn() ? 2 : 1) : (m_xReportDefinition->getReportHeaderOn() ? 1 : 0);
         nPosition += (static_cast<sal_uInt16>(_nGroupPos) - lcl_getNonVisbleGroupsBefore(m_xReportDefinition->getGroups(),_nGroupPos,pMemFun));
         bHandle = true;
     }
-    else if ( _sPropName.equals( PROPERTY_FOOTERON ) )
+    else if ( _sPropName == PROPERTY_FOOTERON )
     {
         pMemFun = ::std::mem_fun(&OGroupHelper::getFooterOn);
         pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
