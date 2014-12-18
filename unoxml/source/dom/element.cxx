@@ -65,7 +65,7 @@ namespace DOM
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
             OUString name = (prefix.isEmpty())
-                ? OUString( "xmlns" ) : OUString( "xmlns:" ) + prefix;
+                ? OUString( "xmlns" ) : "xmlns:" + prefix;
             const xmlChar *pHref = pNs->href;
             OUString val(reinterpret_cast<const sal_Char*>(pHref),
                 strlen(reinterpret_cast<const char*>(pHref)),
