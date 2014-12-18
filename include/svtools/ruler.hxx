@@ -257,223 +257,219 @@ it has been dragged. There are the following query methods:
         relative to the set zero-offset.
 
     - GetDragAryPos()
-        Liefert den Index im Array zurueck, wenn ein Border, Indent oder ein
-        Tab gedragt wird. Achtung: Es wird die Array-Position waehrend des
-        gesammten Drag-Vorgangs von dem Item im Array was vor dem Drag gesetzt
-        war zurueckgeben. Dadurch ist es zum Beispiel auch moeglich, einen
-        Tab nicht mehr anzuzeigen, wenn die Maus nach unten/rechts aus dem
-        Lineal gezogen wird.
+        Returns the index in the array if a border, an indent or a tab
+        is being dragged. Attention: During a drag process, the array position
+        of the item that has been set before the drag is returned.
+        Therefore, it is for example also possible, to no longer show a tab
+        if the mouse is dragged out of the ruler in bottom/right direction.
 
     - GetDragSize()
-        Wenn Borders gedragt werden, kann hierueber abgefragt werden, ob
-        die Groesse bzw. welche Seite oder die Position geaendert werden soll.
+        If Borders are dragged, this can be used to query whether the size
+        resp. which side or the position should be changed.
             RULER_DRAGSIZE_MOVE oder 0      - Move
-            RULER_DRAGSIZE_1                - Linke/obere Kante
-            RULER_DRAGSIZE_2                - Rechte/untere Kante
+            RULER_DRAGSIZE_1                - left/upper border
+            RULER_DRAGSIZE_2                - right/bottom border
 
     - IsDragDelete()
-        Mit dieser Methode kann abgefragt werden, ob beim Draggen die
-        Maus unten/rechts aus dem Fenster gezogen wurde. Damit kann
-        zum Beispiel festgestellt werden, ob der Benutzer einen Tab
-        loeschen will.
+        This method can be used to query whether the mouse has been
+        moved out of the window at the bottom/right while dragging.
+        By this, it can for example be determined whether the user
+        wants to delete a tab.
 
     - IsDragCanceled()
-        Mit dieser Methode kann im EndDrag-Handler abgefragt werden,
-        ob die Aktion abgebrochen wurde, indem der Anwender die
-        Maus oben/links vom Fenster losgelassen hat oder ESC gedrueckt
-        hat. In diesem Fall werden die Werte nicht uebernommen. Wird
-        waehrend des Draggings die Maus oben/links aus dem Fenster
-        gezogen, werden automatisch die alten Werte dargestellt, ohne das
-        der Drag-Handler gerufen wird.
-        Falls der Benutzer jedoch den Wert auf die alte Position
-        zurueckgeschoben hat, liefert die Methode trotzdem sal_False. Falls
-        dies vermieden werden soll, muss sich die Applikation im StartDrag-
-        Handler den alten Wert merken und im EndDrag-Handler den Wert
-        vergleichen.
+        Using this Handler, it can be queried in the EndDrag handler
+        whether the action was canceled by the user releasing the
+        mouse at the top/left of the window or by pressing ESC.
+        In this case, the values are not applied. If during the
+        dragging, the mouse is dragged out of the window at the
+        top/left, the old values are displayed automatically without
+        the Drag handler being called.
+        But if the user has moved the value to the old position, the
+        method returns 'false' nevertheless.
+        If this should be avoided, the application must remember the
+        old value in the StartDrag handler and compare the value in the
+        EndDrag handler.
 
     - GetDragScroll()
-        Mit dieser Methode kann abgefragt werden, ob gescrollt werden
-        soll. Es wird einer der folgenden Werte zurueckgegeben:
-            RULER_SCROLL_NO                 - Drag-Position befindet sich
-                                              an keinem Rand und somit
-                                              muss nicht gescrollt werden.
-            RULER_SCROLL_1                  - Drag-Position befindet sich
-                                              am linken/oberen Rand und
-                                              somit sollte das Programm evt.
-                                              ein Srcoll ausloesen.
-            RULER_SCROLL_2                  - Drag-Position befindet sich
-                                              am rechten/unteren Rand und
-                                              somit sollte das Programm evt.
-                                              ein Srcoll ausloesen.
+        This method can be used to query whether scrolling should
+        take place. One of the following values is returned:
+            RULER_SCROLL_NO         - Drag position is at no border and
+                                      therefore no scrolling needs to
+                                      take place.
+            RULER_SCROLL_1          - Drag position is at the left/upper
+                                      border and therefore the
+                                      application should possibly trigger
+                                      scrolling.
+            RULER_SCROLL_2          - Drag position is at the right/bottom
+                                      border and therefore the
+                                      application should possibly trigger
+                                      scrolling.
 
     - GetDragModifier()
-        Liefert die Modifier-Tasten zurueck, die beim Starten des Drag-
-        Vorgangs gedrueckt waren. Siehe MouseEvent.
+        Returns the modifier keys that were pressed when the Drag process
+        was started. See MouseEvent.
 
     - GetClickPos()
-        Liefert die Pixel-Position bezogen auf den eingestellten Null-Offset
-        zurueck, wo der Anwender die Maus gedrueckt hat.
+        Returns the pixel position at which the user has pressed the mouse
+        with respect to the configured null-offset.
 
     - GetClickType()
-        Liefert zurueck, was per DoubleClick betaetigt wird:
-            RULER_TYPE_DONTKNOW             (kein Element im Linealbereich)
-            RULER_TYPE_OUTSIDE              (ausserhalb des Linealbereichs)
-            RULER_TYPE_MARGIN1              (nur Margin1-Kante)
-            RULER_TYPE_MARGIN2              (nur Margin2-Kante)
+        Returns what is applied by double click:
+            RULER_TYPE_DONTKNOW             (no element in the ruler area)
+            RULER_TYPE_OUTSIDE              (outside of the ruler area)
+            RULER_TYPE_MARGIN1              (only Margin1 border)
+            RULER_TYPE_MARGIN2              (only Margin2 border)
             RULER_TYPE_BORDER               (Border: GetClickAryPos())
-            RULER_TYPE_INDENT               (Einzug: GetClickAryPos())
+            RULER_TYPE_INDENT               (indent: GetClickAryPos())
             RULER_TYPE_TAB                  (Tab: GetClickAryPos())
 
     - GetClickAryPos()
-        Liefert den Index im Array zurueck, wenn ein Border, Indent oder ein
-        Tab per DoubleClick betaetigt wird.
+        Returns the index in the array if a Border, an Indent or a Tab
+        is applied via DoubleClick.
 
     - GetType()
-        Mit dieser Methode kann man einen HitTest durchfuehren, um
-        gegebenenfalls ueber das Abfangen des MouseButtonDown-Handlers
-        auch ueber die rechte Maustaste etwas auf ein Item anzuwenden. Als
-        Paramter ueber gibt man die Fensterposition und gegebenenfalls
-        einen Pointer auf einen sal_uInt16, um die Array-Position eines
-        Tabs, Indent oder Borders mitzubekommen. Als Type werden folgende
-        Werte zurueckgegeben:
-            RULER_TYPE_DONTKNOW             (kein Element im Linealbereich)
-            RULER_TYPE_OUTSIDE              (ausserhalb des Linealbereichs)
-            RULER_TYPE_MARGIN1              (nur Margin1-Kante)
-            RULER_TYPE_MARGIN2              (nur Margin2-Kante)
+        This method can be used to carry out a HitTest,
+        in order to possibly also apply sth to an Item using the right
+        mouse button by catching the MouseButtonDown handler. As
+        parameters, the window position and possibly a pointer to a
+        sal_uInt16 are passed, in order to determine the array position
+        of a Tab, an Indent, or a Border. The following values are
+        returned as type:
+            RULER_TYPE_DONTKNOW             (no element in the ruler area)
+            RULER_TYPE_OUTSIDE              (outside of the ruler area)
+            RULER_TYPE_MARGIN1              (only Margin1 border)
+            RULER_TYPE_MARGIN2              (only Margin2 border)
             RULER_TYPE_BORDER               (Border: GetClickAryPos())
-            RULER_TYPE_INDENT               (Einzug: GetClickAryPos())
+            RULER_TYPE_INDENT               (indent: GetClickAryPos())
             RULER_TYPE_TAB                  (Tab: GetClickAryPos())
 
-Wenn der Drag-Vorgang abgebrochen werden soll, kann der Drag-Vorgang
-mit CancelDrag() abgebrochen werden. Folgende Methoden gibt es fuer die
-Drag-Steuerung:
+If the drag process should be canceled, this can be done using CancelDrag().
+There are the following methods for controlling the Drag:
 
     - IsDrag()
-        Liefert sal_True zurueck, wenn sich das Lineal im Drag-Vorgang befindet.
+        Returns 'true' if the ruler is in a drag process.
 
     - CancelDrag()
-        Bricht den Drag-Vorgang ab, falls einer durchgefuehrt wird. Dabei
-        werden die alten Werte wieder hergestellt und der Drag und der
-        EndDrag-Handler gerufen.
+        Cancels the drag process, if one is being carried out. During this,
+        the old values are restored and the Drag and the EndDrag handlers
+        are called.
 
-Um vom Dokument ein Drag auszuloesen, gibt es folgende Methoden:
+In order to trigger a Drag from the document, there are the following
+methods:
 
     - StartDocDrag()
-        Dieser Methode werden der MouseEvent vom Dokumentfenster und
-        was gedragt werden soll uebergeben. Wenn als DragType
-        RULER_TYPE_DONTKNOW uebergeben wird, bestimmt das Lineal, was
-        verschoben werden soll. Bei den anderen, wird der Drag nur dann
-        gestartet, wenn auch an der uebergebenen Position ein entsprechendes
-        Element gefunden wurde. Dies ist zun Beispiel dann notwendig, wenn
-        zum Beispiel Einzuege und Spalten an der gleichen X-Position liegen.
-        Der Rueckgabewert gibt an, ob der Drag ausgeloest wurde. Wenn ein
-        Drag ausgeloest wird, uebernimmt das Lineal die normale Drag-Steuerung
-        und verhaelt sich dann so, wie als wenn direkt in das Lineal geklickt
-        wurde. So captured das Lineal die Mouse und uebernimmt auch die
-        Steuerung des Cancel (ueber Tastatur, oder wenn die Mouse ueber
-        oder links vom Lineal ruasgeschoben wird). Auch alle Handler werden
-        gerufen (inkl. des StartDrag-Handlers). Wenn ein MouseEvent mit
-        Click-Count 2 uebergeben wird auch der DoubleClick-Handler
-        entsprechend gerufen.
+        This method is passed the MouseEvent of the document window
+        and what should be dragged. If RULER_TYPE_DONTKNOW is passed
+        as DragType, the ruler decides what should be dragged. In case
+        of the other types, the Drag is only started if a respective
+        element was found at the given position.
+        This is for example necessary if indents and columns are located
+        at the same X position.
+        The return value indicates whether the Drag has been triggered.
+        If a Drag is triggered, the ruler takes over the normal drag
+        control and behaves as if the ruler had been clicked directly.
+        Thus, the ruler captures the mouse and also takes over control
+        of the Cancel (via keyboard, or if the mouse is moved outside
+        of the ruler above it or left of it). All handlers are called,
+        too (including the StartDrag handler). If a MouseEvent with
+        ClickCount 2 is passed, the DoubleClick handler is also called,
+        respectively.
 
 --------------------------------------------------------------------------
 
-Fuer das Extra-Feld kann der Inhalt bestimmt werden und es gibt Handler,
-womit man bestimmte Aktionen abfangen kann.
+For the extra field, the content can be determined and there are handlers
+that can be used to handle specific actions.
 
     - ExtraDown()
-        Dieser Handler wird gerufen, wenn im Extra-Feld die Maus
-        gedrueckt wird.
+        This handler is called when the mouse is pressed in the extra field.
 
     - SetExtraType()
-        Mit dieser Methode kann festgelegt werden, was im ExtraFeld
-        dargestellt werden soll.
-            - ExtraType         Was im Extrafeld dargestellt werden soll
-                                RULER_EXTRA_DONTKNOW        (Nichts)
-                                RULER_EXTRA_NULLOFFSET      (Koordinaaten-Kreuz)
+        With this method, it can be defined what should be displayed in
+        the extra field.
+            - ExtraType         what should be displayed in the extra field
+                                RULER_EXTRA_DONTKNOW        (nothing)
+                                RULER_EXTRA_NULLOFFSET      (coordinate axes)
                                 RULER_EXTRA_TAB             (Tab)
-            - sal_uInt16 nStyle     Bitfeld als Style:
-                                    RULER_STYLE_HIGHLIGHT   (selektiert)
-                                    RULER_TAB_...           (ein Tab-Style)
+            - sal_uInt16 nStyle     bit field as style:
+                                    RULER_STYLE_HIGHLIGHT   (selected)
+                                    RULER_TAB_...           (a Tab style)
 
     - GetExtraClick()
-        Liefert die Anzahl der Mausclicks zurueck. Dadurch ist es zum
-        Beispiel auch moeglich, auch durch einen DoubleClick im Extrafeld
-        eine Aktion auszuloesen.
+        Returns the number of mouse clicks. By this, it is for example
+        also possible to trigger an action by a DoubleClick in the
+        extra field.
 
     - GetExtraModifier()
-        Liefert die Modifier-Tasten zurueck, die beim Klicken in das Extra-
-        Feld gedrueckt waren. Siehe MouseEvent.
+        Returns the modifier keys that were pressed when the extra field
+        was clicked. See MouseEvent.
 
 --------------------------------------------------------------------------
 
-Weitere Hilfsfunktionen:
+Further helper functions:
 
 - static Ruler::DrawTab()
-    Mit dieser Methode kann ein Tab auf einem OutputDevice ausgegeben
-    werden. Dadurch ist es moeglich, auch in Dialogen die Tabs so
-    anzuzeigen, wie Sie im Lineal gemalt werden.
+    With this method, a Tab can be output on an OutputDevice.
+    By this, it is also possible to show the Tabs in dialogs like
+    they are drawn in the ruler.
 
-    Diese Methode gibt den Tab zentriert an der uebergebenen Position
-    aus. Die Groesse der Tabs kann ueber die Defines RULER_TAB_WIDTH und
-    RULER_TAB_HEIGHT bestimmt werden.
+    This method outputs the Tab centred at the given position. The size
+    of the tabs can be defined by the defines RULER_TAB_WIDTH and
+    RULER_TAB_HEIGHT.
 
 --------------------------------------------------------------------------
 
-Tips zur Benutzung des Lineals:
+Tips for the use of the ruler:
 
-- Bei dem Lineal muss weder im Drag-Modus noch sonst das Setzen der Werte
-  in SetUpdateMode() geklammert werden. Denn das Lineal sorgt von sich
-  aus dafuer, das wenn mehrere Werte gesetzt werden, diese automatisch
-  zusammengefast werden und flackerfrei ausgegeben werden.
+- For the ruler, neither in the Drag mode nor elsewhere, the setting
+  of the values must be bracketed in SetUpdateMode(). The ruler itself
+  takes care that, if multiple values are set, they are automatically
+  grouped together and output flicker-free.
 
-- Initial sollten beim Lineal zuerst die Groessen, Positionen und Werte
-  gesetzt werden, bevor es angezeigt wird. Dies ist deshalb wichtig, da
-  ansonsten viele Werte unnoetig berechnet werden.
+- Initially, the sizes, positions and values should be set first for the
+  ruler, before it is displayed. This is important because otherwise
+  many values are calculated unnecessarily.
 
-- Wenn das Dokumentfenster, in dem sich das Lineal befindet aktiv bzw.
-  deaktiv wird, sollten die Methoden Activate() und Deactivate() vom
-  Lineal gerufen werden. Denn je nach Einstellungen und System wird die
-  Anzeige entsprechend umgeschaltet.
+- When the document window, in which the ruler resides, becomes active
+  resp. unactive, the methods Activate() and Deactivate() should be
+  called by the ruler. That is so because the display is switched according
+  to the settings and the system.
 
-- Zum Beispiel sollte beim Drag von Tabs und Einzuegen nach Moeglichkeit die
-  alten Positionen noch mit angezeigt werden. Dazu sollte zusaetzlich beim
-  Setzen der Tabs und Einzuege als erstes im Array die alten Positionen
-  eingetragen werden und mit dem Style RULER_STYLE_DONTKNOW verknuepft
-  werden. Danach sollte im Array die restlichen Werte eingetragen werden.
+- For example, while dragging Tabs and Indents, the old positions should
+  also be shown if possible. For that, while setting the Tabs and Indents,
+  the old positions should be inserted first into the array in addition
+  and be linked with the style RULER_STYLE_DONTKNOW. After that, the
+  remaining values should be set in the array.
 
-- Bei mehreren markierten Absaetzen und Tabellen-Zellen, sollten die Tabs
-  und Einzuege in grau von der ersten Zelle, bzw. vom ersten Absatz
-  angezeigt werden. Dies kann man auch ueber den Style RULER_STYLE_DONTKNOW
-  erreichen.
+- In case of multiple selected paragraphs and table cells, the Tabs and
+  Indents should be displayed in grey in front of the first cell resp.
+  the first paragraph. This can also be achieved by the style
+  RULER_STYLE_DONTKNOW.
 
-- Die Bemassungspfeile sollten immer dann angezeigt, wenn beim Drag die
-  Alt-Taste (WW-Like) gedrueckt wird. Vielleicht sollte diese Einstellung
-  auch immer vornehmbar sein und vielleicht beim Drag immer die
-  Bemassungspfeile dargestellt werden. Bei allen Einstellung sollten die
-  Werte immer auf ein vielfaches eines Wertes gerundet werden, da die
-  Bildschirmausloesung sehr ungenau ist.
+- The measuring arrow should always be shown when the Alt key (WW-Like)
+  is pressed during the drag. Maybe, this setting should be configurable
+  always and possibly the measuring arrows always be shown while
+  dragging. For all settings, the values should always be rounded to the
+  multiple of one value because the screen resolution is very unprecise.
 
-- DoppelKlicks sollten folgendermassen behandelt werden (GetClickType()):
+- DoubleClicks should be handled in the following way (GetClickType()):
     - RULER_TYPE_DONTKNOW
       RULER_TYPE_MARGIN1
       RULER_TYPE_MARGIN2
-        Wenn die Bedingunden GetClickPos() <= GetMargin1() oder
-        GetClickPos() >= GetMargin2() oder der Type gleich
-        RULER_TYPE_MARGIN1 oder RULER_TYPE_MARGIN2 ist, sollte
-        ein SeitenDialog angezeigt werden, wo der Focus auf dem
-        entsprechenden Rand steht
+        If the conditions GetClickPos() <= GetMargin1() or
+        GetClickPos() >= GetMargin2() are met or the type is equal to
+        RULER_TYPE_MARGIN1 or RULER_TYPE_MARGIN2, a side dialog should
+        be displayed in which the focus is at the respective border.
     - RULER_TYPE_BORDER
-        Es sollte ein Spalten- oder Tabellen-Dialog angezeigt werden,
-        wo der Focus auf der entsprechenden Spalte steht, die mit
-        GetClickAryPos() abgefragt werden kann.
+        A column or table dialog should be shown in which the focus
+        is at the respective column that can be queried using
+        GetClickAryPos().
     - RULER_TYPE_INDENT
-        Es sollte der Dialog angezeigt werden, wo die Einzuege eingestellt
-        werden koennen. Dabei sollte der Focus auf dem Einzug stehen, der
-        mit GetClickAryPos() ermittelt werden kann.
+        The dialog, in which the indents can be configured, should be
+        shown. In this, the focus should be on the indent which can
+        be queried using GetClickAryPos().
     - RULER_TYPE_TAB
-        Es sollte ein TabDialog angezeigt werden, wo der Tab selektiert
-        sein sollte, der ueber GetClickAryPos() abgefragt werden kann.
+        A TabDialog should be displayed in which the Tab, that can be
+        queried using GetClickAryPos(), should be selected.
 
 *************************************************************************/
 
