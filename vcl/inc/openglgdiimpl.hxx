@@ -56,6 +56,9 @@ protected:
 
     SalColor mnLineColor;
     SalColor mnFillColor;
+#ifdef DBG_UTIL
+    bool mProgramIsSolidLineColor;
+#endif
 
     void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
@@ -67,20 +70,21 @@ public:
     bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
     bool UseSolid( SalColor nColor, double fTransparency );
     bool UseSolid( SalColor nColor );
+    bool UseSolidAA( SalColor nColor, double fTransparency );
     bool UseSolidAA( SalColor nColor );
     bool UseInvert();
 
     void DrawPoint( long nX, long nY );
-    void DrawLine( long nX1, long nY1, long nX2, long nY2 );
+    void DrawLine( double nX1, double nY1, double nX2, double nY2 );
     void DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
-    void DrawLineAA( long nX1, long nY1, long nX2, long nY2 );
+    void DrawLineAA( double nX1, double nY1, double nX2, double nY2 );
     void DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawConvexPolygon( const Polygon& rPolygon );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
-    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
+    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
     void DrawRegionBand( const RegionBand& rRegion );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
