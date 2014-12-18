@@ -11,6 +11,23 @@
 
 #include <boost/scoped_array.hpp>
 
+namespace {
+
+OUString convert(xmlChar const * string) {
+    OUString s;
+    CPPUNIT_ASSERT_MESSAGE(
+        "xmlChar string is not UTF-8",
+        rtl_convertStringToUString(
+            &s.pData, reinterpret_cast<char const *>(string), xmlStrlen(string),
+            RTL_TEXTENCODING_UTF8,
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
+    return s;
+}
+
+}
+
 XmlTestTools::XmlTestTools()
 {}
 
@@ -55,7 +72,7 @@ OUString XmlTestTools::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const 
         return OUString();
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()));
-    OUString s(OUString::createFromAscii((const char*)prop));
+    OUString s(convert(prop));
     xmlFree(prop);
     xmlXPathFreeObject(pXmlObj);
     return s;
@@ -70,7 +87,7 @@ OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
             xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString s(OUString::createFromAscii((const char*)((pXmlNode->children[0]).content)));
+    OUString s(convert((pXmlNode->children[0]).content));
     xmlXPathFreeObject(pXmlObj);
     return s;
 }
@@ -137,7 +154,7 @@ int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, con
     int nRet = 0;
     for (xmlNodePtr pChild = pXmlNode->children; pChild; pChild = pChild->next)
     {
-        if (OUString::createFromAscii((const char*)pChild->name) == rChildName)
+        if (convert(pChild->name) == rChildName)
             break;
         ++nRet;
     }
