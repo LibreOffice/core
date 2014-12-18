@@ -306,8 +306,8 @@ uno::Sequence< OUString > ScaPricingAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aRet( 2 );
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( ADDIN_SERVICE );
-    pArray[1] = OUString( MY_SERVICE );
+    pArray[0] = ADDIN_SERVICE;
+    pArray[1] = MY_SERVICE;
     return aRet;
 }
 
