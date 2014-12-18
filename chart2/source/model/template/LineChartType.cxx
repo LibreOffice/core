@@ -164,7 +164,7 @@ uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
 OUString SAL_CALL LineChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_LINE);
 }
 
 // ____ OPropertySet ____

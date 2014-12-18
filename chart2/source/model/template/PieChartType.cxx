@@ -155,7 +155,7 @@ uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
 OUString SAL_CALL PieChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_PIE);
 }
 
 Reference< chart2::XCoordinateSystem > SAL_CALL

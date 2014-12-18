@@ -136,7 +136,7 @@ uno::Sequence<OUString> GL3DBarChartType::getSupportedServiceNames_Static()
 OUString SAL_CALL GL3DBarChartType::getChartType()
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR);
 }
 
 uno::Sequence<OUString> GL3DBarChartType::getSupportedPropertyRoles()

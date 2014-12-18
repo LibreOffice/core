@@ -51,7 +51,7 @@ uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()
 OUString SAL_CALL BarChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_BAR);
 }
 
 uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()

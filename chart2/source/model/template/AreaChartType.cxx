@@ -50,7 +50,7 @@ uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()
 OUString SAL_CALL AreaChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_AREA;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_AREA);
 }
 
 uno::Sequence< OUString > AreaChartType::getSupportedServiceNames_Static()

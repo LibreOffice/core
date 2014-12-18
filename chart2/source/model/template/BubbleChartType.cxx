@@ -161,7 +161,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 OUString SAL_CALL BubbleChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE);
 }
 
 uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()

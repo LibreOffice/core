@@ -65,7 +65,7 @@ uno::Reference< util::XCloneable > SAL_CALL FilledNetChartType::createClone()
 OUString SAL_CALL FilledNetChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET);
 }
 
 uno::Sequence< OUString > FilledNetChartType::getSupportedServiceNames_Static()

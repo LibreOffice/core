@@ -169,7 +169,7 @@ uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
 OUString SAL_CALL NetChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_NET;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_NET);
 }
 
 uno::Sequence< OUString > NetChartType::getSupportedServiceNames_Static()

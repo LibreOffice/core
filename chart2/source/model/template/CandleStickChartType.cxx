@@ -218,7 +218,7 @@ uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
 OUString SAL_CALL CandleStickChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK);
 }
 
 uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()

@@ -150,7 +150,7 @@ uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
 OUString SAL_CALL ColumnChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN);
 }
 
 uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()

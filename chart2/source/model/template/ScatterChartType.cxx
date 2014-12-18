@@ -213,7 +213,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 OUString SAL_CALL ScatterChartType::getChartType()
     throw (uno::RuntimeException, std::exception)
 {
-    return CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
+    return OUString(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER);
 }
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
