@@ -912,9 +912,9 @@ bool ImportContext::importDataAwareProperty(
 {
     OUString sLinkedCell;
     OUString sCellRange;
-    if ( rPropName.equals( "linked-cell" ) )
+    if ( rPropName == "linked-cell" )
        sLinkedCell = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
-    if ( rPropName.equals( "source-cell-range" ) )
+    if ( rPropName == "source-cell-range" )
         sCellRange = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rPropName );
     bool bRes = false;
     Reference< lang::XMultiServiceFactory > xFac( _pImport->getDocOwner(), UNO_QUERY );

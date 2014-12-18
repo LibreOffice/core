@@ -910,7 +910,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
 
     Reference< form::binding::XBindableValue > xBinding( _xProps, UNO_QUERY );
 
-    if ( xFac.is() && xBinding.is() && rAttrName.equals( XMLNS_DIALOGS_PREFIX ":linked-cell" ) )
+    if ( xFac.is() && xBinding.is() && rAttrName == XMLNS_DIALOGS_PREFIX ":linked-cell" )
     {
         try
         {
@@ -935,7 +935,7 @@ void ElementDescriptor::readDataAwareAttr( OUString const & rAttrName )
         }
     }
     Reference< form::binding::XListEntrySink > xEntrySink( _xProps, UNO_QUERY );
-    if ( xEntrySink.is() && rAttrName.equals( XMLNS_DIALOGS_PREFIX ":source-cell-range" ) )
+    if ( xEntrySink.is() && rAttrName == XMLNS_DIALOGS_PREFIX ":source-cell-range" )
     {
         Reference< beans::XPropertySet > xListSource( xEntrySink->getListEntrySource(), UNO_QUERY );
         if ( xListSource.is() )
