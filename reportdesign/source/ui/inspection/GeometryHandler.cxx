@@ -881,7 +881,6 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 switch(nId)
                 {
                     case PROPERTY_ID_POSITIONX:
-                    case PROPERTY_ID_POSITIONY:
                     case PROPERTY_ID_WIDTH:
                         if ( bSetMin )
                             xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
