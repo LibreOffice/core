@@ -25,8 +25,7 @@ class SalOverride:
 public:
     explicit SalOverride(InstantiationData const & data): RewritePlugin(data) {}
 
-    virtual void run() override
-    { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override;
 
     bool VisitCXXMethodDecl(CXXMethodDecl const * decl);
 
@@ -34,6 +33,14 @@ private:
     std::set<SourceLocation> insertions_;
 };
 
+void SalOverride::run() {
+    if (compiler.getLangOpts().CPlusPlus
+        && compiler.getPreprocessor().getIdentifierInfo(
+            "LIBO_INTERNAL_ONLY")->hasMacroDefinition())
+    {
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+    }
+}
 bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
     // As a heuristic, ignore declarations where the name is spelled out in an
     // ignored location; that e.g. handles uses of the Q_OBJECT macro from
