@@ -116,9 +116,9 @@ class Canvas
         int i = maNodes.indexOf (aNode);
         if( i != -1 )
         {
-            Object aObject = maObjects.get(aNode);
+            CanvasShape aObject = maObjects.get(aNode);
             maObjectList.remove (aObject);
-            maObjects.remove (aObject);
+            maObjects.remove (aNode);
             maNodes.remove (aNode);
             repaint ();
         }
