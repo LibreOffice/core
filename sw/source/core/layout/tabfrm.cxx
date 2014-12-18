@@ -3480,19 +3480,19 @@ void SwTabFrm::Prepare( const PrepareHint eHint, const void *, bool )
         CheckDirChange();
 }
 
-SwRowFrm::SwRowFrm( const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent ):
-    SwLayoutFrm( rLine.GetFrmFmt(), pSib ),
-    pTabLine( &rLine ),
-    pFollowRow( 0 ),
+SwRowFrm::SwRowFrm(const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent)
+    : SwLayoutFrm( rLine.GetFrmFmt(), pSib )
+    , m_pTabLine( &rLine )
+    , m_pFollowRow( 0 )
     // #i29550#
-    mnTopMarginForLowers( 0 ),
-    mnBottomMarginForLowers( 0 ),
-    mnBottomLineSize( 0 ),
+    , mnTopMarginForLowers( 0 )
+    , mnBottomMarginForLowers( 0 )
+    , mnBottomLineSize( 0 )
     // --> split table rows
-    bIsFollowFlowRow( false ),
+    , m_bIsFollowFlowRow( false )
     // <-- split table rows
-    bIsRepeatedHeadline( false ),
-    mbIsRowSpanLine( false )
+    , m_bIsRepeatedHeadline( false )
+    , m_bIsRowSpanLine( false )
 {
     mnType = FRMC_ROW;
 

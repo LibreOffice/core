@@ -34,16 +34,16 @@ class SwRowFrm: public SwLayoutFrm
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
 
-    const SwTableLine *pTabLine;
-    SwRowFrm* pFollowRow;
+    const SwTableLine * m_pTabLine;
+    SwRowFrm * m_pFollowRow;
     // #i29550#
     sal_uInt16 mnTopMarginForLowers;
     sal_uInt16 mnBottomMarginForLowers;
     sal_uInt16 mnBottomLineSize;
     // <-- collapsing
-    bool bIsFollowFlowRow;
-    bool bIsRepeatedHeadline;
-    bool mbIsRowSpanLine;
+    bool m_bIsFollowFlowRow;
+    bool m_bIsRepeatedHeadline;
+    bool m_bIsRowSpanLine;
 
 protected:
     virtual void MakeAll() SAL_OVERRIDE;
@@ -63,7 +63,7 @@ public:
      */
     void RegistFlys( SwPageFrm *pPage = 0 );
 
-    const SwTableLine *GetTabLine() const { return pTabLine; }
+    const SwTableLine *GetTabLine() const { return m_pTabLine; }
 
     /**
      * Adapts the Cells to the current height; invalidates the Cells if
@@ -71,8 +71,8 @@ public:
      */
     void AdjustCells( const SwTwips nHeight, const bool bHeight );
 
-    SwRowFrm* GetFollowRow() const { return pFollowRow; }
-    void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
+    SwRowFrm* GetFollowRow() const { return m_pFollowRow; }
+    void SetFollowRow( SwRowFrm* pNew ) { m_pFollowRow = pNew; }
 
     // #i29550#
     sal_uInt16 GetTopMarginForLowers() const { return mnTopMarginForLowers; }
@@ -83,21 +83,21 @@ public:
     void   SetBottomLineSize( sal_uInt16 nNew ) { mnBottomLineSize = nNew; }
     // <-- collapsing
 
-    bool IsRepeatedHeadline() const { return bIsRepeatedHeadline; }
-    void SetRepeatedHeadline( bool bNew ) { bIsRepeatedHeadline = bNew; }
+    bool IsRepeatedHeadline() const { return m_bIsRepeatedHeadline; }
+    void SetRepeatedHeadline( bool bNew ) { m_bIsRepeatedHeadline = bNew; }
 
     // --> split table rows
     bool IsRowSplitAllowed() const;
-    bool IsFollowFlowRow() const { return bIsFollowFlowRow; }
-    void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
+    bool IsFollowFlowRow() const { return m_bIsFollowFlowRow; }
+    void SetFollowFlowRow( bool bNew ) { m_bIsFollowFlowRow = bNew; }
     // <-- split table rows
 
     // #131283# Table row keep feature
     bool ShouldRowKeepWithNext() const;
 
     // #i4032# NEW TABLES
-    bool IsRowSpanLine() const { return mbIsRowSpanLine; }
-    void SetRowSpanLine( bool bNew ) { mbIsRowSpanLine = bNew; }
+    bool IsRowSpanLine() const { return m_bIsRowSpanLine; }
+    void SetRowSpanLine( bool bNew ) { m_bIsRowSpanLine = bNew; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrm)
 };
