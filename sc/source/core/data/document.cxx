@@ -3764,6 +3764,10 @@ void ScDocument::CompileXML()
     if ( pValidationList )
         pValidationList->CompileXML();
 
+    // Track all formula cells that were appended to the FormulaTrack during
+    // import or CompileXML().
+    TrackFormulas();
+
     SetAutoCalc( bOldAutoCalc );
 }
 
