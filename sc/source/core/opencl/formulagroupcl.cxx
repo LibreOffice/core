@@ -3692,6 +3692,14 @@ public:
         {
             SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
             mpResBuf = NULL;
+            return;
+        }
+
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, NULL, NULL);
+        if (err != CL_SUCCESS)
+        {
+            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
+            mpResBuf = NULL;
         }
     }
 
@@ -3701,18 +3709,6 @@ public:
             return false;
 
         rDoc.SetFormulaResults(rTopPos, mpResBuf, mnGroupLength);
-
-        // Obtain cl context
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
-
-        cl_int err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, NULL, NULL);
-        if (err != CL_SUCCESS)
-        {
-            SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << err);
-            return false;
-        }
-
         return true;
     }
 };
