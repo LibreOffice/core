@@ -4995,7 +4995,7 @@ void DomainMapper_Impl::enableInteropGrabBag(const OUString& aName)
 
 void DomainMapper_Impl::disableInteropGrabBag()
 {
-    m_aInteropGrabBagName = "";
+    m_aInteropGrabBagName.clear();
     m_aInteropGrabBag.clear();
     m_aSubInteropGrabBag.clear();
 }

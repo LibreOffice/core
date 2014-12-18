@@ -130,7 +130,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
     // keep the XUriReference implementation happy )
     // add mspath to represent the 'source' of this stream
-    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( OUString( "file:///"  ) + msPath );
+    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( "file:///" + msPath );
 
     static const char sType[] = "Type";
     static const char sDocumentType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";

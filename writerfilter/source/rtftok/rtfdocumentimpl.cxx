@@ -349,12 +349,12 @@ void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreF
     if (!m_aAuthor.isEmpty())
     {
         pImpl->setAuthor(m_aAuthor);
-        m_aAuthor = "";
+        m_aAuthor.clear();
     }
     if (!m_aAuthorInitials.isEmpty())
     {
         pImpl->setAuthorInitials(m_aAuthorInitials);
-        m_aAuthorInitials = "";
+        m_aAuthorInitials.clear();
     }
     pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;
     pImpl->seek(nPos);
@@ -1272,7 +1272,7 @@ void RTFDocumentImpl::text(OUString& rString)
 
     if (!m_aIgnoreFirst.isEmpty() && m_aIgnoreFirst.equals(rString))
     {
-        m_aIgnoreFirst = "";
+        m_aIgnoreFirst.clear();
         return;
     }
 

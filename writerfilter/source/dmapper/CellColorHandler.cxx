@@ -303,7 +303,7 @@ beans::PropertyValue CellColorHandler::getInteropGrabBag()
 
 void CellColorHandler::disableInteropGrabBag()
 {
-    m_aInteropGrabBagName = "";
+    m_aInteropGrabBagName.clear();
     m_aInteropGrabBag.clear();
 }
 

@@ -3415,7 +3415,7 @@ beans::PropertyValue DomainMapper::getInteropGrabBag()
         *pSeq++ = *i;
 
     m_pImpl->m_aInteropGrabBag.clear();
-    m_pImpl->m_aInteropGrabBagName = "";
+    m_pImpl->m_aInteropGrabBagName.clear();
     aRet.Value = uno::makeAny(aSeq);
     return aRet;
 }

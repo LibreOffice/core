@@ -354,11 +354,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 xPropertySet->setPropertyValue("FillColor", aAny);
 
             // fillType will decide, possible it'll be the start color of a gradient.
-            aFillModel.moColor.set(OUString("#") + OUString::fromUtf8(msfilter::util::ConvertColor(aAny.get<sal_Int32>())));
+            aFillModel.moColor.set("#" + OUString::fromUtf8(msfilter::util::ConvertColor(aAny.get<sal_Int32>())));
         }
         else if (i->first == "fillBackColor")
             // fillType will decide, possible it'll be the end color of a gradient.
-            aFillModel.moColor2.set(OUString("#") + OUString::fromUtf8(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32()))));
+            aFillModel.moColor2.set("#" + OUString::fromUtf8(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32()))));
         else if (i->first == "lineColor")
             aLineColor <<= msfilter::util::BGRToRGB(i->second.toInt32());
         else if (i->first == "lineBackColor")
@@ -561,7 +561,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                 aShadowModel.mbHasShadow = true;
         }
         else if (i->first == "shadowColor")
-            aShadowModel.moColor.set(OUString("#") + OUString::fromUtf8(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32()))));
+            aShadowModel.moColor.set("#" + OUString::fromUtf8(msfilter::util::ConvertColor(msfilter::util::BGRToRGB(i->second.toInt32()))));
         else if (i->first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
