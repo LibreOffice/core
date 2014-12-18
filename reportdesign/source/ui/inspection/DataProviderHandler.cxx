@@ -174,6 +174,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
     {
         case PROPERTY_ID_CHARTTYPE:
             // TODO: We need a possibility to get the UI of the selected chart type
+            // LEM: this business of ignoring ChartType seems very fishy!
             //if( m_xChartModel.is() )
             //{
             //    uno::Reference< chart2::XDiagram > xDiagram( m_xChartModel->getFirstDiagram() );
