@@ -199,7 +199,7 @@ public class _XCharacterClassification extends MultiMethodTest {
 
         for (int i=0;i<characters.length;i++) {
             int get = oObj.getType(toCheck, i);
-            res &= (charstyles_office[get] == charstyles_office[i]);
+            res &= charstyles_office[get].equals(charstyles_office[i]);
             if (!res) {
                 log.println("Code :" + Integer.toHexString(charsInt[i]));
                 log.println("Gained: " + charstyles_office[get]);
