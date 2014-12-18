@@ -398,7 +398,7 @@ void Calendar::ImplFormat()
             SetFont( aOldFont );
 
         // Calculate DayOfWeekText (gets displayed in a narrow font)
-        maDayOfWeekText = "";
+        maDayOfWeekText.clear();
         long nStartOffX = 0;
         sal_Int16 nDay = maCalendarWrapper.getFirstDayOfWeek();
         for ( sal_Int16 nDayOfWeek = 0; nDayOfWeek < 7; nDayOfWeek++ )

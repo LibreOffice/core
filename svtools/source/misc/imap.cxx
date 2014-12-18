@@ -633,7 +633,7 @@ void ImageMap::ClearImageMap()
         delete maList[ i ];
     maList.clear();
 
-    aName = "";
+    aName.clear();
 }
 
 

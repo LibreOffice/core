@@ -44,10 +44,10 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_FOLLOWMOUSE                     true
 #define DEFAULT_MENUICONS                       TRISTATE_INDET
 
-#define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    OUString("DontHideDisabledEntry"    )
-#define PROPERTYNAME_FOLLOWMOUSE                OUString("FollowMouse"              )
-#define PROPERTYNAME_SHOWICONSINMENUES          OUString("ShowIconsInMenues"        )
-#define PROPERTYNAME_SYSTEMICONSINMENUES        OUString("IsSystemIconsInMenus"     )
+#define PROPERTYNAME_DONTHIDEDISABLEDENTRIES    "DontHideDisabledEntry"
+#define PROPERTYNAME_FOLLOWMOUSE                "FollowMouse"
+#define PROPERTYNAME_SHOWICONSINMENUES          "ShowIconsInMenues"
+#define PROPERTYNAME_SYSTEMICONSINMENUES        "IsSystemIconsInMenus"
 
 #define PROPERTYHANDLE_DONTHIDEDISABLEDENTRIES  0
 #define PROPERTYHANDLE_FOLLOWMOUSE              1

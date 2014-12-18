@@ -155,12 +155,12 @@ void DavDetailsContainer::show( bool bShow )
 bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
 {
     bool bValid = false;
-    if ( rScheme.equals( "http://" ) )
+    if ( rScheme == "http://" )
     {
         bValid = true;
         m_pCBDavs->Check( false );
     }
-    else if ( rScheme.equals( "https://" ) )
+    else if ( rScheme == "https://" )
     {
         bValid = true;
         m_pCBDavs->Check( true );

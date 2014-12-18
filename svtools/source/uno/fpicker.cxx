@@ -107,8 +107,7 @@ OUString SAL_CALL FilePicker_getImplementationName()
 Sequence< OUString > FilePicker_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames(1);
-    aServiceNames.getArray()[0] =
-        OUString( "com.sun.star.ui.dialogs.FilePicker");
+    aServiceNames.getArray()[0] = "com.sun.star.ui.dialogs.FilePicker";
     return aServiceNames;
 }
 
@@ -178,8 +177,7 @@ OUString SAL_CALL FolderPicker_getImplementationName()
 Sequence< OUString > FolderPicker_getSupportedServiceNames()
 {
     Sequence< OUString > aServiceNames(1);
-    aServiceNames.getArray()[0] =
-        OUString( "com.sun.star.ui.dialogs.FolderPicker");
+    aServiceNames.getArray()[0] = "com.sun.star.ui.dialogs.FolderPicker";
     return aServiceNames;
 }
 

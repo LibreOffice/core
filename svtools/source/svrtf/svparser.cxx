@@ -414,7 +414,7 @@ int SvParser::GetNextToken()
 
     if( !nTokenStackPos )
     {
-        aToken = "";     // empty token buffer
+        aToken.clear();     // empty token buffer
         nTokenValue = -1;   // marker for no value read
         bTokenHasValue = false;
 

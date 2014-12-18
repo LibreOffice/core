@@ -1363,7 +1363,7 @@ bool SvtURLBox_Impl::TildeParsing(
         }
 
         aText = aParseTilde;
-        aBaseURL = ""; // tilde provide absolute path
+        aBaseURL.clear(); // tilde provide absolute path
     }
 #endif
 

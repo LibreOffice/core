@@ -104,7 +104,7 @@ namespace svt
         m_pResultHandler = NULL;
         m_pTranslator = NULL;
         m_aFolder.aContent = ::ucbhelper::Content();
-        m_aFolder.sURL = "";
+        m_aFolder.sURL.clear();
     }
 
 

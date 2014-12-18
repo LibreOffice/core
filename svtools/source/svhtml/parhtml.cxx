@@ -830,7 +830,7 @@ int HTMLParser::_GetNextRawToken()
         // thus we don't have to search it again.
         bReadScript = false;
         bReadStyle = false;
-        aEndToken = "";
+        aEndToken.clear();
         bEndTokenFound = false;
 
         return 0;
@@ -895,7 +895,7 @@ int HTMLParser::_GetNextRawToken()
                             // ">" is optional for security reasons
                             bDone = bOffState &&
                             ( bReadScript
-                                ? aTok.equals(OOO_STRING_SVTOOLS_HTML_script)
+                                ? aTok == OOO_STRING_SVTOOLS_HTML_script
                                 : aTok.equals(aEndToken) );
                         }
                     }
@@ -909,11 +909,10 @@ int HTMLParser::_GetNextRawToken()
                 {
                     // Style sheets can be closed by </STYLE>, </HEAD> or <BODY>
                     if( bOffState )
-                        bDone = aTok.equals(OOO_STRING_SVTOOLS_HTML_style) ||
-                                aTok.equals(OOO_STRING_SVTOOLS_HTML_head);
+                        bDone = aTok == OOO_STRING_SVTOOLS_HTML_style ||
+                                aTok == OOO_STRING_SVTOOLS_HTML_head;
                     else
-                        bDone =
-                            aTok.equals(OOO_STRING_SVTOOLS_HTML_body);
+                        bDone = aTok == OOO_STRING_SVTOOLS_HTML_body;
                 }
 
                 if( bDone )
@@ -930,7 +929,7 @@ int HTMLParser::_GetNextRawToken()
                         // and parse the end token
                         bReadScript = false;
                         bReadStyle = false;
-                        aEndToken = "";
+                        aEndToken.clear();
                         nToken = 0;
                     }
                     else
@@ -1010,7 +1009,7 @@ int HTMLParser::_GetNextRawToken()
                 {
                     bReadScript = false;
                     bReadStyle = false;
-                    aEndToken = "";
+                    aEndToken.clear();
                     nToken = 0;
                 }
                 break;
@@ -1042,14 +1041,14 @@ int HTMLParser::_GetNextRawToken()
 int HTMLParser::_GetNextToken()
 {
     int nRet = 0;
-    sSaveToken = "";
+    sSaveToken.clear();
 
     if (mnPendingOffToken)
     {
         // HTML_<TOKEN>_OFF generated for HTML_<TOKEN>_ON
         nRet = mnPendingOffToken;
         mnPendingOffToken = 0;
-        aToken = "";
+        aToken.clear();
         return nRet;
     }
 
@@ -1189,7 +1188,7 @@ int HTMLParser::_GetNextToken()
                     else
                     {
                         // TokenString not needed anymore
-                        aToken = "";
+                        aToken.clear();
                     }
 
                     // Read until closing '>'
@@ -1248,7 +1247,7 @@ int HTMLParser::_GetNextToken()
                         }
                         if( SVPAR_PENDING == eState )
                             bReadNextChar = bReadNextCharSave;
-                        aToken = "";
+                        aToken.clear();
                     }
                     else if( '%' == nNextCh )
                     {
@@ -1281,7 +1280,7 @@ int HTMLParser::_GetNextToken()
                         if( IsParserWorking() )
                         {
                             sSaveToken = aToken;
-                            aToken = "";
+                            aToken.clear();
                         }
                     }
                     else

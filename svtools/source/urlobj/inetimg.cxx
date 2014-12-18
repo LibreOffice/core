@@ -117,7 +117,7 @@ bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
                 aAlternateText = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
             else if( !aAlternateText.isEmpty() )
-                aAlternateText = "";
+                aAlternateText.clear();
 
             if( nAnchorOffset )
             {
@@ -125,7 +125,7 @@ bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
                 aTargetURL = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
             else if( !aTargetURL.isEmpty() )
-                aTargetURL = "";
+                aTargetURL.clear();
 
             bRet = 0 == rIStm.GetError();
         }

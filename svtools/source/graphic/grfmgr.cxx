@@ -414,7 +414,7 @@ void GraphicObject::SetAttr( const GraphicAttr& rAttr )
 
 void GraphicObject::SetLink()
 {
-    maLink = "";
+    maLink.clear();
 }
 
 void GraphicObject::SetLink( const OUString& rLink )
@@ -424,7 +424,7 @@ void GraphicObject::SetLink( const OUString& rLink )
 
 void GraphicObject::SetUserData()
 {
-    maUserData = "";
+    maUserData.clear();
 }
 
 void GraphicObject::SetUserData( const OUString& rUserData )
@@ -704,7 +704,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     maGraphic = rGraphic;
     mbAutoSwapped = false;
     ImplAssignGraphicData();
-    maLink = "";
+    maLink.clear();
     delete mpSimpleCache, mpSimpleCache = NULL;
 
     mpMgr->ImplRegisterObj( *this, maGraphic, 0, pCopyObj);

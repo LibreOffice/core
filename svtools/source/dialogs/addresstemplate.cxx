@@ -968,7 +968,7 @@ void AssignmentPersistentData::Commit()
             )
             if (!aAdjust->isEmpty())
                 if (aColumnNameSet.end() == aColumnNameSet.find(*aAdjust))
-                    (*aAdjust) = "";
+                    aAdjust->clear();
     }
 
 
@@ -982,7 +982,7 @@ void AssignmentPersistentData::Commit()
         // update the array where we remember the field selections
         if (0 == _pListbox->GetSelectEntryPos())
             // it's the "no field selection" entry
-            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = "";
+            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex].clear();
         else
             // it's a regular field entry
             m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = _pListbox->GetSelectEntry();

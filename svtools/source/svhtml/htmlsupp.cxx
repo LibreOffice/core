@@ -44,11 +44,11 @@ bool HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
 {
     const HTMLOptions& aScriptOptions = GetOptions();
 
-    rLangString = "";
+    rLangString.clear();
     rLang = HTML_SL_JAVASCRIPT;
-    rSrc = "";
-    rLibrary = "";
-    rModule = "";
+    rSrc.clear();
+    rLibrary.clear();
+    rModule.clear();
 
     for( size_t i = aScriptOptions.size(); i; )
     {

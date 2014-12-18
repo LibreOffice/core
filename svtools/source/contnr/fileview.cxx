@@ -645,7 +645,7 @@ IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    maQuickSearchText = "";
+    maQuickSearchText.clear();
     mnSearchIndex = 0;
 
     return 0;

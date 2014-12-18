@@ -63,7 +63,7 @@ public:
     {
         uno::Sequence< OUString > aRet(1);
         OUString* pArray = aRet.getArray();
-        pArray[0] = OUString("com.sun.star.graphic.GraphicObject");
+        pArray[0] = "com.sun.star.graphic.GraphicObject";
         return aRet;
     }
 };

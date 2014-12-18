@@ -139,7 +139,7 @@ sal_Bool VCLXAccessibleHeaderBarItem::supportsService( const OUString& rServiceN
 Sequence< OUString > VCLXAccessibleHeaderBarItem::getSupportedServiceNames() throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames(1);
-    aNames[0] = OUString( "com.sun.star.awt.AccessibleHeaderBarItem" );
+    aNames[0] = "com.sun.star.awt.AccessibleHeaderBarItem";
     return aNames;
 }
 
