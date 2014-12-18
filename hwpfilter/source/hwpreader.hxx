@@ -281,7 +281,7 @@ OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::s
              detect_hwp_version(reinterpret_cast<const char*>(aData.getConstArray()))
            )
         {
-            sTypeName = OUString("writer_MIZI_Hwp_97");
+            sTypeName = "writer_MIZI_Hwp_97";
         }
     }
 
@@ -292,8 +292,8 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(::com::sun
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(SERVICE_NAME1);
-    pArray[1] = OUString(SERVICE_NAME2);
+    pArray[0] = SERVICE_NAME1;
+    pArray[1] = SERVICE_NAME2;
     return aRet;
 }
 
