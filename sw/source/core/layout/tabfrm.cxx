@@ -4368,9 +4368,9 @@ bool SwRowFrm::ShouldRowKeepWithNext() const
     return bRet;
 }
 
-SwCellFrm::SwCellFrm( const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent ) :
-    SwLayoutFrm( rBox.GetFrmFmt(), pSib ),
-    pTabBox( &rBox )
+SwCellFrm::SwCellFrm(const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent)
+    : SwLayoutFrm( rBox.GetFrmFmt(), pSib )
+    , m_pTabBox( &rBox )
 {
     mnType = FRMC_CELL;
 

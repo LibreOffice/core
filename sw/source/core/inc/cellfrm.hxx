@@ -30,7 +30,7 @@ class SwBorderAttrs;
 /// SwCellFrm is one table cell in the document layout.
 class SwCellFrm: public SwLayoutFrm
 {
-    const SwTableBox* pTabBox;
+    const SwTableBox* m_pTabBox;
 
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
@@ -48,7 +48,7 @@ public:
     // #i103961#
     virtual void Cut() SAL_OVERRIDE;
 
-    const SwTableBox *GetTabBox() const { return pTabBox; }
+    const SwTableBox *GetTabBox() const { return m_pTabBox; }
 
     // used for breaking table rows:
     SwCellFrm* GetFollowCell() const;
