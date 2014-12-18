@@ -47,8 +47,8 @@ namespace svxform
 
 
         // FormController
-        REGISTER_SERVICE( FormController, OUString( "com.sun.star.form.runtime.FormController" ) );
-        REGISTER_SERVICE( LegacyFormController, OUString( "com.sun.star.form.FormController" ) );
+        REGISTER_SERVICE( FormController, "com.sun.star.form.runtime.FormController" );
+        REGISTER_SERVICE( LegacyFormController, "com.sun.star.form.FormController" );
 
 
         // FormController - register selfaware service

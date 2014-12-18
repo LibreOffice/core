@@ -88,7 +88,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
         case SVX_VALUE_TYPE_NUMBER:
         case SVX_VALUE_TYPE_UNDEFINED:
         default:
-            aValStr = "";
+            aValStr.clear();
     }
 }
 

@@ -377,14 +377,14 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 {
     // a) special notification about start/stop async dispatch!
     //    FeatureDescriptor = "start" || "stop"
-    if (aEvent.FeatureDescriptor.equals(RECOVERY_OPERATIONSTATE_START))
+    if (aEvent.FeatureDescriptor == RECOVERY_OPERATIONSTATE_START)
     {
         if (m_pListener)
             m_pListener->start();
         return;
     }
 
-    if (aEvent.FeatureDescriptor.equals(RECOVERY_OPERATIONSTATE_STOP))
+    if (aEvent.FeatureDescriptor == RECOVERY_OPERATIONSTATE_STOP)
     {
         if (m_pListener)
             m_pListener->end();
@@ -394,7 +394,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     // b) normal notification about changed items
     //    FeatureDescriptor = "Update"
     //    State             = Lits of information [seq< NamedValue >]
-    if (! aEvent.FeatureDescriptor.equals(RECOVERY_OPERATIONSTATE_UPDATE))
+    if (aEvent.FeatureDescriptor != RECOVERY_OPERATIONSTATE_UPDATE)
         return;
 
     ::comphelper::SequenceAsHashMap lInfo(aEvent.State);
@@ -1268,7 +1268,7 @@ void BrokenRecoveryDialog::impl_refresh()
         sal_uInt16 nPos = m_pFileListLB->InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
         m_pFileListLB->SetEntryData( nPos, (void*)&rInfo );
     }
-    m_sSavePath = "";
+    m_sSavePath.clear();
     m_pOkBtn->GrabFocus();
 }
 

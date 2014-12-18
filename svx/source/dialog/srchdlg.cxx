@@ -2007,8 +2007,7 @@ IMPL_LINK( SvxSearchDialog, TimeoutHdl_Impl, Timer *, pTimer )
 OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
                                              bool bSrchFlag ) const
 {
-    if ( !rStr.isEmpty() )
-        rStr = "";
+    rStr.clear();
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "no DocShell" );

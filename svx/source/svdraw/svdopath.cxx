@@ -1036,7 +1036,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         Point aBeg(rDrag.GetStart());
         Point aNow(rDrag.GetNow());
 
-        aStr = "";
+        aStr.clear();
         aStr += "dx=";
         mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X() - aBeg.X(), aMetr, true);
         aStr += aMetr;

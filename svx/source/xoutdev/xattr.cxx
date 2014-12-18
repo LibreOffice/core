@@ -156,7 +156,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                 if( !pCompareValueFunc( pItem, pCheckItem ) )
                 {
                     // same name but different value, we need a new name for this item
-                    aUniqueName = "";
+                    aUniqueName.clear();
                     bForceNew = true;
                 }
                 break;
@@ -1392,7 +1392,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem->GetLineStartValue() != pLineStartItem->GetLineStartValue() )
                     {
                         // same name but different value, we need a new name for this item
-                        aUniqueName = "";
+                        aUniqueName.clear();
                         bForceNew = true;
                     }
                     break;
@@ -1414,7 +1414,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( pItem->GetLineEndValue() != pLineStartItem->GetLineStartValue() )
                         {
                             // same name but different value, we need a new name for this item
-                            aUniqueName = "";
+                            aUniqueName.clear();
                             bForceNew = true;
                         }
                         break;
@@ -1438,7 +1438,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem->GetLineStartValue() != pLineStartItem->GetLineStartValue() )
                     {
                         // same name but different value, we need a new name for this item
-                        aUniqueName = "";
+                        aUniqueName.clear();
                         bForceNew = true;
                     }
                     break;
@@ -1459,7 +1459,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( pItem->GetLineEndValue() != pLineStartItem->GetLineStartValue() )
                         {
                             // same name but different value, we need a new name for this item
-                            aUniqueName = "";
+                            aUniqueName.clear();
                             bForceNew = true;
                         }
                         break;
@@ -1675,7 +1675,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem->GetLineStartValue() != pLineEndItem->GetLineEndValue() )
                     {
                         // same name but different value, we need a new name for this item
-                        aUniqueName = "";
+                        aUniqueName.clear();
                         bForceNew = true;
                     }
                     break;
@@ -1697,7 +1697,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( pItem->GetLineEndValue() != pLineEndItem->GetLineEndValue() )
                         {
                             // same name but different value, we need a new name for this item
-                            aUniqueName = "";
+                            aUniqueName.clear();
                             bForceNew = true;
                         }
                         break;
@@ -1721,7 +1721,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                     if( pItem->GetLineStartValue() != pLineEndItem->GetLineEndValue() )
                     {
                         // same name but different value, we need a new name for this item
-                        aUniqueName = "";
+                        aUniqueName.clear();
                         bForceNew = true;
                     }
                     break;
@@ -1742,7 +1742,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                         if( pItem->GetLineEndValue() != pLineEndItem->GetLineEndValue() )
                         {
                             // same name but different value, we need a new name for this item
-                            aUniqueName = "";
+                            aUniqueName.clear();
                             bForceNew = true;
                         }
                         break;

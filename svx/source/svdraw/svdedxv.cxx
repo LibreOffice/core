@@ -475,7 +475,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
 {
     bool bOk=false;
     OUString& rStr=pFI->GetRepresentation();
-    rStr = "";
+    rStr.clear();
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
     if (pTextObj!=NULL) {
         Color* pTxtCol=NULL;

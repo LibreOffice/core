@@ -1215,13 +1215,13 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
 
         if(IsGradient())
         {
-            aString = "";
+            aString.clear();
             XFillGradientItem aNewGradItem(aString, aGradTransGradient.aGradient);
             aNewSet.Put(aNewGradItem);
         }
         else
         {
-            aString = "";
+            aString.clear();
             XFillFloatTransparenceItem aNewTransItem(aString, aGradTransGradient.aGradient);
             aNewSet.Put(aNewTransItem);
         }

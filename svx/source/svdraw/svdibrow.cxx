@@ -931,22 +931,22 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                 if (!HAS_BASE(SfxVoidItem,&rItem) && !HAS_BASE(SfxSetItem,&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
                     OUString aCommentStr;
 
-                    INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,OUString("L I N E"));
-                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,OUString("F I L L"));
-                    INSERTCOMMENT(XATTR_TEXT_FIRST,XATTR_TEXT_LAST,OUString("F O N T W O R K"));
-                    INSERTCOMMENT(SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST,OUString("S H A D O W"));
-                    INSERTCOMMENT(SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST,OUString("C A P T I O N"));
-                    INSERTCOMMENT(SDRATTR_MISC_FIRST,SDRATTR_MISC_LAST,OUString("M I S C E L L A N E O U S"));
-                    INSERTCOMMENT(SDRATTR_EDGE_FIRST,SDRATTR_EDGE_LAST,OUString("C O N N E C T O R"));
-                    INSERTCOMMENT(SDRATTR_MEASURE_FIRST,SDRATTR_MEASURE_LAST,OUString("D I M E N S I O N"));
-                    INSERTCOMMENT(SDRATTR_CIRC_FIRST,SDRATTR_CIRC_LAST,OUString("C I R C U L A R"));
-                    INSERTCOMMENT(SDRATTR_NOTPERSIST_FIRST,SDRATTR_NOTPERSIST_LAST,OUString("N O T P E R S I S T"));
-                    INSERTCOMMENT(SDRATTR_MOVEX,SDRATTR_VERTSHEARONE,OUString("Transformation of all object individually"));
-                    INSERTCOMMENT(SDRATTR_RESIZEXALL,SDRATTR_VERTSHEARALL,OUString("Transformation of all objects together"));
-                    INSERTCOMMENT(SDRATTR_TRANSFORMREF1X,SDRATTR_TRANSFORMREF2Y,OUString("V I E W R E F E R E N C E P O I N T S"));
-                    INSERTCOMMENT(SDRATTR_GRAF_FIRST,SDRATTR_GRAF_LAST,OUString("G R A P H I C"));
-                    INSERTCOMMENT(EE_ITEMS_START,EE_ITEMS_END,OUString("E D I T  E N G I N E"));
-                    INSERTCOMMENT(EE_ITEMS_END+1,EE_ITEMS_END+1,OUString("... by Joe Merten, JME Engineering Berlin ..."));
+                    INSERTCOMMENT(XATTR_LINE_FIRST,XATTR_LINE_LAST,"L I N E");
+                    INSERTCOMMENT(XATTR_FILL_FIRST,XATTR_FILL_LAST,"F I L L");
+                    INSERTCOMMENT(XATTR_TEXT_FIRST,XATTR_TEXT_LAST,"F O N T W O R K");
+                    INSERTCOMMENT(SDRATTR_SHADOW_FIRST,SDRATTR_SHADOW_LAST,"S H A D O W");
+                    INSERTCOMMENT(SDRATTR_CAPTION_FIRST,SDRATTR_CAPTION_LAST,"C A P T I O N");
+                    INSERTCOMMENT(SDRATTR_MISC_FIRST,SDRATTR_MISC_LAST,"M I S C E L L A N E O U S");
+                    INSERTCOMMENT(SDRATTR_EDGE_FIRST,SDRATTR_EDGE_LAST,"C O N N E C T O R");
+                    INSERTCOMMENT(SDRATTR_MEASURE_FIRST,SDRATTR_MEASURE_LAST,"D I M E N S I O N");
+                    INSERTCOMMENT(SDRATTR_CIRC_FIRST,SDRATTR_CIRC_LAST,"C I R C U L A R");
+                    INSERTCOMMENT(SDRATTR_NOTPERSIST_FIRST,SDRATTR_NOTPERSIST_LAST,"N O T P E R S I S T");
+                    INSERTCOMMENT(SDRATTR_MOVEX,SDRATTR_VERTSHEARONE,"Transformation of all object individually");
+                    INSERTCOMMENT(SDRATTR_RESIZEXALL,SDRATTR_VERTSHEARALL,"Transformation of all objects together");
+                    INSERTCOMMENT(SDRATTR_TRANSFORMREF1X,SDRATTR_TRANSFORMREF2Y,"V I E W R E F E R E N C E P O I N T S");
+                    INSERTCOMMENT(SDRATTR_GRAF_FIRST,SDRATTR_GRAF_LAST,"G R A P H I C");
+                    INSERTCOMMENT(EE_ITEMS_START,EE_ITEMS_END,"E D I T  E N G I N E");
+                    INSERTCOMMENT(EE_ITEMS_END+1,EE_ITEMS_END+1,"... by Joe Merten, JME Engineering Berlin ...");
 
                     if (!aCommentStr.isEmpty())
                     {

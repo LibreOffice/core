@@ -605,7 +605,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         }
         else
         {   // is it the DataField property ?
-            if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
+            if (evt.PropertyName == FM_PROP_CONTROLSOURCE)
             {
                 aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || ::comphelper::getString(evt.NewValue).isEmpty();
             }
@@ -711,7 +711,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
     else
     {
         // if it's the DataField property we may have to adjust our cache
-        if (m_pPropertySetCache && evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
+        if (m_pPropertySetCache && evt.PropertyName == FM_PROP_CONTROLSOURCE)
         {
             Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
             PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);

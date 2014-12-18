@@ -22,16 +22,16 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-#define FM_COL_TEXTFIELD      OUString( "TextField" )
-#define FM_COL_COMBOBOX       OUString( "ComboBox" )
-#define FM_COL_CHECKBOX       OUString( "CheckBox" )
-#define FM_COL_TIMEFIELD      OUString( "TimeField" )
-#define FM_COL_DATEFIELD      OUString( "DateField" )
-#define FM_COL_NUMERICFIELD   OUString( "NumericField" )
-#define FM_COL_CURRENCYFIELD  OUString( "CurrencyField" )
-#define FM_COL_PATTERNFIELD   OUString( "PatternField" )
-#define FM_COL_LISTBOX        OUString( "ListBox" )
-#define FM_COL_FORMATTEDFIELD OUString( "FormattedField" )
+#define FM_COL_TEXTFIELD      "TextField"
+#define FM_COL_COMBOBOX       "ComboBox"
+#define FM_COL_CHECKBOX       "CheckBox"
+#define FM_COL_TIMEFIELD      "TimeField"
+#define FM_COL_DATEFIELD      "DateField"
+#define FM_COL_NUMERICFIELD   "NumericField"
+#define FM_COL_CURRENCYFIELD  "CurrencyField"
+#define FM_COL_PATTERNFIELD   "PatternField"
+#define FM_COL_LISTBOX        "ListBox"
+#define FM_COL_FORMATTEDFIELD "FormattedField"
 
 // column type ids
 #define TYPE_CHECKBOX       0

@@ -263,11 +263,11 @@ static bool delete_pending_crash()
 RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 {
     m_eJob = RecoveryUI::E_JOB_UNKNOWN;
-    if (aURL.Protocol.equals(RECOVERY_CMDPART_PROTOCOL))
+    if (aURL.Protocol == RECOVERY_CMDPART_PROTOCOL)
     {
-        if (aURL.Path.equals(RECOVERY_CMDPART_DO_EMERGENCY_SAVE))
+        if (aURL.Path == RECOVERY_CMDPART_DO_EMERGENCY_SAVE)
             m_eJob = RecoveryUI::E_DO_EMERGENCY_SAVE;
-        else if (aURL.Path.equals(RECOVERY_CMDPART_DO_RECOVERY))
+        else if (aURL.Path == RECOVERY_CMDPART_DO_RECOVERY)
             m_eJob = RecoveryUI::E_DO_RECOVERY;
     }
 

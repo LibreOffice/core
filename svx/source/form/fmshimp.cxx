@@ -509,7 +509,7 @@ bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::st
             {
                 case TRISTATE_FALSE: *_pCurrentText = "0"; break;
                 case TRISTATE_TRUE: *_pCurrentText = "1"; break;
-                default: *_pCurrentText = ""; break;
+                default: _pCurrentText->clear(); break;
             }
         }
         return true;
@@ -2514,7 +2514,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     {
         pfmscContextInfo->arrFields.clear();
         pfmscContextInfo->xCursor = NULL;
-        pfmscContextInfo->strUsedFields = "";
+        pfmscContextInfo->strUsedFields.clear();
         return 0L;
     }
 
@@ -3399,10 +3399,10 @@ void FmXFormShell::CreateExternalView()
 
                 for (sal_Int32 i=0; i<aProps.getLength(); ++i, ++pProps)
                 {
-                    if (pProps->Name.equals(FM_PROP_LABEL))
+                    if (pProps->Name == FM_PROP_LABEL)
                         // already set
                         continue;
-                    if (pProps->Name.equals(FM_PROP_DEFAULTCONTROL))
+                    if (pProps->Name == FM_PROP_DEFAULTCONTROL)
                         // allow the column's own "default control"
                         continue;
                     if (pProps->Attributes & PropertyAttribute::READONLY)
@@ -4030,7 +4030,7 @@ bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterface>
         Any aClassId( xProperties->getPropertyValue(FM_PROP_CLASSID) );
         if (::comphelper::getINT16(aClassId) == FormComponentType::GRIDCONTROL)
         {
-            m_sCurrentValue = "";
+            m_sCurrentValue.clear();
             return true;
         }
     }

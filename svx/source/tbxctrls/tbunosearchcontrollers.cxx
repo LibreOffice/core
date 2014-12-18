@@ -74,7 +74,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
 {
     css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( rxContext ) );
     css::util::URL aURL;
-    aURL.Complete = OUString(COMMAND_EXECUTESEARCH);
+    aURL.Complete = COMMAND_EXECUTESEARCH;
     xURLTransformer->parseStrict(aURL);
 
     OUString sFindText;
@@ -100,23 +100,23 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     }
 
     css::uno::Sequence< css::beans::PropertyValue > lArgs(6);
-    lArgs[0].Name = OUString(SEARCHITEM_SEARCHSTRING);
+    lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
     lArgs[0].Value <<= sFindText;
-    lArgs[1].Name = OUString(SEARCHITEM_SEARCHBACKWARD);
+    lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
     lArgs[1].Value <<= aSearchBackwards;
-    lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
+    lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
     lArgs[2].Value <<= (sal_Int32)0;
-    lArgs[3].Name = OUString(SEARCHITEM_TRANSLITERATEFLAGS);
+    lArgs[3].Name = SEARCHITEM_TRANSLITERATEFLAGS;
     SvtCTLOptions aCTLOptions;
     sal_Int32 nFlags = 0;
     nFlags |= (!aMatchCase ? static_cast<int>(com::sun::star::i18n::TransliterationModules_IGNORE_CASE) : 0);
     nFlags |= (aCTLOptions.IsCTLFontEnabled() ? com::sun::star::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL:0 );
     nFlags |= (aCTLOptions.IsCTLFontEnabled() ? com::sun::star::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL:0 );
     lArgs[3].Value <<= nFlags;
-    lArgs[4].Name = OUString(SEARCHITEM_COMMAND);
+    lArgs[4].Name = SEARCHITEM_COMMAND;
     lArgs[4].Value <<= (sal_Int16)(aFindAll ?
         SVX_SEARCHCMD_FIND_ALL : SVX_SEARCHCMD_FIND );
-    lArgs[5].Name = OUString(SEARCHITEM_ALGORITHMTYPE);
+    lArgs[5].Name = SEARCHITEM_ALGORITHMTYPE;
     lArgs[5].Value <<= (sal_Int16)0;  // 0 == SearchAlgorithms_ABSOLUTE
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
@@ -592,7 +592,7 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
     impl_executeSearch(m_xContext, m_xFrame, pToolBox, meType == UP );
 
     css::frame::FeatureStateEvent aEvent;
-    aEvent.FeatureURL.Complete = OUString(COMMAND_APPENDSEARCHHISTORY);
+    aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
     css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
     if (xStatusListener.is())
         xStatusListener->statusChanged( aEvent );

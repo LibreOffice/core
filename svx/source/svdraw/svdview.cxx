@@ -1282,7 +1282,7 @@ OUString SdrView::GetStatusText()
                 }
             }
         } else {
-            aStr = "";
+            aStr.clear();
         }
     }
     else if(!aName.isEmpty())

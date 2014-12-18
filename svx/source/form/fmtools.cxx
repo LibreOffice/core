@@ -365,64 +365,64 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_CONTROL;
 
     OUString sPersistentServiceName = xPersistence->getServiceName();
-    if (sPersistentServiceName.equals(FM_COMPONENT_EDIT))   // 5.0-Name
+    if (sPersistentServiceName == FM_COMPONENT_EDIT)   // 5.0-Name
     {
         // may be a simple edit field or a formatted field, dependent of the supported services
         if (_rxObject->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD))
             return OBJ_FM_FORMATTEDFIELD;
         return OBJ_FM_EDIT;
     }
-    if (sPersistentServiceName.equals(FM_COMPONENT_TEXTFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_TEXTFIELD)
         return OBJ_FM_EDIT;
-    if (sPersistentServiceName.equals(FM_COMPONENT_COMMANDBUTTON))
+    if (sPersistentServiceName == FM_COMPONENT_COMMANDBUTTON)
         return OBJ_FM_BUTTON;
-    if (sPersistentServiceName.equals(FM_COMPONENT_FIXEDTEXT))
+    if (sPersistentServiceName == FM_COMPONENT_FIXEDTEXT)
         return OBJ_FM_FIXEDTEXT;
-    if (sPersistentServiceName.equals(FM_COMPONENT_LISTBOX))
+    if (sPersistentServiceName == FM_COMPONENT_LISTBOX)
         return OBJ_FM_LISTBOX;
-    if (sPersistentServiceName.equals(FM_COMPONENT_CHECKBOX))
+    if (sPersistentServiceName == FM_COMPONENT_CHECKBOX)
         return OBJ_FM_CHECKBOX;
-    if (sPersistentServiceName.equals(FM_COMPONENT_RADIOBUTTON))
+    if (sPersistentServiceName == FM_COMPONENT_RADIOBUTTON)
         return OBJ_FM_RADIOBUTTON;
-    if (sPersistentServiceName.equals(FM_COMPONENT_GROUPBOX))
+    if (sPersistentServiceName == FM_COMPONENT_GROUPBOX)
         return OBJ_FM_GROUPBOX;
-    if (sPersistentServiceName.equals(FM_COMPONENT_COMBOBOX))
+    if (sPersistentServiceName == FM_COMPONENT_COMBOBOX)
         return OBJ_FM_COMBOBOX;
-    if (sPersistentServiceName.equals(FM_COMPONENT_GRID))   // 5.0-Name
+    if (sPersistentServiceName == FM_COMPONENT_GRID)   // 5.0-Name
         return OBJ_FM_GRID;
-    if (sPersistentServiceName.equals(FM_COMPONENT_GRIDCONTROL))
+    if (sPersistentServiceName == FM_COMPONENT_GRIDCONTROL)
         return OBJ_FM_GRID;
-    if (sPersistentServiceName.equals(FM_COMPONENT_IMAGEBUTTON))
+    if (sPersistentServiceName == FM_COMPONENT_IMAGEBUTTON)
         return OBJ_FM_IMAGEBUTTON;
-    if (sPersistentServiceName.equals(FM_COMPONENT_FILECONTROL))
+    if (sPersistentServiceName == FM_COMPONENT_FILECONTROL)
         return OBJ_FM_FILECONTROL;
-    if (sPersistentServiceName.equals(FM_COMPONENT_DATEFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_DATEFIELD)
         return OBJ_FM_DATEFIELD;
-    if (sPersistentServiceName.equals(FM_COMPONENT_TIMEFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_TIMEFIELD)
         return OBJ_FM_TIMEFIELD;
-    if (sPersistentServiceName.equals(FM_COMPONENT_NUMERICFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_NUMERICFIELD)
         return OBJ_FM_NUMERICFIELD;
-    if (sPersistentServiceName.equals(FM_COMPONENT_CURRENCYFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_CURRENCYFIELD)
         return OBJ_FM_CURRENCYFIELD;
-    if (sPersistentServiceName.equals(FM_COMPONENT_PATTERNFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_PATTERNFIELD)
         return OBJ_FM_PATTERNFIELD;
-    if (sPersistentServiceName.equals(FM_COMPONENT_HIDDEN)) // 5.0-Name
+    if (sPersistentServiceName == FM_COMPONENT_HIDDEN) // 5.0-Name
         return OBJ_FM_HIDDEN;
-    if (sPersistentServiceName.equals(FM_COMPONENT_HIDDENCONTROL))
+    if (sPersistentServiceName == FM_COMPONENT_HIDDENCONTROL)
         return OBJ_FM_HIDDEN;
-    if (sPersistentServiceName.equals(FM_COMPONENT_IMAGECONTROL))
+    if (sPersistentServiceName == FM_COMPONENT_IMAGECONTROL)
         return OBJ_FM_IMAGECONTROL;
-    if (sPersistentServiceName.equals(FM_COMPONENT_FORMATTEDFIELD))
+    if (sPersistentServiceName == FM_COMPONENT_FORMATTEDFIELD)
     {
         OSL_FAIL("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
             // objects with that service name should exist as they aren't compatible with older versions
         return OBJ_FM_FORMATTEDFIELD;
     }
-    if ( sPersistentServiceName.equals( FM_SUN_COMPONENT_SCROLLBAR ) )
+    if ( sPersistentServiceName == FM_SUN_COMPONENT_SCROLLBAR )
         return OBJ_FM_SCROLLBAR;
-    if ( sPersistentServiceName.equals( FM_SUN_COMPONENT_SPINBUTTON) )
+    if ( sPersistentServiceName == FM_SUN_COMPONENT_SPINBUTTON )
         return OBJ_FM_SPINBUTTON;
-    if (sPersistentServiceName.equals(FM_SUN_COMPONENT_NAVIGATIONBAR))
+    if ( sPersistentServiceName == FM_SUN_COMPONENT_NAVIGATIONBAR )
         return OBJ_FM_NAVIGATIONBAR;
 
     OSL_FAIL("::getControlTypeByObject : unknown object type !");

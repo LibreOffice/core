@@ -1666,7 +1666,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
     if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
         throw beans::PropertyVetoException(
-            OUString("Readonly property can't be set: ") + rPropertyName,
+            "Readonly property can't be set: " + rPropertyName,
             uno::Reference<drawing::XShape>(this));
 
     mpModel->SetChanged();

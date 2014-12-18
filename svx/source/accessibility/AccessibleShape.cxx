@@ -384,8 +384,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            OUString("shape has no child with index ")
-            + OUString::number(nIndex),
+            "shape has no child with index " + OUString::number(nIndex),
             static_cast<uno::XWeak*>(this));
 
     return xChild;
@@ -1060,14 +1059,12 @@ void SAL_CALL
     AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
     throw (uno::RuntimeException, std::exception)
 {
-    static const char sShapeModified[] = "ShapeModified";
-
     // First check if the event is for us.
     uno::Reference<drawing::XShape> xShape (
         rEventObject.Source, uno::UNO_QUERY);
     if ( xShape.get() == mxShape.get() )
     {
-        if (rEventObject.EventName.equals (sShapeModified))
+        if (rEventObject.EventName == "ShapeModified")
         {
             //Need to update text children when receiving ShapeModified hint when exiting edit mode for text box
             if (mpText)

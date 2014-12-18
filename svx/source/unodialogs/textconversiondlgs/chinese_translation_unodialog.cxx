@@ -213,15 +213,15 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
         m_pDialog->getSettings( bDirectionToSimplified, bTranslateCommonTerms );
     }
 
-    if( rPropertyName.equals( "IsDirectionToSimplified" ) )
+    if( rPropertyName == "IsDirectionToSimplified" )
     {
         aRet <<= bDirectionToSimplified;
     }
-    else if( rPropertyName.equals( "IsUseCharacterVariants" ) )
+    else if( rPropertyName == "IsUseCharacterVariants" )
     {
         aRet <<= bUseCharacterVariants;
     }
-    else if( rPropertyName.equals( "IsTranslateCommonTerms" ) )
+    else if( rPropertyName == "IsTranslateCommonTerms" )
     {
         aRet <<= bTranslateCommonTerms;
     }

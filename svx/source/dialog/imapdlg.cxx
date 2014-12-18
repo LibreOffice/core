@@ -64,9 +64,6 @@
 #define IMAP_BINARY_TYPE    OUString("*.sip")
 #define IMAP_CERN_TYPE      OUString("*.map")
 #define IMAP_NCSA_TYPE      OUString("*.map")
-#define IMAP_BINARY_EXT     OUString("sip")
-#define IMAP_CERN_EXT       OUString("map")
-#define IMAP_NCSA_EXT       OUString("map")
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
@@ -500,17 +497,17 @@ bool SvxIMapDlg::DoSave()
         if ( aFilter == aBinFilter )
         {
             nFormat = IMAP_FORMAT_BIN;
-            aExt = IMAP_BINARY_EXT;
+            aExt = "sip";
         }
         else if ( aFilter == aCERNFilter )
         {
             nFormat = IMAP_FORMAT_CERN;
-            aExt = IMAP_CERN_EXT;
+            aExt = "map";
         }
         else if ( aFilter == aNCSAFilter )
         {
             nFormat = IMAP_FORMAT_NCSA;
-            aExt = IMAP_NCSA_EXT;
+            aExt = "map";
         }
         else
         {

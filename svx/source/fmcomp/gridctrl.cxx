@@ -665,7 +665,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                     aText += " *";
             }
             else
-                aText = "";
+                aText.clear();
 
             // add the number of selected rows, if applicable
             if (pParent->GetSelectRowCount())

@@ -347,7 +347,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             if( pGraphic )
             {
                 GraphicObject aObj( *pGraphic );
-                aURL = OUString( UNO_NAME_GRAPHOBJ_URLPREFIX);
+                aURL = UNO_NAME_GRAPHOBJ_URLPREFIX;
                 aURL += OStringToOUString(aObj.GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
             }
@@ -367,7 +367,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
             {
                 ::comphelper::IEmbeddedHelper *pPersist = mpObj->GetModel()->GetPersist();
                 if( (NULL == pPersist) || !pPersist->getEmbeddedObjectContainer().HasEmbeddedObject( pOle->GetPersistName() ) )
-                    aPersistName = "";
+                    aPersistName.clear();
             }
         }
 
@@ -536,7 +536,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 
     if( pOle2Obj )
     {
-        rHexCLSID = "";
+        rHexCLSID.clear();
 
         if( pOle2Obj->IsEmpty() )
         {

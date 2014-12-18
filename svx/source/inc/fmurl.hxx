@@ -27,7 +27,7 @@
 #define FMURL_RECORD_MOVENEXT              OUString( ".uno:FormController/moveToNext" )
 #define FMURL_RECORD_MOVELAST              OUString( ".uno:FormController/moveToLast" )
 #define FMURL_RECORD_MOVETONEW             OUString( ".uno:FormController/moveToNew" )
-#define FMURL_RECORD_UNDO                  OUString( ".uno:FormController/undoRecord" )
+#define FMURL_RECORD_UNDO                  ".uno:FormController/undoRecord"
 #define FMURL_RECORD_SAVE                  OUString( ".uno:FormController/saveRecord" )
 #define FMURL_RECORD_DELETE                OUString( ".uno:FormController/deleteRecord" )
 #define FMURL_FORM_REFRESH                 OUString( ".uno:FormController/refreshForm" )
@@ -39,14 +39,14 @@
 #define FMURL_FORM_FILTER                  OUString( ".uno:FormController/filter" )
 #define FMURL_FORM_APPLY_FILTER            OUString( ".uno:FormController/applyFilter" )
 #define FMURL_FORM_REMOVE_FILTER           OUString( ".uno:FormController/removeFilterOrder" )
-#define FMURL_CONFIRM_DELETION             OUString( ".uno:FormSlots/ConfirmDeletion" )
-#define FMURL_COMPONENT_FORMGRIDVIEW       OUString( ".component:DB/FormGridView" )
-#define FMURL_GRIDVIEW_CLEARVIEW           OUString( ".uno:FormSlots/ClearView" )
-#define FMURL_GRIDVIEW_ADDCOLUMN           OUString( ".uno:FormSlots/AddGridColumn" )
-#define FMURL_GRIDVIEW_ATTACHTOFORM        OUString( ".uno:FormSlots/AttachToForm" )
-#define FMARG_ATTACHTO_MASTERFORM          OUString( "MasterForm" )
-#define FMARG_ADDCOL_COLUMNTYPE            OUString( "ColumnType" )
-#define FMARG_ADDCOL_COLUMNPOS             OUString( "ColumnPosition" )
+#define FMURL_CONFIRM_DELETION             ".uno:FormSlots/ConfirmDeletion"
+#define FMURL_COMPONENT_FORMGRIDVIEW       ".component:DB/FormGridView"
+#define FMURL_GRIDVIEW_CLEARVIEW           ".uno:FormSlots/ClearView"
+#define FMURL_GRIDVIEW_ADDCOLUMN           ".uno:FormSlots/AddGridColumn"
+#define FMURL_GRIDVIEW_ATTACHTOFORM        ".uno:FormSlots/AttachToForm"
+#define FMARG_ATTACHTO_MASTERFORM          "MasterForm"
+#define FMARG_ADDCOL_COLUMNTYPE            "ColumnType"
+#define FMARG_ADDCOL_COLUMNPOS             "ColumnPosition"
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 

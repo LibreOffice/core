@@ -624,7 +624,9 @@ void IMapWindow::UpdateInfo( bool bNewObj )
         }
         else
         {
-            aInfo.aMarkURL = aInfo.aMarkAltText = aInfo.aMarkTarget = "";
+            aInfo.aMarkURL.clear();
+            aInfo.aMarkAltText.clear();
+            aInfo.aMarkTarget.clear();
             aInfo.bOneMarked = false;
             aInfo.bActivated = false;
         }

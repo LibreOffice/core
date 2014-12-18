@@ -1121,7 +1121,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
         case FUNIT_NONE   :
         case FUNIT_CUSTOM :
         {
-            rStr = "";
+            rStr.clear();
             break;
         }
         case FUNIT_100TH_MM:

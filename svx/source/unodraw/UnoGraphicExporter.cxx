@@ -370,8 +370,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;
                     case SVX_NUMBER_NONE:
-                        aPageNumValue = "";
-                        aPageNumValue += " ";
+                        aPageNumValue = " ";
                         break;
                     default:
                         aPageNumValue += OUString::number( (sal_Int32)mnPageNumber );

@@ -622,7 +622,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                     RTL_TEXTENCODING_ASCII_US);
             }
             else
-                rURLPair.second = "";
+                rURLPair.second.clear();
         }
         else
         {

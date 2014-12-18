@@ -130,8 +130,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
                 if(!aFact.IsValid())
                 {
-                    aStr = "";
-                    aStr += "?";
+                    aStr = "?";
                 }
 
                 sal_Unicode cDec(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);

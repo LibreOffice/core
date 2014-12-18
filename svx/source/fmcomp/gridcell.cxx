@@ -418,7 +418,7 @@ OUString DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumb
         return aText;
 
     if (!pRow || !pRow->IsValid())
-        aText = OUString(INVALIDTEXT);
+        aText = INVALIDTEXT;
     else if (pRow->HasField(m_nFieldPos))
     {
         aText = GetCellText( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
@@ -436,7 +436,7 @@ OUString DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColu
         if (pTextCell)
             aText = pTextCell->GetText(xField, xFormatter);
         else if (m_bObject)
-            aText = OUString(OBJECTTEXT);
+            aText = OBJECTTEXT;
     }
     return aText;
 }
@@ -674,10 +674,10 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
 
     Reference< XPropertySet > xSourceProps( _rEvent.Source, UNO_QUERY );
 
-    if  (   _rEvent.PropertyName.equals( FM_PROP_VALUE )
-        ||  _rEvent.PropertyName.equals( FM_PROP_STATE )
-        ||  _rEvent.PropertyName.equals( FM_PROP_TEXT )
-        ||  _rEvent.PropertyName.equals( FM_PROP_EFFECTIVE_VALUE )
+    if  (   _rEvent.PropertyName == FM_PROP_VALUE
+        ||  _rEvent.PropertyName == FM_PROP_STATE
+        ||  _rEvent.PropertyName == FM_PROP_TEXT
+        ||  _rEvent.PropertyName == FM_PROP_EFFECTIVE_VALUE
         )
     {   // it was one of the known "value" properties
         if ( !isValuePropertyLocked() )
@@ -685,18 +685,18 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
             implValuePropertyChanged( );
         }
     }
-    else if ( _rEvent.PropertyName.equals( FM_PROP_READONLY ) )
+    else if ( _rEvent.PropertyName == FM_PROP_READONLY )
     {
         implAdjustReadOnly( xSourceProps, true);
     }
-    else if ( _rEvent.PropertyName.equals( FM_PROP_ISREADONLY ) )
+    else if ( _rEvent.PropertyName == FM_PROP_ISREADONLY )
     {
         bool bReadOnly = true;
         _rEvent.NewValue >>= bReadOnly;
         m_rColumn.SetReadOnly(bReadOnly);
         implAdjustReadOnly( xSourceProps, false);
     }
-    else if ( _rEvent.PropertyName.equals( FM_PROP_ENABLED ) )
+    else if ( _rEvent.PropertyName == FM_PROP_ENABLED )
     {
         implAdjustEnabled( xSourceProps );
     }
@@ -2418,7 +2418,7 @@ DbComboBox::DbComboBox(DbGridColumn& _rColumn)
 
 void DbComboBox::_propertyChanged( const PropertyChangeEvent& _rEvent ) throw( RuntimeException )
 {
-    if ( _rEvent.PropertyName.equals( FM_PROP_STRINGITEMLIST ) )
+    if ( _rEvent.PropertyName == FM_PROP_STRINGITEMLIST )
     {
         SetList(_rEvent.NewValue);
     }
@@ -2547,7 +2547,7 @@ DbListBox::DbListBox(DbGridColumn& _rColumn)
 
 void DbListBox::_propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw( RuntimeException )
 {
-    if ( _rEvent.PropertyName.equals( FM_PROP_STRINGITEMLIST ) )
+    if ( _rEvent.PropertyName == FM_PROP_STRINGITEMLIST )
     {
         SetList(_rEvent.NewValue);
     }
@@ -2632,7 +2632,7 @@ OUString DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColum
                 if ( aPosSeq.getLength() )
                     sText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
                 else
-                    sText = "";
+                    sText.clear();
             }
         }
         catch( const Exception& )

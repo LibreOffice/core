@@ -33,10 +33,10 @@
 #include <sax/tools/converter.hxx>
 #include <boost/scoped_array.hpp>
 
-#define FORMAT_BMP  OUString("bmp")
-#define FORMAT_GIF  OUString("gif")
-#define FORMAT_JPG  OUString("jpg")
-#define FORMAT_PNG  OUString("png")
+#define FORMAT_BMP  "bmp"
+#define FORMAT_GIF  "gif"
+#define FORMAT_JPG  "jpg"
+#define FORMAT_PNG  "png"
 
 GraphicFilter* XOutBitmap::pGrfFilter = NULL;
 

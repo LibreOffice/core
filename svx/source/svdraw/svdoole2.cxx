@@ -996,7 +996,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
                 uno::Reference< embed::XLinkageSupport > xLinkSupport( mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY_THROW );
                 xLinkSupport->breakLink( xStorage, mpImpl->aPersistName );
                 DisconnectFileLink_Impl();
-                mpImpl->maLinkURL = "";
+                mpImpl->maLinkURL.clear();
             }
             catch( ::com::sun::star::uno::Exception& )
             {
@@ -1577,7 +1577,7 @@ void SdrOle2Obj::SetPersistName( const OUString& rPersistName )
 
 void SdrOle2Obj::AbandonObject()
 {
-    mpImpl->aPersistName = "";
+    mpImpl->aPersistName.clear();
     mpImpl->mbLoadingOLEObjectFailed = false;
     SetObjRef(0);
 }

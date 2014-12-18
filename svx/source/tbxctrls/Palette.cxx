@@ -112,15 +112,15 @@ void PaletteGPL::LoadPalette()
             OString token;
 
             token = lcl_getToken(aLine, nIndex);
-            if(token == "" || nIndex == -1) continue;
+            if(token.isEmpty() || nIndex == -1) continue;
             sal_Int32 r = token.toInt32();
 
             token = lcl_getToken(aLine, nIndex);
-            if(token == "" || nIndex == -1) continue;
+            if(token.isEmpty() || nIndex == -1) continue;
             sal_Int32 g = token.toInt32();
 
             token = lcl_getToken(aLine, nIndex);
-            if(token == "") continue;
+            if(token.isEmpty()) continue;
             sal_Int32 b = token.toInt32();
 
             OString name;

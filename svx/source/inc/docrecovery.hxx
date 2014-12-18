@@ -39,21 +39,21 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 
-#define RECOVERY_CMDPART_PROTOCOL                   OUString( "vnd.sun.star.autorecovery:")
+#define RECOVERY_CMDPART_PROTOCOL                   "vnd.sun.star.autorecovery:"
 
-#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          OUString( "/doEmergencySave"         )
-#define RECOVERY_CMDPART_DO_RECOVERY                OUString( "/doAutoRecovery"          )
+#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          "/doEmergencySave"
+#define RECOVERY_CMDPART_DO_RECOVERY                "/doAutoRecovery"
 
 #define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      OUString( "vnd.sun.star.autorecovery:/doPrepareEmergencySave")
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE              OUString( "vnd.sun.star.autorecovery:/doEmergencySave"       )
-#define RECOVERY_CMD_DO_RECOVERY                    OUString( "vnd.sun.star.autorecovery:/doAutoRecovery"        )
+#define RECOVERY_CMD_DO_EMERGENCY_SAVE              "vnd.sun.star.autorecovery:/doEmergencySave"
+#define RECOVERY_CMD_DO_RECOVERY                    "vnd.sun.star.autorecovery:/doAutoRecovery"
 #define RECOVERY_CMD_DO_ENTRY_BACKUP                OUString( "vnd.sun.star.autorecovery:/doEntryBackup"         )
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               OUString( "vnd.sun.star.autorecovery:/doEntryCleanUp"        )
 
-#define PROP_STATUSINDICATOR                        OUString( "StatusIndicator"  )
-#define PROP_DISPATCHASYNCHRON                      OUString( "DispatchAsynchron")
-#define PROP_SAVEPATH                               OUString( "SavePath"         )
-#define PROP_ENTRYID                                OUString( "EntryID"          )
+#define PROP_STATUSINDICATOR                        "StatusIndicator"
+#define PROP_DISPATCHASYNCHRON                      "DispatchAsynchron"
+#define PROP_SAVEPATH                               "SavePath"
+#define PROP_ENTRYID                                "EntryID"
 
 #define STATEPROP_ID                                OUString( "ID"           )
 #define STATEPROP_STATE                             OUString( "DocumentState")
@@ -64,9 +64,9 @@
 #define STATEPROP_TITLE                             OUString( "Title"        )
 #define STATEPROP_MODULE                            OUString( "Module"       )
 
-#define RECOVERY_OPERATIONSTATE_START               OUString( "start" )
-#define RECOVERY_OPERATIONSTATE_STOP                OUString( "stop"  )
-#define RECOVERY_OPERATIONSTATE_UPDATE              OUString( "update")
+#define RECOVERY_OPERATIONSTATE_START               "start"
+#define RECOVERY_OPERATIONSTATE_STOP                "stop"
+#define RECOVERY_OPERATIONSTATE_UPDATE              "update"
 
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1

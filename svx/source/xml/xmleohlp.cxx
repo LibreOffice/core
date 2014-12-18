@@ -188,7 +188,7 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(const OUString& _aURLNoPar,
     sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
     if( -1 == _nPos )
     {
-        rContainerStorageName = "";
+        rContainerStorageName.clear();
         rObjectStorageName = aURLNoPar;
     }
     else
@@ -290,7 +290,7 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos = aURLNoPar.lastIndexOf( '/' );
         if( -1 == nPos )
         {
-            rContainerStorageName = "";
+            rContainerStorageName.clear();
             rObjectStorageName = aURLNoPar.copy( nPathStart );
         }
         else if( nPos > nPathStart )
@@ -480,7 +480,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
         }
 
         ImplReadObject( aContainerStorageName, aObjectStorageName, pClassId, pOut ? pOut->GetStream() : 0 );
-        sRetURL = OUString( XML_EMBEDDEDOBJECT_URL_BASE );
+        sRetURL = XML_EMBEDDEDOBJECT_URL_BASE;
         sRetURL += aObjectStorageName;
 
         if( pOut )

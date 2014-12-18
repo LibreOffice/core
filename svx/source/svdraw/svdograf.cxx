@@ -630,9 +630,9 @@ void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rRefe
 void SdrGrafObj::ReleaseGraphicLink()
 {
     ImpLinkAbmeldung();
-    aFileName = "";
-    aReferer = "";
-    aFilterName = "";
+    aFileName.clear();
+    aReferer.clear();
+    aFilterName.clear();
 }
 
 bool SdrGrafObj::IsLinkedGraphic() const

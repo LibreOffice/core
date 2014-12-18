@@ -69,7 +69,7 @@ bool SvxRotateModeItem::GetPresentation(
                                 SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
                                 OUString& rText, const IntlWrapper * )  const
 {
-    rText = "";
+    rText.clear();
 
     switch ( ePres )
     {

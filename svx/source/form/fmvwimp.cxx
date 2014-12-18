@@ -1406,11 +1406,11 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 
         // The service name decides which control should be created
         sal_uInt16 nOBJID = OBJ_FM_EDIT;
-        if(OUString(_rDesc.szServiceName).equals(FM_SUN_COMPONENT_NUMERICFIELD))
+        if(OUString(_rDesc.szServiceName) == FM_SUN_COMPONENT_NUMERICFIELD)
             nOBJID = OBJ_FM_NUMERICFIELD;
-        if(OUString(_rDesc.szServiceName).equals(FM_SUN_COMPONENT_CHECKBOX))
+        if(OUString(_rDesc.szServiceName) == FM_SUN_COMPONENT_CHECKBOX)
             nOBJID = OBJ_FM_CHECKBOX;
-        if(OUString(_rDesc.szServiceName).equals(FM_COMPONENT_COMMANDBUTTON))
+        if(OUString(_rDesc.szServiceName) == FM_COMPONENT_COMMANDBUTTON)
             nOBJID = OBJ_FM_BUTTON;
 
         typedef ::com::sun::star::form::submission::XSubmission XSubmission_t;

@@ -380,7 +380,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
         m_pImpl->m_MediaProperties.setURL(
             m_pImpl->m_LastFailedPkgURL, tempFileURL, "");
     }
-    m_pImpl->m_LastFailedPkgURL = ""; // once only
+    m_pImpl->m_LastFailedPkgURL.clear(); // once only
 }
 
 /// copy a stream from XStorage to temp file
