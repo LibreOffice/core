@@ -782,7 +782,7 @@ static sal_Int32 lcl_GetToken( OUString &rToken,
     sal_Int32 nRes = -1;
 
     if (rText.isEmpty() ||  nPos >= rText.getLength())
-        rToken = "";
+        rToken.clear();
     else if (rDelim.isEmpty())
     {
         rToken = rText;
