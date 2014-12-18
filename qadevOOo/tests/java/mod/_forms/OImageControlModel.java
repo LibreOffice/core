@@ -130,16 +130,7 @@ public class OImageControlModel extends GenericModelTest {
 
         super.m_LCShape_Type = "FixedText";
 
-    }    /**
-     * calls <CODE>cleanup()</CODE> from it's super class
-     * @param tParam the test parameter
-     * @param log the log writer
-     */
-    @Override
-    protected void cleanup(TestParameters tParam, PrintWriter log) {
-        super.cleanup(tParam, log);
     }
-
 
     /**
      * calls <CODE>createTestEnvironment()</CODE> from it's super class

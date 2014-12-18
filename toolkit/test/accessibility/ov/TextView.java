@@ -93,12 +93,6 @@ public class TextView
     }
 
     @Override
-    synchronized public void Destroy ()
-    {
-        super.Destroy();
-    }
-
-    @Override
     synchronized public void Update ()
     {
         if (mxText == null)
