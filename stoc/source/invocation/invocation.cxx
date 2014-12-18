@@ -593,8 +593,8 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         catch (const Exception & exc)
         {
             throw InvocationTargetException(
-                OUString( "exception occurred in setValue(): " ) +
-                exc.Message, Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
+                "exception occurred in setValue(): " + exc.Message,
+                Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
         }
     }
 }
