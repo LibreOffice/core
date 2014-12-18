@@ -613,9 +613,9 @@ bool SelectionManager::convertData(
         aFlavor.MimeType = convertTypeFromNative( nType, nSelection, rFormat );
 
         sal_Int32 nIndex = 0;
-        if( aFlavor.MimeType.getToken( 0, ';', nIndex ).equalsAscii( "text/plain" ) )
+        if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
         {
-            if( aFlavor.MimeType.getToken( 0, ';', nIndex ).equalsAscii( "charset=utf-16" ) )
+            if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "charset=utf-16" )
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
             else
                 aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
@@ -1323,18 +1323,18 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 {
                     OUString aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
                     // omit text/plain;charset=unicode since it is not well defined
-                    if( aToken.equalsAscii( "charset=unicode" ) )
+                    if( aToken == "charset=unicode" )
                     {
                         pAtoms++;
                         continue;
                     }
                     bHaveText = true;
-                    if( aToken.equalsAscii( "charset=utf-16" ) )
+                    if( aToken == "charset=utf-16" )
                     {
                         bHaveUTF16 = true;
                         pFlavors->DataType = cppu::UnoType<OUString>::get();
                     }
-                    else if( aToken.equalsAscii( "charset=utf-8" ) )
+                    else if( aToken == "charset=utf-8" )
                     {
                         aUTF8Type = *pAtoms;
                     }

@@ -1808,7 +1808,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     static const char aStarDot[] = "*.";
     OUString aTokens;
 
-    bool bAllGlob = rType.equalsAscii( "*.*" ) || rType.equalsAscii( "*" );
+    bool bAllGlob = rType == "*.*" || rType == "*";
     if (bAllGlob)
         gtk_file_filter_add_pattern( filter, "*" );
     else

@@ -857,7 +857,7 @@ void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
     {
         const PPDValue* pVal = pKey->getValue( i );
         patch_order.push_back( pVal->m_aOption.toInt32() );
-        if( patch_order.back() == 0 && ! pVal->m_aOption.equalsAscii( "0" ) )
+        if( patch_order.back() == 0 && pVal->m_aOption != "0" )
         {
             WritePS( pFile, "% Warning: left out JobPatchFile option \"" );
             OString aOption = OUStringToOString( pVal->m_aOption, RTL_TEXTENCODING_ASCII_US );

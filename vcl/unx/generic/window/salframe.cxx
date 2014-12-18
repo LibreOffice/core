@@ -1035,7 +1035,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
         else
         {
             const OUString& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
-            if( rWM.equalsAscii( "KWin" ) )         // assume KDE is running
+            if( rWM == "KWin" )         // assume KDE is running
                 iconSize = 48;
             static bool bGnomeIconSize = false;
             static bool bGnomeChecked = false;
@@ -3384,7 +3384,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 {
     // ReflectionX in Windows mode changes focus while mouse is grabbed
-    if( nVisibleFloats > 0 && GetDisplay()->getWMAdaptor()->getWindowManagerName().equalsAscii( "ReflectionX Windows" ) )
+    if( nVisibleFloats > 0 && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "ReflectionX Windows" )
         return 1;
 
     /*  ignore focusout resulting from keyboard grabs
@@ -4072,7 +4072,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     /*  another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
-                    if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName().equalsAscii( "Sawfish" ) )
+                    if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "Sawfish" )
                     {
                         // don't set the focus into the IME status window
                         // since this will lead to a parent loss of focus, close status,

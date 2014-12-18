@@ -70,7 +70,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
     m_nSelectionTimeout( 3 )
 {
     Sequence< OUString > aKeys( 1 );
-    aKeys.getArray()[0] = OUString( SELECTION_PROPERTY );
+    aKeys.getArray()[0] = SELECTION_PROPERTY;
     Sequence< Any > aValues = GetProperties( aKeys );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );

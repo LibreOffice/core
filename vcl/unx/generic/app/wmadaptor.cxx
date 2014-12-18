@@ -821,7 +821,7 @@ bool WMAdaptor::getNetWmName()
                             }
 
                             // if this is metacity, check for version to enable a legacy workaround
-                            if( m_aWMName.equalsAscii( "Metacity" ) )
+                            if( m_aWMName == "Metacity" )
                             {
                                 int nVersionMajor = 0, nVersionMinor = 0;
                                 Atom nVersionAtom = XInternAtom( m_pDisplay, "_METACITY_VERSION", True );
@@ -890,7 +890,7 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
                                                  OUString( "ShouldSwitchWorkspace" ) ) );
         if( aSetting.isEmpty() )
         {
-            if( m_aWMName.equalsAscii( "awesome" ) )
+            if( m_aWMName == "awesome" )
             {
                 pWMA->m_bWMshouldSwitchWorkspace = false;
             }

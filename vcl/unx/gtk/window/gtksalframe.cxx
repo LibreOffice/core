@@ -1158,7 +1158,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         XSetWMHints( pDisplay, aWindow, pHints );
         XFree( pHints );
 
-        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName().equalsAscii("compiz"))
+        if (GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWindowManagerName() == "compiz")
             return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
@@ -4028,7 +4028,7 @@ void GtkSalFrame::IMHandler::sendEmptyCommit()
     SalExtTextInputEvent aEmptyEv;
     aEmptyEv.mnTime             = 0;
     aEmptyEv.mpTextAttr         = 0;
-    aEmptyEv.maText             = "";
+    aEmptyEv.maText.clear();
     aEmptyEv.mnCursorPos        = 0;
     aEmptyEv.mnCursorFlags      = 0;
     aEmptyEv.mbOnlyCursor       = False;
@@ -4263,7 +4263,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
         if( ! aDel.isDeleted() )
         {
             // reset input event
-            pThis->m_aInputEvent.maText = "";
+            pThis->m_aInputEvent.maText.clear();
             pThis->m_aInputEvent.mnCursorPos = 0;
             pThis->updateIMSpotLocation();
         }

@@ -1071,7 +1071,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         {
             // handle main key translations of form:
             // *ll_CC.Translation MainKeyword/translated text: ""
-            if( aUniKey.equalsAscii( "Translation" ) )
+            if( aUniKey == "Translation" )
             {
                 m_pTranslator->insertKey( aOption, aOptionTranslation, aTransLocale );
             }
@@ -1692,7 +1692,7 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
 
     // None / False and the default can always be set, but be careful !
     // setting them might influence constrained values
-    if( pNewValue->m_aOption.equalsAscii( "None" ) || pNewValue->m_aOption.equalsAscii( "False" ) ||
+    if( pNewValue->m_aOption == "None" || pNewValue->m_aOption == "False" ||
         pNewValue == pKey->getDefaultValue() )
         return true;
 
@@ -1727,8 +1727,8 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
                     continue; // this should not happen, PPD broken
 
                 if( pKeyOption == pNewValue &&
-                    ! pOtherKeyOption->m_aOption.equalsAscii( "None" ) &&
-                    ! pOtherKeyOption->m_aOption.equalsAscii( "False" ) )
+                    pOtherKeyOption->m_aOption != "None" &&
+                    pOtherKeyOption->m_aOption != "False" )
                 {
                     // check if the other value can be reset and
                     // do so if possible
@@ -1741,8 +1741,8 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
             else if( pOtherKeyOption )
             {
                 if( getValue( pOtherKey ) == pOtherKeyOption &&
-                    ! pNewValue->m_aOption.equalsAscii( "None" ) &&
-                    ! pNewValue->m_aOption.equalsAscii( "False" ) )
+                    pNewValue->m_aOption != "None" &&
+                    pNewValue->m_aOption != "False" )
                     return false;
             }
             else
@@ -1754,10 +1754,10 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
         else
         {
             const PPDValue* pOtherValue = getValue( pOtherKey );
-            if( ! pOtherValue->m_aOption.equalsAscii( "None" )  &&
-                ! pOtherValue->m_aOption.equalsAscii( "False" )     &&
-                ! pNewValue->m_aOption.equalsAscii( "None" )        &&
-                ! pNewValue->m_aOption.equalsAscii( "False" ) )
+            if( pOtherValue->m_aOption != "None"  &&
+                pOtherValue->m_aOption != "False" &&
+                pNewValue->m_aOption != "None"    &&
+                pNewValue->m_aOption != "False" )
                 return false;
         }
     }

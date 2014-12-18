@@ -341,11 +341,11 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
         for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )
         {
             const PPDKey* pKey = m_pParent->m_aJobData.m_pParser->getKey( i );
-            if( pKey->isUIKey()                                 &&
-                ! pKey->getKey().equalsAscii( "PageSize" )      &&
-                ! pKey->getKey().equalsAscii( "InputSlot" )     &&
-                ! pKey->getKey().equalsAscii( "PageRegion" )    &&
-                ! pKey->getKey().equalsAscii( "Duplex" )
+            if( pKey->isUIKey()                   &&
+                pKey->getKey() != "PageSize"      &&
+                pKey->getKey() != "InputSlot"     &&
+                pKey->getKey() != "PageRegion"    &&
+                pKey->getKey() != "Duplex"
                 )
             {
                 OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );

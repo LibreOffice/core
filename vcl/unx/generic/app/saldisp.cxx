@@ -970,7 +970,7 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             aStrMap += aKeyName;
         }
         else
-            aStrMap = "";
+            aStrMap.clear();
     }
     else if (!aCustomKeyName.isEmpty())
     {
@@ -981,7 +981,7 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         aStrMap += aCustomKeyName;
     }
     else
-        aStrMap = "";
+        aStrMap.clear();
 
     return aStrMap;
 }
