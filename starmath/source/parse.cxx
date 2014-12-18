@@ -461,7 +461,7 @@ void SmParser::NextToken()
         m_aCurToken.cMathChar = '\0';
         m_aCurToken.nGroup       = 0;
         m_aCurToken.nLevel       = 0;
-        m_aCurToken.aText = "";
+        m_aCurToken.aText.clear();
     }
     else if (aRes.TokenType & KParseType::ANY_NUMBER)
     {

@@ -214,7 +214,7 @@ SmCfgOther::SmCfgOther()
 
 SmFontFormat::SmFontFormat()
 {
-    aName       = OUString( FONTNAME_MATH );
+    aName       = FONTNAME_MATH;
     nCharSet    = RTL_TEXTENCODING_UNICODE;
     nFamily     = FAMILY_DONTKNOW;
     nPitch      = PITCH_DONTKNOW;

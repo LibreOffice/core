@@ -709,9 +709,9 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
     bool     bSuccess = false;
     const OUString& rFltName = rMedium.GetFilter()->GetFilterName();
 
-    OSL_ENSURE( !rFltName.equals( STAROFFICE_XML ), "Wrong filter!");
+    OSL_ENSURE( rFltName != STAROFFICE_XML, "Wrong filter!");
 
-    if ( rFltName.equals( MATHML_XML ) )
+    if ( rFltName == MATHML_XML )
     {
         if (pTree)
         {
@@ -898,14 +898,14 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
             ArrangeFormula();
 
         const OUString& rFltName = pFlt->GetFilterName();
-        if(rFltName.equals( STAROFFICE_XML ))
+        if(rFltName == STAROFFICE_XML)
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);
             aEquation.SetFlat(false);
             bRet = aEquation.Export(rMedium);
         }
-        else if(rFltName.equals( MATHML_XML ))
+        else if(rFltName == MATHML_XML)
         {
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLExportWrapper aEquation(xModel);

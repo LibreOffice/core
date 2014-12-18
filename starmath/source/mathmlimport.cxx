@@ -1675,7 +1675,7 @@ void SmXMLNoneContext_Impl::EndElement(void)
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.aText = "";
+    aToken.aText.clear();
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
     GetSmImport().GetNodeStack().push_front(
