@@ -1126,7 +1126,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             rEvent.msElementName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
         }
         else // token is always preferred.
-            rEvent.msElementName = OUString( "" );
+            rEvent.msElementName.clear();
 
         rEntity.maNamespaceStack.push( NameWithToken(rEvent.msNamespace, nNamespaceToken) );
         if (rEntity.mbEnableThreads)
@@ -1354,7 +1354,7 @@ uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
     Sequence<OUString> seq(1);
-    seq[0] = OUString("com.sun.star.xml.sax.FastParser");
+    seq[0] = "com.sun.star.xml.sax.FastParser";
     return seq;
 }
 
