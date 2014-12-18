@@ -1056,7 +1056,7 @@ void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
         if (sExtension.equalsIgnoreAsciiCase(".WMF"))
             sContentType = "image/x-wmf";
         else
-            sContentType = OUString("image/") + sExtension.copy(1);
+            sContentType = "image/" + sExtension.copy(1);
         sRelId = sRelId.copy(3);
 
         StreamDataSequence dataSeq;

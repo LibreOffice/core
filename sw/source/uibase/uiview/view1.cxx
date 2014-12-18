@@ -75,7 +75,7 @@ void SwView::Activate(bool bMDIActivate)
         if( !m_sSwViewData.isEmpty() )
         {
             ReadUserData(m_sSwViewData, false);
-            m_sSwViewData = "";
+            m_sSwViewData.clear();
         }
 
         AttrChangedNotify(m_pWrtShell);

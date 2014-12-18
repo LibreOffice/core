@@ -1244,8 +1244,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 OUString::createFromAscii(rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
         }
         else
-            aDesc.sBodyMimeType =
-                OUString("text/plain; charset=UTF-8; format=flowed");
+            aDesc.sBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
 
         aDesc.sSubject = m_pSubjectED->GetText();
         aDesc.sCC = m_sCC;

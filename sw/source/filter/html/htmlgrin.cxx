@@ -700,14 +700,14 @@ IMAGE_SETEVENT:
         if (pStream)
         {
             if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *pStream))
-                sGrfNm = "";
+                sGrfNm.clear();
         }
     }
     // sBaseURL is empty if the source is clipboard
     else if (sBaseURL.isEmpty())
     {
         if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
-            sGrfNm = "";
+            sGrfNm.clear();
     }
     if (!sGrfNm.isEmpty())
     {
@@ -1155,7 +1155,7 @@ ANCHOR_SETEVENT:
                     sCmp == "outline" ||
                     sCmp == "text" )
                 {
-                    aName = "";
+                    aName.clear();
                 }
             }
         }

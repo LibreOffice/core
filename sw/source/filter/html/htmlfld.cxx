@@ -573,7 +573,7 @@ void SwHTMLParser::EndField()
     }
 
     bInField = false;
-    aContents = "";
+    aContents.clear();
 }
 
 void SwHTMLParser::InsertFieldText()

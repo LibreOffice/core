@@ -492,7 +492,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         Sequence< PropertyValue > aArgs;
         OUString cmd(".uno:ScrollToPrevious");
         if (NID_NEXT == nSet)
-            cmd = OUString(".uno:ScrollToNext");
+            cmd = ".uno:ScrollToNext";
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                      cmd, aArgs );
     }

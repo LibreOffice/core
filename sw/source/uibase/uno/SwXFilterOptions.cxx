@@ -67,7 +67,7 @@ uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() thro
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = OUString( FILTER_OPTIONS_NAME );
+    pArray[0].Name = FILTER_OPTIONS_NAME;
     pArray[0].Value <<= sFilterOptions;
 
     return aRet;

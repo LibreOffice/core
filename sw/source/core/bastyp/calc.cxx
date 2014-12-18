@@ -778,7 +778,7 @@ SwCalcOper SwCalc::GetToken()
                 case '[':
                     if( aRes.EndPos < sCommand.getLength() )
                     {
-                        aVarName = "";
+                        aVarName.clear();
                         sal_Int32 nFndPos = aRes.EndPos,
                                   nSttPos = nFndPos;
 

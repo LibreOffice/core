@@ -2027,7 +2027,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwTOXType& rTOXType )
 static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, OUString& rText )
 {
     int nRet = 4;
-    rText = "";
+    rText.clear();
 
     // #i21237#
     SwFormTokens aPattern = rForm.GetPattern(nLvl);
@@ -2175,7 +2175,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         else if ((4 == nRet) || (2 == nRet)) //#109414#
                             aFillTxt = "\t";
                         else
-                            aFillTxt = "";
+                            aFillTxt.clear();
                     }
                     sStr += "\\e \"";
                     sStr += aFillTxt;
@@ -2399,7 +2399,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                     if( bFirstFillTxt )
                                         aFillTxt = aTxt;
                                     else if( aFillTxt != aTxt )
-                                        aFillTxt = "";
+                                        aFillTxt.clear();
                                     bFirstFillTxt = false;
                                 }
                             }

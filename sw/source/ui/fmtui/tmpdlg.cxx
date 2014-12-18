@@ -74,8 +74,8 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
                              SwWrtShell* pActShell,
                              bool bNew)
     : SfxStyleDialog(pParent,
-                    OUString("TemplateDialog") + OUString::number(nRegion),
-                    OUString("modules/swriter/ui/templatedialog") +
+                    "TemplateDialog" + OUString::number(nRegion),
+                    "modules/swriter/ui/templatedialog" +
                         OUString::number(nRegion) + ".ui",
                     rBase)
     , nType(nRegion)

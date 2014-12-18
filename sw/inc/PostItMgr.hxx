@@ -123,7 +123,7 @@ class SwNoteProps: public utl::ConfigItem
             {
                 aNames.realloc(1);
                 OUString* pNames = aNames.getArray();
-                pNames[0] = OUString("ShowAnkor");
+                pNames[0] = "ShowAnkor";
             }
             return aNames;
         }

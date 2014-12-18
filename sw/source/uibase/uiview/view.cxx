@@ -1217,7 +1217,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
                     m_pWrtShell->EnterSelFrmMode( &aCrsrPos2 );
                 }
                 m_pWrtShell->MakeSelVisible();
-                m_sNewCrsrPos = "";
+                m_sNewCrsrPos.clear();
             }
             else if(USHRT_MAX != m_nNewPage)
             {

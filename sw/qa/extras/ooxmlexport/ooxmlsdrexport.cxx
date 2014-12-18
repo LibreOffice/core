@@ -551,22 +551,22 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70838, "fdo70838.docx")
             OUString aStyleCommandName  = aStyleCommand.getToken( 0, ':' );
             OUString aStyleCommandValue = aStyleCommand.getToken( 1, ':' );
 
-            if( aStyleCommandName.equals( "margin-left" ) )
+            if( aStyleCommandName == "margin-left" )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(97.6, fValue, 0.1);
             }
-            else if( aStyleCommandName.equals( "margin-top" ) )
+            else if( aStyleCommandName == "margin-top" )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(165.0, fValue, 0.2);
             }
-            else if( aStyleCommandName.equals( "width" ) )
+            else if( aStyleCommandName == "width" )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(283.4, fValue, 0.1);
             }
-            else if( aStyleCommandName.equals( "height" ) )
+            else if( aStyleCommandName == "height" )
             {
                 float fValue = aStyleCommandValue.getToken( 0, 'p' ).toFloat();
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(141.7, fValue, 0.1);

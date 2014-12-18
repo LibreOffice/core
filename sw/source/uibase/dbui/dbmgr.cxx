@@ -832,8 +832,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             eEncoding = rHtmlOptions.GetTextEncoding();
         }
         else
-            sBodyMimeType =
-                OUString("text/plain; charset=UTF-8; format=flowed");
+            sBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
     }
 
     uno::Reference< XPropertySet > xColumnProp;
@@ -1863,7 +1862,7 @@ bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 n
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
     {
-        rResult = "";
+        rResult.clear();
         return false;
     }
 
@@ -2509,7 +2508,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
         }
         catch(const Exception&)
         {
-            sFind = "";
+            sFind.clear();
         }
     return sFind;
 }

@@ -533,13 +533,13 @@ void SwFldRefPage::UpdateSubType()
                      mpSavedSelectedTxtNode == maOutlineNodes[nOutlIdx] )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
-                    sOldSel = "";
+                    sOldSel.clear();
                     bCertainTxtNodeSelected = true;
                 }
                 else if ( !bCertainTxtNodeSelected && mnSavedSelectedPos == nOutlIdx )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
-                    sOldSel = "";
+                    sOldSel.clear();
                 }
             }
         }
@@ -561,13 +561,13 @@ void SwFldRefPage::UpdateSubType()
                      mpSavedSelectedTxtNode == maNumItems[nNumItemIdx]->GetTxtNode() )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
-                    sOldSel = "";
+                    sOldSel.clear();
                     bCertainTxtNodeSelected = true;
                 }
                 else if ( !bCertainTxtNodeSelected && mnSavedSelectedPos == nNumItemIdx )
                 {
                     m_pSelectionToolTipLB->Select( pEntry );
-                    sOldSel = "";
+                    sOldSel.clear();
                 }
             }
         }
@@ -583,7 +583,7 @@ void SwFldRefPage::UpdateSubType()
                 SwSeqFldList aArr;
                 // old selection should be kept in non-edit mode
                 if(IsFldEdit())
-                    sOldSel = "";
+                    sOldSel.clear();
 
                 const size_t nCnt = pType->GetSeqFldList( aArr );
                 for( size_t n = 0; n < nCnt; ++n )
@@ -812,7 +812,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
 
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_FOOTNOTE;
-            aName = "";
+            aName.clear();
 
             if (pSh->GetSeqFtnList(aArr) && aArr.SeekEntry(aElem, &nPos))
             {
@@ -833,7 +833,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
 
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_ENDNOTE;
-            aName = "";
+            aName.clear();
 
             if (pSh->GetSeqFtnList(aArr, true) && aArr.SeekEntry(aElem, &nPos))
             {

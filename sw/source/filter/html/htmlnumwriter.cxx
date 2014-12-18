@@ -179,7 +179,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
     {
         rWrt.OutNewLine(); // <OL>/<UL> in eine neue Zeile
 
-        rWrt.aBulletGrfs[i] = "";
+        rWrt.aBulletGrfs[i].clear();
         OStringBuffer sOut;
         sOut.append('<');
         const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get( i );

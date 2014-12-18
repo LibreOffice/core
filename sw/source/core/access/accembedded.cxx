@@ -90,7 +90,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServi
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.text.AccessibleTextEmbeddedObject";
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 

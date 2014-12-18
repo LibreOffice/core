@@ -385,7 +385,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                     SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sHideParagraphsExpression, aEmptyOUStr, 0, &rShell );
                     aFldMgr.InsertFld( aData );
                 }
-                sHideParagraphsExpression = "";
+                sHideParagraphsExpression.clear();
                 //now add a new paragraph
                 rShell.SplitNode();
             }

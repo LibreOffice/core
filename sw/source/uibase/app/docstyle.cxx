@@ -437,9 +437,9 @@ SwDocStyleSheet::SwDocStyleSheet( const SwDocStyleSheet& rOrg) :
 
 void  SwDocStyleSheet::Reset()
 {
-    aName = "";
-    aFollow = "";
-    aParent = "";
+    aName.clear();
+    aFollow.clear();
+    aParent.clear();
     SetPhysical(false);
 }
 
@@ -1808,7 +1808,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             if( pDesc->GetPoolHlpFileId() != UCHAR_MAX )
                 aHelpFile = *rDoc.GetDocPattern( pDesc->GetPoolHlpFileId() );
             else
-                aHelpFile = "";
+                aHelpFile.clear();
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
@@ -1836,7 +1836,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             if( pNumRule->GetPoolHlpFileId() != UCHAR_MAX )
                 aHelpFile = *rDoc.GetDocPattern( pNumRule->GetPoolHlpFileId() );
             else
-                aHelpFile = "";
+                aHelpFile.clear();
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
@@ -1881,7 +1881,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             if( pFmt->GetPoolHlpFileId() != UCHAR_MAX )
                 aHelpFile = *rDoc.GetDocPattern( pFmt->GetPoolHlpFileId() );
             else
-                aHelpFile = "";
+                aHelpFile.clear();
 
             if( RES_CONDTXTFMTCOLL == pFmt->Which() )
                 _nMask |= SWSTYLEBIT_CONDCOLL;

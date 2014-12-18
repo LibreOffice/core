@@ -661,10 +661,10 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
 {
     sal_uInt16 nDeep = 0;
     rToken.clear();
-    rClass = "";
+    rClass.clear();
     rRefPoolId = 0;
     if( pPseudo )
-        *pPseudo = "";
+        pPseudo->clear();
 
     bool bChrFmt = RES_CHRFMT==pFmt->Which();
 
@@ -983,7 +983,7 @@ static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, OUString& rSelector,
         if( !aToken.isEmpty() )
             rSelector = OStringToOUString(aToken, RTL_TEXTENCODING_ASCII_US);
         else
-            rSelector = "";
+            rSelector.clear();
 
         if( !aClass.isEmpty() )
             rSelector += "." + aClass;
@@ -1786,7 +1786,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
 
     if( nNotes > 0 )
     {
-        aSelector = OUString(OOO_STRING_SVTOOLS_HTML_anchor) + "." +
+        aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
                     ( bEndNote ? OUString(OOO_STRING_SVTOOLS_HTML_sdendnote_anc)
                                : OUString(OOO_STRING_SVTOOLS_HTML_sdfootnote_anc) );
         SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
@@ -1817,7 +1817,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         }
         if( aItemSet.Count() )
         {
-            aSelector = OUString(OOO_STRING_SVTOOLS_HTML_anchor) + "." +
+            aSelector = OOO_STRING_SVTOOLS_HTML_anchor "." +
                         ( bEndNote ? OUString(OOO_STRING_SVTOOLS_HTML_sdendnote_sym)
                                    : OUString(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym));
             if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, true, false ))

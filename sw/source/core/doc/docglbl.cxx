@@ -338,7 +338,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                     // do not insert a FileLinkSection in case of error
                     if( xDocSh->GetError() )
-                        sFileName = "";
+                        sFileName.clear();
                 }
                 xDocSh->DoClose();
             }

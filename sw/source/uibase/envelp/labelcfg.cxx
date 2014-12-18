@@ -229,7 +229,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
             case 0: pValues[nProp].Value <<= OUString(rRec.aType); break;
             case 1:
             {
-                rMeasure = "";
+                rMeasure.clear();
                 rMeasure += rRec.bCont ? OUString( "C" ) : OUString( "S" );      rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.lHDist ) );   rMeasure += sColon;
                 rMeasure += OUString::number( convertTwipToMm100( rRec.lVDist ) );   rMeasure += sColon;

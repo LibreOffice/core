@@ -2342,7 +2342,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
                             if( !bChgTxt )
                             {
-                                sNewTxt = "";
+                                sNewTxt.clear();
                             }
                         }
 

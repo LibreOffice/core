@@ -57,7 +57,7 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
 {
     Sequence<OUString> aSeq( 2 );
     aSeq[0] = "com.sun.star.text.AccessibleTextDocumentPageView";
-    aSeq[1] = OUString( sAccessibleServiceName );
+    aSeq[1] = sAccessibleServiceName;
     return aSeq;
 }
 

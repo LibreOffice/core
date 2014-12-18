@@ -288,9 +288,9 @@ SwField* SwFldMgr::GetCurFld()
         pCurFld = NULL;
 
     // initialise strings and format
-    aCurPar1 = "";
-    aCurPar2 = "";
-    sCurFrame = "";
+    aCurPar1.clear();
+    aCurPar2.clear();
+    sCurFrame.clear();
     nCurFmt = 0;
 
     if(!pCurFld)

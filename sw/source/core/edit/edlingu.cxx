@@ -864,7 +864,7 @@ uno::Reference< XSpellAlternatives >
                     // implementation here by providing an additional parameter.
                     Sequence< PropertyValue > aPropVals(1);
                     PropertyValue &rVal = aPropVals.getArray()[0];
-                    rVal.Name = OUString( UPN_MAX_NUMBER_OF_SUGGESTIONS );
+                    rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
                     rVal.Value <<= (sal_Int16) 7;
 
                     xSpellAlt = xSpell->spell( aWord, eActLang, aPropVals );

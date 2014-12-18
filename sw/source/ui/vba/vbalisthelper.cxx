@@ -60,17 +60,17 @@ void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
     {
         case word::WdListGalleryType::wdBulletGallery:
         {
-            msStyleName = OUString(WORD_BULLET_GALLERY );
+            msStyleName = WORD_BULLET_GALLERY;
             break;
         }
         case word::WdListGalleryType::wdNumberGallery:
         {
-            msStyleName = OUString(WORD_NUMBER_GALLERY );
+            msStyleName = WORD_NUMBER_GALLERY;
             break;
         }
         case word::WdListGalleryType::wdOutlineNumberGallery:
         {
-            msStyleName = OUString(WORD_OUTLINE_NUMBER_GALLERY );
+            msStyleName = WORD_OUTLINE_NUMBER_GALLERY;
             break;
         }
         default:

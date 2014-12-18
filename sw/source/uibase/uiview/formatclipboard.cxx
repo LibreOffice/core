@@ -588,9 +588,9 @@ void SwFormatClipboard::Erase()
     m_pTableItemSet = 0;
 
     if( !m_aCharStyle.isEmpty() )
-        m_aCharStyle = "";
+        m_aCharStyle.clear();
     if( !m_aParaStyle.isEmpty() )
-        m_aParaStyle = "";
+        m_aParaStyle.clear();
 
     m_bPersistentCopy = false;
 }

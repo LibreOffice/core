@@ -900,7 +900,7 @@ void SwEditWin::FlushInBuffer()
                         nExpandSelection = nOldLen - nChgPos;
                     }
                     else
-                        m_aInBuffer = "";
+                        m_aInBuffer.clear();
                 }
                 else
                 {
@@ -962,7 +962,7 @@ void SwEditWin::FlushInBuffer()
 
         rSh.Insert( m_aInBuffer );
         m_eBufferLanguage = LANGUAGE_DONTKNOW;
-        m_aInBuffer = "";
+        m_aInBuffer.clear();
         bFlushCharBuffer = false;
     }
 }

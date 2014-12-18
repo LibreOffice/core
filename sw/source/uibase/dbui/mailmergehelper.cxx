@@ -478,7 +478,7 @@ OUString SwAddressPreview::FillData(
     }
 
     SwAddressIterator aIter(sAddress);
-    sAddress = "";
+    sAddress.clear();
     while(aIter.HasMore())
     {
         SwMergeAddressItem aItem = aIter.Next();
@@ -518,7 +518,7 @@ OUString SwAddressPreview::FillData(
                             if( !rExcludeCountry.isEmpty() && sReplace != rExcludeCountry )
                                 aItem.sText = sReplace;
                             else
-                                aItem.sText = "";
+                                aItem.sText.clear();
                         }
                         else
                         {
@@ -578,7 +578,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
             else if(-1 == nOpen && -1 == nReturn)
             {
                 aRet.sText = sAddress;
-                sAddress = "";
+                sAddress.clear();
             }
             else
             {

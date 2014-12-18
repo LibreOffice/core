@@ -1004,7 +1004,7 @@ void SwHTMLParser::NextToken( int nToken )
                     }
                 }
                 bInTitle = false;
-                sTitle = "";
+                sTitle.clear();
                 break;
 
             case HTML_NONBREAKSPACE:
@@ -1070,7 +1070,7 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_NOEMBED_OFF:
                 aContents = convertLineEnd(aContents, GetSystemLineEnd());
                 InsertComment( aContents, OOO_STRING_SVTOOLS_HTML_noembed );
-                aContents = "";
+                aContents.clear();
                 bCallNextToken = false;
                 bInNoEmbed = false;
                 break;
@@ -1242,12 +1242,12 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
             case HTML_IMAGE:        // Don't know why Netscape acts this way.
-                aUnknownToken = "";
+                aUnknownToken.clear();
                 break;
             case HTML_TEXTTOKEN:
                 return;
             default:
-                aUnknownToken = "";
+                aUnknownToken.clear();
                 break;
             }
         }
@@ -1259,7 +1259,7 @@ void SwHTMLParser::NextToken( int nToken )
         if( !aStyleSource.isEmpty() )
         {
             pCSS1Parser->ParseStyleSheet( aStyleSource );
-            aStyleSource = "";
+            aStyleSource.clear();
         }
         if( IsNewDoc() )
         {
@@ -1885,7 +1885,7 @@ void SwHTMLParser::NextToken( int nToken )
         if( !aStyleSource.isEmpty() )
         {
             pCSS1Parser->ParseStyleSheet( aStyleSource );
-            aStyleSource = "";
+            aStyleSource.clear();
         }
         break;
 

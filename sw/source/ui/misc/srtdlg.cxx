@@ -298,7 +298,7 @@ void SwSortDlg::Apply()
     {
         OUString sEntry( m_pTypDLB1->GetSelectEntry() );
         if( sEntry == aNumericTxt )
-            sEntry = "";
+            sEntry.clear();
         else if( 0 != (pUserData = m_pTypDLB1->GetEntryData(
                                             m_pTypDLB1->GetSelectEntryPos())) )
             sEntry = *(OUString*)pUserData;
@@ -312,7 +312,7 @@ void SwSortDlg::Apply()
     {
         OUString sEntry( m_pTypDLB2->GetSelectEntry() );
         if( sEntry == aNumericTxt )
-            sEntry = "";
+            sEntry.clear();
         else if( 0 != (pUserData = m_pTypDLB2->GetEntryData(
                                             m_pTypDLB2->GetSelectEntryPos())) )
             sEntry = *(OUString*)pUserData;
@@ -326,7 +326,7 @@ void SwSortDlg::Apply()
     {
         OUString sEntry( m_pTypDLB3->GetSelectEntry() );
         if( sEntry == aNumericTxt )
-            sEntry = "";
+            sEntry.clear();
         else if( 0 != (pUserData = m_pTypDLB3->GetEntryData(
                                             m_pTypDLB3->GetSelectEntryPos())) )
             sEntry = *(OUString*)pUserData;

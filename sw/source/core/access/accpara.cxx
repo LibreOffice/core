@@ -1118,8 +1118,8 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNam
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sServiceName );
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[0] = sServiceName;
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 
@@ -1692,7 +1692,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
         const SwTxtNode* pTxtNode( GetTxtNode() );
         PropertyValue& rValue = pValues[aValues.getLength() - 1 ];
-        rValue.Name = OUString("NumberingPrefix");
+        rValue.Name = "NumberingPrefix";
         OUString sNumBullet = pTxtNode->GetNumString();
         rValue.Value <<= sNumBullet;
         rValue.Handle = -1;
@@ -1704,7 +1704,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
             aValues.realloc( aValues.getLength() + 1 );
             pValues = aValues.getArray();
             PropertyValue& rValueFT = pValues[aValues.getLength() - 1];
-            rValueFT.Name = OUString("FieldType");
+            rValueFT.Name = "FieldType";
             rValueFT.Value <<= strTypeName.toAsciiLowerCase();
             rValueFT.Handle = -1;
             rValueFT.State = PropertyState_DIRECT_VALUE;
@@ -3867,7 +3867,7 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
         if (length == 9 || length == 10)
         {
             OUString headStr = sValue.copy(0, 7);
-            if (headStr.equals("Heading"))
+            if (headStr == "Heading")
             {
                 OUString intStr = sValue.copy(8);
                 sal_Int32 headingLevel = intStr.toInt32(10);

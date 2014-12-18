@@ -992,7 +992,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Document: Document
 
             nPDFType = vcl::PDFWriter::Document;
-            aPDFType = OUString(aDocumentString);
+            aPDFType = aDocumentString;
             break;
 
         case FRM_HEADER :
@@ -1008,7 +1008,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Footnote container: Division
 
             nPDFType = vcl::PDFWriter::Division;
-            aPDFType = OUString(aDivString);
+            aPDFType = aDivString;
             break;
 
         case FRM_FTN :
@@ -1018,7 +1018,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = vcl::PDFWriter::Note;
-            aPDFType = OUString(aNoteString);
+            aPDFType = aNoteString;
             break;
 
         case FRM_SECTION :
@@ -1036,19 +1036,19 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( TOX_INDEX == pTOXBase->GetType() )
                         {
                             nPDFType = vcl::PDFWriter::Index;
-                            aPDFType = OUString(aIndexString);
+                            aPDFType = aIndexString;
                         }
                         else
                         {
                             nPDFType = vcl::PDFWriter::TOC;
-                            aPDFType = OUString(aTOCString);
+                            aPDFType = aTOCString;
                         }
                     }
                 }
                 else if ( CONTENT_SECTION == pSection->GetType() )
                 {
                     nPDFType = vcl::PDFWriter::Section;
-                    aPDFType = OUString(aSectString);
+                    aPDFType = aSectString;
                 }
             }
             break;
@@ -1084,7 +1084,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if (sStyleName == aQuotations)
                 {
                     nPDFType = vcl::PDFWriter::BlockQuote;
-                    aPDFType = OUString(aBlockQuoteString);
+                    aPDFType = aBlockQuoteString;
                 }
 
                 // Caption: Caption
@@ -1092,7 +1092,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if (sStyleName == aCaption)
                 {
                     nPDFType = vcl::PDFWriter::Caption;
-                    aPDFType = OUString(aCaptionString);
+                    aPDFType = aCaptionString;
                 }
 
                 // Caption: Caption
@@ -1108,7 +1108,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if (sStyleName == aHeading)
                 {
                     nPDFType = vcl::PDFWriter::Heading;
-                    aPDFType = OUString(aHString);
+                    aPDFType = aHString;
                 }
 
                 // Heading: H1 - H6
@@ -1122,22 +1122,22 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     switch(nRealLevel)
                     {
                         case 0 :
-                            aPDFType = OUString(aH1String);
+                            aPDFType = aH1String;
                             break;
                         case 1 :
-                            aPDFType = OUString(aH2String);
+                            aPDFType = aH2String;
                             break;
                         case 2 :
-                            aPDFType = OUString(aH3String);
+                            aPDFType = aH3String;
                             break;
                         case 3 :
-                            aPDFType = OUString(aH4String);
+                            aPDFType = aH4String;
                             break;
                         case 4 :
-                            aPDFType = OUString(aH5String);
+                            aPDFType = aH5String;
                             break;
                         default:
-                            aPDFType = OUString(aH6String);
+                            aPDFType = aH6String;
                             break;
                     }
                 }
@@ -1168,7 +1168,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // TabFrm: Table
 
             nPDFType = vcl::PDFWriter::Table;
-            aPDFType = OUString(aTableString);
+            aPDFType = aTableString;
 
             {
                 // set up table column data:
@@ -1222,7 +1222,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             if ( !static_cast<const SwRowFrm*>(pFrm)->IsRepeatedHeadline() )
             {
                 nPDFType = vcl::PDFWriter::TableRow;
-                aPDFType = OUString(aTRString);
+                aPDFType = aTRString;
             }
             else
             {
@@ -1239,12 +1239,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( pTable->IsInHeadline( *pFrm ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrm*>(pFrm) ) )
                 {
                     nPDFType = vcl::PDFWriter::TableHeader;
-                    aPDFType = OUString(aTHString);
+                    aPDFType = aTHString;
                 }
                 else
                 {
                     nPDFType = vcl::PDFWriter::TableData;
-                    aPDFType = OUString(aTDString);
+                    aPDFType = aTDString;
                 }
             }
             break;
@@ -1276,18 +1276,18 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( bFormula )
                     {
                         nPDFType = vcl::PDFWriter::Formula;
-                        aPDFType = OUString(aFormulaString);
+                        aPDFType = aFormulaString;
                     }
                     else
                     {
                         nPDFType = vcl::PDFWriter::Figure;
-                        aPDFType = OUString(aFigureString);
+                        aPDFType = aFigureString;
                     }
                 }
                 else
                 {
                     nPDFType = vcl::PDFWriter::Division;
-                    aPDFType = OUString(aDivString);
+                    aPDFType = aDivString;
                 }
             }
             break;
@@ -1332,7 +1332,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_HYPHSTR :
         case POR_SOFTHYPHSTR :
             nPDFType = vcl::PDFWriter::Span;
-            aPDFType = OUString(aSpanString);
+            aPDFType = aSpanString;
             break;
 
         case POR_LAY :
@@ -1359,18 +1359,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 if( pInetFmtAttr )
                 {
                     nPDFType = vcl::PDFWriter::Link;
-                    aPDFType = OUString(aLinkString);
+                    aPDFType = aLinkString;
                 }
                 // Check for Quote/Code character style:
                 else if (sStyleName == aQuotation)
                 {
                     nPDFType = vcl::PDFWriter::Quote;
-                    aPDFType = OUString(aQuoteString);
+                    aPDFType = aQuoteString;
                 }
                 else if (sStyleName == aSourceText)
                 {
                     nPDFType = vcl::PDFWriter::Code;
-                    aPDFType = OUString(aCodeString);
+                    aPDFType = aCodeString;
                 }
                 else
                 {
@@ -1391,7 +1391,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         if (!sStyleName.isEmpty())
                             aPDFType = sStyleName;
                         else
-                            aPDFType = OUString(aSpanString);
+                            aPDFType = aSpanString;
                     }
                 }
             }
@@ -1399,7 +1399,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
         case POR_FTN :
             nPDFType = vcl::PDFWriter::Link;
-            aPDFType = OUString(aLinkString);
+            aPDFType = aLinkString;
             break;
 
         case POR_FLD :
@@ -1416,12 +1416,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     if ( RES_GETREFFLD == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;
-                        aPDFType = OUString(aLinkString);
+                        aPDFType = aLinkString;
                     }
                     else if ( RES_AUTHORITY == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::BibEntry;
-                        aPDFType = OUString(aBibEntryString);
+                        aPDFType = aBibEntryString;
                     }
                 }
             }

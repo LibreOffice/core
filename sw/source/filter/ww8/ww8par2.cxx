@@ -928,13 +928,13 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             pNumRule = rDoc.FindNumRulePtr(sNumRule);
             if (!pNumRule)
-                sNumRule = "";
+                sNumRule.clear();
             else
             {
                 // this is ROW numbering ?
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
                 if (pS12 && 0 != ((WW8_ANLD*)pS12)->fNumberAcross)
-                    sNumRule = "";
+                    sNumRule.clear();
             }
         }
     }
@@ -945,7 +945,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         sNumRule = pStyInf->pFmt->GetNumRule().GetValue();
         pNumRule = rDoc.FindNumRulePtr(sNumRule);
         if (!pNumRule)
-            sNumRule = "";
+            sNumRule.clear();
     }
 
     if (sNumRule.isEmpty())
@@ -4264,7 +4264,7 @@ void WW8RStyle::ImportOldFormatStyles()
         }
 
         if (sName.isEmpty())
-            sName = OUString("Unknown Style: ") + OUString::number(stc);
+            sName = "Unknown Style: " + OUString::number(stc);
 
         rSI.SetOrgWWIdent(sName, stc);
         stcp++;

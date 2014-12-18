@@ -650,7 +650,7 @@ void SwUiWriterTest::testMergeDoc()
     SwDoc* const pDoc1(createDoc("merge-change1.odt"));
 
     auto xDoc2Component(loadFromDesktop(
-            getURLFromSrc(DATA_DIRECTORY) + OUString("merge-change2.odt"),
+            getURLFromSrc(DATA_DIRECTORY) + "merge-change2.odt",
             "com.sun.star.text.TextDocument"));
     auto pxDoc2Document(
             dynamic_cast<SwXTextDocument *>(xDoc2Component.get()));

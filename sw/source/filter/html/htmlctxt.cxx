@@ -447,7 +447,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
         InsertFlyFrame( aFrmItemSet, pContext, rPropInfo.aId,
                         CONTEXT_FLAGS_ABSPOS );
         pContext->SetPopStack( true );
-        rPropInfo.aId = "";
+        rPropInfo.aId.clear();
         bRet = true;
     }
 

@@ -86,7 +86,7 @@ void Test::testSwappedOutImageExport()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -106,7 +106,7 @@ void Test::testSwappedOutImageExport()
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
             CPPUNIT_ASSERT_MESSAGE(
-                sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+                sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -231,7 +231,7 @@ void Test::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT(sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT(sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -249,7 +249,7 @@ void Test::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT(sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT(sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -313,7 +313,7 @@ void Test::testGraphicShape()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -326,7 +326,7 @@ void Test::testGraphicShape()
         }
 
         // MS filters make this kind of linked images broken !?
-        if( OUString::createFromAscii(aFilterNames[nFilter]) != OUString("writer8") )
+        if( OUString::createFromAscii(aFilterNames[nFilter]) != "writer8" )
             return;
 
         // Second image is a linked one

@@ -305,7 +305,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
         // This is the common case: "close sdt before the current paragraph" was requrested by the next paragraph.
         EndSdtBlock();
         m_bStartedParaSdt = false;
-        m_aStartedParagraphSdtPrAlias = "";
+        m_aStartedParagraphSdtPrAlias.clear();
     }
     m_bHadSectPr = false;
 
@@ -339,7 +339,7 @@ static void lcl_deleteAndResetTheLists( ::sax_fastparser::FastAttributeList* &pS
         pSdtPrDataBindingAttrs = NULL;
     }
     if (!rSdtPrAlias.isEmpty())
-        rSdtPrAlias = "";
+        rSdtPrAlias.clear();
 }
 
 void DocxAttributeOutput::PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize)
@@ -698,7 +698,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
             // do not delete yet; it's in xAttrList inside the parser
             pSdtPrDataBindingAttrs = NULL;
         }
-        rSdtPrAlias = "";
+        rSdtPrAlias.clear();
     }
 }
 
@@ -1137,7 +1137,7 @@ void DocxAttributeOutput::EndRun()
     DoWriteBookmarks( );
     DoWriteAnnotationMarks( );
 
-    if( m_closeHyperlinkInThisRun && m_startedHyperlink && m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
+    if( m_closeHyperlinkInThisRun && m_startedHyperlink && !m_hyperLinkAnchor.isEmpty() && m_hyperLinkAnchor.startsWith("_Toc"))
     {
         OUString sToken;
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
@@ -1237,7 +1237,7 @@ void DocxAttributeOutput::EndRun()
                         FSEND );
                 m_pSerializer->endElementNS( XML_w, XML_r );
                 m_endPageRef = false;
-                m_hyperLinkAnchor = "";
+                m_hyperLinkAnchor.clear();
             }
             for ( int i = 0; i < m_nFieldsInHyperlink; i++ )
             {
@@ -2273,7 +2273,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
 bool DocxAttributeOutput::EndURL(bool const)
 {
     m_closeHyperlinkInThisRun = true;
-    if(m_startedHyperlink && m_hyperLinkAnchor != "" && m_hyperLinkAnchor.startsWith("_Toc"))
+    if(m_startedHyperlink && !m_hyperLinkAnchor.isEmpty() && m_hyperLinkAnchor.startsWith("_Toc"))
     {
         m_endPageRef = true;
     }
@@ -5749,7 +5749,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
             return;
         uno::Reference< com::sun::star::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
-            OUString( "word/fonts/font" ) + OUString::number(m_nextFontId) + ".odttf",
+            "word/fonts/font" + OUString::number(m_nextFontId) + ".odttf",
             "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
         // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
         // so just alter the first and last part of the key.
@@ -5800,7 +5800,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         xOutStream->closeOutput();
         OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font",
-            OUString( "fonts/font" ) + OUString::number( m_nextFontId ) + ".odttf" ), RTL_TEXTENCODING_UTF8 );
+            "fonts/font" + OUString::number( m_nextFontId ) + ".odttf" ), RTL_TEXTENCODING_UTF8 );
         EmbeddedFontRef ref;
         ref.relId = relId;
         ref.fontKey = fontKeyStr;
@@ -7563,7 +7563,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
-        m_sOriginalBackgroundColor = "";
+        m_sOriginalBackgroundColor.clear();
     }
 }
 

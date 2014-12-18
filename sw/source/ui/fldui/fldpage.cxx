@@ -291,7 +291,7 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
         if( (*ppLB) && (*ppLB)->GetEntryCount() )
             m_aLstStrArr[ i ] = (*ppLB)->GetSelectEntry();
         else
-            m_aLstStrArr[ i ] = "";
+            m_aLstStrArr[ i ].clear();
 }
 
 void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)

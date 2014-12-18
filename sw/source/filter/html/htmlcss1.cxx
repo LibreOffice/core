@@ -613,7 +613,7 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,
         }
         else
         {
-            rClass = "";
+            rClass.clear();
         }
     }
 
@@ -625,7 +625,7 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
                               sal_uInt16& rScriptFlags )
 {
     rToken = pSelector->GetString();
-    rClass = "";
+    rClass.clear();
     rScriptFlags = CSS1_SCRIPT_ALL;
 
     CSS1SelectorType eType = pSelector->GetType();
@@ -1700,7 +1700,7 @@ void SwHTMLParser::EndStyle()
     if( !aStyleSource.isEmpty() )
     {
         pCSS1Parser->ParseStyleSheet( aStyleSource );
-        aStyleSource = "";
+        aStyleSource.clear();
     }
 }
 

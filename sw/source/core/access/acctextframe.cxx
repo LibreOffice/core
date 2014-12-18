@@ -293,7 +293,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.text.AccessibleTextFrameView";
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 

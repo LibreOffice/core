@@ -3643,7 +3643,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
                 rSh.ResetModified();
         }
         else
-            sName = "";
+            sName.clear();
         rSh.DoUndo( bUndo );
     }
 

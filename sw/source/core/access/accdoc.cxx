@@ -448,8 +448,8 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceName
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( sServiceName );
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[0] = sServiceName;
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 

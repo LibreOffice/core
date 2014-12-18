@@ -1784,15 +1784,15 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( Runt
     Sequence< OUString > aRet (3);
     OUString* pArray = aRet.getArray();
 
-    pArray[0] = OUString ( ( "com.sun.star.document.OfficeDocument"  ) );
-    pArray[1] = OUString ( ( "com.sun.star.text.GenericTextDocument" ) );
+    pArray[0] = "com.sun.star.document.OfficeDocument";
+    pArray[1] = "com.sun.star.text.GenericTextDocument";
 
     if (bTextDoc)
-        pArray[2] = OUString ( ( "com.sun.star.text.TextDocument" ) );
+        pArray[2] = "com.sun.star.text.TextDocument";
     else if (bWebDoc)
-        pArray[2] = OUString ( ( "com.sun.star.text.WebDocument" ) );
+        pArray[2] = "com.sun.star.text.WebDocument";
     else if (bGlobalDoc)
-        pArray[2] = OUString ( ( "com.sun.star.text.GlobalDocument" ) );
+        pArray[2] = "com.sun.star.text.GlobalDocument";
 
     return aRet;
 }
@@ -3425,7 +3425,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sBookmarks)
     {
-        sSuffix = "";
+        sSuffix.clear();
         Reference< XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
                                         pxDoc->getBookmarks(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xBkms, UNO_QUERY);

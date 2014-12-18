@@ -1558,7 +1558,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 {
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sTmp );
-                    sGrfName = "";
+                    sGrfName.clear();
                 }
                 else if( sTmp.startsWith(sGraphicObjectProtocol) )
                 {
@@ -1566,7 +1566,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         sTmp.copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
-                    sGrfName = "";
+                    sGrfName.clear();
                 }
                 else
                 {
@@ -2375,7 +2375,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
         {
             const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(pNames[i]);
             if (!pEntry)
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException("Unknown property: " + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
             if(pEntry->nWID == FN_UNO_ANCHOR_TYPES||
                 pEntry->nWID == FN_PARAM_LINK_DISPLAY_NAME||
@@ -2804,7 +2804,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 {
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sGraphicURL );
-                    sGraphicURL = "";
+                    sGraphicURL.clear();
                 }
                 else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )
                 {
@@ -2812,7 +2812,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         sGraphicURL.copy( sizeof(sGraphicObjectProtocol)-1 ),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
-                    sGraphicURL = "";
+                    sGraphicURL.clear();
                 }
             }
             Graphic aGraphic;

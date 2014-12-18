@@ -484,9 +484,9 @@ sal_uLong SwHTMLWriter::WriteStream()
     ClearNextNumInfo();
 
     for( i=0; i<MAXLEVEL; i++ )
-        aBulletGrfs[i] = "";
+        aBulletGrfs[i].clear();
 
-    aNonConvertableCharacters = "";
+    aNonConvertableCharacters.clear();
 
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );

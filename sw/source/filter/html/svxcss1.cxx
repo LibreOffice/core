@@ -400,7 +400,7 @@ void SvxCSS1PropertyInfo::DestroyBorderInfos()
 
 void SvxCSS1PropertyInfo::Clear()
 {
-    aId = "";
+    aId.clear();
     bTopMargin = bBottomMargin = false;
     bLeftMargin = bRightMargin = bTextIndent = false;
     nLeftMargin = nRightMargin = 0;
@@ -1554,7 +1554,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
     if( bTransparent )
     {
         bColor = false;
-        aURL = "";
+        aURL.clear();
     }
 
     // repeat hat prio gegenueber einer Position

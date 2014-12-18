@@ -279,7 +279,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
     bool bTextOnly = true;
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";
-    rText = "";
+    rText.clear();
 
     try
     {

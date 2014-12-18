@@ -160,7 +160,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
     SwTxtNode* pTOXNd = (SwTxtNode*)entries.at(indexOfEntryToProcess)->pTOXNd;
     // FIXME this operates directly on the node text
     OUString & rTxt = const_cast<OUString&>(pTOXNd->GetTxt());
-    rTxt = "";
+    rTxt.clear();
     for(sal_uInt16 nIndex = indexOfEntryToProcess; nIndex < indexOfEntryToProcess + numberOfEntriesToProcess; nIndex++)
     {
         if(nIndex > indexOfEntryToProcess)

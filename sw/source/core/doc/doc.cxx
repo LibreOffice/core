@@ -1536,7 +1536,7 @@ bool SwDoc::ConvertFieldsToText()
 
                     // database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
-                        sText = "";
+                        sText.clear();
 
                     SwPaM aInsertPam(*pTxtFld->GetpTxtNode(), pTxtFld->GetStart());
                     aInsertPam.SetMark();

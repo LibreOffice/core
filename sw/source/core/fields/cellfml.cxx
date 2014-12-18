@@ -45,7 +45,7 @@ namespace
 {
 
 const sal_Unicode cRelSeparator = ',';
-const sal_Unicode cRelIdentifier = '';     // CTRL-R
+const sal_Unicode cRelIdentifier = '\x12'; // CTRL-R
 
 enum
 {

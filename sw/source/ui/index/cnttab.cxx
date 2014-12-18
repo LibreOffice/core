@@ -712,7 +712,7 @@ SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        pStyleArr[i] = "";
+        pStyleArr[i].clear();
 
     SvTreeListEntry* pEntry = m_pHeaderTree->First();
     while(pEntry)
@@ -2415,7 +2415,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     const bool bEqualsNoCharStyle = sEntry == sNoCharStyle;
     m_pEditStylePB->Enable(!bEqualsNoCharStyle);
     if (bEqualsNoCharStyle)
-        sEntry = "";
+        sEntry.clear();
     Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl)

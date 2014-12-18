@@ -172,12 +172,12 @@ void SwHTMLParser::EndScript()
         }
     }
 
-    aScriptSource = "";
-    aScriptType = "";
-    aScriptURL = "";
+    aScriptSource.clear();
+    aScriptType.clear();
+    aScriptURL.clear();
 
-    aBasicLib = "";
-    aBasicModule = "";
+    aBasicLib.clear();
+    aBasicModule.clear();
 }
 
 void SwHTMLParser::AddScriptSource()

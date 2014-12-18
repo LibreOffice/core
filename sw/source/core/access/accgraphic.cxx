@@ -60,7 +60,7 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.text.AccessibleTextGraphicObject";
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 

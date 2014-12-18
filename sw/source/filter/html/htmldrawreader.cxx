@@ -252,7 +252,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 {
 
     OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
-    aContents = "";
+    aContents.clear();
 
     OUString aId, aStyle, aClass;
 
@@ -562,7 +562,7 @@ void SwHTMLParser::EndMarquee()
         static_cast<SdrTextObj*>(pMarquee)->FitFrameToTextSize();
     }
 
-    aContents = "";
+    aContents.clear();
     pMarquee = 0;
 }
 

@@ -415,12 +415,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink().isEmpty() )
                         sGrfNm = static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink();
                     else
-                        sGrfNm = "";
+                        sGrfNm.clear();
 
                     if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicFilter().isEmpty() )
                         sFilterNm = static_cast<const SvxBrushItem*>(pItem)->GetGraphicFilter();
                     else
-                        sFilterNm = "";
+                        sFilterNm.clear();
 
                     if( !sGrfNm.isEmpty() )
                     {

@@ -825,7 +825,7 @@ static void lcl_html_setEvents(
         rDesc.EventMethod = sMethod;
         rDesc.ScriptType = rType;
         rDesc.ScriptCode = sCode;
-        rDesc.AddListenerParam = "";
+        rDesc.AddListenerParam.clear();
 
         if(!rUnoMacroParamTbl.empty())
         {

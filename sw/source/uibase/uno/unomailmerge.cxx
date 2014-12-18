@@ -811,7 +811,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if ( xCurModel.get() != xModel.get() )
     {   // in case it was a temporary model -> close it, and delete the file
         DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName );
-        aTmpFileName = "";
+        aTmpFileName.clear();
     }
     // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
 

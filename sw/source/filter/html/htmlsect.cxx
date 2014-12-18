@@ -365,7 +365,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
         if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
-            aPropInfo.aId = "";
+            aPropInfo.aId.clear();
     }
     else
     {
@@ -645,7 +645,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         if( nCols < 2 )
         {
             aFlyName = aId;
-            aPropInfo.aId = "";
+            aPropInfo.aId.clear();
         }
 
         InsertFlyFrame( aFrmItemSet, pCntxt, aFlyName, CONTEXT_FLAGS_ABSPOS );
@@ -753,7 +753,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
         // Insert a bookmark if its name differs from the section's name only.
         if( !aPropInfo.aId.isEmpty() && aPropInfo.aId==aName )
-            aPropInfo.aId = "";
+            aPropInfo.aId.clear();
     }
 
     // Additional attributes must be set as hard ones.

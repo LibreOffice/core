@@ -263,7 +263,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_SELECT:
             pFuncPtr = new DrawSelection(m_pWrtShell, m_pEditWin, this);
             m_nDrawSfxId = m_nFormSfxId = SID_OBJECT_SELECT;
-            m_sDrawCustom = "";
+            m_sDrawCustom.clear();
             break;
 
         case SID_DRAW_LINE:
@@ -276,7 +276,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CAPTION_VERTICAL:
             pFuncPtr = new ConstRectangle(m_pWrtShell, m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
-            m_sDrawCustom = "";
+            m_sDrawCustom.clear();
             break;
 
         case SID_DRAW_POLYGON_NOFILL:
@@ -284,7 +284,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_FREELINE_NOFILL:
             pFuncPtr = new ConstPolygon(m_pWrtShell, m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
-            m_sDrawCustom = "";
+            m_sDrawCustom.clear();
             break;
 
         case SID_DRAW_ARC:
@@ -292,7 +292,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CIRCLECUT:
             pFuncPtr = new ConstArc(m_pWrtShell, m_pEditWin, this);
             m_nDrawSfxId = nSlotId;
-            m_sDrawCustom = "";
+            m_sDrawCustom.clear();
             break;
 
         case SID_FM_CREATE_CONTROL:
@@ -645,7 +645,7 @@ void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
 void SwView::SetSelDrawSlot()
 {
     m_nDrawSfxId = SID_OBJECT_SELECT;
-    m_sDrawCustom = "";
+    m_sDrawCustom.clear();
 }
 
 bool SwView::AreOnlyFormsSelected() const

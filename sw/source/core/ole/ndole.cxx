@@ -576,7 +576,7 @@ void SwOLENode::BreakFileLink_Impl()
                 uno::Reference< embed::XLinkageSupport > xLinkSupport( aOLEObj.GetOleRef(), uno::UNO_QUERY_THROW );
                 xLinkSupport->breakLink( xStorage, aOLEObj.GetCurrentPersistName() );
                 DisconnectFileLink_Impl();
-                maLinkURL = "";
+                maLinkURL.clear();
             }
             catch( uno::Exception& )
             {

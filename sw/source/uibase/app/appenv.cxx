@@ -102,7 +102,7 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
                 if ( nPos == -1 )
                 {
                     sTmpText = aLine;
-                    aLine = "";
+                    aLine.clear();
                 }
                 else
                 {

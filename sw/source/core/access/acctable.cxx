@@ -1376,7 +1376,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTable::getSupportedServiceNames()
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.table.AccessibleTableView";
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 

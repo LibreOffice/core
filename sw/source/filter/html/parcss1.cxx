@@ -105,7 +105,7 @@ sal_Unicode CSS1Parser::GetNextChar()
 CSS1Token CSS1Parser::GetNextToken()
 {
     CSS1Token nRet = CSS1_NULL;
-    aToken = "";
+    aToken.clear();
 
     do {
         // Merken, ob davor White-Space gelesen wurde
@@ -176,7 +176,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     // Blocks ignorieren
                     if( CSS1_NULL==nRet )
                     {
-                        aToken = "";
+                        aToken.clear();
                         sal_uInt16 nBlockLvl = 0;
                         sal_Unicode cQuoteCh = 0;
                         bool bDone = false, bEscape = false;

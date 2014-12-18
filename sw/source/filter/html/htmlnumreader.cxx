@@ -247,7 +247,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         bChangeNumFmt = true;
     }
     else
-        aBulletGrfs[nLevel] = "";
+        aBulletGrfs[nLevel].clear();
 
     // den aktuellen Absatz erst einmal nicht numerieren
     {

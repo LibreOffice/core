@@ -102,7 +102,7 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
         pArray[0] = "com.sun.star.text.AccessibleHeaderView";
     else
         pArray[0] = "com.sun.star.text.AccessibleFooterView";
-    pArray[1] = OUString( sAccessibleServiceName );
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 

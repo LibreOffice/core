@@ -115,10 +115,10 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     if( AccessibleRole::END_NOTE == GetRole() )
-        pArray[0] = OUString( sServiceNameEndnote );
+        pArray[0] = sServiceNameEndnote;
     else
-        pArray[0] = OUString( sServiceNameFootnote );
-    pArray[1] = OUString( sAccessibleServiceName );
+        pArray[0] = sServiceNameFootnote;
+    pArray[1] = sAccessibleServiceName;
     return aRet;
 }
 
