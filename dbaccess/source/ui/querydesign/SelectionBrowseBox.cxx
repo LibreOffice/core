@@ -901,8 +901,8 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_VIS_ROW:
                 {
                     bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue() != TRISTATE_FALSE;
-                    strOldCellContents = bOldValue ? "1" : "0";
-                    sNewValue          = !bOldValue ? "1" : "0";
+                    strOldCellContents = bOldValue ? OUStringLiteral("1") : OUStringLiteral("0");
+                    sNewValue          = !bOldValue ? OUStringLiteral("1") : OUStringLiteral("0");
                 }
                 if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
                    (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
@@ -2231,7 +2231,7 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
     switch (nCellIndex)
     {
         case BROW_VIS_ROW :
-            return pEntry->IsVisible() ? "1" : "0";
+            return pEntry->IsVisible() ? OUStringLiteral("1") : OUStringLiteral("0");
         case BROW_ORDER_ROW:
         {
             sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
