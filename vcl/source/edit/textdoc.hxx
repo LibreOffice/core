@@ -85,15 +85,12 @@ public:
 
     TextNode*           Split( sal_uInt16 nPos, bool bKeepEndigAttribs );
     void                Append( const TextNode& rNode );
-
-    bool operator ==(TextNode const& other) const;
 };
 
 class TextDoc
 {
 private:
-    typedef boost::ptr_vector<TextNode> TextNodes;
-    TextNodes maTextNodes;
+    ToolsList<TextNode*> maTextNodes;
     sal_uInt16              mnLeftMargin;
 
 protected:
@@ -101,22 +98,19 @@ protected:
 
 public:
                         TextDoc();
-                        ~TextDoc() {};
+                        ~TextDoc();
 
     void                Clear();
 
-    const TextNode&     GetNode(sal_uInt16 pos) const { return maTextNodes[pos]; }
-    TextNode*           GetNode(sal_uInt16 pos)       { return &maTextNodes[pos]; }
-    size_t              CountNodes() { return maTextNodes.size(); }
-    void                InsertNode( TextNode* node, size_t nPos ) { maTextNodes.insert( maTextNodes.begin() + nPos, node ); }
-    void                RemoveNode( size_t nPos ) { maTextNodes.erase( maTextNodes.begin()+nPos ); }
+    ToolsList<TextNode*>&       GetNodes()              { return maTextNodes; }
+    const ToolsList<TextNode*>& GetNodes() const        { return maTextNodes; }
 
     TextPaM             RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
     TextPaM             InsertText( const TextPaM& rPaM, const OUString& rStr );
 
     TextPaM             InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs );
-    TextPaM             ConnectParagraphs( TextNode& pLeft, const TextNode& pRight );
+    TextPaM             ConnectParagraphs( TextNode* pLeft, TextNode* pRight );
 
     sal_uLong           GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel = NULL ) const;
     OUString            GetText( const sal_Unicode* pSep ) const;
