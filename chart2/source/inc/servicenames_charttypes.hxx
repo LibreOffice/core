@@ -21,17 +21,17 @@
 
 namespace chart {
 
-#define CHART2_SERVICE_NAME_CHARTTYPE_AREA OUString( "com.sun.star.chart2.AreaChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_BAR OUString( "com.sun.star.chart2.BarChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_COLUMN OUString( "com.sun.star.chart2.ColumnChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_LINE OUString( "com.sun.star.chart2.LineChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_SCATTER OUString( "com.sun.star.chart2.ScatterChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_PIE OUString( "com.sun.star.chart2.PieChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_NET OUString( "com.sun.star.chart2.NetChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET OUString( "com.sun.star.chart2.FilledNetChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK OUString( "com.sun.star.chart2.CandleStickChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE OUString( "com.sun.star.chart2.BubbleChartType" )
-#define CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR OUString( "com.sun.star.chart2.GL3DBarChartType" )
+#define CHART2_SERVICE_NAME_CHARTTYPE_AREA "com.sun.star.chart2.AreaChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_BAR "com.sun.star.chart2.BarChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_COLUMN "com.sun.star.chart2.ColumnChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_LINE "com.sun.star.chart2.LineChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_SCATTER "com.sun.star.chart2.ScatterChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_PIE "com.sun.star.chart2.PieChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_NET "com.sun.star.chart2.NetChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET "com.sun.star.chart2.FilledNetChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK "com.sun.star.chart2.CandleStickChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE "com.sun.star.chart2.BubbleChartType"
+#define CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR "com.sun.star.chart2.GL3DBarChartType"
 
 } //namespace chart
 

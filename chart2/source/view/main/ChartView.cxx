@@ -2877,7 +2877,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException
           , lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    if( rPropertyName.equals("Resolution") )
+    if( rPropertyName == "Resolution" )
     {
         awt::Size aNewResolution;
         if( ! (rValue >>= aNewResolution) )
@@ -2894,7 +2894,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
                 this->modified( lang::EventObject(  static_cast< uno::XWeak* >( this )  ) );
         }
     }
-    else if( rPropertyName.equals("ZoomFactors") )
+    else if( rPropertyName == "ZoomFactors" )
     {
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
         uno::Sequence< beans::PropertyValue > aZoomFactors;
@@ -2917,7 +2917,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
             pDataValues++;
         }
     }
-    else if( rPropertyName.equals("SdrViewIsInEditMode") )
+    else if( rPropertyName == "SdrViewIsInEditMode" )
     {
         //#i77362 change notification for changes on additional shapes are missing
         if( ! (rValue >>= m_bSdrViewIsInEditMode) )
@@ -2931,7 +2931,7 @@ Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
-    if( rPropertyName.equals("Resolution") )
+    if( rPropertyName == "Resolution" )
     {
         aRet = uno::makeAny( m_aPageResolution );
     }

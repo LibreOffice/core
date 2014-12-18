@@ -1078,7 +1078,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
 
                     Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
-                    if( xChartType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+                    if( xChartType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
                     {
                         try
                         {

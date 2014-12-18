@@ -369,12 +369,12 @@ sal_Int32 XMLFilter::impl_Import(
             uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
             for( sal_Int32 nInd = 0; nInd < aModProps.getLength(); nInd++ )
             {
-                if( aModProps[nInd].Name.equals( "HierarchicalDocumentName" ) )
+                if( aModProps[nInd].Name == "HierarchicalDocumentName" )
                 {
                     // Actually this argument only has meaning for embedded documents
                     aModProps[nInd].Value >>= aHierarchName;
                 }
-                else if( aModProps[nInd].Name.equals( "DocumentBaseURL" ) )
+                else if( aModProps[nInd].Name == "DocumentBaseURL" )
                 {
                     aModProps[nInd].Value >>= aBaseUri;
                 }

@@ -180,7 +180,7 @@ uno::Sequence< OUString > ChartFrameLoader::getSupportedServiceNames_Static()
                     xLoadable->load( aCompleteMediaDescriptor );
 
                     //resize standalone files to get correct size:
-                    if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( "StarChart 5.0") )
+                    if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName == "StarChart 5.0" )
                     {
                         awt::Rectangle aRect( xComponentWindow->getPosSize() );
                         sal_Int16 nFlags=0;

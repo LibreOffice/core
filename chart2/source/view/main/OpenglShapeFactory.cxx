@@ -94,7 +94,7 @@ uno::Reference< drawing::XShapes > getChartShape(
 
                 uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                 xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
-                if( aRet.equals("com.sun.star.chart2.shapes") )
+                if( aRet == "com.sun.star.chart2.shapes" )
                 {
                     xRet = dynamic_cast<SvxDummyShapeContainer&>(*xShape.get()).getWrappedShape();
                     break;

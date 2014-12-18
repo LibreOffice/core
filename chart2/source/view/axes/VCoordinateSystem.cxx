@@ -58,9 +58,9 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
 
     //@todo: in future the coordinatesystems should be instantiated via service factory
     VCoordinateSystem* pRet=NULL;
-    if( aViewServiceName.equals( CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ) )
+    if( aViewServiceName == CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME )
         pRet = new VCartesianCoordinateSystem(xCooSysModel);
-    else if( aViewServiceName.equals( CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME ) )
+    else if( aViewServiceName == CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME )
         pRet = new VPolarCoordinateSystem(xCooSysModel);
     if(!pRet)
         pRet = new VCoordinateSystem(xCooSysModel);

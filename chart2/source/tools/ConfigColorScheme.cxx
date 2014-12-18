@@ -166,7 +166,7 @@ void ConfigColorScheme::retrieveConfigColors()
 
 void ConfigColorScheme::notify( const OUString & rPropertyName )
 {
-    if( rPropertyName.equals( aSeriesPropName ))
+    if( rPropertyName == aSeriesPropName )
         m_bNeedsUpdate = true;
 }
 

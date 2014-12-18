@@ -153,7 +153,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_FAIL( OUStringToOString(OUString( "Property Exception caught. Message: " ) +
+                OSL_FAIL( OUStringToOString("Property Exception caught. Message: " +
                                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
         }
@@ -184,7 +184,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_FAIL( OUStringToOString(OUString("Property Exception caught. Message: " ) +
+                OSL_FAIL( OUStringToOString("Property Exception caught. Message: " +
                                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
         }
@@ -201,7 +201,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_FAIL( OUStringToOString(OUString("Property Exception caught. Message: " ) +
+            OSL_FAIL( OUStringToOString("Property Exception caught. Message: " +
                                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
         return Color( nResult );
@@ -219,7 +219,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_FAIL( OUStringToOString(OUString( "Property Exception caught. Message: " ) +
+            OSL_FAIL( OUStringToOString( "Property Exception caught. Message: " +
                                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
     }

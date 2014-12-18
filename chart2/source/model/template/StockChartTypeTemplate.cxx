@@ -442,11 +442,11 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
                     if( nNumberOfChartTypes > 3 )
                         break;
                     OUString aCTService = aChartTypeSeq[j]->getChartType();
-                    if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
+                    if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
                         xVolumeChartType.set( aChartTypeSeq[j] );
-                    else if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
+                    else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
                         xCandleStickChartType.set( aChartTypeSeq[j] );
-                    else if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
+                    else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
                         xLineChartType.set( aChartTypeSeq[j] );
                 }
             }

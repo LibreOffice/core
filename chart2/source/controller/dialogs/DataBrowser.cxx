@@ -362,40 +362,40 @@ Image SeriesHeader::GetChartTypeImage(
         return aResult;
     OUString aChartTypeName( xChartType->getChartType());
 
-    if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_AREA ))
+    if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_AREA )
     {
         aResult = Image( SchResId( IMG_TYPE_AREA ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
     {
         if( bSwapXAndYAxis )
             aResult = Image( SchResId( IMG_TYPE_BAR ) );
         else
             aResult = Image( SchResId( IMG_TYPE_COLUMN ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
     {
         aResult = Image( SchResId( IMG_TYPE_LINE ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_SCATTER )
     {
         aResult = Image( SchResId( IMG_TYPE_XY ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
     {
         aResult = Image( SchResId( IMG_TYPE_PIE ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
-          || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_NET
+          || aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET )
     {
         aResult = Image( SchResId( IMG_TYPE_NET ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
     {
         // @todo: correct image for candle-stick type
         aResult = Image( SchResId( IMG_TYPE_STOCK ) );
     }
-    else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
+    else if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE )
     {
         aResult = Image( SchResId( IMG_TYPE_BUBBLE ) );
     }

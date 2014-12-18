@@ -891,7 +891,7 @@ void DataBrowserModel::updateFromModel()
                                 nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
                                     Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ), xSeries, -1, xDiagram );
                             }
-                            else if( aRole.equals( "values-x" ) )
+                            else if( aRole == "values-x" )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;
 
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),

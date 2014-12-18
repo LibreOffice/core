@@ -181,7 +181,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValue( const OUString& rPropertyName,
     for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
     {
         Reference< chart2::XChartType > xType( aTypes[nN] );
-        if( xType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+        if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
             Reference< beans::XPropertySet > xTypeProps( aTypes[nN], uno::UNO_QUERY );
             if(xTypeProps.is())
@@ -205,7 +205,7 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const OUString& rPropertyN
     for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
     {
         Reference< chart2::XChartType > xType( aTypes[nN] );
-        if( xType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+        if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
             Reference< beans::XPropertySet > xTypeProps( aTypes[nN], uno::UNO_QUERY );
             if(xTypeProps.is())

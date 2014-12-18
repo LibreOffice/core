@@ -1350,7 +1350,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
         xResult.set( xDataSeries );
         bServiceFound = true;
     }
-    else if( aServiceSpecifier.equals( CHART_VIEW_SERVICE_NAME ) )
+    else if( aServiceSpecifier == CHART_VIEW_SERVICE_NAME )
     {
         if( !m_xChartView.is() )
         {

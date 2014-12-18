@@ -696,7 +696,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     uno::Sequence< sal_Int32 > aSequenceMapping;
     DataSourceHelper::readArguments( aArguments, aRangeRepresentation, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
 
-    if( aRangeRepresentation.equals( lcl_aCategoriesRangeName ) )
+    if( aRangeRepresentation == lcl_aCategoriesRangeName )
     {
         //return split complex categories if we have any:
         ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aComplexCategories;
@@ -723,7 +723,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
         return new DataSource( ContainerHelper::ContainerToSequence(aComplexCategories) );
     }
 
-    OSL_ASSERT( aRangeRepresentation.equals( lcl_aCompleteRange ));
+    OSL_ASSERT( aRangeRepresentation == lcl_aCompleteRange );
 
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultLSeqVec;
 
@@ -814,7 +814,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
 {
     if( aRangeRepresentation.match( lcl_aCategoriesRangeName ))
     {
-        OSL_ASSERT( aRangeRepresentation.equals( lcl_aCategoriesRangeName ) );//it is not expected nor implmented that only parts of the categories are really requested
+        OSL_ASSERT( aRangeRepresentation == lcl_aCategoriesRangeName );//it is not expected nor implmented that only parts of the categories are really requested
 
         // categories
         return createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName );
@@ -864,7 +864,7 @@ sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUSt
 
     if( aRange.match( lcl_aCategoriesRangeName ))
     {
-        OSL_ASSERT( aRange.equals( lcl_aCategoriesRangeName ) );//it is not expected nor implmented that only parts of the categories are really requested
+        OSL_ASSERT( aRange == lcl_aCategoriesRangeName );//it is not expected nor implmented that only parts of the categories are really requested
         bResult = true;
     }
     else if( aRange.match( lcl_aLabelRangePrefix ))
@@ -915,7 +915,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
                        aResult.getArray(), lcl_copyFromLevel(nLevel) );
         }
     }
-    else if( aRange.equals( lcl_aCategoriesRangeName ) )
+    else if( aRange == lcl_aCategoriesRangeName )
     {
         vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
@@ -994,7 +994,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
         else
             m_aInternalData.setComplexColumnLabels( aComplexCategories );
     }
-    else if( aRange.equals( lcl_aCategoriesRangeName ) )
+    else if( aRange == lcl_aCategoriesRangeName )
     {
         vector< vector< uno::Any > > aComplexCategories;
         aComplexCategories.resize( aNewVector.size() );
@@ -1186,7 +1186,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
     // @todo: add this information in the range representation strings
     if( aRangeRepresentation.match( lcl_aCategoriesRangeName ))
     {
-        OSL_ASSERT( aRangeRepresentation.equals( lcl_aCategoriesRangeName ) );//it is not expected nor implmented that only parts of the categories are really requested
+        OSL_ASSERT( aRangeRepresentation == lcl_aCategoriesRangeName );//it is not expected nor implmented that only parts of the categories are really requested
         aRange.aUpperLeft.bIsEmpty = false;
         if( m_bDataInColumns )
         {
@@ -1219,7 +1219,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
             aRange.aUpperLeft.nRow = nIndex + 1;
         }
     }
-    else if( aRangeRepresentation.equals( lcl_aCompleteRange ))
+    else if( aRangeRepresentation == lcl_aCompleteRange )
     {
         aRange.aUpperLeft.bIsEmpty = false;
         aRange.aLowerRight.bIsEmpty = false;

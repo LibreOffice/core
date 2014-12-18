@@ -527,7 +527,7 @@ void Chart2ImportTest::testBnc864396()
     uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
     for(sal_Int32 i = 0; i < aRowLabels.getLength(); ++i)
     {
-        OUString aExpected = OUString("cat") + OUString::number(i+1);
+        OUString aExpected = "cat" + OUString::number(i+1);
         CPPUNIT_ASSERT_EQUAL(aExpected, aRowLabels[i]);
     }
 }

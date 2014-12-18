@@ -509,9 +509,9 @@ void SAL_CALL ChartModel::load(
                  aMDHelper.ISSET_InputStream )
         {
             if( aMDHelper.ISSET_FilterName &&
-                (aMDHelper.FilterName.equals( "StarChart 5.0") ||
-                 aMDHelper.FilterName.equals( "StarChart 4.0") ||
-                 aMDHelper.FilterName.equals( "StarChart 3.0") ))
+                (aMDHelper.FilterName == "StarChart 5.0" ||
+                 aMDHelper.FilterName == "StarChart 4.0" ||
+                 aMDHelper.FilterName == "StarChart 3.0" ))
             {
                 attachResource( aMDHelper.URL, rMediaDescriptor );
                 impl_load( rMediaDescriptor, 0 ); // cannot create a storage from binary streams, but I do not need the storage here anyhow

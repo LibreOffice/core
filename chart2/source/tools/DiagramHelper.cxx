@@ -1488,7 +1488,7 @@ bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
-        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
             return true;
     }
     return false;

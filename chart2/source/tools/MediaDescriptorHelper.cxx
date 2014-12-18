@@ -28,7 +28,7 @@ const short FLAG_DEPRECATED =1;
 const short FLAG_MODEL      =2;
 
 #define WRITE_PROPERTY( MediaName, nFlags )             \
-if(rProp.Name.equals(#MediaName)) \
+if(rProp.Name == #MediaName) \
 {                                                       \
     if( rProp.Value >>= MediaName )                     \
         ISSET_##MediaName = true;                       \

@@ -180,7 +180,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
     for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
     {
         Reference< chart2::XChartType > xType( aTypes[nN] );
-        if( xType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+        if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesContainer(xType,uno::UNO_QUERY);
             if( xSeriesContainer.is() )
@@ -219,7 +219,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
     for( sal_Int32 nN = 0; nN < aTypes.getLength(); nN++ )
     {
         Reference< chart2::XChartType > xType( aTypes[nN] );
-        if( xType->getChartType().equals(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+        if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesContainer(xType,uno::UNO_QUERY);
             if( xSeriesContainer.is() )

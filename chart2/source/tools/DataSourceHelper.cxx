@@ -256,7 +256,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
     {
         OUString aRole = DataSeriesHelper::getRole(aDataSeqences[nN]);
-        if( !aRole.equals("values-x") )
+        if( aRole != "values-x" )
             aResultVector.push_back( aDataSeqences[nN] );
     }
 

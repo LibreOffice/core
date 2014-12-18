@@ -308,12 +308,12 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
                     if( nNumberOfChartTypes > 2 )
                         break;
                     OUString aCTService = aChartTypeSeq[j]->getChartType();
-                    if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
+                    if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
                     {
                         xColumnChartType.set( aChartTypeSeq[j] );
                         xColumnChartCooSys.set( aCooSysSeq[i] );
                     }
-                    else if( aCTService.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
+                    else if( aCTService == CHART2_SERVICE_NAME_CHARTTYPE_LINE )
                         xLineChartType.set( aChartTypeSeq[j] );
                 }
             }

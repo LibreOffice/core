@@ -56,14 +56,14 @@ bool RegressionCurveCalculator::isLinearScaling(
     if( !xScaling.is())
         return true;
     uno::Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
-    return (xServiceName.is() && xServiceName->getServiceName().equals( "com.sun.star.chart2.LinearScaling" ));
+    return xServiceName.is() && xServiceName->getServiceName() == "com.sun.star.chart2.LinearScaling";
 }
 
 bool RegressionCurveCalculator::isLogarithmicScaling(
     const Reference< chart2::XScaling > & xScaling )
 {
     uno::Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
-    return (xServiceName.is() && xServiceName->getServiceName().equals( "com.sun.star.chart2.LogarithmicScaling" ));
+    return xServiceName.is() && xServiceName->getServiceName() == "com.sun.star.chart2.LogarithmicScaling";
 }
 
 void RegressionCurveCalculator::setRegressionProperties(

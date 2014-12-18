@@ -147,7 +147,7 @@ void RangeChooserTabPage::initControlsFromModel()
     if( bIsValid )
         m_rDialogModel.detectArguments(m_aLastValidRangeString, bUseColumns, bFirstCellAsLabel, bHasCategories );
     else
-        m_aLastValidRangeString = "";
+        m_aLastValidRangeString.clear();
 
     m_pED_Range->SetText( m_aLastValidRangeString );
 

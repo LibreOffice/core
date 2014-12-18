@@ -66,9 +66,9 @@ bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XCha
         if(nDimensionCount==3)
         {
             OUString aChartTypeName = xChartType->getChartType();
-            if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+            if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_BAR )
                 return true;
-            if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
+            if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_COLUMN )
                 return true;
         }
     }
@@ -452,15 +452,15 @@ sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
-        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
         {
             if( bSimple )
                 nRet = static_cast< sal_Int32 >( 0x333333 ); // grey80
             else
                 nRet = static_cast< sal_Int32 >( 0xb3b3b3 ); // grey30
         }
-        else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
-            || aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+        else if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_LINE
+            || aChartType == CHART2_SERVICE_NAME_CHARTTYPE_SCATTER )
             nRet = static_cast< sal_Int32 >( 0x666666 ); // grey60
     }
     return nRet;
@@ -472,7 +472,7 @@ sal_Int32 ChartTypeHelper::getDefaultAmbientLightColor( bool bSimple, const uno:
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
-        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
         {
             if( bSimple )
                 nRet = static_cast< sal_Int32 >( 0xcccccc ); // grey20
@@ -489,10 +489,10 @@ drawing::Direction3D ChartTypeHelper::getDefaultSimpleLightDirection( const uno:
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
-        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
             aRet = drawing::Direction3D(0.0, 0.8, 0.5);
-        else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
-            || aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+        else if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_LINE
+            || aChartType == CHART2_SERVICE_NAME_CHARTTYPE_SCATTER )
             aRet = drawing::Direction3D(0.9, 0.5, 0.05);
     }
     return aRet;
@@ -504,10 +504,10 @@ drawing::Direction3D ChartTypeHelper::getDefaultRealisticLightDirection( const u
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
-        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+        if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
             aRet = drawing::Direction3D(0.6, 0.6, 0.6);
-        else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
-            || aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+        else if( aChartType == CHART2_SERVICE_NAME_CHARTTYPE_LINE
+            || aChartType == CHART2_SERVICE_NAME_CHARTTYPE_SCATTER )
             aRet = drawing::Direction3D(0.9, 0.5, 0.05);
     }
     return aRet;
@@ -546,7 +546,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
         try
         {
             OUString aChartTypeName = xChartType->getChartType();
-            if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+            if( aChartTypeName == CHART2_SERVICE_NAME_CHARTTYPE_PIE )
             {
                 uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
                 bool bDonut = false;

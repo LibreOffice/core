@@ -266,8 +266,8 @@ bool RegressionCurveHelper::isMeanValueLine(
 {
     uno::Reference< XServiceName > xServName( xRegCurve, uno::UNO_QUERY );
     if( xServName.is() &&
-        xServName->getServiceName().equals(
-            "com.sun.star.chart2.MeanValueRegressionCurve"))
+        xServName->getServiceName() ==
+            "com.sun.star.chart2.MeanValueRegressionCurve" )
         return true;
     return false;
 }

@@ -90,8 +90,8 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
 bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
 {
     Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
-    return xServiceName.is() && (xServiceName->getServiceName()).equals(
-              "com.sun.star.chart2.LogarithmicScaling");
+    return xServiceName.is()
+        && xServiceName->getServiceName() == "com.sun.star.chart2.LogarithmicScaling";
 }
 
 chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
@@ -1085,7 +1085,7 @@ void AxisHelper::setRTLAxisLayout( const Reference< XCoordinateSystem >& xCooSys
 {
     if( xCooSys.is() )
     {
-        bool bCartesian = xCooSys->getViewServiceName().equals( CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME );
+        bool bCartesian = xCooSys->getViewServiceName() == CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
         if( bCartesian )
         {
             bool bVertical = false;
