@@ -323,8 +323,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
             {
                 nFilterNamePos = nAttribs;
                 rFilterData.realloc( ++nAttribs );
-                rFilterData[ nFilterNamePos ].Name =
-                    OUString( "FilterName" );
+                rFilterData[ nFilterNamePos ].Name = "FilterName";
             }
             aOutTypeName = "pdf_Portable_Document_Format";
 

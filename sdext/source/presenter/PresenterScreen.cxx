@@ -677,7 +677,7 @@ void PresenterScreen::ProcessLayout (
     {
         Reference<container::XHierarchicalNameAccess> xLayoutNode (
             rConfiguration.GetConfigurationNode(
-                OUString("Presenter/Layouts/")+rsLayoutName),
+                "Presenter/Layouts/"+rsLayoutName),
             UNO_QUERY_THROW);
 
         // Read the parent layout first, if one is referenced.

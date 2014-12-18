@@ -121,7 +121,7 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
 
     Action aAction (maAction);
     Predicate aPredicate (maPredicate);
-    if (rEvent.Type.equals("ConfigurationUpdateEnd"))
+    if (rEvent.Type == "ConfigurationUpdateEnd")
     {
         Shutdown();
         aAction(aPredicate);

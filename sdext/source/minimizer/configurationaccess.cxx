@@ -305,11 +305,10 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
             PropertyState_DIRECT_VALUE ) );
         OUString sAccessService;
         if ( bReadOnly )
-            sAccessService = OUString(
-                "com.sun.star.configuration.ConfigurationAccess" );
+            sAccessService = "com.sun.star.configuration.ConfigurationAccess";
         else
-            sAccessService = OUString(
-                "com.sun.star.configuration.ConfigurationUpdateAccess" );
+            sAccessService =
+                "com.sun.star.configuration.ConfigurationUpdateAccess";
 
         xRoot = xProvider->createInstanceWithArguments(
             sAccessService, aCreationArguments );
