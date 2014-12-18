@@ -1119,7 +1119,7 @@ String MN_GRF_POPUPMENU
     Text [ en-US ] = "Graphic" ;
 };
 
-#define MN_ALIGN_FRAME \
+#define MN_ARRANGE_FRAME \
     MenuItem\
     {\
         Identifier = MN_SUB_ALIGN ; \
@@ -1141,11 +1141,14 @@ String MN_GRF_POPUPMENU
                 };\
             };\
         };\
-        };\
+    };\
+
+#define MN_ALIGNMENT_FRAME \
     MenuItem\
     {\
         Identifier = MN_FORMAT_FRM_HORZ ; \
         Command = ".uno:AlignFrameMenu" ; \
+        Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -1189,62 +1192,61 @@ String MN_GRF_POPUPMENU
                     };\
             };\
         };\
-        Text [ en-US ] = "A~lignment" ; \
+    };\
+
+#define MN_ROTATE_IMAGE \
+    MenuItem\
+    {\
+        Identifier = SID_MENU_MANAGE_GRAPHIC ; \
+        Command = ".uno:ManageGraphicMenu" ; \
+        Text [ en-US ] = "~Rotate Image" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ROTATE_GRAPHIC_LEFT ; \
+                    Command = ".uno:RotateLeft" ; \
+                    Text [ en-US ] = "Rotate 90° Left" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ROTATE_GRAPHIC_RIGHT ; \
+                    Command = ".uno:RotateRight" ; \
+                    Text [ en-US ] = "Rotate 90° Right" ; \
+                };\
+            };\
         };\
+    };\
+
+#define MN_ALIGN_FRAME \
+    MN_ARRANGE_FRAME \
+    MN_ALIGNMENT_FRAME \
     MN_ANCHOR
 
 Menu MN_GRF_POPUPMENU
 {
     ItemList =
     {
-        MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITH_CONTOUR
+        MenuItem { ITEM_EXTERNAL_EDIT };
+        MenuItem { ITEM_CHANGE_PICTURE };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
+        MenuItem { ITEM_SAVE_GRAPHIC };
+        MN_ROTATE_IMAGE
         SEPARATOR ;
-        MN_TITLE_DESCRIPTION_SHAPE
-        SEPARATOR ;
+
+        MN_FRM_CAPTION_ITEM
         MenuItem
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
             HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
             Text [ en-US ] = "~Image..." ;
         };
-        MN_FRM_CAPTION_ITEM
-        SEPARATOR;
-        MenuItem { ITEM_SAVE_GRAPHIC };
-        MenuItem { ITEM_CHANGE_PICTURE };
-        MenuItem { ITEM_COMPRESS_GRAPHIC };
-        MenuItem { ITEM_EXTERNAL_EDIT };
+        SEPARATOR ;
 
-        MenuItem
-        {
-            Identifier = SID_MENU_MANAGE_GRAPHIC ;
-            Command = ".uno:ManageGraphicMenu" ;
-            Text [ en-US ] = "~Rotate Image" ;
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier = SID_ROTATE_GRAPHIC_LEFT ;
-                        Command = ".uno:RotateLeft" ;
-                        Text [ en-US ] = "Rotate 90° Left" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SID_ROTATE_GRAPHIC_RIGHT ;
-                        Command = ".uno:RotateRight" ;
-                        Text [ en-US ] = "Rotate 90° Right" ;
-                    };
-                };
-            };
-        };
-
-        SEPARATOR;
-        MenuItem
-        {
-            ITEM_EDIT_IMAP
-        };
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_WITH_CONTOUR
     };
 };
 
