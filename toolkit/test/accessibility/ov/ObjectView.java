@@ -37,18 +37,6 @@ import com.sun.star.accessibility.XAccessibleContext;
 abstract public class ObjectView
     extends JPanel
 {
-    /** This factory method creates a new instance of the (derived) class
-        when the given accessible object supports all necessary features.
-        In the ususal case this will be the support of a specific
-        accessibility interface.
-    */
-    static public ObjectView Create (
-        ObjectViewContainer aContainer,
-        XAccessibleContext xContext)
-    {
-        return null;
-    }
-
     public ObjectView (ObjectViewContainer aContainer)
     {
         maContainer = aContainer;

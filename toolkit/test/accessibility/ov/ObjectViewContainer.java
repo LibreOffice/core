@@ -22,8 +22,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -37,19 +35,37 @@ import com.sun.star.accessibility.XAccessibleContext;
 public class ObjectViewContainer
     extends JPanel
 {
+    private static interface IViewFactory {
+        ObjectView Create (
+                ObjectViewContainer aContainer,
+                XAccessibleContext xContext);
+    }
+
     public ObjectViewContainer ()
     {
-        maViewTemplates = new ArrayList<Class> ();
+        maViewTemplates = new ArrayList<IViewFactory>();
         maViewBorder = BorderFactory.createBevelBorder (BevelBorder.RAISED);
         setLayout (new GridBagLayout ());
 
-        System.out.println ("ObjectViewContainer");
-        RegisterView (ContextView.class);
-        RegisterView (FocusView.class);
-        RegisterView (TextView.class);
+        maViewTemplates.add(new IViewFactory() {
+            public ObjectView Create(ObjectViewContainer aContainer,
+                    XAccessibleContext xContext) {
+                return ContextView.Create(aContainer, xContext);
+            }
+        });
+        maViewTemplates.add(new IViewFactory() {
+            public ObjectView Create(ObjectViewContainer aContainer,
+                    XAccessibleContext xContext) {
+                return FocusView.Create(aContainer, xContext);
+            }
+        });
+        maViewTemplates.add(new IViewFactory() {
+            public ObjectView Create(ObjectViewContainer aContainer,
+                    XAccessibleContext xContext) {
+                return TextView.Create(aContainer, xContext);
+            }
+        });
     }
-
-
 
     /** Remove all existing views and create new ones according to the
         interfaces supported by the given object.
@@ -67,26 +83,9 @@ public class ObjectViewContainer
         // Add new views.
         for (int i=0; i<maViewTemplates.size(); i++)
         {
-            try
-            {
-                Class<?> aViewClass = maViewTemplates.get(i);
-                Method aCreateMethod = aViewClass.getDeclaredMethod (
-                    "Create", new Class[] {
-                        ObjectViewContainer.class,
-                        XAccessibleContext.class});
-                if (aCreateMethod != null)
-                {
-                    ObjectView aView = (ObjectView)
-                        aCreateMethod.invoke (null, new Object[] {this, xContext});
-                    Add (aView);
-                }
-            }
-            catch (NoSuchMethodException e)
-            {System.err.println ("Caught exception while creating view " + i + " : " + e);}
-            catch (IllegalAccessException e)
-            {System.err.println ("Caught exception while creating view " + i + " : " + e);}
-            catch (InvocationTargetException e)
-            {System.err.println ("Caught exception while creating view " + i + " : " + e);}
+            IViewFactory aViewFactory = maViewTemplates.get(i);
+            ObjectView aView = aViewFactory.Create(this, xContext);
+            Add (aView);
         }
 
         UpdateLayoutManager ();
@@ -99,24 +98,6 @@ public class ObjectViewContainer
         setPreferredSize (getLayout().preferredLayoutSize (this));
     }
 
-
-    /** Add the given class to the list of classes which will be
-        instantiated the next time an accessible object is set.
-    */
-    private void RegisterView (Class aObjectViewClass)
-    {
-        System.out.println ("registering " + aObjectViewClass);
-        maViewTemplates.add(aObjectViewClass);
-    }
-
-    /** Replace one view class with another.
-    */
-    public void ReplaceView (Class aObjectViewClass, Class aSubstitution)
-    {
-        int nIndex = maViewTemplates.indexOf (aObjectViewClass);
-        if (nIndex >= 0)
-            maViewTemplates.set (nIndex, aSubstitution);
-    }
 
     /** Add an object view and place it below all previously added views.
         @param aView
@@ -167,5 +148,5 @@ public class ObjectViewContainer
 
     private final Border maViewBorder;
     /// List of view templates which are instantiated when new object is set.
-    private final ArrayList<Class> maViewTemplates;
+    private final ArrayList<IViewFactory> maViewTemplates;
 }
