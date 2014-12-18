@@ -112,7 +112,7 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
 XSERVICEINFO_IMPL_1_CTX(
     ContentProvider,
     OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ),
-    OUString( TDOC_CONTENT_PROVIDER_SERVICE_NAME ) );
+    TDOC_CONTENT_PROVIDER_SERVICE_NAME );
 
 
 

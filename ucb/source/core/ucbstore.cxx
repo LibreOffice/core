@@ -183,7 +183,7 @@ UcbStore::~UcbStore()
 
 XSERVICEINFO_IMPL_1_CTX( UcbStore,
                      OUString( "com.sun.star.comp.ucb.UcbStore" ),
-                     OUString( STORE_SERVICE_NAME ) );
+                     STORE_SERVICE_NAME );
 
 
 
@@ -295,7 +295,7 @@ PropertySetRegistry::~PropertySetRegistry()
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
                                 OUString( "com.sun.star.comp.ucb.PropertySetRegistry" ),
-                                OUString( PROPSET_REG_SERVICE_NAME ) );
+                                PROPSET_REG_SERVICE_NAME );
 
 
 
@@ -994,8 +994,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
             {
                 Sequence< Any > aArguments( 1 );
                 PropertyValue aProperty;
-                aProperty.Name
-                    = OUString( CFGPROPERTY_NODEPATH  );
+                aProperty.Name = CFGPROPERTY_NODEPATH;
                 aProperty.Value
                     <<= OUString( STORE_CONTENTPROPERTIES_KEY  );
                 aArguments[ 0 ] <<= aProperty;
@@ -1054,11 +1053,11 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 Sequence< Any > aArguments( 2 );
                 PropertyValue   aProperty;
 
-                aProperty.Name = OUString( CFGPROPERTY_NODEPATH  );
+                aProperty.Name = CFGPROPERTY_NODEPATH;
                 aProperty.Value <<= OUString( STORE_CONTENTPROPERTIES_KEY  );
                 aArguments[ 0 ] <<= aProperty;
 
-                aProperty.Name = OUString( CFGPROPERTY_LAZYWRITE  );
+                aProperty.Name = CFGPROPERTY_LAZYWRITE;
                 aProperty.Value <<= sal_True;
                 aArguments[ 1 ] <<= aProperty;
 
@@ -1191,7 +1190,7 @@ PersistentPropertySet::~PersistentPropertySet()
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PersistentPropertySet,
                                 OUString( "com.sun.star.comp.ucb.PersistentPropertySet" ),
-                                OUString( PERS_PROPSET_SERVICE_NAME ) );
+                                PERS_PROPSET_SERVICE_NAME );
 
 
 

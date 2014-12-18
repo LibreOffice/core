@@ -994,8 +994,7 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
                                OUString(
                             "com.sun.star.comp.ucb.CachedContentResultSet" ),
-                            OUString(
-                            CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
+                            CACHED_CONTENT_RESULTSET_SERVICE_NAME );
 
 
 // XPropertySet methods. ( inherited )
@@ -2256,7 +2255,7 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 
 XSERVICEINFO_IMPL_1_CTX( CachedContentResultSetFactory,
                      OUString( "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
-                     OUString( CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
+                     CACHED_CONTENT_RESULTSET_FACTORY_NAME );
 
 
 // Service factory implementation.

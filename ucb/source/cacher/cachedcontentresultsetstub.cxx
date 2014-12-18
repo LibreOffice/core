@@ -172,7 +172,7 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSetStub,
                         OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" ),
-                        OUString( CACHED_CRS_STUB_SERVICE_NAME ) );
+                        CACHED_CRS_STUB_SERVICE_NAME );
 
 
 // XFetchProvider methods.
@@ -544,7 +544,7 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
                      OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
-                     OUString( CACHED_CRS_STUB_FACTORY_NAME ) );
+                     CACHED_CRS_STUB_FACTORY_NAME );
 
 
 // Service factory implementation.

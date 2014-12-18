@@ -313,7 +313,7 @@ UcbPropertiesManager::~UcbPropertiesManager()
 
 XSERVICEINFO_IMPL_1( UcbPropertiesManager,
                      OUString( "com.sun.star.comp.ucb.UcbPropertiesManager" ),
-                     OUString( PROPERTIES_MANAGER_SERVICE_NAME ) );
+                     PROPERTIES_MANAGER_SERVICE_NAME );
 
 
 

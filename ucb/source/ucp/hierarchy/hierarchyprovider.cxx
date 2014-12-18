@@ -106,7 +106,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
                      OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
-                     OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME );
 
 
 

@@ -1345,7 +1345,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Roll-back.
             m_aProps.setTitle( aOldTitle );
-            aOldTitle = "";
+            aOldTitle.clear();
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(

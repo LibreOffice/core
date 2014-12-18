@@ -168,7 +168,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.ucb.PackageContentProvider" ),
-                     OUString( PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     PACKAGE_CONTENT_PROVIDER_SERVICE_NAME );
 
 
 

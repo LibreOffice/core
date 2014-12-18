@@ -348,7 +348,7 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 
 XSERVICEINFO_IMPL_1_CTX( UniversalContentBroker,
                      OUString( "com.sun.star.comp.ucb.UniversalContentBroker" ),
-                     OUString( UCB_SERVICE_NAME ) );
+                     UCB_SERVICE_NAME );
 
 
 

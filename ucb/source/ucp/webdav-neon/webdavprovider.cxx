@@ -109,7 +109,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.WebDAVContentProvider" ),
-                     OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     WEBDAV_CONTENT_PROVIDER_SERVICE_NAME );
 
 
 

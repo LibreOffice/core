@@ -50,7 +50,9 @@ void HierarchyUri::init() const
     if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aService = m_aParentUri = m_aName = "";
+        m_aService.clear();
+        m_aParentUri.clear();
+        m_aName.clear();
 
         // URI must match at least: <sheme>:
         if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )

@@ -123,7 +123,7 @@ XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
                         OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStub" ),
-                        OUString( CACHED_DRS_STUB_SERVICE_NAME ) );
+                        CACHED_DRS_STUB_SERVICE_NAME );
 
 
 
@@ -180,7 +180,7 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetStubFactory,
 
 XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetStubFactory,
                      OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" ),
-                     OUString( CACHED_DRS_STUB_FACTORY_NAME ) );
+                     CACHED_DRS_STUB_FACTORY_NAME );
 
 
 // Service factory implementation.

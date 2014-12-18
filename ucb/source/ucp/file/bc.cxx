@@ -1121,7 +1121,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         // as child
         dstUncPath = m_aUncPath;
 
-    dstUncPath += ( OUString("/") + NewTitle );
+    dstUncPath += "/" + NewTitle;
 
     sal_Int32 NameClash = aTransferInfo.NameClash;
 

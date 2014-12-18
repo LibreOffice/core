@@ -148,7 +148,7 @@ FTPContentProvider_CreateInstance( const css::uno::Reference<
 css::uno::Sequence< OUString > FTPContentProvider::getSupportedServiceNames_Static()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME);
+    aSNS.getArray()[ 0 ] = FTP_CONTENT_PROVIDER_SERVICE_NAME;
     return aSNS;
 }
 

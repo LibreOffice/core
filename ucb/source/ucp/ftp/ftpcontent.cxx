@@ -202,7 +202,7 @@ css::uno::Sequence< OUString > SAL_CALL FTPContent::getSupportedServiceNames()
 css::uno::Sequence< OUString > FTPContent::getSupportedServiceNames_Static()
 {
     css::uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = OUString( "com.sun.star.ucb.FTPContent");
+    aSNS.getArray()[ 0 ] = "com.sun.star.ucb.FTPContent";
     return aSNS;
 }
 
@@ -636,9 +636,9 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
     }
 }
 
-#define FTP_FILE OUString( "application/vnd.sun.staroffice.ftp-file")
+#define FTP_FILE "application/vnd.sun.staroffice.ftp-file"
 
-#define FTP_FOLDER OUString( "application/vnd.sun.staroffice.ftp-folder")
+#define FTP_FOLDER "application/vnd.sun.staroffice.ftp-folder"
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
@@ -846,8 +846,8 @@ Reference< XRow > FTPContent::getPropertyValues(
             if(Name == "ContentType")
                 xRow->appendString(seqProp[i],
                                    aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR
-                                   ? FTP_FOLDER
-                                   : FTP_FILE );
+                                   ? OUString(FTP_FOLDER)
+                                   : OUString(FTP_FILE) );
             else if(Name == "IsReadOnly")
                 xRow->appendBoolean(seqProp[i],
                                     aDirEntry.m_nMode
@@ -906,8 +906,7 @@ Sequence<Any> FTPContent::setPropertyValues(
                 try {
                     OUString OldTitle = m_aFTPURL.ren(Title);
                     evt.realloc(1);
-                    evt[0].PropertyName =
-                        OUString("Title");
+                    evt[0].PropertyName = "Title";
                     evt[0].Further = false;
                     evt[0].PropertyHandle = -1;
                     evt[0].OldValue <<= OldTitle;

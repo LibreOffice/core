@@ -229,7 +229,7 @@ Content* Content::create(
 OUString Content::getContentType(
     const OUString& aScheme, bool bFolder )
 {
-    return ( OUString("application/")
+    return ( "application/"
              + aScheme
              + ( bFolder
                  ? OUString("-folder")
@@ -1390,7 +1390,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         else
         {
             // Do not set new title!
-            aNewTitle = "";
+            aNewTitle.clear();
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
@@ -2040,7 +2040,7 @@ void Content::transfer(
 
                     ucb::TransferInfo aInfo;
                     aInfo.MoveData  = sal_False;
-                    aInfo.NewTitle  = "";
+                    aInfo.NewTitle.clear();
                     aInfo.SourceURL = aChildId;
                     aInfo.NameClash = rInfo.NameClash;
 

@@ -1323,7 +1323,8 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             m_aProps.setTitle( aOldTitle );
             m_aProps.setName ( aOldName );
 
-            aOldTitle = aOldName = "";
+            aOldTitle.clear();
+            aOldName.clear();
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
@@ -1804,7 +1805,7 @@ void HierarchyContent::transfer(
 
             ucb::TransferInfo aInfo;
             aInfo.MoveData  = sal_False;
-            aInfo.NewTitle  = "";
+            aInfo.NewTitle.clear();
             aInfo.SourceURL = aChildId;
             aInfo.NameClash = rInfo.NameClash;
 

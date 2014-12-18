@@ -96,8 +96,7 @@ DocumentContentFactory::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-        = OUString(
-            "com.sun.star.frame.TransientDocumentsDocumentContentFactory" );
+        = "com.sun.star.frame.TransientDocumentsDocumentContentFactory";
     return aSNS;
 }
 

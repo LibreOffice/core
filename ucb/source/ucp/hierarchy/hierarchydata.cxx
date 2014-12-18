@@ -292,7 +292,7 @@ bool HierarchyEntry::setData(
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue      aProperty;
 
-            aProperty.Name    = OUString( CFGPROPERTY_NODEPATH  );
+            aProperty.Name    = CFGPROPERTY_NODEPATH;
             aProperty.Value <<= aParentPath;
             aArguments[ 0 ] <<= aProperty;
 
@@ -556,7 +556,7 @@ bool HierarchyEntry::move(
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
 
-        aProperty.Name  = OUString( CFGPROPERTY_NODEPATH  );
+        aProperty.Name  = CFGPROPERTY_NODEPATH;
         aProperty.Value <<= aOldParentPath;
         aArguments[ 0 ] <<= aProperty;
 
@@ -580,7 +580,7 @@ bool HierarchyEntry::move(
         {
             bDifferentParents = true;
 
-            aProperty.Name    = OUString( CFGPROPERTY_NODEPATH  );
+            aProperty.Name    = CFGPROPERTY_NODEPATH;
             aProperty.Value <<= aNewParentPath;
             aArguments[ 0 ] <<= aProperty;
 
@@ -817,7 +817,7 @@ bool HierarchyEntry::remove()
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue      aProperty;
 
-            aProperty.Name    = OUString( CFGPROPERTY_NODEPATH  );
+            aProperty.Name    = CFGPROPERTY_NODEPATH;
             aProperty.Value <<= aParentPath;
             aArguments[ 0 ] <<= aProperty;
 
@@ -1056,8 +1056,7 @@ HierarchyEntry::getRootReadAccess()
 
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
-                    aProperty.Name = OUString(
-                         CFGPROPERTY_NODEPATH  );
+                    aProperty.Name = CFGPROPERTY_NODEPATH;
                     aProperty.Value <<= OUString(); // root path
                     aArguments[ 0 ] <<= aProperty;
 

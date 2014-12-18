@@ -118,7 +118,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString("com.sun.star.comp.CmisContentProvider"),
-                     OUString("com.sun.star.ucb.CmisContentProvider") );
+                     "com.sun.star.ucb.CmisContentProvider" );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
