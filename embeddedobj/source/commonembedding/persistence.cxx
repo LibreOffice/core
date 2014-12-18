@@ -652,8 +652,7 @@ OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
             uno::Reference< frame::XModel > xParentModel( m_xClientSite->getComponent(), uno::UNO_QUERY_THROW );
             uno::Sequence< beans::PropertyValue > aModelProps = xParentModel->getArgs();
             for ( nInd = 0; nInd < aModelProps.getLength(); nInd++ )
-                if ( aModelProps[nInd].Name.equals(
-                                                OUString( "DocumentBaseURL" ) ) )
+                if ( aModelProps[nInd].Name == "DocumentBaseURL" )
                 {
                     aModelProps[nInd].Value >>= aBaseURL;
                     break;
@@ -668,8 +667,7 @@ OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
     if ( aBaseURL.isEmpty() )
     {
         for ( nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
-            if ( m_aDocMediaDescriptor[nInd].Name.equals(
-                                                OUString( "DocumentBaseURL" ) ) )
+            if ( m_aDocMediaDescriptor[nInd].Name == "DocumentBaseURL" )
             {
                 m_aDocMediaDescriptor[nInd].Value >>= aBaseURL;
                 break;

@@ -201,8 +201,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
 
     if ( !aNameWithExtention.isEmpty() )
     {
-        OUString aURLToAnalyze =
-                ( OUString( "file:///" ) + aNameWithExtention );
+        OUString aURLToAnalyze = "file:///" + aNameWithExtention;
         aTypeName = xTypeDetection->queryTypeByURL( aURLToAnalyze );
     }
 

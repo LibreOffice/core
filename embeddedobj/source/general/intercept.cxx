@@ -174,7 +174,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "Update";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString( "($1) ") + m_pDocHolder->GetTitle() );
+        aStateEvent.State <<= ( "($1) " + m_pDocHolder->GetTitle() );
         Control->statusChanged(aStateEvent);
 
         {
@@ -198,7 +198,7 @@ Interceptor::addStatusListener(
         aStateEvent.FeatureDescriptor = "Close and Return";
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (OUString( "($2) ") + m_pDocHolder->GetTitle() );
+        aStateEvent.State <<= ( "($2) " + m_pDocHolder->GetTitle() );
         Control->statusChanged(aStateEvent);
 
 

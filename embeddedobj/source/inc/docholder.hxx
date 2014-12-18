@@ -131,7 +131,7 @@ public:
 
     OUString GetTitle() const
     {
-        return m_aContainerName + OUString( " - " ) + m_aDocumentNamePart;
+        return m_aContainerName + " - " + m_aDocumentNamePart;
     }
 
     OUString GetContainerName() const { return m_aContainerName; }
