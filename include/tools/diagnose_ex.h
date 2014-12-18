@@ -61,15 +61,15 @@
 #define ENSURE_ARG_OR_THROW(c, m) if( !(c) ) { \
                                      OSL_ENSURE(c, m); \
                                      throw ::com::sun::star::lang::IllegalArgumentException( \
-                                     OUString(BOOST_CURRENT_FUNCTION) + \
-                                     OUString( ",\n" m ), \
+                                     OUStringLiteral(BOOST_CURRENT_FUNCTION) \
+                                     + ",\n" m, \
                                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
                                                throw ::com::sun::star::lang::IllegalArgumentException( \
-                                               OUString(BOOST_CURRENT_FUNCTION) + \
-                                               OUString( ",\n" m ), \
+                                               OUStringLiteral(BOOST_CURRENT_FUNCTION) \
+                                               + ",\n" m, \
                                                ifc, \
                                                arg ); }
 
@@ -80,16 +80,14 @@
     if( !(c) ){ \
         OSL_ENSURE(c, m); \
         throw ::com::sun::star::uno::RuntimeException( \
-        OUString(BOOST_CURRENT_FUNCTION) + \
-        OUString( ",\n" m ), \
+        OUStringLiteral(BOOST_CURRENT_FUNCTION) + ",\n" m, \
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
 
 #define ENSURE_OR_THROW2(c, m, ifc) \
     if( !(c) ) { \
         OSL_ENSURE(c, m); \
         throw ::com::sun::star::uno::RuntimeException( \
-        OUString(BOOST_CURRENT_FUNCTION) + \
-        OUString( ",\n" m ), \
+        OUStringLiteral(BOOST_CURRENT_FUNCTION) + ",\n" m, \
         ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and
