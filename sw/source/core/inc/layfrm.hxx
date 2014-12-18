@@ -54,7 +54,7 @@ protected:
     virtual void MakeAll() SAL_OVERRIDE;
 
     SwFrm * m_pLower;
-    std::vector<SwAnchoredObject*> aVertPosOrientFrmsFor;
+    std::vector<SwAnchoredObject*> m_VertPosOrientFrmsFor;
 
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
@@ -178,14 +178,15 @@ public:
 
     void SetVertPosOrientFrmFor(SwAnchoredObject *pObj)
     {
-        aVertPosOrientFrmsFor.push_back(pObj);
+        m_VertPosOrientFrmsFor.push_back(pObj);
     }
 
     void ClearVertPosOrientFrmFor(SwAnchoredObject *pObj)
     {
-        aVertPosOrientFrmsFor.erase(
-            std::remove(aVertPosOrientFrmsFor.begin(),
-                aVertPosOrientFrmsFor.end(), pObj), aVertPosOrientFrmsFor.end());
+        m_VertPosOrientFrmsFor.erase(
+            std::remove(m_VertPosOrientFrmsFor.begin(),
+                m_VertPosOrientFrmsFor.end(), pObj),
+            m_VertPosOrientFrmsFor.end());
     }
 };
 

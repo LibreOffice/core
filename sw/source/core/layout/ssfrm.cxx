@@ -432,13 +432,13 @@ void SwCntntFrm::RegisterToNode( SwCntntNode& rNode )
 
 void SwLayoutFrm::Destroy()
 {
-    while (!aVertPosOrientFrmsFor.empty())
+    while (!m_VertPosOrientFrmsFor.empty())
     {
-        SwAnchoredObject *pObj = *aVertPosOrientFrmsFor.begin();
+        SwAnchoredObject *pObj = *m_VertPosOrientFrmsFor.begin();
         pObj->ClearVertPosOrientFrm();
     }
 
-    assert(aVertPosOrientFrmsFor.empty());
+    assert(m_VertPosOrientFrmsFor.empty());
 
     SwFrm *pFrm = m_pLower;
 
