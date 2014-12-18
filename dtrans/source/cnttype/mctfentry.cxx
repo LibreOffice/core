@@ -25,9 +25,6 @@
 
 // some defines
 
-// the service names
-#define MIMECONTENTTYPEFACTORY_SERVICE_NAME  "com.sun.star.datatransfer.MimeContentTypeFactory"
-
 // the implementation names
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
@@ -67,7 +64,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL mcnttype_component_getFactory( const sal_Cha
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, MIMECONTENTTYPEFACTORY_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString( MIMECONTENTTYPEFACTORY_SERVICE_NAME );
+        aSNS.getArray( )[0] = "com.sun.star.datatransfer.MimeContentTypeFactory";
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

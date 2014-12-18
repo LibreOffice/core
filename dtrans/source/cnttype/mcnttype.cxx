@@ -290,7 +290,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         {
             break;
         }
-        else if ( isInRange( m_nxtSym, OUString(TOKEN) + OUString(TSPECIALS) + OUString(SPACE) ) )
+        else if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + TSPECIALS + SPACE ) )
         {
             pvalue += m_nxtSym;
             if ( m_nxtSym == "\"" )
@@ -329,7 +329,7 @@ void SAL_CALL CMimeContentType::comment( void )
 {
     while ( !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, OUString(TOKEN) + OUString(SPACE) ) )
+        if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + SPACE ) )
             getSym( );
         else if ( m_nxtSym == ")" )
             break;
