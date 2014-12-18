@@ -212,7 +212,7 @@ public class ScIndexEnumeration_TableChartsEnumeration extends TestCase {
         }
 
         if (flag.equals("V")) {
-            oCell.setValue(new Float(theValue).floatValue());
+            oCell.setValue(Float.parseFloat(theValue));
         } else {
             oCell.setFormula(theValue);
         }

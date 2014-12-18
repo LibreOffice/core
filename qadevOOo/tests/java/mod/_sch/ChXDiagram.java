@@ -388,8 +388,12 @@ public class ChXDiagram extends TestCase {
         } catch (com.sun.star.lang.IndexOutOfBoundsException ex) {
             System.out.println("Could not get Cell");
         }
-        if (flag.equals("V")) {oCell.setValue((new Float(theValue)).floatValue());}
-                   else {oCell.setFormula(theValue);}
+        if (flag.equals("V")) {
+            oCell.setValue(Float.parseFloat(theValue));
+        }
+        else {
+            oCell.setFormula(theValue);
+        }
 
     } // end of insertIntoCell
 
