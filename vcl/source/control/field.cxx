@@ -176,7 +176,7 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     if ( aStr1.isEmpty() )
         aStr1 = "0";
     if ( bNegative )
-        aStr1 = "-" + aStr1;
+        aStr1.insert(0, "-");
 
     // prune and round fraction
     bool bRound = false;
