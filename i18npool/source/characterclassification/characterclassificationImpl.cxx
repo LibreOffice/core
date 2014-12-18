@@ -139,7 +139,7 @@ bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassifi
     }
 
     Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString("com.sun.star.i18n.CharacterClassification_") + serviceName, m_xContext);
+            "com.sun.star.i18n.CharacterClassification_" + serviceName, m_xContext);
 
     Reference < XCharacterClassification > xCI;
     if ( xI.is() ) {
@@ -209,7 +209,7 @@ Sequence< OUString > SAL_CALL
 CharacterClassificationImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.i18n.CharacterClassification");
+    aRet[0] = "com.sun.star.i18n.CharacterClassification";
     return aRet;
 }
 

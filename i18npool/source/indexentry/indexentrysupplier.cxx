@@ -100,7 +100,7 @@ throw (RuntimeException, std::exception)
 bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {
     Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString("com.sun.star.i18n.IndexEntrySupplier_") + name, m_xContext);
+            "com.sun.star.i18n.IndexEntrySupplier_" + name, m_xContext);
 
     if ( xI.is() ) {
         xIES.set( xI, UNO_QUERY );

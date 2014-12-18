@@ -78,7 +78,7 @@ UnoScriptTypeDetector::supportsService(const OUString& ServiceName) throw( ::com
 UnoScriptTypeDetector::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     ::com::sun::star::uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.i18n.ScriptTypeDetector");
+    aRet[0] = "com.sun.star.i18n.ScriptTypeDetector";
     return aRet;
 }
 

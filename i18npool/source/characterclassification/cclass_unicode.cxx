@@ -273,7 +273,7 @@ sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) 
 Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.i18n.CharacterClassification_Unicode");
+    aRet[0] = "com.sun.star.i18n.CharacterClassification_Unicode";
     return aRet;
 }
 

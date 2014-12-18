@@ -70,7 +70,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
 
     if (i >= sal::static_int_cast<sal_Int32>(lookupTable.size())) {
         Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-                  OUString("com.sun.star.i18n.Calendar_") + uniqueID, m_xContext);
+                  "com.sun.star.i18n.Calendar_" + uniqueID, m_xContext);
 
         if ( ! xI.is() ) {
             // check if the calendar is defined in localedata, load gregorian calendar service.

@@ -118,7 +118,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
         }
 
         Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-                OUString("com.sun.star.i18n.InputSequenceChecker_") +
+                "com.sun.star.i18n.InputSequenceChecker_" +
                 OUString::createFromAscii(rLanguage),
                 m_xContext);
 

@@ -127,7 +127,7 @@ Sequence< OUString > SAL_CALL
 TextConversionImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.i18n.TextConversion");
+    aRet[0] = "com.sun.star.i18n.TextConversion";
     return aRet;
 }
 

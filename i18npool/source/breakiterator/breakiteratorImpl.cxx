@@ -540,7 +540,7 @@ bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUStrin
     }
 
     Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString("com.sun.star.i18n.BreakIterator_") + aLocaleName, m_xContext);
+            "com.sun.star.i18n.BreakIterator_" + aLocaleName, m_xContext);
 
     if ( xI.is() ) {
         xBI.set(xI, UNO_QUERY);
@@ -615,7 +615,7 @@ Sequence< OUString > SAL_CALL
 BreakIteratorImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.i18n.BreakIterator");
+    aRet[0] = "com.sun.star.i18n.BreakIterator";
     return aRet;
 }
 

@@ -1077,7 +1077,7 @@ OUString SAL_CALL
 LocaleDataImpl::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
     sal_Unicode **indexArray = getIndexArrayForAlgorithm(rLocale, algorithm);
-    return indexArray ? OUString("0-9")+OUString(indexArray[2]) : OUString();
+    return indexArray ? "0-9"+OUString(indexArray[2]) : OUString();
 }
 
 OUString SAL_CALL

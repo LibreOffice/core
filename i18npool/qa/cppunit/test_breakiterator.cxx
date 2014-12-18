@@ -457,7 +457,7 @@ void TestBreakIterator::testWordBoundaries()
                 break;
             case 1:
                 aLocale.Language = "grc";
-                aLocale.Country = "";
+                aLocale.Country.clear();
                 break;
             default:
                 CPPUNIT_ASSERT(false);

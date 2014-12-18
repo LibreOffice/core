@@ -611,7 +611,7 @@ bool SAL_CALL
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
-    OUString cname = OUString(TRLT_IMPLNAME_PREFIX) + implName;
+    OUString cname = TRLT_IMPLNAME_PREFIX + implName;
     loadBody(cname, body);
     if (body.is()) {
         body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
@@ -622,7 +622,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
                 if (i == 0) // current module is caseignore
                     body->loadModule(TMlist[0].tm, rLocale); // caseingore need to setup module name
                 if (! caseignore.is()) {
-                    OUString bname = OUString(TRLT_IMPLNAME_PREFIX) +
+                    OUString bname = TRLT_IMPLNAME_PREFIX +
                                 OUString::createFromAscii(TMlist[0].implName);
                     loadBody(bname, caseignore);
                 }
@@ -652,7 +652,7 @@ Sequence< OUString > SAL_CALL
 TransliterationImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.i18n.Transliteration");
+    aRet[0] = "com.sun.star.i18n.Transliteration";
     return aRet;
 }
 

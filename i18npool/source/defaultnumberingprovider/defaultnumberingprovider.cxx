@@ -1061,7 +1061,7 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
                 throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.text.DefaultNumberingProvider");
+    aRet[0] = "com.sun.star.text.DefaultNumberingProvider";
     return aRet;
 }
 
