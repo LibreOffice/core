@@ -1330,7 +1330,9 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         // During load, only those cells that are marked explicitly dirty get
         // recalculated.  So we need to set it dirty here.
         SetDirtyVar();
-        pDocument->PutInFormulaTree(this);
+        pDocument->AppendToFormulaTrack(this);
+        // Do not call TrackFormulas() here, not all listeners may have been
+        // established, postponed until ScDocument::CompileXML() finishes.
     }
     else if (bWasInFormulaTree)
         pDocument->PutInFormulaTree(this);
@@ -2135,7 +2137,14 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
         if( bDirtyFlag )
             SetDirtyVar();
         pDocument->AppendToFormulaTrack( this );
-        pDocument->TrackFormulas();
+
+        // While loading a document listeners have not been established yet.
+        // Tracking would remove this cell from the FormulaTrack and add it to
+        // the FormulaTree, once in there it would be assumed that its
+        // dependents already had been tracked and it would be skipped on a
+        // subsequent notify. Postpone tracking until all listeners are set.
+        if (!pDocument->IsImportingXML())
+            pDocument->TrackFormulas();
     }
 
     pDocument->SetStreamValid(aPos.Tab(), false);
