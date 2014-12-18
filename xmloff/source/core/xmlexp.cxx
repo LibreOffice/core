@@ -1958,7 +1958,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
         if( (getExportFlags() & EXPORT_EMBEDDED) == 0 )
             sRet = mxGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
         else
-            sRet = "";
+            sRet.clear();
     }
     else
         sRet = GetRelativeReference( sRet );

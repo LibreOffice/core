@@ -2468,7 +2468,7 @@ void SchXMLExportHelper_Impl::exportAxes(
             }
         }
         exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasXAxisTitle, bHasXAxisMajorGrid, bHasXAxisMinorGrid, bExportContent );
-        aCategoriesRange = "";
+        aCategoriesRange.clear();
     }
 
     // secondary x axis

@@ -329,7 +329,7 @@ void XMLSetVarFieldImportContext::EndElement()
         {
             // create field/Service
             Reference<XPropertySet> xPropSet;
-            if (CreateField(xPropSet, OUString(sAPI_textfield_prefix) + GetServiceName()))
+            if (CreateField(xPropSet, sAPI_textfield_prefix + GetServiceName()))
             {
                 Reference<XDependentTextField> xDepTextField(xPropSet, UNO_QUERY);
                 if (xDepTextField.is())

@@ -65,18 +65,18 @@ namespace xmloff
             pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
-                if ((pEventDescription->Name.equals(EVENT_LOCALMACRONAME)) ||
-                    (pEventDescription->Name.equals(EVENT_SCRIPTURL)))
+                if (pEventDescription->Name == EVENT_LOCALMACRONAME ||
+                    pEventDescription->Name == EVENT_SCRIPTURL)
                     pEventDescription->Value >>= pTranslated->ScriptCode;
-                else if (pEventDescription->Name.equals(EVENT_TYPE))
+                else if (pEventDescription->Name == EVENT_TYPE)
                     pEventDescription->Value >>= pTranslated->ScriptType;
-                else if (pEventDescription->Name.equals(EVENT_LIBRARY))
+                else if (pEventDescription->Name == EVENT_LIBRARY)
                     pEventDescription->Value >>= sLibrary;
             }
 
-            if (pTranslated->ScriptType.equals(EVENT_STARBASIC))
+            if (pTranslated->ScriptType == EVENT_STARBASIC)
             {
-                if (sLibrary.equals(EVENT_STAROFFICE))
+                if (sLibrary == EVENT_STAROFFICE)
                     sLibrary = EVENT_APPLICATION;
 
                 if ( !sLibrary.isEmpty() )

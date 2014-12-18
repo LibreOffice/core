@@ -50,8 +50,8 @@ namespace xmloff
             Sequence< PropertyValue >& rMappedEvent = m_aMappedEvents[sName];
 
             sLocalMacroName = pEvents->ScriptCode;
-            sLibrary = "";
-            if (pEvents->ScriptType.equals(EVENT_STARBASIC))
+            sLibrary.clear();
+            if (pEvents->ScriptType == EVENT_STARBASIC)
             {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
                 DBG_ASSERT( 0 <= nPrefixLen, "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
@@ -59,7 +59,7 @@ namespace xmloff
                 {
                     // the export handler for StarBasic expects "StarOffice", not "application" for application modules ...
                     sLibrary = sLocalMacroName.copy( 0, nPrefixLen );
-                    if (sLibrary.equals(EVENT_APPLICATION))
+                    if (sLibrary == EVENT_APPLICATION)
                         sLibrary = EVENT_STAROFFICE;
 
                     sLocalMacroName = sLocalMacroName.copy( nPrefixLen + 1 );
@@ -98,7 +98,7 @@ namespace xmloff
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
             throw NoSuchElementException(
-                OUString("There is no element named ") + _rName,
+                "There is no element named " + _rName,
                 static_cast< ::cppu::OWeakObject* >(this));
 
         return makeAny(aPos->second);

@@ -200,7 +200,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         {
             if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )
             {
-                msContinueListId = "";
+                msContinueListId.clear();
             }
             else
             {

@@ -3133,7 +3133,7 @@ lcl_GetMediaReference(SvXMLImport const& rImport, OUString const& rURL)
 {
     if (rImport.IsPackageURL(rURL))
     {
-        return OUString( "vnd.sun.star.Package:") + rURL;
+        return "vnd.sun.star.Package:" + rURL;
     }
     else
     {

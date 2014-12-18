@@ -2201,12 +2201,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 exportTextField( xTxtRange, bAutoStyles, bIsProgress );
                 bPrevCharIsSpace = false;
             }
-            else if ( sType.equals( sAnnotation ) )
+            else if ( sType == sAnnotation )
             {
                 exportTextField( xTxtRange, bAutoStyles, bIsProgress );
                 bPrevCharIsSpace = false;
             }
-            else if ( sType.equals( sAnnotationEnd ) )
+            else if ( sType == sAnnotationEnd )
             {
                 Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                 const OUString& rName = xBookmark->getName();
@@ -2268,7 +2268,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportRuby(xPropSet, bAutoStyles);
             }
-            else if (sType.equals(sMeta))
+            else if (sType == sMeta)
             {
                 exportMeta(xPropSet, bAutoStyles, bIsProgress);
             }

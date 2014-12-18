@@ -182,7 +182,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
         OUStringBuffer aStemBuffer(32);
         aStemBuffer.append( rFamilyData.maStrPrefix );
 
-        if (rParentName != "")
+        if (!rParentName.isEmpty())
             {
                 aStemBuffer.append("-");
                 aStemBuffer.append(rParentName);
@@ -195,7 +195,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                 if (rState.mnIndex == -1)
                     continue;
                 OUString sXMLName(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryXMLName(rState.mnIndex));
-                if (sXMLName == "")
+                if (sXMLName.isEmpty())
                     continue;
                 aStemBuffer.append("-");
                 aStemBuffer.append(OUString::number(rFamilyData.mxMapper->getPropertySetMapper()->GetEntryNameSpace(rState.mnIndex)));
@@ -415,8 +415,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     OUString aPrefix( rStrPrefix );
     if( bStylesOnly )
     {
-        aPrefix = "M";
-        aPrefix += rStrPrefix;
+        aPrefix = "M" + rStrPrefix;
     }
 
 #if OSL_DEBUG_LEVEL > 0

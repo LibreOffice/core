@@ -169,7 +169,7 @@ namespace xmloff
 
         OUString sToWriteServiceName = sServiceName;
 #define CHECK_N_TRANSLATE( name )   \
-        else if (sServiceName.equals(SERVICE_PERSISTENT_COMPONENT_##name)) \
+        else if (sServiceName == SERVICE_PERSISTENT_COMPONENT_##name) \
             sToWriteServiceName = SERVICE_##name
 
         if (false)
@@ -194,7 +194,7 @@ namespace xmloff
         CHECK_N_TRANSLATE( HIDDENCONTROL );
         CHECK_N_TRANSLATE( IMAGECONTROL );
         CHECK_N_TRANSLATE( FORMATTEDFIELD );
-        else if (sServiceName.equals(SERVICE_PERSISTENT_COMPONENT_EDIT))
+        else if (sServiceName == SERVICE_PERSISTENT_COMPONENT_EDIT)
         {
             // special handling for the edit field: we have two controls using this as persistence service name
             sToWriteServiceName = SERVICE_EDIT;

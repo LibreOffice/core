@@ -755,7 +755,7 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
 
 bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUString& rName)
 {
-    rName = "";
+    rName.clear();
     bool bRetval(false);
 
     Reference <beans::XPropertySet> xPropSet(xPage, UNO_QUERY);

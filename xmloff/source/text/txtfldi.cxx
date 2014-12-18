@@ -4088,7 +4088,7 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
         const OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_header, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString(sAPI_presentation_prefix );
+    sServicePrefix = sAPI_presentation_prefix;
     bValid = true;
 }
 
@@ -4112,7 +4112,7 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
         const OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_footer, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString(sAPI_presentation_prefix );
+    sServicePrefix = sAPI_presentation_prefix;
     bValid = true;
 }
 
@@ -4137,7 +4137,7 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
         const OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_datetime, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString(sAPI_presentation_prefix );
+    sServicePrefix = sAPI_presentation_prefix;
     bValid = true;
 }
 

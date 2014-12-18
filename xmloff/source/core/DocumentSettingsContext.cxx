@@ -767,27 +767,27 @@ void XMLConfigItemMapIndexedContext::EndElement()
 
                         for ( sal_Int32 j = 0 ; j < XML_FORBIDDEN_CHARACTER_MAX ; j++ )
                         {
-                            if (pForChar->Name.equals ( "Language" ) )
+                            if (pForChar->Name == "Language")
                             {
                                 pForChar->Value >>= aLocale.Language;
                                 bHaveLanguage = true;
                             }
-                            else if (pForChar->Name.equals ( "Country" ) )
+                            else if (pForChar->Name == "Country")
                             {
                                 pForChar->Value >>= aLocale.Country;
                                 bHaveCountry = true;
                             }
-                            else if (pForChar->Name.equals ( "Variant" ) )
+                            else if (pForChar->Name == "Variant")
                             {
                                 pForChar->Value >>= aLocale.Variant;
                                 bHaveVariant = true;
                             }
-                            else if (pForChar->Name.equals ( "BeginLine" ) )
+                            else if (pForChar->Name == "BeginLine")
                             {
                                 pForChar->Value >>= aForbid.beginLine;
                                 bHaveBegin = true;
                             }
-                            else if (pForChar->Name.equals ( "EndLine" ) )
+                            else if (pForChar->Name == "EndLine")
                             {
                                 pForChar->Value >>= aForbid.endLine;
                                 bHaveEnd = true;
@@ -839,52 +839,52 @@ void XMLConfigItemMapIndexedContext::EndElement()
 
                     for ( sal_Int32 j = 0 ; j < XML_SYMBOL_DESCRIPTOR_MAX ; j++ )
                     {
-                        if (pSymbol->Name.equals ( "Name" ) )
+                        if (pSymbol->Name == "Name")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sName;
                             bHaveName = true;
                         }
-                        else if (pSymbol->Name.equals ( "ExportName" ) )
+                        else if (pSymbol->Name == "ExportName")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sExportName;
                             bHaveExportName = true;
                         }
-                        else if (pSymbol->Name.equals ( "FontName" ) )
+                        else if (pSymbol->Name == "FontName")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sFontName;
                             bHaveFontName = true;
                         }
-                        else if (pSymbol->Name.equals ( "CharSet" ) )
+                        else if (pSymbol->Name == "CharSet")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharSet;
                             bHaveCharSet = true;
                         }
-                        else if (pSymbol->Name.equals ( "Family" ) )
+                        else if (pSymbol->Name == "Family")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nFamily;
                             bHaveFamily = true;
                         }
-                        else if (pSymbol->Name.equals ( "Pitch" ) )
+                        else if (pSymbol->Name == "Pitch")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nPitch;
                             bHavePitch = true;
                         }
-                        else if (pSymbol->Name.equals ( "Weight" ) )
+                        else if (pSymbol->Name == "Weight")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nWeight;
                             bHaveWeight = true;
                         }
-                        else if (pSymbol->Name.equals ( "Italic" ) )
+                        else if (pSymbol->Name == "Italic")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nItalic;
                             bHaveItalic = true;
                         }
-                        else if (pSymbol->Name.equals ( "SymbolSet" ) )
+                        else if (pSymbol->Name == "SymbolSet")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].sSymbolSet;
                             bHaveSymbolSet = true;
                         }
-                        else if (pSymbol->Name.equals ( "Character" ) )
+                        else if (pSymbol->Name == "Character")
                         {
                             pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharacter;
                             bHaveCharacter = true;

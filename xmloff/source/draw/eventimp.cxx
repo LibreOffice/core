@@ -379,8 +379,7 @@ void SdXMLEventContext::EndElement()
                 }
                 else
                 {
-                    pProperties->Name =
-                        OUString( "EventType" );
+                    pProperties->Name = "EventType";
                     pProperties->Handle = -1;
                     pProperties->Value <<= OUString( "Script" );
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
