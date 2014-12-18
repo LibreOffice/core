@@ -201,7 +201,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
 	) \
-	libotouch \
 ))
 
 endif

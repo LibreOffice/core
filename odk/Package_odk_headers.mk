@@ -151,7 +151,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	rtl/ustring.h \
 	rtl/ustring.hxx \
 	rtl/uuid.h \
-	sal/ByteBufferWrapper.hxx \
 	sal/alloca.h \
 	sal/config.h \
 	sal/detail/log.h \
