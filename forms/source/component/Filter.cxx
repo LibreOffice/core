@@ -643,7 +643,7 @@ namespace frm
                     OSL_ENSURE( ( itemPos != m_aDisplayItemToValueItem.end() ) || m_aText.isEmpty(),
                         "OFilterControl::setText: this text is not in my display list!" );
                     if ( itemPos == m_aDisplayItemToValueItem.end() )
-                        m_aText = "";
+                        m_aText.clear();
 
                     if ( m_aText.isEmpty() )
                     {

@@ -443,7 +443,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
     if ( evt.Source == m_xAggregateSet )
     {
         Reference< XPropertySet > xSourceSet( evt.Source, UNO_QUERY );
-        if ( evt.PropertyName.equals( PROPERTY_FORMATKEY ) )
+        if ( evt.PropertyName == PROPERTY_FORMATKEY )
         {
             if ( evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG )
             {
@@ -471,7 +471,7 @@ void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyCha
             }
             return;
         }
-        if ( evt.PropertyName.equals( PROPERTY_FORMATSSUPPLIER ) )
+        if ( evt.PropertyName == PROPERTY_FORMATSSUPPLIER )
         {
             updateFormatterNullDate();
             return;

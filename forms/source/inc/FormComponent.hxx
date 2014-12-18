@@ -89,7 +89,7 @@ namespace frm
     // old macro for quickly implementing XServiceInfo::getImplementationName
     #define IMPLEMENTATION_NAME(ImplName)                                       \
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
-        { return OUString("com.sun.star.comp.forms.") + OUString(#ImplName); }
+        { return OUString("com.sun.star.comp.forms." #ImplName); }
 
     class OControlModel;
 

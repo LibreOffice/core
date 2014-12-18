@@ -60,7 +60,7 @@ void registerClassInfo(
 
 #define REGISTER_CLASS_CORE(classImplName) \
     registerClassInfo( \
-        OUString("com.sun.star.form.") + OUString(#classImplName), \
+        "com.sun.star.form." #classImplName, \
         aServices, \
         frm::classImplName##_CreateInstance)
 

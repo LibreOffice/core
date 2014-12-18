@@ -634,13 +634,13 @@ void OButtonControl::modelFeatureUrlPotentiallyChanged( )
 
 void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent ) throw ( RuntimeException, std::exception )
 {
-    if  (   _rEvent.PropertyName.equals( PROPERTY_TARGET_URL )
-        ||  _rEvent.PropertyName.equals( PROPERTY_BUTTONTYPE )
+    if  (   _rEvent.PropertyName == PROPERTY_TARGET_URL
+        ||  _rEvent.PropertyName == PROPERTY_BUTTONTYPE
         )
     {
         modelFeatureUrlPotentiallyChanged( );
     }
-    else if ( _rEvent.PropertyName.equals( PROPERTY_ENABLED ) )
+    else if ( _rEvent.PropertyName == PROPERTY_ENABLED )
     {
         _rEvent.NewValue >>= m_bEnabledByPropertyValue;
     }

@@ -307,7 +307,7 @@ namespace frm
         // TODO: more generic mechanisms for this (the grid control implementation,
         // when used herein, will do the same stuff for lot of these)
 
-        if ( _rPropertyName.equals( PROPERTY_BACKGROUNDCOLOR ) )
+        if ( _rPropertyName == PROPERTY_BACKGROUNDCOLOR )
         {
             Wallpaper aTest = pNavBar->GetBackground();
             if ( bVoid )
@@ -323,7 +323,7 @@ namespace frm
                 pNavBar->SetControlBackground( aColor );
             }
         }
-        else if ( _rPropertyName.equals( PROPERTY_TEXTLINECOLOR ) )
+        else if ( _rPropertyName == PROPERTY_TEXTLINECOLOR )
         {
             if ( bVoid )
             {
@@ -335,28 +335,28 @@ namespace frm
                 pNavBar->SetTextLineColor( nColor );
             }
         }
-        else if ( _rPropertyName.equals( PROPERTY_ICONSIZE ) )
+        else if ( _rPropertyName == PROPERTY_ICONSIZE )
         {
             sal_Int16 nInt16Value = 0;
             OSL_VERIFY( _rValue >>= nInt16Value );
             pNavBar->SetImageSize( nInt16Value ? NavigationToolBar::eLarge : NavigationToolBar::eSmall );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_POSITION ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_POSITION )
         {
             OSL_VERIFY( _rValue >>= bBoolValue );
             pNavBar->ShowFunctionGroup( NavigationToolBar::ePosition, bBoolValue );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_NAVIGATION ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_NAVIGATION )
         {
             OSL_VERIFY( _rValue >>= bBoolValue );
             pNavBar->ShowFunctionGroup( NavigationToolBar::eNavigation, bBoolValue );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_RECORDACTIONS ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_RECORDACTIONS )
         {
             OSL_VERIFY( _rValue >>= bBoolValue );
             pNavBar->ShowFunctionGroup( NavigationToolBar::eRecordActions, bBoolValue );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_FILTERSORT ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_FILTERSORT )
         {
             OSL_VERIFY( _rValue >>= bBoolValue );
             pNavBar->ShowFunctionGroup( NavigationToolBar::eFilterSort, bBoolValue );
@@ -375,33 +375,33 @@ namespace frm
         Any aReturn;
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );
 
-        if ( _rPropertyName.equals( PROPERTY_BACKGROUNDCOLOR ) )
+        if ( _rPropertyName == PROPERTY_BACKGROUNDCOLOR )
         {
             aReturn <<= (sal_Int32)pNavBar->GetControlBackground().GetColor();
         }
-        else if ( _rPropertyName.equals( PROPERTY_TEXTLINECOLOR ) )
+        else if ( _rPropertyName == PROPERTY_TEXTLINECOLOR )
         {
             aReturn <<= (sal_Int32)pNavBar->GetTextLineColor().GetColor();
         }
-        else if ( _rPropertyName.equals( PROPERTY_ICONSIZE ) )
+        else if ( _rPropertyName == PROPERTY_ICONSIZE )
         {
             sal_Int16 nIconType = ( NavigationToolBar::eLarge == pNavBar->GetImageSize() )
                                 ? 1 : 0;
             aReturn <<= nIconType;
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_POSITION ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_POSITION )
         {
             aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::ePosition );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_NAVIGATION ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_NAVIGATION )
         {
             aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::eNavigation );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_RECORDACTIONS ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_RECORDACTIONS )
         {
             aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::eRecordActions );
         }
-        else if ( _rPropertyName.equals( PROPERTY_SHOW_FILTERSORT ) )
+        else if ( _rPropertyName == PROPERTY_SHOW_FILTERSORT )
         {
             aReturn <<= pNavBar->IsFunctionGroupVisible( NavigationToolBar::eFilterSort );
         }

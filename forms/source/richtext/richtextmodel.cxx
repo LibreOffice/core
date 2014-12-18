@@ -233,13 +233,13 @@ namespace frm
 
     IMPLEMENT_SERVICE_REGISTRATION_8( ORichTextModel, OControlModel,
         FRM_SUN_COMPONENT_RICHTEXTCONTROL,
-        OUString( "com.sun.star.text.TextRange" ),
-        OUString( "com.sun.star.style.CharacterProperties" ),
-        OUString( "com.sun.star.style.ParagraphProperties" ),
-        OUString( "com.sun.star.style.CharacterPropertiesAsian" ),
-        OUString( "com.sun.star.style.CharacterPropertiesComplex" ),
-        OUString( "com.sun.star.style.ParagraphPropertiesAsian" ),
-        OUString( "com.sun.star.style.ParagraphPropertiesComplex" )
+        "com.sun.star.text.TextRange",
+        "com.sun.star.style.CharacterProperties",
+        "com.sun.star.style.ParagraphProperties",
+        "com.sun.star.style.CharacterPropertiesAsian",
+        "com.sun.star.style.CharacterPropertiesComplex",
+        "com.sun.star.style.ParagraphPropertiesAsian",
+        "com.sun.star.style.ParagraphPropertiesComplex"
     )
 
 

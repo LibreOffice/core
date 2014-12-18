@@ -88,7 +88,7 @@ namespace frm
                 case FormFeature::RemoveFilterAndSort   : pAsciiCommandName = "RemoveFilterSort";   break;
             }
             if ( pAsciiCommandName != NULL )
-                return OUString( ".uno:" ) + OUString::createFromAscii( pAsciiCommandName );
+                return ".uno:" + OUString::createFromAscii( pAsciiCommandName );
 
             OSL_FAIL( "lcl_getCommandURL: unknown FormFeature!" );
             return OUString();

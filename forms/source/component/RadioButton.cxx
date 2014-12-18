@@ -351,7 +351,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
 
 void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
 {
-    if ( _rEvent.PropertyName.equals( PROPERTY_STATE ) )
+    if ( _rEvent.PropertyName == PROPERTY_STATE )
     {
         if ( _rEvent.NewValue == (sal_Int16)1 )
         {
@@ -361,7 +361,7 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) thr
             SetSiblingPropsTo( PROPERTY_STATE, aZero );
         }
     }
-    else if ( _rEvent.PropertyName.equals( PROPERTY_GROUP_NAME ) )
+    else if ( _rEvent.PropertyName == PROPERTY_GROUP_NAME )
     {
         setControlSource();
         // Can't call OReferenceValueComponent::_propertyChanged(), as it

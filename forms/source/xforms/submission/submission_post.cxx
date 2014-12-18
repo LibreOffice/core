@@ -60,7 +60,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference<
         css::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
         aPostArgument.Sink = aSink;
         aPostArgument.MediaType = "application/xml";
-        aPostArgument.Referer = "";
+        aPostArgument.Referer.clear();
         Any aCommandArgument;
         aCommandArgument <<= aPostArgument;
         aContent.executeCommand( aCommandName, aCommandArgument);

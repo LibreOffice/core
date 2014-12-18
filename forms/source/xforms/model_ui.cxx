@@ -1026,7 +1026,7 @@ void xforms::setInstanceData(
 #define PROP(NAME) \
     if( p##NAME != NULL ) \
     { \
-        pSequence[ nIndex ].Name = OUString(#NAME); \
+        pSequence[ nIndex ].Name = #NAME; \
         pSequence[ nIndex ].Value <<= *p##NAME; \
         nIndex++; \
     }

@@ -1799,7 +1799,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException, std::exception)
 {
     // if the DBColumn value changed, transfer it to the control
-    if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
+    if ( evt.PropertyName == PROPERTY_VALUE )
     {
         OSL_ENSURE( evt.Source == getField(), "OBoundControlModel::propertyChange: value changes from components other than our database column?" );
         osl::MutexGuard aGuard(m_aMutex);
@@ -1813,12 +1813,12 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         // our binding has properties which can control properties of ourself
         OUString sBindingControlledProperty;
         bool bForwardToLabelControl = false;
-        if ( evt.PropertyName.equals( PROPERTY_READONLY ) )
+        if ( evt.PropertyName == PROPERTY_READONLY )
         {
             sBindingControlledProperty = PROPERTY_READONLY;
         }
 
-        else if ( evt.PropertyName.equals( PROPERTY_RELEVANT ) )
+        else if ( evt.PropertyName == PROPERTY_RELEVANT )
         {
             sBindingControlledProperty = PROPERTY_ENABLED;
             bForwardToLabelControl = true;

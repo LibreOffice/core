@@ -2528,7 +2528,7 @@ void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XCon
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     _rGroup.realloc(0);
-    _rName = "";
+    _rName.clear();
 
     if ((nGroup < 0) || (nGroup >= m_pGroupManager->getGroupCount()))
         return;

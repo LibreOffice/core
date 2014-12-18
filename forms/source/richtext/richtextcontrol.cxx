@@ -293,7 +293,7 @@ namespace frm
 
     bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
     {
-        return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
+        return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName == PROPERTY_RICH_TEXT;
     }
 
 
@@ -398,7 +398,7 @@ namespace frm
             return;
         }
 
-        if ( _rPropertyName.equals( PROPERTY_BACKGROUNDCOLOR ) )
+        if ( _rPropertyName == PROPERTY_BACKGROUNDCOLOR )
         {
             RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
             if ( !_rValue.hasValue() )
@@ -412,19 +412,19 @@ namespace frm
                 pControl->SetBackgroundColor( Color( nColor ) );
             }
         }
-        else if (  _rPropertyName.equals( PROPERTY_HSCROLL ) )
+        else if ( _rPropertyName == PROPERTY_HSCROLL )
         {
             adjustTwoStateWinBit( GetWindow(), _rValue, WB_HSCROLL );
         }
-        else if ( _rPropertyName.equals( PROPERTY_VSCROLL ) )
+        else if ( _rPropertyName == PROPERTY_VSCROLL )
         {
             adjustTwoStateWinBit( GetWindow(), _rValue, WB_VSCROLL );
         }
-        else if ( _rPropertyName.equals( PROPERTY_HARDLINEBREAKS ) )
+        else if ( _rPropertyName == PROPERTY_HARDLINEBREAKS )
         {
             adjustTwoStateWinBit( GetWindow(), _rValue, WB_WORDBREAK, true );
         }
-        else if ( _rPropertyName.equals( PROPERTY_READONLY ) )
+        else if ( _rPropertyName == PROPERTY_READONLY )
         {
             RichTextControl* pControl = static_cast< RichTextControl* >( GetWindow() );
             bool bReadOnly( pControl->IsReadOnly() );
@@ -440,7 +440,7 @@ namespace frm
                 aDispatcherLoop->second->invalidate();
             }
         }
-        else if ( _rPropertyName.equals( PROPERTY_HIDEINACTIVESELECTION ) )
+        else if ( _rPropertyName == PROPERTY_HIDEINACTIVESELECTION )
         {
             RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
             bool bHide = pRichTextControl->GetHideInactiveSelection();
