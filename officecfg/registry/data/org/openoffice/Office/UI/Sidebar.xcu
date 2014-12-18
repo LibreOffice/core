@@ -193,7 +193,11 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            any, any, visible ;
+            WriterVariants,   Annotation,         visible                    ;
+            WriterVariants,   DrawText,           visible                    ;
+            WriterVariants,   Table,              visible                    ;
+            WriterVariants,   Text,               visible                    ;
+            WriterVariants,   default,            visible                    ;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
