@@ -23,9 +23,7 @@
 #include <svx/svxcommands.h>
 #include <sfx2/sfxcommands.h>
 
-#define HID_BMPMASK_CTL_PIPETTE                               "SVX_HID_BMPMASK_CTL_PIPETTE"
 #define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
-#define HID_BMPMASK_TBI_PIPETTE                               "SVX_HID_BMPMASK_TBI_PIPETTE"
 #define HID_COLOR_CTL_COLORS                                  "SVX_HID_COLOR_CTL_COLORS"
 #define HID_CTRL3D_HSCROLL                                    "SVX_HID_CTRL3D_HSCROLL"
 #define HID_CTRL3D_SWITCHER                                   "SVX_HID_CTRL3D_SWITCHER"
