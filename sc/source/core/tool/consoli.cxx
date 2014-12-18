@@ -140,7 +140,7 @@ void ScConsData::DeleteData()
     if (bRowByName) nRowCount = 0;
 
     bCornerUsed = false;
-    aCornerText = "";
+    aCornerText.clear();
 }
 
 #undef DELETEARR
@@ -484,7 +484,7 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
         if (bCornerUsed)
         {
             if (aCornerText != aThisCorner)
-                aCornerText = "";
+                aCornerText.clear();
         }
         else
         {

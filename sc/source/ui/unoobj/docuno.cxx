@@ -966,7 +966,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     if ( nPrintRange == 1 )
         rPagesStr = aPageRange;
     else
-        rPagesStr = "";
+        rPagesStr.clear();
 
     return bDone;
 }

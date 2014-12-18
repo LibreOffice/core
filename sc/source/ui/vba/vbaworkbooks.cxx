@@ -178,7 +178,7 @@ ScVbaWorkbooks::isTextFile( const OUString& sType )
     // b) a csv file
     // c) unknown
     // returning true basically means treat this like a csv file
-    return sType.equals( "generic_Text" ) || sType.isEmpty();
+    return sType == "generic_Text" || sType.isEmpty();
 }
 
 bool

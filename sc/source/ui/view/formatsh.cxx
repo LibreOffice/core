@@ -1145,7 +1145,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                         if(cChar == ',')
                         {
                             sFormat[nStrCount] = sTmpStr;
-                            sTmpStr = "";
+                            sTmpStr.clear();
                             nStrCount++;
                         }
                         else

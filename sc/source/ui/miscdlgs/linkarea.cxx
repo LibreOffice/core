@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
 
     // #i53241# replace HTML filter with DataQuery filter
     if (aFilter == FILTERNAME_HTML)
-        aFilter = OUString(FILTERNAME_QUERY);
+        aFilter = FILTERNAME_QUERY;
 
     LoadDocument( aEntered, aFilter, aOptions );
 

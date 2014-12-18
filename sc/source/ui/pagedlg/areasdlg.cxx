@@ -255,7 +255,7 @@ void ScPrintAreasDlg::Impl_Reset()
 
     // Druckbereich
 
-    aStrRange = "";
+    aStrRange.clear();
     OUString aOne;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
@@ -753,7 +753,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
                 }
             }
 
-            aBuf = "";
+            aBuf.clear();
             bEndPos = true;
         }
         else
@@ -788,7 +788,7 @@ static bool lcl_CheckRepeatString( const OUString& rStr, ScDocument* pDoc, bool 
 
 static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
 {
-    rStr = "";
+    rStr.clear();
     if (!pRange)
         return;
 

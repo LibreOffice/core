@@ -3238,7 +3238,7 @@ void Test::testCopyPaste()
     fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", fValue, 0);
     aString = m_pDoc->GetString(2, 1, 1);
-    CPPUNIT_ASSERT_MESSAGE("after undo, string should be removed", aString == "");
+    CPPUNIT_ASSERT_MESSAGE("after undo, string should be removed", aString.isEmpty());
     CPPUNIT_ASSERT_MESSAGE("after undo, note on A2 should be removed", !m_pDoc->HasNote(ScAddress(0, 1, 1)));
     CPPUNIT_ASSERT_MESSAGE("after undo, note on B2 should be removed", !m_pDoc->HasNote(ScAddress(1, 1, 1)));
     CPPUNIT_ASSERT_MESSAGE("after undo, note on C2 should be removed", !m_pDoc->HasNote(ScAddress(2, 1, 1)));
@@ -4500,7 +4500,7 @@ void Test::testAutoFill()
     m_pDoc->Fill(100, 110, 100, 110, NULL, aMarkData, 10, FILL_TO_TOP, FILL_AUTO);
     for(SCROW nRow = 110; nRow >= 100; --nRow)
     {
-        OUString aExpected = OUString("=A") + OUString::number(nRow +1);
+        OUString aExpected = "=A" + OUString::number(nRow +1);
         OUString aFormula;
         m_pDoc->GetFormula(100, nRow, 0, aFormula);
         CPPUNIT_ASSERT_EQUAL(aExpected, aFormula);

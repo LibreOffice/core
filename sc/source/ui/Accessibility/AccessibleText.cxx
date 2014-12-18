@@ -769,7 +769,7 @@ void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, OUString& 
         else if (!aOptions.GetOption( VOPT_NULLVALS ))
         {
             if ((aCellType == CELLTYPE_VALUE || aCellType == CELLTYPE_FORMULA) && rDoc.GetValue(rCellPos) == 0.0)
-                rText = "";
+                rText.clear();
         }
     }
 }

@@ -869,7 +869,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
             const sal_Unicode* p = aLine.getStr();
             while( *p )
             {
-                aCell = "";
+                aCell.clear();
                 const sal_Unicode* q = p;
                 while (*p && *p != cSep)
                 {
@@ -1506,7 +1506,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         bool& rbOverflowCell )
 {
     rbIsQuoted = false;
-    rField = "";
+    rField.clear();
     const sal_Unicode cBlank = ' ';
     if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
     {
@@ -1773,7 +1773,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( *p == '"' )
                             {
                                 bText = true;
-                                aText = "";
+                                aText.clear();
                                 p = lcl_ScanSylkString( p, aText, eVersion);
                             }
                             else
@@ -2019,7 +2019,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                         switch ( pFCell->GetMatrixFlag() )
                         {
                             case MM_REFERENCE :
-                                aCellStr = "";
+                                aCellStr.clear();
                             break;
                             default:
                                 OUString aOUCellStr;

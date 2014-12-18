@@ -284,7 +284,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     if(cChar == ',')
                     {
                         sFormat[nStrCount] = sTmpStr;
-                        sTmpStr = "";
+                        sTmpStr.clear();
                         nStrCount++;
                     }
                     else

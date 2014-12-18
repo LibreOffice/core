@@ -125,17 +125,17 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
     }
     ScLinkConfigItem aItem( aSepPath );
 
-    pNames[0] = OUString( MERGE_DELIMITERS );
-    pNames[1] = OUString( SEPARATORS );
-    pNames[2] = OUString( TEXT_SEPARATORS );
-    pNames[3] = OUString( FIXED_WIDTH );
+    pNames[0] = MERGE_DELIMITERS;
+    pNames[1] = SEPARATORS;
+    pNames[2] = TEXT_SEPARATORS;
+    pNames[3] = FIXED_WIDTH;
     if (eCall != SC_TEXTTOCOLUMNS)
     {
-        pNames[4] = OUString( FROM_ROW );
-        pNames[5] = OUString( CHAR_SET );
-        pNames[6] = OUString( QUOTED_AS_TEXT );
-        pNames[7] = OUString( DETECT_SPECIAL_NUM );
-        pNames[8] = OUString( LANGUAGE );
+        pNames[4] = FROM_ROW;
+        pNames[5] = CHAR_SET;
+        pNames[6] = QUOTED_AS_TEXT;
+        pNames[7] = DETECT_SPECIAL_NUM;
+        pNames[8] = LANGUAGE;
     }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getConstArray();
@@ -198,17 +198,17 @@ static void save_Separators(
     }
     ScLinkConfigItem aItem( aSepPath );
 
-    pNames[0] = OUString( MERGE_DELIMITERS );
-    pNames[1] = OUString( SEPARATORS );
-    pNames[2] = OUString( TEXT_SEPARATORS );
-    pNames[3] = OUString( FIXED_WIDTH );
+    pNames[0] = MERGE_DELIMITERS;
+    pNames[1] = SEPARATORS;
+    pNames[2] = TEXT_SEPARATORS;
+    pNames[3] = FIXED_WIDTH;
     if (eCall != SC_TEXTTOCOLUMNS)
     {
-        pNames[4] = OUString( FROM_ROW );
-        pNames[5] = OUString( CHAR_SET );
-        pNames[6] = OUString( QUOTED_AS_TEXT );
-        pNames[7] = OUString( DETECT_SPECIAL_NUM );
-        pNames[8] = OUString( LANGUAGE );
+        pNames[4] = FROM_ROW;
+        pNames[5] = CHAR_SET;
+        pNames[6] = QUOTED_AS_TEXT;
+        pNames[7] = DETECT_SPECIAL_NUM;
+        pNames[8] = LANGUAGE;
     }
     aValues = aItem.GetProperties( aNames );
     pProperties = aValues.getArray();

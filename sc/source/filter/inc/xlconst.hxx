@@ -80,8 +80,8 @@ const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet
 #define EXC_STORAGE_OLE_EMBEDDED            OUString( "MBD" )
 #define EXC_STORAGE_VBA_PROJECT             OUString( "_VBA_PROJECT_CUR" )
 
-#define EXC_STREAM_BOOK                     OUString( "Book" )
-#define EXC_STREAM_WORKBOOK                 OUString( "Workbook" )
+#define EXC_STREAM_BOOK                     "Book"
+#define EXC_STREAM_WORKBOOK                 "Workbook"
 #define EXC_STREAM_CTLS                     OUString( "Ctls" )
 
 // Encoded URLs ---------------------------------------------------------------

@@ -136,28 +136,28 @@ void ScXMLSortContext::EndElement()
     if (nAlgoLength)
         ++i;
     uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
-    aSortDescriptor[0].Name = OUString(SC_UNONAME_BINDFMT);
+    aSortDescriptor[0].Name = SC_UNONAME_BINDFMT;
     aSortDescriptor[0].Value = css::uno::makeAny(bBindFormatsToContent);
-    aSortDescriptor[1].Name = OUString(SC_UNONAME_COPYOUT);
+    aSortDescriptor[1].Name = SC_UNONAME_COPYOUT;
     aSortDescriptor[1].Value = css::uno::makeAny(bCopyOutputData);
-    aSortDescriptor[2].Name = OUString(SC_UNONAME_ISCASE);
+    aSortDescriptor[2].Name = SC_UNONAME_ISCASE;
     aSortDescriptor[2].Value = css::uno::makeAny(bIsCaseSensitive);
-    aSortDescriptor[3].Name = OUString(SC_UNONAME_ISULIST);
+    aSortDescriptor[3].Name = SC_UNONAME_ISULIST;
     aSortDescriptor[3].Value = css::uno::makeAny(bEnabledUserList);
-    aSortDescriptor[4].Name = OUString(SC_UNONAME_OUTPOS);
+    aSortDescriptor[4].Name = SC_UNONAME_OUTPOS;
     aSortDescriptor[4].Value <<= aOutputPosition;
-    aSortDescriptor[5].Name = OUString(SC_UNONAME_UINDEX);
+    aSortDescriptor[5].Name = SC_UNONAME_UINDEX;
     aSortDescriptor[5].Value <<= nUserListIndex;
-    aSortDescriptor[6].Name = OUString(SC_UNONAME_SORTFLD);
+    aSortDescriptor[6].Name = SC_UNONAME_SORTFLD;
     aSortDescriptor[6].Value <<= aSortFields;
     if (!maLanguageTagODF.isEmpty())
     {
-        aSortDescriptor[7].Name = OUString(SC_UNONAME_COLLLOC);
+        aSortDescriptor[7].Name = SC_UNONAME_COLLLOC;
         aSortDescriptor[7].Value <<= maLanguageTagODF.getLanguageTag().getLocale( false);
     }
     if (nAlgoLength)
     {
-        aSortDescriptor[6 + i].Name = OUString(SC_UNONAME_COLLALG);
+        aSortDescriptor[6 + i].Name = SC_UNONAME_COLLALG;
         aSortDescriptor[6 + i].Value <<= sAlgorithm;
     }
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);

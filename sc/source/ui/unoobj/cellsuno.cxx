@@ -4743,10 +4743,10 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(4);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCSHEETCELLRANGES_SERVICE );
-    pArray[1] = OUString( SCCELLPROPERTIES_SERVICE );
-    pArray[2] = OUString( SCCHARPROPERTIES_SERVICE );
-    pArray[3] = OUString( SCPARAPROPERTIES_SERVICE );
+    pArray[0] = SCSHEETCELLRANGES_SERVICE;
+    pArray[1] = SCCELLPROPERTIES_SERVICE;
+    pArray[2] = SCCHARPROPERTIES_SERVICE;
+    pArray[3] = SCPARAPROPERTIES_SERVICE;
     return aRet;
 }
 
@@ -6024,11 +6024,11 @@ uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(5);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCSHEETCELLRANGE_SERVICE );
-    pArray[1] = OUString( SCCELLRANGE_SERVICE );
-    pArray[2] = OUString( SCCELLPROPERTIES_SERVICE );
-    pArray[3] = OUString( SCCHARPROPERTIES_SERVICE );
-    pArray[4] = OUString( SCPARAPROPERTIES_SERVICE );
+    pArray[0] = SCSHEETCELLRANGE_SERVICE;
+    pArray[1] = SCCELLRANGE_SERVICE;
+    pArray[2] = SCCELLPROPERTIES_SERVICE;
+    pArray[3] = SCCHARPROPERTIES_SERVICE;
+    pArray[4] = SCPARAPROPERTIES_SERVICE;
     return aRet;
 }
 
@@ -6716,13 +6716,13 @@ uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(7);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCSHEETCELL_SERVICE );
-    pArray[1] = OUString( SCCELL_SERVICE );
-    pArray[2] = OUString( SCCELLPROPERTIES_SERVICE );
-    pArray[3] = OUString( SCCHARPROPERTIES_SERVICE );
-    pArray[4] = OUString( SCPARAPROPERTIES_SERVICE );
-    pArray[5] = OUString( SCSHEETCELLRANGE_SERVICE );
-    pArray[6] = OUString( SCCELLRANGE_SERVICE );
+    pArray[0] = SCSHEETCELL_SERVICE;
+    pArray[1] = SCCELL_SERVICE;
+    pArray[2] = SCCELLPROPERTIES_SERVICE;
+    pArray[3] = SCCHARPROPERTIES_SERVICE;
+    pArray[4] = SCPARAPROPERTIES_SERVICE;
+    pArray[5] = SCSHEETCELLRANGE_SERVICE;
+    pArray[6] = SCCELLRANGE_SERVICE;
     return aRet;
 }
 
@@ -8611,13 +8611,13 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(7);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCSPREADSHEET_SERVICE );
-    pArray[1] = OUString( SCSHEETCELLRANGE_SERVICE );
-    pArray[2] = OUString( SCCELLRANGE_SERVICE );
-    pArray[3] = OUString( SCCELLPROPERTIES_SERVICE );
-    pArray[4] = OUString( SCCHARPROPERTIES_SERVICE );
-    pArray[5] = OUString( SCPARAPROPERTIES_SERVICE );
-    pArray[6] = OUString( SCLINKTARGET_SERVICE );
+    pArray[0] = SCSPREADSHEET_SERVICE;
+    pArray[1] = SCSHEETCELLRANGE_SERVICE;
+    pArray[2] = SCCELLRANGE_SERVICE;
+    pArray[3] = SCCELLPROPERTIES_SERVICE;
+    pArray[4] = SCCHARPROPERTIES_SERVICE;
+    pArray[5] = SCPARAPROPERTIES_SERVICE;
+    pArray[6] = SCLINKTARGET_SERVICE;
     return aRet;
 }
 

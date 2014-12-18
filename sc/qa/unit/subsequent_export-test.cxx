@@ -728,7 +728,7 @@ void ScExportTest::testRichTextExportODS()
             if (pText->GetParagraphCount() != 6)
                 return false;
 
-            if (pText->GetText(0) != "")
+            if (!pText->GetText(0).isEmpty())
                 return false;
 
             if (pText->GetText(1) != "Two")
@@ -737,13 +737,13 @@ void ScExportTest::testRichTextExportODS()
             if (pText->GetText(2) != "Three")
                 return false;
 
-            if (pText->GetText(3) != "")
+            if (!pText->GetText(3).isEmpty())
                 return false;
 
             if (pText->GetText(4) != "Five")
                 return false;
 
-            if (pText->GetText(5) != "")
+            if (!pText->GetText(5).isEmpty())
                 return false;
 
             return true;
@@ -2308,7 +2308,7 @@ void ScExportTest::testSwappedOutImageExport()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -2326,7 +2326,7 @@ void ScExportTest::testSwappedOutImageExport()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -2458,7 +2458,7 @@ void ScExportTest::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -2476,7 +2476,7 @@ void ScExportTest::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {

@@ -130,7 +130,7 @@ uno::Sequence<OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCFILTEROPTIONSOBJ_SERVICE );
+    pArray[0] = SCFILTEROPTIONSOBJ_SERVICE;
     return aRet;
 }
 
@@ -141,7 +141,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = OUString( SC_UNONAME_FILTEROPTIONS );
+    pArray[0].Name = SC_UNONAME_FILTEROPTIONS;
     pArray[0].Value <<= aFilterOptions;
 
     return aRet;

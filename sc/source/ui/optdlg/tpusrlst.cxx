@@ -297,7 +297,7 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
     aStr = comphelper::string::strip(aStr, cDelimiter);
     sal_Int32 nLen = aStr.getLength();
 
-    rListStr = "";
+    rListStr.clear();
 
     // Alle Doppelten cDelimiter entfernen:
     sal_Int32 c = 0;
@@ -377,7 +377,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                 }
                 if ( !aStrList.isEmpty() )
                     AddNewList( aStrList );
-                aStrList = "";
+                aStrList.clear();
             }
         }
         else
@@ -401,7 +401,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
                 }
                 if ( !aStrList.isEmpty() )
                     AddNewList( aStrList );
-                aStrList = "";
+                aStrList.clear();
             }
         }
 

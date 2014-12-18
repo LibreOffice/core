@@ -717,7 +717,7 @@ static bool lcl_HFPresentation
     {
         sal_uInt16 nWhich = pItem->Which();
 
-        aText = "";
+        aText.clear();
 
         switch( nWhich )
         {

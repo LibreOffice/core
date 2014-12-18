@@ -217,7 +217,7 @@ SCCOL ColumnEdit::AlphaToNum( OUString& rStr )
         }
     }
     else
-        rStr = "";
+        rStr.clear();
 
     return nColumn;
 }
@@ -229,7 +229,7 @@ SCCOL ColumnEdit::NumStrToAlpha( OUString& rStr )
     if ( CharClass::isAsciiNumeric(rStr) )
         nColumn = NumToAlpha( (SCCOL)rStr.toInt32(), rStr );
     else
-        rStr = "";
+        rStr.clear();
 
     return nColumn;
 }

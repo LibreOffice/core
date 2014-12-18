@@ -335,7 +335,7 @@ bool ScfTools::IsHTMLTablesName( const OUString& rSource )
 
 bool ScfTools::GetHTMLNameFromName( const OUString& rSource, OUString& rName )
 {
-    rName = "";
+    rName.clear();
     if( rSource.startsWithIgnoreAsciiCase( GetHTMLNamePrefix() ) )
     {
         rName = rSource.copy( GetHTMLNamePrefix().getLength() );

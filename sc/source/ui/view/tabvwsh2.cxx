@@ -218,7 +218,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
 
     nDrawSfxId = nNewId;
-    sDrawCustom = "";    // value is set below for custom shapes
+    sDrawCustom.clear();    // value is set below for custom shapes
 
     if ( nNewId != SID_DRAW_CHART )             // Chart nicht mit DrawShell
     {

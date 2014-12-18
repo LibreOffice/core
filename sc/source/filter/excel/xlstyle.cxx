@@ -184,8 +184,8 @@ XclFontData::XclFontData( const SvxFont& rFont )
 
 void XclFontData::Clear()
 {
-    maName = "";
-    maStyle = "";
+    maName.clear();
+    maStyle.clear();
     maColor.SetColor( COL_AUTO );
     mnHeight = 0;
     mnWeight = EXC_FONTWGHT_DONTKNOW;
@@ -199,7 +199,7 @@ void XclFontData::Clear()
 void XclFontData::FillFromVclFont( const vcl::Font& rFont )
 {
     maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
-    maStyle = "";
+    maStyle.clear();
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );
     mnEscapem = EXC_FONTESC_NONE;

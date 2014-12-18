@@ -1944,7 +1944,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         switch ( eType )
         {
             case CELLTYPE_NONE:
-                aString = "";
+                aString.clear();
                 bString = false;
                 break;
             case CELLTYPE_FORMULA :
@@ -2028,7 +2028,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 break;
             default:
                 OSL_FAIL( "ScDocShell::AsciiSave: unknown CellType" );
-                aString = "";
+                aString.clear();
                 bString = false;
         }
 

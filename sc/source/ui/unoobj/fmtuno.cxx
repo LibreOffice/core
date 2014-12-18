@@ -275,7 +275,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                 aEntry.maExpr1 = aStrVal;
             else if ( rProp.Value >>= aTokens )
             {
-                aEntry.maExpr1 = "";
+                aEntry.maExpr1.clear();
                 aEntry.maTokens1 = aTokens;
             }
         }
@@ -287,7 +287,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                 aEntry.maExpr2 = aStrVal;
             else if ( rProp.Value >>= aTokens )
             {
-                aEntry.maExpr2 = "";
+                aEntry.maExpr2.clear();
                 aEntry.maTokens2 = aTokens;
             }
         }
@@ -696,10 +696,10 @@ void ScTableValidationObj::ClearData_Impl()
     bShowError   = false;
     nErrorStyle  = SC_VALERR_STOP;
     aSrcPos.Set(0,0,0);
-    aExpr1 = "";
-    aExpr2 = "";
-    maExprNmsp1 = "";
-    maExprNmsp2 = "";
+    aExpr1.clear();
+    aExpr2.clear();
+    maExprNmsp1.clear();
+    maExprNmsp2.clear();
     meGrammar1 = meGrammar2 = FormulaGrammar::GRAM_UNSPECIFIED;  // will be overridden when needed
     aInputTitle.clear();
     aInputMessage.clear();
@@ -804,12 +804,12 @@ void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const uno::Sequ
     if (nIndex == 0)
     {
         aTokens1 = aTokens;
-        aExpr1 = "";
+        aExpr1.clear();
     }
     else if (nIndex == 1)
     {
         aTokens2 = aTokens;
-        aExpr2 = "";
+        aExpr2.clear();
     }
 }
 

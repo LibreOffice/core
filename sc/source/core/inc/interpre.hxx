@@ -973,7 +973,7 @@ inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUStri
     if ( rResult.getLength() + rAdd.getLength() > SAL_MAX_UINT16 )
     {
         SetError( errStringOverflow );
-        rResult = "";
+        rResult.clear();
         return false;
     }
     return true;

@@ -1521,7 +1521,7 @@ void ScContentTree::ToggleRoot()        // nach Selektion
 
 void ScContentTree::ResetManualDoc()
 {
-    aManualDoc = "";
+    aManualDoc.clear();
     bHiddenDoc = false;
 
     ActiveDocChanged();
@@ -1546,7 +1546,7 @@ void ScContentTree::ActiveDocChanged()
         {
             //  eingestelltes Dokument existiert nicht mehr
 
-            aManualDoc = "";             // wieder automatisch
+            aManualDoc.clear();             // wieder automatisch
             Refresh();
             pSh = GetManualOrCurrent();     // sollte jetzt aktives sein
             if (pSh)

@@ -89,7 +89,7 @@ public:
         assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
         load("/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
-        maFilterOptions = OUString("SkipImages");
+        maFilterOptions = "SkipImages";
         save("HTML (StarCalc)", aTempFile);
 
         pDoc = parseHtml(aTempFile);

@@ -4775,7 +4775,7 @@ void ScXMLExport::WriteConsolidation()
             ScXMLConverter::GetStringFromFunction( sStrData, pCons->eFunction );
             AddAttribute( XML_NAMESPACE_TABLE, XML_FUNCTION, sStrData );
 
-            sStrData = "";
+            sStrData.clear();
             for( sal_Int32 nIndex = 0; nIndex < pCons->nDataAreaCount; ++nIndex )
                 ScRangeStringConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, FormulaGrammar::CONV_OOO, ' ', true );
             AddAttribute( XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES, sStrData );

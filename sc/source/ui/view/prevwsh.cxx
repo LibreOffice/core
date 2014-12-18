@@ -949,12 +949,12 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     if(pSeq)
     {
         sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
-        pSeq[0].Name = OUString(SC_VIEWID);
+        pSeq[0].Name = SC_VIEWID;
         OUStringBuffer sBuffer(SC_VIEW);
         ::sax::Converter::convertNumber(sBuffer,
                 static_cast<sal_Int32>(nViewID));
         pSeq[0].Value <<= sBuffer.makeStringAndClear();
-        pSeq[1].Name = OUString(SC_ZOOMVALUE);
+        pSeq[1].Name = SC_ZOOMVALUE;
         pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
         pSeq[2].Name = "PageNumber";
         pSeq[2].Value <<= pPreview->GetPageNo();

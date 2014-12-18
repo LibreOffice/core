@@ -54,7 +54,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
         {
             double nValue = rCell.mfValue;
             if (!bNullVals && nValue == 0.0)
-                rString = "";
+                rString.clear();
             else
             {
                 if( eForceTextFmt == ftCheck )
@@ -101,12 +101,12 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                     if (nErrCode != 0)
                         rString = ScGlobal::GetErrorString(nErrCode);
                     else if ( pFCell->IsEmptyDisplayedAsString() )
-                        rString = "";
+                        rString.clear();
                     else if ( pFCell->IsValue() )
                     {
                         double fValue = pFCell->GetValue();
                         if ( !bNullVals && fValue == 0.0 )
-                            rString = "";
+                            rString.clear();
                         else if ( pFCell->IsHybridValueCell() )
                             rString = pFCell->GetString().getString();
                         else
@@ -122,7 +122,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
         }
         break;
         default:
-            rString = "";
+            rString.clear();
             break;
     }
 }
@@ -155,7 +155,7 @@ OUString ScCellFormat::GetString(
         case CELLTYPE_VALUE:
         {
             double nValue = rDoc.GetValue(rPos);
-            if (!bNullVals && nValue == 0.0) aString = "";
+            if (!bNullVals && nValue == 0.0) aString.clear();
             else
             {
                 if (eForceTextFmt == ftCheck)
@@ -200,11 +200,11 @@ OUString ScCellFormat::GetString(
                     sal_uInt16 nErrCode = pFCell->GetErrCode();
 
                     if (nErrCode != 0) aString = ScGlobal::GetErrorString(nErrCode);
-                    else if (pFCell->IsEmptyDisplayedAsString()) aString = "";
+                    else if (pFCell->IsEmptyDisplayedAsString()) aString.clear();
                     else if (pFCell->IsValue())
                     {
                         double fValue = pFCell->GetValue();
-                        if (!bNullVals && fValue == 0.0) aString = "";
+                        if (!bNullVals && fValue == 0.0) aString.clear();
                         else if (pFCell->IsHybridValueCell()) aString = pFCell->GetString().getString();
                         else rFormatter.GetOutputString(fValue, nFormat, aString, ppColor, bUseStarFormat);
                     }

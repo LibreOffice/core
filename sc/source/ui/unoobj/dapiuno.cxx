@@ -980,13 +980,13 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 {
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = OUString( SC_UNO_DP_SOURCENAME );
+                    pArray[0].Name = SC_UNO_DP_SOURCENAME;
                     pArray[0].Value <<= pServiceDesc->aParSource;
-                    pArray[1].Name = OUString( SC_UNO_DP_OBJECTNAME );
+                    pArray[1].Name = SC_UNO_DP_OBJECTNAME;
                     pArray[1].Value <<= pServiceDesc->aParName;
-                    pArray[2].Name = OUString( SC_UNO_DP_USERNAME );
+                    pArray[2].Name = SC_UNO_DP_USERNAME;
                     pArray[2].Value <<= pServiceDesc->aParUser;
-                    pArray[3].Name = OUString( SC_UNO_DP_PASSWORD );
+                    pArray[3].Name = SC_UNO_DP_PASSWORD;
                     pArray[3].Value <<= pServiceDesc->aParPass;
                     aRet <<= aSeq;
                 }
@@ -1824,7 +1824,7 @@ OUString SAL_CALL ScDataPilotFieldObj::getName()
     if( ScDPSaveDimension* pDim = GetDPDimension() )
     {
         if( pDim->IsDataLayout() )
-            aName = OUString( SC_DATALAYOUT_NAME );
+            aName = SC_DATALAYOUT_NAME;
         else
         {
             const OUString* pLayoutName = pDim->GetLayoutName();

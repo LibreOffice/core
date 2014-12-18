@@ -1357,9 +1357,9 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
     return NULL;
 }
 
-#define SC_EVENTACC_ONCLICK     OUString( "OnClick" )
-#define SC_EVENTACC_SCRIPT      OUString( "Script" )
-#define SC_EVENTACC_EVENTTYPE   OUString( "EventType" )
+#define SC_EVENTACC_ONCLICK     "OnClick"
+#define SC_EVENTACC_SCRIPT      "Script"
+#define SC_EVENTACC_EVENTTYPE   "EventType"
 
 typedef ::cppu::WeakImplHelper1< container::XNameReplace > ShapeUnoEventAcess_BASE;
 class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
@@ -1393,7 +1393,7 @@ public:
         bool isEventType = false;
         for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
         {
-            if ( pProperties->Name.equals( SC_EVENTACC_EVENTTYPE ) )
+            if ( pProperties->Name == SC_EVENTACC_EVENTTYPE )
             {
                 isEventType = true;
                 continue;
@@ -1430,7 +1430,7 @@ public:
             {
                 aProperties.realloc( 2 );
                 aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
-                aProperties[ 0 ].Value <<= SC_EVENTACC_SCRIPT;
+                aProperties[ 0 ].Value <<= OUString(SC_EVENTACC_SCRIPT);
                 aProperties[ 1 ].Name = SC_EVENTACC_SCRIPT;
                 aProperties[ 1 ].Value <<= pInfo->GetMacro();
             }

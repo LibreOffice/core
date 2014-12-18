@@ -3540,7 +3540,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
                 return true;
         }
 
-        aUpper = "";
+        aUpper.clear();
         bool bAsciiUpper = false;
         if (bMayBeFuncName)
         {
@@ -3667,8 +3667,8 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
     bCorrected = false;
     if ( bAutoCorrect )
     {
-        aCorrectedFormula = "";
-        aCorrectedSymbol = "";
+        aCorrectedFormula.clear();
+        aCorrectedSymbol.clear();
     }
     sal_uInt8 nForced = 0;   // ==formula forces recalc even if cell is not visible
     if( nSrcPos < aFormula.getLength() && aFormula[nSrcPos] == '=' )
@@ -3731,7 +3731,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     if ( bAutoCorrect )
                     {
                         bCorrected = true;
-                        aCorrectedSymbol = "";
+                        aCorrectedSymbol.clear();
                     }
                 }
                 else
@@ -3773,7 +3773,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     if ( bAutoCorrect )
                     {
                         bCorrected = true;
-                        aCorrectedSymbol = "";
+                        aCorrectedSymbol.clear();
                     }
                 }
                 if (bUseFunctionStack && nFunction)

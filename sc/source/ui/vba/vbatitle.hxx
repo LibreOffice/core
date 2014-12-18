@@ -146,7 +146,7 @@ public:
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = OUString("ooo.vba.excel.XTitle" );
+            aServiceNames[ 0 ] = "ooo.vba.excel.XTitle";
         }
         return aServiceNames;
     }

@@ -151,7 +151,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
         {
             mxNameContainerCellStyles->insertByName(_sName, uno::makeAny( xStyle) );
         }
-        if (!sParentCellStyleName.equals("Default"))
+        if (sParentCellStyleName != "Default")
         {
             xStyle->setParentStyle( sParentCellStyleName );
         }

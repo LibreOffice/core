@@ -186,22 +186,22 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     aDescriptor.setDataSource(rParam.aDBName);
     if (aDescriptor.has( svx::daDataSource ))
     {
-        pArray[0].Name = OUString( SC_UNONAME_DBNAME );
+        pArray[0].Name = SC_UNONAME_DBNAME;
         pArray[0].Value <<= rParam.aDBName;
     }
     else if (aDescriptor.has( svx::daConnectionResource ))
     {
-        pArray[0].Name = OUString( SC_UNONAME_CONRES );
+        pArray[0].Name = SC_UNONAME_CONRES;
         pArray[0].Value <<= rParam.aDBName;
     }
 
-    pArray[1].Name = OUString( SC_UNONAME_SRCTYPE );
+    pArray[1].Name = SC_UNONAME_SRCTYPE;
     pArray[1].Value <<= eMode;
 
-    pArray[2].Name = OUString( SC_UNONAME_SRCOBJ );
+    pArray[2].Name = SC_UNONAME_SRCOBJ;
     pArray[2].Value <<= rParam.aStatement;
 
-    pArray[3].Name = OUString( SC_UNONAME_ISNATIVE );
+    pArray[3].Name = SC_UNONAME_ISNATIVE;
     ScUnoHelpFunctions::SetBoolInAny( pArray[3].Value, rParam.bNative );
 }
 
@@ -307,31 +307,31 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
     //  Sequence fuellen
 
-    pArray[0].Name = OUString( SC_UNONAME_ISSORTCOLUMNS );
+    pArray[0].Name = SC_UNONAME_ISSORTCOLUMNS;
     pArray[0].Value <<= !rParam.bByRow;
 
-    pArray[1].Name = OUString( SC_UNONAME_CONTHDR );
+    pArray[1].Name = SC_UNONAME_CONTHDR;
     ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );
 
-    pArray[2].Name = OUString( SC_UNONAME_MAXFLD );
+    pArray[2].Name = SC_UNONAME_MAXFLD;
     pArray[2].Value <<= static_cast<sal_Int32>( rParam.GetSortKeyCount() );
 
-    pArray[3].Name = OUString( SC_UNONAME_SORTFLD );
+    pArray[3].Name = SC_UNONAME_SORTFLD;
     pArray[3].Value <<= aFields;
 
-    pArray[4].Name = OUString( SC_UNONAME_BINDFMT );
+    pArray[4].Name = SC_UNONAME_BINDFMT;
     ScUnoHelpFunctions::SetBoolInAny( pArray[4].Value, rParam.bIncludePattern );
 
-    pArray[5].Name = OUString( SC_UNONAME_COPYOUT );
+    pArray[5].Name = SC_UNONAME_COPYOUT;
     ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, !rParam.bInplace );
 
-    pArray[6].Name = OUString( SC_UNONAME_OUTPOS );
+    pArray[6].Name = SC_UNONAME_OUTPOS;
     pArray[6].Value <<= aOutPos;
 
-    pArray[7].Name = OUString( SC_UNONAME_ISULIST );
+    pArray[7].Name = SC_UNONAME_ISULIST;
     ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, rParam.bUserDef );
 
-    pArray[8].Name = OUString( SC_UNONAME_UINDEX );
+    pArray[8].Name = SC_UNONAME_UINDEX;
     pArray[8].Value <<= static_cast<sal_Int32>( rParam.nUserIndex );
 }
 
@@ -2202,7 +2202,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.sheet.DatabaseRange";
-    pArray[1] = OUString( SCLINKTARGET_SERVICE );
+    pArray[1] = SCLINKTARGET_SERVICE;
     return aRet;
 }
 

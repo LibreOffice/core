@@ -476,7 +476,7 @@ XclExpStringRef lclCreateFormattedString(
                     else
                     {
                         OSL_FAIL( "lclCreateFormattedString - unknown text field" );
-                        aXclPortionText = "";
+                        aXclPortionText.clear();
                     }
                 }
             }
@@ -667,7 +667,7 @@ void XclExpHFConverter::GenerateString(
         const EditTextObject* pCenterObj,
         const EditTextObject* pRightObj )
 {
-    maHFString = "";
+    maHFString.clear();
     mnTotalHeight = 0;
     AppendPortion( pLeftObj, 'L' );
     AppendPortion( pCenterObj, 'C' );

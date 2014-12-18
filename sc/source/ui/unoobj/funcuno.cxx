@@ -218,7 +218,7 @@ uno::Sequence<OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 {
     uno::Sequence<OUString> aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCFUNCTIONACCESS_SERVICE );
+    pArray[0] = SCFUNCTIONACCESS_SERVICE;
     return aRet;
 }
 
@@ -239,8 +239,8 @@ uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString( SCFUNCTIONACCESS_SERVICE );
-    pArray[1] = OUString( SCDOCSETTINGS_SERVICE );
+    pArray[0] = SCFUNCTIONACCESS_SERVICE;
+    pArray[1] = SCDOCSETTINGS_SERVICE;
     return aRet;
 }
 

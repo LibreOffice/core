@@ -124,7 +124,7 @@ const sal_Unicode* parseQuotedName( const sal_Unicode* p, OUString& rName )
         cPrev = *p;
     }
 
-    rName = "";
+    rName.clear();
     return pStart;
 }
 
@@ -437,9 +437,9 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     sal_uInt16 nSaveFlags = nFlags;
 
     // Is this an external reference ?
-    rStartTabName = "";
-    rEndTabName = "";
-    rExternDocName = "";
+    rStartTabName.clear();
+    rEndTabName.clear();
+    rExternDocName.clear();
     const sal_Unicode* pMsoxlQuoteStop = NULL;
     if (*p == '[')
     {
@@ -451,7 +451,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
             p = parseQuotedName(p, rExternDocName);
             if (!*p || *p != ']' || rExternDocName.isEmpty())
             {
-                rExternDocName = "";
+                rExternDocName.clear();
                 return start;
             }
         }
@@ -483,19 +483,19 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         p = parseQuotedName(p, rExternDocName);
         if (!*p || *p != '!')
         {
-            rExternDocName = "";
+            rExternDocName.clear();
             return start;
         }
         if (!rExternDocName.isEmpty())
         {
             sal_Int32 nOpen = rExternDocName.indexOf( '[');
             if (nOpen == -1)
-                rExternDocName = "";
+                rExternDocName.clear();
             else
             {
                 sal_Int32 nClose = rExternDocName.indexOf( ']', nOpen+1);
                 if (nClose == -1)
-                    rExternDocName = "";
+                    rExternDocName.clear();
                 else
                 {
                     rExternDocName = rExternDocName.copy(0, nClose);
@@ -1834,7 +1834,7 @@ static void lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
                               OUString& rTabName, OUString& rDocName )
 {
     pDoc->GetName(nTab, rTabName);
-    rDocName = "";
+    rDocName.clear();
     // External reference, same as in ScCompiler::MakeTabStr()
     if ( rTabName[0] == '\'' )
     {   // "'Doc'#Tab"

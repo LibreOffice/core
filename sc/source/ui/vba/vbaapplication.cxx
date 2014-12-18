@@ -290,7 +290,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException, std::exception)
     }
     else
     {
-        throw uno::RuntimeException( sImplementationName + OUString(" not supported" ) );
+        throw uno::RuntimeException( sImplementationName + " not supported" );
     }
 }
 

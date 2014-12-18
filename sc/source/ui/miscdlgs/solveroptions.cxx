@@ -146,7 +146,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
             nSelect = 0;
         }
         else
-            maEngine = "";
+            maEngine.clear();
         maProperties.realloc(0);        // don't use options from different engine
     }
     if ( nSelect >= 0 )                 // select in list box

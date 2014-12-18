@@ -253,7 +253,7 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
     @param rFmlaStr  (out-param) The converted formula string. */
 void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringList, sal_Unicode cFmlaSep )
 {
-    rFmlaStr = "";
+    rFmlaStr.clear();
     sal_Int32 nTokenCnt = comphelper::string::getTokenCount(rStringList, '\n');
     for( sal_Int32 nToken = 0, nStringIx = 0; nToken < (sal_Int32) nTokenCnt; ++nToken )
     {
@@ -275,7 +275,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
     OUString aQuotes( "\"\"" );
     sal_Int32 nTokenCnt = ScStringUtil::GetQuotedTokenCount(rFmlaStr, aQuotes, cFmlaSep );
 
-    rStringList="";
+    rStringList.clear();
     bool bIsStringList = (nTokenCnt > 0);
     bool bTokenAdded = false;
 
@@ -410,7 +410,7 @@ void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetFirstFormula( aFmlaStr );
 
-    aFmlaStr= "";
+    aFmlaStr.clear();
     if ( rArgSet->GetItemState( FID_VALID_VALUE2, true, &pItem ) == SfxItemState::SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
     SetSecondFormula( aFmlaStr );

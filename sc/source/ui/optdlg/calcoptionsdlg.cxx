@@ -796,7 +796,7 @@ struct OpenCLTester
         mpDoc->SetString(ScAddress(1,1+mnTestAreas-1,0), rArea.getSummaryFormula(mpDoc, mnTestAreas));
 
         mpDoc->SetString(ScAddress(1,0,0),
-                        OUString("=IF(SUM(") +
+                        "=IF(SUM(" +
                         ScRange(ScAddress(1,1,0),
                                 ScAddress(1,1+mnTestAreas-1,0)).Format(SCA_VALID|SCA_VALID_COL|SCA_VALID_ROW) +
                         ")=0,\"PASS\",\"FAIL\")");
@@ -866,7 +866,7 @@ struct UnOp : Op
         pDoc->SetValue(ScAddress(0,1+nRow,nTab), nArg);
 
         pDoc->SetString(ScAddress(1,1+nRow,nTab),
-                        OUString("=") + msOp + "(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) + ")");
+                        "=" + msOp + "(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) + ")");
 
         pDoc->SetValue(ScAddress(2,1+nRow,nTab), mpFun(nArg));
 
@@ -874,7 +874,7 @@ struct UnOp : Op
         {
             // relative epsilon
             pDoc->SetString(ScAddress(3,1+nRow,nTab),
-                            OUString("=IF(ABS((") + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "=IF(ABS((" + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                             "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                             ")/" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                             ")<=" + OUString::number(-mnEpsilon) +
@@ -884,7 +884,7 @@ struct UnOp : Op
         {
             // absolute epsilon
             pDoc->SetString(ScAddress(3,1+nRow,nTab),
-                            OUString("=IF(ABS(") + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "=IF(ABS(" + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                             "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                             ")<=" + OUString::number(mnEpsilon) +
                             ",0,1)");
@@ -893,7 +893,7 @@ struct UnOp : Op
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
     {
-        return OUString("=SUM(") +
+        return "=SUM(" +
             ScRange(ScAddress(3,1,nTab),
                     ScAddress(3,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
             ")";
@@ -925,7 +925,7 @@ struct BinOp : Op
     {
         pDoc->SetString(ScAddress(0,0,nTab), "lhs");
         pDoc->SetString(ScAddress(1,0,nTab), "rhs");
-        pDoc->SetString(ScAddress(2,0,nTab), OUString("lhs") + msOp + "rhs");
+        pDoc->SetString(ScAddress(2,0,nTab), "lhs" + msOp + "rhs");
         pDoc->SetString(ScAddress(3,0,nTab), "expected");
     }
 
@@ -942,13 +942,13 @@ struct BinOp : Op
         pDoc->SetValue(ScAddress(1,1+nRow,nTab), nRhs);
 
         pDoc->SetString(ScAddress(2,1+nRow,nTab),
-                        OUString("=") + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                         msOp + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW));
 
         pDoc->SetValue(ScAddress(3,1+nRow,nTab), mpFun(nLhs, nRhs));
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
-                        OUString("=IF(ABS(") + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                         "-" + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                         ")<=" + OUString::number(mnEpsilon) +
                         ",0,1)");
@@ -956,7 +956,7 @@ struct BinOp : Op
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
     {
-        return OUString("=SUM(") +
+        return "=SUM(" +
             ScRange(ScAddress(4,1,nTab),
                     ScAddress(4,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
             ")";
@@ -1010,7 +1010,7 @@ struct Reduction : Op
         if (nRow >= mnNum-1)
         {
             pDoc->SetString(ScAddress(1,1+nRow-mnNum+1,nTab),
-                            OUString("=") + msOp + "(" +
+                            "=" + msOp + "(" +
                             ScRange(ScAddress(0,1+nRow-mnNum+1,nTab),
                                     ScAddress(0,1+nRow,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW) +
                             ")");
@@ -1023,13 +1023,13 @@ struct Reduction : Op
 
             if (mnEpsilon != 0)
                 pDoc->SetString(ScAddress(3,1+nRow-mnNum+1,nTab),
-                                OUString("=IF(ABS(") + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "=IF(ABS(" + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                                 "-" + ScAddress(2,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                                 ")<=" + OUString::number(mnEpsilon) +
                                 ",0,1)");
             else
                 pDoc->SetString(ScAddress(3,1+nRow-mnNum+1,nTab),
-                                OUString("=IF(") + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "=IF(" + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                                 "=" + ScAddress(2,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                                 ",0,1)");
         }
@@ -1037,7 +1037,7 @@ struct Reduction : Op
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
     {
-        return OUString("=SUM(") +
+        return "=SUM(" +
             ScRange(ScAddress(3,1+0,nTab),
                     ScAddress(3,1+mnRows-mnNum-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
             ")";

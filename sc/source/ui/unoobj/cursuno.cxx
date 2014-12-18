@@ -471,8 +471,8 @@ uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
     //  SheetCellCursor should be first (?)
     uno::Sequence<OUString> aTotalSeq( nParentLen + 2 );
     OUString* pTotalArr = aTotalSeq.getArray();
-    pTotalArr[0] = OUString( SCSHEETCELLCURSOR_SERVICE );
-    pTotalArr[1] = OUString( SCCELLCURSOR_SERVICE );
+    pTotalArr[0] = SCSHEETCELLCURSOR_SERVICE;
+    pTotalArr[1] = SCCELLCURSOR_SERVICE;
 
     //  append cell range services
     for (long i=0; i<nParentLen; i++)

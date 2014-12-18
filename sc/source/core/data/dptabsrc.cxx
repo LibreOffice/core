@@ -1554,7 +1554,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
             sal_Int32 nLength = aSeq.getLength();
             if ( nLength == 0 )
             {
-                aSelectedPage = "";
+                aSelectedPage.clear();
                 bHasSelectedPage = false;
                 bDone = true;
             }

@@ -510,8 +510,8 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
     SolarMutexGuard aGuard;
     uno::Sequence<OUString> aNames(SC_STYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
-    pNames[0] = OUString(SC_FAMILYNAME_CELL );
-    pNames[1] = OUString(SC_FAMILYNAME_PAGE );
+    pNames[0] = SC_FAMILYNAME_CELL;
+    pNames[1] = SC_FAMILYNAME_PAGE;
     return aNames;
 }
 
@@ -549,13 +549,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
     uno::Sequence<beans::PropertyValue> aSequence(3);
     beans::PropertyValue* pArray = aSequence.getArray();
 
-    pArray[0].Name = OUString(SC_UNONAME_OVERWSTL );
+    pArray[0].Name = SC_UNONAME_OVERWSTL;
     ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, true );
 
-    pArray[1].Name = OUString(SC_UNONAME_LOADCELL );
+    pArray[1].Name = SC_UNONAME_LOADCELL;
     ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, true );
 
-    pArray[2].Name = OUString(SC_UNONAME_LOADPAGE );
+    pArray[2].Name = SC_UNONAME_LOADPAGE;
     ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, true );
 
     return aSequence;
@@ -1936,7 +1936,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                             sal_uInt8 nValue = static_cast<const SvxPaperBinItem&>(pItemSet->Get(nWhich)).GetValue();
                             OUString aName;
                             if ( nValue == PAPERBIN_PRINTER_SETTINGS )
-                                aName = OUString(SC_PAPERBIN_DEFAULTNAME );
+                                aName = SC_PAPERBIN_DEFAULTNAME;
                             else
                             {
                                 Printer* pPrinter = pDocShell->GetPrinter();
@@ -2027,7 +2027,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
     bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
     uno::Sequence<OUString> aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString(SCSTYLE_SERVICE );
+    pArray[0] = SCSTYLE_SERVICE;
     pArray[1] = bPage ? OUString(SCPAGESTYLE_SERVICE)
                       : OUString(SCCELLSTYLE_SERVICE);
     return aRet;

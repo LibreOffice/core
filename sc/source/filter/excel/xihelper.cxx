@@ -282,7 +282,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
     meCurrObj = EXC_HF_CENTER;
 
     // parser temporaries
-    maCurrText = "";
+    maCurrText.clear();
     OUString aReadFont;           // current font name
     OUString aReadStyle;          // current font style
     sal_uInt16 nReadHeight = 0; // current font height
@@ -382,8 +382,8 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                     break;
 
                     case '\"':          // font name
-                        aReadFont = "";
-                        aReadStyle = "";
+                        aReadFont.clear();
+                        aReadStyle.clear();
                         eState = xlPSFont;
                     break;
                     default:
@@ -544,7 +544,7 @@ void XclImpHFConverter::InsertText()
         ESelection& rSel = GetCurrSel();
         mrEE.QuickInsertText( maCurrText, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
         rSel.nEndPos = rSel.nEndPos + maCurrText.getLength();
-        maCurrText = "";
+        maCurrText.clear();
         UpdateCurrMaxLineHeight();
     }
 }

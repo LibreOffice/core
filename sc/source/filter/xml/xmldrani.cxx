@@ -340,7 +340,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         size_t nOldSize = aSortSequence.getLength();
         aSortSequence.realloc(nOldSize + 1);
         beans::PropertyValue aProperty;
-        aProperty.Name = OUString(SC_UNONAME_ORIENT);
+        aProperty.Name = SC_UNONAME_ORIENT;
         table::TableOrientation eOrient = mpQueryParam->bByRow ?
             table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
         aProperty.Value <<= eOrient;

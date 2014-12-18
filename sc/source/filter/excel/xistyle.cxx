@@ -212,7 +212,7 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
                 }
             }
         }
-        maData.maStyle = "";
+        maData.maStyle.clear();
     }
     GuessScriptType();
     SetAllUsedFlags( true );

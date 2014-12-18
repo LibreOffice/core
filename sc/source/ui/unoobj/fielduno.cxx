@@ -1340,7 +1340,7 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyNam
                         uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (aPropertyName.equals(SC_UNONAME_TEXTFIELD_TYPE))
+    if (aPropertyName == SC_UNONAME_TEXTFIELD_TYPE)
         return uno::makeAny(meType);
 
     if (aPropertyName == SC_UNONAME_ANCHOR)

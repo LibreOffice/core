@@ -51,19 +51,19 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         if ( !bCellMapFilled )
         {
             aCellMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
-            aCellMap[0].aProgName = OUString( SC_STYLE_PROG_STANDARD );
+            aCellMap[0].aProgName = SC_STYLE_PROG_STANDARD;
 
             aCellMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_RESULT );
-            aCellMap[1].aProgName = OUString( SC_STYLE_PROG_RESULT );
+            aCellMap[1].aProgName = SC_STYLE_PROG_RESULT;
 
             aCellMap[2].aDispName = ScGlobal::GetRscString( STR_STYLENAME_RESULT1 );
-            aCellMap[2].aProgName = OUString( SC_STYLE_PROG_RESULT1 );
+            aCellMap[2].aProgName = SC_STYLE_PROG_RESULT1;
 
             aCellMap[3].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE );
-            aCellMap[3].aProgName = OUString( SC_STYLE_PROG_HEADLINE );
+            aCellMap[3].aProgName = SC_STYLE_PROG_HEADLINE;
 
             aCellMap[4].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE1 );
-            aCellMap[4].aProgName = OUString( SC_STYLE_PROG_HEADLINE1 );
+            aCellMap[4].aProgName = SC_STYLE_PROG_HEADLINE1;
 
             //  last entry remains empty
 
@@ -78,10 +78,10 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         if ( !bPageMapFilled )
         {
             aPageMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
-            aPageMap[0].aProgName = OUString( SC_STYLE_PROG_STANDARD );
+            aPageMap[0].aProgName = SC_STYLE_PROG_STANDARD;
 
             aPageMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_REPORT );
-            aPageMap[1].aProgName = OUString( SC_STYLE_PROG_REPORT );
+            aPageMap[1].aProgName = SC_STYLE_PROG_REPORT;
 
             //  last entry remains empty
 
