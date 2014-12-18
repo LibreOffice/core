@@ -892,7 +892,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     OUString aStyleBoxText =pStyleBox->GetText();
     sal_Int32 nEntryPos = pStyleBox->GetEntryPos( aStyleBoxText );
     if ( nEntryPos >= m_pImpl->m_nExtraEntryPos )
-        aStyleBoxText = "";
+        aStyleBoxText.clear();
     vcl::FontInfo aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
     SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );

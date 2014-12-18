@@ -146,7 +146,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
     rStrURL = GetCurrentURL();
 
     if( rStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
-         rStrURL = "";
+         rStrURL.clear();
 
     GetDataFromCommonFields( aStrName, aStrIntName, aStrFrame, eMode );
 }

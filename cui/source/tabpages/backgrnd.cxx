@@ -1487,8 +1487,8 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                     }
                     else
                     {
-                        aBgdGraphicFilter = "";
-                        aBgdGraphicPath = "";
+                        aBgdGraphicFilter.clear();
+                        aBgdGraphicPath.clear();
                         bIsGraphicValid = false;
                     }
                 }
@@ -1734,8 +1734,8 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if ( m_pLbSelect->IsVisible() ) // initialize graphic part
         {
-            aBgdGraphicFilter = "";
-            aBgdGraphicPath = "";
+            aBgdGraphicFilter.clear();
+            aBgdGraphicPath.clear();
 
             if ( rUserData.isEmpty() )
                 m_pBtnPreview->Check( false );
@@ -1765,7 +1765,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
         else
         {
-            aBgdGraphicPath = "";
+            aBgdGraphicPath.clear();
             m_pBtnLink->Check( false );
             m_pBtnLink->Disable();
         }

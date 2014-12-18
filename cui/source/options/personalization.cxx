@@ -250,7 +250,7 @@ void SelectPersonaDialog::AddPersonaSetting( OUString& rPersonaSetting )
 void SelectPersonaDialog::ClearSearchResults()
 {
     m_vPersonaSettings.clear();
-    m_aSelectedPersona = "";
+    m_aSelectedPersona.clear();
     for( sal_Int32 nIndex = 0; nIndex < 9; nIndex++ )
     {
         m_vResultList[nIndex]->Disable();
@@ -321,7 +321,7 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
     // write
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
     if( aPersona == "no" )
-        m_aPersonaSettings = "";
+        m_aPersonaSettings.clear();
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
     officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
     batch->commit();
@@ -638,7 +638,7 @@ void SearchAndParseThread::execute()
             return;
 
         SolarMutexGuard aGuard;
-        sProgress = "";
+        sProgress.clear();
         m_pPersonaDialog->SetProgress( sProgress );
         m_pPersonaDialog->setOptimalLayoutSize();
     }

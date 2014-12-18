@@ -2446,10 +2446,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
             if ( aSmartTagCaption.isEmpty() )
                 aSmartTagCaption = aSmartTagType;
 
-            const OUString aLBEntry = aSmartTagCaption +
-                                           OUString(" (") +
-                                           aName +
-                                           OUString(")");
+            const OUString aLBEntry = aSmartTagCaption + " (" + aName + ")";
 
             SvTreeListEntry* pEntry = m_pSmartTagTypesLB->SvTreeListBox::InsertEntry( aLBEntry );
             if ( pEntry )

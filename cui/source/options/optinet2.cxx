@@ -554,7 +554,7 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
      if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
          aHelpText = GetEntry(nPos);
     if( aHelpText.getLength() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
-        aHelpText = ""; // if the entry is quite short, clear the helping tip content.
+        aHelpText.clear(); // if the entry is quite short, clear the helping tip content.
     aItemRect = Rectangle(Point(0,0),GetSizePixel());
     aPt = Point(OutputToScreenPixel( aItemRect.TopLeft() ));
     aItemRect.Left()   = aPt.X();

@@ -679,9 +679,9 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
     const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
-    OUString entryForAuto = sAutoStr + OUString(" (") +
+    OUString entryForAuto = sAutoStr + " (" +
                                 autoIconTheme.GetDisplayName() +
-                                OUString(")");
+                                ")";
     m_pIconStyleLB->InsertEntry(entryForAuto);
 
     for (std::vector<vcl::IconThemeInfo>::const_iterator aI = mInstalledIconThemes.begin(); aI != mInstalledIconThemes.end(); ++aI) {

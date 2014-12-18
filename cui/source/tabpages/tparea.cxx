@@ -2077,7 +2077,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
     //UUUU
     mbDirectGraphicSet = false;
     maDirectGraphic.Clear();
-    maDirectName = "";
+    maDirectName.clear();
 
     const SfxPoolItem* pPoolItem = NULL;
     sal_Int32 _nPos = m_pLbBitmap->GetSelectEntryPos();

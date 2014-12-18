@@ -62,7 +62,7 @@ PersonasDocHandler::startElement( const OUString& aName,
     if( aName == "searchresults" )
     {
         OUString aTotalResults = xAttribs->getValueByName( "total_results" );
-        if( !aTotalResults.equals( "0" ) )
+        if( aTotalResults != "0" )
             m_hasResults = true;
     }
 

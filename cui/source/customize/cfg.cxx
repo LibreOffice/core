@@ -853,7 +853,7 @@ SaveInData::SaveInData(
             m_xParentCfgMgr( xParentCfgMgr )
 {
     m_aSeparatorSeq.realloc( 1 );
-    m_aSeparatorSeq[0].Name  = OUString( ITEM_DESCRIPTOR_TYPE  );
+    m_aSeparatorSeq[0].Name  = ITEM_DESCRIPTOR_TYPE;
     m_aSeparatorSeq[0].Value <<= css::ui::ItemType::SEPARATOR_LINE;
 
     if ( bDocConfig )
@@ -1606,8 +1606,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         if ( pModuleData != NULL )
         {
             nPos = m_pSaveInListBox->InsertEntry(
-                utl::ConfigManager::getProductName() +
-                OUString( " "  ) + aModuleName );
+                utl::ConfigManager::getProductName() + " " + aModuleName );
             m_pSaveInListBox->SetEntryData( nPos, pModuleData );
         }
 
@@ -1714,7 +1713,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                     try{
                         aCheckId = xModuleManager->identify( xf );
                     } catch(const uno::Exception&)
-                        { aCheckId = ""; }
+                        { aCheckId.clear(); }
 
                     if ( aModuleId.equals( aCheckId ) )
                     {
@@ -2899,7 +2898,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
-    m_aURLToSelect = OUString(ITEM_TOOLBAR_URL );
+    m_aURLToSelect = ITEM_TOOLBAR_URL;
     m_aURLToSelect += "standardbar";
 
     const SfxPoolItem* pItem =
@@ -3422,7 +3421,7 @@ void SvxToolbarConfigPage::Init()
         }
 
         // in future select the default toolbar: Standard
-        m_aURLToSelect = OUString(ITEM_TOOLBAR_URL );
+        m_aURLToSelect = ITEM_TOOLBAR_URL;
         m_aURLToSelect += "standardbar";
     }
 

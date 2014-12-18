@@ -269,8 +269,7 @@ OUString AboutDialog::GetVersionString()
 
     if (strlen(EXTRA_BUILDID) > 0)
     {
-        sVersion += "\n";
-        sVersion += EXTRA_BUILDID;
+        sVersion += "\n" EXTRA_BUILDID;
     }
 
     if (!pLocaleStr.trim().isEmpty())
@@ -295,7 +294,7 @@ OUString AboutDialog::GetCopyrightString()
     aCopyrightString += m_aCopyrightTextStr;
     aCopyrightString += "\n";
 
-    if (utl::ConfigManager::getProductName().equals("LibreOffice"))
+    if (utl::ConfigManager::getProductName() == "LibreOffice")
         aCopyrightString += m_aBasedTextStr;
     else
         aCopyrightString += m_aBasedDerivedTextStr;

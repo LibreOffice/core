@@ -1571,7 +1571,7 @@ namespace svx
     {
         if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
         {
-            m_aOriginal = "";
+            m_aOriginal.clear();
             m_bModifiedOriginal = true;
             InitEditDictDialog( m_nCurrentDict );
         }
@@ -1586,7 +1586,7 @@ namespace svx
         if( m_nCurrentDict != _nSelDict )
         {
             m_nCurrentDict = _nSelDict;
-            m_aOriginal = "";
+            m_aOriginal.clear();
             m_bModifiedOriginal = true;
         }
 

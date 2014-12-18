@@ -81,7 +81,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
     OUString sCurName;
     for (sal_uInt16 i=0; i<xCols->getCount(); ++i)
     {
-        sCurName = "";
+        sCurName.clear();
         xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
         bool bIsHidden = false;
         try

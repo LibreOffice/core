@@ -1030,7 +1030,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
     if ( bInputAllowed )
     {
         aPreviewTimer.Stop();
-        aPreviewString = "";
+        aPreviewString.clear();
 
         if( !m_pCbxPreview->IsChecked() )
         {

@@ -387,23 +387,23 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
     {
         if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTP_SCHEME ) )
         {
-            aStrScheme = OUString( INET_HTTP_SCHEME );
+            aStrScheme = INET_HTTP_SCHEME;
         }
         else if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTPS_SCHEME ) )
         {
-            aStrScheme = OUString( INET_HTTPS_SCHEME );
+            aStrScheme = INET_HTTPS_SCHEME;
         }
         else if ( rStrURL.startsWithIgnoreAsciiCase( INET_FTP_SCHEME ) )
         {
-            aStrScheme = OUString( INET_FTP_SCHEME );
+            aStrScheme = INET_FTP_SCHEME;
         }
         else if ( rStrURL.startsWithIgnoreAsciiCase( INET_MAILTO_SCHEME ) )
         {
-            aStrScheme = OUString( INET_MAILTO_SCHEME );
+            aStrScheme = INET_MAILTO_SCHEME;
         }
         else if ( rStrURL.startsWithIgnoreAsciiCase( INET_NEWS_SCHEME ) )
         {
-            aStrScheme = OUString( INET_NEWS_SCHEME );
+            aStrScheme = INET_NEWS_SCHEME;
         }
     }
     else

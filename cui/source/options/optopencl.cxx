@@ -164,7 +164,7 @@ ListEntryDialog::ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplM
     get(mpDriverVersion, "driverversion");
 
     // Hardcode knowledge that entry 0 is the "Any"
-    if (maEntry.maOS == "")
+    if (maEntry.maOS.isEmpty())
     {
         mpOS->SelectEntryPos(0, false);
     }
@@ -195,7 +195,7 @@ IMPL_LINK(ListEntryDialog, OSSelectHdl, ListBox*, pListBox)
     if (pListBox == mpOS)
     {
         if (mpOS->GetSelectEntryPos() == 0)
-            maEntry.maOS = "";
+            maEntry.maOS.clear();
         else
             maEntry.maOS = mpOS->GetEntry(mpOS->GetSelectEntryPos());
     }

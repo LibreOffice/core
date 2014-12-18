@@ -567,8 +567,8 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 
             if ( pMultiDlg->Execute() == RET_OK && pEntry )
             {
-                sUser = "";
-                sWritable = "";
+                sUser.clear();
+                sWritable.clear();
                 OUString sFullPath;
                 OUString sNewPath = pMultiDlg->GetPath();
                 char cDelim = MULTIPATH_DELIMITER;

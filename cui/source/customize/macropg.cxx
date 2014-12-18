@@ -629,7 +629,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     {
         // delete pressed
         sEventType =  "Script" ;
-        sEventURL = "";
+        sEventURL.clear();
         if(!pThis->bAppEvents)
             pThis->bDocModified = true;
     }
@@ -845,7 +845,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( vcl::Window* pParent, const Reference< fra
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {
     OUString aMethodName = mpMethodEdit->GetText();
-    maURL = "";
+    maURL.clear();
     if( !aMethodName.isEmpty() )
     {
         maURL = aVndSunStarUNO;
