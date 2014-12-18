@@ -241,8 +241,7 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
     {
         TargetURL = ( tvDom->getTargetURL() + configData.appendix );
         if( !tvDom->anchor.isEmpty() )
-            TargetURL += ( OUString( "#" ) +
-                           tvDom->anchor );
+            TargetURL += "#" + tvDom->anchor;
     }
     else
         Children = new TVChildTarget( configData,tvDom );
@@ -665,9 +664,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     {
     }
 
-    OUString productVersion( setupversion +
-                                  OUString( " " ) +
-                                  setupextension );
+    OUString productVersion( setupversion + " " + setupextension );
     OUString locale( getKey( xHierAccess,"L10N/ooLocale" ) );
 
     // Determine fileurl from url and locale
@@ -762,11 +759,11 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
        configData.system = system;
     configData.locale = locale;
     configData.appendix =
-        OUString( "?Language=" ) +
+        "?Language=" +
         configData.locale +
-        OUString( "&System=" ) +
+        "&System=" +
         configData.system +
-        OUString( "&UseDB=no" ) ;
+        "&UseDB=no";
 
     return configData;
 }
@@ -931,7 +928,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
             const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
             const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
             OUString aMediaType = xPackageTypeInfo->getMediaType();
-            if( aMediaType.equals( aHelpMediaType ) )
+            if( aMediaType == aHelpMediaType )
             {
                 xHelpPackage = xSubPkg;
                 o_xParentPackageBundle = xPackage;
@@ -943,7 +940,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     {
         const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
         OUString aMediaType = xPackageTypeInfo->getMediaType();
-        if( aMediaType.equals( aHelpMediaType ) )
+        if( aMediaType == aHelpMediaType )
             xHelpPackage = xPackage;
     }
 
@@ -1184,7 +1181,7 @@ OUString TreeFileIterator::implGetTreeFileFromPackage
     if( m_xSFA->exists( aRetFile ) )
         rnFileSize = m_xSFA->getSize( aRetFile );
     else
-        aRetFile = "";
+        aRetFile.clear();
 
     return aRetFile;
 }

@@ -331,10 +331,10 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )
     {
         m_aPath[m_nRow] =
-            m_aPath[m_nRow]                         +
-            OUString( "?Language=" )           +
-            m_aURLParameter.get_language()          +
-            OUString( "&System=" )             +
+            m_aPath[m_nRow] +
+            "?Language=" +
+            m_aURLParameter.get_language() +
+            "&System=" +
             m_aURLParameter.get_system();
 
         uno::Reference< XContent > content = queryContent();

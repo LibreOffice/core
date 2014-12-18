@@ -52,11 +52,11 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext
     for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )
     {
         m_aPath[i] =
-            OUString( "vnd.sun.star.help://" ) +
-            m_aPath[i]                              +
-            OUString( "?Language=" )           +
-            m_aURLParameter.get_language()          +
-            OUString( "&System=" )             +
+            "vnd.sun.star.help://" +
+            m_aPath[i] +
+            "?Language=" +
+            m_aURLParameter.get_language() +
+            "&System=" +
             m_aURLParameter.get_system();
 
         m_nRow = sal_Int32( i );

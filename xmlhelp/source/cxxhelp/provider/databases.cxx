@@ -293,7 +293,7 @@ OString Databases::getImagesZipFileURL()
                 bFound = impl_getZipFile( m_aImagesZipPaths, OUString( "images.zip" ), aImageZip );
 
             if ( ! bFound )
-                aImageZip = "";
+                aImageZip.clear();
 
             m_aImagesZipFileURL = OUStringToOString(
                         rtl::Uri::encode(

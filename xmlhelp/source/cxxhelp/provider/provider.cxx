@@ -159,12 +159,8 @@ uno::Sequence< OUString >
 ContentProvider::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[ 0 ] =
-        OUString(
-            MYUCP_CONTENT_PROVIDER_SERVICE_NAME1 );
-    aSNS.getArray()[ 1 ] =
-        OUString(
-            MYUCP_CONTENT_PROVIDER_SERVICE_NAME2 );
+    aSNS.getArray()[ 0 ] = MYUCP_CONTENT_PROVIDER_SERVICE_NAME1;
+    aSNS.getArray()[ 1 ] = MYUCP_CONTENT_PROVIDER_SERVICE_NAME2;
 
     return aSNS;
 }
@@ -327,10 +323,7 @@ void ContentProvider::init()
     {
     }
 
-    OUString productversion(
-        setupversion +
-        OUString( " " ) +
-        setupextension );
+    OUString productversion( setupversion + " " + setupextension );
 
     uno::Sequence< OUString > aImagesZipPaths( 2 );
     xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );

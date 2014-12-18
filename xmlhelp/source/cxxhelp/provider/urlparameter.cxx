@@ -610,7 +610,7 @@ bool URLParameter::query()
         if( delimIdx == -1 )
         {
             value = query_.copy( equalIdx + 1 ).trim();
-            query_ = "";
+            query_.clear();
         }
         else
         {
@@ -635,7 +635,7 @@ bool URLParameter::query()
             if( m_aQuery.isEmpty() )
                 m_aQuery = value;
             else
-                m_aQuery += ( OUString( " " ) + value );
+                m_aQuery += " " + value;
         }
         else if( parameter == "Scope" )
             m_aScope = value;
