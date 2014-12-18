@@ -738,9 +738,13 @@ IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
 
 bool SpellDialog::Close()
 {
-    GetBindings().GetDispatcher()->
-        Execute(rParent.GetType(),
-        SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+    // We have to call ToggleChildWindow directly; calling SfxDispatcher's
+    // Execute() does not work here when we are in a document with protected
+    // section - in that case, the cursor can move from the editable field to
+    // the protected area, and the slots get disabled because of
+    // SW_DISABLE_ON_PROTECTED_CURSOR (see FN_SPELL_GRAMMAR_DIALOG in .sdi).
+    SfxViewFrame::Current()->ToggleChildWindow(rParent.GetType());
+
     return true;
 }
 
