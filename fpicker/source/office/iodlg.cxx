@@ -107,9 +107,6 @@ using namespace ExtendedFilePickerElementIds;
 using namespace CommonFilePickerElementIds;
 using namespace InternalFilePickerElementIds;
 
-#define IODLG_CONFIGNAME        OUString("FileDialog")
-#define IMPGRF_CONFIGNAME       OUString("ImportGraphicDialog")
-
 #define GET_DECODED_NAME(aObj) \
     aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET )
 
@@ -244,7 +241,7 @@ namespace
 
     bool lcl_getHomeDirectory( const OUString& _rForURL, OUString& /* [out] */ _rHomeDir )
     {
-        _rHomeDir = "";
+        _rHomeDir.clear();
 
         // now ask the content broker for a provider for this scheme
 
@@ -557,7 +554,7 @@ void SvtFileDialog::Init_Impl
     }
 
     // set the ini file for extracting the size
-    _pImp->_aIniKey = IODLG_CONFIGNAME;
+    _pImp->_aIniKey = "FileDialog";
 
     AddControls_Impl( );
 
@@ -1912,7 +1909,7 @@ short SvtFileDialog::PrepareExecute()
                      && (_aPath.indexOf('/') == -1))
     {
         aFileNameOnly = _aPath;
-        _aPath = "";
+        _aPath.clear();
     }
 
     // no starting path specified?
@@ -2516,7 +2513,7 @@ void SvtFileDialog::AddControls_Impl( )
     // create the "show preview" checkbox ( and the preview window, too ), if needed
     if ( _nExtraBits & SFX_EXTRA_SHOWPREVIEW  )
     {
-        _pImp->_aIniKey = IMPGRF_CONFIGNAME;
+        _pImp->_aIniKey = "ImportGraphicDialog";
         // because the "<All Formats> (*.bmp,*...)" entry is to wide,
         // we need to disable the auto width feature of the filter box
         _pImp->DisableFilterBoxAutoWidth();
@@ -2763,7 +2760,7 @@ void SvtFileDialog::appendDefaultExtension(OUString& _rFileName,
     OUString aType(_rFilterExtensions);
     aType = aType.toAsciiLowerCase();
 
-    if ( ! aType.equals(FILEDIALOG_FILTER_ALL) )
+    if ( aType != FILEDIALOG_FILTER_ALL )
     {
         sal_uInt16 nWildCard = comphelper::string::getTokenCount(aType, FILEDIALOG_DEF_EXTSEP);
         sal_uInt16 nIndex;
