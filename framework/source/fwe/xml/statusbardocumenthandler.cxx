@@ -373,12 +373,12 @@ throw(  SAXException, RuntimeException, std::exception )
                         else
                         {
                             Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                            aStatusbarItemProp[0].Name = OUString( ITEM_DESCRIPTOR_COMMANDURL );
-                            aStatusbarItemProp[1].Name = OUString( ITEM_DESCRIPTOR_HELPURL );
-                            aStatusbarItemProp[2].Name = OUString( ITEM_DESCRIPTOR_OFFSET );
-                            aStatusbarItemProp[3].Name = OUString( ITEM_DESCRIPTOR_STYLE );
-                            aStatusbarItemProp[4].Name = OUString( ITEM_DESCRIPTOR_WIDTH );
-                            aStatusbarItemProp[5].Name = OUString( ITEM_DESCRIPTOR_TYPE );
+                            aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+                            aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
+                            aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
+                            aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
+                            aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
+                            aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
 
                             aStatusbarItemProp[0].Value <<= aCommandURL;
                             aStatusbarItemProp[1].Value <<= aHelpURL;
@@ -489,9 +489,9 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType    = OUString( ATTRIBUTE_TYPE_CDATA );
-    m_aXMLXlinkNS       = OUString( XMLNS_XLINK_PREFIX );
-    m_aXMLStatusBarNS   = OUString( XMLNS_STATUSBAR_PREFIX );
+    m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
+    m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
+    m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
 }
 
 OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
@@ -586,19 +586,19 @@ throw ( SAXException, RuntimeException )
     // alignment
     if ( nStyle & ItemStyle::ALIGN_RIGHT )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_ALIGN_RIGHT ) );
     }
     else if ( nStyle & ItemStyle::ALIGN_CENTER )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_ALIGN_CENTER ) );
     }
     else
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_ALIGN,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_ALIGN_LEFT ) );
     }
@@ -606,13 +606,13 @@ throw ( SAXException, RuntimeException )
     // style ( SIB_IN is default )
     if ( nStyle & ItemStyle::DRAW_FLAT )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_STYLE ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_STYLE_FLAT ) );
     }
     else if ( nStyle & ItemStyle::DRAW_OUT3D )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_STYLE ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_STYLE_OUT ) );
     }
@@ -620,7 +620,7 @@ throw ( SAXException, RuntimeException )
     // autosize (default sal_False)
     if ( nStyle & ItemStyle::AUTO_SIZE )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_AUTOSIZE ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_AUTOSIZE,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
@@ -628,7 +628,7 @@ throw ( SAXException, RuntimeException )
     // ownerdraw (default sal_False)
     if ( nStyle & ItemStyle::OWNER_DRAW )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OWNERDRAW ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OWNERDRAW,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
@@ -636,7 +636,7 @@ throw ( SAXException, RuntimeException )
     // width (default 0)
     if ( nWidth > 0 )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_WIDTH ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_WIDTH,
                              m_aAttributeType,
                              OUString::number( nWidth ) );
     }
@@ -644,7 +644,7 @@ throw ( SAXException, RuntimeException )
     // offset (default STATUSBAR_OFFSET)
     if ( nOffset != STATUSBAR_OFFSET )
     {
-        pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OFFSET ),
+        pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_OFFSET,
                              m_aAttributeType,
                              OUString::number( nOffset ) );
     }

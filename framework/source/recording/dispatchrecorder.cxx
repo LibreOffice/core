@@ -36,7 +36,7 @@ namespace framework{
 DEFINE_XSERVICEINFO_MULTISERVICE_2(
     DispatchRecorder,
     ::cppu::OWeakObject,
-    OUString("com.sun.star.frame.DispatchRecorder"),
+    "com.sun.star.frame.DispatchRecorder",
     OUString("com.sun.star.comp.framework.DispatchRecorder"))
 
 DEFINE_INIT_SERVICE(
@@ -70,8 +70,7 @@ Sequence< Any > make_seq_out_of_struct(
     if (TypeClass_STRUCT != eTypeClass && TypeClass_EXCEPTION != eTypeClass)
     {
         throw RuntimeException(
-            type.getTypeName() +
-            OUString( "is no struct or exception!" ) );
+            type.getTypeName() + "is no struct or exception!" );
     }
     typelib_TypeDescription * pTD = 0;
     TYPELIB_DANGER_GET( &pTD, type.getTypeLibType() );
@@ -79,8 +78,7 @@ Sequence< Any > make_seq_out_of_struct(
     if (! pTD)
     {
         throw RuntimeException(
-            OUString( "cannot get type descr of type " ) +
-            type.getTypeName() );
+            "cannot get type descr of type " + type.getTypeName() );
     }
 
     ::std::vector< Any > vec;

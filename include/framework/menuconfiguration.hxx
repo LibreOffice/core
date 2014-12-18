@@ -36,8 +36,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
-#define BOOKMARK_NEWMENU        OUString( "private:menu_bookmark_new" )
-#define BOOKMARK_WIZARDMENU     OUString( "private:menu_bookmark_wizard" )
+#define BOOKMARK_NEWMENU        "private:menu_bookmark_new"
+#define BOOKMARK_WIZARDMENU     "private:menu_bookmark_wizard"
 
 // Prepare for inclusion by framework and sfx
 // Please consider that there is a corresponding define also in sfxsids.hrc!! (SID_SFX_START)/(SID_ADDONS)

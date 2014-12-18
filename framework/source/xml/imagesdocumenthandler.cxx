@@ -602,11 +602,11 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList            = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType        = OUString( ATTRIBUTE_TYPE_CDATA );
-    m_aXMLImageNS           = OUString( XMLNS_IMAGE_PREFIX );
-    m_aXMLXlinkNS           = OUString( XMLNS_XLINK_PREFIX );
-    m_aAttributeXlinkType   = OUString( ATTRIBUTE_XLINK_TYPE );
-    m_aAttributeValueSimple = OUString( ATTRIBUTE_XLINK_TYPE_VALUE );
+    m_aAttributeType        = ATTRIBUTE_TYPE_CDATA;
+    m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
+    m_aXMLXlinkNS           = XMLNS_XLINK_PREFIX;
+    m_aAttributeXlinkType   = ATTRIBUTE_XLINK_TYPE;
+    m_aAttributeValueSimple = ATTRIBUTE_XLINK_TYPE_VALUE;
 }
 
 OWriteImagesDocumentHandler::~OWriteImagesDocumentHandler()
@@ -677,23 +677,23 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
                          m_aAttributeType,
                          m_aAttributeValueSimple );
 
-    pList->AddAttribute( m_aXMLXlinkNS + OUString( ATTRIBUTE_HREF ),
+    pList->AddAttribute( m_aXMLXlinkNS + ATTRIBUTE_HREF,
                          m_aAttributeType,
                          pImageList->aURL );
 
     if ( pImageList->nMaskMode == ImageMaskMode_Bitmap )
     {
-        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKMODE ),
+        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKMODE,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_MASKMODE_BITMAP ) );
 
-        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKURL ),
+        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKURL,
                              m_aAttributeType,
                              pImageList->aMaskURL );
 
         if ( !pImageList->aHighContrastMaskURL.isEmpty() )
         {
-            pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_HIGHCONTRASTMASKURL ),
+            pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_HIGHCONTRASTMASKURL,
                                  m_aAttributeType,
                                  pImageList->aHighContrastMaskURL );
         }
@@ -706,18 +706,18 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
         aColorStrBuffer.appendAscii( "#" );
         aColorStrBuffer.append( OUString::number( nValue, 16 ));
 
-        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKCOLOR ),
+        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKCOLOR,
                              m_aAttributeType,
                              aColorStrBuffer.makeStringAndClear() );
 
-        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_MASKMODE ),
+        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKMODE,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_MASKMODE_COLOR ) );
     }
 
     if ( !pImageList->aHighContrastURL.isEmpty() )
     {
-        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_HIGHCONTRASTURL ),
+        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_HIGHCONTRASTURL,
                              m_aAttributeType,
                              pImageList->aHighContrastURL );
     }
@@ -742,11 +742,11 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_BITMAPINDEX ),
+    pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_BITMAPINDEX,
                          m_aAttributeType,
                          OUString::number( pImage->nIndex ) );
 
-    pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_COMMAND ),
+    pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_COMMAND,
                          m_aAttributeType,
                          pImage->aCommandURL );
 
@@ -787,14 +787,14 @@ void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDes
 
     if ( !pExternalImage->aURL.isEmpty() )
     {
-        pList->AddAttribute( m_aXMLXlinkNS + OUString( ATTRIBUTE_HREF ),
+        pList->AddAttribute( m_aXMLXlinkNS + ATTRIBUTE_HREF,
                              m_aAttributeType,
                              pExternalImage->aURL );
     }
 
     if ( !pExternalImage->aCommandURL.isEmpty() )
     {
-        pList->AddAttribute( m_aXMLImageNS + OUString( ATTRIBUTE_COMMAND ),
+        pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_COMMAND,
                              m_aAttributeType,
                              pExternalImage->aCommandURL );
     }

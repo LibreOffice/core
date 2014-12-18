@@ -45,18 +45,8 @@ namespace framework{
 #define AL_ATTRIBUTE_MOD_MOD3           DECLARE_ASCII("accel:mod3" )
 
 // same items with full qualified name space
-#define NS_ELEMENT_ACCELERATORLIST      DECLARE_ASCII("http://openoffice.org/2001/accel^acceleratorlist")
-#define NS_ELEMENT_ITEM                 DECLARE_ASCII("http://openoffice.org/2001/accel^item"           )
-
 #define NS_XMLNS_ACCEL                  DECLARE_ASCII("http://openoffice.org/2001/accel")
 #define NS_XMLNS_XLINK                  DECLARE_ASCII("http://www.w3.org/1999/xlink"    )
-
-#define NS_ATTRIBUTE_URL                DECLARE_ASCII("http://www.w3.org/1999/xlink^href"     )
-#define NS_ATTRIBUTE_KEYCODE            DECLARE_ASCII("http://openoffice.org/2001/accel^code" )
-#define NS_ATTRIBUTE_MOD_SHIFT          DECLARE_ASCII("http://openoffice.org/2001/accel^shift")
-#define NS_ATTRIBUTE_MOD_MOD1           DECLARE_ASCII("http://openoffice.org/2001/accel^mod1" )
-#define NS_ATTRIBUTE_MOD_MOD2           DECLARE_ASCII("http://openoffice.org/2001/accel^mod2" )
-#define NS_ATTRIBUTE_MOD_MOD3           DECLARE_ASCII("http://openoffice.org/2001/accel^mod3" )
 
 } // namespace framework
 

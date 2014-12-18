@@ -29,20 +29,20 @@ namespace framework{
 #define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
 #define SERVICENAME_CFGUPDATEACCESS                             DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")   // provides read/write access to the configuration
 #define SERVICENAME_CFGREADACCESS                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationAccess"      )   // provides readonly access to the configuration
-#define SERVICENAME_CONTENTHANDLER                              DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
-#define SERVICENAME_JOB                                         DECLARE_ASCII("com.sun.star.task.Job"                               )
-#define SERVICENAME_PROTOCOLHANDLER                             DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
+#define SERVICENAME_CONTENTHANDLER                              "com.sun.star.frame.ContentHandler"
+#define SERVICENAME_JOB                                         "com.sun.star.task.Job"
+#define SERVICENAME_PROTOCOLHANDLER                             "com.sun.star.frame.ProtocolHandler"
 #define SERVICENAME_POPUPMENUCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.PopupMenuControllerFactory" )
-#define SERVICENAME_POPUPMENUCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.PopupMenuController"       )
+#define SERVICENAME_POPUPMENUCONTROLLER                         "com.sun.star.frame.PopupMenuController"
 #define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.UIElementFactory"             )
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolbarControllerFactory"         )
 #define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
 #define SERVICENAME_STATUSBARCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.StatusbarController"              )
-#define SERVICENAME_TABWINFACTORY                               DECLARE_ASCII("com.sun.star.frame.TabWindowFactory"                 )
-#define SERVICENAME_TABWINDOW                                   DECLARE_ASCII("com.sun.star.frame.TabWindow"                        )
-#define SERVICENAME_STRINGABBREVIATION                          DECLARE_ASCII("com.sun.star.util.UriAbbreviation"                   )
+#define SERVICENAME_TABWINFACTORY                               "com.sun.star.frame.TabWindowFactory"
+#define SERVICENAME_TABWINDOW                                   "com.sun.star.frame.TabWindow"
+#define SERVICENAME_STRINGABBREVIATION                          "com.sun.star.util.UriAbbreviation"
 #define SERVICENAME_TABWINDOWSERVICE                            DECLARE_ASCII("com.sun.star.ui.dialogs.TabContainerWindow"          )
 
 //  used implementationnames by framework

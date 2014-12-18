@@ -31,6 +31,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
+#define SETNAME_HANDLER "HandlerSet" // name of configuration set inside package
+
 namespace framework{
 
 /**

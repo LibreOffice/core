@@ -357,17 +357,17 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
     for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {
         OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
-        if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_URL )
+        if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_URL )
             rAddonMenuEntry[i].Value >>= rURL;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_TITLE )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TITLE )
             rAddonMenuEntry[i].Value >>= rTitle;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_TARGET )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TARGET )
             rAddonMenuEntry[i].Value >>= rTarget;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_IMAGEIDENTIFIER )
             rAddonMenuEntry[i].Value >>= rImageId;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_SUBMENU )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
             rAddonMenuEntry[i].Value >>= rAddonSubMenu;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_CONTEXT )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_CONTEXT )
             rAddonMenuEntry[i].Value >>= rContext;
     }
 }

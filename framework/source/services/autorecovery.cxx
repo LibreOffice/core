@@ -469,7 +469,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = OUString("com.sun.star.frame.AutoRecovery");
+        aSeq[0] = "com.sun.star.frame.AutoRecovery";
         return aSeq;
     }
 
@@ -1247,7 +1247,7 @@ DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
 
 void DispatchParams::forget()
 {
-    m_sSavePath       = "";
+    m_sSavePath.clear();
     m_nWorkingEntryID = -1;
     m_xProgress.clear();
     m_xHoldRefForAsyncOpAlive.clear();
@@ -1892,7 +1892,7 @@ void AutoRecovery::implts_readConfig()
                 continue;
 
             AutoRecovery::TDocumentInfo aInfo;
-            aInfo.NewTempURL = "";
+            aInfo.NewTempURL.clear();
             aInfo.Document   = css::uno::Reference< css::frame::XModel >();
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL;
             xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL;
@@ -1991,8 +1991,8 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     }
     catch(const css::uno::Exception&)
     {
-        rInfo.DefaultFilter = "";
-        rInfo.Extension     = "";
+        rInfo.DefaultFilter.clear();
+        rInfo.Extension.clear();
     }
 }
 
@@ -2701,8 +2701,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     sRemoveURL1 = aInfo.OldTempURL;
     sRemoveURL2 = aInfo.NewTempURL;
-    aInfo.OldTempURL = "";
-    aInfo.NewTempURL = "";
+    aInfo.OldTempURL.clear();
+    aInfo.NewTempURL.clear();
 
     utl::MediaDescriptor lDescriptor(aInfo.Document->getArgs());
     aInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME(), OUString());
@@ -3184,7 +3184,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     else
     {
         // safe the state about error ...
-        rInfo.NewTempURL     = "";
+        rInfo.NewTempURL.clear();
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
         rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
         rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
@@ -3198,7 +3198,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // The only thing is: we fill the disk with temp files, if we can't remove old ones :-)
     OUString sRemoveFile      = rInfo.OldTempURL;
     rInfo.OldTempURL = rInfo.NewTempURL;
-    rInfo.NewTempURL = "";
+    rInfo.NewTempURL.clear();
 
     implts_flushConfigItem(rInfo);
 

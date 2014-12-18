@@ -113,7 +113,7 @@ Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames
 throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGER );
+    seqServiceNames[0] = SERVICENAME_ACTIONTRIGGER;
     return seqServiceNames;
 }
 

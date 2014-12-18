@@ -35,7 +35,6 @@ namespace framework{
 
 #define CFG_PATH_SEPARATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
 
-#define SETNAME_HANDLER                             DECLARE_ASCII("HandlerSet"                                      )   /// name of configuration set inside package
 #define PROPERTY_PROTOCOLS                          DECLARE_ASCII("Protocols"                                       )   /// properties of a protocol handler
 
 /**

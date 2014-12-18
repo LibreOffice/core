@@ -29,29 +29,29 @@ bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
         case E_SELF :
             return (
                     (sCheckTarget.isEmpty()                 ) ||
-                    (sCheckTarget.equals(SPECIALTARGET_SELF))
+                    sCheckTarget == SPECIALTARGET_SELF
                    );
 
         case E_PARENT :
-            return (sCheckTarget.equals(SPECIALTARGET_PARENT));
+            return sCheckTarget == SPECIALTARGET_PARENT;
 
         case E_TOP :
-            return (sCheckTarget.equals(SPECIALTARGET_TOP));
+            return sCheckTarget == SPECIALTARGET_TOP;
 
         case E_BLANK :
-            return (sCheckTarget.equals(SPECIALTARGET_BLANK));
+            return sCheckTarget == SPECIALTARGET_BLANK;
 
         case E_DEFAULT :
-            return (sCheckTarget.equals(SPECIALTARGET_DEFAULT));
+            return sCheckTarget == SPECIALTARGET_DEFAULT;
 
         case E_BEAMER :
-            return (sCheckTarget.equals(SPECIALTARGET_BEAMER));
+            return sCheckTarget == SPECIALTARGET_BEAMER;
 
         case E_MENUBAR :
-            return (sCheckTarget.equals(SPECIALTARGET_MENUBAR));
+            return sCheckTarget == SPECIALTARGET_MENUBAR;
 
         case E_HELPTASK :
-            return (sCheckTarget.equals(SPECIALTARGET_HELPTASK));
+            return sCheckTarget == SPECIALTARGET_HELPTASK;
         default:
             return false;
     }

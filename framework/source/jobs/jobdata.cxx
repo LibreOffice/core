@@ -591,10 +591,10 @@ void JobData::impl_reset()
     SolarMutexGuard g;
     m_eMode        = E_UNKNOWN_MODE;
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
-    m_sAlias       = "";
-    m_sService     = "";
-    m_sContext     = "";
-    m_sEvent       = "";
+    m_sAlias.clear();
+    m_sService.clear();
+    m_sContext.clear();
+    m_sEvent.clear();
     m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
 }
 

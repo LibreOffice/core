@@ -658,7 +658,7 @@ throw( SAXException, RuntimeException, std::exception )
     else if ( rName == ELEMENT_MENUSEPARATOR )
     {
         Sequence< PropertyValue > aMenuSeparator( 1 );
-        aMenuSeparator[0].Name = OUString( ITEM_DESCRIPTOR_TYPE );
+        aMenuSeparator[0].Name = ITEM_DESCRIPTOR_TYPE;
         aMenuSeparator[0].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
 
         m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuSeparator ) );
@@ -734,7 +734,7 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType =  OUString( ATTRIBUTE_TYPE_CDATA );
+    m_aAttributeType = ATTRIBUTE_TYPE_CDATA;
 }
 
 OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler()

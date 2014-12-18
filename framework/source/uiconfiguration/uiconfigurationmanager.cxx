@@ -80,7 +80,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = OUString("com.sun.star.ui.UIConfigurationManager");
+        aSeq[0] = "com.sun.star.ui.UIConfigurationManager";
         return aSeq;
     }
 

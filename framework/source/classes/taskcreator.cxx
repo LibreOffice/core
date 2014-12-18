@@ -91,23 +91,23 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg;
 
-    aArg.Name    = OUString(ARGUMENT_PARENTFRAME);
+    aArg.Name    = ARGUMENT_PARENTFRAME;
     aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
 
-    aArg.Name    = OUString(ARGUMENT_CREATETOPWINDOW);
+    aArg.Name    = ARGUMENT_CREATETOPWINDOW;
     aArg.Value <<= sal_True;
     lArgs[1]   <<= aArg;
 
-    aArg.Name    = OUString(ARGUMENT_MAKEVISIBLE);
+    aArg.Name    = ARGUMENT_MAKEVISIBLE;
     aArg.Value <<= bVisible;
     lArgs[2]   <<= aArg;
 
-    aArg.Name    = OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE);
+    aArg.Name    = ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
     aArg.Value <<= sal_True;
     lArgs[3]   <<= aArg;
 
-    aArg.Name    = OUString(ARGUMENT_FRAMENAME);
+    aArg.Name    = ARGUMENT_FRAMENAME;
     aArg.Value <<= sName;
     lArgs[4]   <<= aArg;
 

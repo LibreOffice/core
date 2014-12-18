@@ -879,7 +879,7 @@ bool LoadEnv::impl_handleContent()
     lTypeReg[0] = sType;
 
     css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = OUString(PROP_TYPES);
+    lQuery[0].Name    = PROP_TYPES;
     lQuery[0].Value <<= lTypeReg;
 
     OUString sPROP_NAME(PROP_NAME);
@@ -1172,7 +1172,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     lTypesReg[0] = sType;
 
     css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = OUString(PROP_TYPES);
+    lQuery[0].Name    = PROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
     OUString sPROP_NAME(PROP_NAME);

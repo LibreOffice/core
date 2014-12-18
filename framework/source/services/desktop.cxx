@@ -83,7 +83,7 @@ css::uno::Sequence<OUString> SAL_CALL Desktop::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aSeq(1);
-    aSeq[0] = OUString("com.sun.star.frame.Desktop");
+    aSeq[0] = "com.sun.star.frame.Desktop";
     return aSeq;
 }
 

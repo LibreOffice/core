@@ -107,14 +107,14 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
         css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
-        lViewInfos[0].Command = OUString(URL_CLOSEWIN);
+        lViewInfos[0].Command = URL_CLOSEWIN;
         lViewInfos[0].GroupId = css::frame::CommandGroup::VIEW;
         return lViewInfos;
     }
     else if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
     {
         css::uno::Sequence< css::frame::DispatchInformation > lDocInfos(1);
-        lDocInfos[0].Command = OUString(URL_CLOSEDOC);
+        lDocInfos[0].Command = URL_CLOSEDOC;
         lDocInfos[0].GroupId = css::frame::CommandGroup::DOCUMENT;
         return lDocInfos;
     }

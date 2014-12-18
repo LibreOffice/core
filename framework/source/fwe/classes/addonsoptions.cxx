@@ -48,54 +48,16 @@ using namespace ::com::sun::star;
 
 #define ROOTNODE_ADDONMENU                              OUString("Office.Addons" )
 #define PATHDELIMITER                                   OUString("/"             )
-#define SEPARATOR_URL_STR                               "private:separator"
-#define SEPARATOR_URL                                   OUString( SEPARATOR_URL_STR )
+#define SEPARATOR_URL                                   "private:separator"
 
-#define PROPERTYNAME_URL                                ADDONSMENUITEM_PROPERTYNAME_URL
-#define PROPERTYNAME_TITLE                              ADDONSMENUITEM_PROPERTYNAME_TITLE
-#define PROPERTYNAME_TARGET                             ADDONSMENUITEM_PROPERTYNAME_TARGET
-#define PROPERTYNAME_IMAGEIDENTIFIER                    ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER
-#define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_PROPERTYNAME_CONTEXT
-#define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_PROPERTYNAME_SUBMENU
-#define PROPERTYNAME_CONTROLTYPE                        ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE
-#define PROPERTYNAME_WIDTH                              ADDONSMENUITEM_PROPERTYNAME_WIDTH
-
-#define PROPERTYNAME_ALIGN                              STATUSBARITEM_PROPERTYNAME_ALIGN
-#define PROPERTYNAME_AUTOSIZE                           STATUSBARITEM_PROPERTYNAME_AUTOSIZE
-#define PROPERTYNAME_OWNERDRAW                          STATUSBARITEM_PROPERTYNAME_OWNERDRAW
-
-#define PROPERTYNAME_IMAGESMALL                         OUString("ImageSmall" )
-#define PROPERTYNAME_IMAGEBIG                           OUString("ImageBig" )
-#define PROPERTYNAME_IMAGESMALLHC                       OUString("ImageSmallHC" )
-#define PROPERTYNAME_IMAGEBIGHC                         OUString("ImageBigHC" )
-#define PROPERTYNAME_IMAGESMALL_URL                     OUString("ImageSmallURL" )
-#define PROPERTYNAME_IMAGEBIG_URL                       OUString("ImageBigURL" )
-#define PROPERTYNAME_IMAGESMALLHC_URL                   OUString("ImageSmallHCURL" )
-#define PROPERTYNAME_IMAGEBIGHC_URL                     OUString("ImageBigHCURL" )
+#define PROPERTYNAME_URL                                ADDONSMENUITEM_STRING_URL
+#define PROPERTYNAME_TITLE                              ADDONSMENUITEM_STRING_TITLE
+#define PROPERTYNAME_TARGET                             ADDONSMENUITEM_STRING_TARGET
+#define PROPERTYNAME_IMAGEIDENTIFIER                    ADDONSMENUITEM_STRING_IMAGEIDENTIFIER
+#define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_STRING_CONTEXT
+#define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_STRING_SUBMENU
 
 #define IMAGES_NODENAME                                 OUString("UserDefinedImages" )
-
-#define PROPERTYNAME_MERGEMENU_MERGEPOINT               OUString("MergePoint" )
-#define PROPERTYNAME_MERGEMENU_MERGECOMMAND             OUString("MergeCommand" )
-#define PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER    OUString("MergeCommandParameter" )
-#define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            OUString("MergeFallback" )
-#define PROPERTYNAME_MERGEMENU_MERGECONTEXT             OUString("MergeContext" )
-#define PROPERTYNAME_MERGEMENU_MENUITEMS                OUString("MenuItems" )
-
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               OUString("MergeToolBar" )
-#define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            OUString("MergePoint" )
-#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND          OUString("MergeCommand" )
-#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER OUString("MergeCommandParameter" )
-#define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         OUString("MergeFallback" )
-#define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString("MergeContext" )
-#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString("ToolBarItems" )
-
-#define PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT               OUString("MergePoint")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND             OUString("MergeCommand")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECOMMANDPARAMETER    OUString("MergeCommandParameter")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK            OUString("MergeFallback")
-#define PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT             OUString("MergeContext")
-#define PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS           OUString("StatusBarItems")
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL               0
@@ -367,44 +329,44 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropNames[ INDEX_IMAGEIDENTIFIER ] = PROPERTYNAME_IMAGEIDENTIFIER;
     m_aPropNames[ INDEX_CONTEXT         ] = PROPERTYNAME_CONTEXT;
     m_aPropNames[ INDEX_SUBMENU         ] = PROPERTYNAME_SUBMENU; // Submenu set!
-    m_aPropNames[ INDEX_CONTROLTYPE     ] = PROPERTYNAME_CONTROLTYPE;
-    m_aPropNames[ INDEX_WIDTH           ] = PROPERTYNAME_WIDTH;
-    m_aPropNames[ INDEX_ALIGN           ] = PROPERTYNAME_ALIGN;
-    m_aPropNames[ INDEX_AUTOSIZE        ] = PROPERTYNAME_AUTOSIZE;
-    m_aPropNames[ INDEX_OWNERDRAW       ] = PROPERTYNAME_OWNERDRAW;
+    m_aPropNames[ INDEX_CONTROLTYPE     ] = "ControlType";
+    m_aPropNames[ INDEX_WIDTH           ] = "Width";
+    m_aPropNames[ INDEX_ALIGN           ] = "Alignment";
+    m_aPropNames[ INDEX_AUTOSIZE        ] = "AutoSize";
+    m_aPropNames[ INDEX_OWNERDRAW       ] = "OwnerDraw";
 
     // initialize array with fixed images property names
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALL         ] = PROPERTYNAME_IMAGESMALL;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIG           ] = PROPERTYNAME_IMAGEBIG;
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC       ] = PROPERTYNAME_IMAGESMALLHC;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC         ] = PROPERTYNAME_IMAGEBIGHC;
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL     ] = PROPERTYNAME_IMAGESMALL_URL;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL       ] = PROPERTYNAME_IMAGEBIG_URL;
-    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL   ] = PROPERTYNAME_IMAGESMALLHC_URL;
-    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL     ] = PROPERTYNAME_IMAGEBIGHC_URL;
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL         ] = "ImageSmall";
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG           ] = "ImageBig";
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC       ] = "ImageSmallHC";
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC         ] = "ImageBigHC";
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALL_URL     ] = "ImageSmallURL";
+    m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL       ] = "ImageBigURL";
+    m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL   ] = "ImageSmallHCURL";
+    m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL     ] = "ImageBigHCURL";
 
     // initialize array with fixed merge menu property names
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] = PROPERTYNAME_MERGEMENU_MERGEPOINT;
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] = PROPERTYNAME_MERGEMENU_MERGECOMMAND;
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER;
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] = PROPERTYNAME_MERGEMENU_MERGEFALLBACK;
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] = PROPERTYNAME_MERGEMENU_MERGECONTEXT;
-    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] = PROPERTYNAME_MERGEMENU_MENUITEMS;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] = "MergePoint";
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] = "MergeCommand";
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] = "MergeFallback";
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] = "MergeContext";
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] = "MenuItems";
 
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR               ] = PROPERTYNAME_MERGETOOLBAR_TOOLBAR;
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT            ] = PROPERTYNAME_MERGETOOLBAR_MERGEPOINT;
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND          ] = PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND;
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] = PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER;
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK         ] = PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK;
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT          ] = PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT;
-    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS          ] = PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR               ] = "MergeToolBar";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT            ] = "MergePoint";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND          ] = "MergeCommand";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK         ] = "MergeFallback";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT          ] = "MergeContext";
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS          ] = "ToolBarItems";
 
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEPOINT            ] = PROPERTYNAME_MERGESTATUSBAR_MERGEPOINT;
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMAND          ] = PROPERTYNAME_MERGESTATUSBAR_MERGECOMMAND;
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMANDPARAMETER ] = PROPERTYNAME_MERGESTATUSBAR_MERGECOMMANDPARAMETER;
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK         ] = PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK;
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT          ] = PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT;
-    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS        ] = PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS;
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEPOINT            ] = "MergePoint";
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMAND          ] = "MergeCommand";
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECOMMANDPARAMETER ] = "MergeCommandParameter";
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK         ] = "MergeFallback";
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT          ] = "MergeContext";
+    m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS        ] = "StatusBarItems";
 
     ReadConfigurationData();
 
@@ -1171,7 +1133,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
         }
     }
     else if (( aMenuItemNodePropValues[ OFFSET_MENUITEM_URL ] >>= aStrValue ) &&
-              aStrValue == SEPARATOR_URL_STR )
+              aStrValue == SEPARATOR_URL )
     {
         // Separator
         aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aStrValue;
@@ -1254,7 +1216,7 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     // A toolbar item must have a command URL
     if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_URL ] >>= aURL ) && !aURL.isEmpty() )
     {
-        if ( aURL.equals( SEPARATOR_URL ))
+        if ( aURL == SEPARATOR_URL )
         {
             // A speparator toolbar item only needs a URL
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;

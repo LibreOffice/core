@@ -94,9 +94,9 @@ throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 3 );
 
-    aSeq[0] = OUString( SERVICENAME_ACTIONTRIGGER );
-    aSeq[1] = OUString( SERVICENAME_ACTIONTRIGGERCONTAINER );
-    aSeq[2] = OUString( SERVICENAME_ACTIONTRIGGERSEPARATOR );
+    aSeq[0] = SERVICENAME_ACTIONTRIGGER;
+    aSeq[1] = SERVICENAME_ACTIONTRIGGERCONTAINER;
+    aSeq[2] = SERVICENAME_ACTIONTRIGGERSEPARATOR;
 
     return aSeq;
 }
@@ -119,7 +119,7 @@ throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames( 1 );
 
-    seqServiceNames[0] = OUString( SERVICENAME_ACTIONTRIGGERCONTAINER );
+    seqServiceNames[0] = SERVICENAME_ACTIONTRIGGERCONTAINER;
     return seqServiceNames;
 }
 

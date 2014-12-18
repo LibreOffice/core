@@ -1353,7 +1353,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
 
     sal_Int32 nIndex = 0;
     sKeyIdentifier = sKey.getToken(0, '_', nIndex);
-    aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode(OUString("KEY_")+sKeyIdentifier);
+    aKeyEvent.KeyCode = m_rKeyMapping->mapIdentifierToCode("KEY_"+sKeyIdentifier);
 
     css::uno::Sequence< OUString > sToken(3);
     const sal_Int32 nToken = 3;

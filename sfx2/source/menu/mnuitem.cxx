@@ -314,7 +314,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
 
     ::framework::MenuConfiguration aConf( ::comphelper::getProcessComponentContext() );
     Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame().GetFrameInterface() );
-    pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? BOOKMARK_NEWMENU : BOOKMARK_WIZARDMENU );
+    pMenu = aConf.CreateBookmarkMenu( aXFrame, GetId() == SID_NEWDOCDIRECT ? OUString(BOOKMARK_NEWMENU) : OUString(BOOKMARK_WIZARDMENU) );
     if( pMenu )
     {
         pMenu->SetSelectHdl( Link( &(this->GetBindings()), Select_Impl ) );

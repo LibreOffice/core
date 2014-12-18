@@ -201,7 +201,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = OUString("com.sun.star.util.PathSettings");
+        aSeq[0] = "com.sun.star.util.PathSettings";
         return aSeq;
     }
 

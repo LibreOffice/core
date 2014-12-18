@@ -148,9 +148,7 @@ void lcl_throwCorruptedUIConfigurationException(
     throw css::configuration::CorruptedUIConfigurationException(
         lcl_getLocalizedMessage(id),
         css::uno::Reference< css::uno::XInterface >(),
-        (exception.getValueTypeName() +
-         OUString(": \"") + e.Message +
-         OUString("\"")));
+        exception.getValueTypeName() + ": \"" + e.Message + "\"");
 }
 
 }

@@ -231,9 +231,9 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
 {
     AcceleratorConfigurationReader::EXMLElement eElement;
 
-    if (sElement.equals(NS_ELEMENT_ACCELERATORLIST))
+    if (sElement == "http://openoffice.org/2001/accel^acceleratorlist")
         eElement = E_ELEMENT_ACCELERATORLIST;
-    else if (sElement.equals(NS_ELEMENT_ITEM))
+    else if (sElement == "http://openoffice.org/2001/accel^item")
         eElement = E_ELEMENT_ITEM;
     else
         throw css::uno::RuntimeException(
@@ -247,17 +247,17 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 {
     AcceleratorConfigurationReader::EXMLAttribute eAttribute;
 
-    if (sAttribute.equals(NS_ATTRIBUTE_KEYCODE))
+    if (sAttribute == "http://openoffice.org/2001/accel^code")
         eAttribute = E_ATTRIBUTE_KEYCODE;
-    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_SHIFT))
+    else if (sAttribute == "http://openoffice.org/2001/accel^shift")
         eAttribute = E_ATTRIBUTE_MOD_SHIFT;
-    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD1))
+    else if (sAttribute == "http://openoffice.org/2001/accel^mod1")
         eAttribute = E_ATTRIBUTE_MOD_MOD1;
-    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD2))
+    else if (sAttribute == "http://openoffice.org/2001/accel^mod2")
         eAttribute = E_ATTRIBUTE_MOD_MOD2;
-    else if (sAttribute.equals(NS_ATTRIBUTE_MOD_MOD3))
+    else if (sAttribute == "http://openoffice.org/2001/accel^mod3")
         eAttribute = E_ATTRIBUTE_MOD_MOD3;
-    else if (sAttribute.equals(NS_ATTRIBUTE_URL))
+    else if (sAttribute == "http://www.w3.org/1999/xlink^href")
         eAttribute = E_ATTRIBUTE_URL;
     else
         throw css::uno::RuntimeException(

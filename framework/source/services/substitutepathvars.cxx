@@ -247,7 +247,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = OUString("com.sun.star.util.PathSubstitution");
+        aSeq[0] = "com.sun.star.util.PathSubstitution";
         return aSeq;
     }
 
@@ -505,7 +505,7 @@ const OUString& SubstitutePathVariables_Impl::GetDNSDomainName()
         if ( nIndex >= 0 && aTemp.getLength() > nIndex+1 )
             m_aDNSDomain = aTemp.copy( nIndex+1 ).toAsciiLowerCase();
         else
-            m_aDNSDomain = "";
+            m_aDNSDomain.clear();
 
         m_bDNSDomainRetrieved = true;
     }

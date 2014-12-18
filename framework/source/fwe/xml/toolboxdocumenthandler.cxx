@@ -659,9 +659,9 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
-    m_aAttributeType    = OUString( ATTRIBUTE_TYPE_CDATA );
-    m_aXMLXlinkNS       = OUString( XMLNS_XLINK_PREFIX );
-    m_aXMLToolbarNS     = OUString( XMLNS_TOOLBAR_PREFIX );
+    m_aAttributeType    = ATTRIBUTE_TYPE_CDATA;
+    m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
+    m_aXMLToolbarNS     = XMLNS_TOOLBAR_PREFIX;
 }
 
 OWriteToolBoxDocumentHandler::~OWriteToolBoxDocumentHandler()
@@ -708,7 +708,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
                          OUString( XMLNS_XLINK ) );
 
     if ( !aUIName.isEmpty() )
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_UINAME ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_UINAME,
                              m_aAttributeType,
                              aUIName );
 
@@ -777,28 +777,28 @@ throw ( SAXException, RuntimeException )
 
     if ( !rLabel.isEmpty() )
     {
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_TEXT ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_TEXT,
                              m_aAttributeType,
                              rLabel );
     }
 
     if ( !bVisible )
     {
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_VISIBLE ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_VISIBLE,
                              m_aAttributeType,
                              OUString( ATTRIBUTE_BOOLEAN_FALSE ) );
     }
 
     if ( !rHelpURL.isEmpty() )
     {
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_HELPID ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_HELPID,
                              m_aAttributeType,
                              rHelpURL );
     }
 
     if ( !rTooltip.isEmpty() )
     {
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_TOOLTIP ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_TOOLTIP,
                              m_aAttributeType,
                              rTooltip );
     }
@@ -817,14 +817,14 @@ throw ( SAXException, RuntimeException )
                 aValue += OUString::createFromAscii( pStyle->attrName );
             }
         }
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_ITEMSTYLE ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,
                              m_aAttributeType,
                              aValue );
     }
 
     if ( nWidth > 0 )
     {
-        pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_WIDTH ),
+        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_WIDTH,
                              m_aAttributeType,
                              OUString::number( nWidth) );
     }

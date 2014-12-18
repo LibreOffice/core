@@ -1862,8 +1862,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 {
                     Sequence< PropertyValue > aPropSeq( 1 );
 
-                    aPropSeq[ 0 ].Name =
-                        OUString( "ResourceURL");
+                    aPropSeq[ 0 ].Name = "ResourceURL";
                     aPropSeq[ 0 ].Value <<= m_aResourceName;
 
                     xDisp->dispatch( aURL, aPropSeq );
