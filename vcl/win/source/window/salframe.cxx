@@ -2282,7 +2282,7 @@ static void ImplSalFrameEndExtTextInput( HWND hWnd, sal_uInt16 nFlags )
     if ( hIMC )
     {
         DWORD nIndex;
-        if ( nFlags & SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE )
+        if ( nFlags & EXTTEXTINPUT_END_COMPLETE )
             nIndex = CPS_COMPLETE;
         else
             nIndex = CPS_CANCEL;

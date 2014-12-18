@@ -50,9 +50,6 @@ struct SystemEnvData;
 #define SAL_FRAME_TOTOP_GRABFOCUS           ((sal_uInt16)0x0004)
 #define SAL_FRAME_TOTOP_GRABFOCUS_ONLY       ((sal_uInt16)0x0008)
 
-#define SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE  ((sal_uInt16)0x0001)
-#define SAL_FRAME_ENDEXTTEXTINPUT_CANCEL    ((sal_uInt16)0x0002)
-
 // SalFrame styles
 #define SAL_FRAME_STYLE_DEFAULT             ((sal_uLong)0x00000001)
 #define SAL_FRAME_STYLE_MOVEABLE            ((sal_uLong)0x00000002)
