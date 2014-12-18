@@ -334,8 +334,8 @@ uno::Sequence< OUString >
 PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = OUString(
-                          "com.sun.star.task.PasswordContainerInteractionHandler" );
+    aSNS.getArray()[ 0 ] =
+                          "com.sun.star.task.PasswordContainerInteractionHandler";
     return aSNS;
 }
 

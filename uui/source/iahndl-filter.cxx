@@ -216,8 +216,7 @@ handleFilterOptionsRequest_(
             sal_Int32 nPropCount = rRequest.rProperties.getLength();
             for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
             {
-                if( rRequest.rProperties[ind].Name.equals(
-                        OUString("FilterName")) )
+                if( rRequest.rProperties[ind].Name == "FilterName" )
                 {
                     rRequest.rProperties[ind].Value >>= aFilterName;
                     break;
@@ -231,8 +230,7 @@ handleFilterOptionsRequest_(
                 for( sal_Int32 nProperty=0;
                      nProperty < nPropertyCount;
                      ++nProperty )
-                    if( aProps[nProperty].Name.equals(
-                            OUString("UIComponent")) )
+                    if( aProps[nProperty].Name == "UIComponent" )
                     {
                         OUString aServiceName;
                         aProps[nProperty].Value >>= aServiceName;
