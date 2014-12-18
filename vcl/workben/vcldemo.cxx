@@ -251,6 +251,10 @@ public:
                 };
                 for (size_t i = 0; i < aRegions.size(); i++)
                 {
+                    // Half of them not-anti-aliased ..
+                    if (i >= aRegions.size()/2)
+                        rDev.SetAntialiasing(nOldAA);
+
                     static const struct {
                         double nX, nY;
                     } aPoints[] = {
@@ -265,10 +269,6 @@ public:
                                                        aSub.Top()  + aSub.GetHeight() * aPoints[j].nY));
                     }
                     rDev.DrawPolyLine(aPoly, aLineWidths[i], eJoins[i], eLineCaps[i]);
-
-                    // Half of them not-anti-aliased ..
-                    if (i > aRegions.size()/2)
-                        rDev.SetAntialiasing(nOldAA);
                 }
             }
             else
