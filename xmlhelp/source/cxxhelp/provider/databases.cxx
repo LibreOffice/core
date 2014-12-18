@@ -957,7 +957,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
             // let ZipPackage be used ( no manifest.xml is required )
             beans::NamedValue aArg;
             aArg.Name = "StorageFormat";
-            aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
+            aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
             aArguments[ 1 ] <<= aArg;
 
             Reference< XInterface > xIfc
@@ -1756,7 +1756,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
         aArg.Name = "StorageFormat";
-        aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
+        aArg.Value <<= OUString(ZIP_STORAGE_FORMAT_STRING);
         aArguments[ 1 ] <<= aArg;
 
         Reference< XMultiComponentFactory >xSMgr( m_xContext->getServiceManager(), UNO_QUERY );

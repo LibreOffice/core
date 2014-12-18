@@ -596,7 +596,7 @@ struct OReportDefinitionImpl
     ,m_aCloseListener(_aMutex)
     ,m_aModifyListeners(_aMutex)
     ,m_aDocEventListeners(_aMutex)
-    ,m_sMimeType(MIMETYPE_OASIS_OPENDOCUMENT_TEXT)
+    ,m_sMimeType(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII)
     ,m_sIdentifier(SERVICE_REPORTDEFINITION)
     // default visual area is 8 x 7 cm
     ,m_aVisualAreaSize( 8000, 7000 )
@@ -753,7 +753,7 @@ void OReportDefinition::init()
             OUString sMediaType;
             xStorProps->getPropertyValue("MediaType") >>= sMediaType;
             if ( sMediaType.isEmpty() )
-                xStorProps->setPropertyValue("MediaType",uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT));
+                xStorProps->setPropertyValue("MediaType",uno::makeAny<OUString>(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII));
         }
         m_pImpl->m_pObjectContainer.reset( new comphelper::EmbeddedObjectContainer(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) ) );
     }
@@ -1458,8 +1458,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         static const char sPropName[] = "MediaType";
         OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
-        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT != sOldMediaType )
-            xProp->setPropertyValue( sPropName, uno::makeAny(MIMETYPE_OASIS_OPENDOCUMENT_REPORT) );
+        if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII != sOldMediaType )
+            xProp->setPropertyValue( sPropName, uno::makeAny<OUString>(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII) );
     }
 
     /** property map for export info set */
@@ -2117,8 +2117,8 @@ void SAL_CALL OReportDefinition::setMimeType( const OUString& _mimetype ) throw 
 uno::Sequence< OUString > SAL_CALL OReportDefinition::getAvailableMimeTypes(  ) throw (lang::DisposedException, uno::Exception, uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > s_aList(2);
-    s_aList[0] = MIMETYPE_OASIS_OPENDOCUMENT_TEXT;
-    s_aList[1] = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET;
+    s_aList[0] = MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII;
+    s_aList[1] = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII;
     return s_aList;
 }
 

@@ -842,8 +842,8 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                 OUString aVersion;
                 if (( xPropSet->getPropertyValue(
                     OUString("Version")) >>= aVersion )
-                    && !aVersion.equals(ODFVER_010_TEXT)
-                    && !aVersion.equals(ODFVER_011_TEXT) )
+                    && aVersion != ODFVER_010_TEXT
+                    && aVersion != ODFVER_011_TEXT )
                 {
                     const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
                         xModel, uno::UNO_QUERY_THROW );

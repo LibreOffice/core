@@ -253,7 +253,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                 //  Check whether the entry is an impress template.  If so
                 //  add a new entry to the resulting list (which is created
                 //  first if necessary).
-                if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
+                if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE_OASIS)
                     ||  (sContentType == IMPRESS_BIN_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE)

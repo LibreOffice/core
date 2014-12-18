@@ -165,7 +165,7 @@ namespace dbaxml
                             // so establishing the data connection (to a Calc sheet)
                             // will be "faster".
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
-                                aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
+                                aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII) )),
                                 OUString(), // empty frame name
                                 0,
                                 aArgs

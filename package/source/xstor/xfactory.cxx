@@ -203,11 +203,11 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                     sal_Int32 nFormatID = 0;
                     if ( aDescr[nInd].Value >>= aFormatName )
                     {
-                        if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
+                        if ( aFormatName == PACKAGE_STORAGE_FORMAT_STRING )
                             nStorageType = embed::StorageFormats::PACKAGE;
-                        else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
+                        else if ( aFormatName == ZIP_STORAGE_FORMAT_STRING )
                             nStorageType = embed::StorageFormats::ZIP;
-                        else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
+                        else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
                             nStorageType = embed::StorageFormats::OFOPXML;
                         else
                             throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );

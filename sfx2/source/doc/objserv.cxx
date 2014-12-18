@@ -1421,7 +1421,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     bool bNoSig = false;
 
     if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
-      || (!aODFVersion.equals( ODFVER_012_TEXT ) && !bHasSign) )
+      || (aODFVersion != ODFVER_012_TEXT && !bHasSign) )
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
 

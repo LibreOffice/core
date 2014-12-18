@@ -27,13 +27,13 @@
 #include <comphelper/comphelperdllapi.h>
 
 
-#define PACKAGE_STORAGE_FORMAT_STRING   OUString( "PackageFormat" )
-#define ZIP_STORAGE_FORMAT_STRING       OUString( "ZipFormat" )
-#define OFOPXML_STORAGE_FORMAT_STRING   OUString( "OFOPXMLFormat" )
+#define PACKAGE_STORAGE_FORMAT_STRING   "PackageFormat"
+#define ZIP_STORAGE_FORMAT_STRING       "ZipFormat"
+#define OFOPXML_STORAGE_FORMAT_STRING   "OFOPXMLFormat"
 
-#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 OUString( "PackageSHA256UTF8EncryptionKey" )
-#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   OUString( "PackageSHA1UTF8EncryptionKey" )
-#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 OUString( "PackageSHA1MS1252EncryptionKey" )
+#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 "PackageSHA256UTF8EncryptionKey"
+#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   "PackageSHA1UTF8EncryptionKey"
+#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 "PackageSHA1MS1252EncryptionKey"
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct NamedValue; }

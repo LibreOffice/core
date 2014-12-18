@@ -679,11 +679,11 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     sal_Int32 nFormatID = 0;
                     if ( aNamedValue.Value >>= aFormatName )
                     {
-                        if ( aFormatName.equals( PACKAGE_STORAGE_FORMAT_STRING ) )
+                        if ( aFormatName == PACKAGE_STORAGE_FORMAT_STRING )
                             m_nFormat = embed::StorageFormats::PACKAGE;
-                        else if ( aFormatName.equals( ZIP_STORAGE_FORMAT_STRING ) )
+                        else if ( aFormatName == ZIP_STORAGE_FORMAT_STRING )
                             m_nFormat = embed::StorageFormats::ZIP;
-                        else if ( aFormatName.equals( OFOPXML_STORAGE_FORMAT_STRING ) )
+                        else if ( aFormatName == OFOPXML_STORAGE_FORMAT_STRING )
                             m_nFormat = embed::StorageFormats::OFOPXML;
                         else
                             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
@@ -1709,9 +1709,9 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             bool bHasSHA1 = false;
             for ( sal_Int32 nInd = 0; nInd < aKeys.getLength(); nInd++ )
             {
-                if ( aKeys[nInd].Name.equals( PACKAGE_ENCRYPTIONDATA_SHA256UTF8 ) )
+                if ( aKeys[nInd].Name == PACKAGE_ENCRYPTIONDATA_SHA256UTF8 )
                     bHasSHA256 = true;
-                if ( aKeys[nInd].Name.equals( PACKAGE_ENCRYPTIONDATA_SHA1UTF8 ) )
+                if ( aKeys[nInd].Name == PACKAGE_ENCRYPTIONDATA_SHA1UTF8 )
                     bHasSHA1 = true;
             }
 

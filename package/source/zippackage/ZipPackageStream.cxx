@@ -232,7 +232,7 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
             aNameToFind = PACKAGE_ENCRYPTIONDATA_SHA256UTF8;
         else if ( nKeyGenID == xml::crypto::DigestID::SHA1 )
         {
-            aNameToFind = bUseWinEncoding ? PACKAGE_ENCRYPTIONDATA_SHA1MS1252 : PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
+            aNameToFind = bUseWinEncoding ? OUString(PACKAGE_ENCRYPTIONDATA_SHA1MS1252) : OUString(PACKAGE_ENCRYPTIONDATA_SHA1UTF8);
         }
         else
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
