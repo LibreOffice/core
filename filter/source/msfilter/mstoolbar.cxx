@@ -137,7 +137,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
             aPopupMenu[0].Name = "CommandURL";
-            aPopupMenu[0].Value = uno::makeAny( OUString("vnd.openoffice.org:") + rName );
+            aPopupMenu[0].Value = uno::makeAny( "vnd.openoffice.org:" + rName );
             aPopupMenu[1].Name = "Label";
             aPopupMenu[1].Value <<= rName;
             aPopupMenu[2].Name = "ItemDescriptorContainer";

@@ -57,7 +57,7 @@ Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
 {
     Sequence< OUString > aRet( 1 );
 
-    aRet.getArray()[ 0 ] = OUString ( SVG_DIALOG_SERVICE_NAME );
+    aRet.getArray()[ 0 ] = SVG_DIALOG_SERVICE_NAME;
 
     return aRet;
 }

@@ -325,7 +325,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, OUString());
             if (
                 (!sDocumentService.isEmpty()                   ) &&
-                (!sDocumentService.equals(QUERY_CONSTVALUE_ALL)) &&
+                (sDocumentService != QUERY_CONSTVALUE_ALL      ) &&
                 (!sCheckValue.equals(sDocumentService)         )
             )
             {

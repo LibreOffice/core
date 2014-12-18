@@ -286,7 +286,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         }
     }
     else
-        rGradientId = "";
+        rGradientId.clear();
 }
 
 void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
@@ -1251,7 +1251,7 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
     {
         Point   aRot( maTextPos );
         OUString aTransform =
-                OUString("translate(") + OUString::number( aRot.X() ) +
+                "translate(" + OUString::number( aRot.X() ) +
                 "," + OUString::number( aRot.Y() ) + ") rotate(" +
                 OUString::number( rFont.GetOrientation() * -0.1 ) +
                 ") translate(" + OUString::number( -aRot.X() ) +
@@ -1279,7 +1279,7 @@ void SVGTextWriter::implExportHyperlinkIds()
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "HyperlinkIdList" );
         SvXMLElementExport aDescElem( mrExport, XML_NAMESPACE_NONE, "desc", true, false );
         mrExport.GetDocHandler()->characters( msHyperlinkIdList.trim() );
-        msHyperlinkIdList = "";
+        msHyperlinkIdList.clear();
     }
 }
 

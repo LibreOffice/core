@@ -196,7 +196,7 @@ void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
     delete m_pFilterInfo;
     m_pFilterInfo = new filter_info_impl( rFilterInfo );
 
-    m_sImportRecentFile = "";
+    m_sImportRecentFile.clear();
 
     initDialog();
 

@@ -239,25 +239,25 @@ public:
             {
                 case SVXDATEFORMAT_STDSMALL:
                 case SVXDATEFORMAT_A:       // 13.02.96
-                    sDateFormat = "";
+                    sDateFormat.clear();
                     break;
                 case SVXDATEFORMAT_C:       // 13.Feb 1996
-                    sDateFormat = "";
+                    sDateFormat.clear();
                     break;
                 case SVXDATEFORMAT_D:       // 13.February 1996
-                    sDateFormat = "";
+                    sDateFormat.clear();
                     break;
                 case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                    sDateFormat = "";
+                    sDateFormat.clear();
                     break;
                 case SVXDATEFORMAT_STDBIG:
                 case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                    sDateFormat = "";
+                    sDateFormat.clear();
                     break;
                 // default case
                 case SVXDATEFORMAT_B:      // 13.02.1996
                 default:
-                    sDateFormat = "";
+                    sDateFormat.clear();
                     break;
             }
         }
@@ -268,20 +268,20 @@ public:
             switch( eTimeFormat )
             {
                 case SVXTIMEFORMAT_24_HMS:      // 13:49:38
-                    sTimeFormat = "";
+                    sTimeFormat.clear();
                     break;
                 case SVXTIMEFORMAT_AM_HM:      // 01:49 PM
                 case SVXTIMEFORMAT_12_HM:
-                    sTimeFormat = "";
+                    sTimeFormat.clear();
                     break;
                 case SVXTIMEFORMAT_AM_HMS:     // 01:49:38 PM
                 case SVXTIMEFORMAT_12_HMS:
-                    sTimeFormat = "";
+                    sTimeFormat.clear();
                     break;
                 // default case
                 case SVXTIMEFORMAT_24_HM:     // 13:49
                 default:
-                    sTimeFormat = "";
+                    sTimeFormat.clear();
                     break;
             }
         }
@@ -1119,7 +1119,7 @@ bool SVGFilter::implGenerateMetaData()
             {
                 for( sal_Int32 i = 0, nSize = aFieldSet.size(); i < nSize; ++i )
                 {
-                    OUString sElemId = OUString(aOOOElemTextField) + "_" + OUString::number( i );
+                    OUString sElemId = OUStringLiteral(aOOOElemTextField) + "_" + OUString::number( i );
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sElemId );
                     aFieldSet[i]->elementExport( mpSVGExport );
                 }
