@@ -58,9 +58,8 @@ namespace tools_urlobj
         {
             INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii
-                            ( "smb://10.10.1.1/sampledir/sample.file" ) );
+            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE )
+                            == "smb://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
@@ -86,8 +85,8 @@ namespace tools_urlobj
                 setFSysPath( OUString( "\\\\137.65.170.24\\c$\\Img0001.jpg" ),
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) );
+            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE )
+                            == "smb://137.65.170.24/c$/Img0001.jpg" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
@@ -112,8 +111,8 @@ namespace tools_urlobj
                 setFSysPath( OUString( "\\\\hive-winxp-x86\\pmladek\\test2.odt" ),
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) );
+            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE )
+                            == "smb://hive-winxp-x86/pmladek/test2.odt" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
@@ -131,8 +130,8 @@ namespace tools_urlobj
         {
             INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://10.10.1.1/sampledir/sample.file" ) );
+            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE )
+                            == "smb://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
@@ -155,8 +154,8 @@ namespace tools_urlobj
             aUrl.setFSysPath( OUString( "//137.65.170.24/c$/Img0001.jpg" ),
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) );
+            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE )
+                            == "smb://137.65.170.24/c$/Img0001.jpg" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
@@ -180,8 +179,8 @@ namespace tools_urlobj
             aUrl.setFSysPath( OUString( "//hive-winxp-x86/pmladek/test2.odt" ),
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
-            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) );
+            CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE )
+                            == "smb://hive-winxp-x86/pmladek/test2.odt" );
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
