@@ -337,10 +337,10 @@ const OUString& SfxDocumentTemplates::GetRegionName
         if ( pData )
             maTmpString = pData->GetTitle();
         else
-            maTmpString = "";
+            maTmpString.clear();
     }
     else
-        maTmpString = "";
+        maTmpString.clear();
 
     return maTmpString;
 }
@@ -432,10 +432,10 @@ const OUString& SfxDocumentTemplates::GetName
         if ( pEntry )
             maTmpString = pEntry->GetTitle();
         else
-            maTmpString = "";
+            maTmpString.clear();
     }
     else
-        maTmpString = "";
+        maTmpString.clear();
 
     return maTmpString;
 }

@@ -1970,7 +1970,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
                 aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                 aDesc.maDragStartPos = Point();
-                aDesc.maDisplayName = "";
+                aDesc.maDisplayName.clear();
                 aDesc.mbCanLink = false;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
@@ -2190,54 +2190,53 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
     Sequence< datatransfer::DataFlavor > aFlavorSeq( nSuppFlavors );
 
     aFlavorSeq[0].MimeType =
-        OUString( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""  );
+        "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"";
     aFlavorSeq[0].HumanPresentableName =  "GDIMetaFile";
     aFlavorSeq[0].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[1].MimeType =
-        OUString( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""  );
+        "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"";
     aFlavorSeq[1].HumanPresentableName = "GDIMetaFile";
     aFlavorSeq[1].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[2].MimeType =
-        OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\""  );
+        "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ;
     aFlavorSeq[2].HumanPresentableName = "Enhanced Windows MetaFile";
     aFlavorSeq[2].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[3].MimeType =
-        OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\""  );
+        "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
     aFlavorSeq[3].HumanPresentableName = "Windows MetaFile";
     aFlavorSeq[3].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[4].MimeType =
-        OUString( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" );
+        "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"";
     aFlavorSeq[4].HumanPresentableName = "Star Object Descriptor (XML)";
     aFlavorSeq[4].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[5].MimeType =
-        OUString( "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\""  );
+        "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
     aFlavorSeq[5].HumanPresentableName = "Star Embed Source (XML)";
     aFlavorSeq[5].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aFlavorSeq[6].MimeType =
-        OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\""  );
+        "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
     aFlavorSeq[6].HumanPresentableName = "Bitmap";
     aFlavorSeq[6].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    aFlavorSeq[7].MimeType =
-        OUString( "image/png"  );
+    aFlavorSeq[7].MimeType = "image/png";
     aFlavorSeq[7].HumanPresentableName = "PNG";
     aFlavorSeq[7].DataType = getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     if ( nSuppFlavors == 10 )
     {
         aFlavorSeq[8].MimeType =
-            OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\""  );
+            "application/x-openoffice-emf;windows_formatname=\"Image EMF\"";
         aFlavorSeq[8].HumanPresentableName = "Enhanced Windows MetaFile";
         aFlavorSeq[8].DataType = cppu::UnoType<sal_uInt64>::get();
 
         aFlavorSeq[9].MimeType =
-            OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\""  );
+            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
         aFlavorSeq[9].HumanPresentableName = "Windows MetaFile";
         aFlavorSeq[9].DataType = cppu::UnoType<sal_uInt64>::get();
     }

@@ -142,13 +142,13 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 {
     // Load from disk
 
-    OUString aBaseName = OUString("/") + OUString::createFromAscii( pName );
+    OUString aBaseName = "/" + OUString::createFromAscii( pName );
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    OUString uri = OUString( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER ) + aBaseName + ".svg";
+    OUString uri = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + aBaseName + ".svg";
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );
     SvgData aSvgData(aObj.PathToFileName());

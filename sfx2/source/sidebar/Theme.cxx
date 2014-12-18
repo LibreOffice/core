@@ -751,7 +751,7 @@ void Theme::SetupPropertyMaps (void)
     maBooleans.resize(__Bool_Rect - __Int_Bool - 1);
     maRectangles.resize(__Post_Rect - __Bool_Rect - 1);
 
-    #define AddEntry(e) maPropertyNameToIdMap[OUString(#e)]=e; maPropertyIdToNameMap[e]=OUString(#e)
+    #define AddEntry(e) maPropertyNameToIdMap[OUString(#e)]=e; maPropertyIdToNameMap[e]=#e
 
     AddEntry(Image_Grip);
     AddEntry(Image_Expand);

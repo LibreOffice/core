@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
             // remember required values to change protection and change recording in
             // FillItemSet_Impl later on if password was correct.
             m_bNewPasswordIsValid = true;
-            m_aNewPassword = "";
+            m_aNewPassword.clear();
             m_pProtectPB->Show();
             m_pUnProtectPB->Hide();
         }

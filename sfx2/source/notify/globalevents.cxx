@@ -113,7 +113,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = OUString("com.sun.star.frame.GlobalEventBroadcaster");
+        aSeq[0] = "com.sun.star.frame.GlobalEventBroadcaster";
         return aSeq;
     }
 

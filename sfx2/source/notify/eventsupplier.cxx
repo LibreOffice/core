@@ -397,7 +397,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
             if ( aLibrary == "application" )
                 aLibrary = SfxGetpApp()->GetName();
             else
-                aLibrary = "";
+                aLibrary.clear();
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
         }
         else if ( eType == EXTENDED_STYPE )
@@ -461,7 +461,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         }
         else if ( !aMacroName.isEmpty() )
         {
-            aScript = OUString( MACRO_PRFIX  );
+            aScript = MACRO_PRFIX;
             if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
                 aScript += OUString('.');
 

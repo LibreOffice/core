@@ -392,7 +392,7 @@ void MakeLnkName( OUString& rName, const OUString* pType, const OUString& rFile,
         rName += OUString(cTokenSeparator);
     }
     else if( !rName.isEmpty() )
-        rName = "";
+        rName.clear();
 
     rName += rFile;
 
@@ -626,7 +626,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             else
                 pShell = SfxObjectShell::GetNext( *pShell, &aType, false );
 
-            sTmp = "";
+            sTmp.clear();
         }
     }
 

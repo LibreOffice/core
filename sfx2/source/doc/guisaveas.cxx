@@ -1280,7 +1280,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
-                INetURLObject aObj( OUString( "c:/" ) + aRecommendedName, INET_PROT_FILE,
+                INetURLObject aObj( "c:/" + aRecommendedName, INET_PROT_FILE,
                         INetURLObject::ENCODE_ALL, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DOS );
 
                 uno::Sequence< beans::PropertyValue > aTypeNameProps;

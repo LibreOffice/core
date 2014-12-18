@@ -302,7 +302,7 @@ void SfxApplication::SetLastDir_Impl
 
 void SfxApplication::ResetLastDir()
 {
-    pAppData_Impl->aLastDir = "";
+    pAppData_Impl->aLastDir.clear();
 }
 
 

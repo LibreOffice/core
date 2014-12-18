@@ -41,8 +41,7 @@ bool sfx2::openUriExternally(
     } catch (css::lang::IllegalArgumentException & e) {
         if (e.ArgumentPosition != 0) {
             throw css::uno::RuntimeException(
-                OUString("unexpected IllegalArgumentException: ")
-                 + e.Message);
+                "unexpected IllegalArgumentException: " + e.Message);
         }
         SolarMutexGuard g;
         MessageDialog eb(

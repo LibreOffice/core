@@ -2021,7 +2021,7 @@ namespace
         }
 
         if ( !bValid )
-            sPath = "";
+            sPath.clear();
 
         return sPath;
     }

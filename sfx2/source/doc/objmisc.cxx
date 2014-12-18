@@ -960,7 +960,7 @@ void SfxObjectShell::InvalidateName()
 */
 
 {
-    pImp->aTitle = "";
+    pImp->aTitle.clear();
     SetName( GetTitle( SFX_TITLE_APINAME ) );
 
     Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );

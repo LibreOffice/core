@@ -418,7 +418,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
                         aEndEditLink.Call( &sFile );
                 }
                 else
-                    sFile = "";
+                    sFile.clear();
             }
             break;
 
@@ -454,7 +454,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
             break;
 
             default:
-                sFile = "";
+                sFile.clear();
         }
     }
 }

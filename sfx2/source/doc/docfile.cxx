@@ -2171,7 +2171,7 @@ void SfxMedium::ClearBackup_Impl()
             if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
             {
                 pImp->m_bRemoveBackup = false;
-                pImp->m_aBackupURL = "";
+                pImp->m_aBackupURL.clear();
             }
             else
             {
@@ -2181,7 +2181,7 @@ void SfxMedium::ClearBackup_Impl()
         }
     }
     else
-        pImp->m_aBackupURL = "";
+        pImp->m_aBackupURL.clear();
 }
 
 
@@ -2763,7 +2763,7 @@ void SfxMedium::CompleteReOpen()
     {
         pTmpFile = pImp->pTempFile;
         pImp->pTempFile = NULL;
-        pImp->m_aName = "";
+        pImp->m_aName.clear();
     }
 
     GetMedium_Impl();
@@ -3237,7 +3237,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
             return;
 
         DELETEZ( pImp->pTempFile );
-        pImp->m_aName = "";
+        pImp->m_aName.clear();
     }
 
     pImp->pTempFile = new ::utl::TempFile();

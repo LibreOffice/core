@@ -163,13 +163,13 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             OUString aLib  = pMacro->GetLibName();
             OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = PROP_EVENT_TYPE;
             pValues[ 0 ].Value <<= aType;
 
-            pValues[ 1 ].Name = OUString(PROP_LIBRARY );
+            pValues[ 1 ].Name = PROP_LIBRARY;
             pValues[ 1 ].Value <<= aLib;
 
-            pValues[ 2 ].Name = OUString(PROP_MACRO_NAME );
+            pValues[ 2 ].Name = PROP_MACRO_NAME;
             pValues[ 2 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -182,10 +182,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             OUString aLib   = pMacro->GetLibName();
             OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = PROP_EVENT_TYPE;
             pValues[ 0 ].Value <<= aLib;
 
-            pValues[ 1 ].Name = OUString(PROP_SCRIPT );
+            pValues[ 1 ].Name = PROP_SCRIPT;
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -197,10 +197,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 
             OUString aMacro  = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = PROP_EVENT_TYPE;
             pValues[ 0 ].Value <<= OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
 
-            pValues[ 1 ].Name = OUString(PROP_MACRO_NAME );
+            pValues[ 1 ].Name = PROP_MACRO_NAME;
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;

@@ -253,7 +253,7 @@ IMPL_LINK( SvBaseLink, EndEditHdl, OUString*, _pNewName )
     if ( _pNewName )
         sNewName = *_pNewName;
     if ( !ExecuteEdit( sNewName ) )
-        sNewName = "";
+        sNewName.clear();
     bWasLastEditOK = !sNewName.isEmpty();
     if ( pImpl->m_aEndEditLink.IsSet() )
         pImpl->m_aEndEditLink.Call( this );

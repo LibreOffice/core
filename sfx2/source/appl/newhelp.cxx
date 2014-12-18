@@ -834,7 +834,7 @@ void IndexTabPage_Impl::OpenKeyword()
     {
         m_pIndexCB->SetText( sKeyword );
         m_pIndexCB->GetDoubleClickHdl().Call( NULL );
-        sKeyword = "";
+        sKeyword.clear();
     }
 }
 

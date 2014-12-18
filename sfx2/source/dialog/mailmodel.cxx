@@ -941,7 +941,7 @@ bool CreateFromAddress_Impl( OUString& rFrom )
         rFrom = rFrom + "<" + comphelper::string::strip(aEmailName, ' ') + ">";
     }
     else
-        rFrom = "";
+        rFrom.clear();
     return !rFrom.isEmpty();
 }
 

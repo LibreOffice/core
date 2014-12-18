@@ -230,8 +230,8 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 void SAL_CALL HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException, std::exception )
 {
-    bool bBack = ( OUString( ".uno:Backward" ) == aURL.Complete );
-    if ( bBack || OUString( ".uno:Forward" ) == aURL.Complete )
+    bool bBack = aURL.Complete == ".uno:Backward";
+    if ( bBack || aURL.Complete == ".uno:Forward" )
     {
         if ( m_pHistory )
         {

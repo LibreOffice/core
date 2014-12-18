@@ -179,7 +179,7 @@ IMAPOBJ_SETEVENT:
     }
 
     if( bNoHRef )
-        aHRef = "";
+        aHRef.clear();
 
     bool bNewArea = true;
     switch( nShape )

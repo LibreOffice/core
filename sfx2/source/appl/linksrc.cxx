@@ -287,7 +287,7 @@ void SvLinkSource::SendDataChanged()
         delete pImpl->pTimer;
         pImpl->pTimer = NULL;
     }
-    pImpl->aDataMimeType = "";
+    pImpl->aDataMimeType.clear();
 }
 
 void SvLinkSource::NotifyDataChanged()

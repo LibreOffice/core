@@ -1230,8 +1230,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         // The ODF spec says that handling multiple occurrences is
         // application-specific.
         css::uno::Reference<css::xml::dom::XNode> xNode =
-            xPath->selectSingleNode(m_xParent,
-                OUString("child::") + name);
+            xPath->selectSingleNode(m_xParent, "child::" + name);
         // Do not create an empty element if it is missing;
         // for certain elements, such as dateTime, this would be invalid
         m_meta[name] = xNode;
@@ -1241,8 +1240,7 @@ void SAL_CALL SfxDocumentMetaData::init(
     for (const char **pName = s_stdMetaList; *pName != 0; ++pName) {
         OUString name = OUString::createFromAscii(*pName);
         css::uno::Reference<css::xml::dom::XNodeList> nodes =
-            xPath->selectNodeList(m_xParent,
-                OUString("child::") + name);
+            xPath->selectNodeList(m_xParent, "child::" + name);
         std::vector<css::uno::Reference<css::xml::dom::XNode> > v;
         for (sal_Int32 i = 0; i < nodes->getLength(); ++i) {
             v.push_back(nodes->item(i));
@@ -1901,9 +1899,9 @@ SfxDocumentMetaData::loadFromStorage(
     try {
         xPropArg->getPropertyValue("BaseURI")
             >>= input.sSystemId;
-        input.sSystemId += "/" + OUString(s_meta);
+        input.sSystemId += OUStringLiteral("/") + s_meta;
     } catch (const css::uno::Exception &) {
-        input.sSystemId = OUString(s_meta);
+        input.sSystemId = s_meta;
     }
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= xPropArg;

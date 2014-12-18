@@ -1053,7 +1053,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             SfxChildAlignment eLocalAlignment = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
             if ( pImp->bDockingPrevented )
                 // docking prevented, ignore old configuration and take alignment from default
-                aStr = "";
+                aStr.clear();
             else
                 SetAlignment( eLocalAlignment );
 
@@ -1062,7 +1062,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
             {
                 OSL_FAIL("Invalid Alignment!");
                 SetAlignment( eAlign );
-                aStr = "";
+                aStr.clear();
             }
 
             // get last alignment (for toggeling)
