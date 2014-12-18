@@ -324,7 +324,20 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const c
         }
         if ( exception.Context.is() )
         {
+#if defined __clang__
+#if __has_warning("-Wunused-value")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-value"
+    // "expression with side effects will be evaluated despite being used as an
+    // operand to 'typeid'"
+#endif
+#endif
             const char* pContext = typeid( *exception.Context.get() ).name();
+#if defined __clang__
+#if __has_warning("-Wunused-value")
+#pragma GCC diagnostic pop
+#endif
+#endif
             sMessage += "\ncontext: ";
             sMessage += pContext;
         }
