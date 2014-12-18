@@ -370,7 +370,7 @@ void SplashScreen::loadConfig()
 
     // Determine full screen splash mode
     _bFullScreenSplash = (( !sFullScreenSplash.isEmpty() ) &&
-                          ( !sFullScreenSplash.equals( "0" )));
+                          ( sFullScreenSplash != "0" ));
 
     // Try to retrieve the relative values for the progress bar. The current
     // schema uses the screen ratio to retrieve the associated values.

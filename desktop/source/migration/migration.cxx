@@ -1238,11 +1238,11 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         {
             uno::Sequence< beans::PropertyValue > aPropSeq(3);
 
-            aPropSeq[0].Name = OUString(ITEM_DESCRIPTOR_COMMANDURL);
+            aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
             aPropSeq[0].Value <<= it->m_sCommandURL;
-            aPropSeq[1].Name = OUString(ITEM_DESCRIPTOR_LABEL);
+            aPropSeq[1].Name = ITEM_DESCRIPTOR_LABEL;
             aPropSeq[1].Value <<= retrieveLabelFromCommand(it->m_sCommandURL, sModuleIdentifier);
-            aPropSeq[2].Name = OUString(ITEM_DESCRIPTOR_CONTAINER);
+            aPropSeq[2].Name = ITEM_DESCRIPTOR_CONTAINER;
             aPropSeq[2].Value <<= it->m_xPopupMenu;
 
             if (it->m_sPrevSibling.isEmpty())

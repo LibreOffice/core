@@ -270,7 +270,7 @@ void CommandEnvironmentImpl::handle(
     {
         OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()).toString());
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        dp_misc::writeConsole(OUString("\n") + sMsg + "\n\n");
+        dp_misc::writeConsole("\n" + sMsg + "\n\n");
         approve = true;
     }
     else {
@@ -290,7 +290,7 @@ void CommandEnvironmentImpl::handle(
     if (abort && m_option_verbose && !bLicenseException)
     {
         OUString msg = ::comphelper::anyToString(request);
-        dp_misc::writeConsoleError(OUString("\nERROR: ") + msg + "\n");
+        dp_misc::writeConsoleError("\nERROR: " + msg + "\n");
     }
 
     // select:

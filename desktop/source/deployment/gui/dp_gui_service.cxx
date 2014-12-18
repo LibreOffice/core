@@ -242,7 +242,7 @@ void ServiceImpl::startExecuteModal(
             Application::SetSettings( as );
             Application::SetDisplayName(
                 utl::ConfigManager::getProductName() +
-                OUString(" ") +
+                " " +
                 utl::ConfigManager::getProductVersion());
             ExtensionCmdQueue::syncRepositories( m_xComponentContext );
         }

@@ -1073,7 +1073,7 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
             if ( eState == AMBIGUOUS )
                 (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
             else if ( ! (*iIndex)->m_bMissingLic )
-                (*iIndex)->m_sErrorText = "";
+                (*iIndex)->m_sErrorText.clear();
 
             if ( IsReallyVisible() )
                 Invalidate();

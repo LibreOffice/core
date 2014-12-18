@@ -250,7 +250,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             OUString dialogURL( makeURL( url, "dialog.xlb" ) );
             if (! create_ucb_content(
                     0, dialogURL, xCmdEnv, false /* no throw */ )) {
-                dialogURL = "";
+                dialogURL.clear();
             }
 
             if (subType.equalsIgnoreAsciiCase("vnd.sun.star.basic-library"))
@@ -258,7 +258,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 OUString scriptURL( makeURL( url, "script.xlb"));
                 if (! create_ucb_content(
                         0, scriptURL, xCmdEnv, false /* no throw */ )) {
-                    scriptURL = "";
+                    scriptURL.clear();
                 }
 
                 return new PackageImpl(

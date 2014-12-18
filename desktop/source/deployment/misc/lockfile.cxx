@@ -79,7 +79,7 @@ namespace desktop {
         // build the file-url to use for the lock
         OUString aUserPath;
         utl::Bootstrap::locateUserInstallation( aUserPath );
-        m_aLockname = aUserPath + LOCKFILE_SUFFIX;
+        m_aLockname = aUserPath + "/.lock";
 
         // generate ID
         const int nIdBytes = 16;

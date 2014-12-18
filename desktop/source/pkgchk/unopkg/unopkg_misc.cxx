@@ -152,7 +152,7 @@ bool readArgument(
         {
             OSL_ASSERT( pValue != 0 );
             osl_getCommandArg( *pIndex, &pValue->pData );
-            dp_misc::TRACE(OUString( __FILE__) + ": argument value: "
+            dp_misc::TRACE(__FILE__ ": argument value: "
                 + *pValue + "\n");
             ++(*pIndex);
             return true;

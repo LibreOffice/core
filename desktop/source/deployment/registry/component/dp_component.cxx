@@ -511,7 +511,7 @@ BackendImpl::BackendImpl(
       m_xDynComponentTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-component;type=native;platform=" +
                                    getPlatformString(),
-                                   OUString("*") + OUString(SAL_DLLEXTENSION),
+                                   "*" SAL_DLLEXTENSION,
                                    getResourceString(RID_STR_DYN_COMPONENT),
                                    RID_IMG_COMPONENT) ),
       m_xJavaComponentTypeInfo( new Package::TypeInfo(

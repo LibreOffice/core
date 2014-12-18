@@ -301,8 +301,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             }
             else if (option_shared) {
                 dp_misc::writeConsoleError(
-                    OUString("WARNING: explicit context given!  ") +
-                    "Ignoring option " + toString( info_shared ) + "!\n" );
+                    "WARNING: explicit context given!  Ignoring option " +
+                    toString( info_shared ) + "!\n" );
             }
         }
 
@@ -425,7 +425,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                       vec_packages.size(), false);
 
                 dp_misc::writeConsole(
-                    OUString("All deployed ") + repository + " extensions:\n\n");
+                    "All deployed " + repository + " extensions:\n\n");
             }
             else
             {

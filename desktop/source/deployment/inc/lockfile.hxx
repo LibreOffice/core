@@ -41,7 +41,6 @@
 
 #include "dp_misc_api.hxx"
 
-#define LOCKFILE_SUFFIX   OUString( "/.lock" )
 #define LOCKFILE_GROUP    OString( "Lockdata" )
 #define LOCKFILE_USERKEY  OString( "User" )
 #define LOCKFILE_HOSTKEY  OString( "Host" )
