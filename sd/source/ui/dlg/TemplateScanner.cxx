@@ -216,9 +216,9 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
         //  We are interested only in three properties: the entry's name,
         //  its URL, and its content type.
         Sequence<OUString> aProps (3);
-        aProps[0] = OUString(TITLE);
-        aProps[1] = OUString(TARGET_URL);
-        aProps[2] = OUString(DESCRIPTION);
+        aProps[0] = TITLE;
+        aProps[1] = TARGET_URL;
+        aProps[2] = DESCRIPTION;
 
         //  Create a cursor to iterate over the templates in this folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
@@ -304,8 +304,8 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
 
         //  Define the list of properties we are interested in.
         Sequence<OUString> aProps (2);
-        aProps[0] = OUString(TITLE);
-        aProps[1] = OUString(TARGET_DIR_URL);
+        aProps[0] = TITLE;
+        aProps[1] = TARGET_DIR_URL;
 
         //  Create an cursor to iterate over the template folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;

@@ -830,7 +830,7 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const OUString& rLayoutName, std::
 
 void SdStyleSheetPool::CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets )
 {
-    OUString aLayoutNameWithSep(rLayoutName + OUString(SD_LT_SEPARATOR ));
+    OUString aLayoutNameWithSep(rLayoutName + SD_LT_SEPARATOR);
 
     SfxStyleSheetIterator aIter(this, SD_STYLE_FAMILY_MASTERPAGE);
     SfxStyleSheetBase* pSheet = aIter.First();

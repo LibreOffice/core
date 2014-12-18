@@ -68,7 +68,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
     pImagesLst->SetSelectHdl(LINK(this, SdPhotoAlbumDialog, SelectHdl));
 
     mpGraphicFilter = new GraphicFilter;
-    sDirUrl = "";
+    sDirUrl.clear();
     pAddBtn->GrabFocus();
     pImagesLst->Clear();
 }
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
     OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-    if (sUrl != "")
+    if (!sUrl.isEmpty())
         aDlg.SetDisplayDirectory(sUrl);
     else
         aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -522,7 +522,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
 {
     sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
-    if (pImagesLst->GetEntry(nActPos + 1) != OUString("") )
+    if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
     {
         OUString sActEntry( pImagesLst->GetEntry(pImagesLst->GetSelectEntryPos()) );
         OUString* pActData = (OUString*) pImagesLst->GetEntryData(pImagesLst->GetSelectEntryPos());

@@ -198,8 +198,8 @@ uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames
     uno::Sequence< OUString > aNameSequence( 2 );
     OUString* pStrings = aNameSequence.getArray();
 
-    *pStrings++ = OUString( sUNO_Service_PageBackground );
-    *pStrings   = OUString( sUNO_Service_FillProperties );
+    *pStrings++ = sUNO_Service_PageBackground;
+    *pStrings   = sUNO_Service_FillProperties;
 
     return aNameSequence;
 }

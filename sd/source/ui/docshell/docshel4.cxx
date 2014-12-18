@@ -474,7 +474,7 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         ErrCode nError = ERRCODE_NONE;
         bRet = SdXMLFilter( rMedium, *this, true, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 ).Import( nError );
     }
-    else if( aFilterName.equals( "CGM - Computer Graphics Metafile" ) )
+    else if( aFilterName == "CGM - Computer Graphics Metafile" )
     {
         mpDoc->CreateFirstPages();
         mpDoc->StopWorkStartupDelay();

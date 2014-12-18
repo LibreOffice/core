@@ -457,7 +457,7 @@ void SAL_CALL Listener::propertyChange (
     static const char sCurrentPagePropertyName[] = "CurrentPage";
     static const char sEditModePropertyName[] = "IsMasterPageMode";
 
-    if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
+    if (rEvent.PropertyName == sCurrentPagePropertyName)
     {
         Any aCurrentPage = rEvent.NewValue;
         Reference<beans::XPropertySet> xPageSet (aCurrentPage, UNO_QUERY);
@@ -486,7 +486,7 @@ void SAL_CALL Listener::propertyChange (
             }
         }
     }
-    else if (rEvent.PropertyName.equals (sEditModePropertyName))
+    else if (rEvent.PropertyName == sEditModePropertyName)
     {
         bool bIsMasterPageMode = false;
         rEvent.NewValue >>= bIsMasterPageMode;

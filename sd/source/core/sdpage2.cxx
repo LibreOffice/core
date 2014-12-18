@@ -392,7 +392,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     maSoundFile          = rSrcPage.maSoundFile;
     mbLoopSound          = rSrcPage.mbLoopSound;
     mbStopSound          = rSrcPage.mbStopSound;
-    maCreatedPageName    = "";
+    maCreatedPageName.clear();
     maFileName           = rSrcPage.maFileName;
     maBookmarkName       = rSrcPage.maBookmarkName;
     mbScaleObjects       = rSrcPage.mbScaleObjects;

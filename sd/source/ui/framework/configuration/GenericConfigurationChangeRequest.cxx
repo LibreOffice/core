@@ -64,7 +64,7 @@ void SAL_CALL GenericConfigurationChangeRequest::execute (
 OUString SAL_CALL GenericConfigurationChangeRequest::getName (void)
     throw (RuntimeException, std::exception)
 {
-    return OUString("GenericConfigurationChangeRequest ")
+    return "GenericConfigurationChangeRequest "
         + (meMode==Activation ? OUString("activate ") : OUString("deactivate "))
         + FrameworkHelper::ResourceIdToString(mxResourceId);
 }

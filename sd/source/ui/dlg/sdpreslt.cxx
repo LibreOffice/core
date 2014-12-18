@@ -79,7 +79,7 @@ void SdPresLayoutDlg::Reset()
     if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, true, &pPoolItem) == SfxItemState::SET)
         maName = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
     else
-        maName = "";
+        maName.clear();
 
     FillValueSet();
 
@@ -114,7 +114,7 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     {
         aLayoutName = maLayoutNames[ nId - 1 ];
         if( aLayoutName == maStrNone )
-            aLayoutName = ""; // that way we encode "- nothing -" (see below)
+            aLayoutName.clear(); // that way we encode "- nothing -" (see below)
     }
 
     rOutAttrs.Put( SfxStringItem( ATTR_PRESLAYOUT_NAME, aLayoutName ) );
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
             else
             {
                 // that way we encode "- nothing -"
-                maName = "";
+                maName.clear();
             }
         }
         break;

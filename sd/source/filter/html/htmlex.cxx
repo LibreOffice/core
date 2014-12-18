@@ -3267,7 +3267,7 @@ void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL )
 {
     mnResId = nResId;
     maURL1 = rURL;
-    maURL2 = "";
+    maURL2.clear();
 }
 
 void HtmlErrorContext::SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 )

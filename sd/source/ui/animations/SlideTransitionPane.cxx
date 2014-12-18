@@ -602,11 +602,11 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbSoundAmbiguous )
     {
         mpLB_SOUND->SetNoSelection();
-        maCurrentSoundFile = "";
+        maCurrentSoundFile.clear();
     }
     else
     {
-        maCurrentSoundFile = "";
+        maCurrentSoundFile.clear();
         if( aEffect.mbStopSound )
         {
             mpLB_SOUND->SelectEntryPos( 1 );
@@ -813,7 +813,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     // sound
     if( mpLB_SOUND->IsEnabled())
     {
-        maCurrentSoundFile = "";
+        maCurrentSoundFile.clear();
         if( mpLB_SOUND->GetSelectEntryCount() > 0 )
         {
             sal_Int32 nPos = mpLB_SOUND->GetSelectEntryPos();

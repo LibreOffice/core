@@ -1947,7 +1947,7 @@ private:
                 rInfo.msPageString += " ";
             }
             else
-                rInfo.msPageString = "";
+                rInfo.msPageString.clear();
             rInfo.msPageString += rInfo.msTimeDate;
 
             long aPageWidth   = aPageSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder();

@@ -559,7 +559,7 @@ void SdExportTest::testSwappedOutImageExport()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -579,7 +579,7 @@ void SdExportTest::testSwappedOutImageExport()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -685,7 +685,7 @@ void SdExportTest::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {
@@ -705,7 +705,7 @@ void SdExportTest::testImageWithSpecialID()
         {
             OUString sURL;
             XPropSet->getPropertyValue("GraphicURL") >>= sURL;
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != "vnd.sun.star.GraphicObject:00000000000000000000000000000000");
         }
         // Check size
         {

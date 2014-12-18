@@ -20,7 +20,7 @@ private:
     htmlDocPtr exportAndParseHtml(sd::DrawDocShellRef& xDocShRef)
     {
         FileFormat* pFormat = getFormat(HTML);
-        OUString aExt = OUString( "." ) + OUString::createFromAscii(pFormat->pName);
+        OUString aExt = "." + OUString::createFromAscii(pFormat->pName);
         utl::TempFile aTempFile(OUString(), true, &aExt);
         aTempFile.EnableKillingFile();
         exportTo(xDocShRef, pFormat, aTempFile);

@@ -521,7 +521,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     SdStyleSheetVector aNewGraphicStyles;
     OUString aRenameStr;
     if(!bReplace && !bNoDialogs)
-        aRenameStr = OUString("_");
+        aRenameStr = "_";
     rStyleSheetPool.RenameAndCopyGraphicSheets(rBookmarkStyleSheetPool, aNewGraphicStyles, aRenameStr);
     SdStyleSheetVector aNewCellStyles;
     rStyleSheetPool.CopyCellSheets(rBookmarkStyleSheetPool, aNewCellStyles);
@@ -1144,7 +1144,7 @@ void SdDrawDocument::CloseBookmarkDoc()
     }
 
     mxBookmarkDocShRef.Clear();
-    maBookmarkFile = "";
+    maBookmarkFile.clear();
 }
 
 // Is this document read-only?
@@ -1383,7 +1383,7 @@ OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 
         if(!isMasterPageLayoutNameUnique(rDoc, aRetval))
         {
-            aRetval = "";
+            aRetval.clear();
         }
     }
 

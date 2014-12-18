@@ -1321,7 +1321,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     Sequence< NamedValue > aUserDataSequence;
     aUserDataSequence.realloc(1);
 
-    aUserDataSequence[0].Name = OUString("node-type");
+    aUserDataSequence[0].Name = "node-type";
     aUserDataSequence[0].Value <<= bOnClick ? EffectNodeType::ON_CLICK : EffectNodeType::AFTER_PREVIOUS;
 
     xOuterSeqTimeContainer->setUserData(aUserDataSequence);

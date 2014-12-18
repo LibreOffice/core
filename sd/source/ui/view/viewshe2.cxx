@@ -752,7 +752,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if( !xObj.is() )
         {
-            aName = "";
+            aName.clear();
 
             // call dialog "insert OLE object"
             GetDocSh()->SetWaitCursor( false );
@@ -967,7 +967,7 @@ void ViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
     if (GetViewShellBase().GetMainViewShell().get() != NULL)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
-    rSequence[nIndex].Name = OUString( sUNO_View_ViewId );
+    rSequence[nIndex].Name = sUNO_View_ViewId;
     OUStringBuffer sBuffer( "view" );
     sBuffer.append( static_cast<sal_Int32>(nViewID));
     rSequence[nIndex].Value <<= sBuffer.makeStringAndClear();

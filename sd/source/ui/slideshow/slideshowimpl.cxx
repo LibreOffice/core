@@ -1917,7 +1917,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                         if( mpSlideController->jumpToSlideNumber( maCharBuffer.toInt32() - 1 ) )
                             displayCurrentSlide();
                     }
-                    maCharBuffer = "";
+                    maCharBuffer.clear();
                 }
                 else
                 {

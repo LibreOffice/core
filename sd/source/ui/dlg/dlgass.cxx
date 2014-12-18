@@ -1253,7 +1253,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
     OUString aInfo  = mpPage4AskInfoEDT->GetText();
 
     if (aTopic.isEmpty() && aName.isEmpty() && aInfo.isEmpty())
-        maDocFile = "";
+        maDocFile.clear();
 
     return 0;
 }
