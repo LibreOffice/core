@@ -401,6 +401,17 @@ bool OpenGLHelper::supportsVCLOpenGL()
 
 bool OpenGLHelper::isVCLOpenGLEnabled()
 {
+    /**
+     * The !bSet part should only be called once! Changing the results in the same
+     * run will mix OpenGL and normal rendering.
+     */
+    static bool bSet = false;
+    static bool bEnable = false;
+    static bool bForceOpenGL = false;
+    if (bSet)
+    {
+        return bForceOpenGL || bEnable;
+    }
     /*
      * There are a number of cases that these environment variables cover:
      *  * SAL_FORCEGL forces OpenGL independent of any other option
@@ -408,16 +419,20 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
      *  * SAL_ENABLEGL overrides VCL_HIDE_WINDOWS and the configuration variable
      *  * the configuration variable is checked if no environment variable is set
      */
-    static bool bForceOpenGL = !!getenv("SAL_FORCEGL") || officecfg::Office::Common::VCL::ForceOpenGL::get();
+
+    bSet = true;
+    bForceOpenGL = !!getenv("SAL_FORCEGL") || officecfg::Office::Common::VCL::ForceOpenGL::get();
     if (bForceOpenGL)
         return true;
 
     if (!supportsVCLOpenGL())
+    {
         return false;
+    }
 
     static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
 
-    bool bEnable = bEnableGLEnv;
+    bEnable = bEnableGLEnv;
 
     static bool bDuringBuild = getenv("VCL_HIDE_WINDOWS");
     if (bDuringBuild && !bEnable /* env. enable overrides */)

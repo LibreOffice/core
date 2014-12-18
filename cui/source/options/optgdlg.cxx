@@ -146,7 +146,7 @@ OpenGLCfg::~OpenGLCfg()
         boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
         officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
-
+        batch->commit();
     }
 }
 
