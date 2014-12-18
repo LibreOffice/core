@@ -702,14 +702,6 @@
         Text [ en-US ] = "Description..." ; \
     };
 
-#define MN_EFFECT \
-    MenuItem\
-    {\
-        Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
-        HelpId = CMD_SID_CUSTOM_ANIMATION_PANEL ; \
-        Text [ en-US ] = "Custom Animation..." ; \
-    };
-
 #define MN_ACTION \
     MenuItem\
     {\
