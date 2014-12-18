@@ -310,11 +310,11 @@ throw ( provider::ScriptFrameworkErrorException,
     // ** Special case is BASIC, all calls to getScript will be handled
     // by the language script provider in the current location context
     // even if its different
-    if  (   (   location.equals( "document" )
+    if  (   (   location == "document"
             &&  m_xModel.is()
             )
             ||  ( endsWith( m_sCtxString, location ) )
-            ||  ( language.equals( "Basic" ) )
+            ||  ( language == "Basic" )
          )
     {
         Reference< provider::XScriptProvider > xScriptProvider;

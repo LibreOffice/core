@@ -122,7 +122,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
     else if ( m_sLocation == USER_UNO_PACKAGES )
     {
         test = "uno_packages";
-        uri = OUString( USER_URI ) + USER_UNO_PACKAGES_DIR;
+        uri = OUStringLiteral(USER_URI) + USER_UNO_PACKAGES_DIR;
     }
     else if (m_sLocation == SHARE)
     {

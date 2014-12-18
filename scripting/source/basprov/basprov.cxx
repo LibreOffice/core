@@ -226,7 +226,7 @@ namespace basprov
             if ( !( aArguments[0] >>= m_sScriptingContext ) )
             {
                 throw IllegalArgumentException(
-                    OUString( "BasicProviderImpl::initialize: incorrect argument type " ) + aArguments[0].getValueTypeName(),
+                    "BasicProviderImpl::initialize: incorrect argument type " + aArguments[0].getValueTypeName(),
                     *this,
                     1
                 );
