@@ -1553,24 +1553,24 @@ OUString GetAutoNumType(sal_Int16 nNumberingType, bool bSDot, bool bPBehind, boo
     {
         case SVX_NUM_CHARS_UPPER_LETTER_N :
         case SVX_NUM_CHARS_UPPER_LETTER :
-            return OUString("alphaUc") + sPrefixSuffix;
+            return "alphaUc" + sPrefixSuffix;
 
         case SVX_NUM_CHARS_LOWER_LETTER_N :
         case SVX_NUM_CHARS_LOWER_LETTER :
-            return OUString("alphaLc") + sPrefixSuffix;
+            return "alphaLc" + sPrefixSuffix;
 
         case SVX_NUM_ROMAN_UPPER :
-            return OUString("romanUc") + sPrefixSuffix;
+            return "romanUc" + sPrefixSuffix;
 
         case SVX_NUM_ROMAN_LOWER :
-            return OUString("romanLc") + sPrefixSuffix;
+            return "romanLc" + sPrefixSuffix;
 
         case SVX_NUM_ARABIC :
         {
             if (sPrefixSuffix.isEmpty())
                 return OUString("arabicPlain");
             else
-                return OUString("arabic") + sPrefixSuffix;
+                return "arabic" + sPrefixSuffix;
         }
         default:
             break;
@@ -1875,7 +1875,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
             for ( sal_Int32 i = 0, nElems = aProps.getLength(); i < nElems; ++i )
             {
                 sal_Int32 nTextRotateAngle = 0;
-                if ( aProps[ i ].Name.equals( "TextPreRotateAngle" ) && ( aProps[ i ].Value >>= nTextRotateAngle ) )
+                if ( aProps[ i ].Name == "TextPreRotateAngle" && ( aProps[ i ].Value >>= nTextRotateAngle ) )
                 {
                     if ( nTextRotateAngle == -90 )
                     {

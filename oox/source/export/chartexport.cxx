@@ -184,9 +184,9 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
+                        "Exception caught. Type: " +
                         OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
+                        ", Message: " +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
@@ -301,9 +301,9 @@ bool lcl_isSeriesAttachedToFirstAxis(
     {
         (void)ex; // avoid warning for pro build
         OSL_FAIL( OUStringToOString(
-                        OUString(  "Exception caught. Type: " ) +
+                        "Exception caught. Type: " +
                         OUString::createFromAscii( typeid( ex ).name()) +
-                        OUString(  ", Message: " ) +
+                        ", Message: " +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
@@ -652,9 +652,9 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         {
             (void)ex; // avoid warning for pro build
             OSL_FAIL( OUStringToOString(
-                            OUString(  "Exception caught. Type: " ) +
+                            "Exception caught. Type: " +
                             OUString::createFromAscii( typeid( ex ).name()) +
-                            OUString(  ", Message: " ) +
+                            ", Message: " +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
 }
@@ -1591,7 +1591,7 @@ void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
                     FSEND );
             // For Linechart with UpDownBars, spPr is not getting imported
             // so no need to call the exportShapeProps() for LineChart
-            if(xChartType->getChartType().equals("com.sun.star.chart2.CandleStickChartType"))
+            if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
             {
                 exportShapeProps(xChartPropSet);
             }
@@ -1602,7 +1602,7 @@ void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
         {
             pFS->startElement( FSNS( XML_c, XML_downBars ),
                     FSEND );
-            if(xChartType->getChartType().equals("com.sun.star.chart2.CandleStickChartType"))
+            if(xChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType")
             {
                 exportShapeProps(xChartPropSet);
             }

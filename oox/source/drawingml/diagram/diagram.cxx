@@ -352,7 +352,7 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
 
     if ( 0 < maDataRelsMap.getLength() )
     {
-        pValue[0].Name = OUString("OOXDiagramDataRels");
+        pValue[0].Name = "OOXDiagramDataRels";
         pValue[0].Value = uno::makeAny ( maDataRelsMap );
         ++pValue;
     }

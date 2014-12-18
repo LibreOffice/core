@@ -40,12 +40,12 @@ OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
 
 OUString createOfficeDocRelationTypeTransitional(const OUString& rType)
 {
-    return OUString("http://schemas.openxmlformats.org/officeDocument/2006/relationships/") + rType;
+    return "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" + rType;
 }
 
 OUString createOfficeDocRelationTypeStrict(const OUString& rType)
 {
-    return OUString("http://purl.oclc.org/ooxml/officeDocument/relationships/") + rType;
+    return "http://purl.oclc.org/ooxml/officeDocument/relationships/" + rType;
 }
 
 }

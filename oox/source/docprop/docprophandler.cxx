@@ -58,7 +58,7 @@ void OOXMLDocPropHandler::InitNew()
 {
     m_nState = 0;
     m_nBlock = 0;
-    m_aCustomPropertyName = "";
+    m_aCustomPropertyName.clear();
     m_nType = 0;
     m_nInBlock = 0;
 }
@@ -342,7 +342,7 @@ void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
         else if ( m_nInBlock == 1 )
         {
             m_nBlock = 0;
-            m_aCustomPropertyName = "";
+            m_aCustomPropertyName.clear();
         }
         else if ( m_nInBlock == 2 )
             m_nType = 0;
