@@ -320,7 +320,7 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
         }
     }
 
-    if ( rEvent.ActionCommand.equals( COMMAND_CLOSE ) )
+    if ( rEvent.ActionCommand == COMMAND_CLOSE )
     {
         if ( ( mnLastCtrlState & ( 1 << CLOSE_BUTTON ) ) == ( 1 << CLOSE_BUTTON ) )
             eButton = CLOSE_BUTTON;

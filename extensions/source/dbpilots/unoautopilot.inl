@@ -107,7 +107,7 @@ void OUnoAutoPilot<TYPE, SERVICEINFO>::implInitialize(const com::sun::star::uno:
 {
     ::com::sun::star::beans::PropertyValue aArgument;
     if (_rValue >>= aArgument)
-        if (aArgument.Name.equals("ObjectModel"))
+        if (aArgument.Name == "ObjectModel")
         {
             aArgument.Value >>= m_xObjectModel;
             return;

@@ -650,7 +650,7 @@ namespace pcr
             return;
 
         OUString sOldSelection = m_sPageSelection;
-        m_sPageSelection = "";
+        m_sPageSelection.clear();
 
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
         if ( (sal_uInt16)-1 != nCurrentPage )
@@ -1373,7 +1373,7 @@ namespace pcr
             OUString sPlcHolder = PcrRes(RID_EMBED_IMAGE_PLACEHOLDER).toString();
             bool bIsPlaceHolderValue = false;
 
-            if ( rName.equals( PROPERTY_IMAGE_URL ) )
+            if ( rName == PROPERTY_IMAGE_URL )
             {
                 // if the prop value is the PlaceHolder
                 // can ignore it
@@ -1421,7 +1421,7 @@ namespace pcr
             OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
         }
 
-        m_sCommittingProperty = "";
+        m_sCommittingProperty.clear();
     }
 
 
