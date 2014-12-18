@@ -2216,7 +2216,9 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
     OSL_ENSURE( !aFrmOrObj.GetSwFrm() || aFrmOrObj.GetSwFrm()->IsAccessibleFrm(),
             "non accessible frame should be disposed" );
 
-    if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
+    if (aFrmOrObj.IsAccessible( GetShell()->IsPreview() )
+            // fdo#87199 dispose the darn thing if it ever was accessible
+        || (pFrm && mpFrmMap && mpFrmMap->find(pFrm) != mpFrmMap->end()))
     {
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
