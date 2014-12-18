@@ -210,13 +210,6 @@ gb_GLOBALDEFS := \
 	$(gb_COMPILERDEFS) \
 	$(gb_CPUDEFS) \
 
-# This is used to detect whether LibreOffice is being built (as opposed to building
-# 3rd-party code). Used for tag deprecation for API we want to
-# ensure is not used at all externally while we clean
-# out our internal usage, for code in sal/ that should be used only internally, etc.
-gb_GLOBALDEFS += \
-	-DLIBO_INTERNAL_ONLY \
-
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_GLOBALDEFS += -DDBG_UTIL
 
@@ -267,6 +260,13 @@ gb_GLOBALDEFS += \
 	)
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
+
+# This is used to detect whether LibreOffice is being built (as opposed to building
+# 3rd-party code). Used for tag deprecation for API we want to
+# ensure is not used at all externally while we clean
+# out our internal usage, for code in sal/ that should be used only internally, etc.
+gb_DEFS_INTERNAL := \
+	-DLIBO_INTERNAL_ONLY \
 
 include $(GBUILDDIR)/Deliver.mk
 

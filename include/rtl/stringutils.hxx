@@ -13,14 +13,10 @@
 #include <sal/config.h>
 #include <sal/types.h>
 
-// Manually defining RTL_DISABLE_FAST_STRING allows to force turning fast string concatenation off
-// (e.g. for debugging).
-#ifndef RTL_DISABLE_FAST_STRING
 // This feature is not part of public API and is meant to be used only internally by LibreOffice.
 #ifdef LIBO_INTERNAL_ONLY
 // Enable fast string concatenation.
 #define RTL_FAST_STRING
-#endif
 #endif
 
 // The unittest uses slightly different code to help check that the proper

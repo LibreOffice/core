@@ -8,7 +8,9 @@
  */
 
 // Acts as if building outside of LO.
-#undef LIBO_INTERNAL_ONLY
+#ifdef LIBO_INTERNAL_ONLY
+#error Build system problem, LIBO_INTERNAL_ONLY should not be set here.
+#endif
 
 // The whole purpose of this test is to check that public API headers
 // build even without RTL_USING (which enables using e.g. rtl::OUString
@@ -17,7 +19,7 @@
 // for uses of such types.
 
 #ifdef RTL_USING
-#error Build system problem, RTL_USING using should not be set here.
+#error Build system problem, RTL_USING should not be set here.
 #endif
 
 // Additionally, check that public API headers build also with C++03.

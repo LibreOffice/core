@@ -138,6 +138,7 @@ $(eval $(foreach method,\
 	set_precompiled_header \
 	add_nativeres \
 	set_warnings_not_errors \
+	set_external_code \
 	set_generated_cxx_suffix \
 	disable_compiler_plugins \
 ,\

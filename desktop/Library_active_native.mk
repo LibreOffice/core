@@ -13,6 +13,8 @@ $(eval $(call gb_Library_add_exception_objects,active_native, \
     desktop/test/deployment/active/active_native \
 ))
 
+$(eval $(call gb_Library_set_external_code,active_native))
+
 $(eval $(call gb_Library_use_externals,active_native, \
     boost_headers \
 ))

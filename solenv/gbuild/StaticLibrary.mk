@@ -110,6 +110,7 @@ $(eval $(foreach method,\
 	add_sdi_headers \
 	set_precompiled_header \
 	set_warnings_not_errors \
+	set_external_code \
 	set_generated_cxx_suffix \
 	disable_compiler_plugins \
 ,\

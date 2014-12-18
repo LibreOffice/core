@@ -15,6 +15,8 @@ $(eval $(call gb_Library_add_exception_objects,passive_native, \
 
 $(eval $(call gb_Library_set_componentfile,passive_native,desktop/test/deployment/passive/passive_native))
 
+$(eval $(call gb_Library_set_external_code,passive_native))
+
 $(eval $(call gb_Library_use_externals,passive_native, \
     boost_headers \
 ))

@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,mysqlc))
 
-$(eval $(call gb_Library_add_cxxflags,mysqlc,-DRTL_DISABLE_FAST_STRING))
-
 $(eval $(call gb_Library_use_externals,mysqlc,\
 	boost_headers \
 	mysqlcppconn \
@@ -58,5 +56,7 @@ $(eval $(call gb_Library_add_exception_objects,mysqlc,\
 ))
 
 $(eval $(call gb_Library_set_componentfile,mysqlc,mysqlc/source/mysqlc))
+
+$(eval $(call gb_Library_set_external_code,mysqlc))
 
 # vim: set noet sw=4 ts=4:

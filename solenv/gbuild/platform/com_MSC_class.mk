@@ -42,6 +42,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
 		$(if $(filter %.c,$(3)), $(gb_CC), $(gb_CXX))) \
 		$(DEFS) \
+		$(if $(EXTERNAL_CODE),,$(gb_DEFS_INTERNAL)) \
 		$(gb_LTOFLAGS) \
 		$(2) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \

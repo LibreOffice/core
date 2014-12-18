@@ -385,6 +385,7 @@ $(eval $(foreach method,\
 	use_custom_headers \
 	set_visibility_default \
 	set_warnings_not_errors \
+	set_external_code \
 	set_generated_cxx_suffix \
 	disable_compiler_plugins \
 ,\

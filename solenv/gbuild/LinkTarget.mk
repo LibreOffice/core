@@ -615,6 +615,7 @@ $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
 $(call gb_LinkTarget_get_target,$(1)) : NATIVERES :=
 $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
+$(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 $(call gb_LinkTarget_get_target,$(1)) : T_COMPILER_PLUGINS := $$(COMPILER_PLUGINS)
 
@@ -1366,6 +1367,12 @@ endef
 # call gb_LinkTarget_set_warnings_not_errors,linktarget
 define gb_LinkTarget_set_warnings_not_errors
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS := $(true)
+
+endef
+
+# call gb_LinkTarget_set_external_code,linktarget
+define gb_LinkTarget_set_external_code
+$(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE := $(true)
 
 endef
 

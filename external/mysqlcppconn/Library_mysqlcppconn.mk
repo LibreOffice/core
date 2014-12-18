@@ -32,6 +32,8 @@ $(eval $(call gb_Library_use_externals,mysqlcppconn,\
 endif
 endif
 
+$(eval $(call gb_Library_set_external_code,mysqlcppconn))
+
 $(eval $(call gb_Library_set_warnings_not_errors,mysqlcppconn))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,mysqlcppconn,cpp))
