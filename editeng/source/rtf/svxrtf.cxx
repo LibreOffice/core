@@ -138,7 +138,7 @@ SvParserState SvxRTFParser::CallParser()
     bNewGroup = false;
     nDfltFont = 0;
 
-    sBaseURL = "";
+    sBaseURL.clear();
 
     // generate the correct WhichId table from the set WhichIds.
     BuildWhichTbl();
@@ -575,8 +575,8 @@ void SvxRTFParser::ReadFontTable()
             aFontTbl.insert( nInsFontNo, pFont );
             pFont = new vcl::Font();
             pFont->SetCharSet( nSystemChar );
-            sAltNm = "";
-            sFntNm = "";
+            sAltNm.clear();
+            sFntNm.clear();
         }
     }
     // the last one we have to delete manually
@@ -600,7 +600,7 @@ void SvxRTFParser::ReadOLEData()
 
 OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 {
-    rStr = "";
+    rStr.clear();
     int _nOpenBrakets = 1, nToken;  // the first was already detected earlier!!
 
     while( _nOpenBrakets && IsParserWorking() )

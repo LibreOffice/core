@@ -291,7 +291,7 @@ private:
         {
             m_rText = m_rText.replaceAt(rSttPos, nEndPos, pFnd->GetLong());
             if( pPara )
-                *pPara = "";//&pCurNode->GetString();
+                pPara->clear(); // =&pCurNode->GetString();
             return true;
         }
 

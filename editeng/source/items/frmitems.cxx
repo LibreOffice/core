@@ -3658,7 +3658,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
                 else if( sLink.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
                 {
-                    maStrLink = "";
+                    maStrLink.clear();
                     OString sId(OUStringToOString(sLink.copy( sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ),
                                                   RTL_TEXTENCODING_ASCII_US));
                     GraphicObject *pOldGrfObj = pImpl->pGraphicObject;
@@ -3750,8 +3750,8 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
     eGraphicPos = rItem.eGraphicPos;
 
     DELETEZ( pImpl->pGraphicObject );
-    maStrLink = "";
-    maStrFilter = "";
+    maStrLink.clear();
+    maStrFilter.clear();
 
     if ( GPOS_NONE != eGraphicPos )
     {
@@ -3942,8 +3942,8 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
     if ( GPOS_NONE == eGraphicPos )
     {
         DELETEZ( pImpl->pGraphicObject );
-        maStrLink = "";
-        maStrFilter = "";
+        maStrLink.clear();
+        maStrFilter.clear();
     }
     else
     {
@@ -4003,7 +4003,7 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
 void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 {
     if ( rNew.isEmpty() )
-        maStrLink = "";
+        maStrLink.clear();
     else
     {
         maStrLink = rNew;

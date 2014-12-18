@@ -861,7 +861,7 @@ namespace accessibility
             uno::Sequence< OUString >* pSeq = new uno::Sequence< OUString >( 21 );
             OUString* pStrings = pSeq->getArray();
             sal_Int32 i = 0;
-            #define STR(x) pStrings[i++] = OUString(x)
+            #define STR(x) pStrings[i++] = x
             STR("CharColor");
             STR("CharContoured");
             STR("CharEmphasis");
