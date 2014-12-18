@@ -198,7 +198,7 @@ namespace dbaccess
     private:
         const Reference<XComponentContext>&   m_rContext;
         const StorageXMLOutputStream&           m_rDelegator;
-        const OUStringBuffer             m_aNamespace;
+        const OUString m_aNamespace;
     };
 
     void SettingsExportContext::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
