@@ -56,7 +56,7 @@ bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, Od
 
 bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
-    rTypeName = "";
+    rTypeName.clear();
 
     EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
 

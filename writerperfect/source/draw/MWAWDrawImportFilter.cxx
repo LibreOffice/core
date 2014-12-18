@@ -46,7 +46,7 @@ bool MWAWDrawImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput,
 
 bool MWAWDrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
 {
-    rTypeName = "";
+    rTypeName.clear();
 
     MWAWDocument::Type docType = MWAWDocument::MWAW_T_UNKNOWN;
     MWAWDocument::Kind docKind = MWAWDocument::MWAW_K_UNKNOWN;
