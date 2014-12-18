@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <GL/glew.h>
+#include <vcl/opengl/GLMHelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -131,42 +132,46 @@ namespace oglcanvas
         if( ::basegfx::fTools::equalZero( mfAlpha ) )
             return true;
 
-        const glm::vec2 aSpriteSizePixel(
-            ::canvas::tools::roundUp( maSize.Width ),
-            ::canvas::tools::roundUp( maSize.Height ));
-        RenderHelper* pRenderHelper = maCanvasHelper.getDeviceHelper()->getRenderHelper();
+            const glm::vec2 aSpriteSizePixel(
+            ::canvas::tools::roundUp( maSize.Width),
+            ::canvas::tools::roundUp( maSize.Height));
+
+            RenderHelper* pRenderHelper = maCanvasHelper.getDeviceHelper()->getRenderHelper();
             IBufferContextSharedPtr pBufferContext;
-            if( mfAlpha != 1.0 || mxClip.is() )
+
+            if( mfAlpha != 0.0 || mxClip.is() )
             {
                 // drats. need to render to temp surface before, and then
                 // composite that to screen
 
                 // TODO(P3): buffer texture
                 pBufferContext = maCanvasHelper.getDeviceHelper()->createBufferContext(aSpriteSizePixel);
+                //glViewport(0, 0,aSpriteSizePixel.x,aSpriteSizePixel.y);
                 pBufferContext->startBufferRendering();
             }
-
             // this ends up in pBufferContext, if that one's "current"
             if( !maCanvasHelper.renderRecordedActions() )
                 return false;
-
             const glm::mat4 translate = glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0));
             if( pBufferContext )
             {
+
+                //pRenderHelper->SetModelAndMVP( aGLTransform);
+                // content ended up in background buffer - compose to
+                // screen now. Calls below switches us back to window
+                // context, and binds to generated, dynamic texture
+
+                pBufferContext->endBufferRendering();
 
                 const glm::mat4 aGLTransform = glm::mat4(
                         maTransformation.m00, maTransformation.m10, 0, 0,
                         maTransformation.m01, maTransformation.m11, 0, 0,
                         0,                    0,                    1, 0,
                         maTransformation.m02, maTransformation.m12, 0, 1
-                    );
+                );
 
-                //pRenderHelper->SetModelAndMVP(translate * aGLTransform);
-                pRenderHelper->SetModelAndMVP( aGLTransform);
-                // content ended up in background buffer - compose to
-                // screen now. Calls below switches us back to window
-                // context, and binds to generated, dynamic texture
-                pBufferContext->endBufferRendering();
+                pRenderHelper->SetModelAndMVP( translate *aGLTransform );
+
                 GLuint nTexture = pBufferContext->getTextureId();
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, nTexture);
@@ -212,22 +217,19 @@ namespace oglcanvas
                 }
                 else
                 {
-                    const double fWidth=maSize.Width/aSpriteSizePixel.x;
-                    const double fHeight=maSize.Height/aSpriteSizePixel.y;
-
                     std::vector<glm::vec2> vertices;
                     vertices.reserve(4);
-                    vertices.push_back(glm::vec2(0, 0));
-                    vertices.push_back(glm::vec2(0, (float) aSpriteSizePixel.y));
                     vertices.push_back(glm::vec2((float) aSpriteSizePixel.x, 0));
                     vertices.push_back(glm::vec2((float) aSpriteSizePixel.x, (float) aSpriteSizePixel.y));
+                    vertices.push_back(glm::vec2(0, 0));
+                    vertices.push_back(glm::vec2(0, (float) aSpriteSizePixel.y));
 
                     std::vector<glm::vec2> uvCoordinates;
                     uvCoordinates.reserve(4);
+                    uvCoordinates.push_back(glm::vec2(1, 1));
+                    uvCoordinates.push_back(glm::vec2(1, 0));
+                    uvCoordinates.push_back(glm::vec2(0, 1));
                     uvCoordinates.push_back(glm::vec2(0, 0));
-                    uvCoordinates.push_back(glm::vec2(0, (float) fHeight));
-                    uvCoordinates.push_back(glm::vec2((float) fWidth, 0));
-                    uvCoordinates.push_back(glm::vec2((float) fWidth, (float) fHeight));
 
                     pRenderHelper->renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
                 }
@@ -235,7 +237,6 @@ namespace oglcanvas
                 glBindTexture(GL_TEXTURE_2D, 0);
 
             }
-
         std::vector<glm::vec2> vertices;
         vertices.reserve(6);
         vertices.push_back(glm::vec2(-2, -2));
