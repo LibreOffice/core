@@ -104,9 +104,10 @@ $(call gb_Extension_get_target,%) : \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_Extension_get_rootdir,$*)/registration &&) \
 		$(if $(and $(gb_Extension_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_Extension_TRANS_LANGS),$(call gb_Extension_get_workdir,$*)/description-$(lang).txt) $(call gb_Extension_get_rootdir,$*) &&) \
 		cd $(call gb_Extension_get_rootdir,$*) && \
+		ZIPFILES=$(call var2file,$(shell $(gb_MKTEMP)),500,$(sort $(FILES))) && \
 		$(gb_Extension_ZIPCOMMAND) -rX --filesync --must-match \
 			$(call gb_Extension_get_target,$*) \
-			$(sort $(FILES)))
+			`cat $${ZIPFILES} | tr -d '\r'` && rm $${ZIPFILES})
 
 # set file list and location of manifest and description files
 # register target and clean target
