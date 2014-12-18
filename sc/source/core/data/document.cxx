@@ -2552,11 +2552,16 @@ void ScDocument::CopyBlockFromClip(
                 aRefCxt.mnTabDelta = nDz;
                 if (rCxt.getClipDoc()->GetClipParam().mbCutMode)
                 {
-                    bool bOldInserting = IsInsertingFromOtherDoc();
-                    SetInsertingFromOtherDoc( true);
-                    aRefCxt.meMode = URM_MOVE;
-                    UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
-                    SetInsertingFromOtherDoc( bOldInserting);
+                    // Update references only if cut originates from the same
+                    // document we are pasting into.
+                    if (rCxt.getClipDoc()->GetPool() == GetPool())
+                    {
+                        bool bOldInserting = IsInsertingFromOtherDoc();
+                        SetInsertingFromOtherDoc( true);
+                        aRefCxt.meMode = URM_MOVE;
+                        UpdateReference(aRefCxt, rCxt.getUndoDoc(), false);
+                        SetInsertingFromOtherDoc( bOldInserting);
+                    }
                 }
                 else
                 {
