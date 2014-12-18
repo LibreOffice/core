@@ -104,7 +104,7 @@ bool StgCompObjStream::Load()
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
     nCbFormat = 0;
-    aUserName = "";
+    aUserName.clear();
     if( GetError() != SVSTREAM_OK )
         return false;
     Seek( 8L );     // skip the first part

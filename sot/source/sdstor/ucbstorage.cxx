@@ -230,7 +230,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException,
     --nOpenFiles;
 #endif
     ::utl::UCBContentHelper::Kill( m_aURL );
-    m_aURL = "";
+    m_aURL.clear();
 }
 
 
@@ -1120,7 +1120,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 m_pContent->executeCommand( OUString("insert"), aAny );
 
                 // wrapper now controls lifetime of temporary file
-                m_aTempURL = "";
+                m_aTempURL.clear();
 
                 INetURLObject aObj( m_aURL );
                 aObj.SetName( m_aName );
@@ -1168,7 +1168,7 @@ bool UCBStorageStream_Impl::Revert()
     if ( !m_aTempURL.isEmpty() )
     {
         ::utl::UCBContentHelper::Kill( m_aTempURL );
-        m_aTempURL = "";
+        m_aTempURL.clear();
     }
 
     m_bSourceRead = false;
@@ -1255,7 +1255,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
         if ( !m_aTempURL.isEmpty() )
         {
             ::utl::UCBContentHelper::Kill( m_aTempURL );
-            m_aTempURL = "";
+            m_aTempURL.clear();
         }
     }
 }
@@ -1975,7 +1975,7 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
 
     if ( m_bIsRoot )
         // the "FullPath" of a child always starts without '/'
-        aPath = "";
+        aPath.clear();
 
     for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
     {
@@ -2026,7 +2026,7 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
 
     if ( m_bIsRoot )
         // the "FullPath" of a child always starts without '/'
-        aPath = "";
+        aPath.clear();
 
     // now the properties of my elements
     for ( size_t i = 0; i < m_aChildrenList.size(); ++i )
