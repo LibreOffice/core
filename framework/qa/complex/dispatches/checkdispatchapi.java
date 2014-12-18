@@ -28,14 +28,8 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XCloseable;
-import complex.dispatches.Interceptor;
 import java.util.HashMap;
 
-
-
-
-
-// ---------- junit imports -----------------
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

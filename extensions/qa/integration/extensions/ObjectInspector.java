@@ -26,8 +26,6 @@ import com.sun.star.frame.*;
 import com.sun.star.inspection.*;
 import com.sun.star.beans.*;
 
-import integration.extensions.Frame;
-
 public class ObjectInspector extends complexlib.ComplexTestCase
 {
     private XComponentContext       m_context;

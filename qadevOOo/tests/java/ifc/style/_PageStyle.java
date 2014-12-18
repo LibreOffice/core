@@ -18,8 +18,6 @@
 
 package ifc.style;
 
-import ifc.style._PageProperties;
-
 /**
  * Test page style properties.
  * These properties are a subset of the PageProperties. So just use the

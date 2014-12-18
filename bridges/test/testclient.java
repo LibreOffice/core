@@ -23,10 +23,6 @@ import com.sun.star.connection.XConnector;
 import com.sun.star.connection.XConnection;
 import com.sun.star.bridge.XInstanceProvider;
 
-import test.XCallMe;
-import test.XTestFactory;
-
-
 class MyInstanceProvider implements XInstanceProvider
 {
     public Object getInstance( String sName )
