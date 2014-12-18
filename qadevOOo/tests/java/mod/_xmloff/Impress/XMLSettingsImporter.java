@@ -191,11 +191,7 @@ public class XMLSettingsImporter extends TestCase {
                     }
                     logF.println("Property \"IsLayerMode\" after import is "
                         + propValue);
-                    if ( propValue.booleanValue() ) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return propValue.booleanValue();
                 }
             });
 
