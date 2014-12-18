@@ -41,7 +41,7 @@ public class Acceptor extends TestCase {
     */
     protected static final int basePort = 10000;
     private int curPort ;
-    private static String sOfficeHost = null ;
+    private String sOfficeHost = null ;
 
     /**
     * Retrieves host name where StarOffice is started from test

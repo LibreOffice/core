@@ -49,7 +49,7 @@ import util.utils;
 public class OfficeProvider implements AppProvider
 {
 
-    private static boolean debug = false;
+    private boolean debug = false;
 
     /**
      * copy the user layer to a safe place, usually to $TMP/user_backup$USER
@@ -312,7 +312,7 @@ public class OfficeProvider implements AppProvider
      * @throws com.sun.star.connection.NoConnectException
      * @throws Exception
      */
-    private static XMultiServiceFactory connect(String connectStr)
+    private XMultiServiceFactory connect(String connectStr)
             throws com.sun.star.uno.Exception,
             com.sun.star.uno.RuntimeException,
             com.sun.star.connection.NoConnectException,
@@ -690,7 +690,7 @@ public class OfficeProvider implements AppProvider
      * @param msf the <CODE>MultiServiceFactory</CODE>
      * @param param the <CODE>TestParameters</CODE>
      */
-    private static void makeAppExecCommand(XMultiServiceFactory msf, TestParameters param)
+    private void makeAppExecCommand(XMultiServiceFactory msf, TestParameters param)
     {
         debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
 
@@ -733,7 +733,7 @@ public class OfficeProvider implements AppProvider
         param.put(util.PropertyName.APP_EXECUTION_COMMAND, command);
     }
 
-    private static void dbg(String message)
+    private void dbg(String message)
     {
         if (debug)
         {

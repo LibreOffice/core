@@ -40,7 +40,7 @@ import stats.Summarizer;
  */
 public class java_fat_service implements TestBase {
 
-    static protected boolean debug = false;
+    protected boolean debug = false;
     protected LogWriter log = null;
 
     public boolean executeTest(lib.TestParameters param) {
