@@ -591,8 +591,7 @@ static bool performTest(
                 Any nullAny(xLBT->getNullPolyAny().member);
                 bRet &= check(
                     (((nullAny.getValueTypeName() ==
-                       OUString(
-                               "com.sun.star.uno.XInterface")) &&
+                       "com.sun.star.uno.XInterface") &&
                       !static_cast< Reference< XInterface > const * >(
                           nullAny.getValue())->is())
                      || nullAny == Any()),
