@@ -68,7 +68,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
 
     // parse data
     bool bCategoriesUsed = false;
-    bool bSetXValues = aData.getLength()>(bCategoriesUsed?2:1);
+    bool bSetXValues = aData.getLength()>1;
     for( sal_Int32 nDataIdx= 0; nDataIdx < aData.getLength(); ++nDataIdx )
     {
         try
