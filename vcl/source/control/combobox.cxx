@@ -292,7 +292,7 @@ void ComboBox::ImplAutocompleteHandler( Edit* pEdit )
     {
         OUString    aFullText = pEdit->GetText();
         OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
-        sal_Int32      nStart = mpImplLB->GetCurrentPos();
+        sal_Int32   nStart = mpImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
             nStart = 0;
@@ -303,7 +303,10 @@ void ComboBox::ImplAutocompleteHandler( Edit* pEdit )
         else if ( eAction == AUTOCOMPLETE_TABBACKWARD )
         {
             bForward = false;
-            nStart = nStart ? nStart - 1 : mpImplLB->GetEntryList()->GetEntryCount()-1;
+            if (nStart)
+                nStart = nStart - 1;
+            else if (mpImplLB->GetEntryList()->GetEntryCount())
+                nStart = mpImplLB->GetEntryList()->GetEntryCount()-1;
         }
 
         sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
