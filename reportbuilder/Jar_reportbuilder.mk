@@ -147,11 +147,9 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/pentaho/parser/AttributeSpecification \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/ElementReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/OfficeDocumentXmlResourceFactory \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/OfficeParserUtil \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/OfficeStylesXmlResourceFactory \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/StarStyleXmlFactoryModule \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/StarXmlFactoryModule \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/StyleMapper \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/chart/ChartReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/data/DataStyleReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/draw/ObjectOleReadHandler \
@@ -180,28 +178,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/pentaho/parser/style/OfficeStylesReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/style/PageLayoutReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/style/StyleDefinitionReadHandler \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/OneOfConstantsMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/draw/TextAreaVerticalAlignMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/BackgroundColorMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/BorderRightMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/ColorMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/FontSizeMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/FontStyleMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/FontWeightMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/fo/TextAlignMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/FontFamilyGenericMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/FontFamilyMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/FontNameMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/FontPitchMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/FontReliefMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/TextEmphasizeMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/TextUnderlineColorMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/TextUnderlineStyleMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/TextUnderlineWidthMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/TextUnderlineWordMode \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/style/VerticalAlignMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/table/ColumnWidthMapper \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/stylemapper/table/RowHeightMapper \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/table/CoveredCellReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/table/TableCellReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/table/TableColumnReadHandler \
@@ -255,12 +231,6 @@ $(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/penta
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/star-rpt.css \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/svg.css \
 	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/xsl-fo.css \
-))
-
-$(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/pentaho/parser,\
-	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/parser/rpt-schema-v1.0-os.xsd \
-	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/parser/selectors.properties \
-	$(SRCDIR)/reportbuilder/java/org/libreoffice/report/pentaho/parser/style-mapping.txt \
 ))
 
 $(eval $(call gb_Jar_add_packagefiles,reportbuilder,org/libreoffice/report/pentaho/styles,\
