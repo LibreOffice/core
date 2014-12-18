@@ -1844,12 +1844,15 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                     (eNew == svDouble && aResult.GetDouble() != aNewResult.GetDouble()) ||
                     (eNew == svString && aResult.GetString() != aNewResult.GetString()));
 
-            // #i102616# handle special cases of initial results after loading (only if the sheet is still marked unchanged)
+            // #i102616# handle special cases of initial results after loading
+            // (only if the sheet is still marked unchanged)
             if ( bChanged && !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
-                if ( ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) ) ||
-                     ( (eOld == svHybridCell || eOld == svHybridValueCell) && eNew == svString && aResult.GetString() == aNewResult.GetString() ) ||
-                     ( eOld == svDouble && eNew == svDouble && rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() ) ) )
+                if ((eOld == svUnknown && (eNew == svError || (eNew == svDouble && aNewResult.GetDouble() == 0.0))) ||
+                        ((eOld == svHybridCell || eOld == svHybridValueCell) &&
+                         eNew == svString && aResult.GetString() == aNewResult.GetString()) ||
+                        (eOld == svDouble && eNew == svDouble &&
+                         rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble())))
                 {
                     // no change, see above
                 }
