@@ -56,7 +56,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -97,7 +96,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -139,7 +137,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -181,7 +178,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -220,7 +216,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
 //      SEPARATOR
@@ -258,7 +253,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
 //      SEPARATOR
@@ -295,7 +289,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -336,7 +329,6 @@
         MN_ENTER_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -374,7 +366,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -416,7 +407,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -458,7 +448,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -500,7 +489,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -565,7 +553,6 @@
         MN_BREAK
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -604,7 +591,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
@@ -656,7 +642,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -707,7 +692,6 @@
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
     };
@@ -861,7 +845,6 @@
         MN_NAME_GROUP
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
-        MN_EFFECT
         MN_ACTION
 #endif
         SEPARATOR
