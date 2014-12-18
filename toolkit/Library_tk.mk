@@ -126,10 +126,4 @@ $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif
 
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_use_libraries,tk,\
-    libotouch \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
