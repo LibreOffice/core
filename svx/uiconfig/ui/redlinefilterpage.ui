@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">19851231</property>
+    <property name="upper">20501231</property>
+    <property name="value">19851231</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sc/res/time.png</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sc/res/time.png</property>
+  </object>
   <object class="GtkGrid" id="RedlineFilterPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -271,6 +288,7 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="startdate:yy:mm:dd">
+                <property name="width_request">120</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -292,10 +310,8 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkSpinButton" id="starttime:hh:mm">
+                <property name="width_request">70</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -335,6 +351,7 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="enddate:yy:mm:dd">
+                <property name="width_request">120</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -357,6 +374,7 @@
             </child>
             <child>
               <object class="GtkSpinButton" id="endtime:hh:mm">
+                <property name="width_request">75</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -394,6 +412,9 @@
                 <property name="height">1</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -409,22 +430,5 @@
         <property name="height">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">19851231</property>
-    <property name="upper">20501231</property>
-    <property name="value">19851231</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/time.png</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/time.png</property>
   </object>
 </interface>

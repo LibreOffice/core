@@ -389,7 +389,7 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     pTopLevel->get(m_pUndo, "undo");
 
     SvSimpleTableContainer* pTable = get<SvSimpleTableContainer>("changes");
-    Size aControlSize(221, 65);
+    Size aControlSize(80, 65);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     pTable->set_width_request(aControlSize.Width());
     pTable->set_height_request(aControlSize.Height());
