@@ -36,43 +36,43 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     using SwFrm::GetLeaf;
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, bool bFwd );
 
-    SwTable* pTable;
+    SwTable * m_pTable;
 
-    bool bComplete          :1; /// Set entries for Repaint without needing to
+    bool m_bComplete        :1; /// Set entries for Repaint without needing to
                                 /// set the base class' CompletePaint
                                 /// With that we would want to avoid unnecessary
                                 /// table repaints
-    bool bCalcLowers        :1; /// For stability of the content in MakeAll
-    bool bLowersFormatted   :1; /// Communication between MakeAll and Layact
-    bool bLockBackMove      :1; /// The Master took care of the BackMove test
-    bool bResizeHTMLTable   :1; /// Call the Resize of the HTMLTableLayout in the MakeAll
+    bool m_bCalcLowers      :1; /// For stability of the content in MakeAll
+    bool m_bLowersFormatted :1; /// Communication between MakeAll and Layact
+    bool m_bLockBackMove    :1; /// The Master took care of the BackMove test
+    bool m_bResizeHTMLTable :1; /// Call the Resize of the HTMLTableLayout in the MakeAll
                                 /// This is an optimization, so that we don't have to call
                                 /// it in CntntFrm::Grow; there it might be called for
                                 /// _every_ Cell
 
-    bool bONECalcLowers     :1; /// Primarily for the StarONE SS
+    bool m_bONECalcLowers   :1; /// Primarily for the StarONE SS
                                 /// The Cntnts are formatted via Calc() on MakeAll in any
                                 /// case. There are no further invalidations and that path can
                                 /// hardly give any guarantees
 
-    bool bHasFollowFlowLine :1; /// Means that the first line in the follow
+    bool m_bHasFollowFlowLine :1; /// Means that the first line in the follow
                                 /// is indented to contain content from a broken
                                 /// cell
-    bool bIsRebuildLastLine :1; /// Means that currently the last line of the
+    bool m_bIsRebuildLastLine :1; /// Means that currently the last line of the
                                 /// TabFrame is rebuilt. In this case we do not
                                 //  want any notification to the master table
 
-    bool bRestrictTableGrowth :1;       // Usually, the table may grow infinitely,
+    bool m_bRestrictTableGrowth :1;     // Usually, the table may grow infinitely,
                                         // as the table can be split in SwTabFrm::MakeAll
                                         // In MakeAll, this flag is set to indicate that
                                         // the table may only grow inside its upper. This
                                         // is necessary, in order to let the text flow into
                                         // the FollowFlowLine
 
-    bool bRemoveFollowFlowLinePending :1;
+    bool m_bRemoveFollowFlowLinePending :1;
 
     // #i26945#
-    bool bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
+    bool m_bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
                                            // are considered during the calculation
                                            // for the minimal cell height.
                                            // For the splitting table rows algorithm
@@ -81,10 +81,10 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                            // of the re-calculation of the
                                            // last table row.
     // #i26945#
-    bool bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
+    bool m_bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
                           // indicates, if the floating screen objects fits
 
-    bool mbInRecalcLowerRow : 1;
+    bool m_bInRecalcLowerRow : 1;
 
     /**
      * Split() splits the Frm at the specified position: a Follow is
@@ -137,63 +137,63 @@ public:
                  SwCntntFrm *FindLastCntnt();
     inline const SwCntntFrm *FindLastCntnt() const;
 
-    const SwTable *GetTable() const { return pTable; }
-          SwTable *GetTable()       { return pTable; }
+    const SwTable *GetTable() const { return m_pTable; }
+          SwTable *GetTable()       { return m_pTable; }
 
-    bool IsComplete()  { return bComplete; }
-    void SetComplete() { bComplete = true; }
-    void ResetComplete() { bComplete = false; }
+    bool IsComplete()  { return m_bComplete; }
+    void SetComplete() { m_bComplete = true; }
+    void ResetComplete() { m_bComplete = false; }
 
-    bool IsLowersFormatted() const      { return bLowersFormatted; }
-    void SetLowersFormatted( bool b )   { bLowersFormatted = b;    }
+    bool IsLowersFormatted() const      { return m_bLowersFormatted; }
+    void SetLowersFormatted(bool b)   { m_bLowersFormatted = b;    }
 
-    void SetCalcLowers()        { bCalcLowers = true;      } // use rarely
-    void SetResizeHTMLTable()   { bResizeHTMLTable = true; } // same
-    void SetONECalcLowers()     { bONECalcLowers = true;   }
+    void SetCalcLowers()        { m_bCalcLowers = true;      } // use rarely
+    void SetResizeHTMLTable()   { m_bResizeHTMLTable = true; } // same
+    void SetONECalcLowers()     { m_bONECalcLowers = true;   }
 
     // Start: New stuff for breaking table rows
 
-    bool HasFollowFlowLine() const { return bHasFollowFlowLine; }
-    void SetFollowFlowLine( bool bNew ) { bHasFollowFlowLine = bNew; }
+    bool HasFollowFlowLine() const { return m_bHasFollowFlowLine; }
+    void SetFollowFlowLine(bool bNew) { m_bHasFollowFlowLine = bNew; }
     //return the SwTabFrm (if any) that this SwTabFrm is a follow flow line for
     SwTabFrm* GetFollowFlowLineFor();
 
-    bool IsRebuildLastLine() const { return bIsRebuildLastLine; }
-    void SetRebuildLastLine( bool bNew ) { bIsRebuildLastLine = bNew; }
+    bool IsRebuildLastLine() const { return m_bIsRebuildLastLine; }
+    void SetRebuildLastLine(bool bNew) { m_bIsRebuildLastLine = bNew; }
 
-    bool IsRestrictTableGrowth() const { return bRestrictTableGrowth; }
-    void SetRestrictTableGrowth( bool bNew ) { bRestrictTableGrowth = bNew; }
+    bool IsRestrictTableGrowth() const { return m_bRestrictTableGrowth; }
+    void SetRestrictTableGrowth( bool bNew ) { m_bRestrictTableGrowth = bNew; }
 
-    bool IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
-    void SetRemoveFollowFlowLinePending( bool bNew ) { bRemoveFollowFlowLinePending = bNew; }
+    bool IsRemoveFollowFlowLinePending() const { return m_bRemoveFollowFlowLinePending; }
+    void SetRemoveFollowFlowLinePending(bool bNew) { m_bRemoveFollowFlowLinePending = bNew; }
 
     bool IsInRecalcLowerRow() const
     {
-        return mbInRecalcLowerRow;
+        return m_bInRecalcLowerRow;
     }
     void SetInRecalcLowerRow( bool bNew )
     {
-        mbInRecalcLowerRow = bNew;
+        m_bInRecalcLowerRow = bNew;
     }
 
     // #i26945#
     bool IsConsiderObjsForMinCellHeight() const
     {
-        return bConsiderObjsForMinCellHeight;
+        return m_bConsiderObjsForMinCellHeight;
     }
-    void SetConsiderObjsForMinCellHeight( bool _bNewConsiderObjsForMinCellHeight )
+    void SetConsiderObjsForMinCellHeight(bool const bConsiderObjsForMinCellHeight)
     {
-        bConsiderObjsForMinCellHeight = _bNewConsiderObjsForMinCellHeight;
+        m_bConsiderObjsForMinCellHeight = bConsiderObjsForMinCellHeight;
     }
 
     // #i26945#
     bool DoesObjsFit() const
     {
-        return bObjsDoesFit;
+        return m_bObjsDoesFit;
     }
-    void SetDoesObjsFit( bool _bNewObjsDoesFit )
+    void SetDoesObjsFit(bool const bObjsDoesFit)
     {
-        bObjsDoesFit = _bNewObjsDoesFit;
+        m_bObjsDoesFit = bObjsDoesFit;
     }
 
     bool RemoveFollowFlowLine();

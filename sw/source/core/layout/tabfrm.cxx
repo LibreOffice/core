@@ -58,18 +58,24 @@
 
 using namespace ::com::sun::star;
 
-SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
-    SwLayoutFrm( rTab.GetFrmFmt(), pSib ),
-    SwFlowFrm( (SwFrm&)*this ),
-    pTable( &rTab )
+SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib )
+    : SwLayoutFrm( rTab.GetFrmFmt(), pSib )
+    , SwFlowFrm( static_cast<SwFrm&>(*this) )
+    , m_pTable( &rTab )
+    , m_bComplete(false)
+    , m_bCalcLowers(false)
+    , m_bLowersFormatted(false)
+    , m_bLockBackMove(false)
+    , m_bResizeHTMLTable(false)
+    , m_bONECalcLowers(false)
+    , m_bHasFollowFlowLine(false)
+    , m_bIsRebuildLastLine(false)
+    , m_bRestrictTableGrowth(false)
+    , m_bRemoveFollowFlowLinePending(false)
+    , m_bConsiderObjsForMinCellHeight(true)
+    , m_bObjsDoesFit(true)
+    , m_bInRecalcLowerRow(false)
 {
-    bComplete = bCalcLowers = bONECalcLowers = bLowersFormatted = bLockBackMove =
-    bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
-    bRestrictTableGrowth = bRemoveFollowFlowLinePending = false;
-    // #i26945#
-    bConsiderObjsForMinCellHeight = true;
-    bObjsDoesFit = true;
-    mbInRecalcLowerRow = false;
     mbFixSize = false;     //Don't fall for import filter again.
     mnType = FRMC_TAB;
 
@@ -90,18 +96,24 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
 }
 
-SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
-    SwLayoutFrm( rTab.GetFmt(), &rTab ),
-    SwFlowFrm( (SwFrm&)*this ),
-    pTable( rTab.GetTable() )
+SwTabFrm::SwTabFrm( SwTabFrm &rTab )
+    : SwLayoutFrm( rTab.GetFmt(), &rTab )
+    , SwFlowFrm( static_cast<SwFrm&>(*this) )
+    , m_pTable( rTab.GetTable() )
+    , m_bComplete(false)
+    , m_bCalcLowers(false)
+    , m_bLowersFormatted(false)
+    , m_bLockBackMove(false)
+    , m_bResizeHTMLTable(false)
+    , m_bONECalcLowers(false)
+    , m_bHasFollowFlowLine(false)
+    , m_bIsRebuildLastLine(false)
+    , m_bRestrictTableGrowth(false)
+    , m_bRemoveFollowFlowLinePending(false)
+    , m_bConsiderObjsForMinCellHeight(true)
+    , m_bObjsDoesFit(true)
+    , m_bInRecalcLowerRow(false)
 {
-    bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
-    bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
-    bRestrictTableGrowth = bRemoveFollowFlowLinePending = false;
-    // #i26945#
-    bConsiderObjsForMinCellHeight = true;
-    bObjsDoesFit = true;
-    mbInRecalcLowerRow = false;
     mbFixSize = false;     //Don't fall for import filter again.
     mnType = FRMC_TAB;
 
@@ -1719,12 +1731,12 @@ void SwTabFrm::MakeAll()
         SetRemoveFollowFlowLinePending( false );
     }
 
-    if ( bResizeHTMLTable ) //Optimized interplay with grow/shrink of the content
+    if (m_bResizeHTMLTable) //Optimized interplay with grow/shrink of the content
     {
-        bResizeHTMLTable = false;
+        m_bResizeHTMLTable = false;
         SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
         if ( pLayout )
-            bCalcLowers = pLayout->Resize(
+            m_bCalcLowers = pLayout->Resize(
                             pLayout->GetBrowseWidthByTabFrm( *this ), false );
     }
 
@@ -1828,7 +1840,7 @@ void SwTabFrm::MakeAll()
             if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
             {
                 bMovedFwd = true;
-                bCalcLowers = true;
+                m_bCalcLowers = true;
                 // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
@@ -1846,7 +1858,7 @@ void SwTabFrm::MakeAll()
                 if( pLayout )
                 {
                     delete pAccess;
-                    bCalcLowers |= pLayout->Resize(
+                    m_bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrm( *this ), false );
                     pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
                     pAttrs = pAccess->Get();
@@ -1859,7 +1871,7 @@ void SwTabFrm::MakeAll()
             if ( bKeep || (0 != (pPre = FindPrev()) &&
                 pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
-                bCalcLowers = true;
+                m_bCalcLowers = true;
                 // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
@@ -1890,7 +1902,7 @@ void SwTabFrm::MakeAll()
                 (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
             {
                 delete pAccess;
-                bCalcLowers |= pLayout->Resize(
+                m_bCalcLowers |= pLayout->Resize(
                     pLayout->GetBrowseWidthByTabFrm( *this ), false );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
@@ -1939,7 +1951,7 @@ void SwTabFrm::MakeAll()
                         if( pHTMLLayout )
                         {
                             delete pAccess;
-                            bCalcLowers |= pHTMLLayout->Resize(
+                            m_bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrm( *this ),
                                 false );
 
@@ -1951,7 +1963,7 @@ void SwTabFrm::MakeAll()
                         Format( pAttrs );
                     }
                     lcl_RecalcTable( *this, 0, aNotify );
-                    bLowersFormatted = true;
+                    m_bLowersFormatted = true;
                     if ( bKeep && KEEPTAB )
                     {
 
@@ -2139,16 +2151,16 @@ void SwTabFrm::MakeAll()
 
             if ( IsValid() )
             {
-                if ( bCalcLowers )
+                if (m_bCalcLowers)
                 {
                     lcl_RecalcTable( *this, 0, aNotify );
-                    bLowersFormatted = true;
-                    bCalcLowers = false;
+                    m_bLowersFormatted = true;
+                    m_bCalcLowers = false;
                 }
-                else if ( bONECalcLowers )
+                else if (m_bONECalcLowers)
                 {
                     lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
-                    bONECalcLowers = false;
+                    m_bONECalcLowers = false;
                 }
             }
             continue;
@@ -2162,16 +2174,16 @@ void SwTabFrm::MakeAll()
         // an unsolvable problem: We ignore it with all our power.
         if ( !bMoveable )
         {
-            if ( bCalcLowers && IsValid() )
+            if (m_bCalcLowers && IsValid())
             {
                 lcl_RecalcTable( *this, 0, aNotify );
-                bLowersFormatted = true;
-                bCalcLowers = false;
+                m_bLowersFormatted = true;
+                m_bCalcLowers = false;
             }
-            else if ( bONECalcLowers )
+            else if (m_bONECalcLowers)
             {
                 lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
-                bONECalcLowers = false;
+                m_bONECalcLowers = false;
             }
 
             // It does not make sense to cut off the last line if we are
@@ -2181,11 +2193,11 @@ void SwTabFrm::MakeAll()
             continue;
         }
 
-        if ( bCalcLowers && IsValid() )
+        if (m_bCalcLowers && IsValid())
         {
             lcl_RecalcTable( *this, 0, aNotify );
-            bLowersFormatted = true;
-            bCalcLowers = false;
+            m_bLowersFormatted = true;
+            m_bCalcLowers = false;
             if( !IsValid() )
                 continue;
         }
@@ -2233,7 +2245,7 @@ void SwTabFrm::MakeAll()
                     ::lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), nDeadLine );
                     SetInRecalcLowerRow( false );
                 }
-                bLowersFormatted = true;
+                m_bLowersFormatted = true;
                 aNotify.SetLowersComplete( true );
 
                 // One more check if its really necessary to split the table.
@@ -2437,7 +2449,7 @@ void SwTabFrm::MakeAll()
         }
 
         SWREFRESHFN( this )
-        bCalcLowers = true;
+        m_bCalcLowers = true;
         bMovedFwd = true;
         aNotify.SetLowersComplete( false );
         if ( IsFollow() )
@@ -2466,7 +2478,7 @@ void SwTabFrm::MakeAll()
             GetUpper()->ResetCompletePaint();
         }
 
-        if ( bCalcLowers && IsValid() )
+        if (m_bCalcLowers && IsValid())
         {
             // #i44910# - format of lower frames unnecessary
             // and can cause layout loops, if table doesn't fit and isn't
@@ -2476,8 +2488,8 @@ void SwTabFrm::MakeAll()
             if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
             {
                 lcl_RecalcTable( *this, 0, aNotify );
-                bLowersFormatted = true;
-                bCalcLowers = false;
+                m_bLowersFormatted = true;
+                m_bCalcLowers = false;
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -2498,7 +2510,7 @@ void SwTabFrm::MakeAll()
             pPre->InvalidatePos();
     }
 
-    bCalcLowers = bONECalcLowers = false;
+    m_bCalcLowers = m_bONECalcLowers = false;
     delete pAccess;
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd || !bOldValidPos )
@@ -3290,10 +3302,10 @@ bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool &rReformat )
                         nSpace += pNewUpper->Grow( LONG_MAX, true );
                 }
             }
-            else if( !bLockBackMove )
+            else if (!m_bLockBackMove)
                 bMoveAnyway = true;
         }
-        else if( !bLockBackMove )
+        else if (!m_bLockBackMove)
             bMoveAnyway = true;
 
         if ( bMoveAnyway )
@@ -3301,7 +3313,7 @@ bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool &rReformat )
             rReformat = true;
             return true;
         }
-        if ( !bLockBackMove && nSpace > 0 )
+        if (!m_bLockBackMove && nSpace > 0)
         {
             // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object

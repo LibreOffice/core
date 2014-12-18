@@ -1439,14 +1439,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
             if ( pFrm->IsTabFrm() )
             {
-                static_cast<SwTabFrm*>(pFrm)->bCalcLowers = true;
+                static_cast<SwTabFrm*>(pFrm)->m_bCalcLowers = true;
                 // OD 26.08.2003 #i18103# - lock move backward of follow table,
                 // if no section content is formatted or follow table belongs
                 // to the section, which content is formatted.
                 if ( static_cast<SwTabFrm*>(pFrm)->IsFollow() &&
                      ( !pSect || pSect == pFrm->FindSctFrm() ) )
                 {
-                    static_cast<SwTabFrm*>(pFrm)->bLockBackMove = true;
+                    static_cast<SwTabFrm*>(pFrm)->m_bLockBackMove = true;
                 }
             }
 
@@ -1613,7 +1613,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
             if ( pFrm->IsTabFrm() )
             {
                 if ( static_cast<SwTabFrm*>(pFrm)->IsFollow() )
-                    static_cast<SwTabFrm*>(pFrm)->bLockBackMove = false;
+                    static_cast<SwTabFrm*>(pFrm)->m_bLockBackMove = false;
             }
 
             pFrm = bPrevInvalid ? pTmpPrev : pFrm->FindNext();
