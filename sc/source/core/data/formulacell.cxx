@@ -2033,7 +2033,14 @@ void ScFormulaCell::SetDirty( bool bDirtyFlag )
                 if( bDirtyFlag )
                     SetDirtyVar();
                 pDocument->AppendToFormulaTrack( this );
-                pDocument->TrackFormulas();
+
+                // While loading a document listeners have not been established yet.
+                // Tracking would remove this cell from the FormulaTrack and add it to
+                // the FormulaTree, once in there it would be assumed that its
+                // dependents already had been tracked and it would be skipped on a
+                // subsequent notify. Postpone tracking until all listeners are set.
+                if (!pDocument->IsImportingXML())
+                    pDocument->TrackFormulas();
             }
         }
 
