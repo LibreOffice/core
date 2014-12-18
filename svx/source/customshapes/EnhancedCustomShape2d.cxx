@@ -52,6 +52,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/strbuf.hxx>
 #include <math.h>
 
@@ -1770,8 +1771,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         GetParameter ( fStartAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1) ].First, false, false );
                         GetParameter ( fSwingAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1 ) ].Second, false, false );
 
-                        fWR *= fXScale;
-                        fHR *= fYScale;
+                        // Convert angles to radians, but don't do any scaling / translation yet.
 
                         fStartAngle *= F_PI180;
                         fSwingAngle *= F_PI180;
@@ -1783,7 +1783,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         if (aNewB2DPolygon.count() > 0)
                         {
                             basegfx::B2DPoint aStartPointB2D( aNewB2DPolygon.getB2DPoint(aNewB2DPolygon.count() - 1 ) );
-                            Point aStartPoint( aStartPointB2D.getX(), aStartPointB2D.getY() );
+                            Point aStartPoint( 0, 0 );
 
                             double fT = atan2((fWR*sin(fStartAngle)), (fHR*cos(fStartAngle)));
                             double fTE = atan2((fWR*sin(fStartAngle + fSwingAngle)), fHR*cos(fStartAngle + fSwingAngle));
@@ -1798,7 +1798,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             OSL_TRACE("ARCANGLETO rect: %d, %d   x   %d, %d   start: %d, %d end: %d, %d clockwise: %d",
                                       aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom(),
                                       aStartPoint.X(), aStartPoint.Y(), aEndPoint.X(), aEndPoint.Y(), bClockwise);
-                            aNewB2DPolygon.append(CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && fSwingAngle > F_PI));
+                            basegfx::B2DPolygon aArc = CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && fSwingAngle > F_PI);
+                            // Now that we have the arc, move it to aStartPointB2D and also scale it.
+                            basegfx::B2DHomMatrix aMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(fXScale, fYScale, aStartPointB2D.getX(), aStartPointB2D.getY());
+                            aArc.transform(aMatrix);
+                            aNewB2DPolygon.append(aArc);
                         }
 
                         rSrcPt += 2;

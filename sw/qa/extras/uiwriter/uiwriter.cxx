@@ -8,6 +8,7 @@
  */
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
@@ -26,6 +27,8 @@
 #include <hhcwrp.hxx>
 #include <swacorr.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <unotools/streamwrap.hxx>
+#include <test/mtfxmldump.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -72,6 +75,7 @@ public:
     void testCreatePortions();
     void testBookmarkUndo();
     void testFdo85876();
+    void testFdo87448();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -101,6 +105,7 @@ public:
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
+    CPPUNIT_TEST(testFdo87448);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -758,6 +763,45 @@ void SwUiWriterTest::testFdo85876()
         // this used to be BOLD too with fdo#85876
         CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
     }
+}
+
+void SwUiWriterTest::testFdo87448()
+{
+    createDoc("fdo87448.odt");
+
+    // Save the first shape to a metafile.
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(comphelper::getProcessComponentContext());
+    uno::Reference<lang::XComponent> xSourceDoc(getShape(1), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xSourceDoc);
+
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor =
+    {
+        beans::PropertyValue("OutputStream", sal_Int32(0), uno::makeAny(xOutputStream), beans::PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("SVM")), beans::PropertyState_DIRECT_VALUE)
+    };
+    xGraphicExporter->filter(aDescriptor);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Read it back and dump it as an XML file.
+    Graphic aGraphic;
+    ReadGraphic(aStream, aGraphic);
+    const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(const_cast<GDIMetaFile&>(rMetaFile));
+
+    // The first polyline in the document has a number of points to draw arcs,
+    // the last one jumps back to the start, so we call "end" the last but one.
+    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "/metafile/polyline[1]/point[last()-1]", "x").toInt32();
+    // The second polyline has a different start point, but the arc it draws
+    // should end at the ~same position as the first polyline.
+    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "/metafile/polyline[2]/point[last()]", "x").toInt32();
+
+    // nFirstEnd was 6023 and nSecondEnd was 6648, now they should be much closer, e.g. nFirstEnd = 6550, nSecondEnd = 6548
+    OString aMsg = "nFirstEnd is " + OString::number(nFirstEnd) + ", nSecondEnd is " + OString::number(nSecondEnd);
+    // Assert that the difference is less than half point.
+    CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), abs(nFirstEnd - nSecondEnd) < 10);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
