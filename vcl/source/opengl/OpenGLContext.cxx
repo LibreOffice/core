@@ -1168,7 +1168,7 @@ void OpenGLContext::reset()
         while( it != maPrograms.end() )
         {
             delete it->second;
-            it++;
+            ++it;
         }
         maPrograms.clear();
     }

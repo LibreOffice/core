@@ -57,7 +57,7 @@ bool OpenGLProgram::Clean()
         {
             glActiveTexture( GL_TEXTURE0 + nIndex-- );
             it->Unbind();
-            it++;
+            ++it;
         }
         maTextures.clear();
     }

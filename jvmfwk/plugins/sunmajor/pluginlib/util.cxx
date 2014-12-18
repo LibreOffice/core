@@ -595,7 +595,7 @@ void addJavaInfoFromWinReg(
         // create impl objects
         typedef std::vector<OUString>::iterator ItHome;
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
-            it_home++)
+            ++it_home)
         {
             getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
         }
@@ -606,7 +606,7 @@ void addJavaInfoFromWinReg(
     {
         typedef std::vector<OUString>::iterator ItHome;
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
-            it_home++)
+            ++it_home)
         {
             getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
         }
@@ -657,7 +657,7 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                             //iterate over the vector with java home strings
                             typedef vector<OUString>::iterator ItHome;
                             for(ItHome itHome= vecJavaHome.begin();
-                                itHome != vecJavaHome.end(); itHome++)
+                                itHome != vecJavaHome.end(); ++itHome)
                             {
                                 if(usHomeUrl.equals(*itHome))
                                 {
