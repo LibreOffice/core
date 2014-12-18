@@ -114,7 +114,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     if (! pTypeDescr)
     {
         throw RuntimeException(
-            OUString("cannot get typedescription for type ") +
+            "cannot get typedescription for type " +
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
     }
 
@@ -130,7 +130,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     if (! rtti)
     {
         throw RuntimeException(
-            OUString("no rtti for type ") +
+            "no rtti for type " +
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
     }
     }
@@ -158,7 +158,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
     if (0 == pExcTypeDescr)
     {
-        RuntimeException aRE( OUString("exception type not found: ") + unoName );
+        RuntimeException aRE( "exception type not found: " + unoName );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
         SAL_WARN("bridges", aRE.Message);
