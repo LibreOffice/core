@@ -122,8 +122,8 @@ void ImpSvNumberformatScan::ChangeIntl()
     bKeywordsNeedInit = true;
     bCompatCurNeedInit = true;
     // may be initialized by InitSpecialKeyword()
-    sKeyword[NF_KEY_TRUE] = "";
-    sKeyword[NF_KEY_FALSE] = "";
+    sKeyword[NF_KEY_TRUE].clear();
+    sKeyword[NF_KEY_FALSE].clear();
 }
 
 void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
@@ -515,7 +515,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
     }
     else
     {
-        sStr = "";
+        sStr.clear();
         if (bConvertMode)
         {
             pFormatter->ChangeIntl(eNewLnge);
@@ -651,7 +651,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
     const sal_Int32 nStart = nPos;
     short eType = 0;
     ScanState eState = SsStart;
-    sSymbol = "";
+    sSymbol.clear();
     while ( nPos < rStr.getLength() && eState != SsStop )
     {
         sal_Unicode cToken = rStr[nPos++];
@@ -2685,7 +2685,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         }
     }
     // Concatenate strings, remove quotes for output, and rebuild the format string
-    rString = "";
+    rString.clear();
     i = 0;
     while (i < nAnzStrings)
     {

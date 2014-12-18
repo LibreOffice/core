@@ -39,8 +39,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-#define PERSISTENT_SERVICE_NAME     OUString("com.sun.star.util.NumberFormatsSupplier");
-
 Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
     return static_cast< ::cppu::OWeakObject* >(new SvNumberFormatsSupplierServiceObject( comphelper::getComponentContext(_rxFactory) ));
@@ -128,7 +126,7 @@ sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const O
 Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSupported(1);
-    aSupported.getArray()[0] = PERSISTENT_SERVICE_NAME;
+    aSupported.getArray()[0] = "com.sun.star.util.NumberFormatsSupplier";
     return aSupported;
 }
 

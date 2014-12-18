@@ -47,7 +47,7 @@ SVL_DLLPUBLIC void* SAL_CALL svl_component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString("com.sun.star.util.NumberFormatsSupplier");
+                "com.sun.star.util.NumberFormatsSupplier";
 
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
@@ -60,8 +60,7 @@ SVL_DLLPUBLIC void* SAL_CALL svl_component_getFactory (
                      "com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject") == 0)
         {
             Sequence< OUString > aServiceNames(1);
-            aServiceNames.getArray()[0] =
-                OUString("com.sun.star.util.NumberFormatter");
+            aServiceNames.getArray()[0] = "com.sun.star.util.NumberFormatter";
 
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
@@ -74,7 +73,7 @@ SVL_DLLPUBLIC void* SAL_CALL svl_component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString("com.sun.star.config.SpecialConfigManager");
+                "com.sun.star.config.SpecialConfigManager";
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< css::lang::XMultiServiceFactory* >( _pServiceManager ),
                 OUString::createFromAscii( pImplementationName ),

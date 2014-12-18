@@ -1175,7 +1175,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     ::osl::MutexGuard aGuard( mMutex );
     if ( m_pStorageFile )
     {
-        m_aMasterPasswd = "";
+        m_aMasterPasswd.clear();
         m_pStorageFile->setEncodedMP( OUString() ); // let the master password be removed from configuration
     }
 }

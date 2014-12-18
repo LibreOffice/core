@@ -3344,7 +3344,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
             return true;
         }
     }
-    rStr = "";
+    rStr.clear();
     return false;
 }
 

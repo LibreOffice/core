@@ -289,7 +289,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
     }
     else
     {
-        rSymbol = "";
+        rSymbol.clear();
     }
 
     pStr = pHere;
@@ -3340,7 +3340,7 @@ void ImpSvNumberInputScan::ChangeIntl()
     bDecSepInDateSeps = ( cDecSep == (sal_Unicode)'-' ||
                           cDecSep == pFormatter->GetDateSep()[0] );
     bTextInitialized = false;
-    aUpperCurrSymbol ="";
+    aUpperCurrSymbol.clear();
     InvalidateDateAcceptancePatterns();
 }
 

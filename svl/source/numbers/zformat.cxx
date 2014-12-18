@@ -417,7 +417,7 @@ bool ImpSvNumFor::GetNewCurrencySymbol( OUString& rSymbol,
             }
             else
             {
-                rExtension = "";
+                rExtension.clear();
             }
             return true;
         }
@@ -1636,8 +1636,8 @@ bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
             return true;
         }
     }
-    rSymbol = "";
-    rExtension = "";
+    rSymbol.clear();
+    rExtension.clear();
     return false;
 }
 
@@ -2068,7 +2068,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
 {
     bool bRes = false;
     OUStringBuffer sBuff;
-    OutString = "";
+    OutString.clear();
     *ppColor = NULL; // No color change
     if (eType & NUMBERFORMAT_LOGICAL)
     {
@@ -3115,7 +3115,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
             }
             else if ( rOrgCalendar == rGregorian )
             {
-                rOrgCalendar = "";
+                rOrgCalendar.clear();
             }
             rCal.loadCalendar( rGregorian, rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
