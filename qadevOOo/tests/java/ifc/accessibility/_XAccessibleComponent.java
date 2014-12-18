@@ -150,7 +150,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
             if (oObj.containsPoint(new Point(x, bounds.Height + bounds.Y))) {
                 log.println(
                     "Outer upper and lower bounds CONTAIN some component point"
-                    + " (" + x + ", " + bounds.Height + bounds.Y
+                    + " (" + x + ", " + (bounds.Height + bounds.Y)
                     + ") - FAILED");
                 locRes = false;
                 break;
@@ -177,7 +177,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
             if (oObj.containsPoint(new Point(bounds.X + bounds.Width, y))) {
                 log.println(
                     "Outer left and right bounds CONTAIN some component point"
-                    + " (" + bounds.X + bounds.Width + ", " + y + ") - FAILED");
+                    + " (" + (bounds.X + bounds.Width) + ", " + y + ") - FAILED");
                 locRes = false;
                 break;
             }
