@@ -123,7 +123,7 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceName
     uno::Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] =  "com.sun.star.xml.crypto.SEInitializer";
-    pArray[1] =  OUString ( NSS_SERVICE_NAME );
+    pArray[1] =  NSS_SERVICE_NAME;
     return aRet;
 }
 

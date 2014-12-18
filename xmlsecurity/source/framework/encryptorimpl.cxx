@@ -31,7 +31,6 @@ namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
 
-#define SERVICE_NAME "com.sun.star.xml.crypto.sax.Encryptor"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.EncryptorImpl"
 
 EncryptorImpl::EncryptorImpl(const Reference<XComponentContext> & xContext) : EncryptorImpl_Base(xContext)
@@ -224,10 +223,9 @@ Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
 {
     Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] = "com.sun.star.xml.crypto.sax.Encryptor";
     return aRet;
 }
-#undef SERVICE_NAME
 
 Reference< XInterface > SAL_CALL EncryptorImpl_createInstance(
     const Reference< cssl::XMultiServiceFactory >& xMSF)

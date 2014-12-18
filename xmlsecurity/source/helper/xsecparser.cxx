@@ -161,7 +161,7 @@ void SAL_CALL XSecParser::startElement(
             }
             else if (aName == TAG_DIGESTVALUE)
             {
-            m_ouDigestValue = "";
+                m_ouDigestValue.clear();
                 m_bInDigestValue = true;
             }
             else if ( aName == TAG_SIGNATUREPROPERTY )

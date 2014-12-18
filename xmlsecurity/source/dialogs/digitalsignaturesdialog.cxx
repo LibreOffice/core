@@ -136,7 +136,7 @@ bool DigitalSignaturesDialog::isXML(const OUString& rURI )
         }
         if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))
         {
-            bIsXML = sMediaType.equals("text/xml") && ! bEncrypted;
+            bIsXML = sMediaType == "text/xml" && ! bEncrypted;
             bPropsAvailable = true;
             break;
         }

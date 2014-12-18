@@ -162,9 +162,9 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
     OUString sNamespace;
     if (mbODFPre1_2)
-        sNamespace = OUString(NS_DOCUMENTSIGNATURES);
+        sNamespace = NS_DOCUMENTSIGNATURES;
     else
-        sNamespace = OUString(NS_DOCUMENTSIGNATURES_ODF_1_2);
+        sNamespace = NS_DOCUMENTSIGNATURES_ODF_1_2;
 
     pAttributeList->AddAttribute(
         OUString(ATTR_XMLNS),

@@ -32,7 +32,6 @@ namespace cssxcsax = com::sun::star::xml::csax;
 namespace cssxw = com::sun::star::xml::wrapper;
 namespace cssxs = com::sun::star::xml::sax;
 
-#define SERVICE_NAME "com.sun.star.xml.crypto.sax.SAXEventKeeper"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SAXEventKeeperImpl"
 
 #define _USECOMPRESSEDDOCUMENTHANDLER
@@ -1371,10 +1370,9 @@ cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] = "com.sun.star.xml.crypto.sax.SAXEventKeeper";
     return aRet;
 }
-#undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL SAXEventKeeperImpl_createInstance(
     const cssu::Reference< cssl::XMultiServiceFactory > &)

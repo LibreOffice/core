@@ -792,7 +792,7 @@ void XSecController::exportSignature(
                 {
                     pAttributeList->AddAttribute(
                         OUString(ATTR_URI),
-                        OUString(CHAR_FRAGMENT)+refInfor.ouURI);
+                        CHAR_FRAGMENT+refInfor.ouURI);
                 }
 
                 xDocumentHandler->startElement( tag_Reference, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -910,7 +910,7 @@ void XSecController::exportSignature(
                     signatureInfo.ouPropertyId);
                 pAttributeList->AddAttribute(
                     OUString(ATTR_TARGET),
-                    OUString(CHAR_FRAGMENT)+signatureInfo.ouSignatureId);
+                    CHAR_FRAGMENT+signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     tag_SignatureProperty,
                     cssu::Reference< cssxs::XAttributeList > (pAttributeList));
@@ -919,15 +919,11 @@ void XSecController::exportSignature(
 
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
-                        OUString(ATTR_XMLNS)
-                            + ":"
-                            + OUString(NSTAG_DC),
+                        ATTR_XMLNS ":" NSTAG_DC,
                         OUString(NS_DC));
 
                     xDocumentHandler->startElement(
-                        OUString(NSTAG_DC)
-                            + ":"
-                            + tag_Date,
+                        NSTAG_DC ":" + tag_Date,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList));
 
                     OUStringBuffer buffer;
@@ -944,9 +940,7 @@ void XSecController::exportSignature(
                     xDocumentHandler->characters( buffer.makeStringAndClear() );
 
                     xDocumentHandler->endElement(
-                        OUString(NSTAG_DC)
-                            + ":"
-                            + tag_Date);
+                        NSTAG_DC ":" + tag_Date);
                 }
                 xDocumentHandler->endElement( tag_SignatureProperty );
             }

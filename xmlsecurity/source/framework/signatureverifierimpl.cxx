@@ -30,7 +30,6 @@ namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 
-#define SERVICE_NAME "com.sun.star.xml.crypto.sax.SignatureVerifier"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureVerifierImpl"
 
 SignatureVerifierImpl::SignatureVerifierImpl( const cssu::Reference< css::uno::XComponentContext >& xContext)
@@ -184,10 +183,9 @@ cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNam
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( SERVICE_NAME );
+    pArray[0] = "com.sun.star.xml.crypto.sax.SignatureVerifier";
     return aRet;
 }
-#undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstance(
     const cssu::Reference< cssl::XMultiServiceFactory >& rSMgr)

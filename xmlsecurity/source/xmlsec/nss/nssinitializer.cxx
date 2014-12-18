@@ -474,7 +474,7 @@ cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
 {
     cssu::Sequence < OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] =  OUString ( NSS_SERVICE_NAME );
+    pArray[0] = NSS_SERVICE_NAME;
     return aRet;
 }
 

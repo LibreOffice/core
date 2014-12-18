@@ -45,39 +45,39 @@ OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     OUString aValidity ;
 
     if( certValidity == CertificateValidity::VALID ) {
-        aValidity = OUString(VALID_STR ) ;
+        aValidity = VALID_STR;
     } else if( ( certValidity &  CertificateValidity::UNTRUSTED ) ==  CertificateValidity::UNTRUSTED ) {
-         aValidity = OUString(UNTRUSTED_STR ) ;
+         aValidity = UNTRUSTED_STR;
     } else if( ( certValidity & CertificateValidity::TIME_INVALID ) == CertificateValidity::TIME_INVALID ) {
-         aValidity = OUString(TIME_INVALID_STR ) ;
+         aValidity = TIME_INVALID_STR;
     } else if( ( certValidity & CertificateValidity::NOT_TIME_NESTED ) == CertificateValidity::NOT_TIME_NESTED ) {
-         aValidity = OUString(NOT_NESTED_TIME_STR ) ;
+         aValidity = NOT_NESTED_TIME_STR;
     } else if( ( certValidity & CertificateValidity::REVOKED ) == CertificateValidity::REVOKED ) {
-         aValidity = OUString(REVOKED_STR ) ;
+         aValidity = REVOKED_STR;
     } else if( ( certValidity &  CertificateValidity::UNKNOWN_REVOKATION ) == CertificateValidity::UNKNOWN_REVOKATION ) {
-         aValidity = OUString(UNKNOWN_REVOKATION_STR ) ;
+         aValidity = UNKNOWN_REVOKATION_STR;
     } else if( ( certValidity &  CertificateValidity::SIGNATURE_INVALID ) == CertificateValidity::SIGNATURE_INVALID ) {
-         aValidity = OUString(SIGNATURE_INVALID_STR ) ;
+         aValidity = SIGNATURE_INVALID_STR;
     } else if( ( certValidity &  CertificateValidity::EXTENSION_INVALID ) == CertificateValidity::EXTENSION_INVALID ) {
-         aValidity = OUString(EXTENSION_INVALID_STR ) ;
+         aValidity = EXTENSION_INVALID_STR;
     } else if( ( certValidity &  CertificateValidity::EXTENSION_UNKNOWN ) == CertificateValidity::EXTENSION_UNKNOWN ) {
-         aValidity = OUString(EXTENSION_UNKNOWN_STR ) ;
+         aValidity = EXTENSION_UNKNOWN_STR;
     } else if( ( certValidity &  CertificateValidity::ISSUER_UNKNOWN ) == CertificateValidity::ISSUER_UNKNOWN ) {
-         aValidity = OUString(ISSUER_UNKNOWN_STR ) ;
+         aValidity = ISSUER_UNKNOWN_STR;
     } else if( ( certValidity &  CertificateValidity::ISSUER_UNTRUSTED ) == CertificateValidity::ISSUER_UNTRUSTED ) {
-         aValidity = OUString(ISSUER_UNTRUSTED_STR ) ;
+         aValidity = ISSUER_UNTRUSTED_STR;
     } else if( ( certValidity &  CertificateValidity::ISSUER_INVALID ) == CertificateValidity::ISSUER_INVALID ) {
-         aValidity = OUString(ISSUER_INVALID_STR ) ;
+         aValidity = ISSUER_INVALID_STR;
     } else if( ( certValidity &  CertificateValidity::ROOT_UNKNOWN ) == CertificateValidity::ROOT_UNKNOWN ) {
-         aValidity = OUString(ROOT_UNKNOWN_STR ) ;
+         aValidity = ROOT_UNKNOWN_STR;
     } else if( ( certValidity &  CertificateValidity::ROOT_UNTRUSTED ) == CertificateValidity::ROOT_UNTRUSTED ) {
-         aValidity = OUString(ROOT_UNTRUSTED_STR ) ;
+         aValidity = ROOT_UNTRUSTED_STR;
     } else if( ( certValidity &  CertificateValidity::ROOT_INVALID ) == CertificateValidity::ROOT_INVALID ) {
-         aValidity = OUString(ROOT_INVALID_STR ) ;
+         aValidity = ROOT_INVALID_STR;
     } else if( ( certValidity &  CertificateValidity::CHAIN_INCOMPLETE ) == CertificateValidity::CHAIN_INCOMPLETE ) {
-         aValidity = OUString(CHAIN_INCOMPLETE_STR ) ;
+         aValidity = CHAIN_INCOMPLETE_STR;
     } else {
-         aValidity = OUString(INVALID_STR ) ;
+         aValidity = INVALID_STR;
     }
 
     return aValidity ;
