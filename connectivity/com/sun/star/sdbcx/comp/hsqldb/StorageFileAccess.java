@@ -51,7 +51,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
             if ( isStreamElement(key,filename) )
                 removeElement(key,filename);
         } catch (java.io.IOException e) {
-           throw new FileSystemRuntimeException( e, FileSystemRuntimeException.fileAccessRemoveElementFailed );
+           throw new FileSystemRuntimeException( e );
        }
     }
 
@@ -62,7 +62,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
                 renameElement(key,oldName, newName);
             }
        } catch (java.io.IOException e) {
-           throw new FileSystemRuntimeException( e, FileSystemRuntimeException.fileAccessRenameElementFailed );
+           throw new FileSystemRuntimeException( e );
        }
     }
 

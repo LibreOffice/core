@@ -50,7 +50,7 @@ public class ProxyProvider
         // if retVal == null then probably not registered
         if (retVal == null)
         {
-            Object aProxy = new Proxy(sOid, type);
+            Object aProxy = new Proxy(sOid);
             String[] arOid = new String[]
             {sOid};
             retVal= env.registerInterface(aProxy, arOid, type);
@@ -62,7 +62,7 @@ public class ProxyProvider
 class Proxy implements IQueryInterface, XEventListener
 {
     private String oid;
-    Proxy(String oid, Type t) {
+    Proxy(String oid) {
         this.oid = oid;
     }
 

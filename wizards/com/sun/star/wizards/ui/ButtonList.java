@@ -484,10 +484,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
     }
 
-    public void setSelectionGap(Size size)
-    {
-    }
-
     public void setShowButtons(boolean b)
     {
         showButtons = b;

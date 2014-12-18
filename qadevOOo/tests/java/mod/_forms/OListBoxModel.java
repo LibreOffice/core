@@ -179,7 +179,7 @@ public class OListBoxModel extends GenericModelTest {
         TestEnvironment tEnv = super.createTestEnvironment(Param, log);
 
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-                            new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
+                            new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName));
         return tEnv;
     }
 
@@ -190,7 +190,7 @@ public class OListBoxModel extends GenericModelTest {
             private XInterface ctrl = null;
             private String ChangePropertyName = null;
 
-            public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName, Object ChangePropertyValue) {
+            public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName) {
                 formLoaderF = xl;
                 this.ps = ps;
                 this.ctrl = ctrl;

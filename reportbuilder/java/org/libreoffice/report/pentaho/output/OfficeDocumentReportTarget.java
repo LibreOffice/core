@@ -527,7 +527,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OFFICE_NS, "body", attrs))
                     {
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_BODY));
-                        startBody(attrs);
+                        startBody();
                     }
                     else
                     {
@@ -559,7 +559,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     if (ReportTargetUtil.isElementOfType(JFreeReportInfo.REPORT_NAMESPACE, "report-body", attrs))
                     {
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_GROUP_BODY));
-                        startGroupBody(attrs);
                     }
                     else
                     {
@@ -675,7 +674,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     if (ReportTargetUtil.isElementOfType(JFreeReportInfo.REPORT_NAMESPACE, "group-body", attrs))
                     {
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_GROUP_BODY));
-                        startGroupBody(attrs);
                     }
                     else
                     {
@@ -773,7 +771,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
     }
 
-    private void startBody(final AttributeMap attrs)
+    private void startBody()
             throws IOException
     {
         getXmlWriter().writeTag(OfficeNamespaces.OFFICE_NS, "body", XmlWriterSupport.OPEN);
@@ -813,10 +811,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
 
     protected void startGroupInstance(final AttributeMap attrs)
-    {
-    }
-
-    private void startGroupBody(final AttributeMap attrs)
     {
     }
 
@@ -938,7 +932,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_INSTANCE:
                 {
-                    endGroupInstance(attrs);
                     break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
@@ -953,7 +946,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 }
                 case OfficeDocumentReportTarget.STATE_IN_BODY:
                 {
-                    endBody(attrs);
+                    endBody();
                     break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_DOCUMENT:
@@ -987,10 +980,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
     }
 
-    private void endGroupInstance(final AttributeMap attrs)
-    {
-    }
-
     public int getCurrentRole()
     {
         return currentRole;
@@ -1017,7 +1006,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected abstract void endContent(final AttributeMap attrs)
             throws IOException, DataSourceException, ReportProcessingException;
 
-    private void endBody(final AttributeMap attrs)
+    private void endBody()
             throws IOException
     {
         getXmlWriter().writeCloseTag();

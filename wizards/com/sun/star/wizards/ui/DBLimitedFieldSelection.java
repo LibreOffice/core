@@ -38,7 +38,7 @@ public abstract class DBLimitedFieldSelection
     protected int iCurPosY;
     protected int FirstHelpIndex;
 
-    public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int _FirstHelpIndex)
+    public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int iCompPosY, int _FirstHelpIndex)
     {
         this.CurUnoDialog = _CurUnoDialog;
         FirstHelpIndex = _FirstHelpIndex;

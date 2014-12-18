@@ -57,9 +57,6 @@ class MyCallMe implements XCallMe
         {
             return "";
         }
-    public void setsAttribute( String _sattribute ) throws com.sun.star.uno.RuntimeException
-        {
-        }
 
     // Methods
     public void call( /*IN*/String s, /*IN*/int nToDo ) throws com.sun.star.uno.RuntimeException

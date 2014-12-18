@@ -42,11 +42,6 @@ public class VariablesCollection
 
     public VariablesCollection(final String namePrefix)
     {
-        this(namePrefix, null);
-    }
-
-    private VariablesCollection(final String namePrefix, final VariablesCollection parent)
-    {
         if (namePrefix == null)
         {
             throw new NullPointerException("NamePrefix cannot be null");

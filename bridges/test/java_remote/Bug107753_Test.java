@@ -48,7 +48,7 @@ public final class Bug107753_Test extends ComplexTestCase {
 
     public void test() throws Exception {
         TestBed t = new TestBed();
-        assure("test", t.execute(new Provider(t), false, Client.class, 0));
+        assure("test", t.execute(new Provider(), false, Client.class, 0));
     }
 
     public static final class Client extends TestBed.Client {
@@ -350,8 +350,6 @@ public final class Bug107753_Test extends ComplexTestCase {
     }
 
     private static final class Provider implements XInstanceProvider {
-        public Provider(TestBed testBed) {
-        }
 
         public Object getInstance(String instanceName) {
             return new XTransport() {

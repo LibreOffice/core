@@ -43,7 +43,7 @@ public class OfficeDocumentView
     }
 
     /* ------------------------------------------------------------------ */
-    public OfficeDocumentView( XMultiServiceFactory orb, OfficeDocument document, XController controller )
+    public OfficeDocumentView( XMultiServiceFactory orb, XController controller )
     {
         m_orb = orb;
         m_controller = controller;

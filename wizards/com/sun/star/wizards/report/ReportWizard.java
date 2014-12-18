@@ -324,7 +324,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         CurGroupFieldHandler = new GroupFieldHandler(m_reportDocument, this);
         CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
         CurReportLayouter = new ReportLayouter(xMSF, m_reportDocument, this, isReportBuilderInstalled());
-        CurReportFinalizer = new ReportFinalizer(xMSF, m_reportDocument, this);
+        CurReportFinalizer = new ReportFinalizer(m_reportDocument, this);
         bCloseDocument = true;
         enableNavigationButtons(false, false, false);
     }

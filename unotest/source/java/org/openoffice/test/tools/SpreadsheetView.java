@@ -24,9 +24,9 @@ public class SpreadsheetView extends OfficeDocumentView
 {
 
     /** Creates a new instance of SpreadsheetView */
-    public SpreadsheetView( XMultiServiceFactory orb, OfficeDocument document, XController controller )
+    public SpreadsheetView( XMultiServiceFactory orb, XController controller )
     {
-        super( orb, document, controller );
+        super( orb, controller );
     }
 
 }

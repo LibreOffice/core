@@ -31,10 +31,7 @@ package org.hsqldb.lib;
  */
 public class FileSystemRuntimeException extends java.lang.RuntimeException {
 
-    public static final int fileAccessRemoveElementFailed = 1;
-    public static final int fileAccessRenameElementFailed = 2;
-
-    public FileSystemRuntimeException(java.lang.Throwable _cause, int _errorCode) {
+    public FileSystemRuntimeException(java.lang.Throwable _cause) {
         super(_cause);
     }
 

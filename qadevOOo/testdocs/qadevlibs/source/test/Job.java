@@ -28,34 +28,36 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
 
-
 public class Job {
 
     static public class _Implementation implements XServiceInfo, XTypeProvider,
             XJob, XNamed {
-    static private final String __serviceName = "test.Job";
+        static private final String __serviceName = "test.Job";
         Object oDoc = null;
         String actionType = null;
         String actionParm = null;
 
+        public _Implementation(XMultiServiceFactory xMSF) {
+        }
 
-    public _Implementation(XMultiServiceFactory xMSF) {
-    }
+        // XServiceInfo
+        public String getImplementationName()
+                throws com.sun.star.uno.RuntimeException {
+            return getClass().getName();
+        }
 
-    // XServiceInfo
-    public String getImplementationName() throws com.sun.star.uno.RuntimeException {
-        return getClass().getName();
-    }
+        public boolean supportsService(String serviceName)
+                throws com.sun.star.uno.RuntimeException {
+            return __serviceName.equals(serviceName);
+        }
 
-    public boolean supportsService(String serviceName) throws com.sun.star.uno.RuntimeException {
-        return __serviceName.equals(serviceName);
-    }
-
-    public String[] getSupportedServiceNames() throws com.sun.star.uno.RuntimeException {
-        return new String[] {__serviceName};
-    }
+        public String[] getSupportedServiceNames()
+                throws com.sun.star.uno.RuntimeException {
+            return new String[] { __serviceName };
+        }
 
         private static int executed = 0;
+
         public Object execute(NamedValue[] args) {
             executed++;
 
@@ -63,41 +65,40 @@ public class Job {
         }
 
         public String getName() {
-            return  "" + executed;
+            return "" + executed;
         }
 
         public void setName(String n) {
         }
 
-    public byte[] getImplementationId() {
-        return new byte[0];
+        public byte[] getImplementationId() {
+            return new byte[0];
+        }
+
+        public Type[] getTypes() {
+            Class<?> interfaces[] = getClass().getInterfaces();
+            Type types[] = new Type[interfaces.length];
+            for (int i = 0; i < interfaces.length; ++i)
+                types[i] = new Type(interfaces[i]);
+            return types;
+        }
+
     }
 
-    public Type[] getTypes() {
-        Class<?> interfaces[] = getClass().getInterfaces();
-        Type types[] = new Type[interfaces.length];
-        for(int i = 0; i < interfaces.length; ++ i)
-        types[i] = new Type(interfaces[i]);
-        return types;
+    public static XSingleServiceFactory __getServiceFactory(
+            XMultiServiceFactory multiFactory, XRegistryKey regKey) {
+        XSingleServiceFactory xSingleServiceFactory = null;
+        xSingleServiceFactory = FactoryHelper.getServiceFactory(
+                _Implementation.class, _Implementation.__serviceName,
+                multiFactory, regKey);
+        return xSingleServiceFactory;
     }
-
-    }
-
-    public static XSingleServiceFactory __getServiceFactory(XMultiServiceFactory multiFactory,
-                                XRegistryKey regKey) {
-    XSingleServiceFactory xSingleServiceFactory = null;
-    xSingleServiceFactory = FactoryHelper.getServiceFactory(_Implementation.class,
-                                    _Implementation.__serviceName,
-                                    multiFactory,
-                                    regKey);
-    return xSingleServiceFactory;
-    }
-
 
     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-    boolean result = true;
-    result = FactoryHelper.writeRegistryServiceInfo(_Implementation.class.getName(),
-                              _Implementation.__serviceName, regKey);
-    return result;
+        boolean result = true;
+        result = FactoryHelper.writeRegistryServiceInfo(
+                _Implementation.class.getName(), _Implementation.__serviceName,
+                regKey);
+        return result;
     }
 }

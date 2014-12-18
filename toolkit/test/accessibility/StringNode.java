@@ -28,4 +28,9 @@ class StringNode
     {
         super (aDisplayObject, aParent);
     }
+
+    @Override
+    public int indexOf(AccessibleTreeNode aNode) {
+        return -1;
+    }
 }

@@ -114,10 +114,6 @@ public class Settings
         return theDocs.toArray( docs );
     }
 
-    public void setLastUsedWikiServer( int l )
-    {
-    }
-
     public String[] getWikiURLs()
     {
         String [] WikiList = new String [m_WikiConnections.size()];

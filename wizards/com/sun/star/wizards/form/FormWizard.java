@@ -248,7 +248,7 @@ public class FormWizard extends DatabaseObjectWizard
 
         curFormDocument.xProgressBar.setValue(40);
 
-        curFieldLinker = new FieldLinker(this, SOFIELDLINKER_PAGE, 95, 30, 34441);
+        curFieldLinker = new FieldLinker(this, SOFIELDLINKER_PAGE, 30, 34441);
         curFormDocument.xProgressBar.setValue(50);
 
         curControlArranger = new UIControlArranger(this, curFormDocument);

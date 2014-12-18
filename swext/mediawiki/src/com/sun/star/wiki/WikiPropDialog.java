@@ -254,7 +254,6 @@ public class WikiPropDialog extends WikiDialog{
                 short [] sel = (short[]) aWikiListProps.getPropertyValue("SelectedItems");
                 String [] items = (String []) aWikiListProps.getPropertyValue("StringItemList");
                 m_sWikiEngineURL = items[sel[0]];
-                m_aSettings.setLastUsedWikiServer(sel[0]);
                 m_sWikiTitle = (String) aArticleTextProps.getPropertyValue("Text");
                 m_sWikiComment = (String) aCommentTextProps.getPropertyValue("Text");
 

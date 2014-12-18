@@ -144,7 +144,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/pentaho/output/text/TextRawReportProcessor \
     reportbuilder/java/org/libreoffice/report/pentaho/output/text/TextRawReportTarget \
     reportbuilder/java/org/libreoffice/report/pentaho/output/text/VariablesDeclarations \
-    reportbuilder/java/org/libreoffice/report/pentaho/parser/AttributeSpecification \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/ElementReadHandler \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/OfficeDocumentXmlResourceFactory \
     reportbuilder/java/org/libreoffice/report/pentaho/parser/OfficeStylesXmlResourceFactory \

@@ -56,7 +56,7 @@ class AccTreeNode
     private XAccessibleText mxText;
     private XAccessibleTable mxTable;
 
-    public AccTreeNode (XAccessible xAccessible, XAccessibleContext xContext, Object aDisplay, AccessibleTreeNode aParent)
+    public AccTreeNode (XAccessibleContext xContext, Object aDisplay, AccessibleTreeNode aParent)
     {
         super (aDisplay, aParent);
 

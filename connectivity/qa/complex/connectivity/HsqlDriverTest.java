@@ -99,7 +99,7 @@ public class HsqlDriverTest extends ComplexTestCase {
             XDriver drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.sdbcx.comp.hsqldb.Driver"));
 
 
-            TestCacheSize test = new TestCacheSize((param.getMSF()),info,drv);
+            TestCacheSize test = new TestCacheSize(info,drv);
 
             StopWatch     sw   = new StopWatch();
 
@@ -127,7 +127,7 @@ public class HsqlDriverTest extends ComplexTestCase {
                 ,new com.sun.star.beans.PropertyValue("ParameterNameSubstitution",0, false,PropertyState.DIRECT_VALUE)
             };
             XDriver drv = UnoRuntime.queryInterface(XDriver.class,param.getMSF().createInstance("com.sun.star.comp.sdbc.JDBCDriver"));
-            TestCacheSize test = new TestCacheSize((param.getMSF()),info,drv);
+            TestCacheSize test = new TestCacheSize(info,drv);
             test.setURL("jdbc:hsqldb:g:\\hsql\\db");
 
 

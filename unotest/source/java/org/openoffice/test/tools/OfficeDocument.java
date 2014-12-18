@@ -129,9 +129,9 @@ public class OfficeDocument
         XController xController = xDocModel.getCurrentController();
 
         if ( classify() == DocumentType.CALC )
-            return new SpreadsheetView( m_orb, this, xController );
+            return new SpreadsheetView( m_orb, xController );
 
-        return new OfficeDocumentView( m_orb, this, xController );
+        return new OfficeDocumentView( m_orb, xController );
     }
 
     /* ------------------------------------------------------------------ */

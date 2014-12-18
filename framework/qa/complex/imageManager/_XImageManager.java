@@ -20,7 +20,6 @@ package complex.imageManager;
 import com.sun.star.graphic.XGraphic;
 import com.sun.star.ui.ImageType;
 import com.sun.star.ui.XImageManager;
-import lib.TestParameters;
 
 
 /**
@@ -33,7 +32,7 @@ public class _XImageManager {
     private XGraphic[] xGraphicArray = null;
     private final XImageManager oObj;
 
-    public _XImageManager( TestParameters tEnv, XImageManager oObj) {
+    public _XImageManager( XImageManager oObj) {
         this.oObj = oObj;
     }
 

@@ -232,7 +232,6 @@ public class UIControlArranger
             m_aButtonList.setStep(Short.valueOf((short) FormWizard.SOCONTROL_PAGE));
             m_aButtonList.setShowButtons(false);      // shows a button line at ''wrong'' position like |<| 1..4/4 |>|
             m_aButtonList.setRenderer(new LayoutRenderer());
-            m_aButtonList.setSelectionGap(new Size(2, 2));
             m_aButtonList.setGap(new Size(3, 3));
 //            m_aButtonList.scaleImages = Boolean.FALSE;
             m_aButtonList.tabIndex = curtabindex++;

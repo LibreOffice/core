@@ -39,7 +39,6 @@ package complex.connectivity.hsqldb;
 import org.hsqldb.lib.StopWatch;
 
 import java.util.Random;
-import com.sun.star.lang.*;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.sdbc.*;
 
@@ -111,7 +110,7 @@ public class TestCacheSize {
     private XDriver drv;
     private com.sun.star.beans.PropertyValue[] info;
 
-    public TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
+    public TestCacheSize(com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
         drv = _drv;
         info = _info;
     }

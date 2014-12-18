@@ -115,7 +115,7 @@ class NodeFactory
 
 
         // create node, and add default handlers
-        AccTreeNode aNode = new AccTreeNode (xAccessible, xContext, sDisplay, aParent);
+        AccTreeNode aNode = new AccTreeNode (xContext, sDisplay, aParent);
         addDefaultHandlers (aNode, xContext);
 
         return aNode;

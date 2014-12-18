@@ -20,7 +20,6 @@ import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.JavaTools;
@@ -42,7 +41,7 @@ public class ReportFinalizer
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;
-    public ReportFinalizer(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
+    public ReportFinalizer(IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
         this.CurReportDocument = _CurReportDocument;

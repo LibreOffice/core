@@ -259,7 +259,7 @@ public class ReportDesignerTest
                 aPropertyList.add(aActiveConnection);
 
                 loadAndStoreReports(xNameAccess, aPropertyList, _nType);
-                createDBEntry(_nType);
+                createDBEntry();
             }
             catch(com.sun.star.uno.Exception e)
             {
@@ -276,7 +276,7 @@ public class ReportDesignerTest
         }
 
 
-    private void createDBEntry(int _nType)
+    private void createDBEntry()
         {
             // try to connect the database
             String sDBConnection = ""; // (String)param.get( convwatch.PropertyName.DB_CONNECTION_STRING );

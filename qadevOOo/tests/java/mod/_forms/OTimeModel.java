@@ -172,7 +172,7 @@ public class OTimeModel extends GenericModelTest {
         exclude.add("FormatKey");
 
         tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-                            new Checker(m_XFormLoader, m_XPS, m_XCtrl, m_ChangePropertyName, m_ChangePropertyValue));
+                            new Checker(m_XFormLoader, m_XPS, m_XCtrl));
         return tEnv;
     }
 
@@ -181,7 +181,7 @@ public class OTimeModel extends GenericModelTest {
             private XPropertySet ps = null;
             private XInterface ctrl = null;
 
-            public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl, String ChangePropertyName, Object ChangePropertyValue) {
+            public Checker(XLoadable xl, XPropertySet ps, XInterface ctrl) {
                 formLoaderF = xl;
                 this.ps = ps;
                 this.ctrl = ctrl;

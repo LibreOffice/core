@@ -22,7 +22,6 @@ package complex.imageManager;
 
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import lib.TestParameters;
 
 /**
 * Testing <code>com.sun.star.lang.XTypeProvider</code>
@@ -40,7 +39,7 @@ public class _XTypeProvider {
 
     private XTypeProvider oObj = null;
 
-    public _XTypeProvider(TestParameters tEnv, XTypeProvider oObj) {
+    public _XTypeProvider(XTypeProvider oObj) {
         this.oObj = oObj;
     }
 

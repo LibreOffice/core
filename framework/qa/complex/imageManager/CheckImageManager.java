@@ -103,7 +103,7 @@ public class CheckImageManager  {
         assertTrue(testObjectName + "::XInitialization.initialize", _xInit._initialize());
 
         // xImageManager is already there, just write a test ;-)
-        _XImageManager _xImage = new _XImageManager(param, xImageManager);
+        _XImageManager _xImage = new _XImageManager(xImageManager);
         assertTrue(testObjectName + "::XImageManager.getAllImageNames", _xImage._getAllImageNames());
         assertTrue(testObjectName + "::XImageManager.getImages", _xImage._getImages());
         assertTrue(testObjectName + "::XImageManager.hasImage", _xImage._hasImage());
@@ -113,7 +113,7 @@ public class CheckImageManager  {
         assertTrue(testObjectName + "::XImageManager.reset", _xImage._reset());
 
         XTypeProvider xType = UnoRuntime.queryInterface(XTypeProvider.class, xImageManager);
-        _XTypeProvider _xType = new _XTypeProvider(param, xType);
+        _XTypeProvider _xType = new _XTypeProvider(xType);
         assertTrue(testObjectName + "::XTypeProvider.getImplementationId", _xType._getImplementationId());
         assertTrue(testObjectName + "::XTypeProvider.getTypes", _xType._getTypes());
 

@@ -23,7 +23,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 /**
     Base class for all tree nodes.
  */
-class AccessibleTreeNode
+abstract class AccessibleTreeNode
 {
     /// The parent node.  It is null for the root node.
     private AccessibleTreeNode maParent;
@@ -70,10 +70,7 @@ class AccessibleTreeNode
         throw new IndexOutOfBoundsException();
     }
 
-    public int indexOf (AccessibleTreeNode aNode)
-    {
-        return -1;
-    }
+    public abstract int indexOf (AccessibleTreeNode aNode);
 
     /** Create a path to this node by first asking the parent for its path
         and then appending this object.
