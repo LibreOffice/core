@@ -543,14 +543,27 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
+            //untested code, otherways commented out should work...
+            basegfx::B2DPolygon aPoly;
+            aPoly.append(basegfx::B2DPoint(aBezierSegment.Px, aBezierSegment.Py));
+            aPoly.appendBezierSegment( basegfx::B2DPoint(aBezierSegment.C1x, aBezierSegment.C1y),
+                                       basegfx::B2DPoint(aBezierSegment.C1x, aBezierSegment.C1y),
+                                       basegfx::B2DPoint(aEndPoint.X,aEndPoint.Y));
 
+            basegfx::B2DPolyPolygon aPolyPoly;
+            aPolyPoly.append(aPoly);
+            rAct.maPolyPolys.push_back(aPolyPoly);
+            rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+
+            rAct.maFunction = lcl_drawPolyPolygon;
             // TODO(F2): subdivide&render whole curve
-            rAct.maFunction = ::boost::bind(&lcl_drawLine,
+        /*    rAct.maFunction = ::boost::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
                                                 aBezierSegment.Py),
-                                            aEndPoint);
+                                            aEndPoint);*/
+
         }
     }
 
