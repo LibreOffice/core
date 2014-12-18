@@ -373,7 +373,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     break;
 
                 case CLOSE: // 0 param
-                    SAL_WARN_IF(rPointLists.back().empty() || rPointLists.back().empty(), "oox", "empty pointlists at close");
+                    SAL_WARN_IF(rPointLists.back().empty() || rFlagLists.back().empty(), "oox", "empty pointlists at close");
                     if (!rPointLists.back().empty() && !rFlagLists.back().empty())
                     {
                         rPointLists.back().push_back( rPointLists.back()[ 0 ] );
