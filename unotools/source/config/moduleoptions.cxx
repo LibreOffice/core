@@ -50,16 +50,16 @@
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
 #define ROOTNODE_FACTORIES                  OUString("Setup/Office/Factories"        )
-#define PATHSEPARATOR                       OUString("/"                             )
+#define PATHSEPARATOR                       "/"
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
 //            special code that uses hard coded strings to return them.
-#define PROPERTYNAME_SHORTNAME              OUString("ooSetupFactoryShortName"       )
-#define PROPERTYNAME_TEMPLATEFILE           OUString("ooSetupFactoryTemplateFile"    )
-#define PROPERTYNAME_WINDOWATTRIBUTES       OUString("ooSetupFactoryWindowAttributes")
-#define PROPERTYNAME_EMPTYDOCUMENTURL       OUString("ooSetupFactoryEmptyDocumentURL")
-#define PROPERTYNAME_DEFAULTFILTER          OUString("ooSetupFactoryDefaultFilter"   )
-#define PROPERTYNAME_ICON                   OUString("ooSetupFactoryIcon"            )
+#define PROPERTYNAME_SHORTNAME              "ooSetupFactoryShortName"
+#define PROPERTYNAME_TEMPLATEFILE           "ooSetupFactoryTemplateFile"
+#define PROPERTYNAME_WINDOWATTRIBUTES       "ooSetupFactoryWindowAttributes"
+#define PROPERTYNAME_EMPTYDOCUMENTURL       "ooSetupFactoryEmptyDocumentURL"
+#define PROPERTYNAME_DEFAULTFILTER          "ooSetupFactoryDefaultFilter"
+#define PROPERTYNAME_ICON                   "ooSetupFactoryIcon"
 
 #define PROPERTYHANDLE_SHORTNAME            0
 #define PROPERTYHANDLE_TEMPLATEFILE         1
@@ -70,16 +70,16 @@
 
 #define PROPERTYCOUNT                       6
 
-#define FACTORYNAME_WRITER                  OUString("com.sun.star.text.TextDocument"                )
-#define FACTORYNAME_WRITERWEB               OUString("com.sun.star.text.WebDocument"                 )
-#define FACTORYNAME_WRITERGLOBAL            OUString("com.sun.star.text.GlobalDocument"              )
-#define FACTORYNAME_CALC                    OUString("com.sun.star.sheet.SpreadsheetDocument"        )
-#define FACTORYNAME_DRAW                    OUString("com.sun.star.drawing.DrawingDocument"          )
-#define FACTORYNAME_IMPRESS                 OUString("com.sun.star.presentation.PresentationDocument")
-#define FACTORYNAME_MATH                    OUString("com.sun.star.formula.FormulaProperties"        )
-#define FACTORYNAME_CHART                   OUString("com.sun.star.chart2.ChartDocument"             )
-#define FACTORYNAME_DATABASE                OUString("com.sun.star.sdb.OfficeDatabaseDocument"       )
-#define FACTORYNAME_STARTMODULE             OUString("com.sun.star.frame.StartModule"                )
+#define FACTORYNAME_WRITER                  "com.sun.star.text.TextDocument"
+#define FACTORYNAME_WRITERWEB               "com.sun.star.text.WebDocument"
+#define FACTORYNAME_WRITERGLOBAL            "com.sun.star.text.GlobalDocument"
+#define FACTORYNAME_CALC                    "com.sun.star.sheet.SpreadsheetDocument"
+#define FACTORYNAME_DRAW                    "com.sun.star.drawing.DrawingDocument"
+#define FACTORYNAME_IMPRESS                 "com.sun.star.presentation.PresentationDocument"
+#define FACTORYNAME_MATH                    "com.sun.star.formula.FormulaProperties"
+#define FACTORYNAME_CHART                   "com.sun.star.chart2.ChartDocument"
+#define FACTORYNAME_DATABASE                "com.sun.star.sdb.OfficeDatabaseDocument"
+#define FACTORYNAME_STARTMODULE             "com.sun.star.frame.StartModule"
 
 #define FACTORYCOUNT                        10
 
@@ -102,12 +102,12 @@ struct FactoryInfo
         void free()
         {
             bInstalled                  = false;
-            sFactory                    = "";
-            sShortName                  = "";
-            sTemplateFile               = "";
-            sWindowAttributes           = "";
-            sEmptyDocumentURL           = "";
-            sDefaultFilter              = "";
+            sFactory.clear();
+            sShortName.clear();
+            sTemplateFile.clear();
+            sWindowAttributes.clear();
+            sEmptyDocumentURL.clear();
+            sDefaultFilter.clear();
             nIcon                       = 0;
             bChangedTemplateFile        = false;
             bChangedWindowAttributes    = false;
@@ -712,12 +712,12 @@ css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
     {
-        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_SHORTNAME;
-        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_TEMPLATEFILE;
-        pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_WINDOWATTRIBUTES;
-        pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_EMPTYDOCUMENTURL;
-        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_DEFAULTFILTER;
-        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPARATOR + PROPERTYNAME_ICON;
+        pPropNames[nPropStart+PROPERTYHANDLE_SHORTNAME       ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_SHORTNAME;
+        pPropNames[nPropStart+PROPERTYHANDLE_TEMPLATEFILE    ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_TEMPLATEFILE;
+        pPropNames[nPropStart+PROPERTYHANDLE_WINDOWATTRIBUTES] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_WINDOWATTRIBUTES;
+        pPropNames[nPropStart+PROPERTYHANDLE_EMPTYDOCUMENTURL] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_EMPTYDOCUMENTURL;
+        pPropNames[nPropStart+PROPERTYHANDLE_DEFAULTFILTER   ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
+        pPropNames[nPropStart+PROPERTYHANDLE_ICON            ] = lSetNames[nName] + PATHSEPARATOR PROPERTYNAME_ICON;
         nPropStart += PROPERTYCOUNT;
     }
 
@@ -1134,23 +1134,23 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const OU
 
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const OUString& sName)
 {
-    if (sName.equals(FACTORYNAME_WRITERGLOBAL))
+    if (sName == FACTORYNAME_WRITERGLOBAL)
         return E_WRITERGLOBAL;
-    if (sName.equals(FACTORYNAME_WRITERWEB))
+    if (sName == FACTORYNAME_WRITERWEB)
         return E_WRITERWEB;
-    if (sName.equals(FACTORYNAME_WRITER))
+    if (sName == FACTORYNAME_WRITER)
         return E_WRITER;
-    if (sName.equals(FACTORYNAME_CALC))
+    if (sName == FACTORYNAME_CALC)
         return E_CALC;
-    if (sName.equals(FACTORYNAME_DRAW))
+    if (sName == FACTORYNAME_DRAW)
         return E_DRAW;
-    if (sName.equals(FACTORYNAME_IMPRESS))
+    if (sName == FACTORYNAME_IMPRESS)
         return E_IMPRESS;
-    if (sName.equals(FACTORYNAME_MATH))
+    if (sName == FACTORYNAME_MATH)
         return E_MATH;
-    if (sName.equals(FACTORYNAME_CHART))
+    if (sName == FACTORYNAME_CHART)
         return E_CHART;
-    if (sName.equals(FACTORYNAME_DATABASE))
+    if (sName == FACTORYNAME_DATABASE)
         return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;

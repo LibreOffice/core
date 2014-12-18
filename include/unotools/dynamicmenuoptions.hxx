@@ -30,10 +30,10 @@
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
-#define DYNAMICMENU_PROPERTYNAME_URL                    OUString("URL")
-#define DYNAMICMENU_PROPERTYNAME_TITLE                  OUString("Title")
-#define DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER        OUString("ImageIdentifier")
-#define DYNAMICMENU_PROPERTYNAME_TARGETNAME             OUString("TargetName")
+#define DYNAMICMENU_PROPERTYNAME_URL                    "URL"
+#define DYNAMICMENU_PROPERTYNAME_TITLE                  "Title"
+#define DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER        "ImageIdentifier"
+#define DYNAMICMENU_PROPERTYNAME_TARGETNAME             "TargetName"
 
 /*-************************************************************************************************************
     @descr          You can use these enum values to specify right menu if you call our interface methods.

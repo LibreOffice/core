@@ -39,7 +39,7 @@ namespace utl
 
 bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUString& rBaseURL, OUString& rReturn )
 {
-    rReturn = "";
+    rReturn.clear();
 
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
@@ -58,7 +58,7 @@ bool LocalFileHelper::ConvertSystemPathToURL( const OUString& rName, const OUStr
 
 bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& rReturn )
 {
-    rReturn = "";
+    rReturn.clear();
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );
@@ -93,7 +93,7 @@ bool LocalFileHelper::ConvertPhysicalNameToURL(const OUString& rName, OUString& 
 
 bool LocalFileHelper::ConvertURLToPhysicalName(const OUString& rName, OUString& rReturn)
 {
-    rReturn = "";
+    rReturn.clear();
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );

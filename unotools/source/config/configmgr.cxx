@@ -148,8 +148,7 @@ utl::ConfigManager::acquireTree(utl::ConfigItem & item) {
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= css::beans::NamedValue(
         OUString("nodepath"),
-        css::uno::makeAny(
-            OUString("/org.openoffice.") + item.GetSubTreeName()));
+        css::uno::makeAny("/org.openoffice." + item.GetSubTreeName()));
     if ((item.GetMode() & CONFIG_MODE_ALL_LOCALES) != 0) {
         args.realloc(2);
         args[1] <<= css::beans::NamedValue(OUString("locale"), css::uno::makeAny(OUString("*")));

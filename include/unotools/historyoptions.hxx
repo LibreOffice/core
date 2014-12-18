@@ -31,11 +31,11 @@
 // The method GetList() returns a list of property values.
 // Use follow defines to separate values by names.
 
-#define HISTORY_PROPERTYNAME_URL            OUString("URL")
-#define HISTORY_PROPERTYNAME_FILTER         OUString("Filter")
-#define HISTORY_PROPERTYNAME_TITLE          OUString("Title")
-#define HISTORY_PROPERTYNAME_PASSWORD       OUString("Password")
-#define HISTORY_PROPERTYNAME_THUMBNAIL      OUString("Thumbnail")
+#define HISTORY_PROPERTYNAME_URL            "URL"
+#define HISTORY_PROPERTYNAME_FILTER         "Filter"
+#define HISTORY_PROPERTYNAME_TITLE          "Title"
+#define HISTORY_PROPERTYNAME_PASSWORD       "Password"
+#define HISTORY_PROPERTYNAME_THUMBNAIL      "Thumbnail"
 
 /// You can use these enum values to specify right history if you call our interface methods.
 enum EHistoryType

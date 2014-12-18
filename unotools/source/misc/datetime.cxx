@@ -162,7 +162,7 @@ namespace
         else if (i_str[io_index] == '+' || i_str[io_index] == '-') // other timezones indicator
         {
             ++io_index;
-            o_strInt = "";
+            o_strInt.clear();
             for (; io_index < i_str.getLength(); ++io_index)
             {
                 const sal_Unicode c = i_str[io_index];

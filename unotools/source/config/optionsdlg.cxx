@@ -32,10 +32,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
 #define CFG_FILENAME            OUString( "Office.OptionsDialog" )
-#define ROOT_NODE               OUString( "OptionsDialogGroups" )
-#define PAGES_NODE              OUString( "Pages" )
-#define OPTIONS_NODE            OUString( "Options" )
-#define PROPERTY_HIDE           OUString( "Hide" )
+#define ROOT_NODE               "OptionsDialogGroups"
+#define PAGES_NODE              "Pages"
+#define OPTIONS_NODE            "Options"
 
 static SvtOptionsDlgOptions_Impl*   pOptions = NULL;
 static sal_Int32                    nRefCount = 0;
@@ -135,7 +134,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     }
 
     Sequence< OUString > lResult( nLen );
-    lResult[0] = OUString( sNode + PROPERTY_HIDE );
+    lResult[0] = OUString( sNode + "Hide" );
     if ( _eType != NT_Option )
         lResult[1] = OUString( sNode + sSet );
 
@@ -162,15 +161,15 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
 
 OUString getGroupPath( const OUString& _rGroup )
 {
-    return OUString( ROOT_NODE + "/" + _rGroup + "/" );
+    return OUString( ROOT_NODE "/" + _rGroup + "/" );
 }
 OUString getPagePath( const OUString& _rPage )
 {
-    return OUString( PAGES_NODE + "/" + _rPage + "/" );
+    return OUString( PAGES_NODE "/" + _rPage + "/" );
 }
 OUString getOptionPath( const OUString& _rOption )
 {
-    return OUString( OPTIONS_NODE + "/" + _rOption + "/" );
+    return OUString( OPTIONS_NODE "/" + _rOption + "/" );
 }
 
 bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const

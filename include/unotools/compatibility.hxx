@@ -47,21 +47,21 @@ enum CompatibilityOptions
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
-#define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( "Name" )
-#define COMPATIBILITY_PROPERTYNAME_MODULE                   OUString( "Module" )
-#define COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS            OUString( "UsePrinterMetrics" )
-#define COMPATIBILITY_PROPERTYNAME_ADDSPACING               OUString( "AddSpacing" )
-#define COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES        OUString( "AddSpacingAtPages" )
-#define COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS           OUString( "UseOurTabStopFormat" )
-#define COMPATIBILITY_PROPERTYNAME_NOEXTLEADING             OUString( "NoExternalLeading" )
-#define COMPATIBILITY_PROPERTYNAME_USELINESPACING           OUString( "UseLineSpacing" )
-#define COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING          OUString( "AddTableSpacing" )
-#define COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING     OUString( "UseObjectPositioning" )
-#define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING       OUString( "UseOurTextWrapping" )
-#define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE    OUString( "ConsiderWrappingStyle" )
-#define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          OUString( "ExpandWordSpace" )
+#define COMPATIBILITY_PROPERTYNAME_NAME                     "Name"
+#define COMPATIBILITY_PROPERTYNAME_MODULE                   "Module"
+#define COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS            "UsePrinterMetrics"
+#define COMPATIBILITY_PROPERTYNAME_ADDSPACING               "AddSpacing"
+#define COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES        "AddSpacingAtPages"
+#define COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS           "UseOurTabStopFormat"
+#define COMPATIBILITY_PROPERTYNAME_NOEXTLEADING             "NoExternalLeading"
+#define COMPATIBILITY_PROPERTYNAME_USELINESPACING           "UseLineSpacing"
+#define COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING          "AddTableSpacing"
+#define COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING     "UseObjectPositioning"
+#define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING       "UseOurTextWrapping"
+#define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE    "ConsiderWrappingStyle"
+#define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          "ExpandWordSpace"
 
-#define COMPATIBILITY_DEFAULT_NAME                          OUString( "_default" )
+#define COMPATIBILITY_DEFAULT_NAME                          "_default"
 
 //  forward declarations
 

@@ -116,20 +116,20 @@ const ::com::sun::star::lang::Locale& LocaleDataWrapper::getMyLocale() const
 
 void LocaleDataWrapper::invalidateData()
 {
-    aCurrSymbol = "";
-    aCurrBankSymbol = "";
+    aCurrSymbol.clear();
+    aCurrBankSymbol.clear();
     nDateFormat = nLongDateFormat = nDateFormatInvalid;
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
         for (sal_Int32 j=0; j<LocaleItem::COUNT; ++j)
-            aLocaleItem[j] = "";
+            aLocaleItem[j].clear();
         bLocaleDataItemValid = false;
     }
     if ( bReservedWordValid )
     {
         for ( sal_Int16 j=0; j<reservedWords::COUNT; ++j )
-            aReservedWord[j] = "";
+            aReservedWord[j].clear();
         bReservedWordValid = false;
     }
     xDefaultCalendar.reset();

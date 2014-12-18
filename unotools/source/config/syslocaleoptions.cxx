@@ -101,12 +101,12 @@ public:
 
 #define ROOTNODE_SYSLOCALE              OUString("Setup/L10N")
 
-#define PROPERTYNAME_LOCALE             OUString("ooSetupSystemLocale")
-#define PROPERTYNAME_UILOCALE           OUString("ooLocale")
-#define PROPERTYNAME_CURRENCY           OUString("ooSetupCurrency")
-#define PROPERTYNAME_DECIMALSEPARATOR   OUString("DecimalSeparatorAsLocale")
-#define PROPERTYNAME_DATEPATTERNS       OUString("DateAcceptancePatterns")
-#define PROPERTYNAME_IGNORELANGCHANGE   OUString("IgnoreLanguageChange")
+#define PROPERTYNAME_LOCALE             "ooSetupSystemLocale"
+#define PROPERTYNAME_UILOCALE           "ooLocale"
+#define PROPERTYNAME_CURRENCY           "ooSetupCurrency"
+#define PROPERTYNAME_DECIMALSEPARATOR   "DecimalSeparatorAsLocale"
+#define PROPERTYNAME_DATEPATTERNS       "DateAcceptancePatterns"
+#define PROPERTYNAME_IGNORELANGCHANGE   "IgnoreLanguageChange"
 
 #define PROPERTYHANDLE_LOCALE           0
 #define PROPERTYHANDLE_UILOCALE         1

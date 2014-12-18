@@ -40,8 +40,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 #define ROOTNODE_OPTIONS        OUString( "Office.Compatibility/" )
-#define PATHDELIMITER           OUString( "/" )
-#define SETNODE_ALLFILEFORMATS  OUString( "AllFileFormats" )
+#define PATHDELIMITER           "/"
+#define SETNODE_ALLFILEFORMATS  "AllFileFormats"
 
 #define PROPERTYNAME_NAME               COMPATIBILITY_PROPERTYNAME_NAME
 #define PROPERTYNAME_MODULE             COMPATIBILITY_PROPERTYNAME_MODULE
@@ -356,7 +356,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bExpandWordSpace;
         m_aOptions.AppendEntry( aItem );
 
-        if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) )
+        if ( !bDefaultFound && aItem.sName == COMPATIBILITY_DEFAULT_NAME )
         {
             SvtSysLocale aSysLocale;
             com::sun::star::lang::Locale aLocale = aSysLocale.GetLanguageTag().getLocale();
@@ -382,27 +382,27 @@ SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
 
 void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bValue )
 {
-    if ( COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS.equals( sName ) )
+    if ( sName == COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS )
         m_aDefOptions.SetUsePrtMetrics( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_ADDSPACING.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_ADDSPACING )
         m_aDefOptions.SetAddSpacing( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES )
         m_aDefOptions.SetAddSpacingAtPages( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS )
         m_aDefOptions.SetUseOurTabStops( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_NOEXTLEADING.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_NOEXTLEADING )
         m_aDefOptions.SetNoExtLeading( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_USELINESPACING.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_USELINESPACING )
         m_aDefOptions.SetUseLineSpacing( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING )
         m_aDefOptions.SetAddTableSpacing( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING )
         m_aDefOptions.SetUseObjPos( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING )
         m_aDefOptions.SetUseOurTextWrapping( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE )
         m_aDefOptions.SetConsiderWrappingStyle( bValue );
-    else if ( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE.equals( sName ) )
+    else if ( sName == COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE )
         m_aDefOptions.SetExpandWordSpace( bValue );
 }
 
@@ -429,7 +429,7 @@ void SvtCompatibilityOptions_Impl::Commit()
     for( nItem = 0; nItem < nNewCount; ++nItem )
     {
         aItem = m_aOptions[ nItem ];
-        sNode = SETNODE_ALLFILEFORMATS + PATHDELIMITER + aItem.sName + PATHDELIMITER;
+        sNode = SETNODE_ALLFILEFORMATS PATHDELIMITER + aItem.sName + PATHDELIMITER;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Name = sNode + PROPERTYNAME_MODULE;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Name = sNode + PROPERTYNAME_USEPRTMETRICS;
@@ -509,7 +509,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     m_aOptions.AppendEntry( aItem );
 
     // default item reset?
-    if ( _sName.equals( COMPATIBILITY_DEFAULT_NAME ) )
+    if ( _sName == COMPATIBILITY_DEFAULT_NAME )
         m_aDefOptions = aItem;
 
     SetModified();

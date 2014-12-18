@@ -34,8 +34,8 @@ using namespace ::com::sun::star::uno;
 #define DEFAULT_AUTOMNEMONIC            false
 #define DEFAULT_DIALOGSCALE             0
 
-#define PROPERTYNAME_AUTOMNEMONIC       OUString("AutoMnemonic")
-#define PROPERTYNAME_DIALOGSCALE        OUString("DialogScale")
+#define PROPERTYNAME_AUTOMNEMONIC       "AutoMnemonic"
+#define PROPERTYNAME_DIALOGSCALE        "DialogScale"
 
 #define PROPERTYHANDLE_AUTOMNEMONIC     0
 #define PROPERTYHANDLE_DIALOGSCALE      1

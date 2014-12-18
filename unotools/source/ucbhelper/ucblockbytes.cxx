@@ -973,8 +973,7 @@ static bool UCBOpenContentSync(
                         OUString() );
                     aExcep.Server = aURL.GetHost();
                     aExcep.Classification = InteractionClassification_ERROR;
-                    aExcep.Message =
-                        OUString( "server not responding after five seconds");
+                    aExcep.Message = "server not responding after five seconds";
                     Any request;
                     request <<= aExcep;
                     ucbhelper::InteractionRequest *ir =
