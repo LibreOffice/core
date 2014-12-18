@@ -472,7 +472,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     if ( aDocument == m_aCurDocument && aLibName == m_aCurLibName )
                     {
                         m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
-                        m_aCurLibName = "";
+                        m_aCurLibName.clear();
                         // no UpdateWindows!
                         if (SfxBindings* pBindings = GetBindingsPtr())
                             pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR );

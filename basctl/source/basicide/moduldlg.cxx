@@ -547,9 +547,9 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 
 ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nMode)
-    : TabPage(pParent, rName, OUString("modules/BasicIDE/ui/") +
+    : TabPage(pParent, rName, "modules/BasicIDE/ui/" +
         OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
-        OUString(".ui"))
+        ".ui")
 {
     get(m_pBasicBox, "library");
     Size aSize(m_pBasicBox->LogicToPixel(Size(130, 117), MAP_APPFONT));

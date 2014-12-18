@@ -139,7 +139,7 @@ void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
 void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString& rIndex )
 {
     rVar = rVName;
-    rIndex = "";
+    rIndex.clear();
     sal_Int32 nIndexStart = rVar.indexOf( '(' );
     if ( nIndexStart != -1 )
     {
