@@ -247,7 +247,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     //note by ,1-27
     rtl::Reference<XFFont> pFont;
     XFTextStyle* pStyle = NULL;
-    m_StyleName = "";
+    m_StyleName.clear();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     if (m_pModifiers->HasCharStyle)
     {

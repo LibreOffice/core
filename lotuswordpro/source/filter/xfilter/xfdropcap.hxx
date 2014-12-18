@@ -111,7 +111,7 @@ inline void XFDropcap::Reset()
     m_nCharCount = 0;
     m_nLines = 0;
     m_fDistance = 0;
-    m_strStyleName = "";
+    m_strStyleName.clear();
 }
 
 inline void XFDropcap::ToXml(IXFStream *pStrm)

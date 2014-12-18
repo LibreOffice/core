@@ -813,7 +813,7 @@ XFSection* LwpPara::CreateXFSection()
 {
     XFSection* pXFSection = new XFSection();
     pXFSection->SetStyleName(m_SectionStyleName);
-    m_SectionStyleName = "";
+    m_SectionStyleName.clear();
     return pXFSection;
 }
 

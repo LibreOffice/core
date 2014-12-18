@@ -68,9 +68,9 @@ void XFFileName::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    if (m_strType.equals("FileName"))
+    if (m_strType == "FileName")
         pAttrList->AddAttribute( "text:display", "name-and-extension" );
-    else if (m_strType.equals("Path"))
+    else if (m_strType == "Path")
         pAttrList->AddAttribute( "text:display", "path" );
     pStrm->StartElement( "text:file-name" );
     pStrm->EndElement( "text:file-name" );
