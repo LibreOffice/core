@@ -89,9 +89,9 @@ void FirebirdTest::testIntegerDatabase()
         xRow->getInt(xColumnLocate->findColumn("_INT")));
     CPPUNIT_ASSERT(SAL_CONST_INT64(-9000000000000000000) ==
         xRow->getLong(xColumnLocate->findColumn("_BIGINT")));
-    CPPUNIT_ASSERT(OUString("5") ==
+    CPPUNIT_ASSERT("5" ==
         xRow->getString(xColumnLocate->findColumn("_CHAR")));
-    CPPUNIT_ASSERT(OUString("5") ==
+    CPPUNIT_ASSERT("5" ==
         xRow->getString(xColumnLocate->findColumn("_VARCHAR")));
 
     CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row

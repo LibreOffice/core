@@ -309,7 +309,7 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
 
             aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
             if ( !sEmbeddedDatabaseURL.isEmpty() )
-                aInstalled.getNodeValue(OUString(s_sValue) + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
+                aInstalled.getNodeValue(OUStringLiteral(s_sValue) + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )

@@ -69,7 +69,7 @@ namespace dbaui
                 // data source type
                 // This is worth at least an assertion.
                 OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
-                sDisplayName = "";
+                sDisplayName.clear();
             }
 
             SelectEntry( sDisplayName );

@@ -489,7 +489,7 @@ namespace dbaui
                                     if (bCatalogWildcard)
                                         sCatalog = sWildcard;
                                     else
-                                        sCatalog = "";
+                                        sCatalog.clear();
                                     sCatalog += m_sCatalogSeparator;
                                     sCatalog += m_pTablesList->GetEntryText( pCatalog );
                                 }
@@ -516,7 +516,7 @@ namespace dbaui
                 aTableFilter[nOldLen] = sComposedName;
 
                 // reset the composed name
-                sComposedName = "";
+                sComposedName.clear();
             }
 
             if (bCatalogWildcard)

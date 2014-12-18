@@ -434,7 +434,7 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
     {
         if(!bAlter || bNew)
         {
-            m_sName = "";
+            m_sName.clear();
             stopTableListening();
             m_xTable = NULL;
         }

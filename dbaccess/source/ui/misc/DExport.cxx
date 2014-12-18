@@ -787,9 +787,9 @@ void ODatabaseExport::adjustFormat()
 
 void ODatabaseExport::eraseTokens()
 {
-    m_sTextToken = "";
-    m_sNumToken = "";
-    m_sValToken = "";
+    m_sTextToken.clear();
+    m_sNumToken.clear();
+    m_sValToken.clear();
 }
 
 void ODatabaseExport::ensureFormatter()

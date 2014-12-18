@@ -863,7 +863,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 
         // one of the many properties which require us to update the definition ?
         // a column's width ?
-        else if (evt.PropertyName.equals(PROPERTY_WIDTH))
+        else if (evt.PropertyName == PROPERTY_WIDTH)
         {   // a column width has changed -> update the model
             // (the update of the view is done elsewhere)
             Reference<XPropertySet> xProp = getColumnHelper(m_pCurrentlyDisplayed,xSource);
@@ -877,7 +877,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
         }
 
         // a column's 'visible' state ?
-        else if (evt.PropertyName.equals(PROPERTY_HIDDEN))
+        else if (evt.PropertyName == PROPERTY_HIDDEN)
         {
             Reference<XPropertySet> xProp = getColumnHelper(m_pCurrentlyDisplayed,xSource);
             if(xProp.is())
@@ -885,7 +885,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
         }
 
         // a columns alignment ?
-        else if (evt.PropertyName.equals(PROPERTY_ALIGN))
+        else if (evt.PropertyName == PROPERTY_ALIGN)
         {
             Reference<XPropertySet> xProp = getColumnHelper(m_pCurrentlyDisplayed,xSource);
             try
@@ -911,7 +911,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
         }
 
         // a column's format ?
-        else if (   (evt.PropertyName.equals(PROPERTY_FORMATKEY))
+        else if (   evt.PropertyName == PROPERTY_FORMATKEY
             &&  (TypeClass_LONG == evt.NewValue.getValueTypeClass())
             )
         {
@@ -923,7 +923,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 
         // some table definition properties ?
         // the height of the rows in the grid ?
-        else if (evt.PropertyName.equals(PROPERTY_ROW_HEIGHT))
+        else if (evt.PropertyName == PROPERTY_ROW_HEIGHT)
         {
             if(m_pCurrentlyDisplayed)
             {
@@ -938,15 +938,15 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
             }
         }
 
-        else if (   evt.PropertyName.equals(PROPERTY_FONT)          // the font ?
-                ||  evt.PropertyName.equals(PROPERTY_TEXTCOLOR)     // the text color ?
-                ||  evt.PropertyName.equals(PROPERTY_FILTER)        // the filter ?
-                ||  evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE) // the having clause ?
-                ||  evt.PropertyName.equals(PROPERTY_ORDER)         // the sort ?
-                ||  evt.PropertyName.equals(PROPERTY_APPLYFILTER)   // the appliance of the filter ?
-                ||  evt.PropertyName.equals(PROPERTY_TEXTLINECOLOR) // the text line color ?
-                ||  evt.PropertyName.equals(PROPERTY_TEXTEMPHASIS)  // the text emphasis ?
-                ||  evt.PropertyName.equals(PROPERTY_TEXTRELIEF)    // the text relief ?
+        else if (   evt.PropertyName == PROPERTY_FONT          // the font ?
+                ||  evt.PropertyName == PROPERTY_TEXTCOLOR     // the text color ?
+                ||  evt.PropertyName == PROPERTY_FILTER        // the filter ?
+                ||  evt.PropertyName == PROPERTY_HAVING_CLAUSE // the having clause ?
+                ||  evt.PropertyName == PROPERTY_ORDER         // the sort ?
+                ||  evt.PropertyName == PROPERTY_APPLYFILTER   // the appliance of the filter ?
+                ||  evt.PropertyName == PROPERTY_TEXTLINECOLOR // the text line color ?
+                ||  evt.PropertyName == PROPERTY_TEXTEMPHASIS  // the text emphasis ?
+                ||  evt.PropertyName == PROPERTY_TEXTRELIEF    // the text relief ?
                 )
         {
             transferChangedControlProperty(evt.PropertyName, evt.NewValue);
@@ -1096,7 +1096,7 @@ namespace
             return true;
         }
         _rDisplayName = _rDS;
-        _rUniqueId = "";
+        _rUniqueId.clear();
         return false;
     }
 
@@ -1623,7 +1623,7 @@ void SbaTableQueryBrowser::LoadFinished(bool _bWasSynch)
 {
     SbaXDataBrowserController::LoadFinished(_bWasSynch);
 
-    m_sQueryCommand = "";
+    m_sQueryCommand.clear();
     m_bQueryEscapeProcessing = false;
 
     if (isValid() && !loadingCancelled())
@@ -3546,7 +3546,7 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
 
 bool SbaTableQueryBrowser::implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing )
 {
-    _rCommand = "";
+    _rCommand.clear();
     _bEscapeProcessing = false;
 
     try

@@ -1939,7 +1939,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         xColumn = NULL;
                         bReFetchName = true;
-                        sColumnLabel = "";
+                        sColumnLabel.clear();
                     }
                     if(!xColumn.is())
                     {
@@ -2345,7 +2345,7 @@ bool ORowSet::impl_buildActiveCommand_throw()
     // the last use the command as it is
     bool bDoEscapeProcessing = m_bUseEscapeProcessing;
 
-    m_aActiveCommand = "";
+    m_aActiveCommand.clear();
     OUString sCommand;
 
     if ( m_aCommand.isEmpty() )

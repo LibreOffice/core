@@ -342,7 +342,7 @@ namespace dbaui
 
                         if (bEmptySelected)
                         {
-                            aPos->sFieldName = "";
+                            aPos->sFieldName.clear();
 
                             // invalidate the row to force repaint
                             Invalidate(GetRowRectPixel(nRow));

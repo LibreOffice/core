@@ -58,7 +58,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = "";
+        aProperty.Name.clear();
 
         sal_uInt16 nToken = rTokenMap.Get( nPrefix, sLocalName );
         aTokens.push_back(nToken);

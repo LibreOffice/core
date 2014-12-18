@@ -1076,7 +1076,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
 
     SolarMutexGuard aGuard;
     // the IsModified changed to sal_False ?
-    if  (   (evt.PropertyName.equals(PROPERTY_ISMODIFIED))
+    if  (   evt.PropertyName == PROPERTY_ISMODIFIED
         &&  !::comphelper::getBOOL(evt.NewValue)
         )
     {   // -> the current field isn't modified anymore, too
@@ -1084,7 +1084,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     }
 
     // switching to a new record ?
-    if  (   (evt.PropertyName.equals(PROPERTY_ISNEW))
+    if  (   evt.PropertyName == PROPERTY_ISNEW
         &&  ::comphelper::getBOOL(evt.NewValue)
         )
     {
@@ -1094,21 +1094,21 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
             InvalidateAll();
     }
 
-    if (evt.PropertyName.equals(PROPERTY_FILTER))
+    if (evt.PropertyName == PROPERTY_FILTER)
     {
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
-    else if (evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE))
+    else if (evt.PropertyName == PROPERTY_HAVING_CLAUSE)
     {
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
-    else if (evt.PropertyName.equals(PROPERTY_ORDER))
+    else if (evt.PropertyName == PROPERTY_ORDER)
     {
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
 
     // a new record count ? -> may be our search availability has changed
-    if (evt.PropertyName.equals(PROPERTY_ROWCOUNT))
+    if (evt.PropertyName == PROPERTY_ROWCOUNT)
     {
         sal_Int32 nNewValue = 0, nOldValue = 0;
         evt.NewValue >>= nNewValue;

@@ -1211,7 +1211,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter:
 
         for (sal_Int32 i=0; i<aProps.getLength(); ++i, ++pProps)
         {
-            if (pProps->Name.equals(PROPERTY_NAME))
+            if (pProps->Name == PROPERTY_NAME)
             {
                 ((SbaXFormAdapter*)this)->m_nNamePropHandle = pProps->Handle;
                 break;
@@ -1241,7 +1241,7 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
     Any* pValues = aReturn.getArray();
     OSL_ENSURE(aReturn.getLength() == aPropertyNames.getLength(), "SAL_CALL SbaXFormAdapter::getPropertyValues : the main form returned an invalid-length sequence !");
     for (sal_Int32 i=0; i<aPropertyNames.getLength(); ++i, ++pNames, ++pValues)
-        if (pNames->equals(PROPERTY_NAME))
+        if (*pNames == PROPERTY_NAME)
         {
             (*pValues) <<= m_sName;
             break;
@@ -1289,7 +1289,7 @@ void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, c
         return;
 
     // special handling for the "name" property
-    if (aPropertyName.equals(PROPERTY_NAME))
+    if (aPropertyName == PROPERTY_NAME)
         setFastPropertyValue(m_nNamePropHandle, aValue);
 
     xSet->setPropertyValue(aPropertyName, aValue);
@@ -1302,7 +1302,7 @@ Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) thr
         return Any();
 
     // special handling for the "name" property
-    if (PropertyName.equals(PROPERTY_NAME))
+    if (PropertyName == PROPERTY_NAME)
         return getFastPropertyValue(m_nNamePropHandle);
 
     return xSet->getPropertyValue(PropertyName);
@@ -1632,7 +1632,7 @@ Reference< ::com::sun::star::container::XEnumeration > SAL_CALL SbaXFormAdapter:
 // ::com::sun::star::beans::XPropertyChangeListener
 void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
 {
-    if (evt.PropertyName.equals(PROPERTY_NAME))
+    if (evt.PropertyName == PROPERTY_NAME)
     {
         ::std::vector<  ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = ::std::find_if(  m_aChildren.begin(),
                                                                 m_aChildren.end(),

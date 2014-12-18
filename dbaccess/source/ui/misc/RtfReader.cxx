@@ -264,11 +264,11 @@ bool ORTFReader::CreateTable(int nToken)
             case RTF_UNKNOWNCONTROL:
             case RTF_UNKNOWNDATA:
                 m_bInTbl = false;
-                aColumnName = "";
+                aColumnName.clear();
                 break;
             case RTF_INTBL:
                 if(m_bInTbl)
-                    aColumnName = "";
+                    aColumnName.clear();
 
                 m_bInTbl = true;
                 break;
@@ -284,7 +284,7 @@ bool ORTFReader::CreateTable(int nToken)
                         aColumnName = ModuleRes(STR_COLUMN_NAME);
 
                     CreateDefaultColumn(aColumnName);
-                    aColumnName = "";
+                    aColumnName.clear();
                 }
                 break;
             case RTF_CF:

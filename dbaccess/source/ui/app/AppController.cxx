@@ -2470,7 +2470,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     m_aAsyncDrop.nAction        = _rEvt.mnAction;
     m_aAsyncDrop.bError         = false;
     m_aAsyncDrop.bHtml          = false;
-    m_aAsyncDrop.aUrl           = "";
+    m_aAsyncDrop.aUrl.clear();
 
     // loop through the available formats and see what we can do ...
     // first we have to check if it is our own format, if not we have to copy the stream :-(

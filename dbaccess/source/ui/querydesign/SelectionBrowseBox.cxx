@@ -52,11 +52,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::accessibility;
 
-#define g_strOne OUString("1")
-#define g_strZero OUString("0")
-
 #define DEFAULT_QUERY_COLS  20
-#define DEFAULT_SIZE        GetTextWidth(g_strZero) * 30
+#define DEFAULT_SIZE        GetTextWidth("0") * 30
 #define CHECKBOX_SIZE       10
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WITDH 70
@@ -904,8 +901,8 @@ bool OSelectionBrowseBox::SaveModified()
             case BROW_VIS_ROW:
                 {
                     bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue() != TRISTATE_FALSE;
-                    strOldCellContents = bOldValue ? g_strOne : g_strZero;
-                    sNewValue          = !bOldValue ? g_strOne : g_strZero;
+                    strOldCellContents = bOldValue ? "1" : "0";
+                    sNewValue          = !bOldValue ? "1" : "0";
                 }
                 if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
                    (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
@@ -1044,7 +1041,7 @@ bool OSelectionBrowseBox::SaveModified()
                             // we have to change the visblie flag, so we must append also an undo action
                             pEntry->SetVisible(true);
                             m_pVisibleCell->GetBox().Check();
-                            appendUndoAction(g_strZero,g_strOne,BROW_VIS_ROW,bListAction);
+                            appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
                             RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
                         }
 
@@ -1058,7 +1055,7 @@ bool OSelectionBrowseBox::SaveModified()
                     }
                     else
                     {
-                        sFunctionName = "";
+                        sFunctionName.clear();
                         pEntry->SetFunction(OUString());
                         pEntry->SetFunctionType(pEntry->GetFunctionType() & ~FKT_AGGREGATE );
                     }
@@ -1185,7 +1182,7 @@ bool OSelectionBrowseBox::SaveModified()
     {
         // Default to visible
         pEntry->SetVisible(true);
-        appendUndoAction(g_strZero,g_strOne,BROW_VIS_ROW,bListAction);
+        appendUndoAction("0","1",BROW_VIS_ROW,bListAction);
         RowModified(BROW_VIS_ROW, GetCurColumnId());
 
         // if required add empty columns
@@ -2234,7 +2231,7 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
     switch (nCellIndex)
     {
         case BROW_VIS_ROW :
-            return pEntry->IsVisible() ? g_strOne : g_strZero;
+            return pEntry->IsVisible() ? "1" : "0";
         case BROW_ORDER_ROW:
         {
             sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
@@ -2260,7 +2257,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
     switch (nRow)
     {
         case BROW_VIS_ROW:
-            pEntry->SetVisible(strNewText == g_strOne);
+            pEntry->SetVisible(strNewText == "1");
             break;
         case BROW_FIELD_ROW:
             pEntry->SetField(strNewText);

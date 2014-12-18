@@ -742,7 +742,8 @@ namespace
 
             for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
             {
-                aHavingStr = aWhereStr = "";
+                aHavingStr.clear();
+                aWhereStr.clear();
 
                 for(aIter = _rFieldList.begin();aIter != aEnd;++aIter)
                 {
@@ -2214,7 +2215,7 @@ namespace
                                 {   // we got an aggregate function but without column name inside
                                     // so we set the whole argument of the function as field name
                                     nFunctionType |= FKT_NUMERIC;
-                                    sFieldName = "";
+                                    sFieldName.clear();
                                     pParamRef->parseNodeToStr(  sFieldName,
                                                         xConnection,
                                                         &rController.getParser().getContext(),

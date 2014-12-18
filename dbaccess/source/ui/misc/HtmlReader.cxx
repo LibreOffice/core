@@ -192,7 +192,7 @@ void OHTMLReader::NextToken( int nToken )
                 m_sCurrent += m_sTextToken;
                 break;
             case HTML_PARABREAK_ON:
-                m_sTextToken = "";
+                m_sTextToken.clear();
                 break;
             case HTML_TABLEDATA_ON:
                 fetchOptions();
@@ -210,7 +210,7 @@ void OHTMLReader::NextToken( int nToken )
                     {
                         showErrorDialog(e);
                     }
-                    m_sCurrent = "";
+                    m_sCurrent.clear();
                     m_nColumnPos++;
                     eraseTokens();
                     m_bSDNum = m_bInTbl = false;
@@ -266,7 +266,7 @@ void OHTMLReader::NextToken( int nToken )
                 m_sCurrent += m_sTextToken;
                 break;
             case HTML_PARABREAK_ON:
-                m_sTextToken = "";
+                m_sTextToken.clear();
                 break;
             case HTML_TABLEDATA_OFF:
                 if ( !m_sCurrent.isEmpty() )
@@ -274,7 +274,7 @@ void OHTMLReader::NextToken( int nToken )
                 adjustFormat();
                 m_nColumnPos++;
                 m_bSDNum = m_bInTbl = false;
-                m_sCurrent = "";
+                m_sCurrent.clear();
                 break;
             case HTML_TABLEROW_OFF:
                 if ( !m_sCurrent.isEmpty() )
@@ -282,7 +282,7 @@ void OHTMLReader::NextToken( int nToken )
                 adjustFormat();
                 m_nColumnPos = 0;
                 m_nRows--;
-                m_sCurrent = "";
+                m_sCurrent.clear();
                 break;
         }
     }
@@ -436,7 +436,7 @@ bool OHTMLReader::CreateTable(int nToken)
                 m_sCurrent += aColumnName;
                 break;
             case HTML_PARABREAK_ON:
-                m_sTextToken = "";
+                m_sTextToken.clear();
                 break;
             case HTML_TABLEDATA_ON:
             case HTML_TABLEHEADER_ON:
@@ -454,8 +454,8 @@ bool OHTMLReader::CreateTable(int nToken)
 
                     aColumnName = comphelper::string::strip(aColumnName, ' ');
                     CreateDefaultColumn(aColumnName);
-                    aColumnName = "";
-                    m_sCurrent = "";
+                    aColumnName.clear();
+                    m_sCurrent.clear();
 
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
                     bTableHeader = false;

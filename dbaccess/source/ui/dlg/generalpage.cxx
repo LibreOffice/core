@@ -343,12 +343,12 @@ namespace dbaui
             // do not display the Connector/OOo driver itself, it is always wrapped via the MySQL-Driver, if
             // this driver is installed
             if ( m_pCollection->hasDriver( "sdbc:mysql:mysqlc:" ) )
-                _inout_rDisplayName = "";
+                _inout_rDisplayName.clear();
         }
 
         if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB
                 || eType ==  ::dbaccess::DST_EMBEDDED_FIREBIRD )
-            _inout_rDisplayName = "";
+            _inout_rDisplayName.clear();
 
         return _inout_rDisplayName.getLength() > 0;
     }
@@ -612,7 +612,7 @@ namespace dbaui
         case ::dbaccess::DST_MYSQL_NATIVE:
             // don't display those, the decision whether the user connects via JDBC/ODBC/C-OOo is made on another
             // page
-            _inout_rDisplayName = "";
+            _inout_rDisplayName.clear();
             break;
         default:
             break;
@@ -719,7 +719,7 @@ namespace dbaui
                 return 0L;
             }
             m_aBrowsedDocument.sURL = sPath;
-            m_aBrowsedDocument.sFilter = "";
+            m_aBrowsedDocument.sFilter.clear();
             m_aChooseDocumentHandler.Call( this );
             return 1L;
         }

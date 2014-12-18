@@ -54,7 +54,7 @@ OXMLConnectionResource::OXMLConnectionResource( ODBFilter& rImport,
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         const OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = "";
+        aProperty.Name.clear();
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
