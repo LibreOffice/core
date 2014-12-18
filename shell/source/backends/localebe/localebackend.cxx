@@ -284,12 +284,12 @@ css::uno::Any LocaleBackend::getPropertyValue(
         return css::uno::makeAny(
             css::beans::Optional< css::uno::Any >(
                 true, css::uno::makeAny(getLocale())));
-    } else if (PropertyName.equals("SystemLocale"))
+    } else if (PropertyName == "SystemLocale")
     {
         return css::uno::makeAny(
             css::beans::Optional< css::uno::Any >(
                 true, css::uno::makeAny(getSystemLocale())));
-    } else if (PropertyName.equals("UILocale"))
+    } else if (PropertyName == "UILocale")
     {
         return css::uno::makeAny(
             css::beans::Optional< css::uno::Any >(

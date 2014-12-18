@@ -134,7 +134,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( aURL.isEmpty() && !aCommand.isEmpty() )
         {
             throw RuntimeException(
-                OUString("Cannot translate URI reference to external format: ")
+                "Cannot translate URI reference to external format: "
                  + aCommand,
                 static_cast< cppu::OWeakObject * >(this));
         }
@@ -224,8 +224,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0)
     {
         throw css::lang::IllegalArgumentException(
-            OUString("XSystemShellExecute.execute URIS_ONLY with non-absolute"
-                     " URI reference ")
+            "XSystemShellExecute.execute URIS_ONLY with non-absolute"
+                     " URI reference "
              + aCommand,
             static_cast< cppu::OWeakObject * >(this), 0);
     } else {
