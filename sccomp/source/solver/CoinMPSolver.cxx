@@ -58,7 +58,7 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
     if ( !xModel.is() )
         throw uno::RuntimeException();
 
-    maStatus = "";
+    maStatus.clear();
     mbSuccess = false;
 
     xModel->lockControllers();

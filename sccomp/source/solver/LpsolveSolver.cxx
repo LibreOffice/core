@@ -90,7 +90,7 @@ void SAL_CALL LpsolveSolver::solve() throw(uno::RuntimeException, std::exception
     if ( !xModel.is() )
         throw uno::RuntimeException();
 
-    maStatus = "";
+    maStatus.clear();
     mbSuccess = false;
 
     if ( mnEpsilonLevel < EPS_TIGHT || mnEpsilonLevel > EPS_BAGGY )
