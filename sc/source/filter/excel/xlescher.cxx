@@ -213,11 +213,11 @@ XclObjLineData::XclObjLineData() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclObjLineData& rLineData )
 {
-    return rStrm
-        >> rLineData.mnColorIdx
-        >> rLineData.mnStyle
-        >> rLineData.mnWidth
-        >> rLineData.mnAuto;
+    rLineData.mnColorIdx = rStrm.ReaduInt8();
+    rLineData.mnStyle = rStrm.ReaduInt8();
+    rLineData.mnWidth = rStrm.ReaduInt8();
+    rLineData.mnAuto = rStrm.ReaduInt8();
+    return rStrm;
 }
 
 XclObjFillData::XclObjFillData() :
@@ -230,11 +230,11 @@ XclObjFillData::XclObjFillData() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclObjFillData& rFillData )
 {
-    return rStrm
-        >> rFillData.mnBackColorIdx
-        >> rFillData.mnPattColorIdx
-        >> rFillData.mnPattern
-        >> rFillData.mnAuto;
+    rFillData.mnBackColorIdx = rStrm.ReaduInt8();
+    rFillData.mnPattColorIdx = rStrm.ReaduInt8();
+    rFillData.mnPattern = rStrm.ReaduInt8();
+    rFillData.mnAuto = rStrm.ReaduInt8();
+    return rStrm;
 }
 
 XclObjTextData::XclObjTextData() :
@@ -252,30 +252,42 @@ XclObjTextData::XclObjTextData() :
 
 void XclObjTextData::ReadObj3( XclImpStream& rStrm )
 {
-    rStrm >> mnTextLen;
+    mnTextLen = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> mnFormatSize >> mnDefFontIdx;
+    mnFormatSize = rStrm.ReaduInt16();
+    mnDefFontIdx = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> mnFlags >> mnOrient;
+    mnFlags = rStrm.ReaduInt16();
+    mnOrient = rStrm.ReaduInt16();
     rStrm.Ignore( 8 );
 }
 
 void XclObjTextData::ReadObj5( XclImpStream& rStrm )
 {
-    rStrm >> mnTextLen;
+    mnTextLen = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> mnFormatSize >> mnDefFontIdx;
+    mnFormatSize = rStrm.ReaduInt16();
+    mnDefFontIdx = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> mnFlags >> mnOrient;
+    mnFlags = rStrm.ReaduInt16();
+    mnOrient = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> mnLinkSize;
+    mnLinkSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> mnButtonFlags >> mnShortcut >> mnShortcutEA;
+    mnButtonFlags = rStrm.ReaduInt16();
+    mnShortcut = rStrm.ReaduInt16();
+    mnShortcutEA = rStrm.ReaduInt16();
 }
 
 void XclObjTextData::ReadTxo8( XclImpStream& rStrm )
 {
-    rStrm >> mnFlags >> mnOrient >> mnButtonFlags >> mnShortcut >> mnShortcutEA >> mnTextLen >> mnFormatSize;
+    mnFlags = rStrm.ReaduInt16();
+    mnOrient = rStrm.ReaduInt16();
+    mnButtonFlags = rStrm.ReaduInt16();
+    mnShortcut = rStrm.ReaduInt16();
+    mnShortcutEA = rStrm.ReaduInt16();
+    mnTextLen = rStrm.ReaduInt16();
+    mnFormatSize = rStrm.ReaduInt16();
 }
 
 Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape > xShape )

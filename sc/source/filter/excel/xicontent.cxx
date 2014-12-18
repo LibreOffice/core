@@ -76,7 +76,7 @@ void XclImpSst::ReadSst( XclImpStream& rStrm )
 {
     rStrm.Ignore( 4 );
     sal_uInt32 nStrCount(0);
-    rStrm >> nStrCount;
+    nStrCount = rStrm.ReaduInt32();
     maStrings.clear();
     maStrings.reserve( static_cast< size_t >( nStrCount ) );
     while( (nStrCount > 0) && rStrm.IsValid() )
@@ -123,7 +123,7 @@ void lclAppendString32( OUString& rString, XclImpStream& rStrm, bool b16Bit )
 void lclIgnoreString32( XclImpStream& rStrm, bool b16Bit )
 {
     sal_uInt32 nChars(0);
-    rStrm >> nChars;
+    nChars = rStrm.ReaduInt32();
     if( b16Bit )
         nChars *= 2;
     rStrm.Ignore( nChars );
@@ -237,7 +237,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     rStrm >> aGuid;
     rStrm.Ignore( 4 );
     sal_uInt32 nFlags(0);
-    rStrm >> nFlags;
+    nFlags = rStrm.ReaduInt32();
 
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
@@ -271,17 +271,17 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         if( aGuid == XclTools::maGuidFileMoniker )
         {
             sal_uInt16 nLevel = 0; // counter for level to climb down in path
-            rStrm >> nLevel;
+            nLevel = rStrm.ReaduInt16();
             xShortName.reset( new OUString );
             lclAppendString32( *xShortName, rStrm, false );
             rStrm.Ignore( 24 );
 
             sal_uInt32 nStrLen = 0;
-            rStrm >> nStrLen;
+            nStrLen = rStrm.ReaduInt32();
             if( nStrLen )
             {
                 nStrLen = 0;
-                rStrm >> nStrLen;
+                nStrLen = rStrm.ReaduInt32();
                 nStrLen /= 2;       // it's byte count here...
                 rStrm.Ignore( 2 );
                 xLongName.reset( new OUString );
@@ -294,7 +294,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         else if( aGuid == XclTools::maGuidUrlMoniker )
         {
             sal_uInt32 nStrLen(0);
-            rStrm >> nStrLen;
+            nStrLen = rStrm.ReaduInt32();
             nStrLen /= 2;       // it's byte count here...
             xLongName.reset( new OUString );
             lclAppendString32( *xLongName, rStrm, nStrLen, true );
@@ -489,7 +489,7 @@ void XclImpCondFormat::ReadCondfmt( XclImpStream& rStrm )
 {
     OSL_ENSURE( !mnCondCount, "XclImpCondFormat::ReadCondfmt - already initialized" );
     XclRangeList aXclRanges;
-    rStrm >> mnCondCount;
+    mnCondCount = rStrm.ReaduInt16();
     rStrm.Ignore( 10 );
     rStrm >> aXclRanges;
     GetAddressConverter().ConvertRangeList( maRanges, aXclRanges, GetCurrScTab(), true );
@@ -512,7 +512,12 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     sal_uInt32 nFlags(0);
     sal_uInt16 nFlagsExtended(0);
 
-    rStrm >> nType >> nOperator >> nFmlaSize1 >> nFmlaSize2 >> nFlags >> nFlagsExtended;
+    nType = rStrm.ReaduInt8();
+    nOperator = rStrm.ReaduInt8();
+    nFmlaSize1 = rStrm.ReaduInt16();
+    nFmlaSize2 = rStrm.ReaduInt16();
+    nFlags = rStrm.ReaduInt32();
+    nFlagsExtended = rStrm.ReaduInt16();
 
     // *** mode and comparison operator ***
 
@@ -578,7 +583,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         XclImpCellAlign aAlign;
         sal_uInt16 nAlign(0);
         sal_uInt16 nAlignMisc(0);
-        rStrm >> nAlign >> nAlignMisc;
+        nAlign = rStrm.ReaduInt16();
+        nAlignMisc = rStrm.ReaduInt16();
         aAlign.FillFromCF( nAlign, nAlignMisc );
         aAlign.FillToItemSet( rStyleItemSet, NULL );
         rStrm.Ignore(4);
@@ -590,7 +596,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         sal_uInt16 nLineStyle(0);
         sal_uInt32 nLineColor(0);
-        rStrm >> nLineStyle >> nLineColor;
+        nLineStyle = rStrm.ReaduInt16();
+        nLineColor = rStrm.ReaduInt32();
         rStrm.Ignore( 2 );
 
         XclImpCellBorder aBorder;
@@ -603,7 +610,8 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     if( ::get_flag( nFlags, EXC_CF_BLOCK_AREA ) )
     {
         sal_uInt16 nPattern(0), nColor(0);
-        rStrm >> nPattern >> nColor;
+        nPattern = rStrm.ReaduInt16();
+        nColor = rStrm.ReaduInt16();
 
         XclImpCellArea aArea;
         aArea.FillFromCF8( nPattern, nColor, nFlags );
@@ -613,7 +621,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     if( get_flag( nFlags, EXC_CF_BLOCK_PROTECTION ) )
     {
         sal_uInt16 nCellProt;
-        rStrm >> nCellProt;
+        nCellProt = rStrm.ReaduInt16();
         XclImpCellProt aCellProt;
         aCellProt.FillFromXF3(nCellProt);
         aCellProt.FillToItemSet( rStyleItemSet );
@@ -718,7 +726,7 @@ void XclImpValidationManager::ReadDval( XclImpStream& rStrm )
 
     sal_uInt32 nObjId(0);
     rStrm.Ignore( 10 );
-    rStrm >> nObjId;
+    nObjId = rStrm.ReaduInt32();
     if( nObjId != EXC_DVAL_NOOBJ )
     {
         OSL_ENSURE( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
@@ -737,7 +745,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 
     // flags
     sal_uInt32 nFlags(0);
-    rStrm >> nFlags;
+    nFlags = rStrm.ReaduInt32();
 
     // message strings
     /*  Empty strings are single NUL characters in Excel (string length is 1).
@@ -760,7 +768,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     ::std::unique_ptr< ScTokenArray > xTokArr1;
 
     sal_uInt16 nLen = 0;
-    rStrm >> nLen;
+    nLen = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
     if( nLen > 0 )
     {
@@ -777,7 +785,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     ::std::unique_ptr< ScTokenArray > xTokArr2;
 
     nLen = 0;
-    rStrm >> nLen;
+    nLen = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
     if( nLen > 0 )
     {
@@ -932,9 +940,9 @@ void XclImpWebQuery::ReadWqsettings( XclImpStream& rStrm )
 {
     rStrm.Ignore( 10 );
     sal_uInt16 nFlags(0);
-    rStrm >> nFlags;
+    nFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 10 );
-    rStrm >> mnRefresh;
+    mnRefresh = rStrm.ReaduInt16();
 
     if( ::get_flag( nFlags, EXC_WQSETT_SPECTABLES ) && (meMode == xlWQAllTables) )
         meMode = xlWQSpecTables;
@@ -1054,7 +1062,8 @@ XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
     if( rStrm.GetRecLeft() == 4 )
     {
         sal_uInt16 nKey(0), nHash(0);
-        rStrm >> nKey >> nHash;
+        nKey = rStrm.ReaduInt16();
+        nHash = rStrm.ReaduInt16();
         xDecr.reset( new XclImpBiff5Decrypter( nKey, nHash ) );
     }
     return xDecr;
@@ -1088,7 +1097,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
     XclImpDecrypterRef xDecr;
 
     sal_uInt16 nMode(0);
-    rStrm >> nMode;
+    nMode = rStrm.ReaduInt16();
     switch( nMode )
     {
         case EXC_FILEPASS_BIFF5:
@@ -1099,7 +1108,7 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
         {
             rStrm.Ignore( 2 );
             sal_uInt16 nSubMode(0);
-            rStrm >> nSubMode;
+            nSubMode = rStrm.ReaduInt16();
             switch( nSubMode )
             {
                 case EXC_FILEPASS_BIFF8_STD:
@@ -1240,14 +1249,14 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
     // For enhanced protection data, the size is always 4.  For the most xls
     // documents out there this value is almost always -1.
     sal_Int32 nFlagSize(0);
-    rStrm >> nFlagSize;
+    nFlagSize = rStrm.ReadInt32();
     if (nFlagSize != -1)
         return;
 
     // There are actually 4 bytes to read, but the upper 2 bytes currently
     // don't store any bits.
     sal_uInt16 nOptions(0);
-    rStrm >> nOptions;
+    nOptions = rStrm.ReaduInt16();
 
     Sheet* pSheet = GetSheetItem(nTab);
     if (pSheet)
@@ -1264,7 +1273,7 @@ void XclImpSheetProtectBuffer::AppendEnhancedProtection( const ScEnhancedProtect
 void XclImpSheetProtectBuffer::ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab )
 {
     sal_uInt16 nHash(0);
-    rStrm >> nHash;
+    nHash = rStrm.ReaduInt16();
     Sheet* pSheet = GetSheetItem(nTab);
     if (pSheet)
         pSheet->mnPasswordHash = nHash;

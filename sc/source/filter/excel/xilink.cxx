@@ -149,7 +149,10 @@ struct XclImpXti
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
 {
-    return rStrm >> rXti.mnSupbook >> rXti.mnSBTabFirst >> rXti.mnSBTabLast;
+    rXti.mnSupbook = rStrm.ReaduInt16();
+    rXti.mnSBTabFirst = rStrm.ReaduInt16();
+    rXti.mnSBTabLast = rStrm.ReaduInt16();
+    return rStrm;
 }
 
 /** Implementation of the link manager. */
@@ -289,7 +292,7 @@ XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
         for (SCSIZE nCol = 0; nCol <= nLastCol; ++nCol)
         {
             sal_uInt8 nOp;
-            rStrm >> nOp;
+            nOp = rStrm.ReaduInt8();
             switch (nOp)
             {
                 case 0x01:
@@ -338,7 +341,9 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
     sal_uInt16 nFlags(0);
     sal_uInt8 nLen(0);
 
-    rStrm >> nFlags >> mnStorageId >> nLen ;
+    nFlags = rStrm.ReaduInt16();
+    mnStorageId = rStrm.ReaduInt32();
+    nLen = rStrm.ReaduInt8();
     maName = rStrm.ReadUniString( nLen );
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
     {
@@ -376,7 +381,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
                 {
                     const ScTokenArray* pArray = NULL;
                     sal_uInt16 nFmlaLen;
-                    rStrm >> nFmlaLen;
+                    nFmlaLen = rStrm.ReaduInt16();
                     vector<OUString> aTabNames;
                     sal_uInt16 nCount = rSupbook.GetTabCount();
                     aTabNames.reserve(nCount);
@@ -620,7 +625,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     mnSBTab( EXC_TAB_DELETED )
 {
     sal_uInt16 nSBTabCnt;
-    rStrm >> nSBTabCnt;
+    nSBTabCnt = rStrm.ReaduInt16();
 
     if( rStrm.GetRecLeft() == 2 )
     {
@@ -673,7 +678,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
 void XclImpSupbook::ReadXct( XclImpStream& rStrm )
 {
     rStrm.Ignore( 2 );
-    rStrm >> mnSBTab;
+    mnSBTab = rStrm.ReaduInt16();
 }
 
 void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
@@ -683,7 +688,9 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
     XclImpSupbookTab& rSbTab = maSupbTabList[mnSBTab];
     sal_uInt8 nXclColLast, nXclColFirst;
     sal_uInt16 nXclRow;
-    rStrm >> nXclColLast >> nXclColFirst >> nXclRow;
+    nXclColLast = rStrm.ReaduInt8();
+    nXclColFirst = rStrm.ReaduInt8();
+    nXclRow = rStrm.ReaduInt16();
 
     for( sal_uInt8 nXclCol = nXclColFirst; (nXclCol <= nXclColLast) && (rStrm.GetRecLeft() > 1); ++nXclCol )
         rSbTab.ReadCrn( rStrm, XclAddress( nXclCol, nXclRow ) );
@@ -760,7 +767,7 @@ XclImpLinkManagerImpl::XclImpLinkManagerImpl( const XclImpRoot& rRoot ) :
 void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
 {
     sal_uInt16 nXtiCount;
-    rStrm >> nXtiCount;
+    nXtiCount = rStrm.ReaduInt16();
     OSL_ENSURE( static_cast< sal_Size >( nXtiCount * 6 ) == rStrm.GetRecLeft(), "XclImpLinkManagerImpl::ReadExternsheet - invalid count" );
     nXtiCount = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nXtiCount, rStrm.GetRecLeft() / 6 ) );
 

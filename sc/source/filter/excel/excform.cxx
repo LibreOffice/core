@@ -54,22 +54,21 @@ void ImportExcel::Formula25()
 
     if( GetBiff() == EXC_BIFF2 )
     {//                     BIFF2
-        sal_uInt8 nDummy;
-
         aIn.Ignore( 3 );
 
-        aIn >> fCurVal;
+        fCurVal = aIn.ReadDouble();
         aIn.Ignore( 1 );
-        aIn >> nDummy;
-        nFormLen = nDummy;
+        nFormLen = aIn.ReaduInt8();
         bShrFmla = false;
     }
     else
     {//                     BIFF5
-        aIn >> nXF >> fCurVal >> nFlag0;
+        nXF = aIn.ReaduInt16();
+        fCurVal = aIn.ReadDouble();
+        nFlag0 = aIn.ReaduInt8();
         aIn.Ignore( 5 );
 
-        aIn >> nFormLen;
+        nFormLen = aIn.ReaduInt16();
 
         bShrFmla = nFlag0 & 0x08;   // shared or not shared
     }
@@ -89,9 +88,12 @@ void ImportExcel::Formula4()
     double  fCurVal;
     sal_uInt8   nFlag0;
 
-    aIn >> aXclPos >> nXF >> fCurVal >> nFlag0;
+    aIn >> aXclPos;
+    nXF = aIn.ReaduInt16();
+    fCurVal = aIn.ReadDouble();
+    nFlag0 = aIn.ReaduInt8();
     aIn.Ignore( 1 );
-    aIn >> nFormLen;
+    nFormLen = aIn.ReaduInt16();
 
     Formula( aXclPos, nXF, nFormLen, fCurVal, false );
 }
@@ -241,7 +243,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
-        aIn >> nOp;
+        nOp = aIn.ReaduInt8();
 
         // always reset flags
         aSRD.InitFlags();
@@ -370,7 +372,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 GetTracer().TraceFormulaMissingArg();
                 break;
             case 0x17: // String Constant                       [314 266]
-                aIn >> nLen;
+                nLen = aIn.ReaduInt8();
                 aString = aIn.ReadRawByteString( nLen );
 
                 aStack << aPool.Store( aString );
@@ -380,7 +382,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 sal_uInt16  nData(0), nFakt(0);
                 sal_uInt8   nOpt(0);
 
-                aIn >> nOpt;
+                nOpt = aIn.ReaduInt8();
 
                 if( meBiff == EXC_BIFF2 )
                 {
@@ -389,7 +391,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 }
                 else
                 {
-                    aIn >> nData;
+                    nData = aIn.ReaduInt16();
                     nFakt = 2;
                 }
 
@@ -431,7 +433,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 break;
             case 0x1C: // Error Value                           [314 266]
             {
-                aIn >> nByte;
+                nByte = aIn.ReaduInt8();
                 DefTokenId          eOc;
                 switch( nByte )
                 {
@@ -451,7 +453,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             }
                 break;
             case 0x1D: // Boolean                               [315 266]
-                aIn >> nByte;
+                nByte = aIn.ReaduInt8();
                 if( nByte == 0 )
                     aPool << ocFalse << ocOpen << ocClose;
                 else
@@ -459,17 +461,18 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aPool >> aStack;
                 break;
             case 0x1E: // Integer                               [315 266]
-                aIn >> nUINT16;
+                nUINT16 = aIn.ReaduInt16();
                 aStack << aPool.Store( ( double ) nUINT16 );
                 break;
             case 0x1F: // Number                                [315 266]
-                aIn >> fDouble;
+                fDouble = aIn.ReadDouble();
                 aStack << aPool.Store( fDouble );
                 break;
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                aIn >> nByte >> nUINT16;
+                nByte = aIn.ReaduInt8();
+                nUINT16 = aIn.ReaduInt16();
                 aIn.Ignore( (meBiff == EXC_BIFF2) ? 3 : 4 );
                 if( bAllowArrays )
                 {
@@ -490,7 +493,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 if( meBiff <= EXC_BIFF3 )
                     nXclFunc = aIn.ReaduInt8();
                 else
-                    aIn >> nXclFunc;
+                    nXclFunc = aIn.ReaduInt16();
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
                     DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount );
                 else
@@ -503,12 +506,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             {
                 sal_uInt16 nXclFunc;
                 sal_uInt8 nParamCount;
-                aIn >> nParamCount;
+                nParamCount = aIn.ReaduInt8();
                 nParamCount &= 0x7F;
                 if( meBiff <= EXC_BIFF3 )
                     nXclFunc = aIn.ReaduInt8();
                 else
-                    aIn >> nXclFunc;
+                    nXclFunc = aIn.ReaduInt16();
                 if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclFunc( nXclFunc ) )
                     DoMulArgs( pFuncInfo->meOpCode, nParamCount );
                 else
@@ -519,7 +522,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x63:
             case 0x23: // Name                                  [318 269]
             {
-                aIn >> nUINT16;
+                nUINT16 = aIn.ReaduInt16();
                 switch( meBiff )
                 {
                     case EXC_BIFF2: aIn.Ignore( 5 );    break;
@@ -543,7 +546,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x4A:
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
-                aIn >> nUINT16 >> nByte;
+                nUINT16 = aIn.ReaduInt16();
+                nByte = aIn.ReaduInt8();
                 aSRD.SetAbsCol(static_cast<SCsCOL>(nByte));
                 aSRD.SetAbsRow(nUINT16 & 0x3FFF);
                 aSRD.SetRelTab(0);
@@ -575,7 +579,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 ScSingleRefData&    rSRef1 = aCRD.Ref1;
                 ScSingleRefData&    rSRef2 = aCRD.Ref2;
 
-                aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
+                nRowFirst = aIn.ReaduInt16();
+                nRowLast = aIn.ReaduInt16();
+                nColFirst = aIn.ReaduInt8();
+                nColLast = aIn.ReaduInt8();
 
                 rSRef1.SetRelTab(0);
                 rSRef2.SetRelTab(0);
@@ -624,7 +631,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
             {
-                aIn >> nUINT16 >> nByte;    // >> Attribute, Row >> Col
+                nUINT16 = aIn.ReaduInt16();
+                nByte = aIn.ReaduInt8();    // >> Attribute, Row >> Col
 
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
@@ -646,7 +654,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aCRD.Ref1.SetFlag3D( bRangeName );
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
-                aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
+                nRowFirst = aIn.ReaduInt16();
+                nRowLast = aIn.ReaduInt16();
+                nColFirst = aIn.ReaduInt8();
+                nColLast = aIn.ReaduInt8(  );
 
                 ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
                 ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
@@ -674,18 +685,18 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x78:
             case 0x38: // Command-Equivalent Function           [333    ]
                 aString = "COMM_EQU_FUNC";
-                aIn >> nByte;
+                nByte = aIn.ReaduInt8();
                 aString += OUString::number( nByte );
-                aIn >> nByte;
+                nByte = aIn.ReaduInt8();
                 aStack << aPool.Store( aString );
                 DoMulArgs( ocPush, nByte + 1 );
                 break;
             case 0x59:
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
-                aIn >> nINT16;
+                nINT16 = aIn.ReadInt16();
                 aIn.Ignore( 8 );
-                aIn >> nUINT16;
+                nUINT16 = aIn.ReaduInt16();
                 if( nINT16 >= 0 )
                 {
                     const ExtName* pExtName = rR.pExtNameBuff->GetNameByIndex( nINT16, nUINT16 );
@@ -724,9 +735,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 sal_Int16           nExtSheet;
                 sal_uInt8           nCol;
 
-                aIn >> nExtSheet;
+                nExtSheet = aIn.ReadInt16();
                 aIn.Ignore( 8 );
-                aIn >> nTabFirst >> nTabLast >> nRow >> nCol;
+                nTabFirst = aIn.ReaduInt16();
+                nTabLast = aIn.ReaduInt16();
+                nRow = aIn.ReaduInt16();
+                nCol = aIn.ReaduInt8();
 
                 if( nExtSheet >= 0 )
                 {   // from external
@@ -786,10 +800,14 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 sal_Int16       nExtSheet;
                 sal_uInt8       nColFirst, nColLast;
 
-                aIn >> nExtSheet;
+                nExtSheet = aIn.ReadInt16();
                 aIn.Ignore( 8 );
-                aIn >> nTabFirst >> nTabLast >> nRowFirst >> nRowLast
-                    >> nColFirst >> nColLast;
+                nTabFirst = aIn.ReaduInt16();
+                nTabLast = aIn.ReaduInt16();
+                nRowFirst = aIn.ReaduInt16();
+                nRowLast = aIn.ReaduInt16();
+                nColFirst = aIn.ReaduInt8();
+                nColLast = aIn.ReaduInt8();
 
                 if( nExtSheet >= 0 )
                     // von extern
@@ -925,7 +943,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
-        aIn >> nOp;
+        nOp = aIn.ReaduInt8();
         nIgnore = 0;
 
         // always reset flags
@@ -963,7 +981,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x16: // Missing Argument                      [314 266]
                 break;
             case 0x17: // String Constant                       [314 266]
-                aIn >> nLen;
+                nLen = aIn.ReaduInt8();
                 nIgnore = nLen;
                 break;
             case 0x19: // Special Attribute                     [327 279]
@@ -971,7 +989,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 sal_uInt16 nData(0), nFakt(0);
                 sal_uInt8 nOpt(0);
 
-                aIn >> nOpt;
+                nOpt = aIn.ReaduInt8();
 
                 if( meBiff == EXC_BIFF2 )
                 {
@@ -980,7 +998,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 }
                 else
                 {
-                    aIn >> nData;
+                    nData = aIn.ReaduInt16();
                     nFakt = 2;
                 }
 
@@ -1054,7 +1072,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x44:
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
-                aIn >> nUINT16 >> nByte;
+                nUINT16 = aIn.ReaduInt16();
+                nByte = aIn.ReaduInt8();
                 aSRD.SetAbsCol(static_cast<SCsCOL>(nByte));
                 aSRD.SetAbsRow(nUINT16 & 0x3FFF);
                 aSRD.SetRelTab(0);
@@ -1073,7 +1092,10 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 ScSingleRefData &rSRef1 = aCRD.Ref1;
                 ScSingleRefData &rSRef2 = aCRD.Ref2;
 
-                aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
+                nRowFirst = aIn.ReaduInt16();
+                nRowLast = aIn.ReaduInt16();
+                nColFirst = aIn.ReaduInt8();
+                nColLast = aIn.ReaduInt8();
 
                 rSRef1.SetRelTab(0);
                 rSRef2.SetRelTab(0);
@@ -1117,7 +1139,8 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
             {
-                aIn >> nUINT16 >> nByte;    // >> Attribute, Row >> Col
+                nUINT16 = aIn.ReaduInt16();
+                nByte = aIn.ReaduInt8();    // >> Attribute, Row >> Col
 
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
@@ -1139,7 +1162,10 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 aCRD.Ref1.SetFlag3D( bRangeName );
                 aCRD.Ref2.SetFlag3D( bRangeName );
 
-                aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
+                nRowFirst = aIn.ReaduInt16();
+                nRowLast = aIn.ReaduInt16();
+                nColFirst = aIn.ReaduInt8();
+                nColLast = aIn.ReaduInt8();
 
                 ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
                 ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
@@ -1181,9 +1207,12 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 sal_Int16           nExtSheet;
                 sal_uInt8           nCol;
 
-                aIn >> nExtSheet;
+                nExtSheet = aIn.ReadInt16();
                 aIn.Ignore( 8 );
-                aIn >> nTabFirst >> nTabLast >> nRow >> nCol;
+                nTabFirst = aIn.ReaduInt16();
+                nTabLast = aIn.ReaduInt16();
+                nRow = aIn.ReaduInt16();
+                nCol = aIn.ReaduInt8();
 
                 if( nExtSheet >= 0 )
                     // from external
@@ -1232,10 +1261,14 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 sal_Int16       nExtSheet;
                 sal_uInt8       nColFirst, nColLast;
 
-                aIn >> nExtSheet;
+                nExtSheet = aIn.ReadInt16();
                 aIn.Ignore( 8 );
-                aIn >> nTabFirst >> nTabLast >> nRowFirst >> nRowLast
-                    >> nColFirst >> nColLast;
+                nTabFirst = aIn.ReaduInt16();
+                nTabLast = aIn.ReaduInt16();
+                nRowFirst = aIn.ReaduInt16();
+                nRowLast = aIn.ReaduInt16();
+                nColFirst = aIn.ReaduInt8();
+                nColLast = aIn.ReaduInt8();
 
                 if( nExtSheet >= 0 )
                     // from external
@@ -1333,7 +1366,7 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
 
     while( rStrm.IsValid() && (rStrm.GetRecPos() < nEndPos) )
     {
-        rStrm >> nOp;
+        nOp = rStrm.ReaduInt8();
         nSeek = 0;
 
         switch( nOp )
@@ -1345,7 +1378,8 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
             case 0x6C:
             case 0x2C: // Cell Reference Within a Name          [323    ]
                        // Cell Reference Within a Shared Formula[    273]
-                rStrm >> nRow1 >> nCol1;
+                nRow1 = rStrm.ReaduInt16();
+                nCol1 = rStrm.ReaduInt8();
 
                 nRow2 = nRow1;
                 nCol2 = nCol1;
@@ -1358,16 +1392,22 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
             case 0x6D:
             case 0x2D: // Area Reference Within a Name          [324    ]
                        // Area Reference Within a Shared Formula[    274]
-                rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+                nRow1 = rStrm.ReaduInt16();
+                nRow2 = rStrm.ReaduInt16();
+                nCol1 = rStrm.ReaduInt8();
+                nCol2 = rStrm.ReaduInt8();
 
                 nTab1 = nTab2 = GetCurrScTab();
                 goto _common;
             case 0x5A:
             case 0x7A:
             case 0x3A: // 3-D Cell Reference                    [    275]
-                rStrm >> nRefIdx;
+                nRefIdx = rStrm.ReadInt16();
                 rStrm.Ignore( 8 );
-                rStrm >> nTabFirst >> nTabLast >> nRow1 >> nCol1;
+                nTabFirst = rStrm.ReaduInt16();
+                nTabLast = rStrm.ReaduInt16();
+                nRow1 = rStrm.ReaduInt16();
+                nCol1 = rStrm.ReaduInt8();
 
                 nRow2 = nRow1;
                 nCol2 = nCol1;
@@ -1376,9 +1416,14 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
             case 0x5B:
             case 0x7B:
             case 0x3B: // 3-D Area Reference                    [    276]
-                rStrm >> nRefIdx;
+                nRefIdx = rStrm.ReadInt16();
                 rStrm.Ignore( 8 );
-                rStrm >> nTabFirst >> nTabLast >> nRow1 >> nRow2 >> nCol1 >> nCol2;
+                nTabFirst = rStrm.ReaduInt16();
+                nTabLast = rStrm.ReaduInt16();
+                nRow1 = rStrm.ReaduInt16();
+                nRow2 = rStrm.ReaduInt16();
+                nCol1 = rStrm.ReaduInt8();
+                nCol2 = rStrm.ReaduInt8();
 
     _3d_common:
                 nTab1 = static_cast< SCTAB >( nTabFirst );
@@ -1505,7 +1550,8 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
             {
                 sal_uInt8 nOpt;
                 sal_uInt16 nData;
-                rStrm >> nOpt >> nData;
+                nOpt = rStrm.ReaduInt8();
+                nData = rStrm.ReaduInt16();
                 if( nOpt & 0x04 )
                     nSeek = nData * 2 + 2;
             }
@@ -1696,7 +1742,7 @@ bool ExcelToSc::ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCR
     rStrm.PushPosition();
 
     sal_uInt8 nOp;
-    rStrm >> nOp;
+    nOp = rStrm.ReaduInt8();
 
     if (nOp != 0x01)   // must be PtgExp token.
     {
@@ -1705,7 +1751,8 @@ bool ExcelToSc::ReadSharedFormulaPosition( XclImpStream& rStrm, SCCOL& rCol, SCR
     }
 
     sal_uInt16 nRow, nCol;
-    rStrm >> nRow >> nCol;
+    nRow = rStrm.ReaduInt16();
+    nCol = rStrm.ReaduInt16();
     rStrm.PopPosition();
     rCol = nCol;
     rRow = nRow;
@@ -1759,7 +1806,8 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
     OUString    aString;
     ScMatrix*   pMatrix;
 
-    aIn >> nByte >> nUINT16;
+    nByte = aIn.ReaduInt8();
+    nUINT16 = aIn.ReaduInt16();
 
     SCSIZE nC, nCols;
     SCSIZE nR, nRows;
@@ -1806,7 +1854,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
     {
         for( nC = 0 ; nC < nCols; nC++ )
         {
-            aIn >> nByte;
+            nByte = aIn.ReaduInt8();
             switch( nByte )
             {
                 case EXC_CACHEDVAL_EMPTY:
@@ -1818,7 +1866,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                     break;
 
                 case EXC_CACHEDVAL_DOUBLE:
-                    aIn >> fDouble;
+                    fDouble = aIn.ReadDouble();
                     if( NULL != pMatrix )
                     {
                         pMatrix->PutDouble( fDouble, nC, nR );
@@ -1828,12 +1876,12 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                 case EXC_CACHEDVAL_STRING:
                     if( GetBiff() == EXC_BIFF8 )
                     {
-                        aIn >> nUINT16;
+                        nUINT16 = aIn.ReaduInt16();
                         aString = aIn.ReadUniString( nUINT16 );
                     }
                     else
                     {
-                        aIn >> nByte;
+                        nByte = aIn.ReaduInt8();
                         aString = aIn.ReadRawByteString( nByte );
                     }
                     if( NULL != pMatrix )
@@ -1843,7 +1891,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                     break;
 
                 case EXC_CACHEDVAL_BOOL:
-                    aIn >> nByte;
+                    nByte = aIn.ReaduInt8();
                     aIn.Ignore( 7 );
                     if( NULL != pMatrix )
                     {
@@ -1852,7 +1900,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
                     break;
 
                 case EXC_CACHEDVAL_ERROR:
-                    aIn >> nByte;
+                    nByte = aIn.ReaduInt8();
                     aIn.Ignore( 7 );
                     if( NULL != pMatrix )
                     {
@@ -1867,7 +1915,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
 void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
 {
     sal_uInt32 nFlags;
-    aIn >> nFlags;
+    nFlags = aIn.ReaduInt32();
 
     sal_uInt32 nCount = nFlags & EXC_TOK_NLR_ADDMASK;
     aIn.Ignore( nCount * 4 ); // Drop the cell positions
@@ -1876,7 +1924,7 @@ void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
 void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
 {
     sal_uInt16 nCount(0);
-    aIn >> nCount;
+    nCount = aIn.ReaduInt16();
 
     aIn.Ignore( static_cast<sal_Size>(nCount) * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
 }

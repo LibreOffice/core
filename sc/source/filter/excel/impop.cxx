@@ -186,7 +186,8 @@ void ImportExcel::SetLastFormula( SCCOL nCol, SCROW nRow, double fVal, sal_uInt1
 void ImportExcel::ReadFileSharing()
 {
     sal_uInt16 nRecommendReadOnly, nPasswordHash;
-    maStrm >> nRecommendReadOnly >> nPasswordHash;
+    nRecommendReadOnly = maStrm.ReaduInt16();
+    nPasswordHash = maStrm.ReaduInt16();
 
     if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
     {
@@ -219,7 +220,9 @@ sal_uInt16 ImportExcel::ReadXFIndex( const ScAddress& rScPos, bool bBiff2 )
         }
         // read formatting information (includes the XF identifier)
         sal_uInt8 nFlags1, nFlags2, nFlags3;
-        maStrm >> nFlags1 >> nFlags2 >> nFlags3;
+        nFlags1 = maStrm.ReaduInt8();
+        nFlags2 = maStrm.ReaduInt8();
+        nFlags3 = maStrm.ReaduInt8();
         /*  If the file contains XFs, extract and set the XF identifier,
             otherwise get the explicit formatting. */
         if( mbBiff2HasXfs )
@@ -239,7 +242,7 @@ sal_uInt16 ImportExcel::ReadXFIndex( const ScAddress& rScPos, bool bBiff2 )
         }
     }
     else
-        aIn >> nXFIdx;
+        nXFIdx = aIn.ReaduInt16();
     return nXFIdx;
 }
 
@@ -264,7 +267,10 @@ void ImportExcel::ReadDimensions()
     else
     {
         sal_uInt32 nXclRow1, nXclRow2;
-        maStrm >> nXclRow1 >> nXclRow2 >> aXclUsedArea.maFirst.mnCol >> aXclUsedArea.maLast.mnCol;
+        nXclRow1 = maStrm.ReaduInt32();
+        nXclRow2 = maStrm.ReaduInt32();
+        aXclUsedArea.maFirst.mnCol = maStrm.ReaduInt16();
+        aXclUsedArea.maLast.mnCol = maStrm.ReaduInt16();
         if( (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
             (nXclRow1 <= static_cast< sal_uInt32 >( GetScMaxPos().Row() )) )
         {
@@ -307,7 +313,7 @@ void ImportExcel::ReadInteger()
     {
         sal_uInt16 nXFIdx = ReadXFIndex( aScPos, true );
         sal_uInt16 nValue;
-        maStrm >> nValue;
+        nValue = maStrm.ReaduInt16();
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDocImport().setNumericCell(aScPos, nValue);
@@ -324,7 +330,7 @@ void ImportExcel::ReadNumber()
     {
         sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_NUMBER );
         double fValue;
-        maStrm >> fValue;
+        fValue = maStrm.ReadDouble();
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDocImport().setNumericCell(aScPos, fValue);
@@ -371,7 +377,8 @@ void ImportExcel::ReadBoolErr()
     {
         sal_uInt16 nXFIdx = ReadXFIndex( aScPos, maStrm.GetRecId() == EXC_ID2_BOOLERR );
         sal_uInt8 nValue, nType;
-        maStrm >> nValue >> nType;
+        nValue = maStrm.ReaduInt8();
+        nType = maStrm.ReaduInt8();
 
         if( nType == EXC_BOOLERR_BOOL )
             GetXFRangeBuffer().SetBoolXF( aScPos, nXFIdx );
@@ -396,7 +403,7 @@ void ImportExcel::ReadRk()
     {
         sal_uInt16 nXFIdx = ReadXFIndex( aScPos, false );
         sal_Int32 nRk;
-        maStrm >> nRk;
+        nRk = maStrm.ReadInt32();
 
         GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
         GetDocImport().setNumericCell(aScPos, XclTools::GetDoubleFromRK(nRk));
@@ -412,12 +419,12 @@ void ImportExcel::Row25( void )
 {
     sal_uInt16  nRow, nRowHeight;
 
-    aIn >> nRow;
+    nRow = aIn.ReaduInt16();
     aIn.Ignore( 4 );
 
     if( ValidRow( nRow ) )
     {
-        aIn >> nRowHeight;  // specify direct in Twips
+        nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
         aIn.Ignore( 2 );
 
         if( GetBiff() == EXC_BIFF2 )
@@ -429,7 +436,7 @@ void ImportExcel::Row25( void )
             sal_uInt16  nGrbit;
 
             aIn.Ignore( 2 );   // reserved
-            aIn >> nGrbit;
+            nGrbit = aIn.ReaduInt16();
 
             sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
             pRowOutlineBuff->SetLevel( nRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
@@ -443,7 +450,7 @@ void ImportExcel::Bof2( void )
     sal_uInt16 nSubType;
     maStrm.DisableDecryption();
     maStrm.Ignore( 2 );
-    maStrm >> nSubType;
+    nSubType = maStrm.ReaduInt16();
 
     if( nSubType == 0x0020 )        // Chart
         pExcRoot->eDateiTyp = Biff2C;
@@ -490,7 +497,8 @@ void ImportExcel::Columndefault( void )
     sal_uInt16  nColMic, nColMac;
     sal_uInt8   nOpt0;
 
-    aIn >> nColMic >> nColMac;
+    nColMic = aIn.ReaduInt16();
+    nColMac = aIn.ReaduInt16();
 
     OSL_ENSURE( aIn.GetRecLeft() == (sal_Size)(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
@@ -502,7 +510,7 @@ void ImportExcel::Columndefault( void )
 
     for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
-        aIn >> nOpt0;
+        nOpt0 = aIn.ReaduInt8();
         aIn.Ignore( 2 );   // only 0. Attribut-Byte used
 
         if( nOpt0 & 0x80 )  // Col hidden?
@@ -515,7 +523,10 @@ void ImportExcel::Array25( void )
     sal_uInt16      nFirstRow, nLastRow, nFormLen;
     sal_uInt8       nFirstCol, nLastCol;
 
-    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
+    nFirstRow = aIn.ReaduInt16();
+    nLastRow = aIn.ReaduInt16();
+    nFirstCol = aIn.ReaduInt8();
+    nLastCol = aIn.ReaduInt8();
 
     if( GetBiff() == EXC_BIFF2 )
     {//                     BIFF2
@@ -525,7 +536,7 @@ void ImportExcel::Array25( void )
     else
     {//                     BIFF5
         aIn.Ignore( 6 );
-        aIn >> nFormLen;
+        nFormLen = aIn.ReaduInt16();
     }
 
     if( ValidColRow( nLastCol, nLastRow ) )
@@ -549,7 +560,7 @@ void ImportExcel::Rec1904( void )
 {
     sal_uInt16  n1904;
 
-    aIn >> n1904;
+    n1904 = aIn.ReaduInt16();
 
     if( n1904 )
     {// 1904 date system
@@ -565,7 +576,8 @@ void ImportExcel::Externname25( void )
     sal_uInt32      nRes;
     sal_uInt16      nOpt;
 
-    aIn >> nOpt >> nRes;
+    nOpt = aIn.ReaduInt16();
+    nRes = aIn.ReaduInt32();
 
     OUString aName( aIn.ReadByteString( false ) );
 
@@ -589,7 +601,9 @@ void ImportExcel::Colwidth( void )
     sal_uInt8   nColFirst, nColLast;
     sal_uInt16  nColWidth;
 
-    aIn >> nColFirst >> nColLast >> nColWidth;
+    nColFirst = aIn.ReaduInt8();
+    nColLast = aIn.ReaduInt8();
+    nColWidth = aIn.ReaduInt16();
 
 //! TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
 //   if( nColLast > MAXCOL )
@@ -602,7 +616,7 @@ void ImportExcel::Colwidth( void )
 void ImportExcel::Defrowheight2( void )
 {
     sal_uInt16 nDefHeight;
-    maStrm >> nDefHeight;
+    nDefHeight = maStrm.ReaduInt16();
     nDefHeight &= 0x7FFF;
     pColRowBuff->SetDefHeight( nDefHeight, EXC_DEFROW_UNSYNCED );
 }
@@ -638,7 +652,7 @@ void ImportExcel::Codepage( void )
 
 void ImportExcel::Ixfe( void )
 {
-    maStrm >> mnIxfeIndex;
+    mnIxfeIndex = maStrm.ReaduInt16();
 }
 
 void ImportExcel::DefColWidth( void )
@@ -663,7 +677,11 @@ void ImportExcel::Colinfo( void )
     sal_uInt16  nColFirst, nColLast, nColWidth, nXF;
     sal_uInt16  nOpt;
 
-    aIn >> nColFirst >> nColLast >> nColWidth >> nXF >> nOpt;
+    nColFirst = aIn.ReaduInt16();
+    nColLast = aIn.ReaduInt16();
+    nColWidth = aIn.ReaduInt16();
+    nXF = aIn.ReaduInt16();
+    nOpt = aIn.ReaduInt16();
 
     if( nColFirst > MAXCOL )
         return;
@@ -687,7 +705,7 @@ void ImportExcel::Colinfo( void )
 void ImportExcel::Wsbool( void )
 {
     sal_uInt16 nFlags;
-    aIn >> nFlags;
+    nFlags = aIn.ReaduInt16();
 
     pRowOutlineBuff->SetButtonMode( ::get_flag( nFlags, EXC_WSBOOL_ROWBELOW ) );
     pColOutlineBuff->SetButtonMode( ::get_flag( nFlags, EXC_WSBOOL_COLBELOW ) );
@@ -704,7 +722,7 @@ void ImportExcel::Boundsheet( void )
         aIn.DisableDecryption();
         maSheetOffsets.push_back( aIn.ReaduInt32() );
         aIn.EnableDecryption();
-        aIn >> nGrbit;
+        nGrbit = aIn.ReaduInt16();
     }
 
     OUString aName( aIn.ReadByteString( false ) );
@@ -731,7 +749,8 @@ void ImportExcel::Boundsheet( void )
 void ImportExcel::Country( void )
 {
     sal_uInt16 nUICountry, nDocCountry;
-    maStrm >> nUICountry >> nDocCountry;
+    nUICountry = maStrm.ReaduInt16();
+    nDocCountry = maStrm.ReaduInt16();
 
     // Store system language in XclRoot
     LanguageType eLanguage = ::msfilter::ConvertCountryToLanguage( static_cast< ::msfilter::CountryId >( nDocCountry ) );
@@ -759,7 +778,7 @@ void ImportExcel::Hideobj( void )
     sal_uInt16      nHide;
     ScVObjMode  eOle, eChart, eDraw;
 
-    aIn >> nHide;
+    nHide = aIn.ReaduInt16();
 
     ScViewOptions aOpts( pD->GetViewOptions() );
 
@@ -819,9 +838,12 @@ void ImportExcel::Shrfmla( void )
     sal_uInt16              nFirstRow, nLastRow, nLenExpr;
     sal_uInt8               nFirstCol, nLastCol;
 
-    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
+    nFirstRow = aIn.ReaduInt16();
+    nLastRow = aIn.ReaduInt16();
+    nFirstCol = aIn.ReaduInt8();
+    nLastCol = aIn.ReaduInt8();
     aIn.Ignore( 2 );
-    aIn >> nLenExpr;
+    nLenExpr = aIn.ReaduInt16();
 
     // read mark is now on the formula
 
@@ -866,7 +888,8 @@ void ImportExcel::Mulrk( void )
 
     for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
     {
-        aIn >> nXF >> nRkNum;
+        nXF = aIn.ReaduInt16();
+        nRkNum = aIn.ReadInt32();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
@@ -886,7 +909,7 @@ void ImportExcel::Mulblank( void )
 
     for( XclAddress aCurrXclPos( aXclPos ); (aXclPos.mnCol <= aCurrXclPos.mnCol) && (aIn.GetRecLeft() > 2); ++aCurrXclPos.mnCol )
     {
-        aIn >> nXF;
+        nXF = aIn.ReaduInt16();
 
         ScAddress aScPos( ScAddress::UNINITIALIZED );
         if( GetAddressConverter().ConvertAddress( aScPos, aCurrXclPos, GetCurrScTab(), true ) )
@@ -898,7 +921,8 @@ void ImportExcel::Rstring( void )
 {
     XclAddress aXclPos;
     sal_uInt16 nXFIdx;
-    aIn >> aXclPos >> nXFIdx;
+    aIn >> aXclPos;
+    nXFIdx = aIn.ReaduInt16();
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
@@ -928,7 +952,7 @@ void ImportExcel::Cellmerging()
     SCTAB nScTab = GetCurrScTab();
 
     sal_uInt16 nCount;
-    maStrm >> nCount;
+    nCount = maStrm.ReaduInt16();
     for( sal_uInt16 nIdx = 0; (nIdx < nCount) && (maStrm.GetRecLeft() >= 8); ++nIdx )
     {
         XclRange aXclRange;
@@ -953,21 +977,22 @@ void ImportExcel::Row34( void )
 {
     sal_uInt16  nRow, nRowHeight, nGrbit, nXF;
 
-    aIn >> nRow;
+    nRow = aIn.ReaduInt16();
     aIn.Ignore( 4 );
 
     SCROW nScRow = static_cast< SCROW >( nRow );
 
     if( ValidRow( nScRow ) )
     {
-        aIn >> nRowHeight;  // specify direct in Twips
+        nRowHeight = aIn.ReaduInt16();  // specify direct in Twips
         aIn.Ignore( 4 );
 
         nRowHeight = nRowHeight & 0x7FFF; // Bit 15: Row Height not changed manually
         if( !nRowHeight )
             nRowHeight = (GetBiff() == EXC_BIFF2) ? 0x25 : 0x225;
 
-        aIn >> nGrbit >> nXF;
+        nGrbit = aIn.ReaduInt16();
+        nXF = aIn.ReaduInt16();
 
         sal_uInt8 nLevel = ::extract_value< sal_uInt8 >( nGrbit, 0, 3 );
         pRowOutlineBuff->SetLevel( nScRow, nLevel, ::get_flag( nGrbit, EXC_ROW_COLLAPSED ) );
@@ -983,7 +1008,7 @@ void ImportExcel::Bof3( void )
     sal_uInt16 nSubType;
     maStrm.DisableDecryption();
     maStrm.Ignore( 2 );
-    maStrm >> nSubType;
+    nSubType = maStrm.ReaduInt16();
 
     OSL_ENSURE( nSubType != 0x0100, "*ImportExcel::Bof3(): Biff3 as Workbook?!" );
     if( nSubType == 0x0100 )        // Book
@@ -1001,9 +1026,12 @@ void ImportExcel::Array34( void )
     sal_uInt16                  nFirstRow, nLastRow, nFormLen;
     sal_uInt8                   nFirstCol, nLastCol;
 
-    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
+    nFirstRow = aIn.ReaduInt16();
+    nLastRow = aIn.ReaduInt16();
+    nFirstCol = aIn.ReaduInt8();
+    nLastCol = aIn.ReaduInt8();
     aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
-    aIn >> nFormLen;
+    nFormLen = aIn.ReaduInt16();
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
@@ -1029,7 +1057,8 @@ void ImportExcel::Externname34( void )
 void ImportExcel::Defrowheight345( void )
 {
     sal_uInt16 nFlags, nDefHeight;
-    maStrm >> nFlags >> nDefHeight;
+    nFlags = maStrm.ReaduInt16();
+    nDefHeight = maStrm.ReaduInt16();
     pColRowBuff->SetDefHeight( nDefHeight, nFlags );
 }
 
@@ -1040,8 +1069,15 @@ void ImportExcel::TableOp( void )
     sal_uInt16 nGrbit;
     sal_uInt16 nInpRow, nInpCol, nInpRow2, nInpCol2;
 
-    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol >> nGrbit
-        >> nInpRow >> nInpCol >> nInpRow2 >> nInpCol2;
+    nFirstRow = aIn.ReaduInt16();
+    nLastRow = aIn.ReaduInt16();
+    nFirstCol = aIn.ReaduInt8();
+    nLastCol = aIn.ReaduInt8();
+    nGrbit = aIn.ReaduInt16();
+    nInpRow = aIn.ReaduInt16();
+    nInpCol = aIn.ReaduInt16();
+    nInpRow2 = aIn.ReaduInt16();
+    nInpCol2 = aIn.ReaduInt16();
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
@@ -1113,7 +1149,7 @@ void ImportExcel::Bof4( void )
     sal_uInt16 nSubType;
     maStrm.DisableDecryption();
     maStrm.Ignore( 2 );
-    maStrm >> nSubType;
+    nSubType = maStrm.ReaduInt16();
 
     if( nSubType == 0x0100 )        // Book
         pExcRoot->eDateiTyp = Biff4W;
@@ -1132,7 +1168,8 @@ void ImportExcel::Bof5( void )
     BiffTyp     eDatei;
 
     maStrm.DisableDecryption();
-    maStrm >> nVers >> nSubType;
+    nVers = maStrm.ReaduInt16();
+    nSubType = maStrm.ReaduInt16(  );
 
     switch( nSubType )
     {

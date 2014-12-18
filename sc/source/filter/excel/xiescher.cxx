@@ -188,7 +188,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj3( const XclImpRoot& rRoot, XclImpStr
     {
         sal_uInt16 nObjType;
         rStrm.Ignore( 4 );
-        rStrm >> nObjType;
+        nObjType = rStrm.ReaduInt16();
         switch( nObjType )
         {
             case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
@@ -220,7 +220,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStr
     {
         sal_uInt16 nObjType;
         rStrm.Ignore( 4 );
-        rStrm >> nObjType;
+        nObjType = rStrm.ReaduInt16();
         switch( nObjType )
         {
             case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
@@ -253,7 +253,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj5( const XclImpRoot& rRoot, XclImpStr
     {
         sal_uInt16 nObjType(EXC_OBJTYPE_UNKNOWN);
         rStrm.Ignore( 4 );
-        rStrm >> nObjType;
+        nObjType = rStrm.ReaduInt16();
         switch( nObjType )
         {
             case EXC_OBJTYPE_GROUP:         xDrawObj.reset( new XclImpGroupObj( rRoot ) );          break;
@@ -300,7 +300,9 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
     if( rStrm.GetRecLeft() >= 10 )
     {
         sal_uInt16 nSubRecId(0), nSubRecSize(0), nObjType(0);
-        rStrm >> nSubRecId >> nSubRecSize >> nObjType;
+        nSubRecId = rStrm.ReaduInt16();
+        nSubRecSize = rStrm.ReaduInt16();
+        nObjType = rStrm.ReaduInt16();
         OSL_ENSURE( nSubRecId == EXC_ID_OBJCMO, "XclImpDrawObjBase::ReadObj8 - OBJCMO subrecord expected" );
         if( (nSubRecId == EXC_ID_OBJCMO) && (nSubRecSize >= 6) )
         {
@@ -587,14 +589,16 @@ void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
     {
         // macro is stored in a tNameXR token containing a link to a defined name
         sal_uInt16 nFmlaSize;
-        rStrm >> nFmlaSize;
+        nFmlaSize = rStrm.ReaduInt16();
         rStrm.Ignore( 4 );
         OSL_ENSURE( nFmlaSize == 7, "XclImpDrawObjBase::ReadMacro - unexpected formula size" );
         if( nFmlaSize == 7 )
         {
             sal_uInt8 nTokenId;
             sal_uInt16 nExtSheet, nExtName;
-            rStrm >> nTokenId >> nExtSheet >> nExtName;
+            nTokenId = rStrm.ReaduInt8();
+            nExtSheet = rStrm.ReaduInt16();
+            nExtName = rStrm.ReaduInt16();
             OSL_ENSURE( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
                 "XclImpDrawObjBase::ReadMacro - tNameXR token expected" );
             if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
@@ -823,7 +827,11 @@ void XclImpDrawObjBase::ImplReadObj3( XclImpStream& rStrm )
     rStrm.Seek( 4 );
 
     sal_uInt16 nObjFlags, nMacroSize;
-    rStrm >> mnObjType >> mnObjId >> nObjFlags >> maAnchor >> nMacroSize;
+    mnObjType = rStrm.ReaduInt16();
+    mnObjId = rStrm.ReaduInt16();
+    nObjFlags = rStrm.ReaduInt16();
+    rStrm >> maAnchor;
+    nMacroSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
 
     mbHasAnchor = true;
@@ -838,7 +846,11 @@ void XclImpDrawObjBase::ImplReadObj4( XclImpStream& rStrm )
     rStrm.Seek( 4 );
 
     sal_uInt16 nObjFlags, nMacroSize;
-    rStrm >> mnObjType >> mnObjId >> nObjFlags >> maAnchor >> nMacroSize;
+    mnObjType = rStrm.ReaduInt16();
+    mnObjId = rStrm.ReaduInt16();
+    nObjFlags = rStrm.ReaduInt16();
+    rStrm >> maAnchor;
+    nMacroSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
 
     mbHasAnchor = true;
@@ -854,9 +866,13 @@ void XclImpDrawObjBase::ImplReadObj5( XclImpStream& rStrm )
     rStrm.Seek( 4 );
 
     sal_uInt16 nObjFlags, nMacroSize, nNameLen;
-    rStrm >> mnObjType >> mnObjId >> nObjFlags >> maAnchor >> nMacroSize;
+    mnObjType = rStrm.ReaduInt16();
+    mnObjId = rStrm.ReaduInt16();
+    nObjFlags = rStrm.ReaduInt16();
+    rStrm >> maAnchor;
+    nMacroSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm >> nNameLen;
+    nNameLen = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
 
     mbHasAnchor = true;
@@ -875,7 +891,8 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     while( bLoop && (rStrm.GetRecLeft() >= 4) )
     {
         sal_uInt16 nSubRecId, nSubRecSize;
-        rStrm >> nSubRecId >> nSubRecSize;
+        nSubRecId = rStrm.ReaduInt16();
+        nSubRecSize = rStrm.ReaduInt16();
         rStrm.PushPosition();
         // sometimes the last subrecord has an invalid length (OBJLBSDATA) -> min()
         nSubRecSize = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nSubRecSize, rStrm.GetRecLeft() ) );
@@ -887,7 +904,9 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
                 if( (rStrm.GetRecPos() == 4) && (nSubRecSize >= 6) )
                 {
                     sal_uInt16 nObjFlags;
-                    rStrm >> mnObjType >> mnObjId >> nObjFlags;
+                    mnObjType = rStrm.ReaduInt16();
+                    mnObjId = rStrm.ReaduInt16(  );
+                    nObjFlags = rStrm.ReaduInt16(  );
                     mbPrintable = ::get_flag( nObjFlags, EXC_OBJCMO_PRINTABLE );
                 }
             break;
@@ -920,7 +939,7 @@ void XclImpDrawObjBase::ImplReadObj8( XclImpStream& rStrm )
     {
         sal_uInt32 nDataSize;
         rStrm.Ignore( 4 );
-        rStrm >> nDataSize;
+        nDataSize = rStrm.ReaduInt32();
         nDataSize -= rStrm.GetRecLeft();
         // skip following CONTINUE records until IMGDATA ends
         while( (nDataSize > 0) && (rStrm.GetNextRecId() == EXC_ID_CONT) && rStrm.StartNextRecord() )
@@ -974,7 +993,7 @@ bool XclImpGroupObj::TryInsert( XclImpDrawObjRef xDrawObj )
 void XclImpGroupObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
     rStrm.Ignore( 4 );
-    rStrm >> mnFirstUngrouped;
+    mnFirstUngrouped = rStrm.ReaduInt16();
     rStrm.Ignore( 16 );
     ReadMacro3( rStrm, nMacroSize );
 }
@@ -982,7 +1001,7 @@ void XclImpGroupObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 void XclImpGroupObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
     rStrm.Ignore( 4 );
-    rStrm >> mnFirstUngrouped;
+    mnFirstUngrouped = rStrm.ReaduInt16();
     rStrm.Ignore( 16 );
     ReadMacro4( rStrm, nMacroSize );
 }
@@ -990,7 +1009,7 @@ void XclImpGroupObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 void XclImpGroupObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
 {
     rStrm.Ignore( 4 );
-    rStrm >> mnFirstUngrouped;
+    mnFirstUngrouped = rStrm.ReaduInt16();
     rStrm.Ignore( 16 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, nMacroSize );
@@ -1022,21 +1041,27 @@ XclImpLineObj::XclImpLineObj( const XclImpRoot& rRoot ) :
 
 void XclImpLineObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    rStrm >> maLineData >> mnArrows >> mnStartPoint;
+    rStrm >> maLineData;
+    mnArrows = rStrm.ReaduInt16();
+    mnStartPoint = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
     ReadMacro3( rStrm, nMacroSize );
 }
 
 void XclImpLineObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    rStrm >> maLineData >> mnArrows >> mnStartPoint;
+    rStrm >> maLineData;
+    mnArrows = rStrm.ReaduInt16();
+    mnStartPoint = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
     ReadMacro4( rStrm, nMacroSize );
 }
 
 void XclImpLineObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
 {
-    rStrm >> maLineData >> mnArrows >> mnStartPoint;
+    rStrm >> maLineData;
+    mnArrows = rStrm.ReaduInt16();
+    mnStartPoint = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, nMacroSize );
@@ -1148,7 +1173,8 @@ XclImpRectObj::XclImpRectObj( const XclImpRoot& rRoot ) :
 
 void XclImpRectObj::ReadFrameData( XclImpStream& rStrm )
 {
-    rStrm >> maFillData >> maLineData >> mnFrameFlags;
+    rStrm >> maFillData >> maLineData;
+    mnFrameFlags = rStrm.ReaduInt16();
 }
 
 void XclImpRectObj::ConvertRectStyle( SdrObject& rSdrObj ) const
@@ -1207,21 +1233,24 @@ XclImpArcObj::XclImpArcObj( const XclImpRoot& rRoot ) :
 
 void XclImpArcObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    rStrm >> maFillData >> maLineData >> mnQuadrant;
+    rStrm >> maFillData >> maLineData;
+    mnQuadrant = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
     ReadMacro3( rStrm, nMacroSize );
 }
 
 void XclImpArcObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    rStrm >> maFillData >> maLineData >> mnQuadrant;
+    rStrm >> maFillData >> maLineData;
+    mnQuadrant  = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
     ReadMacro4( rStrm, nMacroSize );
 }
 
 void XclImpArcObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
 {
-    rStrm >> maFillData >> maLineData >> mnQuadrant;
+    rStrm >> maFillData >> maLineData;
+    mnQuadrant = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, nMacroSize );
@@ -1284,7 +1313,8 @@ void XclImpPolygonObj::ReadCoordList( XclImpStream& rStrm )
         while( rStrm.GetRecLeft() >= 4 )
         {
             sal_uInt16 nX, nY;
-            rStrm >> nX >> nY;
+            nX = rStrm.ReaduInt16();
+            nY = rStrm.ReaduInt16();
             maCoords.push_back( Point( nX, nY ) );
         }
     }
@@ -1293,9 +1323,9 @@ void XclImpPolygonObj::ReadCoordList( XclImpStream& rStrm )
 void XclImpPolygonObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
     ReadFrameData( rStrm );
-    rStrm >> mnPolyFlags;
+    mnPolyFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 10 );
-    rStrm >> mnPointCount;
+    mnPointCount = rStrm.ReaduInt16();
     rStrm.Ignore( 8 );
     ReadMacro4( rStrm, nMacroSize );
     ReadCoordList( rStrm );
@@ -1304,9 +1334,9 @@ void XclImpPolygonObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 void XclImpPolygonObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize )
 {
     ReadFrameData( rStrm );
-    rStrm >> mnPolyFlags;
+    mnPolyFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 10 );
-    rStrm >> mnPointCount;
+    mnPointCount = rStrm.ReaduInt16();
     rStrm.Ignore( 8 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, nMacroSize );
@@ -1593,7 +1623,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
         {
             sal_uInt16 nBofType;
             rStrm.Seek( 2 );
-            rStrm >> nBofType;
+            nBofType = rStrm.ReaduInt16();
             DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
         }
         else
@@ -1941,7 +1971,7 @@ void XclImpControlHelper::ReadRangeList( ScRangeList& rScRanges, XclImpStream& r
     if( bWithBoundSize )
     {
         sal_uInt16 nSize;
-        rStrm >> nSize;
+        nSize = rStrm.ReaduInt16();
         if( nSize > 0 )
         {
             rStrm.PushPosition();
@@ -2123,14 +2153,17 @@ void XclImpCheckBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sa
 {
     ReadFrameData( rStrm );
     rStrm.Ignore( 10 );
-    rStrm >> maTextData.maData.mnFlags;
+    maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 20 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
-    rStrm >> maTextData.maData.mnTextLen;
+    maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
-    rStrm >> mnState >> maTextData.maData.mnShortcut >> maTextData.maData.mnShortcutEA >> mnCheckBoxFlags;
+    mnState = rStrm.ReaduInt16();
+    maTextData.maData.mnShortcut = rStrm.ReaduInt16();
+    maTextData.maData.mnShortcutEA = rStrm.ReaduInt16();
+    mnCheckBoxFlags = rStrm.ReaduInt16();
 }
 
 void XclImpCheckBoxObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
@@ -2139,9 +2172,11 @@ void XclImpCheckBoxObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRe
     {
         case EXC_ID_OBJCBLS:
             // do not read EXC_ID_OBJCBLSDATA, not written by OOo Excel export
-            rStrm >> mnState;
+            mnState = rStrm.ReaduInt16();
             rStrm.Ignore( 4 );
-            rStrm >> maTextData.maData.mnShortcut >> maTextData.maData.mnShortcutEA >> mnCheckBoxFlags;
+            maTextData.maData.mnShortcut = rStrm.ReaduInt16();
+            maTextData.maData.mnShortcutEA = rStrm.ReaduInt16();
+            mnCheckBoxFlags = rStrm.ReaduInt16();
         break;
         case EXC_ID_OBJCBLSFMLA:
             ReadCellLinkFormula( rStrm, false );
@@ -2210,15 +2245,19 @@ void XclImpOptionButtonObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen
 {
     ReadFrameData( rStrm );
     rStrm.Ignore( 10 );
-    rStrm >> maTextData.maData.mnFlags;
+    maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 32 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
     ReadCellLinkFormula( rStrm, true );
-    rStrm >> maTextData.maData.mnTextLen;
+    maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
-    rStrm >> mnState >> maTextData.maData.mnShortcut >> maTextData.maData.mnShortcutEA;
-    rStrm >> mnCheckBoxFlags >> mnNextInGroup >> mnFirstInGroup;
+    mnState = rStrm.ReaduInt16();
+    maTextData.maData.mnShortcut = rStrm.ReaduInt16();
+    maTextData.maData.mnShortcutEA = rStrm.ReaduInt16();
+    mnCheckBoxFlags = rStrm.ReaduInt16();
+    mnNextInGroup = rStrm.ReaduInt16();
+    mnFirstInGroup = rStrm.ReaduInt16();
 }
 
 void XclImpOptionButtonObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
@@ -2226,7 +2265,8 @@ void XclImpOptionButtonObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nS
     switch( nSubRecId )
     {
         case EXC_ID_OBJRBODATA:
-            rStrm >> mnNextInGroup >> mnFirstInGroup;
+            mnNextInGroup = rStrm.ReaduInt16();
+            mnFirstInGroup = rStrm.ReaduInt16();
         break;
         default:
             XclImpCheckBoxObj::DoReadObj8SubRec( rStrm, nSubRecId, nSubRecSize );
@@ -2328,13 +2368,15 @@ void XclImpGroupBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sa
 {
     ReadFrameData( rStrm );
     rStrm.Ignore( 10 );
-    rStrm >> maTextData.maData.mnFlags;
+    maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 26 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
-    rStrm >> maTextData.maData.mnTextLen;
+    maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
-    rStrm >> maTextData.maData.mnShortcut >> maTextData.maData.mnShortcutEA >> mnGroupBoxFlags;
+    maTextData.maData.mnShortcut = rStrm.ReaduInt16();
+    maTextData.maData.mnShortcutEA = rStrm.ReaduInt16(  );
+    mnGroupBoxFlags = rStrm.ReaduInt16();
 }
 
 void XclImpGroupBoxObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
@@ -2342,7 +2384,9 @@ void XclImpGroupBoxObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRe
     switch( nSubRecId )
     {
         case EXC_ID_OBJGBODATA:
-            rStrm >> maTextData.maData.mnShortcut >> maTextData.maData.mnShortcutEA >> mnGroupBoxFlags;
+            maTextData.maData.mnShortcut = rStrm.ReaduInt16();
+            maTextData.maData.mnShortcutEA = rStrm.ReaduInt16();
+            mnGroupBoxFlags = rStrm.ReaduInt16();
         break;
         default:
             XclImpTbxObjBase::DoReadObj8SubRec( rStrm, nSubRecId, nSubRecSize );
@@ -2405,13 +2449,16 @@ void XclImpEditObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uI
 {
     ReadFrameData( rStrm );
     rStrm.Ignore( 10 );
-    rStrm >> maTextData.maData.mnFlags;
+    maTextData.maData.mnFlags = rStrm.ReaduInt16();
     rStrm.Ignore( 14 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
-    rStrm >> maTextData.maData.mnTextLen;
+    maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
-    rStrm >> mnContentType >> mnMultiLine >> mnScrollBar >> mnListBoxObjId;
+    mnContentType = rStrm.ReaduInt16();
+    mnMultiLine = rStrm.ReaduInt16();
+    mnScrollBar = rStrm.ReaduInt16();
+    mnListBoxObjId = rStrm.ReaduInt16();
 }
 
 void XclImpEditObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
@@ -2419,7 +2466,10 @@ void XclImpEditObj::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId,
     switch( nSubRecId )
     {
         case EXC_ID_OBJEDODATA:
-            rStrm >> mnContentType >> mnMultiLine >> mnScrollBar >> mnListBoxObjId;
+            mnContentType = rStrm.ReaduInt16();
+            mnMultiLine = rStrm.ReaduInt16();
+            mnScrollBar = rStrm.ReaduInt16();
+            mnListBoxObjId = rStrm.ReaduInt16();
         break;
         default:
             XclImpTbxObjBase::DoReadObj8SubRec( rStrm, nSubRecId, nSubRecSize );
@@ -2475,7 +2525,14 @@ XclImpTbxObjScrollableBase::XclImpTbxObjScrollableBase( const XclImpRoot& rRoot 
 void XclImpTbxObjScrollableBase::ReadSbs( XclImpStream& rStrm )
 {
     rStrm.Ignore( 4 );
-    rStrm >> mnValue >> mnMin >> mnMax >> mnStep >> mnPageStep >> mnOrient >> mnThumbWidth >> mnScrollFlags;
+    mnValue = rStrm.ReaduInt16();
+    mnMin = rStrm.ReaduInt16();
+    mnMax = rStrm.ReaduInt16();
+    mnStep = rStrm.ReaduInt16();
+    mnPageStep = rStrm.ReaduInt16();
+    mnOrient = rStrm.ReaduInt16();
+    mnThumbWidth = rStrm.ReaduInt16();
+    mnScrollFlags = rStrm.ReaduInt16();
 }
 
 void XclImpTbxObjScrollableBase::DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
@@ -2583,7 +2640,10 @@ XclImpTbxObjListBase::XclImpTbxObjListBase( const XclImpRoot& rRoot ) :
 void XclImpTbxObjListBase::ReadLbsData( XclImpStream& rStrm )
 {
     ReadSourceRangeFormula( rStrm, true );
-    rStrm >> mnEntryCount >> mnSelEntry >> mnListFlags >> mnEditObjId;
+    mnEntryCount = rStrm.ReaduInt16();
+    mnSelEntry = rStrm.ReaduInt16();
+    mnListFlags = rStrm.ReaduInt16();
+    mnEditObjId = rStrm.ReaduInt16();
 }
 
 void XclImpTbxObjListBase::SetBoxFormatting( ScfPropertySet& rPropSet ) const
@@ -2620,7 +2680,7 @@ void XclImpListBoxObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal
     ReadFrameData( rStrm );
     ReadSbs( rStrm );
     rStrm.Ignore( 18 );
-    rStrm >> maTextData.maData.mnDefFontIdx;
+    maTextData.maData.mnDefFontIdx = rStrm.ReaduInt16();
     rStrm.Ignore( 4 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
@@ -2705,7 +2765,10 @@ sal_uInt16 XclImpDropDownObj::GetDropDownType() const
 void XclImpDropDownObj::ReadFullLbsData( XclImpStream& rStrm )
 {
     ReadLbsData( rStrm );
-    rStrm >> mnDropDownFlags >> mnLineCount >> mnMinWidth >> maTextData.maData.mnTextLen;
+    mnDropDownFlags = rStrm.ReaduInt16();
+    mnLineCount = rStrm.ReaduInt16();
+    mnMinWidth = rStrm.ReaduInt16();
+    maTextData.maData.mnTextLen = rStrm.ReaduInt16();
     maTextData.ReadByteString( rStrm );
     // dropdowns of auto-filters have 'simple' style, they don't have a text area
     if( GetDropDownType() == EXC_OBJ_DROPDOWN_SIMPLE )
@@ -2717,9 +2780,12 @@ void XclImpDropDownObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sa
     ReadFrameData( rStrm );
     ReadSbs( rStrm );
     rStrm.Ignore( 18 );
-    rStrm >> maTextData.maData.mnDefFontIdx;
+    maTextData.maData.mnDefFontIdx = rStrm.ReaduInt16();
     rStrm.Ignore( 14 );
-    rStrm >> mnLeft >> mnTop >> mnRight >> mnBottom;
+    mnLeft = rStrm.ReaduInt16();
+    mnTop = rStrm.ReaduInt16();
+    mnRight = rStrm.ReaduInt16();
+    mnBottom = rStrm.ReaduInt16();
     rStrm.Ignore( 4 );
     ReadName5( rStrm, nNameLen );
     ReadMacro5( rStrm, rStrm.ReaduInt16() );   // fist macro size invalid and unused
@@ -2814,7 +2880,7 @@ void XclImpPictureObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
     sal_uInt16 nLinkSize;
     ReadFrameData( rStrm );
     rStrm.Ignore( 6 );
-    rStrm >> nLinkSize;
+    nLinkSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
     ReadFlags3( rStrm );
     ReadMacro3( rStrm, nMacroSize );
@@ -2829,7 +2895,7 @@ void XclImpPictureObj::DoReadObj4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
     sal_uInt16 nLinkSize;
     ReadFrameData( rStrm );
     rStrm.Ignore( 6 );
-    rStrm >> nLinkSize;
+    nLinkSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
     ReadFlags3( rStrm );
     ReadMacro4( rStrm, nMacroSize );
@@ -2844,7 +2910,7 @@ void XclImpPictureObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal
     sal_uInt16 nLinkSize;
     ReadFrameData( rStrm );
     rStrm.Ignore( 6 );
-    rStrm >> nLinkSize;
+    nLinkSize = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
     ReadFlags3( rStrm );
     rStrm.Ignore( 4 );
@@ -2962,14 +3028,14 @@ void XclImpPictureObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObje
 void XclImpPictureObj::ReadFlags3( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> nFlags;
+    nFlags = rStrm.ReaduInt16();
     mbSymbol = ::get_flag( nFlags, EXC_OBJ_PIC_SYMBOL );
 }
 
 void XclImpPictureObj::ReadFlags8( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> nFlags;
+    nFlags = rStrm.ReaduInt16();
     mbSymbol      = ::get_flag( nFlags, EXC_OBJ_PIC_SYMBOL );
     mbControl     = ::get_flag( nFlags, EXC_OBJ_PIC_CONTROL );
     mbUseCtlsStrm = ::get_flag( nFlags, EXC_OBJ_PIC_CTLSSTREAM );
@@ -2983,14 +3049,14 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
     if( nLinkSize >= 6 )
     {
         sal_uInt16 nFmlaSize;
-        rStrm >> nFmlaSize;
+        nFmlaSize = rStrm.ReaduInt16();
         OSL_ENSURE( nFmlaSize > 0, "XclImpPictureObj::ReadPictFmla - missing link formula" );
         // BIFF3/BIFF4 do not support storages, nothing to do here
         if( (nFmlaSize > 0) && (GetBiff() >= EXC_BIFF5) )
         {
             rStrm.Ignore( 4 );
             sal_uInt8 nToken;
-            rStrm >> nToken;
+            nToken = rStrm.ReaduInt8();
 
             // different processing for linked vs. embedded OLE objects
             if( nToken == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
@@ -3002,9 +3068,9 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
                     {
                         sal_Int16 nRefIdx;
                         sal_uInt16 nNameIdx;
-                        rStrm >> nRefIdx;
+                        nRefIdx = rStrm.ReadInt16();
                         rStrm.Ignore( 8 );
-                        rStrm >> nNameIdx;
+                        nNameIdx = rStrm.ReaduInt16();
                         rStrm.Ignore( 12 );
                         const ExtName* pExtName = GetOldRoot().pExtNameBuff->GetNameByIndex( nRefIdx, nNameIdx );
                         if( pExtName && pExtName->IsOLE() )
@@ -3014,7 +3080,8 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
                     case EXC_BIFF8:
                     {
                         sal_uInt16 nXti, nExtName;
-                        rStrm >> nXti >> nExtName;
+                        nXti = rStrm.ReaduInt16();
+                        nExtName = rStrm.ReaduInt16();
                         const XclImpExtName* pExtName = GetLinkManager().GetExternName( nXti, nExtName );
                         if( pExtName && (pExtName->GetType() == xlExtOLE) )
                             mnStorageId = pExtName->GetStorageId();
@@ -3036,7 +3103,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
                 if( rStrm.GetRecPos() + 2 <= nLinkEnd )
                 {
                     sal_uInt16 nLen;
-                    rStrm >> nLen;
+                    nLen = rStrm.ReaduInt16();
                     if( nLen > 0 )
                         maClassName = (GetBiff() == EXC_BIFF8) ? rStrm.ReadUniString( nLen ) : rStrm.ReadRawByteString( nLen );
                 }
@@ -3068,7 +3135,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
 
         // additional string (16-bit characters), e.g. for progress bar control
         sal_uInt32 nAddStrSize;
-        rStrm >> nAddStrSize;
+        nAddStrSize = rStrm.ReaduInt32();
         OSL_ENSURE( rStrm.GetRecLeft() >= nAddStrSize + 4, "XclImpPictureObj::ReadPictFmla - missing data" );
         if( rStrm.GetRecLeft() >= nAddStrSize + 4 )
         {
@@ -3080,7 +3147,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
     }
     else if( mbEmbedded && (rStrm.GetRecLeft() >= 4) )
     {
-        rStrm >> mnStorageId;
+        mnStorageId = rStrm.ReaduInt32();
     }
 }
 
@@ -3753,7 +3820,9 @@ Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm
     Graphic aGraphic;
     sal_uInt16 nFormat, nEnv;
     sal_uInt32 nDataSize;
-    rStrm >> nFormat >> nEnv >> nDataSize;
+    nFormat = rStrm.ReaduInt16();
+    nEnv = rStrm.ReaduInt16();
+    nDataSize = rStrm.ReaduInt32();
     if( nDataSize <= rStrm.GetRecLeft() )
     {
         switch( nFormat )
@@ -3943,7 +4012,11 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
         rStrm.PushPosition();
         sal_uInt32 nHdrSize;
         sal_uInt16 nWidth, nHeight, nPlanes, nDepth;
-        rStrm >> nHdrSize >> nWidth >> nHeight >> nPlanes >> nDepth;
+        nHdrSize = rStrm.ReaduInt32();
+        nWidth = rStrm.ReaduInt16();
+        nHeight = rStrm.ReaduInt16();
+        nPlanes = rStrm.ReaduInt16();
+        nDepth = rStrm.ReaduInt16();
         if( (nHdrSize == 12) && (nPlanes == 1) && (nDepth == 32) )
         {
             rStrm.Ignore( 3 );
@@ -4068,7 +4141,8 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
 {
     XclAddress aXclPos;
     sal_uInt16 nTotalLen;
-    rStrm >> aXclPos >> nTotalLen;
+    rStrm >> aXclPos;
+    nTotalLen = rStrm.ReaduInt16();
 
     ScAddress aScNotePos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
@@ -4078,7 +4152,8 @@ void XclImpSheetDrawing::ReadNote3( XclImpStream& rStrm )
         nTotalLen = nTotalLen - nPartLen;
         while( (nTotalLen > 0) && (rStrm.GetNextRecId() == EXC_ID_NOTE) && rStrm.StartNextRecord() )
         {
-            rStrm >> aXclPos >> nPartLen;
+            rStrm >> aXclPos;
+            nPartLen = rStrm.ReaduInt16();
             OSL_ENSURE( aXclPos.mnRow == 0xFFFF, "XclImpObjectManager::ReadNote3 - missing continuation NOTE record" );
             if( aXclPos.mnRow == 0xFFFF )
             {
@@ -4102,7 +4177,9 @@ void XclImpSheetDrawing::ReadNote8( XclImpStream& rStrm )
 {
     XclAddress aXclPos;
     sal_uInt16 nFlags, nObjId;
-    rStrm >> aXclPos >> nFlags >> nObjId;
+    rStrm >> aXclPos;
+    nFlags = rStrm.ReaduInt16();
+    nObjId = rStrm.ReaduInt16();
 
     ScAddress aScNotePos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, maScUsedArea.aStart.Tab(), true ) )
@@ -4215,7 +4292,7 @@ void XclImpDffPropSet::Read( XclImpStream& rStrm )
 
     rStrm.PushPosition();
     rStrm.Ignore( 4 );
-    rStrm >> nPropSetSize;
+    nPropSetSize = rStrm.ReaduInt32();
     rStrm.PopPosition();
 
     mxMemStrm.reset( new SvMemoryStream );

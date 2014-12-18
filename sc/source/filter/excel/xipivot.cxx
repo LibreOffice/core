@@ -159,7 +159,12 @@ void XclImpPCItem::ReadSxdatetime( XclImpStream& rStrm )
     OSL_ENSURE( rStrm.GetRecSize() == 8, "XclImpPCItem::ReadSxdatetime - wrong record size" );
     sal_uInt16 nYear, nMonth;
     sal_uInt8 nDay, nHour, nMin, nSec;
-    rStrm >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
+    nYear = rStrm.ReaduInt16();
+    nMonth = rStrm.ReaduInt16();
+    nDay = rStrm.ReaduInt8();
+    nHour = rStrm.ReaduInt8();
+    nMin = rStrm.ReaduInt8();
+    nSec = rStrm.ReaduInt8();
     SetDateTime( DateTime( Date( nDay, nMonth, nYear ), tools::Time( nHour, nMin, nSec ) ) );
 }
 
@@ -377,7 +382,7 @@ void XclImpPCField::ReadSxgroupinfo( XclImpStream& rStrm )
     size_t nSize = rStrm.GetRecLeft() / 2;
     maGroupOrder.resize( nSize, 0 );
     for( size_t nIdx = 0; nIdx < nSize; ++nIdx )
-        rStrm >> maGroupOrder[ nIdx ];
+        maGroupOrder[ nIdx ] = rStrm.ReaduInt16();
 }
 
 // grouping -------------------------------------------------------------------
@@ -606,12 +611,12 @@ const XclImpPCField* XclImpPivotCache::GetField( sal_uInt16 nFieldIdx ) const
 
 void XclImpPivotCache::ReadSxidstm( XclImpStream& rStrm )
 {
-    rStrm >> mnStrmId;
+    mnStrmId = rStrm.ReaduInt16();
 }
 
 void XclImpPivotCache::ReadSxvs( XclImpStream& rStrm )
 {
-    rStrm >> mnSrcType;
+    mnSrcType = rStrm.ReaduInt16();
     GetTracer().TracePivotDataSource( mnSrcType != EXC_SXVS_SHEET );
 }
 
@@ -645,7 +650,7 @@ void XclImpPivotCache::ReadDConName( XclImpStream& rStrm )
     // indicates that the name has a workbook scope.  For now, we only support
     // internal defined name with a workbook scope.
     sal_uInt16 nFlag;
-    rStrm >> nFlag;
+    nFlag = rStrm.ReaduInt16();
     mbSelfRef = (nFlag == 0);
 
     if (!mbSelfRef)
@@ -1286,7 +1291,7 @@ void XclImpPivotTable::ReadSxivd( XclImpStream& rStrm )
         for( sal_uInt16 nIdx = 0; nIdx < nSize; ++nIdx )
         {
             sal_uInt16 nFieldIdx;
-            rStrm >> nFieldIdx;
+            nFieldIdx = rStrm.ReaduInt16();
             pFieldVec->push_back( nFieldIdx );
 
             // set orientation at special data orientation field

@@ -714,7 +714,10 @@ OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
 XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
 {
     sal_uInt8 nR, nG, nB, nD;
-    rStrm >> nR >> nG >> nB >> nD;
+    nR = rStrm.ReaduInt8();
+    nG = rStrm.ReaduInt8();
+    nB = rStrm.ReaduInt8();
+    nD = rStrm.ReaduInt8();
     rColor.SetColor( RGB_COLORDATA( nR, nG, nB ) );
     return rStrm;
 }

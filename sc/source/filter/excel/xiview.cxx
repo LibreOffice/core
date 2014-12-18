@@ -34,17 +34,17 @@ XclImpDocViewSettings::XclImpDocViewSettings( const XclImpRoot& rRoot ) :
 
 void XclImpDocViewSettings::ReadWindow1( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnWinX
-            >> maData.mnWinY
-            >> maData.mnWinWidth
-            >> maData.mnWinHeight
-            >> maData.mnFlags;
+    maData.mnWinX = rStrm.ReaduInt16();
+    maData.mnWinY = rStrm.ReaduInt16();
+    maData.mnWinWidth = rStrm.ReaduInt16();
+    maData.mnWinHeight = rStrm.ReaduInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
     if( GetBiff() >= EXC_BIFF5 )
     {
-        rStrm   >> maData.mnDisplXclTab
-                >> maData.mnFirstVisXclTab
-                >> maData.mnXclSelectCnt
-                >> maData.mnTabBarWidth;
+        maData.mnDisplXclTab = rStrm.ReaduInt16();
+        maData.mnFirstVisXclTab = rStrm.ReaduInt16();
+        maData.mnXclSelectCnt = rStrm.ReaduInt16();
+        maData.mnTabBarWidth = rStrm.ReaduInt16();
     }
 }
 
@@ -128,7 +128,8 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
     else
     {
         sal_uInt16 nFlags;
-        rStrm >> nFlags >> maData.maFirstXclPos;
+        nFlags = rStrm.ReaduInt16();
+        rStrm >> maData.maFirstXclPos;
 
         // #i59590# real life: Excel ignores some view settings in chart sheets
         maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
@@ -153,12 +154,13 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
             case EXC_BIFF8:
             {
                 sal_uInt16 nGridColorIdx;
-                rStrm >> nGridColorIdx;
+                nGridColorIdx = rStrm.ReaduInt16();
                 // zoom data not included in chart sheets
                 if( rStrm.GetRecLeft() >= 6 )
                 {
                     rStrm.Ignore( 2 );
-                    rStrm >> maData.mnPageZoom >> maData.mnNormalZoom;
+                    maData.mnPageZoom = rStrm.ReaduInt16();
+                    maData.mnNormalZoom = rStrm.ReaduInt16();
                 }
 
                 if( !maData.mbDefGridColor )
@@ -177,7 +179,8 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
 void XclImpTabViewSettings::ReadScl( XclImpStream& rStrm )
 {
     sal_uInt16 nNum, nDenom;
-    rStrm >> nNum >> nDenom;
+    nNum = rStrm.ReaduInt16();
+    nDenom = rStrm.ReaduInt16();
     OSL_ENSURE( nDenom > 0, "XclImpPageSettings::ReadScl - invalid denominator" );
     if( nDenom > 0 )
         maData.mnCurrentZoom = limit_cast< sal_uInt16 >( (nNum * 100) / nDenom );
@@ -185,21 +188,22 @@ void XclImpTabViewSettings::ReadScl( XclImpStream& rStrm )
 
 void XclImpTabViewSettings::ReadPane( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnSplitX;
+    maData.mnSplitX = rStrm.ReaduInt16();
     maData.mnSplitY = rStrm.ReaduInt16();
 
-    rStrm   >> maData.maSecondXclPos
-            >> maData.mnActivePane;
+    rStrm >> maData.maSecondXclPos;
+    maData.mnActivePane = rStrm.ReaduInt8();
 }
 
 void XclImpTabViewSettings::ReadSelection( XclImpStream& rStrm )
 {
     // pane of this selection
     sal_uInt8 nPane;
-    rStrm >> nPane;
+    nPane = rStrm.ReaduInt8();
     XclSelectionData& rSelData = maData.CreateSelectionData( nPane );
     // cursor position and selection
-    rStrm >> rSelData.maXclCursor >> rSelData.mnCursorIdx;
+    rStrm >> rSelData.maXclCursor;
+    rSelData.mnCursorIdx = rStrm.ReaduInt16();
     rSelData.maXclSelection.Read( rStrm, false );
 }
 

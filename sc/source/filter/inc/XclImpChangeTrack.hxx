@@ -41,7 +41,10 @@ struct XclImpChTrRecHeader
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpChTrRecHeader& rRecHeader )
 {
-    rStrm >> rRecHeader.nSize >> rRecHeader.nIndex >> rRecHeader.nOpCode >> rRecHeader.nAccept;
+    rRecHeader.nSize = rStrm.ReaduInt32();
+    rRecHeader.nIndex = rStrm.ReaduInt32();
+    rRecHeader.nOpCode = rStrm.ReaduInt16();
+    rRecHeader.nAccept = rStrm.ReaduInt16();
     return rStrm;
 }
 
@@ -112,7 +115,7 @@ inline sal_uInt8 XclImpChangeTrack::LookAtuInt8()
 {
     pStrm->PushPosition();
     sal_uInt8 nValue;
-    *pStrm >> nValue;
+    nValue = pStrm->ReaduInt8();
     pStrm->PopPosition();
     return nValue;
 }

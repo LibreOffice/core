@@ -326,20 +326,17 @@ public:
 
     sal_uInt16          PeekRecId( sal_Size nPos );
 
-    XclImpStream&       operator>>( sal_Int8& rnValue );
-    XclImpStream&       operator>>( sal_uInt8& rnValue );
-    XclImpStream&       operator>>( sal_Int16& rnValue );
-    XclImpStream&       operator>>( sal_uInt16& rnValue );
-    XclImpStream&       operator>>( sal_Int32& rnValue );
-    XclImpStream&       operator>>( sal_uInt32& rnValue );
-    XclImpStream&       operator>>( float& rfValue );
-    XclImpStream&       operator>>( double& rfValue );
-
+    SAL_WARN_UNUSED_RESULT
     sal_uInt8           ReaduInt8();
+    SAL_WARN_UNUSED_RESULT
     sal_Int16           ReadInt16();
+    SAL_WARN_UNUSED_RESULT
     sal_uInt16          ReaduInt16();
+    SAL_WARN_UNUSED_RESULT
     sal_Int32           ReadInt32();
+    SAL_WARN_UNUSED_RESULT
     sal_uInt32          ReaduInt32();
+    SAL_WARN_UNUSED_RESULT
     double              ReadDouble();
 
     /** Reads nBytes bytes to the existing(!) buffer pData.

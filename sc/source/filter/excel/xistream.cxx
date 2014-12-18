@@ -590,175 +590,108 @@ sal_uInt16 XclImpStream::PeekRecId( sal_Size nPos )
     return nRecId;
 }
 
-XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
+sal_uInt8 XclImpStream::ReaduInt8()
 {
+    sal_uInt8 nValue = 0;
     if( EnsureRawReadSize( 1 ) )
     {
         if( mbUseDecr )
-            mxDecrypter->Read( mrStrm, &rnValue, 1 );
+            mxDecrypter->Read( mrStrm, &nValue, 1 );
         else
-            mrStrm.ReadSChar( rnValue );
+            mrStrm.ReadUChar( nValue );
         --mnRawRecLeft;
     }
-    return *this;
+    return nValue;
 }
 
-XclImpStream& XclImpStream::operator>>( sal_uInt8& rnValue )
+sal_Int16 XclImpStream::ReadInt16()
 {
-    if( EnsureRawReadSize( 1 ) )
-    {
-        if( mbUseDecr )
-            mxDecrypter->Read( mrStrm, &rnValue, 1 );
-        else
-            mrStrm.ReadUChar( rnValue );
-        --mnRawRecLeft;
-    }
-    return *this;
-}
-
-XclImpStream& XclImpStream::operator>>( sal_Int16& rnValue )
-{
+    sal_Int16 nValue = 0;
     if( EnsureRawReadSize( 2 ) )
     {
         if( mbUseDecr )
         {
             SVBT16 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 2 );
-            rnValue = static_cast< sal_Int16 >( SVBT16ToShort( pnBuffer ) );
+            nValue = static_cast< sal_Int16 >( SVBT16ToShort( pnBuffer ) );
         }
         else
-            mrStrm.ReadInt16( rnValue );
+            mrStrm.ReadInt16( nValue );
         mnRawRecLeft -= 2;
     }
-    return *this;
+    return nValue;
 }
 
-XclImpStream& XclImpStream::operator>>( sal_uInt16& rnValue )
+sal_uInt16 XclImpStream::ReaduInt16()
 {
+    sal_uInt16 nValue = 0;
     if( EnsureRawReadSize( 2 ) )
     {
         if( mbUseDecr )
         {
             SVBT16 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 2 );
-            rnValue = SVBT16ToShort( pnBuffer );
+            nValue = SVBT16ToShort( pnBuffer );
         }
         else
-            mrStrm.ReadUInt16( rnValue );
+            mrStrm.ReadUInt16( nValue );
         mnRawRecLeft -= 2;
     }
-    return *this;
+    return nValue;
 }
 
-XclImpStream& XclImpStream::operator>>( sal_Int32& rnValue )
+sal_Int32 XclImpStream::ReadInt32()
 {
+    sal_Int32 nValue = 0;
     if( EnsureRawReadSize( 4 ) )
     {
         if( mbUseDecr )
         {
             SVBT32 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
-            rnValue = static_cast< sal_Int32 >( SVBT32ToUInt32( pnBuffer ) );
+            nValue = static_cast< sal_Int32 >( SVBT32ToUInt32( pnBuffer ) );
         }
         else
-            mrStrm.ReadInt32( rnValue );
+            mrStrm.ReadInt32( nValue );
         mnRawRecLeft -= 4;
     }
-    return *this;
+    return nValue;
 }
 
-XclImpStream& XclImpStream::operator>>( sal_uInt32& rnValue )
+sal_uInt32 XclImpStream::ReaduInt32()
 {
+    sal_uInt32 nValue = 0;
     if( EnsureRawReadSize( 4 ) )
     {
         if( mbUseDecr )
         {
             SVBT32 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 4 );
-            rnValue = SVBT32ToUInt32( pnBuffer );
+            nValue = SVBT32ToUInt32( pnBuffer );
         }
         else
-            mrStrm.ReadUInt32( rnValue );
+            mrStrm.ReadUInt32( nValue );
         mnRawRecLeft -= 4;
     }
-    return *this;
+    return nValue;
 }
 
-XclImpStream& XclImpStream::operator>>( float& rfValue )
+double XclImpStream::ReadDouble()
 {
-    if( EnsureRawReadSize( 4 ) )
-    {
-        if( mbUseDecr )
-        {
-            SVBT32 pnBuffer;
-            mxDecrypter->Read( mrStrm, pnBuffer, 4 );
-            sal_uInt32 nValue = SVBT32ToUInt32( pnBuffer );
-            memcpy( &rfValue, &nValue, 4 );
-        }
-        else
-            mrStrm.ReadFloat( rfValue );
-        mnRawRecLeft -= 4;
-    }
-    return *this;
-}
-
-XclImpStream& XclImpStream::operator>>( double& rfValue )
-{
+    double nValue = 0;
     if( EnsureRawReadSize( 8 ) )
     {
         if( mbUseDecr )
         {
             SVBT64 pnBuffer;
             mxDecrypter->Read( mrStrm, pnBuffer, 8 );
-            rfValue = SVBT64ToDouble( pnBuffer );
+            nValue = SVBT64ToDouble( pnBuffer );
         }
         else
-            mrStrm.ReadDouble( rfValue );
+            mrStrm.ReadDouble( nValue );
         mnRawRecLeft -= 8;
     }
-    return *this;
-}
-
-sal_uInt8 XclImpStream::ReaduInt8()
-{
-    sal_uInt8 nValue(0);
-    operator>>( nValue );
     return nValue;
-}
-
-sal_Int16 XclImpStream::ReadInt16()
-{
-    sal_Int16 nValue(0);
-    operator>>( nValue );
-    return nValue;
-}
-
-sal_uInt16 XclImpStream::ReaduInt16()
-{
-    sal_uInt16 nValue(0);
-    operator>>( nValue );
-    return nValue;
-}
-
-sal_Int32 XclImpStream::ReadInt32()
-{
-    sal_Int32 nValue(0);
-    operator>>( nValue );
-    return nValue;
-}
-
-sal_uInt32 XclImpStream::ReaduInt32()
-{
-    sal_uInt32 nValue(0);
-    operator>>( nValue );
-    return nValue;
-}
-
-double XclImpStream::ReadDouble()
-{
-    double fValue(0.0);
-    operator>>( fValue );
-    return fValue;
 }
 
 sal_Size XclImpStream::Read( void* pData, sal_Size nBytes )
@@ -902,7 +835,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
             sal_uInt16 nReadChar;
             for( ; IsValid() && (pcUniChar < pcEndChar); ++pcUniChar )
             {
-                operator>>( nReadChar );
+                nReadChar = ReaduInt16();
                 (*pcUniChar) = (nReadChar == EXC_NUL) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
             }
         }
@@ -911,7 +844,7 @@ OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
             sal_uInt8 nReadChar;
             for( ; IsValid() && (pcUniChar < pcEndChar); ++pcUniChar )
             {
-                operator>>( nReadChar );
+                nReadChar = ReaduInt8();
                 (*pcUniChar) = (nReadChar == EXC_NUL_C) ? mcNulSubst : static_cast< sal_Unicode >( nReadChar );
             }
         }

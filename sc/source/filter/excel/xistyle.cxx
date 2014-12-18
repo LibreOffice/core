@@ -149,7 +149,7 @@ ColorData XclImpPalette::GetColorData( sal_uInt16 nXclIndex ) const
 void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
-    rStrm >> nCount;
+    nCount = rStrm.ReaduInt16();
 
     const size_t nMinRecordSize = 4;
     const size_t nMaxRecords = rStrm.GetRecLeft() / nMinRecordSize;
@@ -272,11 +272,17 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
     sal_uInt8 nUnderl;
 
     rStrm.Ignore( 64 );
-    rStrm >> nHeight >> nStyle >> nWeight >> nEscapem >> nUnderl;
+    nHeight = rStrm.ReaduInt32();
+    nStyle = rStrm.ReaduInt32();
+    nWeight = rStrm.ReaduInt16();
+    nEscapem = rStrm.ReaduInt16();
+    nUnderl = rStrm.ReaduInt8();
     rStrm.Ignore( 3 );
-    rStrm >> nColor;
+    nColor = rStrm.ReaduInt32();
     rStrm.Ignore( 4 );
-    rStrm >> nFontFlags1 >> nFontFlags2 >> nFontFlags3;
+    nFontFlags1 = rStrm.ReaduInt32();
+    nFontFlags2 = rStrm.ReaduInt32();
+    nFontFlags3 = rStrm.ReaduInt32();
     rStrm.Ignore( 18 );
 
     if( (mbHeightUsed = (nHeight <= 0x7FFF)) == true )
@@ -401,7 +407,8 @@ void XclImpFont::WriteFontProperties( ScfPropertySet& rPropSet,
 void XclImpFont::ReadFontData2( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
-    rStrm >> maData.mnHeight >> nFlags;
+    maData.mnHeight = rStrm.ReaduInt16();
+    nFlags = rStrm.ReaduInt16();
 
     maData.mnWeight     = ::get_flagvalue( nFlags, EXC_FONTATTR_BOLD, EXC_FONTWGHT_BOLD, EXC_FONTWGHT_NORMAL );
     maData.mnUnderline  = ::get_flagvalue( nFlags, EXC_FONTATTR_UNDERLINE, EXC_FONTUNDERL_SINGLE, EXC_FONTUNDERL_NONE );
@@ -416,9 +423,14 @@ void XclImpFont::ReadFontData5( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
 
-    rStrm >> maData.mnHeight >> nFlags;
+    maData.mnHeight = rStrm.ReaduInt16();
+    nFlags = rStrm.ReaduInt16();
     ReadFontColor( rStrm );
-    rStrm >> maData.mnWeight >> maData.mnEscapem >> maData.mnUnderline >> maData.mnFamily >> maData.mnCharSet;
+    maData.mnWeight  = rStrm.ReaduInt16();
+    maData.mnEscapem = rStrm.ReaduInt16();
+    maData.mnUnderline = rStrm.ReaduInt8();
+    maData.mnFamily = rStrm.ReaduInt8();
+    maData.mnCharSet = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
 
     maData.mbItalic     = ::get_flag( nFlags, EXC_FONTATTR_ITALIC );
@@ -635,12 +647,12 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
         break;
 
         case EXC_BIFF5:
-            rStrm >> mnNextXclIdx;
+            mnNextXclIdx = rStrm.ReaduInt16();
             aFormat = rStrm.ReadByteString( false );
         break;
 
         case EXC_BIFF8:
-            rStrm >> mnNextXclIdx;
+            mnNextXclIdx = rStrm.ReaduInt16();
             aFormat = rStrm.ReadUniString();
         break;
 
@@ -663,7 +675,7 @@ sal_uInt16 XclImpNumFmtBuffer::ReadCFFormat( XclImpStream& rStrm, bool bIFmt )
     {
         rStrm.Ignore(1);
         sal_uInt8 nIndex;
-        rStrm >> nIndex;
+        nIndex = rStrm.ReaduInt8();
         return nIndex;
     }
     else
@@ -1092,9 +1104,10 @@ XclImpXF::~XclImpXF()
 void XclImpXF::ReadXF2( XclImpStream& rStrm )
 {
     sal_uInt8 nReadFont, nReadNumFmt, nFlags;
-    rStrm >> nReadFont;
+    nReadFont = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
-    rStrm >> nReadNumFmt >> nFlags;
+    nReadNumFmt = rStrm.ReaduInt8();
+    nFlags = rStrm.ReaduInt8();
 
     // XF type always cell, no parent, used flags always true
     SetAllUsedFlags( true );
@@ -1113,7 +1126,12 @@ void XclImpXF::ReadXF3( XclImpStream& rStrm )
     sal_uInt32 nBorder;
     sal_uInt16 nTypeProt, nAlign, nArea;
     sal_uInt8 nReadFont, nReadNumFmt;
-    rStrm >> nReadFont >> nReadNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
+    nReadFont = rStrm.ReaduInt8();
+    nReadNumFmt = rStrm.ReaduInt8();
+    nTypeProt = rStrm.ReaduInt16();
+    nAlign = rStrm.ReaduInt16();
+    nArea = rStrm.ReaduInt16();
+    nBorder = rStrm.ReaduInt32();
 
     // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );          // new in BIFF3
@@ -1134,7 +1152,12 @@ void XclImpXF::ReadXF4( XclImpStream& rStrm )
     sal_uInt32 nBorder;
     sal_uInt16 nTypeProt, nAlign, nArea;
     sal_uInt8 nReadFont, nReadNumFmt;
-    rStrm >> nReadFont >> nReadNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
+    nReadFont = rStrm.ReaduInt8();
+    nReadNumFmt = rStrm.ReaduInt8();
+    nTypeProt = rStrm.ReaduInt16();
+    nAlign = rStrm.ReaduInt16();
+    nArea = rStrm.ReaduInt16();
+    nBorder = rStrm.ReaduInt32();
 
     // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
@@ -1154,7 +1177,12 @@ void XclImpXF::ReadXF5( XclImpStream& rStrm )
 {
     sal_uInt32 nArea, nBorder;
     sal_uInt16 nTypeProt, nAlign;
-    rStrm >> mnXclFont >> mnXclNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
+    mnXclFont = rStrm.ReaduInt16();
+    mnXclNumFmt = rStrm.ReaduInt16();
+    nTypeProt = rStrm.ReaduInt16();
+    nAlign = rStrm.ReaduInt16();
+    nArea = rStrm.ReaduInt32();
+    nBorder = rStrm.ReaduInt32();
 
     // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
@@ -1172,7 +1200,14 @@ void XclImpXF::ReadXF8( XclImpStream& rStrm )
 {
     sal_uInt32 nBorder1, nBorder2;
     sal_uInt16 nTypeProt, nAlign, nMiscAttrib, nArea;
-    rStrm >> mnXclFont >> mnXclNumFmt >> nTypeProt >> nAlign >> nMiscAttrib >> nBorder1 >> nBorder2 >> nArea;
+    mnXclFont = rStrm.ReaduInt16();
+    mnXclNumFmt = rStrm.ReaduInt16();
+    nTypeProt = rStrm.ReaduInt16();
+    nAlign = rStrm.ReaduInt16();
+    nMiscAttrib = rStrm.ReaduInt16();
+    nBorder1 = rStrm.ReaduInt32();
+    nBorder2 = rStrm.ReaduInt32(  );
+    nArea = rStrm.ReaduInt16();
 
     // XF type/parent, attribute used flags
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
@@ -1444,13 +1479,14 @@ void XclImpStyle::ReadStyle( XclImpStream& rStrm )
     OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF3 );
 
     sal_uInt16 nXFIndex;
-    rStrm >> nXFIndex;
+    nXFIndex = rStrm.ReaduInt16();
     mnXfId = nXFIndex & EXC_STYLE_XFMASK;
     mbBuiltin = ::get_flag( nXFIndex, EXC_STYLE_BUILTIN );
 
     if( mbBuiltin )
     {
-        rStrm >> mnBuiltinId >> mnLevel;
+        mnBuiltinId = rStrm.ReaduInt8();
+        mnLevel = rStrm.ReaduInt8();
     }
     else
     {
@@ -1460,14 +1496,15 @@ void XclImpStyle::ReadStyle( XclImpStream& rStrm )
         {
             sal_uInt8 nExtFlags;
             rStrm.Ignore( 12 );
-            rStrm >> nExtFlags;
+            nExtFlags = rStrm.ReaduInt8();
             mbBuiltin = ::get_flag( nExtFlags, EXC_STYLEEXT_BUILTIN );
             mbCustom = ::get_flag( nExtFlags, EXC_STYLEEXT_CUSTOM );
             mbHidden = ::get_flag( nExtFlags, EXC_STYLEEXT_HIDDEN );
             if( mbBuiltin )
             {
                 rStrm.Ignore( 1 );  // category
-                rStrm >> mnBuiltinId >> mnLevel;
+                mnBuiltinId = rStrm.ReaduInt8();
+                mnLevel = rStrm.ReaduInt8();
             }
         }
     }

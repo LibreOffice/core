@@ -54,9 +54,10 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         case EXC_BIFF2:
         {
             sal_uInt8 nFlagsBiff2;
-            rStrm >> nFlagsBiff2;
+            nFlagsBiff2 = rStrm.ReaduInt8();
             rStrm.Ignore( 1 );
-            rStrm >> nShortCut >> nNameLen;
+            nShortCut = rStrm.ReaduInt8();
+            nNameLen = rStrm.ReaduInt8();
             nFmlaSize = rStrm.ReaduInt8();
             ::set_flag( nFlags, EXC_NAME_FUNC, ::get_flag( nFlagsBiff2, EXC_NAME2_FUNC ) );
         }
@@ -65,14 +66,22 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         case EXC_BIFF3:
         case EXC_BIFF4:
         {
-            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize;
+            nFlags = rStrm.ReaduInt16();
+            nShortCut = rStrm.ReaduInt8();
+            nNameLen = rStrm.ReaduInt8();
+            nFmlaSize = rStrm.ReaduInt16();
         }
         break;
 
         case EXC_BIFF5:
         case EXC_BIFF8:
         {
-            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize >> nExtSheet >> mnXclTab;
+            nFlags = rStrm.ReaduInt16();
+            nShortCut = rStrm.ReaduInt8();
+            nNameLen = rStrm.ReaduInt8();
+            nFmlaSize = rStrm.ReaduInt16();
+            nExtSheet = rStrm.ReaduInt16();
+            mnXclTab = rStrm.ReaduInt16();
             rStrm.Ignore( 4 );
         }
         break;

@@ -28,7 +28,7 @@ void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
     mnRow = rStrm.ReaduInt16();
     if( bCol16Bit )
-        rStrm >> mnCol;
+        mnCol = rStrm.ReaduInt16();
     else
         mnCol = rStrm.ReaduInt8();
 }
@@ -54,7 +54,10 @@ void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
     maLast.mnRow = rStrm.ReaduInt16();
 
     if( bCol16Bit )
-        rStrm >> maFirst.mnCol >> maLast.mnCol;
+    {
+        maFirst.mnCol = rStrm.ReaduInt16();
+        maLast.mnCol = rStrm.ReaduInt16();
+    }
     else
     {
         maFirst.mnCol = rStrm.ReaduInt8();
@@ -95,7 +98,7 @@ void XclRangeList::Read( XclImpStream& rStrm, bool bCol16Bit, sal_uInt16 nCountI
     if (nCountInStream)
         nCount = nCountInStream;
     else
-        rStrm >> nCount;
+        nCount = rStrm.ReaduInt16();
     size_t nOldSize = mRanges.size();
     mRanges.resize( nOldSize + nCount );
     for( XclRangeVector::iterator aIt = mRanges.begin() + nOldSize; rStrm.IsValid() && (nCount > 0); --nCount, ++aIt )

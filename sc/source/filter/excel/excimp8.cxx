@@ -251,7 +251,8 @@ void ImportExcel8::Boundsheet( void )
     aIn.DisableDecryption();
     maSheetOffsets.push_back( aIn.ReaduInt32() );
     aIn.EnableDecryption();
-    aIn >> nGrbit >> nLen;
+    nGrbit = aIn.ReaduInt16();
+    nLen = aIn.ReaduInt8();
 
     OUString aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
@@ -280,7 +281,7 @@ void ImportExcel8::Scenman( void )
     sal_uInt16              nLastDispl;
 
     aIn.Ignore( 4 );
-    aIn >> nLastDispl;
+    nLastDispl = aIn.ReaduInt16();
 
     maScenList.nLastScenario = nLastDispl;
 }
@@ -296,7 +297,9 @@ void ImportExcel8::Labelsst( void )
     sal_uInt16 nXF;
     sal_uInt32  nSst;
 
-    aIn >> aXclPos >> nXF >> nSst;
+    aIn >> aXclPos;
+    nXF = aIn.ReaduInt16();
+    nSst = aIn.ReaduInt32(  );
 
     ScAddress aScPos( ScAddress::UNINITIALIZED );
     if( GetAddressConverter().ConvertAddress( aScPos, aXclPos, GetCurrScTab(), true ) )
@@ -613,7 +616,8 @@ void XclImpAutoFilterData::ReadAutoFilter(
     XclImpStream& rStrm, svl::SharedStringPool& rPool )
 {
     sal_uInt16 nCol, nFlags;
-    rStrm >> nCol >> nFlags;
+    nCol = rStrm.ReaduInt16();
+    nFlags = rStrm.ReaduInt16();
 
     ScQueryConnect eConn = ::get_flagvalue( nFlags, EXC_AFFLAG_ANDORMASK, SC_OR, SC_AND );
     bool bSimple1    = ::get_flag(nFlags, EXC_AFFLAG_SIMPLE1);
@@ -654,7 +658,8 @@ void XclImpAutoFilterData::ReadAutoFilter(
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         bIgnore = false;
 
-        rStrm >> nType >> nOper;
+        nType = rStrm.ReaduInt8();
+        nOper = rStrm.ReaduInt8();
         switch( nOper )
         {
             case EXC_AFOPER_LESS:
@@ -682,23 +687,24 @@ void XclImpAutoFilterData::ReadAutoFilter(
         switch( nType )
         {
             case EXC_AFTYPE_RK:
-                rStrm >> nRK;
+                nRK = rStrm.ReadInt32();
                 rStrm.Ignore( 4 );
                 rItem.maString = rPool.intern(
                     CreateFromDouble(XclTools::GetDoubleFromRK(nRK)));
             break;
             case EXC_AFTYPE_DOUBLE:
-                rStrm >> fVal;
+                fVal = rStrm.ReadDouble();
                 rItem.maString = rPool.intern(CreateFromDouble(fVal));
             break;
             case EXC_AFTYPE_STRING:
                 rStrm.Ignore( 4 );
-                rStrm >> nStrLen[ nE ];
+                nStrLen[ nE ] = rStrm.ReaduInt8();
                 rStrm.Ignore( 3 );
                 rItem.maString = svl::SharedString();
             break;
             case EXC_AFTYPE_BOOLERR:
-                rStrm >> nBoolErr >> nVal;
+                nBoolErr = rStrm.ReaduInt8();
+                nVal = rStrm.ReaduInt8();
                 rStrm.Ignore( 6 );
                 rItem.maString = rPool.intern(OUString::number(nVal));
                 bIgnore = (nBoolErr != 0);

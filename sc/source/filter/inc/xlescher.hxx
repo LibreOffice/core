@@ -25,6 +25,7 @@
 #include "fapihelper.hxx"
 #include "xladdress.hxx"
 #include "xlstyle.hxx"
+#include "xistream.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }
@@ -33,7 +34,6 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class Rectangle;
-class XclImpStream;
 
 // Constants and Enumerations =================================================
 
@@ -321,17 +321,18 @@ inline SvStream& operator>>( SvStream& rStrm, XclObjAnchor& rAnchor )
     return rStrm;
 }
 
-// creates read method for XclImpStream
-template< typename StreamType >
-StreamType& operator>>( StreamType& rStrm, XclObjAnchor& rAnchor )
+inline XclImpStream& operator>>( XclImpStream& rStrm, XclObjAnchor& rAnchor )
 {
     sal_uInt16 tmpFirstRow, tmpTY, tmpLastRow, tmpBY;
 
-    rStrm
-        >> rAnchor.maFirst.mnCol >> rAnchor.mnLX
-        >> tmpFirstRow >> tmpTY
-        >> rAnchor.maLast.mnCol  >> rAnchor.mnRX
-        >> tmpLastRow  >> tmpBY;
+    rAnchor.maFirst.mnCol = rStrm.ReaduInt16();
+    rAnchor.mnLX = rStrm.ReaduInt16();
+    tmpFirstRow = rStrm.ReaduInt16();
+    tmpTY = rStrm.ReaduInt16();
+    rAnchor.maLast.mnCol = rStrm.ReaduInt16();
+    rAnchor.mnRX = rStrm.ReaduInt16();
+    tmpLastRow = rStrm.ReaduInt16();
+    tmpBY = rStrm.ReaduInt16();
 
     rAnchor.maFirst.mnRow = static_cast<sal_uInt32> (tmpFirstRow);
     rAnchor.mnTY = static_cast<sal_uInt32> (tmpTY);

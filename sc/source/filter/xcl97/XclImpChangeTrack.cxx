@@ -119,7 +119,12 @@ void XclImpChangeTrack::ReadDateTime( DateTime& rDateTime )
     sal_uInt16 nYear;
     sal_uInt8 nMonth, nDay, nHour, nMin, nSec;
 
-    *pStrm >> nYear >> nMonth >> nDay >> nHour >> nMin >> nSec;
+    nYear = pStrm->ReaduInt16();
+    nMonth = pStrm->ReaduInt8();
+    nDay = pStrm->ReaduInt8();
+    nHour = pStrm->ReaduInt8();
+    nMin = pStrm->ReaduInt8();
+    nSec = pStrm->ReaduInt8();
 
     rDateTime.SetYear( nYear );
     rDateTime.SetMonth( nMonth );
@@ -177,8 +182,7 @@ bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, Exc
 
 void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddress& rPosition )
 {
-    sal_uInt16 nFmlSize;
-    *pStrm >> nFmlSize;
+    sal_uInt16 nFmlSize = pStrm->ReaduInt16();
 
     // create a memory stream and copy the formula to be able to read simultaneously
     // the formula and the additional 3D tab ref data following the formula
@@ -233,8 +237,7 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_DOUBLE:
         {
-            double fValue;
-            *pStrm >> fValue;
+            double fValue = pStrm->ReadDouble();
             if( pStrm->IsValid() )
             {
                 rCell.meType = CELLTYPE_VALUE;
@@ -347,13 +350,13 @@ void XclImpChangeTrack::ReadChTrCellContent()
         SCTAB nTab = ReadTabNum();
         aPosition.SetTab( nTab );
         sal_uInt16 nValueType;
-        *pStrm >> nValueType;
+        nValueType = pStrm->ReaduInt16();
         sal_uInt16 nOldValueType = (nValueType >> 3) & EXC_CHTR_TYPE_MASK;
         sal_uInt16 nNewValueType = nValueType & EXC_CHTR_TYPE_MASK;
         pStrm->Ignore( 2 );
         Read2DAddress( aPosition );
         sal_uInt16 nOldSize;
-        *pStrm >> nOldSize;
+        nOldSize = pStrm->ReaduInt16();
         OSL_ENSURE( (nOldSize == 0) == (nOldValueType == EXC_CHTR_TYPE_EMPTY),
             "XclImpChangeTrack::ReadChTrCellContent - old value mismatch" );
         pStrm->Ignore( 4 );

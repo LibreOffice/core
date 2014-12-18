@@ -57,8 +57,12 @@ void XclImpPageSettings::ReadSetup( XclImpStream& rStrm )
 
     // BIFF4 - BIFF8
     sal_uInt16 nFlags;
-    rStrm   >> maData.mnPaperSize >> maData.mnScaling >> maData.mnStartPage
-            >> maData.mnFitToWidth >> maData.mnFitToHeight >> nFlags;
+    maData.mnPaperSize = rStrm.ReaduInt16();
+    maData.mnScaling = rStrm.ReaduInt16();
+    maData.mnStartPage = rStrm.ReaduInt16();
+    maData.mnFitToWidth = rStrm.ReaduInt16();
+    maData.mnFitToHeight = rStrm.ReaduInt16();
+    nFlags = rStrm.ReaduInt16();
 
     mbValidPaper = maData.mbValid = !::get_flag( nFlags, EXC_SETUP_INVALID );
     maData.mbPrintInRows = ::get_flag( nFlags, EXC_SETUP_INROWS );
@@ -69,8 +73,11 @@ void XclImpPageSettings::ReadSetup( XclImpStream& rStrm )
     // new in BIFF5 - BIFF8
     if( GetBiff() >= EXC_BIFF5 )
     {
-        rStrm   >> maData.mnHorPrintRes >> maData.mnVerPrintRes
-                >> maData.mfHeaderMargin >> maData.mfFooterMargin >> maData.mnCopies;
+        maData.mnHorPrintRes = rStrm.ReaduInt16();
+        maData.mnVerPrintRes = rStrm.ReaduInt16();
+        maData.mfHeaderMargin = rStrm.ReadDouble();
+        maData.mfFooterMargin = rStrm.ReadDouble();
+        maData.mnCopies = rStrm.ReaduInt16();
 
         maData.mbDraftQuality = ::get_flag( nFlags, EXC_SETUP_DRAFT );
         maData.mbPrintNotes = ::get_flag( nFlags, EXC_SETUP_PRINTNOTES );
@@ -82,10 +89,10 @@ void XclImpPageSettings::ReadMargin( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
-        case EXC_ID_LEFTMARGIN:     rStrm >> maData.mfLeftMargin;   break;
-        case EXC_ID_RIGHTMARGIN:    rStrm >> maData.mfRightMargin;  break;
-        case EXC_ID_TOPMARGIN:      rStrm >> maData.mfTopMargin;    break;
-        case EXC_ID_BOTTOMMARGIN:   rStrm >> maData.mfBottomMargin; break;
+        case EXC_ID_LEFTMARGIN:     maData.mfLeftMargin = rStrm.ReadDouble();   break;
+        case EXC_ID_RIGHTMARGIN:    maData.mfRightMargin = rStrm.ReadDouble();  break;
+        case EXC_ID_TOPMARGIN:      maData.mfTopMargin = rStrm.ReadDouble();    break;
+        case EXC_ID_BOTTOMMARGIN:   maData.mfBottomMargin = rStrm.ReadDouble(); break;
         default:    OSL_FAIL( "XclImpPageSettings::ReadMargin - unknown record" );
     }
 }
@@ -131,13 +138,13 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
         bool bIgnore = GetBiff() == EXC_BIFF8;  // ignore start/end columns or rows in BIFF8
 
         sal_uInt16 nCount, nBreak;
-        rStrm >> nCount;
+        nCount = rStrm.ReaduInt16();
         pVec->clear();
         pVec->reserve( nCount );
 
         while( nCount-- )
         {
-            rStrm >> nBreak;
+            nBreak = rStrm.ReaduInt16();
             if( nBreak )
                 pVec->push_back( nBreak );
             if( bIgnore )

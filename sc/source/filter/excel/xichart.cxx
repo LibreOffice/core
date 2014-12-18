@@ -135,7 +135,11 @@ namespace {
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclChRectangle& rRect )
 {
-    return rStrm >> rRect.mnX >> rRect.mnY >> rRect.mnWidth >> rRect.mnHeight;
+    rRect.mnX = rStrm.ReadInt32();
+    rRect.mnY = rStrm.ReadInt32();
+    rRect.mnWidth = rStrm.ReadInt32();
+    rRect.mnHeight = rStrm.ReadInt32();
+    return rStrm;
 }
 
 inline void lclSetValueOrClearAny( Any& rAny, double fValue, bool bClear )
@@ -436,7 +440,8 @@ void XclImpChGroupBase::SkipBlock( XclImpStream& rStrm )
 
 void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnTLMode >> maData.mnBRMode;
+    maData.mnTLMode = rStrm.ReaduInt16();
+    maData.mnBRMode = rStrm.ReaduInt16();
     /*  According to the spec, the upper 16 bits of all members in the
         rectangle are unused and may contain garbage. */
     maData.maRect.mnX = rStrm.ReadInt16(); rStrm.Ignore( 2 );
@@ -447,7 +452,10 @@ void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
 
 void XclImpChLineFormat::ReadChLineFormat( XclImpStream& rStrm )
 {
-    rStrm >> maData.maColor >> maData.mnPattern >> maData.mnWeight >> maData.mnFlags;
+    rStrm >> maData.maColor;
+    maData.mnPattern = rStrm.ReaduInt16();
+    maData.mnWeight = rStrm.ReadInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
 
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
@@ -477,7 +485,9 @@ void XclImpChLineFormat::Convert( const XclImpChRoot& rRoot,
 
 void XclImpChAreaFormat::ReadChAreaFormat( XclImpStream& rStrm )
 {
-    rStrm >> maData.maPattColor >> maData.maBackColor >> maData.mnPattern >> maData.mnFlags;
+    rStrm >> maData.maPattColor >> maData.maBackColor;
+    maData.mnPattern = rStrm.ReaduInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
 
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
@@ -532,9 +542,10 @@ void XclImpChEscherFormat::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHPICFORMAT:
-            rStrm >> maPicFmt.mnBmpMode;
+            maPicFmt.mnBmpMode = rStrm.ReaduInt16();
             rStrm.Ignore( 2 );
-            rStrm >> maPicFmt.mnFlags >> maPicFmt.mfScale;
+            maPicFmt.mnFlags = rStrm.ReaduInt16();
+            maPicFmt.mfScale = rStrm.ReadDouble();
         break;
     }
 }
@@ -630,7 +641,8 @@ XclImpChFrame::XclImpChFrame( const XclImpChRoot& rRoot, XclChObjectType eObjTyp
 
 void XclImpChFrame::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnFormat >> maData.mnFlags;
+    maData.mnFormat = rStrm.ReaduInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpChFrame::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjFillData& rFillData )
@@ -728,10 +740,10 @@ XclImpChSourceLink::~XclImpChSourceLink()
 
 void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnDestType
-            >> maData.mnLinkType
-            >> maData.mnFlags
-            >> maData.mnNumFmtIdx;
+    maData.mnDestType = rStrm.ReaduInt8();
+    maData.mnLinkType = rStrm.ReaduInt8();
+    maData.mnFlags = rStrm.ReaduInt16();
+    maData.mnNumFmtIdx = rStrm.ReaduInt16();
 
     mxTokenArray.reset();
     if( GetLinkType() == EXC_CHSRCLINK_WORKSHEET )
@@ -919,7 +931,7 @@ XclImpChFont::XclImpChFont() :
 
 void XclImpChFont::ReadChFont( XclImpStream& rStrm )
 {
-    rStrm >> mnFontIdx;
+    mnFontIdx = rStrm.ReaduInt16();
 }
 
 XclImpChText::XclImpChText( const XclImpChRoot& rRoot ) :
@@ -929,19 +941,20 @@ XclImpChText::XclImpChText( const XclImpChRoot& rRoot ) :
 
 void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnHAlign
-            >> maData.mnVAlign
-            >> maData.mnBackMode
-            >> maData.maTextColor
-            >> maData.maRect
-            >> maData.mnFlags;
+    maData.mnHAlign = rStrm.ReaduInt8();
+    maData.mnVAlign = rStrm.ReaduInt8();
+    maData.mnBackMode = rStrm.ReaduInt16();
+    rStrm   >> maData.maTextColor
+            >> maData.maRect;
+    maData.mnFlags = rStrm.ReaduInt16();
 
     if( GetBiff() == EXC_BIFF8 )
     {
         // BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // placement and rotation
-        rStrm >> maData.mnFlags2 >> maData.mnRotation;
+        maData.mnFlags2 = rStrm.ReaduInt16();
+        maData.mnRotation = rStrm.ReaduInt16();
     }
     else
     {
@@ -976,7 +989,9 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
             mxFrame->ReadRecordGroup( rStrm );
         break;
         case EXC_ID_CHOBJECTLINK:
-            rStrm >> maObjLink.mnTarget >> maObjLink.maPointPos.mnSeriesIdx >> maObjLink.maPointPos.mnPointIdx;
+            maObjLink.mnTarget = rStrm.ReaduInt16();
+            maObjLink.maPointPos.mnSeriesIdx = rStrm.ReaduInt16();
+            maObjLink.maPointPos.mnPointIdx = rStrm.ReaduInt16();
         break;
         case EXC_ID_CHFRLABELPROPS:
             ReadChFrLabelProps( rStrm );
@@ -1207,7 +1222,8 @@ void XclImpChText::ReadChFrLabelProps( XclImpStream& rStrm )
         mxLabelProps.reset( new XclChFrLabelProps );
         sal_uInt16 nSepLen;
         rStrm.Ignore( 12 );
-        rStrm >> mxLabelProps->mnFlags >> nSepLen;
+        mxLabelProps->mnFlags = rStrm.ReaduInt16();
+        nSepLen = rStrm.ReaduInt16();
         if( nSepLen > 0 )
             mxLabelProps->maSeparator = rStrm.ReadUniString( nSepLen );
     }
@@ -1247,7 +1263,9 @@ void lclFinalizeTitle( XclImpChTextRef& rxTitle, const XclImpChText* pDefText, c
 
 void XclImpChMarkerFormat::ReadChMarkerFormat( XclImpStream& rStrm )
 {
-    rStrm >> maData.maLineColor >> maData.maFillColor >> maData.mnMarkerType >> maData.mnFlags;
+    rStrm >> maData.maLineColor >> maData.maFillColor;
+    maData.mnMarkerType = rStrm.ReaduInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
 
     const XclImpRoot& rRoot = rStrm.GetRoot();
     if( rRoot.GetBiff() == EXC_BIFF8 )
@@ -1257,7 +1275,7 @@ void XclImpChMarkerFormat::ReadChMarkerFormat( XclImpStream& rStrm )
         maData.maLineColor = rPal.GetColor( rStrm.ReaduInt16() );
         maData.maFillColor = rPal.GetColor( rStrm.ReaduInt16() );
         // marker size
-        rStrm >> maData.mnMarkerSize;
+        maData.mnMarkerSize = rStrm.ReaduInt32();
     }
 }
 
@@ -1301,7 +1319,7 @@ XclImpChPieFormat::XclImpChPieFormat() :
 
 void XclImpChPieFormat::ReadChPieFormat( XclImpStream& rStrm )
 {
-    rStrm >> mnPieDist;
+    mnPieDist = rStrm.ReaduInt16();
 }
 
 void XclImpChPieFormat::Convert( ScfPropertySet& rPropSet ) const
@@ -1317,12 +1335,13 @@ XclImpChSeriesFormat::XclImpChSeriesFormat() :
 
 void XclImpChSeriesFormat::ReadChSeriesFormat( XclImpStream& rStrm )
 {
-    rStrm >> mnFlags;
+    mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpCh3dDataFormat::ReadCh3dDataFormat( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnBase >> maData.mnTop;
+    maData.mnBase = rStrm.ReaduInt8();
+    maData.mnTop = rStrm.ReaduInt8();
 }
 
 void XclImpCh3dDataFormat::Convert( ScfPropertySet& rPropSet ) const
@@ -1342,7 +1361,7 @@ XclImpChAttachedLabel::XclImpChAttachedLabel( const XclImpChRoot& rRoot ) :
 
 void XclImpChAttachedLabel::ReadChAttachedLabel( XclImpStream& rStrm )
 {
-    rStrm >> mnFlags;
+    mnFlags = rStrm.ReaduInt16();
 }
 
 XclImpChTextRef XclImpChAttachedLabel::CreateDataLabel( const XclImpChText* pParent ) const
@@ -1366,10 +1385,10 @@ XclImpChDataFormat::XclImpChDataFormat( const XclImpChRoot& rRoot ) :
 
 void XclImpChDataFormat::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm   >> maData.maPointPos.mnPointIdx
-            >> maData.maPointPos.mnSeriesIdx
-            >> maData.mnFormatIdx
-            >> maData.mnFlags;
+    maData.maPointPos.mnPointIdx = rStrm.ReaduInt16();
+    maData.maPointPos.mnSeriesIdx = rStrm.ReaduInt16();
+    maData.mnFormatIdx = rStrm.ReaduInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpChDataFormat::ReadSubRecord( XclImpStream& rStrm )
@@ -1578,13 +1597,13 @@ XclImpChSerTrendLine::XclImpChSerTrendLine( const XclImpChRoot& rRoot ) :
 
 void XclImpChSerTrendLine::ReadChSerTrendLine( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnLineType
-            >> maData.mnOrder
-            >> maData.mfIntercept
-            >> maData.mnShowEquation
-            >> maData.mnShowRSquared
-            >> maData.mfForecastFor
-            >> maData.mfForecastBack;
+    maData.mnLineType = rStrm.ReaduInt8();
+    maData.mnOrder = rStrm.ReaduInt8();
+    maData.mfIntercept = rStrm.ReadDouble();
+    maData.mnShowEquation = rStrm.ReaduInt8();
+    maData.mnShowRSquared = rStrm.ReaduInt8();
+    maData.mfForecastFor = rStrm.ReadDouble();
+    maData.mfForecastBack = rStrm.ReadDouble();
 }
 
 Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() const
@@ -1664,9 +1683,12 @@ XclImpChSerErrorBar::XclImpChSerErrorBar( const XclImpChRoot& rRoot ) :
 
 void XclImpChSerErrorBar::ReadChSerErrorBar( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnBarType >> maData.mnSourceType >> maData.mnLineEnd;
+    maData.mnBarType = rStrm.ReaduInt8();
+    maData.mnSourceType = rStrm.ReaduInt8();
+    maData.mnLineEnd = rStrm.ReaduInt8();
     rStrm.Ignore( 1 );
-    rStrm >> maData.mfValue >> maData.mnValueCount;
+    maData.mfValue = rStrm.ReadDouble();
+    maData.mnValueCount = rStrm.ReaduInt16();
 }
 
 void XclImpChSerErrorBar::SetSeriesData( XclImpChSourceLinkRef xValueLink, XclImpChDataFormatRef xDataFmt )
@@ -1766,9 +1788,15 @@ XclImpChSeries::XclImpChSeries( const XclImpChRoot& rRoot, sal_uInt16 nSeriesIdx
 
 void XclImpChSeries::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnCategType >> maData.mnValueType >> maData.mnCategCount >> maData.mnValueCount;
+    maData.mnCategType = rStrm.ReaduInt16();
+    maData.mnValueType = rStrm.ReaduInt16();
+    maData.mnCategCount = rStrm.ReaduInt16();
+    maData.mnValueCount = rStrm.ReaduInt16();
     if( GetBiff() == EXC_BIFF8 )
-        rStrm >> maData.mnBubbleType >> maData.mnBubbleCount;
+    {
+        maData.mnBubbleType = rStrm.ReaduInt16();
+        maData.mnBubbleCount = rStrm.ReaduInt16();
+    }
 }
 
 void XclImpChSeries::ReadSubRecord( XclImpStream& rStrm )
@@ -1782,7 +1810,7 @@ void XclImpChSeries::ReadSubRecord( XclImpStream& rStrm )
             ReadChDataFormat( rStrm );
         break;
         case EXC_ID_CHSERGROUP:
-            rStrm >> mnGroupIdx;
+            mnGroupIdx = rStrm.ReaduInt16();
         break;
         case EXC_ID_CHSERPARENT:
             ReadChSerParent( rStrm );
@@ -2093,7 +2121,7 @@ void XclImpChSeries::ReadChDataFormat( XclImpStream& rStrm )
 
 void XclImpChSeries::ReadChSerParent( XclImpStream& rStrm )
 {
-    rStrm >> mnParentIdx;
+    mnParentIdx = rStrm.ReaduInt16();
     // index to parent series is 1-based, convert it to 0-based
     if( mnParentIdx > 0 )
         --mnParentIdx;
@@ -2174,20 +2202,23 @@ void XclImpChType::ReadChType( XclImpStream& rStrm )
     switch( nRecId )
     {
         case EXC_ID_CHBAR:
-            rStrm >> maData.mnOverlap >> maData.mnGap >> maData.mnFlags;
+            maData.mnOverlap = rStrm.ReadInt16();
+            maData.mnGap = rStrm.ReadInt16();
+            maData.mnFlags = rStrm.ReaduInt16();
         break;
 
         case EXC_ID_CHLINE:
         case EXC_ID_CHAREA:
         case EXC_ID_CHRADARLINE:
         case EXC_ID_CHRADARAREA:
-            rStrm >> maData.mnFlags;
+            maData.mnFlags = rStrm.ReaduInt16();
         break;
 
         case EXC_ID_CHPIE:
-            rStrm >> maData.mnRotation >> maData.mnPieHole;
+            maData.mnRotation = rStrm.ReaduInt16();
+            maData.mnPieHole = rStrm.ReaduInt16();
             if( GetBiff() == EXC_BIFF8 )
-                rStrm >> maData.mnFlags;
+                maData.mnFlags = rStrm.ReaduInt16();
             else
                 maData.mnFlags = 0;
         break;
@@ -2200,13 +2231,17 @@ void XclImpChType::ReadChType( XclImpStream& rStrm )
 
         case EXC_ID_CHSCATTER:
             if( GetBiff() == EXC_BIFF8 )
-                rStrm >> maData.mnBubbleSize >> maData.mnBubbleType >> maData.mnFlags;
+            {
+                maData.mnBubbleSize = rStrm.ReaduInt16();
+                maData.mnBubbleType = rStrm.ReaduInt16();
+                maData.mnFlags = rStrm.ReaduInt16();
+            }
             else
                 maData.mnFlags = 0;
         break;
 
         case EXC_ID_CHSURFACE:
-            rStrm >> maData.mnFlags;
+            maData.mnFlags = rStrm.ReaduInt16();
         break;
 
         default:
@@ -2371,13 +2406,13 @@ Reference< XChartType > XclImpChType::CreateChartType( Reference< XDiagram > xDi
 
 void XclImpChChart3d::ReadChChart3d( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnRotation
-            >> maData.mnElevation
-            >> maData.mnEyeDist
-            >> maData.mnRelHeight
-            >> maData.mnRelDepth
-            >> maData.mnDepthGap
-            >> maData.mnFlags;
+    maData.mnRotation = rStrm.ReaduInt16();
+    maData.mnElevation = rStrm.ReadInt16();
+    maData.mnEyeDist = rStrm.ReaduInt16();
+    maData.mnRelHeight = rStrm.ReaduInt16();
+    maData.mnRelDepth = rStrm.ReaduInt16();
+    maData.mnDepthGap = rStrm.ReaduInt16();
+    maData.mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) const
@@ -2455,7 +2490,10 @@ XclImpChLegend::XclImpChLegend( const XclImpChRoot& rRoot ) :
 
 void XclImpChLegend::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.maRect >> maData.mnDockMode >> maData.mnSpacing >> maData.mnFlags;
+    rStrm >> maData.maRect;
+    maData.mnDockMode = rStrm.ReaduInt8();
+    maData.mnSpacing = rStrm.ReaduInt8();
+    maData.mnFlags = rStrm.ReaduInt16();
 
     // trace unsupported features
     if( GetTracer().IsEnabled() )
@@ -2593,7 +2631,7 @@ XclImpChDropBar::XclImpChDropBar( sal_uInt16 nDropBar ) :
 
 void XclImpChDropBar::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> mnBarDist;
+    mnBarDist = rStrm.ReaduInt16();
 }
 
 void XclImpChDropBar::Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
@@ -2620,7 +2658,8 @@ XclImpChTypeGroup::XclImpChTypeGroup( const XclImpChRoot& rRoot ) :
 void XclImpChTypeGroup::ReadHeaderRecord( XclImpStream& rStrm )
 {
     rStrm.Ignore( 16 );
-    rStrm >> maData.mnFlags >> maData.mnGroupIdx;
+    maData.mnFlags = rStrm.ReaduInt16();
+    maData.mnGroupIdx = rStrm.ReaduInt16();
 }
 
 void XclImpChTypeGroup::ReadSubRecord( XclImpStream& rStrm )
@@ -2925,20 +2964,23 @@ XclImpChLabelRange::XclImpChLabelRange( const XclImpChRoot& rRoot ) :
 
 void XclImpChLabelRange::ReadChLabelRange( XclImpStream& rStrm )
 {
-    rStrm >> maLabelData.mnCross >> maLabelData.mnLabelFreq >> maLabelData.mnTickFreq >> maLabelData.mnFlags;
+    maLabelData.mnCross = rStrm.ReaduInt16();
+    maLabelData.mnLabelFreq = rStrm.ReaduInt16();
+    maLabelData.mnTickFreq = rStrm.ReaduInt16();
+    maLabelData.mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpChLabelRange::ReadChDateRange( XclImpStream& rStrm )
 {
-    rStrm   >> maDateData.mnMinDate
-            >> maDateData.mnMaxDate
-            >> maDateData.mnMajorStep
-            >> maDateData.mnMajorUnit
-            >> maDateData.mnMinorStep
-            >> maDateData.mnMinorUnit
-            >> maDateData.mnBaseUnit
-            >> maDateData.mnCross
-            >> maDateData.mnFlags;
+    maDateData.mnMinDate = rStrm.ReaduInt16();
+    maDateData.mnMaxDate = rStrm.ReaduInt16();
+    maDateData.mnMajorStep = rStrm.ReaduInt16();
+    maDateData.mnMajorUnit = rStrm.ReaduInt16();
+    maDateData.mnMinorStep = rStrm.ReaduInt16();
+    maDateData.mnMinorUnit = rStrm.ReaduInt16();
+    maDateData.mnBaseUnit = rStrm.ReaduInt16();
+    maDateData.mnCross = rStrm.ReaduInt16();
+    maDateData.mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const
@@ -3022,12 +3064,12 @@ XclImpChValueRange::XclImpChValueRange( const XclImpChRoot& rRoot ) :
 
 void XclImpChValueRange::ReadChValueRange( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mfMin
-            >> maData.mfMax
-            >> maData.mfMajorStep
-            >> maData.mfMinorStep
-            >> maData.mfCross
-            >> maData.mnFlags;
+    maData.mfMin = rStrm.ReadDouble();
+    maData.mfMax = rStrm.ReadDouble();
+    maData.mfMajorStep = rStrm.ReadDouble();
+    maData.mfMinorStep = rStrm.ReadDouble();
+    maData.mfCross = rStrm.ReadDouble();
+    maData.mnFlags = rStrm.ReaduInt16();
 }
 
 void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) const
@@ -3122,20 +3164,20 @@ XclImpChTick::XclImpChTick( const XclImpChRoot& rRoot ) :
 
 void XclImpChTick::ReadChTick( XclImpStream& rStrm )
 {
-    rStrm   >> maData.mnMajor
-            >> maData.mnMinor
-            >> maData.mnLabelPos
-            >> maData.mnBackMode;
+    maData.mnMajor = rStrm.ReaduInt8();
+    maData.mnMinor = rStrm.ReaduInt8();
+    maData.mnLabelPos = rStrm.ReaduInt8();
+    maData.mnBackMode = rStrm.ReaduInt8();
     rStrm.Ignore( 16 );
-    rStrm   >> maData.maTextColor
-            >> maData.mnFlags;
+    rStrm >> maData.maTextColor;
+    maData.mnFlags = rStrm.ReaduInt16();
 
     if( GetBiff() == EXC_BIFF8 )
     {
         // BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // rotation
-        rStrm >> maData.mnRotation;
+        maData.mnRotation = rStrm.ReaduInt16();
     }
     else
     {
@@ -3177,7 +3219,7 @@ XclImpChAxis::XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxisType ) :
 
 void XclImpChAxis::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnType;
+    maData.mnType = rStrm.ReaduInt16();
 }
 
 void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
@@ -3198,7 +3240,7 @@ void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
             mxValueRange->ReadChValueRange( rStrm );
         break;
         case EXC_ID_CHFORMAT:
-            rStrm >> mnNumFmtIdx;
+            mnNumFmtIdx = rStrm.ReaduInt16();
         break;
         case EXC_ID_CHTICK:
             mxTick.reset( new XclImpChTick( GetChRoot() ) );
@@ -3449,7 +3491,8 @@ XclImpChAxesSet::XclImpChAxesSet( const XclImpChRoot& rRoot, sal_uInt16 nAxesSet
 
 void XclImpChAxesSet::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnAxesSetId >> maData.maRect;
+    maData.mnAxesSetId = rStrm.ReaduInt16();
+    rStrm >> maData.maRect;
 }
 
 void XclImpChAxesSet::ReadSubRecord( XclImpStream& rStrm )
@@ -3989,7 +4032,8 @@ void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
 
 void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
 {
-    rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
+    maProps.mnFlags = rStrm.ReaduInt16();
+    maProps.mnEmptyMode = rStrm.ReaduInt8();
 }
 
 void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )

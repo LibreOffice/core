@@ -66,7 +66,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
             sal_uInt16 nChars = b16BitLen ? rStrm.ReaduInt16() : rStrm.ReaduInt8();
             sal_uInt8 nFlagField = 0;
             if( nChars || !::get_flag( nFlags, EXC_STR_SMARTFLAGS ) )
-                rStrm >> nFlagField;
+                nFlagField = rStrm.ReaduInt8();
 
             bool b16Bit, bRich, bFarEast;
             sal_uInt16 nRunCount;
@@ -119,7 +119,8 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, 
         for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
         {
             sal_uInt16 nChar, nFontIdx;
-            rStrm >> nChar >> nFontIdx;
+            nChar = rStrm.ReaduInt16();
+            nFontIdx = rStrm.ReaduInt16();
             AppendFormat( rFormats, nChar, nFontIdx );
         }
     }
@@ -128,7 +129,8 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, 
         for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
         {
             sal_uInt8 nChar, nFontIdx;
-            rStrm >> nChar >> nFontIdx;
+            nChar = rStrm.ReaduInt8();
+            nFontIdx = rStrm.ReaduInt8();
             AppendFormat( rFormats, nChar, nFontIdx );
         }
     }
@@ -143,7 +145,8 @@ void XclImpString::ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormat
     for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
     {
         sal_uInt16 nChar, nFontIdx;
-        rStrm >> nChar >> nFontIdx;
+        nChar = rStrm.ReaduInt16();
+        nFontIdx = rStrm.ReaduInt16();
         rStrm.Ignore( 4 );
         AppendFormat( rFormats, nChar, nFontIdx );
     }

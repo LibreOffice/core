@@ -777,14 +777,14 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
     mfValue( 0.0 ),
     mnBoolErr( 0 )
 {
-    rStrm >> mnType;
+    mnType = rStrm.ReaduInt8();
     switch( mnType )
     {
         case EXC_CACHEDVAL_EMPTY:
             rStrm.Ignore( 8 );
         break;
         case EXC_CACHEDVAL_DOUBLE:
-            rStrm >> mfValue;
+            mfValue = rStrm.ReadDouble();
         break;
         case EXC_CACHEDVAL_STRING:
             maStr = rStrm.ReadUniString();
@@ -793,7 +793,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
         case EXC_CACHEDVAL_ERROR:
         {
             double fVal;
-            rStrm >> mnBoolErr;
+            mnBoolErr = rStrm.ReaduInt8();
             rStrm.Ignore( 7 );
 
             const ScTokenArray* pScTokArr = rStrm.GetRoot().GetOldFmlaConverter().GetBoolErr(

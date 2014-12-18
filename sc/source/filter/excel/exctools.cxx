@@ -180,10 +180,11 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     sal_uInt16          nCref;
     sal_uInt8           nName, nComment;
 
-    rIn >> nCref;
-    rIn >> nProtected;
+    nCref = rIn.ReaduInt16();
+    nProtected = rIn.ReaduInt8();
     rIn.Ignore( 1 );                // Hide
-    rIn >> nName >> nComment;
+    nName = rIn.ReaduInt8();
+    nComment = rIn.ReaduInt8();
     rIn.Ignore( 1 );       // statt nUser!
 
     if( nName )
@@ -205,7 +206,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
     sal_uInt16          nC, nR;
     while( n )
     {
-        rIn >> nR >> nC;
+        nR = rIn.ReaduInt16();
+        nC = rIn.ReaduInt16();
 
         aEntries.push_back(new ExcScenarioCell( nC, nR ));
 

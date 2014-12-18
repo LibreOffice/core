@@ -689,7 +689,7 @@ sal_uInt16 XclTokenArray::GetSize() const
 void XclTokenArray::ReadSize( XclImpStream& rStrm )
 {
     sal_uInt16 nSize;
-    rStrm >> nSize;
+    nSize = rStrm.ReaduInt16();
     maTokVec.resize( nSize );
 }
 

@@ -175,13 +175,13 @@ XclPCFieldInfo::XclPCFieldInfo() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCFieldInfo& rInfo )
 {
-    rStrm   >> rInfo.mnFlags
-            >> rInfo.mnGroupChild
-            >> rInfo.mnGroupBase
-            >> rInfo.mnVisItems
-            >> rInfo.mnGroupItems
-            >> rInfo.mnBaseItems
-            >> rInfo.mnOrigItems;
+    rInfo.mnFlags = rStrm.ReaduInt16();
+    rInfo.mnGroupChild = rStrm.ReaduInt16();
+    rInfo.mnGroupBase = rStrm.ReaduInt16();
+    rInfo.mnVisItems = rStrm.ReaduInt16();
+    rInfo.mnGroupItems = rStrm.ReaduInt16();
+    rInfo.mnBaseItems = rStrm.ReaduInt16();
+    rInfo.mnOrigItems = rStrm.ReaduInt16();
     if( rStrm.GetRecLeft() >= 3 )
         rInfo.maName = rStrm.ReadUniString();
     else
@@ -261,7 +261,8 @@ void XclPCNumGroupInfo::SetXclDataType( sal_uInt16 nXclType )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCNumGroupInfo& rInfo )
 {
-    return rStrm >> rInfo.mnFlags;
+    rInfo.mnFlags = rStrm.ReaduInt16();
+    return rStrm;;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPCNumGroupInfo& rInfo )
@@ -357,14 +358,14 @@ XclPCInfo::XclPCInfo() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPCInfo& rInfo )
 {
-    rStrm   >> rInfo.mnSrcRecs
-            >> rInfo.mnStrmId
-            >> rInfo.mnFlags
-            >> rInfo.mnBlockRecs
-            >> rInfo.mnStdFields
-            >> rInfo.mnTotalFields;
+    rInfo.mnSrcRecs = rStrm.ReaduInt32();
+    rInfo.mnStrmId = rStrm.ReaduInt16();
+    rInfo.mnFlags = rStrm.ReaduInt16();
+    rInfo.mnBlockRecs = rStrm.ReaduInt16();
+    rInfo.mnStdFields = rStrm.ReaduInt16();
+    rInfo.mnTotalFields = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm   >> rInfo.mnSrcType;
+    rInfo.mnSrcType = rStrm.ReaduInt16();
     rInfo.maUserName = rStrm.ReadUniString();
     return rStrm;
 }
@@ -390,7 +391,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName )
 {
     sal_uInt16 nStrLen;
-    rStrm >> nStrLen;
+    nStrLen = rStrm.ReaduInt16();
     rCachedName.mbUseCache = nStrLen == EXC_PT_NOSTRING;
     if( rCachedName.mbUseCache )
         rCachedName.maName.clear();
@@ -430,11 +431,11 @@ XclPTItemInfo::XclPTItemInfo() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTItemInfo& rInfo )
 {
-    return rStrm
-        >> rInfo.mnType
-        >> rInfo.mnFlags
-        >> rInfo.mnCacheIdx
-        >> rInfo.maVisName;
+    rInfo.mnType = rStrm.ReaduInt16();
+    rInfo.mnFlags = rStrm.ReaduInt16();
+    rInfo.mnCacheIdx = rStrm.ReaduInt16();
+    rStrm >> rInfo.maVisName;
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTItemInfo& rInfo )
@@ -539,12 +540,12 @@ void XclPTFieldInfo::SetSubtotals( const XclPTSubtotalVec& rSubtotals )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldInfo& rInfo )
 {
     // rInfo.mnCacheIdx is not part of the SXVD record
-    return rStrm
-        >> rInfo.mnAxes
-        >> rInfo.mnSubtCount
-        >> rInfo.mnSubtotals
-        >> rInfo.mnItemCount
-        >> rInfo.maVisName;
+    rInfo.mnAxes = rStrm.ReaduInt16();
+    rInfo.mnSubtCount = rStrm.ReaduInt16();
+    rInfo.mnSubtotals = rStrm.ReaduInt16();
+    rInfo.mnItemCount = rStrm.ReaduInt16();
+    rStrm >> rInfo.maVisName;
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldInfo& rInfo )
@@ -624,11 +625,11 @@ void XclPTFieldExtInfo::SetApiLayoutMode( sal_Int32 nLayoutMode )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldExtInfo& rInfo )
 {
     sal_uInt8 nNameLen = 0;
-    rStrm >> rInfo.mnFlags
-          >> rInfo.mnSortField
-          >> rInfo.mnShowField
-          >> rInfo.mnNumFmt
-          >> nNameLen;
+    rInfo.mnFlags = rStrm.ReaduInt32();
+    rInfo.mnSortField = rStrm.ReaduInt16();
+    rInfo.mnShowField = rStrm.ReaduInt16();
+    rInfo.mnNumFmt = rStrm.ReaduInt16();
+    nNameLen = rStrm.ReaduInt8();
 
     rStrm.Ignore(10);
     if (nNameLen != 0xFF)
@@ -674,10 +675,10 @@ XclPTPageFieldInfo::XclPTPageFieldInfo() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTPageFieldInfo& rInfo )
 {
-    return rStrm
-        >> rInfo.mnField
-        >> rInfo.mnSelItem
-        >> rInfo.mnObjId;
+    rInfo.mnField = rStrm.ReaduInt16();
+    rInfo.mnSelItem = rStrm.ReaduInt16();
+    rInfo.mnObjId = rStrm.ReaduInt16();
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTPageFieldInfo& rInfo )
@@ -802,14 +803,14 @@ void XclPTDataFieldInfo::SetApiRefItemType( sal_Int32 nRefItemType )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTDataFieldInfo& rInfo )
 {
-    return rStrm
-        >> rInfo.mnField
-        >> rInfo.mnAggFunc
-        >> rInfo.mnRefType
-        >> rInfo.mnRefField
-        >> rInfo.mnRefItem
-        >> rInfo.mnNumFmt
-        >> rInfo.maVisName;
+    rInfo.mnField = rStrm.ReaduInt16();
+    rInfo.mnAggFunc = rStrm.ReaduInt16();
+    rInfo.mnRefType = rStrm.ReaduInt16();
+    rInfo.mnRefField = rStrm.ReaduInt16();
+    rInfo.mnRefItem = rStrm.ReaduInt16();
+    rInfo.mnNumFmt = rStrm.ReaduInt16();
+    rStrm >> rInfo.maVisName;
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTDataFieldInfo& rInfo )
@@ -847,19 +848,24 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTInfo& rInfo )
 {
     sal_uInt16 nTabLen, nDataLen;
 
-    rStrm   >> rInfo.maOutXclRange
-            >> rInfo.mnFirstHeadRow
-            >> rInfo.maDataXclPos
-            >> rInfo.mnCacheIdx;
+    rStrm   >> rInfo.maOutXclRange;
+    rInfo.mnFirstHeadRow = rStrm.ReaduInt16();
+    rStrm   >> rInfo.maDataXclPos;
+    rInfo.mnCacheIdx = rStrm.ReaduInt16();
     rStrm.Ignore( 2 );
-    rStrm   >> rInfo.mnDataAxis >> rInfo.mnDataPos
-            >> rInfo.mnFields
-            >> rInfo.mnRowFields >> rInfo.mnColFields
-            >> rInfo.mnPageFields >> rInfo.mnDataFields
-            >> rInfo.mnDataRows >> rInfo.mnDataCols
-            >> rInfo.mnFlags
-            >> rInfo.mnAutoFmtIdx
-            >> nTabLen >> nDataLen;
+    rInfo.mnDataAxis = rStrm.ReaduInt16();
+    rInfo.mnDataPos = rStrm.ReaduInt16();
+    rInfo.mnFields = rStrm.ReaduInt16();
+    rInfo.mnRowFields = rStrm.ReaduInt16();
+    rInfo.mnColFields = rStrm.ReaduInt16();
+    rInfo.mnPageFields = rStrm.ReaduInt16();
+    rInfo.mnDataFields = rStrm.ReaduInt16();
+    rInfo.mnDataRows = rStrm.ReaduInt16();
+    rInfo.mnDataCols = rStrm.ReaduInt16();
+    rInfo.mnFlags = rStrm.ReaduInt16();
+    rInfo.mnAutoFmtIdx = rStrm.ReaduInt16();
+    nTabLen = rStrm.ReaduInt16();
+    nDataLen = rStrm.ReaduInt16();
     rInfo.maTableName = rStrm.ReadUniString( nTabLen );
     rInfo.maDataName = rStrm.ReadUniString( nDataLen );
     return rStrm;
@@ -903,13 +909,13 @@ XclPTExtInfo::XclPTExtInfo() :
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTExtInfo& rInfo )
 {
-    rStrm >> rInfo.mnSxformulaRecs;
+    rInfo.mnSxformulaRecs = rStrm.ReaduInt16();
     rStrm.Ignore( 6 );
-    return rStrm
-        >> rInfo.mnSxselectRecs
-        >> rInfo.mnPagePerRow
-        >> rInfo.mnPagePerCol
-        >> rInfo.mnFlags;
+    rInfo.mnSxselectRecs = rStrm.ReaduInt16();
+    rInfo.mnPagePerRow = rStrm.ReaduInt16();
+    rInfo.mnPagePerCol = rStrm.ReaduInt16();
+    rInfo.mnFlags = rStrm.ReaduInt32();
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo )
@@ -992,9 +998,10 @@ void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo )
 {
     rStrm.Ignore( 2 );
-    rStrm >> rInfo.mbReport;            /// 2 for report* fmts ?
+    rInfo.mbReport = rStrm.ReaduInt32();            /// 2 for report* fmts ?
     rStrm.Ignore( 6 );
-    rStrm >> rInfo.mnAutoFormat >> rInfo.mnGridLayout;
+    rInfo.mnAutoFormat = rStrm.ReaduInt8();
+    rInfo.mnGridLayout = rStrm.ReaduInt8();
     rInfo.maGrandTotalName = rStrm.ReadUniString();
     return rStrm;
 }
