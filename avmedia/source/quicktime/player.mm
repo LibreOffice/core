@@ -383,7 +383,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( AVMEDIA_QUICKTIME_PLAYER_SERVICENAME );
+    aRet[0] = AVMEDIA_QUICKTIME_PLAYER_SERVICENAME;
 
     return aRet;
 }

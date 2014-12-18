@@ -80,7 +80,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString( AVMEDIA_QUICKTIME_MANAGER_SERVICENAME );
+    aRet[0] = AVMEDIA_QUICKTIME_MANAGER_SERVICENAME;
 
     return aRet;
 }

@@ -107,7 +107,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 }
 
 #define IMPLEMENTATIONNAME_SOUNDHANDLER OUString("com.sun.star.comp.framework.SoundHandler")
-#define SERVICENAME_CONTENTHANDLER OUString("com.sun.star.frame.ContentHandler")
 
 /*===========================================================================================================*/
 /* XServiceInfo */
@@ -133,7 +132,7 @@ css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames()
 css::uno::Sequence< OUString > SoundHandler::impl_getStaticSupportedServiceNames()
 {
     css::uno::Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = SERVICENAME_CONTENTHANDLER;
+    seqServiceNames.getArray() [0] = "com.sun.star.frame.ContentHandler";
     return seqServiceNames;
 }
 

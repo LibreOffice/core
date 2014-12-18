@@ -64,7 +64,7 @@ uno::Sequence< OUString > SAL_CALL OGLFrameGrabber::getSupportedServiceNames()
         throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.media.FrameGrabber_OpenGL");
+    aRet[0] = "com.sun.star.media.FrameGrabber_OpenGL";
     return aRet;
 }
 

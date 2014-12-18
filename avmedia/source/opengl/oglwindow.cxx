@@ -71,7 +71,7 @@ sal_Bool SAL_CALL OGLWindow::supportsService( const OUString& rServiceName ) thr
 uno::Sequence< OUString > SAL_CALL OGLWindow::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.media.Window_OpenGL");
+    aRet[0] = "com.sun.star.media.Window_OpenGL";
     return aRet;
 }
 

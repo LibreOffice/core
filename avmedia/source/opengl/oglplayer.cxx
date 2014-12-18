@@ -353,7 +353,7 @@ uno::Sequence< OUString > SAL_CALL OGLPlayer::getSupportedServiceNames()
      throw ( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(1);
-    aRet[0] = OUString("com.sun.star.media.Player_OpenGL");
+    aRet[0] = "com.sun.star.media.Player_OpenGL";
     return aRet;
 }
 
