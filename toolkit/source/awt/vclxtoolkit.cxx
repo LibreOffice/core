@@ -64,11 +64,6 @@
 #include "postmac.h"
 #endif
 
-#ifdef ANDROID
-#include <sal/ByteBufferWrapper.hxx>
-using org::libreoffice::touch::ByteBufferWrapper;
-#endif
-
 #include <vcl/sysdata.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
@@ -195,8 +190,6 @@ public:
     virtual ~VCLXToolkit();
 
     // css::awt::XToolkitExperimental
-    css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
-(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL processEventsToIdle()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -730,11 +723,6 @@ void SAL_CALL VCLXToolkit::disposing()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    return createScreenCompatibleDeviceUsingBuffer( Width, Height, 1, 1, 0, 0, 0 );
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXToolkit::createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 addressOfMemoryBufferForSharedArrayWrapper ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-{
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
@@ -743,18 +731,7 @@ void SAL_CALL VCLXToolkit::disposing()
     SolarMutexGuard aSolarGuard;
 
     VirtualDevice* pV = new VirtualDevice;
-    if ( addressOfMemoryBufferForSharedArrayWrapper != 0 ) {
-#if defined(ANDROID)
-        ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
-#else
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ),
-            Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset),
-            basebmp::RawMemorySharedArray( reinterpret_cast<sal_uInt8*>( addressOfMemoryBufferForSharedArrayWrapper )));
-#endif
-    } else {
-        pV->SetOutputSizePixel( Size( Width, Height ) );
-    }
+    pV->SetOutputSizePixel( Size( Width, Height ) );
     pVDev->SetVirtualDevice( pV );
 
     xRef = pVDev;

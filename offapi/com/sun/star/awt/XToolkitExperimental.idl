@@ -19,17 +19,6 @@ module com {  module sun {  module star {  module awt {
 
 interface XToolkitExperimental : XToolkit2
 {
-  /** Don't use this.
-   */
-
-  com::sun::star::awt::XDevice createScreenCompatibleDeviceUsingBuffer( [in] long Width,
-                                                                        [in] long Height,
-                                                                        [in] long ScaleNumerator,
-                                                                        [in] long ScaleDenominator,
-                                                                        [in] long XOffset,
-                                                                        [in] long YOffset,
-                                                                        [in] hyper AddressOfMemoryBufferForSharedArrayWrapper );
-
   /** Process all pending idle events
    */
   void processEventsToIdle();
