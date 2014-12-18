@@ -127,7 +127,6 @@ public class DBMetaData
         };
 
     private int iMaxColumnsInSelect;
-    private int iMaxColumnsInGroupBy;
     private int iMaxColumnNameLength = -1;
     private int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
@@ -419,15 +418,6 @@ public class DBMetaData
         }
     }
 
-    private void setMaxColumnsInGroupBy() throws SQLException
-    {
-        iMaxColumnsInGroupBy = xDBMetaData.getMaxColumnsInGroupBy();
-        if (iMaxColumnsInGroupBy == 0)
-        {
-            iMaxColumnsInGroupBy = DBMetaData.NOLIMIT;
-        }
-    }
-
     public int getMaxColumnsInTable() throws SQLException
     {
         int iMaxColumnsInTable = xDBMetaData.getMaxColumnsInTable();
@@ -444,7 +434,6 @@ public class DBMetaData
         {
             xDBMetaData = DBConnection.getMetaData();
             getDataSourceInterfaces();
-            setMaxColumnsInGroupBy();
             setMaxColumnsInSelect();
         }
         catch (SQLException e)

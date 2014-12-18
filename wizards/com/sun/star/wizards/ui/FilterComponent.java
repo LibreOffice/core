@@ -101,7 +101,6 @@ public class FilterComponent
     private static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     private int SOI_MATCHALL = 0;
     private int SOI_MATCHANY = 1;
-    private int curHelpID;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
@@ -364,7 +363,7 @@ public class FilterComponent
      */
     public FilterComponent(WizardDialog CurUnoDialog, int iStep, int iPosX, int iPosY, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
-        this.curHelpID = _firstHelpID;
+        int curHelpID = _firstHelpID;
         this.IStep = Integer.valueOf(iStep);
 
         curtabindex = UnoDialog.setInitialTabindex(iStep);
@@ -440,7 +439,7 @@ public class FilterComponent
         for (int i = 0; i < FilterCount; i++)
         {
             bEnabled = (i == 0);
-            oControlRows[i] = new ControlRow(iPosX, iPosY + 20, i, bEnabled, (this.curHelpID + (i * 3)));
+            oControlRows[i] = new ControlRow(iPosX, iPosY + 20, i, bEnabled, (curHelpID + (i * 3)));
             iPosY += 43;
         }
     }

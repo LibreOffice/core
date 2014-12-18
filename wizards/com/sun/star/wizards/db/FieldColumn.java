@@ -40,7 +40,6 @@ public class FieldColumn
 
     // field meta data
     private int FieldWidth;
-    private int StandardFormatKey;
     private boolean bIsNumberFormat;
 
     private static boolean bFormatKeysInitialized = false;
@@ -223,6 +222,7 @@ public class FieldColumn
 
     private void getTyperelatedFieldData()
     {
+        int StandardFormatKey = 0;
         try
         {
             switch ( getFieldType() )

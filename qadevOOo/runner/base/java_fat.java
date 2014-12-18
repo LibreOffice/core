@@ -45,10 +45,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class java_fat implements TestBase
 {
 
-    private boolean m_isDebug = false;
-    private boolean keepdocument = false;
     private boolean logging = true;
-    private boolean newOffice = false;
     private DynamicClassLoader m_aDynamicClassLoader = null;
 
     private lib.TestParameters m_aParams;
@@ -65,21 +62,21 @@ public class java_fat implements TestBase
             String ExclusionFile = (String) m_aParams.get("ExclusionList");
             ArrayList<String> exclusions = null;
             boolean retValue = true;
-            m_isDebug = m_aParams.getBool("DebugIsActive");
+            boolean isDebug = m_aParams.getBool("DebugIsActive");
             logging = m_aParams.getBool("LoggingIsActive");
-            keepdocument = m_aParams.getBool("KeepDocument");
-            newOffice = m_aParams.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
+            boolean keepdocument = m_aParams.getBool("KeepDocument");
+            boolean newOffice = m_aParams.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
             if (keepdocument)
             {
                 System.setProperty("KeepDocument", "true");
             }
             if (ExclusionFile != null)
             {
-                exclusions = getExclusionList(ExclusionFile, m_isDebug);
+                exclusions = getExclusionList(ExclusionFile, isDebug);
             }
 
             String sDescriptionPath = (String) m_aParams.get("DescriptionPath");
-            DescEntry[] entries = dg.getDescriptionFor(job, sDescriptionPath, m_isDebug);
+            DescEntry[] entries = dg.getDescriptionFor(job, sDescriptionPath, isDebug);
 
             if (entries == null)
             {

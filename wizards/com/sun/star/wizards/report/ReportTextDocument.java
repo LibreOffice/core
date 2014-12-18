@@ -63,7 +63,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     private TextStyleHandler oTextStyleHandler;
     public TextFieldHandler oTextFieldHandler;
     public ViewHandler oViewHandler;
-    private NumberFormatter oNumberFormatter;
     public static final String TBLRECORDSECTION = "Tbl_RecordSection";
     public static final String TBLGROUPSECTION = "Tbl_GroupField";
     public static final String RECORDSECTION = "RecordSection";
@@ -96,7 +95,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         oViewHandler = new ViewHandler(xTextDocument);
         oTextFieldHandler = new TextFieldHandler(xMSFDoc, xTextDocument);
         DBColumnsVector = new java.util.ArrayList<DBColumn>();
-        oNumberFormatter = oTextTableHandler.getNumberFormatter();
+        NumberFormatter oNumberFormatter = oTextTableHandler.getNumberFormatter();
         CurDBMetaData = _aRecordParser;
         long lDateCorrection = oNumberFormatter.getNullDateCorrection();
         oNumberFormatter.setBooleanReportDisplayNumberFormat();

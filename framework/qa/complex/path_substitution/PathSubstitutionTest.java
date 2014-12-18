@@ -38,7 +38,6 @@ import com.sun.star.util.XStringSubstitution;
 public class PathSubstitutionTest
 {
 
-    private XMultiServiceFactory xMSF;
     // all substitution variables
     private VariableContainer substVars = null;
 
@@ -66,7 +65,7 @@ public class PathSubstitutionTest
      */
     @Test public void checkXStringSubstitution()
     {
-        xMSF = getMSF();
+        XMultiServiceFactory xMSF = getMSF();
         System.out.println("---- Testing the XStringSubstitution interface ----");
         System.out.println("Create intance of test object.\n");
         XStringSubstitution oObj = null;

@@ -34,17 +34,15 @@ public class DatabaseApplication
 
     private final XOfficeDatabaseDocument databaseDocument;
     private final XDatabaseDocumentUI documentUI;
-    private final DatabaseAccess db;
 
     public DatabaseApplication(final DatabaseAccess _db) throws Exception
     {
-        db = _db;
-        databaseDocument = db.getDatabaseDocument();
+        databaseDocument = _db.getDatabaseDocument();
 
         // load it into a frame
-        final Object object = db.getORB().createInstance("com.sun.star.frame.Desktop");
+        final Object object = _db.getORB().createInstance("com.sun.star.frame.Desktop");
         final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, object);
-        final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(db.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
+        final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(_db.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
 
         // get the controller, which provides access to various UI operations
         final XModel docModel = UnoRuntime.queryInterface(XModel.class, loadedComponent);

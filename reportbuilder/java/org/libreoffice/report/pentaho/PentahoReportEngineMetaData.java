@@ -17,6 +17,10 @@
  */
 package org.libreoffice.report.pentaho;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.libreoffice.report.DataSourceFactory;
 import org.libreoffice.report.ImageService;
 import org.libreoffice.report.InputRepository;
@@ -24,14 +28,6 @@ import org.libreoffice.report.OutputRepository;
 import org.libreoffice.report.ReportEngineMetaData;
 import org.libreoffice.report.ReportEngineParameterNames;
 import org.libreoffice.report.ReportJobFactory;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.pentaho.reporting.libraries.base.util.HashNMap;
 
 
 public class PentahoReportEngineMetaData
@@ -41,31 +37,11 @@ public class PentahoReportEngineMetaData
     public static final String OPENDOCUMENT_TEXT = "application/vnd.oasis.opendocument.text";
     public static final String OPENDOCUMENT_SPREADSHEET = "application/vnd.oasis.opendocument.spreadsheet";
     public static final String OPENDOCUMENT_CHART = "application/vnd.oasis.opendocument.chart";
-    private final static String CONTENT_TYPE = "content-type";
     public static final String DEBUG = "raw/text+xml";
-    private final Set<String> mandatoryParameters;
     private final Map<String,Class<?>> parameterTypes;
-    private final HashNMap enumerationValues;
 
     public PentahoReportEngineMetaData()
     {
-        mandatoryParameters = new HashSet<String>();
-        mandatoryParameters.add(ReportEngineParameterNames.CONTENT_TYPE);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_NAME);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_REPOSITORY);
-        mandatoryParameters.add(ReportEngineParameterNames.OUTPUT_NAME);
-        mandatoryParameters.add(ReportEngineParameterNames.OUTPUT_REPOSITORY);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
-        mandatoryParameters.add(ReportEngineParameterNames.IMAGE_SERVICE);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_REPORTJOB_FACTORY);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_MASTER_COLUMNS);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_MASTER_VALUES);
-        mandatoryParameters.add(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
-        mandatoryParameters.add(ReportEngineParameterNames.AUTHOR);
-        mandatoryParameters.add(ReportEngineParameterNames.TITLE);
-        mandatoryParameters.add(ReportEngineParameterNames.MAXROWS);
-
-
         parameterTypes = new HashMap<String,Class<?>>();
         parameterTypes.put(ReportEngineParameterNames.CONTENT_TYPE, String.class);
         parameterTypes.put(ReportEngineParameterNames.INPUT_NAME, String.class);
@@ -81,15 +57,6 @@ public class PentahoReportEngineMetaData
         parameterTypes.put(ReportEngineParameterNames.AUTHOR, String.class);
         parameterTypes.put(ReportEngineParameterNames.TITLE, String.class);
         parameterTypes.put(ReportEngineParameterNames.MAXROWS, Integer.class);
-
-        enumerationValues = new HashNMap();
-        enumerationValues.add(CONTENT_TYPE,
-                PentahoReportEngineMetaData.OPENDOCUMENT_TEXT);
-        enumerationValues.add(CONTENT_TYPE,
-                PentahoReportEngineMetaData.OPENDOCUMENT_SPREADSHEET);
-        enumerationValues.add(CONTENT_TYPE,
-                PentahoReportEngineMetaData.OPENDOCUMENT_CHART);
-        enumerationValues.add(CONTENT_TYPE, PentahoReportEngineMetaData.DEBUG);
     }
 
     public Class getParameterType(final String parameter)

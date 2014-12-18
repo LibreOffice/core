@@ -100,10 +100,6 @@ public class CheckMemoryUsage
     private String[][] sDocuments;
     private static final int iAllowMemoryIncrease = 10;
     private int iExportDocCount = 25;
-    /**
-     * The test parameters
-     */
-    private TestParameters param = null;
 
     /**
      * Collect all documents to load and all filters used for export.
@@ -115,7 +111,7 @@ public class CheckMemoryUsage
         final XMultiServiceFactory xMsf = getMSF();
 
         // some Tests need the qadevOOo TestParameters, it is like a Hashmap for Properties.
-        param = new TestParameters();
+        TestParameters param = new TestParameters();
         param.put("ServiceFactory", xMsf); // some qadevOOo functions need the ServiceFactory
 
         // test does definitely not run on Windows.
