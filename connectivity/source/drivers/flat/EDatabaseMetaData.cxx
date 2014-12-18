@@ -240,7 +240,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return OUString("sdbc:flat:") + m_pConnection->getURL();
+    return "sdbc:flat:" + m_pConnection->getURL();
 }
 
 

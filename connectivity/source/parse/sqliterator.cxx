@@ -252,7 +252,7 @@ namespace
     {
         _out_rString = _rxRow->getString( _nColumnIndex );
         if ( _rxRow->wasNull() )
-            _out_rString = "";
+            _out_rString.clear();
     }
 
 
@@ -274,7 +274,7 @@ namespace
 
         if ( _rxDBMeta.is() )
         {
-            sComposedName = "";
+            sComposedName.clear();
 
             Reference< XResultSet> xRes = _rxDBMeta->getTables(
                 !_rCatalog.isEmpty() ? makeAny( _rCatalog ) : Any(), !_rSchema.isEmpty() ? _rSchema : s_sWildcard, _rTableName, sTableTypes );
@@ -502,7 +502,7 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
     OSL_PRECOND( SQL_ISRULE( pTableRef, cross_union ) || SQL_ISRULE( pTableRef, qualified_join ) ,
         "OSQLParseTreeIterator::getQualified_join: illegal node!" );
 
-    aTableRange = "";
+    aTableRange.clear();
 
     const OSQLParseNode* pNode = getTableNode(_rTables,pTableRef->getChild(0),aTableRange);
     if ( isTableNode( pNode ) )
@@ -620,7 +620,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
     OUString aTableRange;
     for (sal_uInt32 i = 0; i < pTableRefCommalist->count(); i++)
     {   // Process FROM clause
-        aTableRange = "";
+        aTableRange.clear();
 
         const OSQLParseNode* pTableListElement = pTableRefCommalist->getChild(i);
         if ( isTableNode( pTableListElement ) )
@@ -711,7 +711,9 @@ namespace
         OUString& _out_rColumnName, OUString& _out_rTableRange,
         const OSQLColumns* _pSelectColumns, OUString& _out_rColumnAliasIfPresent )
     {
-        _out_rColumnName = _out_rTableRange = _out_rColumnAliasIfPresent = "";
+        _out_rColumnName.clear();
+        _out_rTableRange.clear();
+        _out_rColumnAliasIfPresent.clear();
         if ( SQL_ISRULE( _pColumnRef, column_ref ) )
         {
             if( _pColumnRef->count() > 1 )
@@ -1081,8 +1083,8 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
             pColumnRef = pColumnRef->getChild(0);
         }
         OSL_ENSURE(pColumnRef != NULL,"OSQLParseTreeIterator: error in parse tree!");
-        aTableRange = "";
-        sColumnName = "";
+        aTableRange.clear();
+        sColumnName.clear();
         if ( SQL_ISRULE(pColumnRef,column_ref) )
         {
             // Column name (and TableRange):

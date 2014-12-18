@@ -2517,7 +2517,7 @@ OUString ODbaseTable::createTempFile()
         aIdent += "/";
 
     OUString sTempName(aIdent);
-    OUString sExt(OUString(".") + m_pConnection->getExtension());
+    OUString sExt("." + m_pConnection->getExtension());
     OUString sName(m_Name);
     TempFile aTempFile(sName, true, &sExt, &sTempName);
     if(!aTempFile.IsValid())

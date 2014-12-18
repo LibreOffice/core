@@ -114,7 +114,7 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
                 lcl_readURLPatternNode(m_aInstalled,*pPatternIter,aInstalledDriver);
                 if ( !aInstalledDriver.sDriverFactory.isEmpty() &&
                      ( aMiscOptions.IsExperimentalMode() ||
-                       !aInstalledDriver.sDriverFactory.equals("com.sun.star.comp.sdbc.firebird.Driver") ))
+                       aInstalledDriver.sDriverFactory != "com.sun.star.comp.sdbc.firebird.Driver" ))
                     m_aDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
             }
         } // if ( m_aInstalled.isValid() )

@@ -411,7 +411,7 @@ namespace connectivity
                 "connectivity.hsqldb", "jfw_getEnabled: error code " << +e);
             break;
         }
-        return bEnabled  && url.equals("sdbc:embedded:hsqldb");
+        return bEnabled  && url == "sdbc:embedded:hsqldb";
     }
 
 

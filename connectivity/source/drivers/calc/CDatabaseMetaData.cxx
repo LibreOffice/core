@@ -240,7 +240,7 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OUString("sdbc:calc:") + m_pConnection->getURL();
+    return "sdbc:calc:" + m_pConnection->getURL();
 }
 
 

@@ -186,7 +186,7 @@ sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const OUString& url )
     SvtMiscOptions aMiscOptions;
 
     return aMiscOptions.IsExperimentalMode() &&
-        (url.equals("sdbc:embedded:firebird") || url.startsWith("sdbc:firebird:"));
+        (url == "sdbc:embedded:firebird" || url.startsWith("sdbc:firebird:"));
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo(

@@ -134,7 +134,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
         bool bIsNewDatabase = false;
         OUString aStorageURL;
-        if (url.equals("sdbc:embedded:firebird"))
+        if (url == "sdbc:embedded:firebird")
         {
             m_bIsEmbedded = true;
 

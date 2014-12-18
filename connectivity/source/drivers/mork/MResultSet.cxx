@@ -739,7 +739,7 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
     OSQLParseNode *pMark = pNode->getChild(0);
 
     // Initialize to empty string
-    rMatchString = "";
+    rMatchString.clear();
 
     OUString aParameterName;
     if (SQL_ISPUNCTUATION(pMark,"?")) {
@@ -944,7 +944,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             // String containing only a '%' and nothing else
             op = MQueryOp::Exists;
             // Will be ignored for Exists case, but clear anyway.
-            matchString = "";
+            matchString.clear();
         }
         else if ( matchString.indexOf ( WILDCARD ) == -1 &&
              matchString.indexOf ( MATCHCHAR ) == -1 )
@@ -1370,7 +1370,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             if (xTableColumn.is())
                 xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
-                sTableColumnName = "";
+                sTableColumnName.clear();
 
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...

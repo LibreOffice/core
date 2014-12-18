@@ -331,7 +331,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return OUString("sdbc:dbase:") + m_pConnection->getURL();
+    return "sdbc:dbase:" + m_pConnection->getURL();
 }
 
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)

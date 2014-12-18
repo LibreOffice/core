@@ -85,7 +85,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     }
     m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    m_sPassword = "";
+    m_sPassword.clear();
     const char* pPwd        = "password";
 
     const PropertyValue *pIter  = info.getConstArray();

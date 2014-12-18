@@ -361,7 +361,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
 
     aParseParam.pParser = &_rParser;
 
-    _out_rString = "";
+    _out_rString.clear();
     OUStringBuffer sBuffer;
     bool bSuccess = false;
     try
@@ -777,7 +777,8 @@ bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
         const OSQLParseNode* pTableNode = _pTableNode;
         // clear the parameter given
         _rCatalog = Any();
-        _rSchema = _rTable = "";
+        _rSchema.clear();
+        _rTable.clear();
         // see rule catalog_name: in sqlbison.y
         if (SQL_ISRULE(pTableNode,catalog_name))
         {
@@ -1269,12 +1270,12 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     SQLyylval.pParseNode = NULL;
     //  SQLyypvt = NULL;
     m_pParseTree = NULL;
-    m_sErrorMessage = "";
+    m_sErrorMessage.clear();
 
     // Start the parser
     if (SQLyyparse() != 0)
     {
-        m_sFieldName = "";
+        m_sFieldName.clear();
         m_xField.clear();
         m_xFormatter.clear();
         m_nFormatKey = 0;
@@ -1295,7 +1296,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
     {
         (*s_pGarbageCollector)->clear();
 
-        m_sFieldName = "";
+        m_sFieldName.clear();
         m_xField.clear();
         m_xFormatter.clear();
         m_nFormatKey = 0;

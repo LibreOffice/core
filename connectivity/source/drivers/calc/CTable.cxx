@@ -485,7 +485,7 @@ void OCalcTable::fillColumns()
                 break;
             default:
                 SAL_WARN( "connectivity.drivers","missing type name");
-                aTypeName = "";
+                aTypeName.clear();
         }
 
         // check if the column name already exists
