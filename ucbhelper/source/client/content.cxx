@@ -1193,7 +1193,7 @@ void Content_Impl::disposing( const EventObject& Source )
 
         xContent = m_xContent;
 
-        m_aURL = "";
+        m_aURL.clear();
         m_xCommandProcessor = 0;
         m_xContent = 0;
     }
@@ -1314,7 +1314,7 @@ void Content_Impl::inserted()
 {
     // URL might have changed during 'insert' => recalculate in next getURL()
     osl::MutexGuard aGuard( m_aMutex );
-    m_aURL = "";
+    m_aURL.clear();
 }
 
 

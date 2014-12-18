@@ -112,8 +112,7 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
                                OUString(
                                    "ResultSetImplHelper" ),
-                               OUString(
-                                   DYNAMICRESULTSET_SERVICE_NAME ) );
+                               DYNAMICRESULTSET_SERVICE_NAME );
 
 
 

@@ -288,7 +288,7 @@ XTYPEPROVIDER_IMPL_9( ResultSet,
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSet,
                     OUString("ResultSet"),
-                    OUString(RESULTSET_SERVICE_NAME ) );
+                    RESULTSET_SERVICE_NAME );
 
 
 
@@ -1334,14 +1334,12 @@ void SAL_CALL ResultSet::setPropertyValue( const OUString& aPropertyName,
     if ( aPropertyName.isEmpty() )
         throw beans::UnknownPropertyException();
 
-    if ( aPropertyName.equals(
-                OUString("RowCount") ) )
+    if ( aPropertyName == "RowCount" )
     {
         // property is read-only.
         throw lang::IllegalArgumentException();
     }
-    else if ( aPropertyName.equals(
-                OUString("IsRowCountFinal") ) )
+    else if ( aPropertyName == "IsRowCountFinal" )
     {
         // property is read-only.
         throw lang::IllegalArgumentException();
@@ -1365,13 +1363,11 @@ uno::Any SAL_CALL ResultSet::getPropertyValue(
 
     uno::Any aValue;
 
-    if ( PropertyName.equals(
-                OUString("RowCount") ) )
+    if ( PropertyName == "RowCount" )
     {
         aValue <<= m_pImpl->m_xDataSupplier->currentCount();
     }
-    else if ( PropertyName.equals(
-                OUString("IsRowCountFinal") ) )
+    else if ( PropertyName == "IsRowCountFinal" )
     {
         aValue <<= m_pImpl->m_xDataSupplier->isCountFinal();
     }
@@ -1397,10 +1393,8 @@ void SAL_CALL ResultSet::addPropertyChangeListener(
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !aPropertyName.isEmpty() &&
-         !aPropertyName.equals(
-                OUString("RowCount") ) &&
-         !aPropertyName.equals(
-                OUString("IsRowCountFinal") ) )
+         aPropertyName != "RowCount" &&
+         aPropertyName != "IsRowCountFinal" )
         throw beans::UnknownPropertyException();
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
@@ -1423,10 +1417,8 @@ void SAL_CALL ResultSet::removePropertyChangeListener(
     osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( !aPropertyName.isEmpty() &&
-         !aPropertyName.equals(
-                OUString("RowCount") ) &&
-         !aPropertyName.equals(
-                OUString("IsRowCountFinal") ) )
+         aPropertyName != "RowCount" &&
+         aPropertyName != "IsRowCountFinal" )
         throw beans::UnknownPropertyException();
 
     if ( m_pImpl->m_pPropertyChangeListeners )
