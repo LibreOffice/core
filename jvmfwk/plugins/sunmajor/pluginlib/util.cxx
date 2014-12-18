@@ -1287,8 +1287,8 @@ void addJavaInfosDirScan(
                     }
 
                     JFW_ENSURE(errNext == File::E_None || errNext == File::E_NOENT,
-                                OUString("[Java framework] sunjavaplugin: ")
-                                + "Error while iterating over contens of "
+                                "[Java framework] sunjavaplugin: "
+                                "Error while iterating over contens of "
                                 + usDir2 + ". Osl file error: "
                                 + OUString::number(openErr));
                 }
