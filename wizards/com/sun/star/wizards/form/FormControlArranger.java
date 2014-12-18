@@ -25,7 +25,6 @@ import com.sun.star.sdbc.DataType;
 import com.sun.star.task.XStatusIndicator;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
-import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.*;
@@ -597,6 +596,7 @@ public class FormControlArranger
             {
                 if (nFieldType == DataType.TIMESTAMP)
                 {
+
                     DBControlList[i] = new TimeStampControl(new Resource(xMSF, "dbw"), oFormHandler, xFormName, sFieldName, aPoint);
                 }
                 else
@@ -625,7 +625,7 @@ public class FormControlArranger
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
 
             {
-                Helper.setUnoPropertyValue(LabelControlList[i], PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
+                LabelControlList[i].setPropertyValue(PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
             }
             checkOuterPoints(m_currentControlPosX, m_dbControlWidth, m_currentControlPosY, m_dbControlHeight, true);
             aDBControl.setPropertyValue(PropertyNames.PROPERTY_BORDER, NBorderType);

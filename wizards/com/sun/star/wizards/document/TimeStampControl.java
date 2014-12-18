@@ -73,7 +73,7 @@ public class TimeStampControl extends DatabaseControl
             {
                 Object oControl = xShapes.getByIndex(_i);
                 XControlShape xControlShape = UnoRuntime.queryInterface(XControlShape.class, oControl);
-                return UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
+                return UnoRuntime.queryInterface(XPropertySet.class, xControlShape);
             }
         }
         catch (Exception e)
