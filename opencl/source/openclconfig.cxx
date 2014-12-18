@@ -114,7 +114,7 @@ OpenCLConfig::ImplMatcherSet StringSequenceToSetOfImplMatcher(const css::uno::Se
 
 bool match(const OUString& rPattern, const OUString& rInput)
 {
-    if (rPattern == "")
+    if (rPattern.isEmpty())
         return true;
 
     UErrorCode nIcuError(U_ZERO_ERROR);
@@ -131,13 +131,13 @@ bool match(const OUString& rPattern, const OUString& rInput)
 bool match(const OpenCLConfig::ImplMatcher& rListEntry, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
 {
 #if defined WNT
-    if (rListEntry.maOS != "" && rListEntry.maOS != "Windows")
+    if (!rListEntry.maOS.isEmpty() && rListEntry.maOS != "Windows")
         return false;
 #elif defined LINUX
-    if (rListEntry.maOS != "" && rListEntry.maOS != "Linux")
+    if (!rListEntry.maOS.isEmpty() && rListEntry.maOS != "Linux")
         return false;
 #elif defined MACOSX
-    if (rListEntry.maOS != "" && rListEntry.maOS != "OS X")
+    if (!rListEntry.maOS.isEmpty() && rListEntry.maOS != "OS X")
         return false;
 #endif
 
