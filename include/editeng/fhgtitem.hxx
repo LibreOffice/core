@@ -91,6 +91,8 @@ public:
     sal_uInt16 GetProp() const { return nProp; }
 
     SfxMapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif

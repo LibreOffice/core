@@ -414,10 +414,14 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 static_cast<const SwNumRuleItem*>(pItem)->dumpAsXml(writer);
                 break;
             case RES_CHRATR_FONT:
+            case RES_CHRATR_CTL_FONT:
                 static_cast<const SvxFontItem*>(pItem)->dumpAsXml(writer);
                 break;
             case RES_CHRATR_BACKGROUND:
                 static_cast<const SvxBrushItem*>(pItem)->dumpAsXml(writer);
+                break;
+            case RES_CHRATR_FONTSIZE:
+                static_cast<const SvxFontHeightItem*>(pItem)->dumpAsXml(writer);
                 break;
             default: bDone = false; break;
         }
@@ -433,14 +437,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_CHRATR_CTL_FONT: pWhich = "character ctl font"; break;
-            case RES_CHRATR_FONTSIZE:
-            {
-                pWhich = "character font size";
-                const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
-                oValue = "nHeight: " + OString::number(pFontHeightItem->GetHeight()) + ", nProp: " + OString::number(pFontHeightItem->GetProp());
-                break;
-            }
             case RES_CNTNT:
             {
                 pWhich = "content";
