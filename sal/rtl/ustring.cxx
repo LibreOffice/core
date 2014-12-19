@@ -62,6 +62,8 @@ static rtl_uString const aImplEmpty_rtl_uString =
  * string.cxx
  */
 
+#define IMPL_RTL_IS_USTRING         true
+
 #define IMPL_RTL_STRCODE            sal_Unicode
 #define IMPL_RTL_USTRCODE( c )      (c)
 #define IMPL_RTL_STRNAME( n )       rtl_ustr_ ## n
@@ -69,7 +71,7 @@ static rtl_uString const aImplEmpty_rtl_uString =
 #define IMPL_RTL_STRINGNAME( n )    rtl_uString_ ## n
 #define IMPL_RTL_STRINGDATA         rtl_uString
 #define IMPL_RTL_EMPTYSTRING        aImplEmpty_rtl_uString
-#define IMPL_RTL_INTERN
+
 static void internRelease (rtl_uString *pThis);
 
 #if USE_SDT_PROBES

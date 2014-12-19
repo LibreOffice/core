@@ -62,8 +62,7 @@ static inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* _pDest,
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( getLength )( const IMPL_RTL_STRCODE* pStr )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     return strlen( pStr);
 #else
@@ -88,8 +87,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
                                                 const IMPL_RTL_STRCODE* pStr2 )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     return strcmp( pStr1, pStr2);
 #else
@@ -122,8 +120,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
                                                            sal_Int32 nStr2Len )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     sal_Int32 nMin = std::min(nStr1Len, nStr2Len);
     sal_Int32 nRet = strncmp(pStr1, pStr2, nMin);
@@ -163,8 +160,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
                                                                     sal_Int32 nShortenedLength )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     sal_Int32 nMin = std::min(std::min(nStr1Len, nStr2Len), nShortenedLength);
     sal_Int32 nRet = strncmp(pStr1, pStr2, nMin);
@@ -336,8 +332,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr
                                                     IMPL_RTL_STRCODE c )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     const IMPL_RTL_STRCODE* p = strchr(pStr, c);
     return p ? p - pStr : -1;
@@ -371,8 +366,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar_WithLength )( const IMPL_RTL_ST
                                                                IMPL_RTL_STRCODE c )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     IMPL_RTL_STRCODE* p = (IMPL_RTL_STRCODE*) memchr(pStr, c, nLen);
     return p ? p - pStr : -1;
@@ -397,8 +391,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* 
                                                         IMPL_RTL_STRCODE c )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     const IMPL_RTL_STRCODE* p = strrchr(pStr, c);
     return p ? p - pStr : -1;
@@ -442,8 +435,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr )( const IMPL_RTL_STRCODE* pStr,
                                                    const IMPL_RTL_STRCODE* pSubStr )
     SAL_THROW_EXTERN_C()
 {
-// same as "if sal_Char mode"
-#ifndef IMPL_RTL_INTERN
+#if !IMPL_RTL_IS_USTRING
     // take advantage of builtin optimisations
     const IMPL_RTL_STRCODE* p = strstr(pStr, pSubStr);
     return p ? p - pStr : -1;
@@ -1177,7 +1169,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
         return;
 
 /* OString doesn't have an 'intern' */
-#ifdef IMPL_RTL_INTERN
+#if IMPL_RTL_IS_USTRING
     if (SAL_STRING_IS_INTERN (pThis))
     {
         internRelease (pThis);

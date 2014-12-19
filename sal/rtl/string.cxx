@@ -55,6 +55,9 @@ static rtl_String const aImplEmpty_rtl_String =
  * the strtmpl.cxx just below, used to share code between here and
  * ustring.cxx
  */
+
+#define IMPL_RTL_IS_USTRING         false
+
 #define IMPL_RTL_STRCODE            sal_Char
 #define IMPL_RTL_USTRCODE( c )      ((unsigned char)c)
 #define IMPL_RTL_STRNAME( n )       rtl_str_ ## n
