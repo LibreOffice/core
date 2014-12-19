@@ -307,6 +307,19 @@ public class FormHandler
     public boolean belongsToForm(Object _oDrawPageElement, String _FormName)
     {
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
+        while (xServiceInfo.supportsService("com.sun.star.drawing.GroupShape"))
+        {
+            XShapes xShapes = UnoRuntime.queryInterface(XShapes.class, _oDrawPageElement);
+            try
+            {
+                _oDrawPageElement = xShapes.getByIndex(0);
+                xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
+            }
+            catch(final com.sun.star.uno.Exception e)
+            {
+                return false;
+            }
+        }
         if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
         {
             XControlShape xControlShape = UnoRuntime.queryInterface(XControlShape.class, _oDrawPageElement);
