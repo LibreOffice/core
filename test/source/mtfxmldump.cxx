@@ -231,7 +231,7 @@ void MetafileXmlDump::filterAllActionTypes()
     maFilter.assign(constMaxActionType, true);
 }
 
-xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
+xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
 {
     boost::scoped_ptr<SvStream> pStream;
 
@@ -256,10 +256,11 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
     return pDoc;
 }
 
-void MetafileXmlDump::writeXml(GDIMetaFile& rMetaFile, XmlWriter& rWriter)
+void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter)
 {
-    for(MetaAction* pAction = rMetaFile.FirstAction(); pAction != NULL; pAction = rMetaFile.NextAction())
+    for(size_t nAction = 0; nAction < rMetaFile.GetActionSize(); ++nAction)
     {
+        MetaAction* pAction = rMetaFile.GetAction(nAction);
         const sal_uInt16 nActionType = pAction->GetType();
         if (maFilter[nActionType])
             continue;

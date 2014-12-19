@@ -23,7 +23,7 @@ class OOO_DLLPUBLIC_TEST MetafileXmlDump
 {
     std::vector<bool> maFilter;
 
-    void writeXml(GDIMetaFile& rMetaFile, XmlWriter& rWriter);
+    void writeXml(const GDIMetaFile& rMetaFile, XmlWriter& rWriter);
 
 public:
     MetafileXmlDump();
@@ -39,7 +39,7 @@ public:
         pTempStreamName - this is useful when creating the test, to dump the
         file for examination.
     */
-    xmlDocPtr dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName = OUString());
+    xmlDocPtr dumpAndParse(const GDIMetaFile& rMetaFile, const OUString& rTempStreamName = OUString());
 };
 
 #endif
