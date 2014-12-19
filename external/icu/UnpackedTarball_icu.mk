@@ -19,7 +19,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-macosx.patch \
 	external/icu/icu4c-solarisgcc.patch \
 	external/icu/icu4c-mkdir.patch \
-	external/icu/icu4c-buffer-overflow.patch \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 	external/icu/icu4c-scriptrun.patch \
 	external/icu/icu4c-changeset-39671.patch.1 \
