@@ -22,6 +22,7 @@
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <vector>
+#include "unonames.hxx"
 #include "vbaformatconditions.hxx"
 #include "vbaformatcondition.hxx"
 #include "vbaworkbook.hxx"
@@ -227,7 +228,7 @@ ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue("ConditionalFormat", uno::makeAny( mxSheetConditionalEntries ));
+        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::makeAny( mxSheetConditionalEntries ));
     }
     catch (uno::Exception& )
     {

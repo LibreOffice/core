@@ -18,6 +18,7 @@
  */
 #include "vbaformatcondition.hxx"
 #include "vbaformatconditions.hxx"
+#include "unonames.hxx"
 #include <ooo/vba/excel/XlFormatConditionType.hpp>
 
 using namespace ::ooo::vba;
@@ -147,7 +148,7 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue("ConditionalFormat", uno::makeAny( mxSheetConditionalEntries) );
+        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::makeAny( mxSheetConditionalEntries));
     }
     catch (uno::Exception& )
     {
