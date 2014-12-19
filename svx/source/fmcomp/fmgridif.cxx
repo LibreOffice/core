@@ -2702,7 +2702,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
     static Sequence< ::com::sun::star::util::URL> aSupported;
     if (aSupported.getLength() == 0)
     {
-        static const OUString sSupported[] = {
+        static const char* sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
             FMURL_RECORD_MOVEPREV,
             FMURL_RECORD_MOVENEXT,
@@ -2715,7 +2715,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
         sal_uInt16 i;
 
         for ( i = 0; i < aSupported.getLength(); ++i, ++pSupported)
-            pSupported->Complete = sSupported[i];
+            pSupported->Complete = OUString::createFromAscii(sSupported[i]);
 
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
