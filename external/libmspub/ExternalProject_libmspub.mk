@@ -19,6 +19,7 @@ $(eval $(call gb_ExternalProject_use_externals,libmspub,\
 	boost_headers \
 	icu \
 	revenge \
+	zlib \
 ))
 
 $(call gb_ExternalProject_get_state_target,libmspub,build) :
