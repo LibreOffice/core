@@ -344,6 +344,13 @@
 #define RID_SVX_RELOAD_NORMAL               (RID_SVX_START + 480)
 #define RID_SVX_RELOAD_SPECIAL              (RID_SVX_START + 481)
 
+#define RID_SVXIMG_DEPTH_INFINITY           (RID_SVX_START + 482)
+#define RID_SVXIMG_DEPTH_0                  (RID_SVX_START + 483)
+#define RID_SVXIMG_DEPTH_1                  (RID_SVX_START + 484)
+#define RID_SVXIMG_DEPTH_2                  (RID_SVX_START + 485)
+#define RID_SVXIMG_DEPTH_3                  (RID_SVX_START + 486)
+#define RID_SVXIMG_DEPTH_4                  (RID_SVX_START + 487)
+
 // Defines for the 3D engine
 #define RID_SVX_3D_UNDO_EXCHANGE_PASTE      (RID_SVX_START + 489)
 #define RID_SVX_3D_CREATE_LATHE             (RID_SVX_START + 490)

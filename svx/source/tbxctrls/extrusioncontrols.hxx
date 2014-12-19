@@ -89,6 +89,13 @@ class ExtrusionDepthWindow : public svtools::ToolbarMenu
 private:
     svt::ToolboxController& mrController;
 
+    Image maImgDepth0;
+    Image maImgDepth1;
+    Image maImgDepth2;
+    Image maImgDepth3;
+    Image maImgDepth4;
+    Image maImgDepthInfinity;
+
     FieldUnit   meUnit;
     double      mfDepth;
 
