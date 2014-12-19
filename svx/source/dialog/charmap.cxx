@@ -1448,6 +1448,105 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x11680, 0x116CF, RID_SUBSETSTR_TAKRI ) );
                     break;
 #endif
+#if U_ICU_VERSION_MAJOR_NUM >= 53
+                case UBLOCK_BASSA_VAH:
+                    aAllSubsets.push_back( Subset( 0x16AD0, 0x16AFF, RID_SUBSETSTR_BASSA_VAH ) );
+                    break;
+                case UBLOCK_CAUCASIAN_ALBANIAN:
+                    aAllSubsets.push_back( Subset( 0x10530, 0x1056F, RID_SUBSETSTR_CAUCASIAN_ALBANIAN) );
+                    break;
+                case UBLOCK_COPTIC_EPACT_NUMBERS:
+                    aAllSubsets.push_back( Subset( 0x102E0, 0x102FF, RID_SUBSETSTR_COPTIC_EPACT_NUMBERS ) );
+                    break;
+                case UBLOCK_COMBINING_DIACRITICAL_MARKS_EXTENDED:
+                    aAllSubsets.push_back( Subset( 0x1AB0, 0x1AFF, RID_SUBSETSTR_COMBINING_DIACRITICAL_MARKS_EXTENDED ) );
+                    break;
+                case UBLOCK_DUPLOYAN:
+                    aAllSubsets.push_back( Subset( 0x1BC00, 0x1BC9F, RID_SUBSETSTR_DUPLOYAN ) );
+                    break;
+                case UBLOCK_ELBASAN:
+                    aAllSubsets.push_back( Subset( 0x10500, 0x1052F, RID_SUBSETSTR_ELBASAN ) );
+                    break;
+                case UBLOCK_GEOMETRIC_SHAPES_EXTENDED:
+                    aAllSubsets.push_back( Subset( 0x1F780, 0x1F7FF, RID_SUBSETSTR_GEOMETRIC_SHAPES_EXTENDED ) );
+                    break;
+                case UBLOCK_GRANTHA:
+                    aAllSubsets.push_back( Subset( 0x11300, 0x1137F, RID_SUBSETSTR_GRANTHA ) );
+                    break;
+                case UBLOCK_KHOJKI:
+                    aAllSubsets.push_back( Subset( 0x11200, 0x1124F, RID_SUBSETSTR_KHOJKI ) );
+                    break;
+                case UBLOCK_KHUDAWADI:
+                    aAllSubsets.push_back( Subset( 0x112B0, 0x112FF, RID_SUBSETSTR_KHUDAWADI ) );
+                    break;
+                case UBLOCK_LATIN_EXTENDED_E:
+                    aAllSubsets.push_back( Subset( 0xAB30, 0xAB6F, RID_SUBSETSTR_LATIN_EXTENDED_E ) );
+                    break;
+                case UBLOCK_LINEAR_A:
+                    aAllSubsets.push_back( Subset( 0x10600, 0x1077F, RID_SUBSETSTR_LINEAR_A ) );
+                    break;
+                case UBLOCK_MAHAJANI:
+                    aAllSubsets.push_back( Subset( 0x11150, 0x1117F, RID_SUBSETSTR_MAHAJANI ) );
+                    break;
+                case UBLOCK_MANICHAEAN:
+                    aAllSubsets.push_back( Subset( 0x10AC0, 0x10AFF, RID_SUBSETSTR_MANICHAEAN ) );
+                    break;
+                case UBLOCK_MENDE_KIKAKUI:
+                    aAllSubsets.push_back( Subset( 0x1E800, 0x1E8DF, RID_SUBSETSTR_MENDE_KIKAKUI ) );
+                    break;
+                case UBLOCK_MODI:
+                    aAllSubsets.push_back( Subset( 0x11600, 0x1165F, RID_SUBSETSTR_MODI ) );
+                    break;
+                case UBLOCK_MRO:
+                    aAllSubsets.push_back( Subset( 0x16A40, 0x16A6F, RID_SUBSETSTR_MRO ) );
+                    break;
+                case UBLOCK_MYANMAR_EXTENDED_B:
+                    aAllSubsets.push_back( Subset( 0xA9E0, 0xA9FF, RID_SUBSETSTR_MYANMAR_EXTENDED_B ) );
+                    break;
+                case UBLOCK_NABATAEAN:
+                    aAllSubsets.push_back( Subset( 0x10880, 0x108AF, RID_SUBSETSTR_NABATAEAN ) );
+                    break;
+                case UBLOCK_OLD_NORTH_ARABIAN:
+                    aAllSubsets.push_back( Subset( 0x10A80, 0x10A9F, RID_SUBSETSTR_OLD_NORTH_ARABIAN ) );
+                    break;
+                case UBLOCK_OLD_PERMIC:
+                    aAllSubsets.push_back( Subset( 0x10350, 0x1037F, RID_SUBSETSTR_OLD_PERMIC ) );
+                    break;
+                case UBLOCK_ORNAMENTAL_DINGBATS:
+                    aAllSubsets.push_back( Subset( 0x1F650, 0x1F67F, RID_SUBSETSTR_ORNAMENTAL_DINGBATS ) );
+                    break;
+                case UBLOCK_PAHAWH_HMONG:
+                    aAllSubsets.push_back( Subset( 0x16B00, 0x16B8F, RID_SUBSETSTR_PAHAWH_HMONG ) );
+                    break;
+                case UBLOCK_PALMYRENE:
+                    aAllSubsets.push_back( Subset( 0x10860, 0x1087F, RID_SUBSETSTR_PALMYRENE ) );
+                    break;
+                case UBLOCK_PAU_CIN_HAU:
+                    aAllSubsets.push_back( Subset( 0x11AC0, 0x11AFF, RID_SUBSETSTR_PAU_CIN_HAU ) );
+                    break;
+                case UBLOCK_PSALTER_PAHLAVI:
+                    aAllSubsets.push_back( Subset( 0x10B80, 0x10BAF, RID_SUBSETSTR_PSALTER_PAHLAVI ) );
+                    break;
+                case UBLOCK_SHORTHAND_FORMAT_CONTROLS:
+                    aAllSubsets.push_back( Subset( 0x1BCA0, 0x1BCAF, RID_SUBSETSTR_SHORTHAND_FORMAT_CONTROLS ) );
+                    break;
+                case UBLOCK_SIDDHAM:
+                    aAllSubsets.push_back( Subset( 0x11580, 0x115FF, RID_SUBSETSTR_SIDDHAM ) );
+                    break;
+                case UBLOCK_SINHALA_ARCHAIC_NUMBERS:
+                    aAllSubsets.push_back( Subset( 0x111E0, 0x111FF, RID_SUBSETSTR_SINHALA_ARCHAIC_NUMBERS ) );
+                    break;
+                case UBLOCK_SUPPLEMENTAL_ARROWS_C:
+                    aAllSubsets.push_back( Subset( 0x1F800, 0x1F8FF, RID_SUBSETSTR_SUPPLEMENTAL_ARROWS_C ) );
+                    break;
+                case UBLOCK_TIRHUTA:
+                    aAllSubsets.push_back( Subset( 0x11480, 0x114DF, RID_SUBSETSTR_TIRHUTA ) );
+                    break;
+                case UBLOCK_WARANG_CITI:
+                    aAllSubsets.push_back( Subset( 0x118A0, 0x118FF, RID_SUBSETSTR_WARANG_CITI ) );
+                    break;
+#endif
+
             }
 
 #if OSL_DEBUG_LEVEL > 0
