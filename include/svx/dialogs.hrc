@@ -899,11 +899,9 @@
 #define RID_SVXSTR_DEPTH_4_INCH             (RID_SVX_START + 1001)
 
 #define RID_SVXFLOAT_FONTWORK_ALIGNMENT     (RID_SVX_START + 1002)
-#define RID_SVXFLOAT_FONTWORK_CHARSPACING   (RID_SVX_START + 1003)
 
-/*  #i35426# DR 2004-10-19: (RID_SVX_START+1002) and (RID_SVX_START+1003) are
-    already used for RID_SVXFLOAT_FONTWORK_ALIGNMENT and
-    RID_SVXFLOAT_FONTWORK_CHARSPACING above. But these IDs describe floating
+/*  #i35426# DR 2004-10-19: (RID_SVX_START+1002) is
+    already used for RID_SVXFLOAT_FONTWORK_ALIGNMENT above. But these IDs describe floating
     windows, and the following IDs are for strings, so this is no conflict. */
 #define RID_SVXSTR_PAGES                    (RID_SVX_START + 1002)
 
@@ -1068,9 +1066,16 @@
 #define RID_SVXSTR_MATTE                 (RID_SVX_START + 1298)
 #define RID_SVXSTR_PLASTIC               (RID_SVX_START + 1299)
 #define RID_SVXSTR_METAL                 (RID_SVX_START + 1300)
+#define RID_SVXSTR_CHARS_SPACING_VERY_TIGHT (RID_SVX_START + 1301)
+#define RID_SVXSTR_CHARS_SPACING_TIGHT   (RID_SVX_START + 1302)
+#define RID_SVXSTR_CHARS_SPACING_NORMAL  (RID_SVX_START + 1303)
+#define RID_SVXSTR_CHARS_SPACING_LOOSE   (RID_SVX_START + 1304)
+#define RID_SVXSTR_CHARS_SPACING_VERY_LOOSE (RID_SVX_START + 1305)
+#define RID_SVXSTR_CHARS_SPACING_CUSTOM   (RID_SVX_START + 1306)
+#define RID_SVXSTR_CHARS_SPACING_KERN_PAIRS (RID_SVX_START + 1307)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1301)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1308)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be

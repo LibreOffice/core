@@ -110,47 +110,39 @@ DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     };
 };
 
-DockingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
+String RID_SVXSTR_CHARS_SPACING_VERY_TIGHT
 {
-    HelpID = "svx:DockingWindow:RID_SVXFLOAT_FONTWORK_CHARSPACING";
-    Border = FALSE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = FALSE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
+    Text [ en-US ] = "~Very Tight";
+};
 
-    Text [ en-US ] = "Fontwork Character Spacing" ;
+String RID_SVXSTR_CHARS_SPACING_TIGHT
+{
+    Text [ en-US ] = "~Tight";
+};
 
-    String STR_CHARS_SPACING_VERY_TIGHT
-    {
-        Text [ en-US ] = "~Very Tight";
-    };
-    String STR_CHARS_SPACING_TIGHT
-    {
-        Text [ en-US ] = "~Tight";
-    };
-    String STR_CHARS_SPACING_NORMAL
-    {
-        Text [ en-US ] = "~Normal";
-    };
-    String STR_CHARS_SPACING_LOOSE
-    {
-        Text [ en-US ] = "~Loose";
-    };
-    String STR_CHARS_SPACING_VERY_LOOSE
-    {
-        Text [ en-US ] = "Very ~Loose";
-    };
-    String STR_CHARS_SPACING_CUSTOM
-    {
-        Text [ en-US ] = "~Custom...";
-    };
-    String STR_CHARS_SPACING_KERN_PAIRS
-    {
-        Text [ en-US ] = "~Kern Character Pairs";
-    };
+String RID_SVXSTR_CHARS_SPACING_NORMAL
+{
+    Text [ en-US ] = "~Normal";
+};
+
+String RID_SVXSTR_CHARS_SPACING_LOOSE
+{
+    Text [ en-US ] = "~Loose";
+};
+
+String RID_SVXSTR_CHARS_SPACING_VERY_LOOSE
+{
+    Text [ en-US ] = "Very ~Loose";
+};
+
+String RID_SVXSTR_CHARS_SPACING_CUSTOM
+{
+    Text [ en-US ] = "~Custom...";
+};
+
+String RID_SVXSTR_CHARS_SPACING_KERN_PAIRS
+{
+    Text [ en-US ] = "~Kern Character Pairs";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

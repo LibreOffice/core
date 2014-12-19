@@ -514,35 +514,29 @@ private:
 
 };
 
-
-
-FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow )
-: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_CHARSPACING ))
-, mrController( rController )
-, msFontworkCharacterSpacing( ".uno:FontworkCharacterSpacing" )
-, msFontworkKernCharacterPairs( ".uno:FontworkKernCharacterPairs" )
+FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxController& rController,
+    const Reference< XFrame >& rFrame, vcl::Window* pParentWindow)
+    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    , mrController(rController)
+    , msFontworkCharacterSpacing(".uno:FontworkCharacterSpacing")
+    , msFontworkKernCharacterPairs(".uno:FontworkKernCharacterPairs")
 {
-    SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
     SetSelectHdl( LINK( this, FontworkCharacterSpacingWindow, SelectHdl ) );
 
-    appendEntry( 0, SVX_RESSTR( STR_CHARS_SPACING_VERY_TIGHT ), MenuItemBits::RADIOCHECK );
-    appendEntry( 1, SVX_RESSTR( STR_CHARS_SPACING_TIGHT      ), MenuItemBits::RADIOCHECK );
-    appendEntry( 2, SVX_RESSTR( STR_CHARS_SPACING_NORMAL     ), MenuItemBits::RADIOCHECK );
-    appendEntry( 3, SVX_RESSTR( STR_CHARS_SPACING_LOOSE      ), MenuItemBits::RADIOCHECK );
-    appendEntry( 4, SVX_RESSTR( STR_CHARS_SPACING_VERY_LOOSE ), MenuItemBits::RADIOCHECK );
-    appendEntry( 5, SVX_RESSTR( STR_CHARS_SPACING_CUSTOM     ), MenuItemBits::RADIOCHECK );
+    appendEntry(0, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_VERY_TIGHT), MenuItemBits::RADIOCHECK);
+    appendEntry(1, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_TIGHT), MenuItemBits::RADIOCHECK);
+    appendEntry(2, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_NORMAL), MenuItemBits::RADIOCHECK);
+    appendEntry(3, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_LOOSE), MenuItemBits::RADIOCHECK);
+    appendEntry(4, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_VERY_LOOSE), MenuItemBits::RADIOCHECK);
+    appendEntry(5, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_CUSTOM), MenuItemBits::RADIOCHECK);
     appendSeparator();
-    appendEntry( 6, SVX_RESSTR( STR_CHARS_SPACING_KERN_PAIRS ), MenuItemBits::CHECKABLE  );
+    appendEntry(6, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_KERN_PAIRS), MenuItemBits::CHECKABLE);
 
     SetOutputSizePixel( getMenuSize() );
-
-    FreeResource();
 
     AddStatusListener( msFontworkCharacterSpacing );
     AddStatusListener( msFontworkKernCharacterPairs );
 }
-
-
 
 void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled )
 {
