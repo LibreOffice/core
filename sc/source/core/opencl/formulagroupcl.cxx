@@ -3306,7 +3306,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
 
             default:
                 throw UnhandledToken(pChild, "unhandled opcode");
-        };
+        }
     }
 }
 
