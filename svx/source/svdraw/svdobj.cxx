@@ -508,7 +508,7 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     // If the page is changing to another page with the same model, we
     // assume they create compatible UNO shape objects so we shouldn't have
     // to invalidate.
-    if (pOldPage != pPage && !(pOldPage && pPage && pOldModel == pModel))
+    if (pOldPage != pPage && pOldModel != pModel)
     {
         SvxShape* const pShape(getSvxShape());
         if (pShape && !pShape->HasSdrObjectOwnership())
