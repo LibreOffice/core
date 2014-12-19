@@ -334,11 +334,11 @@ public class StyleApplier
         {
             StylesPath = FileAccess.getOfficePath(xMSF, "Config", "", "");
             StylesPath = FileAccess.combinePaths(xMSF, StylesPath, "/wizard/form/styles");
-	}
+        }
         catch (NoValidPathException e)
-	{
-	}
-	return StylesPath;
+        {
+        }
+        return StylesPath;
     }
 
     private int[] getStyleColors(String _filename)
@@ -401,16 +401,16 @@ public class StyleApplier
                             if (aDBControl != null)
                             {
                                 if (aDBControl.xServiceInfo.supportsService("com.sun.star.drawing.ShapeCollection"))
-                            {
-                                    TimeStampControl oTimeStampControl = (TimeStampControl) aDBControl;
-                                for (int i = 0; i < 2; i++)
                                 {
-                                    XPropertySet xPropertySet = oTimeStampControl.getControlByIndex(i);
-                                    setDBControlColors(xPropertySet, _iStyleColors);
+                                    TimeStampControl oTimeStampControl = (TimeStampControl) aDBControl;
+                                    for (int i = 0; i < 2; i++)
+                                    {
+                                        XPropertySet xPropertySet = oTimeStampControl.getControlByIndex(i);
+                                        setDBControlColors(xPropertySet, _iStyleColors);
+                                    }
                                 }
-                            }
-                            else
-                            {
+                                else
+                                {
                                     setDBControlColors(aDBControl.xPropertySet, _iStyleColors);
                                 }
                             }
