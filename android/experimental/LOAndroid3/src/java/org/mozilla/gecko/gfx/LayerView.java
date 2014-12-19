@@ -418,8 +418,4 @@ public class LayerView extends FrameLayout {
             super(e);
         }
     }
-
-    public void changeCheckerboardBitmap(Bitmap bitmap, float pageWidth, float pageHeight) {
-        mRenderer.setCheckerboardBitmap(bitmap, pageWidth, pageHeight);
-    }
 }

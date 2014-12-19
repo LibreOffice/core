@@ -78,7 +78,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
     /* The new color for the checkerboard. */
     private int mCheckerboardColor;
-    private boolean mCheckerboardShouldShowChecks;
 
     private final PanZoomController mPanZoomController;
     private LayerView mView;
@@ -98,7 +97,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mZoomConstraints = new ZoomConstraints(false);
         mCheckerboardColor = Color.WHITE;
-        mCheckerboardShouldShowChecks = true;
 
         mPanZoomController = PanZoomController.Factory.create(this);
     }
@@ -247,10 +245,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
                 }
             });
         }
-    }
-
-    boolean checkerboardShouldShowChecks() {
-        return mCheckerboardShouldShowChecks;
     }
 
     int getCheckerboardColor() {
@@ -452,14 +446,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
                 ((viewPoint.y + origin.y) / zoom) - (geckoOrigin.y / geckoZoom));
 
         return layerPoint;
-    }
-
-    /**
-     * Sets whether or not the checkerboard should show checkmarks.
-     */
-    public void setCheckerboardShowChecks(boolean showChecks) {
-        mCheckerboardShouldShowChecks = showChecks;
-        mView.requestRender();
     }
 
     public ImmutableViewportMetrics getGeckoViewportMetrics() {

@@ -593,20 +593,10 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             if (!untransformedPageRect.contains(mFrameMetrics.getViewport()))
                 mShadowLayer.draw(mPageContext);
 
-            /* Draw the 'checkerboard'. We use gfx.show_checkerboard_pattern to
-             * determine whether to draw the screenshot layer.
+            /* Scissor around the page-rect, in case the page has shrunk
+             * since the screenshot layer was last updated.
              */
-            if (mView.getLayerClient().checkerboardShouldShowChecks()) {
-                /* Find the area the root layer will render into, to mask the checkerboard layer */
-                Rect rootMask = getMaskForLayer(mView.getLayerClient().getRoot());
-                mScreenshotLayer.setMask(rootMask);
-
-                /* Scissor around the page-rect, in case the page has shrunk
-                 * since the screenshot layer was last updated.
-                 */
-                setScissorRect(); // Calls glEnable(GL_SCISSOR_TEST))
-                mScreenshotLayer.draw(mPageContext);
-            }
+            setScissorRect(); // Calls glEnable(GL_SCISSOR_TEST))
         }
 
         // Draws the layer the client added to us.
