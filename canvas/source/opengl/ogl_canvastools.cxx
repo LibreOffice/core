@@ -21,8 +21,9 @@
 #include <com/sun/star/rendering/ARGBColor.hpp>
 
 #include <GL/glew.h>
-#include <glm/gtc/type_ptr.hpp>
 
+//subdivision count of bezier segments
+#define COUNT_OF_ADAPTIVE_SUBDIVISION 40
 
 using namespace ::com::sun::star;
 
@@ -34,7 +35,7 @@ namespace oglcanvas
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
-            aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
+            aPolyPoly = rPolyPoly.getAdaptiveSubdivision(COUNT_OF_ADAPTIVE_SUBDIVISION);
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(aPolyPoly));
         if(rTriangulatedPolygon.count()>0)
@@ -56,7 +57,7 @@ namespace oglcanvas
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
-            aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
+            aPolyPoly = rPolyPoly.getAdaptiveSubdivision(COUNT_OF_ADAPTIVE_SUBDIVISION);
         const ::basegfx::B2DRange& rBounds(aPolyPoly.getB2DRange());
         const double nWidth=rBounds.getWidth();
         const double nHeight=rBounds.getHeight();
@@ -75,6 +76,7 @@ namespace oglcanvas
         }
     }
 
+
     /** only use this for line polygons.
 
         better not leave triangulation to OpenGL. also, ignores texturing
@@ -83,10 +85,9 @@ namespace oglcanvas
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
-            aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
+            aPolyPoly = rPolyPoly.getAdaptiveSubdivision(COUNT_OF_ADAPTIVE_SUBDIVISION);
         for(sal_uInt32 i=0; i<aPolyPoly.count(); i++ )
         {
-
 
             const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
 
