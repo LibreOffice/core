@@ -242,6 +242,17 @@ DECLARE_OOXMLIMPORT_TEST(testFdo81486, "fdo81486.docx")
     CPPUNIT_ASSERT_EQUAL(text->getString(),OUString("CustomTitle"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo79738, "fdo79738.docx")
+{
+    uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( mxComponent, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameContainer> xStyles;
+    xStyleFamilies->getByName("ParagraphStyles") >>= xStyles;
+    uno::Reference<beans::XPropertySet> xPropertySetHeader( xStyles->getByName("Header"), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySetHeader->getPropertyValue("ParaLineNumberCount").get<bool>());
+    uno::Reference<beans::XPropertySet> xPropertySetFooter( xStyles->getByName("Footer"), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL(false, xPropertySetFooter->getPropertyValue("ParaLineNumberCount").get<bool>());
+}
 
 DECLARE_OOXMLIMPORT_TEST(testN751077, "n751077.docx")
 {
