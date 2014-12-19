@@ -232,12 +232,12 @@
         <Day>
           <DayID>thu</DayID>
           <DefaultAbbrvName>lam</DefaultAbbrvName>
-          <DefaultFullName>lamussa</DefaultFullName>
+          <DefaultFullName>lamusa</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
           <DefaultAbbrvName>arz</DefaultAbbrvName>
-          <DefaultFullName>arzuma</DefaultFullName>
+          <DefaultFullName>arzũma</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
@@ -344,11 +344,11 @@
       <trueWord>sɩda</trueWord>
       <falseWord>zĩri</falseWord>
       <quarter1Word>yʋʋmdã pipi kis a tãabo</quarter1Word>
-      <quarter2Word>yʋʋmda kis a tãab a yiib n soaba</quarter2Word>
-      <quarter3Word>yʋʋmda kis a tãab a tãab n soaba</quarter3Word>
-      <quarter4Word>yʋʋmda yaoolem kis a tãab soaba</quarter4Word>
-      <aboveWord>kaare</aboveWord>
-      <belowWord>rasĩng kaare</belowWord>
+      <quarter2Word>yʋʋmdã kis a tãab a yiib n soaba</quarter2Word>
+      <quarter3Word>yʋʋmdã kis a tãab a tãab n soaba</quarter3Word>
+      <quarter4Word>yʋʋmdã yaoolem kis a tãab soaba</quarter4Word>
+      <aboveWord>zugẽ</aboveWord>
+      <belowWord>tẽngre</belowWord>
       <quarter1Abbreviation>Kis a tãab 1</quarter1Abbreviation>
       <quarter2Abbreviation>Kis a tãab 2</quarter2Abbreviation>
       <quarter3Abbreviation>Kis a tãab 3</quarter3Abbreviation>
