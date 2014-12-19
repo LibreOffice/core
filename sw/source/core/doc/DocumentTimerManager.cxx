@@ -41,44 +41,44 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
                                                                 mbStartIdleTimer( false ),
                                                                 mIdleBlockCount( 0 )
 {
-    maIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
-    maIdle.SetIdleHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
+    maIdleTimer.SetTimeout( 600 );
+    maIdleTimer.SetTimeoutHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
 }
 
 void DocumentTimerManager::StartIdling()
 {
     mbStartIdleTimer = true;
     if( !mIdleBlockCount )
-        maIdle.Start();
+        maIdleTimer.Start();
 }
 
 void DocumentTimerManager::StopIdling()
 {
     mbStartIdleTimer = false;
-    maIdle.Stop();
+    maIdleTimer.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
-    maIdle.Stop();
+    maIdleTimer.Stop();
     ++mIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maIdle.IsActive() )
-        maIdle.Start();
+    if( !mIdleBlockCount && mbStartIdleTimer && !maIdleTimer.IsActive() )
+        maIdleTimer.Start();
 }
 
 void DocumentTimerManager::StartBackgroundJobs()
 {
     // Trigger DoIdleJobs(), asynchronously.
-    if (!maIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
-        maIdle.Start();
+    if (!maIdleTimer.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
+        maIdleTimer.Start();
 }
 
-IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
+IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pTimer )
 {
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = 0;
