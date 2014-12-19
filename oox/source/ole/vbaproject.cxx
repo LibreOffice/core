@@ -293,10 +293,9 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
         sal_Int32 nRecSize = aRecData.getLength();
         switch( nRecId )
         {
-#define OOX_ENSURE_RECORDSIZE( cond ) OSL_ENSURE( cond, "VbaProject::importVba - invalid record size" )
             case VBA_ID_PROJECTCODEPAGE:
             {
-                OOX_ENSURE_RECORDSIZE( nRecSize == 2 );
+                OSL_ENSURE( nRecSize == 2, "VbaProject::importVba - invalid record size" );
                 OSL_ENSURE( maModules.empty(), "VbaProject::importVba - unexpected PROJECTCODEPAGE record" );
                 rtl_TextEncoding eNewTextEnc = rtl_getTextEncodingFromWindowsCodePage( aRecStrm.readuInt16() );
                 OSL_ENSURE( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW, "VbaProject::importVba - unknown text encoding" );
@@ -313,7 +312,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             }
             break;
             case VBA_ID_PROJECTMODULES:
-                OOX_ENSURE_RECORDSIZE( nRecSize == 2 );
+                OSL_ENSURE( nRecSize == 2, "VbaProject::importVba - invalid record size" );
                 OSL_ENSURE( maModules.empty(), "VbaProject::importVba - unexpected PROJECTMODULES record" );
                 nModuleCount = aRecStrm.readuInt16();
             break;
@@ -330,7 +329,6 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
                 maModulesByStrm[ rxModule->getStreamName() ] = rxModule;
             }
             break;
-#undef OOX_ENSURE_RECORDSIZE
         }
     }
     OSL_ENSURE( nModuleCount == maModules.size(), "VbaProject::importVba - invalid module count" );
