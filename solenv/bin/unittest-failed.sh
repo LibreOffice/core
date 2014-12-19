@@ -23,11 +23,11 @@ Error: a unit test failed, please do one of:
 
 export DEBUGCPPUNIT=TRUE            # for exception catching
 EOF
-if [ "$3" == "WNT" ]; then
+if [ "$3" = "WNT" ]; then
 cat << EOF
 export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio
 EOF
-elif [ "$3" == "MACOSX" ]; then
+elif [ "$3" = "MACOSX" ]; then
 cat << EOF
 export CPPUNITTRACE="lldb --" # for interactive debugging on OSX
 EOF
