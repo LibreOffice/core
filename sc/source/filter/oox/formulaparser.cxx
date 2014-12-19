@@ -2844,12 +2844,9 @@ OUString FormulaParser::importOleTargetLink( SequenceInputStream& rStrm )
     sal_Int64 nFmlaEndPos = rStrm.tell() + ::std::max< sal_Int32 >( nFmlaSize, 0 );
     if( (nFmlaSize == 7) && (rStrm.getRemaining() >= 7) )
     {
-        sal_uInt8 nToken;
-        sal_Int16 nRefId;
-        sal_Int32 nNameId;
-        nToken = rStrm.readuChar();
-        nRefId = rStrm.readInt16();
-        nNameId = rStrm.readInt32();
+        sal_uInt8 nToken = rStrm.readuChar();
+        sal_Int16 nRefId = rStrm.readInt16();
+        rStrm.skip(4); //nNameId
         if( nToken == (BIFF_TOKCLASS_VAL|BIFF_TOKID_NAMEX) )
             aTargetLink = mxImpl->resolveOleTarget( nRefId, true );
     }
