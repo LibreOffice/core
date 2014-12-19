@@ -1624,7 +1624,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
             sal_uInt16 nBofType;
             rStrm.Seek( 2 );
             nBofType = rStrm.ReaduInt16();
-            DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
+            SAL_WARN_IF( nBofType != EXC_BOF_CHART, "sc.filter", "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
         }
         else
         {
