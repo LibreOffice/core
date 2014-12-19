@@ -605,7 +605,7 @@ namespace xmloff
                 {   // the column indeed has a formatting
                     sal_Int32 nStyleMapIndex = m_xStyleExportMapper->getPropertySetMapper()->FindEntryIndex( CTF_FORMS_DATA_STYLE );
                         // TODO: move this to the ctor
-                    OSL_ENSURE ( -1 != nStyleMapIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
+                    OSL_ENSURE ( -1 != nStyleMapIndex, "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: could not obtain the index for our context id!");
 
                     XMLPropertyState aNumberStyleState( nStyleMapIndex, makeAny( sColumnNumberStyle ) );
                     aPropertyStates.push_back( aNumberStyleState );
