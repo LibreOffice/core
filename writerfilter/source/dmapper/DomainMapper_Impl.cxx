@@ -42,6 +42,7 @@
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -87,6 +88,30 @@ using namespace ::com::sun::star;
 using namespace oox;
 namespace writerfilter {
 namespace dmapper{
+
+//line numbering for header/footer
+void lcl_linenumberingHeaderFooter( PropertyNameSupplier& rPropNameSupplier, uno::Reference<container::XNameContainer> xStyles, OUString rname, DomainMapper_Impl* dmapper )
+{
+    const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
+    if (!pEntry)
+        return;
+    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>( pEntry->pProperties.get() );
+    if ( !pStyleSheetProperties )
+        return;
+    sal_Int32 nListId = pStyleSheetProperties->GetListId();
+    if( xStyles.is() )
+    {
+        if( xStyles->hasByName( rname ) )
+        {
+            uno::Reference< style::XStyle > xStyle;
+            xStyles->getByName( rname ) >>= xStyle;
+            if( !xStyle.is() )
+                return;
+            uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY );
+            xPropertySet->setPropertyValue( rPropNameSupplier.GetName( PROP_PARA_LINE_NUMBER_COUNT ), uno::makeAny( ( bool )( nListId >= 0 ) ) );
+        }
+    }
+}
 
 // Populate Dropdown Field properties from FFData structure
 void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler )
@@ -4654,6 +4679,13 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
         {}
     }
     m_bLineNumberingSet = true;
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+    uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameContainer> xStyles;
+    xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_PARAGRAPH_STYLES )) >>= xStyles;
+    lcl_linenumberingHeaderFooter( rPropNameSupplier, xStyles, "Header", this );
+    lcl_linenumberingHeaderFooter( rPropNameSupplier, xStyles, "Footer", this );
 }
 
 
