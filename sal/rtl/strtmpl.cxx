@@ -1374,9 +1374,9 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThi
     sal_Int32 nCount;
     for( nCount = nLen; nCount > 0; --nCount )
     {
-        /* Check ASCII range */
-        SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
-                    "rtl_uString_newFromLiteral - Found char > 127" );
+#if IMPL_RTL_IS_USTRING
+        assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
+#endif
         SAL_WARN_IF( ((unsigned char)*pCharStr) == '\0', "rtl.string",
                     "rtl_uString_newFromLiteral - Found embedded \\0 character" );
 

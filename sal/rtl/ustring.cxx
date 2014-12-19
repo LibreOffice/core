@@ -501,10 +501,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
         sal_Unicode* pBuffer = (*ppThis)->buffer;
         do
         {
-            /* Check ASCII range */
-            SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
-                        "rtl_uString_newFromAscii - Found char > 127" );
-
+            assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
             *pBuffer = *pCharStr;
             pBuffer++;
             pCharStr++;
