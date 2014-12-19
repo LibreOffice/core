@@ -403,9 +403,9 @@ bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
     sal_Int32 nRow = GetCurRow();
     if ( nRow != BROWSER_ENDOFSELECTION )
     {
-        bool bAppend = false;
         try
         {
+            bool bAppend = false;
             uno::Reference< report::XGroup> xGroup;
             if ( m_aGroupPositions[nRow] == NO_GROUP )
             {

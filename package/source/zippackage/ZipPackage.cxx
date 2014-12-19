@@ -194,7 +194,6 @@ void ZipPackage::parseManifest()
     if ( m_nFormat == embed::StorageFormats::PACKAGE )
     {
         bool bManifestParsed = false;
-        bool bDifferentStartKeyAlgorithm = false;
         const OUString sMeta ("META-INF");
         if ( m_xRootFolder->hasByName( sMeta ) )
         {
@@ -410,6 +409,8 @@ void ZipPackage::parseManifest()
         bool bODF12AndNewer = ( m_pRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
         if ( !m_bForceRecovery && bODF12AndNewer )
         {
+            bool bDifferentStartKeyAlgorithm = false;
+
             if ( m_bInconsistent )
             {
                 // this is an ODF1.2 document that contains streams not referred in the manifest.xml;
@@ -575,12 +576,13 @@ void ZipPackage::getZipFileContents()
 void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         throw( Exception, RuntimeException, std::exception )
 {
-    bool bHaveZipFile = true;
     uno::Reference< XProgressHandler > xProgressHandler;
     beans::NamedValue aNamedValue;
 
     if ( aArguments.getLength() )
     {
+        bool bHaveZipFile = true;
+
         for( int ind = 0; ind < aArguments.getLength(); ind++ )
         {
             OUString aParamUrl;

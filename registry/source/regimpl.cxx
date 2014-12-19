@@ -1616,14 +1616,13 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     sal::static_int_cast< unsigned long >(len));
                 fprintf(stdout, "%s       Data = ", indent);
 
-                sal_Char *pValue;
                 for (sal_uInt32 i=0; i < len; i++)
                 {
                     readUINT32(pBuffer+offset, sLen);
 
                     offset += 4; // 4 Bytes (sal_uInt32) fuer die Groesse des strings in Bytes
 
-                    pValue = (sal_Char*)rtl_allocateMemory(sLen);
+                    sal_Char *pValue = (sal_Char*)rtl_allocateMemory(sLen);
                     readUtf8(pBuffer+offset, pValue, sLen);
 
                     if (offset > 8)
@@ -1654,7 +1653,6 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     sal::static_int_cast< unsigned long >(len));
                 fprintf(stdout, "%s       Data = ", indent);
 
-                sal_Unicode *pValue;
                 OString uStr;
                 for (sal_uInt32 i=0; i < len; i++)
                 {
@@ -1662,7 +1660,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
 
                     offset += 4; // 4 Bytes (sal_uInt32) fuer die Groesse des strings in Bytes
 
-                    pValue = (sal_Unicode*)rtl_allocateMemory((sLen / 2) * sizeof(sal_Unicode));
+                    sal_Unicode *pValue = (sal_Unicode*)rtl_allocateMemory((sLen / 2) * sizeof(sal_Unicode));
                     readString(pBuffer+offset, pValue, sLen);
 
                     if (offset > 8)

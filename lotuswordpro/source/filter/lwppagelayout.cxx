@@ -719,10 +719,10 @@ LwpPara* LwpPageLayout::GetPagePosition()
     if(pPara)
         return pPara;
     //Get the position from its related section
-    LwpSection* pSection = NULL;
     LwpFoundry* pFoundry = GetFoundry();
     if(pFoundry)
     {
+        LwpSection* pSection = NULL;
         while( (pSection = pFoundry->EnumSections(pSection)) )
         {
             if(pSection->GetPageLayout() == this)

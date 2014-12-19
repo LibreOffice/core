@@ -368,11 +368,11 @@ void LwpPara::RegisterStyle()
 
     XFParaStyle* pOverStyle = NULL;
     bool noSpacing = true;
-    bool noIndent = true;
     LwpParaProperty* pBulletProps = NULL, *pNumberingProps = NULL;
 
     if (m_pProps != NULL)
     {
+        bool noIndent = true;
         pOverStyle = new XFParaStyle;
         *pOverStyle = *pBaseStyle;
         pOverStyle->SetStyleName("");
@@ -582,7 +582,6 @@ void LwpPara::RegisterStyle()
                     bool bHeading;
                     LwpPara* pPara = this;
                     LwpPara* pPrePara = NULL;
-                    LwpSilverBullet* pParaSilverBullet = NULL;
                     sal_uInt16 nNum = 0, nLevel = 0, nFoundLevel = 0xffff, nFoundBound = 0;
 
                     nFoundBound = nLevel = pNumbering->GetLevel();
@@ -602,7 +601,7 @@ void LwpPara::RegisterStyle()
                             break;
                         }*/
 
-                        pParaSilverBullet = pPara->GetSilverBullet();
+                        LwpSilverBullet* pParaSilverBullet = pPara->GetSilverBullet();
                         pNumbering = pPara->GetParaNumbering();
 
                         if (pPara->GetObjectID() != this->GetObjectID())
