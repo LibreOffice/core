@@ -62,17 +62,22 @@ public class TimeStampControl extends DatabaseControl
         nreltimewidth = 1.0 - nreldatewidth;
     }
 
-    public XPropertySet getControlByIndex(int _i)
+    public XPropertySet getControlofGroupShapeByIndex(int _i)
     {
-        switch (_i)
+        try
         {
-        case 0:
-            return oDateControl.xPropertySet;
-        case 1:
-            return oTimeControl.xPropertySet;
-        default:
-            return null;
+            if (_i < xShapes.getCount())
+            {
+                Object oControl = xShapes.getByIndex(_i);
+                XControlShape xControlShape = UnoRuntime.queryInterface(XControlShape.class, oControl);
+                return UnoRuntime.queryInterface(XPropertySet.class, xControlShape.getControl());
+            }
         }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.err);
+        }
+        return null;
     }
 
     public TimeStampControl(Resource _oResource, GridControl _oGridControl, FieldColumn _curfieldcolumn)
