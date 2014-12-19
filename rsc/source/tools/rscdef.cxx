@@ -392,11 +392,9 @@ RscFile :: ~RscFile()
 
 bool RscFile::Depend( sal_uLong lDepend, sal_uLong lFree )
 {
-    RscDepend * pDep;
-
     for ( size_t i = aDepLst.size(); i > 0; )
     {
-        pDep = aDepLst[ --i ];
+        RscDepend * pDep = aDepLst[ --i ];
         if( pDep->GetFileKey() == lDepend )
         {
             for ( size_t j = i ? --i : 0; j > 0; )
@@ -442,10 +440,9 @@ RscDefTree::~RscDefTree()
 
 void RscDefTree::Remove()
 {
-    RscDefine * pDef;
     while( pDefRoot )
     {
-        pDef = pDefRoot;
+        RscDefine * pDef = pDefRoot;
         pDefRoot = static_cast<RscDefine *>(pDefRoot->Remove( pDefRoot ));
         pDef->DecRef();
     }
@@ -647,11 +644,9 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey )
     pFName = GetFile( lFileKey );
     if( pFName )
     {
-        RscDefine * pDef;
-
         for ( size_t i = 0, n = pFName->aDefLst.maList.size(); i < n; ++i )
         {
-            pDef = pFName->aDefLst.maList[ i ];
+            RscDefine * pDef = pFName->aDefLst.maList[ i ];
             aDefTree.Remove( pDef );
         };
 
