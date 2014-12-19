@@ -557,7 +557,6 @@ public class FormDocument extends TextDocument
                     {
                         oFormHandler.groupShapesTogether(xMSF, oLabelControls[i].xShape, oDBControls[i].xShape);
                     }
-
                 }
             }
         }
