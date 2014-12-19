@@ -447,8 +447,6 @@ void LwpAssociatedLayouts::Read(LwpObjectStream* pStrm)
 */
 LwpVirtualLayout* LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout)
 {
-    LwpVirtualLayout* pLayout = NULL;
-
     if (!pStartLayout && !m_OnlyLayout.IsNull())
         /* Looking for the first layout and there's only one layout in  the list.*/
         return dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj().get());
@@ -456,7 +454,7 @@ LwpVirtualLayout* LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout
     LwpObjectHolder* pObjHolder = dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead().obj().get());
     if(pObjHolder)
     {
-        pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject().obj().get());
+        LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject().obj().get());
         if(!pStartLayout )
             return pLayout;
 

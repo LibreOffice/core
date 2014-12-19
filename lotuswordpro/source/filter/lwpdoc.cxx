@@ -257,10 +257,9 @@ void LwpDocument::RegisterLayoutStyles()
 
     //set initial pagelayout in story for parsing pagelayout
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO).get());
-    LwpPageLayout* pPageLayout = NULL;
     if(pDivInfo)
     {
-        pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
+        LwpPageLayout* pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID().obj(VO_PAGELAYOUT).get());
         if(pPageLayout)
         {
             //In Ole division, the content of pagelayout is VO_OLEOBJECT
@@ -540,11 +539,10 @@ LwpDocument* LwpDocument::GetPreviousDivision()
     }
 
     LwpDocument* pDivision = GetLastDivision();
-    LwpDocument* pContentDivision = NULL;
 
     while(pDivision)
     {
-        pContentDivision = pDivision->GetLastDivisionWithContents();
+        LwpDocument* pContentDivision = pDivision->GetLastDivisionWithContents();
         if(pContentDivision)
         {
             return pContentDivision;
@@ -621,11 +619,9 @@ LwpDocument* LwpDocument::GetPreviousDivision()
 
     LwpDocument* pDivision = GetFirstDivision();
 
-    LwpDocument*  pContentDivision = NULL;
-
     while (pDivision)
     {
-        pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
+        LwpDocument* pContentDivision = pDivision->GetFirstDivisionWithContentsThatIsNotOLE();
         if(pContentDivision)
             return pContentDivision;
         pDivision = pDivision->GetNextDivision();

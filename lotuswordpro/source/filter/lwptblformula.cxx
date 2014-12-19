@@ -310,14 +310,13 @@ bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
     sal_uInt16 NumberOfArguments = m_pObjStrm->QuickReaduInt16();
     sal_uInt16 ArgumentDiskLength, Count;
     sal_uInt8 ArgumentType;
-    bool bArgument = false;
     bool readSucceeded = true;
 
     for (Count = 0; Count < NumberOfArguments; Count++)
     {
         ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
         ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
-        bArgument = true;
+        bool bArgument = true;
 
         switch(ArgumentType)
         {

@@ -547,7 +547,6 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
         const sal_Int32 nCount = m_xSection->getCount();
         for (sal_Int32 i = 0; i < nCount; ++i)
         {
-            bool bChanged = false;
             uno::Reference< report::XReportComponent> xReportComponent(m_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
             awt::Point aPos = xReportComponent->getPosition();
             awt::Size aSize = xReportComponent->getSize();
@@ -555,6 +554,8 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
             if ( pObject )
             {
+                bool bChanged = false;
+
                 OObjectBase& rBase = dynamic_cast<OObjectBase&>(*pObject);
                 rBase.EndListening(false);
                 if ( aPos.X < i_nLeftMargin )

@@ -848,7 +848,6 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     sal_uInt8* CellMark = new sal_uInt8[nRowNum];
-    bool bFindFlag = false;
 
     if (nRowNum == 1)
     {
@@ -860,7 +859,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     else
     {
         sal_uInt8 nFirstColSpann = 1;
-        bFindFlag = FindSplitColMark(pTmpTable,CellMark,nFirstColSpann);
+        const bool bFindFlag = FindSplitColMark(pTmpTable,CellMark,nFirstColSpann);
 
         if (bFindFlag)//split to 2 cells
         {

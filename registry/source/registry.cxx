@@ -74,11 +74,9 @@ static void REGISTRY_CALLTYPE release(RegHandle hReg)
 
 static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
 {
-    ORegistry*  pReg;
-
     if (hReg)
     {
-        pReg = (ORegistry*)hReg;
+        ORegistry*  pReg = (ORegistry*)hReg;
         if ( pReg->isOpen() )
         {
             rtl_uString_assign(pName, pReg->getName().pData);
@@ -580,11 +578,9 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryN
 
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
 {
-    ORegistry* pReg;
-
     if (hRegistry)
     {
-        pReg = (ORegistry*)hRegistry;
+        ORegistry* pReg = (ORegistry*)hRegistry;
         delete(pReg);
         return REG_NO_ERROR;
     } else

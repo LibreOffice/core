@@ -169,10 +169,9 @@ XFListStyle::XFListStyle()
 
 XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
 {
-    enumXFListLevel type;
     for( int i=0; i<10; i++ )
     {
-        type = other.m_pListLevels[i]->m_eListType;
+        const enumXFListLevel type = other.m_pListLevels[i]->m_eListType;
         if( type == enumXFListLevelNumber )
         {
             XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(other.m_pListLevels[i]);
@@ -190,10 +189,9 @@ XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
 
 XFListStyle& XFListStyle::operator=(const XFListStyle& other)
 {
-    enumXFListLevel type;
     for( int i=0; i<10; i++ )
     {
-        type = other.m_pListLevels[i]->m_eListType;
+        const enumXFListLevel type = other.m_pListLevels[i]->m_eListType;
         if( type == enumXFListLevelNumber )
         {
             XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(m_pListLevels[i]);
