@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_e95ec675",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-12-19T16:56:50Z",
+      "side": 1,
+      "message": "Nitpick: you can have a single startElementNS() call here: if you do FSNS(XML_w, XML_fldLock), pFoo, where pFoo is either 0 or points to a valid char*, then in the 0 case the attribute will be omitted.",
+      "revId": "68a50bf8df09808a798923a56571e22ad3075293",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_8954da54",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-12-19T16:56:50Z",
+      "side": 1,
+      "message": "So now the exporters\u0027 OutputField() method (RTF, DOC and DOCX export) is expected to handle the FIXEDFLD \u0026 nSubType case as well, but in fact you only adopted the DOCX export. Please make sure that indeed the DOC and RTF exports need no changes.",
+      "revId": "68a50bf8df09808a798923a56571e22ad3075293",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
