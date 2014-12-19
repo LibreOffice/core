@@ -7,7 +7,7 @@
 +static int
 +isolatesavailable(UBiDi *pBiDi) {
 +    if (pBiDi->isolates == pBiDi->simpleIsolates) {
-+        return pBiDi->isolateCount < SIMPLE_ISOLATES_SIZE-1;
++        return pBiDi->isolateCount < SIMPLE_ISOLATES_COUNT-1;
 +    }
 +    return pBiDi->isolateCount < pBiDi->isolatesSize/sizeof(Isolate)-1;
 +}

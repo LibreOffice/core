@@ -19,12 +19,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-macosx.patch \
 	external/icu/icu4c-solarisgcc.patch \
 	external/icu/icu4c-mkdir.patch \
-	external/icu/icu4c-buffer-overflow.patch \
 	external/icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 	external/icu/icu-ubsan.patch.0 \
-	external/icu/icu4c-icu11054.patch.1 \
 	external/icu/icu4c-icu11100.patch.1 \
-	external/icu/icu4c-icu11131.patch.1 \
 	external/icu/icu4c-scriptrun.patch \
 	external/icu/icu4c-icu11451.patch.1 \
 ))
