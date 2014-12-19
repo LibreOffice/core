@@ -5955,7 +5955,12 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
     else
     {
-        m_pSerializer->singleElementNS( XML_w, XML_lvlText,FSNS( XML_w, XML_val ), OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+        // Writer's "zero width space" suffix is necessary, so that LabelFollowedBy shows up, but Word doesn't require that.
+        OUString aLevelText = aBuffer.makeStringAndClear();
+        static OUString aZeroWidthSpace(static_cast<sal_Unicode>(0x200B));
+        if (aLevelText == aZeroWidthSpace)
+            aLevelText.clear();
+        m_pSerializer->singleElementNS(XML_w, XML_lvlText, FSNS(XML_w, XML_val), aLevelText.toUtf8(), FSEND);
     }
 
     // bullet

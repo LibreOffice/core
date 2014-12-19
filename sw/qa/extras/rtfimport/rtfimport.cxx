@@ -582,7 +582,10 @@ DECLARE_RTFIMPORT_TEST(testFdo49692, "fdo49692.rtf")
         const beans::PropertyValue& rProp = aProps[i];
 
         if (rProp.Name == "Suffix")
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rProp.Value.get<OUString>().getLength());
+        {
+            OUString aExpected(static_cast<sal_Unicode>(0x200B));
+            CPPUNIT_ASSERT_EQUAL(aExpected, rProp.Value.get<OUString>());
+        }
     }
 }
 

@@ -99,6 +99,13 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","%1" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testDecimalNumberingNoLeveltext, "decimal-numbering-no-leveltext.docx")
+{
+    // This was "%1", not empty: we turned a kind-of-none numbering into a decimal one.
+    if (xmlDocPtr pXmlDoc = parseExport("word/numbering.xml"))
+        assertXPath (pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val", "");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
 {
     /* File getting crash while saving in LO.

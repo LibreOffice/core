@@ -33,6 +33,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -273,6 +274,10 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     {
         if (!m_sGraphicURL.isEmpty() || m_sGraphicBitmap.is())
             nNumberFormat = style::NumberingType::BITMAP;
+        else if (m_sBulletChar.isEmpty() && nNumberFormat != style::NumberingType::CHAR_SPECIAL)
+            // w:lvlText is empty, that means no numbering in Word.
+            // CHAR_SPECIAL is handled separately below.
+            nNumberFormat = style::NumberingType::NUMBER_NONE;
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_NUMBERING_TYPE, nNumberFormat ));
     }
 
@@ -619,6 +624,20 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
                 aLvlProps.realloc( aLvlProps.getLength( ) + 4 );
                 aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 4] = MAKE_PROPVAL( PROP_PREFIX, rPrefix );
+
+                if (sText.isEmpty())
+                {
+                    // Empty <w:lvlText>? Then put a Unicode "zero width space" as a suffix, so LabelFollowedBy is still shown, as in Word.
+                    // With empty suffix, Writer does not show LabelFollowedBy, either.
+                    comphelper::SequenceAsHashMap aMap(aLvlProps);
+                    if (aMap.find("NumberingType") != aMap.end())
+                    {
+                        sal_Int16 nNumberFormat = aMap["NumberingType"].get<sal_Int16>();
+                        if (nNumberFormat == style::NumberingType::NUMBER_NONE)
+                            rSuffix = OUString(static_cast<sal_Unicode>(0x200B));
+                    }
+                }
+
                 aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 3] = MAKE_PROPVAL( PROP_SUFFIX, rSuffix );
                 aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 2] = MAKE_PROPVAL( PROP_PARENT_NUMBERING, nParentNum );
 
