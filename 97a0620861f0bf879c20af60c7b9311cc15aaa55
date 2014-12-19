@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_e9d566b9",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4116,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-12-19T17:13:06Z",
+      "side": 1,
+      "message": "Aren\u0027t you duplicating msfilter::util::DTTM2DateTime() here? If so, please submit a follow-up patch that removes this duplication.",
+      "revId": "97a0620861f0bf879c20af60c7b9311cc15aaa55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_89db7aed",
+        "filename": "writerfilter/source/ooxml/factoryimpl_ns.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-12-19T17:13:06Z",
+      "side": 1,
+      "message": "Python doesn\u0027t need a semicolon at the end of lines.",
+      "revId": "97a0620861f0bf879c20af60c7b9311cc15aaa55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
