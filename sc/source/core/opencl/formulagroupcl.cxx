@@ -1935,8 +1935,8 @@ struct SumIfsArgs
 /// Helper functions that have multiple buffers
 class DynamicKernelSoPArguments : public DynamicKernelArgument
 {
-public:
     typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
+public:
     typedef std::vector<SubArgument> SubArgumentsType;
 
     DynamicKernelSoPArguments(
