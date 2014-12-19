@@ -44,29 +44,25 @@ double ScInterpreter::GetGammaContFraction( double fA, double fX )
     double const fBigInv = ::std::numeric_limits<double>::epsilon();
     double const fBig = 1.0/fBigInv;
     double fCount = 0.0;
-    double fNum = 0.0;  // dummy value
     double fY = 1.0 - fA;
     double fDenom = fX + 2.0-fA;
-    double fPk = 0.0;   // dummy value
     double fPkm1 = fX + 1.0;
     double fPkm2 = 1.0;
-    double fQk = 1.0;   // dummy value
     double fQkm1 = fDenom * fX;
     double fQkm2 = fX;
     double fApprox = fPkm1/fQkm1;
     bool bFinished = false;
-    double fR = 0.0;    // dummy value
     do
     {
         fCount = fCount +1.0;
         fY = fY+ 1.0;
-        fNum = fY * fCount;
+        const double fNum = fY * fCount;
         fDenom = fDenom +2.0;
-        fPk = fPkm1 * fDenom  -  fPkm2 * fNum;
-        fQk = fQkm1 * fDenom  -  fQkm2 * fNum;
+        double fPk = fPkm1 * fDenom  -  fPkm2 * fNum;
+        const double fQk = fQkm1 * fDenom  -  fQkm2 * fNum;
         if (fQk != 0.0)
         {
-            fR = fPk/fQk;
+            const double fR = fPk/fQk;
             bFinished = (fabs( (fApprox - fR)/fR ) <= fHalfMachEps);
             fApprox = fR;
         }

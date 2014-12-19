@@ -2021,16 +2021,12 @@ bool lcl_CalculateQRdecomposition(ScMatrixRef pMatA,
 bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
                                    ::std::vector< double>& pVecR, SCSIZE nK, SCSIZE nN)
 {
-    double fScale ;
-    double fEuclid ;
-    double fFactor ;
-    double fSignum ;
     double fSum ;
     // ScMatrix matrices are zero based, index access (column,row)
     for (SCSIZE row = 0; row <nK; row++)
     {
         // calculate vector u of the householder transformation
-        fScale = lcl_TGetColumnMaximumNorm(pMatA, row, row, nN);
+        const double fScale = lcl_TGetColumnMaximumNorm(pMatA, row, row, nN);
         if (fScale == 0.0)
         {
             // A is singular
@@ -2039,9 +2035,9 @@ bool lcl_TCalculateQRdecomposition(ScMatrixRef pMatA,
         for (SCSIZE col = row; col <nN; col++)
             pMatA->PutDouble( pMatA->GetDouble(col,row)/fScale, col, row);
 
-        fEuclid = lcl_TGetColumnEuclideanNorm(pMatA, row, row, nN);
-        fFactor = 1.0/fEuclid/(fEuclid + fabs(pMatA->GetDouble(row,row)));
-        fSignum = lcl_GetSign(pMatA->GetDouble(row,row));
+        const double fEuclid = lcl_TGetColumnEuclideanNorm(pMatA, row, row, nN);
+        const double fFactor = 1.0/fEuclid/(fEuclid + fabs(pMatA->GetDouble(row,row)));
+        const double fSignum = lcl_GetSign(pMatA->GetDouble(row,row));
         pMatA->PutDouble( pMatA->GetDouble(row,row) + fSignum*fEuclid, row,row);
         pVecR[row] = -fSignum * fScale * fEuclid;
 
@@ -2099,13 +2095,12 @@ void lcl_SolveWithUpperRightTriangle(ScMatrixRef pMatA,
                         SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
-    double fSum;
     SCSIZE row;
     // SCSIZE is never negative, therefore test with rowp1=row+1
     for (SCSIZE rowp1 = nK; rowp1>0; rowp1--)
     {
         row = rowp1-1;
-        fSum = pMatS->GetDouble(row);
+        double fSum = pMatS->GetDouble(row);
         for (SCSIZE col = rowp1; col<nK ; col++)
             if (bIsTransposed)
                 fSum -= pMatA->GetDouble(row,col) * pMatS->GetDouble(col);
@@ -2126,10 +2121,9 @@ void lcl_SolveWithLowerLeftTriangle(ScMatrixRef pMatA,
                                     SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
-    double fSum;
     for (SCSIZE row = 0; row < nK; row++)
     {
-        fSum = pMatT -> GetDouble(row);
+        double fSum = pMatT -> GetDouble(row);
         for (SCSIZE col=0; col < row; col++)
         {
             if (bIsTransposed)
@@ -2152,10 +2146,9 @@ void lcl_ApplyUpperRightTriangle(ScMatrixRef pMatA,
                                  ScMatrixRef pMatZ, SCSIZE nK, bool bIsTransposed)
 {
     // ScMatrix matrices are zero based, index access (column,row)
-    double fSum;
     for (SCSIZE row = 0; row < nK; row++)
     {
-        fSum = pVecR[row] * pMatB->GetDouble(row);
+        double fSum = pVecR[row] * pMatB->GetDouble(row);
         for (SCSIZE col = row+1; col < nK; col++)
             if (bIsTransposed)
                 fSum += pMatA->GetDouble(row,col) * pMatB->GetDouble(col);
@@ -2178,10 +2171,9 @@ double lcl_GetMeanOverAll(ScMatrixRef pMat, SCSIZE nN)
 void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
                               SCSIZE nC, SCSIZE nR)
 {
-    double fSum = 0.0;
     for (SCSIZE i=0; i < nC; i++)
     {
-        fSum =0.0;
+        double fSum =0.0;
         for (SCSIZE k=0; k < nR; k++)
             fSum += pX->GetDouble(i,k);   // GetDouble(Column,Row)
         pResMat ->PutDouble( fSum/static_cast<double>(nR),i);
@@ -2193,10 +2185,9 @@ void lcl_CalculateColumnMeans(ScMatrixRef pX, ScMatrixRef pResMat,
 void lcl_CalculateRowMeans(ScMatrixRef pX, ScMatrixRef pResMat,
                            SCSIZE nC, SCSIZE nR)
 {
-    double fSum = 0.0;
     for (SCSIZE k=0; k < nR; k++)
     {
-        fSum =0.0;
+        double fSum = 0.0;
         for (SCSIZE i=0; i < nC; i++)
             fSum += pX->GetDouble(i,k);   // GetDouble(Column,Row)
         pResMat ->PutDouble( fSum/static_cast<double>(nC),k);
@@ -2228,10 +2219,9 @@ double lcl_GetSSresid(ScMatrixRef pMatX, ScMatrixRef pMatY, double fSlope,
                       SCSIZE nN)
 {
     double fSum = 0.0;
-    double fTemp = 0.0;
     for (SCSIZE i=0; i<nN; i++)
     {
-        fTemp = pMatY->GetDouble(i) - fSlope * pMatX->GetDouble(i);
+        const double fTemp = pMatY->GetDouble(i) - fSlope * pMatX->GetDouble(i);
         fSum += fTemp * fTemp;
     }
     return fSum;
@@ -2676,7 +2666,6 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     // = RMSE * sqrt( Xmean * (R' R)^(-1) * Xmean' + 1/N)
                     // (R' R)^(-1) = R^(-1) * (R')^(-1). Do not calculate it as
                     // a whole matrix, but iterate over unit vectors.
-                    double fSigmaSlope = 0.0;
                     double fSigmaIntercept = 0.0;
                     double fPart; // for Xmean * single column of (R' R)^(-1)
                     for (SCSIZE col = 0; col < K; col++)
@@ -2689,7 +2678,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                         // Solve R * Znew = Zold
                         lcl_SolveWithUpperRightTriangle(pMatX, aVecR, pMatZ, K, false);
                         // now Z is column col in (R' R)^(-1)
-                        fSigmaSlope = fRMSE * sqrt(pMatZ->GetDouble(col));
+                        double fSigmaSlope = fRMSE * sqrt(pMatZ->GetDouble(col));
                         pResMat->PutDouble(fSigmaSlope, K-1-col, 1);
                         // (R' R) ^(-1) is symmetric
                         if (bConstant)
@@ -2835,7 +2824,6 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                     // (R' R)^(-1) = R^(-1) * (R')^(-1). Do not calculate it as
                     // a whole matrix, but iterate over unit vectors.
                     // (R' R) ^(-1) is symmetric
-                    double fSigmaSlope = 0.0;
                     double fSigmaIntercept = 0.0;
                     double fPart; // for Xmean * single col of (R' R)^(-1)
                     for (SCSIZE row = 0; row < K; row++)
@@ -2848,7 +2836,7 @@ void ScInterpreter::CalulateRGPRKP(bool _bRKP)
                         // Solve R * Znew = Zold
                         lcl_SolveWithUpperRightTriangle(pMatX, aVecR, pMatZ, K, true);
                         // now Z is column col in (R' R)^(-1)
-                        fSigmaSlope = fRMSE * sqrt(pMatZ->GetDouble(row));
+                        double fSigmaSlope = fRMSE * sqrt(pMatZ->GetDouble(row));
                         pResMat->PutDouble(fSigmaSlope, K-1-row, 1);
                         if (bConstant)
                         {

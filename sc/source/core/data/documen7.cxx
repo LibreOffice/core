@@ -589,13 +589,12 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
     {
         // outside the loop, check if any sheet has a "calculate" event script
         bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
-        SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;
         pTrack = pFormulaTrack;
         do
         {
-            pBC = GetBroadcaster(pTrack->aPos);
+            SvtBroadcaster* pBC = GetBroadcaster(pTrack->aPos);
             ScHint aHint(nHintId, pTrack->aPos);
             if (pBC)
                 pBC->Broadcast( aHint );

@@ -1037,7 +1037,7 @@ void ScInterpreter::ScIRR()
         fEstimated = 0.1;
     sal_uInt16 sPos = sp;                       //memory the position of the stack
     double fEps = 1.0;
-    double x, xNew, fValue, fNom, fDenom, nCount;
+    double x, fValue;
     if (fEstimated == -1.0)
         x = 0.1;                            // default result for divion by zero
     else
@@ -1058,9 +1058,9 @@ void ScInterpreter::ScIRR()
     while (fEps > SCdEpsilon && nItCount < nIterationsMax)
     {                                       // Newtons method:
         sp = sPos;                          // reset stack
-        nCount = 0.0;
-        fNom = 0.0;
-        fDenom = 0.0;
+        double nCount = 0.0;
+        double fNom = 0.0;
+        double fDenom = 0.0;
         sal_uInt16 nErr = 0;
         PopDoubleRef( aRange );
         ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
@@ -1077,7 +1077,7 @@ void ScInterpreter::ScIRR()
             }
             SetError(nErr);
         }
-        xNew = x - fNom / fDenom;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
+        double xNew = x - fNom / fDenom;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
         nItCount++;
         fEps = fabs(xNew - x);
         x = xNew;

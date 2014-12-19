@@ -923,7 +923,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
 */
 static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
 {   // like old version
-    double a1, b1, a2, b2, fnorm, apl2m, d2m, d2m1, cfnew, cf;
+    double a1, b1, a2, b2, fnorm, cfnew, cf;
     a1 = 1.0; b1 = 1.0;
     b2 = 1.0 - (fA+fB)/(fA+1.0)*fX;
     if (b2 == 0.0)
@@ -948,9 +948,9 @@ static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
     bool bfinished = false;
     do
     {
-        apl2m = fA + 2.0*rm;
-        d2m = rm*(fB-rm)*fX/((apl2m-1.0)*apl2m);
-        d2m1 = -(fA+rm)*(fA+fB+rm)*fX/(apl2m*(apl2m+1.0));
+        const double apl2m = fA + 2.0*rm;
+        const double d2m = rm*(fB-rm)*fX/((apl2m-1.0)*apl2m);
+        const double d2m1 = -(fA+rm)*(fA+fB+rm)*fX/(apl2m*(apl2m+1.0));
         a1 = (a2+d2m*a1)*fnorm;
         b1 = (b2+d2m*b1)*fnorm;
         a2 = a1 + d2m1*a2*fnorm;
@@ -1441,11 +1441,11 @@ void ScInterpreter::ScCritBinom()
                 else
                 {
                     // accumulate BinomDist until accumulated BinomDist reaches alpha
-                    double fSum = 0.0, x;
+                    double fSum = 0.0;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                     for (i = 0; i < max && fSum < alpha; i++)
                     {
-                        x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
+                        const double x = GetBetaDistPDF( p, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
                         if ( !nGlobalError )
                         {
                             fSum += x;
@@ -1477,12 +1477,12 @@ void ScInterpreter::ScCritBinom()
                 else
                 {
                     // accumulate BinomDist until accumulated BinomDist reaches alpha
-                    double fSum = 0.0, x;
+                    double fSum = 0.0;
                     sal_uInt32 max = static_cast<sal_uInt32> (n), i;
                     alpha = 1 - alpha;
                     for (i = 0; i < max && fSum < alpha; i++)
                     {
-                        x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
+                        const double x = GetBetaDistPDF( q, ( i + 1 ), ( n - i + 1 ) )/( n + 1 );
                         if ( !nGlobalError )
                         {
                             fSum += x;
@@ -2885,7 +2885,6 @@ void ScInterpreter::ScKurt()
         vSum += (values[i] - fMean) * (values[i] - fMean);
 
     double fStdDev = sqrt(vSum / (fCount - 1.0));
-    double dx = 0.0;
     double xpower4 = 0.0;
 
     if (fStdDev == 0.0)
@@ -2896,7 +2895,7 @@ void ScInterpreter::ScKurt()
 
     for (size_t i = 0; i < values.size(); i++)
     {
-        dx = (values[i] - fMean) / fStdDev;
+        double dx = (values[i] - fMean) / fStdDev;
         xpower4 = xpower4 + (dx * dx * dx * dx);
     }
 
@@ -3287,7 +3286,6 @@ void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
         vSum += (values[i] - fMean) * (values[i] - fMean);
 
     double fStdDev = sqrt( vSum / (bSkewp ? fCount : (fCount - 1.0)));
-    double dx = 0.0;
     double xcube = 0.0;
 
     if (fStdDev == 0)
@@ -3298,7 +3296,7 @@ void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
 
     for (size_t i = 0; i < values.size(); ++i)
     {
-        dx = (values[i] - fMean) / fStdDev;
+        double dx = (values[i] - fMean) / fStdDev;
         xcube = xcube + (dx * dx * dx);
     }
 
