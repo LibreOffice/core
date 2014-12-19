@@ -568,7 +568,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                                  com::sun::star::awt::Point* pRefPoint /* = NULL */,
                                  SvXMLAttributeList* pAttrList /* = NULL */ )
 {
-    SAL_WARN("xmloff", xShape->getShapeType());
+    SAL_INFO("xmloff", xShape->getShapeType());
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
         SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no auto styles where collected before export" );
