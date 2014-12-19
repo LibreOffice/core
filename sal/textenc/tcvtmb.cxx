@@ -221,8 +221,6 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
 {
     sal_uInt16                  cConv;
     sal_Unicode                 c;
-    unsigned char                   nHighChar;
-    unsigned char                   nLowChar;
     const ImplUniToDBCSHighTab* pHighEntry;
     const ImplDBCSConvertData*  pConvertData = (const ImplDBCSConvertData*)pData;
     const ImplUniToDBCSHighTab* pHighTab = pConvertData->mpToDBCSHighTab;
@@ -241,8 +239,8 @@ sal_Size ImplUnicodeToDBCS( const void* pData, SAL_UNUSED_PARAMETER void*,
     while ( pSrcBuf < pEndSrcBuf )
     {
         c = *pSrcBuf;
-        nHighChar = (unsigned char)((c >> 8) & 0xFF);
-        nLowChar = (unsigned char)(c & 0xFF);
+        unsigned char nHighChar = (unsigned char)((c >> 8) & 0xFF);
+        unsigned char nLowChar = (unsigned char)(c & 0xFF);
 
         /* get entry for the high byte */
         pHighEntry = pHighTab+nHighChar;
@@ -382,7 +380,6 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                              sal_uInt32 nFlags, sal_uInt32* pInfo,
                              sal_Size* pSrcCvtBytes )
 {
-    unsigned char                   c;
     unsigned char                   cLead = '\0';
     unsigned char                   cTrail = '\0';
     sal_Unicode                 cConv;
@@ -397,7 +394,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
     while ( pSrcBuf < pEndSrcBuf )
     {
-        c = (unsigned char)*pSrcBuf;
+        unsigned char c = (unsigned char)*pSrcBuf;
 
         /* ASCII */
         if ( c <= 0x7F )

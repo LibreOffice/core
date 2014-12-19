@@ -65,7 +65,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
       if ( (res = gethostbyname(name)) )
       {
-        int nname, naliases, naddr_list, naliasesdata, n;
+        int nname, naliases, naddr_list, naliasesdata;
         char **p, **parray, *data;
 
         /* Check buffer size before copying, we want to leave the
@@ -101,7 +101,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
             result->h_aliases = parray;
             data = buffer + (naliases+1)*sizeof(char*);
             for ( p = res->h_aliases; *p != NULL; p++) {
-                n = strlen(*p)+1;
+                int n = strlen(*p)+1;
                 *parray++ = data;
                 memcpy(data, *p, n);
                 data += n;
@@ -251,7 +251,6 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
 {
   static char ret[256];
   char buf[256],zahl[256],format[256]="%";
-  char *v1,*v2;
 
   if (value==0.0) value=1e-30;
 
@@ -279,8 +278,8 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
 
   if (ndigit!=0)
   {
-    v1=strtok(buf,".");
-    v2=strtok(NULL,".");
+    char *v1=strtok(buf,".");
+    char *v2=strtok(NULL,".");
     strcpy(ret,v1);
     strcat(ret,v2);
   }

@@ -569,7 +569,6 @@ void SAL_CALL rtl_uString_newFromCodePoints(
 static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen, bool * ascii )
 {
     int             n;
-    unsigned char       c;
     const sal_Char* pEndStr;
 
     *ascii = true;
@@ -577,7 +576,7 @@ static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen, 
     pEndStr  = pStr+nLen;
     while ( pStr < pEndStr )
     {
-        c = (unsigned char)*pStr;
+        unsigned char c = (unsigned char)*pStr;
 
         if ( !(c & 0x80) )
             pStr++;

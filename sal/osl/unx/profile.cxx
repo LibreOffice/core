@@ -357,7 +357,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 {
     sal_uInt32    NoEntry;
     sal_Char* pStr=0;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile=0;
     osl_TProfileImpl*    pTmpProfile=0;
     bool bRet = false;
@@ -389,6 +388,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != NULL) &&
             (NoEntry < pSec->m_NoEntries) &&
             ((pStr = strchr(pProfile->m_Lines[pSec->m_Entries[NoEntry].m_Line],
@@ -644,7 +644,6 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
                                          const sal_Char *pszEntry)
 {
     sal_uInt32    NoEntry;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
     osl_TProfileImpl*    pTmpProfile = 0;
     bool bRet = false;
@@ -676,6 +675,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != NULL) &&
             (NoEntry < pSec->m_NoEntries))
         {
@@ -713,7 +713,6 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 {
     sal_uInt32    i, n = 0;
     sal_uInt32    NoEntry;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
     osl_TProfileImpl*    pTmpProfile = 0;
     bool bRet = false;
@@ -748,6 +747,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if ((pSec = findEntry(pProfile, pszSection, "", &NoEntry)) != NULL)
         {
             if (MaxLen != 0)
@@ -797,7 +797,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
                                            sal_uInt32 MaxLen)
 {
     sal_uInt32    i, n = 0;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
     osl_TProfileImpl*    pTmpProfile = 0;
     bool bRet = false;
@@ -834,7 +833,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
         {
             for (i = 0; i < pProfile->m_NoSections; i++)
             {
-                pSec = &pProfile->m_Sections[i];
+                osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
                 if ((n + pSec->m_Len + 1) < MaxLen)
                 {
@@ -1052,7 +1051,7 @@ static bool OslProfile_rewindFile(osl_TFile* pFile, bool bTruncate)
 
 static sal_Char* OslProfile_getLine(osl_TFile* pFile)
 {
-    int   Max, Free, Bytes, nLineBytes = 0;
+    int   Max, Free, nLineBytes = 0;
     sal_Char* pChr;
     sal_Char* pLine = NULL;
     sal_Char* pNewLine;
@@ -1067,7 +1066,7 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
 
     do
     {
-        Bytes = sizeof(pFile->m_ReadBuf) - (pFile->m_pReadPtr - pFile->m_ReadBuf);
+        int Bytes = sizeof(pFile->m_ReadBuf) - (pFile->m_pReadPtr - pFile->m_ReadBuf);
 
         if (Bytes <= 1)
         {
@@ -1274,7 +1273,6 @@ static sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sa
     if (LineNo < pProfile->m_NoLines)
     {
         sal_uInt32 i, n;
-        osl_TProfileSection* pSec;
 
         memmove(&pProfile->m_Lines[LineNo + 1], &pProfile->m_Lines[LineNo],
                 (pProfile->m_NoLines - LineNo) * sizeof(sal_Char *));
@@ -1282,7 +1280,7 @@ static sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Line, sa
         /* adjust line references */
         for (i = 0; i < pProfile->m_NoSections; i++)
         {
-            pSec = &pProfile->m_Sections[i];
+            osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
             if (pSec->m_Line >= LineNo)
                 pSec->m_Line++;
@@ -1309,7 +1307,6 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
         if (pProfile->m_NoLines - LineNo > 1)
         {
             sal_uInt32 i, n;
-            osl_TProfileSection* pSec;
 
             memmove(&pProfile->m_Lines[LineNo], &pProfile->m_Lines[LineNo + 1],
                     (pProfile->m_NoLines - LineNo - 1) * sizeof(sal_Char *));
@@ -1321,7 +1318,7 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
             /* adjust line references */
             for (i = 0; i < pProfile->m_NoSections; i++)
             {
-                pSec = &pProfile->m_Sections[i];
+                osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
                 if (pSec->m_Line > LineNo)
                     pSec->m_Line--;
@@ -1502,7 +1499,6 @@ static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile,
     static  sal_uInt32    Sect = 0;
             sal_uInt32    i, n;
             sal_uInt32  Len;
-            const sal_Char* pStr;
             osl_TProfileSection* pSec=0;
 
     Len = strlen(Section);
@@ -1530,7 +1526,7 @@ static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile,
 
         for (i = 0; i < pSec->m_NoEntries; i++)
         {
-            pStr = &pProfile->m_Lines[pSec->m_Entries[i].m_Line]
+            const sal_Char* pStr = &pProfile->m_Lines[pSec->m_Entries[i].m_Line]
                                      [pSec->m_Entries[i].m_Offset];
             if ((Len == pSec->m_Entries[i].m_Len) &&
                 (strncasecmp(Entry, pStr, pSec->m_Entries[i].m_Len)
@@ -1554,7 +1550,6 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     sal_Char*   pChar;
 
     sal_Char* pLine;
-    sal_Char* bWasAdded = NULL;
 
     if ( !pFile )
     {
@@ -1573,7 +1568,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
 
     while ( ( pLine=OslProfile_getLine(pFile) ) != 0 )
     {
-        bWasAdded = addLine( pProfile, pLine );
+        sal_Char* bWasAdded = addLine( pProfile, pLine );
         rtl_freeMemory( pLine );
         SAL_WARN_IF(!bWasAdded, "sal.osl", "addLine( pProfile, pLine ) ==> false");
         if ( ! bWasAdded )

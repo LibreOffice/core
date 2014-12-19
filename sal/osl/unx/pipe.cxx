@@ -115,7 +115,6 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 {
     oslPipe pPipe=0;
     rtl_String* strPipeName=0;
-    sal_Char* pszPipeName=0;
 
     if ( ustrPipeName != 0 )
     {
@@ -124,7 +123,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
                             rtl_uString_getLength(ustrPipeName),
                             osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
-        pszPipeName = rtl_string_getStr(strPipeName);
+        sal_Char* pszPipeName = rtl_string_getStr(strPipeName);
         pPipe = osl_psz_createPipe(pszPipeName, Options, Security);
 
         if ( strPipeName != 0 )
@@ -364,11 +363,6 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
 void SAL_CALL osl_closePipe( oslPipe pPipe )
 {
     int nRet;
-#if defined(LINUX)
-    size_t     len;
-    struct sockaddr_un addr;
-    int fd;
-#endif
     int ConnFD;
 
     if( ! pPipe )
@@ -388,11 +382,13 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
       connect to the accepting pipe
      */
 #if defined(LINUX)
+    struct sockaddr_un addr;
+
     if ( pPipe->m_bIsAccepting )
     {
         pPipe->m_bIsInShutdown = true;
         pPipe->m_Socket = -1;
-        fd = socket(AF_UNIX, SOCK_STREAM, 0);
+        int fd = socket(AF_UNIX, SOCK_STREAM, 0);
         if ( fd < 0 )
         {
             OSL_TRACE("socket in osl_destroyPipe failed with error: %s", strerror(errno));
@@ -404,7 +400,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 
         addr.sun_family = AF_UNIX;
         strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path) - 1);
-        len = sizeof(addr);
+        size_t len = sizeof(addr);
 
         nRet = connect( fd, (struct sockaddr *)&addr, len);
         if ( nRet < 0 )
@@ -438,7 +434,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 
 oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
-    int     s, flags;
+    int     s;
     oslPipe pAcceptedPipe;
 
     OSL_ASSERT(pPipe);
@@ -485,6 +481,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         }
 
         /* set close-on-exec flag */
+        int flags;
         if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
         {
             flags |= FD_CLOEXEC;

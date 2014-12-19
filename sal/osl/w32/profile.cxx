@@ -418,7 +418,6 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 {
     sal_uInt32    NoEntry;
     const sal_Char* pStr = 0;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
 
 #ifdef TRACE_OSL_PROFILE
@@ -438,6 +437,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != NULL) &&
             (NoEntry < pSec->m_NoEntries) &&
             ((pStr = strchr(pProfile->m_Lines[pSec->m_Entries[NoEntry].m_Line],
@@ -695,7 +695,6 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
                                const sal_Char *pszSection, const sal_Char *pszEntry)
 {
     sal_uInt32    NoEntry;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
     sal_Bool bRet = sal_False;
 
@@ -716,6 +715,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != NULL) &&
             (NoEntry < pSec->m_NoEntries))
         {
@@ -755,7 +755,6 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
 {
     sal_uInt32    i, n = 0;
     sal_uInt32    NoEntry;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
 
 #ifdef TRACE_OSL_PROFILE
@@ -775,6 +774,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
+        osl_TProfileSection* pSec;
         if ((pSec = findEntry(pProfile, pszSection, "", &NoEntry)) != NULL)
         {
             if (MaxLen != 0)
@@ -1041,7 +1041,6 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName,
 sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuffer, sal_uInt32 MaxLen)
 {
     sal_uInt32    i, n = 0;
-    osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = acquireProfile(Profile, sal_False);
 
     if (pProfile == NULL)
@@ -1053,7 +1052,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
         {
              for (i = 0; i < pProfile->m_NoSections; i++)
             {
-                pSec = &pProfile->m_Sections[i];
+                osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
                 if ((n + pSec->m_Len + 1) < MaxLen)
                 {
@@ -1237,7 +1236,7 @@ static sal_Bool rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
 {
     DWORD Max;
-    size_t Free, Bytes;
+    size_t Free;
     sal_Char* pChr;
     sal_Char* pLine = (sal_Char *)pszLine;
 
@@ -1248,7 +1247,7 @@ static sal_Bool getLine(osl_TFile* pFile, const sal_Char *pszLine, int MaxLen)
 
     do
     {
-        Bytes = sizeof(pFile->m_ReadBuf) - (pFile->m_pReadPtr - pFile->m_ReadBuf);
+        size_t Bytes = sizeof(pFile->m_ReadBuf) - (pFile->m_pReadPtr - pFile->m_ReadBuf);
 
         if (Bytes <= 1)
         {
@@ -1455,7 +1454,6 @@ static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Li
     if (LineNo < pProfile->m_NoLines)
     {
         sal_uInt32 i, n;
-        osl_TProfileSection* pSec;
 
         memmove(&pProfile->m_Lines[LineNo + 1], &pProfile->m_Lines[LineNo],
                 (pProfile->m_NoLines - LineNo) * sizeof(sal_Char *));
@@ -1463,7 +1461,7 @@ static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Li
         /* adjust line references */
         for (i = 0; i < pProfile->m_NoSections; i++)
         {
-            pSec = &pProfile->m_Sections[i];
+            osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
             if (pSec->m_Line >= LineNo)
                 pSec->m_Line++;
@@ -1490,7 +1488,6 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
         if (pProfile->m_NoLines - LineNo > 1)
         {
             sal_uInt32 i, n;
-            osl_TProfileSection* pSec;
 
             memmove(&pProfile->m_Lines[LineNo], &pProfile->m_Lines[LineNo + 1],
                     (pProfile->m_NoLines - LineNo - 1) * sizeof(sal_Char *));
@@ -1502,7 +1499,7 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
             /* adjust line references */
             for (i = 0; i < pProfile->m_NoSections; i++)
             {
-                pSec = &pProfile->m_Sections[i];
+                osl_TProfileSection* pSec = &pProfile->m_Sections[i];
 
                 if (pSec->m_Line > LineNo)
                     pSec->m_Line--;
@@ -1680,7 +1677,6 @@ static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile, const sal_Char
 static  sal_uInt32    Sect = 0;
         sal_uInt32    i, n;
         sal_uInt32    Len;
-        const sal_Char* pStr;
         osl_TProfileSection* pSec = NULL;
 
     Len = strlen(Section);
@@ -1710,7 +1706,7 @@ static  sal_uInt32    Sect = 0;
 
         for (i = 0; i < pSec->m_NoEntries; i++)
         {
-            pStr = &pProfile->m_Lines[pSec->m_Entries[i].m_Line]
+            const sal_Char* pStr = &pProfile->m_Lines[pSec->m_Entries[i].m_Line]
                                      [pSec->m_Entries[i].m_Offset];
             if ((Len == pSec->m_Entries[i].m_Len) &&
                 (strnicmp(Entry, pStr, pSec->m_Entries[i].m_Len)
@@ -2072,7 +2068,7 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile)
 
 static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile, sal_Unicode *strProfile)
 {
-    sal_Char *pChr, *pStr;
+    sal_Char *pChr;
     sal_Char Buffer[4096] = "";
     sal_Char Product[132] = "";
 
@@ -2326,7 +2322,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                 static const sal_Char *SubDirs[] = SVERSION_DIRS;
 
                 unsigned i = 0;
-                pStr = aTmpPath + nPos;
+                sal_Char *pStr = aTmpPath + nPos;
 
                 for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
                     if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
