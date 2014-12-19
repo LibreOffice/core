@@ -105,7 +105,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      OUString( "com.sun.star.comp.GIOContentProvider" ),
-                     OUString( "com.sun.star.ucb.GIOContentProvider" ) );
+                     "com.sun.star.ucb.GIOContentProvider" );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 

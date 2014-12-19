@@ -1146,13 +1146,13 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
-        seq[0].Type       = OUString( GIO_FILE_TYPE );
+        seq[0].Type       = GIO_FILE_TYPE;
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
-        seq[1].Type       = OUString( GIO_FOLDER_TYPE );
+        seq[1].Type       = GIO_FOLDER_TYPE;
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
