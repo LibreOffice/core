@@ -39,6 +39,8 @@ ANDROID)
     oslibs="$WORKDIR/UnpackedTarball/curl/lib/.libs/*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/fontconfig/src/.libs/libfontconfig.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/freetype/objs/.libs/libfreetype.a"
+    # Only liblo-bootstrap.a ends up here:
+    oslibs="$oslibs $WORKDIR/LinkTarget/Library/lib*.a"
     ;;
 IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
@@ -64,7 +66,6 @@ esac
 echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
-     $WORKDIR/LinkTarget/Library/lib*.a \
      $oslibs \
      $nsslibs \
      $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a \
