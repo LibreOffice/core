@@ -247,11 +247,13 @@ public:
 
     // This method collects all automatic styles for the given XShape
     void collectShapeAutoStyles(
-        const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape);
+        const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape,
+        sal_Int32 nShapeId = -1);
 
     // This method exports the given XShape
     void exportShape(
         const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape,
+        sal_Int32 nShapeId = -1,
         sal_Int32 nFeatures = SEF_DEFAULT,
         com::sun::star::awt::Point* pRefPoint = NULL,
         SvXMLAttributeList* pAttrList = NULL

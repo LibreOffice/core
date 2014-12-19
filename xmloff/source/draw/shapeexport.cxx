@@ -235,17 +235,21 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
 }
 
 // This method collects all automatic styles for the given XShape
-void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape )
+void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape, sal_Int32 nZIndex)
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
     {
         OSL_FAIL( "XMLShapeExport::collectShapeAutoStyles(): no call to seekShapes()!" );
         return;
     }
-    sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
-    if( xSet.is() )
-        xSet->getPropertyValue(msZIndex) >>= nZIndex;
+    if( nZIndex == -1 )
+    {
+        if( xSet.is() )
+            xSet->getPropertyValue(msZIndex) >>= nZIndex;
+        else
+            nZindex = 0;
+    }
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
@@ -564,6 +568,7 @@ namespace
 }
 // This method exports the given XShape
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
+                                 sal_Int32 nZIndex,
                                  sal_Int32 nFeatures /* = SEF_DEFAULT */,
                                  com::sun::star::awt::Point* pRefPoint /* = NULL */,
                                  SvXMLAttributeList* pAttrList /* = NULL */ )
@@ -574,7 +579,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         SAL_WARN( "xmloff", "XMLShapeExport::exportShape(): no auto styles where collected before export" );
         return;
     }
-    sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
 
     boost::scoped_ptr< SvXMLElementExport >  mpHyperlinkElement;
@@ -606,8 +610,13 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         SAL_WARN("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
     }
 
-    if( xSet.is() )
-        xSet->getPropertyValue(msZIndex) >>= nZIndex;
+    if( nZIndex == -1 )
+    {
+        if( xSet.is() )
+            xSet->getPropertyValue(msZIndex) >>= nZIndex;
+        else
+            nZindex = 0;
+    }
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
@@ -954,7 +963,7 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
         if(!xShape.is())
             continue;
 
-        collectShapeAutoStyles( xShape );
+        collectShapeAutoStyles( xShape, nShapeId );
     }
 
     maCurrentShapesIter = aOldCurrentShapesIter;
@@ -975,7 +984,7 @@ void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xS
         if(!xShape.is())
             continue;
 
-        exportShape( xShape, nFeatures, pRefPoint );
+        exportShape( xShape, nShapeId, nFeatures, pRefPoint );
     }
 
     maCurrentShapesIter = aOldCurrentShapesIter;

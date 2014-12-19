@@ -2874,7 +2874,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                             sal_Int32 nFeatures =
                                 addTextFrameAttributes( xPropSet, true );
                             GetExport().GetShapeExport()
-                                ->exportShape( xShape, nFeatures );
+                                ->exportShape( xShape, -1, nFeatures );
                         }
                         break;
                     }
