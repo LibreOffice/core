@@ -16,31 +16,30 @@
          ".long ","",HEX_0X
      },
 +    {"gcc-android-arm",
-+	"\t.arch armv5te\n"
-+	"\t.fpu softvfp\n"
-+	"\t.eabi_attribute 20, 1\n"
-+	"\t.eabi_attribute 21, 1\n"
-+	"\t.eabi_attribute 23, 3\n"
-+	"\t.eabi_attribute 24, 1\n"
-+	"\t.eabi_attribute 25, 1\n"
-+	"\t.eabi_attribute 26, 2\n"
-+	"\t.eabi_attribute 30, 6\n"
-+	"\t.eabi_attribute 18, 4\n"
-+	"\t.file \"%s.s\"\n"
-+	"\t.global %s\n"
-+	"\t.section .rodata\n"
-+	"\t.align 2\n"
-+	"\t.type %s, %%object\n"
-+	"%s:\n",
++        "\t.arch armv5te\n"
++        "\t.fpu softvfp\n"
++        "\t.eabi_attribute 20, 1\n"
++        "\t.eabi_attribute 21, 1\n"
++        "\t.eabi_attribute 23, 3\n"
++        "\t.eabi_attribute 24, 1\n"
++        "\t.eabi_attribute 25, 1\n"
++        "\t.eabi_attribute 26, 2\n"
++        "\t.eabi_attribute 30, 6\n"
++        "\t.eabi_attribute 18, 4\n"
++        "\t.file \"%s.s\"\n"
++        "\t.global %s\n"
++        "\t.section .rodata\n"
++        "\t.align 2\n"
++        "\t.type %s, %%object\n"
++        "%s:\n",
 +
-+	"\t.word ",
-+	"\t.section .note.GNU-stack,\"\",%%progbits\n",
-+	HEX_0X
++        "\t.word ",
++        "\t.section .note.GNU-stack,\"\",%%progbits\n",
++        HEX_0X
 +    },
- // 16 bytes alignment.
- // http://docs.oracle.com/cd/E19641-01/802-1947/802-1947.pdf
+ /* 16 bytes alignment. */
+ /* http://docs.oracle.com/cd/E19641-01/802-1947/802-1947.pdf */
      {"sun",
-
 --- misc/icu/source/config/mh-darwin	2010-09-29 20:37:36.000000000 +0200
 +++ misc/build/icu/source/config/mh-darwin	2011-03-15 10:56:26.653056004 +0100
 @@ -28,11 +28,7 @@
