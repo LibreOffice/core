@@ -189,8 +189,8 @@ public:
 
 class SlidingFunctionBase : public OpBase
 {
-public:
     typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
+public:
     typedef std::vector<SubArgument> SubArguments;
     virtual void GenSlidingWindowFunction( std::stringstream&,
         const std::string&, SubArguments& ) = 0;
