@@ -40,7 +40,6 @@ public class TimeStampControl extends DatabaseControl
     private double nreldatewidth;
     private double nreltimewidth;
     private int nDBWidth;
-    private XShape xShapeGroup;
 
     public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint)
     {
@@ -57,7 +56,7 @@ public class TimeStampControl extends DatabaseControl
         nDBWidth = nDateWidth + nTimeWidth + 10;
         xShapes.add(oDateControl.xShape);
         xShapes.add(oTimeControl.xShape);
-        xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
+        xShape = _oFormHandler.xShapeGrouper.group(xShapes);
         nreldatewidth = 1.0 / ((double) getSize().Width / (double) nDateWidth);
         nreltimewidth = 1.0 - nreldatewidth;
     }
@@ -120,20 +119,6 @@ public class TimeStampControl extends DatabaseControl
     {
         int ncontrolwidth = oDateControl.xShape.getSize().Width + oTimeControl.xShape.getSize().Width;
         return new Size(ncontrolwidth, oDateControl.xShape.getSize().Height);
-    }
-
-    public Point getPosition()
-    {
-        return xShapeGroup.getPosition();
-    }
-
-    public void setPosition(Point _aPoint)
-    {
-        // --> TESTING
-        Point aBeforePt = xShapeGroup.getPosition();
-        xShapeGroup.setPosition(_aPoint);
-        // --> TESTING
-        Point aAfterPt = xShapeGroup.getPosition();
     }
 
     public int getControlType()
