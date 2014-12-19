@@ -934,6 +934,26 @@ OString SAL_CALL unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "mwr";
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 54)
+        case USCRIPT_AHOM:
+            sRet = "aho";
+            break;
+        case USCRIPT_HATRAN:
+            sRet = "qly-Hatr";
+            break;
+        case USCRIPT_MODI:
+            sRet = "mr-Modi";
+            break;
+        case USCRIPT_MULTANI:
+            sRet = "skr-Mutl";
+            break;
+        case USCRIPT_PAU_CIN_HAU:
+            sRet = "ctd-Pauc";
+            break;
+        case USCRIPT_SIDDHAM:
+            sRet = "sa-Sidd";
+            break;
+#endif
     }
     return sRet;
 }
