@@ -358,7 +358,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
         }
 
-        if (aParentName.isEmpty() && xPropertySetInfo->hasPropertyByName("TextBox") && xPropSet->getPropertyValue("TextBox").get<bool>())
+        if (aParentName.isEmpty() && xPropertySetInfo->hasPropertyByName("TextBox") && xPropSet->getPropertyValue("TextBox").hasValue() && xPropSet->getPropertyValue("TextBox").get<bool>())
         {
             // Shapes with a Writer TextBox always have a parent style.
             // If there would be none, then just assign the first available.
