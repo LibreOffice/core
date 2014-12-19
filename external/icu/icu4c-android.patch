@@ -17,9 +17,9 @@
  	fi ;;
 -*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu) icu_cv_host_frag=mh-linux ;;
 +*-*-linux*|*-*-gnu|*-*-k*bsd*-gnu|*-*-kopensolaris*-gnu|*-*-*-androideabi*) icu_cv_host_frag=mh-linux ;;
- *-*-cygwin|*-*-mingw32|*-*-mingw64)
+ i[34567]86-*-cygwin)
  	if test "$GCC" = yes; then
- 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ 		icu_cv_host_frag=mh-cygwin
 @@ -6032,6 +6032,10 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
