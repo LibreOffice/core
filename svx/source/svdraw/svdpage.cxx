@@ -1806,7 +1806,7 @@ void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     size_t nObjCount = GetObjCount();
     for (size_t i = 0; i < nObjCount; ++i)
     {
-        if (const SdrObject* pObject = pPage->GetObj(i))
+        if (const SdrObject* pObject = GetObj(i))
             pObject->dumpAsXml(pWriter);
     }
 
