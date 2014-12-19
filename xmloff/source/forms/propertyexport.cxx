@@ -539,14 +539,18 @@ namespace xmloff
                 aBuffer = getBOOL(_rValue) ? m_sValueTrue : m_sValueFalse;
                 break;
             case TypeClass_BYTE:
+            case TypeClass_UNSIGNED_SHORT:
             case TypeClass_SHORT:
             case TypeClass_LONG:
                 // let the unit converter format is as string
                 ::sax::Converter::convertNumber(aBuffer, getINT32(_rValue));
                 break;
+            case TypeClass_UNSIGNED_LONG:
             case TypeClass_HYPER:
-                // TODO
-                OSL_FAIL("OPropertyExport::implConvertAny: missing implementation for sal_Int64!");
+                ::sax::Converter::convertNumber(aBuffer, getINT64(_rValue));
+                break;
+            case TypeClass_UNSIGNED_HYPER:
+                ::sax::Converter::convertNumber(aBuffer, _rValue.get<sal_uInt64>());
                 break;
             case TypeClass_ENUM:
             {
