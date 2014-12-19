@@ -67,7 +67,7 @@ This class is not part of public API and is meant to be used only in LibreOffice
 struct SAL_WARN_UNUSED OUStringLiteral
 {
     template< int N >
-    OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
+    explicit OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
     int size;
     const char* data;
 };
