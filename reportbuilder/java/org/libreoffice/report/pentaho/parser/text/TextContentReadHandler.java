@@ -30,11 +30,6 @@ import org.xml.sax.SAXException;
 public class TextContentReadHandler extends NoCDATATextContentReadHandler
 {
 
-    public TextContentReadHandler(final Section section, final boolean copyType)
-    {
-        super(section, copyType);
-    }
-
     public TextContentReadHandler(final Section section)
     {
         super(section);

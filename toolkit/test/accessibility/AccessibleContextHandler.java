@@ -24,8 +24,6 @@ import tools.NameProvider;
 class AccessibleContextHandler
     extends NodeHandler
 {
-    protected int nChildrenCount;
-
     @Override
     public NodeHandler createHandler (XAccessibleContext xContext)
     {

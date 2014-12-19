@@ -61,11 +61,6 @@ public class ImageElement extends ReportElement
         return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI));
     }
 
-    public void setPreserveIRI(final boolean preserveIRI)
-    {
-        setAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI, String.valueOf(preserveIRI));
-    }
-
     public String getImageData()
     {
         return (String) getAttribute(OfficeNamespaces.FORM_NS, OfficeToken.IMAGE_DATA);

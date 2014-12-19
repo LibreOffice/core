@@ -37,16 +37,6 @@ abstract class NodeHandler
         maChildList = new Vector<AccessibleTreeNode> ();
     }
 
-    /** Clear the cache of child objects.
-    */
-    public void clear ()
-    {
-        synchronized (maChildList)
-        {
-            maChildList.clear();
-        }
-    }
-
     /** return the number of children this object has */
     public int getChildCount()
     {

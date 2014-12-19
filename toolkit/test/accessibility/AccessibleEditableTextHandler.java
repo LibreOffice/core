@@ -45,12 +45,6 @@ class AccessibleEditableTextHandler extends NodeHandler
             maChildList.setSize (1);
     }
 
-    protected static XAccessibleEditableText getEText (AccTreeNode aNode)
-    {
-        return UnoRuntime.queryInterface (
-            XAccessibleEditableText.class, aNode.getContext());
-    }
-
     @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {

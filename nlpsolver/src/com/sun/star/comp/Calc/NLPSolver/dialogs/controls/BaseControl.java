@@ -65,10 +65,6 @@ public abstract class BaseControl {
         properties = UnoRuntime.queryInterface(XPropertySet.class, unoModel);
     }
 
-    public Object getUnoControl() {
-        return unoControl;
-    }
-
     public void setParentControl(BaseControl parentControl) {
         //TODO : remove from existing parentControl
         try {

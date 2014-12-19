@@ -26,27 +26,13 @@ package org.libreoffice.report.pentaho.layoutprocessor;
 public class ImageElementContext
 {
 
-    private final int colSpan;
-    private final int rowSpan;
     private String[] rowStyles;
     private String[] colStyles;
 
     public ImageElementContext(final int colSpan, final int rowSpan)
     {
-        this.colSpan = colSpan;
-        this.rowSpan = rowSpan;
         this.colStyles = new String[colSpan];
         this.rowStyles = new String[rowSpan];
-    }
-
-    public int getColSpan()
-    {
-        return colSpan;
-    }
-
-    public int getRowSpan()
-    {
-        return rowSpan;
     }
 
     public String[] getRowStyles()

@@ -54,20 +54,6 @@ class HelpWindow
             e.printStackTrace (System.err);
         }
     }
-    public void loadURL (String sURL)
-    {
-        try
-        {
-            loadURL (new URL (sURL));
-        }
-        catch (MalformedURLException e)
-        {
-            e.printStackTrace (System.err);
-        }
-    }
-
-
-
 
     private void loadURL (URL aURL)
     {

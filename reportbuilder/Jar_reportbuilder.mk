@@ -53,7 +53,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/ReportEngineMetaData \
     reportbuilder/java/org/libreoffice/report/ReportEngineParameterNames \
     reportbuilder/java/org/libreoffice/report/ReportExecutionException \
-    reportbuilder/java/org/libreoffice/report/ReportExpressionMetaData \
     reportbuilder/java/org/libreoffice/report/ReportJob \
     reportbuilder/java/org/libreoffice/report/ReportJobDefinition \
     reportbuilder/java/org/libreoffice/report/ReportJobFactory \
@@ -69,7 +68,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/pentaho/DefaultNameGenerator \
     reportbuilder/java/org/libreoffice/report/pentaho/OfficeNamespaces \
     reportbuilder/java/org/libreoffice/report/pentaho/PentahoFormulaContext \
-    reportbuilder/java/org/libreoffice/report/pentaho/PentahoReportAddIn \
     reportbuilder/java/org/libreoffice/report/pentaho/PentahoReportEngine \
     reportbuilder/java/org/libreoffice/report/pentaho/PentahoReportEngineMetaData \
     reportbuilder/java/org/libreoffice/report/pentaho/PentahoReportJob \
@@ -83,7 +81,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/pentaho/StarReportDataFactory \
     reportbuilder/java/org/libreoffice/report/pentaho/StarReportModule \
     reportbuilder/java/org/libreoffice/report/pentaho/expressions/SumExpression \
-    reportbuilder/java/org/libreoffice/report/pentaho/expressions/SumExpressionMetaData \
     reportbuilder/java/org/libreoffice/report/pentaho/layoutprocessor/AbstractReportElementLayoutController \
     reportbuilder/java/org/libreoffice/report/pentaho/layoutprocessor/FixedTextLayoutController \
     reportbuilder/java/org/libreoffice/report/pentaho/layoutprocessor/FormatValueUtility \
@@ -226,7 +223,6 @@ $(eval $(call gb_Jar_add_sourcefiles,reportbuilder,\
     reportbuilder/java/org/libreoffice/report/util/DefaultJobProperties \
     reportbuilder/java/org/libreoffice/report/util/DefaultParameterMap \
     reportbuilder/java/org/libreoffice/report/util/DefaultReportJobDefinition \
-    reportbuilder/java/org/libreoffice/report/util/ManifestWriter \
 ))
 
 $(eval $(call gb_Jar_add_packagefiles,reportbuilder,,\

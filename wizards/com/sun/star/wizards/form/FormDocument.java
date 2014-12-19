@@ -277,13 +277,6 @@ public class FormDocument extends TextDocument
         return null;
     }
 
-    public ControlForm[] getControlForms()
-    {
-        ControlForm[] aResult = new ControlForm[oControlForms.size()];
-        oControlForms.toArray( aResult );
-        return aResult;
-    }
-
     public boolean finalizeForms(DataEntrySetter _curDataEntrySetter, FieldLinker _curFieldLinker, FormConfiguration _curFormConfiguration)
     {
         try

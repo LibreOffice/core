@@ -541,17 +541,6 @@ public class UnoDialog
         return xDialog.execute();
     }
 
-    public void setVisible(UnoDialog parent) throws com.sun.star.uno.Exception
-    {
-        calculateDialogPosition(parent.xWindow.getPosSize());
-        if (xWindowPeer == null)
-        {
-            createWindowPeer();
-        }
-        xDialog = UnoRuntime.queryInterface(XDialog.class, xUnoDialog);
-        this.xWindow.setVisible(true);
-    }
-
     /**
      * @return 0 for cancel, 1 for ok.
      */

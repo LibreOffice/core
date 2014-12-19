@@ -27,6 +27,7 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
  *
  * @since 12.03.2007
  */
+@SuppressWarnings("ucd")
 public class StyleMapperXmlResourceFactory extends AbstractXmlResourceFactory
 {
 

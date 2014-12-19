@@ -53,10 +53,6 @@ public abstract class ProblemEncoder {
     return designSpace;
   }
 
-  public EvalStruct getEvalStruct() {
-    return evalStruct;
-  }
-
   //set the default information for each dimension of search space (S)
   protected void setDefaultXAt(int i,  double min, double max, double grain) {
     DesignDim dd = new DesignDim();

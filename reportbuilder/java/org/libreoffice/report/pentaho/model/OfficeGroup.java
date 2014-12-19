@@ -17,7 +17,6 @@
  */
 package org.libreoffice.report.pentaho.model;
 
-import org.libreoffice.report.OfficeToken;
 import org.libreoffice.report.pentaho.OfficeNamespaces;
 
 import org.jfree.report.JFreeReportInfo;
@@ -32,16 +31,6 @@ import org.jfree.report.structure.Section;
  */
 public class OfficeGroup extends Section
 {
-
-    public boolean isStartNewColumn()
-    {
-        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "start-new-column"));
-    }
-
-    public boolean isResetPageNumber()
-    {
-        return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "reset-page-number"));
-    }
 
     public OfficeGroupSection getHeader()
     {

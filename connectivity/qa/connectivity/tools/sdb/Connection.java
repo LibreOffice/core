@@ -22,7 +22,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
-import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XPreparedStatement;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbcx.XTablesSupplier;
@@ -71,12 +70,6 @@ public class Connection
     XPreparedStatement prepareStatement( String _sql ) throws SQLException
     {
         return m_connection.prepareStatement( _sql );
-    }
-
-    public
-    XDatabaseMetaData getMetaData() throws SQLException
-    {
-        return m_connection.getMetaData();
     }
 
     public

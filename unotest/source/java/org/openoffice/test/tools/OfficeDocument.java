@@ -20,13 +20,8 @@ package org.openoffice.test.tools;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.document.MacroExecMode;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.drawing.XDrawPages;
-import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -35,7 +30,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
-import com.sun.star.util.XModifiable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,12 +67,6 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    private static OfficeDocument implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
-    {
-        return implLoadDocument( orb, documentOrFactoryURL, new PropertyValue[0] );
-    }
-
-    /* ------------------------------------------------------------------ */
     private static OfficeDocument implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL, final PropertyValue[] i_args ) throws com.sun.star.uno.Exception
     {
         XComponent document = implLoadAsComponent( orb, documentOrFactoryURL, i_args );
@@ -90,21 +78,9 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    public static OfficeDocument loadDocument( XMultiServiceFactory orb, String documentURL ) throws com.sun.star.uno.Exception
-    {
-        return implLoadDocument( orb, documentURL );
-    }
-
-    /* ------------------------------------------------------------------ */
     public static OfficeDocument blankTextDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
     {
         return blankDocument( orb, DocumentType.WRITER );
-    }
-
-    /* ------------------------------------------------------------------ */
-    public static OfficeDocument blankXMLForm( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
-    {
-        return blankDocument( orb, DocumentType.XMLFORM );
     }
 
     /* ------------------------------------------------------------------ */
@@ -140,25 +116,6 @@ public class OfficeDocument
     }
 
     /* ------------------------------------------------------------------ */
-    public boolean isModified()
-    {
-        XModifiable modify = query( XModifiable.class );
-        return modify.isModified();
-    }
-
-    /* ------------------------------------------------------------------ */
-    private <T> T query( Class<T> aInterfaceClass )
-    {
-        return UnoRuntime.queryInterface( aInterfaceClass, m_documentComponent );
-    }
-
-    /* ------------------------------------------------------------------ */
-    public XMultiServiceFactory getOrb( )
-    {
-        return m_orb;
-    }
-
-    /* ------------------------------------------------------------------ */
     /** retrieves the current view of the document
         @return
             the view component, queried for the interface described by aInterfaceClass
@@ -175,33 +132,6 @@ public class OfficeDocument
             return new SpreadsheetView( m_orb, this, xController );
 
         return new OfficeDocumentView( m_orb, this, xController );
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** reloads the document
-     *
-     *  The reload is done by dispatching the respective URL at a frame of the document.
-     *  As a consequence, if you have references to a view of the document, or any interface
-     *  of the document, they will become invalid.
-     *  The Model instance itself, at which you called reload, will still be valid, it will
-     *  automatically update its internal state after the reload.
-     *
-     *  Another consequence is that if the document does not have a view at all, it cannot
-     *  be reloaded.
-     */
-    public void reload() throws Exception
-    {
-        OfficeDocumentView view = getCurrentView();
-        XFrame frame = view.getController().getFrame();
-        XModel oldModel = frame.getController().getModel();
-
-        getCurrentView().dispatch( ".uno:Reload" );
-
-        m_documentComponent = UnoRuntime.queryInterface( XComponent.class, frame.getController().getModel() );
-
-        XModel newModel = getCurrentView().getController().getModel();
-        if ( UnoRuntime.areSame( oldModel, newModel ) )
-            throw new java.lang.IllegalStateException( "reload failed" );
     }
 
     /* ------------------------------------------------------------------ */
@@ -243,48 +173,6 @@ public class OfficeDocument
             return DocumentType.FORMULA;
 
         return DocumentType.UNKNOWN;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** retrieves a com.sun.star.drawing.DrawPage of the document, denoted by index
-     *  @param index
-     *      the index of the draw page
-     *  @throws
-     *      com.sun.star.lang.IndexOutOfBoundsException
-     *      com.sun.star.lang.WrappedTargetException
-     */
-    protected XDrawPage getDrawPage( int index ) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
-    {
-        XDrawPagesSupplier xSuppPages = UnoRuntime.queryInterface( XDrawPagesSupplier.class, getDocument() );
-        XDrawPages xPages = xSuppPages.getDrawPages();
-
-        return UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( index ) );
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** retrieves the <type scope="com.sun.star.drawing">DrawPage</type> of the document
-    */
-    protected XDrawPage getMainDrawPage( ) throws com.sun.star.uno.Exception
-    {
-        XDrawPage xReturn;
-
-        // in case of a Writer document, this is rather easy: simply ask the XDrawPageSupplier
-        XDrawPageSupplier xSuppPage = UnoRuntime.queryInterface( XDrawPageSupplier.class, getDocument() );
-        if ( null != xSuppPage )
-            xReturn = xSuppPage.getDrawPage();
-        else
-        {   // the model itself is no draw page supplier - okay, it may be a Writer or Calc document
-            // (or any other multi-page document)
-            XDrawPagesSupplier xSuppPages = UnoRuntime.queryInterface( XDrawPagesSupplier.class, getDocument() );
-            XDrawPages xPages = xSuppPages.getDrawPages();
-
-            xReturn = UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( 0 ) );
-
-            // Note that this is no really error-proof code: If the document model does not support the
-            // XDrawPagesSupplier interface, or if the pages collection returned is empty, this will break.
-        }
-
-        return xReturn;
     }
 
     /* ------------------------------------------------------------------ */

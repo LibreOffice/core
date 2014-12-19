@@ -37,11 +37,6 @@ public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
     private final ObjectOleElement element;
     private boolean ignore = false;
 
-    public SubDocumentReadHandler(final ObjectOleElement element)
-    {
-        this.element = element;
-    }
-
     private SubDocumentReadHandler(final Section section, final ObjectOleElement element)
     {
         super(section);

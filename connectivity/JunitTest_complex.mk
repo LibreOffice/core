@@ -41,7 +41,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,connectivity_complex,\
 	connectivity/qa/complex/connectivity/dbase/DBaseNumericFunctions \
 	connectivity/qa/complex/connectivity/dbase/DBaseSqlTests \
 	connectivity/qa/complex/connectivity/dbase/DBaseStringFunctions \
-	connectivity/qa/complex/connectivity/hsqldb/DatabaseMetaData \
 	connectivity/qa/complex/connectivity/hsqldb/TestCacheSize \
 	connectivity/qa/connectivity/tools/AbstractDatabase \
 	connectivity/qa/connectivity/tools/CRMDatabase \

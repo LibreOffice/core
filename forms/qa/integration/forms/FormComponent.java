@@ -24,15 +24,12 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNamed;
 import com.sun.star.drawing.XDrawPage;
-import com.sun.star.lang.XServiceInfo;
 
 public class FormComponent
 {
     private final Object          m_component;
     private final XNameAccess     m_nameAccess;
     private final XIndexAccess    m_indexAccess;
-    private final XChild          m_child;
-    private final XNamed          m_named;
 
     /* ------------------------------------------------------------------ */
     private FormComponent()
@@ -40,8 +37,6 @@ public class FormComponent
         m_component = null;
         m_nameAccess = null;
         m_indexAccess = null;
-        m_child = null;
-        m_named = null;
     }
 
     /* ------------------------------------------------------------------ */
@@ -54,9 +49,9 @@ public class FormComponent
         m_nameAccess = (XNameAccess)m_component;
         m_indexAccess = UnoRuntime.queryInterface(
             XIndexAccess.class, m_component );
-        m_child = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
             XChild.class, m_component );
-        m_named = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
             XNamed.class, m_component );
     }
 
@@ -68,9 +63,9 @@ public class FormComponent
             XNameAccess.class, m_component );
         m_indexAccess = UnoRuntime.queryInterface(
             XIndexAccess.class, m_component );
-        m_child = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
             XChild.class, m_component );
-        m_named = UnoRuntime.queryInterface(
+        UnoRuntime.queryInterface(
             XNamed.class, m_component );
     }
 
@@ -101,20 +96,6 @@ public class FormComponent
     }
 
     /* ------------------------------------------------------------------ */
-    public String[] getElementNames()
-    {
-        return ( m_nameAccess != null ) ? m_nameAccess.getElementNames() : new String[]{};
-    }
-
-
-
-    /* ------------------------------------------------------------------ */
-    public int getCount()
-    {
-        return ( m_indexAccess != null ) ? m_indexAccess.getCount() : 0;
-    }
-
-    /* ------------------------------------------------------------------ */
     public FormComponent getByIndex( int index )
     {
         try
@@ -130,35 +111,4 @@ public class FormComponent
         return new FormComponent();
     }
 
-    /* ------------------------------------------------------------------ */
-    public com.sun.star.uno.Type getElementType(  )
-    {
-        if ( m_indexAccess != null )
-            return m_indexAccess.getElementType();
-        else if ( m_nameAccess != null )
-            return m_nameAccess.getElementType();
-        return new com.sun.star.uno.Type( String.class );
-    }
-
-
-
-    /* ------------------------------------------------------------------ */
-    public FormComponent getParent()
-    {
-        return ( m_child != null ) ? new FormComponent( m_child.getParent() ) : new FormComponent();
-    }
-
-    /* ------------------------------------------------------------------ */
-    public String getName()
-    {
-        return ( m_named != null ) ? m_named.getName() : "";
-    }
-
-    /* ------------------------------------------------------------------ */
-    public String getImplementationName()
-    {
-        XServiceInfo si = UnoRuntime.queryInterface(
-            XServiceInfo.class, m_component );
-        return ( si != null ) ? si.getImplementationName() : "";
-    }
 }

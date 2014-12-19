@@ -24,21 +24,12 @@ $(eval $(call gb_Jar_set_packageroot,EvolutionarySolver,net/adaptivebox))
 $(eval $(call gb_Jar_set_manifest,EvolutionarySolver,$(SRCDIR)/nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/Manifest.mf))
 
 $(eval $(call gb_Jar_add_sourcefiles,EvolutionarySolver,\
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/goodness/SRComparator \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/goodness/ACRComparator \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/goodness/BCHComparator \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/goodness/IGoodnessCompareEngine \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/goodness/PenaltyComparator \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/CompareValue \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/GlobalString \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/BasicArray \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/GlobalCompare \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/BasicBound \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/OutputMethods \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/RandomGenerator \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/GlobalFile \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/IUpdateCycleEngine \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/global/BasicTag \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/encode/EvalStruct \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/encode/EvalElement \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/encode/IEncodeEngine \
@@ -46,7 +37,6 @@ $(eval $(call gb_Jar_add_sourcefiles,EvolutionarySolver,\
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/space/BasicPoint \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/space/DesignSpace \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/space/DesignDim \
-    nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/problem/UnconstrainedProblemEncoder \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/problem/ProblemEncoder \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/knowledge/Library \
     nlpsolver/ThirdParty/EvolutionarySolver/src/net/adaptivebox/knowledge/ILibEngine \

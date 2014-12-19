@@ -18,7 +18,6 @@
 package com.sun.star.wizards.common;
 
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ui.dialogs.*;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XComponent;
@@ -29,8 +28,6 @@ import com.sun.star.awt.XMessageBox;
 
 public class SystemDialog
 {
-
-    XFilterManager xFilterManager;
 
     public static int showErrorBox(XMultiServiceFactory xMSF, String ResPrefix, int ResID, String AddTag, String AddString)
     {

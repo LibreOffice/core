@@ -147,11 +147,6 @@ public class StorageRepository implements InputRepository, OutputRepository
         return false;
     }
 
-    public boolean isWritable(final String name)
-    {
-        return true;
-    }
-
     public Object getId()
     {
         return "1";

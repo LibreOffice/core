@@ -34,16 +34,6 @@ class Options
         return saOptions;
     }
 
-    static public void SetString (String sName, String sValue)
-    {
-        Instance().setProperty (sName, sValue);
-    }
-
-    static public String GetString (String sName)
-    {
-        return Instance().getProperty (sName);
-    }
-
     static public void SetBoolean (String sName, boolean bValue)
     {
         Instance().setProperty (sName, Boolean.toString(bValue));

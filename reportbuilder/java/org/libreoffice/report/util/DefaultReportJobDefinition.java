@@ -17,14 +17,9 @@
  */
 package org.libreoffice.report.util;
 
-import org.libreoffice.report.DataSourceFactory;
-import org.libreoffice.report.InputRepository;
-import org.libreoffice.report.JobDefinitionException;
 import org.libreoffice.report.JobProperties;
-import org.libreoffice.report.OutputRepository;
 import org.libreoffice.report.ParameterMap;
 import org.libreoffice.report.ReportEngineMetaData;
-import org.libreoffice.report.ReportEngineParameterNames;
 import org.libreoffice.report.ReportJobDefinition;
 
 public class DefaultReportJobDefinition implements ReportJobDefinition
@@ -40,39 +35,6 @@ public class DefaultReportJobDefinition implements ReportJobDefinition
         this.properties = new DefaultJobProperties(metaData);
     }
 
-    public void setDataSourceFactory(final DataSourceFactory dataSourceFactory)
-            throws JobDefinitionException
-    {
-        this.properties.setProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, dataSourceFactory);
-    }
-
-    public DataSourceFactory getDataSourceFactory()
-    {
-        return (DataSourceFactory) this.properties.getProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
-    }
-
-    public InputRepository getInputRepository()
-    {
-        return (InputRepository) this.properties.getProperty(ReportEngineParameterNames.INPUT_REPOSITORY);
-    }
-
-    public void setInputRepository(final InputRepository inputRepository)
-            throws JobDefinitionException
-    {
-        this.properties.setProperty(ReportEngineParameterNames.INPUT_REPOSITORY, inputRepository);
-    }
-
-    public OutputRepository getOutputRepository()
-    {
-        return (OutputRepository) this.properties.getProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY);
-    }
-
-    public void setOutputRepository(final OutputRepository outputRepository)
-            throws JobDefinitionException
-    {
-        this.properties.setProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY, outputRepository);
-    }
-
     /**
      * The parameters of the root report definition. The parameters for the subreports are
      * defined using mappings, it would not make sense to define them here.
@@ -82,22 +44,6 @@ public class DefaultReportJobDefinition implements ReportJobDefinition
     public ParameterMap getQueryParameters()
     {
         return parameters;
-    }
-
-    public void setReportDefinitionName(final String reportDefinitionName)
-            throws JobDefinitionException
-    {
-        this.properties.setProperty(ReportEngineParameterNames.INPUT_NAME, reportDefinitionName);
-    }
-
-    /**
-     * The name under which we can load the report definition.
-     *
-     * @return the report definition's name.
-     */
-    public String getReportDefinitionName()
-    {
-        return (String) this.properties.getProperty(ReportEngineParameterNames.INPUT_NAME);
     }
 
     public JobProperties getProcessingParameters()

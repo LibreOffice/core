@@ -103,11 +103,6 @@ public class FormControlArranger
         return oFormHandler.getBasicLabelDiffHeight();
     }
 
-    public void setBorderType(short _nBorderType)
-    {
-        NBorderType = Short.valueOf(_nBorderType);
-    }
-
     public Control[] getLabelControlList()
     {
         return LabelControlList;

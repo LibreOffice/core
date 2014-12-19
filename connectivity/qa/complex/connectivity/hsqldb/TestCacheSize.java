@@ -82,7 +82,6 @@ public class TestCacheSize {
     // type of the big table {MEMORY | CACHED | TEXT}
     private String tableType      = "CACHED";
     private int    cacheScale     = 17;
-    int    cacheSizeScale = 8;
 
     // script format {TEXT, BINARY, COMPRESSED}
     private String logType       = "TEXT";
@@ -109,7 +108,6 @@ public class TestCacheSize {
 
     private XStatement  sStatement;
     private XConnection cConnection;
-    XDataSource ds;
     private XDriver drv;
     private com.sun.star.beans.PropertyValue[] info;
 

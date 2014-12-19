@@ -62,10 +62,8 @@ public class ProxyProvider
 class Proxy implements IQueryInterface, XEventListener
 {
     private String oid;
-    Type type;
     Proxy(String oid, Type t) {
         this.oid = oid;
-        this.type = t;
     }
 
     public String getOid() {

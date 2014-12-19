@@ -45,12 +45,6 @@ class AccessibleTableHandler extends NodeHandler
             maChildList.setSize (4);
     }
 
-    protected static XAccessibleTable getTable(Object aObject)
-    {
-        return UnoRuntime.queryInterface (
-            XAccessibleTable.class, aObject);
-    }
-
     @Override
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {

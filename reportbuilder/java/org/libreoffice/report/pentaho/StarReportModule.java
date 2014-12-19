@@ -21,6 +21,7 @@ import org.pentaho.reporting.libraries.base.boot.AbstractModule;
 import org.pentaho.reporting.libraries.base.boot.ModuleInitializeException;
 import org.pentaho.reporting.libraries.base.boot.SubSystem;
 
+@SuppressWarnings("ucd")
 public class StarReportModule extends AbstractModule
 {
 

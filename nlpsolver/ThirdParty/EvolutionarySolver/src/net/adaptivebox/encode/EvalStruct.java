@@ -32,9 +32,6 @@ public class EvalStruct {
   public EvalStruct(int elemsNum) {
     evalElems = new EvalElement[elemsNum];
   }
-  public int getSize() {
-    return evalElems.length;
-  }
 
   public void setElemAt(EvalElement dim, int index) {
     evalElems[index] = dim;

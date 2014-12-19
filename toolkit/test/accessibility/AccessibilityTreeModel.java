@@ -71,21 +71,6 @@ public class AccessibilityTreeModel
     }
 
 
-
-
-    /** Inform all listeners (especially the renderer) of a change of the
-        tree's structure.
-        @param aNode This node specifies the sub tree in which all changes
-        take place.
-    */
-    public void FireTreeStructureChanged (AccessibleTreeNode aNode)
-    {
-    }
-
-
-
-
-
     @Override
     public synchronized void setRoot (AccessibleTreeNode aRoot)
     {
@@ -337,12 +322,6 @@ public class AccessibilityTreeModel
         {
             maTMListeners.get(i).treeStructureChanged(e);
         }
-    }
-
-    protected TreeModelEvent createEvent (XAccessibleContext xParent)
-    {
-        AccessibleTreeNode aParentNode = maNodeMap.GetNode (xParent);
-        return new TreeModelEvent (this, createPath (aParentNode));
     }
 
     /** Create a TreeModelEvent object that informs listeners that one child

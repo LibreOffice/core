@@ -37,11 +37,9 @@ public class Job {
         Object oDoc = null;
         String actionType = null;
         String actionParm = null;
-        private XMultiServiceFactory oMSF = null;
 
 
     public _Implementation(XMultiServiceFactory xMSF) {
-            oMSF = xMSF;
     }
 
     // XServiceInfo

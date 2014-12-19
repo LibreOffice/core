@@ -29,8 +29,4 @@ public class DbaseDatabase extends FlatFileDatabase
     }
 
 
-    protected DbaseDatabase( final XMultiServiceFactory i_orb, final String i_existingDocumentURL ) throws Exception
-    {
-        super( i_orb, i_existingDocumentURL, "dbase" );
-    }
 }

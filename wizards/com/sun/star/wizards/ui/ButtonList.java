@@ -52,7 +52,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private int rows = 3;
     private Size m_aButtonSize = new Size(20, 20);
     private Size pos;
-    private Size selectionGap = new Size(2, 2);
     private boolean showButtons = true;
     private Short step;
     private static final boolean refreshOverNull = true;
@@ -68,14 +67,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private IRenderer counterRenderer = new SimpleCounterRenderer();
     private final static int LINE_HEIGHT = 8;
 
-    /** Getter for property m_aButtonSize.
-     * @return Value of property m_aButtonSize.
-     *
-     */
-    public Size getButtonSize()
-    {
-        return this.m_aButtonSize;
-    }
     public void setName(String _sName)
     {
         m_aControlName = _sName;
@@ -410,59 +401,14 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-    public int getCols()
-    {
-        return cols;
-    }
-
-    public Size getGap()
-    {
-        return gap;
-    }
-
     private ListModel getListModel()
     {
         return listModel;
     }
 
-    public Short getStep()
-    {
-        return step;
-    }
-
-    public int getPageStart()
-    {
-        return pageStart;
-    }
-
-    public Size getPos()
-    {
-        return pos;
-    }
-
-    public IImageRenderer getRenderer()
-    {
-        return renderer;
-    }
-
-    public int getRows()
-    {
-        return rows;
-    }
-
     public int getSelected()
     {
         return m_nCurrentSelection;
-    }
-
-    public Size getSelectionGap()
-    {
-        return selectionGap;
-    }
-
-    public boolean isShowButtons()
-    {
-        return showButtons;
     }
 
     public void setCols(int i)
@@ -540,7 +486,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     public void setSelectionGap(Size size)
     {
-        selectionGap = size;
     }
 
     public void setShowButtons(boolean b)
@@ -586,15 +531,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
-    public Object[] getSelectedObjects()
-    {
-        return new Object[]
-                {
-                    getListModel().getElementAt(m_nCurrentSelection)
-                };
-    }
-
-
     public interface IImageRenderer extends IRenderer
     {
 
@@ -626,23 +562,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             max = max_;
         }
     }
-
-    public Object getSelectedObject()
-    {
-        return m_nCurrentSelection >= 0 ? getListModel().getElementAt(m_nCurrentSelection) : null;
-    }
-
-
-    public void setRowSelect(boolean b)
-    {
-        rowSelect = b;
-    }
-
-    public boolean isRowSelect()
-    {
-        return rowSelect;
-    }
-
 
     public boolean isenabled()
     {

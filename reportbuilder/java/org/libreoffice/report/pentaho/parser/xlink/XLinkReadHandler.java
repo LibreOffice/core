@@ -32,9 +32,6 @@ public class XLinkReadHandler extends AbstractXmlReadHandler
 {
 
     private String uri;
-    private String type;
-    private String show;
-    private String actuate;
 
     /**
      * Starts parsing.
@@ -46,9 +43,6 @@ public class XLinkReadHandler extends AbstractXmlReadHandler
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         uri = attrs.getValue(OfficeNamespaces.XLINK_NS, "uri");
-        type = attrs.getValue(OfficeNamespaces.XLINK_NS, "type");
-        show = attrs.getValue(OfficeNamespaces.XLINK_NS, "show");
-        actuate = attrs.getValue(OfficeNamespaces.XLINK_NS, "actuate");
     }
 
     /**
@@ -68,18 +62,4 @@ public class XLinkReadHandler extends AbstractXmlReadHandler
         return uri;
     }
 
-    public String getType()
-    {
-        return type;
-    }
-
-    public String getShow()
-    {
-        return show;
-    }
-
-    public String getActuate()
-    {
-        return actuate;
-    }
 }

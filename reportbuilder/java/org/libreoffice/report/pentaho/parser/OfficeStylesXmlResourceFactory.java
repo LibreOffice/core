@@ -30,6 +30,7 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
  *
  * @since 09.03.2007
  */
+@SuppressWarnings("ucd")
 public class OfficeStylesXmlResourceFactory extends AbstractXmlResourceFactory
 {
 

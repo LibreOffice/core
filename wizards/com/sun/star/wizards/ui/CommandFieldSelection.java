@@ -245,7 +245,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
      * @return
      * @throws com.sun.star.wizards.common.TerminateWizardException
      */
-    private short fillupCommandListBox() throws com.sun.star.wizards.common.TerminateWizardException
+    private short fillupCommandListBox()
     {
         short[] iSelArray = new short[0];
         boolean bgetFields = false;

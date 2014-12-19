@@ -32,10 +32,6 @@ public class Library {
   private final SearchPoint[] libPoints;
   private int gIndex = -1;
 
-  public Library(SearchPoint[] points){
-    this.libPoints = points;
-  }
-
   public Library(int number, ProblemEncoder problemEncoder){
     libPoints = new SearchPoint[number];
     for (int i=0; i<number; i++) {

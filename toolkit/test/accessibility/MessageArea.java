@@ -61,17 +61,6 @@ public class MessageArea
 
 
     /** Show the given string at the end of the message area and scroll to make
-        it visible.
-    */
-    public static synchronized void print (String aMessage)
-    {
-        print (0, aMessage);
-    }
-
-
-
-
-    /** Show the given string at the end of the message area and scroll to make
         it visible.  Indent the string as requested.
     */
     private static synchronized void print (int nIndentation, String aMessage)

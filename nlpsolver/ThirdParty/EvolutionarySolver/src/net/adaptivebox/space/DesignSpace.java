@@ -72,11 +72,6 @@ public class DesignSpace {
     for(int i=0;i<tempX.length;i++) tempX[i] =  dimProps[i].paramBound.getRandomValue(); //Global.RandomGenerator.doubleRangeRandom(9.8, 10);
   }
 
-  public double[] getFreshGene() {
-    double[] tempX = new double[this.getDimension()];
-    initializeGene(tempX);
-    return tempX;
-  }
   public void getMappingPoint(double[] point) {
     for(int i=0; i<getDimension(); i++) {
       point[i] = dimProps[i].paramBound.annulusAdjust(point[i]);

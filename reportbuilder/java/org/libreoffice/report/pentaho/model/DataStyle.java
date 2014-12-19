@@ -34,8 +34,4 @@ public class DataStyle extends Section
         return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
     }
 
-    public void setStyleName(final String name)
-    {
-        setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
-    }
 }

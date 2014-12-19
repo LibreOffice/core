@@ -36,8 +36,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/disposing/GetServiceWhileDisposingOffice \
     framework/qa/complex/path_substitution/PathSubstitutionTest \
     framework/qa/complex/loadAllDocuments/InteractionHandler \
-    framework/qa/complex/loadAllDocuments/StreamSimulator \
-    framework/qa/complex/loadAllDocuments/TestDocument \
     framework/qa/complex/loadAllDocuments/CheckXComponentLoader \
     framework/qa/complex/loadAllDocuments/StatusIndicator \
     framework/qa/complex/broken_document/TestDocument \
@@ -46,7 +44,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/framework/autosave/AutoSave \
     framework/qa/complex/framework/autosave/Protocol \
     framework/qa/complex/framework/autosave/ConfigHelper \
-    framework/qa/complex/framework/recovery/TimeoutThread \
     framework/qa/complex/framework/recovery/KlickButtonThread \
     framework/qa/complex/framework/recovery/RecoveryTools \
     framework/qa/complex/framework/recovery/RecoveryTest \

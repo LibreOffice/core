@@ -48,7 +48,6 @@ public class AggregateComponent extends ControlScroller
     private String slblAggregate;
     private String slblFieldNames;
     private String sDuplicateAggregateFunction;
-    private int Count;
     private static final int SOADDROW = 1;
     private static final int SOREMOVEROW = 2;
     private ArrayList<ControlRow> ControlRowVector;
@@ -61,7 +60,6 @@ public class AggregateComponent extends ControlScroller
         try
         {
             this.CurDBMetaData = _CurDBMetaData;
-            Count = 1;
             CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
                     new String[]
                     {
@@ -175,11 +173,6 @@ public class AggregateComponent extends ControlScroller
                 exception.printStackTrace(System.err);
             }
         }
-    }
-
-    public int getCount()
-    {
-        return Count;
     }
 
     protected void insertControlGroup(int i, int ypos)

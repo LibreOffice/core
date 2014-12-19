@@ -410,11 +410,6 @@ public class DBMetaData
         return iMaxColumnsInSelect;
     }
 
-    public int getMaxColumnsInGroupBy()
-    {
-        return iMaxColumnsInGroupBy;
-    }
-
     private void setMaxColumnsInSelect() throws SQLException
     {
         iMaxColumnsInSelect = xDBMetaData.getMaxColumnsInSelect();

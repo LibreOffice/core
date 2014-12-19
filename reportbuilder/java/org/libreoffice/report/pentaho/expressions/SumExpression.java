@@ -17,26 +17,7 @@
  */
 package org.libreoffice.report.pentaho.expressions;
 
-import org.libreoffice.report.DataRow;
-
 public class SumExpression
 {
 
-    private Object[] parameters;
-
-    public Object getParameters()
-    {
-        return parameters;
-    }
-
-    public Object getValue(final DataRow row)
-    {
-
-        return null;
-    }
-
-    public void setParameters(final Object[] parameters)
-    {
-        this.parameters = parameters;
-    }
 }

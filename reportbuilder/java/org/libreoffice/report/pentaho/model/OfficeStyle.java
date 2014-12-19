@@ -87,19 +87,9 @@ public class OfficeStyle extends Section
         return findFirstChild(OfficeNamespaces.STYLE_NS, "table-row-properties");
     }
 
-    public Element getTableProperties()
-    {
-        return findFirstChild(OfficeNamespaces.STYLE_NS, "table-properties");
-    }
-
     public Element getTableColumnProperties()
     {
         return findFirstChild(OfficeNamespaces.STYLE_NS, "table-column-properties");
-    }
-
-    public Element getSectionProperties()
-    {
-        return findFirstChild(OfficeNamespaces.STYLE_NS, "section-properties");
     }
 
     public Element getTableCellProperties()

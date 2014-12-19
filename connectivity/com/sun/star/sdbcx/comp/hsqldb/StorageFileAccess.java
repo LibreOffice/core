@@ -20,6 +20,7 @@ package com.sun.star.sdbcx.comp.hsqldb;
 import org.hsqldb.lib.FileAccess;
 import org.hsqldb.lib.FileSystemRuntimeException;
 
+@SuppressWarnings("ucd")
 public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     static { NativeLibraries.load(); }
 

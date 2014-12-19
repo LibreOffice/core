@@ -449,11 +449,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         return null;
     }
 
-    public int getID()
-    {
-        return 0;
-    }
-
     public void moveItemDown(String Selitem)
     {
     }

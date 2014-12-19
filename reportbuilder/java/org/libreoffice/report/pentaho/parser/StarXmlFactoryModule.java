@@ -24,6 +24,7 @@ import org.pentaho.reporting.libraries.xmlns.parser.XmlDocumentInfo;
 import org.pentaho.reporting.libraries.xmlns.parser.XmlFactoryModule;
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
 
+@SuppressWarnings("ucd")
 public class StarXmlFactoryModule implements XmlFactoryModule
 {
 

@@ -35,11 +35,6 @@ public class PentahoReportEngine
         this.metaData = new PentahoReportEngineMetaData();
     }
 
-    public ReportEngineMetaData getMetaData()
-    {
-        return metaData;
-    }
-
     public ReportJobDefinition createJobDefinition()
     {
         return new DefaultReportJobDefinition(metaData);

@@ -293,12 +293,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public void disposing(EventObject arg0)
     {
     }
-    private int ID;
-
-    public int getID()
-    {
-        return ID;
-    }
 
     public void setID(String sIncSuffix)
     {

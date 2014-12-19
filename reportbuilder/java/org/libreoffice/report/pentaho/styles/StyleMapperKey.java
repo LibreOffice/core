@@ -52,26 +52,6 @@ public final class StyleMapperKey
         this.hashCode = computeHashCode();
     }
 
-    public String getElementNamespace()
-    {
-        return elementNamespace;
-    }
-
-    public String getElementName()
-    {
-        return elementName;
-    }
-
-    public String getAttributeNamespace()
-    {
-        return attributeNamespace;
-    }
-
-    public String getAttributeName()
-    {
-        return attributeName;
-    }
-
     @Override
     public boolean equals(final Object o)
     {

@@ -52,19 +52,9 @@ public class DatabaseApplication
         documentUI.connect();
     }
 
-    public XOfficeDatabaseDocument getDatabaseDocument()
-    {
-        return databaseDocument;
-    }
-
     public XDatabaseDocumentUI getDocumentUI()
     {
         return documentUI;
-    }
-
-    public DatabaseAccess getDb()
-    {
-        return db;
     }
 
     public void store()

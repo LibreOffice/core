@@ -73,7 +73,6 @@ public class PentahoReportJob implements ReportJob
 {
 
     private static final Log LOGGER = LogFactory.getLog(PentahoReportJob.class);
-    private boolean finished;
     private final DataSourceFactory dataSourceFactory;
     private final OutputRepository outputRepository;
     private final JobProperties jobProperties;
@@ -82,14 +81,8 @@ public class PentahoReportJob implements ReportJob
     private final String outputName;
     private final ImageService imageService;
     private final InputRepository inputRepository;
-    private final ReportJobDefinition definition;
     private final List masterValues;
     private final List detailColumns;
-
-    public ReportJobDefinition getDefinition()
-    {
-        return definition;
-    }
 
     public PentahoReportJob(final ReportJobDefinition definition)
             throws JobDefinitionException
@@ -99,7 +92,6 @@ public class PentahoReportJob implements ReportJob
             throw new NullPointerException();
         }
 
-        this.definition = definition;
         this.jobProperties = definition.getProcessingParameters().copy();
 
         this.dataSourceFactory = (DataSourceFactory) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
@@ -174,37 +166,6 @@ public class PentahoReportJob implements ReportJob
         }
 
         return tempReport;
-    }
-
-    /**
-     * Interrupt the job.
-     */
-    public void interrupt()
-    {
-        // hey, not yet ..
-    }
-
-    /**
-     * Queries the jobs result status.
-     *
-     * @return true, if the job is finished (or has been interrupted), false if the job
-     *         waits for activation.
-     */
-    public boolean isFinished()
-    {
-        return finished;
-    }
-
-
-
-    /**
-     * Queries the jobs execution status.
-     *
-     * @return true, if the job is currently running, false otherwise.
-     */
-    public boolean isRunning()
-    {
-        return !finished;
     }
 
     private void collectGroupExpressions(final Node[] nodes, final List<Object[]> expressions, final FormulaParser parser, final Expression reportFunctions[])

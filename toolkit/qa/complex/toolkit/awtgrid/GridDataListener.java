@@ -94,11 +94,6 @@ final public class GridDataListener implements XGridDataListener
         return m_rowHeadingChangeEvent;
     }
 
-    public final boolean isDisposed()
-    {
-        return m_disposed;
-    }
-
     public final void reset()
     {
         m_rowInsertionEvent = m_rowRemovalEvent = m_dataChangeEvent = m_rowHeadingChangeEvent = null;

@@ -613,17 +613,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
     {
     }
 
-    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
-    {
-        switch (_ndialogpage)
-        {
-            case SOMAINPAGE:
-                break;
-            default:
-                break;
-        }
-    }
-
     private void toggleSortingPage()
     {
         int nlCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();

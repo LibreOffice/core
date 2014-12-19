@@ -93,9 +93,6 @@ public class Main {
                     else
                     {
                         currentOpt = o;
-                        if (!o.bHasValue) {
-                            o.bSet = true;
-                        }
                         break;
                     }
                 }
@@ -188,9 +185,6 @@ class Option {
     String sShort;
     boolean bHasValue;
     Object value;
-    //indicates if this option was set if it does not need a value. Otherwise value
-    //is set.
-    boolean bSet;
 }
 
 

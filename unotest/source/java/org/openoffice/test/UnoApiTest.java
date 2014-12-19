@@ -20,19 +20,20 @@ package org.openoffice.test;
 
 import org.openoffice.Runner;
 import static org.junit.Assert.*;
+import org.junit.*;
 
 public final class UnoApiTest {
-    @org.junit.Before public void setUp() throws Exception {
+    @Before public void setUp() throws Exception {
         connection.setUp();
     }
 
-    @org.junit.After public void tearDown()
+    @After public void tearDown()
         throws InterruptedException, com.sun.star.uno.Exception
     {
         connection.tearDown();
     }
 
-    @org.junit.Test public void test() {
+    @Test public void test() {
         assertTrue(
             Runner.run(
                 "-sce", Argument.get("sce"), "-xcl", Argument.get("xcl"), "-tdoc",

@@ -26,6 +26,7 @@ import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
  *
  * @since 12.03.2007
  */
+@SuppressWarnings("ucd")
 public class StyleMapperXmlFactoryModule implements XmlFactoryModule
 {
 

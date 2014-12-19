@@ -37,13 +37,6 @@ public class BasicBound {
     return Math.abs(maxValue-minValue);
   }
 
-  public boolean isSatisfyCondition(double child){
-    if(child > maxValue || child < minValue) {
-      return(false);
-    }
-    return(true);
-  }
-
   public double boundAdjust(double value){
     if(value > maxValue) {
       value = maxValue;
@@ -65,13 +58,6 @@ public class BasicBound {
   }
 
 
-
-  public double randomAdjust (double value){
-    if(value > maxValue || value < minValue) {
-      value =  getRandomValue();
-    }
-    return value;
-  }
 
   public double getRandomValue(){
     return RandomGenerator.doubleRangeRandom(minValue, maxValue);

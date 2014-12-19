@@ -37,7 +37,6 @@ import java.util.List;
 public class VariablesCollection
 {
 
-    private VariablesCollection parent;
     private String namePrefix;
     private List<FormattedTextElement> variables;
 
@@ -54,13 +53,7 @@ public class VariablesCollection
         }
 
         this.namePrefix = namePrefix;
-        this.parent = parent;
         this.variables = new ArrayList<FormattedTextElement>();
-    }
-
-    public VariablesCollection getParent()
-    {
-        return parent;
     }
 
     public String getNamePrefix()

@@ -106,19 +106,6 @@ class NodeMap
             return null;
     }
 
-    XAccessibleContext GetAccessible (AccessibleTreeNode aNode)
-    {
-        if ((aNode != null) && (aNode instanceof AccTreeNode))
-            return ((AccTreeNode)aNode).getContext();
-        else
-            return null;
-    }
-
-    boolean IsMember (XAccessibleContext xContext)
-    {
-        return maXAccessibleToNode.containsKey(xContext);
-    }
-
     boolean ValueIsMember (AccessibleTreeNode aNode)
     {
         return maXAccessibleToNode.containsValue(aNode);

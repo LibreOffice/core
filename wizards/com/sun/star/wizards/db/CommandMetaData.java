@@ -60,8 +60,6 @@ public class CommandMetaData extends DBMetaData
     public String[] NonAggregateFieldNames;
     private int CommandType;
     private String Command;
-    private boolean bCatalogAtStart = true;
-    private String sCatalogSep = PropertyNames.EMPTY_STRING;
     private String sIdentifierQuote = PropertyNames.EMPTY_STRING;
     private boolean bCommandComposerAttributesalreadyRetrieved = false;
 
@@ -468,16 +466,6 @@ public class CommandMetaData extends DBMetaData
         }
     }
 
-    public String[] getFieldTitles()
-    {
-        String[] sFieldTitles = new String[FieldColumns.length];
-        for (int i = 0; i < FieldColumns.length; i++)
-        {
-            sFieldTitles[i] = FieldColumns[i].getFieldTitle();
-        }
-        return sFieldTitles;
-    }
-
     public void setGroupFieldNames(String[] GroupFieldNames)
     {
         this.GroupFieldNames = GroupFieldNames;
@@ -527,7 +515,7 @@ public class CommandMetaData extends DBMetaData
     {
         try
         {
-            sCatalogSep = xDBMetaData.getCatalogSeparator();
+            xDBMetaData.getCatalogSeparator();
             sIdentifierQuote = xDBMetaData.getIdentifierQuoteString();
             bCommandComposerAttributesalreadyRetrieved = true;
         }
@@ -535,30 +523,6 @@ public class CommandMetaData extends DBMetaData
         {
             e.printStackTrace(System.err);
         }
-    }
-
-    /**
-     * @return Returns the bCatalogAtStart.
-     */
-    public boolean isCatalogAtStart()
-    {
-        if (!bCommandComposerAttributesalreadyRetrieved)
-        {
-            setCommandComposingAttributes();
-        }
-        return bCatalogAtStart;
-    }
-
-    /**
-     * @return Returns the sCatalogSep.
-     */
-    public String getCatalogSeparator()
-    {
-        if (!bCommandComposerAttributesalreadyRetrieved)
-        {
-            setCommandComposingAttributes();
-        }
-        return sCatalogSep;
     }
 
     /**

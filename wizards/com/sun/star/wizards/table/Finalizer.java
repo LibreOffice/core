@@ -305,11 +305,6 @@ public class Finalizer
         }
     }
 
-    public String getTableName()
-    {
-        return txtTableName.getText();
-    }
-
     public String getTableName(String _firsttablename)
     {
         if (txtTableName.getText().equals(PropertyNames.EMPTY_STRING))

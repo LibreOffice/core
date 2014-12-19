@@ -45,14 +45,6 @@ class AccessibleHypertextHandler extends AccessibleTreeHandler
             maChildList.setSize (1);
     }
 
-    protected static XAccessibleHypertext getHypertext (AccTreeNode aNode)
-    {
-        XAccessibleHypertext xHypertext =
-            UnoRuntime.queryInterface (
-             XAccessibleHypertext.class, aNode.getContext());
-        return xHypertext;
-    }
-
     @Override
     public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
     {

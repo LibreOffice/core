@@ -38,15 +38,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleExtendedComponent {
 
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleExtendedComponent" ;
-
     private final XAccessibleExtendedComponent oObj;
-
-    // temporary while accessibility package is in com.sun.star
-    protected String getTestedClassName() {
-        return className;
-    }
 
     public _XAccessibleExtendedComponent(XInterface object/*, LogWriter log*/) {
         oObj = UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, object);

@@ -299,8 +299,4 @@ public class DesignTemplate
         analyseReportDefinition();
     }
 
-    public XReportDefinition getReportDefinition()
-    {
-        return m_xReportDefinition;
-    }
 }

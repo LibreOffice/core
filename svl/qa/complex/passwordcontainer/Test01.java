@@ -28,7 +28,6 @@ import com.sun.star.uno.UnoRuntime;
 
 public class Test01 implements PasswordContainerTest {
     private XMultiServiceFactory m_xMSF = null;
-    XPasswordContainer m_xPasswordContainer = null;
     private TestHelper m_aTestHelper = null;
 
     public Test01 ( XMultiServiceFactory xMSF )

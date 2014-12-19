@@ -41,16 +41,6 @@ public class TestHelper {
         }
     }
 
-    public boolean GetTempFileRemove ( XTempFile xTempFile ) {
-        boolean b = false;
-        try {
-            b = xTempFile.getRemoveFile();
-        } catch( Exception e) {
-            Error( "Cannot get TempFileRemove. exception: " + e );
-        }
-        return b;
-    }
-
     public String GetTempFileURL ( XTempFile xTempFile ) {
         String sTempFileURL = null;
         try {

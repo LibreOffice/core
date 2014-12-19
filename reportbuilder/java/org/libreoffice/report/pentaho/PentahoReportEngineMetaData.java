@@ -92,43 +92,9 @@ public class PentahoReportEngineMetaData
         enumerationValues.add(CONTENT_TYPE, PentahoReportEngineMetaData.DEBUG);
     }
 
-    public Object[] getEnumerationValues(final String parameter)
-    {
-        return enumerationValues.toArray(parameter);
-    }
-
     public Class getParameterType(final String parameter)
     {
         return parameterTypes.get(parameter);
     }
 
-    public boolean isEnumeration(final String parameter)
-    {
-        return enumerationValues.containsKey(parameter);
-    }
-
-    /**
-     * Checks, whether a certain output type is available. Feed the mime-type of the output
-     * type in and you'll get a true or false back.
-     *
-     * @return true, if the output type is supported; false otherwise.
-     */
-    public boolean isOutputSupported(final String mimeType)
-    {
-        return enumerationValues.containsValue(CONTENT_TYPE, mimeType.toLowerCase());
-    }
-
-    /**
-     * Lists all supported output parameters for the given mime-type. This listing can be
-     * used to build a generic user interface for configuring a certain output.
-     */
-    public String[] getOutputParameters(final String mimeType)
-    {
-        return new String[0];
-    }
-
-    public boolean isMandatory(final String parameter)
-    {
-        return mandatoryParameters.contains(parameter);
-    }
 }

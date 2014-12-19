@@ -23,7 +23,6 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.RecordParser;
@@ -43,11 +42,8 @@ public class ReportFinalizer
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;
-    private final XMultiServiceFactory m_xMSF;
     public ReportFinalizer(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
     {
-        m_xMSF = _xMSF;
-
         this.CurUnoDialog = _CurUnoDialog;
         this.CurReportDocument = _CurReportDocument;
         short curtabindex = (short) (ReportWizard.SOSTOREPAGE * 100);
@@ -207,13 +203,6 @@ public class ReportFinalizer
             }
         }
         return (StoreName);
-    }
-
-    public String getStorePath()
-    {
-        StoreName = getStoreName();
-        String StorePath = FileAccess.getOfficePath(m_xMSF, "Temp") + "/" + StoreName;
-        return StorePath;
     }
 
     private void changeReportTitle()

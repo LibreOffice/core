@@ -61,10 +61,6 @@ class ScreenComparer
         m_imgDiff = null;
     }
 
-    public Rectangle getLocation()
-    {
-        return m_rect;
-    }
     public void grabOne() throws Exception
     {
         grabOne(m_rect);

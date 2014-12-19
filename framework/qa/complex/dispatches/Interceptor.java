@@ -240,18 +240,6 @@ public class Interceptor implements XDispatch,
     }
 
 
-
-    /** set a new list of URL's, which should be used on registration time
-        (that's why it's necessary to call this impl-method before the interceptor
-        is used at the OOo API!) to optimize the interception chain.
-     */
-    public synchronized void setURLs4InterceptionInfo(String[] lURLs)
-    {
-        m_lURLs4InterceptionInfo = lURLs;
-    }
-
-
-
     /** set a new list of URL's, which should be blocked by this interceptor.
         (that's why it's necessary to call this impl-method before the interceptor
         is used at the OOo API!)

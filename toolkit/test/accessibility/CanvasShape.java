@@ -43,7 +43,6 @@ class CanvasShape
         maSize = new Dimension (10,10);
         maFgColor = java.awt.Color.black;
         maBgColor = Color.blue;
-        mnRole = -1;
         mbHighlighted = false;
         mbSelected = false;
         mbFocused = false;
@@ -62,7 +61,6 @@ class CanvasShape
         {
             msName = mxContext.getAccessibleName();
             msDescription = mxContext.getAccessibleDescription();
-            mnRole = mxContext.getAccessibleRole();
 
             // Extract the selected and focused flag.
             XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet ();
@@ -257,39 +255,14 @@ class CanvasShape
         mbHighlighted = false;
     }
 
-    public boolean isHighlighted ()
-    {
-        return mbHighlighted;
-    }
-
     public Rectangle getBBox ()
     {
         return new Rectangle (maPosition, maSize);
     }
 
-    public Point getOrigin ()
-    {
-        return maPosition;
-    }
-
     public TreePath getPath ()
     {
         return new TreePath (maNode.createPath());
-    }
-
-    public int getRole ()
-    {
-        return mnRole;
-    }
-
-    public XAccessibleContext getContext ()
-    {
-        return mxContext;
-    }
-
-    public XAccessibleComponent getComponent ()
-    {
-        return mxComponent;
     }
 
     @Override
@@ -314,5 +287,4 @@ class CanvasShape
         mbSelected,
         // Set when the accessible object is focused.
         mbFocused;
-    private int mnRole;
 }

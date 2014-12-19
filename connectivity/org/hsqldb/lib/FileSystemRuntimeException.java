@@ -34,29 +34,8 @@ public class FileSystemRuntimeException extends java.lang.RuntimeException {
     public static final int fileAccessRemoveElementFailed = 1;
     public static final int fileAccessRenameElementFailed = 2;
 
-    private final int errorCode;
-
-    public FileSystemRuntimeException(int _errorCode) {
-        super();
-        errorCode = _errorCode;
-    }
-
-    public FileSystemRuntimeException(String _message, int _errorCode) {
-        super(_message);
-        errorCode = _errorCode;
-    }
-
-    public FileSystemRuntimeException(String _message, java.lang.Throwable _cause, int _errorCode) {
-        super(_message, _cause);
-        errorCode = _errorCode;
-    }
-
     public FileSystemRuntimeException(java.lang.Throwable _cause, int _errorCode) {
         super(_cause);
-        errorCode = _errorCode;
     }
 
-    public final int getErrorCode() {
-        return errorCode;
-    }
 }

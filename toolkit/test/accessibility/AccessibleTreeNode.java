@@ -47,11 +47,6 @@ class AccessibleTreeNode
         return maParent;
     }
 
-    public Object getDisplayObject ()
-    {
-        return maDisplayObject;
-    }
-
     public int getChildCount ()
     {
         return 0;

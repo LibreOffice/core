@@ -28,11 +28,8 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter;
-import com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-
-import java.io.InputStream;
 
 
 public class SOImageService implements ImageService
@@ -60,11 +57,6 @@ public class SOImageService implements ImageService
         {
             throw new ReportExecutionException("There is no graphic-provider available.");
         }
-    }
-
-    public Size getImageSize(final InputStream image) throws ReportExecutionException
-    {
-        return getImageSize(new InputStreamToXInputStreamAdapter(image));
     }
 
     private Size getImageSize(final XInputStream image) throws ReportExecutionException
@@ -161,11 +153,6 @@ public class SOImageService implements ImageService
             throw new ReportExecutionException(ex);
         }
         return null;
-    }
-
-    public String getMimeType(final InputStream image) throws ReportExecutionException
-    {
-        return getMimeType(new InputStreamToXInputStreamAdapter(image));
     }
 
     public String getMimeType(final byte[] image) throws ReportExecutionException

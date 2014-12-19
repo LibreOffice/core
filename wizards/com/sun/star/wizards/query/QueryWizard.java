@@ -21,7 +21,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XFrame;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
@@ -84,11 +83,6 @@ public class QueryWizard extends DatabaseObjectWizard
                 wizard.start();
             }
         });
-    }
-
-    public final XFrame getFrame()
-    {
-        return m_frame;
     }
 
     public String start()

@@ -139,11 +139,6 @@ public class FieldSelection
         AppendMode = _AppendMode;
     }
 
-    public boolean getAppendMode()
-    {
-        return AppendMode;
-    }
-
     public FieldSelection(UnoDialog CurUnoDialog, int _iStep, int CompPosX, int CompPosY, int CompWidth, int CompHeight, String slblFields, String slblSelFields, int _FirstHelpIndex, boolean bshowFourButtons)
     {
         try

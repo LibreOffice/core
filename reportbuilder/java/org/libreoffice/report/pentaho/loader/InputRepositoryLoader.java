@@ -30,7 +30,6 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceLoader;
 import org.pentaho.reporting.libraries.resourceloader.ResourceLoadingException;
-import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.resourceloader.loader.LoaderUtils;
 
 
@@ -38,7 +37,6 @@ public class InputRepositoryLoader implements ResourceLoader
 {
 
     private final InputRepository inputRepository;
-    private ResourceManager resourceManager;
 
     public InputRepositoryLoader(final InputRepository inputRepository)
     {
@@ -145,16 +143,6 @@ public class InputRepositoryLoader implements ResourceLoader
         }
 
         return new InputRepositoryResourceData(key, inputRepository);
-    }
-
-    public void setResourceManager(final ResourceManager manager)
-    {
-        this.resourceManager = manager;
-    }
-
-    public ResourceManager getResourceManager()
-    {
-        return resourceManager;
     }
 
     public boolean isSupportedDeserializer(String string)

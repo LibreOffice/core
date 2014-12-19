@@ -20,29 +20,8 @@ package org.libreoffice.report.pentaho.parser;
 public final class AttributeSpecification
 {
 
-    private final String namespaceUrl;
-    private final String attributName;
-    private final String mapperImplementation;
-
     public AttributeSpecification(String namespaceUrl, String attributName, String mapperImplementation)
     {
-        this.namespaceUrl = namespaceUrl;
-        this.attributName = attributName;
-        this.mapperImplementation = mapperImplementation;
     }
 
-    public String getAttributName()
-    {
-        return attributName;
-    }
-
-    public String getMapperImplementation()
-    {
-        return mapperImplementation;
-    }
-
-    public String getNamespaceUrl()
-    {
-        return namespaceUrl;
-    }
 }

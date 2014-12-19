@@ -24,9 +24,6 @@ public class AWeakBase extends WeakBase implements XEventListener
 {
     public int nDisposingCalled= 0;
 
-    public AWeakBase(int i)
-    {
-    }
     public AWeakBase()
     {
     }

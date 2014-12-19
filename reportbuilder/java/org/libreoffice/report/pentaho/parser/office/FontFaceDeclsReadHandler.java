@@ -52,11 +52,6 @@ public class FontFaceDeclsReadHandler extends ElementReadHandler
         this.fontFaceReadHandlers = new ArrayList<FontFaceReadHandler>();
     }
 
-    public FontFaceDeclsSection getFontFaceDecls()
-    {
-        return fontFaceDecls;
-    }
-
     /**
      * Returns the handler for a child element.
      *

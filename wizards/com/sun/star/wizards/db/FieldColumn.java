@@ -123,11 +123,6 @@ public class FieldColumn
         return m_nDBFormatKey;
     }
 
-    public int getStandardFormatKey()
-    {
-        getFieldType(); // will collect meta data 'bout the column, if not already done so
-        return StandardFormatKey;
-    }
     public boolean isNumberFormat()
     {
         getFieldType(); // will collect meta data 'bout the column, if not already done so
@@ -182,11 +177,6 @@ public class FieldColumn
     {
         getFieldType(); // will collect meta data 'bout the column, if not already done so
         return m_xColPropertySet;
-    }
-
-    public void setCommandName(String _CommandName)
-    {
-        m_sCommandName = _CommandName;
     }
 
     public String getDisplayFieldName()

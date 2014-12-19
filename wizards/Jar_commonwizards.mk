@@ -46,7 +46,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/common/SystemDialog				\
 	wizards/com/sun/star/wizards/common/Configuration				\
 	wizards/com/sun/star/wizards/common/IRenderer					\
-	wizards/com/sun/star/wizards/common/TerminateWizardException			\
 	wizards/com/sun/star/wizards/common/DebugHelper					\
 	wizards/com/sun/star/wizards/common/PropertySetHelper					\
 	wizards/com/sun/star/wizards/common/NumericalHelper					\
@@ -67,8 +66,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/db/TableDescriptor				\
 	wizards/com/sun/star/wizards/db/SQLQueryComposer				\
 	wizards/com/sun/star/wizards/db/DatabaseObjectWizard					\
-	wizards/com/sun/star/wizards/ui/event/DataAware				\
-	wizards/com/sun/star/wizards/ui/event/DataAwareFields				\
 	wizards/com/sun/star/wizards/ui/event/XActionListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XItemListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XTextListenerAdapter	\

@@ -50,8 +50,6 @@ import com.sun.star.util.XModifiable;
 public class OfficeDocument
 {
 
-    private XWindowPeer xWindowPeer;
-
     public static void dispose(XMultiServiceFactory xMSF, XComponent xComponent)
     {
         try
@@ -248,21 +246,4 @@ public class OfficeDocument
         }
     }
 
-    /**
-     * @return Returns the xWindowPeer.
-     */
-    public XWindowPeer getWindowPeer()
-    {
-        return xWindowPeer;
-    }
-
-    /**
-     * @param windowPeer The xWindowPeer to set.
-     * Should be called as soon as a Windowpeer of a wizard dialog is available
-     * The windowpeer is needed to call a Messagebox
-     */
-    public void setWindowPeer(XWindowPeer windowPeer)
-    {
-        xWindowPeer = windowPeer;
-    }
 }

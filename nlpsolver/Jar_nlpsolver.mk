@@ -40,7 +40,6 @@ $(eval $(call gb_Jar_add_sourcefiles,nlpsolver,\
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/Button \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/LabeledControl \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/controls/Label \
-    nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/ModalState \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/DummyEvolutionarySolverStatusDialog \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/IEvolutionarySolverStatusDialog \
     nlpsolver/src/com/sun/star/comp/Calc/NLPSolver/dialogs/EvolutionarySolverStatusUno \

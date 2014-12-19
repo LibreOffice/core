@@ -43,14 +43,6 @@ public class OfficeConnection
         return maServiceManager;
     }
 
-    /** @descr  Return a flag that indicates if the constructor has been able to
-                establish a valid connection.
-    */
-    public boolean connectionIsValid ()
-    {
-        return getServiceManager() != null;
-    }
-
     /** @descr  Connect to an already running LibreOffice application.
     */
     private void connect ()

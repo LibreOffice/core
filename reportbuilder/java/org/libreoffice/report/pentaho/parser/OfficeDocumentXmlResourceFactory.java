@@ -27,6 +27,7 @@ import org.jfree.report.modules.factories.report.base.JFreeReportXmlResourceFact
  *
  * @since 09.03.2007
  */
+@SuppressWarnings("ucd")
 public class OfficeDocumentXmlResourceFactory extends JFreeReportXmlResourceFactory
 {
 

@@ -53,11 +53,6 @@ public class MasterStylesReadHandler extends ElementReadHandler
         this.otherHandlers = new ArrayList<ElementReadHandler>();
     }
 
-    public OfficeMasterStyles getMasterStyles()
-    {
-        return masterStyles;
-    }
-
     /**
      * Returns the handler for a child element.
      *

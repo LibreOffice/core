@@ -26,11 +26,6 @@ public class DocumentType extends com.sun.star.uno.Enum
         super( value );
     }
 
-    public static DocumentType getDefault()
-    {
-        return WRITER;
-    }
-
     public static final DocumentType WRITER = new DocumentType(0);
     public static final DocumentType CALC = new DocumentType(1);
     public static final DocumentType DRAWING = new DocumentType(2);
@@ -39,17 +34,4 @@ public class DocumentType extends com.sun.star.uno.Enum
     public static final DocumentType FORMULA = new DocumentType(5);
     public static final DocumentType UNKNOWN = new DocumentType(-1);
 
-    public static DocumentType fromInt(int value)
-    {
-        switch(value)
-        {
-            case 0: return WRITER;
-            case 1: return CALC;
-            case 2: return DRAWING;
-            case 3: return XMLFORM;
-            case 4: return PRESENTATION;
-            case 5: return FORMULA;
-            default: return UNKNOWN;
-        }
-    }
 }

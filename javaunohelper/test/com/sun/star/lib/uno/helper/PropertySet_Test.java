@@ -1624,7 +1624,6 @@ XPropertiesChangeListener
     int nChangeCalled;
     int nPropertiesChange;
     int nVetoCalled;
-    private int nDisposingCalled;
     boolean bVeto= false;
     PropertyChangeEvent evt;
     PropertyChangeEvent[] arEvt;
@@ -1646,7 +1645,6 @@ XPropertiesChangeListener
 
     public void disposing( /*IN*/EventObject Source )
     {
-        nDisposingCalled++;
     }
 
     public void reset()
@@ -1654,7 +1652,6 @@ XPropertiesChangeListener
         nChangeCalled= 0;
         nPropertiesChange= 0;
         nVetoCalled= 0;
-        nDisposingCalled= 0;
         evt= null;
         arEvt= null;
         bVeto= false;

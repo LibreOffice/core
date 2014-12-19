@@ -23,10 +23,7 @@ import com.sun.star.io.*;
 import com.sun.star.uno.UnoRuntime;
 import java.util.Random;
 
-import share.LogWriter;
-
 public class Test01 {
-    LogWriter m_aLogWriter;
     private XMultiServiceFactory m_xMSF = null;
     private XSimpleFileAccess m_xSFA = null;
     private TestHelper m_aTestHelper = null;

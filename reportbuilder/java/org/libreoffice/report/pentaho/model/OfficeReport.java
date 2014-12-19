@@ -87,19 +87,9 @@ public class OfficeReport extends Element
         return columnHeader;
     }
 
-    public void setColumnHeader(final Node columnHeader)
-    {
-        this.columnHeader = columnHeader;
-    }
-
     public Node getColumnFooter()
     {
         return columnFooter;
-    }
-
-    public void setColumnFooter(final Node columnFooter)
-    {
-        this.columnFooter = columnFooter;
     }
 
     public Node getReportHeader()

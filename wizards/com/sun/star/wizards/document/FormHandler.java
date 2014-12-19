@@ -76,7 +76,6 @@ public class FormHandler
     public final static int SOGRIDCONTROL = 6;
     public final static int SOIMAGECONTROL = 7;
     public final static int SODATETIMECONTROL = 8;
-    private int iImageControlHeight = 2000;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
     private int iXPixelFactor = -1;
     private int iYPixelFactor = -1;
@@ -361,25 +360,6 @@ public class FormHandler
         return iYPixelFactor;
     }
 
-    public void setXPixelFactor(int i)
-    {
-        iXPixelFactor = i;
-    }
-
-    public void setYPixelFactor(int i)
-    {
-        iYPixelFactor = i;
-    }
-
-    public int getImageControlHeight()
-    {
-        return iImageControlHeight;
-    }
-
-    public void setImageControlHeight(int i)
-    {
-        iImageControlHeight = i;
-    }
     // Note: as Shapes cannot be removed from the DrawPage without destroying
     // the object we have to park them somewhere beyond the visible area of the page
     public void moveShapesToNirwana(Control[] ControlList)

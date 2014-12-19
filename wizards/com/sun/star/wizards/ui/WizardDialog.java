@@ -102,26 +102,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         nMaxStep = i;
     }
 
-    public int getMaxStep()
-    {
-        return nMaxStep;
-    }
-
-    public void setOldStep(int i)
-    {
-        nOldStep = i;
-    }
-
-    public int getOldStep()
-    {
-        return nOldStep;
-    }
-
-    public void setNewStep(int i)
-    {
-        nNewStep = i;
-    }
-
     public int getNewStep()
     {
         return nNewStep;
@@ -252,18 +232,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         sRMItemLabels = _oResource.getResArray(StartResID, nMaxStep);
     }
 
-    public String[] getRMItemLabels()
-    {
-        return sRMItemLabels;
-    }
-
-    /*    public void insertRoadmapItems(int StartIndex, int RMCount)
-    {
-    Object oRoadmapItem;
-    boolean bEnabled;
-    for (int i = StartIndex; i < (StartIndex + RMCount); i++)
-    insertSingleRoadmapItem(i, true, sRMItemLabels[i], i);
-    }*/
     public int insertRoadmapItem(int _Index, boolean _bEnabled, int _LabelID, int _CurItemID)
     {
         return insertRoadmapItem(_Index, _bEnabled, sRMItemLabels[_LabelID], _CurItemID);
@@ -612,11 +580,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         if ( success )
             removeTerminateListener();
-    }
-
-    public int getMaximalStep()
-    {
-        return this.nMaxStep;
     }
 
     public int getCurrentStep()

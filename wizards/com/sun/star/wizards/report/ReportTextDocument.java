@@ -110,13 +110,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         getReportPageStyles();
     }
 
-    public NumberFormatter getNumberFormatter()
-    {
-        return oNumberFormatter;
-    }
-
-
-
     public void swapContentTemplate(String ContentTemplatePath)
     {
         this.ContentTemplatePath = ContentTemplatePath;

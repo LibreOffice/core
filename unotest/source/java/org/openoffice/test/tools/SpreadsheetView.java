@@ -17,15 +17,8 @@
  */
 package org.openoffice.test.tools;
 
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheetView;
-import com.sun.star.uno.UnoRuntime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SpreadsheetView extends OfficeDocumentView
 {
@@ -36,25 +29,4 @@ public class SpreadsheetView extends OfficeDocumentView
         super( orb, document, controller );
     }
 
-    /** activates the sheet with the given index
-     */
-    void activateSheet( int sheetIndex )
-    {
-        try
-        {
-            // get the sheet to activate
-            XSpreadsheetDocument doc = UnoRuntime.queryInterface( XSpreadsheetDocument.class, getDocument().getDocument() );
-            XIndexAccess sheets = UnoRuntime.queryInterface( XIndexAccess.class, doc.getSheets() );
-
-            XSpreadsheet sheet = UnoRuntime.queryInterface( XSpreadsheet.class, sheets.getByIndex( sheetIndex ) );
-
-            // activate
-            XSpreadsheetView view = UnoRuntime.queryInterface( XSpreadsheetView.class, getController() );
-            view.setActiveSheet( sheet );
-        }
-        catch( com.sun.star.uno.Exception e )
-        {
-            Logger.getLogger( SpreadsheetView.class.getName() ).log( Level.SEVERE, "unable to activate the given sheet", e );
-        }
-    }
 }

@@ -23,7 +23,6 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleEditableText;
-import com.sun.star.accessibility.XAccessibleExtendedComponent;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.accessibility.XAccessibleTable;
 import com.sun.star.accessibility.XAccessibleText;
@@ -52,16 +51,10 @@ class AccTreeNode
     private ArrayList<HandlerDescriptor> maHandlers;
 
     // The accessible context of this node.
-    private XAccessible mxAccessible;
     private XAccessibleContext mxContext;
     private XAccessibleComponent mxComponent;
     private XAccessibleText mxText;
     private XAccessibleTable mxTable;
-
-    public AccTreeNode (XAccessible xAccessible, XAccessibleContext xContext, AccessibleTreeNode aParent)
-    {
-        this (xAccessible, xContext, xContext, aParent);
-    }
 
     public AccTreeNode (XAccessible xAccessible, XAccessibleContext xContext, Object aDisplay, AccessibleTreeNode aParent)
     {
@@ -69,7 +62,6 @@ class AccTreeNode
 
         maHandlers = new ArrayList<HandlerDescriptor>(5);
         mxContext = xContext;
-        mxAccessible = xAccessible;
     }
 
     /** Update the internal data extracted from the corresponding accessible
@@ -102,17 +94,6 @@ class AccTreeNode
         return mxComponent;
     }
 
-    public XAccessibleExtendedComponent getExtendedComponent ()
-    {
-        if (mxComponent == null)
-            getComponent();
-        if (mxComponent != null)
-            return UnoRuntime.queryInterface(
-                XAccessibleExtendedComponent.class, mxComponent);
-        else
-            return null;
-    }
-
     public XAccessibleText getText ()
     {
         if (mxText == null && mxContext != null)
@@ -135,14 +116,6 @@ class AccTreeNode
         return mxTable;
     }
 
-
-    public XAccessible getAccessible()
-    {
-        if ((mxAccessible == null) && (mxContext != null))
-            mxAccessible = UnoRuntime.queryInterface(
-                XAccessible.class, mxContext);
-        return mxAccessible;
-    }
 
     public XAccessibleSelection getSelection ()
     {
@@ -346,16 +319,6 @@ class AccTreeNode
             }
         }
         return null;
-    }
-
-    /** Update the specified handlers.
-        @return
-            The returned array contains the indices of the updated children
-            and can be used to create a TreeModelEvent.
-    */
-    public java.util.List<Integer> updateChildren (java.lang.Class class1)
-    {
-        return updateChildren (class1, null);
     }
 
     public java.util.List<Integer> updateChildren (java.lang.Class class1, java.lang.Class<AccessibleExtendedComponentHandler> class2)

@@ -19,8 +19,6 @@ package org.openoffice.test.tools;
 
 /**************************************************************************/
 
-import com.sun.star.beans.NamedValue;
-import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
@@ -37,7 +35,6 @@ public class OfficeDocumentView
 {
     private final     XMultiServiceFactory    m_orb;
     private final     XController             m_controller;
-    private final     OfficeDocument          m_document;
 
     /* ------------------------------------------------------------------ */
     final public XController getController()
@@ -46,16 +43,9 @@ public class OfficeDocumentView
     }
 
     /* ------------------------------------------------------------------ */
-    final protected OfficeDocument getDocument()
-    {
-        return m_document;
-    }
-
-    /* ------------------------------------------------------------------ */
     public OfficeDocumentView( XMultiServiceFactory orb, OfficeDocument document, XController controller )
     {
         m_orb = orb;
-        m_document = document;
         m_controller = controller;
     }
 
@@ -88,16 +78,6 @@ public class OfficeDocumentView
 
 
     /* ------------------------------------------------------------------ */
-    /** retrieves a dispatcher for the given URL, obtained at the current view of the document
-    */
-    public XDispatch getDispatcher( String url ) throws com.sun.star.uno.Exception
-    {
-        URL[] aURL = new URL[] { new URL() };
-        aURL[0].Complete = url;
-        return getDispatcher( aURL );
-    }
-
-    /* ------------------------------------------------------------------ */
     /** dispatches the given URL into the view, if there's a dispatcher for it
 
         @return
@@ -121,15 +101,4 @@ public class OfficeDocumentView
         return true;
     }
 
-    /* ------------------------------------------------------------------ */
-    public boolean dispatch( final String i_url, final NamedValue[] i_arguments ) throws com.sun.star.uno.Exception
-    {
-        final PropertyValue[] dispatchArgs = new PropertyValue[ i_arguments.length ];
-        for ( int i=0; i<i_arguments.length; ++i )
-        {
-            dispatchArgs[i] = new PropertyValue( i_arguments[i].Name, -1, i_arguments[i].Value, PropertyState.DIRECT_VALUE );
-        }
-        return dispatch( i_url, dispatchArgs );
-    }
 }
-

@@ -54,28 +54,6 @@ public class Properties extends HashMap<String,Object>
         return false;
     }
 
-    public PropertyValue[] getProperties()
-    {
-        return getProperties(this);
-    }
-
-    private static PropertyValue[] getProperties(Map<String,Object> map)
-    {
-        PropertyValue[] pv = new PropertyValue[map.size()];
-
-        Iterator<String> it = map.keySet().iterator();
-        for (int i = 0; i < pv.length; i++)
-        {
-            pv[i] = createProperty(it.next(), map);
-        }
-        return pv;
-    }
-
-    private static PropertyValue createProperty(String name, Map<String,Object> map)
-    {
-        return createProperty(name, map.get(name));
-    }
-
     public static PropertyValue createProperty(String name, Object value)
     {
         PropertyValue pv = new PropertyValue();

@@ -42,13 +42,6 @@ public class XMLDocument extends integration.forms.DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    public XMLDocument( XMultiServiceFactory _orb, XComponent _document )
-    {
-        super( _orb, _document );
-        impl_initialize( _document );
-    }
-
-    /* ------------------------------------------------------------------ */
     private void impl_initialize( XComponent _document )
     {
         XFormsSupplier  formsSupplier = UnoRuntime.queryInterface( XFormsSupplier.class,

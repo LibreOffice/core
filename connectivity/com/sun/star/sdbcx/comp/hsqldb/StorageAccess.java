@@ -18,6 +18,7 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 
+@SuppressWarnings("ucd")
 public class StorageAccess implements org.hsqldb.lib.Storage {
     String key;
     String name;

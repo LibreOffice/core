@@ -22,12 +22,9 @@ import com.sun.star.uno.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.table.XCellRange;
-import com.sun.star.table.CellAddress;
-import com.sun.star.table.CellRangeAddress;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.beans.NamedValue;
 
 public class SpreadsheetDocument extends DocumentHelper
 {
@@ -68,71 +65,4 @@ public class SpreadsheetDocument extends DocumentHelper
         );
     }
 
-    /* ------------------------------------------------------------------ */
-    /** creates a value binding for a given cell
-    */
-    public com.sun.star.form.binding.XValueBinding createCellBinding( short sheet, short column, short row )
-    {
-        return createCellBinding( sheet, column, row, false );
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** creates a value binding which can be used to exchange a list box selection <em>index</em> with a cell
-    */
-    public com.sun.star.form.binding.XValueBinding createListIndexBinding( short sheet, short column, short row )
-    {
-        return createCellBinding( sheet, column, row, true );
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** creates a value binding for a given cell, with or without support for integer value exchange
-    */
-    private com.sun.star.form.binding.XValueBinding createCellBinding( short sheet, short column, short row, boolean supportIntegerValues )
-    {
-        com.sun.star.form.binding.XValueBinding cellBinding = null;
-        try
-        {
-            CellAddress address = new CellAddress( sheet, column, row );
-            Object[] initParam = new Object[] { new NamedValue( "BoundCell", address ) };
-            cellBinding = UnoRuntime.queryInterface(
-                com.sun.star.form.binding.XValueBinding.class,
-                createInstanceWithArguments(
-                    supportIntegerValues ? "com.sun.star.table.ListPositionCellBinding"
-                                         : "com.sun.star.table.CellValueBinding",
-                    initParam
-                )
-            );
-        }
-        catch( com.sun.star.uno.Exception e )
-        {
-            System.err.println( e );
-            e.printStackTrace( System.err );
-        }
-        return cellBinding;
-    }
-
-    /* ------------------------------------------------------------------ */
-    /** creates a source of list entries associated with a (one-column) cell range
-    */
-    public com.sun.star.form.binding.XListEntrySource createListEntrySource( short sheet, short column,
-        short topRow, short bottomRow )
-    {
-        com.sun.star.form.binding.XListEntrySource entrySource = null;
-        try
-        {
-            CellRangeAddress rangeAddress = new CellRangeAddress( sheet, column,
-                topRow, column, bottomRow );
-            Object[] initParam = new Object[] { new NamedValue( "CellRange", rangeAddress ) };
-            entrySource = UnoRuntime.queryInterface(
-                com.sun.star.form.binding.XListEntrySource.class,
-                createInstanceWithArguments(
-                    "com.sun.star.table.CellRangeListSource", initParam ) );
-        }
-        catch( com.sun.star.uno.Exception e )
-        {
-            System.err.println( e );
-            e.printStackTrace( System.err );
-        }
-        return entrySource;
-    }
 }

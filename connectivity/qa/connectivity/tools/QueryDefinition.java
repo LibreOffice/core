@@ -18,11 +18,9 @@
 
 package connectivity.tools;
 
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.IllegalArgumentException;
 
 public class QueryDefinition
 {
@@ -48,18 +46,4 @@ public class QueryDefinition
         return command;
     }
 
-    /** retrieves the command underlying the query definition
-     *
-     * This method is a mere wrapped around the <code>getPropertyValue( "Command" )</code> call
-     */
-    public void setCommand( String _command ) throws WrappedTargetException
-    {
-        try
-        {
-            m_queryDef.setPropertyValue( "Command", _command );
-        }
-        catch (UnknownPropertyException e) { }
-        catch (PropertyVetoException e) { }
-        catch (IllegalArgumentException e) { }
-    }
 }

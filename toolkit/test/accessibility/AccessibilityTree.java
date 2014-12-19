@@ -204,11 +204,6 @@ public class AccessibilityTree
 
 
 
-    public void disposing (com.sun.star.lang.EventObject e)
-    {
-        System.out.println ("disposing " + e);
-    }
-
     /*
     public Dimension getPreferredSize ()
     {

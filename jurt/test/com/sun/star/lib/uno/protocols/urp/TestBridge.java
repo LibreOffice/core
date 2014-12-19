@@ -99,8 +99,6 @@ class TestBridge implements IBridge {
 
     public void release() {}
 
-    public void reset() throws IOException {}
-
     public void dispose() throws InterruptedException, IOException {}
 }
 

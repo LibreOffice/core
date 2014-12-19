@@ -41,7 +41,6 @@ public class Settings
 
 
     private final XComponentContext m_xContext;
-    private int lastUsedWikiServer = 0;
     private final List<Map<String, String>> m_WikiConnections = new ArrayList<Map<String, String>>();
     private final List<Map<String, Object>> m_aWikiDocs = new ArrayList<Map<String, Object>>();
 
@@ -65,11 +64,6 @@ public class Settings
         m_WikiConnections.add( wikiCon );
     }
 
-
-    public List<Map<String, String>> getWikiCons()
-    {
-        return m_WikiConnections;
-    }
 
     private String getWikiConUrlByNumber( int num )
     {
@@ -103,11 +97,6 @@ public class Settings
     }
 
 
-    public List<Map<String, Object>> getWikiDocs()
-    {
-        return m_aWikiDocs;
-    }
-
     public Object[] getWikiDocList( int serverid )
     {
         String wikiserverurl = getWikiConUrlByNumber( serverid );
@@ -125,14 +114,8 @@ public class Settings
         return theDocs.toArray( docs );
     }
 
-    public int getLastUsedWikiServer()
-    {
-        return lastUsedWikiServer;
-    }
-
     public void setLastUsedWikiServer( int l )
     {
-        lastUsedWikiServer = l;
     }
 
     public String[] getWikiURLs()
