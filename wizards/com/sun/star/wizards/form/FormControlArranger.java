@@ -629,7 +629,6 @@ public class FormControlArranger
                 aDBControl.setPosition(aPoint);
             }
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
-
             {
                 Helper.setUnoPropertyValue(aDBControl.xPropertySet, PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
             }
