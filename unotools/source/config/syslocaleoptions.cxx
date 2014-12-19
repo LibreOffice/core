@@ -122,12 +122,12 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
     const OUString pProperties[] =
     {
-        PROPERTYNAME_LOCALE,
-        PROPERTYNAME_UILOCALE,
-        PROPERTYNAME_CURRENCY,
-        PROPERTYNAME_DECIMALSEPARATOR,
-        PROPERTYNAME_DATEPATTERNS,
-        PROPERTYNAME_IGNORELANGCHANGE
+        OUString(PROPERTYNAME_LOCALE),
+        OUString(PROPERTYNAME_UILOCALE),
+        OUString(PROPERTYNAME_CURRENCY),
+        OUString(PROPERTYNAME_DECIMALSEPARATOR),
+        OUString(PROPERTYNAME_DATEPATTERNS),
+        OUString(PROPERTYNAME_IGNORELANGCHANGE)
     };
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;

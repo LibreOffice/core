@@ -350,10 +350,10 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     // Build static list of configuration key names.
     static const OUString pProperties[] =
     {
-        PROPERTYNAME_DONTHIDEDISABLEDENTRIES    ,
-        PROPERTYNAME_FOLLOWMOUSE                ,
-        PROPERTYNAME_SHOWICONSINMENUES          ,
-        PROPERTYNAME_SYSTEMICONSINMENUES
+        OUString(PROPERTYNAME_DONTHIDEDISABLEDENTRIES)    ,
+        OUString(PROPERTYNAME_FOLLOWMOUSE)                ,
+        OUString(PROPERTYNAME_SHOWICONSINMENUES)          ,
+        OUString(PROPERTYNAME_SYSTEMICONSINMENUES)
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );

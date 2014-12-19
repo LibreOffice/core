@@ -221,8 +221,8 @@ Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
     // Build static list of configuration key names.
     const OUString aProperties[] =
     {
-        PROPERTYNAME_AUTOMNEMONIC   ,
-        PROPERTYNAME_DIALOGSCALE    ,
+        OUString(PROPERTYNAME_AUTOMNEMONIC)   ,
+        OUString(PROPERTYNAME_DIALOGSCALE)    ,
     };
     // Initialize return sequence with these list ...
     Sequence< OUString > seqPropertyNames(aProperties, PROPERTYCOUNT);
