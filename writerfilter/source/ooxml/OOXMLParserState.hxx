@@ -23,10 +23,6 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 
-#ifdef DEBUG_WRITERFILTER
-#include <resourcemodel/TagLogger.hxx>
-#endif
-
 namespace writerfilter {
 namespace ooxml
 {
