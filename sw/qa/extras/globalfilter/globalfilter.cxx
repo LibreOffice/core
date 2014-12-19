@@ -119,10 +119,10 @@ void Test::testSwappedOutImageExport()
 void Test::testLinkedGraphicRT()
 {
     OUString aFilterNames[] = {
-        "writer8",
+        OUString("writer8"),
 //        "Rich Text Format",  Note: picture is there, but SwGrfNode is not found?
-        "MS Word 97",
-        "Office Open XML Text",
+        OUString("MS Word 97"),
+        OUString("Office Open XML Text"),
     };
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
