@@ -1764,8 +1764,17 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     const SdrObject* pObj = pFmt->FindRealSdrObject();
                     if (pObj)
                     {
-                        std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pFmt->GetDoc());
-                        aRet <<= SwTextBoxHelper::getOrdNum(pObj, aTextBoxes);
+                        bool bConvert = true;
+                        if (SvxShape* pSvxShape = GetSvxShape())
+                            // In case of group shapes, pSvxShape points to the child shape, while pObj points to the outermost group shape.
+                            if (pSvxShape->GetSdrObject() != pObj)
+                                // Textboxes are not expected inside group shapes, so no conversion is necessary there.
+                                bConvert = false;
+                        if (bConvert)
+                        {
+                            std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pFmt->GetDoc());
+                            aRet <<= SwTextBoxHelper::getOrdNum(pObj, aTextBoxes);
+                        }
                     }
                 }
             }
