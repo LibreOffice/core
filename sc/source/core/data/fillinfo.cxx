@@ -620,11 +620,10 @@ void ScDocument::FillInfo(
 
                         if ( pThisMarkArr->Search( nRow1, nIndex ) )
                         {
-                            bool bThisMarked;
                             do
                             {
                                 nThisRow=pThisMarkArr->pData[nIndex].nRow;      // Ende des Bereichs
-                                bThisMarked=pThisMarkArr->pData[nIndex].bMarked;
+                                const bool bThisMarked=pThisMarkArr->pData[nIndex].bMarked;
 
                                 do
                                 {

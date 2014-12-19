@@ -107,14 +107,13 @@ void ScAttrArray::TestData() const
 void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 {
     ScDocumentPool*      pDocPool = pDocument->GetPool();
-    const ScPatternAttr* pOldPattern;
     ScAddress            aAdrStart( nCol, 0, nTab );
     ScAddress            aAdrEnd  ( nCol, 0, nTab );
 
     for (SCSIZE i=0; i<nCount; i++)
     {
         // ensure that attributing changes text width of cell
-        pOldPattern = pData[i].pPattern;
+        const ScPatternAttr* pOldPattern = pData[i].pPattern;
         bool bNumFormatChanged;
         if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                     pPattern->GetItemSet(), pOldPattern->GetItemSet() ) )
@@ -180,7 +179,6 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
     bool bFound = (nCount == 1);
     long nLo = 0;
     long nStartRow = 0;
-    long nEndRow = 0;
     while ( !bFound && nLo <= nHi )
     {
         i = (nLo + nHi) / 2;
@@ -188,7 +186,7 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
             nStartRow = (long) pData[i - 1].nRow;
         else
             nStartRow = -1;
-        nEndRow = (long) pData[i].nRow;
+        const long nEndRow = (long) pData[i].nRow;
         if (nEndRow < (long) nRow)
             nLo = ++i;
         else
@@ -1606,8 +1604,6 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags 
 
 void ScAttrArray::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich )
 {
-    const ScPatternAttr* pOldPattern;
-
     SCSIZE  nIndex;
     SCROW   nRow;
     SCROW   nThisRow;
@@ -1618,7 +1614,7 @@ void ScAttrArray::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* 
 
     while ( nThisRow <= nEndRow )
     {
-        pOldPattern = pData[nIndex].pPattern;
+        const ScPatternAttr* pOldPattern = pData[nIndex].pPattern;
         if ( pOldPattern->HasItemsSet( pWhich ) )
         {
             ScPatternAttr aNewPattern(*pOldPattern);
@@ -2147,7 +2143,6 @@ void ScAttrArray::DeleteArea(SCROW nStartRow, SCROW nEndRow)
 void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
 {
     const ScPatternAttr* pDefPattern = pDocument->GetDefPattern();
-    const ScPatternAttr* pOldPattern;
 
     SCSIZE  nIndex;
     SCROW   nRow;
@@ -2159,7 +2154,7 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
 
     while ( nThisRow <= nEndRow )
     {
-        pOldPattern = pData[nIndex].pPattern;
+        const ScPatternAttr* pOldPattern = pData[nIndex].pPattern;
 
         if ( pOldPattern->GetItemSet().Count() )  // hard attributes ?
         {

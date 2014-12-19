@@ -357,9 +357,9 @@ bool ScChangeAction::IsDeletedInDelType( ScChangeActionType eDelType ) const
             default:
                 eInsType = SC_CAT_NONE;
         }
-        ScChangeAction* p;
         while ( pL )
         {
+            ScChangeAction* p;
             if ( (p = pL->GetAction()) != NULL &&
                     (p->GetType() == eDelType || p->GetType() == eInsType) )
                 return true;
@@ -4147,10 +4147,9 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
         bOk &= pContent->Select( pDoc, this, bOldest, NULL );
         // now the matrix is inserted and new content values are ready
 
-        ScChangeActionContent* pNew;
         while ( !aRejectActions.empty() )
         {
-            pNew = aRejectActions.top();
+            ScChangeActionContent* pNew = aRejectActions.top();
             aRejectActions.pop();
             ScAddress aPos( pNew->GetBigRange().aStart.MakeAddress() );
             ScCellValue aCell;

@@ -196,7 +196,6 @@ bool InitExternalFunc(const OUString& rModuleName)
 
             // Schnittstelle initialisieren
             AdvData pfCallBack = &ScAddInAsyncCallBack;
-            FuncData* pFuncData;
             FuncCollection* pFuncCol = ScGlobal::GetFuncCollection();
             sal_uInt16 nCount;
             (*((GetFuncCountPtr)fpGetCount))(nCount);
@@ -225,7 +224,7 @@ bool InitExternalFunc(const OUString& rModuleName)
                 }
                 OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );
                 OUString aFuncName( cFuncName, strlen(cFuncName), osl_getThreadTextEncoding() );
-                pFuncData = new FuncData( pModuleData,
+                FuncData* pFuncData = new FuncData( pModuleData,
                                           aInternalName,
                                           aFuncName,
                                           i,

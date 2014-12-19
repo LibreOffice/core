@@ -84,10 +84,10 @@ bool Converter::convertMeasure( sal_Int32& rValue,
         nVal += (rString[nPos] - '0');
         nPos++;
     }
-    double nDiv = 1.;
     if( nPos < nLen && '.' == rString[nPos] )
     {
         nPos++;
+        double nDiv = 1.;
 
         while( nPos < nLen &&
                '0' <= rString[nPos] &&
