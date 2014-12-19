@@ -40,7 +40,7 @@ import java.nio.IntBuffer;
  * Note that LayerView is accessed by Robocop via reflection.
  */
 public class LayerView extends FrameLayout {
-    private static String LOGTAG = "GeckoLayerView";
+    private static String LOGTAG = LayerView.class.getName();
 
     private GeckoLayerClient mLayerClient;
     private TouchEventHandler mTouchEventHandler;
@@ -65,7 +65,7 @@ public class LayerView extends FrameLayout {
 
     boolean shouldUseTextureView() {
         // we can only use TextureView on ICS or higher
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        /*if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             Log.i(LOGTAG, "Not using TextureView: not on ICS+");
             return false;
         }
@@ -77,7 +77,8 @@ public class LayerView extends FrameLayout {
         } catch (Exception e) {
             Log.i(LOGTAG, "Not using TextureView: caught exception checking for hw accel: " + e.toString());
             return false;
-        }
+        }*/
+        return false;
     }
 
     public LayerView(Context context, AttributeSet attrs) {
