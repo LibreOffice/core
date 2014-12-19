@@ -247,7 +247,7 @@ void ScMacrosTest::testVba()
         Any aRet;
         Sequence< sal_Int16 > aOutParamIndex;
         Sequence< Any > aOutParam;
-        bool bWorkbooksHandling = OUString( testInfo[i].sFileBaseName ).equalsAscii("Workbooks.") && !sTempDir.isEmpty() ;
+        bool bWorkbooksHandling = OUString( testInfo[i].sFileBaseName ) == "Workbooks." && !sTempDir.isEmpty() ;
 
         if ( bWorkbooksHandling )
         {
