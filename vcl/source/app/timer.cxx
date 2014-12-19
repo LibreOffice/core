@@ -151,7 +151,7 @@ void Timer::ImplTimerCallbackProc( bool idle )
         // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
         // call the handler as soon as the time is up.
         if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
-             !pTimerData->mbDelete && !pTimerData->mbInTimeout && (!pTimerData->mpTimer->mbIdle || idle) )
+             !pTimerData->mbDelete && !pTimerData->mbInTimeout && !pTimerData->mpTimer->mbIdle)
         {
             // time has expired
             if ( pTimerData->GetDeadline() <= nTime )
