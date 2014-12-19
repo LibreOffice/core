@@ -227,7 +227,10 @@ public class FormControlArranger
             // shapes are made more narrow
             ShapeCount = iReduceWidth;
         }
-        return (nDist) / ShapeCount;
+        if(ShapeCount == 0)
+            return 0;
+        else
+            return (nDist) / ShapeCount;
     }
 
     /**
@@ -237,51 +240,54 @@ public class FormControlArranger
      * @param nDist
      * @param WidthFactor is either '+1' or '-1' and determines whether the control shapes widths are to be made smaller or larger
      */
-    private void adjustLineWidth(int StartIndex, int EndIndex, int nDist, int WidthFactor)
+    private void adjustLineWidth(final int StartIndex, final int EndIndex, final int nDist, final int WidthFactor)
     {
-        int CorrWidth = getCorrWidth(StartIndex, EndIndex, nDist, WidthFactor);
-        int iLocTCPosX = cXOffset;
-        for (int i = StartIndex; i <= EndIndex; i++)
+        if(StartIndex <= EndIndex)
         {
-            int nControlBaseWidth = 0;
-            DatabaseControl dbControl = DBControlList[i];
-            Control curLabelControl = LabelControlList[i];
-            if (i != StartIndex)
+            int CorrWidth = getCorrWidth(StartIndex, EndIndex, nDist, WidthFactor);
+            int iLocTCPosX = cXOffset;
+            for (int i = StartIndex; i <= EndIndex; i++)
             {
-                curLabelControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y));
-                dbControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y + m_LabelHeight));
-            }
-            final Size labelSize = curLabelControl.getSize();
-            Size controlSize = dbControl.getSize();
-            if (((labelSize.Width > controlSize.Width)) && (WidthFactor > 0))
-            {
-                nControlBaseWidth = labelSize.Width;
-            }
-            else
-            {
-                nControlBaseWidth = controlSize.Width;
-            }
-            if (FieldColumns[i].getFieldType() == DataType.TIMESTAMP)
-            {
-                TimeStampControl oDBTimeStampControl = (TimeStampControl) dbControl;
-                nControlBaseWidth = oDBTimeStampControl.getSize().Width;
-            }
-            if (WidthFactor > 0 || isReducable(i, labelSize.Width, controlSize.Width))
-            {
-                controlSize.Width = nControlBaseWidth + WidthFactor * CorrWidth;
-                dbControl.setSize(controlSize);
-                controlSize = dbControl.getSize();
-            }
+                int nControlBaseWidth = 0;
+                DatabaseControl dbControl = DBControlList[i];
+                Control curLabelControl = LabelControlList[i];
+                if (i != StartIndex)
+                {
+                    curLabelControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y));
+                    dbControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y + m_LabelHeight));
+                }
+                final Size labelSize = curLabelControl.getSize();
+                Size controlSize = dbControl.getSize();
+                if (((labelSize.Width > controlSize.Width)) && (WidthFactor > 0))
+                {
+                    nControlBaseWidth = labelSize.Width;
+                }
+                else
+                {
+                    nControlBaseWidth = controlSize.Width;
+                }
+                if (FieldColumns[i].getFieldType() == DataType.TIMESTAMP)
+                {
+                    TimeStampControl oDBTimeStampControl = (TimeStampControl) dbControl;
+                    nControlBaseWidth = oDBTimeStampControl.getSize().Width;
+                }
+                if (WidthFactor > 0 || isReducable(i, labelSize.Width, controlSize.Width))
+                {
+                    controlSize.Width = nControlBaseWidth + WidthFactor * CorrWidth;
+                    dbControl.setSize(controlSize);
+                    controlSize = dbControl.getSize();
+                }
 
-            if (labelSize.Width > controlSize.Width)
-            {
-                iLocTCPosX += labelSize.Width;
+                if (labelSize.Width > controlSize.Width)
+                {
+                    iLocTCPosX += labelSize.Width;
+                }
+                else
+                {
+                    iLocTCPosX += controlSize.Width;
+                }
+                iLocTCPosX += cHoriDistance;
             }
-            else
-            {
-                iLocTCPosX += controlSize.Width;
-            }
-            iLocTCPosX += cHoriDistance;
         }
         if (WidthFactor > 0)
         {
