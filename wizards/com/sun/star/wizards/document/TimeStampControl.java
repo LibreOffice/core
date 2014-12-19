@@ -58,7 +58,6 @@ public class TimeStampControl extends DatabaseControl
         xShapes.add(oDateControl.xShape);
         xShapes.add(oTimeControl.xShape);
         xShapeGroup = _oFormHandler.xShapeGrouper.group(xShapes);
-        xShapeGroup = UnoRuntime.queryInterface(XShape.class, xShapeGroup);
         nreldatewidth = 1.0 / ((double) getSize().Width / (double) nDateWidth);
         nreltimewidth = 1.0 - nreldatewidth;
     }
