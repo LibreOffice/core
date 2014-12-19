@@ -423,6 +423,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CHRATR_FONTSIZE:
                 static_cast<const SvxFontHeightItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_CNTNT:
+                static_cast<const SwFmtCntnt*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -437,13 +440,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_CNTNT:
-            {
-                pWhich = "content";
-                const SwFmtCntnt* pCntnt = static_cast<const SwFmtCntnt*>(pItem);
-                oValue = "node index: " + OString::number(pCntnt->GetCntntIdx()->GetNode().GetIndex());
-                break;
-            }
             case RES_FRM_SIZE:
             {
                 pWhich = "frame size";

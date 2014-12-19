@@ -555,6 +555,14 @@ SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
     return new SwFmtCntnt( *this );
 }
 
+void SwFmtCntnt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtCntnt"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pStartNode->GetNode().GetIndex()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 // Partially implemented inline in hxx
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),

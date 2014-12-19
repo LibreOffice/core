@@ -44,6 +44,8 @@ public:
 
     const SwNodeIndex *GetCntntIdx() const { return pStartNode; }
     void SetNewCntntIdx( const SwNodeIndex *pIdx );
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline const SwFmtCntnt &SwAttrSet::GetCntnt(bool bInP) const
