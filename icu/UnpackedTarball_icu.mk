@@ -21,7 +21,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	icu/icu4c-macosx.patch \
 	icu/icu4c-solarisgcc.patch \
 	icu/icu4c-mkdir.patch \
-	icu/icu4c-buffer-overflow.patch \
 	icu/icu4c-$(if $(filter ANDROID,$(OS)),android,rpath).patch \
 ))
 

@@ -911,6 +911,134 @@ Resource RID_SUBSETMAP
     {
         Text [ en-US ] = "Takri";
     };
+    String RID_SUBSETSTR_BASSA_VAH
+    {
+        Text [ en-US ] = "Bassa Vah";
+    };
+    String RID_SUBSETSTR_CAUCASIAN_ALBANIAN
+    {
+        Text [ en-US ] = "Caucasian Albanian";
+    };
+    String RID_SUBSETSTR_COPTIC_EPACT_NUMBERS
+    {
+        Text [ en-US ] = "Coptic Epact Numbers";
+    };
+    String RID_SUBSETSTR_COMBINING_DIACRITICAL_MARKS_EXTENDED
+    {
+        Text [ en-US ] = "Combining Diacritical Marks Extended";
+    };
+    String RID_SUBSETSTR_DUPLOYAN
+    {
+        Text [ en-US ] = "Duployan";
+    };
+    String RID_SUBSETSTR_ELBASAN
+    {
+        Text [ en-US ] = "Elbasan";
+    };
+    String RID_SUBSETSTR_GEOMETRIC_SHAPES_EXTENDED
+    {
+        Text [ en-US ] = "Geometric Shapes Extended";
+    };
+    String RID_SUBSETSTR_GRANTHA
+    {
+        Text [ en-US ] = "Grantha";
+    };
+    String RID_SUBSETSTR_KHOJKI
+    {
+        Text [ en-US ] = "Khojki";
+    };
+    String RID_SUBSETSTR_KHUDAWADI
+    {
+        Text [ en-US ] = "Khudawadi";
+    };
+    String RID_SUBSETSTR_LATIN_EXTENDED_E
+    {
+        Text [ en-US ] = "Latin Extended-E";
+    };
+    String RID_SUBSETSTR_LINEAR_A
+    {
+        Text [ en-US ] = "Linear A";
+    };
+    String RID_SUBSETSTR_MAHAJANI
+    {
+        Text [ en-US ] = "Mahajani";
+    };
+    String RID_SUBSETSTR_MANICHAEAN
+    {
+        Text [ en-US ] = "Manichaean";
+    };
+    String RID_SUBSETSTR_MENDE_KIKAKUI
+    {
+        Text [ en-US ] = "Mende Kikakui";
+    };
+    String RID_SUBSETSTR_MODI
+    {
+        Text [ en-US ] = "Modi";
+    };
+    String RID_SUBSETSTR_MRO
+    {
+        Text [ en-US ] = "Mro";
+    };
+    String RID_SUBSETSTR_MYANMAR_EXTENDED_B
+    {
+        Text [ en-US ] = "Myanmar Extended-B";
+    };
+    String RID_SUBSETSTR_NABATAEAN
+    {
+        Text [ en-US ] = "Nabataean";
+    };
+    String RID_SUBSETSTR_OLD_NORTH_ARABIAN
+    {
+        Text [ en-US ] = "Old North Arabian";
+    };
+    String RID_SUBSETSTR_OLD_PERMIC
+    {
+        Text [ en-US ] = "Old Permic";
+    };
+    String RID_SUBSETSTR_ORNAMENTAL_DINGBATS
+    {
+        Text [ en-US ] = "Ornamental Dingbats";
+    };
+    String RID_SUBSETSTR_PAHAWH_HMONG
+    {
+        Text [ en-US ] = "Pahawh Hmong";
+    };
+    String RID_SUBSETSTR_PALMYRENE
+    {
+        Text [ en-US ] = "Palmyrene";
+    };
+    String RID_SUBSETSTR_PAU_CIN_HAU
+    {
+        Text [ en-US ] = "Pau Cin Hau";
+    };
+    String RID_SUBSETSTR_PSALTER_PAHLAVI
+    {
+        Text [ en-US ] = "Psalter Pahlavi";
+    };
+    String RID_SUBSETSTR_SHORTHAND_FORMAT_CONTROLS
+    {
+        Text [ en-US ] = "Shorthand Format Controls";
+    };
+    String RID_SUBSETSTR_SIDDHAM
+    {
+        Text [ en-US ] = "Siddham";
+    };
+    String RID_SUBSETSTR_SINHALA_ARCHAIC_NUMBERS
+    {
+        Text [ en-US ] = "Sinhala Archaic Numbers";
+    };
+    String RID_SUBSETSTR_SUPPLEMENTAL_ARROWS_C
+    {
+        Text [ en-US ] = "Supplemental Arrows-C";
+    };
+    String RID_SUBSETSTR_TIRHUTA
+    {
+        Text [ en-US ] = "Tirhuta";
+    };
+    String RID_SUBSETSTR_WARANG_CITI
+    {
+        Text [ en-US ] = "Warang Citi";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
