@@ -67,7 +67,6 @@
 #define HID_GALLERY_WINDOW                                    "SVX_HID_GALLERY_WINDOW"
 #define HID_MENU_EXTRUSION_DIRECTION                          "SVX_HID_MENU_EXTRUSION_DIRECTION"
 #define HID_MENU_EXTRUSION_LIGHTING                           "SVX_HID_MENU_EXTRUSION_LIGHTING"
-#define HID_MENU_EXTRUSION_SURFACE                            "SVX_HID_MENU_EXTRUSION_SURFACE"
 #define HID_MNU_FUNC_AVG                                      "SVX_HID_MNU_FUNC_AVG"
 #define HID_MNU_FUNC_COUNT                                    "SVX_HID_MNU_FUNC_COUNT"
 #define HID_MNU_FUNC_COUNT2                                   "SVX_HID_MNU_FUNC_COUNT2"

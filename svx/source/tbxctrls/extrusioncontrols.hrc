@@ -60,11 +60,6 @@
 #define IMG_PERSPECTIVE         31
 #define IMG_PARALLEL            33
 
-#define IMG_WIRE_FRAME          35
-#define IMG_MATTE               36
-#define IMG_PLASTIC             37
-#define IMG_METAL               38
-
 #define IMG_LIGHT_OFF           50  // needs 10 resource ids
 #define IMG_LIGHT_ON            60  // needs 10 resource ids
 #define IMG_LIGHT_PREVIEW       70  // needs 10 resource ids

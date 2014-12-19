@@ -800,43 +800,35 @@ Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    vcl::Window* pParentWindow
-)   : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE ) )
-    , mrController( rController )
-    , maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) )
-    , maImgSurface2( SVX_RES( IMG_MATTE ) )
-    , maImgSurface3( SVX_RES( IMG_PLASTIC ) )
-    , maImgSurface4( SVX_RES( IMG_METAL ) )
-    , msExtrusionSurface( ".uno:ExtrusionSurface" )
+    vcl::Window* pParentWindow)
+    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    , mrController(rController)
+    , maImgSurface1(SVX_RES(RID_SVXIMG_WIRE_FRAME))
+    , maImgSurface2(SVX_RES(RID_SVXIMG_MATTE))
+    , maImgSurface3(SVX_RES(RID_SVXIMG_PLASTIC))
+    , maImgSurface4(SVX_RES(RID_SVXIMG_METAL))
+    , msExtrusionSurface(".uno:ExtrusionSurface")
 {
-    SetHelpId( HID_MENU_EXTRUSION_SURFACE );
     SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
-    appendEntry( 0, SVX_RESSTR( STR_WIREFRAME ), maImgSurface1 );
-    appendEntry( 1, SVX_RESSTR( STR_MATTE     ), maImgSurface2 );
-    appendEntry( 2, SVX_RESSTR( STR_PLASTIC   ), maImgSurface3 );
-    appendEntry( 3, SVX_RESSTR( STR_METAL     ), maImgSurface4 );
+    appendEntry(0, SVX_RESSTR(RID_SVXSTR_WIREFRAME), maImgSurface1);
+    appendEntry(1, SVX_RESSTR(RID_SVXSTR_MATTE), maImgSurface2);
+    appendEntry(2, SVX_RESSTR(RID_SVXSTR_PLASTIC), maImgSurface3);
+    appendEntry(3, SVX_RESSTR(RID_SVXSTR_METAL), maImgSurface4);
 
     SetOutputSizePixel( getMenuSize() );
-
-    FreeResource();
 
     AddStatusListener( msExtrusionSurface );
 }
 
-
-
 void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 {
-    int i;
-    for( i = 0; i < 4; i++ )
+    for(int i = 0; i < 4; ++i)
     {
         checkEntry( i, (i == nSurface) && bEnabled );
         enableEntry( i, bEnabled );
     }
 }
-
-
 
 void ExtrusionSurfaceWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
