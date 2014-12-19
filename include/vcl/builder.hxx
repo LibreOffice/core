@@ -335,11 +335,11 @@ private:
     vcl::Window *insertObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
                     stringmap &rProps, stringmap &rPangoAttributes,
-                    stringmap &rAtkProps, std::vector<OString> &rItems);
+                    stringmap &rAtkProps);
 
     vcl::Window *makeObject(vcl::Window *pParent,
                     const OString &rClass, const OString &rID,
-                    stringmap &rVec, const std::vector<OString> &rItems);
+                    stringmap &rVec);
 
     void        connectNumericFormatterAdjustment(const OString &id, const OString &rAdjustment);
     void        connectTimeFormatterAdjustment(const OString &id, const OString &rAdjustment);

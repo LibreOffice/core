@@ -1221,7 +1221,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
 vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, const OString &id,
-    stringmap &rMap, const std::vector<OString> &rItems)
+    stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
     bool bVertical = false;
@@ -1440,28 +1440,12 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
         {
             ComboBox* pComboBox = new ComboBox(pParent, nBits);
             pComboBox->EnableAutoSize(true);
-            if (!rItems.empty())
-            {
-                sal_uInt16 nActiveId = extractActive(rMap);
-                for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
-                    pComboBox->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
-                if (nActiveId < rItems.size())
-                    pComboBox->SelectEntryPos(nActiveId);
-            }
             pWindow = pComboBox;
         }
         else
         {
             ListBox *pListBox = new ListBox(pParent, nBits|WB_SIMPLEMODE);
             pListBox->EnableAutoSize(true);
-            if (!rItems.empty())
-            {
-                sal_uInt16 nActiveId = extractActive(rMap);
-                for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
-                    pListBox->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
-                if (nActiveId < rItems.size())
-                    pListBox->SelectEntryPos(nActiveId);
-            }
             pWindow = pListBox;
         }
     }
@@ -1758,9 +1742,7 @@ void VclBuilder::set_properties(vcl::Window *pWindow, const stringmap &rProps)
 }
 
 vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClass,
-    const OString &rID, stringmap &rProps, stringmap &rPango,
-    stringmap &rAtk,
-    std::vector<OString> &rItems)
+    const OString &rID, stringmap &rProps, stringmap &rPango, stringmap &rAtk)
 {
     vcl::Window *pCurrentChild = NULL;
 
@@ -1800,7 +1782,7 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
         //been seen yet, then make unattached widgets parent-less toplevels
         if (pParent == m_pParent && m_bToplevelHasDeferredInit)
             pParent = NULL;
-        pCurrentChild = makeObject(pParent, rClass, rID, rProps, rItems);
+        pCurrentChild = makeObject(pParent, rClass, rID, rProps);
     }
 
     if (pCurrentChild)
@@ -1823,7 +1805,6 @@ vcl::Window *VclBuilder::insertObject(vcl::Window *pParent, const OString &rClas
     rProps.clear();
     rPango.clear();
     rAtk.clear();
-    rItems.clear();
 
     if (!pCurrentChild)
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
@@ -2772,6 +2753,23 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
     rProps.clear();
 }
 
+/// Insert items to a ComboBox or a ListBox.
+/// They have no common ancestor that would have 'InsertEntry()', so use a template.
+template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap, const std::vector<OString> &rItems)
+{
+    T *pContainer = dynamic_cast<T*>(pWindow);
+    if (!pContainer)
+        return false;
+
+    sal_uInt16 nActiveId = extractActive(rMap);
+    for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
+        pContainer->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+    if (nActiveId < rItems.size())
+        pContainer->SelectEntryPos(nActiveId);
+
+    return true;
+}
+
 vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     OString sClass;
@@ -2846,7 +2844,7 @@ vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader
                 if (!pCurrentChild)
                 {
                     pCurrentChild = insertObject(pParent, sClass, sID,
-                        aProperties, aPangoAttributes, aAtkAttributes, aItems);
+                        aProperties, aPangoAttributes, aAtkAttributes);
                 }
                 handleChild(pCurrentChild, reader);
             }
@@ -2889,7 +2887,14 @@ vcl::Window* VclBuilder::handleObject(vcl::Window *pParent, xmlreader::XmlReader
     if (!pCurrentChild)
     {
         pCurrentChild = insertObject(pParent, sClass, sID, aProperties,
-            aPangoAttributes, aAtkAttributes, aItems);
+            aPangoAttributes, aAtkAttributes);
+    }
+
+    if (!aItems.empty())
+    {
+        // try to fill-in the items
+        if (!insertItems<ComboBox>(pCurrentChild, aProperties, aItems))
+            insertItems<ListBox>(pCurrentChild, aProperties, aItems);
     }
 
     return pCurrentChild;
