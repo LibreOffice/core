@@ -157,7 +157,6 @@ static bool CallRsc2( RscStrList * pInputList,
                       const OString &rSrsName, RscPtrPtr * pCmdLine )
 {
     int nRet;
-    OString*  pString;
     RscVerbosity eVerbosity = RscVerbosityNormal;
 
     RscPtrPtr aNewCmdL;
@@ -196,7 +195,7 @@ static bool CallRsc2( RscStrList * pInputList,
 
     for ( size_t i = 0, n = pInputList->size(); i < n; ++i )
     {
-        pString = (*pInputList)[ i ];
+        OString* pString = (*pInputList)[ i ];
         aNewCmdL.Append( rsc_strdup( pString->getStr() ) );
     }
 
@@ -231,7 +230,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     char **     ppStr;
     RscPtrPtr   aCmdLine;       // Kommandozeile
     sal_uInt32  i;
-    OString*    pString;
 
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )
@@ -314,7 +312,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         for ( size_t k = 0, n = aInputList.size(); k < n; ++k )
         {
-            pString = aInputList[ k ];
+            OString* pString = aInputList[ k ];
             aTmpName = ::GetTmpFileName();
             if( !CallPrePro( *pString, aTmpName, &aCmdLine, bResponse ) )
             {

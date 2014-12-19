@@ -390,7 +390,6 @@ void RscCompiler::EndCompile()
         if( !(pCL->nCommands & NOSYNTAX_FLAG) )
         {
             FILE        * foutput;
-            RscFile     * pFN;
 
             if( NULL == (foutput = fopen( pCL->aOutputSrs.getStr(), "w" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pCL->aOutputSrs.getStr() );
@@ -400,7 +399,7 @@ void RscCompiler::EndCompile()
                 sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
                 while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
                 {
-                    pFN = pTC->aFileTab.Get( aIndex );
+                    RscFile* pFN = pTC->aFileTab.Get( aIndex );
                     if( !pFN->IsIncFile() )
                     {
                         pTC->WriteSrc( foutput, NOFILE_INDEX, false );
@@ -476,14 +475,13 @@ ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
         aError = ERR_ERROR;
     else if( !pFName->bLoaded )
     {
-        RscDepend * pDep;
 
         //Include-Dateien vorher lesen
         pFName->bLoaded = true; //Endlos Rekursion vermeiden
 
         for ( size_t i = 0; i < pFName->aDepLst.size() && aError.IsOk(); ++i )
         {
-            pDep = pFName->aDepLst[ i ];
+            RscDepend* pDep = pFName->aDepLst[ i ];
             aError = ParseOneFile( pDep->GetFileKey(), pOutputFile, pContext );
         }
 

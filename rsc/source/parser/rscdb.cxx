@@ -329,18 +329,15 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
     }
     else
     {
-        RscDepend *     pDep;
-        RscFile   *     pFile;
-
         RscFile   *     pFName = aFileTab.Get( lFileKey );
         if( pFName )
         {
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
-                pDep = pFName->aDepLst[ i ];
+                RscDepend* pDep = pFName->aDepLst[ i ];
                 if( pDep->GetFileKey() != lFileKey )
                 {
-                    pFile = aFileTab.GetFile( pDep->GetFileKey() );
+                    RscFile* pFile = aFileTab.GetFile( pDep->GetFileKey() );
                     if( pFile )
                     {
                         fprintf( fOutput, "#include " );
@@ -525,7 +522,6 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
                              bool bName )
 {
-    RscFile     *   pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
     unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
@@ -534,6 +530,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
     SAL_WARN_IF(!bSuccess, "rsc", "short write");
     if( bName )
     {
+        RscFile* pFName;
         WriteInc( fOutput, nFileKey );
 
         if( NOFILE_INDEX == nFileKey )
