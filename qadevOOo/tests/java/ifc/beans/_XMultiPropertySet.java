@@ -167,6 +167,11 @@ public class _XMultiPropertySet extends MultiMethodTest {
             testPropsAmount = 0;
         }
 
+        if (testPropsAmount == 0) {
+            log.println("all properties are read only");
+            tRes.tested("addPropertiesChangeListener()", Status.skipped(true));
+            return;
+        }
 
         // Change one of the property to be sure, that this event was cauched.
         for (int i=0; i<testPropsAmount;i++) {
@@ -177,7 +182,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 gValues[i] = newValue;
                 propertiesChanged = false;
                 oObj.setPropertyValues(testPropsNames, gValues);
-                waitAMoment() ;
                 log.println(" ... done");
             } catch (com.sun.star.beans.PropertyVetoException e) {
                 log.println("Exception occurred while trying to change "+
@@ -193,12 +197,8 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 e.printStackTrace(log);
             } // end of try-catch
         }
-        if (testPropsAmount == 0) {
-            log.println("all properties are read only");
-            tRes.tested("addPropertiesChangeListener()", Status.skipped(true));
-        } else {
-            tRes.tested("addPropertiesChangeListener()", propertiesChanged);
-        }
+        waitAMoment();
+        tRes.tested("addPropertiesChangeListener()", propertiesChanged);
     }
 
     /**
