@@ -30,7 +30,7 @@
 #include <rtl/stringutils.hxx>
 #include <sal/types.h>
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include <rtl/stringconcat.hxx>
 #endif
 
@@ -184,7 +184,7 @@ public:
     }
 #endif
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -493,7 +493,7 @@ public:
         return *this;
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -1395,21 +1395,6 @@ public:
         return OUStringBuffer( pNew, count + 16 );
     }
 
-#ifdef LIBO_INTERNAL_ONLY
-    // This is to complement the RTL_FAST_STRING operator+, which allows any combination of valid operands,
-    // even two buffers. It's intentional it returns OUString, just like the operator+ would in the fast variant.
-#ifndef RTL_FAST_STRING
-    /**
-     @internal
-     @since LibreOffice 4.1
-    */
-    friend OUString operator+( const OUStringBuffer& str1, const OUStringBuffer& str2  )
-    {
-        return OUString( str1.pData ).concat( str2.pData );
-    }
-#endif
-#endif
-
 private:
     OUStringBuffer( rtl_uString * value, const sal_Int32 capacity )
     {
@@ -1428,7 +1413,7 @@ private:
     sal_Int32       nCapacity;
 };
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /**
  @internal
 */
@@ -1451,7 +1436,7 @@ typedef rtlunittest::OUStringBuffer OUStringBuffer;
 }
 #endif
 
-#ifdef LIBO_INTERNAL_ONLY
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OUStringBuffer;
 #endif
 

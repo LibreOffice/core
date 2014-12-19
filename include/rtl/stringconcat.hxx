@@ -14,7 +14,7 @@
 
 #include <string.h>
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 
 #ifdef RTL_STRING_UNITTEST
 #define rtl rtlunittest

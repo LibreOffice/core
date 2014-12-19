@@ -190,7 +190,7 @@ inline Any SAL_CALL makeAny( bool const & value )
 }
 
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 template< class C1, class C2 >
 inline Any SAL_CALL makeAny( const rtl::OUStringConcat< C1, C2 >& value )
 {
@@ -220,7 +220,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 }
 
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 template< class C1, class C2 >
 inline void SAL_CALL operator <<= ( Any & rAny, const rtl::OUStringConcat< C1, C2 >& value )
 {

@@ -33,7 +33,7 @@
 #include <rtl/textenc.h>
 #include <sal/log.hxx>
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include <rtl/stringconcat.hxx>
 #endif
 
@@ -53,7 +53,7 @@ namespace rtl
 #undef rtl
 #endif
 
-#if defined RTL_FAST_STRING
+#if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /// @cond INTERNAL
 
 /**
@@ -250,7 +250,7 @@ public:
     }
 #endif
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /// @cond INTERNAL
     /**
       New string from an 8-Bit string literal that is expected to contain only
@@ -324,7 +324,7 @@ public:
         }
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -400,7 +400,7 @@ public:
         return *this;
     }
 
-#if defined RTL_FAST_STRING
+#if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /// @cond INTERNAL
     /** Assign a new string from a single ASCII character literal.
 
@@ -425,7 +425,7 @@ public:
         return *this;
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -1575,7 +1575,7 @@ public:
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
-#ifndef RTL_FAST_STRING
+#ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     friend OUString operator+( const OUString& rStr1, const OUString& rStr2  )
     {
         return rStr1.concat( rStr2 );
@@ -2413,7 +2413,7 @@ public:
     }
 };
 
-#if defined RTL_FAST_STRING
+#if defined LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /// @cond INTERNAL
 
 /** Compare a string and an ASCII character literal for equality.
@@ -2436,12 +2436,6 @@ template<char C> bool operator !=(
     return !(string == literal);
 }
 
-/// @endcond
-#endif
-
-/* ======================================================================= */
-
-#ifdef RTL_FAST_STRING
 /**
  @internal
 */
@@ -2487,10 +2481,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 {
     return stream << OUString( concat );
 }
-#else
-// non-RTL_FAST_STRING needs this to compile
-/// @cond INTERNAL
-typedef OUString OUStringLiteral;
+
 /// @endcond
 #endif
 
@@ -2596,15 +2587,13 @@ typedef rtlunittest::OUString OUString;
 // In internal code, allow to use classes like OUString without having to
 // explicitly refer to the rtl namespace, which is kind of superfluous given
 // that OUString itself is namespaced by its OU prefix:
-#ifdef LIBO_INTERNAL_ONLY
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::rtl::OStringToOUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OUStringLiteral;
-#if defined RTL_FAST_STRING
 using ::rtl::OUStringLiteral1;
-#endif
 #endif
 
 #endif /* _RTL_USTRING_HXX */

@@ -29,7 +29,7 @@
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include <rtl/stringconcat.hxx>
 #endif
 
@@ -214,7 +214,7 @@ public:
         rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -495,7 +495,7 @@ public:
         return *this;
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -940,21 +940,6 @@ public:
         return *this;
     }
 
-#ifdef LIBO_INTERNAL_ONLY
-    // This is to complement the RTL_FAST_STRING operator+, which allows any combination of valid operands,
-    // even two buffers. It's intentional it returns OString, just like the operator+ would in the fast variant.
-#ifndef RTL_FAST_STRING
-    /**
-     @internal
-     @since LibreOffice 4.1
-    */
-    friend OString operator+( const OStringBuffer& str1, const OStringBuffer& str2  )
-    {
-        return OString( str1.pData ).concat( str2.pData );
-    }
-#endif
-#endif
-
 private:
     /**
         A pointer to the data structure which contains the data.
@@ -967,7 +952,7 @@ private:
     sal_Int32       nCapacity;
 };
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /**
  @internal
 */
@@ -992,7 +977,7 @@ typedef rtlunittest::OStringBuffer OStringBuffer;
 #undef RTL_STRING_CONST_FUNCTION
 #endif
 
-#ifdef LIBO_INTERNAL_ONLY
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OStringBuffer;
 #endif
 

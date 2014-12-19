@@ -31,7 +31,7 @@
 #include <rtl/string.h>
 #include <rtl/stringutils.hxx>
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include <rtl/stringconcat.hxx>
 #endif
 
@@ -231,7 +231,7 @@ public:
         }
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -297,7 +297,7 @@ public:
         return *this;
     }
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
      @internal
@@ -1128,7 +1128,7 @@ public:
         return OString( pNew, SAL_NO_ACQUIRE );
     }
 
-#ifndef RTL_FAST_STRING
+#ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     friend OString operator+( const OString & str1, const OString & str2  )
     {
         return str1.concat( str2 );
@@ -1634,7 +1634,7 @@ public:
 
 /* ======================================================================= */
 
-#ifdef RTL_FAST_STRING
+#ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 /**
 A simple wrapper around string literal. It is usually not necessary to use, can
 be mostly used to force OString operator+ working with operands that otherwise would
@@ -1684,11 +1684,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 {
     return stream << OString( concat );
 }
-#else
-// non-RTL_FAST_STRING needs this to compile
-/// @cond INTERNAL
-typedef OString OStringLiteral;
-/// @endcond
 #endif
 
 
@@ -1752,7 +1747,7 @@ typedef rtlunittest::OString OString;
 #undef RTL_STRING_CONST_FUNCTION
 #endif
 
-#ifdef LIBO_INTERNAL_ONLY
+#if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST
 using ::rtl::OString;
 using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;

@@ -52,28 +52,23 @@ CPPUNIT_TEST(checkInvalid);
 CPPUNIT_TEST_SUITE_END();
 };
 
-#ifdef RTL_FAST_STRING
-#define TYPES_ASSERT_EQUAL( a, b ) CPPUNIT_ASSERT_EQUAL( a, b )
-#else
-#define TYPES_ASSERT_EQUAL( a, b )
-#endif
 void test::oustring::StringConcat::checkConcat()
 {
 // All the extra () are to protect commas against being treated as separators of macro arguments.
     CPPUNIT_ASSERT_EQUAL( OUString(), OUString(OUString() + OUString()));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + OUString( "bar" )));
-    TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "foo" ) + OUString( "bar" )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, OUString > )), typeid( OUString( "foo" ) + OUString( "bar" )));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUString( "foo" ) + "bar" ));
-    TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobarbaz" ), OUString( OUString( "foo" ) + "bar" + "baz" ));
-    TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< OUString, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" + "baz" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringConcat< OUString, const char[ 4 ] >, const char[ 4 ] > )), typeid( OUString( "foo" ) + "bar" + "baz" ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringLiteral( "foo" ) + "bar" ));
-    TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral, const char[ 4 ] > )), typeid( OUStringLiteral( "foo" ) + "bar" ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringLiteral, const char[ 4 ] > )), typeid( OUStringLiteral( "foo" ) + "bar" ));
     const char d1[] = "xyz";
     CPPUNIT_ASSERT_EQUAL( OUString( "fooxyz" ), OUString( OUString( "foo" ) + d1 ));
-    TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringBuffer( "foo" ) + OUString( "bar" )));
-    TYPES_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, OUString > )), typeid( OUStringBuffer( "foo" ) + OUString( "bar" )));
+    CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, OUString > )), typeid( OUStringBuffer( "foo" ) + OUString( "bar" )));
 }
 
 void test::oustring::StringConcat::checkEnsureCapacity()
@@ -136,7 +131,6 @@ void test::oustring::StringConcat::checkAppend()
 
 void test::oustring::StringConcat::checkInvalid()
 {
-#ifdef RTL_FAST_STRING
     CPPUNIT_ASSERT( !INVALID_CONCAT( OUString() + OUString()));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OString( "b" )));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "a" ) + OStringBuffer( "b" )));
@@ -150,8 +144,6 @@ void test::oustring::StringConcat::checkInvalid()
     rtl_uString* rus = NULL;
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rs ));
     CPPUNIT_ASSERT( INVALID_CONCAT( OUString( "b" ) + rus ));
-#endif
-
 }
 
 }} // namespace
