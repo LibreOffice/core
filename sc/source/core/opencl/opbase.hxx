@@ -129,6 +129,8 @@ protected:
     FormulaTreeNodeRef mFormulaTree;
 };
 
+typedef boost::shared_ptr<DynamicKernelArgument> DynamicKernelArgumentRef;
+
 /// Holds an input (read-only) argument reference to a SingleVectorRef.
 /// or a DoubleVectorRef for non-sliding-window argument of complex functions
 /// like SumOfProduct
@@ -189,9 +191,8 @@ public:
 
 class SlidingFunctionBase : public OpBase
 {
-    typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
 public:
-    typedef std::vector<SubArgument> SubArguments;
+    typedef std::vector<DynamicKernelArgumentRef> SubArguments;
     virtual void GenSlidingWindowFunction( std::stringstream&,
         const std::string&, SubArguments& ) = 0;
     virtual ~SlidingFunctionBase() { }

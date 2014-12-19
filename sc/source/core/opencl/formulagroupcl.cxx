@@ -877,10 +877,9 @@ protected:
 class SymbolTable
 {
 public:
-    typedef std::map<const formula::FormulaToken*,
-                     boost::shared_ptr<DynamicKernelArgument> > ArgumentMap;
+    typedef std::map<const formula::FormulaToken*, DynamicKernelArgumentRef> ArgumentMap;
     // This avoids instability caused by using pointer as the key type
-    typedef std::list<boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
+    typedef std::list<DynamicKernelArgumentRef> ArgumentList;
     SymbolTable() : mCurId(0) { }
     template<class T>
     const DynamicKernelArgument* DeclRefArg( FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen, int nResultSize );
@@ -1935,9 +1934,8 @@ struct SumIfsArgs
 /// Helper functions that have multiple buffers
 class DynamicKernelSoPArguments : public DynamicKernelArgument
 {
-    typedef boost::shared_ptr<DynamicKernelArgument> SubArgument;
 public:
-    typedef std::vector<SubArgument> SubArgumentsType;
+    typedef std::vector<DynamicKernelArgumentRef> SubArgumentsType;
 
     DynamicKernelSoPArguments(
         const std::string& s, const FormulaTreeNodeRef& ft,
@@ -2204,11 +2202,11 @@ private:
     cl_mem mpClmem2;
 };
 
-boost::shared_ptr<DynamicKernelArgument> SoPHelper(
+DynamicKernelArgumentRef SoPHelper(
     const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
     int nResultSize )
 {
-    return boost::shared_ptr<DynamicKernelArgument>(new DynamicKernelSoPArguments(ts, ft, pCodeGen, nResultSize));
+    return DynamicKernelArgumentRef(new DynamicKernelSoPArguments(ts, ft, pCodeGen, nResultSize));
 }
 
 template<class Base>
@@ -2297,20 +2295,20 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                                 pCodeGen->takeString())
                             {
                                 mvSubArguments.push_back(
-                                    SubArgument(
+                                    DynamicKernelArgumentRef(
                                         new DynamicKernelMixedSlidingArgument(
                                             ts, ft->Children[i], mpCodeGen, j)));
                             }
                             else
                             {
                                 mvSubArguments.push_back(
-                                    SubArgument(VectorRefFactory<VectorRef>(
+                                    DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(
                                             ts, ft->Children[i], mpCodeGen, j)));
                             }
                         }
                         else
                             mvSubArguments.push_back(
-                                SubArgument(VectorRefFactory
+                                DynamicKernelArgumentRef(VectorRefFactory
                                     <DynamicKernelStringArgument>(
                                         ts, ft->Children[i], mpCodeGen, j)));
                     }
@@ -2325,21 +2323,21 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                         pCodeGen->takeString())
                     {
                         mvSubArguments.push_back(
-                            SubArgument(new DynamicKernelMixedArgument(
+                            DynamicKernelArgumentRef(new DynamicKernelMixedArgument(
                                     ts, ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric())
                     {
                         mvSubArguments.push_back(
-                            SubArgument(new VectorRef(ts,
+                            DynamicKernelArgumentRef(new VectorRef(ts,
                                     ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpStringArray &&
                         pCodeGen->takeString())
                     {
                         mvSubArguments.push_back(
-                            SubArgument(new DynamicKernelStringArgument(
+                            DynamicKernelArgumentRef(new DynamicKernelStringArgument(
                                     ts, ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpStringArray == NULL &&
@@ -2347,7 +2345,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     {
                         // Push as an array of NANs
                         mvSubArguments.push_back(
-                            SubArgument(new VectorRef(ts,
+                            DynamicKernelArgumentRef(new VectorRef(ts,
                                     ft->Children[i])));
                     }
                     else
@@ -2357,14 +2355,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 else if (pChild->GetType() == formula::svDouble)
                 {
                     mvSubArguments.push_back(
-                        SubArgument(new DynamicKernelConstantArgument(ts,
+                        DynamicKernelArgumentRef(new DynamicKernelConstantArgument(ts,
                                 ft->Children[i])));
                 }
                 else if (pChild->GetType() == formula::svString
                     && pCodeGen->takeString())
                 {
                     mvSubArguments.push_back(
-                        SubArgument(new ConstStringArgument(ts,
+                        DynamicKernelArgumentRef(new ConstStringArgument(ts,
                                 ft->Children[i])));
                 }
                 else
@@ -2845,12 +2843,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;
             case ocPi:
                 mvSubArguments.push_back(
-                    SubArgument(new DynamicKernelPiArgument(ts,
+                    DynamicKernelArgumentRef(new DynamicKernelPiArgument(ts,
                             ft->Children[i])));
                 break;
             case ocRandom:
                 mvSubArguments.push_back(
-                    SubArgument(new DynamicKernelRandomArgument(ts,
+                    DynamicKernelArgumentRef(new DynamicKernelRandomArgument(ts,
                             ft->Children[i])));
                 break;
             case ocProduct:
@@ -3576,7 +3574,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(
         // Allocate new symbols
         std::stringstream ss;
         ss << "tmp" << mCurId++;
-        boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t, pCodeGen, nResultSize));
+        DynamicKernelArgumentRef new_arg(new T(ss.str(), t, pCodeGen, nResultSize));
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         return new_arg.get();
