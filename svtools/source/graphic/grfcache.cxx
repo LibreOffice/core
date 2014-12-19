@@ -810,9 +810,9 @@ GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDispla
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
     mnUsedDisplaySize       ( 0UL )
 {
-    maReleaseIdle.SetIdleHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
-    maReleaseIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
-    maReleaseIdle.Start();
+    maReleaseTimer.SetTimeoutHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
+    maReleaseTimer.SetTimeout( 10000 );
+    maReleaseTimer.Start();
 }
 
 GraphicCache::~GraphicCache()

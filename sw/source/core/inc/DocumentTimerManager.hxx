@@ -60,7 +60,7 @@ private:
 
      bool mbStartIdleTimer; //< idle timer mode start/stop
      sal_Int32 mIdleBlockCount;
-     Idle maIdle;
+     Timer  maIdleTimer;
 };
 
 }

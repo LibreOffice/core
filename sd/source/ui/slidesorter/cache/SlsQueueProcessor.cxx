@@ -32,7 +32,7 @@ QueueProcessor::QueueProcessor (
     const bool bDoSuperSampling,
     const SharedCacheContext& rpCacheContext)
     : maMutex(),
-      maIdle(),
+      maTimer(),
       mnTimeBetweenHighPriorityRequests (10/*ms*/),
       mnTimeBetweenLowPriorityRequests (100/*ms*/),
       mnTimeBetweenRequestsWhenNotIdle (1000/*ms*/),
@@ -58,8 +58,8 @@ QueueProcessor::QueueProcessor (
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenRequestsWhenNotIdle;
 
-    maIdle.SetIdleHdl (LINK(this,QueueProcessor,ProcessRequestHdl));
-    maIdle.SetPriority (VCL_IDLE_PRIORITY_REPAINT);
+    maTimer.SetTimeoutHdl (LINK(this,QueueProcessor,ProcessRequestHdl));
+    maTimer.SetTimeout (10);
 }
 
 QueueProcessor::~QueueProcessor (void)
@@ -70,20 +70,20 @@ void QueueProcessor::Start (int nPriorityClass)
 {
     if (mbIsPaused)
         return;
-    if ( ! maIdle.IsActive())
+    if ( ! maTimer.IsActive())
     {
         if (nPriorityClass == 0)
-            maIdle.SetPriority (VCL_IDLE_PRIORITY_REPAINT);
+            maTimer.SetTimeout (10);
         else
-            maIdle.SetPriority (VCL_IDLE_PRIORITY_LOW);
-        maIdle.Start();
+            maTimer.SetTimeout (100);
+        maTimer.Start();
     }
 }
 
 void QueueProcessor::Stop (void)
 {
-    if (maIdle.IsActive())
-        maIdle.Stop();
+    if (maTimer.IsActive())
+        maTimer.Stop();
 }
 
 void QueueProcessor::Pause (void)

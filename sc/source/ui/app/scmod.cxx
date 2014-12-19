@@ -112,6 +112,13 @@
 #include "formulagroup.hxx"
 #include <documentlinkmgr.hxx>
 
+#define SC_IDLE_MIN     150
+#define SC_IDLE_MAX     3000
+#define SC_IDLE_STEP    75
+#define SC_IDLE_COUNT   50
+
+static sal_uInt16 nIdleCount = 0;
+
 SFX_IMPL_INTERFACE(ScModule, SfxShell)
 
 void ScModule::InitInterface_Impl()
@@ -169,9 +176,9 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
     aSpellIdle.SetPriority(VCL_IDLE_PRIORITY_REPAINT);
     aSpellIdle.SetIdleHdl( LINK( this, ScModule, SpellTimerHdl ) );
-    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
-    aIdle.SetIdleHdl( LINK( this, ScModule, IdleHandler ) );
-    aIdle.Start();
+    aIdleTimer.SetTimeout(SC_IDLE_MIN);
+    aIdleTimer.SetTimeoutHdl( LINK( this, ScModule, IdleHandler ) );
+    aIdleTimer.Start();
 
     pMessagePool = new ScMessagePool;
     pMessagePool->FreezeIdRanges();
@@ -1844,7 +1851,11 @@ void ScModule::EndReference()
  */
 void ScModule::AnythingChanged()
 {
-    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
+    sal_uLong nOldTime = aIdleTimer.GetTimeout();
+    if ( nOldTime != SC_IDLE_MIN )
+        aIdleTimer.SetTimeout( SC_IDLE_MIN );
+
+    nIdleCount = 0;
 }
 
 static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
@@ -1864,7 +1875,7 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
 {
     if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
-        aIdle.Start(); // Timeout unchanged
+        aIdleTimer.Start(); // Timeout unchanged
         return 0;
     }
 
@@ -1905,12 +1916,30 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
         }
     }
 
-    if (bMore)
-        aIdle.SetPriority(VCL_IDLE_PRIORITY_LOW);
+    sal_uLong nOldTime = aIdleTimer.GetTimeout();
+    sal_uLong nNewTime = nOldTime;
+    if ( bMore )
+    {
+        nNewTime = SC_IDLE_MIN;
+        nIdleCount = 0;
+    }
     else
-        aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    {
+        // Set SC_IDLE_COUNT to initial Timeout - increase afterwards
+        if ( nIdleCount < SC_IDLE_COUNT )
+            ++nIdleCount;
+        else
+        {
+            nNewTime += SC_IDLE_STEP;
+            if ( nNewTime > SC_IDLE_MAX )
+                nNewTime = SC_IDLE_MAX;
+        }
+    }
+    if ( nNewTime != nOldTime )
+        aIdleTimer.SetTimeout( nNewTime );
 
-    aIdle.Start();
+
+    aIdleTimer.Start();
     return 0;
 }
 
