@@ -243,9 +243,9 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         return;
     }
     sal_Int32 nZIndex = 0;
-    uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
-    if( xSet.is() )
-        xSet->getPropertyValue(msZIndex) >>= nZIndex;
+    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if( xPropSet.is() )
+        xPropSet->getPropertyValue(msZIndex) >>= nZIndex;
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
 
@@ -285,7 +285,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     bool bIsEmptyPresObj = false;
 
-    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if ( aShapeInfo.xCustomShapeReplacement.is() )
         xPropSet.clear();
 
@@ -513,7 +512,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             try
             {
-                uno::Reference< table::XColumnRowRange > xRange( xSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
+                uno::Reference< table::XColumnRowRange > xRange( xPropSet->getPropertyValue( msModel ), uno::UNO_QUERY_THROW );
                 GetShapeTableExport()->collectTableAutoStyles( xRange );
             }
             catch(const uno::Exception&)
