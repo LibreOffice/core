@@ -100,27 +100,6 @@ public class TimeStampControl extends DatabaseControl
         return nDBWidth;
     }
 
-    public void setSize(Size _aSize)
-    {
-        try
-        {
-            int ndatewidth = (int) (nreldatewidth * _aSize.Width);
-            int ntimewidth = (int) (nreltimewidth * _aSize.Width);
-            oDateControl.xShape.setSize(new Size(ndatewidth, _aSize.Height));
-            oTimeControl.xShape.setSize(new Size(ntimewidth, _aSize.Height));
-        }
-        catch (PropertyVetoException e)
-        {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public Size getSize()
-    {
-        int ncontrolwidth = oDateControl.xShape.getSize().Width + oTimeControl.xShape.getSize().Width;
-        return new Size(ncontrolwidth, oDateControl.xShape.getSize().Height);
-    }
-
     public int getControlType()
     {
         return FormHandler.SODATETIMECONTROL;
