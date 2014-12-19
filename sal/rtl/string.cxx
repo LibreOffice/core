@@ -56,7 +56,7 @@ static rtl_String const aImplEmpty_rtl_String =
  * ustring.cxx
  */
 
-#define IMPL_RTL_IS_USTRING         false
+#define IMPL_RTL_IS_USTRING         0
 
 #define IMPL_RTL_STRCODE            sal_Char
 #define IMPL_RTL_USTRCODE( c )      ((unsigned char)c)

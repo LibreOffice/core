@@ -62,7 +62,7 @@ static rtl_uString const aImplEmpty_rtl_uString =
  * string.cxx
  */
 
-#define IMPL_RTL_IS_USTRING         true
+#define IMPL_RTL_IS_USTRING         1
 
 #define IMPL_RTL_STRCODE            sal_Unicode
 #define IMPL_RTL_USTRCODE( c )      (c)
