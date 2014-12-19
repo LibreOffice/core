@@ -835,15 +835,8 @@ void ImportExcel::Shrfmla( void )
         // The last FORMULA record should have left this data.
         return;
 
-    sal_uInt16              nFirstRow, nLastRow, nLenExpr;
-    sal_uInt8               nFirstCol, nLastCol;
-
-    nFirstRow = aIn.ReaduInt16();
-    nLastRow = aIn.ReaduInt16();
-    nFirstCol = aIn.ReaduInt8();
-    nLastCol = aIn.ReaduInt8();
-    aIn.Ignore( 2 );
-    nLenExpr = aIn.ReaduInt16();
+    aIn.Ignore( 8 );
+    sal_uInt16 nLenExpr = aIn.ReaduInt16();
 
     // read mark is now on the formula
 

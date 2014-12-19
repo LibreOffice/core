@@ -507,17 +507,12 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     if( maRanges.empty() )
         return;
 
-    sal_uInt8 nType(0), nOperator(0);
-    sal_uInt16 nFmlaSize1(0), nFmlaSize2(0);
-    sal_uInt32 nFlags(0);
-    sal_uInt16 nFlagsExtended(0);
-
-    nType = rStrm.ReaduInt8();
-    nOperator = rStrm.ReaduInt8();
-    nFmlaSize1 = rStrm.ReaduInt16();
-    nFmlaSize2 = rStrm.ReaduInt16();
-    nFlags = rStrm.ReaduInt32();
-    nFlagsExtended = rStrm.ReaduInt16();
+    sal_uInt8 nType = rStrm.ReaduInt8();
+    sal_uInt8 nOperator = rStrm.ReaduInt8();
+    sal_uInt16 nFmlaSize1 = rStrm.ReaduInt16();
+    sal_uInt16 nFmlaSize2 = rStrm.ReaduInt16();
+    sal_uInt32 nFlags = rStrm.ReaduInt32();
+    rStrm.Ignore( 2 ); //nFlagsExtended
 
     // *** mode and comparison operator ***
 

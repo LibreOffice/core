@@ -84,16 +84,12 @@ void ImportExcel::Formula3()
 void ImportExcel::Formula4()
 {
     XclAddress aXclPos;
-    sal_uInt16  nXF, nFormLen;
-    double  fCurVal;
-    sal_uInt8   nFlag0;
 
     aIn >> aXclPos;
-    nXF = aIn.ReaduInt16();
-    fCurVal = aIn.ReadDouble();
-    nFlag0 = aIn.ReaduInt8();
-    aIn.Ignore( 1 );
-    nFormLen = aIn.ReaduInt16();
+    sal_uInt16 nXF = aIn.ReaduInt16();
+    double fCurVal = aIn.ReadDouble();
+    aIn.Ignore( 2 );
+    sal_uInt16 nFormLen = aIn.ReaduInt16();
 
     Formula( aXclPos, nXF, nFormLen, fCurVal, false );
 }

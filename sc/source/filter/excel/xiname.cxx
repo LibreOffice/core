@@ -47,7 +47,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // 1) *** read data from stream *** ---------------------------------------
 
     sal_uInt16 nFlags = 0, nFmlaSize = 0, nExtSheet = EXC_NAME_GLOBAL;
-    sal_uInt8 nNameLen = 0, nShortCut;
+    sal_uInt8 nNameLen = 0;
 
     switch( GetBiff() )
     {
@@ -56,7 +56,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
             sal_uInt8 nFlagsBiff2;
             nFlagsBiff2 = rStrm.ReaduInt8();
             rStrm.Ignore( 1 );
-            nShortCut = rStrm.ReaduInt8();
+            rStrm.Ignore( 1 ); //nShortCut
             nNameLen = rStrm.ReaduInt8();
             nFmlaSize = rStrm.ReaduInt8();
             ::set_flag( nFlags, EXC_NAME_FUNC, ::get_flag( nFlagsBiff2, EXC_NAME2_FUNC ) );
@@ -67,7 +67,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         case EXC_BIFF4:
         {
             nFlags = rStrm.ReaduInt16();
-            nShortCut = rStrm.ReaduInt8();
+            rStrm.Ignore( 1 ); //nShortCut
             nNameLen = rStrm.ReaduInt8();
             nFmlaSize = rStrm.ReaduInt16();
         }
@@ -77,7 +77,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         case EXC_BIFF8:
         {
             nFlags = rStrm.ReaduInt16();
-            nShortCut = rStrm.ReaduInt8();
+            rStrm.Ignore( 1 ); //nShortCut
             nNameLen = rStrm.ReaduInt8();
             nFmlaSize = rStrm.ReaduInt16();
             nExtSheet = rStrm.ReaduInt16();

@@ -3818,11 +3818,9 @@ XclImpDrawing::~XclImpDrawing()
 Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm )
 {
     Graphic aGraphic;
-    sal_uInt16 nFormat, nEnv;
-    sal_uInt32 nDataSize;
-    nFormat = rStrm.ReaduInt16();
-    nEnv = rStrm.ReaduInt16();
-    nDataSize = rStrm.ReaduInt32();
+    sal_uInt16 nFormat = rStrm.ReaduInt16();
+    rStrm.Ignore( 2 );//nEnv
+    sal_uInt32 nDataSize = rStrm.ReaduInt32();
     if( nDataSize <= rStrm.GetRecLeft() )
     {
         switch( nFormat )

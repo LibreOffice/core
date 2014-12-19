@@ -267,22 +267,18 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
     if( GetBiff() != EXC_BIFF8 )
         return;
 
-    sal_uInt32 nHeight, nStyle, nColor, nFontFlags1, nFontFlags2, nFontFlags3;
-    sal_uInt16 nWeight, nEscapem;
-    sal_uInt8 nUnderl;
-
     rStrm.Ignore( 64 );
-    nHeight = rStrm.ReaduInt32();
-    nStyle = rStrm.ReaduInt32();
-    nWeight = rStrm.ReaduInt16();
-    nEscapem = rStrm.ReaduInt16();
-    nUnderl = rStrm.ReaduInt8();
+    sal_uInt32 nHeight = rStrm.ReaduInt32();
+    sal_uInt32 nStyle = rStrm.ReaduInt32();
+    sal_uInt16 nWeight = rStrm.ReaduInt16();
+    rStrm.Ignore( 2 ); //nEscapem
+    sal_uInt8 nUnderl = rStrm.ReaduInt8();
     rStrm.Ignore( 3 );
-    nColor = rStrm.ReaduInt32();
+    sal_uInt32 nColor = rStrm.ReaduInt32();
     rStrm.Ignore( 4 );
-    nFontFlags1 = rStrm.ReaduInt32();
-    nFontFlags2 = rStrm.ReaduInt32();
-    nFontFlags3 = rStrm.ReaduInt32();
+    sal_uInt32 nFontFlags1 = rStrm.ReaduInt32();
+    rStrm.Ignore( 4 ); //nFontFlags2
+    sal_uInt32 nFontFlags3 = rStrm.ReaduInt32();
     rStrm.Ignore( 18 );
 
     if( (mbHeightUsed = (nHeight <= 0x7FFF)) == true )
