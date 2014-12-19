@@ -135,7 +135,7 @@ void convertToCurrentName(
 
 void clearCurrentState(unoidl::detail::SourceProviderScannerData * data) {
     assert(data != 0);
-    data->currentName = "";
+    data->currentName.clear();
     data->publishedContext = false;
 }
 
@@ -542,7 +542,7 @@ Found findEntity(
                         break;
                     }
                     n = "." + typeNucleus;
-                    typeNucleus = "",
+                    typeNucleus.clear();
                     e = findEntity_(data, &n);
                     continue;
                 }
