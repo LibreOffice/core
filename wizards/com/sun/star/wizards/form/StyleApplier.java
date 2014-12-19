@@ -271,7 +271,7 @@ public class StyleApplier
                             TimeStampControl oTimeStampControl = (TimeStampControl) DBControls[n];
                             for (int i = 0; i < 2; i++)
                             {
-                                XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
+                                XPropertySet xPropertySet = oTimeStampControl.getControlByIndex(i);
                                 if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                                 {
                                     xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
@@ -405,7 +405,7 @@ public class StyleApplier
                                     TimeStampControl oTimeStampControl = (TimeStampControl) aDBControl;
                                 for (int i = 0; i < 2; i++)
                                 {
-                                    XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
+                                    XPropertySet xPropertySet = oTimeStampControl.getControlByIndex(i);
                                     setDBControlColors(xPropertySet, _iStyleColors);
                                 }
                             }
