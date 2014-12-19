@@ -59,8 +59,8 @@ protected:
     bool                        bInsObjPointMode : 1;
     bool                        bInsGluePointMode : 1;
     bool                        bNoDragXorPolys : 1;
-    bool                        bAutoVertexCon : 1;  // Automatische Konnektorgenerierung an den Scheitelpunkten
-    bool                        bAutoCornerCon : 1;  // Automatische Konnektorgenerierung an den Eckpunkten
+    bool                        bAutoVertexCon : 1;  // automatic generation of connectors at the vertices
+    bool                        bAutoCornerCon : 1;  // automatic geneartion of connectors at the corners
     bool                        bRubberEdgeDragging : 1;
     bool                        bDetailedEdgeDragging : 1;
 
@@ -86,21 +86,21 @@ public:
     virtual void BrkAction() SAL_OVERRIDE;
     virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
-    // Spezialimplementation fuer den Writer:
-    // TakeDragObjAnchorPos() liefert die Position an der ein Objekt
-    // beim Draggen einer Einfachselektion ungefaehr landet wenn es
-    // "losgelassen" wird (EndDrag).
-    // In der Regel ist das die linke obere Ecke des zu erwartenden neuen
-    // SnapRects. Ausnahme: CaptionObj. Dort ist es die Position des
-    // "Schwanzendes".
-    // Bei Returncode sal_False konnte ich die Position nicht bestimmen
-    // (z.B. Punktverschiebung, Mehrfachselektion, Schieben der
-    // Spiegelschse, ...)
+    // special implementation for Writer:
+    // TakeDragObjAnchorPos() returns the position at which an object
+    // approximately ends up during dragging when it is "released"
+    // (EndDrag).
+    // As a general rule, this is the left upper corner of the expected
+    // new SnapRect. Exception: CaptionObj. There, it is the position
+    // of the "tail end".
+    // In case of return value 'false', the position could not be
+    // determined (e.g. point shift, multiple selection, shift of the
+    // mirror axis,...)
     bool TakeDragObjAnchorPos(Point& rPos, bool bTopRight = false ) const;
 
-    // Wird pForcedMeth uebergeben, so wird pHdl, ... nicht ausgewerten, sondern diese
-    // Drag-Methode verwendet. Die Instanz geht dabei ins Eigentum der View ueber und
-    // wird zum Ende des Draggings destruiert.
+    // If pForcedMeth is passed, then pHdl, ... is not evaluated, but this Drag
+    // method is used. In this, the ownership of the instance passes
+    // to the View and is destroyed at the end of the dragging.
     virtual bool BegDragObj(const Point& rPnt, OutputDevice* pOut=NULL, SdrHdl* pHdl=NULL, short nMinMov=-3, SdrDragMethod* pForcedMeth=NULL);
     void MovDragObj(const Point& rPnt);
     bool EndDragObj(bool bCopy=false);
@@ -111,16 +111,16 @@ public:
     bool IsDraggingPoints() const { return eDragHdl==HDL_POLY; }
     bool IsDraggingGluePoints() const { return eDragHdl==HDL_GLUE; }
 
-    // Wer das beim BegDrag oder mittendrin schon festlegen will.
-    // (Wird bei jedem BegDrag auf sal_False zurueckgesetzt, also nach
-    // BegDrag setzen.)
+    // If you want to define that already during BegDrag
+    // or in the middle.
+    // (Is reset to 'false' on each BegDrag, so set it after BegDrag.)
     void SetDragWithCopy(bool bOn) { bDragWithCopy = bOn; }
     bool IsDragWithCopy() const { return bDragWithCopy; }
 
     void SetInsertGluePoint(bool bOn) { bInsGluePoint = bOn; }
     bool IsInsertGluePoint() const { return bInsGluePoint; }
 
-    // Interaktives einfuegen eines neuen Punktes. nIdx=0 => vor dem ersten Punkt.
+    // Interactive insertion of a new point. nIdx=0 => in front of the first point
     bool IsInsObjPointPossible() const;
     bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0L, rPnt, bNewObj, 0L); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
@@ -128,8 +128,8 @@ public:
     void BrkInsObjPoint() { BrkDragObj(); }
     bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && bInsPolyPoint; }
 
-    // Fuer die App zum Verwalten des Status. GetPreferredPointer() wird
-    // spaeter vielleicht einen passenden Pointer dafuer liefern
+    // For the app to manage the status. GetPreferredPointer() is
+    // possibly going to deliver a matching pointer for it.
     void SetInsObjPointMode(bool bOn) { bInsObjPointMode = bOn; }
     bool IsInsObjPointMode() const { return bInsObjPointMode; }
 
@@ -140,142 +140,144 @@ public:
     void BrkInsGluePoint() { BrkDragObj(); }
     bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && bInsGluePoint; }
 
-    // Fuer die App zum Verwalten des Status. GetPreferredPointer() wird
-    // spaeter vielleicht einen passenden Pointer dafuer liefern
+    // For the app to manage the status. GetPreferredPointer() is
+    // possibly going to deliver a matching pointer for it.
     void SetInsGluePointMode(bool bOn) { bInsGluePointMode = bOn; }
     bool IsInsGluePointMode() const { return bInsGluePointMode; }
 
-    // Begrenzungslinien ueber's gesamte Win waehrend des Draggens
-    // Persistent. Default=FALSE.
+    // border lines over the whole win persistent during the
+    // whole dragging. Default=FALSE.
     void SetDragStripes(bool bOn);
     bool IsDragStripes() const { return bDragStripes; }
 
-    // Handles waehrend des Draggens verstecken
+    // hide handles during dragging
     //HMHvoid SetDragHdlHide(bool bOn);
     //HMHBOOL IsDragHdlHide() const { return bNoDragHdl; }
 
-    // Beim Draggen von Polygonpunkten und Klebepunkten
-    // die Maus verstecken. Default=FALSE
+    // Hide the mouse when dragging polygon points or glue points.
+    // Default=false
     void SetMouseHideWhileDraggingPoints(bool bOn) { bMouseHideWhileDraggingPoints = bOn; }
     bool IsMouseHideWhileDraggingPoints() const { return bMouseHideWhileDraggingPoints; }
 
-    // Beim Draggen werden i.d.R. die Konturen der markierten Objekte
-    // als Xor-Polygone dargestellt. Wird dieses Flag hier gesetzt,
-    // wird (z.B. bei Mehrfachselektion) nur ein Xor-Frame gezeichnet.
-    // Bei objektspeziefischem Dragging (Polygonpunkte,Eckenradius,...
-    // hat diese Einstellung keine Auswirkung.
-    // Auch waerend des Draggens umschaltbar.
+    // As a general rule, the contours of the selected objects
+    // are displayed as Xor-polygons. If this flag is set, only one
+    // Xor-Frame is drawn (e.g. in case of multiple selection).
+    // In case of object-specific dragging (polygon points, corner radius,...),
+    // this setting has no influence.
+    // Also changeable during the dragging.
     // Default=Off
     void SetNoDragXorPolys(bool bOn);
     bool IsNoDragXorPolys() const { return bNoDragXorPolys; }
 
-    // Uebersteigt die Anzahl der markierten Objekte den hier eingestellten
-    // Wert, wird implizit (temporaer) auf NoDragPolys geschaltet.
-    // PolyPolygone etc werden entsprechend als mehrere Objekte gewertet.
+    // If the number of selected objects exceeds te value set here,
+    // NoDragPolys is (temporarily) activated implicitely.
+    // PolyPolygons etc. are regarded as multiple objects respectively.
     // Default=100
     void  SetDragXorPolyLimit(sal_uIntPtr nObjAnz) { nDragXorPolyLimit=nObjAnz; }
     sal_uIntPtr GetDragXorPolyLimit() const { return nDragXorPolyLimit; }
 
-    // Wie DragXorPolyLimit, jedoch bezogen auf die Gesamtpunktanzahl
-    // aller Polygone. Default=500.
-    // Auf NoDragPolys wird (temporaer) geschaltet, wenn eins der Limits
-    // ueberstiegen wird.
+    // Like DragXorPolyLimit, but in respect to the total number of
+    // all polygons. Default=500.
+    // NoDragPolys is (temporarily) activated, if one of the limits
+    // is exceeded.
     void  SetDragXorPointLimit(sal_uIntPtr nPntAnz) { nDragXorPointLimit=nPntAnz; }
     sal_uIntPtr GetDragXorPointLimit() const { return nDragXorPointLimit; }
 
     void SetSolidDragging(bool bOn);
     bool IsSolidDragging() const;
 
-    // Dragging/Creating von Verbindern:
+    // Dragging/Creation of connectors:
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Verbinder an Objektscheitelpunkte ankleben
-    // Default=sal_True=Ja
+    // Stick Connectors to vertices
+    // Default=true=Yes
     void SetAutoVertexConnectors(bool bOn) { bAutoVertexCon = bOn; }
     bool IsAutoVertexConnectors() const { return bAutoVertexCon; }
 
-    // Verbinder an Objektecken ankleben
-    // Default=sal_False=Nein
+    // Stick Connectors to Corners
+    // Default=false=No
     void SetAutoCornerConnectors(bool bOn) { bAutoCornerCon = bOn; }
     bool IsAutoCornerConnectors() const { return bAutoCornerCon; }
 
-    // Dragging von verbundenen Objekten (Nodes):
+    // Dragging of connected objects (Nodes):
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // DetailedEdgeDraggingLimit: Wie RubberEdgeDraggingLimit, jedoch bezieht
-    // sich dieses Limit auf die detalierte Darstellung, d.h. nicht nur
-    // Gummibaender sondern komplette Neuberechnunen sind beim Draggen sichtbar.
-    // Diese detalierte Darstellung ist eh nur beim MoveDrag moeglich.
-    // Defaultwert ist 10
+    // DetailedEdgeDraggingLimit: like RubberEdgeDraggingLimit,
+    // but this limit refers to the detailed depiction, i.e. not
+    // only rubber bands but total recalculations are visible while
+    // dragging. This detailed depiction is only possible in MoveDrag.
+    // Default value: 10
     bool IsDetailedEdgeDragging() const { return bDetailedEdgeDragging; }
 
     sal_uInt16 GetDetailedEdgeDraggingLimit() const { return nDetailedEdgeDraggingLimit; }
 
-    // EdgeDraggingLimit: Sind mehr als nEdgeObjAnz Kanten betroffen, werden
-    // diese beim interaktiven Draggen nicht mit angezeigt.
-    // Gemeint sind hier die "Gummibaender", die weniger Rechenzeit benoetigen
-    // als die kompletten Neuberechnungen beim DetailedEdgeDragging.
-    // Defaultwert ist 100
+    // EdgeDraggingLimit: If more than nEdgeObjCount edges are affected,
+    // they are not shown in the interactive dragging.
+    // This here talks about the "rubber bands", which take less computing time
+    // than the complete recalculations in the DetailedEdgeDragging.
+    // default value: 100
     bool IsRubberEdgeDragging() const { return bRubberEdgeDragging; }
 
-    // Verbinderhandling also zu deutsch wie folgt (bei Defaulteinstellungen):
-    // - Sind bis max 10 Verbinder betroffen werden diese bei jedem
-    //   MouseMove neu berechnet
-    // - Sind zwischen 11 und 100 Verbinder betroffen werden die
-    //   Verbindungen beim Draggen als gerade Linien dargestellt.
-    // - Bei mehr als 100 betroffenen Verbindern wird beim Draggen nichts
-    //   mehr gezeichnet was auf Verbinder hinweist.
+    // Connector handling is thus as follows (when using default settings):
+    // - If at most 10 Connectors are affected, they are recalculated
+    //   on each MouseMove.
+    // - If 11 to 100 Connectors are affected, the connections
+    //   are shown as straight lines while dragging.
+    // - In case of more than 100 affected Connectors, nothing that refers
+    //   to the Connectors is drawn while dragging.
 
-    // Ist ein spezieller Dragmode eingeschaltet, wie Rotate, Mirror oder Crook,
-    // dann leitet ein Hit auf das markierte Objekt genau dieses Dragging ein.
-    // Setzt man MarkedHitMovesAlways auf sal_True, so leitet ein Hit auf das
-    // markierte Objekt immer ein Moven ein, unabhaengig vom gesetzten DragMode.
-    // Dieses Flag ist persistent und sollte von der App fuer den Anwender
-    // konfigurierbar sein!
+    // If a special drag mode like Rotate, Mirror or Crook is enabled,
+    // then a Hit on the selected object triggers exactly this dragging.
+    // If MarkedHitMovesAlways is set to 'true', a Hit on the selected
+    // object always triggers a Move, independent of the DragMode that is
+    // set. This flag is persistent and should be configurable in the app
+    // by the user!
     void SetMarkedHitMovesAlways(bool bOn) { bMarkedHitMovesAlways = bOn; }
     bool IsMarkedHitMovesAlways() const { return bMarkedHitMovesAlways; }
 
-    // Beim Draggen der Spiegelachse das Spiegelbild der markierten Objekte
-    // als Xor darstellen? Persistent. Noch nicht implementiert. Default TRUE.
+    // Show the mirror image of the selected objects as Xor while dragging
+    // the mirror axis? Persistent. Not yet implemented. Default: true
     void SetMirrRefDragObj(bool bOn) { bMirrRefDragObj = bOn; }
     bool IsMirrRefDragObj() const { return bMirrRefDragObj; }
 
     bool IsOrthoDesired() const;
 
-    // Beim Resize die Mitte als Referenz
+    // center as reference on Resize
     // Default=FALSE.
     bool IsResizeAtCenter() const { return bResizeAtCenter; }
     void SetResizeAtCenter(bool bOn) { bResizeAtCenter = bOn; }
 
-    // Symmetrisches Crook
+    // symmetric Crook
     // Default=FALSE.
     bool IsCrookAtCenter() const { return bCrookAtCenter; }
     void SetCrookAtCenter(bool bOn) { bCrookAtCenter = bOn; }
 
-    // Begrenzung des Arbeitsbereichs. Die Begrenzung bezieht sich auf die
-    // View, nicht auf die einzelnen PageViews. Von der View wird diese
-    // Begrenzung nur bei Interaktionen wie Dragging und Create ausgewertet.
-    // Bei von der App algorithmisch oder UI-gesteuerte Aktionen (SetGeoAttr,
-    // MoveMarkedObj, ...) muss die App dieses Limit selbst beruecksichtigen.
-    // Ferner ist dieses Limit als Grob-Limit zu sehen. U.U. koennen Objekte
-    // (z.B. beim Drehen) nicht exakt bis an dieses Limit herangedraggt werden,
-    // koennen Objekte durch Rundungsfehler doch etwas ueberstehen, ... .
-    // Default=EmptyRect=keine Begrenzung.
-    // erst z.T. impl.
-    // (besser in die DragView?)
+    // Limitation of the working area. The limitation refers to the View,
+    // not to the single PageViews. This limitation is only evaluated by
+    // the View on interactions like Dragging and Create.
+    // In case of actions controlled by the app through algorithms or
+    // UI-controlled actions (SetGeoAttr, MoveMarkedObj, ...), the
+    // app must honor this limit itself.
+    // Furthermore, this limit is to be seen as a rough limit. In certain
+    // cases (e.g. while rotating), objects cannot be dragged exactly
+    // up to this limit, objects can overlap a bit because of rounding
+    // errors,...
+    // Default=EmptyRect=no limitation
+    // only partially implemented
     void SetWorkArea(const Rectangle& rRect) { aMaxWorkArea=rRect; }
     const Rectangle& GetWorkArea() const { return aMaxWorkArea; }
 
 
-    // Das DragLimit ist bezogen auf die Page des Objekts.
-    // (Oder auf die View??? Muss ich mal^^^^recherchieren. Joe.)
-    // sal_False=Kein Limit.
-    // Das Rueckgabe-Rect muss absolute Koordinaten enthalten. Der Maximale
-    // Dragbereich wird von der View dann so gewaehlt, dass das SnapRect des
-    // Objekts bis Maximal auf die Kante des LimitRects gemoved bzw. gesized
-    // wird. Bei Objekten wie Bezierkurven, gedrehten Rechtecken ist zu beachten
-    // das durch anschliessende Neuberechnung des SnapRects (bei Resize)
-    // Rundungsfehler auftreten koennen, wodurch das LimitRect minnimal
-    // ueberschritten werden koennte...
-    // Implementiert fuer Move und Resize.
+    // The DragLimit refers to the Page of the object.
+    // (TODO or to the View?? - must be researched...)
+    // 'false' = no limit
+    // The return Rect must contain absolute coordinates. The maximum
+    // drag area is then selected by the View in a way that the object's
+    // SnapRect is moved or resized at most up to the corner of the
+    // LimitRect. For objects like Bezier curves, rotated rectangles,
+    // it must be taken into account that because of subsequent
+    // recalculation of the SnapRect (on Resize), rounding errors can
+    // occur, because of which the LimitRect might be exceeded by a
+    // very small extent....
+    // Implemented for Move and Resize
     virtual bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
 };
 

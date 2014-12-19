@@ -74,44 +74,44 @@ enum HTMLScriptLanguage
 
 struct HTMLOptionEnum
 {
-    const sal_Char *pName;  // Wert einer HTML-Option
-    sal_uInt16 nValue;      // und der dazugehoerige Wert eines Enums
+    const sal_Char *pName;  // value of an HTML option
+    sal_uInt16 nValue;      // and corresponding value of an enum
 };
 
-// Repraesentation einer HTML-Option (=Atrribut in einem Start-Tag)
-// Die Werte der Optionen werden immer als String gespeichert.
-// Die Methoden GetNumber, ... duerfen nur aufgerufen werden, wenn
-// die Option auch numerisch, ... ist.
-
+/** Representation of an HTML option (=attribute in a start tag).
+ * The values of the options are always stored as strings.
+ * The methods GetNumber,... may only be called if the option
+ * is actually numerical,...
+ */
 class SVT_DLLPUBLIC HTMLOption
 {
-    OUString aValue;          // der Wert der Option (immer als String)
-    OUString aToken;          // der Name der Option als String
-    sal_uInt16 nToken;        // und das entsprechende Token
+    OUString aValue;          // value of the option (always as string)
+    OUString aToken;          // name of the option as string
+    sal_uInt16 nToken;        // and respective token
 
 public:
 
     HTMLOption( sal_uInt16 nTyp, const OUString& rToken, const OUString& rValue );
 
-    // der Name der Option ...
-    sal_uInt16 GetToken() const { return nToken; }  // ... als Enum
-    const OUString& GetTokenString() const { return aToken; } // ... als String
+    // name of the option...
+    sal_uInt16 GetToken() const { return nToken; }  // ... as enum
+    const OUString& GetTokenString() const { return aToken; } // ... as string
 
-    // der Wert der Option ...
-    const OUString& GetString() const { return aValue; }  // ... als String
+    // value of the option ...
+    const OUString& GetString() const { return aValue; }  // ... as string
 
-    sal_uInt32 GetNumber() const;                           // ... als Zahl
-    sal_Int32 GetSNumber() const;                           // ... als Zahl
-    void GetNumbers( std::vector<sal_uInt32> &rNumbers,                  // ... als Zahlen
+    sal_uInt32 GetNumber() const;                           // ... as number
+    sal_Int32 GetSNumber() const;                           // ... as number
+    void GetNumbers( std::vector<sal_uInt32> &rNumbers,                  // ... as numbers
                      bool bSpaceDelim=false ) const;
-    void GetColor( Color& ) const;                      // ... als Farbe
+    void GetColor( Color& ) const;                      // ... as color
 
-    // ... als Enum pOptEnums ist ein HTMLOptionEnum-Array
+    // ... as enum; pOptEnums is an HTMLOptionEnum array
     sal_uInt16 GetEnum( const HTMLOptionEnum *pOptEnums,
                         sal_uInt16 nDflt=0 ) const;
     bool GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
 
-    // ... und als ein par spezielle Enums
+    // ... and as a few special enums
     HTMLInputType GetInputType() const;                 // <INPUT TYPE=...>
     HTMLTableFrame GetTableFrame() const;               // <TABLE FRAME=...>
     HTMLTableRules GetTableRules() const;               // <TABLE RULES=...>
@@ -123,37 +123,37 @@ typedef ::boost::ptr_vector<HTMLOption> HTMLOptions;
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {
 private:
-    mutable HTMLOptions maOptions; // die Optionen des Start-Tags
+    mutable HTMLOptions maOptions; // options of the start tag
 
-    bool bNewDoc        : 1;        // neues Doc lesen ?
-    bool bIsInHeader    : 1;        // scanne Header-Bereich
-    bool bIsInBody      : 1;        // scanne Body-Bereich
-    bool bReadListing   : 1;        // Lese Listings
-    bool bReadXMP       : 1;        // Lese XMP
-    bool bReadPRE       : 1;        // Lese preformatted Text
-    bool bReadTextArea  : 1;        // Lese TEXTAREA
-    bool bReadScript    : 1;        // Lesen von <SCRIPT>
-    bool bReadStyle     : 1;        // Lesen von <STYLE>
-    bool bEndTokenFound : 1;        // </SCRIPT> oder </STYLE> gefunden
+    bool bNewDoc        : 1;        // read new Doc?
+    bool bIsInHeader    : 1;        // scan header section
+    bool bIsInBody      : 1;        // scan body section
+    bool bReadListing   : 1;        // read listings
+    bool bReadXMP       : 1;        // read XMP
+    bool bReadPRE       : 1;        // read preformatted text
+    bool bReadTextArea  : 1;        // read TEXTAREA
+    bool bReadScript    : 1;        // read <SCRIPT>
+    bool bReadStyle     : 1;        // read <STYLE>
+    bool bEndTokenFound : 1;        // found </SCRIPT> or </STYLE>
 
-    bool bPre_IgnoreNewPara : 1;    // Flags fuers lesen von PRE-Absaetzen
-    bool bReadNextChar : 1;         // true: NextChar nochmals lesen (JavaScript!)
-    bool bReadComment : 1;          // true: NextChar nochmals lesen (JavaScript!)
+    bool bPre_IgnoreNewPara : 1;    // flags for reading of PRE paragraphs
+    bool bReadNextChar : 1;         // true: read NextChar again(JavaScript!)
+    bool bReadComment : 1;          // true: read NextChar again (JavaScript!)
 
-    sal_uInt32 nPre_LinePos;            // Pos in der Line im PRE-Tag
+    sal_uInt32 nPre_LinePos;            // Pos in the line in the PRE-Tag
 
     int mnPendingOffToken;          ///< OFF token pending for a <XX.../> ON/OFF ON token
 
     OUString aEndToken;
 
 protected:
-    OUString sSaveToken;              // das gelesene Tag als String
+    OUString sSaveToken;             // the read tag as string
 
     int ScanText( const sal_Unicode cBreak = 0U );
 
     int _GetNextRawToken();
 
-    // scanne das naechste Token,
+    // scan next token
     virtual int _GetNextToken() SAL_OVERRIDE;
 
     virtual ~HTMLParser();
@@ -163,7 +163,7 @@ protected:
 public:
     HTMLParser( SvStream& rIn, bool bReadNewDoc = true );
 
-    virtual SvParserState CallParser() SAL_OVERRIDE;   // Aufruf des Parsers
+    virtual SvParserState CallParser() SAL_OVERRIDE;
 
     bool IsNewDoc() const       { return bNewDoc; }
     bool IsInHeader() const     { return bIsInHeader; }
@@ -177,8 +177,7 @@ public:
 
     void SetReadNextChar()      { bReadNextChar = true; }
 
-    // PRE-/LISTING oder XMP-Modus starten/beenden oder Tags entsprechend
-    // filtern
+    // start PRE-/LISTING or XMP mode or filter tags respectively
     inline void StartPRE( bool bRestart=false );
     void FinishPRE() { bReadPRE = false; }
     int FilterPRE( int nToken );
@@ -193,30 +192,30 @@ public:
 
     void FinishTextArea() { bReadTextArea = false; }
 
-    // PRE-/LSITING- und XMP-Modus beenden
+    // finish PRE-/LISTING- and XMP mode
     void FinishPREListingXMP() { bReadPRE = bReadListing = bReadXMP = false; }
 
-    // Das aktuelle Token dem aktuellen Modus (PRE, XMP, ...) entsprechend
-    // Filtern und die Flags setzen. Wird von Continue aufgerufen, bevor
-    // NextToken gerufen wird. Wer eigene Schleifen implementiert bzw.
-    // selbst NextToken aufruft, sollte diese Methode vorher rufen.
+    // Filter the current token according to the current mode
+    // (PRE, XMP, ...) and set the flags. Is called by Continue before
+    // NextToken is called. If you implement own loops or call
+    // NextToken yourself, you should call this method beforehand.
     int FilterToken( int nToken );
 
-    // Scannen eines Scripts beenden (sollte nur unmittelbar nach dem
-    // Lesen eines <SCRIPT> aufgerufen werden
+    // end scanning of a script (should only be called right after
+    // reading of a <SCRIPT>)
     void EndScanScript() { bReadScript = false; }
 
     void ReadRawData( const OUString &rEndToken ) { aEndToken = rEndToken; }
 
-    // Token ohne \-Sequenzen
+    // Token without \-sequences
     void UnescapeToken();
 
-    // Ermitteln der Optionen. pNoConvertToken ist das optionale Token
-    // einer Option, fuer die CR/LFs nicht aus dem Wert der Option
-    // geloescht werden.
+    // Determine the options. pNoConvertToken is the optional token
+    // of an option, for which the CR/LFs are not deleted from the value
+    // of the option.
     const HTMLOptions& GetOptions( sal_uInt16 *pNoConvertToken=0 );
 
-    // fuers asynchrone lesen aus dem SvStream
+    // for asynchronous reading from the SvStream
     virtual void Continue( int nToken ) SAL_OVERRIDE;
 
 
@@ -244,9 +243,9 @@ public:
     bool ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,
                              OUString& rSrc, OUString& rLibrary, OUString& rModule );
 
-    // Einen Kommentar um den Inhalt von <SCRIPT> oder <STYLE> entfernen
-    // Bei 'bFull' wird ggf. die gesammte Zeile hinter einem "<!--"
-    // entfernt (fuer JavaSript)
+    // remove a comment around the content of <SCRIPT> or <STYLE>
+    // In case of 'bFull', the whole line behind a "<!--" might
+    // be deleted (for JavaSript)
     static void RemoveSGMLComment( OUString &rString, bool bFull );
 
     static bool InternalImgToPrivateURL( OUString& rURL );

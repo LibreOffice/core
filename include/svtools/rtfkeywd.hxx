@@ -705,7 +705,7 @@
 #define OOO_STRING_SVTOOLS_RTF_ZWJ "\\zwj"
 #define OOO_STRING_SVTOOLS_RTF_ZWNJ "\\zwnj"
 
-// neue Tokens zur 1.5
+// new tokens for 1.5
 #define OOO_STRING_SVTOOLS_RTF_ABSLOCK "\\abslock"
 #define OOO_STRING_SVTOOLS_RTF_ADJUSTRIGHT "\\adjustright"
 #define OOO_STRING_SVTOOLS_RTF_AFTNNCHOSUNG "\\aftnnchosung"
@@ -1060,7 +1060,7 @@
 #define OOO_STRING_SVTOOLS_RTF_NOOVERFLOW "\\nooverflow"
 #define OOO_STRING_SVTOOLS_RTF_ASPALPHA "\\aspalpha"
 
-// SWG spezifische Attribute
+// SWG-specific attributes
 #define OOO_STRING_SVTOOLS_RTF_GRFALIGNV "\\grfalignv"
 #define OOO_STRING_SVTOOLS_RTF_GRFALIGNH "\\grfalignh"
 #define OOO_STRING_SVTOOLS_RTF_GRFMIRROR "\\grfmirror"
@@ -1077,7 +1077,7 @@
 #define OOO_STRING_SVTOOLS_RTF_PRTDATA "\\prtdata"
 #define OOO_STRING_SVTOOLS_RTF_BKMKKEY "\\bkmkkey"
 
-// Attribute fuer die freifliegenden Rahmen
+// attributes for free-flying frames
 #define OOO_STRING_SVTOOLS_RTF_FLYPRINT "\\flyprint"
 #define OOO_STRING_SVTOOLS_RTF_FLYOPAQUE "\\flyopaque"
 #define OOO_STRING_SVTOOLS_RTF_FLYPRTCTD "\\flyprtctd"
