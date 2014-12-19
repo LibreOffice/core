@@ -402,6 +402,14 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell->getString());
 }
 
+DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
+{
+    // Export of this document failed with beans::UnknownPropertyException.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
