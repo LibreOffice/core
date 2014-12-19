@@ -21,10 +21,13 @@ import android.util.Log;
 
 public class FileUtilities {
     static final int ALL = -1;
+
+    // These have to be in sync with the file_view_modes resource.
     static final int DOC = 0;
-    static final int CALC = 1;
-    static final int IMPRESS = 2;
-    static final int DRAWING = 3;
+    // static final int CALC = 1;
+    static final int IMPRESS = 1;
+    static final int DRAWING = 2;
+
     static final int UNKNOWN = 10;
 
     static final int SORT_AZ = 0;
