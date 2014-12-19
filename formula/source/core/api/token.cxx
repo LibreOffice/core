@@ -695,7 +695,6 @@ FormulaTokenArray::FormulaTokenArray() :
     nRPN(0),
     nIndex(0),
     nError(0),
-    nRefs(0),
     nMode(RECALCMODE_NORMAL),
     bHyperLink(false)
 {
@@ -717,7 +716,6 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     nRPN   = r.nRPN;
     nIndex = r.nIndex;
     nError = r.nError;
-    nRefs  = r.nRefs;
     nMode  = r.nMode;
     bHyperLink = r.bHyperLink;
     pCode  = NULL;
@@ -769,7 +767,6 @@ FormulaTokenArray* FormulaTokenArray::Clone() const
     FormulaTokenArray* p = new FormulaTokenArray;
     p->nLen = nLen;
     p->nRPN = nRPN;
-    p->nRefs = nRefs;
     p->nMode = nMode;
     p->nError = nError;
     p->bHyperLink = bHyperLink;
@@ -828,7 +825,7 @@ void FormulaTokenArray::Clear()
         delete [] pCode;
     }
     pCode = NULL; pRPN = NULL;
-    nError = nLen = nIndex = nRPN = nRefs = 0;
+    nError = nLen = nIndex = nRPN = 0;
     bHyperLink = false;
     ClearRecalcMode();
 }
@@ -856,9 +853,6 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
     {
         CheckToken(*t);
         pCode[ nLen++ ] = t;
-        if( t->GetOpCode() == ocPush
-            && ( t->GetType() == svSingleRef || t->GetType() == svDoubleRef ) )
-            nRefs++;
         t->IncRef();
         if( t->GetOpCode() == ocArrayClose )
             return MergeArray();

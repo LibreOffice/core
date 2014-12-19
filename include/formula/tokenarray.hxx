@@ -103,7 +103,6 @@ protected:
     sal_uInt16          nRPN;                   // Length of RPN array
     sal_uInt16          nIndex;                 // Current step index
     sal_uInt16          nError;                 // Error code
-    short           nRefs;                  // Count of cell references
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
     bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
 
@@ -176,8 +175,6 @@ public:
     void      Reset()            { nIndex = 0; }
     sal_uInt16    GetCodeError() const      { return nError; }
     void      SetCodeError( sal_uInt16 n )  { nError = n; }
-    short     GetRefs()  const { return nRefs;  }
-    void      IncrementRefs() { ++nRefs; }
     void      SetHyperLink( bool bVal ) { bHyperLink = bVal; }
     bool      IsHyperLink() const       { return bHyperLink; }
 

@@ -1108,14 +1108,6 @@ bool FormulaCompiler::GetToken()
     {
         return HandleDbData();
     }
-    else if( mpToken->GetType() == svSingleRef )
-    {
-        pArr->nRefs++;
-    }
-    else if( mpToken->GetType() == svDoubleRef )
-    {
-        pArr->nRefs++;
-    }
     return true;
 }
 
@@ -1636,7 +1628,6 @@ bool FormulaCompiler::MergeRangeReference( FormulaToken * * const pCode1, Formul
     p2->DecRef();
     *pCode1 = p.get();
     --pCode, --pc;
-    pArr->nRefs--;
 
     return true;
 }
@@ -1652,7 +1643,6 @@ bool FormulaCompiler::CompileTokenArray()
             aCorrectedFormula.clear();
             aCorrectedSymbol.clear();
         }
-        pArr->nRefs = 0;    // count from start
         pArr->DelRPN();
         pStack = NULL;
         FormulaToken* pData[ FORMULA_MAXTOKENS ];
@@ -1708,7 +1698,6 @@ void FormulaCompiler::PopTokenArray()
     {
         FormulaArrayStack* p = pStack;
         pStack = p->pNext;
-        p->pArr->nRefs = sal::static_int_cast<short>( p->pArr->nRefs + pArr->nRefs );
         // obtain special RecalcMode from SharedFormula
         if ( pArr->IsRecalcModeAlways() )
             p->pArr->SetExclusiveRecalcModeAlways();

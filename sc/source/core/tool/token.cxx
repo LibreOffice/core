@@ -1574,7 +1574,6 @@ ScTokenArray* ScTokenArray::Clone() const
     ScTokenArray* p = new ScTokenArray();
     p->nLen = nLen;
     p->nRPN = nRPN;
-    p->nRefs = nRefs;
     p->nMode = nMode;
     p->nError = nError;
     p->bHyperLink = bHyperLink;
@@ -1832,7 +1831,6 @@ FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
             p3->DecRef();
             nLen -= 2;
             pCode[ nLen-1 ] = p.get();
-            nRefs--;
         }
     }
     return pCode[ nLen-1 ];

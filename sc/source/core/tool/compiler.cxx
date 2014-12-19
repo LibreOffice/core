@@ -4000,8 +4000,7 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
     {
         case svExternalSingleRef:
         case svExternalDoubleRef:
-            pArr->IncrementRefs();
-        break;
+            break;
         case svExternalName:
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
