@@ -1037,6 +1037,21 @@ void SdrObjList::RemoveObjectFromContainer (
     bObjOrdNumsDirty=true;
 }
 
+void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrObjList"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
+
+    size_t nObjCount = GetObjCount();
+    for (size_t i = 0; i < nObjCount; ++i)
+    {
+        if (const SdrObject* pObject = GetObj(i))
+            pObject->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 
 
@@ -1796,21 +1811,6 @@ void SdrPage::ActionChanged() const
     {
         TRG_GetMasterPageDescriptorViewContact().ActionChanged();
     }
-}
-
-void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrPage"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-
-    size_t nObjCount = GetObjCount();
-    for (size_t i = 0; i < nObjCount; ++i)
-    {
-        if (const SdrObject* pObject = GetObj(i))
-            pObject->dumpAsXml(pWriter);
-    }
-
-    xmlTextWriterEndElement(pWriter);
 }
 
 // sdr::Comment interface

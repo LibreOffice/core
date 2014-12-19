@@ -251,6 +251,8 @@ public:
     void SetNavigationOrder (const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XIndexAccess>& rxOrder);
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
 private:
     class WeakSdrObjectContainerType;
     /// This list, if it exists, defines the navigation order. If it does
@@ -573,8 +575,6 @@ public:
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
-
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     void impl_setModelForLayerAdmin(SdrModel* pNewModel);
