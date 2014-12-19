@@ -1451,7 +1451,7 @@ typedef rtlunittest::OUStringBuffer OUStringBuffer;
 }
 #endif
 
-#ifdef RTL_USING
+#ifdef LIBO_INTERNAL_ONLY
 using ::rtl::OUStringBuffer;
 #endif
 

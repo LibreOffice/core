@@ -12,16 +12,6 @@
 #error Build system problem, LIBO_INTERNAL_ONLY should not be set here.
 #endif
 
-// The whole purpose of this test is to check that public API headers
-// build even without RTL_USING (which enables using e.g. rtl::OUString
-// without to refer to the rtl namespace, which is not wanted
-// in public API). If there are build errors here, check the headers
-// for uses of such types.
-
-#ifdef RTL_USING
-#error Build system problem, RTL_USING should not be set here.
-#endif
-
 // Additionally, check that public API headers build also with C++03.
 
 //#if __cplusplus >= 201103L

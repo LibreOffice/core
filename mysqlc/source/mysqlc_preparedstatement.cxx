@@ -57,21 +57,21 @@ static inline char * my_i_to_a(char * buf, size_t buf_size, int a)
     return buf;
 }
 
-OUString OPreparedStatement::getImplementationName()
+rtl::OUString OPreparedStatement::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return OUString("com.sun.star.sdbcx.mysqlc.PreparedStatement");
+    return rtl::OUString("com.sun.star.sdbcx.mysqlc.PreparedStatement");
 }
 
-css::uno::Sequence<OUString> OPreparedStatement::getSupportedServiceNames()
+css::uno::Sequence<rtl::OUString> OPreparedStatement::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence<OUString> s(1);
+    css::uno::Sequence<rtl::OUString> s(1);
     s[0] = "com.sun.star.sdbc.PreparedStatement";
     return s;
 }
 
-sal_Bool OPreparedStatement::supportsService(OUString const & ServiceName)
+sal_Bool OPreparedStatement::supportsService(rtl::OUString const & ServiceName)
     throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
@@ -202,7 +202,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     return affectedRows;
 }
 
-void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString& x)
+void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const rtl::OUString& x)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OPreparedStatement::setString");
@@ -211,7 +211,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
     checkParameterIndex(parameter);
 
     try {
-        std::string stringie(OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
+        std::string stringie(rtl::OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
         static_cast<sql::PreparedStatement *>(cppStatement)->setString(parameter, stringie);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
@@ -230,19 +230,19 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     return m_pConnection;
 }
 
-Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(const OUString& sql)
+Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(const rtl::OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
     return OCommonStatement::executeQuery( sql );
 }
 
-sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(const OUString& sql)
+sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(const rtl::OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
     return OCommonStatement::executeUpdate( sql );
 }
 
-sal_Bool SAL_CALL OPreparedStatement::execute( const OUString& sql )
+sal_Bool SAL_CALL OPreparedStatement::execute( const rtl::OUString& sql )
     throw(SQLException, RuntimeException, std::exception)
 {
     return OCommonStatement::execute( sql );
@@ -674,7 +674,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
     }
 }
 
-void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /* sqlType */, const OUString& /* typeName */)
+void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /* sqlType */, const rtl::OUString& /* typeName */)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OPreparedStatement::setObjectNull");
@@ -819,8 +819,8 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {
     OSL_TRACE("OPreparedStatement::checkColumnIndex");
     if (column < 1 || column > (sal_Int32) m_paramCount) {
-        OUString buf( "Parameter index out of range" );
-        throw SQLException(buf, *this, OUString(), 1, Any ());
+        rtl::OUString buf( "Parameter index out of range" );
+        throw SQLException(buf, *this, rtl::OUString(), 1, Any ());
     }
 }
 

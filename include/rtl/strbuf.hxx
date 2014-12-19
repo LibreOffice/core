@@ -992,7 +992,7 @@ typedef rtlunittest::OStringBuffer OStringBuffer;
 #undef RTL_STRING_CONST_FUNCTION
 #endif
 
-#ifdef RTL_USING
+#ifdef LIBO_INTERNAL_ONLY
 using ::rtl::OStringBuffer;
 #endif
 

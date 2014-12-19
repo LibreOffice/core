@@ -51,9 +51,9 @@ namespace connectivity
             {
             }
 
-            inline OUString convert( const ::std::string& _string ) const
+            inline rtl::OUString convert( const ::std::string& _string ) const
             {
-                return OUString( _string.c_str(), _string.size(), m_encoding );
+                return rtl::OUString( _string.c_str(), _string.size(), m_encoding );
             }
 
             /// Avoid ambigous cast error from the compiler.
@@ -73,25 +73,25 @@ namespace connectivity
 
             sal_Int32 SAL_CALL getColumnDisplaySize(sal_Int32 column)throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            OUString SAL_CALL getColumnLabel(sal_Int32 column)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            OUString SAL_CALL getColumnName(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            OUString SAL_CALL getSchemaName(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getColumnLabel(sal_Int32 column)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getColumnName(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getSchemaName(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Int32 SAL_CALL getPrecision(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Int32 SAL_CALL getScale(sal_Int32 column)           throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            OUString SAL_CALL getTableName(sal_Int32 column)        throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            OUString SAL_CALL getCatalogName(sal_Int32 column)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getTableName(sal_Int32 column)        throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getCatalogName(sal_Int32 column)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Int32 SAL_CALL getColumnType(sal_Int32 column)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            OUString SAL_CALL getColumnTypeName(sal_Int32 column)   throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getColumnTypeName(sal_Int32 column)   throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Bool SAL_CALL isReadOnly(sal_Int32 column)          throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Bool SAL_CALL isWritable(sal_Int32 column)          throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column)throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            OUString SAL_CALL getColumnServiceName(sal_Int32 column)throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getColumnServiceName(sal_Int32 column)throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             void checkColumnIndex(sal_Int32 columnIndex)            throw (SQLException, RuntimeException);
         };

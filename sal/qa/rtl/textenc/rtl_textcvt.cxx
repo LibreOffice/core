@@ -27,8 +27,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#define RTL_USING
-
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/tencinfo.h"

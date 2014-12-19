@@ -72,38 +72,38 @@ void MysqlCDriver::disposing()
 }
 
 // static ServiceInfo
-OUString MysqlCDriver::getImplementationName_Static()
+rtl::OUString MysqlCDriver::getImplementationName_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getImplementationName_Static");
-    return OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
+    return rtl::OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
 }
 
-Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
+Sequence< rtl::OUString > MysqlCDriver::getSupportedServiceNames_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getSupportedServiceNames_Static");
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence< OUString > aSNS(1);
+    Sequence< rtl::OUString > aSNS(1);
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
 
-OUString SAL_CALL MysqlCDriver::getImplementationName()
+rtl::OUString SAL_CALL MysqlCDriver::getImplementationName()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getImplementationName");
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL MysqlCDriver::supportsService(const OUString& _rServiceName)
+sal_Bool SAL_CALL MysqlCDriver::supportsService(const rtl::OUString& _rServiceName)
     throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL MysqlCDriver::getSupportedServiceNames()
+Sequence< rtl::OUString > SAL_CALL MysqlCDriver::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getSupportedServiceNames");
@@ -120,7 +120,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
 #ifdef BUNDLE_MARIADB
     if ( !m_bAttemptedLoadCConn )
     {
-        const OUString sModuleName(BUNDLE_MARIADB);
+        const rtl::OUString sModuleName(BUNDLE_MARIADB);
         m_hCConnModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
         m_bAttemptedLoadCConn = true;
     }
@@ -132,7 +132,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         throw SQLException(
             "Unable to load the " BUNDLE_MARIADB " library.",
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
@@ -140,7 +140,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
 #endif
     if ( !m_bAttemptedLoadCppConn )
     {
-        const OUString sModuleName(CPPCONN_LIB);
+        const rtl::OUString sModuleName(CPPCONN_LIB);
         m_hCppConnModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
         m_bAttemptedLoadCppConn = true;
     }
@@ -152,14 +152,14 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         throw SQLException(
             "Unable to load the " CPPCONN_LIB " library.",
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
     }
 
     // find the factory symbol
-    const OUString sSymbolName = "sql_mysql_get_driver_instance";
+    const rtl::OUString sSymbolName = "sql_mysql_get_driver_instance";
     typedef void* (* FGetMySQLDriver)();
 
     const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
@@ -169,7 +169,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         throw SQLException(
             CPPCONN_LIB " is invalid: missing the driver factory function.",
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
@@ -182,14 +182,14 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         throw SQLException(
             "Unable to obtain the MySQL_Driver instance from Connector/C++.",
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            rtl::OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
     }
 }
 
-Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, const Sequence< PropertyValue >& info)
+Reference< XConnection > SAL_CALL MysqlCDriver::connect(const rtl::OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -222,14 +222,14 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
     return xConn;
 }
 
-sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const OUString& url)
+sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const rtl::OUString& url)
         throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::acceptsURL");
     return url.startsWith("sdbc:mysqlc:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const OUString& url, const Sequence< PropertyValue >& /* info */)
+Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const rtl::OUString& url, const Sequence< PropertyValue >& /* info */)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getPropertyInfo");
@@ -237,18 +237,18 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const OUSt
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("Hostname")
-                ,OUString("Name of host")
+                rtl::OUString("Hostname")
+                ,rtl::OUString("Name of host")
                 ,sal_True
-                ,OUString("localhost")
-                ,Sequence< OUString >())
+                ,rtl::OUString("localhost")
+                ,Sequence< rtl::OUString >())
             );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("Port")
-                ,OUString("Port")
+                rtl::OUString("Port")
+                ,rtl::OUString("Port")
                 ,sal_True
-                ,OUString("3306")
-                ,Sequence< OUString >())
+                ,rtl::OUString("3306")
+                ,Sequence< rtl::OUString >())
             );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     }

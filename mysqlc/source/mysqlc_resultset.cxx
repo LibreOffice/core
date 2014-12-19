@@ -49,24 +49,24 @@ using ::osl::MutexGuard;
 
 #include <stdio.h>
 
-OUString SAL_CALL OResultSet::getImplementationName()
+rtl::OUString SAL_CALL OResultSet::getImplementationName()
     throw (RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::getImplementationName");
-    return OUString( "com.sun.star.sdbcx.mysqlc.ResultSet" );
+    return rtl::OUString( "com.sun.star.sdbcx.mysqlc.ResultSet" );
 }
 
-Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
+Sequence< rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::getSupportedServiceNames");
-    Sequence< OUString > aSupported(2);
+    Sequence< rtl::OUString > aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return (aSupported);
 }
 
-sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
+sal_Bool SAL_CALL OResultSet::supportsService(const rtl::OUString& _rServiceName)
     throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
@@ -128,7 +128,7 @@ Sequence< Type > SAL_CALL OResultSet::getTypes()
     return concatSequences(aTypes.getTypes(), OResultSet_BASE::getTypes());
 }
 
-sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
+sal_Int32 SAL_CALL OResultSet::findColumn(const rtl::OUString& columnName)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::findColumn");
@@ -150,7 +150,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& columnName)
     throw SQLException(
         "The column name '" + columnName + "' is not valid.",
         *this,
-        OUString("42S22"),
+        rtl::OUString("42S22"),
         0,
         Any()
     );
@@ -238,8 +238,8 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
 
     Date d;
     try {
-        OUString dateString = getString(column);
-        OUString token;
+        rtl::OUString dateString = getString(column);
+        rtl::OUString token;
         sal_Int32 nIndex = 0, i=0;
 
         do {
@@ -438,7 +438,7 @@ sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 column)
     return 0; // fool compiler
 }
 
-OUString SAL_CALL OResultSet::getString(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSet::getString(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::getString");
@@ -450,14 +450,14 @@ OUString SAL_CALL OResultSet::getString(sal_Int32 column)
     try {
         sql::SQLString val = m_result->getString(column);
         if (!m_result->wasNull()) {
-            return OUString( val.c_str(), val.length(), m_encoding );
+            return rtl::OUString( val.c_str(), val.length(), m_encoding );
         } else {
-            return OUString();
+            return rtl::OUString();
         }
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
 Time SAL_CALL OResultSet::getTime(sal_Int32 column)
@@ -469,8 +469,8 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
 
     checkColumnIndex(column);
     Time t;
-    OUString timeString = getString(column);
-    OUString token;
+    rtl::OUString timeString = getString(column);
+    rtl::OUString token;
     sal_Int32 nIndex, i=0;
 
     nIndex = timeString.indexOf(' ') + 1;
@@ -922,7 +922,7 @@ void SAL_CALL OResultSet::updateDouble(sal_Int32 column, double /* x */)
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateDouble", *this);
 }
 
-void SAL_CALL OResultSet::updateString(sal_Int32 column, const OUString& /* x */)
+void SAL_CALL OResultSet::updateString(sal_Int32 column, const rtl::OUString& /* x */)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::updateString");
@@ -1216,8 +1216,8 @@ void OResultSet::checkColumnIndex(sal_Int32 index)
     OSL_TRACE("OResultSet::checkColumnIndex");
     if ((index < 1 || index > (int) fieldCount)) {
         /* static object for efficiency or thread safety is a problem ? */
-        OUString buf( "index out of range" );
-        throw SQLException(buf, *this, OUString(), 1, Any());
+        rtl::OUString buf( "index out of range" );
+        throw SQLException(buf, *this, rtl::OUString(), 1, Any());
     }
 }
 

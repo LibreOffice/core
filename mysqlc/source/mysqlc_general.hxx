@@ -29,7 +29,7 @@
 
 namespace mysqlc_sdbc_driver
 {
-    OUString getStringFromAny(const ::com::sun::star::uno::Any& _rAny);
+    rtl::OUString getStringFromAny(const ::com::sun::star::uno::Any& _rAny);
 
     void throwFeatureNotImplementedException(
             const sal_Char* _pAsciiFeatureName,
@@ -50,9 +50,9 @@ namespace mysqlc_sdbc_driver
     int mysqlToOOOType(int mysqlType) throw ();
 
 
-    OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
+    rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 
-    ::std::string convert(const OUString& _string, const rtl_TextEncoding encoding);
+    ::std::string convert(const rtl::OUString& _string, const rtl_TextEncoding encoding);
 }
 
 #endif

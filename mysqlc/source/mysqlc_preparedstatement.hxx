@@ -62,14 +62,14 @@ namespace connectivity
                                                                                     throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
             virtual ~OPreparedStatement();
         public:
-            virtual OUString SAL_CALL getImplementationName()
+            virtual rtl::OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
+                rtl::OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
-            virtual css::uno::Sequence<OUString> SAL_CALL
+            virtual css::uno::Sequence<rtl::OUString> SAL_CALL
             getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
@@ -91,17 +91,17 @@ namespace connectivity
             Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection() throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XStatement
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(const OUString& sql)
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(const rtl::OUString& sql)
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            sal_Int32 SAL_CALL executeUpdate(const OUString& sql)
+            sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql)
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            sal_Bool SAL_CALL execute( const OUString& sql )
+            sal_Bool SAL_CALL execute( const rtl::OUString& sql )
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XParameters
             void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType)           throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            void SAL_CALL setObjectNull(sal_Int32 parameter, sal_Int32 sqlType, const OUString& typeName)
+            void SAL_CALL setObjectNull(sal_Int32 parameter, sal_Int32 sqlType, const rtl::OUString& typeName)
                                                                                     throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             void SAL_CALL setBoolean(sal_Int32 parameter, sal_Bool x)               throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
@@ -118,7 +118,7 @@ namespace connectivity
 
             void SAL_CALL setDouble(sal_Int32 parameter, double x)                  throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            void SAL_CALL setString(sal_Int32 parameter, const OUString& x)         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setString(sal_Int32 parameter, const rtl::OUString& x)         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             void SAL_CALL setBytes(sal_Int32 parameter, const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
                                                                                     throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;

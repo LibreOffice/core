@@ -2593,11 +2593,10 @@ typedef rtlunittest::OUString OUString;
 }
 #endif
 
-// RTL_USING is defined by gbuild for all modules except those with stable public API
-// (as listed in ure/source/README). It allows to use classes like OUString without
-// having to explicitly refer to the rtl namespace, which is kind of superfluous
-// given that OUString itself is namespaced by its OU prefix.
-#ifdef RTL_USING
+// In internal code, allow to use classes like OUString without having to
+// explicitly refer to the rtl namespace, which is kind of superfluous given
+// that OUString itself is namespaced by its OU prefix:
+#ifdef LIBO_INTERNAL_ONLY
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::rtl::OStringToOUString;

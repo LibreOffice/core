@@ -27,7 +27,6 @@ static const BOOL
 #define IGNORE_ARG(X) ((void) X)
 
 #define CPPU_ENV gcc3
-#define RTL_USING
 #define HAVE_GCC_VISIBILITY_FEATURE
 
 #import "time.h"

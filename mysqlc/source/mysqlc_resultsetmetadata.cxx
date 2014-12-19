@@ -99,7 +99,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     return sal_False; // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getSchemaName");
@@ -112,10 +112,10 @@ OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getColumnName");
@@ -128,10 +128,10 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getTableName");
@@ -144,10 +144,10 @@ OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getCatalogName");
@@ -160,10 +160,10 @@ OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getColumnTypeName");
@@ -176,10 +176,10 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getColumnLabel");
@@ -192,16 +192,16 @@ OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return rtl::OUString(); // fool compiler
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
+rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSetMetaData::getColumnServiceName");
     checkColumnIndex(column);
 
-    OUString aRet = OUString();
+    rtl::OUString aRet = rtl::OUString();
     return aRet;
 }
 
@@ -370,13 +370,13 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     OSL_TRACE("OResultSetMetaData::checkColumnIndex");
     if (columnIndex < 1 || columnIndex > (sal_Int32) meta->getColumnCount()) {
 
-        OUStringBuffer buf;
+        rtl::OUStringBuffer buf;
         buf.appendAscii( "Column index out of range (expected 1 to " );
         buf.append( sal_Int32( meta->getColumnCount() ) );
         buf.appendAscii( ", got " );
         buf.append( sal_Int32( columnIndex ) );
         buf.append( '.' );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+        throw SQLException( buf.makeStringAndClear(), *this, rtl::OUString(), 1, Any() );
     }
 }
 

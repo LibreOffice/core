@@ -34,9 +34,9 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
         (
             const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
+            const rtl::OUString & rComponentName,
             ::cppu::ComponentInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames,
+            const Sequence< rtl::OUString > & rServiceNames,
             rtl_ModuleCount*
         );
 
@@ -44,19 +44,19 @@ struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
     Reference< XMultiServiceFactory > const xServiceManager;
-    OUString const sImplementationName;
+    rtl::OUString const sImplementationName;
 
     ProviderRequest(
         void* pServiceManager,
         sal_Char const* pImplementationName
     ) : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-      , sImplementationName(OUString::createFromAscii(pImplementationName))
+      , sImplementationName(rtl::OUString::createFromAscii(pImplementationName))
     {
     }
 
     inline bool CREATE_PROVIDER(
-                const OUString& Implname,
-                const Sequence< OUString > & Services,
+                const rtl::OUString& Implname,
+                const Sequence< rtl::OUString > & Services,
                 ::cppu::ComponentInstantiation Factory,
                 createFactoryFunc creator
             )

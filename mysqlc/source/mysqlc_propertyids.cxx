@@ -96,9 +96,9 @@ OPropertyMap::~OPropertyMap()
     }
 }
 
-OUString OPropertyMap::getNameByIndex(sal_Int32 idx) const
+rtl::OUString OPropertyMap::getNameByIndex(sal_Int32 idx) const
 {
-    OUString sRet;
+    rtl::OUString sRet;
     ::std::map<sal_Int32 , rtl_uString*>::const_iterator aIter = m_aPropertyMap.find(idx);
     if (aIter == m_aPropertyMap.end()) {
         sRet = const_cast<OPropertyMap*>(this)->fillValue(idx);
@@ -168,7 +168,7 @@ static const property_callback property_callbacks[PROPERTY_ID_LAST] =
     getPROPERTY_PRIVILEGES,
 };
 
-OUString OPropertyMap::fillValue(sal_Int32 idx)
+rtl::OUString OPropertyMap::fillValue(sal_Int32 idx)
 {
     rtl_uString* pStr = NULL;
     rtl_uString_newFromAscii(&pStr, property_callbacks[idx]());

@@ -35,11 +35,11 @@ namespace mysqlc_sdbc_driver
 void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    const OUString sMessage = OUString::createFromAscii( _pAsciiFeatureName ) + ": feature not implemented.";
+    const rtl::OUString sMessage = rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ": feature not implemented.";
     throw SQLException(
         sMessage,
         _rxContext,
-        OUString("HYC00"),
+        rtl::OUString("HYC00"),
         0,
         _pNextException ? *_pNextException : Any()
     );
@@ -48,11 +48,11 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
 void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    const OUString sMessage = OUString::createFromAscii( _pAsciiFeatureName ) + ": invalid arguments.";
+    const rtl::OUString sMessage = rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ": invalid arguments.";
     throw SQLException(
         sMessage,
         _rxContext,
-        OUString("HYC00"),
+        rtl::OUString("HYC00"),
         0,
         _pNextException ? *_pNextException : Any()
     );
@@ -69,9 +69,9 @@ void translateAndThrow(const ::sql::SQLException& _error, const ::com::sun::star
         );
 }
 
-OUString getStringFromAny(const Any& _rAny)
+rtl::OUString getStringFromAny(const Any& _rAny)
 {
-    OUString nReturn;
+    rtl::OUString nReturn;
     OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
@@ -147,14 +147,14 @@ int mysqlToOOOType(int cppConnType)
     return com::sun::star::sdbc::DataType::VARCHAR;
 }
 
-OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
+rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
-    return OUString( _string.c_str(), _string.size(), encoding );
+    return rtl::OUString( _string.c_str(), _string.size(), encoding );
 }
 
-::std::string convert(const OUString& _string, const rtl_TextEncoding encoding)
+::std::string convert(const rtl::OUString& _string, const rtl_TextEncoding encoding)
 {
-    return ::std::string( OUStringToOString( _string, encoding ).getStr() );
+    return ::std::string( rtl::OUStringToOString( _string, encoding ).getStr() );
 }
 
 

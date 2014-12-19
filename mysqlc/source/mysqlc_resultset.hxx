@@ -93,14 +93,14 @@ namespace connectivity
             virtual ~OResultSet();
 
         public:
-            virtual OUString SAL_CALL getImplementationName()
+            virtual rtl::OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
+                rtl::OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
-            virtual css::uno::Sequence<OUString> SAL_CALL
+            virtual css::uno::Sequence<rtl::OUString> SAL_CALL
             getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
@@ -159,7 +159,7 @@ namespace connectivity
             // XRow
             sal_Bool SAL_CALL wasNull() throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            OUString SAL_CALL getString(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getString(sal_Int32 column)       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             sal_Bool SAL_CALL getBoolean(sal_Int32 column)              throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             sal_Int8 SAL_CALL getByte(sal_Int32 column)                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
@@ -228,7 +228,7 @@ namespace connectivity
             void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x)     throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateFloat(sal_Int32 column, float x)        throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateDouble(sal_Int32 column, double x)      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL updateString(sal_Int32 column, const OUString& x)
+            void SAL_CALL updateString(sal_Int32 column, const rtl::OUString& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
             void SAL_CALL updateBytes(sal_Int32 column, const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
@@ -248,7 +248,7 @@ namespace connectivity
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XColumnLocate
-            sal_Int32 SAL_CALL findColumn(const OUString& columnName)
+            sal_Int32 SAL_CALL findColumn(const rtl::OUString& columnName)
                                                                         throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XRowLocate

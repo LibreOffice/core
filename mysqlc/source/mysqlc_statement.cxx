@@ -148,35 +148,35 @@ void SAL_CALL OStatement::clearBatch()
     // if you support batches clear it here
 }
 
-sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
+sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::execute");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const OUString sSqlStatement = m_pConnection->transFormPreparedStatement( sql );
+    const rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement( sql );
 
     bool success = false;
     try {
-        success = cppStatement->execute(OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr())? sal_True:sal_False;
+        success = cppStatement->execute(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr())? sal_True:sal_False;
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
     return success;
 }
 
-Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& sql)
+Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const rtl::OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::executeQuery");
 
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
+    const rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
 
     Reference< XResultSet > xResultSet;
     try {
-        std::unique_ptr< sql::ResultSet > rset(cppStatement->executeQuery(OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr()));
+        std::unique_ptr< sql::ResultSet > rset(cppStatement->executeQuery(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr()));
         xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
         rset.release();
     } catch (const sql::SQLException &e) {
@@ -214,7 +214,7 @@ Any SAL_CALL OStatement::queryInterface(const Type & rType)
     return (aRet);
 }
 
-void SAL_CALL OStatement::addBatch(const OUString& sql)
+void SAL_CALL OStatement::addBatch(const rtl::OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OStatement::addBatch");
@@ -235,17 +235,17 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
     return aRet;
 }
 
-sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
+sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const rtl::OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::executeUpdate");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
+    const rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
 
     sal_Int32 affectedRows = 0;
     try {
-        affectedRows = cppStatement->executeUpdate(OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr());
+        affectedRows = cppStatement->executeUpdate(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr());
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
@@ -310,7 +310,7 @@ void SAL_CALL OCommonStatement::clearWarnings()
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME), PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
+    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME), PROPERTY_ID_CURSORNAME, cppu::UnoType<rtl::OUString>::get(), 0);
     pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING), PROPERTY_ID_ESCAPEPROCESSING, ::getBooleanCppuType(), 0);
     pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION), PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE), PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
@@ -384,20 +384,20 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
     }
 }
 
-OUString OStatement::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+rtl::OUString OStatement::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
-    return OUString("com.sun.star.sdbcx.OStatement");
+    return rtl::OUString("com.sun.star.sdbcx.OStatement");
 }
 
-css::uno::Sequence<OUString> OStatement::getSupportedServiceNames()
+css::uno::Sequence<rtl::OUString> OStatement::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    css::uno::Sequence<OUString> s(1);
+    css::uno::Sequence<rtl::OUString> s(1);
     s[0] = "com.sun.star.sdbc.Statement";
     return s;
 }
 
-sal_Bool OStatement::supportsService(OUString const & ServiceName)
+sal_Bool OStatement::supportsService(rtl::OUString const & ServiceName)
     throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);

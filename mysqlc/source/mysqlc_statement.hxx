@@ -71,7 +71,7 @@ namespace connectivity
             SQLWarning m_aLastWarning;
 
         protected:
-            ::std::list< OUString>  m_aBatchList;
+            ::std::list< rtl::OUString>  m_aBatchList;
 
             OConnection*            m_pConnection;  // The owning Connection object
 
@@ -123,13 +123,13 @@ namespace connectivity
                                                 throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XStatement
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(const OUString& sql)
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(const rtl::OUString& sql)
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL executeUpdate(const OUString& sql)
+            sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql)
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL execute( const OUString& sql )
+            sal_Bool SAL_CALL execute( const rtl::OUString& sql )
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection()
@@ -175,14 +175,14 @@ namespace connectivity
             OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) :
                 OCommonStatement(_pConnection, _cppStatement) {}
 
-            virtual OUString SAL_CALL getImplementationName()
+            virtual rtl::OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
+                rtl::OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
-            virtual css::uno::Sequence<OUString> SAL_CALL
+            virtual css::uno::Sequence<rtl::OUString> SAL_CALL
             getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
                 SAL_OVERRIDE;
 
@@ -193,7 +193,7 @@ namespace connectivity
             void SAL_CALL release()             throw() SAL_OVERRIDE;
 
             // XBatchExecution
-            void SAL_CALL addBatch(const OUString& sql)
+            void SAL_CALL addBatch(const rtl::OUString& sql)
                                                 throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
 
             void SAL_CALL clearBatch()          throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
