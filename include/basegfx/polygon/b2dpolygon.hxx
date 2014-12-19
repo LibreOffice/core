@@ -148,6 +148,15 @@ namespace basegfx
         */
         B2DPolygon getDefaultAdaptiveSubdivision() const;
 
+        /**  adaptive subdivision access
+
+             see getDefaultAdaptiveSubdivision
+
+             @nCount
+             count of subdivision, creates nCount+1 edges
+             and nCount +2 points
+         */
+        B2DPolygon getAdaptiveSubdivision(const sal_uInt32 nCount) const;
         /** Get the B2DRange (Rectangle dimensions) of this B2DPolygon
 
             A polygon may have up to three ranges:

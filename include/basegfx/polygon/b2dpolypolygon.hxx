@@ -85,6 +85,15 @@ namespace basegfx
         */
         B2DPolyPolygon getDefaultAdaptiveSubdivision() const;
 
+        /** adaptive subdivision access
+
+            For details refer to B2DPolygon::getAdaptiveSubdivision()
+
+            @return
+            The default subdivision of this polygon
+        */
+        B2DPolyPolygon getAdaptiveSubdivision(const sal_uInt32 nCount) const;
+
         /** Get the B2DRange (Rectangle dimensions) of this B2DPolyPolygon
 
             For details refer to B2DPolygon::getB2DRange()

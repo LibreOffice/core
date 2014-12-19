@@ -481,12 +481,17 @@ public:
 
     const basegfx::B2DPolygon& getDefaultAdaptiveSubdivision(const basegfx::B2DPolygon& rSource) const
     {
-        if(!mpDefaultSubdivision)
-        {
-            const_cast< ImplBufferedData* >(this)->mpDefaultSubdivision.reset(new basegfx::B2DPolygon(basegfx::tools::adaptiveSubdivideByCount(rSource, 9)));
-        }
+        return getAdaptiveSubdivision(rSource, 9);
+    }
 
-        return *mpDefaultSubdivision;
+
+    const basegfx::B2DPolygon& getAdaptiveSubdivision(const basegfx::B2DPolygon& rSource, const sal_uInt32 nCount) const
+    {
+         if(!mpDefaultSubdivision)
+         {
+             const_cast< ImplBufferedData* >(this)->mpDefaultSubdivision.reset(new basegfx ::B2DPolygon(basegfx::tools::adaptiveSubdivideByCount(rSource,nCount)));
+         }
+         return *mpDefaultSubdivision;
     }
 
     const basegfx::B2DRange& getB2DRange(const basegfx::B2DPolygon& rSource) const
@@ -589,6 +594,22 @@ public:
         }
 
         return mpBufferedData->getDefaultAdaptiveSubdivision(rSource);
+    }
+
+
+    const basegfx::B2DPolygon& getAdaptiveSubdivision(const basegfx::B2DPolygon& rSource, const sal_uInt32 nCount) const
+    {
+        if(!mpControlVector || !mpControlVector->isUsed())
+        {
+            return rSource;
+        }
+
+        if(!mpBufferedData)
+        {
+            const_cast< ImplB2DPolygon* >(this)->mpBufferedData.reset(new ImplBufferedData);
+        }
+
+        return mpBufferedData->getAdaptiveSubdivision(rSource, nCount);
     }
 
     const basegfx::B2DRange& getB2DRange(const basegfx::B2DPolygon& rSource) const
@@ -1377,6 +1398,11 @@ namespace basegfx
     B2DPolygon B2DPolygon::getDefaultAdaptiveSubdivision() const
     {
         return mpPolygon->getDefaultAdaptiveSubdivision(*this);
+    }
+
+    B2DPolygon B2DPolygon::getAdaptiveSubdivision(const sal_uInt32 nCount) const
+    {
+        return mpPolygon->getAdaptiveSubdivision(*this, nCount);
     }
 
     B2DRange B2DPolygon::getB2DRange() const

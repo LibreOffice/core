@@ -283,6 +283,18 @@ namespace basegfx
         return aRetval;
     }
 
+    B2DPolyPolygon B2DPolyPolygon::getAdaptiveSubdivision(const sal_uInt32 nCount) const
+    {
+        B2DPolyPolygon aRetval;
+
+        for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
+        {
+            aRetval.append(mpPolyPolygon->getB2DPolygon(a).getAdaptiveSubdivision(nCount));
+        }
+
+        return aRetval;
+    }
+
     B2DRange B2DPolyPolygon::getB2DRange() const
     {
         B2DRange aRetval;
