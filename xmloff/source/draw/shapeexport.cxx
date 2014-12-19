@@ -248,7 +248,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         if( xPropSet.is() )
             xPropSet->getPropertyValue(msZIndex) >>= nZIndex;
         else
-            nZindex = 0;
+            nZIndex = 0;
     }
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
@@ -614,7 +614,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         if( xSet.is() )
             xSet->getPropertyValue(msZIndex) >>= nZIndex;
         else
-            nZindex = 0;
+            nZIndex = 0;
     }
 
     ImplXMLShapeExportInfoVector& aShapeInfoVector = (*maCurrentShapesIter).second;
