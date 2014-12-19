@@ -56,42 +56,6 @@ namespace rtl
 /// @endcond
 
 /** A string buffer implements a mutable sequence of characters.
-    <p>
-    String buffers are safe for use by multiple threads. The methods
-    are synchronized where necessary so that all the operations on any
-    particular instance behave as if they occur in some serial order.
-    <p>
-    String buffers are used by the compiler to implement the binary
-    string concatenation operator <code>+</code>. For example, the code:
-    <p><blockquote><pre>
-        x = "a" + 4 + "c"
-    </pre></blockquote><p>
-    is compiled to the equivalent of:
-    <p><blockquote><pre>
-        x = new OStringBuffer().append("a").append(4).append("c")
-                              .makeStringAndClear()
-    </pre></blockquote><p>
-    The principal operations on a <code>OStringBuffer</code> are the
-    <code>append</code> and <code>insert</code> methods, which are
-    overloaded so as to accept data of any type. Each effectively
-    converts a given datum to a string and then appends or inserts the
-    characters of that string to the string buffer. The
-    <code>append</code> method always adds these characters at the end
-    of the buffer; the <code>insert</code> method adds the characters at
-    a specified point.
-    <p>
-    For example, if <code>z</code> refers to a string buffer object
-    whose current contents are "<code>start</code>", then
-    the method call <code>z.append("le")</code> would cause the string
-    buffer to contain "<code>startle</code>", whereas
-    <code>z.insert(4, "le")</code> would alter the string buffer to
-    contain "<code>starlet</code>".
-    <p>
-    Every string buffer has a capacity. As long as the length of the
-    character sequence contained in the string buffer does not exceed
-    the capacity, it is not necessary to allocate a new internal
-    buffer array. If the internal buffer overflows, it is
-    automatically made larger.
  */
 class SAL_WARN_UNUSED OStringBuffer
 {
