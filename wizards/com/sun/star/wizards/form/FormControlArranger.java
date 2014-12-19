@@ -625,7 +625,7 @@ public class FormControlArranger
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
 
             {
-                Helper.setUnoPropertyValue(LabelControlList[i], PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
+                Helper.setUnoPropertyValue(aDBControl.xPropertySet, PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
             }
             checkOuterPoints(m_currentControlPosX, m_dbControlWidth, m_currentControlPosY, m_dbControlHeight, true);
             aDBControl.setPropertyValue(PropertyNames.PROPERTY_BORDER, NBorderType);
