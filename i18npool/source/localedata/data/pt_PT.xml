@@ -132,6 +132,30 @@
     <FormatElement msgid="DateFormatskey26" default="false" type="medium" usage="DATE" formatindex="54">
       <FormatCode>DD-MMM-AAAA</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="56">
+      <FormatCode>MMMM-AAAA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="57">
+      <FormatCode>MMM-AAAA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="58">
+      <FormatCode>MMMM-AA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="59">
+      <FormatCode>MMM-AA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="60">
+      <FormatCode>D-MMMM-AAAA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey32" default="false" type="medium" usage="DATE" formatindex="61">
+      <FormatCode>D-MMMM-AA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="62">
+      <FormatCode>MMMM "de" AAAA</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey34" default="false" type="long" usage="DATE" formatindex="63">
+      <FormatCode>MMM "de" AAAA</FormatCode>
+    </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
       <FormatCode>HH:MM</FormatCode>
     </FormatElement>
