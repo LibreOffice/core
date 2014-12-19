@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_e9a3264e",
+        "filename": "RepositoryModule_host.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "That sounds strange.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_89893acd",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 10211,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "That line should be unnecessary as we are not really using them anymore as far as I remember and I plan to remove the mesa header soon. We are using glew now to abstract the the OpenGL stuff.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_499332fb",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "Sounds strange.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_a9867eb7",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "Just use --disable-opengl",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_699076ed",
+        "filename": "vcl/Module_vcl.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "Why?",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_09bc4a6b",
+        "filename": "vcl/Module_vcl.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "Unnecessary whitespace.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_c99e6207",
+        "filename": "vcl/StaticLibrary_glxtest.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "I don\u0027t like that change. That library as the name already mentions is a X11 lib. Please just make sure not to include it in the places where we include the glxtest lib.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_299a6e15",
+        "filename": "vcl/unx/glxtest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-19T18:45:10Z",
+      "side": 1,
+      "message": "I don\u0027t like that one. You should not build that file as that file need X11 unconditionally and you are not using it anyway.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
