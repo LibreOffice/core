@@ -684,7 +684,6 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
     rtl_String          *strUTF8 = NULL;
     rtl_uString         *strDecodedURL = NULL;
     rtl_uString         *strTempPath = NULL;
-    const sal_Unicode   *pDecodedURL;
     sal_uInt32          nDecodedLen;
     sal_Bool            bValidEncoded;
     oslFileError        nError = osl_File_E_INVAL;  /* Assume failure */
@@ -714,7 +713,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
         rtl_uString_newReplace( &strDecodedURL, strDecodedURL, '/', '\\' );
         rtl_uString_newReplace( &strDecodedURL, strDecodedURL, '|', ':' );
 
-        pDecodedURL = rtl_uString_getStr( strDecodedURL );
+        const sal_Unicode *pDecodedURL = rtl_uString_getStr( strDecodedURL );
         nDecodedLen = rtl_uString_getLength( strDecodedURL );
 
         /* Must start with "file://" */

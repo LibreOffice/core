@@ -1044,7 +1044,6 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
 
     if (strlen(LocalHostname) == 0)
     {
-        const sal_Char *pStr;
 
 #ifdef SYSV
         struct utsname uts;
@@ -1070,6 +1069,7 @@ oslSocketResult SAL_CALL osl_psz_getLocalHostname (
             /* no, determine it via dns */
             Addr = osl_psz_createHostAddrByName(LocalHostname);
 
+            const sal_Char *pStr;
             if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != NULL)
             {
                 strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
@@ -1395,7 +1395,6 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 
     if ( pSocket->m_bIsAccepting )
     {
-        int nConnFD;
         union {
             struct sockaddr aSockAddr;
             struct sockaddr_in aSockAddrIn;
@@ -1415,7 +1414,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
                 s.aSockAddrIn.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
             }
 
-            nConnFD = socket(AF_INET, SOCK_STREAM, 0);
+            int nConnFD = socket(AF_INET, SOCK_STREAM, 0);
             if ( nConnFD < 0 )
             {
                 OSL_TRACE("socket call failed with error: %s", strerror(errno));

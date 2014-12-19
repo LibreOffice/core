@@ -65,8 +65,6 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
 {
     unsigned int lower = 0;
     unsigned int upper = member;
-    unsigned int current;
-    int comparison;
 
     /* check for validity of input */
     if ( (key == NULL) || (base == NULL) || (member == 0) )
@@ -75,8 +73,8 @@ _pair_search (const char *key, const _pair *base, unsigned int member )
     /* binary search */
     while ( lower < upper )
     {
-        current = (lower + upper) / 2;
-        comparison = _pair_compare( key, base + current );
+        const unsigned int current = (lower + upper) / 2;
+        const int comparison = _pair_compare( key, base + current );
         if (comparison < 0)
             upper = current;
         else if (comparison > 0)

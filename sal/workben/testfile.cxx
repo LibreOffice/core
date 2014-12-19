@@ -114,7 +114,6 @@ sal_Bool Initialize( void )
 
     rtl::OUString   iniFileURL;
     File            *pFile;
-    sal_Unicode     *pExeFileCount;
 
     FileBase::RC    rc;
 
@@ -132,7 +131,7 @@ sal_Bool Initialize( void )
 
     if ( ProcessError == osl_Process_E_None)
     {
-        pExeFileCount=rtl_uString_getStr(strExeFileURL)+rtl_uString_getLength(strExeFileURL);
+        sal_Unicode *pExeFileCount=rtl_uString_getStr(strExeFileURL)+rtl_uString_getLength(strExeFileURL);
 
         // Search for the last slash in the Path
         while (*pExeFileCount!=L'/' && pExeFileCount>rtl_uString_getStr(strExeFileURL))
@@ -1748,7 +1747,6 @@ void DirectoryFileStatusTest( void )
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
-    FileStatus      *pStatus;
 
     printf( "--------------------------------------------\n" );
     printf( "Directory-FileStatus-Test\n" );
@@ -1765,7 +1763,7 @@ void DirectoryFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( osl_FileStatus_Mask_All );
+        FileStatus *pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -1785,7 +1783,6 @@ void FileFileStatusTest( void )
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
-    FileStatus      *pStatus;
 
     printf( "--------------------------------------------\n" );
     printf( "File-FileStatus-Test\n" );
@@ -1802,7 +1799,7 @@ void FileFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( osl_FileStatus_Mask_All );
+        FileStatus *pStatus=new FileStatus( osl_FileStatus_Mask_All );
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );
@@ -1822,7 +1819,6 @@ void VolumeFileStatusTest( void )
 {
     FileBase::RC    rc;
     DirectoryItem   aItem;
-    FileStatus      *pStatus;
 
     printf( "--------------------------------------------\n" );
     printf( "Volume-FileStatus-Test\n" );
@@ -1839,7 +1835,7 @@ void VolumeFileStatusTest( void )
 
     if ( rc==FileBase::E_None )
     {
-        pStatus=new FileStatus( osl_FileStatus_Mask_All) ;
+        FileStatus *pStatus=new FileStatus( osl_FileStatus_Mask_All) ;
         rc=aItem.getFileStatus( *pStatus );
 
         FileStatusTest( pStatus );

@@ -421,8 +421,6 @@ callback(struct dl_phdr_info *info, size_t size, void *data)
 
     if (pDynamic)
     {
-        char buffer[100];
-        int len;
         char exe[PATH_MAX];
         const char *dsoname = info->dlpi_name;
 
@@ -430,6 +428,9 @@ callback(struct dl_phdr_info *info, size_t size, void *data)
 
         if (strcmp(dsoname, "") == 0)
         {
+            char buffer[100];
+            int len;
+
             snprintf(buffer, sizeof(buffer), "/proc/%d/exe", getpid());
             if ((len = readlink(buffer, exe, PATH_MAX)) != -1)
             {
@@ -557,7 +558,6 @@ static int ReportCrash( int Signal )
                 char szStackTempNameBuffer[L_tmpnam];
 
                 void *stackframes[MAX_STACK_FRAMES];
-                int  iFrame;
                 int  nFrames = backtrace( stackframes, SAL_N_ELEMENTS(stackframes) );
 
                 FILE *xmlout = NULL, *stackout = NULL, *checksumout = NULL;
@@ -590,6 +590,7 @@ static int ReportCrash( int Signal )
 
                     fprintf( checksumout, "<errormail:Checksums type=\"MD5\">\n" );
 
+                    int  iFrame;
                     for ( iFrame = 0; iFrame < nFrames; iFrame++ )
                     {
                         Dl_info dl_info;
@@ -609,14 +610,15 @@ static int ReportCrash( int Signal )
                         {
                             const char *dli_fname = NULL;
                             char *dli_fdir = NULL;
-                            char szDirectory[PATH_MAX];
-                            char szCanonicDirectory[PATH_MAX];
 
                             /* Don't expect that dladdr filled all members of dl_info */
 
                             dli_fname = dl_info.dli_fname ? strrchr(  dl_info.dli_fname, '/' ) : NULL;
                             if ( dli_fname )
                             {
+                                char szDirectory[PATH_MAX];
+                                char szCanonicDirectory[PATH_MAX];
+
                                 ++dli_fname;
                                 memcpy( szDirectory, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
                                 szDirectory[dli_fname - dl_info.dli_fname] = 0;

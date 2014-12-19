@@ -87,13 +87,12 @@ oslCondition SAL_CALL osl_createCondition()
 void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
     oslConditionImpl* pCond;
-    int nRet = 0;
 
     if ( Condition )
     {
         pCond = (oslConditionImpl*)Condition;
 
-        nRet = pthread_cond_destroy(&pCond->m_Condition);
+        int nRet = pthread_cond_destroy(&pCond->m_Condition);
         SAL_WARN_IF(
             nRet != 0, "sal.osl",
             "pthread_cond_destroy failed, errno " << nRet << ", \""
@@ -225,7 +224,6 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     {
         if ( ! pCond->m_State )
         {
-            int                 ret;
             struct timeval      tp;
             struct timespec     to;
 
@@ -237,7 +235,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
             /* spurious wake up prevention */
             do
             {
-                ret = pthread_cond_timedwait(&pCond->m_Condition, &pCond->m_Lock, &to);
+                const int ret = pthread_cond_timedwait(&pCond->m_Condition, &pCond->m_Lock, &to);
                 if ( ret != 0 )
                 {
                     if ( ret == ETIME || ret == ETIMEDOUT )

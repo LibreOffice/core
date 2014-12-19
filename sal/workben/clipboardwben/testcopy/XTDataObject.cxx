@@ -105,12 +105,13 @@ STDMETHODIMP CXTDataObject::GetData(LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium 
 
     if ( CF_TEXT == pFormatetc->cfFormat )
     {
-        char     buff[] = "Hello World, How are you!";
         LPSTREAM lpStream;
 
         hr = CreateStreamOnHGlobal( NULL, FALSE, &lpStream );
         if ( SUCCEEDED( hr ) )
         {
+            char buff[] = "Hello World, How are you!";
+
             hr = lpStream->Write( buff, sizeof( buff ) * sizeof( char ), NULL );
             if ( SUCCEEDED( hr ) )
             {

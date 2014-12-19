@@ -1194,7 +1194,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
     sal_uInt8           *pBuffer, sal_Size nBufLen)
 {
     unsigned int *S;
-    unsigned int  x, y, t;
+    unsigned int t;
     sal_Size               k;
 
     /* Check arguments. */
@@ -1209,8 +1209,8 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
     for (k = 0; k < nDatLen; k++)
     {
         /* Update counters X and Y. */
-        x = ctx->m_X;
-        y = ctx->m_Y;
+        unsigned int x = ctx->m_X;
+        unsigned int y = ctx->m_Y;
         x = (x + 1   ) % CIPHER_CBLOCK_ARCFOUR;
         y = (y + S[x]) % CIPHER_CBLOCK_ARCFOUR;
         ctx->m_X = x;
