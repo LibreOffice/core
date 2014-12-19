@@ -118,7 +118,7 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, 
     {
         for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
         {
-            sal_uInt16 nChar, nFontIdx;
+            sal_uInt16 nChar(0), nFontIdx(0);
             rStrm >> nChar >> nFontIdx;
             AppendFormat( rFormats, nChar, nFontIdx );
         }
@@ -127,7 +127,7 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, XclFormatRunVec& rFormats, 
     {
         for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
         {
-            sal_uInt8 nChar, nFontIdx;
+            sal_uInt8 nChar(0), nFontIdx(0);
             rStrm >> nChar >> nFontIdx;
             AppendFormat( rFormats, nChar, nFontIdx );
         }
@@ -142,7 +142,7 @@ void XclImpString::ReadObjFormats( XclImpStream& rStrm, XclFormatRunVec& rFormat
     rFormats.reserve( nRunCount );
     for( sal_uInt16 nIdx = 0; nIdx < nRunCount; ++nIdx )
     {
-        sal_uInt16 nChar, nFontIdx;
+        sal_uInt16 nChar(0), nFontIdx(0);
         rStrm >> nChar >> nFontIdx;
         rStrm.Ignore( 4 );
         AppendFormat( rFormats, nChar, nFontIdx );
