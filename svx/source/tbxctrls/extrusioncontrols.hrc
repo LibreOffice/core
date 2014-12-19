@@ -57,13 +57,6 @@
 
 #define IMG_DIRECTION           1       // needs 10 resource ids
 
-#define IMG_DEPTH_0             19
-#define IMG_DEPTH_1             20
-#define IMG_DEPTH_2             21
-#define IMG_DEPTH_3             22
-#define IMG_DEPTH_4             23
-#define IMG_DEPTH_INFINITY      24
-
 #define IMG_PERSPECTIVE         31
 #define IMG_PARALLEL            33
 

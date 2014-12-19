@@ -160,42 +160,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     {
         Text [ en-US ] = "~Infinity";
     };
-
-    Image IMG_DEPTH_0
-    {
-        ImageBitmap = Bitmap { File = "extrusion0inch_16.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_DEPTH_1
-    {
-        ImageBitmap = Bitmap { File = "extrusion05inch_16.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_DEPTH_2
-    {
-        ImageBitmap = Bitmap { File = "extrusion1inch_16.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_DEPTH_3
-    {
-        ImageBitmap = Bitmap { File = "extrusion2inch_16.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_DEPTH_4
-    {
-        ImageBitmap = Bitmap { File = "extrusion4inch_16.bmp"; };
-        MASKCOLOR
-    };
-
-    Image IMG_DEPTH_INFINITY
-    {
-        ImageBitmap = Bitmap { File = "extrusioninfinity_16.bmp"; };
-        MASKCOLOR
-    };
 };
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING

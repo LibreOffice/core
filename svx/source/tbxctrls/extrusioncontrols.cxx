@@ -317,12 +317,6 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     vcl::Window* pParentWindow
 )   : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH ))
     , mrController( rController )
-    , maImgDepth0( SVX_RES( IMG_DEPTH_0 ) )
-    , maImgDepth1( SVX_RES( IMG_DEPTH_1 ) )
-    , maImgDepth2( SVX_RES( IMG_DEPTH_2 ) )
-    , maImgDepth3( SVX_RES( IMG_DEPTH_3 ) )
-    , maImgDepth4( SVX_RES( IMG_DEPTH_4 ) )
-    , maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) )
     , meUnit(FUNIT_NONE)
     , mfDepth( -1.0 )
     , msExtrusionDepth( ".uno:ExtrusionDepth" )
@@ -333,12 +327,12 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
     OUString aEmpty;
-    appendEntry( 0, aEmpty, maImgDepth0 );
-    appendEntry( 1, aEmpty, maImgDepth1 );
-    appendEntry( 2, aEmpty, maImgDepth2 );
-    appendEntry( 3, aEmpty, maImgDepth3 );
-    appendEntry( 4, aEmpty, maImgDepth4 );
-    appendEntry( 5, SVX_RESSTR( STR_INFINITY ), maImgDepthInfinity );
+    appendEntry( 0, aEmpty );
+    appendEntry( 1, aEmpty );
+    appendEntry( 2, aEmpty );
+    appendEntry( 3, aEmpty );
+    appendEntry( 4, aEmpty );
+    appendEntry( 5, SVX_RESSTR( STR_INFINITY ) );
     appendEntry( 6, SVX_RESSTR( STR_CUSTOM ) );
 
     SetOutputSizePixel( getMenuSize() );
@@ -415,26 +409,6 @@ void ExtrusionDepthWindow::statusChanged(
         }
     }
 }
-
-
-
-void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    ToolbarMenu::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-    {
-        setEntryImage( 0, maImgDepth0 );
-        setEntryImage( 1, maImgDepth1 );
-        setEntryImage( 2, maImgDepth2 );
-        setEntryImage( 3, maImgDepth3 );
-        setEntryImage( 4, maImgDepth4 );
-        setEntryImage( 5, maImgDepthInfinity );
-    }
-}
-
-
-
 
 IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
 {

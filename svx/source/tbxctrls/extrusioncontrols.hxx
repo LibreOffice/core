@@ -84,19 +84,10 @@ public:
     using svt::PopupWindowController::createPopupWindow;
 };
 
-
-
 class ExtrusionDepthWindow : public svtools::ToolbarMenu
 {
 private:
     svt::ToolboxController& mrController;
-
-    Image maImgDepth0;
-    Image maImgDepth1;
-    Image maImgDepth2;
-    Image maImgDepth3;
-    Image maImgDepth4;
-    Image maImgDepthInfinity;
 
     FieldUnit   meUnit;
     double      mfDepth;
@@ -113,10 +104,7 @@ public:
     ExtrusionDepthWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
-
-
 
 class ExtrusionDepthController : public svt::PopupWindowController
 {
