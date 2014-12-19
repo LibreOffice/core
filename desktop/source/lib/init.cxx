@@ -293,7 +293,7 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
     OUString aURL = getAbsoluteURL(pURL);
 
-    pLib->maLastExceptionMsg = "";
+    pLib->maLastExceptionMsg.clear();
 
     if (!xContext.is())
     {
