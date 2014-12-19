@@ -150,8 +150,6 @@ public class AccessibleBrowseBox extends TestCase {
 
         shortWait();
 
-        new AccessibilityTools();
-
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

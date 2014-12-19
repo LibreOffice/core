@@ -100,10 +100,6 @@ public class AccessibleComboBox extends TestCase {
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 
-        new AccessibilityTools();
-
-        util.utils.shortWait(Param.getInt("ShortWait"));
-
         Object atw = tk.getActiveTopWindow();
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,

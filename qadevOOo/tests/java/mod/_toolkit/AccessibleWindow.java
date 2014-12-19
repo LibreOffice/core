@@ -157,8 +157,6 @@ public class AccessibleWindow extends TestCase {
 
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   aModel);
 

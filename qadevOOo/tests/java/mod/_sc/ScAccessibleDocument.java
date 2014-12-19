@@ -85,8 +85,6 @@ public class ScAccessibleDocument extends TestCase {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

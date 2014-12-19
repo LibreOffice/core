@@ -136,8 +136,6 @@ public class AccessibleTabBarPageList extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        new AccessibilityTools();
-
         shortWait();
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,

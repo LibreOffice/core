@@ -101,8 +101,6 @@ public class AccessibleTabBar extends TestCase {
 
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         shortWait();
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xDoc).

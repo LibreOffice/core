@@ -142,8 +142,6 @@ public class AccessibleScrollBar extends TestCase {
 
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   aModel);
 

@@ -97,8 +97,6 @@ public class AccessibleMenuItem extends TestCase {
 
         shortWait();
 
-        new AccessibilityTools();
-
         Object atw = tk.getActiveTopWindow();
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,

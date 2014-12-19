@@ -196,8 +196,6 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
 
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

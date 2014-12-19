@@ -131,8 +131,6 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
 
-        new AccessibilityTools();
-
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

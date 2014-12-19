@@ -144,8 +144,6 @@ public class AccessibleStatusBarItem extends TestCase {
         XInterface oObj = null;
         XInterface secondItem = null;
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
                                   aModel);
 

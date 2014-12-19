@@ -114,8 +114,6 @@ public class SwAccessibleEndnoteView extends TestCase {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

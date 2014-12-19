@@ -151,8 +151,6 @@ public class AccessibleToolBoxItem extends TestCase {
 
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(
                                   aModel);
 

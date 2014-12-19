@@ -180,8 +180,6 @@ public class AccessibleBrowseBoxTableCell extends TestCase {
 
         shortWait();
 
-        new AccessibilityTools();
-
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

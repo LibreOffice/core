@@ -170,8 +170,6 @@ public class SwAccessiblePageView extends TestCase {
 
         shortWait();
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

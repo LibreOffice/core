@@ -105,8 +105,6 @@ public class AccessiblePresentationGraphicShape extends TestCase {
         } catch (com.sun.star.beans.UnknownPropertyException e) {
         }
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

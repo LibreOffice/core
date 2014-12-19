@@ -153,8 +153,6 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));

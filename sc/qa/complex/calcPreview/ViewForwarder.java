@@ -247,8 +247,6 @@ public class ViewForwarder {
             e.printStackTrace();
         }
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
@@ -657,8 +655,6 @@ public class ViewForwarder {
             e.printStackTrace();
         }
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         XAccessible parent = null;
@@ -863,8 +859,6 @@ public class ViewForwarder {
             System.out.println("While waiting :" + e) ;
         }
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
@@ -994,8 +988,6 @@ public class ViewForwarder {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        new AccessibilityTools();
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

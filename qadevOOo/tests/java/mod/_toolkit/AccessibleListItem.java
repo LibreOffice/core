@@ -136,8 +136,6 @@ public class AccessibleListItem extends TestCase {
 
         shortWait();
 
-        new AccessibilityTools();
-
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
 

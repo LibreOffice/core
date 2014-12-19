@@ -219,8 +219,6 @@ public class AccessibleRadioButton extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        new AccessibilityTools();
-
         util.utils.shortWait(2000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,

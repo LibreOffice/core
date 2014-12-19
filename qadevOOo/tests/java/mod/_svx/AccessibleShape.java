@@ -86,8 +86,6 @@ public class AccessibleShape extends TestCase {
 
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

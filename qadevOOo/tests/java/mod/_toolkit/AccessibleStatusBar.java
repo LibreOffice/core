@@ -134,8 +134,6 @@ public class AccessibleStatusBar extends TestCase {
 
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         final XWindow xWindow =
             UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();

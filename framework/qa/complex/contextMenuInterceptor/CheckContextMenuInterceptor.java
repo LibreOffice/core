@@ -224,8 +224,6 @@ public class CheckContextMenuInterceptor
 
         XAccessible xRoot = null;
 
-        new AccessibilityTools();
-
         try
         {
             xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getTopWindow(0));
@@ -288,7 +286,6 @@ public class CheckContextMenuInterceptor
     {
 
         System.out.println("try to open contex menu...");
-        new AccessibilityTools();
 
         xWindow = AccessibilityTools.getCurrentWindow(aModel);
 

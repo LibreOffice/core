@@ -110,8 +110,6 @@ public class _XContextMenuInterception extends MultiMethodTest {
 
         XAccessible xRoot = null;
 
-        new AccessibilityTools();
-
         try {
             xWindow = UnoRuntime.queryInterface(XWindow.class,
                     tk.getTopWindow(0));
@@ -156,7 +154,6 @@ public class _XContextMenuInterception extends MultiMethodTest {
     private void openContextMenu(XModel xModel){
 
         log.println("try to open contex menu...");
-        new AccessibilityTools();
 
         xWindow = AccessibilityTools.getCurrentWindow(xModel);
 

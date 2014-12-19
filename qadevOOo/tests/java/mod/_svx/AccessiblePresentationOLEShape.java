@@ -113,8 +113,6 @@ public class AccessiblePresentationOLEShape extends TestCase {
         } catch (com.sun.star.beans.UnknownPropertyException e) {
         }
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
         AccessibilityTools.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));

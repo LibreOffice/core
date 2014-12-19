@@ -139,8 +139,6 @@ public class AccessibleFixedText extends TestCase {
 
         shortWait();
 
-        new AccessibilityTools();
-
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWinDlg);
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));

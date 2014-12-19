@@ -82,8 +82,6 @@ public class AccessiblePageShape extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow (aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

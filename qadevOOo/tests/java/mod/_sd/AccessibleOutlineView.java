@@ -64,8 +64,6 @@ public class AccessibleOutlineView extends TestCase {
             (TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow (
                         aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);

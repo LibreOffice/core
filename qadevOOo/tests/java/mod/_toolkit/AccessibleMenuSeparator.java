@@ -75,8 +75,6 @@ public class AccessibleMenuSeparator extends TestCase {
                                                     PrintWriter log) {
         shortWait();
 
-        new AccessibilityTools();
-
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
 

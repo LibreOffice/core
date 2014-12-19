@@ -129,8 +129,6 @@ public class AccessibleCheckBox extends TestCase {
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 
-        new AccessibilityTools();
-
         util.utils.shortWait(Param.getInt("ShortWait"));
 
         log.println("Getting the active TopWindow");

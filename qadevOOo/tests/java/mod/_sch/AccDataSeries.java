@@ -61,8 +61,6 @@ public class AccDataSeries extends TestCase {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xChartDoc);
 
-        new AccessibilityTools();
-
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 

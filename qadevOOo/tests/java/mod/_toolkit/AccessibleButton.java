@@ -107,8 +107,6 @@ public class AccessibleButton extends lib.TestCase {
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 
-        new AccessibilityTools();
-
         util.utils.shortWait(Param.getInt("ShortWait"));
 
         Object atw = tk.getActiveTopWindow();

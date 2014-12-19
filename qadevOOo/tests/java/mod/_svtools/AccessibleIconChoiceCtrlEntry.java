@@ -201,8 +201,6 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
 
-        new AccessibilityTools();
-
         shortWait();
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
