@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_NDARR_HXX
 
 #include <vector>
+#include <memory>
 
 #include <boost/utility.hpp>
 
@@ -31,6 +32,7 @@
 #include <bparr.hxx>
 #include <ndtyp.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <ring.hxx>
 
 class Graphic;
 class GraphicObject;
@@ -93,7 +95,7 @@ class SW_DLLPUBLIC SwNodes
     friend class SwStartNode;
     friend class ::sw::DocumentContentOperationsManager;
 
-    SwNodeIndex* pRoot;                 ///< List of all indices on nodes.
+    SwNodeIndex* vIndices; ///< ring of all indices on nodes.
 
     void InsertNode( const SwNodePtr pNode,
                      const SwNodeIndex& rPos );

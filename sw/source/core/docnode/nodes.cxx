@@ -57,7 +57,7 @@ sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
  * @param pDocument TODO: provide documentation
  */
 SwNodes::SwNodes( SwDoc* pDocument )
-    : pRoot( 0 ), pMyDoc( pDocument )
+    : vIndices(nullptr), pMyDoc( pDocument )
 {
     bInNodesDel = bInDelUpdOutl = bInDelUpdNum = false;
 
@@ -2212,29 +2212,11 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
     sal_uLong nEnd = nDelPos + nSz;
     SwNode* pNew = (*this)[ nEnd ];
 
-    if( pRoot )
+    for(SwNodeIndex& rIndex : vIndices->GetRingContainer())
     {
-        SwNodeIndex *p = pRoot;
-        while( p )
-        {
-            sal_uLong nIdx = p->GetIndex();
-            SwNodeIndex* pNext = p->pNext;
-            if( nDelPos <= nIdx && nIdx < nEnd )
-                (*p) = *pNew;
-
-            p = pNext;
-        }
-
-        p = pRoot->pPrev;
-        while( p )
-        {
-            sal_uLong nIdx = p->GetIndex();
-            SwNodeIndex* pPrev = p->pPrev;
-            if( nDelPos <= nIdx && nIdx < nEnd )
-                (*p) = *pNew;
-
-            p = pPrev;
-        }
+        sal_uLong nIdx = rIndex.GetIndex();
+        if( nDelPos <= nIdx && nIdx < nEnd )
+            rIndex = *pNew;
     }
 
     {
@@ -2288,42 +2270,6 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
     BigPtrArray::Remove( nDelPos, nSz );
 }
 
-void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
-{
-    if( !pRoot ) // no root set, yet?
-    {
-        pRoot = &rIdx;
-        pRoot->pPrev = 0;
-        pRoot->pNext = 0;
-    }
-    else
-    {
-        // add always after root
-        rIdx.pNext = pRoot->pNext;
-        pRoot->pNext = &rIdx;
-        rIdx.pPrev = pRoot;
-        if( rIdx.pNext )
-            rIdx.pNext->pPrev = &rIdx;
-    }
-}
-
-void SwNodes::DeRegisterIndex( SwNodeIndex& rIdx )
-{
-    SwNodeIndex* pN = rIdx.pNext;
-    SwNodeIndex* pP = rIdx.pPrev;
-
-    if( pRoot == &rIdx )
-        pRoot = pP ? pP : pN;
-
-    if( pP )
-        pP->pNext = pN;
-    if( pN )
-        pN->pPrev = pP;
-
-    rIdx.pNext = 0;
-    rIdx.pPrev = 0;
-}
-
 void SwNodes::InsertNode( const SwNodePtr pNode,
                           const SwNodeIndex& rPos )
 {
@@ -2367,4 +2313,18 @@ bool SwNodes::IsDocNodes() const
     return this == &pMyDoc->GetNodes();
 }
 
+void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
+{
+    if(!vIndices)
+        vIndices = &rIdx;
+    rIdx.MoveTo(vIndices);
+}
+void SwNodes::DeRegisterIndex( SwNodeIndex& rIdx )
+{
+    if(vIndices == &rIdx)
+        vIndices = vIndices->GetNextInRing();
+    rIdx.MoveTo(nullptr);
+    if(vIndices == &rIdx)
+        vIndices = nullptr;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

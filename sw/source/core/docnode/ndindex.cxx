@@ -42,13 +42,13 @@ SwNodeRange::SwNodeRange( const SwNode& rS, long nSttDiff,
 {}
 
 SwNodeIndex::SwNodeIndex( SwNodes& rNds, sal_uLong nIdx )
-    : pNd( rNds[ nIdx ] ), pNext( 0 ), pPrev( 0 )
+    : pNd( rNds[ nIdx ] )
 {
     rNds.RegisterIndex( *this );
 }
 
 SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
-    : pNext( 0 ), pPrev( 0 )
+    : sw::Ring<SwNodeIndex>()
 {
     if( nDiff )
         pNd = rIdx.GetNodes()[ rIdx.GetIndex() + nDiff ];
@@ -59,7 +59,6 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
 }
 
 SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
-    : pNext( 0 ), pPrev( 0 )
 {
     if( nDiff )
         pNd = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];

@@ -25,19 +25,16 @@
 #include <tools/solar.h>
 
 #include <node.hxx>
+#include <ring.hxx>
 
 class SwNode;
 class SwNodes;
 
 /// Marks a node in the document model.
-class SW_DLLPUBLIC SwNodeIndex SAL_FINAL
+class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
 {
-    friend void SwNodes::RegisterIndex( SwNodeIndex& );
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
-    friend void SwNodes::RemoveNode( sal_uLong, sal_uLong, bool );
-
     SwNode* pNd;
-    SwNodeIndex *pNext, *pPrev;
 
     void Remove();
 

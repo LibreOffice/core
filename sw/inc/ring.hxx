@@ -216,7 +216,7 @@ namespace sw
         private:
             friend class boost::iterator_core_access;
             void increment()
-                { m_pCurrent = m_pCurrent ? m_pCurrent->GetNextInRing() : m_pStart->GetNext(); }
+                { m_pCurrent = m_pCurrent ? m_pCurrent->GetNextInRing() : m_pStart->GetNextInRing(); }
             bool equal(RingIterator const& other) const
             {
                 // we never want to compare iterators from
