@@ -435,23 +435,24 @@ IMPL_LINK( ToolbarMenu, HighlightHdl, Control *, pControl )
     return 0;
 }
 
-
-
 ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, WinBits nBits )
-: DockingWindow(pParentWindow, nBits)
+    : DockingWindow(pParentWindow, nBits)
 {
     implInit(rFrame);
 }
-
-
 
 ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, const ResId& rResId )
-: DockingWindow(pParentWindow, rResId)
+    : DockingWindow(pParentWindow, rResId)
 {
     implInit(rFrame);
 }
 
-
+ToolbarMenu::ToolbarMenu(vcl::Window* pParentWindow, const OString& rID,
+    const OUString& rUIXMLDescription, const Reference< XFrame >& rFrame)
+    : DockingWindow(pParentWindow, rID, rUIXMLDescription, rFrame)
+{
+    implInit(rFrame);
+}
 
 void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 {

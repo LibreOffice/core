@@ -440,20 +440,21 @@ void DockingWindow::doDeferredInit(WinBits nBits)
     mbIsDefferedInit = false;
 }
 
-void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    const css::uno::Reference<css::frame::XFrame> &rFrame)
 {
     mbIsDefferedInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
 }
 
-DockingWindow::DockingWindow(vcl::Window* pParent, const OUString& rID,
-    const OUString& rUIXMLDescription)
+DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
+    const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Window(WINDOW_DOCKINGWINDOW)
 {
     ImplInitDockingWindowData();
 
-    loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
+    loadUI(pParent, rID, rUIXMLDescription, rFrame);
 }
 
 DockingWindow::~DockingWindow()

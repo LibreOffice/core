@@ -281,7 +281,8 @@ protected:
 
     SAL_DLLPRIVATE void DoInitialLayout();
 
-    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    void loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+                const css::uno::Reference<css::frame::XFrame> &rFrame);
 
 public:
     bool            isLayoutEnabled() const;
@@ -297,7 +298,8 @@ protected:
 public:
     DockingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDDOCKWIN);
     DockingWindow(vcl::Window* pParent, const ResId& rResId);
-    DockingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription);
+    DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow();
 
     virtual void    StartDocking();

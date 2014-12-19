@@ -944,7 +944,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
 }
 
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
+    vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : DockingWindow(pParent, rID, rUIXMLDescription)
     , pBindings(pBindinx)
     , pMgr(pCW)
