@@ -122,7 +122,6 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
     short i = 0;
     XColorListRef pColorList( XColorList::CreateStdColorList() );
     long nCount = pColorList->Count();
-    XColorEntry* pEntry = NULL;
     Color aColWhite( COL_WHITE );
     OUString aStrWhite( ModuleRes(STR_COLOR_WHITE) );
 
@@ -132,7 +131,7 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 
     for ( i = 0; i < nCount; i++ )
     {
-        pEntry = pColorList->GetColor(i);
+        XColorEntry* pEntry = pColorList->GetColor(i);
         m_aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
     }
 

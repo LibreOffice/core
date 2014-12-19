@@ -284,14 +284,13 @@ void LwpStory::SortPageLayout()
 **************************************************************************/
 bool LwpStory::IsNeedSection()
 {
-    bool bColumns = false;
     bool bNewSection = false;
     if(m_pCurrentLayout)
     {
         if(m_pCurrentLayout->HasColumns())
         {
             //get the following pagelayout and its type
-            bColumns = true;
+            bool bColumns = true;
             LwpPageLayout* pNextLayout = GetNextPageLayout();
             if(pNextLayout)
             {

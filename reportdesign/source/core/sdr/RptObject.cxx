@@ -710,9 +710,9 @@ void OUnoObject::NbcMove( const Size& rSize )
 
         bool bPositionFixed = false;
         Size aUndoSize(0,0);
-        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
+            bool bUndoMode = false;
             OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
             if (pRptModel->GetUndoEnv().IsUndoMode())
             {
@@ -1006,9 +1006,9 @@ void OOle2Obj::NbcMove( const Size& rSize )
 
         bool bPositionFixed = false;
         Size aUndoSize(0,0);
-        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
+            bool bUndoMode = false;
             OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
             if (pRptModel->GetUndoEnv().IsUndoMode())
             {

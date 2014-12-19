@@ -488,7 +488,6 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
 {
     LwpListList* pList = NULL;
-    LwpContent* pContent = NULL;
     if(pLast)
         pList = static_cast<LwpListList*>(pLast->GetNext().obj().get());
     else
@@ -502,7 +501,7 @@ LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
 
     while(pList)
     {
-        pContent = static_cast<LwpContent*>(pList->GetObject().obj().get());
+        LwpContent* pContent = static_cast<LwpContent*>(pList->GetObject().obj().get());
         if(pContent && pContent->HasNonEmbeddedLayouts() &&
             !pContent->IsStyleContent())
             return pList;

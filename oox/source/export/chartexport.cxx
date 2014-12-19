@@ -2505,9 +2505,9 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
-    bool bDisplayUnits = false;
     if( nAxisType == XML_valAx && GetProperty( xAxisProp, "DisplayUnits" ) )
     {
+        bool bDisplayUnits = false;
         mAny >>= bDisplayUnits;
         if(bDisplayUnits)
         {
