@@ -315,35 +315,29 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     svt::ToolboxController& rController,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
-)   : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH ))
+)   : ToolbarMenu( rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
     , mrController( rController )
     , meUnit(FUNIT_NONE)
     , mfDepth( -1.0 )
     , msExtrusionDepth( ".uno:ExtrusionDepth" )
     , msMetricUnit(     ".uno:MetricUnit"     )
 {
-    SetHelpId( HID_MENU_EXTRUSION_DEPTH );
-
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
     OUString aEmpty;
-    appendEntry( 0, aEmpty );
-    appendEntry( 1, aEmpty );
-    appendEntry( 2, aEmpty );
-    appendEntry( 3, aEmpty );
-    appendEntry( 4, aEmpty );
-    appendEntry( 5, SVX_RESSTR( STR_INFINITY ) );
-    appendEntry( 6, SVX_RESSTR( STR_CUSTOM ) );
+    appendEntry(0, aEmpty);
+    appendEntry(1, aEmpty);
+    appendEntry(2, aEmpty);
+    appendEntry(3, aEmpty);
+    appendEntry(4, aEmpty);
+    appendEntry(5, SVX_RESSTR(RID_SVXSTR_INFINITY));
+    appendEntry(6, SVX_RESSTR(RID_SVXSTR_CUSTOM));
 
     SetOutputSizePixel( getMenuSize() );
-
-    FreeResource();
 
     AddStatusListener( msExtrusionDepth );
     AddStatusListener( msMetricUnit );
 }
-
-
 
 void ExtrusionDepthWindow::implSetDepth( double fDepth )
 {

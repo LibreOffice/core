@@ -870,7 +870,6 @@
 #define RID_SVX_EXTRUSION_BAR               (RID_SVX_START + 986)
 #define RID_SVX_FONTWORK_BAR                (RID_SVX_START + 987)
 
-#define RID_SVXFLOAT_EXTRUSION_DEPTH        (RID_SVX_START + 988)
 #define RID_SVXFLOAT_EXTRUSION_LIGHTING     (RID_SVX_START + 989)
 #define RID_SVXFLOAT_EXTRUSION_SURFACE      (RID_SVX_START + 990)
 #define RID_SVXSTR_EXTRUSION_COLOR          (RID_SVX_START + 991)
@@ -1051,9 +1050,11 @@
 #define RID_SVXSTR_ZOOM                  (RID_SVX_START + 1292)
 #define RID_SVXSTR_ZOOM_IN               (RID_SVX_START + 1293)
 #define RID_SVXSTR_ZOOM_OUT              (RID_SVX_START + 1294)
+#define RID_SVXSTR_CUSTOM                (RID_SVX_START + 1295)
+#define RID_SVXSTR_INFINITY              (RID_SVX_START + 1296)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1295)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1297)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be

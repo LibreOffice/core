@@ -138,30 +138,6 @@ DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
     };
 };
 
-DockingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
-{
-    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_DEPTH";
-    Border = FALSE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = FALSE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-
-    Text [ en-US ] = "Extrusion Depth" ;
-
-    String STR_CUSTOM
-    {
-        Text [ en-US ] = "~Custom...";
-    };
-
-    String STR_INFINITY
-    {
-        Text [ en-US ] = "~Infinity";
-    };
-};
-
 DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 {
     HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_LIGHTING";
@@ -446,6 +422,16 @@ String RID_SVXSTR_DEPTH_3_INCH
 String RID_SVXSTR_DEPTH_4_INCH
 {
     Text [ en-US ] = "~4 inch";
+};
+
+String RID_SVXSTR_CUSTOM
+{
+    Text [ en-US ] = "~Custom...";
+};
+
+String RID_SVXSTR_INFINITY
+{
+    Text [ en-US ] = "~Infinity";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

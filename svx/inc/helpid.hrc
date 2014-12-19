@@ -65,7 +65,6 @@
 #define HID_GALLERY_RENAME                                    "SVX_HID_GALLERY_RENAME"
 #define HID_GALLERY_THEMELIST                                 "SVX_HID_GALLERY_THEMELIST"
 #define HID_GALLERY_WINDOW                                    "SVX_HID_GALLERY_WINDOW"
-#define HID_MENU_EXTRUSION_DEPTH                              "SVX_HID_MENU_EXTRUSION_DEPTH"
 #define HID_MENU_EXTRUSION_DIRECTION                          "SVX_HID_MENU_EXTRUSION_DIRECTION"
 #define HID_MENU_EXTRUSION_LIGHTING                           "SVX_HID_MENU_EXTRUSION_LIGHTING"
 #define HID_MENU_EXTRUSION_SURFACE                            "SVX_HID_MENU_EXTRUSION_SURFACE"
