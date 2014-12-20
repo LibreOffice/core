@@ -29,9 +29,6 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }
 } } }
 
-#define XML_TEXT_FRAME_TEXTBOX 1
-#define XML_TEXT_FRAME_GRAPHIC 2
-
 class XMLOFF_DLLPUBLIC XMLTextTableContext : public SvXMLImportContext
 {
 
