@@ -43,7 +43,7 @@ class SVX_DLLPUBLIC E3dView : public SdrView
 protected:
     E3dDefaultAttributes        a3DDefaultAttr;
     MouseEvent                  aMouseEvent;                    // The parameters of the last Events (Mouse, Keyboard)
-    Color                       aDefaultLightColor;             // The paramaters for the last colors
+    Color                       aDefaultLightColor;             // The parameters for the last colors
     Color                       aDefaultAmbientColor;
 
     double                      fDefaultScaleX;                 // Scaling

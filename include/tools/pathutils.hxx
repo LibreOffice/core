@@ -50,7 +50,7 @@ WCHAR * filename(WCHAR * path);
     x might denote different directories).
 
     @param path
-        An output paremeter taking the resulting path; must point at a valid
+        An output parameter taking the resulting path; must point at a valid
         range of memory of size at least MAX_PATH.  If NULL is returned, the
         content is unspecified.
     @param frontBegin, frontEnd
