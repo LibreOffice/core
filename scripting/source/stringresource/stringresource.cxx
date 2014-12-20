@@ -543,10 +543,10 @@ void StringResourceImpl::removeLocale( const Locale& locale )
         sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
         if( nLocaleCount > 1 )
         {
-            LocaleItem* pFallbackItem = NULL;
             if( m_pCurrentLocaleItem == pRemoveItem ||
                 m_pDefaultLocaleItem  == pRemoveItem )
             {
+                LocaleItem* pFallbackItem = NULL;
                 for( LocaleItemVectorIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); ++it )
                 {
                     LocaleItem* pLocaleItem = *it;

@@ -284,15 +284,13 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
         case 1:     return Besselk1( fNum );
         default:
         {
-            double      fBkp;
-
             double      fTox = 2.0 / fNum;
             double      fBkm = Besselk0( fNum );
             double      fBk = Besselk1( fNum );
 
             for( sal_Int32 n = 1 ; n < nOrder ; n++ )
             {
-                fBkp = fBkm + double( n ) * fTox * fBk;
+                const double fBkp = fBkm + double( n ) * fTox * fBk;
                 fBkm = fBk;
                 fBk = fBkp;
             }
@@ -438,15 +436,13 @@ double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
         case 1:     return Bessely1( fNum );
         default:
         {
-            double      fByp;
-
             double      fTox = 2.0 / fNum;
             double      fBym = Bessely0( fNum );
             double      fBy = Bessely1( fNum );
 
             for( sal_Int32 n = 1 ; n < nOrder ; n++ )
             {
-                fByp = double( n ) * fTox * fBy - fBym;
+                const double fByp = double( n ) * fTox * fBy - fBym;
                 fBym = fBy;
                 fBy = fByp;
             }

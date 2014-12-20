@@ -669,9 +669,9 @@ static const char aResourceResolverPropName[] = "ResourceResolver";
                 uno::Reference< beans::XPropertySet > xDlgModPropSet( xCtrlMod, uno::UNO_QUERY );
                 if( xDlgModPropSet.is() )
                 {
-                    bool bDecoration = true;
                     try
                     {
+                        bool bDecoration = true;
                         Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
                         aDecorationAny >>= bDecoration;
                         if( !bDecoration )

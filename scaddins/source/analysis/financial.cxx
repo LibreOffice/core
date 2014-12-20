@@ -539,14 +539,13 @@ double SAL_CALL AnalysisAddIn::getXirr(
     static const sal_Int32 nMaxIter = 50;
 
     // Newton's method - try to find a fResultRate, so that lcl_sca_XirrResult() returns 0.
-    double fNewRate, fRateEps, fResultValue;
     sal_Int32 nIter = 0;
     bool bContLoop;
     do
     {
-        fResultValue = lcl_sca_XirrResult( aValues, aDates, fResultRate );
-        fNewRate = fResultRate - fResultValue / lcl_sca_XirrResult_Deriv1( aValues, aDates, fResultRate );
-        fRateEps = fabs( fNewRate - fResultRate );
+        double fResultValue = lcl_sca_XirrResult( aValues, aDates, fResultRate );
+        double fNewRate = fResultRate - fResultValue / lcl_sca_XirrResult_Deriv1( aValues, aDates, fResultRate );
+        double fRateEps = fabs( fNewRate - fResultRate );
         fResultRate = fNewRate;
         bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);
     }

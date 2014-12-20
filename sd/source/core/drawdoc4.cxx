@@ -783,12 +783,11 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 // Fill OnlineSpelling list
 void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 {
-    SdrObject* pObj = NULL;
     SdrObjListIter aIter(*pPage, IM_FLAT);
 
     while (aIter.IsMore())
     {
-        pObj = aIter.Next();
+        SdrObject* pObj = aIter.Next();
 
         if( !pObj )
             continue;
@@ -845,11 +844,10 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
                 SdrObjListIter aGroupIter(*static_cast<SdrObjGroup*>(pObj)->GetSubList(),
                                           IM_DEEPNOGROUPS);
 
-                SdrObject* pSubObj = NULL;
 
                 while (aGroupIter.IsMore())
                 {
-                    pSubObj = aGroupIter.Next();
+                    SdrObject* pSubObj = aGroupIter.Next();
 
                     if (pSubObj->GetOutlinerParaObject() && pSubObj->ISA(SdrTextObj))
                     {

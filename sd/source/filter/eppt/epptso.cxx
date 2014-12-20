@@ -2231,11 +2231,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             if ( bGroup )
             {
-                SvMemoryStream* pTmp = NULL;
                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >
                     aXIndexAccess( mXShape, ::com::sun::star::uno::UNO_QUERY );
                 if ( EnterGroup( aXIndexAccess ) )
                 {
+                    SvMemoryStream* pTmp = NULL;
+
                     if ( bEffect && !mbUseNewAnimations )
                     {
                         pTmp = new SvMemoryStream( 0x200, 0x200 );
