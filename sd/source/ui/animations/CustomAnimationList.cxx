@@ -541,9 +541,6 @@ void CustomAnimationList::update()
     long nLastVis = -1;
     long nFirstSelOld = -1;
     long nLastSelOld = -1;
-    bool bMoved = false;
-    bool bMovedUp = false;
-    bool bMovedDown = false;
 
     if( mpMainSequence.get() )
     {
@@ -650,9 +647,9 @@ void CustomAnimationList::update()
         }
 
         // Scroll to a selected entry, depending on where the selection moved.
-        bMoved = nFirstSelNew != nFirstSelOld;
-        bMovedUp = nFirstSelNew < nFirstSelOld;
-        bMovedDown = nFirstSelNew > nFirstSelOld;
+        const bool bMoved = nFirstSelNew != nFirstSelOld;
+        const bool bMovedUp = nFirstSelNew < nFirstSelOld;
+        const bool bMovedDown = nFirstSelNew > nFirstSelOld;
 
         if( bMoved && nLastSelOld < nFirstVis && nLastSelNew < nFirstVis )
         {

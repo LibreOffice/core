@@ -77,16 +77,14 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         {
             // document is loaded, is there a FrameView?
             sal_uLong nSdViewShellCount = 0;
-            ViewShellBase* pBase = NULL;
-            SfxViewShell* pSfxViewSh = NULL;
             SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(pDocShell);
 
             while (pSfxViewFrame)
             {
                 // Count the FrameViews and remember the type of the main
                 // view shell.
-                pSfxViewSh = pSfxViewFrame->GetViewShell();
-                pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
+                SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
+                ViewShellBase* pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
 
                 if (pBase != NULL)
                 {

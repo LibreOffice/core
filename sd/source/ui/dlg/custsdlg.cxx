@@ -295,13 +295,12 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     m_pLbCustomPages->set_width_request(m_pLbPages->approximate_char_width() * 16);
     m_pLbPages->SetDropDownLineCount(10);
 
-    SdPage* pPage;
     // fill Listbox with page names of Docs
     for( long nPage = 0L;
          nPage < rDoc.GetSdPageCount( PK_STANDARD );
          nPage++ )
     {
-        pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
+        SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
         OUString aStr( pPage->GetName() );
         m_pLbPages->InsertEntry( aStr );
     }
@@ -438,12 +437,11 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     // set new page pointer
     if( bDifferent )
     {
-        SdPage* pPage = NULL;
         for( pEntry = m_pLbCustomPages->First();
              pEntry != NULL;
              pEntry = m_pLbCustomPages->Next( pEntry ) )
         {
-            pPage = (SdPage*) pEntry->GetUserData();
+            SdPage* pPage = (SdPage*) pEntry->GetUserData();
             rpCustomShow->PagesVector().push_back( pPage );
         }
         bModified = true;

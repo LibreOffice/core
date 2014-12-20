@@ -107,7 +107,6 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
         OUString aOwnCont;
         OUString aOtherCont;
-        const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( SD_RESSTR(STR_DLG_INSERT_PAGES_FROM_FILE) );
 
@@ -135,7 +134,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
 
                 // Get main filter
-                pFilter = SfxFilter::GetDefaultFilterFromFactory( aOwnCont );
+                const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aOwnCont );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 

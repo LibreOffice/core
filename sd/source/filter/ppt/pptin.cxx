@@ -872,8 +872,6 @@ bool ImplSdPPTImport::Import()
         {
             for ( sal_uInt16 nPage = 0; nPage < nPageAnz; nPage++ )
             {
-                bool bNewAnimationsUsed = false;
-
                 mePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPage, PPT_SLIDEPAGE );
                 SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( false ));
@@ -896,6 +894,8 @@ bool ImplSdPPTImport::Import()
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
                 {
+                    bool bNewAnimationsUsed = false;
+
                     aPageHd.SeekToContent( rStCtrl );
                     while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
@@ -2527,12 +2527,13 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pObj, PRESOBJ_PAGE );
         }
 
-        bool bInhabitanceChecked = false;
-        bool bAnimationInfoFound = false;
         DffRecordHeader aMasterShapeHd;
 
         if ( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
+            bool bInhabitanceChecked = false;
+            bool bAnimationInfoFound = false;
+
             DffRecordHeader& rHdClientData = *maShapeRecords.Current();
             while( true )
             {

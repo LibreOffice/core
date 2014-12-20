@@ -738,10 +738,11 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                             // insert as clip action => jump
                             OUString       aBookmark( aINetBookmark.GetURL() );
                             SdAnimationInfo*    pInfo = mrDoc.GetAnimationInfo( pPickObj );
-                            bool                bCreated = false;
 
                             if( !aBookmark.isEmpty() )
                             {
+                                bool bCreated = false;
+
                                 presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
 
                                 sal_Int32 nIndex = aBookmark.indexOf( (sal_Unicode)'#' );

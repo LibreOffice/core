@@ -655,11 +655,10 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     uno::Sequence< OUString > aSeq( nLayerCount );
 
     OUString* pStrings = aSeq.getArray();
-    SdrLayer* pLayer;
 
     for( sal_uInt16 nLayer = 0; nLayer < nLayerCount; nLayer++ )
     {
-        pLayer = rLayerAdmin.GetLayer( nLayer );
+        SdrLayer* pLayer = rLayerAdmin.GetLayer( nLayer );
         if( pLayer )
             *pStrings++ = SdLayer::convertToExternalName( pLayer->GetName() );
     }
