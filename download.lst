@@ -1,5 +1,5 @@
-export ABW_MD5SUM := 9317e967c8fa8ff50e049744c4b33c87
-export ABW_TARBALL := libabw-0.1.0.tar.bz2
+export ABW_MD5SUM := 7a3815b506d064313ba309617b6f5a0b
+export ABW_TARBALL := libabw-0.1.1.tar.bz2
 export APACHE_COMMONS_CODEC_TARBALL := $(if $(filter TRUE,$(HAVE_JAVA6))\
   ,048751f3271906db5126ab76870444c4-commons-codec-1.9-src.zip\
   ,2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz\
