@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 				CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
 				CFLAGS="-I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
 			) \
-			$(if $(openldap_LDFLAGS),LDFLAGS="$(openldap_LDFLAGS)") \
+			$(if $(openldap_LDFLAGS),LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \
 	)
 
