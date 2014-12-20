@@ -12839,7 +12839,7 @@ place yourself in a working directory of you choice.
  [go to Start menu, click "All Programs", click "Visual Studio 2013", click "Visual Studio Tools", double-click "VS2013 x86 Native Tools Command Prompt" or "VS2013 x64 Native Tools Comand Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
- cd path-to-make-repor-you-cloned-above
+ cd path-to-make-repo-you-cloned-above
  build_w32.bat --without-guile
 
 should result in a WinRel/gnumake.exe.
