@@ -1813,11 +1813,10 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             ScDocAttrIterator aTestIter( &rDoc, i, nMergeTestStartCol, nMergeTestStartRow, nMergeTestEndCol, nMergeTestEndRow );
             ScRange aExtendRange( nMergeTestStartCol, nMergeTestStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i );
             const ScPatternAttr* pPattern = NULL;
-            const ScMergeAttr* pMergeFlag = NULL;
             const ScMergeFlagAttr* pMergeFlagAttr = NULL;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != NULL )
             {
-                pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
+                const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
                 pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
                 sal_Int16 nNewFlags = pMergeFlagAttr->GetValue() & ( SC_MF_HOR | SC_MF_VER );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == SC_MF_HOR || nNewFlags == SC_MF_VER )
@@ -1939,14 +1938,12 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( bSuccess )
     {
-        SCTAB* pTabs      = NULL;
-        SCTAB* pScenarios = NULL;
         SCTAB  nUndoPos  = 0;
 
         if ( bRecord )
         {
-            pTabs       = new SCTAB[nSelCount];
-            pScenarios  = new SCTAB[nSelCount];
+            SCTAB* pTabs       = new SCTAB[nSelCount];
+            SCTAB* pScenarios  = new SCTAB[nSelCount];
             nUndoPos    = 0;
             itr = aMark.begin();
             for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -2225,11 +2222,10 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             ScDocAttrIterator aTestIter( &rDoc, i, nUndoStartCol, nUndoStartRow, nMergeTestEndCol, nMergeTestEndRow );
             ScRange aExtendRange( nUndoStartCol, nUndoStartRow, i, nMergeTestEndCol, nMergeTestEndRow, i );
             const ScPatternAttr* pPattern = NULL;
-            const ScMergeAttr* pMergeFlag = NULL;
             const ScMergeFlagAttr* pMergeFlagAttr = NULL;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != NULL )
             {
-                pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
+                const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
                 pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
                 sal_Int16 nNewFlags = pMergeFlagAttr->GetValue() & ( SC_MF_HOR | SC_MF_VER );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == SC_MF_HOR || nNewFlags == SC_MF_VER )
@@ -5051,7 +5047,6 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
     ScDocument& rDoc = rDocShell.GetDocument();
     const bool bRecord = rDoc.IsUndoEnabled();
     SCTAB nTab = rStartPos.Tab();
-    ScDocument* pUndoDoc = NULL;
 
     //local names have higher priority than global names
     ScRangeName* pLocalList = rDoc.GetRangeName(nTab);
@@ -5082,6 +5077,8 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
         ScEditableTester aTester( &rDoc, nTab, nStartCol,nStartRow, nEndCol,nEndRow );
         if (aTester.IsEditable())
         {
+            ScDocument* pUndoDoc = NULL;
+
             if (bRecord)
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );

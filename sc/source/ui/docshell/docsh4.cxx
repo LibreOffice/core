@@ -1467,8 +1467,6 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
 {
     ScDocShellModificator aModificator( *this );
 
-    bool bWarn = false;
-
     SCTAB nTabCount = aDocument.GetTableCount();
     SCTAB nUseTab = MAXTAB+1;
     for (SCTAB nTab=0; nTab<nTabCount && nUseTab>MAXTAB; nTab++)
@@ -1479,6 +1477,8 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
 
     if (ValidTab(nUseTab))      // nicht verwendet -> nichts zu tun
     {
+        bool bWarn = false;
+
         ScPrintFunc aPrintFunc( this, GetPrinter(), nUseTab );  //! ohne CountPages auskommen
         if (!aPrintFunc.UpdatePages())                          //  setzt Umbrueche auf allen Tabs
             bWarn = true;

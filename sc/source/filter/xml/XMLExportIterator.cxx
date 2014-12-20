@@ -653,8 +653,6 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const table::Cel
     rMyCell.bIsMatrixCovered = false;
     rMyCell.bIsMatrixBase = false;
 
-    bool bIsMatrixBase = false;
-
     switch (rMyCell.maBaseCell.meType)
     {
         case CELLTYPE_VALUE:
@@ -671,12 +669,14 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const table::Cel
             rMyCell.nType = table::CellContentType_EMPTY;
     }
 
-    if (rMyCell.maBaseCell.meType == CELLTYPE_FORMULA)
+    if (rMyCell.maBaseCell.meType == CELLTYPE_FORMULA) {
+        bool bIsMatrixBase = false;
         if (rExport.IsMatrix(rMyCell.maCellAddress, rMyCell.aMatrixRange, bIsMatrixBase))
         {
             rMyCell.bIsMatrixBase = bIsMatrixBase;
             rMyCell.bIsMatrixCovered = !bIsMatrixBase;
         }
+    }
 }
 
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)

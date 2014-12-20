@@ -235,14 +235,13 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            OUString* pStr    = NULL;
             bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = pLbCopyArea->GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
-                pStr = (OUString*)pLbCopyArea->GetEntryData( i );
+                OUString* pStr = (OUString*)pLbCopyArea->GetEntryData( i );
                 bFound = (theCurPosStr == *pStr);
             }
 

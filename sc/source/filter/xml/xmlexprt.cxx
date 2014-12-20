@@ -937,7 +937,6 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAd
     sal_Int32 nPrevColumn(0);
     bool bPrevIsVisible (true);
     bool bWasHeader (false);
-    bool bIsHeader (false);
     bool bIsClosed (true);
     sal_Int32 nPrevIndex (-1);
     sal_Int32 nColumn;
@@ -947,7 +946,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAd
         bool bIsVisible(true);
         nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumn, bIsVisible);
 
-        bIsHeader = bHasColumnHeader && (aColumnHeaderRange.StartColumn <= nColumn) && (nColumn <= aColumnHeaderRange.EndColumn);
+        const bool bIsHeader = bHasColumnHeader && (aColumnHeaderRange.StartColumn <= nColumn) && (nColumn <= aColumnHeaderRange.EndColumn);
         if (bIsHeader != bWasHeader)
         {
             if (bIsHeader)
@@ -4975,10 +4974,10 @@ XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExp
 
 void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib)
 {
-    const SfxPoolItem* pItem;
     sal_uInt32 nItems(pPool->GetItemCount2( nAttrib ));
     for( sal_uInt32 i = 0; i < nItems; ++i )
     {
+        const SfxPoolItem* pItem;
         if( 0 != (pItem = pPool->GetItem2( nAttrib, i ) ) )
         {
             const SvXMLAttrContainerItem *pUnknown(static_cast<const SvXMLAttrContainerItem *>(pItem));

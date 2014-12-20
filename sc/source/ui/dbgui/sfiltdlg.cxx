@@ -431,14 +431,13 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
-                OUString* pStr    = NULL;
                 bool    bFound  = false;
                 sal_uInt16  i       = 0;
                 sal_uInt16  nCount  = pLbFilterArea->GetEntryCount();
 
                 for ( i=1; i<nCount && !bFound; i++ )
                 {
-                    pStr = (OUString*)pLbFilterArea->GetEntryData( i );
+                    OUString* pStr = (OUString*)pLbFilterArea->GetEntryData( i );
                     bFound = (theCurAreaStr == *pStr);
                 }
 

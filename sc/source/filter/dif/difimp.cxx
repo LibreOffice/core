@@ -61,7 +61,6 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
     bool        bOverflowWarn = false;
 
     OUString&   aData = aDifParser.aData;
-    bool        bData = false;
 
     rIn.Seek( 0 );
 
@@ -73,7 +72,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
 
         aPrgrsBar.Progress();
 
-        bData = !aData.isEmpty();
+        const bool bData = !aData.isEmpty();
 
         switch( eTopic )
         {

@@ -582,10 +582,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
             if ( rScDoc.InsertTab( nNewTab, aTabName ) )
             {
-                bool bAppend = true;
-
                 if (bUndo)
                 {
+                    bool bAppend = true;
                     pScDocSh->GetUndoManager()->AddUndoAction(
                         new ScUndoInsertTab( pScDocSh, nNewTab,
                                              bAppend, aTabName ) );
