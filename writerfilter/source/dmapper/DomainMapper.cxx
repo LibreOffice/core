@@ -63,6 +63,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <filter/msfilter/util.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <TextEffectsHandler.hxx>
 #include <CellColorHandler.hxx>
@@ -96,11 +97,11 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
                             uno::Reference<text::XTextRange> const& xInsertTextRange,
-                            bool bIsNewDoc ) :
+                            utl::MediaDescriptor& rMediaDesc) :
 LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
-    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, bIsNewDoc )),
+    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, !rMediaDesc.getUnpackedValueOrDefault("InsertMode", false))),
     mnBackgroundColor(0), mbIsHighlightSet(false), mbIsSplitPara(false)
 {
     // #i24363# tab stops relative to indent

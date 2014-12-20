@@ -15,6 +15,11 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+namespace utl
+{
+class MediaDescriptor;
+}
+
 namespace writerfilter
 {
 namespace dmapper
@@ -38,7 +43,7 @@ public:
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
                  css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
-                 bool bIsNewDoc = true);
+                 utl::MediaDescriptor& rMediaDesc);
 };
 } // namespace dmapper
 } // namespace writerfilter

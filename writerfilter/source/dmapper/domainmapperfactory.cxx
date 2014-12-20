@@ -8,6 +8,7 @@
  */
 
 #include <DomainMapper.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 namespace writerfilter
 {
@@ -20,9 +21,9 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
         bool bRepairStorage,
         SourceDocumentType eDocumentType,
         css::uno::Reference<css::text::XTextRange> const& xInsertTextRange,
-        bool bIsNewDoc)
+        utl::MediaDescriptor& rMediaDesc)
 {
-    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, xInsertTextRange, bIsNewDoc));
+    return Stream::Pointer_t(new DomainMapper(xContext, xInputStream, xModel, bRepairStorage, eDocumentType, xInsertTextRange, rMediaDesc));
 }
 
 } // namespace dmapper

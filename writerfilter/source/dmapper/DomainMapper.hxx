@@ -46,6 +46,11 @@ namespace com{ namespace sun {namespace star{
     }
 }}}
 
+namespace utl
+{
+class MediaDescriptor;
+}
+
 typedef std::vector< com::sun::star::beans::PropertyValue > PropertyValueVector_t;
 
 namespace writerfilter {
@@ -76,7 +81,7 @@ public:
                                 bool bRepairStorage,
                                 SourceDocumentType eDocumentType,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > const& xInsertTextRange,
-                                bool bIsNewDoc = true);
+                                utl::MediaDescriptor& rMediaDesc);
     virtual ~DomainMapper();
 
     // Stream
