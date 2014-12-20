@@ -426,6 +426,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CNTNT:
                 static_cast<const SwFmtCntnt*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_FRM_SIZE:
+                static_cast<const SwFmtFrmSize*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -440,14 +443,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_FRM_SIZE:
-            {
-                pWhich = "frame size";
-                const SwFmtFrmSize* pSize = static_cast<const SwFmtFrmSize*>(pItem);
-                oValue = "height size type: " + OString::number(pSize->GetHeightSizeType()) + ", height: " + OString::number(pSize->GetHeight())
-                    + ", width size type: " + OString::number(pSize->GetWidthSizeType()) + ", width: " + OString::number(pSize->GetWidth());
-                break;
-            }
             case RES_VERT_ORIENT:
             {
                 pWhich = "frame vertical orientation";

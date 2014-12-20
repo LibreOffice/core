@@ -411,6 +411,25 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
+void SwFmtFrmSize::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtFrmSize"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+
+    std::stringstream aSize;
+    aSize << m_aSize;
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(aSize.str().c_str()));
+
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrmHeightType"), BAD_CAST(OString::number(m_eFrmHeightType).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eFrmWidthType"), BAD_CAST(OString::number(m_eFrmWidthType).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidthPercent"), BAD_CAST(OString::number(m_nWidthPercent).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eWidthPercentRelation"), BAD_CAST(OString::number(m_eWidthPercentRelation).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nHeightPercent"), BAD_CAST(OString::number(m_nHeightPercent).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eHeightPercentRelation"), BAD_CAST(OString::number(m_eHeightPercentRelation).getStr()));
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 // Partially implemented inline in hxx
 SwFmtFillOrder::SwFmtFillOrder( SwFillOrder nFO )
     : SfxEnumItem( RES_FILL_ORDER, sal_uInt16(nFO) )
