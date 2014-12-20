@@ -1035,12 +1035,11 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
 {
     const size_t nObjectCount = pPage->GetObjCount();
-    SdrObject*      pObject      = NULL;
     SdrTextObj*     pResult      = NULL;
 
     for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
     {
-        pObject = pPage->GetObj(nObject);
+        SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor &&
             pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
@@ -1326,13 +1325,12 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
 
     sal_Int32 nCount = pOutliner->GetParagraphCount();
 
-    Paragraph* pParagraph = NULL;
 
     sal_Int16 nCurrentDepth = -1;
 
     for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
     {
-        pParagraph = pOutliner->GetParagraph(nIndex);
+        Paragraph* pParagraph = pOutliner->GetParagraph(nIndex);
         if(pParagraph == NULL)
             continue;
 

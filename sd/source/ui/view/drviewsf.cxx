@@ -601,10 +601,10 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     }
                     if ( nCount == 1 )
                     {
-                        bool bBullets = false;
                         const SvxNumberFormat* pNumFmt = pNumRule->Get(nCurLevel);
                         if ( pNumFmt )
                         {
+                            bool bBullets = false;
                             switch(pNumFmt->GetNumberingType())
                             {
                                 case SVX_NUM_CHAR_SPECIAL:

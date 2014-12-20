@@ -955,12 +955,11 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 {
     const size_t nObjectCount = pPage->GetObjCount();
-    SdrObject*      pObject      = NULL;
     SdrTextObj*     pResult      = NULL;
 
     for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
     {
-        pObject = pPage->GetObj(nObject);
+        SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor &&
             pObject->GetObjIdentifier() == OBJ_TITLETEXT)
         {
@@ -977,12 +976,11 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage* pPage)
 {
     const size_t nObjectCount = pPage->GetObjCount();
-    SdrObject*      pObject      = NULL;
     SdrTextObj*     pResult      = NULL;
 
     for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
     {
-        pObject = pPage->GetObj(nObject);
+        SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor &&
             pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {

@@ -110,13 +110,12 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
-            uno::Any* pAny;
             PropertyEntryVector_t aProperties = mpPropSet->getPropertyMap().getPropertyEntries();
             PropertyEntryVector_t::const_iterator aIt = aProperties.begin();
 
             while( aIt != aProperties.end() )
             {
-                pAny = mpPropSet->GetUsrAnyForID( aIt->nWID );
+                uno::Any* pAny = mpPropSet->GetUsrAnyForID( aIt->nWID );
                 if( pAny )
                 {
                     OUString aPropertyName( aIt->sName );

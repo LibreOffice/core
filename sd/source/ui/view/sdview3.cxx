@@ -663,8 +663,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
         {
-            bool bChanged = false;
-
             DrawDocShellRef xShell = new DrawDocShell(SFX_CREATE_MODE_INTERNAL);
             xShell->DoInitNew(0);
 
@@ -683,6 +681,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
             else
             {
+                bool bChanged = false;
+
                 if( bReturn )
                 {
                     if( pModel->GetSdPage( 0, PK_STANDARD )->GetObjCount() == 1 )

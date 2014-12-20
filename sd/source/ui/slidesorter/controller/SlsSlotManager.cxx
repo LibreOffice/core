@@ -1248,12 +1248,11 @@ namespace {
 SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 {
     SlideExclusionState eState (UNDEFINED);
-    bool bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)
     {
-        bState = rPageSet.GetNextElement()->GetPage()->IsExcluded();
+        const bool bState = rPageSet.GetNextElement()->GetPage()->IsExcluded();
         switch (eState)
         {
             case UNDEFINED:

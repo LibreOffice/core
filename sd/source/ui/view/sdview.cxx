@@ -556,7 +556,6 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
 
     SdrMark* pMark;
     SdPage* pPage;
-    SdrObject* pObj;
 
     bool bSelected = false;
     bool bMasterPage = false;
@@ -566,7 +565,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
         --nMark;
         // Backwards through mark list
         pMark = pMarkList->GetMark(nMark);
-        pObj = pMark->GetMarkedSdrObj();
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
 
         if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
         {

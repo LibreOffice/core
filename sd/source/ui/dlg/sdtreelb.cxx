@@ -456,11 +456,11 @@ bool SdPageObjsTLB::SelectEntry( const OUString& rName )
  */
 bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
 {
-    bool bFound  = false;
     bool bChildren = false;
 
     if( !rName.isEmpty() )
     {
+        bool bFound  = false;
         SvTreeListEntry* pEntry = NULL;
         OUString aTmp;
 
@@ -896,7 +896,6 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
         if( GetBookmarkDoc() )
         {
             SdrObject*   pObj = NULL;
-            SdPage*      pPage = NULL;
             SvTreeListEntry* pPageEntry = NULL;
 
             Image aImgPage     = Image( BitmapEx( SdResId( BMP_PAGE     ) ) );
@@ -911,7 +910,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
 
             while( nPage < nMaxPages )
             {
-                pPage = static_cast<SdPage*>( mpBookmarkDoc->GetPage( nPage ) );
+                SdPage* pPage = static_cast<SdPage*>( mpBookmarkDoc->GetPage( nPage ) );
                 if( pPage->GetPageKind() == PK_STANDARD )
                 {
                     pPageEntry = InsertEntry( pPage->GetName(),

@@ -240,14 +240,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_OUTLINE_TEXT_AUTOFIT:
         {
             ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
-            SdrObject* pObj = NULL;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
                 pUndoManager->EnterListAction("", "");
                 mpDrawView->BegUndo();
 
-                pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 bool bSet = static_cast<const SdrTextFitToSizeTypeItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
 
                 mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));

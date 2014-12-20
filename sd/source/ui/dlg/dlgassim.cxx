@@ -149,11 +149,10 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
 
                     sal_Int32 nCount = pOutliner->GetParagraphCount();
 
-                    Paragraph* pPara = NULL;
 
                     for (sal_Int32 nPara = 0; nPara < nCount; nPara++)
                     {
-                        pPara = pOutliner->GetParagraph(nPara);
+                        Paragraph* pPara = pOutliner->GetParagraph(nPara);
                         if(pPara && pOutliner->GetDepth( nPara ) == 0 )
                         {
                             OUString aParaText = pOutliner->GetText(pPara);

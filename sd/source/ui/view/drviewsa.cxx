@@ -160,12 +160,11 @@ DrawViewShell::~DrawViewShell()
 
     DisposeFunctions();
 
-    SdPage* pPage;
     sal_uInt16 aPageCnt = GetDoc()->GetSdPageCount(mePageKind);
 
     for (sal_uInt16 i = 0; i < aPageCnt; i++)
     {
-        pPage = GetDoc()->GetSdPage(i, mePageKind);
+        SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
 
         if (pPage == mpActualPage)
         {
