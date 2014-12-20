@@ -884,14 +884,13 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            OUString* pStr    = NULL;
             bool    bFound  = false;
             sal_uInt16  i       = 0;
             sal_uInt16  nCount  = m_pLbOutPos->GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
-                pStr = (OUString*)m_pLbOutPos->GetEntryData( i );
+                OUString* pStr = (OUString*)m_pLbOutPos->GetEntryData( i );
                 bFound = (theCurPosStr == *pStr);
             }
 

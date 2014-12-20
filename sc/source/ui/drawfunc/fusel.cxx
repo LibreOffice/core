@@ -380,7 +380,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     bool bOle = pViewShell && pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     SdrObject* pObj = NULL;
-    SdrPageView* pPV = NULL;
     if (aDragTimer.IsActive() )
     {
         aDragTimer.Stop();
@@ -435,6 +434,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * If a user wants to click on an object in front of a marked
                 * one, he releases the mouse button immediately
                 **************************************************************/
+                SdrPageView* pPV = NULL;
                 if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
                 {
                     pView->UnmarkAllObj();

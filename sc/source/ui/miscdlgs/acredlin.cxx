@@ -1245,12 +1245,11 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvTreeListEntr
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     bool bTheTestFlag = true;
-    SvTreeListEntry* pEntry=NULL;
     ScChangeActionMap::iterator itChangeAction;
 
     for( itChangeAction = pActionMap->begin(); itChangeAction != pActionMap->end(); ++itChangeAction )
     {
-        pEntry=InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
+        SvTreeListEntry* pEntry=InsertChangeAction( itChangeAction->second, SC_CAS_VIRGIN, pParent, false, true );
 
         if(pEntry!=NULL)
         {
@@ -1343,7 +1342,6 @@ bool ScAcceptChgDlg::Expand(
 IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
-    ScChangeAction* pScChangeAction=NULL;
     SetPointer(Pointer(POINTER_WAIT));
     if(pTable!=NULL && pChanges!=NULL)
     {
@@ -1351,6 +1349,8 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
         SvTreeListEntry* pEntry=pTheView->GetHdlEntry();
         if(pEntry!=NULL)
         {
+            ScChangeAction* pScChangeAction=NULL;
+
             ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
             if(pEntryData!=NULL)
                 pScChangeAction=(ScChangeAction*) pEntryData->pData;
@@ -1411,7 +1411,6 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
     if(pChanges!=NULL)
     {
         SvTreeListEntry* pParent=NULL;
-        const ScChangeAction* pScChangeAction=NULL;
         bAcceptEnableFlag=true;
         bRejectEnableFlag=true;
         SetPointer(Pointer(POINTER_WAIT));
@@ -1426,7 +1425,7 @@ void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartActio
 
         for(sal_uLong i=nStartAction;i<=nEndAction;i++)
         {
-            pScChangeAction=pChanges->GetAction(i);
+            const ScChangeAction* pScChangeAction=pChanges->GetAction(i);
             if(pScChangeAction==NULL) continue;
 
             switch(pScChangeAction->GetState())
@@ -1503,13 +1502,12 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
     if(nAction>=nStartAction && nAction<=nEndAction)
         pTheView->SetCurEntry(pTheView->GetModel()->GetEntry(0));
 
-    bool bRemove = false;
 
     // MUST do it backwards, don't delete parents before children and GPF
     pEntry=pTheView->Last();
     while(pEntry!=NULL)
     {
-        bRemove=false;
+        bool bRemove = false;
         pEntryData=(ScRedlinData *)(pEntry->GetUserData());
         if(pEntryData!=NULL)
         {
@@ -1535,14 +1533,13 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
     sal_uLong nPos=TREELIST_APPEND;
 
-    bool bRemove = false;
 
     SvTreeListEntry* pEntry=pTheView->First();
     SvTreeListEntry* pNextEntry = (pEntry ? pTheView->NextSibling(pEntry) : NULL);
     SvTreeListEntry* pLastEntry=NULL;
     while(pEntry!=NULL)
     {
-        bRemove=false;
+        bool bRemove = false;
         ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
         if(pEntryData!=NULL)
         {

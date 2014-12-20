@@ -266,7 +266,6 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
 
 void ScRTFParser::ProcToken( ImportInfo* pInfo )
 {
-    ScEEParseEntry* pE;
     switch ( pInfo->nToken )
     {
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
@@ -351,7 +350,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             {   // Assign current Twips to MergeCell
                 if ( !maList.empty() )
                 {
-                    pE = maList.back();
+                    ScEEParseEntry* pE = maList.back();
                     pE->nTwips = pActDefault->nTwips;
                 }
                 // Adjust selection of free-flying pActEntry

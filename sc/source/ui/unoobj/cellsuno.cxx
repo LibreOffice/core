@@ -7350,10 +7350,10 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScPrintRangeSaver* pOldRanges = NULL;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
+        ScPrintRangeSaver* pOldRanges = NULL;
         ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
