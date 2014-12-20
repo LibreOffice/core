@@ -356,7 +356,7 @@ public:
     const ImageList&    GetImageList() const { return maImageList; }
     void                SetImageList( const ImageList& rImageList );
 
-    void                SetButtonType( ButtonType eNewType = BUTTON_SYMBOL );
+    void                SetButtonType( ButtonType eNewType = ButtonType::SYMBOLONLY );
     ButtonType          GetButtonType() const { return meButtonType; }
 
     // sets a fixed button size (small, large or dontcare (==autosize))

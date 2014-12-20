@@ -70,7 +70,7 @@ SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,
 {
     get(m_pBackTB, "back");
     m_pBackTB->SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
-    m_pBackTB->SetButtonType( BUTTON_SYMBOLTEXT );
+    m_pBackTB->SetButtonType( ButtonType::SYMBOLTEXT );
 }
 
 IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)

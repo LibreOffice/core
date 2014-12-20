@@ -62,10 +62,10 @@ enum class ToolBoxItemBits
     AUTOSIZE            = 0x0010,
     DROPDOWN            = 0x0020,
     REPEAT              = 0x0040,
-    DROPDOWNONLY        = 0x00a0, // 0x0080 | TIB_DROPDOWN
+    DROPDOWNONLY        = 0x00a0, // 0x0080 | DROPDOWN
     TEXT_ONLY           = 0x0100,
     ICON_ONLY           = 0x0200,
-    TEXTICON            = 0x0300 // TIB_TEXT_ONLY | TIB_ICON_ONLY
+    TEXTICON            = 0x0300 // TEXT_ONLY | ICON_ONLY
 };
 namespace o3tl
 {
@@ -74,7 +74,7 @@ namespace o3tl
 
 enum class ToolBoxItemType { DONTKNOW, BUTTON, SPACE, SEPARATOR, BREAK };
 
-enum ButtonType { BUTTON_SYMBOL, BUTTON_TEXT, BUTTON_SYMBOLTEXT };
+enum class ButtonType { SYMBOLONLY, TEXT, SYMBOLTEXT };
 
 enum class SymbolType : sal_uInt16
 {

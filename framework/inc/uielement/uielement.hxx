@@ -68,7 +68,7 @@ struct UIElement
                   m_bNoClose( false ),
                   m_bSoftClose( false ),
                   m_bStateRead( false ),
-                  m_nStyle( BUTTON_SYMBOL )
+                  m_nStyle( ButtonType::SYMBOLONLY )
                   {}
 
     UIElement( const OUString& rName,
@@ -89,7 +89,7 @@ struct UIElement
                    m_bNoClose( false ),
                    m_bSoftClose( false ),
                    m_bStateRead( false ),
-                   m_nStyle( BUTTON_SYMBOL ) {}
+                   m_nStyle( ButtonType::SYMBOLONLY ) {}
 
     bool operator< ( const UIElement& aUIElement ) const;
     UIElement& operator=( const UIElement& rUIElement );
@@ -109,7 +109,7 @@ struct UIElement
     bool                                                               m_bNoClose,
                                                                        m_bSoftClose,
                                                                        m_bStateRead;
-    sal_Int16                                                          m_nStyle;
+    ButtonType                                                         m_nStyle;
     DockedData                                                         m_aDockedData;
     FloatingData                                                       m_aFloatingData;
 };

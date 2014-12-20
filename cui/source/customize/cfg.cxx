@@ -3506,15 +3506,15 @@ void ToolbarSaveInData::SetSystemStyle(
 
         if ( nStyle == 0 )
         {
-            toolbox->SetButtonType( BUTTON_SYMBOL );
+            toolbox->SetButtonType( ButtonType::SYMBOLONLY );
         }
         else if ( nStyle == 1 )
         {
-            toolbox->SetButtonType( BUTTON_TEXT );
+            toolbox->SetButtonType( ButtonType::TEXT );
         }
         if ( nStyle == 2 )
         {
-            toolbox->SetButtonType( BUTTON_SYMBOLTEXT );
+            toolbox->SetButtonType( ButtonType::SYMBOLTEXT );
         }
     }
 }

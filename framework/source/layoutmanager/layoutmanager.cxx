@@ -552,7 +552,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                     {
                         sal_Int32 nStyle = 0;
                         if ( aWindowState[n].Value >>= nStyle )
-                            rElementData.m_nStyle = sal_Int16( nStyle );
+                            rElementData.m_nStyle = static_cast<ButtonType>( nStyle );
                     }
                     else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_LOCKED )
                     {

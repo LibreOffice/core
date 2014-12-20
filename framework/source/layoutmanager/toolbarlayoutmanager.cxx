@@ -1422,8 +1422,6 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
             }
             if ( pToolBox )
             {
-                if (( rElement.m_nStyle < 0 ) || ( rElement.m_nStyle > BUTTON_SYMBOLTEXT ))
-                    rElement.m_nStyle = BUTTON_SYMBOL;
                 pToolBox->SetButtonType( (ButtonType)rElement.m_nStyle );
                 if ( rElement.m_bNoClose )
                     pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() & ~WB_CLOSEABLE );
@@ -1604,7 +1602,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
             aWindowState[7].Value = uno::makeAny( rElementData.m_aDockedData.m_bLocked );
             aWindowState[8].Name  = WINDOWSTATE_PROPERTY_STYLE;
-            aWindowState[8].Value = uno::makeAny( rElementData.m_nStyle );
+            aWindowState[8].Value = uno::makeAny( static_cast<sal_uInt16>(rElementData.m_nStyle) );
 
             OUString aName = rElementData.m_aName;
             if ( xPersistentWindowState->hasByName( aName ))

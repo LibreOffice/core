@@ -1238,9 +1238,9 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         RscEnum   * pEnum;
 
         aBaseLst.push_back( pEnum = new RscEnum( pHS->getID( "EnumButtonType" ), RSC_NOTYPE ) );
-        SETCONST( pEnum, "BUTTON_SYMBOL",               BUTTON_SYMBOL );
-        SETCONST( pEnum, "BUTTON_TEXT",                 BUTTON_TEXT );
-        SETCONST( pEnum, "BUTTON_SYMBOLTEXT",   BUTTON_SYMBOLTEXT );
+        SETCONST( pEnum, "BUTTON_SYMBOL",               ButtonType::SYMBOLONLY );
+        SETCONST( pEnum, "BUTTON_TEXT",                 ButtonType::TEXT );
+        SETCONST( pEnum, "BUTTON_SYMBOLTEXT",   ButtonType::SYMBOLTEXT );
 
         // Variable einfuegen
         nId = aNmTb.Put( "ButtonType", VARNAME );

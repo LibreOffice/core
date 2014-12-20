@@ -220,8 +220,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 
     // Set toolbox styles
-    mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
-    mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
+    mpViewBar->SetButtonType(ButtonType::SYMBOLTEXT);
+    mpTemplateBar->SetButtonType(ButtonType::SYMBOLTEXT);
 
     // Set toolbox button bits
     mpViewBar->SetItemBits(mpViewBar->GetItemId(VIEWBAR_REPOSITORY), ToolBoxItemBits::DROPDOWNONLY);

@@ -169,11 +169,11 @@ ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
     ButtonType tmpButtonType = defaultType;
     if ( pItem->mnBits & (ToolBoxItemBits::TEXT_ONLY | ToolBoxItemBits::ICON_ONLY) ) // item has custom setting
     {
-        tmpButtonType = BUTTON_SYMBOLTEXT;
+        tmpButtonType = ButtonType::SYMBOLTEXT;
         if ( pItem->mnBits & ToolBoxItemBits::TEXT_ONLY )
-            tmpButtonType = BUTTON_TEXT;
+            tmpButtonType = ButtonType::TEXT;
         else if ( pItem->mnBits & ToolBoxItemBits::ICON_ONLY )
-            tmpButtonType = BUTTON_SYMBOL;
+            tmpButtonType = ButtonType::SYMBOLONLY;
     }
     return tmpButtonType;
 }
@@ -1398,7 +1398,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbIsShift          = false;
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
-    meButtonType      = BUTTON_SYMBOL;
+    meButtonType      = ButtonType::SYMBOLONLY;
     meAlign           = WINDOWALIGN_TOP;
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
@@ -1755,7 +1755,7 @@ bool ToolBox::ImplCalcItem()
 
                     it->mbEmptyBtn = false;
 
-                    if ( tmpButtonType == BUTTON_SYMBOL )
+                    if ( tmpButtonType == ButtonType::SYMBOLONLY )
                     {
                         // we're drawing images only
                         if ( bImage || !bText )
@@ -1769,7 +1769,7 @@ bool ToolBox::ImplCalcItem()
                             it->mbVisibleText = true;
                         }
                     }
-                    else if ( tmpButtonType == BUTTON_TEXT )
+                    else if ( tmpButtonType == ButtonType::TEXT )
                     {
                         // we're drawing text only
                         if ( bText || !bImage )

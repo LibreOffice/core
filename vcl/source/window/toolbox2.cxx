@@ -282,7 +282,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
     // prefer images if symbolonly buttons are drawn
     // prefer texts if textonly buttons are dreawn
 
-    if ( eButtonType == BUTTON_SYMBOL )         // drawing icons only
+    if ( eButtonType == ButtonType::SYMBOLONLY )         // drawing icons only
     {
         if( bHasImage || !bHasText )
         {
@@ -295,7 +295,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
             rbText  = true;
         }
     }
-    else if ( eButtonType == BUTTON_TEXT )      // drawing text only
+    else if ( eButtonType == ButtonType::TEXT )      // drawing text only
     {
         if( bHasText || !bHasImage )
         {
@@ -1270,7 +1270,7 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
         // only once all is calculated, do extra work
         if ( !mbCalc &&
-             ((meButtonType != BUTTON_SYMBOL) || !pItem->maImage) )
+             ((meButtonType != ButtonType::SYMBOLONLY) || !pItem->maImage) )
         {
             long nOldWidth = GetCtrlTextWidth( pItem->maText );
             pItem->maText = ImplConvertMenuString( rText );

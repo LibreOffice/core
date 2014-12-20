@@ -125,7 +125,7 @@ OUString VCLXAccessibleToolBoxItem::GetText( bool _bAsName )
 {
     OUString sRet;
     // no text for separators and spaces
-    if ( m_pToolBox && m_nItemId > 0 && ( _bAsName || m_pToolBox->GetButtonType() != BUTTON_SYMBOL ) )
+    if ( m_pToolBox && m_nItemId > 0 && ( _bAsName || m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) )
     {
         sRet = m_pToolBox->GetItemText( m_nItemId );
         if (sRet.isEmpty())
@@ -270,7 +270,7 @@ Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType ) thr
 {
     // #i33611# - toolbox buttons without text don't support XAccessibleText
     if ( _rType == cppu::UnoType<XAccessibleText>::get()
-        && ( !m_pToolBox || m_pToolBox->GetButtonType() == BUTTON_SYMBOL ) )
+        && ( !m_pToolBox || m_pToolBox->GetButtonType() == ButtonType::SYMBOLONLY ) )
         return Any();
 
     ::com::sun::star::uno::Any aReturn = AccessibleTextHelper_BASE::queryInterface( _rType );
@@ -466,7 +466,7 @@ awt::Rectangle SAL_CALL VCLXAccessibleToolBoxItem::getCharacterBounds( sal_Int32
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aBounds( 0, 0, 0, 0 );
-    if ( m_pToolBox && m_pToolBox->GetButtonType() != BUTTON_SYMBOL ) // symbol buttons have no character bounds
+    if ( m_pToolBox && m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) // symbol buttons have no character bounds
     {
         Rectangle aCharRect = m_pToolBox->GetCharacterBounds( m_nItemId, nIndex );
         Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
@@ -482,7 +482,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getIndexAtPoint( const awt::Point&
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nIndex = -1;
-    if ( m_pToolBox && m_pToolBox->GetButtonType() != BUTTON_SYMBOL ) // symbol buttons have no character bounds
+    if ( m_pToolBox && m_pToolBox->GetButtonType() != ButtonType::SYMBOLONLY ) // symbol buttons have no character bounds
     {
         sal_uInt16 nItemId = 0;
         Rectangle aItemRect = m_pToolBox->GetItemRect( m_nItemId );
