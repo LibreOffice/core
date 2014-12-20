@@ -36,9 +36,6 @@ class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
 {
     SwNode* pNd;
 
-    void Remove()
-        { DeRegisterIndex( pNd->GetNodes() ); };
-
     // These are not allowed!
     SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx );
     SwNodeIndex( SwNodes& rNds, int nIdx );
@@ -82,7 +79,8 @@ public:
         RegisterIndex( pNd->GetNodes() );
     }
 
-    ~SwNodeIndex() { Remove(); }
+    ~SwNodeIndex()
+        { DeRegisterIndex( pNd->GetNodes() ); };
 
     inline sal_uLong operator++();
     inline sal_uLong operator--();
