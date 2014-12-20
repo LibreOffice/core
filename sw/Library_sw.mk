@@ -224,7 +224,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/docnode/cancellablejob \
     sw/source/core/docnode/finalthreadmanager \
     sw/source/core/docnode/ndcopy \
-    sw/source/core/docnode/ndindex \
     sw/source/core/docnode/ndnotxt \
     sw/source/core/docnode/ndnum \
     sw/source/core/docnode/ndsect \

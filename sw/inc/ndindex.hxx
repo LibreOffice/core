@@ -124,7 +124,10 @@ public:
     SwNode& GetNode() const { return *pNd; }
 };
 
-std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index);
+inline std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index)
+{
+    return s << "SwNodeIndex (node " << index.GetIndex() << ")";
+};
 
 // SwRange
 
