@@ -114,8 +114,8 @@ public:
     inline sal_uLong GetIndex() const;
 
     // Enables assignments without creation of a temporary object.
-    SwNodeIndex& Assign( SwNodes& rNds, sal_uLong );
-    SwNodeIndex& Assign( const SwNode& rNd, long nOffset = 0 );
+    inline SwNodeIndex& Assign( SwNodes& rNds, sal_uLong );
+    inline SwNodeIndex& Assign( const SwNode& rNd, long nOffset = 0 );
 
     // Gets pointer on NodesArray.
     inline const SwNodes& GetNodes() const;
@@ -279,6 +279,36 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
     }
     else
         pNd = (SwNode*)&rNd;
+    return *this;
+}
+
+SwNodeIndex& SwNodeIndex::Assign( SwNodes& rNds, sal_uLong nIdx )
+{
+    if( &pNd->GetNodes() != &rNds )
+    {
+        DeRegisterIndex( pNd->GetNodes() );
+        pNd = rNds[ nIdx ];
+        RegisterIndex( pNd->GetNodes() );
+    }
+    else
+        pNd = rNds[ nIdx ];
+    return *this;
+}
+
+SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
+{
+    if( &pNd->GetNodes() != &rNd.GetNodes() )
+    {
+        DeRegisterIndex( pNd->GetNodes() );
+        pNd = (SwNode*)&rNd;
+        RegisterIndex( pNd->GetNodes() );
+    }
+    else
+        pNd = (SwNode*)&rNd;
+
+    if( nOffset )
+        pNd = pNd->GetNodes()[ pNd->GetIndex() + nOffset ];
+
     return *this;
 }
 
