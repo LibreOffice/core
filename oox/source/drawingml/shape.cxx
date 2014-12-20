@@ -1014,7 +1014,10 @@ Reference< XShape > Shape::createAndInsert(
             if( getTextBody() )
             {
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
-                mpCustomShapePropertiesPtr->setTextRotateAngle( nTextRotateAngle / 60000 );
+                /* OOX measures text rotation clockwise in 1/60000th degrees,
+                   relative to the containing shape. setTextRotateAngle wants
+                   degrees anticlockwise. */
+                mpCustomShapePropertiesPtr->setTextRotateAngle( -1 * nTextRotateAngle / 60000 );
             }
 
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");

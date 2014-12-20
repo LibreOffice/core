@@ -84,13 +84,16 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
     // ST_TextVerticalType
     if( rAttribs.hasAttribute( XML_vert ) ) {
         mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
-        bool bRtl = rAttribs.getBool( XML_rtl, false );
         sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
-        if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert )
-            mrTextBodyProp.moRotation = -5400000*(tVert==XML_vert270?3:1);
-        else
+        if (tVert == XML_vert || tVert == XML_eaVert || tVert == XML_mongolianVert)
+            mrTextBodyProp.moRotation = 5400000;
+        else if (tVert == XML_vert270)
+            mrTextBodyProp.moRotation = 5400000 * 3;
+        else {
+            bool bRtl = rAttribs.getBool( XML_rtl, false );
             mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWritingMode,
                 ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB ));
+        }
     }
 
     // ST_TextAnchoringType
