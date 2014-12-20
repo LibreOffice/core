@@ -91,7 +91,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     //UUUU fill attributes for paragraph backgrounds
     // #i125045# moved to the front to be able to exclude these in lcl_txtprmap_getMap
-    // for TEXT_PROP_MAP_SHAPE_PARA to not have these double for Shapes (which already have these)
+    // for TextPropMap::SHAPE_PARA to not have these double for Shapes (which already have these)
     GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SW_TYPE_FILLSTYLE, 0 ),
     GMAP( "FillColor",                      XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
     GMAP( "FillColor2",                     XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0 ),
@@ -955,15 +955,15 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
     M_END()
 };
 
-static XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
+static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
 {
     XMLPropertyMapEntry *pMap = 0;
     switch( nType )
     {
-    case TEXT_PROP_MAP_TEXT:
+    case TextPropMap::TEXT:
         pMap = aXMLTextPropMap;
         break;
-    case TEXT_PROP_MAP_SHAPE_PARA:
+    case TextPropMap::SHAPE_PARA:
         // #i125045# use [21] instead of [1] for text props for Shapes, idices
         // [1..20] contain the DrawingLayer FillStyle attributes corresponding to
         // [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and would be double since Shapes
@@ -971,32 +971,32 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         pMap = &(aXMLParaPropMap[21]);
         OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "shape para map changed" );
         break;
-    case TEXT_PROP_MAP_PARA:
+    case TextPropMap::PARA:
         pMap = aXMLParaPropMap;
         break;
-    case TEXT_PROP_MAP_FRAME:
+    case TextPropMap::FRAME:
         pMap = aXMLFramePropMap;
         break;
-    case TEXT_PROP_MAP_AUTO_FRAME:
+    case TextPropMap::AUTO_FRAME:
         pMap = &(aXMLFramePropMap[13]);
         OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "frame map changed" );
         break;
-    case TEXT_PROP_MAP_SHAPE:
+    case TextPropMap::SHAPE:
         pMap = aXMLShapePropMap;
         break;
-    case TEXT_PROP_MAP_SECTION:
+    case TextPropMap::SECTION:
         pMap = aXMLSectionPropMap;
         break;
-    case TEXT_PROP_MAP_RUBY:
+    case TextPropMap::RUBY:
         pMap = aXMLRubyPropMap;
         break;
-    case TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS:
+    case TextPropMap::TEXT_ADDITIONAL_DEFAULTS:
         pMap = aXMLAdditionalTextDefaultsMap;
         break;
-    case TEXT_PROP_MAP_TABLE_DEFAULTS:
+    case TextPropMap::TABLE_DEFAULTS:
         pMap = aXMLTableDefaultsMap;
         break;
-    case TEXT_PROP_MAP_TABLE_ROW_DEFAULTS:
+    case TextPropMap::TABLE_ROW_DEFAULTS:
         pMap = aXMLTableRowDefaultsMap;
         break;
     }
@@ -1004,12 +1004,12 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
     return pMap;
 }
 
-const XMLPropertyMapEntry* XMLTextPropertySetMapper::getPropertyMapForType( sal_uInt16 _nType )
+const XMLPropertyMapEntry* XMLTextPropertySetMapper::getPropertyMapForType( TextPropMap _nType )
 {
     return lcl_txtprmap_getMap( _nType );
 }
 
-XMLTextPropertySetMapper::XMLTextPropertySetMapper( sal_uInt16 nType, bool bForExport ) :
+XMLTextPropertySetMapper::XMLTextPropertySetMapper( TextPropMap nType, bool bForExport ) :
     XMLPropertySetMapper( lcl_txtprmap_getMap( nType ),
                           new XMLTextPropertyHandlerFactory, bForExport )
 {

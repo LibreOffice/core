@@ -269,7 +269,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     m_xPropHdlFactory = new OXMLRptPropHdlFactory();
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
     rtl::Reference < XMLPropertySetMapper > xTableStylesPropertySetMapper1 = new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(),xFac, true);
-    rtl::Reference < XMLPropertySetMapper > xTableStylesPropertySetMapper2 = new XMLTextPropertySetMapper(TEXT_PROP_MAP_TABLE_DEFAULTS, true );
+    rtl::Reference < XMLPropertySetMapper > xTableStylesPropertySetMapper2 = new XMLTextPropertySetMapper(TextPropMap::TABLE_DEFAULTS, true );
     xTableStylesPropertySetMapper1->AddMapperEntry(xTableStylesPropertySetMapper2);
 
     m_xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper1);
@@ -284,7 +284,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     rtl::Reference < XMLPropertySetMapper > xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory, true);
     m_xRowStylesExportPropertySetMapper = new OSpecialHandleXMLExportPropertyMapper(xRowStylesPropertySetMapper);
 
-    rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA, true ));
+    rtl::Reference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TextPropMap::PARA, true ));
     m_xParaPropMapper = new OSpecialHandleXMLExportPropertyMapper( xPropMapper);
 
     OUString sFamily( GetXMLToken(XML_PARAGRAPH) );

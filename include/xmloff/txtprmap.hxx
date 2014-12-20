@@ -198,25 +198,27 @@
 #define CTF_RELHEIGHTREL                    (XML_TEXT_CTF_START + 169)
 
 
-#define TEXT_PROP_MAP_TEXT 0
-#define TEXT_PROP_MAP_PARA 1
-#define TEXT_PROP_MAP_FRAME 2
-#define TEXT_PROP_MAP_AUTO_FRAME 3
-#define TEXT_PROP_MAP_SECTION 4
-#define TEXT_PROP_MAP_SHAPE 5
-#define TEXT_PROP_MAP_RUBY 6
-#define TEXT_PROP_MAP_SHAPE_PARA 7
-#define TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS 8
-#define TEXT_PROP_MAP_TABLE_DEFAULTS 9
-#define TEXT_PROP_MAP_TABLE_ROW_DEFAULTS 10
+enum class TextPropMap {
+    TEXT = 0,
+    PARA = 1,
+    FRAME = 2,
+    AUTO_FRAME = 3,
+    SECTION = 4,
+    SHAPE = 5,
+    RUBY = 6,
+    SHAPE_PARA = 7,
+    TEXT_ADDITIONAL_DEFAULTS = 8,
+    TABLE_DEFAULTS = 9,
+    TABLE_ROW_DEFAULTS = 10
+};
 
 class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper : public XMLPropertySetMapper
 {
 public:
-    XMLTextPropertySetMapper( sal_uInt16 nType, bool bForExport );
+    XMLTextPropertySetMapper( TextPropMap nType, bool bForExport );
     virtual ~XMLTextPropertySetMapper();
 
-    static const XMLPropertyMapEntry* getPropertyMapForType( sal_uInt16 _nType );
+    static const XMLPropertyMapEntry* getPropertyMapForType( TextPropMap _nType );
 };
 
 #endif

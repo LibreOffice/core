@@ -334,14 +334,14 @@ namespace xmloff
         Reference< XText > xControlText( m_xProps, UNO_QUERY );
         if ( xControlText.is() )
         {
-            const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_TEXT );
+            const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TextPropMap::TEXT );
             while ( pCharAttributeProperties->msApiName )
             {
                 exportedProperty( OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
                 ++pCharAttributeProperties;
             }
 
-            const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_SHAPE_PARA );
+            const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TextPropMap::SHAPE_PARA );
             while ( pParaAttributeProperties->msApiName )
             {
                 exportedProperty( OUString::createFromAscii( pParaAttributeProperties->msApiName ) );

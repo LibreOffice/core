@@ -375,7 +375,7 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
     m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap(true, false);
     m_xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory, false);
     m_xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory, false);
-    m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS, false );
+    m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TextPropMap::TABLE_DEFAULTS, false );
 }
 
 
