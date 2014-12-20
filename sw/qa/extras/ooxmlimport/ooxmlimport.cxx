@@ -73,13 +73,13 @@ public:
 
     virtual void preTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx")
+        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(true);
     }
 
     virtual void postTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx")
+        if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx" || OString(filename) == "fdo87488.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(false);
     }
 };
@@ -2406,6 +2406,27 @@ DECLARE_OOXMLIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.docx")
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // This was false, last section was balanced, but it's unbalanced in Word.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(2), "DontBalanceTextColumns"));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testFdo87488, "fdo87488.docx")
+{
+    // The shape on the right (index 0, CustomShape within a
+    // GroupShape) is rotated 90 degrees clockwise and contains text
+    // rotated 90 degrees anticlockwise.  Must be read with SmartArt
+    // enabled in preTest above, otherwise it gets converted to a
+    // StarView MetaFile.
+    uno::Reference<container::XIndexAccess> group(getShape(1), uno::UNO_QUERY);
+    {
+        uno::Reference<text::XTextRange> text(group->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("text2"), text->getString());
+    }
+    {
+        uno::Reference<beans::XPropertySet> props(group->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(props->getPropertyValue("RotateAngle"),
+                             uno::makeAny(270 * 100));
+        comphelper::SequenceAsHashMap geom(props->getPropertyValue("CustomShapeGeometry"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(90), geom["TextPreRotateAngle"].get<sal_Int32>());
+    }
 }
 
 #endif
