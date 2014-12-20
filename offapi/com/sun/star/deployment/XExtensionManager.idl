@@ -305,10 +305,10 @@ interface XExtensionManager
         are also not returned.
 
         Extensions returned by these functions are not returned by
-        XExtensionManger::getDeployedExtension()
-        XExtensionManger::getDeployedExtensions()
-        XExtensionManger::getAllExtensions()
-        XExtensionManger::getExtensionsWithSameIdentifier()
+        XExtensionManager::getDeployedExtension()
+        XExtensionManager::getDeployedExtensions()
+        XExtensionManager::getAllExtensions()
+        XExtensionManager::getExtensionsWithSameIdentifier()
     */
     sequence<XPackage> getExtensionsWithUnacceptedLicenses(
         [in] string repository,
