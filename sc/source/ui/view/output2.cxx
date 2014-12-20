@@ -1858,12 +1858,12 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         bVClip = true;
                     }
 
-                    //      horizontalen Platz testen
+                    // check horizontal space
 
-                    bool bRightAdjusted = false;        // to correct text width calculation later
                     bool bNeedEditEngine = false;
                     if ( !bNeedEditEngine && !bOutside )
                     {
+                        bool bRightAdjusted = false;        // to correct text width calculation later
                         switch (eOutHorJust)
                         {
                             case SVX_HOR_JUSTIFY_LEFT:

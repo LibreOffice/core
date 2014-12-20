@@ -923,9 +923,9 @@ ScVbaChart::is100PercentStacked() throw ( uno::RuntimeException )
 sal_Int32
 ScVbaChart::getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _nVerti100PercentStacked, sal_Int32 _nVertiUnStacked, sal_Int32 _nHoriStacked, sal_Int32 _nHori100PercentStacked, sal_Int32 _nHoriUnStacked) throw ( script::BasicErrorException )
 {
-    bool bIsVertical = true;
     try
     {
+        bool bIsVertical = true;
         mxDiagramPropertySet->getPropertyValue(VERTICAL) >>= bIsVertical;
         bool bIsDeep = false;
         mxDiagramPropertySet->getPropertyValue(DEEP) >>= bIsDeep;
@@ -955,9 +955,9 @@ ScVbaChart::getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _
 sal_Int32
 ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw (script::BasicErrorException)
 {
-    bool bUpDown = false;
     try
     {
+        bool bUpDown = false;
         mxDiagramPropertySet->getPropertyValue(UPDOWN) >>= bUpDown;
         if (bUpDown)
         {

@@ -92,11 +92,10 @@ bool has_item(const values_type& items, const indices_type& order, int val, long
     bool found = false;
     long low = 0;
     long high = items.size() - 1;
-    long comp_res;
     while (low <= high)
     {
         long this_index = (low + high) / 2;
-        comp_res = compare(items[order[this_index]], val);
+        const long comp_res = compare(items[order[this_index]], val);
         if (comp_res < 0)
             low = this_index + 1;
         else
