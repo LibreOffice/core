@@ -1190,7 +1190,6 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
         OUString sAddress = (*it).trim();
         // if a local name ( on the active sheet ) exists this will
         // take precedence over a global with the same name
-        bool bLocalName = false;
         if ( !xNameAccess->hasByName( sAddress ) )
         {
             // try a local name
@@ -1199,7 +1198,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             ScRangeName* pRangeName = rDoc.GetRangeName(nCurTab);
             if (pRangeName)
             {
-                bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != NULL;
+                bool bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != NULL;
                 // TODO: Handle local names correctly.
                 (void)bLocalName;
             }
@@ -2094,9 +2093,9 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         if ( !bVal )
             nFlags &= ~COL_ABSOLUTE;
     }
-    bool bLocal = false;
     if ( External.hasValue() )
     {
+        bool bLocal = false;
         External >>= bLocal;
         if (  bLocal )
             nFlags |= SCA_TAB_3D | SCA_FORCE_DOC;
@@ -3045,7 +3044,6 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
     sal_Int16 nLook =  globalSearchOptions.GetWordOnly() ?  excel::XlLookAt::xlPart : excel::XlLookAt::xlWhole;
     sal_Int16 nSearchOrder = globalSearchOptions.GetRowDirection() ? excel::XlSearchOrder::xlByRows : excel::XlSearchOrder::xlByColumns;
 
-    bool bMatchCase = false;
     uno::Reference< util::XReplaceable > xReplace( mxRange, uno::UNO_QUERY );
     if ( xReplace.is() )
     {
@@ -3088,6 +3086,8 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         }
         if ( MatchCase.hasValue() )
         {
+            bool bMatchCase = false;
+
             // SearchCaseSensitive
             MatchCase >>= bMatchCase;
             xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::makeAny( bMatchCase ) );
@@ -4470,7 +4470,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 
     if (  !aField.hasValue() && ( Criteria1.hasValue() || Operator.hasValue() || Criteria2.hasValue() ) )
         throw uno::RuntimeException();
-    bool bAll = false;
     uno::Any Field( aField );
     if ( !( Field >>= nField ) )
     {
@@ -4488,6 +4487,8 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     // in this case we just call the core calc functionality -
     if ( ( Field >>= nField )  )
     {
+        bool bAll = false;
+
         uno::Reference< sheet::XSheetFilterDescriptor2 > xDesc(
                 xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
         if ( xDesc.is() )
@@ -4836,8 +4837,6 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException, std::ex
     if( m_Areas->getCount() > 1 )
         throw uno::RuntimeException("Can not get Range.ShowDetail attribute " );
 
-    bool bShowDetail = false;
-
     RangeHelper helper( mxRange );
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = helper.getSheetCellCursor();
     xSheetCellCursor->collapseToCurrentRegion();
@@ -4857,7 +4856,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException, std::ex
         const ScOutlineEntry* pEntry = rOutlineArray.GetEntryByPos( 0, nPos );
         if( pEntry )
         {
-            bShowDetail = !pEntry->IsHidden();
+            const bool bShowDetail = !pEntry->IsHidden();
             return uno::makeAny( bShowDetail );
         }
     }

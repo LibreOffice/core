@@ -1304,9 +1304,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 InsertDeleteFlags nFlags = IDF_NONE;
                 sal_uInt16 nFunction = PASTE_NOFUNC;
-                bool bSkipEmpty = false;
-                bool bTranspose = false;
-                bool bAsLink    = false;
                 InsCellCmd eMoveMode = INS_NONE;
 
                 vcl::Window* pWin = GetViewData()->GetActiveWin();
@@ -1315,6 +1312,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
+                    bool bSkipEmpty = false;
+                    bool bTranspose = false;
+                    bool bAsLink    = false;
+
                     // keep a reference in case the clipboard is changed during dialog or PasteFromClip
                     uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )

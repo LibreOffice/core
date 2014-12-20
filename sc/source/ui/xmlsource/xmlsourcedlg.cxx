@@ -326,10 +326,9 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
     {
         // Only an element with no child elements (leaf element) can be linked.
         bool bHasChild = false;
-        ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
         for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = mpLbTree->NextSibling(pChild))
         {
-            pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
+            ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
             OSL_ASSERT(pUserData);
             if (pUserData->meType != ScOrcusXMLTreeParam::Attribute)
             {
@@ -451,11 +450,10 @@ void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
 
 bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
 {
-    ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
     SvTreeListEntry* pParent = mpLbTree->GetParent(pEntry);
     while (pParent)
     {
-        pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+        ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
         assert(pUserData);
         if (pUserData->maLinkedPos.IsValid())
         {
@@ -474,10 +472,9 @@ bool ScXMLSourceDlg::IsParentDirty(SvTreeListEntry* pEntry) const
 
 bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
 {
-    ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
     for (SvTreeListEntry* pChild = mpLbTree->FirstChild(pEntry); pChild; pChild = mpLbTree->NextSibling(pChild))
     {
-        pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
+        ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
         OSL_ASSERT(pUserData);
         if (pUserData->maLinkedPos.IsValid())
             // Already linked.

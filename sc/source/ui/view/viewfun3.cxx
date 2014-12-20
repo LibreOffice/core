@@ -1151,15 +1151,13 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {       // "Cell merge not possible if cells already merged"
             ScDocAttrIterator aIter( pDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow );
             const ScPatternAttr* pPattern = NULL;
-            const ScMergeAttr* pMergeFlag = NULL;
-            const ScMergeFlagAttr* pMergeFlagAttr = NULL;
             SCCOL nCol = -1;
             SCROW nRow1 = -1;
             SCROW nRow2 = -1;
             while ( ( pPattern = aIter.GetNext( nCol, nRow1, nRow2 ) ) != NULL )
             {
-                pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
-                pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
+                const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
+                const ScMergeFlagAttr* pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || ( pMergeFlagAttr && pMergeFlagAttr->IsOverlapped() ) )
                 {
                     ScRange aRange(nCol, nRow1, nStartTab);

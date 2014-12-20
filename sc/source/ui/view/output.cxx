@@ -414,11 +414,10 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                         ++nVisX;
 
                     nPosY = nScrY;
-                    long nNextY;
                     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
                     {
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                        nNextY = nPosY + pThisRowInfo->nHeight;
+                        const long nNextY = nPosY + pThisRowInfo->nHeight;
 
                         bool bHOver = pThisRowInfo->pCellInfo[nXplus1].bHideGrid;
                         if (!bHOver)
@@ -516,10 +515,9 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                     if ( bLayoutRTL )
                         nPosX += nMirrorW - nOneX;
 
-                    long nNextX;
                     for (SCCOL i=nX1; i<=nX2; i++)
                     {
-                        nNextX = nPosX + pRowInfo[0].pCellInfo[i+1].nWidth * nLayoutSign;
+                        const long nNextX = nPosX + pRowInfo[0].pCellInfo[i+1].nWidth * nLayoutSign;
                         if (nNextX != nPosX)                                // visible
                         {
                             bool bVOver;
@@ -1000,7 +998,6 @@ void ScOutputData::DrawBackground()
                 const SvxBrushItem* pOldBackground = NULL;
                 const SvxBrushItem* pBackground;
                 const Color* pOldColor = NULL;
-                const Color* pColor = NULL;
                 const ScDataBarInfo* pOldDataBarInfo = NULL;
                 const ScIconSetInfo* pOldIconSetInfo = NULL;
                 for (SCCOL nX=nX1; nX<=nX2; nX++)
@@ -1041,7 +1038,7 @@ void ScOutputData::DrawBackground()
                         pBackground = lcl_FindBackground( mpDoc, nX, nY, nTab );
                     }
 
-                    pColor = pInfo->pColorScale.get();
+                    const Color* pColor = pInfo->pColorScale.get();
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar.get();
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
                     drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
