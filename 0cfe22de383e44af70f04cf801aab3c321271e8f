@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_4c1d8065",
+        "filename": "RepositoryModule_host.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-20T11:02:33Z",
+      "side": 1,
+      "message": "There\u0027s some Display / glx usage that is breaking. I don\u0027t think i need this without a gui no?",
+      "parentUuid": "fa32b979_e9a3264e",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_89893acd",
         "filename": "configure.ac",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2014-12-19T18:45:10Z",
       "side": 1,
       "message": "That line should be unnecessary as we are not really using them anymore as far as I remember and I plan to remove the mesa header soon. We are using glew now to abstract the the OpenGL stuff.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_6c1ac470",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 10211,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-20T11:02:33Z",
+      "side": 1,
+      "message": "Yeah, will remove that",
+      "parentUuid": "fa32b979_89893acd",
       "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_0c2698ba",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-20T11:02:33Z",
+      "side": 1,
+      "message": "Uhm, isn\u0027t opengl sort of mandatory right now with the vcl opengl backend?",
+      "parentUuid": "fa32b979_a9867eb7",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_699076ed",
         "filename": "vcl/Module_vcl.mk",
         "patchSetId": 4
@@ -81,6 +135,24 @@
       "writtenOn": "2014-12-19T18:45:10Z",
       "side": 1,
       "message": "Why?",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_2c2b5c84",
+        "filename": "vcl/Module_vcl.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-20T11:02:33Z",
+      "side": 1,
+      "message": "This was because GUIBASE is not unx there and there\u0027s some executables around that requires glxtest",
+      "parentUuid": "fa32b979_699076ed",
       "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +193,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_cc1f505a",
+        "filename": "vcl/StaticLibrary_glxtest.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-20T11:02:33Z",
+      "side": 1,
+      "message": "I think i don\u0027t understand your commit, i think we are not building the glxtest anymore on --without-x and add ifdefery to the users instead.",
+      "parentUuid": "fa32b979_c99e6207",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_299a6e15",
         "filename": "vcl/unx/glxtest.cxx",
         "patchSetId": 4
@@ -132,6 +222,24 @@
       "writtenOn": "2014-12-19T18:45:10Z",
       "side": 1,
       "message": "I don\u0027t like that one. You should not build that file as that file need X11 unconditionally and you are not using it anyway.",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_ac10cc4f",
+        "filename": "vcl/unx/glxtest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-20T11:02:33Z",
+      "side": 1,
+      "message": "Ok, will do",
+      "parentUuid": "fa32b979_299a6e15",
       "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
