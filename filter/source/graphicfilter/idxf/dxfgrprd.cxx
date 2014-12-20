@@ -27,7 +27,7 @@
 
 
 // we use an own ReadLine function, because Stream::ReadLine stops if
-// a 0-sign occurs; this functions converts 0-signs to blanks and reads
+// a 0-sign occurs; this function converts 0-signs to blanks and reads
 // a complete line until a cr/lf is found
 
 OString DXFReadLine(SvStream& rIStm)

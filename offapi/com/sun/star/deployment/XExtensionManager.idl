@@ -304,7 +304,7 @@ interface XExtensionManager
         need to be displayed, and which are installed with the corresponding option,
         are also not returned.
 
-        Extensions returned by this functions are not returned by
+        Extensions returned by these functions are not returned by
         XExtensionManger::getDeployedExtension()
         XExtensionManger::getDeployedExtensions()
         XExtensionManger::getAllExtensions()

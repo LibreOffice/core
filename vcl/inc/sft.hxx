@@ -367,7 +367,7 @@ namespace vcl
 #ifndef NO_TYPE3
 /**
  * Generates a new PostScript Type 3 font and dumps it to <b>outf</b> file.
- * This functions subsititues glyph 0 for all glyphIDs that are not found in the font.
+ * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
  * @param ttf         pointer to the TrueTypeFont structure
  * @param outf        the resulting font is written to this stream
  * @param fname       font name for the new font. If it is NULL the PostScript name of the
@@ -388,7 +388,7 @@ namespace vcl
 #ifndef NO_TTCR
 /**
  * Generates a new TrueType font and dumps it to <b>outf</b> file.
- * This functions subsititues glyph 0 for all glyphIDs that are not found in the font.
+ * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
  * @param ttf         pointer to the TrueTypeFont structure
  * @param fname       file name for the output TrueType font file
  * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf. The first
@@ -419,7 +419,7 @@ namespace vcl
 #ifndef NO_TYPE42
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
- * This functions subsititues glyph 0 for all glyphIDs that are not found in the font.
+ * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
  * @param ttf         pointer to the TrueTypeFont structure
  * @param outf        output stream for a resulting font
  * @param psname      PostScript name of the resulting font

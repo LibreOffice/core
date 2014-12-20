@@ -2065,7 +2065,7 @@ static bool                     gbAscending = true;
 static sal_Int16                gnColumn = COLUMN_TITLE;
 static const CollatorWrapper*   pCollatorWrapper = NULL;
 
-/* this functions returns true, if aOne is less then aTwo
+/* this function returns true, if aOne is less then aTwo
 */
 bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl* const aTwo )
 {

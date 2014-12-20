@@ -99,7 +99,7 @@ void DragSource::StartDragImpl(
 
     // The SourceContext class administers the XDragSourceListener s and
     // fires events to them. An instance only exists in the scope of this
-    // functions. However, the drag and drop operation causes callbacks
+    // function. However, the drag and drop operation causes callbacks
     // to the IDropSource interface implemented in this class (but only
     // while this function executes). The source context is also used
     // in DragSource::QueryContinueDrag.

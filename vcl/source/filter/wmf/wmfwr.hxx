@@ -110,7 +110,7 @@ private:
     bool bEmbedEMF; // optionally embedd EMF data into WMF
 
     void MayCallback();
-        // this functions calculates percentage using the above 5 parameters
+        // this function calculates percentage using the above 5 parameters
         // and triggers a callback if needed. Puts bStatus to FALSE if the
         // users wants to abort.
 

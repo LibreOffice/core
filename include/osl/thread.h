@@ -62,7 +62,7 @@ typedef sal_uInt32 oslThreadIdentifier;
 typedef void* oslThreadKey;
 
 /** Create the thread, using the function-ptr pWorker as
-    its main (worker) function. This functions receives in
+    its main (worker) function. This function receives in
     its void* parameter the value supplied by pThreadData.
     Once the OS-structures are initialized,the thread starts
     running.
@@ -71,7 +71,7 @@ typedef void* oslThreadKey;
 SAL_DLLPUBLIC oslThread SAL_CALL osl_createThread(oslWorkerFunction pWorker, void* pThreadData);
 
 /** Create the thread, using the function-ptr pWorker as
-    its main (worker) function. This functions receives in
+    its main (worker) function. This function receives in
     its void* parameter the value supplied by pThreadData.
     The thread will be created, but it won't start running.
     To wake-up the thread, use resume().

@@ -46,7 +46,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
 
 /** Get the nArg-th command-line argument passed to the main-function of this process.
 
-    This functions differs from osl_getCommandArg() in filtering any bootstrap values
+    This function differs from osl_getCommandArg() in filtering any bootstrap values
     given by command args, that means that all arguments starting with "-env:" will be
     ignored by this function.
 
@@ -60,7 +60,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl
 
 /** Returns the number of command line arguments at process start.
 
-    This functions differs from osl_getCommandArg() in filtering any bootstrap values
+    This function differs from osl_getCommandArg() in filtering any bootstrap values
     given by command args, that means that all arguments starting with "-env:" will be
     ignored by this function.
 

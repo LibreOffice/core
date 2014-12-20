@@ -527,7 +527,7 @@ void SAL_CALL osl_waitThread(const TimeValue* pDelay)
 /* osl_yieldThread */
 /*
     Note that POSIX scheduling _really_ requires threads to call this
-    functions, since a thread only reschedules to other thread, when
+    function, since a thread only reschedules to other thread, when
     it blocks (sleep, blocking I/O) OR calls sched_yield().
 */
 /*****************************************************************************/

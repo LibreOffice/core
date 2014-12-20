@@ -415,7 +415,7 @@ namespace osl_Thread
 
     void resumeAndWaitThread(Thread* _pThread)
     {
-        // This functions starts a thread, wait a second and suspends the thread
+        // This function starts a thread, wait a second and suspends the thread
         // Due to the fact, that a suspend and never run thread never really exists.
 
         // Note: on UNX, after createSuspended, and then terminate the thread, it performs well;
