@@ -27,7 +27,6 @@ namespace dmapper
 
 enum SourceDocumentType
 {
-    DOCUMENT_DOC,
     DOCUMENT_OOXML,
     DOCUMENT_RTF
 };
