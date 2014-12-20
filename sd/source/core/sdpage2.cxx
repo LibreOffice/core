@@ -195,16 +195,14 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                 bListsFilled = true;
             }
 
-            SfxStyleSheet* pSheet = NULL;
-            SfxStyleSheet* pOldSheet = NULL;
 
             std::vector<SfxStyleSheetBase*>::iterator iterOut = aOutlineStyles.begin();
             std::vector<SfxStyleSheetBase*>::iterator iterOldOut = aOldOutlineStyles.begin();
 
             while (iterOut != aOutlineStyles.end())
             {
-                pSheet = static_cast<SfxStyleSheet*>(*iterOut);
-                pOldSheet = static_cast<SfxStyleSheet*>(*iterOldOut);
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(*iterOut);
+                SfxStyleSheet* pOldSheet = static_cast<SfxStyleSheet*>(*iterOldOut);
 
                 if (pSheet != pOldSheet)
                 {
@@ -270,14 +268,13 @@ void SdPage::EndListenOutlineText()
         if( nIndex != -1 )
             aTrueLayoutName = aTrueLayoutName.copy(0, nIndex);
 
-        SfxStyleSheet *pSheet = NULL;
         std::vector<SfxStyleSheetBase*> aOutlineStyles;
         pSPool->CreateOutlineSheetList(aTrueLayoutName,aOutlineStyles);
 
         std::vector<SfxStyleSheetBase*>::iterator iter;
         for (iter = aOutlineStyles.begin(); iter != aOutlineStyles.end(); ++iter)
         {
-            pSheet = static_cast<SfxStyleSheet*>(*iter);
+            SfxStyleSheet *pSheet = static_cast<SfxStyleSheet*>(*iter);
             pOutlineTextObj->EndListening(*pSheet);
         }
     }

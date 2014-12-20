@@ -224,10 +224,9 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
         if (pPage && pPage->GetPageKind() == PK_NOTES)
         {
             const size_t nObjCount = pPage->GetObjCount();
-            SdrObject* pObj = NULL;
             for (size_t nObj = 0; nObj < nObjCount; ++nObj)
             {
-                pObj = pPage->GetObj(nObj);
+                SdrObject* pObj = pPage->GetObj(nObj);
                 if (pObj->GetObjIdentifier() == OBJ_PAGE &&
                     pObj->GetObjInventor() == SdrInventor)
                 {
@@ -923,13 +922,12 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
 {
     sal_uInt16 nUD          = 0;
     sal_uInt16 nUDCount     = rObject.GetUserDataCount();
-    SdrObjUserData* pUD = 0;
     SdAnimationInfo* pRet = 0;
 
     // Can we find animation information within the user data?
     for (nUD = 0; nUD < nUDCount; nUD++)
     {
-        pUD = rObject.GetUserData(nUD);
+        SdrObjUserData* pUD = rObject.GetUserData(nUD);
         if((pUD->GetInventor() == SdUDInventor) && (pUD->GetId() == SD_ANIMATIONINFO_ID))
         {
             pRet = dynamic_cast<SdAnimationInfo*>(pUD);
@@ -950,14 +948,13 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 {
     DBG_ASSERT(pObject, "Without an object there is no IMapInfo");
 
-    SdrObjUserData* pUserData = NULL;
     SdIMapInfo*     pIMapInfo = NULL;
     sal_uInt16          nCount = pObject->GetUserDataCount();
 
     // Can we find IMap information within the user data?
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        pUserData = pObject->GetUserData( i );
+        SdrObjUserData* pUserData = pObject->GetUserData( i );
 
         if ( ( pUserData->GetInventor() == SdUDInventor ) && ( pUserData->GetId() == SD_IMAPINFO_ID ) )
             pIMapInfo = static_cast<SdIMapInfo*>(pUserData);
@@ -1057,7 +1054,6 @@ void SdDrawDocument::CheckMasterPages()
     }
 
     SdPage* pPage = NULL;
-    SdPage* pNotesPage = NULL;
 
     sal_uInt16 nPage;
 
@@ -1073,6 +1069,8 @@ void SdDrawDocument::CheckMasterPages()
 
     if( nPage < nMaxPages )
     {
+        SdPage* pNotesPage = NULL;
+
         // there is a fatal error in the master page order,
         // we need to repair the document
         bool bChanged = false;

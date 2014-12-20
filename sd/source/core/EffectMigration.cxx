@@ -445,10 +445,10 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
         EffectSequence::iterator aIterAsWhole( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::AS_WHOLE ) );
         const EffectSequence::iterator aEnd( pMainSequence->getEnd() );
 
-        bool bEffectCreated = false;
-
         if( (aIterOnlyBackground == aEnd) && (aIterAsWhole == aEnd) )
         {
+            bool bEffectCreated = false;
+
             // check if there is already an text effect for this shape
             EffectSequence::iterator aIterOnlyText( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_TEXT ) );
             if( aIterOnlyText != aEnd )
@@ -1402,14 +1402,13 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
             Reference< XTimeContainer > xParentContainer(xOuterSeqTimeContainer, UNO_QUERY_THROW);
 
             // prepare loop over objects
-            SdrObject* pLast = 0;
             SdrObject* pNext = 0;
             const double fDurationShow(0.2);
             const double fDurationHide(0.001);
 
             for(sal_uInt32 a(0); a < aObjects.size(); a++)
             {
-                pLast = pNext;
+                SdrObject* pLast = pNext;
                 pNext = aObjects[a];
 
                 // create node

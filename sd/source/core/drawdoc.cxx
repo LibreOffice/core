@@ -666,12 +666,11 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     mbNewOrLoadCompleted = true;
 
     // Update all linked pages
-    SdPage* pPage = NULL;
     sal_uInt16 nMaxSdPages = GetSdPageCount(PK_STANDARD);
 
     for (sal_uInt16 nSdPage=0; nSdPage < nMaxSdPages; nSdPage++)
     {
-        pPage = (SdPage*) GetSdPage(nSdPage, PK_STANDARD);
+        SdPage* pPage = (SdPage*) GetSdPage(nSdPage, PK_STANDARD);
 
         if (pPage && !pPage->GetFileName().isEmpty() && pPage->GetBookmarkName().getLength())
         {

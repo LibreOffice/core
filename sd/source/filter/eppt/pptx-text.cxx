@@ -88,7 +88,6 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
 {
     OUString aString( rXTextRange->getString() );
     OUString aURL;
-    bool bRTL_endingParen = false;
 
     mnTextSize = aString.getLength();
     if ( bLast )
@@ -96,6 +95,7 @@ PortionObj::PortionObj(::com::sun::star::uno::Reference< ::com::sun::star::text:
 
     if ( mnTextSize )
     {
+        bool bRTL_endingParen = false;
         mpFieldEntry = NULL;
         sal_uInt32 nFieldType = 0;
 
