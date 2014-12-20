@@ -1074,10 +1074,10 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
         bool bDoThis = (pLbField->GetSelectEntryPos() != 0);
         rEntry.bDoQuery = bDoThis;
-        bool bByEmptyOrNotByEmpty = false;
 
         if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
         {
+            bool bByEmptyOrNotByEmpty = false;
             if ( aStrEmpty.equals(aStrVal) )
             {
                 bByEmptyOrNotByEmpty = true;

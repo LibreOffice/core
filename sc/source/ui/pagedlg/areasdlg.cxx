@@ -586,12 +586,11 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     if ( (nEntryCount > nFirstCustomPos) && !aStrEd.isEmpty() )
     {
         bool    bFound  = false;
-        OUString* pSymbol = NULL;
         sal_uInt16 i;
 
         for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
-            pSymbol = (OUString*)pLb->GetEntryData( i );
+            OUString* pSymbol = (OUString*)pLb->GetEntryData( i );
             bFound  = ( (*pSymbol)  ==aStrEd || (*pSymbol) == aEdUpper );
         }
 

@@ -71,11 +71,9 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
 
     if ( nCount > 0 )
     {
-        sal_uInt16* pData = NULL;
-
         for ( sal_uLong i=0; i<nCount; i++ )
         {
-            pData = (sal_uInt16*)(mpLbColumns->GetEntryData( i ));
+            sal_uInt16* pData = (sal_uInt16*)(mpLbColumns->GetEntryData( i ));
             OSL_ENSURE( pData, "EntryData not found" );
 
             delete pData;

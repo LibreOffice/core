@@ -340,7 +340,6 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
     SCCOL   nEndCol         = rEndPos.Col();
     SCROW   nEndRow         = rEndPos.Row();
     sal_uInt16  nCellDir        = SCRET_COLS;
-    bool    bValueIgnored   = false;
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
     {
@@ -353,6 +352,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefAddress& rStartPos,
 
     if ( nCellDir != RET_CANCEL )
     {
+        bool bValueIgnored = false;
         OUString  aStrList;
         OUString  aStrField;
 

@@ -300,8 +300,6 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
 #else
 
     sal_uLong nErr = eERR_OK;
-    long i;
-    long nColCount = 0;
 
     // Try to get the Text Encoding from the driver
     if( eCharSet == RTL_TEXTENCODING_IBM_850 )
@@ -309,6 +307,8 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
 
     try
     {
+        long i;
+        long nColCount = 0;
         OUString aTabName;
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
