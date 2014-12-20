@@ -192,6 +192,10 @@ DomainMapper::~DomainMapper()
     }
 
     delete m_pImpl;
+
+#ifdef DEBUG_WRITERFILTER
+        dmapper_logger->endDocument();
+#endif
 }
 
 void DomainMapper::lcl_attribute(Id nName, Value & val)

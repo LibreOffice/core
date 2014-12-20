@@ -22,7 +22,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapperFactory.hxx>
-#include <resourcemodel/TagLogger.hxx>
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -68,16 +67,6 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault("RepairPackage", false);
         bool bIsNewDoc = !aMediaDesc.getUnpackedValueOrDefault("InsertMode", false);
         uno::Reference<text::XTextRange> xInsertTextRange = aMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>());
-#ifdef DEBUG_WRITERFILTER
-        OUString sURL = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
-        std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
-
-        writerfilter::TagLogger::Pointer_t dmapper_logger
-        (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
-        if (getenv("SW_DEBUG_WRITERFILTER"))
-            dmapper_logger->setFileName(sURLc);
-        dmapper_logger->startDocument();
-#endif
         uno::Reference< io::XInputStream > xInputStream;
 
         aMediaDesc.addInputStream();
@@ -118,9 +107,6 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
             writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);
         bResult = true;
-#ifdef DEBUG_WRITERFILTER
-        dmapper_logger->endDocument();
-#endif
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
     }

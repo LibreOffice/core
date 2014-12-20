@@ -34,7 +34,6 @@
 #include <osl/process.h>
 #endif
 
-#include <resourcemodel/TagLogger.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/helper/graphichelper.hxx>
@@ -76,17 +75,6 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         if ( !xInputStream.is() )
             return sal_False;
-
-#ifdef DEBUG_WRITERFILTER
-        OUString sURL = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
-        ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
-
-        writerfilter::TagLogger::Pointer_t dmapper_logger
-        (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
-        if (getenv("SW_DEBUG_WRITERFILTER"))
-            dmapper_logger->setFileName(sURLc);
-        dmapper_logger->startDocument();
-#endif
 
         writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::DOCUMENT_OOXML;
         writerfilter::Stream::Pointer_t pStream(
@@ -157,10 +145,6 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         }
 
         pStream.reset();
-
-#ifdef DEBUG_WRITERFILTER
-        dmapper_logger->endDocument();
-#endif
 
         return sal_True;
     }
