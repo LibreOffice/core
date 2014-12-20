@@ -26,6 +26,7 @@
 
 #include <node.hxx>
 #include <ring.hxx>
+#include <ndarr.hxx>
 
 class SwNode;
 class SwNodes;
@@ -33,7 +34,6 @@ class SwNodes;
 /// Marks a node in the document model.
 class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
 {
-    friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
     SwNode* pNd;
 
     void Remove();
@@ -41,6 +41,20 @@ class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
     // These are not allowed!
     SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx );
     SwNodeIndex( SwNodes& rNds, int nIdx );
+    void RegisterIndex( SwNodes& rNodes )
+    {
+        if(!rNodes.vIndices)
+            rNodes.vIndices = this;
+        MoveTo(rNodes.vIndices);
+    }
+    void DeRegisterIndex( SwNodes& rNodes )
+    {
+        if(rNodes.vIndices == this)
+            rNodes.vIndices = GetNextInRing();
+        MoveTo(nullptr);
+        if(rNodes.vIndices == this)
+            rNodes.vIndices = nullptr;
+    }
 
 public:
     SwNodeIndex( SwNodes& rNds, sal_uLong nIdx = 0 );

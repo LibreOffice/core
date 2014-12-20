@@ -96,6 +96,7 @@ class SW_DLLPUBLIC SwNodes
     friend class ::sw::DocumentContentOperationsManager;
 
     SwNodeIndex* vIndices; ///< ring of all indices on nodes.
+    void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, bool bDel );
 
     void InsertNode( const SwNodePtr pNode,
                      const SwNodeIndex& rPos );
@@ -114,11 +115,6 @@ class SW_DLLPUBLIC SwNodes
                                            Do not update Num/Outline. */
     bool bInDelUpdOutl : 1;         ///< Flag for updating of Outline.
     bool bInDelUpdNum : 1;          ///< Flag for updating of Outline.
-
-    /// For administering indices.
-    void RegisterIndex( SwNodeIndex& rIdx );
-    void DeRegisterIndex( SwNodeIndex& rIdx );
-    void RemoveNode( sal_uLong nDelPos, sal_uLong nLen, bool bDel );
 
     // Actions on the nodes.
     void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
@@ -336,6 +332,7 @@ public:
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
 };
+
 
 #endif
 

@@ -44,7 +44,7 @@ SwNodeRange::SwNodeRange( const SwNode& rS, long nSttDiff,
 SwNodeIndex::SwNodeIndex( SwNodes& rNds, sal_uLong nIdx )
     : pNd( rNds[ nIdx ] )
 {
-    rNds.RegisterIndex( *this );
+    RegisterIndex( rNds );
 }
 
 SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
@@ -55,7 +55,7 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
     else
         pNd = rIdx.pNd;
 
-    pNd->GetNodes().RegisterIndex( *this );
+    RegisterIndex( pNd->GetNodes() );
 }
 
 SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
@@ -65,21 +65,21 @@ SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
     else
         pNd = (SwNode*)&rNd;
 
-    pNd->GetNodes().RegisterIndex( *this );
+    RegisterIndex( pNd->GetNodes() );
 }
 
 void SwNodeIndex::Remove()
 {
-    pNd->GetNodes().DeRegisterIndex( *this );
+    DeRegisterIndex( pNd->GetNodes() );
 }
 
 SwNodeIndex& SwNodeIndex::operator=( const SwNodeIndex& rIdx )
 {
     if( &pNd->GetNodes() != &rIdx.pNd->GetNodes() )
     {
-        pNd->GetNodes().DeRegisterIndex( *this );
+        DeRegisterIndex( pNd->GetNodes() );
         pNd = rIdx.pNd;
-        pNd->GetNodes().RegisterIndex( *this );
+        RegisterIndex( pNd->GetNodes() );
     }
     else
         pNd = rIdx.pNd;
@@ -90,9 +90,9 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
 {
     if( &pNd->GetNodes() != &rNd.GetNodes() )
     {
-        pNd->GetNodes().DeRegisterIndex( *this );
+        DeRegisterIndex( pNd->GetNodes() );
         pNd = (SwNode*)&rNd;
-        pNd->GetNodes().RegisterIndex( *this );
+        RegisterIndex( pNd->GetNodes() );
     }
     else
         pNd = (SwNode*)&rNd;
@@ -103,9 +103,9 @@ SwNodeIndex& SwNodeIndex::Assign( SwNodes& rNds, sal_uLong nIdx )
 {
     if( &pNd->GetNodes() != &rNds )
     {
-        pNd->GetNodes().DeRegisterIndex( *this );
+        DeRegisterIndex( pNd->GetNodes() );
         pNd = rNds[ nIdx ];
-        pNd->GetNodes().RegisterIndex( *this );
+        RegisterIndex( pNd->GetNodes() );
     }
     else
         pNd = rNds[ nIdx ];
@@ -116,9 +116,9 @@ SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
 {
     if( &pNd->GetNodes() != &rNd.GetNodes() )
     {
-        pNd->GetNodes().DeRegisterIndex( *this );
+        DeRegisterIndex( pNd->GetNodes() );
         pNd = (SwNode*)&rNd;
-        pNd->GetNodes().RegisterIndex( *this );
+        RegisterIndex( pNd->GetNodes() );
     }
     else
         pNd = (SwNode*)&rNd;

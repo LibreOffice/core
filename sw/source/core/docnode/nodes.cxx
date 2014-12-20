@@ -2313,18 +2313,4 @@ bool SwNodes::IsDocNodes() const
     return this == &pMyDoc->GetNodes();
 }
 
-void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
-{
-    if(!vIndices)
-        vIndices = &rIdx;
-    rIdx.MoveTo(vIndices);
-}
-void SwNodes::DeRegisterIndex( SwNodeIndex& rIdx )
-{
-    if(vIndices == &rIdx)
-        vIndices = vIndices->GetNextInRing();
-    rIdx.MoveTo(nullptr);
-    if(vIndices == &rIdx)
-        vIndices = nullptr;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
