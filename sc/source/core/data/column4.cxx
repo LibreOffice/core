@@ -149,6 +149,8 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     if (!pBlockPos)
         return;
 
+    bool bSameDocPool = (rCxt.getClipDoc()->GetPool() == pDocument->GetPool());
+
     ScCellValue& rSrcCell = rCxt.getSingleCell(nColOffset);
 
     InsertDeleteFlags nFlags = rCxt.getInsertFlag();
@@ -157,7 +159,8 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     {
         if (!rCxt.isSkipAttrForEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
-            const ScPatternAttr* pAttr = rCxt.getSingleCellPattern(nColOffset);
+            const ScPatternAttr* pAttr = (bSameDocPool ? rCxt.getSingleCellPattern(nColOffset) :
+                    rCxt.getSingleCellPattern(nColOffset)->PutInPool( pDocument, rCxt.getClipDoc()));
             pAttrArray->SetPatternArea(nRow1, nRow2, pAttr, true);
         }
     }
@@ -182,8 +185,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             {
                 // Compare the ScDocumentPool* to determine if we are copying within the
                 // same document. If not, re-intern shared strings.
-                svl::SharedStringPool* pSharedStringPool = (rCxt.getClipDoc()->GetPool() != pDocument->GetPool()) ?
-                    &pDocument->GetSharedStringPool() : NULL;
+                svl::SharedStringPool* pSharedStringPool = (bSameDocPool ? NULL : &pDocument->GetSharedStringPool());
                 svl::SharedString aStr = (pSharedStringPool ?
                         pSharedStringPool->intern( rSrcCell.mpString->getString()) :
                         *rSrcCell.mpString);
