@@ -36,7 +36,8 @@ class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
 {
     SwNode* pNd;
 
-    void Remove();
+    void Remove()
+        { DeRegisterIndex( pNd->GetNodes() ); };
 
     // These are not allowed!
     SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx );
@@ -57,9 +58,30 @@ class SW_DLLPUBLIC SwNodeIndex SAL_FINAL : public sw::Ring<SwNodeIndex>
     }
 
 public:
-    SwNodeIndex( SwNodes& rNds, sal_uLong nIdx = 0 );
-    SwNodeIndex( const SwNodeIndex &, long nDiff = 0 );
-    SwNodeIndex( const SwNode&, long nDiff = 0 );
+    SwNodeIndex( SwNodes& rNds, sal_uLong nIdx = 0 )
+        : pNd( rNds[ nIdx ] )
+    {
+        RegisterIndex( rNds );
+    };
+    SwNodeIndex( const SwNodeIndex& rIdx, long nDiff = 0 )
+        : sw::Ring<SwNodeIndex>()
+    {
+        if( nDiff )
+            pNd = rIdx.GetNodes()[ rIdx.GetIndex() + nDiff ];
+        else
+            pNd = rIdx.pNd;
+        RegisterIndex( pNd->GetNodes() );
+    }
+
+    SwNodeIndex( const SwNode& rNd, long nDiff = 0 )
+    {
+        if( nDiff )
+            pNd = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
+        else
+            pNd = (SwNode*)&rNd;
+        RegisterIndex( pNd->GetNodes() );
+    }
+
     ~SwNodeIndex() { Remove(); }
 
     inline sal_uLong operator++();
@@ -114,14 +136,18 @@ public:
     SwNodeIndex aStart;
     SwNodeIndex aEnd;
 
-    SwNodeRange( const SwNodeIndex &rS, const SwNodeIndex &rE );
-    SwNodeRange( const SwNodeRange &rRange );
+    SwNodeRange( const SwNodeIndex &rS, const SwNodeIndex &rE )
+        : aStart( rS ), aEnd( rE ) {};
+    SwNodeRange( const SwNodeRange &rRange )
+        : aStart( rRange.aStart ), aEnd( rRange.aEnd ) {};
 
-    SwNodeRange( SwNodes& rArr, sal_uLong nSttIdx = 0, sal_uLong nEndIdx = 0 );
-    SwNodeRange( const SwNodeIndex& rS, long nSttDiff,
-                 const SwNodeIndex& rE, long nEndDiff = 0 );
-    SwNodeRange( const SwNode& rS, long nSttDiff,
-                 const SwNode& rE, long nEndDiff = 0 );
+    SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx = 0, sal_uLong nEndIdx = 0 )
+        : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx ) {};
+
+    SwNodeRange( const SwNodeIndex& rS, long nSttDiff, const SwNodeIndex& rE, long nEndDiff = 0 )
+        : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff ) {};
+    SwNodeRange( const SwNode& rS, long nSttDiff, const SwNode& rE, long nEndDiff = 0 )
+        : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff ) {};
 };
 
 // For inlines node.hxx is needed which in turn needs this one.

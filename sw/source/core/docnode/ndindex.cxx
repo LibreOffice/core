@@ -19,60 +19,6 @@
 
 #include "ndindex.hxx"
 
-SwNodeRange::SwNodeRange( const SwNodeIndex &rS, const SwNodeIndex &rE )
-    : aStart( rS ), aEnd( rE )
-{}
-
-SwNodeRange::SwNodeRange( const SwNodeRange &rRange )
-    : aStart( rRange.aStart ), aEnd( rRange.aEnd )
-{}
-
-SwNodeRange::SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx, sal_uLong nEndIdx )
-    : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx )
-{}
-
-SwNodeRange::SwNodeRange( const SwNodeIndex& rS, long nSttDiff,
-                          const SwNodeIndex& rE, long nEndDiff )
-    : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff )
-{}
-
-SwNodeRange::SwNodeRange( const SwNode& rS, long nSttDiff,
-                          const SwNode& rE, long nEndDiff )
-    : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff )
-{}
-
-SwNodeIndex::SwNodeIndex( SwNodes& rNds, sal_uLong nIdx )
-    : pNd( rNds[ nIdx ] )
-{
-    RegisterIndex( rNds );
-}
-
-SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
-    : sw::Ring<SwNodeIndex>()
-{
-    if( nDiff )
-        pNd = rIdx.GetNodes()[ rIdx.GetIndex() + nDiff ];
-    else
-        pNd = rIdx.pNd;
-
-    RegisterIndex( pNd->GetNodes() );
-}
-
-SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
-{
-    if( nDiff )
-        pNd = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
-    else
-        pNd = (SwNode*)&rNd;
-
-    RegisterIndex( pNd->GetNodes() );
-}
-
-void SwNodeIndex::Remove()
-{
-    DeRegisterIndex( pNd->GetNodes() );
-}
-
 SwNodeIndex& SwNodeIndex::operator=( const SwNodeIndex& rIdx )
 {
     if( &pNd->GetNodes() != &rIdx.pNd->GetNodes() )
