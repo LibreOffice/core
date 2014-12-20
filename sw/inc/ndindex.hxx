@@ -107,8 +107,8 @@ public:
     inline bool operator!=( sal_uLong nWert ) const;
 
     inline SwNodeIndex& operator=( sal_uLong );
-           SwNodeIndex& operator=( const SwNodeIndex& );
-           SwNodeIndex& operator=( const SwNode& );
+    inline SwNodeIndex& operator=( const SwNodeIndex& );
+    inline SwNodeIndex& operator=( const SwNode& );
 
     // Return value of index as sal_uLong.
     inline sal_uLong GetIndex() const;
@@ -253,6 +253,32 @@ inline sal_uLong SwNodeIndex::operator-=( const SwNodeIndex& rIndex )
 inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
 {
     pNd = GetNodes()[ nWert ];
+    return *this;
+}
+
+SwNodeIndex& SwNodeIndex::operator=( const SwNodeIndex& rIdx )
+{
+    if( &pNd->GetNodes() != &rIdx.pNd->GetNodes() )
+    {
+        DeRegisterIndex( pNd->GetNodes() );
+        pNd = rIdx.pNd;
+        RegisterIndex( pNd->GetNodes() );
+    }
+    else
+        pNd = rIdx.pNd;
+    return *this;
+}
+
+SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
+{
+    if( &pNd->GetNodes() != &rNd.GetNodes() )
+    {
+        DeRegisterIndex( pNd->GetNodes() );
+        pNd = (SwNode*)&rNd;
+        RegisterIndex( pNd->GetNodes() );
+    }
+    else
+        pNd = (SwNode*)&rNd;
     return *this;
 }
 
