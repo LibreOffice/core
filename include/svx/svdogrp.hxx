@@ -108,6 +108,8 @@ public:
     virtual void ReformatText() SAL_OVERRIDE;
 
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
+
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_SVDOGRP_HXX

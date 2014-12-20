@@ -48,6 +48,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <libxml/xmlwriter.h>
 
 
 // BaseProperties section
@@ -774,6 +775,17 @@ SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     }
 
     return pGroup;
+}
+
+void SdrObjGroup::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrObjGroup"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SdrObject::dumpAsXml(pWriter);
+
+    pSub->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
