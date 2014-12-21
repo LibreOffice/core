@@ -1054,8 +1054,13 @@ void ScCheckListMenuWindow::packWindow()
 void ScCheckListMenuWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
-    for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, bSet);
+    OUString aLabel;
+    for (size_t i = 0; i < n; ++i) {
+        aLabel = maMembers[i].maName;
+        if (aLabel.isEmpty())
+            aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
+        maChecks.CheckEntry( aLabel, maMembers[i].mpParent, bSet);
+    }
 
     if (!maConfig.mbAllowEmptySet)
         // We need to have at least one member selected.
@@ -1493,8 +1498,11 @@ void ScCheckListMenuWindow::initMembers()
         }
         else
         {
+            OUString aLabel = maMembers[i].maName;
+            if (aLabel.isEmpty())
+                aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
             SvTreeListEntry* pEntry = maChecks.InsertEntry(
-                maMembers[i].maName, NULL, false, TREELIST_APPEND, NULL,
+                aLabel, NULL, false, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
             maChecks.SetCheckButtonState(
@@ -1544,7 +1552,10 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
     {
         if ( maMembers[i].mbLeaf )
         {
-            bool bState =  maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent );
+            OUString aLabel = maMembers[i].maName;
+            if (aLabel.isEmpty())
+                aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
+            bool bState =  maChecks.IsChecked( aLabel,  maMembers[i].mpParent );
             OUString sName;
             if ( maMembers[i].mbDate )
                 sName = maMembers[i].maRealName;
