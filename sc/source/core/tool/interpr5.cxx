@@ -1188,6 +1188,11 @@ void ScInterpreter::ScAdd()
 {
     CalculateAddSub(false);
 }
+
+namespace {
+
+}
+
 void ScInterpreter::CalculateAddSub(bool _bSub)
 {
     ScMatrixRef pMat1 = NULL;
@@ -1278,26 +1283,21 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            SCSIZE nCount = nC * nR;
+            svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
             if (bFlag || !_bSub )
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
+                if (_bSub)
                 {
-                    if (pMat->IsValue(i))
-                        pResMat->PutDouble( _bSub ? ::rtl::math::approxSub( fVal, pMat->GetDouble(i)) : ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
-                    else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+                    pMat->SubAddOp(true, fVal, aString, *pResMat);
+                }
+                else
+                {
+                    pMat->SubAddOp(false, fVal, aString, *pResMat);
                 }
             }
             else
             {
-                for ( SCSIZE i = 0; i < nCount; i++ )
-                {
-                    if (pMat->IsValue(i))
-                        pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
-                    else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-                }
+                pMat->SubAddOp(true, fVal, aString, *pResMat);
             }
             PushMatrix(pResMat);
         }
