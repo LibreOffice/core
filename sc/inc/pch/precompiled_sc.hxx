@@ -36,7 +36,6 @@
 #include <basic/sbxobj.hxx>
 #include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
-#include <boost/foreach.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/random.hpp>

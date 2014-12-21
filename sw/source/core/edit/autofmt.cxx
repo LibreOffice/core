@@ -67,7 +67,6 @@
 #include <numrule.hxx>
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;
 

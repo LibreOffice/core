@@ -20,7 +20,6 @@
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/foreach.hpp>
 #include <stdio.h>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/token/tokens.hxx>
