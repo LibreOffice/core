@@ -29,8 +29,8 @@
 #include "scdllapi.h"
 #include <formula/IFunctionDescription.hxx>
 #include <formula/token.hxx>
-#include "scmatrix.hxx"
 #include "calcmacros.hxx"
+#include "types.hxx"
 
 // Matrix token constants.
 #define MATRIX_TOKEN_HAS_RANGE 1
@@ -42,6 +42,7 @@ struct RangeMatrix;
 }
 
 class ScJumpMatrix;
+class ScMatrix;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
 

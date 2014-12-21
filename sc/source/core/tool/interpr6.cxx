@@ -24,6 +24,7 @@
 #include "cellvalue.hxx"
 #include "dociter.hxx"
 #include "mtvcellfunc.hxx"
+#include "scmatrix.hxx"
 
 #include <formula/token.hxx>
 
