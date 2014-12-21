@@ -1912,6 +1912,9 @@
       </node>
       <node oor:name=".uno:NewDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Manage Templates</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Manage</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -4900,6 +4903,14 @@
       <node oor:name=".uno:SendMail" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~E-mail Document...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EmailMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">E~mail</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
