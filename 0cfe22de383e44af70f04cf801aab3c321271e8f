@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_acf68cd5",
+        "filename": "RepositoryModule_host.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-21T11:39:33Z",
+      "side": 1,
+      "message": "I think that will break impress quite badly.",
+      "parentUuid": "fa32b979_4c1d8065",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_89893acd",
         "filename": "configure.ac",
         "patchSetId": 4
@@ -124,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_ec13340c",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-21T11:39:33Z",
+      "side": 1,
+      "message": "ENABLE_OPENGLhas nothing to do with the vcl opengl backend. It is purely for the OGL transitions. The option is badly named and might be removed in the future but at least as long as they are still only LGPL we are keeping that option. There is no configure option for that anymore but you can set it in configure.ac in your headless part.",
+      "parentUuid": "fa32b979_0c2698ba",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_699076ed",
         "filename": "vcl/Module_vcl.mk",
         "patchSetId": 4
@@ -153,6 +189,24 @@
       "side": 1,
       "message": "This was because GUIBASE is not unx there and there\u0027s some executables around that requires glxtest",
       "parentUuid": "fa32b979_699076ed",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_cc0e70e5",
+        "filename": "vcl/Module_vcl.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-21T11:39:33Z",
+      "side": 1,
+      "message": "Just make the use of glxtest conditional on not being in the headless mode.",
+      "parentUuid": "fa32b979_2c2b5c84",
       "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -205,6 +259,24 @@
       "side": 1,
       "message": "I think i don\u0027t understand your commit, i think we are not building the glxtest anymore on --without-x and add ifdefery to the users instead.",
       "parentUuid": "fa32b979_c99e6207",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_8cf948cb",
+        "filename": "vcl/StaticLibrary_glxtest.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-21T11:39:33Z",
+      "side": 1,
+      "message": "Don\u0027t build that library for your headless build. It is a X11 library!",
+      "parentUuid": "fa32b979_cc1f505a",
       "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
