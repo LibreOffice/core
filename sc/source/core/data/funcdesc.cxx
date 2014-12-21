@@ -783,7 +783,10 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     if ( pLRUListIds )
     {
         for (sal_uInt16 i = 0; i < nLRUFuncCount; ++i)
-            _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
+        {
+            if (std::find(_rLastRUFunctions.begin(), _rLastRUFunctions.end(), Get(pLRUListIds[i])) == _rLastRUFunctions.end())
+                _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
+        }
     }
 }
 
