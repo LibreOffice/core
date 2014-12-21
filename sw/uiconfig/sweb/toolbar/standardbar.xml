@@ -32,11 +32,9 @@
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:PrintPreview" toolbar:helpid="5325"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintPreview" toolbar:helpid="5325" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SourceView" toolbar:helpid="5675"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:helpid="20622"/>
- <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"/>
+ <toolbar:toolbaritem xlink:href=".uno:WebHtml"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:helpid="5710"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:helpid="5711"/>
@@ -46,14 +44,29 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:helpid="20622"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetDocumentProperties" toolbar:text="Properties"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="10593"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertPlugin"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFootnote"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false" toolbar:helpid="6660"/>
- <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false" toolbar:helpid="5402"/>
