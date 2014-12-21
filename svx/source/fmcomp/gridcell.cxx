@@ -2407,7 +2407,6 @@ bool DbTimeField::commitControl()
 
 DbComboBox::DbComboBox(DbGridColumn& _rColumn)
            :DbCellControl(_rColumn)
-           ,m_nKeyType(::com::sun::star::util::NumberFormat::UNDEFINED)
 {
     setAlignedController( false );
 
@@ -2479,9 +2478,6 @@ void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
     SetList( xModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) );
     implAdjustGenericFieldSetting( xModel );
 
-    if (m_rColumn.GetParent().getNumberFormatter().is())
-        m_nKeyType  = comphelper::getNumberFormatType(m_rColumn.GetParent().getNumberFormatter()->getNumberFormatsSupplier()->getNumberFormats(), m_rColumn.GetKey());
-
     DbCellControl::Init( rParent, xCursor );
 }
 
@@ -2494,17 +2490,10 @@ CellControllerRef DbComboBox::CreateController() const
 
 OUString DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
-    OUString aString;
-    if (_rxField.is())
-        try
-        {
-            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    return aString;
+    const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
+    ::dbtools::FormattedColumnValue fmter( xFormatter, xPS );
+
+    return fmter.getFormattedValue();
 }
 
 
