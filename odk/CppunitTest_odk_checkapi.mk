@@ -23,8 +23,6 @@ $(eval $(call gb_CppunitTest_use_internal_comprehensive_api,odk_checkapi,\
 	udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_disable_compiler_plugins,odk_checkapi))
-
 $(eval $(call gb_CppunitTest_add_cxxflags,odk_checkapi,\
 	$(gb_CXX03FLAGS) \
 ))
