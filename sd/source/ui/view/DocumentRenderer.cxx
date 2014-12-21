@@ -161,6 +161,12 @@ namespace {
             return GetBoolValue("PrintProspect", false);
         }
 
+        bool IsPrinterPreferred(bool bDocumentType) const
+        {
+            bool bIsDraw = bDocumentType == DOCUMENT_TYPE_DRAW;
+            return IsTilePage() || IsPageSize() || IsBooklet() || (!bIsDraw && !IsNotes());
+        }
+
         bool IsPrintExcluded() const
         {
             return (IsNotes() || IsDraw() || IsHandout()) &&  IsHiddenPages();
@@ -1359,9 +1365,7 @@ private:
         PrintInfo& rInfo)
     {
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
-        bool bIsDraw = pDocument->GetDocumentType() == DOCUMENT_TYPE_DRAW;
         rInfo.meOrientation = ORIENTATION_PORTRAIT;
-        bool bDoDodgyHeightWidthFit = mpOptions->IsBooklet() || (!bIsDraw && !mpOptions->IsNotes());
 
         if( ! mpOptions->IsBooklet())
         {
@@ -1370,10 +1374,9 @@ private:
         else if (rInfo.maPageSize.Width() < rInfo.maPageSize.Height())
             rInfo.meOrientation = ORIENTATION_LANDSCAPE;
 
-        // Draw and Notes should abide by their specified paper size, except
-        // for booklets
+        // Draw and Notes should usually abide by their specified paper size
         Size aPaperSize;
-        if (!bDoDodgyHeightWidthFit)
+        if (!mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()))
         {
             aPaperSize.setWidth(rInfo.maPageSize.Width());
             aPaperSize.setHeight(rInfo.maPageSize.Height());
@@ -1386,7 +1389,7 @@ private:
 
         maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
 
-        if (bDoDodgyHeightWidthFit)
+        if (mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()))
         {
             if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
                   (aPaperSize.Width() < aPaperSize.Height()))
@@ -1448,8 +1451,8 @@ private:
             if (mpOptions->IsTime())
                 aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false, false );
 
-            // Draw should use specified paper size when printing, except for booklets
-            if (!mpOptions->IsBooklet() && mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_DRAW)
+            // Draw and Notes should usually use specified paper size when printing
+            if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
             {
                 aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PK_STANDARD)->GetSize();
                 maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
