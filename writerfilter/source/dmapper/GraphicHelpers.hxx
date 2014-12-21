@@ -34,10 +34,8 @@ namespace dmapper
 class PositionHandler: public LoggedProperties
 {
 public:
-    PositionHandler( bool vertical, std::pair<OUString, OUString>& rPositionOffsets );
+    PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns );
     virtual ~PositionHandler( );
-    static void setAlignH(const OUString & sText);
-    static void setAlignV(const OUString & sText);
     sal_Int16 orientation() const;
     sal_Int16 relation() const { return m_nRelation;}
     sal_Int32 position() const { return m_nPosition;}
@@ -47,8 +45,8 @@ public:
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
     sal_Int32 m_nPosition;
-    static int savedAlignV, savedAlignH;
     std::pair<OUString, OUString>& m_rPositionOffsets;
+    std::pair<OUString, OUString>& m_rAligns;
 };
 typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
 

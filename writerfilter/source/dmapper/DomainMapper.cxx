@@ -2924,6 +2924,14 @@ awt::Point DomainMapper::getPositionOffset()
     return aRet;
 }
 
+void DomainMapper::lcl_align(const OUString& rText, bool bVertical)
+{
+    if (bVertical)
+        m_pImpl->m_aAligns.second = rText;
+    else
+        m_pImpl->m_aAligns.first = rText;
+}
+
 void DomainMapper::lcl_positivePercentage(const OUString& rText)
 {
     m_pImpl->m_aPositivePercentages.push(rText);

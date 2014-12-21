@@ -828,6 +828,8 @@ public:
 
     /// ST_PositionOffset values we received
     std::pair<OUString, OUString> m_aPositionOffsets;
+    /// ST_AlignH/V values we received
+    std::pair<OUString, OUString> m_aAligns;
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
     bool isInIndexContext() { return m_bStartIndex;}

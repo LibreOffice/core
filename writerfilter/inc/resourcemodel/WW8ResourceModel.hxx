@@ -248,6 +248,12 @@ public:
     virtual void positionOffset(const OUString& rText, bool bVertical) = 0;
     /// Returns the last set offsets of a shape in HMM.
     virtual css::awt::Point getPositionOffset() = 0;
+    /**
+     * Horizontal and vertical alignment for a shape.
+     *
+     * Call *before* an ooxml:CT_PosH/V_align sprm is sent.
+     */
+    virtual void align(const OUString& rText, bool bVertical) = 0;
     virtual void positivePercentage(const OUString& rText) = 0;
 
     /**

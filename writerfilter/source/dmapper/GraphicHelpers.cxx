@@ -39,24 +39,14 @@ namespace dmapper {
 
 using namespace com::sun::star;
 
-int PositionHandler::savedAlignV = text::VertOrientation::NONE;
-int PositionHandler::savedAlignH = text::HoriOrientation::NONE;
-
-PositionHandler::PositionHandler( bool vertical, std::pair<OUString, OUString>& rPositionOffsets ) :
+PositionHandler::PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns ) :
 LoggedProperties(dmapper_logger, "PositionHandler"),
-m_rPositionOffsets(rPositionOffsets)
+m_nOrient(text::VertOrientation::NONE),
+m_nPosition(0),
+m_rPositionOffsets(rPositionOffsets),
+m_rAligns(rAligns)
 {
     m_nRelation = text::RelOrientation::FRAME;
-    if( vertical )
-    {
-        m_nOrient = savedAlignV;
-        savedAlignV = text::VertOrientation::NONE;
-    }
-    else
-    {
-        m_nOrient = savedAlignH;
-        savedAlignH = text::HoriOrientation::NONE;
-    }
 }
 
 PositionHandler::~PositionHandler( )
@@ -140,6 +130,36 @@ void PositionHandler::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_CT_PosV_posOffset:
             m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.second.toInt32());
             break;
+        case NS_ooxml::LN_CT_PosH_align:
+        {
+            OUString& rAlign = m_rAligns.first;
+            if (rAlign == "left")
+                m_nOrient = text::HoriOrientation::LEFT;
+            else if (rAlign == "right")
+                m_nOrient = text::HoriOrientation::RIGHT;
+            else if (rAlign == "center")
+                m_nOrient = text::HoriOrientation::CENTER;
+            else if (rAlign == "inside")
+                m_nOrient = text::HoriOrientation::INSIDE;
+            else if (rAlign == "outside")
+                m_nOrient = text::HoriOrientation::OUTSIDE;
+            break;
+        }
+        case NS_ooxml::LN_CT_PosV_align:
+        {
+            OUString& rAlign = m_rAligns.second;
+            if (rAlign == "top")
+                m_nOrient = text::VertOrientation::TOP;
+            else if (rAlign == "bottom")
+                m_nOrient = text::VertOrientation::BOTTOM;
+            else if (rAlign == "center")
+                m_nOrient = text::VertOrientation::CENTER;
+            else if (rAlign == "inside")
+                m_nOrient = text::VertOrientation::NONE;
+            else if (rAlign == "outside")
+                m_nOrient = text::VertOrientation::NONE;
+            break;
+        }
     }
 }
 
@@ -154,36 +174,6 @@ sal_Int16 PositionHandler::orientation() const
             return text::VertOrientation::TOP;
     }
     return m_nOrient;
-}
-
-
-
-void PositionHandler::setAlignH(const OUString & sText)
-{
-    if( sText == "left")
-        savedAlignH = text::HoriOrientation::LEFT;
-    else if( sText == "right" )
-        savedAlignH = text::HoriOrientation::RIGHT;
-    else if( sText == "center" )
-        savedAlignH = text::HoriOrientation::CENTER;
-    else if( sText == "inside" )
-        savedAlignH = text::HoriOrientation::INSIDE;
-    else if( sText == "outside" )
-        savedAlignH = text::HoriOrientation::OUTSIDE;
-}
-
-void PositionHandler::setAlignV(const OUString & sText)
-{
-    if( sText == "top" )
-        savedAlignV = text::VertOrientation::TOP;
-    else if( sText == "bottom" )
-        savedAlignV = text::VertOrientation::BOTTOM;
-    else if( sText == "center" )
-        savedAlignV = text::VertOrientation::CENTER;
-    else if( sText == "inside" )
-        savedAlignV = text::VertOrientation::NONE;
-    else if( sText == "outside" )
-        savedAlignV = text::VertOrientation::NONE;
 }
 
 WrapHandler::WrapHandler( ) :

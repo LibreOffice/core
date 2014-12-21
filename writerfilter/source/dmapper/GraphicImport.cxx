@@ -262,6 +262,7 @@ public:
     OUString sAlternativeText;
     OUString title;
     std::pair<OUString, OUString>& m_rPositionOffsets;
+    std::pair<OUString, OUString>& m_rAligns;
     std::queue<OUString>& m_rPositivePercentages;
     OUString sAnchorId;
     comphelper::SequenceAsHashMap m_aInteropGrabBag;
@@ -270,7 +271,7 @@ public:
     boost::optional<sal_Int32> m_oEffectExtentRight;
     boost::optional<sal_Int32> m_oEffectExtentBottom;
 
-    GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper, std::pair<OUString, OUString>& rPositionOffsets, std::queue<OUString>& rPositivePercentages) :
+    GraphicImport_Impl(GraphicImportType eImportType, DomainMapper& rDMapper, std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns, std::queue<OUString>& rPositivePercentages) :
         nXSize(0)
         ,bXSizeValid(false)
         ,nYSize(0)
@@ -322,6 +323,7 @@ public:
         ,bPositionProtected(false)
         ,nShapeOptionType(0)
         ,m_rPositionOffsets(rPositionOffsets)
+        ,m_rAligns(rAligns)
         ,m_rPositivePercentages(rPositivePercentages)
     {}
 
@@ -447,11 +449,12 @@ GraphicImport::GraphicImport(uno::Reference<uno::XComponentContext> const& xComp
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType,
                              std::pair<OUString, OUString>& rPositionOffsets,
+                             std::pair<OUString, OUString>& rAligns,
                              std::queue<OUString>& rPositivePercentages)
 : LoggedProperties(dmapper_logger, "GraphicImport")
 , LoggedTable(dmapper_logger, "GraphicImport")
 , LoggedStream(dmapper_logger, "GraphicImport")
-, m_pImpl(new GraphicImport_Impl(eImportType, rDMapper, rPositionOffsets, rPositivePercentages))
+, m_pImpl(new GraphicImport_Impl(eImportType, rDMapper, rPositionOffsets, rAligns, rPositivePercentages))
 , m_xComponentContext(xComponentContext)
 , m_xTextFactory(xTextFactory)
 {
@@ -1048,7 +1051,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
         {
             // Use a special handler for the positionning
-            PositionHandlerPtr pHandler( new PositionHandler( false, m_pImpl->m_rPositionOffsets ));
+            PositionHandlerPtr pHandler( new PositionHandler( m_pImpl->m_rPositionOffsets, m_pImpl->m_rAligns ));
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get( ) )
             {
@@ -1074,7 +1077,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_CT_Anchor_positionV: // 90977;
         {
             // Use a special handler for the positionning
-            PositionHandlerPtr pHandler( new PositionHandler( true, m_pImpl->m_rPositionOffsets ));
+            PositionHandlerPtr pHandler( new PositionHandler( m_pImpl->m_rPositionOffsets, m_pImpl->m_rAligns));
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get( ) )
             {

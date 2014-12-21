@@ -219,6 +219,21 @@ void LoggedStream::positionOffset(const OUString& rText, bool bVertical)
 #endif
 }
 
+void LoggedStream::align(const OUString& rText, bool bVertical)
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("align");
+    mHelper.attribute("vertical", static_cast<int>(bVertical));
+    mHelper.chars(rText);
+#endif
+
+    lcl_align(rText, bVertical);
+
+#ifdef DEBUG_WRITERFILTER
+    mHelper.endElement("align");
+#endif
+}
+
 void LoggedStream::positivePercentage(const OUString& rText)
 {
 #ifdef DEBUG_WRITERFILTER

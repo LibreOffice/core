@@ -84,6 +84,7 @@ public:
                             DomainMapper& rDomainMapper,
                             GraphicImportType eGraphicImportType,
                             std::pair<OUString, OUString>& rPositionOffsets,
+                            std::pair<OUString, OUString>& rAligns,
                             std::queue<OUString>& rPositivePercentages);
     virtual ~GraphicImport();
 

@@ -26,7 +26,6 @@
 #include <ooxml/QNameToString.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
-#include <dmapper/GraphicHelpers.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
@@ -666,16 +665,16 @@ void OOXMLFastContextHandler::ignore()
 {
 }
 
-void OOXMLFastContextHandler::alignH(const OUString & sText)
+void OOXMLFastContextHandler::alignH(const OUString& rText)
 {
     if (isForwardEvents())
-        ::writerfilter::dmapper::PositionHandler::setAlignH( sText );
+        mpStream->align(rText, /*bVertical=*/false);
 }
 
-void OOXMLFastContextHandler::alignV(const OUString & sText)
+void OOXMLFastContextHandler::alignV(const OUString& rText)
 {
     if (isForwardEvents())
-        ::writerfilter::dmapper::PositionHandler::setAlignV( sText );
+        mpStream->align(rText, /*bVertical=*/true);
 }
 
 void OOXMLFastContextHandler::positivePercentage(const OUString& rText)

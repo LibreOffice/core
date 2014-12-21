@@ -34,7 +34,6 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <dmapper/GraphicHelpers.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtflookahead.hxx>
 #include <rtfcharsets.hxx>

@@ -64,6 +64,7 @@ public:
     void text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
     void utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
     void positionOffset(const OUString& rText, bool bVertical) SAL_OVERRIDE;
+    void align(const OUString& rText, bool bVertical) SAL_OVERRIDE;
     void positivePercentage(const OUString& rText) SAL_OVERRIDE;
     void props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
     void table(Id name, writerfilter::Reference<Table>::Pointer_t ref) SAL_OVERRIDE;
@@ -83,6 +84,7 @@ protected:
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_positionOffset(const OUString& /*rText*/, bool /*bVertical*/) { }
     virtual css::awt::Point getPositionOffset() { return css::awt::Point(); }
+    virtual void lcl_align(const OUString& /*rText*/, bool /*bVertical*/) { }
     virtual void lcl_positivePercentage(const OUString& /*rText*/) { }
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
     virtual void lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref) = 0;
