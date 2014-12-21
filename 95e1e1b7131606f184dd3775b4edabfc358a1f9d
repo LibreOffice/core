@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_0cd3f839",
+        "filename": "external/openldap/ExternalProject_openldap.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-21T15:04:28Z",
+      "side": 1,
+      "message": "I think you should add them to openldap_LDFLAGS way before that. Otherwise they will only be used if openldap_LDFLAGS is not empty.",
+      "revId": "95e1e1b7131606f184dd3775b4edabfc358a1f9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
