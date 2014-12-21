@@ -204,6 +204,21 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
 #endif
 }
 
+void LoggedStream::positionOffset(const OUString& rText, bool bVertical)
+{
+#ifdef DEBUG_WRITERFILTER
+    mHelper.startElement("positionOffset");
+    mHelper.attribute("vertical", static_cast<int>(bVertical));
+    mHelper.chars(rText);
+#endif
+
+    lcl_positionOffset(rText, bVertical);
+
+#ifdef DEBUG_WRITERFILTER
+    mHelper.endElement("positionOffset");
+#endif
+}
+
 void LoggedStream::positivePercentage(const OUString& rText)
 {
 #ifdef DEBUG_WRITERFILTER

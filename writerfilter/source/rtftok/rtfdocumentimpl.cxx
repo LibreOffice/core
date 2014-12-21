@@ -950,19 +950,27 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
             aAnchorSprms.set(NS_ooxml::LN_EG_WrapType_wrapSquare, pAnchorWrapValue);
 
         // See OOXMLFastContextHandler::positionOffset(), we can't just put offset values in an RTFValue.
+        RTFSprms aPoshAttributes;
         RTFSprms aPoshSprms;
         if (m_aStates.top().aShape.nHoriOrientRelationToken > 0)
-            aPoshSprms.set(NS_ooxml::LN_CT_PosH_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nHoriOrientRelationToken)));
+            aPoshAttributes.set(NS_ooxml::LN_CT_PosH_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nHoriOrientRelationToken)));
         if (m_aStates.top().aShape.nLeft != 0)
-            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nLeft)), false);
-        aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(aPoshSprms)));
+        {
+            Mapper().positionOffset(OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nLeft)), /*bVertical=*/false);
+            aPoshSprms.set(NS_ooxml::LN_CT_PosH_posOffset, RTFValue::Pointer_t(new RTFValue()));
+        }
+        aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(aPoshAttributes, aPoshSprms)));
 
+        RTFSprms aPosvAttributes;
         RTFSprms aPosvSprms;
         if (m_aStates.top().aShape.nVertOrientRelationToken > 0)
-            aPosvSprms.set(NS_ooxml::LN_CT_PosV_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nVertOrientRelationToken)));
+            aPosvAttributes.set(NS_ooxml::LN_CT_PosV_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nVertOrientRelationToken)));
         if (m_aStates.top().aShape.nTop != 0)
-            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nTop)), true);
-        aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(aPosvSprms)));
+        {
+            Mapper().positionOffset(OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nTop)), /*bVertical=*/true);
+            aPosvSprms.set(NS_ooxml::LN_CT_PosV_posOffset, RTFValue::Pointer_t(new RTFValue()));
+        }
+        aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(aPosvAttributes, aPosvSprms)));
 
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
         aAnchorSprms.set(NS_ooxml::LN_graphic_graphic, pGraphicValue);

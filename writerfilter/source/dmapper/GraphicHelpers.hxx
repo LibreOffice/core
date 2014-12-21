@@ -25,6 +25,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <map>
+#include <utility>
 
 namespace writerfilter {
 namespace dmapper
@@ -33,10 +34,8 @@ namespace dmapper
 class PositionHandler: public LoggedProperties
 {
 public:
-    PositionHandler( bool vertical );
+    PositionHandler( bool vertical, std::pair<OUString, OUString>& rPositionOffsets );
     virtual ~PositionHandler( );
-    static void setPositionOffset(const OUString & sText, bool vertical);
-    static int getPositionOffset(bool vertical);
     static void setAlignH(const OUString & sText);
     static void setAlignV(const OUString & sText);
     sal_Int16 orientation() const;
@@ -48,8 +47,8 @@ public:
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;
     sal_Int32 m_nPosition;
-    static int savedPositionOffsetV, savedPositionOffsetH;
     static int savedAlignV, savedAlignH;
+    std::pair<OUString, OUString>& m_rPositionOffsets;
 };
 typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
 

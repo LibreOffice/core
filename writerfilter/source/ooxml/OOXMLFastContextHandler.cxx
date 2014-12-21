@@ -656,20 +656,10 @@ void OOXMLFastContextHandler::text(const OUString & sText)
                         sText.getLength());
 }
 
-/*
- HACK. An ugly hack. The problem with wp:positionOffset, wp:alignV and wp:alignH
- is that they do not work in the usual OOXML way of <tag val="value"/> but instead
- it's <tag>value</tag>, which is otherwise used only things like <t>. And I really
- haven't managed to find out how to make this XML parsing monstrosity to handle this
- on its own, so the code is modelled after <t> handling and does it manually in a hackish
- way - it reads the value as text and converts itself, moreover the reading of the value
- is done sooner than lcl_sprms() actually results in processing the tags it is enclosed
- in, so the values are stored in PositionHandler for later use.
-*/
-void OOXMLFastContextHandler::positionOffset(const OUString & sText)
+void OOXMLFastContextHandler::positionOffset(const OUString& rText)
 {
     if (isForwardEvents())
-        ::writerfilter::dmapper::PositionHandler::setPositionOffset( sText, inPositionV );
+        mpStream->positionOffset(rText, inPositionV);
 }
 
 void OOXMLFastContextHandler::ignore()
@@ -1632,7 +1622,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
     if ( mrShapeContext.is() && !m_bShapeSent )
     {
-        awt::Point aPosition(writerfilter::dmapper::PositionHandler::getPositionOffset(false), writerfilter::dmapper::PositionHandler::getPositionOffset(true));
+        awt::Point aPosition = mpStream->getPositionOffset();
         mrShapeContext->setPosition(aPosition);
         uno::Reference<drawing::XShape> xShape(mrShapeContext->getShape());
         if (xShape.is())

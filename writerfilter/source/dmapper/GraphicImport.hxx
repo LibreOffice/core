@@ -83,6 +83,7 @@ public:
                             css::uno::Reference<css::lang::XMultiServiceFactory> const& xTextFactory,
                             DomainMapper& rDomainMapper,
                             GraphicImportType eGraphicImportType,
+                            std::pair<OUString, OUString>& rPositionOffsets,
                             std::queue<OUString>& rPositivePercentages);
     virtual ~GraphicImport();
 

@@ -826,6 +826,8 @@ public:
     /// A sub-grabbag of m_aInteropGrabBag, like 'spacing'.
     std::vector<css::beans::PropertyValue> m_aSubInteropGrabBag;
 
+    /// ST_PositionOffset values we received
+    std::pair<OUString, OUString> m_aPositionOffsets;
     /// ST_PositivePercentage values we received
     std::queue<OUString> m_aPositivePercentages;
     bool isInIndexContext() { return m_bStartIndex;}

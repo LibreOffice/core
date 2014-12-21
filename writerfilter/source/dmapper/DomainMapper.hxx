@@ -145,6 +145,8 @@ private:
 
     virtual void lcl_text(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) SAL_OVERRIDE;
+    virtual void lcl_positionOffset(const OUString& rText, bool bVertical) SAL_OVERRIDE;
+    virtual css::awt::Point getPositionOffset() SAL_OVERRIDE;
     virtual void lcl_positivePercentage(const OUString& rText) SAL_OVERRIDE;
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
     virtual void lcl_table(Id name,

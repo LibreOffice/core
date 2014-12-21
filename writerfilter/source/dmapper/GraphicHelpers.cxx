@@ -39,27 +39,22 @@ namespace dmapper {
 
 using namespace com::sun::star;
 
-int PositionHandler::savedPositionOffsetV = 0;
-int PositionHandler::savedPositionOffsetH = 0;
 int PositionHandler::savedAlignV = text::VertOrientation::NONE;
 int PositionHandler::savedAlignH = text::HoriOrientation::NONE;
 
-PositionHandler::PositionHandler( bool vertical ) :
-LoggedProperties(dmapper_logger, "PositionHandler")
+PositionHandler::PositionHandler( bool vertical, std::pair<OUString, OUString>& rPositionOffsets ) :
+LoggedProperties(dmapper_logger, "PositionHandler"),
+m_rPositionOffsets(rPositionOffsets)
 {
     m_nRelation = text::RelOrientation::FRAME;
     if( vertical )
     {
-        m_nPosition = savedPositionOffsetV;
         m_nOrient = savedAlignV;
-        savedPositionOffsetV = 0;
         savedAlignV = text::VertOrientation::NONE;
     }
     else
     {
-        m_nPosition = savedPositionOffsetH;
         m_nOrient = savedAlignH;
-        savedPositionOffsetH = 0;
         savedAlignH = text::HoriOrientation::NONE;
     }
 }
@@ -133,8 +128,19 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
     }
 }
 
-void PositionHandler::lcl_sprm( Sprm& )
+void PositionHandler::lcl_sprm(Sprm& rSprm)
 {
+    sal_uInt32 nSprmId = rSprm.getId();
+
+    switch (nSprmId)
+    {
+        case NS_ooxml::LN_CT_PosH_posOffset:
+            m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.first.toInt32());
+            break;
+        case NS_ooxml::LN_CT_PosV_posOffset:
+            m_nPosition = oox::drawingml::convertEmuToHmm(m_rPositionOffsets.second.toInt32());
+            break;
+    }
 }
 
 sal_Int16 PositionHandler::orientation() const
@@ -151,22 +157,6 @@ sal_Int16 PositionHandler::orientation() const
 }
 
 
-
-void PositionHandler::setPositionOffset(const OUString & sText, bool vertical)
-{
-    if( vertical )
-        savedPositionOffsetV = oox::drawingml::convertEmuToHmm(sText.toInt32());
-    else
-        savedPositionOffsetH = oox::drawingml::convertEmuToHmm(sText.toInt32());
-}
-
-int PositionHandler::getPositionOffset(bool vertical)
-{
-    if (vertical)
-        return savedPositionOffsetV;
-    else
-        return savedPositionOffsetH;
-}
 
 void PositionHandler::setAlignH(const OUString & sText)
 {

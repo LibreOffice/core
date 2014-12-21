@@ -28,6 +28,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -2905,6 +2906,22 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     {
         SAL_WARN("writerfilter", "failed. Message :" << e.Message);
     }
+}
+
+void DomainMapper::lcl_positionOffset(const OUString& rText, bool bVertical)
+{
+    if (bVertical)
+        m_pImpl->m_aPositionOffsets.second = rText;
+    else
+        m_pImpl->m_aPositionOffsets.first = rText;
+}
+
+awt::Point DomainMapper::getPositionOffset()
+{
+    awt::Point aRet;
+    aRet.X = oox::drawingml::convertEmuToHmm(m_pImpl->m_aPositionOffsets.first.toInt32());
+    aRet.Y = oox::drawingml::convertEmuToHmm(m_pImpl->m_aPositionOffsets.second.toInt32());
+    return aRet;
 }
 
 void DomainMapper::lcl_positivePercentage(const OUString& rText)
