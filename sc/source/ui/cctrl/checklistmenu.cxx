@@ -1493,8 +1493,11 @@ void ScCheckListMenuWindow::initMembers()
         }
         else
         {
+            OUString aLabel = maMembers[i].maName;
+            if (aLabel.isEmpty())
+                aLabel = "(" + SC_STRLOAD(RID_POPUP_FILTER, STR_BLANKS) + ")";
             SvTreeListEntry* pEntry = maChecks.InsertEntry(
-                maMembers[i].maName, NULL, false, TREELIST_APPEND, NULL,
+                aLabel, NULL, false, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
             maChecks.SetCheckButtonState(
@@ -1544,7 +1547,10 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
     {
         if ( maMembers[i].mbLeaf )
         {
-            bool bState =  maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent );
+            OUString aLabel = maMembers[i].maName;
+            if (aLabel.isEmpty())
+                aLabel = "(" + SC_STRLOAD(RID_POPUP_FILTER, STR_BLANKS) + ")";
+            bool bState =  maChecks.IsChecked( aLabel,  maMembers[i].mpParent );
             OUString sName;
             if ( maMembers[i].mbDate )
                 sName = maMembers[i].maRealName;
