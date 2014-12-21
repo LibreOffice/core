@@ -45,7 +45,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 
-
 using namespace ::com::sun::star;
 
 //Helper functions for this file

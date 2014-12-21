@@ -72,7 +72,6 @@
 #ifdef DEBUG_TIMING
 #include <vector>
 #endif
-#include <boost/foreach.hpp>
 
 using namespace std;
 using namespace ::sd::slidesorter::model;

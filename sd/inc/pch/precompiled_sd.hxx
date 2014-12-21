@@ -69,7 +69,6 @@
 #include <basic/sbx.hxx>
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/limits.hpp>
 #include <boost/make_shared.hpp>

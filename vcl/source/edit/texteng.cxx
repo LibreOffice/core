@@ -56,7 +56,6 @@
 #include <cstdlib>
 #include <set>
 #include <vector>
-#include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;

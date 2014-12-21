@@ -3688,8 +3688,10 @@ static bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
         }
     }
     else
+    {
         for( _FndLine& rFndLine : rBox.GetLines() )
             lcl_SetAFmtLine( rFndLine, pSetPara );
+    }
 
     if (!rBox.GetUpper()->GetUpper()) // a BaseLine
         ++pSetPara->nCurBox;

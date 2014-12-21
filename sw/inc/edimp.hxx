@@ -22,7 +22,6 @@
 
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
-#include <boost/foreach.hpp>
 
 class SwPaM;
 class SwNodeIndex;

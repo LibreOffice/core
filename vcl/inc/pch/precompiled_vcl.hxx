@@ -137,7 +137,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/optional.hpp>
