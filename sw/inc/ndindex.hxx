@@ -75,7 +75,7 @@ public:
         if( nDiff )
             pNd = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
         else
-            pNd = (SwNode*)&rNd;
+            pNd = const_cast<SwNode*>(&rNd);
         RegisterIndex( pNd->GetNodes() );
     }
 
@@ -277,11 +277,11 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
     if( &pNd->GetNodes() != &rNd.GetNodes() )
     {
         DeRegisterIndex( pNd->GetNodes() );
-        pNd = (SwNode*)&rNd;
+        pNd = const_cast<SwNode*>(&rNd);
         RegisterIndex( pNd->GetNodes() );
     }
     else
-        pNd = (SwNode*)&rNd;
+        pNd = const_cast<SwNode*>(&rNd);
     return *this;
 }
 
@@ -303,11 +303,11 @@ SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
     if( &pNd->GetNodes() != &rNd.GetNodes() )
     {
         DeRegisterIndex( pNd->GetNodes() );
-        pNd = (SwNode*)&rNd;
+        pNd = const_cast<SwNode*>(&rNd);
         RegisterIndex( pNd->GetNodes() );
     }
     else
-        pNd = (SwNode*)&rNd;
+        pNd = const_cast<SwNode*>(&rNd);
 
     if( nOffset )
         pNd = pNd->GetNodes()[ pNd->GetIndex() + nOffset ];
