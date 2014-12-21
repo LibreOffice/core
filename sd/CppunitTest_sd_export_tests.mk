@@ -65,46 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_export_tests,\
 $(eval $(call gb_CppunitTest_use_ure,sd_export_tests))
 $(eval $(call gb_CppunitTest_use_vcl,sd_export_tests))
 
-$(eval $(call gb_CppunitTest_use_components,sd_export_tests,\
-    animations/source/animcore/animcore \
-    basic/util/sb \
-    chart2/source/chartcore \
-    chart2/source/controller/chartcontroller \
-    comphelper/util/comphelp \
-    configmgr/source/configmgr \
-    dbaccess/util/dba \
-    desktop/source/deployment/deployment \
-    embeddedobj/util/embobj \
-    filter/source/config/cache/filterconfig1 \
-    filter/source/svg/svgfilter \
-    forms/util/frm \
-    framework/util/fwk \
-    i18npool/util/i18npool \
-    linguistic/source/lng \
-    oox/util/oox \
-    package/source/xstor/xstor \
-    package/util/package2 \
-    sax/source/expatwrap/expwrap \
-    sd/util/sd \
-    sd/util/sdfilt \
-    sd/util/sdd \
-    sfx2/util/sfx \
-    sot/util/sot \
-    svl/source/fsstor/fsstorage \
-    svtools/util/svt \
-    toolkit/util/tk \
-    ucb/source/core/ucb1 \
-    ucb/source/ucp/expand/ucpexpand1 \
-    ucb/source/ucp/file/ucpfile1 \
-    ucb/source/ucp/package/ucppkg1 \
-    ucb/source/ucp/tdoc/ucptdoc1 \
-    unotools/util/utl \
-    unoxml/source/rdf/unordf \
-    unoxml/source/service/unoxml \
-    xmloff/util/xo \
-    xmlsecurity/util/xsec_fw \
-    xmlsecurity/util/xmlsecurity \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sd_export_tests,services))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sd_export_tests,\
 	officecfg/registry \
