@@ -233,7 +233,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
 
         case CONTENT_TYPE_TABLE     :
             sTypeToken = "table";
-            nMemberCount = pWrtShell->GetTblFrmFmtCount(true);
+            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTblFrmFmtCount(true));
             bEdit = true;
         break;
 
@@ -518,10 +518,10 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
         case CONTENT_TYPE_TABLE     :
         {
-            OSL_ENSURE(nMemberCount == pWrtShell->GetTblFrmFmtCount(true),
+            OSL_ENSURE(nMemberCount == static_cast<sal_uInt16>(pWrtShell->GetTblFrmFmtCount(true)),
                        "MemberCount differs");
             Point aNullPt;
-            nMemberCount =  pWrtShell->GetTblFrmFmtCount(true);
+            nMemberCount = static_cast<sal_uInt16>(pWrtShell->GetTblFrmFmtCount(true));
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
                 const SwFrmFmt& rTblFmt = pWrtShell->GetTblFrmFmt(i, true);

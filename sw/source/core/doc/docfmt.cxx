@@ -754,13 +754,13 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const OUString &rFmtName,
     return pFmt;
 }
 
-sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
+size_t SwDoc::GetTblFrmFmtCount(bool bUsed) const
 {
-    sal_uInt16 nCount = mpTblFrmFmtTbl->size();
+    size_t nCount = mpTblFrmFmtTbl->size();
     if(bUsed)
     {
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
-        for ( sal_uInt16 i = nCount; i; )
+        for ( size_t i = nCount; i; )
         {
             if((*mpTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
                 --nCount;
@@ -769,13 +769,13 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
     return nCount;
 }
 
-SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
+SwFrmFmt& SwDoc::GetTblFrmFmt(size_t nFmt, bool bUsed ) const
 {
-    sal_uInt16 nRemoved = 0;
+    size_t nRemoved = 0;
     if(bUsed)
     {
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
-        for ( sal_uInt16 i = 0; i <= nFmt; i++ )
+        for ( size_t i = 0; i <= nFmt; ++i )
         {
             while ( (*mpTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))
             {

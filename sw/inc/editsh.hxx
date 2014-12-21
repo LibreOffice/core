@@ -285,8 +285,8 @@ public:
     sal_uInt16 GetCurLang() const;
 
     /// TABLE
-    sal_uInt16 GetTblFrmFmtCount( bool bUsed = false ) const;
-    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed = false ) const;
+    size_t GetTblFrmFmtCount( bool bUsed = false ) const;
+    SwFrmFmt& GetTblFrmFmt(size_t nFmt, bool bUsed = false ) const;
     OUString GetUniqueTblName() const;
 
     /// CHAR

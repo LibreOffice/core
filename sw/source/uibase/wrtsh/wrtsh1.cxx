@@ -1475,7 +1475,7 @@ SwCharFmt *SwWrtShell::GetCharStyle(const OUString &rFmtName, GetStyle eCreate )
 SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
 {
     SwFrmFmt *pFmt = 0;
-    for( sal_uInt16 i = GetTblFrmFmtCount(); i; )
+    for( size_t i = GetTblFrmFmtCount(); i; )
         if( !( pFmt = &GetTblFrmFmt( --i ) )->IsDefault() &&
             pFmt->GetName() == rFmtName && IsUsed( *pFmt ) )
             return pFmt;

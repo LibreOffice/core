@@ -105,12 +105,12 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, bool bReset)
         pCharFmt->SetFmtAttr( *pCNd->GetpSwAttrSet() );
 }
 
-sal_uInt16 SwEditShell::GetTblFrmFmtCount(bool bUsed) const
+size_t SwEditShell::GetTblFrmFmtCount(bool bUsed) const
 {
     return GetDoc()->GetTblFrmFmtCount(bUsed);
 }
 
-SwFrmFmt& SwEditShell::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
+SwFrmFmt& SwEditShell::GetTblFrmFmt(size_t nFmt, bool bUsed ) const
 {
     return GetDoc()->GetTblFrmFmt(nFmt, bUsed );
 }

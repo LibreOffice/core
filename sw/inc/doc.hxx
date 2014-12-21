@@ -880,8 +880,8 @@ public:
     // Table formatting
     const SwFrmFmts* GetTblFrmFmts() const  { return mpTblFrmFmtTbl; }
           SwFrmFmts* GetTblFrmFmts()        { return mpTblFrmFmtTbl; }
-    sal_uInt16 GetTblFrmFmtCount( bool bUsed ) const;
-    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const;
+    size_t GetTblFrmFmtCount( bool bUsed ) const;
+    SwFrmFmt& GetTblFrmFmt(size_t nFmt, bool bUsed ) const;
     SwTableFmt* MakeTblFrmFmt(const OUString &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
     SwTableFmt* FindTblFmtByName( const OUString& rName, bool bAll = false ) const;

@@ -851,7 +851,7 @@ sal_Int32 SwXTextTables::getCount(void) throw( uno::RuntimeException, std::excep
     SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;
     if(IsValid())
-        nRet = GetDoc()->GetTblFrmFmtCount(true);
+        nRet = static_cast<sal_Int32>(GetDoc()->GetTblFrmFmtCount(true));
     return nRet;
 }
 
@@ -862,7 +862,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(IsValid())
     {
-        if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(true) > nIndex)
+        if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(true) > static_cast<size_t>(nIndex))
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(nIndex, true);
             uno::Reference< XTextTable >  xTbl = SwXTextTables::GetObject(rFmt);
@@ -884,9 +884,9 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
     uno::Any aRet;
     if(IsValid())
     {
-        const sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
+        const size_t nCount = GetDoc()->GetTblFrmFmtCount(true);
         uno::Reference< XTextTable >  xTbl;
-        for( sal_uInt16 i = 0; i < nCount; i++)
+        for( size_t i = 0; i < nCount; ++i)
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
             if (rItemName == rFmt.GetName())
@@ -911,12 +911,12 @@ uno::Sequence< OUString > SwXTextTables::getElementNames(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    const sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
-    uno::Sequence<OUString> aSeq(nCount);
+    const size_t nCount = GetDoc()->GetTblFrmFmtCount(true);
+    uno::Sequence<OUString> aSeq(static_cast<sal_Int32>(nCount));
     if(nCount)
     {
         OUString* pArray = aSeq.getArray();
-        for( sal_uInt16 i = 0; i < nCount; i++)
+        for( size_t i = 0; i < nCount; ++i)
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
 
@@ -933,8 +933,8 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
     bool bRet= false;
     if(IsValid())
     {
-        const sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
-        for( sal_uInt16 i = 0; i < nCount; i++)
+        const size_t nCount = GetDoc()->GetTblFrmFmtCount(true);
+        for( size_t i = 0; i < nCount; ++i)
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
             if (rName == rFmt.GetName())
