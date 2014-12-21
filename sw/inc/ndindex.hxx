@@ -261,14 +261,7 @@ inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
 
 SwNodeIndex& SwNodeIndex::operator=( const SwNodeIndex& rIdx )
 {
-    if( &pNd->GetNodes() != &rIdx.pNd->GetNodes() )
-    {
-        DeRegisterIndex( pNd->GetNodes() );
-        pNd = rIdx.pNd;
-        RegisterIndex( pNd->GetNodes() );
-    }
-    else
-        pNd = rIdx.pNd;
+    *this = *(rIdx.pNd);
     return *this;
 }
 
@@ -287,27 +280,13 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
 
 SwNodeIndex& SwNodeIndex::Assign( SwNodes& rNds, sal_uLong nIdx )
 {
-    if( &pNd->GetNodes() != &rNds )
-    {
-        DeRegisterIndex( pNd->GetNodes() );
-        pNd = rNds[ nIdx ];
-        RegisterIndex( pNd->GetNodes() );
-    }
-    else
-        pNd = rNds[ nIdx ];
+    *this = *rNds[ nIdx ];
     return *this;
 }
 
 SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
 {
-    if( &pNd->GetNodes() != &rNd.GetNodes() )
-    {
-        DeRegisterIndex( pNd->GetNodes() );
-        pNd = const_cast<SwNode*>(&rNd);
-        RegisterIndex( pNd->GetNodes() );
-    }
-    else
-        pNd = const_cast<SwNode*>(&rNd);
+    *this = rNd;
 
     if( nOffset )
         pNd = pNd->GetNodes()[ pNd->GetIndex() + nOffset ];
