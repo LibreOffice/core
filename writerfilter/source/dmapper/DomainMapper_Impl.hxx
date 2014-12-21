@@ -614,7 +614,7 @@ public:
     void PushAnnotation();
     void PopAnnotation();
 
-    //field context starts with a 0x13
+    /// A field context starts with a cFieldStart.
     void PushFieldContext();
     //the current field context waits for the completion of the command
     bool IsOpenFieldCommand() const;
@@ -662,7 +662,7 @@ public:
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
         const OUString & sTOCServiceName);
-    //the field command has to be closed (0x14 appeared)
+    /// The field command has to be closed (cFieldSep appeared).
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
     bool IsFieldResultAsString();
@@ -671,7 +671,7 @@ public:
     void SetFieldResult(OUString const& rResult);
     // set FFData of top field context
     void SetFieldFFData( FFDataHandler::Pointer_t pFFDataHandler );
-    //the end of field is reached (0x15 appeared) - the command might still be open
+    /// The end of field is reached (cFieldEnd appeared) - the command might still be open.
     void PopFieldContext();
 
     void SetBookmarkName( const OUString& rBookmarkName );

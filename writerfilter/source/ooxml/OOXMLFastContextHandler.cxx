@@ -43,9 +43,6 @@ static const sal_Unicode uNoBreakHyphen = 0x2011;
 static const sal_Unicode uSoftHyphen = 0xAD;
 
 static const sal_uInt8 cFtnEdnCont = 0x4;
-static const sal_uInt8 cFieldStart = 0x13;
-static const sal_uInt8 cFieldSep = 0x14;
-static const sal_uInt8 cFieldEnd = 0x15;
 static const sal_uInt8 cFieldLock = 0x8;
 
 namespace writerfilter {

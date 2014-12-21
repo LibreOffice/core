@@ -2856,15 +2856,15 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
                     return;
                 }
-                case 0x13:
+                case cFieldStart:
                     m_pImpl->PushFieldContext();
                     return;
-                case 0x14:
+                case cFieldSep:
                     // delimiter not necessarily available
                     // appears only if field contains further content
                     m_pImpl->CloseFieldCommand();
                     return;
-                case 0x15: /* end of field */
+                case cFieldEnd:
                     m_pImpl->PopFieldContext();
                     return;
                 default:

@@ -1551,7 +1551,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             if (aBuf.toString().indexOf(OString("FORM")) != -1)
                 m_bFormField = true;
 
-            singleChar(0x13);
+            singleChar(cFieldStart);
             m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
         }
         break;
@@ -2391,10 +2391,10 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     case RTF_CHPGN:
     {
         OUString aStr("PAGE");
-        singleChar(0x13);
+        singleChar(cFieldStart);
         text(aStr);
-        singleChar(0x14, true);
-        singleChar(0x15);
+        singleChar(cFieldSep, true);
+        singleChar(cFieldEnd);
     }
     break;
     case RTF_CHFTNSEP:
@@ -5098,11 +5098,11 @@ int RTFDocumentImpl::popState()
         }
         m_aFormfieldAttributes.clear();
         m_aFormfieldSprms.clear();
-        singleChar(0x14);
+        singleChar(cFieldSep);
     }
     break;
     case DESTINATION_FIELDRESULT:
-        singleChar(0x15);
+        singleChar(cFieldEnd);
         break;
     case DESTINATION_LEVELTEXT:
     {
@@ -5212,11 +5212,11 @@ int RTFDocumentImpl::popState()
         OUString const field(
             (DESTINATION_INDEXENTRY == aState.nDestinationState) ? OUStringLiteral("XE") : OUStringLiteral("TC"));
         str = field + " \"" + str.replaceAll("\"", "\\\"") + "\"";
-        singleChar(0x13);
+        singleChar(cFieldStart);
         Mapper().utext(reinterpret_cast<sal_uInt8 const*>(str.getStr()), str.getLength());
-        singleChar(0x14);
+        singleChar(cFieldSep);
         // no result
-        singleChar(0x15);
+        singleChar(cFieldEnd);
     }
     break;
     case DESTINATION_FORMFIELDNAME:
@@ -5987,7 +5987,7 @@ int RTFDocumentImpl::popState()
         break;
     case DESTINATION_FIELD:
         if (aState.nFieldStatus == FIELD_INSTRUCTION)
-            singleChar(0x15);
+            singleChar(cFieldEnd);
         break;
     case DESTINATION_SHAPEPROPERTYVALUEPICT:
         if (!m_aStates.empty())

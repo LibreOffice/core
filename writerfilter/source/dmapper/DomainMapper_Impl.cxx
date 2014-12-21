@@ -2551,9 +2551,6 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
     return xMaster;
 }
 
-/*-------------------------------------------------------------------------
-//field context starts with a 0x13
-  -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
 {
     m_bParaHadField = true;
@@ -3389,9 +3386,6 @@ void DomainMapper_Impl::handleIndex
     }
 }
 
-/*-------------------------------------------------------------------------
-//the field command has to be closed (0x14 appeared)
-  -----------------------------------------------------------------------*/
 void DomainMapper_Impl::CloseFieldCommand()
 {
     if(m_bDiscardHeaderFooter)
@@ -4278,9 +4272,6 @@ void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
 #endif
 }
 
-/*-------------------------------------------------------------------------
-//the end of field is reached (0x15 appeared) - the command might still be open
-  -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopFieldContext()
 {
     if(m_bDiscardHeaderFooter)
