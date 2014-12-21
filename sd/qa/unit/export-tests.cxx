@@ -80,6 +80,7 @@ public:
     void testFdo79731();
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
+    void testBnc822341();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testN821567);
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
+    CPPUNIT_TEST(testBnc822341);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -636,6 +638,41 @@ void SdExportTest::testLinkedGraphicRT()
 
         xDocShRef->DoClose();
     }
+}
+
+void SdExportTest::testBnc822341()
+{
+    // Check import / export of embedded text document
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/odp/bnc822341.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    // Export an LO specific ole object (imported from an ODP document)
+    {
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        const SdrPage *pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+        const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
+    }
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    // Export an MS specific ole object (imported from a PPTX document)
+    {
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        const SdrPage *pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+        const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
+    }
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
