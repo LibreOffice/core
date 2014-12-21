@@ -47,7 +47,8 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
         return true;
     }
     APSInt res;
-    if (sub->isIntegerConstantExpr(res, compiler.getASTContext())
+    if (!sub->isValueDependent()
+        && sub->isIntegerConstantExpr(res, compiler.getASTContext())
         && res.getLimitedValue() <= 1)
     {
         SourceLocation loc { sub->getLocStart() };
@@ -132,7 +133,9 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             expr->getLocStart())
             << expr->getCastKindName() << expr->getSubExpr()->getType()
             << expr->getType() << expr->getSourceRange();
-    } else if (sub->isIntegerConstantExpr(res, compiler.getASTContext())) {
+    } else if (!sub->isValueDependent()
+               && sub->isIntegerConstantExpr(res, compiler.getASTContext()))
+    {
         report(
             DiagnosticsEngine::Warning,
             ("implicit conversion (%0) of integer constant expression of type"
