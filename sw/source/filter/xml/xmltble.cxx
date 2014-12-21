@@ -48,7 +48,6 @@
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
-#include <boost/foreach.hpp>
 #include <o3tl/sorted_vector.hxx>
 
 using namespace ::com::sun::star;
@@ -1037,7 +1036,7 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
 {
     if( !pBox->GetSttNd() )
     {
-        BOOST_FOREACH( SwTableLine* pLine, pBox->GetTabLines() )
+        for( SwTableLine* pLine: pBox->GetTabLines() )
             lcl_xmltble_ClearName_Line( pLine );
     }
     else
@@ -1050,7 +1049,7 @@ static void lcl_xmltble_ClearName_Box( SwTableBox* pBox )
 
 void lcl_xmltble_ClearName_Line( SwTableLine* pLine )
 {
-    BOOST_FOREACH( SwTableBox* pBox, pLine->GetTabBoxes() )
+    for( SwTableBox* pBox: pLine->GetTabBoxes() )
         lcl_xmltble_ClearName_Box( pBox );
 }
 
@@ -1104,7 +1103,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
         ExportTableLines( rTbl.GetTabLines(), aTblInfo, rTbl.GetRowsToRepeat() );
 
-        BOOST_FOREACH( SwTableLine *pLine, ((SwTable &)rTbl).GetTabLines() )
+        for( SwTableLine *pLine: ((SwTable &)rTbl).GetTabLines() )
             lcl_xmltble_ClearName_Line( pLine );
     }
 }
