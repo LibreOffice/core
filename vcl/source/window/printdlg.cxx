@@ -1618,7 +1618,9 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         if( pButton == maJobPage.mpSetupButton )
         {
             maPController->setupPrinter( this );
-            preparePreview( true, true );
+
+            // fdo#63905 don't use cache: page size may change
+            preparePreview( true, false );
         }
         checkControlDependencies();
     }
@@ -1767,6 +1769,10 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
 
             sal_Int32 nVal = it->second;
             pVal->Value <<= nVal;
+
+            // fdo#63905 use paper size set in printer properties
+            if (pVal->Name == "PageOptions")
+                maPController->resetPaperToLastConfigured();
 
             checkOptionalControlDependencies();
 
