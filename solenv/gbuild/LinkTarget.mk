@@ -136,7 +136,7 @@ $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb
 else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
-	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$<,$(call gb_CObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$<,$(call gb_CObject_get_dep_target,$*),$(COMPILER_PLUGINS))
 endif
 
 # Note: if the *Object_dep_target does not exist it will be created by
@@ -188,7 +188,7 @@ else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*.cxx,$(true),CXX,3)
 	$(eval $(gb_CxxObject__set_pchflags))
-	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$<,$(call gb_CxxObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$<,$(call gb_CxxObject_get_dep_target,$*),$(COMPILER_PLUGINS))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -212,7 +212,7 @@ gb_GenCObject_get_source = $(WORKDIR)/$(1).c
 $(call gb_GenCObject_get_target,%) :
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
-	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+	$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenCObject_get_dep_target,%)).dir :
@@ -235,7 +235,7 @@ $(call gb_GenCxxObject_get_target,%) :
 	$(call gb_Output_announce,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),$(true),CXX,3)
 	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
 	$(eval $(gb_CxxObject__set_pchflags))
-	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+	$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_GenCxxObject_get_dep_target,%)).dir :
@@ -321,7 +321,7 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 else
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
-	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$<,$(call gb_ObjCxxObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$<,$(call gb_ObjCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -348,7 +348,7 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 else
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
-	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$<,$(call gb_ObjCObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$<,$(call gb_ObjCObject_get_dep_target,$*),$(COMPILER_PLUGINS))
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -613,7 +613,6 @@ $(call gb_LinkTarget_get_target,$(1)) : VISIBILITY :=
 $(call gb_LinkTarget_get_target,$(1)) : WARNINGS_NOT_ERRORS :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
-$(call gb_LinkTarget_get_target,$(1)) : T_COMPILER_PLUGINS := $$(COMPILER_PLUGINS)
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
@@ -1379,12 +1378,6 @@ endef
 # call gb_LinkTarget_set_generated_cxx_suffix,linktarget,used-suffix
 define gb_LinkTarget_set_generated_cxx_suffix
 gb_LinkTarget_CXX_SUFFIX_$(call gb_LinkTarget__get_workdir_linktargetname,$(1)) := $(2)
-
-endef
-
-# call gb_LinkTarget_disable_compiler_plugins,linktarget
-define gb_LinkTarget_disable_compiler_plugins
-$(call gb_LinkTarget_get_target,$(1)) : T_COMPILER_PLUGINS :=
 
 endef
 

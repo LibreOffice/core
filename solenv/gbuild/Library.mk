@@ -225,7 +225,6 @@ $(eval $(foreach method,\
 	set_warnings_not_errors \
 	set_external_code \
 	set_generated_cxx_suffix \
-	disable_compiler_plugins \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))
