@@ -146,6 +146,11 @@ namespace {
             return GetBoolValue("PageOptions", sal_Int32(1));
         }
 
+        bool IsDistribute() const
+        {
+            return GetBoolValue("PageOptions", sal_Int32(2));
+        }
+
         bool IsTilePage() const
         {
             return GetBoolValue("PageOptions", sal_Int32(2)) || GetBoolValue("PageOptions", sal_Int32(3));
@@ -1361,7 +1366,7 @@ private:
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
         bool bIsDraw = pDocument->GetDocumentType() == DOCUMENT_TYPE_DRAW;
         rInfo.meOrientation = ORIENTATION_PORTRAIT;
-        bool bDoDodgyHeightWidthFit = mpOptions->IsBooklet() || (!bIsDraw && !mpOptions->IsNotes());
+        bool bDoDodgyHeightWidthFit = mpOptions->IsDistribute() || mpOptions->IsBooklet() || (!bIsDraw && !mpOptions->IsNotes());
 
         if( ! mpOptions->IsBooklet())
         {
@@ -1371,7 +1376,7 @@ private:
             rInfo.meOrientation = ORIENTATION_LANDSCAPE;
 
         // Draw and Notes should abide by their specified paper size, except
-        // for booklets
+        // for booklets and distributed pages
         Size aPaperSize;
         if (!bDoDodgyHeightWidthFit)
         {
@@ -1448,8 +1453,8 @@ private:
             if (mpOptions->IsTime())
                 aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( ::tools::Time( ::tools::Time::SYSTEM ), false, false );
 
-            // Draw should use specified paper size when printing, except for booklets
-            if (!mpOptions->IsBooklet() && mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_DRAW)
+            // Draw should use specified paper size when printing, except for booklets and distributed pages
+            if (!mpOptions->IsDistribute() && !mpOptions->IsBooklet() && mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_DRAW)
             {
                 aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PK_STANDARD)->GetSize();
                 maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
