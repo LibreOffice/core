@@ -473,7 +473,6 @@ protected:
 
 class DbComboBox : public DbCellControl
 {
-    sal_Int16         m_nKeyType;
 
 public:
     TYPEINFO_OVERRIDE();
