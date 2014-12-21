@@ -295,6 +295,9 @@ public:
     void MergeDoubleArray( std::vector<double>& rArray, ScMatrix::Op eOp ) const;
     void AddValues( const ScMatrixImpl& rMat );
 
+    template<typename T>
+    void ApplyOperation(T aOp, ScMatrixImpl& rMat);
+
 #if DEBUG_MATRIX
     void Dump() const;
 #endif
@@ -1858,6 +1861,215 @@ void ScMatrixImpl::AddValues( const ScMatrixImpl& rMat )
     }
 }
 
+namespace Op {
+
+template<typename T>
+struct return_type
+{
+    typedef T type;
+};
+
+template<>
+struct return_type<bool>
+{
+    typedef double type;
+};
+
+template<>
+struct return_type<char>
+{
+    typedef svl::SharedString type;
+};
+
+}
+
+template<typename T, typename U>
+struct wrapped_iterator
+{
+    typedef ::std::bidirectional_iterator_tag iterator_category;
+    typedef typename T::const_iterator::value_type old_value_type;
+    typedef typename Op::return_type<old_value_type>::type value_type;
+    typedef value_type* pointer;
+    typedef value_type& reference;
+    typedef typename T::const_iterator::difference_type difference_type;
+
+    typename T::const_iterator it;
+    mutable value_type val;
+    U maOp;
+
+private:
+
+    value_type calcVal() const
+    {
+        return maOp(*it);
+    }
+
+public:
+
+    wrapped_iterator(typename T::const_iterator it_, U aOp):
+        it(it_),
+        val(value_type()),
+        maOp(aOp)
+    {
+    }
+
+    wrapped_iterator(const wrapped_iterator& r):
+        it(r.it),
+        val(r.val),
+        maOp(r.maOp)
+    {
+    }
+
+    wrapped_iterator& operator=(const wrapped_iterator& r)
+    {
+        it = r.it;
+        return *this;
+    }
+
+    bool operator==(const wrapped_iterator& r) const
+    {
+        return it == r.it;
+    }
+
+    bool operator!=(const wrapped_iterator& r) const
+    {
+        return !operator==(r);
+    }
+
+    wrapped_iterator& operator++()
+    {
+        ++it;
+
+        return *this;
+    }
+
+    wrapped_iterator& operator--()
+    {
+        --it;
+
+        return *this;
+    }
+
+    value_type& operator*() const
+    {
+        val = calcVal();
+        return val;
+    }
+
+    pointer operator->() const
+    {
+        val = calcVal();
+        return &val;
+    }
+};
+
+template<typename T, typename U>
+struct MatrixIteratorWrapper
+{
+private:
+    typename T::const_iterator m_itBegin;
+    typename T::const_iterator m_itEnd;
+    U maOp;
+public:
+    MatrixIteratorWrapper(typename T::const_iterator itBegin, typename T::const_iterator itEnd, U aOp):
+        m_itBegin(itBegin),
+        m_itEnd(itEnd),
+        maOp(aOp)
+    {
+    }
+
+    wrapped_iterator<T, U> begin()
+    {
+        return wrapped_iterator<T, U>(m_itBegin, maOp);
+    }
+
+    wrapped_iterator<T, U> end()
+    {
+        return wrapped_iterator<T, U>(m_itEnd, maOp);
+    }
+};
+
+template<typename T>
+struct MatrixOpWrapper
+{
+private:
+    MatrixImplType& mrMat;
+    MatrixImplType::position_type pos;
+    T maOp;
+
+public:
+    MatrixOpWrapper(MatrixImplType& rMat, T aOp):
+        mrMat(rMat),
+        pos(rMat.position(0,0)),
+        maOp(aOp)
+    {
+    }
+
+    void operator()(const MatrixImplType::element_block_node_type& node)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                typedef MatrixImplType::numeric_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+                MatrixIteratorWrapper<block_type, T> aFunc(it, itEnd, maOp);
+                pos = mrMat.set(pos,aFunc.begin(), aFunc.end());
+                ++pos.first;
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                typedef MatrixImplType::boolean_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+
+                MatrixIteratorWrapper<block_type, T> aFunc(it, itEnd, maOp);
+                pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
+                ++pos.first;
+            }
+            break;
+            case mdds::mtm::element_string:
+            {
+                typedef MatrixImplType::string_block_type block_type;
+
+                block_type::const_iterator it = block_type::begin(*node.data);
+                block_type::const_iterator itEnd = block_type::end(*node.data);
+
+                MatrixIteratorWrapper<block_type, T> aFunc(it, itEnd, maOp);
+                pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
+                ++pos.first;
+            }
+            break;
+            case mdds::mtm::element_empty:
+            {
+                if (maOp.useFunctionForEmpty())
+                {
+                    std::vector<char> aVec(node.size);
+                    MatrixIteratorWrapper<std::vector<char>, T> aFunc(aVec.begin(), aVec.end(), maOp);
+                    pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
+                    ++pos.first;
+                }
+                else
+                    pos.second += node.size;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+};
+
+template<typename T>
+void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
+{
+    MatrixOpWrapper<T> aFunc(rMat.maMat, aOp);
+    maMat.walk(aFunc);
+}
+
 #if DEBUG_MATRIX
 void ScMatrixImpl::Dump() const
 {
@@ -2281,6 +2493,104 @@ void ScMatrix::GetDoubleArray( std::vector<double>& rArray, bool bEmptyAsZero ) 
 void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const
 {
     pImpl->MergeDoubleArray(rArray, eOp);
+}
+
+namespace {
+
+struct AddOp
+{
+private:
+    double mnVal;
+    svl::SharedString maString;
+
+public:
+
+    AddOp(double nVal, svl::SharedString aString):
+        mnVal(nVal),
+        maString(aString)
+    {
+    }
+
+    double operator()(double nVal) const
+    {
+        return nVal + mnVal;
+    }
+
+    double operator()(bool bVal) const
+    {
+        return mnVal + (double)bVal;
+    }
+
+    svl::SharedString operator()(const svl::SharedString&) const
+    {
+        return maString;
+    }
+
+    svl::SharedString operator()(char) const
+    {
+        return maString;
+    }
+
+    bool useFunctionForEmpty() const
+    {
+        return true;
+    }
+};
+
+struct SubOp
+{
+private:
+    double mnVal;
+    svl::SharedString maString;
+
+public:
+
+    SubOp(double nVal, svl::SharedString aString):
+        mnVal(nVal),
+        maString(aString)
+    {
+    }
+
+    double operator()(double nVal) const
+    {
+        return nVal - mnVal;
+    }
+
+    double operator()(bool bVal) const
+    {
+        return (double)bVal - mnVal;
+    }
+
+    svl::SharedString operator()(const svl::SharedString&) const
+    {
+        return maString;
+    }
+
+    svl::SharedString operator()(char) const
+    {
+        return maString;
+    }
+
+    bool useFunctionForEmpty() const
+    {
+        return true;
+    }
+};
+
+}
+
+void ScMatrix::SubAddOp(bool bSub, double fVal, svl::SharedString aString, ScMatrix& rMat)
+{
+    if(bSub)
+    {
+        SubOp aOp(fVal, aString);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+    else
+    {
+        AddOp aOp(fVal, aString);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
 }
 
 ScMatrix& ScMatrix::operator+= ( const ScMatrix& r )
