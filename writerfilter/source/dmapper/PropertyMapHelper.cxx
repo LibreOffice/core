@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <resourcemodel/TagLogger.hxx>
+#include "TagLogger.hxx"
 #include "PropertyMapHelper.hxx"
 
 namespace writerfilter

@@ -30,7 +30,7 @@
 #include <map>
 #include <vector>
 
-#include <resourcemodel/TagLogger.hxx>
+#include "TagLogger.hxx"
 
 namespace com{namespace sun{namespace star{
     namespace beans{

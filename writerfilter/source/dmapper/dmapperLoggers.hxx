@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DMAPPERLOGGERS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DMAPPERLOGGERS_HXX
 
-#include <resourcemodel/TagLogger.hxx>
+#include "TagLogger.hxx"
 
 namespace writerfilter {
     namespace dmapper {

@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/TableManager \
     writerfilter/source/dmapper/TablePositionHandler \
     writerfilter/source/dmapper/TablePropertiesHandler \
+	writerfilter/source/dmapper/TagLogger \
     writerfilter/source/dmapper/TextEffectsHandler \
     writerfilter/source/dmapper/TblStylePrHandler \
     writerfilter/source/dmapper/ThemeTable \
@@ -126,7 +127,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLStreamImpl \
     writerfilter/source/ooxml/qnametostrcore \
     writerfilter/source/resourcemodel/ResourceModelHelper \
-    writerfilter/source/resourcemodel/TagLogger \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\

@@ -21,7 +21,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
-#include <resourcemodel/TagLogger.hxx>
+#include "TagLogger.hxx"
 
 
 namespace writerfilter
