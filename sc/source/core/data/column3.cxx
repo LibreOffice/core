@@ -2053,6 +2053,16 @@ public:
         processCell(nRow, aCell);
     }
 
+    void operator() (const int nElemType, size_t nRow, size_t /* nDataSize */)
+    {
+        if ( nElemType == sc::element_type_empty ) {
+            mrStrings.push_back(ScTypedStrData(OUString()));
+            return;
+        }
+        ScRefCellValue aCell = mrColumn.GetCellValue(nRow);
+        processCell(nRow, aCell);
+    }
+
     bool hasDates() const { return mbHasDates; }
 };
 
@@ -2064,7 +2074,7 @@ void ScColumn::GetFilterEntries(
 {
     FilterEntriesHandler aFunc(*this, rStrings);
     rBlockPos.miCellPos =
-        sc::ParseAllNonEmpty(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc);
+        sc::ParseAll(rBlockPos.miCellPos, maCells, nStartRow, nEndRow, aFunc, aFunc);
     rHasDates = aFunc.hasDates();
 }
 
