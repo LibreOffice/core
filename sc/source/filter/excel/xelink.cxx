@@ -241,7 +241,7 @@ protected:
     /** Writes the list of externalName elements. */
     void                WriteExtNameBufferXml( XclExpXmlStream& rStrm );
 
-private:
+protected:
     typedef boost::shared_ptr< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
     XclExpExtNameBfrRef mxExtNameBfr;   /// List of EXTERNNAME records.
 };
@@ -1680,14 +1680,18 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 
     }
 
-    pExternalLink->startElement( XML_sheetDataSet, FSEND);
+    if (!maXctList.IsEmpty() || mxExtNameBfr)
+    {
+        pExternalLink->startElement( XML_sheetDataSet, FSEND);
 
-    // sheetData elements
-    maXctList.SaveXml( rStrm );
-    // externalName elements
-    WriteExtNameBufferXml( rStrm );
+        // sheetData elements
+        maXctList.SaveXml( rStrm );
+        // externalName elements
+        WriteExtNameBufferXml( rStrm );
 
-    pExternalLink->endElement( XML_sheetDataSet);
+        pExternalLink->endElement( XML_sheetDataSet);
+
+    }
     pExternalLink->endElement( XML_externalBook);
     pExternalLink->endElement( XML_externalLink);
 }
