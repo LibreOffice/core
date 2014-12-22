@@ -427,7 +427,7 @@ public:
     inline SwTwips GetFtnFrmHeight() const;
     SwTxtFrm *FindFtnRef( const SwTxtFtn *pFtn );
     inline const SwTxtFrm *FindFtnRef( const SwTxtFtn *pFtn ) const
-    { return FindFtnRef( pFtn ); }
+    { return const_cast<SwTxtFrm *>(this)->FindFtnRef( pFtn ); }
     void ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine );
 
     /**
