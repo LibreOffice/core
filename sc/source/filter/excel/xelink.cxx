@@ -1671,14 +1671,18 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
             FSNS(XML_r, XML_id),    XclXmlUtils::ToOString( sId ).getStr(),
             FSEND);
 
-    pExternalLink->startElement( XML_sheetNames, FSEND);
-    for (size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos)
+    if (!maXctList.IsEmpty())
     {
-        pExternalLink->singleElement( XML_sheetName,
-                XML_val,    XclXmlUtils::ToOString( maXctList.GetRecord( nPos )->GetTabName()).getStr(),
-                FSEND);
+        pExternalLink->startElement( XML_sheetNames, FSEND);
+        for (size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos)
+        {
+            pExternalLink->singleElement( XML_sheetName,
+                    XML_val,    XclXmlUtils::ToOString( maXctList.GetRecord( nPos )->GetTabName()).getStr(),
+                    FSEND);
+        }
+        pExternalLink->endElement( XML_sheetNames);
+
     }
-    pExternalLink->endElement( XML_sheetNames);
 
     pExternalLink->startElement( XML_sheetDataSet, FSEND);
 
