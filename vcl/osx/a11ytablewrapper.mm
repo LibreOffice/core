@@ -135,8 +135,6 @@ using namespace ::com::sun::star::uno;
             NSMutableArray * cells = [ [ NSMutableArray alloc ] init ];
             try
             {
-                // find out number of rows
-                sal_Int32 nRows = accessibleTable->getAccessibleRowCount();
                 for( sal_Int32 n = 0; n < nRows; n++ )
                 {
                     Reference < XAccessible > rAccessibleCell = accessibleTable -> getAccessibleCellAt ( n, 0 );
