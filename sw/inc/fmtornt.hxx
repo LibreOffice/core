@@ -99,6 +99,8 @@ public:
 
     bool IsPosToggle() const { return bPosToggle; }
     void SetPosToggle( bool bNew ) { bPosToggle = bNew; }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )
