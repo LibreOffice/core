@@ -97,6 +97,7 @@ public:
     void testFdo79731();
     void testBnc904423();
     void testShapeLineStyle();
+    void testBnc862510_6();
 #if !defined WNT
     void testBnc822341();
 #endif
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST(testBnc904423);
     CPPUNIT_TEST(testShapeLineStyle);
+    CPPUNIT_TEST(testBnc862510_6);
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
 #endif
@@ -1247,6 +1249,44 @@ void SdFiltersTest::testShapeLineStyle()
                 pObj->GetMergedItem(XATTR_LINEWIDTH));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(176), rWidthItem.GetValue());
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc862510_6()
+{
+    // Black text was imported instead of gray
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_6.pptx"));
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xShape(
+        xPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+
+    // Get first paragraph of the text
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
+                uno::UNO_QUERY_THROW);
+
+    // Get first run of the paragraph
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+    sal_Int32 nCharColor;
+    xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
+
+    // Color should be black
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x8B8B8B), nCharColor );
 
     xDocShRef->DoClose();
 }
