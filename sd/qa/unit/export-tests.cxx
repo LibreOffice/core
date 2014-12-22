@@ -728,7 +728,7 @@ void SdExportTest::testBnc822341()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/odp/bnc822341.odp"), ODP);
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
-    // Export an LO specific ole object (exported from an ODP document)
+    // Export an LO specific ole object (imported from an ODP document)
     {
         SdDrawDocument *pDoc = xDocShRef->GetDoc();
         CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -742,7 +742,7 @@ void SdExportTest::testBnc822341()
 
     xDocShRef = saveAndReload( xDocShRef, PPTX );
 
-    // Export an MS specific ole object (exported from a PPTX document)
+    // Export an MS specific ole object (imported from a PPTX document)
     {
         SdDrawDocument *pDoc = xDocShRef->GetDoc();
         CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
