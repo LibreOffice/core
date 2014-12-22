@@ -656,7 +656,7 @@ public:
 
     SwFrm* GetIndNext()
         { return ( mpNext || !IsInSct() ) ? mpNext : _GetIndNext(); }
-    const SwFrm* GetIndNext() const { return static_cast<const SwFrm*>(this)->GetIndNext(); }
+    const SwFrm* GetIndNext() const { return const_cast<SwFrm*>(this)->GetIndNext(); }
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
     sal_uInt16 GetVirtPageNum() const;  // page number with offset
