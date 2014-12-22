@@ -22,120 +22,125 @@
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
-DockingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
+Image RID_SVXIMG_DIRECTION + DIRECTION_NW
 {
-    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_DIRECTION";
-    Border = FALSE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = FALSE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
+    ImageBitmap = Bitmap { File = "directionnorthwest_22.bmp" ; };
+    MASKCOLOR
+};
 
-    Text [ en-US ] = "Extrusion Direction" ;
+Image RID_SVXIMG_DIRECTION + DIRECTION_N
+{
+    ImageBitmap = Bitmap { File = "directionnorth_22.bmp" ; };
+    MASKCOLOR
+};
 
-    Image IMG_DIRECTION + DIRECTION_NW
-    {
-        ImageBitmap = Bitmap { File = "directionnorthwest_22.bmp" ; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_N
-    {
-        ImageBitmap = Bitmap { File = "directionnorth_22.bmp" ; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_NE
-    {
-        ImageBitmap = Bitmap { File = "directionnortheast_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_W
-    {
-        ImageBitmap = Bitmap { File = "directionwest_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_NONE
-    {
-        ImageBitmap = Bitmap { File = "directionstraight_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_E
-    {
-        ImageBitmap = Bitmap { File = "directioneast_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_SW
-    {
-        ImageBitmap = Bitmap { File = "directionsouthwest_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_S
-    {
-        ImageBitmap = Bitmap { File = "directionsouth_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_DIRECTION + DIRECTION_SE
-    {
-        ImageBitmap = Bitmap { File = "directionsoutheast_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_PERSPECTIVE
-    {
-        ImageBitmap = Bitmap { File = "perspective_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_PARALLEL
-    {
-        ImageBitmap = Bitmap { File = "parallel_16.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_DIRECTION + DIRECTION_NE
+{
+    ImageBitmap = Bitmap { File = "directionnortheast_22.bmp"; };
+    MASKCOLOR
+};
 
-    String STR_PERSPECTIVE
-    {
-        Text [ en-US ] = "~Perspective" ;
-    };
+Image RID_SVXIMG_DIRECTION + DIRECTION_W
+{
+    ImageBitmap = Bitmap { File = "directionwest_22.bmp"; };
+    MASKCOLOR
+};
 
-    String STR_PARALLEL
-    {
-        Text [ en-US ] = "P~arallel" ;
-    };
-    String STR_DIRECTION + DIRECTION_NW
-    {
-        Text [ en-US ] = "Extrusion North-West";
-    };
-    String STR_DIRECTION + DIRECTION_N
-    {
-        Text [ en-US ] = "Extrusion North";
-    };
-    String STR_DIRECTION + DIRECTION_NE
-    {
-        Text [ en-US ] = "Extrusion North-East";
-    };
-    String STR_DIRECTION + DIRECTION_W
-    {
-        Text [ en-US ] = "Extrusion West";
-    };
-    String STR_DIRECTION + DIRECTION_NONE
-    {
-        Text [ en-US ] = "Extrusion Backwards";
-    };
-    String STR_DIRECTION + DIRECTION_E
-    {
-        Text [ en-US ] = "Extrusion East";
-    };
-    String STR_DIRECTION + DIRECTION_SW
-    {
-        Text [ en-US ] = "Extrusion South-West";
-    };
-    String STR_DIRECTION + DIRECTION_S
-    {
-        Text [ en-US ] = "Extrusion South";
-    };
-    String STR_DIRECTION + DIRECTION_SE
-    {
-        Text [ en-US ] = "Extrusion South-East";
-    };
+Image RID_SVXIMG_DIRECTION + DIRECTION_NONE
+{
+    ImageBitmap = Bitmap { File = "directionstraight_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_DIRECTION + DIRECTION_E
+{
+    ImageBitmap = Bitmap { File = "directioneast_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_DIRECTION + DIRECTION_SW
+{
+    ImageBitmap = Bitmap { File = "directionsouthwest_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_DIRECTION + DIRECTION_S
+{
+    ImageBitmap = Bitmap { File = "directionsouth_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_DIRECTION + DIRECTION_SE
+{
+    ImageBitmap = Bitmap { File = "directionsoutheast_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_PERSPECTIVE
+{
+    ImageBitmap = Bitmap { File = "perspective_16.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_PARALLEL
+{
+    ImageBitmap = Bitmap { File = "parallel_16.bmp"; };
+    MASKCOLOR
+};
+
+String RID_SVXSTR_PERSPECTIVE
+{
+    Text [ en-US ] = "~Perspective" ;
+};
+
+String RID_SVXSTR_PARALLEL
+{
+    Text [ en-US ] = "P~arallel" ;
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_NW
+{
+    Text [ en-US ] = "Extrusion North-West";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_N
+{
+    Text [ en-US ] = "Extrusion North";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_NE
+{
+    Text [ en-US ] = "Extrusion North-East";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_W
+{
+    Text [ en-US ] = "Extrusion West";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_NONE
+{
+    Text [ en-US ] = "Extrusion Backwards";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_E
+{
+    Text [ en-US ] = "Extrusion East";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_SW
+{
+    Text [ en-US ] = "Extrusion South-West";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_S
+{
+    Text [ en-US ] = "Extrusion South";
+};
+
+String RID_SVXSTR_DIRECTION + DIRECTION_SE
+{
+    Text [ en-US ] = "Extrusion South-East";
 };
 
 DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING

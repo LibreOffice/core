@@ -39,26 +39,9 @@
 #define DIRECTION_S         7
 #define DIRECTION_SE        8
 
-#define STR_PERSPECTIVE         1
-#define STR_PARALLEL            2
-#define STR_CUSTOM              3
-#define STR_INFINITY            4
-
 #define STR_BRIGHT              15
 #define STR_NORMAL              16
 #define STR_DIM                 17
-
-#define STR_WIREFRAME           18
-#define STR_MATTE               19
-#define STR_PLASTIC             20
-#define STR_METAL               21
-
-#define STR_DIRECTION           30      // needs 10 resource ids
-
-#define IMG_DIRECTION           1       // needs 10 resource ids
-
-#define IMG_PERSPECTIVE         31
-#define IMG_PARALLEL            33
 
 #define IMG_LIGHT_OFF           50  // needs 10 resource ids
 #define IMG_LIGHT_ON            60  // needs 10 resource ids

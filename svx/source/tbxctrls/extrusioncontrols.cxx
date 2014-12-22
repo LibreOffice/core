@@ -65,45 +65,40 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     vcl::Window* pParentWindow
 )
-:   ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )) ,
-    mrController( rController ) ,
-    maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ) ,
-    maImgParallel(    SVX_RES( IMG_PARALLEL    ) ) ,
-    msExtrusionDirection(  ".uno:ExtrusionDirection"  ) ,
-    msExtrusionProjection( ".uno:ExtrusionProjection" )
+    : ToolbarMenu(rFrame, pParentWindow,
+                  WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    , mrController(rController)
+    , maImgPerspective(SVX_RES(RID_SVXIMG_PERSPECTIVE))
+    , maImgParallel(SVX_RES(RID_SVXIMG_PARALLEL))
+    , msExtrusionDirection(".uno:ExtrusionDirection")
+    , msExtrusionProjection(".uno:ExtrusionProjection")
 {
-    SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
-
-    sal_uInt16 i;
-    for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
+    for(sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        maImgDirection[i] = Image( SVX_RES( IMG_DIRECTION + i ) );
+        maImgDirection[i] = Image( SVX_RES( RID_SVXIMG_DIRECTION + i ) );
     }
 
     SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet = createEmptyValueSetControl();
-    mpDirectionSet->SetHelpId( HID_VALUESET_EXTRUSION_DIRECTION );
 
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet->SetColCount( 3 );
     mpDirectionSet->EnableFullItemMode( false );
 
-    for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
+    for (sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        OUString aText( SVX_RESSTR( STR_DIRECTION + i ) );
-        mpDirectionSet->InsertItem( i+1, maImgDirection[ i ], aText );
+        OUString aText(SVX_RESSTR(RID_SVXSTR_DIRECTION + i));
+        mpDirectionSet->InsertItem(i + 1, maImgDirection[i], aText);
     }
 
-    mpDirectionSet->SetOutputSizePixel( Size( 72, 72 ) );
+    mpDirectionSet->SetOutputSizePixel(Size(72, 72));
 
-    appendEntry( 2, mpDirectionSet );
+    appendEntry(2, mpDirectionSet );
     appendSeparator();
-    appendEntry( 0, SVX_RESSTR( STR_PERSPECTIVE ), maImgPerspective );
-    appendEntry( 1, SVX_RESSTR( STR_PARALLEL    ), maImgParallel    );
+    appendEntry(0, SVX_RESSTR(RID_SVXSTR_PERSPECTIVE), maImgPerspective);
+    appendEntry(1, SVX_RESSTR(RID_SVXSTR_PARALLEL), maImgParallel);
 
     SetOutputSizePixel( getMenuSize() );
-
-    FreeResource();
 
     AddStatusListener( msExtrusionDirection );
     AddStatusListener( msExtrusionProjection );
