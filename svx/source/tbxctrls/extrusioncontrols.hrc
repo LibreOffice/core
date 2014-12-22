@@ -39,16 +39,4 @@
 #define DIRECTION_S         7
 #define DIRECTION_SE        8
 
-#define STR_BRIGHT              15
-#define STR_NORMAL              16
-#define STR_DIM                 17
-
-#define IMG_LIGHT_OFF           50  // needs 10 resource ids
-#define IMG_LIGHT_ON            60  // needs 10 resource ids
-#define IMG_LIGHT_PREVIEW       70  // needs 10 resource ids
-
-#define IMG_LIGHTING_BRIGHT     110
-#define IMG_LIGHTING_NORMAL     111
-#define IMG_LIGHTING_DIM        112
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

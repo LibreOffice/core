@@ -143,177 +143,187 @@ String RID_SVXSTR_DIRECTION + DIRECTION_SE
     Text [ en-US ] = "Extrusion South-East";
 };
 
-DockingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
+Image RID_SVXIMG_LIGHT_OFF + FROM_TOP_LEFT
 {
-    HelpID = "svx:DockingWindow:RID_SVXFLOAT_EXTRUSION_LIGHTING";
-    Border = FALSE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = FALSE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
+    ImageBitmap = Bitmap { File = "lightofffromtopleft_22.bmp"; };
+    MASKCOLOR
+};
 
-    Text [ en-US ] = "Extrusion Lighting" ;
+Image RID_SVXIMG_LIGHT_OFF + FROM_TOP
+{
+    ImageBitmap = Bitmap { File = "lightofffromtop_22.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_LIGHT_OFF + FROM_TOP_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromtopleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_TOP
-    {
-        ImageBitmap = Bitmap { File = "lightofffromtop_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_TOP_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromtopright_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightofffromright_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_BOTTOM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightofffrombottomleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_BOTTOM
-    {
-        ImageBitmap = Bitmap { File = "lightofffrombottom_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_OFF + FROM_BOTTOM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightofffrombottomright_22.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_LIGHT_OFF + FROM_TOP_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightofffromtopright_22.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_LIGHT_ON + FROM_TOP_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromtopleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_TOP
-    {
-        ImageBitmap = Bitmap { File = "lightonfromtop_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_TOP_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromtopright_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightonfromright_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_BOTTOM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightonfrombottomleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_BOTTOM
-    {
-        ImageBitmap = Bitmap { File = "lightonfrombottom_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_ON + FROM_BOTTOM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightonfrombottomright_22.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_LIGHT_OFF + FROM_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightofffromleft_22.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_LIGHT_PREVIEW + FROM_TOP_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightfromtopleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_TOP
-    {
-        ImageBitmap = Bitmap { File = "lightfromtop_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_TOP_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightfromtopright_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightfromleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightfromright_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_FRONT
-    {
-        ImageBitmap = Bitmap { File = "lightfromfront_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_BOTTOM_LEFT
-    {
-        ImageBitmap = Bitmap { File = "lightfrombottomleft_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_BOTTOM
-    {
-        ImageBitmap = Bitmap { File = "lightfrombottom_22.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHT_PREVIEW + FROM_BOTTOM_RIGHT
-    {
-        ImageBitmap = Bitmap { File = "lightfrombottomright_22.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_LIGHT_OFF + FROM_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightofffromright_22.bmp"; };
+    MASKCOLOR
+};
 
-    Image IMG_LIGHTING_BRIGHT
-    {
-        ImageBitmap = Bitmap { File = "brightlit_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHTING_NORMAL
-    {
-        ImageBitmap = Bitmap { File = "normallit_16.bmp"; };
-        MASKCOLOR
-    };
-    Image IMG_LIGHTING_DIM
-    {
-        ImageBitmap = Bitmap { File = "dimlit_16.bmp"; };
-        MASKCOLOR
-    };
+Image RID_SVXIMG_LIGHT_OFF + FROM_BOTTOM_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightofffrombottomleft_22.bmp"; };
+    MASKCOLOR
+};
 
-    String STR_BRIGHT
-    {
-        Text [ en-US ] = "~Bright";
-    };
+Image RID_SVXIMG_LIGHT_OFF + FROM_BOTTOM
+{
+    ImageBitmap = Bitmap { File = "lightofffrombottom_22.bmp"; };
+    MASKCOLOR
+};
 
-    String STR_NORMAL
-    {
-        Text [ en-US ] = "~Normal";
-    };
+Image RID_SVXIMG_LIGHT_OFF + FROM_BOTTOM_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightofffrombottomright_22.bmp"; };
+    MASKCOLOR
+};
 
-    String STR_DIM
-    {
-        Text [ en-US ] = "~Dim";
-    };
+Image RID_SVXIMG_LIGHT_ON + FROM_TOP_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightonfromtopleft_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_TOP
+{
+    ImageBitmap = Bitmap { File = "lightonfromtop_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_TOP_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightonfromtopright_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightonfromleft_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightonfromright_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_BOTTOM_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightonfrombottomleft_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_BOTTOM
+{
+    ImageBitmap = Bitmap { File = "lightonfrombottom_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_ON + FROM_BOTTOM_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightonfrombottomright_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_TOP_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightfromtopleft_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_TOP
+{
+    ImageBitmap = Bitmap { File = "lightfromtop_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_TOP_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightfromtopright_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightfromleft_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightfromright_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_FRONT
+{
+    ImageBitmap = Bitmap { File = "lightfromfront_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_BOTTOM_LEFT
+{
+    ImageBitmap = Bitmap { File = "lightfrombottomleft_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_BOTTOM
+{
+    ImageBitmap = Bitmap { File = "lightfrombottom_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHT_PREVIEW + FROM_BOTTOM_RIGHT
+{
+    ImageBitmap = Bitmap { File = "lightfrombottomright_22.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHTING_BRIGHT
+{
+    ImageBitmap = Bitmap { File = "brightlit_16.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHTING_NORMAL
+{
+    ImageBitmap = Bitmap { File = "normallit_16.bmp"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_LIGHTING_DIM
+{
+    ImageBitmap = Bitmap { File = "dimlit_16.bmp"; };
+    MASKCOLOR
+};
+
+String RID_SVXSTR_BRIGHT
+{
+    Text [ en-US ] = "~Bright";
+};
+
+String RID_SVXSTR_NORMAL
+{
+    Text [ en-US ] = "~Normal";
+};
+
+String RID_SVXSTR_DIM
+{
+    Text [ en-US ] = "~Dim";
 };
 
 String RID_SVXSTR_WIREFRAME

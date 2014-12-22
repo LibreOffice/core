@@ -509,45 +509,41 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstanc
     return *new ExtrusionDepthController( comphelper::getComponentContext(rSMgr) );
 }
 
-
-
 OUString SAL_CALL ExtrusionDepthController::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDepthController_getImplementationName();
 }
-
-
 
 Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
 {
     return ExtrusionDepthController_getSupportedServiceNames();
 }
 
-ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow )
-: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ))
-, mrController( rController )
-, maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) )
-, maImgNormal( SVX_RES( IMG_LIGHTING_NORMAL ) )
-, maImgDim(    SVX_RES( IMG_LIGHTING_DIM    ) )
-, mnLevel( 0 )
-, mbLevelEnabled( false )
-, mnDirection( FROM_FRONT )
-, mbDirectionEnabled( false )
-, msExtrusionLightingDirection( ".uno:ExtrusionLightingDirection" )
-, msExtrusionLightingIntensity( ".uno:ExtrusionLightingIntensity" )
+ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rController,
+                                                 const css::uno::Reference<css::frame::XFrame >& rFrame,
+                                                 vcl::Window* pParentWindow)
+    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    , mrController(rController)
+    , maImgBright(SVX_RES(RID_SVXIMG_LIGHTING_BRIGHT))
+    , maImgNormal(SVX_RES(RID_SVXIMG_LIGHTING_NORMAL))
+    , maImgDim(SVX_RES(RID_SVXIMG_LIGHTING_DIM))
+    , mnLevel(0)
+    , mbLevelEnabled(false)
+    , mnDirection(FROM_FRONT)
+    , mbDirectionEnabled(false)
+    , msExtrusionLightingDirection(".uno:ExtrusionLightingDirection")
+    , msExtrusionLightingIntensity(".uno:ExtrusionLightingIntensity")
 {
-    sal_uInt16 i;
-    for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
+    for (sal_uInt16 i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; ++i)
     {
         if( i != FROM_FRONT )
         {
-            maImgLightingOff[  i ] = Image( SVX_RES( IMG_LIGHT_OFF   + i ) );
-            maImgLightingOn[   i ] = Image( SVX_RES( IMG_LIGHT_ON    + i ) );
+            maImgLightingOff[i] = Image(SVX_RES(RID_SVXIMG_LIGHT_OFF + i));
+            maImgLightingOn[i] = Image(SVX_RES(RID_SVXIMG_LIGHT_ON + i));
         }
-        maImgLightingPreview[i] = Image( SVX_RES( IMG_LIGHT_PREVIEW + i ) );
+        maImgLightingPreview[i] = Image(SVX_RES(RID_SVXIMG_LIGHT_PREVIEW + i));
     }
 
-    SetHelpId( HID_MENU_EXTRUSION_LIGHTING );
     SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
 
     mpLightingSet = createEmptyValueSetControl();
@@ -557,7 +553,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
     mpLightingSet->SetColCount( 3 );
     mpLightingSet->EnableFullItemMode( false );
 
-    for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
+    for (sal_uInt16 i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; ++i)
     {
         if( i != FROM_FRONT )
         {
@@ -570,35 +566,28 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
     }
     mpLightingSet->SetOutputSizePixel( Size( 72, 72 ) );
 
-    appendEntry( 3, mpLightingSet );
+    appendEntry(3, mpLightingSet);
     appendSeparator();
-    appendEntry( 0, SVX_RESSTR( STR_BRIGHT ), maImgBright );
-    appendEntry( 1, SVX_RESSTR( STR_NORMAL ), maImgNormal );
-    appendEntry( 2, SVX_RESSTR( STR_DIM    ), maImgDim    );
+    appendEntry(0, SVX_RESSTR(RID_SVXSTR_BRIGHT), maImgBright);
+    appendEntry(1, SVX_RESSTR(RID_SVXSTR_NORMAL), maImgNormal);
+    appendEntry(2, SVX_RESSTR(RID_SVXSTR_DIM), maImgDim);
 
     SetOutputSizePixel( getMenuSize() );
-
-    FreeResource();
 
     AddStatusListener( msExtrusionLightingDirection );
     AddStatusListener( msExtrusionLightingIntensity );
 }
 
-
-
 void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
 {
     mnLevel = nLevel;
     mbLevelEnabled = bEnabled;
-    int i = 0;
-    for( i = 0; i < 3; i++ )
+    for (int i = 0; i < 3; ++i)
     {
         checkEntry( i, (i == nLevel) && bEnabled );
         enableEntry( i, bEnabled );
     }
 }
-
-
 
 void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 {
