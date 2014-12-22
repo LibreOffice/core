@@ -71,6 +71,8 @@ public:
     void SetType( RndStdIds nRndId ) { nAnchorId = nRndId; }
     void SetPageNum( sal_uInt16 nNew ) { nPageNum = nNew; }
     void SetAnchor( const SwPosition *pPos );
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline const SwFmtAnchor &SwAttrSet::GetAnchor(bool bInP) const

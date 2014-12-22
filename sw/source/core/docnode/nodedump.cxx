@@ -435,6 +435,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_HORI_ORIENT:
                 static_cast<const SwFmtHoriOrient*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_ANCHOR:
+                static_cast<const SwFmtAnchor*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -449,36 +452,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_ANCHOR:
-            {
-                pWhich = "frame anchor";
-                const SwFmtAnchor* pAnchor = static_cast<const SwFmtAnchor*>(pItem);
-                switch (pAnchor->GetAnchorId())
-                {
-                case FLY_AT_PARA:
-                    oValue = "anchor type: at-para";
-                    break;
-                case FLY_AS_CHAR:
-                    oValue = "anchor type: as-char";
-                    break;
-                case FLY_AT_PAGE:
-                    oValue = "anchor type: at-page";
-                    break;
-                case FLY_AT_FLY:
-                    oValue = "anchor type: at-fly";
-                    break;
-                case FLY_AT_CHAR:
-                    oValue = "anchor type: at-char";
-                    break;
-                default:
-                    oValue = "anchor type: " + OString::number(pAnchor->GetAnchorId());
-                    break;
-                }
-                const SwPosition* pPosition = pAnchor->GetCntntAnchor();
-                if (pPosition)
-                    oValue = *oValue + ", node index: " + OString::number(pPosition->nNode.GetNode().GetIndex()) + ", index: " + OString::number(pPosition->nContent.GetIndex());
-                break;
-            }
             case RES_SURROUND:
             {
                 pWhich = "frame surround";

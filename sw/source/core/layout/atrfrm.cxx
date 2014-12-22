@@ -1666,6 +1666,30 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
+void SwFmtAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtAnchor"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+
+    if (m_pCntntAnchor)
+    {
+        std::stringstream aCntntAnchor;
+        aCntntAnchor << *m_pCntntAnchor;
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pCntntAnchor"), BAD_CAST(aCntntAnchor.str().c_str()));
+    }
+    else
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("pCntntAnchor"), "%p", m_pCntntAnchor.get());
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nAnchorType"), BAD_CAST(OString::number(nAnchorId).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPageNum"), BAD_CAST(OString::number(nPageNum).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nOrder"), BAD_CAST(OString::number(mnOrder).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nOrderCounter"), BAD_CAST(OString::number(mnOrderCounter).getStr()));
+    OUString aPresentation;
+    GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS, SFX_MAPUNIT_100TH_MM, SFX_MAPUNIT_100TH_MM, aPresentation);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 // Partially implemented inline in hxx
 SwFmtURL::SwFmtURL() :
     SfxPoolItem( RES_URL ),
