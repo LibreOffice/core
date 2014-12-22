@@ -93,8 +93,8 @@ struct FileType
             sClipboardFormat.clear();
             nDocumentIconID     = 0;
             lUINames.free   ();
-            lURLPattern.free();
-            lExtensions.free();
+            framework::free(lURLPattern);
+            framework::free(lExtensions);
         }
 
         inline FileType& impl_copy( const FileType& rCopy )
@@ -156,8 +156,8 @@ struct Filter
             nFlags              = 0;
             nFileFormatVersion  = 0;
             sTemplateName.clear();
-            lUINames.free   ();
-            lUserData.free  ();
+            lUINames.free();
+            framework::free(lUserData);
         }
 
         inline Filter& impl_copy( const Filter& rCopy )
@@ -216,7 +216,7 @@ struct Detector
         inline void impl_clear()
         {
             sName.clear();
-            lTypes.free();
+            framework::free(lTypes);
         }
 
         inline Detector& impl_copy( const Detector& rCopy )
@@ -257,8 +257,8 @@ struct Loader
         inline void impl_clear()
         {
             sName.clear();
-            lUINames.free   ();
-            lTypes.free     ();
+            lUINames.free();
+            framework::free(lTypes);
         }
 
         inline Loader& impl_copy( const Loader& rCopy )
@@ -300,7 +300,7 @@ struct ContentHandler
         inline void impl_clear()
         {
             sName.clear();
-            lTypes.free();
+            framework::free(lTypes);
         }
 
         inline ContentHandler& impl_copy( const ContentHandler& rCopy )
@@ -338,9 +338,9 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
         inline void free()
         {
             SetNodeHash().swap( *this ); // get rid of reserved capacity
-            lAddedItems.free  ();
-            lChangedItems.free();
-            lRemovedItems.free();
+            framework::free(lAddedItems);
+            framework::free(lChangedItems);
+            framework::free(lRemovedItems);
         }
 
         // Append changed, added or removed items to special lists
