@@ -30,12 +30,7 @@
 
 namespace sfx2
 {
-
-
-
     //= TitledDockingWindow
-
-
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent,
             WinBits i_nStyle )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_nStyle )
@@ -49,21 +44,6 @@ namespace sfx2
         impl_construct();
     }
 
-
-    TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, vcl::Window* i_pParent,
-            const ResId& i_rResId )
-        :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_rResId )
-        ,m_sTitle()
-        ,m_aToolbox( this )
-        ,m_aContentWindow( this )
-        ,m_aBorder( 3, 1, 3, 3 )
-        ,m_bLayoutPending( false )
-        ,m_nTitleBarHeight(0)
-    {
-        impl_construct();
-    }
-
-
     void TitledDockingWindow::impl_construct()
     {
         SetBackground( Wallpaper() );
@@ -76,7 +56,6 @@ namespace sfx2
 
         m_aContentWindow.Show();
     }
-
 
     TitledDockingWindow::~TitledDockingWindow()
     {

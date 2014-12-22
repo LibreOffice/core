@@ -42,10 +42,6 @@ namespace sfx2
             vcl::Window* i_pParent, WinBits i_nStyle = 0
         );
 
-        TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow,
-            vcl::Window* i_pParent, const ResId& i_rResId
-        );
-
         virtual ~TitledDockingWindow();
 
         /** sets a title to be displayed in the docking window

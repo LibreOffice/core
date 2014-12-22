@@ -18,7 +18,6 @@
  */
 
 #include "PaneChildWindows.hxx"
-#include "PaneDockingWindow.hrc"
 #include "PaneDockingWindow.hxx"
 #include "ViewShellBase.hxx"
 #include "framework/FrameworkHelper.hxx"
@@ -48,23 +47,20 @@ SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW_WITHID(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
 
 //===== PaneChildWindow =======================================================
-
 PaneChildWindow::PaneChildWindow (
     vcl::Window* pParentWindow,
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const sal_uInt16 nDockWinTitleResId,
     const sal_uInt16 nTitleBarResId,
     SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
-    pWindow = new PaneDockingWindow (
+    pWindow = new PaneDockingWindow(
         pBindings,
         this,
         pParentWindow,
-        SdResId( nDockWinTitleResId ),
-        SD_RESSTR( nTitleBarResId ) );
+        SD_RESSTR(nTitleBarResId));
     eChildAlignment = eAlignment;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
     SetHideNotDelete(true);
@@ -88,7 +84,6 @@ PaneChildWindow::~PaneChildWindow (void)
 }
 
 //===== LeftPaneImpressChildWindow ============================================
-
 LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
     vcl::Window* pParentWindow,
     sal_uInt16 nId,
@@ -99,14 +94,12 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         nId,
         pBindings,
         pInfo,
-        FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW,
         STR_LEFT_PANE_IMPRESS_TITLE,
         SFX_ALIGN_LEFT)
 {
 }
 
 //===== LeftPaneDrawChildWindow ===============================================
-
 LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
     vcl::Window* pParentWindow,
     sal_uInt16 nId,
@@ -117,7 +110,6 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         nId,
         pBindings,
         pInfo,
-        FLT_LEFT_PANE_DRAW_DOCKING_WINDOW,
         STR_LEFT_PANE_DRAW_TITLE,
         SFX_ALIGN_LEFT)
 {

@@ -42,8 +42,6 @@ public:
             window.
         @param pParent
             The parent window of the new docking window.
-        @param rResId
-            The resource is used to determine initial size and attributes.
         @param rsTitle
             the initial title
     */
@@ -51,10 +49,9 @@ public:
         SfxBindings *pBindings,
         SfxChildWindow *pChildWindow,
         vcl::Window* pParent,
-        const ResId& rResId,
         const OUString& rsTitle);
 
-    virtual ~PaneDockingWindow (void);
+    virtual ~PaneDockingWindow();
     virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
     /** When docked the given range is passed to the parent SplitWindow.
