@@ -1,9 +1,14 @@
 package org.libreoffice;
 
+import android.graphics.PointF;
+import android.graphics.RectF;
+import android.util.Log;
+
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
+import org.mozilla.gecko.gfx.JavaPanZoomController;
 import org.mozilla.gecko.gfx.SubTile;
 
 import java.util.concurrent.PriorityBlockingQueue;
@@ -40,7 +45,8 @@ public class LOKitThread extends Thread {
 
         mLayerClient.setPageRect(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         mViewportMetrics = mLayerClient.getViewportMetrics();
-        mLayerClient.setViewportMetrics(mViewportMetrics.setZoomFactor(mViewportMetrics.getWidth() / mViewportMetrics.getPageWidth()));
+        mLayerClient.setViewportMetrics(mViewportMetrics);
+        mLayerClient.zoomToPageWidth(mTileProvider.getPageWidth());
         mLayerClient.forceRedraw();
     }
 
@@ -53,6 +59,8 @@ public class LOKitThread extends Thread {
     private void changePart(int partIndex) {
         LOKitShell.showProgressSpinner();
         mTileProvider.changePart(partIndex);
+        mViewportMetrics = mLayerClient.getViewportMetrics();
+        mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
         refresh();
         LOKitShell.hideProgressSpinner();
     }
@@ -99,6 +107,7 @@ public class LOKitThread extends Thread {
                 closeDocument();
                 break;
             case LOEvent.SIZE_CHANGED:
+                Log.i(LOGTAG, "Size change event!");
                 redraw();
                 break;
             case LOEvent.CHANGE_PART:

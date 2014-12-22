@@ -915,7 +915,7 @@ public class JavaPanZoomController
      * While we usually use device pixels, @zoomToRect must be specified in CSS
      * pixels.
      */
-    private boolean animatedZoomTo(RectF zoomToRect) {
+    public boolean animatedZoomTo(RectF zoomToRect) {
         final float startZoom = getMetrics().zoomFactor;
 
         RectF viewport = getMetrics().getViewport();
