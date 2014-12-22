@@ -40,12 +40,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxColorValueSet(vcl::
     return new SvxColorValueSet(pParent, nWinBits);
 }
 
-SvxColorValueSet::SvxColorValueSet(vcl::Window* _pParent, const ResId& rResId)
-:   ValueSet(_pParent, rResId)
-{
-    SetEdgeBlending(true);
-}
-
 sal_uInt32 SvxColorValueSet::getMaxRowCount() const
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

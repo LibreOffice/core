@@ -81,7 +81,6 @@ public:
     bool        GetIsAllowAnimatedGraphics() const;
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;
-    bool        GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
     bool        IsSelectionInReadonly() const;
     sal_Int16   GetEdgeBlending() const;
@@ -95,7 +94,6 @@ public:
     void        SetIsAllowAnimatedGraphics(bool bSet);
     void        SetIsAllowAnimatedText(bool bSet);
     void        SetIsAutomaticFontColor(bool bSet);
-    void        SetIsSystemFont(bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(bool bSet);
 
@@ -239,24 +237,6 @@ bool SvtAccessibilityOptions_Impl::GetIsAutomaticFontColor() const
     {
         if(xNode.is())
             xNode->getPropertyValue(s_sIsAutomaticFontColor) >>= bRet;
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
-    }
-
-    return bRet;
-}
-
-bool SvtAccessibilityOptions_Impl::GetIsSystemFont() const
-{
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-    bool                                            bRet = true;
-
-    try
-    {
-        if(xNode.is())
-            xNode->getPropertyValue(s_sIsSystemFont) >>= bRet;
     }
     catch(const css::uno::Exception& ex)
     {
@@ -494,26 +474,6 @@ void SvtAccessibilityOptions_Impl::SetIsAutomaticFontColor(bool bSet)
     }
 }
 
-void SvtAccessibilityOptions_Impl::SetIsSystemFont(bool bSet)
-{
-    css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
-
-    try
-    {
-        if(xNode.is() && xNode->getPropertyValue(s_sIsSystemFont)!=bSet)
-        {
-            xNode->setPropertyValue(s_sIsSystemFont, css::uno::makeAny(bSet));
-            ::comphelper::ConfigurationHelper::flush(m_xCfg);
-
-            bIsModified = true;
-        }
-    }
-    catch(const css::uno::Exception& ex)
-    {
-        SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
-    }
-}
-
 void SvtAccessibilityOptions_Impl::SetHelpTipSeconds(sal_Int16 nSet)
 {
     css::uno::Reference< css::beans::XPropertySet > xNode(m_xCfg, css::uno::UNO_QUERY);
@@ -563,12 +523,6 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
 
     aHelpSettings.SetTipTimeout( GetIsHelpTipsDisappear() ? GetHelpTipSeconds() * 1000 : HELP_TIP_TIMEOUT);
     aAllSettings.SetHelpSettings(aHelpSettings);
-
-    if(aStyleSettings.GetUseSystemUIFonts() != GetIsSystemFont())
-    {
-        aStyleSettings.SetUseSystemUIFonts(GetIsSystemFont());
-        StyleSettingsChanged = true;
-    }
 
     const sal_Int16 nEdgeBlendingCountA(GetEdgeBlending());
     OSL_ENSURE(nEdgeBlendingCountA >= 0, "OOps, negative values for EdgeBlending are not allowed (!)");
@@ -697,10 +651,6 @@ bool SvtAccessibilityOptions::GetIsAutomaticFontColor() const
 {
     return sm_pSingleImplConfig->GetIsAutomaticFontColor();
 }
-bool SvtAccessibilityOptions::GetIsSystemFont() const
-{
-    return sm_pSingleImplConfig->GetIsSystemFont();
-}
 sal_Int16 SvtAccessibilityOptions::GetHelpTipSeconds() const
 {
     return sm_pSingleImplConfig->GetHelpTipSeconds();
@@ -734,10 +684,6 @@ void SvtAccessibilityOptions::SetIsAllowAnimatedText(bool bSet)
 void SvtAccessibilityOptions::SetIsAutomaticFontColor(bool bSet)
 {
     sm_pSingleImplConfig->SetIsAutomaticFontColor(bSet);
-}
-void SvtAccessibilityOptions::SetIsSystemFont(bool bSet)
-{
-    sm_pSingleImplConfig->SetIsSystemFont(bSet);
 }
 void SvtAccessibilityOptions::SetHelpTipSeconds(sal_Int16 nSet)
 {

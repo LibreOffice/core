@@ -606,21 +606,6 @@ private:
     SAL_DLLPRIVATE bool                 ImplUpdatePos();
     SAL_DLLPRIVATE void                 ImplUpdateSysObjPos();
 
-    /** check whether a font is suitable for UI
-
-    The font to be tested will be checked whether it could display a
-    localized test string. If this is not the case, then the font
-    is deemed unsuitable as UI font.
-
-    @param rFont
-    the font to be tested
-
-    @returns
-    True if the font can be used as UI font
-    False if the font is unsuitable as UI font
-     */
-    SAL_DLLPRIVATE bool                 ImplCheckUIFont( const vcl::Font& rFont );
-
     SAL_DLLPRIVATE void                 ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true );
 
     SAL_DLLPRIVATE void                 ImplAlignChildren();

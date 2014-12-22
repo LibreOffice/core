@@ -14,23 +14,9 @@
 
 using namespace boost;
 
-AuthFallbackDlg::AuthFallbackDlg( Window* pParent ) :
-    ModalDialog( pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui" )
-{
-    get( m_pTVInstructions, "instructions" );
-    get( m_pEDUrl, "url" );
-    get( m_pEDCode, "code" );
-    get( m_pBTOk, "ok" );
-    get( m_pBTCancel, "cancel" );
-
-    m_pBTOk->SetClickHdl( LINK( this, AuthFallbackDlg, OKHdl) );
-    m_pBTOk->Enable( false );
-}
-
-AuthFallbackDlg::AuthFallbackDlg( Window* pParent, 
-        const OUString& instructions,
-        const OUString& url ) :
-    ModalDialog( pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui" )
+AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
+                                 const OUString& url)
+    : ModalDialog(pParent, "AuthFallbackDlg", "uui/ui/authfallback.ui")
 {
     get( m_pTVInstructions, "instructions" );
     get( m_pEDUrl, "url" );
@@ -44,10 +30,6 @@ AuthFallbackDlg::AuthFallbackDlg( Window* pParent,
 
     m_pTVInstructions->SetText( instructions );
     m_pEDUrl->SetText( url );
-}
-
-AuthFallbackDlg::~AuthFallbackDlg( )
-{
 }
 
 IMPL_LINK ( AuthFallbackDlg,  OKHdl, Button *, EMPTYARG )

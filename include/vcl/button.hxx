@@ -271,7 +271,6 @@ private:
 
 public:
     explicit        HelpButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    explicit        HelpButton( vcl::Window* pParent, const ResId& );
 
     virtual void    Click() SAL_OVERRIDE;
 };

@@ -43,7 +43,6 @@ public:
     bool        GetIsAllowAnimatedGraphics() const;
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;
-    bool        GetIsSystemFont() const;
     sal_Int16   GetHelpTipSeconds() const;
     bool        IsSelectionInReadonly() const;
     bool        GetAutoDetectSystemHC() const;
@@ -53,7 +52,6 @@ public:
     void        SetIsAllowAnimatedGraphics(bool bSet);
     void        SetIsAllowAnimatedText(bool bSet);
     void        SetIsAutomaticFontColor(bool bSet);
-    void        SetIsSystemFont(bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(bool bSet);
     void        SetAutoDetectSystemHC(bool bSet);

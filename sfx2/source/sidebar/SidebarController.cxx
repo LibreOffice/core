@@ -483,14 +483,6 @@ void SidebarController::UpdateConfigurations (void)
     }
 }
 
-void SidebarController::RequestSwitchToDeck (
-    const ::rtl::OUString& rsDeckId)
-{
-    maContextChangeUpdate.CancelRequest();
-    maAsynchronousDeckSwitch.RequestCall(
-        ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, rsDeckId));
-}
-
 void SidebarController::OpenThenSwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {

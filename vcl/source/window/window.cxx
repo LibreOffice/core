@@ -1294,47 +1294,6 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
     OutputDevice::CopyDeviceArea(aPosAry, nFlags);
 }
 
-bool Window::ImplCheckUIFont( const vcl::Font& rFont )
-{
-    if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
-        return true;
-
-    // create a text string using the localized text of important buttons
-    OUString aTestText;
-    static const StandardButtonType aTestButtons[] =
-    {
-        BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
-        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_IGNORE,
-        BUTTON_RETRY, BUTTON_HELP
-    };
-
-    const int nTestButtonCount = SAL_N_ELEMENTS(aTestButtons);
-    for( int n = 0; n < nTestButtonCount; ++n )
-    {
-        OUString aButtonStr = Button::GetStandardText( aTestButtons[n] );
-        // #i115432# ignore mnemonic+accelerator part of each string
-        // TODO: use a string filtering method when it becomes available
-        const sal_Int32 nLen = aButtonStr.getLength();
-        bool bInside = false;
-        for( int i = 0; i < nLen; ++i ) {
-            const sal_Unicode c = aButtonStr[ i ];
-            if( (c == '('))
-                bInside = true;
-            if( (c == ')'))
-                bInside = false;
-            if( (c == '~')
-            ||  (c == '(') || (c == ')')
-            || ((c >= 'A') && (c <= 'Z') && bInside) )
-                aButtonStr = aButtonStr.replaceAt( i, 1, " " );
-        }
-        // append sanitized button text to test string
-        aTestText += aButtonStr;
-    }
-
-    const bool bUIFontOk = ( HasGlyphs( rFont, aTestText ) == -1 );
-    return bUIFontOk;
-}
-
 SalGraphics* Window::ImplGetFrameGraphics() const
 {
     if ( mpWindowImpl->mpFrameWindow->mpGraphics )

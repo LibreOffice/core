@@ -88,4 +88,15 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^MathML:: \
 		  | grep -v ^GeneratedSaxParser:: \
 		  | grep -v ^GLTF:: \
+		  | grep -v ^OneDrive \
+		  | grep -v ^SharePoint \
+		  | grep -v ^VersioningService:: \
+		  | grep -v ^WSSession:: \
+		  | grep -v ^NavigationService:: \
+		  | grep -v ^ObjectService:: \
+		  | grep -v ^RepositoryService:: \
+		  | grep -v ^GDriveDocument:: \
+		  | grep -v ^GDriveFolder:: \
+		  | grep -v ^GDriveProperty:: \
+		  | grep -v ^GDriveSession:: \
 		  > ../unusedcode.easy

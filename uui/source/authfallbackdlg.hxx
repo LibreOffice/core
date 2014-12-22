@@ -18,22 +18,18 @@
 
 class AuthFallbackDlg : public ModalDialog
 {
-private :
-
+private:
     VclMultiLineEdit* m_pTVInstructions;
     Edit* m_pEDUrl;
     Edit* m_pEDCode;
     PushButton* m_pBTOk;
     PushButton* m_pBTCancel;
 
-public :
+public:
+    AuthFallbackDlg(Window* pParent, const OUString& instructions,
+                    const OUString& url);
 
-     AuthFallbackDlg( Window* pParent);
-     AuthFallbackDlg(Window* pParent, const OUString& instructions,
-             const OUString& url );
-     virtual ~AuthFallbackDlg();
-
-    OUString GetCode() { return m_pEDCode->GetText(); }
+    OUString GetCode() const { return m_pEDCode->GetText(); }
 
 private:
 

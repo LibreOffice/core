@@ -41,14 +41,10 @@ public:
                         ImpBitmap();
                         /**
                          * takes ownership
-                         * same as Sequence:
-                         * pBmp = new ImpBitmap;
-                         * pBmp->ImplSetSalBitmap(pBitmap);
                          */
                         ImpBitmap(SalBitmap* pBitmap);
                         ~ImpBitmap();
 
-    void                ImplSetSalBitmap( SalBitmap* pSalBitmap );
     SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap; }
 
     bool            ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
@@ -69,8 +65,6 @@ public:
     inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
     inline sal_uLong    ImplGetChecksum() const { return mnChecksum; }
 
-    bool                ImplCrop( const Rectangle& rRectPixel );
-    bool                ImplErase( const Color& rFillColor );
     bool                ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
     bool                ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol );
 };

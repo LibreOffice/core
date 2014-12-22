@@ -43,11 +43,6 @@ ImpBitmap::~ImpBitmap()
     delete mpSalBitmap;
 }
 
-void ImpBitmap::ImplSetSalBitmap( SalBitmap* pBitmap )
-{
-    delete mpSalBitmap, mpSalBitmap = pBitmap;
-}
-
 bool ImpBitmap::ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
 {
     return mpSalBitmap->Create( rSize, nBitCount, rPal );
@@ -91,16 +86,6 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode
 
     if( nMode == BITMAP_WRITE_ACCESS )
         mnChecksum = 0;
-}
-
-bool ImpBitmap::ImplCrop( const Rectangle& rRectPixel )
-{
-    return mpSalBitmap->Crop( rRectPixel );
-}
-
-bool ImpBitmap::ImplErase( const ::Color& rFillColor )
-{
-    return mpSalBitmap->Erase( rFillColor );
 }
 
 bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )

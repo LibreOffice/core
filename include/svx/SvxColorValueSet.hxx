@@ -26,11 +26,8 @@ class XColorList;
 
 class SVX_DLLPUBLIC SvxColorValueSet : public ValueSet
 {
-private:
-protected:
 public:
     SvxColorValueSet(vcl::Window* pParent, WinBits nWinStyle = WB_ITEMBORDER);
-    SvxColorValueSet(vcl::Window* pParent, const ResId& rResId);
 
     virtual void Resize() SAL_OVERRIDE;
 

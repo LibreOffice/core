@@ -1794,18 +1794,6 @@ HelpButton::HelpButton( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-HelpButton::HelpButton( vcl::Window* pParent, const ResId& rResId ) :
-    PushButton( WINDOW_HELPBUTTON )
-{
-    rResId.SetRT( RSC_HELPBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void HelpButton::Click()
 {
     // trigger help if no link set
