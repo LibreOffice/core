@@ -1,4 +1,0 @@
-ParamList=-OutProducer stats.SimpleFileOutProducer -OutputPath /dev/null
-#AppExecutionCommand=d:\\prj_new\\install\\src680_m17\\program\\soffice --norestore --accept=socket,host=0,port=8100;urp;
-# the test job list
-job1=sw.SwXTextTable

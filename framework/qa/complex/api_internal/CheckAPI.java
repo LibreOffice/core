@@ -23,7 +23,6 @@ import static org.junit.Assert.fail;
 import helper.OfficeProvider;
 import helper.ProcessHandler;
 
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 import lib.TestParameters;
 
@@ -35,7 +34,6 @@ import org.openoffice.test.OfficeConnection;
 
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XJob;
 import com.sun.star.uno.UnoRuntime;
@@ -77,60 +75,25 @@ public class CheckAPI  {
         assertNotNull("Cannot create 'org.openoffice.RunnerService'", oObj);
 
         // get the parameters for the internal test
-        String paramList = (String)param.get("ParamList");
-        ArrayList<Object> p = new ArrayList<Object>();
-        StringTokenizer paramTokens = new StringTokenizer(paramList, " ");
-        while(paramTokens.hasMoreTokens())
-        {
-            p.add(paramTokens.nextToken());
-        }
-        int length = p.size()/2+1;
-        NamedValue[] internalParams = new NamedValue[length];
-        for (int i=0; i<length-1; i++) {
-            internalParams[i] = new NamedValue();
-            internalParams[i].Name = (String)p.get(i*2);
-            internalParams[i].Value = p.get(i*2+1);
-            System.out.println("Name: "+internalParams[i].Name);
-            System.out.println("Value: "+(String)internalParams[i].Value);
-        }
+        final NamedValue[] internalParams = new NamedValue[3];
+        internalParams[0] = new NamedValue();
+        internalParams[0].Name = "-OutProducer";
+        internalParams[0].Value = "stats.SimpleFileOutProducer";
+        internalParams[1] = new NamedValue();
+        internalParams[1].Name = "-OutputPath";
+        internalParams[1].Value = "/dev/null";
 
         // do we have test jobs?
-        String testJob = (String)param.get("job");
-        PropertyValue[]props;
-        if (testJob==null)
-        {
-            if ( param.get("job1")==null )
-            {
-                // get all test jobs from runner service
-                XPropertyAccess xPropAcc = UnoRuntime.queryInterface(XPropertyAccess.class, oObj);
-                props = xPropAcc.getPropertyValues();
-            }
-            else  {
-                int index=1;
-                p = new ArrayList<Object>();
-                while ( param.get("job"+index) != null ) {
-                    p.add(param.get("job"+index));
-                    index++;
-                }
-                props = new PropertyValue[p.size()];
-                for ( int i=0; i<props.length; i++ ) {
-                    props[i] = new PropertyValue();
-                    props[i].Value = p.get(i);
-                }
-            }
-        }
-        else  {
-            props = new PropertyValue[1];
-            props[0] = new PropertyValue();
-            props[0].Value = testJob;
-        }
+        final PropertyValue[] props = new PropertyValue[1];
+        props[0] = new PropertyValue();
+        props[0].Value = "sw.SwXTextTable";
 
         System.out.println("Props length: "+ props.length);
         for (int i=0; i<props.length; i++) {
             XJob xJob = UnoRuntime.queryInterface(XJob.class, oObj);
-            internalParams[length-1] = new NamedValue();
-            internalParams[length-1].Name = "-o";
-            internalParams[length-1].Value = props[i].Value;
+            internalParams[2] = new NamedValue();
+            internalParams[2].Name = "-o";
+            internalParams[2].Value = props[i].Value;
             System.out.println("Executing: " + (String)props[i].Value);
 
             String erg = null;
