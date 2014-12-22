@@ -29,10 +29,6 @@ public interface PropertyName {
      */
     String APP_EXECUTION_COMMAND = "AppExecutionCommand";
     /**
-     * parameter name: "AppKillCommand"
-     */
-    String APP_KILL_COMMAND = "AppKillCommand";
-    /**
      * parameter name: "ConnectionString"
      */
     String CONNECTION_STRING = "ConnectionString";

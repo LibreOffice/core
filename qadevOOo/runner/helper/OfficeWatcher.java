@@ -78,19 +78,6 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         if (ph != null) {
             dbg("the Office is idle for " + timeOut / 1000 +
                 " seconds, it probably hangs and is killed NOW.");
-            final String AppKillCommand = (String) params.get(util.PropertyName.APP_KILL_COMMAND);
-            if (AppKillCommand != null) {
-                final StringTokenizer aKillCommandToken = new StringTokenizer(AppKillCommand, ";");
-                while (aKillCommandToken.hasMoreTokens()) {
-                    final String sKillCommand = aKillCommandToken.nextToken();
-
-                    dbg("User defined an application to destroy the started process.");
-                    dbg("Trying to execute: " + sKillCommand);
-
-                    final ProcessHandler pHdl = new ProcessHandler(sKillCommand);
-                    pHdl.executeSynchronously();
-                }
-            }
             ph.kill();
         } else {
             dbg("reaeched timeout but ProcessHandler is NULL");

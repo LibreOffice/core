@@ -497,23 +497,6 @@ public class OfficeProvider implements AppProvider
             }
         }
 
-        final String AppKillCommand = (String) param.get(util.PropertyName.APP_KILL_COMMAND);
-        if (AppKillCommand != null)
-        {
-            String sAppKillCommand = StringHelper.removeSurroundQuoteIfExists(AppKillCommand);
-            final StringTokenizer aKillCommandToken = new StringTokenizer(sAppKillCommand, ";");
-            while (aKillCommandToken.hasMoreTokens())
-            {
-                final String sKillCommand = aKillCommandToken.nextToken();
-                dbg("User defined an application to destroy the started process. Trying to execute: " + sKillCommand);
-
-                final ProcessHandler pHdl = new ProcessHandler(sKillCommand, 1000); // 3000 seems to be too long
-                pHdl.runCommand();
-
-                pHdl.kill();
-            }
-        }
-
         final ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
 
         if (ph != null)
