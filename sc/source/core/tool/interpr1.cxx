@@ -1832,9 +1832,9 @@ void ScInterpreter::ScIsEmpty()
             ScAddress aAdr;
             if ( !PopDoubleRefOrSingleRef( aAdr ) )
                 break;
-            // NOTE: this could test also on inherited emptiness, but then the
-            // cell tested wouldn't be empty. Must correspond with
-            // ScCountEmptyCells().
+            // NOTE: this differs from COUNTBLANK() ScCountEmptyCells() that
+            // may treat ="" in the referenced cell as blank for Excel
+            // interoperability.
             ScRefCellValue aCell;
             aCell.assign(*pDok, aAdr);
             if (aCell.meType == CELLTYPE_NONE)
@@ -4520,6 +4520,14 @@ bool isCellContentEmpty( const ScRefCellValue& rCell )
             return false;
         case CELLTYPE_FORMULA:
         {
+            // NOTE: Excel treats ="" in a referenced cell as blank in
+            // COUNTBLANK() but not in ISBLANK(), which is inconsistent.
+            // COUNTBLANK() tests the (display) result whereas ISBLANK() tests
+            // the cell content.
+            // ODFF allows both for COUNTBLANK().
+            // OOo and LibreOffice prior to 4.4 did not treat ="" as blank in
+            // COUNTBLANK(), we now do for Excel interoperability.
+            /* TODO: introduce yet another compatibility option? */
             sc::FormulaResultValue aRes = rCell.mpFormula->GetResult();
             if (aRes.meType != sc::FormulaResultValue::String)
                 return false;
