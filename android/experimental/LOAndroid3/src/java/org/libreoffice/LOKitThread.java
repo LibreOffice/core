@@ -1,14 +1,13 @@
 package org.libreoffice;
 
+import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
-import org.mozilla.gecko.gfx.JavaPanZoomController;
 import org.mozilla.gecko.gfx.SubTile;
 
 import java.util.concurrent.PriorityBlockingQueue;
@@ -116,7 +115,14 @@ public class LOKitThread extends Thread {
             case LOEvent.TILE_REQUEST:
                 tileRequest(event.mComposedTileLayer, event.mTileId);
                 break;
+            case LOEvent.THUMBNAIL:
+                createThumbnail(event.mTask);
         }
+    }
+
+    private void createThumbnail(final ThumbnailCreator.ThumbnailCreationTask task) {
+        final Bitmap bitmap = task.getThumbnail(mTileProvider);
+        task.applyBitmap(bitmap);
     }
 
     public void queueEvent(LOEvent event) {

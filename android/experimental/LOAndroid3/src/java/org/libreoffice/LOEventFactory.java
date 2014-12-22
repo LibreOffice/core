@@ -32,4 +32,8 @@ public class LOEventFactory {
     public static LOEvent tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileRequest) {
         return new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileRequest);
     }
+
+    public static LOEvent thumbnail(ThumbnailCreator.ThumbnailCreationTask task) {
+        return new LOEvent(LOEvent.THUMBNAIL, task);
+    }
 }

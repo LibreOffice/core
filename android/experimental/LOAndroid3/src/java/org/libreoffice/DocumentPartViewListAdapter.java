@@ -1,7 +1,6 @@
 package org.libreoffice;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,12 @@ public class DocumentPartViewListAdapter extends ArrayAdapter<DocumentPartView> 
     private static final String LOGTAG = DocumentPartViewListAdapter.class.getSimpleName();
 
     private final Activity activity;
+    private final ThumbnailCreator thumbnailCollector;
 
     public DocumentPartViewListAdapter(Activity activity, int resource, List<DocumentPartView> objects) {
         super(activity, resource, objects);
         this.activity = activity;
+        this.thumbnailCollector = new ThumbnailCreator();
     }
 
     @Override
@@ -30,15 +31,10 @@ public class DocumentPartViewListAdapter extends ArrayAdapter<DocumentPartView> 
 
         DocumentPartView documentPartView = getItem(position);
         TextView textView = (TextView) view.findViewById(R.id.text);
-        textView.setText(documentPartView.getPartName());
-        Log.i(LOGTAG, "getView - " + documentPartView.getPartName());
+        textView.setText(documentPartView.partName);
 
         ImageView imageView = (ImageView) view.findViewById(R.id.image);
-        if (documentPartView.getThumbnail() != null) {
-            imageView.setImageBitmap(documentPartView.getThumbnail());
-        } else {
-            imageView.setImageResource(R.drawable.writer);
-        }
+        thumbnailCollector.createThumbnail(position, imageView);
 
         return view;
     }

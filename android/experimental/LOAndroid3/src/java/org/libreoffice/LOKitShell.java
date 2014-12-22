@@ -54,4 +54,8 @@ public class LOKitShell {
         LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         return metrics;
     }
+
+    public static void sendThumbnailEvent(ThumbnailCreator.ThumbnailCreationTask task) {
+        LOKitShell.sendEvent(LOEventFactory.thumbnail(task));
+    }
 }

@@ -12,10 +12,12 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int CLOSE = 5;
     public static final int REDRAW = 6;
     public static final int TILE_REQUEST = 7;
+    public static final int THUMBNAIL = 8;
 
     public final int mType;
     public int mPriority = 0;
 
+    public ThumbnailCreator.ThumbnailCreationTask mTask;
     public String mTypeString;
     public int mPartIndex;
     public String mFilename;
@@ -53,6 +55,11 @@ public class LOEvent implements Comparable<LOEvent> {
         mType = type;
         mPartIndex = partIndex;
         mTypeString = "Change part";
+    }
+
+    public LOEvent(int type, ThumbnailCreator.ThumbnailCreationTask task) {
+        mType = type;
+        mTask = task;
     }
 
     public String getTypeString() {

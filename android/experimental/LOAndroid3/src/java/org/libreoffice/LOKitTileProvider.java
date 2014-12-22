@@ -82,7 +82,7 @@ public class LOKitTileProvider implements TileProvider {
 
                 mDocument.setPart(i);
                 resetDocumentSize();
-                final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
+                final DocumentPartView partView = new DocumentPartView(i, partName);
                 LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
             }
         } else {
@@ -256,6 +256,11 @@ public class LOKitTileProvider implements TileProvider {
     public void changePart(int partIndex) {
         mDocument.setPart(partIndex);
         resetDocumentSize();
+    }
+
+    @Override
+    public int getCurrentPartNumber() {
+        return mDocument.getPart();
     }
 }
 

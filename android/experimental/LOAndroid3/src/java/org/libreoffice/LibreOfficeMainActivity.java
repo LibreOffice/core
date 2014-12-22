@@ -217,7 +217,7 @@ public class LibreOfficeMainActivity extends LOAbout {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
-            LOKitShell.sendEvent(LOEventFactory.changePart(partView.getPartIndex()));
+            LOKitShell.sendEvent(LOEventFactory.changePart(partView.partIndex));
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }
