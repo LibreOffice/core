@@ -83,7 +83,7 @@ protected:
     virtual void lcl_text(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_utext(const sal_uInt8 * data, size_t len) = 0;
     virtual void lcl_positionOffset(const OUString& /*rText*/, bool /*bVertical*/) { }
-    virtual css::awt::Point getPositionOffset() { return css::awt::Point(); }
+    virtual css::awt::Point getPositionOffset() SAL_OVERRIDE { return css::awt::Point(); }
     virtual void lcl_align(const OUString& /*rText*/, bool /*bVertical*/) { }
     virtual void lcl_positivePercentage(const OUString& /*rText*/) { }
     virtual void lcl_props(writerfilter::Reference<Properties>::Pointer_t ref) = 0;
