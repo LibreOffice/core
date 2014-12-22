@@ -54,7 +54,6 @@ namespace
     const char s_sIsAllowAnimatedGraphics[] = "IsAllowAnimatedGraphics";
     const char s_sIsAllowAnimatedText[] = "IsAllowAnimatedText";
     const char s_sIsAutomaticFontColor[] = "IsAutomaticFontColor";
-    const char s_sIsSystemFont[] = "IsSystemFont";
     const char s_sIsSelectionInReadonly[] = "IsSelectionInReadonly";
     const char s_sColorValueSetColumnCount[] = "ColorValueSetColumnCount";
     const char s_sEdgeBlending[] = "EdgeBlending";
