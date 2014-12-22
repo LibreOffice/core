@@ -160,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_0c9538e3",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-22T10:22:00Z",
+      "side": 1,
+      "message": "Ah! will do that then.:)",
+      "parentUuid": "fa32b979_ec13340c",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_699076ed",
         "filename": "vcl/Module_vcl.mk",
         "patchSetId": 4
@@ -277,6 +295,24 @@
       "side": 1,
       "message": "Don\u0027t build that library for your headless build. It is a X11 library!",
       "parentUuid": "fa32b979_cc1f505a",
+      "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_2c9a7c15",
+        "filename": "vcl/StaticLibrary_glxtest.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-22T10:22:00Z",
+      "side": 1,
+      "message": "That\u0027s pretty clear :)",
+      "parentUuid": "fa32b979_8cf948cb",
       "revId": "0cfe22de383e44af70f04cf801aab3c321271e8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
