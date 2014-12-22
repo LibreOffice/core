@@ -104,7 +104,15 @@
     {\
         Identifier = SID_PRESENTATION_LAYOUT ; \
         HelpId = CMD_SID_PRESENTATION_LAYOUT ; \
-        Text [ en-US ] = "~Slide Design" ; \
+        Text [ en-US ] = "~Slide Design..." ; \
+    };
+
+#define MN_PAGE_DESIGN \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATION_LAYOUT ; \
+        HelpId = CMD_SID_PRESENTATION_LAYOUT ; \
+        Text [ en-US ] = "~Page Design..." ; \
     };
 
 #define MN_DIA \
