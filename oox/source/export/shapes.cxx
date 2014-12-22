@@ -1109,7 +1109,8 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                             mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
                                               XML_name, "Document",
                                               FSNS(XML_r, XML_id), USS( sRelId ),
-                                              XML_spid, OString::number(GetShapeID(xShape)),
+                                              // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
+                                              XML_spid, "",
                                               FSEND );
                         }
 
@@ -1117,7 +1118,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
 
                         // pic element
                         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
-                        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )
+                        // The spec doesn't allow <p:pic> here, but PowerPoint requires it.
+                        bool bEcma = mpFB->getVersion() == oox::core::ECMA_DIALECT;
+                        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) && bEcma)
                         {
                             const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
                             if ( pGraphic )
