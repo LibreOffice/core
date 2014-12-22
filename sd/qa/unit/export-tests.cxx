@@ -81,7 +81,9 @@ public:
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
+#if !defined WNT
     void testBnc822341();
+#endif
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testN821567);
@@ -101,7 +103,9 @@ public:
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
+#if !defined WNT
     CPPUNIT_TEST(testBnc822341);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -722,6 +726,8 @@ void SdExportTest::testImageWithSpecialID()
     }
 }
 
+#if !defined WNT
+
 void SdExportTest::testBnc822341()
 {
     // Check import / export of embedded text document
@@ -756,6 +762,8 @@ void SdExportTest::testBnc822341()
 
     xDocShRef->DoClose();
 }
+
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 
