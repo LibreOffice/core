@@ -1073,6 +1073,12 @@ void XclExpChTrCellContent::SaveXml( XclExpXmlStream& rRevisionLogStrm )
     if( pOldData )
     {
         lcl_WriteCell( rRevisionLogStrm, XML_oc, aPosition, pOldData );
+        if (!pNewData)
+        {
+            pStream->singleElement(XML_nc,
+                    XML_r,  XclXmlUtils::ToOString( aPosition ).getStr(),
+                    FSEND);
+        }
     }
     if( pNewData )
     {
