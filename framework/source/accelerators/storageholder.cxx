@@ -37,6 +37,8 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 
+#include <algorithm>
+
 #define PATH_SEPARATOR_ASCII        "/"
 #define PATH_SEPARATOR_UNICODE      ((sal_Unicode)'/')
 #define PATH_SEPARATOR              OUString(PATH_SEPARATOR_ASCII)

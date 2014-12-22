@@ -469,7 +469,7 @@ bool isEnabled( const OUString& sAdminTime ,
  */
 void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                          const OUString&                                                 sEvent ,
-                                               ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  )
+                                               ::std::vector< JobData::TJob2DocEventBinding >& lJobs  )
 {
     css::uno::Sequence< OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(rxContext, sEvent);
     sal_Int32                             c               = lAdditionalJobs.getLength();

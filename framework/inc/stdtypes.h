@@ -20,6 +20,7 @@
 #ifndef INCLUDED_FRAMEWORK_INC_STDTYPES_H
 #define INCLUDED_FRAMEWORK_INC_STDTYPES_H
 
+#include <algorithm>
 #include <queue>
 #include <unordered_map>
 #include <vector>
@@ -28,7 +29,6 @@
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-#include <comphelper/sequenceasvector.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
@@ -79,38 +79,26 @@ struct KeyEventEqualsFunc
     }
 };
 
-/**
-    Basic string list based on a std::vector()
-    It implements some additional funtionality which can be useful but
-    is missing at the normal vector implementation.
-*/
-class OUStringList : public ::comphelper::SequenceAsVector< OUString >
+typedef ::std::vector< OUString > OUStringList;
+
+// search for given element
+template <class T>
+typename std::vector<T>::iterator find( std::vector<T>& vec, const T& sElement )
 {
-    public:
+    return ::std::find(vec.begin(), vec.end(), sElement);
+}
 
-        // insert given element as the first one into the vector
-        void push_front( const OUString& sElement )
-        {
-            insert( begin(), sElement );
-        }
+template <class T>
+typename std::vector<T>::const_iterator find( const std::vector<T>& vec, const T& sElement )
+{
+    return ::std::find(vec.begin(), vec.end(), sElement);
+}
 
-        // search for given element
-        iterator find( const OUString& sElement )
-        {
-            return ::std::find(begin(), end(), sElement);
-        }
-
-        const_iterator findConst( const OUString& sElement ) const
-        {
-            return ::std::find(begin(), end(), sElement);
-        }
-
-        // the only way to free used memory really!
-        void free()
-        {
-            OUStringList().swap( *this );// get rid of reserved capacity
-        }
-};
+template <class T>
+void free(std::vector<T>& vec)
+{
+    OUStringList().swap(vec);
+}
 
 /**
     Basic string queue based on a std::queue()

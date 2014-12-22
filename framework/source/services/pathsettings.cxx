@@ -600,7 +600,7 @@ OUStringList PathSettings::impl_readOldFormat(const OUString& sPath)
         }
         else if (aVal >>= lStringListVal)
         {
-            aPathVal << lStringListVal;
+            aPathVal = comphelper::sequenceToContainer<OUStringList>(lStringListVal);
         }
     }
 
@@ -624,17 +624,19 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
     // read internal path list
     css::uno::Reference< css::container::XNameAccess > xIPath;
     xPath->getByName(CFGPROP_INTERNALPATHS) >>= xIPath;
-    aPathVal.lInternalPaths << xIPath->getElementNames();
+    aPathVal.lInternalPaths = comphelper::sequenceToContainer<OUStringList>(xIPath->getElementNames());
 
     // read user defined path list
-    aPathVal.lUserPaths << xPath->getByName(CFGPROP_USERPATHS);
+    css::uno::Sequence<OUString> vTmpUserPathsSeq;
+    xPath->getByName(CFGPROP_USERPATHS) >>= vTmpUserPathsSeq;
+    aPathVal.lUserPaths = comphelper::sequenceToContainer<OUStringList>(vTmpUserPathsSeq);
 
     // read the writeable path
     xPath->getByName(CFGPROP_WRITEPATH) >>= aPathVal.sWritePath;
 
     // avoid duplicates, by removing the writeable path from
     // the user defined path list if it happens to be there too
-    OUStringList::iterator aI = aPathVal.lUserPaths.find(aPathVal.sWritePath);
+    OUStringList::iterator aI = find(aPathVal.lUserPaths, aPathVal.sWritePath);
     if (aI != aPathVal.lUserPaths.end())
         aPathVal.lUserPaths.erase(aI);
 
@@ -677,7 +679,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
         ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                             aResubstPath.sPathName,
                                                             CFGPROP_USERPATHS,
-                                                            css::uno::makeAny(aResubstPath.lUserPaths.getAsConstList()));
+                            css::uno::makeAny(comphelper::containerToSequence(aResubstPath.lUserPaths)));
     }
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
@@ -722,8 +724,8 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
         else
         {
             if (
-                (  rPath.lInternalPaths.findConst(sOld) == rPath.lInternalPaths.end()) &&
-                (  rPath.lUserPaths.findConst(sOld)     == rPath.lUserPaths.end()    ) &&
+                (  find(rPath.lInternalPaths, sOld) == rPath.lInternalPaths.end()) &&
+                (  find(rPath.lUserPaths, sOld)     == rPath.lUserPaths.end()    ) &&
                 (! rPath.sWritePath.equals(sOld)                                     )
                )
                rPath.lUserPaths.push_back(sOld);
@@ -924,18 +926,18 @@ void PathSettings::impl_notifyPropListener(      PathSettings::EChangeOp /*eOp*/
             case IDGROUP_INTERNAL_PATHS :
                  {
                     if (pPathOld)
-                        lOldVals[0] <<= pPathOld->lInternalPaths.getAsConstList();
+                        lOldVals[0] <<= comphelper::containerToSequence(pPathOld->lInternalPaths);
                     if (pPathNew)
-                        lNewVals[0] <<= pPathNew->lInternalPaths.getAsConstList();
+                        lNewVals[0] <<= comphelper::containerToSequence(pPathNew->lInternalPaths);
                  }
                  break;
 
             case IDGROUP_USER_PATHS :
                  {
                     if (pPathOld)
-                        lOldVals[0] <<= pPathOld->lUserPaths.getAsConstList();
+                        lOldVals[0] <<= comphelper::containerToSequence(pPathOld->lUserPaths);
                     if (pPathNew)
-                        lNewVals[0] <<= pPathNew->lUserPaths.getAsConstList();
+                        lNewVals[0] <<= comphelper::containerToSequence(pPathNew->lUserPaths);
                  }
                  break;
 
@@ -1054,10 +1056,10 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
          ++pIt                                 )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = lList.find(rItem);
+        OUStringList::iterator pItem = find(lList, rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
-        pItem = rPath.lUserPaths.find(rItem);
+        pItem = find(rPath.lUserPaths, rItem);
         if (pItem != rPath.lUserPaths.end())
             rPath.lUserPaths.erase(pItem);
     }
@@ -1067,7 +1069,7 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
     while ( pIt != rPath.lUserPaths.end() )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = lList.find(rItem);
+        OUStringList::iterator pItem = find(lList, rItem);
         if ( pItem == lList.end() )
         {
             rPath.lUserPaths.erase(pIt);
@@ -1085,13 +1087,13 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
          ++pIt                             )
     {
         const OUString& rItem = *pIt;
-        OUStringList::iterator pItem = lList.find(rItem);
+        OUStringList::iterator pItem = find(lList, rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
     }
 
     // Erase the write path from lList
-    OUStringList::iterator pItem = lList.find(rPath.sWritePath);
+    OUStringList::iterator pItem = find(lList, rPath.sWritePath);
     if (pItem != lList.end())
         lList.erase(pItem);
 }
@@ -1173,13 +1175,13 @@ css::uno::Any PathSettings::impl_getPathValue(sal_Int32 nID) const
 
         case IDGROUP_INTERNAL_PATHS :
              {
-                aVal <<= pPath->lInternalPaths.getAsConstList();
+                aVal <<= comphelper::containerToSequence(pPath->lInternalPaths);
              }
              break;
 
         case IDGROUP_USER_PATHS :
              {
-                aVal <<= pPath->lUserPaths.getAsConstList();
+                aVal <<= comphelper::containerToSequence(pPath->lUserPaths);
              }
              break;
 
@@ -1249,8 +1251,9 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
 
-                OUStringList lList;
-                lList << aVal;
+                css::uno::Sequence<OUString> lTmpList;
+                aVal >>= lTmpList;
+                OUStringList lList = comphelper::sequenceToContainer<OUStringList>(lTmpList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
                 aChangePath.lInternalPaths = lList;
@@ -1269,8 +1272,9 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                                               static_cast< ::cppu::OWeakObject* >(this));
                 }
 
-                OUStringList lList;
-                lList << aVal;
+                css::uno::Sequence<OUString> lTmpList;
+                aVal >>= lTmpList;
+                OUStringList lList = comphelper::sequenceToContainer<OUStringList>(lTmpList);
                 if (! impl_isValidPath(lList))
                     throw css::lang::IllegalArgumentException();
                 aChangePath.lUserPaths = lList;
