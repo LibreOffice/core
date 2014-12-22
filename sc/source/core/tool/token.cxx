@@ -857,6 +857,8 @@ ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken&
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 
+ScMatrixCellResultToken::~ScMatrixCellResultToken() {}
+
 svl::SharedString ScMatrixCellResultToken::GetString() const
 {
     return xUpperLeft->GetString();
@@ -903,6 +905,8 @@ ScMatrixFormulaCellToken::ScMatrixFormulaCellToken( const ScMatrixFormulaCellTok
     if (xUpperLeft)
         xUpperLeft = xUpperLeft->Clone();
 }
+
+ScMatrixFormulaCellToken::~ScMatrixFormulaCellToken() {}
 
 bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 {

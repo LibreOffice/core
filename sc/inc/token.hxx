@@ -276,6 +276,7 @@ protected:
 public:
     ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixCellResultToken( const ScMatrixCellResultToken& r );
+    virtual ~ScMatrixCellResultToken();
     virtual double              GetDouble() const SAL_OVERRIDE;
     virtual svl::SharedString GetString() const SAL_OVERRIDE;
     virtual const ScMatrix*     GetMatrix() const SAL_OVERRIDE;
@@ -302,6 +303,7 @@ public:
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
     ScMatrixFormulaCellToken( SCCOL nC, SCROW nR );
     ScMatrixFormulaCellToken( const ScMatrixFormulaCellToken& r );
+    virtual ~ScMatrixFormulaCellToken();
 
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScMatrixFormulaCellToken(*this); }
