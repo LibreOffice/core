@@ -65,6 +65,14 @@
     {\
         Identifier = SID_MODIFYPAGE ; \
         HelpId = CMD_SID_MODIFYPAGE ; \
+        Text [ en-US ] = "Page ~Layout" ; \
+    };
+
+#define MN_MODIFY_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_MODIFYPAGE ; \
+        HelpId = CMD_SID_MODIFYPAGE ; \
         Text [ en-US ] = "Slide ~Layout" ; \
     };
 
@@ -74,6 +82,14 @@
         Identifier = SID_PAGESETUP ; \
         HelpId = CMD_SID_PAGESETUP ; \
         Text [ en-US ] = "~Page Setup..." ; \
+    };
+
+#define MN_FORMAT_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_PAGESETUP ; \
+        HelpId = CMD_SID_PAGESETUP ; \
+        Text [ en-US ] = "Format ~Slide..." ; \
     };
 
 #define MN_INSERT_SLIDE \
@@ -112,7 +128,7 @@
     {\
         Identifier = SID_SELECT_BACKGROUND ; \
         HelpId = CMD_SID_SELECT_BACKGROUND ; \
-        Text [ en-US ] = "Set Background Image for Slide ..." ; \
+        Text [ en-US ] = "Set Background Image..." ; \
     };
 #define MN_DISPLAY_MASTER_BACKGROUND \
     MenuItem\
@@ -129,6 +145,22 @@
         Text [ en-US ] = "Display Objects from Master" ; \
     };
 
+#define MN_HIDE_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_HIDE_SLIDE ; \
+        HelpId = CMD_SID_HIDE_SLIDE ; \
+        Text [ en-US ] = "~Hide Slide" ; \
+    };
+
+#define MN_SHOW_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_SHOW_SLIDE ; \
+        HelpId = CMD_SID_SHOW_SLIDE ; \
+        Text [ en-US ] = "~Show Slide" ; \
+    };
+
 #define MN_PAGE_MENU \
     MenuItem\
     {\
@@ -138,41 +170,43 @@
         {\
             ItemList = \
             {\
-                MN_FORMAT_PAGE\
-                MN_PRESENTATION_LAYOUT\
-                MN_RENAME_PAGE\
-                SEPARATOR\
                 MN_INSERT_PAGE\
                 MN_DELETE_PAGE\
+                SEPARATOR\
+                MN_FORMAT_PAGE\
+                MN_SELECT_BACKGROUND\
+                MN_PAGE_DESIGN\
+                MN_RENAME_PAGE\
             };\
         };\
         Text [ en-US ] = "Pag~e" ; \
     };
 
 #define MN_SLIDE_MENU \
+    MN_SELECT_BACKGROUND\
+    MN_FORMAT_SLIDE\
     MenuItem\
     {\
         Identifier = DUMMY + 8 ; \
         Command = ".uno:PageMenu" ; \
+        Text [ en-US ] = "Slid~e" ; \
         SubMenu = Menu\
         {\
             ItemList = \
             {\
-                MN_FORMAT_PAGE\
-                MN_PRESENTATION_LAYOUT\
-                MN_MODIFY_PAGE\
-                MN_SELECT_BACKGROUND\
-                MN_RENAME_SLIDE\
-                SEPARATOR\
-                MN_DISPLAY_MASTER_BACKGROUND\
-                MN_DISPLAY_MASTER_OBJECTS\
-                SEPARATOR\
                 MN_INSERT_SLIDE\
                 MN_DUPLICATE_SLIDE\
                 MN_DELETE_SLIDE\
+                SEPARATOR\
+                MN_RENAME_SLIDE\
+                MN_HIDE_SLIDE\
+                MN_SHOW_SLIDE\
+                SEPARATOR\
+                MN_PRESENTATION_LAYOUT\
+                MN_DISPLAY_MASTER_BACKGROUND\
+                MN_DISPLAY_MASTER_OBJECTS\
             };\
         };\
-        Text [ en-US ] = "Slid~e" ; \
     };
 
  // Layer
@@ -213,7 +247,7 @@
     {\
         Identifier = SID_RENAMEPAGE ; \
         HelpId = CMD_SID_RENAMEPAGE ; \
-        Text [ en-US ] = "~Rename Slide" ; \
+        Text [ en-US ] = "~Rename Slide..." ; \
     };
 
 #define MN_RENAME_MASTER \
@@ -229,7 +263,7 @@
     {\
         Identifier = SID_RENAMEPAGE ; \
         HelpId = CMD_SID_RENAMEPAGE ; \
-        Text [ en-US ] = "~Rename Page" ; \
+        Text [ en-US ] = "~Rename Page..." ; \
     };
 
  // graphic attributes
