@@ -25,12 +25,14 @@ $(eval $(call gb_Module_add_targets,vcl,\
 	Package_opengl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-        Executable_ui-previewer \
+		$(if $(ENABLE_HEADLESS),, \
+			Executable_ui-previewer) \
 		$(if $(filter LINUX MACOSX WNT,$(OS)), \
-			Executable_icontest \
 			Executable_outdevgrind \
-			Executable_vcldemo \
-            Executable_mtfdemo )) \
+			$(if $(ENABLE_HEADLESS),, \
+				Executable_vcldemo \
+				Executable_icontest \
+				Executable_mtfdemo ))) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
@@ -48,7 +50,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_desktop_detector \
     StaticLibrary_headless \
-	StaticLibrary_glxtest \
+    StaticLibrary_glxtest \
     Package_fontunxppds \
     Package_fontunxpsprint \
 ))
@@ -107,10 +109,16 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_wmf_test \
 ))
 
+
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_timer \
 ))
 endif
 
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Module_add_check_targets,vcl,\
+	CppunitTest_vcl_timer \
+))
+endif
 # vim: set noet sw=4 ts=4:
