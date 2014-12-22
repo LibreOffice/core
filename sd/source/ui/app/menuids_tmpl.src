@@ -138,41 +138,40 @@
         {\
             ItemList = \
             {\
+                MN_INSERT_PAGE\
+                MN_DELETE_PAGE\
+                SEPARATOR\
                 MN_FORMAT_PAGE\
                 MN_PRESENTATION_LAYOUT\
                 MN_RENAME_PAGE\
-                SEPARATOR\
-                MN_INSERT_PAGE\
-                MN_DELETE_PAGE\
             };\
         };\
         Text [ en-US ] = "Pag~e" ; \
     };
 
 #define MN_SLIDE_MENU \
+    MN_SELECT_BACKGROUND\
+    MN_FORMAT_PAGE\
     MenuItem\
     {\
         Identifier = DUMMY + 8 ; \
         Command = ".uno:PageMenu" ; \
+        Text [ en-US ] = "Slid~e" ; \
         SubMenu = Menu\
         {\
             ItemList = \
             {\
-                MN_FORMAT_PAGE\
-                MN_PRESENTATION_LAYOUT\
-                MN_MODIFY_PAGE\
-                MN_SELECT_BACKGROUND\
-                MN_RENAME_SLIDE\
-                SEPARATOR\
-                MN_DISPLAY_MASTER_BACKGROUND\
-                MN_DISPLAY_MASTER_OBJECTS\
-                SEPARATOR\
                 MN_INSERT_SLIDE\
                 MN_DUPLICATE_SLIDE\
                 MN_DELETE_SLIDE\
+                SEPARATOR\
+                MN_RENAME_SLIDE\
+                SEPARATOR\
+                MN_PRESENTATION_LAYOUT\
+                MN_DISPLAY_MASTER_BACKGROUND\
+                MN_DISPLAY_MASTER_OBJECTS\
             };\
         };\
-        Text [ en-US ] = "Slid~e" ; \
     };
 
  // Layer
