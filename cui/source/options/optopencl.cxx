@@ -42,13 +42,17 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 {
     get(mpUseOpenCL, "useopencl");
     get(mpBlackList, "blacklist");
+    get(mpBlackListFrame,"blacklistframe");
     get(mpBlackListEdit, "bledit");
     get(mpBlackListAdd, "bladd");
     get(mpBlackListDelete, "bldelete");
     get(mpWhiteList, "whitelist");
+    get(mpWhiteListFrame,"whitelistframe");
     get(mpWhiteListEdit, "wledit");
     get(mpWhiteListAdd, "wladd");
     get(mpWhiteListDelete, "wldelete");
+
+    mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
 
     mpBlackListEdit->SetClickHdl(LINK(this, SvxOpenCLTabPage, BlackListEditHdl));
     mpBlackListAdd->SetClickHdl(LINK(this, SvxOpenCLTabPage, BlackListAddHdl));
@@ -60,6 +64,7 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     mpBlackList->set_height_request(4 * mpBlackList->GetTextHeight());
     mpWhiteList->set_height_request(4 * mpWhiteList->GetTextHeight());
+
 }
 
 SvxOpenCLTabPage::~SvxOpenCLTabPage()
@@ -273,6 +278,10 @@ long SvxOpenCLTabPage::DeleteHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet
 
     return 0;
 }
+void SvxOpenCLTabPage::EnableOpenCLHdl(VclFrame* pFrame, bool aEnable)
+{
+    pFrame->Enable(aEnable);
+}
 
 IMPL_LINK_NOARG(SvxOpenCLTabPage, BlackListEditHdl)
 {
@@ -303,5 +312,14 @@ IMPL_LINK_NOARG(SvxOpenCLTabPage, WhiteListDeleteHdl)
 {
     return DeleteHdl(mpWhiteList, maConfig.maWhiteList);
 }
+
+IMPL_LINK_NOARG(SvxOpenCLTabPage, EnableOpenCLHdl)
+{
+    EnableOpenCLHdl(mpBlackListFrame, mpUseOpenCL->IsChecked());
+    EnableOpenCLHdl(mpWhiteListFrame, mpUseOpenCL->IsChecked());
+    return 0;
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

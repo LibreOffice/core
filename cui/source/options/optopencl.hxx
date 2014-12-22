@@ -33,11 +33,13 @@ private:
 
     CheckBox* mpUseOpenCL;
 
+    VclFrame* mpBlackListFrame;
     ListBox* mpBlackList;
     PushButton* mpBlackListEdit;
     PushButton* mpBlackListAdd;
     PushButton* mpBlackListDelete;
 
+    VclFrame* mpWhiteListFrame;
     ListBox* mpWhiteList;
     PushButton* mpWhiteListEdit;
     PushButton* mpWhiteListAdd;
@@ -51,9 +53,12 @@ private:
     DECL_LINK(WhiteListAddHdl, void*);
     DECL_LINK(WhiteListDeleteHdl, void*);
 
+    DECL_LINK(EnableOpenCLHdl, void*);
+
     long EditHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
     long AddHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
     long DeleteHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet);
+    void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
 
 public:
     SvxOpenCLTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
