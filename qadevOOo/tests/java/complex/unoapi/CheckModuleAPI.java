@@ -530,23 +530,18 @@ public class CheckModuleAPI extends ComplexTestCase
 
     private void setUnoApiCwsStatus(boolean status)
     {
-
-        if (!param.getBool(PropertyName.NO_CWS_ATTACH))
+        final String version = (String) param.get(PropertyName.VERSION);
+        if (version.startsWith("cws_"))
         {
-
-            final String version = (String) param.get(PropertyName.VERSION);
-            if (version.startsWith("cws_"))
+            try
             {
-                try
-                {
 
-                    final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
-                    cde.setUnoApiCwsStatus(status);
-                }
-                catch (ParameterNotFoundException ex)
-                {
-                    log.println("ERROR: could not wirte status to EIS database: " + ex.toString());
-                }
+                final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
+                cde.setUnoApiCwsStatus(status);
+            }
+            catch (ParameterNotFoundException ex)
+            {
+                log.println("ERROR: could not wirte status to EIS database: " + ex.toString());
             }
         }
     }

@@ -161,7 +161,6 @@ public class ClParser
         COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-debug", "DebugIsActive");
         COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-log", "LoggingIsActive");
         COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-dbout", "DataBaseOut");
-        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-nca", "NoCwsAttach");
     }
 
     private String getParameterFor(String name)

@@ -144,12 +144,6 @@ public interface PropertyName {
      */
     String CYGWIN = "Cygwin";
     /**
-     * parameter name: "NoCwsAttach"<p>
-     * If this parameter is set to "true" , a status of CWS-UnoAPI-Tests was not attached to EIS<p>
-     * @see complex.unoapi.CheckModuleAPI
-     */
-    String NO_CWS_ATTACH = "NoCwsAttach";
-    /**
      * internal only, no parameter
      */
     String WNTMSCI = "wntmsci";
