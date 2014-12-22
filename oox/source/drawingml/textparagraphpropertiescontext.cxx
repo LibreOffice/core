@@ -54,7 +54,10 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2H
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
 
     // ST_TextAlignType
-    rPropertyMap.setProperty( PROP_ParaAdjust, GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) ));
+    if ( rAttribs.hasAttribute( XML_algn ) )
+    {
+        mrTextParagraphProperties.getParaAdjust() = GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) );
+    }
     // TODO see to do the same with RubyAdjust
 
     // ST_Coordinate32

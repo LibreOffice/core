@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <osl/diagnose.h>
 
@@ -381,6 +382,8 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
         moFirstLineIndentation = rSourceProps.moFirstLineIndentation;
     if( rSourceProps.mnLevel )
         mnLevel = rSourceProps.mnLevel;
+    if( rSourceProps.moParaAdjust )
+        moParaAdjust = rSourceProps.moParaAdjust;
 }
 
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
@@ -477,6 +480,15 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             aSeq[0] = aTabStop;
             aPropSet.setProperty( PROP_ParaTabStops, aSeq );
         }
+    }
+
+    if ( moParaAdjust )
+    {
+        aPropSet.setProperty( PROP_ParaAdjust, moParaAdjust.get());
+    }
+    else
+    {
+        aPropSet.setProperty( PROP_ParaAdjust, com::sun::star::style::ParagraphAdjust_LEFT);
     }
 }
 
