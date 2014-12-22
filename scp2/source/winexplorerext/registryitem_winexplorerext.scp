@@ -410,6 +410,15 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl
     Value = "%PRODUCTNAME Property Handler";
 End
 
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_EnableShareDenyWrite
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    ComponentCondition = "VersionNT >= 600";
+    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
+    Name = "EnableShareDenyNone";
+    Value = "#1";
+End
+
 #ifdef BUILD_X64
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl_x64
@@ -418,6 +427,15 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl_x64
     ComponentCondition = "VersionNT64 >= 600";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
+End
+
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_EnableShareDenyWrite_x64
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_x64;
+    ComponentCondition = "VersionNT >= 600";
+    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
+    Name = "EnableShareDenyNone";
+    Value = "#1";
 End
 
 #endif
