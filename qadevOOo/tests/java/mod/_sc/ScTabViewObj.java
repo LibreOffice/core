@@ -98,9 +98,7 @@ public class ScTabViewObj extends TestCase {
         try {
             log.println("creating two spreadsheet documents");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {}
+            util.utils.pause(1000);
             xSpreadsheetDoc2 = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );

@@ -136,12 +136,12 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
 
         try {
             checker.update() ;
-            shortWait() ;
+            util.utils.pause(200);
             checker.commit() ;
-            shortWait() ;
+            util.utils.pause(200);
             boolean committed = checker.wasCommited() ;
 
-            shortWait() ;
+            util.utils.pause(200);
 
             bResult = listener.approveCalled &&
                       ! listener.updateCalled &&
@@ -152,18 +152,18 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
                 (listener.updateCalled ? "":"NOT")+" called, the value was " +
                 (committed ? "" : "NOT") + " committed.") ;
 
-            shortWait() ;
+            util.utils.pause(200);
 
             listener.init() ;
             listener.approve = true ;
-            shortWait() ;
+            util.utils.pause(200);
             checker.update() ;
-            shortWait() ;
+            util.utils.pause(200);
             checker.commit() ;
-            shortWait() ;
+            util.utils.pause(200);
             committed = checker.wasCommited() ;
 
-            shortWait() ;
+            util.utils.pause(200);
 
             log.println("Calling with approving : approveUpdate() was " +
                 (listener.approveCalled ? "":"NOT")+" called, updated() was "+
@@ -202,10 +202,10 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
 
         try {
             checker.update() ;
-            shortWait() ;
+            util.utils.pause(200);
             checker.commit() ;
 
-            shortWait() ;
+            util.utils.pause(200);
 
             bResult = ! listener.approveCalled &&
                       ! listener.updateCalled ;
@@ -217,15 +217,6 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
         }
 
         tRes.tested("removeUpdateListener()", bResult);
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(200);
-        }
-        catch (InterruptedException ex) {
-        }
-
     }
 
     /**

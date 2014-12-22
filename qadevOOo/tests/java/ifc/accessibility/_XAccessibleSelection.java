@@ -212,7 +212,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
                     if (isSelectable(tEnv.getTestObject(), k)) {
                         oObj.selectAccessibleChild(k);
-                        shortWait();
+                        util.utils.shortWait();
                         isSelected = oObj.isAccessibleChildSelected(k);
                         log.println("isAccessibleChildSelected - " +
                                     isSelected);
@@ -247,7 +247,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         // clearAccessibleSelection() call is oneway so we need
         // some waiting
-        shortWait();
+        util.utils.shortWait();
 
         if ((childCount > 0) && !OneAlwaysSelected) {
             try {
@@ -284,7 +284,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
         // selectAllAccessibleChildren() call is oneway so we need
         // some waiting
-        shortWait();
+        util.utils.shortWait();
 
         boolean res = true;
         boolean isSelected = true;
@@ -435,7 +435,7 @@ public class _XAccessibleSelection extends MultiMethodTest {
 
                     if (isSelectable(tEnv.getTestObject(), k)) {
                         oObj.selectAccessibleChild(k);
-                        shortWait();
+                        util.utils.shortWait();
                         log.println("selected child count: " +
                                     oObj.getSelectedAccessibleChildCount());
                         XAccessible selChild = oObj.getSelectedAccessibleChild(0);
@@ -582,12 +582,5 @@ public class _XAccessibleSelection extends MultiMethodTest {
         }
 
         return res;
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-        }
     }
 }

@@ -95,9 +95,7 @@ public class _XItemListener extends MultiMethodTest {
         event.Highlighted = 2 ;
         oObj.itemStateChanged(event) ;
 
-        try {
-            Thread.sleep(200) ;
-        } catch (InterruptedException e) {}
+        util.utils.pause(200);
 
         result = itemListener.itemStateChangedCalled &&
             itemListener.event.Selected == 1 &&

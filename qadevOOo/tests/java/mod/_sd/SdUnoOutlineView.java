@@ -137,7 +137,7 @@ public class SdUnoOutlineView extends TestCase {
         try {
             log.println( "creating a impress document" );
             xImpressDoc = SOF.createImpressDoc(null);
-            shortWait();
+            util.utils.pause(5000);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -173,7 +173,7 @@ public class SdUnoOutlineView extends TestCase {
         try {
             log.println( "creating a second impress document" );
             xSecondDrawDoc = SOF.createImpressDoc(null);
-            shortWait();
+            util.utils.pause(5000);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -216,14 +216,6 @@ public class SdUnoOutlineView extends TestCase {
         return tEnv;
 
     } // finish method getTestEnvironment
-
-    private void shortWait() {
-        try {
-            Thread.sleep(5000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
 
 
 } // finish class SdUnoOutlineView

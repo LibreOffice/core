@@ -87,10 +87,10 @@ public class _XFormController extends MultiMethodTest {
 
         XWindow wind = UnoRuntime.queryInterface(XWindow.class, cntrl);
         wind.setFocus();
-        shortWait();
+        util.utils.pause(1000);
         XWindow otherWind = (XWindow)tEnv.getObjRelation("otherWindow");
         otherWind.setFocus();
-        shortWait();
+        util.utils.pause(1000);
         log.println("activated = " + listener.activated +
             ", deactivated = " + listener.deactivated) ;
 
@@ -112,10 +112,10 @@ public class _XFormController extends MultiMethodTest {
 
         XWindow wind = UnoRuntime.queryInterface(XWindow.class, cntrl);
         wind.setFocus();
-        shortWait();
+        util.utils.pause(1000);
         XWindow otherWind = (XWindow)tEnv.getObjRelation("otherWindow");
         otherWind.setFocus();
-        shortWait();
+        util.utils.pause(1000);
         log.println("activated = " + listener.activated +
             ", deactivated = " + listener.deactivated) ;
 
@@ -147,18 +147,6 @@ public class _XFormController extends MultiMethodTest {
         }
 
         tRes.tested("getCurrentControl()", res) ;
-    }
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
     }
 }
 

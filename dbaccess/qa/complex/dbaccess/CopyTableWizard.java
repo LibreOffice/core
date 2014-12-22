@@ -202,13 +202,7 @@ public class CopyTableWizard extends CRMBasedTestCase
 
     private void sleep()
     {
-        try
-        {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException e)
-        {
-        }
+        util.utils.shortWait();
     }
 
 }

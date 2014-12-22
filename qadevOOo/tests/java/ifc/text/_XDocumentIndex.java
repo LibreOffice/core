@@ -96,11 +96,7 @@ public class _XDocumentIndex extends MultiMethodTest {
 
         oObj.update();
 
-        try {
-            Thread.sleep(1000);
-        }
-        catch (InterruptedException ex) {
-        }
+        util.utils.pause(1000);
 
 
         String contentAfter = oObj.getAnchor().getString();

@@ -99,15 +99,6 @@ public class _XLoadable extends MultiMethodTest {
     }
 
     /**
-     * Waits for 0.1 second. Used to get time for load completion.
-     */
-    private void shortWait() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {}
-    }
-
-    /**
     * Loads the form. <p>
     * Has <b> OK </b> status if <code>isLoaded()</code> returns
     * <code>true</code> and listener method <code>loaded()</code>
@@ -126,7 +117,7 @@ public class _XLoadable extends MultiMethodTest {
         boolean result = true ;
         oObj.load() ;
 
-        shortWait() ;
+        util.utils.pause(100);
         result = oObj.isLoaded() && loadListener.loadedCalled ;
 
         tRes.tested("load()", result) ;
@@ -151,7 +142,7 @@ public class _XLoadable extends MultiMethodTest {
         boolean result = true ;
         oObj.unload() ;
 
-        shortWait() ;
+        util.utils.pause(100);
         result = !oObj.isLoaded() && loadListener.unloadedCalled ;
 
         tRes.tested("unload()", result) ;
@@ -176,7 +167,7 @@ public class _XLoadable extends MultiMethodTest {
         boolean result = true ;
         oObj.reload() ;
 
-        shortWait() ;
+        util.utils.pause(100);
         result = oObj.isLoaded() && loadListener.reloadedCalled;
 
         tRes.tested("reload()", result) ;

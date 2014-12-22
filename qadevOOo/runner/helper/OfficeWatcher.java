@@ -65,7 +65,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         while (!isDone) {
             timeOut = params.getInt("TimeOut");
             final int previous = StoredPing;
-            shortWait(timeOut == 0 ? 30000 : timeOut);
+            util.utils.pause(timeOut == 0 ? 30000 : timeOut);
             // a timeout with value 0 lets watcher not react.
             if ((StoredPing == previous) && timeOut != 0) {
                 isDone = true;
@@ -95,15 +95,8 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         } else {
             dbg("reaeched timeout but ProcessHandler is NULL");
         }
-        shortWait(timeOut == 0 ? 30000 : timeOut);
+        util.utils.pause(timeOut == 0 ? 30000 : timeOut);
         dbg("finished");
-    }
-
-    private void shortWait(int timeOut) {
-        try {
-            OfficeWatcher.sleep(timeOut);
-        } catch (InterruptedException ie) {
-        }
     }
 
     private void dbg(String message) {

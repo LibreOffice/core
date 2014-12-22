@@ -104,7 +104,7 @@ public class _XFrameLoader extends MultiMethodTest {
                         .createInstance("com.sun.star.frame.Desktop") ;
                 XDesktop dsk = UnoRuntime.queryInterface(XDesktop.class, oDsk) ;
 
-                shortWait() ;
+                util.utils.shortWait();
                 frame = dsk.getCurrentFrame() ;
             } catch ( com.sun.star.uno.Exception e ) {
                 // Some exception occurs.FAILED
@@ -146,7 +146,7 @@ public class _XFrameLoader extends MultiMethodTest {
         if (!loaded) {
             oObj.load(frame, url, args, listener) ;
 
-            shortWait();
+            util.utils.shortWait();
 
             loaded = listener.finished ;
         }
@@ -166,7 +166,7 @@ public class _XFrameLoader extends MultiMethodTest {
         oObj.load(frame, url, args, listener) ;
         oObj.cancel() ;
 
-        shortWait();
+        util.utils.shortWait();
 
         if (listener.cancelled) {
             log.println("Loading was canceled.") ;
@@ -187,15 +187,6 @@ public class _XFrameLoader extends MultiMethodTest {
     public void after() {
         if (frameSup != null) frameSup.dispose() ;
         frame.dispose();
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(5000);
-        }
-        catch (InterruptedException ex) {
-        }
-
     }
 }
 

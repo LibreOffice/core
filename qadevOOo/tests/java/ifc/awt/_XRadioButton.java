@@ -117,9 +117,7 @@ public class _XRadioButton extends MultiMethodTest {
         boolean result = true ;
         oObj.setState(!state) ;
 
-        try {
-            Thread.sleep(200) ;
-        } catch (InterruptedException e) {}
+        util.utils.pause(200);
 
         result = oObj.getState() == !state ;
 

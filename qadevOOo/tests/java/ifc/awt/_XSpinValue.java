@@ -38,7 +38,7 @@ public class _XSpinValue extends MultiMethodTest {
     public void _addAdjustmentListener() {
         util.FormTools.switchDesignOf(tParam.getMSF(),
                                  (XTextDocument) tEnv.getObjRelation("Document"));
-        shortWait();
+        util.utils.shortWait();
         oObj.addAdjustmentListener(listener);
         adjustScrollBar();
 
@@ -158,7 +158,7 @@ public class _XSpinValue extends MultiMethodTest {
 
         sv.setValue(500);
 
-        shortWait();
+        util.utils.shortWait();
 
         XAccessible acc = UnoRuntime.queryInterface(
                                   XAccessible.class, tEnv.getTestObject());
@@ -177,18 +177,7 @@ public class _XSpinValue extends MultiMethodTest {
             System.out.println("couldn't adjust scrollbar");
         }
 
-        shortWait();
-    }
-
-    /**
-     * Sleeps for 0.5 sec. to allow Office to react
-     */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
+        util.utils.shortWait();
     }
 
     public class AdjustmentListener

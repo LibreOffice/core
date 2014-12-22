@@ -47,7 +47,7 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
             String filename = dirname+"XSimpleFileAccess.txt";
             XInputStream iStream = oObj.openFileRead(filename);
             oObj.writeFile(fileURL,iStream);
-            shortWait();
+            util.utils.pause(1000);
             result = oObj.exists(fileURL);
             oObj.kill(fileURL);
             tRes.tested("writeFile()",result);
@@ -65,18 +65,6 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
         }
 
     } //EOF writeFile()
-
-    /**
-    * Sleeps for 1 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
-    }
 
 }  // finish class _XSimpleFileAccess
 

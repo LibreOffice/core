@@ -78,7 +78,7 @@ public class AccessibleList extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        shortWait();
+        util.utils.pause(1000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -113,7 +113,7 @@ public class AccessibleList extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        shortWait();
+        util.utils.pause(1000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -136,7 +136,7 @@ public class AccessibleList extends TestCase {
                                                    XAccessibleSelection.class,
                                                    oObj);
             xAccSel.selectAccessibleChild(3);
-            shortWait();
+            util.utils.pause(1000);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             throw new StatusException("Can't switch to required tab", e);
         }
@@ -211,18 +211,6 @@ public class AccessibleList extends TestCase {
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
-        }
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
         }
     }
 }

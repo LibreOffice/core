@@ -104,7 +104,7 @@ public class GlobalEventBroadcaster {
         notifyEvents.clear();
         {
             XTextDocument xTextDoc = wHelper.openEmptyDoc();
-            shortWait();
+            util.utils.pause(2000);
             expected = new String[] { "OnUnfocus", "OnCreate", "OnViewCreated", "OnFocus" };
 
             assertTrue("Wrong events fired when opening empty doc",
@@ -114,7 +114,7 @@ public class GlobalEventBroadcaster {
             System.out.println("changing the writer doc");
             notifyEvents.clear();
             xTextDoc.getText().setString("GlobalEventBroadcaster");
-            shortWait();
+            util.utils.pause(2000);
             expected = new String[] { "OnModifyChanged" };
 
             assertTrue("Wrong events fired when changing doc",
@@ -124,7 +124,7 @@ public class GlobalEventBroadcaster {
             System.out.println("closing the empty writer doc");
             notifyEvents.clear();
             wHelper.closeDoc(xTextDoc);
-            shortWait();
+            util.utils.pause(2000);
         }
         expected = new String[] { "OnUnfocus", "OnFocus", "OnViewClosed", "OnUnload" };
 
@@ -137,7 +137,7 @@ public class GlobalEventBroadcaster {
         {
             XTextDocument xTextDoc = wHelper.openFromDialog(".uno:NewWindow", "", false);
 
-            shortWait();
+            util.utils.pause(2000);
             expected = new String[] { "OnUnfocus", "OnCreate", "OnViewCreated", "OnFocus", "OnUnfocus", "OnViewCreated", "OnFocus", };
 
             assertTrue("Wrong events fired when opening an writer doc via Window-New Window",
@@ -148,7 +148,7 @@ public class GlobalEventBroadcaster {
             notifyEvents.clear();
 
             wHelper.closeDoc(xTextDoc);
-            shortWait();
+            util.utils.pause(2000);
         }
         expected = new String[] { "OnViewClosed", "OnUnfocus", "OnFocus", "OnViewClosed", "OnUnload" };
 
@@ -161,7 +161,7 @@ public class GlobalEventBroadcaster {
         if (false) {
             System.out.println("Opening document with label wizard");
             XTextDocument xTextDoc = wHelper.openFromDialog("private:factory/swriter?slot=21051", "", false);
-            shortWait();
+            util.utils.pause(2000);
             XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, wHelper.getToolkit().getActiveTopWindow());
             UITools ut = new UITools(xWindow);
             notifyEvents.clear();
@@ -172,9 +172,9 @@ public class GlobalEventBroadcaster {
                 System.out.println("Couldn't press Button");
             }
             System.out.println("... done");
-            shortWait();
-            shortWait();
-            shortWait();
+            util.utils.pause(2000);
+            util.utils.pause(2000);
+            util.utils.pause(2000);
             expected = new String[] { "OnViewClosed", "OnCreate", "OnFocus", "OnModifyChanged" };
 
             assertTrue("Wrong events fired when starting labels wizard",
@@ -182,9 +182,9 @@ public class GlobalEventBroadcaster {
 
             System.out.println("Try to close document...");
             wHelper.closeDoc(xTextDoc);
-            shortWait();
+            util.utils.pause(2000);
             wHelper.closeFromDialog();
-            shortWait();
+            util.utils.pause(2000);
             xTextDoc = null;
         }
 
@@ -195,18 +195,6 @@ public class GlobalEventBroadcaster {
         System.out.println("removing Listener");
         m_xEventBroadcaster.removeEventListener(m_xEventListener);
         System.out.println("... done");
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 
     private boolean proveExpectation(String[] expected) {

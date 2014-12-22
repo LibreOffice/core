@@ -254,10 +254,10 @@ public class _XContainer extends MultiMethodTest {
     protected boolean performChanges2() {
         int precount = CC.getControls().length;
         CC.addControl("NewControl",(XControl) inst);
-        shortWait();
+        util.utils.pause(1000);
         int count = CC.getControls().length;
         CC.removeControl(CC.getControl("NewControl"));
-        shortWait();
+        util.utils.pause(1000);
         return count>precount;
     }
 
@@ -336,18 +336,6 @@ public class _XContainer extends MultiMethodTest {
         }
 
         return res;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 }
 

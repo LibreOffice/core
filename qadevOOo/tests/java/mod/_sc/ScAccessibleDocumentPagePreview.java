@@ -149,9 +149,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
+        util.utils.shortWait();
 
         XWindow xWindow = AccessibilityTools.getCurrentContainerWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -215,9 +213,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             log.println("loading document "+url);
             xSpreadsheetDoc = UnoRuntime.queryInterface(
                             XSpreadsheetDocument.class,SOF.loadDocument(url));
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {}
+            util.utils.pause(500);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document ", e );

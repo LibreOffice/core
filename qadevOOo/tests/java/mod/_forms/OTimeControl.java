@@ -231,20 +231,8 @@ public class OTimeControl extends TestCase {
         tEnv.addObjRelation("TestTextListener", listener);
 
         FormTools.switchDesignOf((Param.getMSF()), xTextDoc);
-        shortWait();
+        util.utils.pause(200);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
-    }
 } // finish class OTimeControl

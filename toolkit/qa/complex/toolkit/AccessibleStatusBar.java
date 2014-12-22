@@ -61,18 +61,6 @@ public class AccessibleStatusBar {
     }
 
     /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
-
-    /**
      * Check document types
      */
     @Test
@@ -205,7 +193,7 @@ public class AccessibleStatusBar {
         try {
             System.out.println("****** Open a new calc document");
             xSpreadsheetDoc = xSOF.createCalcDoc("_blank");
-            shortWait();
+            util.utils.pause(500);
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
@@ -230,17 +218,17 @@ public class AccessibleStatusBar {
                                             "com.sun.star.awt.Toolkit") ;
             XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, xIfc);
 
-            shortWait();
+            util.utils.pause(500);
             xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
 
-            shortWait();
+            util.utils.pause(500);
             XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
             XAccessibleContext parentContext = null;
 
             System.out.println("Get the accessible status bar.");
             parentContext = AccessibilityTools.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
-            shortWait();
+            util.utils.pause(500);
             System.out.println("...OK.");
 
             XServiceInfo xSI = UnoRuntime.queryInterface(XServiceInfo.class, parentContext);

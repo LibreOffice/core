@@ -173,9 +173,7 @@ public class _XDispatchRecorderSupplier extends MultiMethodTest {
             }
         }
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
+        util.utils.shortWait();
 
         XModel model = UnoRuntime.queryInterface(XModel.class, xTextDoc);
         XFrame fr = model.getCurrentController().getFrame();

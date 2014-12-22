@@ -123,7 +123,7 @@ public class AccessibleOutlineView extends TestCase {
         try {
             log.println( "creating a impress document" );
             xImpressDoc = SOF.createImpressDoc(null);
-            shortWait();
+            util.utils.pause(2000);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -152,15 +152,7 @@ public class AccessibleOutlineView extends TestCase {
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
         }
-        shortWait();
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
+        util.utils.pause(2000);
     }
 }
 

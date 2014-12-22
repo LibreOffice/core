@@ -73,7 +73,7 @@ public class _XExecutableDialog extends MultiMethodTest {
             eThread.start();
             XCancellable canc = UnoRuntime.queryInterface
                     (XCancellable.class, tEnv.getTestObject());
-            shortWait();
+            util.utils.pause(2000);
             if (canc != null) {
                 closeDialog();
                 short res = eThread.execRes;
@@ -112,18 +112,6 @@ public class _XExecutableDialog extends MultiMethodTest {
             } catch(Exception e) {
                 log.println("Thread has been interrupted ... ");
             }
-        }
-    }
-
-    /**
-     * Sleeps for 5 sec. to allow StarOffice to react on <code>
-     * reset</code> call.
-     */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
         }
     }
 

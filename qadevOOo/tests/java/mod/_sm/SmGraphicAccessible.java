@@ -132,9 +132,9 @@ public class SmGraphicAccessible extends TestCase {
                     try {
                         xAC.grabFocus();
                         xPS.setPropertyValue("Formula", "sum hat x");
-                        shortWait();
+                        util.utils.pause(1000);
                         xPS.setPropertyValue("Formula", expFormula);
-                        shortWait();
+                        util.utils.pause(1000);
                     } catch(com.sun.star.lang.WrappedTargetException e) {
                     } catch(com.sun.star.lang.IllegalArgumentException e) {
                     } catch(com.sun.star.beans.PropertyVetoException e) {
@@ -154,17 +154,5 @@ public class SmGraphicAccessible extends TestCase {
 
         log.println( "    disposing xMathDoc " );
         xMathDoc.dispose();
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 }    // finish class SmModel

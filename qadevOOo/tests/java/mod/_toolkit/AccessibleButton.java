@@ -100,14 +100,14 @@ public class AccessibleButton extends lib.TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         DiagThread psDiag = new DiagThread(xTextDoc, msf);
         psDiag.start();
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         Object atw = tk.getActiveTopWindow();
 

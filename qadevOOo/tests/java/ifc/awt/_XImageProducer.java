@@ -144,9 +144,7 @@ public class _XImageProducer extends MultiMethodTest {
 
         oObj.startProduction() ;
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {}
+        util.utils.shortWait();
 
         tRes.tested("startProduction()", consumer.initCalled) ;
     }

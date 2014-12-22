@@ -189,9 +189,7 @@ public class _XFrame extends MultiMethodTest {
             return;
         }
 
-        try {
-            Thread.sleep(500);
-        }catch (InterruptedException ex) {}
+        util.utils.shortWait();
 
 
         if (!listenerCalled[0]) {

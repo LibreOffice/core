@@ -65,11 +65,7 @@ public class _XComponentLoader extends MultiMethodTest {
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
 
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException ex) {
-            }
+            util.utils.shortWait();
 
             oDoc.dispose();
 
@@ -78,11 +74,7 @@ public class _XComponentLoader extends MultiMethodTest {
             oDoc = oObj.loadComponentFromURL(
                             url, frameName, 0, szArgs);
 
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException ex) {
-            }
+            util.utils.shortWait();
 
             oDoc.dispose();
 

@@ -136,7 +136,7 @@ public class OQueryDesign extends TestCase {
         Args[1] = param2;
         getting.dispatch(the_url,Args);
 
-        shortWait();
+        util.utils.pause(5000);
 
         Object oDBC = null;
 
@@ -287,18 +287,6 @@ public class OQueryDesign extends TestCase {
             log.println("Connection was already closed. It's OK.") ;
         }
 
-    }
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(5000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
     }
 
 }    // finish class oDatasourceBrowser

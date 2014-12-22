@@ -70,14 +70,11 @@ public class LoggingThread extends Thread {
      * finished the LoggingThread
      */
     public void finish() {
-        try {
-            finished = true;
-            synchronized (this) {
-                notify();
-            }
-            if (debug) log.println("TimeOutLogger: " + utils.getDateTime() + " try to finish ");
-            sleep(1000);
-        } catch (InterruptedException ex) {
+        finished = true;
+        synchronized (this) {
+            notify();
         }
+        if (debug) log.println("TimeOutLogger: " + utils.getDateTime() + " try to finish ");
+        util.utils.pause(1000);
     }
 }

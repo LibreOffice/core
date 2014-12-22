@@ -58,17 +58,6 @@ public class AccessibleStatusBarItem {
     XWindow xWindow = null;
 
     /**
-    * Sleeps for a certain time.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
-
-    /**
      * Check document types
      */
     @Test
@@ -207,7 +196,7 @@ public class AccessibleStatusBarItem {
         try {
             System.out.println("****** Open a new calc document");
             xSpreadsheetDoc = xSOF.createCalcDoc("_blank");
-            shortWait();
+            util.utils.pause(500);
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
@@ -233,18 +222,18 @@ public class AccessibleStatusBarItem {
             XExtendedToolkit tk =
                         UnoRuntime.queryInterface(XExtendedToolkit.class,xIfc);
 
-            shortWait();
+            util.utils.pause(500);
             xWindow = UnoRuntime.queryInterface(
                                     XWindow.class,tk.getActiveTopWindow());
 
-            shortWait();
+            util.utils.pause(500);
             XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
             XAccessibleContext parentContext = null;
 
             System.out.println("Get the accessible status bar.");
             parentContext = AccessibilityTools.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
-            shortWait();
+            util.utils.pause(500);
             if ( parentContext == null ) {
                 fail("Could not create a test object.");
             }

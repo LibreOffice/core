@@ -97,7 +97,7 @@ public class AccessibleTabPage extends TestCase {
             if (accCloseButton != null) {
                 log.println("closing InsertFields Dialog");
                 accCloseButton.doAccessibleAction(0);
-                shortWait();
+                util.utils.pause(1000);
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
@@ -140,7 +140,7 @@ public class AccessibleTabPage extends TestCase {
             if (accCloseButton != null) {
                 log.println("closing InsertFields Dialog");
                 accCloseButton.doAccessibleAction(0);
-                shortWait();
+                util.utils.pause(1000);
             }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
@@ -167,7 +167,7 @@ public class AccessibleTabPage extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        util.utils.pause(1000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -202,7 +202,7 @@ public class AccessibleTabPage extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        shortWait();
+        util.utils.pause(1000);
 
         XInterface oObj = null;
 
@@ -218,7 +218,7 @@ public class AccessibleTabPage extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        shortWait();
+        util.utils.pause(1000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -246,7 +246,7 @@ public class AccessibleTabPage extends TestCase {
                                                oObj);
         accComp.getLocationOnScreen();
 
-        shortWait();
+        util.utils.pause(1000);
 
         XInterface xEventInt = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PAGE_TAB, "Variables");
         final XAccessibleComponent eventAccComp = UnoRuntime.queryInterface(
@@ -261,18 +261,6 @@ public class AccessibleTabPage extends TestCase {
         });
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 
     protected void closeDoc() {

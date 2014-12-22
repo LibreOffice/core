@@ -70,10 +70,7 @@ public class UnoProvider implements AppProvider {
     public boolean disposeManager(TestParameters param) {
         param.remove("ServiceManager");
         System.gc();
-        try {
-            Thread.sleep(1000);
-        }
-        catch(InterruptedException e) {}
+        util.utils.pause(1000);
         return true;
     }
 

@@ -92,7 +92,7 @@ public class AccessibleMenu extends TestCase {
             throw new StatusException("Can't create document", e);
         }
 
-        shortWait();
+        util.utils.pause(500);
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
@@ -126,10 +126,7 @@ public class AccessibleMenu extends TestCase {
                 try {
                     act2.doAccessibleAction(0);
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                    }
+                    util.utils.pause(500);
 
                     act1.doAccessibleAction(0);
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -169,17 +166,5 @@ public class AccessibleMenu extends TestCase {
      */
     @Override
     protected void initialize(TestParameters Param, PrintWriter log) {
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
     }
 }

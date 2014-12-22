@@ -267,7 +267,7 @@ public class EventTest {
 
         et.run();
 
-        util.utils.shortWait(m_threadWait);
+        util.utils.pause(m_threadWait);
         System.out.println("key listener thread should be finished.");
 
         assertTrue("key event does not work!", m_keyPressed && m_keyReleased);
@@ -300,7 +300,7 @@ public class EventTest {
 
         et.run();
 
-        util.utils.shortWait(m_threadWait);
+        util.utils.pause(m_threadWait);
         System.out.println("mouse listener thread should be finished.");
 
         assertTrue("mouse event does not work!", m_mousePressed && m_mouseReleased);

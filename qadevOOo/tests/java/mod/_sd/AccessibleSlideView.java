@@ -69,7 +69,7 @@ public class AccessibleSlideView extends TestCase {
 
         oDPn.insertNewByIndex(0);
 
-        shortWait();
+        util.utils.pause(2000);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow (
                                 aModel);
@@ -135,7 +135,7 @@ public class AccessibleSlideView extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        util.utils.pause(2000);
 
         aModel = UnoRuntime.queryInterface(XModel.class, xImpressDoc);
 
@@ -160,16 +160,8 @@ public class AccessibleSlideView extends TestCase {
             log.println("Couldn't change mode");
         }
 
-        shortWait();
+        util.utils.pause(2000);
 
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
     }
 }
 

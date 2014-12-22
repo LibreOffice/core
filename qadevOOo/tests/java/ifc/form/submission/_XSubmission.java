@@ -110,11 +110,7 @@ public class _XSubmission extends MultiMethodTest {
 
         log.println("Sleeping 2s");
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            // sleeping didn't work
-        }
+        util.utils.pause(2000);
 
         log.println("... done");
 

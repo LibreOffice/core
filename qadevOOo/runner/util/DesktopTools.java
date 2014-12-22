@@ -402,7 +402,7 @@ public class DesktopTools
             oViewProp.setPropertyValue("ZoomType",
                     Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
 
-            utils.shortWait(5000);
+            utils.pause(5000);
         }
         catch (Exception e)
         {

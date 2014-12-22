@@ -138,7 +138,7 @@ public class AccessibleTreeListBox extends TestCase {
             throw new StatusException( "Couldn't create document", e );
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -156,7 +156,7 @@ public class AccessibleTreeListBox extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
-        shortWait();
+        util.utils.pause(5000);
 
         XFrame the_frame1 = the_Desk.getCurrentFrame();
 
@@ -214,18 +214,6 @@ public class AccessibleTreeListBox extends TestCase {
             Boolean.FALSE);
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
     }
 
 }

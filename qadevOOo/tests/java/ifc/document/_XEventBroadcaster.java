@@ -48,7 +48,7 @@ public class _XEventBroadcaster extends MultiMethodTest {
         XModel docModel = UnoRuntime.queryInterface(
                 XModel.class,tEnv.getTestObject());
         docModel.getCurrentController().getFrame().getContainerWindow().setFocus();
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
         XController xc = UnoRuntime.queryInterface(XController.class,tEnv.getObjRelation("CONT2"));
         xc.getFrame().getContainerWindow().setFocus();
     }
@@ -58,7 +58,7 @@ public class _XEventBroadcaster extends MultiMethodTest {
         listenerCalled = false;
         oObj.addEventListener(listener);
         switchFocus();
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
         tRes.tested("addEventListener()",listenerCalled);
     }
 
@@ -67,7 +67,7 @@ public class _XEventBroadcaster extends MultiMethodTest {
         listenerCalled = false;
         oObj.removeEventListener(listener);
         switchFocus();
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
         tRes.tested("removeEventListener()",!listenerCalled);
     }
 

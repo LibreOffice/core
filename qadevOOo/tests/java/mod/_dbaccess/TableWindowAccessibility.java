@@ -190,7 +190,7 @@ public class TableWindowAccessibility extends TestCase {
                                     col_name2 + " int)");
         } catch (com.sun.star.sdbc.SQLException e) {
             try {
-                shortWait();
+                util.utils.pause(1500);
                 connection = isolConnection.getIsolatedConnection(user,
                                                                   password);
                 statement = connection.createStatement();
@@ -281,7 +281,7 @@ public class TableWindowAccessibility extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        shortWait();
+        util.utils.pause(1500);
 
         XAccessibleComponent accComp = UnoRuntime.queryInterface(
                                                XAccessibleComponent.class,
@@ -328,19 +328,6 @@ public class TableWindowAccessibility extends TestCase {
         } catch (Exception e)
         {
             e.printStackTrace ();
-        }
-    }
-
-
-    /**
-    * Sleeps for 1.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
         }
     }
 }

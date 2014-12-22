@@ -100,7 +100,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
             rob.mouseRelease(InputEvent.BUTTON3_MASK);
             System.out.println("done");
             System.out.println("warte");
-            shortWait();
+            util.utils.pause(200);
             System.out.println("Press Button");
             rob.mousePress(InputEvent.BUTTON1_MASK);
             System.out.println("Release Button");
@@ -112,14 +112,6 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
 
 
         return true;
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 
     protected class MyListener implements XEnhancedMouseClickHandler {

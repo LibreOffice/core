@@ -153,9 +153,9 @@ public class SdUnoDrawView extends TestCase {
         try {
             log.println( "creating two draw documents" );
             xDrawDoc = SOF.createDrawDoc(null);
-            shortWait();
+            util.utils.pause(1000);
             xSecondDrawDoc = SOF.createDrawDoc(null);
-            shortWait();
+            util.utils.pause(1000);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -194,7 +194,7 @@ public class SdUnoDrawView extends TestCase {
         oShapes.add(shape1);
         oShapes.add(shape2);
         oShapes.add(shape3);
-        shortWait();
+        util.utils.pause(1000);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
@@ -263,14 +263,6 @@ public class SdUnoDrawView extends TestCase {
         return tEnv;
 
     } // finish method getTestEnvironment
-
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
 
 
 } // finish class SdUnoDrawView

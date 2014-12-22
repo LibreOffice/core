@@ -124,13 +124,13 @@ public class _XChangeBroadcaster extends MultiMethodTest {
         win1.setFocus();
 
         changeContent() ;
-        shortWait();
+        util.utils.pause(2000);
 
         win2.setFocus();
         XTextComponent TC = UnoRuntime.queryInterface
             (XTextComponent.class,tEnv.getObjRelation("CONTROL"));
         TC.setText("NOXChangeBroadcaster");
-        shortWait();
+        util.utils.pause(2000);
         tRes.tested("addChangeListener()", changed);
     }
 
@@ -156,20 +156,8 @@ public class _XChangeBroadcaster extends MultiMethodTest {
         changeContent() ;
 
         win2.setFocus();
-        shortWait();
+        util.utils.pause(2000);
         tRes.tested("removeChangeListener()", !changed);
-    }
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 
     /**

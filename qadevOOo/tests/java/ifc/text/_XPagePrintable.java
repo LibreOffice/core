@@ -132,7 +132,7 @@ public class _XPagePrintable extends MultiMethodTest {
 
             oObj.printPages(PrintOptions);
 
-            util.utils.shortWait(tParam.getInt(util.PropertyName.SHORT_WAIT));
+            util.utils.shortWait();
 
             if (! util.utils.fileExists(xMSF, printFile)){
                 log.println("ERROR: could not find '" + printFile + "'");

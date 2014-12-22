@@ -103,7 +103,7 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
                 ("'could not fire event: " + e)) ;
         }
 
-        shortWait();
+        util.utils.pause(200);
 
         tRes.tested("addMailMergeEventListener()", changed);
     }
@@ -132,21 +132,9 @@ public class _XMailMergeBroadcaster extends MultiMethodTest {
                 ("'could not fire event: " + e)) ;
         }
 
-        shortWait();
+        util.utils.pause(200);
 
         tRes.tested("removeMailMergeEventListener()", !changed);
-    }
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * execute</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(200) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 
 

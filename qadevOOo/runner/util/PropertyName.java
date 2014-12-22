@@ -67,10 +67,9 @@ public interface PropertyName {
      */
     String OUT_PRODUCER = "OutProducer";
     /**
-     * parameter name: "ShortWait"
-     * Short wait time for the Office: default is 500 milliseconds
+     * Default short wait time for the Office
      */
-    String SHORT_WAIT= "ShortWait";
+    int DEFAULT_SHORT_WAIT_MS = 500;
     /**
      * internal only, no parameter
      * The OfficeProvider contains the full qualified

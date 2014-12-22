@@ -146,10 +146,7 @@ public class _XAcceptor extends MultiMethodTest {
             acception = new AcceptorThread(oObj) ;
             acception.start() ;
 
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException e) {}
+            util.utils.shortWait();
 
             XConnection con = xConnector.connect(connectString) ;
 

@@ -90,11 +90,7 @@ public class _XTextComponent extends MultiMethodTest {
     public void _addTextListener(){
         oObj.addTextListener(listener);
         oObj.setText("Listen");
-        try {
-            Thread.sleep(500);
-        } catch(InterruptedException e) {
-            e.printStackTrace(log);
-        }
+        util.utils.shortWait();
         if (!textChanged) {
             log.println("Listener wasn't called after changing Text");
         }

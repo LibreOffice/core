@@ -151,7 +151,6 @@ public class TestParameters extends HashMap<String,Object> {
         put(PropertyName.LOGGING_IS_ACTIVE, Boolean.TRUE);
         put(PropertyName.DEBUG_IS_ACTIVE, Boolean.valueOf(DebugIsActive));
         put(PropertyName.OUT_PRODUCER, "stats.SimpleOutProducer");
-        put(PropertyName.SHORT_WAIT, Integer.valueOf(500));
         put(PropertyName.OFFICE_PROVIDER, "helper.OfficeProvider");
         put(PropertyName.LOG_WRITER, "stats.SimpleLogWriter");
         put(PropertyName.APP_EXECUTION_COMMAND, "");

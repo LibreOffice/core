@@ -162,10 +162,7 @@ public class _XBridgeFactory extends MultiMethodTest {
             acceptorThread = new AcceptorThread(xAccptr) ;
             acceptorThread.start();
 
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException e) {}
+            util.utils.shortWait();
             conn = xCntr.connect(connectString) ;
 
         } catch (com.sun.star.uno.Exception e) {

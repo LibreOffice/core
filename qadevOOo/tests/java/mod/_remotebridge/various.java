@@ -203,10 +203,7 @@ public class various extends TestCase {
             accThread = new AcceptorThread(xAcctr);
             accThread.start();
             // let the thread sleep
-            try {
-                Thread.sleep(500);
-            }
-            catch (InterruptedException e) {}
+            util.utils.pause(500);
 
             // establish the connection
             XConnection xConnection = xCntr.connect(connectString);
@@ -268,11 +265,7 @@ public class various extends TestCase {
             bridgeDisposed[0] = true;
             xComp.dispose();
             // wait for dispose
-            try {
-                Thread.sleep(5000);
-            }
-            catch(InterruptedException e) {
-            }
+            util.utils.pause(5000);
         }
     }
 }

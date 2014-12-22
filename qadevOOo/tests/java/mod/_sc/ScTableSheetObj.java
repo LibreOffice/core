@@ -160,11 +160,7 @@ public class ScTableSheetObj extends TestCase {
             log.println("Couldn't get XCloseable");
         }
 
-        try {
-            log.println("Sleeping 500 Millis");
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-        }
+        util.utils.pause(500);
 
         log.println("... Done");
     }

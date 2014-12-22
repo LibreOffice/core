@@ -215,20 +215,14 @@ public class _XCommandProcessor {
                 for (int i = 0; i < 10; i++) {
                     log.println("try to abort command");
                     oObj.abort(cmdId);
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                    }
+                    util.utils.pause(10);
                 }
             }
         };
 
         aborter.start();
 
-        try {
-            Thread.sleep(15);
-        } catch (InterruptedException e) {
-        }
+        util.utils.pause(15);
 
         log.println("executing command");
         try {

@@ -97,11 +97,11 @@ public class AccessibleTabBar extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XInterface oObj = null;
 
-        shortWait();
+        util.utils.pause(5000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xDoc).
             getCurrentController().getFrame().getContainerWindow();
@@ -124,18 +124,6 @@ public class AccessibleTabBar extends TestCase {
         });
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 3 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 
     protected void closeDoc(XComponent xDoc) {

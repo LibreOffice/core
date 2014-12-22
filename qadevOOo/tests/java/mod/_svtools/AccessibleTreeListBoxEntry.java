@@ -156,7 +156,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -178,7 +178,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
-        shortWait();
+        util.utils.pause(5000);
 
         XFrame the_frame1 = the_Desk.getCurrentFrame();
 
@@ -223,7 +223,7 @@ public class AccessibleTreeListBoxEntry extends TestCase {
             throw new StatusException("Could not select Biblio-Database", ex);
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XWindow xWindow = secondController.getFrame().getContainerWindow();
 
@@ -257,18 +257,6 @@ public class AccessibleTreeListBoxEntry extends TestCase {
         tEnv.addObjRelation("XAccessibleText.Text", "Bibliography");
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 
     protected void closeDoc() {

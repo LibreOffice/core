@@ -197,7 +197,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
                 e.printStackTrace(log);
             } // end of try-catch
         }
-        waitAMoment();
+        util.utils.pause(200);
         tRes.tested("addPropertiesChangeListener()", propertiesChanged);
     }
 
@@ -216,7 +216,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
         propertiesChanged = false ;
 
         oObj.firePropertiesChangeEvent(testPropsNames, PClistener);
-        waitAMoment() ;
+        util.utils.pause(200);
 
         tRes.tested("firePropertiesChangeEvent()", propertiesChanged);
     }
@@ -334,17 +334,6 @@ public class _XMultiPropertySet extends MultiMethodTest {
         testPropsNames = new String[nr];
         for (int i=0; i<nr; i++) testPropsNames[i] = ST.nextToken();
         testPropsAmount = nr;
-    }
-
-    /**
-    * Waits some time for listener to be called.
-    */
-    private void waitAMoment() {
-        try {
-            Thread.sleep(200) ;
-        } catch (InterruptedException e) {
-            log.println("!!! Exception while waiting !!!") ;
-        }
     }
 
     /*

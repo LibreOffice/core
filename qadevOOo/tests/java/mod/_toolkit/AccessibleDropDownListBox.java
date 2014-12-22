@@ -73,7 +73,7 @@ public class AccessibleDropDownListBox extends TestCase {
                                                     PrintWriter log) {
         XInterface oObj = null;
 
-        shortWait();
+        util.utils.pause(500);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(
                                   xTextDoc);
@@ -127,17 +127,5 @@ public class AccessibleDropDownListBox extends TestCase {
     @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
     }
 }

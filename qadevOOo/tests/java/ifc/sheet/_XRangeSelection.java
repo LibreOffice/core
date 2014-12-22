@@ -62,7 +62,7 @@ public class _XRangeSelection extends MultiMethodTest {
         XWindow xWindow = xModel.getCurrentController().getFrame().getContainerWindow();
         XTopWindow xTopWindow = UnoRuntime.queryInterface(XTopWindow.class, xWindow);
         xTopWindow.toFront();
-        util.utils.shortWait(500);
+        util.utils.pause(500);
     }
 
 
@@ -114,7 +114,7 @@ public class _XRangeSelection extends MultiMethodTest {
         props[2].Value = Boolean.FALSE;
         oObj.startRangeSelection(props);
         // wait for listeners
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
 
         // get closer button: move if window cobvers the sheet center
         Point closer = getCloser(center);
@@ -123,22 +123,22 @@ public class _XRangeSelection extends MultiMethodTest {
 
         // do something to trigger the listeners
         clickOnSheet(center);
-        util.utils.shortWait(5000);
+        util.utils.pause(5000);
 
         // click on closer
         clickOnSheet(closer);
-        util.utils.shortWait(5000);
+        util.utils.pause(5000);
 
         // open a new range selection
         props[0].Value = "C4:E6";
         oObj.startRangeSelection(props);
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
         props[0].Value = "C2:E3";
         oObj.startRangeSelection(props);
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
 
         oObj.startRangeSelection(props);
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
         oObj.abortRangeSelection();
         aListener.reset();
         System.out.println("Listener called: " + aListener.bAbortCalled);
@@ -295,9 +295,9 @@ public class _XRangeSelection extends MultiMethodTest {
             Robot rob = new Robot();
             rob.mouseMove(point.X, point.Y);
             rob.mousePress(InputEvent.BUTTON1_MASK);
-            util.utils.shortWait(1000);
+            util.utils.pause(1000);
             rob.mouseRelease(InputEvent.BUTTON1_MASK);
-            util.utils.shortWait(1000);
+            util.utils.pause(1000);
         } catch (java.awt.AWTException e) {
             log.println("couldn't press mouse button");
         }

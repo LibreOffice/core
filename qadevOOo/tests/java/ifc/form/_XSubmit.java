@@ -134,7 +134,7 @@ public class _XSubmit extends MultiMethodTest {
         }
 
         oObj.submit(cntrl, new MouseEvent());
-        shortWait();
+        util.utils.pause(200);
 
         log.println("Listener1 called " + listener1.called + " times");
         log.println("Listener2 called " + listener2.called + " times");
@@ -157,18 +157,6 @@ public class _XSubmit extends MultiMethodTest {
     public void _removeSubmitListener() {
         requiredMethod("addSubmitListener()");
         oObj.removeSubmitListener(listener1);
-    }
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(200) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 
     /**

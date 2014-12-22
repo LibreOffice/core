@@ -129,9 +129,7 @@ public class _XComponent {
         log.println( "begin dispose" + Thread.currentThread());
         oObj.dispose();
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {}
+        util.utils.pause(500);
         if (Loutput[0]!=null) log.println(Loutput[0]);
         if (Loutput[1]!=null) log.println(Loutput[1]);
         log.println( "end dispose" + Thread.currentThread());

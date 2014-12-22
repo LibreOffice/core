@@ -93,39 +93,19 @@ public class RecoveryTools {
         // This could consumes more time then the TimeOut allow.
         int counter = 0;
         int multi = 5;
-        int pause = param.getInt(PropertyName.SHORT_WAIT)*10;
+        int pause = PropertyName.DEFAULT_SHORT_WAIT_MS * 10;
         int timeOut = param.getInt(PropertyName.THREAD_TIME_OUT)*5;
         int maximum = (timeOut / pause) * multi;
 
         XDialog oDialog = getActiveDialog(xMSF);
 
         while (oDialog == null && (counter < maximum)){
-            log.println("waiting until the office has recoverd... remaining " + (timeOut * multi - pause * counter)/1000 + " seconds");
-            pause(pause);
+            log.println("waiting until the office has recovered... remaining " + (timeOut * multi - pause * counter)/1000 + " seconds");
+            util.utils.pause(pause);
             oDialog = getActiveDialog(xMSF);
             counter ++;
         }
         return oDialog;
-    }
-
-    /**
-     * halt the thread for some time
-     */
-    public void pause(){
-       pause(param.getInt(PropertyName.SHORT_WAIT));
-    }
-
-    /**
-     * halt the thread for some time
-     */
-    private void pause(int sleepTime){
-        sleep(sleepTime);
-    }
-
-    private void sleep(long millis){
-        try{
-            Thread.sleep(millis);
-        }catch (InterruptedException e){}
     }
 
     /**
@@ -204,11 +184,11 @@ public class RecoveryTools {
         helper.ProcessHandler ph = (helper.ProcessHandler) param.get("AppProvider");
 
         int timeOut = param.getInt(PropertyName.THREAD_TIME_OUT)*5;
-        int pause = param.getInt(PropertyName.SHORT_WAIT)*20;
+        int pause = PropertyName.DEFAULT_SHORT_WAIT_MS * 20;
         int multi = 0;
         while ((ph != null) && (ph.getExitCode()<0) && (pause*multi < timeOut)) {
             log.println("waiting until the office is closed... remaining " + (timeOut - pause * multi)/1000 + " seconds");
-            pause(pause);
+            util.utils.pause(pause);
             multi ++;
         }
 
@@ -254,7 +234,7 @@ public class RecoveryTools {
 
         log.println("try to get modal Dialog...");
 
-        pause();
+        util.utils.shortWait();
 
         XWindow oDialog = getActiveWindow(xMSF);
 
@@ -270,14 +250,14 @@ public class RecoveryTools {
         } catch ( java.lang.Exception e){
             throw new com.sun.star.accessibility.IllegalAccessibleComponentStateException("Could not click '"+buttonName +"' at modal dialog", e);
         }
-        pause();
+        util.utils.shortWait();
     }
 
     public void clickThreadButton(XWindow xWindow, String buttonName)
     {
         KlickButtonThread kbt = new KlickButtonThread(xWindow, buttonName);
         kbt.start();
-        pause(param.getInt(PropertyName.SHORT_WAIT) * 10);
+        util.utils.pause(PropertyName.DEFAULT_SHORT_WAIT_MS * 10);
     }
 
     public void copyRecoveryData(boolean backup)

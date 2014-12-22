@@ -180,9 +180,7 @@ public class JobExecutor extends TestCase {
                 XChangesBatch xCB = UnoRuntime.queryInterface(XChangesBatch.class, oRootCfg);
                 xCB.commitChanges();
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {}
+                util.utils.pause(1000);
 
             } catch (com.sun.star.uno.Exception e) {
                 e.printStackTrace(log);

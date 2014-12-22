@@ -59,7 +59,7 @@ public class ScAccessibleCsvCell extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XInterface oObj = null;
 
-        shortWait();
+        util.utils.pause(2000);
 
         try {
             oObj = (XInterface) tParam.getMSF().createInstance
@@ -152,19 +152,7 @@ public class ScAccessibleCsvCell extends TestCase {
 
         lThread = new loadThread(SOF, args);
         lThread.start();
-        shortWait();
-    }
-
-    /**
-    * Sleeps for 2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
+        util.utils.pause(2000);
     }
 
     private class loadThread extends Thread {

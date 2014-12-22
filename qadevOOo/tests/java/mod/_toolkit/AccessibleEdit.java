@@ -135,7 +135,7 @@ public class AccessibleEdit extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        shortWait();
+        util.utils.pause(500);
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -206,18 +206,6 @@ public class AccessibleEdit extends TestCase {
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
-        }
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
         }
     }
 }

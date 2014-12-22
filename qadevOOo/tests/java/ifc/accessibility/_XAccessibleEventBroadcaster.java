@@ -114,11 +114,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         log.println("fire event");
         prod.fireEvent() ;
 
-        try {
-            Thread.sleep(3000);
-        }
-        catch (InterruptedException ex) {
-        }
+        util.utils.pause(3000);
 
         boolean works = true;
 
@@ -163,11 +159,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         log.println("fire event");
         prod.fireEvent() ;
 
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException ex) {
-        }
+        util.utils.shortWait();
 
         if (list.notifiedEvent == null) {
             log.println("listener wasn't called -- OK");

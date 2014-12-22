@@ -140,7 +140,7 @@ public class _XTopWindow extends MultiMethodTest {
         requiredMethod("addTopWindowListener()");
         listener.initListener();
         oObj.toFront();
-        shortWait();
+        util.utils.pause(1000);
 
         tRes.tested("toFront()", listener.activated && !listener.deactivated);
     }
@@ -185,14 +185,6 @@ public class _XTopWindow extends MultiMethodTest {
     @Override
     protected void after() {
         aTextDoc.dispose();
-    }
-
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
     }
 }
 

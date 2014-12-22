@@ -90,7 +90,7 @@ public class _XSystemShellExecute extends MultiMethodTest {
             } catch(com.sun.star.uno.Exception e) {
                 log.println("Exception:" + e);
             }
-            shortWait();
+            util.utils.pause(1000);
             i++;
         }
 
@@ -102,18 +102,6 @@ public class _XSystemShellExecute extends MultiMethodTest {
         }
 
         tRes.tested("execute()", bExist);
-    }
-
-    /**
-    * Sleeps to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 }  // finish class _XSystemShellExecute
 

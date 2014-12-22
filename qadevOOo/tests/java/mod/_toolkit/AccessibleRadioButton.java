@@ -168,7 +168,7 @@ public class AccessibleRadioButton extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        util.utils.shortWait(2000);
+        util.utils.pause(2000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -203,7 +203,7 @@ public class AccessibleRadioButton extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        util.utils.shortWait(2000);
+        util.utils.pause(2000);
 
         XInterface oObj = null;
 
@@ -219,7 +219,7 @@ public class AccessibleRadioButton extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.shortWait(2000);
+        util.utils.pause(2000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());

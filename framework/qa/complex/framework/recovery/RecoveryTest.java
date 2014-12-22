@@ -204,8 +204,8 @@ public class RecoveryTest extends ComplexTestCase {
 
         CrashThread crash = new CrashThread(xDoc, xMSF);
         crash.start();
-        rt.pause();
-        rt.pause();
+        util.utils.shortWait();
+        util.utils.shortWait();
     }
 
     /**
@@ -221,13 +221,13 @@ public class RecoveryTest extends ComplexTestCase {
             log.println("wating for recovery dialog...");
 
             int counter = 0;
-            int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / param.getInt(PropertyName.SHORT_WAIT);
+            int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / PropertyName.DEFAULT_SHORT_WAIT_MS;
 
             XDialog oDialog = rt.getActiveDialog(xMSF);
 
             while ( oDialog == null && (counter < maximum))
             {
-                rt.pause();
+                util.utils.shortWait();
                 oDialog = rt.getActiveDialog(xMSF);
                 counter ++;
             }
@@ -349,10 +349,10 @@ public class RecoveryTest extends ComplexTestCase {
                 log.println("clicking 'Start Recovery' button...");
                 oUITools.clickButton("Start Recovery >");
 
-                rt.pause();
+                util.utils.shortWait();
 
                 int counter = 0;
-                int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / param.getInt(PropertyName.SHORT_WAIT);
+                int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / PropertyName.DEFAULT_SHORT_WAIT_MS;
 
                 XAccessibleContext oButton = null;
                 while ((oButton == null) && (counter < maximum)){
@@ -364,7 +364,7 @@ public class RecoveryTest extends ComplexTestCase {
                         // no fault: The title "Start Recovery" switches to "Next"
                         // while all documents are recoverd
                     }
-                    rt.pause();
+                    util.utils.shortWait();
                     counter++;
                 }
 
@@ -379,7 +379,7 @@ public class RecoveryTest extends ComplexTestCase {
                     oUITools.clickButton("Next >");
                 }
 
-                rt.pause();
+                util.utils.shortWait();
 
             } else {
                     log.println("do not recover: clicking 'Cancel' button...");

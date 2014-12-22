@@ -139,9 +139,9 @@ public class DrawController_DrawView extends TestCase {
         try {
             log.println( "creating two impress documents" );
             xDrawDoc = SOF.createDrawDoc(null);
-            shortWait();
+            util.utils.pause(1000);
             xSecondDrawDoc = SOF.createDrawDoc(null);
-            shortWait();
+            util.utils.pause(1000);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -180,7 +180,7 @@ public class DrawController_DrawView extends TestCase {
         oShapes.add(shape1);
         oShapes.add(shape2);
         oShapes.add(shape3);
-        shortWait();
+        util.utils.pause(1000);
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xDrawDoc);
 
@@ -215,7 +215,7 @@ public class DrawController_DrawView extends TestCase {
         xShapes1.add(shape2);
         xShapes1.add(shape3);
         xShapes2.add(shape1);
-        shortWait();
+        util.utils.pause(1000);
 
 
         tEnv.addObjRelation("Selections", new Object[] {
@@ -265,14 +265,6 @@ public class DrawController_DrawView extends TestCase {
         return tEnv;
 
     } // finish method getTestEnvironment
-
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
 
 
 }

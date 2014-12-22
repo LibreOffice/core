@@ -156,7 +156,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
             throw new StatusException( "Couldn't create document", e );
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
@@ -187,7 +187,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        shortWait();
+        util.utils.pause(5000);
 
         XInterface oObj = null;
         try {
@@ -201,7 +201,7 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(XExtendedToolkit.class, oObj);
 
-        shortWait();
+        util.utils.pause(5000);
 
         XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
 
@@ -234,18 +234,6 @@ public class AccessibleIconChoiceCtrlEntry extends TestCase {
                     "only delivers senseful values for getCharacterBounds(0,length-1)");
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
     }
 
 }

@@ -223,7 +223,8 @@ public class CheckMemoryUsage
             System.out.println();
         }
 
-        shortWait(10000);
+        System.out.println("Wait for: " + 10000 + "ms");
+        util.utils.pause(10000);
 
         // Now the real test, load document and store 25 times
 
@@ -374,7 +375,8 @@ public class CheckMemoryUsage
         public void stop()
         {
             // short wait for the office to 'calm down' and free some memory
-            shortWait(20000);
+            System.out.println("Wait for: " + 20000 + "ms");
+            util.utils.pause(20000);
             // wait util memory is not freed anymore.
             int storageAfter = getOfficeMemoryUsage(createModeName("stop", 0));
             int mem = 0;
@@ -384,7 +386,8 @@ public class CheckMemoryUsage
                 count++;
                 mem = storageAfter;
                 storageAfter = getOfficeMemoryUsage(createModeName("stop", count));
-                shortWait(1000);
+                System.out.println("Wait for: " + 1000 + "ms");
+                util.utils.pause(1000);
             }
             m_nMemoryUsage = (storageAfter - m_nMemoryStart);
         }
@@ -481,22 +484,6 @@ public class CheckMemoryUsage
             catch (java.io.IOException e)
             {
             }
-        }
-    }
-
-    /**
-     * Let this thread sleep for some time
-     * @param milliSeconds time to wait in milliseconds.
-     */
-    public static void shortWait(int milliSeconds)
-    {
-        System.out.println("Wait for: " + milliSeconds + "ms");
-        try
-        {
-            Thread.sleep(milliSeconds);
-        }
-        catch (InterruptedException e)
-        { // ignore
         }
     }
 

@@ -103,7 +103,7 @@ public class AccessibleCheckBox extends TestCase {
             }
         }
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         XInterface oObj = null;
 
@@ -120,16 +120,16 @@ public class AccessibleCheckBox extends TestCase {
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, oObj);
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         log.println("Opening Dialog in second thread");
 
         psDiag = new DiagThread(xTextDoc, msf);
         psDiag.start();
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         log.println("Getting the active TopWindow");
 

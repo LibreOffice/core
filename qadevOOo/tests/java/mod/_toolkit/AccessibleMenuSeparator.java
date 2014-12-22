@@ -73,7 +73,7 @@ public class AccessibleMenuSeparator extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
-        shortWait();
+        util.utils.pause(500);
 
         XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
             getCurrentController().getFrame().getContainerWindow();
@@ -93,7 +93,7 @@ public class AccessibleMenuSeparator extends TestCase {
                           XAccessibleAction.class, Menu);
             act.doAccessibleAction(0);
 
-            shortWait();
+            util.utils.pause(500);
 
 
             //get a menue-separator
@@ -143,17 +143,5 @@ public class AccessibleMenuSeparator extends TestCase {
     @Override
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
     }
 }

@@ -106,10 +106,7 @@ public class _XNotifyingDispatch extends MultiMethodTest {
 
         oObj.dispatchWithNotification(url, arguments, notificationListener);
 
-        try {
-            Thread.sleep(200);
-        }
-        catch(InterruptedException e) {}
+        util.utils.pause(200);
 
         log.println("Listener called: "+ notificationListener.finishedDispatch);
 

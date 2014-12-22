@@ -113,7 +113,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
             throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
-        shortWait();
+        util.utils.pause(2000);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -131,26 +131,13 @@ public class SwAccessibleDocumentPageView extends TestCase {
                 public void fireEvent() {
                     String oldText = the_text.getString();
                     the_text.setString("EVENT FIRED");
-                    shortWait();
+                    util.utils.pause(2000);
                     the_text.setString(oldText);
                 }
             });
 
         return tEnv;
 
-    }
-
-
-    /**
-    * Sleeps for 1 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 
 

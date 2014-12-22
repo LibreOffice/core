@@ -142,9 +142,7 @@ public class _XComponent extends MultiMethodTest {
                 altDispose.dispose();
         }
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {}
+        util.utils.shortWait();
         if (Loutput[0]!=null) log.println(Loutput[0]);
         if (Loutput[1]!=null) log.println(Loutput[1]);
         log.println( "end dispose" + Thread.currentThread());

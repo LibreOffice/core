@@ -87,7 +87,7 @@ public class WriterHelper {
         XComponent comp = UnoRuntime.queryInterface(XComponent.class, xLocalDoc);
         DialogThread diagThread = new DialogThread(comp, m_xMSF, url);
         diagThread.start();
-        shortWait();
+        util.utils.pause(4000);
 
         if (createButton.length() > 1) {
             XExtendedToolkit tk = getToolkit();
@@ -111,7 +111,7 @@ public class WriterHelper {
                 System.out.println("Couldn't press button");
             }
 
-            shortWait();
+            util.utils.pause(4000);
         }
 
         XDesktop xDesktop = getDesktop();
@@ -134,17 +134,6 @@ public class WriterHelper {
 
 
 
-
-    /**
-    * Sleeps for 2 sec. to allow StarOffice to react
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
-    }
 
     /** creates an instance of com.sun.star.awt.Toolkit to query the XExtendedToolkit
      * interface

@@ -127,10 +127,7 @@ public class _XConnector extends MultiMethodTest {
         acceptorThread = new AcceptorThread(xAcceptor) ;
         acceptorThread.start() ;
 
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException e) {}
+        util.utils.shortWait();
 
         // connect to acceptor
         try {

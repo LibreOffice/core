@@ -68,7 +68,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
         log.println("ensure that the first model is focused");
         DesktopTools.bringWindowToFront(docModel);
 
-        utils.shortWait(3000);
+        utils.pause(3000);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class _XContextMenuInterception extends MultiMethodTest {
             log.println("couldn't press mouse button");
         }
 
-        utils.shortWait(1000);
+        utils.pause(1000);
 
     }
 

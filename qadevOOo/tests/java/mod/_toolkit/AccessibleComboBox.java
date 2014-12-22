@@ -98,7 +98,7 @@ public class AccessibleComboBox extends TestCase {
                                            Param.getMSF());
         psDiag.start();
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         Object atw = tk.getActiveTopWindow();
 
@@ -124,7 +124,7 @@ public class AccessibleComboBox extends TestCase {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
         }
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.pause(Param.getInt("ShortWait"));
 
         AccessibilityTools.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",

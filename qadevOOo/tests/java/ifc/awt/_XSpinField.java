@@ -94,7 +94,7 @@ public class _XSpinField extends MultiMethodTest {
         requiredMethod("addSpinListener()") ;
 
         oObj.up() ;
-        shortWait();
+        util.utils.shortWait();
 
         tRes.tested("up()", listener.upFl) ;
     }
@@ -112,7 +112,7 @@ public class _XSpinField extends MultiMethodTest {
         requiredMethod("addSpinListener()") ;
 
         oObj.down() ;
-        shortWait();
+        util.utils.shortWait();
 
         tRes.tested("down()", listener.downFl) ;
     }
@@ -130,7 +130,7 @@ public class _XSpinField extends MultiMethodTest {
         requiredMethod("addSpinListener()") ;
 
         oObj.first() ;
-        shortWait();
+        util.utils.shortWait();
 
         tRes.tested("first()", listener.firstFl) ;
     }
@@ -148,7 +148,7 @@ public class _XSpinField extends MultiMethodTest {
         requiredMethod("addSpinListener()") ;
 
         oObj.last() ;
-        shortWait();
+        util.utils.shortWait();
 
         tRes.tested("last()", listener.lastFl) ;
     }
@@ -191,17 +191,5 @@ public class _XSpinField extends MultiMethodTest {
         oObj.enableRepeat(false) ;
 
         tRes.tested("enableRepeat()", true) ;
-    }
-
-    /**
-     * Waits for 0.5 sec to allow listener to be called.
-     */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException ex) {
-        }
-
     }
 }

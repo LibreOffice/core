@@ -316,7 +316,7 @@ public class CheckContextMenuInterceptor
             System.out.println("couldn't press mouse button");
         }
 
-        utils.shortWait(3000);
+        utils.pause(3000);
 
     }
 

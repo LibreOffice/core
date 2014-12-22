@@ -133,7 +133,7 @@ public class java_fat implements TestBase
                     continue;
                 }
 
-                util.utils.shortWait(2000);
+                util.utils.pause(2000);
 
                 System.out.println("Creating: " + entry.entryName);
 
@@ -430,7 +430,7 @@ public class java_fat implements TestBase
             if (ph != null)
             {
                 m_aOffice.closeExistingOffice(m_aParams, true);
-                util.utils.shortWait(5000);
+                util.utils.pause(5000);
             }
 
         }

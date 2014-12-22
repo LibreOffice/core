@@ -85,10 +85,7 @@ public class DocumentHandle {
             XComponentLoader xFrameLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
             xFrameLoader.loadComponentFromURL(docName, "_self", 0, szArgs);
             // wait for the document to load.
-            try {
-                Thread.sleep(10000);
-            }
-            catch(InterruptedException e) {}
+            util.utils.pause(10000);
 
             xWin = xFrame.getContainerWindow();
             xWin.addWindowListener(wl);
@@ -144,10 +141,7 @@ public class DocumentHandle {
         wl.resetTrigger();
         xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                     newPosSize.Height, PosSize.POSSIZE);
-        try {
-            Thread.sleep(3000);
-        }
-        catch(InterruptedException e) {}
+        util.utils.pause(3000);
         return wl.resizedTrigger;
     }
 }

@@ -147,9 +147,7 @@ public class _XComponent {
             }
         }
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {}
+        util.utils.shortWait();
         if (Loutput[0]!=null){
             System.out.println(Loutput[0]);
         }

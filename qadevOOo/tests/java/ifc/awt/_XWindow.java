@@ -242,7 +242,7 @@ public class _XWindow extends MultiMethodTest {
             oObj.setPosSize(0, 0, 100, 100, PosSize.WIDTH);
         }
 
-        shortWait();
+        util.utils.pause(200);
         boolean res = wListener.resized && wListener.moved &&
             !wListener.hidden && !wListener.shown;
         result &= res;
@@ -257,10 +257,10 @@ public class _XWindow extends MultiMethodTest {
 
         // testing wListener.windowHidden()
         wListener.init();
-        shortWait();
+        util.utils.pause(200);
         log.println("set object invisible...");
         oObj.setVisible(false);
-        shortWait();
+        util.utils.pause(200);
         res = wListener.hidden && !wListener.resized
                         && !wListener.moved && !wListener.shown;
         result &= res;
@@ -275,10 +275,10 @@ public class _XWindow extends MultiMethodTest {
 
         // testing wListener.windowShown()
         wListener.init() ;
-        shortWait();
+        util.utils.pause(200);
         log.println("set object visible...");
         oObj.setVisible(true) ;
-        shortWait();
+        util.utils.pause(200);
         res = wListener.shown && !wListener.resized &&
                 !wListener.hidden && !wListener.moved;
         result &= res;
@@ -361,9 +361,9 @@ public class _XWindow extends MultiMethodTest {
 
         // testing fListener.lost()
         oObj.setFocus();
-        shortWait();
+        util.utils.pause(200);
         win.setFocus();
-        shortWait();
+        util.utils.pause(200);
         result &= fListener.lost;
         if (!fListener.lost) {
             log.println("Lost focus was not notified about") ;
@@ -371,7 +371,7 @@ public class _XWindow extends MultiMethodTest {
 
         // testing fListener.gained()
         oObj.setFocus() ;
-        shortWait();
+        util.utils.pause(200);
         result &= fListener.gained;
         if (!fListener.gained) {
             log.println("Gained focus was not notified about") ;
@@ -597,18 +597,6 @@ public class _XWindow extends MultiMethodTest {
         requiredMethod("addPaintListener()");
         oObj.removePaintListener(pListener);
         tRes.tested("removePaintListener()", true);
-    }
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 
 }

@@ -109,7 +109,7 @@ public class SdUnoSlideView extends TestCase {
         try {
             log.println( "creating a impress document" );
             xImpressDoc = SOF.createImpressDoc(null);
-            shortWait();
+            util.utils.pause(1000);
             xDP = DrawTools.getDrawPages(xImpressDoc);
             xDP.insertNewByIndex(0);
             xDP.insertNewByIndex(0);
@@ -144,7 +144,7 @@ public class SdUnoSlideView extends TestCase {
         try {
             log.println( "creating a second impress document" );
             xSecondDrawDoc = SOF.createImpressDoc(null);
-            shortWait();
+            util.utils.pause(1000);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't create document", e);
@@ -195,14 +195,6 @@ public class SdUnoSlideView extends TestCase {
         return tEnv;
 
     } // finish method getTestEnvironment
-
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-    }
 
 
 } // finish class SdUnoOutlineView

@@ -135,7 +135,7 @@ public class AccessiblePopupMenu extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait(tParam);
+        util.utils.shortWait();
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class,
                                                            xTextDoc);
@@ -166,7 +166,7 @@ public class AccessiblePopupMenu extends TestCase {
             log.println("couldn't press mouse button");
         }
 
-        shortWait(tParam);
+        util.utils.shortWait();
 
         XExtendedToolkit tk = UnoRuntime.queryInterface(
                                       XExtendedToolkit.class, toolkit);
@@ -211,9 +211,5 @@ public class AccessiblePopupMenu extends TestCase {
 
     protected void closeDoc() {
         util.DesktopTools.closeDoc(xTextDoc);
-    }
-
-    private void shortWait(TestParameters tParam) {
-        util.utils.shortWait(tParam.getInt(util.PropertyName.SHORT_WAIT));
     }
 }

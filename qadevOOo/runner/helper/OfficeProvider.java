@@ -262,13 +262,7 @@ public class OfficeProvider implements AppProvider
                     }
                     if (msf == null)
                     {
-                        try
-                        {
-                            Thread.sleep(500L * k);
-                        }
-                        catch (InterruptedException ex)
-                        {
-                        }
+                        util.utils.pause(500 * k);
                     }
                     k++;
                 }
@@ -762,15 +756,8 @@ public class OfficeProvider implements AppProvider
             {
                 System.out.println(utils.getDateTime() + "OfficeProvider:Owp: ping ");
                 ow.ping();
-                try
-                {
-                    System.out.println(utils.getDateTime() + "OfficeProvider:Owp: sleep ");
-                    OfficeWatcherPing.sleep(1000); // 5000
-                }
-                catch (InterruptedException ex)
-                {
-                    ex.printStackTrace();
-                }
+                System.out.println(utils.getDateTime() + "OfficeProvider:Owp: sleep ");
+                util.utils.pause(1000);
             }
 
         }

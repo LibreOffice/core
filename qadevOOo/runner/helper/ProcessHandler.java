@@ -329,13 +329,7 @@ public class ProcessHandler
         {
             m_aProcess.destroy();
 
-            try
-            {
-                Thread.sleep(1000L * counter); // 5000
-            }
-            catch (InterruptedException e)
-            {
-            }
+            util.utils.pause(1000 * counter);
             try
             {
                 final int exit_Value = m_aProcess.exitValue();
@@ -664,14 +658,7 @@ public class ProcessHandler
             while (m_nTimeoutInSec > 0)
             {
                 m_nTimeoutInSec--;
-                try
-                {
-                    sleep(1000);
-                }
-                catch(InterruptedException e)
-                {
-                    // interrupt flag is set back to 'not interrupted' :-(
-                }
+                util.utils.pause(1000);
                 if (isInHoldOn())
                 {
                     break;

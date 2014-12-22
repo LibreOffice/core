@@ -217,7 +217,7 @@ public class ConnectionLineAccessibility extends TestCase
         {
             try
             {
-                shortWait();
+                util.utils.pause(1500);
                 connection = isolConnection.getIsolatedConnection(user,
                         password);
                 statement = connection.createStatement();
@@ -318,7 +318,7 @@ public class ConnectionLineAccessibility extends TestCase
 
         QueryComponent = DesktopTools.loadDoc(Param.getMSF(),".component:DB/QueryDesign",loadProps);
 
-        util.utils.shortWait(1000);
+        util.utils.pause(1000);
 
         xWindow = UnoRuntime.queryInterface(XModel.class, QueryComponent).
             getCurrentController().getFrame().getContainerWindow();
@@ -335,7 +335,7 @@ public class ConnectionLineAccessibility extends TestCase
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        shortWait();
+        util.utils.pause(1500);
 
         final XWindow queryWin = xWindow;
 
@@ -374,22 +374,6 @@ public class ConnectionLineAccessibility extends TestCase
         catch (Exception e)
         {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Sleeps for 1.5 sec. to allow StarOffice to react on <code>
-     * reset</code> call.
-     */
-    private void shortWait()
-    {
-        try
-        {
-            Thread.sleep(1500);
-        }
-        catch (InterruptedException e)
-        {
-            log.println("While waiting :" + e);
         }
     }
 }

@@ -127,10 +127,10 @@ public class SmEditAccessible extends TestCase {
                     try {
                         System.out.println("Children "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", "sum hat x \n int a \n sum b");
-                        shortWait();
+                        util.utils.pause(1000);
                         System.out.println("Children "+con.getAccessibleChildCount());
                         xPS.setPropertyValue("Formula", expFormula);
-                        shortWait();
+                        util.utils.pause(1000);
                     } catch(com.sun.star.lang.WrappedTargetException e) {
                     } catch(com.sun.star.lang.IllegalArgumentException e) {
                     } catch(com.sun.star.beans.PropertyVetoException e) {
@@ -151,17 +151,5 @@ public class SmEditAccessible extends TestCase {
 
         log.println( "    disposing xMathDoc " );
         xMathDoc.dispose();
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(1000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 }    // finish class SmModel

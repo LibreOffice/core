@@ -204,7 +204,7 @@ public class ODatasourceBrowser extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XModel aModel1 = UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -263,7 +263,7 @@ public class ODatasourceBrowser extends TestCase {
             throw new StatusException("Couldn't initialize document", e);
         }
 
-        shortWait();
+        util.utils.pause(5000);
 
         XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
                                                             4500, 15000, 10000,
@@ -309,16 +309,4 @@ public class ODatasourceBrowser extends TestCase {
 
         return tEnv;
     } // finish method getTestEnvironment
-
-    /**
-    * Sleeps for 0.2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
-    }
 } // finish class oDatasourceBrowser

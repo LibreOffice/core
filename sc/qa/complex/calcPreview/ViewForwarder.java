@@ -235,9 +235,7 @@ public class ViewForwarder {
             return;
         }
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
+        util.utils.pause(500);
 
         System.out.println("Press any key after resizing ");
         try{
@@ -279,9 +277,7 @@ public class ViewForwarder {
         System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
         System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
+        util.utils.pause(500);
 
         System.out.println("Press any key when the second line is on top");
         try{
@@ -643,9 +639,7 @@ public class ViewForwarder {
             return;
         }
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
+        util.utils.pause(500);
 
         System.out.println("Press any key after resizing ");
         try{
@@ -687,9 +681,7 @@ public class ViewForwarder {
         System.out.println("P-Parent-BoundsWidth= "+accPPC.getBounds().Width);
         System.out.println("P-Parent-BoundsHeight= "+accPPC.getBounds().Height);
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
+        util.utils.pause(500);
 
         System.out.println("Press any key when the header is not visible.");
         try{
@@ -853,11 +845,7 @@ public class ViewForwarder {
             return;
         }
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
+        util.utils.pause(500);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(xModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -936,11 +924,7 @@ public class ViewForwarder {
             return;
         }
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
+        util.utils.pause(500);
 
         xSpreadsheetDoc = UnoRuntime.queryInterface(
                                             XSpreadsheetDocument.class, xComp);
@@ -973,13 +957,7 @@ public class ViewForwarder {
             return;
         }
 
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e) ;
-        }
-
-
+        util.utils.pause(500);
 
         System.out.println("Press any key when a shape is on top.");
         try{

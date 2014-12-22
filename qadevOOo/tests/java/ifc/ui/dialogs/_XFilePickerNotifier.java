@@ -134,7 +134,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             e.printStackTrace(log) ;
         }
 
-        shortWait();
+        util.utils.pause(2000);
 
         if (!listener.called) {
             log.println("Listener wasn't called :-(");
@@ -169,7 +169,7 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             e.printStackTrace(log) ;
         }
 
-        shortWait();
+        util.utils.pause(2000);
 
         closeDialog();
 
@@ -197,18 +197,6 @@ public class _XFilePickerNotifier extends MultiMethodTest {
             } catch (Exception e) {
                 log.println("Thread has been interrupted ...");
             }
-        }
-    }
-
-    /**
-     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-     * reset</code> call.
-     */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
         }
     }
 

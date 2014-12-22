@@ -115,11 +115,7 @@ public class _XAccessibleEventBroadcaster {
         System.out.println("fire event");
         prod.fireEvent() ;
 
-        try {
-            Thread.sleep(1500);
-        }
-        catch (InterruptedException ex) {
-        }
+        util.utils.pause(1500);
 
         boolean works = true;
 
@@ -157,11 +153,7 @@ public class _XAccessibleEventBroadcaster {
         System.out.println("fire event");
         prod.fireEvent() ;
 
-        try {
-            Thread.sleep(500);
-        }
-        catch (InterruptedException ex) {
-        }
+        util.utils.pause(500);
 
         if (list.notifiedEvent == null) {
             System.out.println("listener wasn't called -- OK");

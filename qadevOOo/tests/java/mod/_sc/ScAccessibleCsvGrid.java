@@ -59,7 +59,7 @@ public class ScAccessibleCsvGrid extends TestCase {
 
         XInterface oObj = null;
 
-        shortWait();
+        util.utils.pause(2000);
 
         try {
             oObj = (XInterface) Param.getMSF().createInstance
@@ -137,20 +137,8 @@ public class ScAccessibleCsvGrid extends TestCase {
 
         lThread = new loadThread(SOF, args);
         lThread.start();
-        shortWait();
+        util.utils.pause(2000);
 
-    }
-
-    /**
-    * Sleeps for 2 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(2000) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 
     private class loadThread extends Thread {

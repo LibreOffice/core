@@ -645,10 +645,15 @@ public class utils {
     }
 
     /** Causes the thread to sleep some time.
-     * It can be used f.e. like:
-     * util.utils.shortWait(tParam.getInt("ShortWait"));
+     * This is the default call, which waits for 500ms.
      */
-    public static void shortWait(int milliseconds) {
+    public static void shortWait() {
+        pause(PropertyName.DEFAULT_SHORT_WAIT_MS);
+    }
+
+    /** Causes the thread to sleep some time.
+     */
+    public static void pause(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
@@ -827,7 +832,7 @@ public class utils {
             XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
             xDispatcher.dispatch(aURL, null);
 
-            utils.shortWait(3000);
+            utils.pause(3000);
 
         } catch (Exception e) {
             throw new Exception("ERROR: could not dispatch URL '" + URL + "'", e);

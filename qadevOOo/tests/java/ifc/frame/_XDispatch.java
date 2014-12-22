@@ -130,10 +130,7 @@ public class _XDispatch extends MultiMethodTest {
             notificationListener = new TestNotificationListener(log) ;
             xND.dispatchWithNotification(url, arguments, notificationListener);
 
-            try {
-                Thread.sleep(200);
-            }
-            catch(InterruptedException e) {}
+            util.utils.pause(200);
 
             log.println("   Listener called: "+ notificationListener.finishedDispatch);
 
@@ -174,10 +171,7 @@ public class _XDispatch extends MultiMethodTest {
 
         oObj.dispatch(url, new PropertyValue[0]) ;
 
-        try {
-            Thread.sleep(200);
-        }
-        catch(InterruptedException e) {}
+        util.utils.pause(200);
 
         log.println("Listener called: "+ listener.statusChangedCalled);
 
@@ -219,10 +213,7 @@ public class _XDispatch extends MultiMethodTest {
 
         oObj.dispatch(url, new PropertyValue[0]) ;
 
-        try {
-            Thread.sleep(200);
-        }
-        catch(InterruptedException e) {}
+        util.utils.pause(200);
 
         System.out.println("Listener called: "+ listener.statusChangedCalled);
 

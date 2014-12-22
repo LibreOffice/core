@@ -196,16 +196,14 @@ public final class OfficeConnection {
         return description;
     }
 
-    private static Integer waitForProcess(Process process, final long millis)
+    private static Integer waitForProcess(Process process, final int millis)
         throws InterruptedException
     {
         final Thread t1 = Thread.currentThread();
         Thread t2 = new Thread("waitForProcess") {
                 @Override
                 public void run() {
-                    try {
-                        Thread.sleep(millis);
-                    } catch (InterruptedException e) {}
+                    util.utils.pause(millis);
                     t1.interrupt();
                 }
             };

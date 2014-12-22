@@ -144,7 +144,7 @@ public class SwAccessiblePageView extends TestCase {
             throw new StatusException( "Couldn't get Paragraph", e );
         }
 
-        shortWait();
+        util.utils.pause(500);
 
         XController xController = xTextDoc.getCurrentController();
 
@@ -168,7 +168,7 @@ public class SwAccessiblePageView extends TestCase {
             throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
-        shortWait();
+        util.utils.pause(500);
 
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
@@ -250,17 +250,5 @@ public class SwAccessiblePageView extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
         xTextDoc = WriterTools.createTextDoc(Param.getMSF());
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
     }
 }

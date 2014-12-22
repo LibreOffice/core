@@ -145,10 +145,7 @@ public class CheckAPI  {
                 xMSF = null;
                 ProcessHandler handler = (ProcessHandler)param.get("AppProvider");
                 handler.kill();
-                try {
-                    Thread.sleep(10000);
-                }
-                catch(InterruptedException e) {}
+                util.utils.pause(10000);
                 OfficeProvider op = new OfficeProvider();
                 xMSF = (XMultiServiceFactory)op.getManager(param);
                 param.put("ServiceFactory",xMSF);

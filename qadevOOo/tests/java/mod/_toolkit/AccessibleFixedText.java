@@ -137,7 +137,7 @@ public class AccessibleFixedText extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
-        shortWait();
+        util.utils.pause(500);
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWinDlg);
 
@@ -180,17 +180,5 @@ public class AccessibleFixedText extends TestCase {
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("    Closing dialog ... ");
         xWinDlg.dispose();
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e);
-        }
     }
 }

@@ -86,7 +86,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
         XDispatch xDisp = xDispProv.queryDispatch(dispURL, "", 0);
         xDisp.dispatch(dispURL, dispArgs);
 
-        shortWait();
+        util.utils.shortWait();
 
         log.println("Getting macro ... :");
         String macro = oObj.getRecordedMacro();
@@ -194,12 +194,6 @@ public class _XDispatchRecorder extends MultiMethodTest {
         tRes.tested("recordDispatchAsComment()", res);
     }
 
-
-    private void shortWait() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {}
-    }
 
     private void clearBuffer() {
         oObj.startRecording(xFrame);

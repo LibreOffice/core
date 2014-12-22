@@ -114,7 +114,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
             XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
             if( xDispatcher != null )
                     xDispatcher.dispatch( aURL, null );
-            utils.shortWait(Param.getInt(util.PropertyName.SHORT_WAIT));
+            utils.shortWait();
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
         }

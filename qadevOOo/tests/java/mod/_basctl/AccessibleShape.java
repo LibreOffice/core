@@ -95,7 +95,7 @@ public class AccessibleShape extends TestCase {
             throw new StatusException("Couldn't open Basic Dialog",e);
         }
 
-        utils.shortWait(3000);
+        utils.pause(3000);
 
         try {
             oObj = (XInterface) tParam.getMSF().createInstance
@@ -132,7 +132,7 @@ public class AccessibleShape extends TestCase {
                 newPosSize.Y = oldPosSize.Y + 20;
                 basicIDE.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                 newPosSize.Height, PosSize.POSSIZE);
-                utils.shortWait(1000);
+                utils.pause(1000);
                 basicIDE.setPosSize(oldPosSize.X, oldPosSize.Y, oldPosSize.Width,
                                 oldPosSize.Height, PosSize.POSSIZE);
             }

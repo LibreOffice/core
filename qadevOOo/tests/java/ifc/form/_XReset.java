@@ -134,11 +134,11 @@ public class _XReset extends MultiMethodTest {
          log.println("Testing reset() ...");
          approve = false;
          oObj.reset();
-         shortWait();
+         util.utils.shortWait();
          tRes.tested("reset()", (approveReset[0] && (! resetted[0])));
          approve = true;
          oObj.reset();
-         shortWait();
+         util.utils.shortWait();
          tRes.tested("addResetListener()", (approveReset[1] && resetted[1]));
 
     } // finished _reset
@@ -159,22 +159,10 @@ public class _XReset extends MultiMethodTest {
          approveReset[0] = resetted[0] = false;
          oObj.removeResetListener(listener1);
          oObj.reset();
-         shortWait();
+         util.utils.shortWait();
          tRes.tested("removeResetListener()", !approveReset[0] && !resetted[0]);
          //removing the second listener here may avoid crashing the office
     } // finished _removeResetListener()
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
-        }
-    }
 
 
 } // finished class _XRefresh

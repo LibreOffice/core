@@ -139,22 +139,10 @@ public class ScAccessibleDocument extends TestCase {
             String url = utils.getFullTestURL("calcshapes.sxc");
             log.println("loading document "+url);
             xSpreadsheetDoc = SOF.loadDocument(url);
-            shortWait();
+            util.utils.pause(500);
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document ", e );
-        }
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.sleep(500) ;
-        } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
         }
     }
 

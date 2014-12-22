@@ -89,13 +89,7 @@ public class DesktopTerminate
         try
         {
             xMSF = getMSF();
-            try
-            {
-                Thread.sleep(10000);
-            }
-            catch (InterruptedException e)
-            {
-            }
+            util.utils.pause(10000);
         }
         catch (java.lang.Exception e)
         {
@@ -115,13 +109,7 @@ public class DesktopTerminate
             desk = UnoRuntime.queryInterface(XDesktop.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
             desk.terminate();
             System.out.println("Waiting " + iOfficeCloseTime + " milliseconds for the Office to close down");
-            try
-            {
-                Thread.sleep(iOfficeCloseTime);
-            }
-            catch (InterruptedException e)
-            {
-            }
+            util.utils.pause(iOfficeCloseTime);
             xMSF = null;
         }
         catch (java.lang.Exception e)
