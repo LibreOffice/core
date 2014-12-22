@@ -157,7 +157,7 @@ void ExceptionThrower::release() throw ()
 void ExceptionThrower::throwException( Any const & exc ) throw (Exception, std::exception)
 {
     OSL_FAIL( "unexpected!" );
-    throwException( exc );
+    cppu::throwException( exc );
 }
 
 
