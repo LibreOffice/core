@@ -1039,11 +1039,14 @@ Reference< XShape > Shape::createAndInsert(
                 TextCharacterProperties aCharStyleProperties;
                 if( const ShapeStyleRef* pFontRef = getShapeStyleRef( XML_fontRef ) )
                 {
-                    if( pTheme )
-                        if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
-                            aCharStyleProperties.assignUsed( *pCharProps );
-                    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "use font color");
-                    aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
+                    if( pFontRef->mnThemedIdx != 0 )
+                    {
+                        if( pTheme )
+                            if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
+                                aCharStyleProperties.assignUsed( *pCharProps );
+                        SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "use font color");
+                        aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
+                    }
                 }
 
                 Reference < XTextCursor > xAt = xText->createTextCursor();
