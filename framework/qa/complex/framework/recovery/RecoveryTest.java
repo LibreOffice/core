@@ -221,7 +221,7 @@ public class RecoveryTest extends ComplexTestCase {
             log.println("wating for recovery dialog...");
 
             int counter = 0;
-            int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / PropertyName.DEFAULT_SHORT_WAIT_MS;
+            int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / utils.DEFAULT_SHORT_WAIT_MS;
 
             XDialog oDialog = rt.getActiveDialog(xMSF);
 
@@ -352,7 +352,7 @@ public class RecoveryTest extends ComplexTestCase {
                 util.utils.shortWait();
 
                 int counter = 0;
-                int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / PropertyName.DEFAULT_SHORT_WAIT_MS;
+                int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / utils.DEFAULT_SHORT_WAIT_MS;
 
                 XAccessibleContext oButton = null;
                 while ((oButton == null) && (counter < maximum)){

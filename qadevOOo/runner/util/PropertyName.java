@@ -63,10 +63,6 @@ public interface PropertyName {
      */
     String OUT_PRODUCER = "OutProducer";
     /**
-     * Default short wait time for the Office
-     */
-    int DEFAULT_SHORT_WAIT_MS = 500;
-    /**
      * internal only, no parameter
      * The OfficeProvider contains the full qualified
      * class that provides a connection to StarOffice<br>

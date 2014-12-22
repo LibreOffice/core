@@ -648,7 +648,7 @@ public class utils {
      * This is the default call, which waits for 500ms.
      */
     public static void shortWait() {
-        pause(PropertyName.DEFAULT_SHORT_WAIT_MS);
+        pause(utils.DEFAULT_SHORT_WAIT_MS);
     }
 
     /** Causes the thread to sleep some time.
@@ -857,4 +857,9 @@ public class utils {
             dfmt.format(cal.get(Calendar.MILLISECOND));
         return "[" + dateTime + "]";
     }
+
+    /**
+     * Default short wait time for the Office
+     */
+    public static final int DEFAULT_SHORT_WAIT_MS = 500;
 }
