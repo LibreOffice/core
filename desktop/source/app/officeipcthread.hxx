@@ -87,14 +87,8 @@ class OfficeIPCThread : public salhelper::Thread
     ::osl::Condition cReady;
 
     static ::osl::Mutex&        GetMutex();
-    static const char *sc_aTerminationSequence;
-    static const int sc_nTSeqLength;
     static const char *sc_aShowSequence;
     static const int sc_nShSeqLength;
-    static const char *sc_aConfirmationSequence;
-    static const int sc_nCSeqLength;
-    static const char *sc_aSendArgumentsSequence;
-    static const int sc_nCSASeqLength;
 
     OfficeIPCThread();
 
