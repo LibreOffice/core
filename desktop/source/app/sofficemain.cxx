@@ -55,7 +55,7 @@
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     /* Run test for OpenGL support in own process to avoid crash with broken
      * OpenGL drivers. Start process as early as possible.
      */

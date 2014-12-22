@@ -480,7 +480,7 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     return bEnable;
 }
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
 
 bool OpenGLHelper::GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI)
 {
