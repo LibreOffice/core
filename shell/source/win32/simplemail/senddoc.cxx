@@ -263,40 +263,35 @@ int main(int argc, char* argv[])
         // is installed as Exchange and Mail Client a Profile
         // selection dialog must appear because we specify no
         // profile name, so the user has to specify a profile
-        FLAGS flFlag = MAPI_NEW_SESSION | MAPI_LOGON_UI;
-        LHANDLE hSession;
-        ulRet = mapi.MAPILogon(0, NULL, NULL, flFlag, 0L, &hSession);
 
-        if (ulRet == SUCCESS_SUCCESS)
-        {
-            MapiRecipDesc mapiOriginator;
-            MapiRecipientList_t mapiRecipientList;
-            MapiAttachmentList_t mapiAttachmentList;
-            MapiMessage mapiMsg;
+        LHANDLE hSession = 0;
 
-            initMapiOriginator(&mapiOriginator);
-            initRecipientList(&mapiRecipientList);
-            initAttachmentList(&mapiAttachmentList);
-            initMapiMessage((gFrom.length() ? &mapiOriginator : NULL), mapiRecipientList, mapiAttachmentList, &mapiMsg);
+        MapiRecipDesc mapiOriginator;
+        MapiRecipientList_t mapiRecipientList;
+        MapiAttachmentList_t mapiAttachmentList;
+        MapiMessage mapiMsg;
 
-            ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);
+        initMapiOriginator(&mapiOriginator);
+        initRecipientList(&mapiRecipientList);
+        initAttachmentList(&mapiAttachmentList);
+        initMapiMessage((gFrom.length() ? &mapiOriginator : NULL), mapiRecipientList, mapiAttachmentList, &mapiMsg);
 
-            // There is no point in treating an aborted mail sending
-            // dialog as an error to be returned as our exit
-            // status. If the user decided to abort sending a document
-            // as mail, OK, that is not an error.
+        ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);
 
-            // Also, it seems that GroupWise makes MAPISendMail()
-            // return MAPI_E_USER_ABORT even if the mail sending
-            // dialog was not aborted by the user, and the mail was
-            // actually sent just fine. See bnc#660241 (visible to
-            // Novell people only, sorry).
+        // There is no point in treating an aborted mail sending
+        // dialog as an error to be returned as our exit
+        // status. If the user decided to abort sending a document
+        // as mail, OK, that is not an error.
 
-            if (ulRet == MAPI_E_USER_ABORT)
-                ulRet = SUCCESS_SUCCESS;
+        // Also, it seems that GroupWise makes MAPISendMail()
+        // return MAPI_E_USER_ABORT even if the mail sending
+        // dialog was not aborted by the user, and the mail was
+        // actually sent just fine. See bnc#660241 (visible to
+        // Novell people only, sorry).
 
-            mapi.MAPILogoff(hSession, 0, 0, 0);
-        }
+        if (ulRet == MAPI_E_USER_ABORT)
+            ulRet = SUCCESS_SUCCESS;
+
     }
     catch (const std::runtime_error&
     #if OSL_DEBUG_LEVEL > 0
