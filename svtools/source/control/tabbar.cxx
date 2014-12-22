@@ -35,13 +35,14 @@
 #include <svtools/svtools.hrc>
 #include <limits>
 
-
+namespace {
 #define TABBAR_DRAG_SCROLLOFF   5
 #define TABBAR_MINSIZE          5
 
 const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
+const sal_uInt16 INSERT_TAB_WIDTH = 32;
 
-
+} // anonymous namespace
 
 struct ImplTabBarItem
 {
@@ -1730,12 +1731,14 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
 {
     if (mbHasInsertTab && pItem)
     {
+        sal_Int32 aScaleFactor = GetDPIScaleFactor();
+        sal_Int32 nInsertTabWidth = aScaleFactor * INSERT_TAB_WIDTH;
         Rectangle aInsTabRect = pItem->maRect;
         if ( !mbMirrored )
             aInsTabRect.setX(aInsTabRect.getX() + aInsTabRect.getWidth());
         else
-            aInsTabRect.setX(aInsTabRect.getX());
-        aInsTabRect.setWidth(32);
+            aInsTabRect.setX(aInsTabRect.getX() - nInsertTabWidth);
+        aInsTabRect.setWidth(nInsertTabWidth);
         return aInsTabRect;
     }
     return Rectangle();
