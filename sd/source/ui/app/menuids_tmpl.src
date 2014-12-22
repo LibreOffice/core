@@ -921,7 +921,7 @@
         Identifier = SID_RULER ; \
         HelpId = CMD_SID_RULER ; \
         Checkable = TRUE ; \
-        Text [ en-US ] = "Display ~Ruler" ; \
+        Text [ en-US ] = "View ~Ruler" ; \
     };
 
 #define MN_GRID_VISIBLE\
