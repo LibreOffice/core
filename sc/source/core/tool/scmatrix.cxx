@@ -2505,7 +2505,7 @@ public:
 
     double operator()(double nVal) const
     {
-        return nVal - mnVal;
+        return mnVal - nVal;
     }
 
     double operator()(bool bVal) const
