@@ -38,7 +38,7 @@ using namespace com::sun::star;
 #define MAX_FRAMEBUFFER_COUNT 30
 
 // TODO use rtl::Static instead of 'static'
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
 static std::vector<GLXContext> g_vShareList;
 #elif defined(WNT)
 static std::vector<HGLRC> g_vShareList;
@@ -46,7 +46,7 @@ static std::vector<HGLRC> g_vShareList;
 
 GLWindow::~GLWindow()
 {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     XFree(vi);
 #endif
 }
@@ -69,7 +69,7 @@ OpenGLContext::OpenGLContext():
     mpNextContext(NULL)
 {
     SAL_INFO("vcl.opengl", "new context: " << this);
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     mbPixmap = false;
 #endif
 
@@ -450,7 +450,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 #endif
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
 
 namespace {
 
@@ -679,7 +679,7 @@ bool OpenGLContext::init(SystemChildWindow* pChildWindow)
     return ImplInit();
 }
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
 bool OpenGLContext::init(Display* dpy, Window win, int screen)
 {
     if(mbInitialized)
@@ -1125,7 +1125,7 @@ bool OpenGLContext::initWindow()
     return true;
 }
 
-#elif defined( IOS ) || defined( ANDROID )
+#elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
 
 bool OpenGLContext::initWindow()
 {
@@ -1245,7 +1245,7 @@ void OpenGLContext::reset()
     }
 #elif defined( MACOSX )
     OpenGLWrapper::resetCurrent();
-#elif defined( IOS ) || defined( ANDROID )
+#elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
     if(m_aGLWin.ctx)
@@ -1289,6 +1289,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     aWinData.nSize = sizeof(aWinData);
     aWinData.pVisual = NULL;
 
+#if !defined(LIBO_HEADLESS)
     const SystemEnvData* sysData(pParent->GetSystemData());
 
     Display *dpy = reinterpret_cast<Display*>(sysData->pDisplay);
@@ -1316,6 +1317,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
         SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
         aWinData.pVisual = (void*)(vi->visual);
     }
+#endif
 
     return aWinData;
 }
@@ -1329,7 +1331,7 @@ bool OpenGLContext::isCurrent()
             wglGetCurrentDC() == m_aGLWin.hDC);
 #elif defined( MACOSX )
     return false;
-#elif defined( IOS ) || defined( ANDROID )
+#elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     return false;
 #elif defined( UNX )
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
@@ -1367,7 +1369,7 @@ void OpenGLContext::makeCurrent()
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::makeCurrent(pView);
-#elif defined( IOS ) || defined( ANDROID )
+#elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
 #ifdef DBG_UTIL
@@ -1408,7 +1410,7 @@ void OpenGLContext::resetCurrent()
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
     OpenGLWrapper::resetCurrent();
-#elif defined( IOS ) || defined( ANDROID )
+#elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
     glXMakeCurrent(m_aGLWin.dpy, None, NULL);
@@ -1422,7 +1424,7 @@ void OpenGLContext::swapBuffers()
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::swapBuffers(pView);
-#elif defined( IOS ) || defined( ANDROID )
+#elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
     glXSwapBuffers(m_aGLWin.dpy, mbPixmap ? m_aGLWin.glPix : m_aGLWin.win);
@@ -1433,7 +1435,7 @@ void OpenGLContext::sync()
 {
 #if defined( WNT )
     // nothing
-#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
     glXWaitGL();

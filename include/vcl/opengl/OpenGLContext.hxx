@@ -17,6 +17,7 @@
 #if defined( MACOSX )
 #elif defined( IOS )
 #elif defined( ANDROID )
+#elif defined( LIBO_HEADLESS )
 #elif defined( UNX )
 #  include <prex.h>
 #  include "GL/glxew.h"
@@ -42,6 +43,7 @@ class NSOpenGLView;
 #endif
 #elif defined( IOS )
 #elif defined( ANDROID )
+#elif defined( LIBO_HEADLESS )
 #elif defined( UNX )
 #include <GL/glext.h>
 #define GLX_GLXEXT_PROTOTYPES 1
@@ -110,6 +112,7 @@ struct GLWindow
 #elif defined( MACOSX )
 #elif defined( IOS )
 #elif defined( ANDROID )
+#elif defined( LIBO_HEADLESS )
 #elif defined( UNX )
     Display*            dpy;
     int                 screen;
@@ -137,6 +140,7 @@ struct GLWindow
 #elif defined( MACOSX )
 #elif defined( IOS )
 #elif defined( ANDROID )
+#elif defined( LIBO_HEADLESS )
 #elif defined( UNX )
         dpy(NULL),
         screen(0),
@@ -176,7 +180,7 @@ public:
 
 // these methods are for the deep platform layer, don't use them in normal code
 // only in vcl's platform code
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     bool init(Display* dpy, Window win, int screen);
     bool init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen);
 #elif defined( _WIN32 )
@@ -237,7 +241,7 @@ private:
     SAL_DLLPRIVATE bool InitGLEW();
     SAL_DLLPRIVATE bool initWindow();
     SAL_DLLPRIVATE bool ImplInit();
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     SAL_DLLPRIVATE void initGLWindow(Visual* pVisual);
 #endif
 
@@ -255,7 +259,7 @@ private:
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
     bool mbRequestVirtualDevice;
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     bool mbPixmap; // is a pixmap instead of a window
 #endif
 

@@ -193,7 +193,7 @@ OUString ReplaceStringHookProc(const OUString& rStr);
 
 }
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS
 bool fire_glxtest_process();
 #endif
 

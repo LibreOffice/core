@@ -10210,6 +10210,7 @@ else
 fi
 AC_SUBST(ENABLE_VLC)
 
+# this is for opengl transitions in impress slideshow
 ENABLE_OPENGL=
 if test $_os = iOS -o $_os = Android; then
    : # disable
@@ -10226,7 +10227,9 @@ elif test $_os = WINNT; then
     SYSTEM_MESA_HEADERS=
     BUILD_TYPE="$BUILD_TYPE MESA"
 else
-    ENABLE_OPENGL=TRUE
+    if test "$with_x" != "no"; then
+        ENABLE_OPENGL=TRUE
+    fi
     ENABLE_OPENGL_CANVAS=TRUE
 
     dnl ===================================================================

@@ -61,6 +61,12 @@ $(eval $(call gb_Executable_use_system_win32_libs,gengal,\
 ))
 endif
 
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Executable_add_libs,gengal,\
+	-ldl \
+	-lpthread \
+))
+else
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_libs,gengal,\
 	-ldl \
@@ -73,6 +79,7 @@ $(eval $(call gb_Executable_add_libs,gengal,\
 $(eval $(call gb_Executable_use_static_libraries,gengal,\
 	glxtest \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
