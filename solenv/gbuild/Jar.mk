@@ -34,7 +34,7 @@ $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,$(1)))
 endef
 
 # location of manifest file in workdir
-define gb_Jar_get_manifest_target 
+define gb_Jar_get_manifest_target
 $(call gb_Jar_get_workdir,$(1))/META-INF/MANIFEST.MF
 endef
 
@@ -43,7 +43,7 @@ gb_Jar__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Jar_LAYER_D
 gb_Jar_get_install_target = $(call gb_Jar__get_dir_for_layer,$(call gb_Jar__get_layer,$(1)))/$(1).jar
 
 # creates classset and META-INF folders if they don't exist
-# adds manifest version, class path, solarversion and content from sources to manifest file 
+# adds manifest version, class path, solarversion and content from sources to manifest file
 # creates the target folder of the jar file if it doesn't exist
 # creates the jar file
 # jar program does not remove the target in case of error, so rm it manually
@@ -58,7 +58,7 @@ define gb_Jar__command
 	$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(call gb_Jar_get_workdir,$(1))/META-INF && \
 	echo Manifest-Version: 1.0 > $(call gb_Jar_get_manifest_target,$(1)) && \
-	$(if $(JARCLASSPATH),echo "Class-Path: $(strip $(JARCLASSPATH))" >> $(call gb_Jar_get_manifest_target,$(1)) &&) \
+	$(if $(JARCLASSPATH),$(SRCDIR)/solenv/bin/write_classpath.sh "$(call gb_Jar_get_manifest_target,$(1))" $(strip $(JARCLASSPATH)) &&) \
 	echo "Solar-Version: $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" >> $(call gb_Jar_get_manifest_target,$(1)) && \
 	$(if $(MANIFEST),cat $(MANIFEST) >> $(call gb_Jar_get_manifest_target,$(1)) &&) \
 	mkdir -p $(dir $(2)) && cd $(call gb_Jar_get_workdir,$(1)) && \
