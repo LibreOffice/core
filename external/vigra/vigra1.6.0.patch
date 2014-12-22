@@ -775,7 +775,7 @@ diff -uprN misc/vigra1.6.0/include/vigra/gaussians.hxx misc/build/vigra1.6.0/inc
 -VIGRA_DEFINE_MISSING_ABS(signed char)
 -VIGRA_DEFINE_MISSING_ABS(signed short)
 +#define VIGRA_DEFINE_SIGNED_ABS(T) \
-+    inline T abs(T t) { return (T)abs(t); }
++    inline T abs(T t) { return (T)std::abs(t); }
 +#define VIGRA_DEFINE_SIGNED_LABS(T) \
 +    inline T abs(T t) { return (T)labs(t); }
 +#define VIGRA_DEFINE_SIGNED_LLABS(T) \
