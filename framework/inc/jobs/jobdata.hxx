@@ -209,7 +209,7 @@ class JobData
 
         static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                                const OUString&                                                 sEvent ,
-                                                     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  );
+                                                     ::std::vector< JobData::TJob2DocEventBinding >& lJobs  );
 
     // private helper
 
