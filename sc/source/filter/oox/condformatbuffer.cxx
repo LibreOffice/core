@@ -419,8 +419,9 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
         their own sizes. */
 
     // first formula
-    OSL_ENSURE( (nFmla1Size >= 0) || ((nFmla2Size == 0) && (nFmla3Size == 0)), "CondFormatRule::importCfRule - missing first formula" );
-    OSL_ENSURE( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
+    // I am not bored enough to bother simplifying these expressions
+    SAL_WARN_IF( !( (nFmla1Size >= 0) || ((nFmla2Size == 0) && (nFmla3Size == 0)) ), "sc.filter", "CondFormatRule::importCfRule - missing first formula" );
+    SAL_WARN_IF( !( (nFmla1Size > 0) == (rStrm.getRemaining() >= 8) ), "sc.filter", "CondFormatRule::importCfRule - formula size mismatch" );
     if( rStrm.getRemaining() >= 8 )
     {
         CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
