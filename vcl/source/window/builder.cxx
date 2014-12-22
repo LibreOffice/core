@@ -1657,7 +1657,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     else if (name == "GtkWindow")
     {
         WinBits nBits = extractDeferredBits(rMap);
-        if (nBits | WB_DOCKABLE)
+        if (nBits & WB_DOCKABLE)
             pWindow = new DockingWindow(pParent, nBits|WB_MOVEABLE);
         else
             pWindow = new FloatingWindow(pParent, nBits|WB_MOVEABLE);
