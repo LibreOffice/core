@@ -278,6 +278,9 @@ public:
     /** Put a column vector of empties, starting at row nR, must fit into dimensions. */
     void PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
 
+    /** Put a column vector of empty results, starting at row nR, must fit into dimensions. */
+    void PutEmptyResultVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
+
     /** Put a column vector of empty paths, starting at row nR, must fit into dimensions. */
     void PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR );
 
@@ -321,6 +324,9 @@ public:
 
     /// @return <TRUE/> if empty or empty path.
     bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
+
+    /// @return <TRUE/> if empty, not empty result or empty path.
+    bool IsEmptyCell( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if empty path.
     bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
