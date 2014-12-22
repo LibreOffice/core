@@ -343,12 +343,12 @@ void SfxStateCache::SetState
 
 void SfxStateCache::SetVisibleState( bool bShow )
 {
-    SfxItemState        eState( SfxItemState::DEFAULT );
-    const SfxPoolItem*  pState( NULL );
-    bool            bDeleteItem( false );
-
     if ( bShow != bItemVisible )
     {
+        SfxItemState eState( SfxItemState::DEFAULT );
+        const SfxPoolItem*  pState( NULL );
+        bool bDeleteItem( false );
+
         bItemVisible = bShow;
         if ( bShow )
         {

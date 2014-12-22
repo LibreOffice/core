@@ -1636,8 +1636,8 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
     SmNodeArray aNodes( nSize );
 
     //Clone children
-    SmNode* pKid;
     for( sal_uInt16 i = 0; i < nSize; i++ ){
+        SmNode* pKid;
         if( NULL != ( pKid = pSource->GetSubNode( i ) ) )
             pKid->Accept( this );
         else

@@ -238,7 +238,6 @@ static void deleteSystrayMenu( HMENU hMenu )
         return;
 
     MENUITEMINFOW mi;
-    MYITEM *pMyItem;
     int pos=0;
     memset( &mi, 0, sizeof( mi ) );
     mi.cbSize = sizeof( mi );
@@ -246,7 +245,7 @@ static void deleteSystrayMenu( HMENU hMenu )
 
     while( GetMenuItemInfoW( hMenu, pos++, true, &mi ) )
     {
-        pMyItem = (MYITEM*) mi.dwItemData;
+        MYITEM *pMyItem = (MYITEM*) mi.dwItemData;
         if( pMyItem )
         {
             (pMyItem->text).clear();

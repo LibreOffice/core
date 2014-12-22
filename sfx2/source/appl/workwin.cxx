@@ -1017,11 +1017,10 @@ void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
 SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const vcl::Window& rWindow ) const
 {
 
-    SfxChild_Impl *pChild = 0;
     sal_uInt16 nCount = aChildren.size();
     for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
     {
-        pChild = aChildren[nPos];
+        SfxChild_Impl *pChild = aChildren[nPos];
         if ( pChild && pChild->pWin == &rWindow )
             return pChild;
     }
@@ -1759,11 +1758,10 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         // windows may have been registered and released without an update until now
         Sort_Impl();
 
-    SfxChild_Impl *pChild = 0;
     sal_uInt16 n;
     for ( n=0; n<aSortedList.size(); ++n )
     {
-        pChild = aChildren[aSortedList[n]];
+        SfxChild_Impl *pChild = aChildren[aSortedList[n]];
         if ( pChild )
             if ( pChild->pWin == pWin )
             break;

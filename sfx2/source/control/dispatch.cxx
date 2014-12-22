@@ -887,13 +887,12 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
         }
     }
 
-    const SfxSlot *pSlot=NULL;
     sal_uInt16 nFirstShell = 0;
     for ( sal_uInt16 i = nFirstShell; i < nTotCount; ++i )
     {
         SfxShell *pObjShell = GetShell(i);
         SfxInterface *pIFace = pObjShell->GetInterface();
-        pSlot = pIFace->GetSlot( rCommand );
+        const SfxSlot *pSlot = pIFace->GetSlot( rCommand );
         if ( pSlot )
             return pSlot;
     }
@@ -1262,7 +1261,6 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     SfxGetpApp();
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame().GetWorkWindow_Impl();
     bool bIsActive = false;
-    bool bIsTaskActive = false;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();
     SfxDispatcher *pDispat = this;
     while ( pActDispat && !bIsActive )
@@ -1401,6 +1399,8 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
     if ( pTaskWin && ( bIsMDIApp || bIsIPOwner ) )
     {
+        bool bIsTaskActive = false;
+
         SfxDispatcher *pActDispatcher = pTaskWin->GetBindings().GetDispatcher_Impl();
         SfxDispatcher *pDispatcher = this;
         while ( pActDispatcher && !bIsTaskActive )
