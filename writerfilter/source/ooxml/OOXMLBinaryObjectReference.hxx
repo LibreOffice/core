@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLBINARYOBJECTREFERENCE_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLBINARYOBJECTREFERENCE_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 
 namespace writerfilter {

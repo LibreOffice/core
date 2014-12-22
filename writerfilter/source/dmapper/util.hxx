@@ -22,7 +22,7 @@
 
 #include <com/sun/star/text/XTextRange.hpp>
 #include <string>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 namespace writerfilter
 {

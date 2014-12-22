@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 #include <vector>
 #include <boost/shared_ptr.hpp>

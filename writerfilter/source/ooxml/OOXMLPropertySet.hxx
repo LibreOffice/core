@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLPROPERTYSET_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 namespace writerfilter {
 namespace ooxml

@@ -11,7 +11,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCETABLE_HXX
 
 #include <map>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 namespace writerfilter
 {

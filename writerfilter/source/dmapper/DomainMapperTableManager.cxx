@@ -18,7 +18,6 @@
  */
 #include <boost/optional.hpp>
 #include <DomainMapperTableManager.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
 #include <BorderHandler.hxx>
 #include <CellColorHandler.hxx>
 #include <CellMarginHandler.hxx>

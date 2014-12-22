@@ -9,7 +9,7 @@
 #ifndef INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
 #define INCLUDED_WRITERFILTER_INC_RTFTOK_RTFDOCUMENT_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

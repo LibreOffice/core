@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <libxml/xmlwriter.h>

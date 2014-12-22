@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLParserState.hxx"
 

@@ -22,7 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 #include <oox/token/tokens.hxx>
 

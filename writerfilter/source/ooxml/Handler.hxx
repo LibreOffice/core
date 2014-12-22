@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include "OOXMLFastContextHandler.hxx"
 
 namespace writerfilter {

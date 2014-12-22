@@ -29,7 +29,7 @@ class ContentHandler(xml.sax.handler.ContentHandler):
 #ifndef INCLUDED_OOXML_RESOURCEIDS_HXX
 #define INCLUDED_OOXML_RESOURCEIDS_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 namespace writerfilter {
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LOGGEDRESOURCES_HXX
 
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include "TagLogger.hxx"
 
 

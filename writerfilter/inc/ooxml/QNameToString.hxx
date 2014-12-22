@@ -23,7 +23,7 @@
 #include <map>
 #include <string>
 #include <iostream>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace writerfilter

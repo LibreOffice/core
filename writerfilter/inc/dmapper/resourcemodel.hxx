@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX
-#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX
+#ifndef INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
+#define INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
 
 #include <string>
 #include <memory>
@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
 /**
-   @file WW8ResourceModel.hxx
+   @file resourcemodel.hxx
 
    The classes in this file define the interfaces for the resource
    model of the DocTokenizer:
@@ -409,6 +409,6 @@ typedef sal_Int32 Token_t;
 
 }
 
-#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_WW8RESOURCEMODEL_HXX
+#endif // INCLUDED_WRITERFILTER_INC_DMAPPER_RESOURCEMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include "PropertyMap.hxx"
 
 #include <TableManager.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <dmapper/resourcemodel.hxx>
 
 #include <boost/shared_ptr.hpp>
 
