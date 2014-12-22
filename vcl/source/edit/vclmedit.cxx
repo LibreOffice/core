@@ -748,7 +748,6 @@ void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
     mbInMBDown = true;  // so that GetFocus does not select everything
     mpExtTextView->MouseButtonDown( rMEvt );
-    Window::MouseButtonDown( rMEvt );
     GrabFocus();
     mbInMBDown = false;
 }
@@ -756,7 +755,6 @@ void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void TextWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     mpExtTextView->MouseButtonUp( rMEvt );
-    Window::MouseButtonUp( rMEvt );
 }
 
 void TextWindow::KeyInput( const KeyEvent& rKEvent )
