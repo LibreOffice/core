@@ -460,7 +460,13 @@ void FixedText::set_mnemonic_widget(vcl::Window *pWindow)
 
 FixedText::~FixedText()
 {
+    dispose();
+}
+
+void FixedText::dispose()
+{
     set_mnemonic_widget(NULL);
+    Control::dispose();
 }
 
 SelectableFixedText::SelectableFixedText(vcl::Window* pParent, WinBits nStyle)

@@ -62,6 +62,7 @@ public:
     explicit        FixedText( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        FixedText( vcl::Window* pParent, const ResId& rResId );
     virtual         ~FixedText();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;

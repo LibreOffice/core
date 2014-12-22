@@ -742,6 +742,7 @@ public:
     void set_primary_text(const OUString &rPrimaryString);
     void set_secondary_text(const OUString &rSecondaryString);
     virtual ~MessageDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);

@@ -551,6 +551,8 @@ void Window::dispose()
             vcl::Window* pSysWin = pSVData->maWinData.mpFirstFrame;
             while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame != this )
                 pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
+
+            assert (mpWindowImpl->mpFrameData->mpNextFrame != pSysWin);
             pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         }
         mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
@@ -565,7 +567,7 @@ void Window::dispose()
 Window::~Window()
 {
     vcl::LazyDeletor<vcl::Window>::Undelete( this );
-
+    dispose ();
     DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
 }
 
@@ -990,6 +992,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpOverlapWindow = this;
 
         // set frame data
+        assert (pSVData->maWinData.mpFirstFrame != this);
         mpWindowImpl->mpFrameData->mpNextFrame        = pSVData->maWinData.mpFirstFrame;
         pSVData->maWinData.mpFirstFrame = this;
         mpWindowImpl->mpFrameData->mpFirstOverlap     = NULL;

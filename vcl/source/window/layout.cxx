@@ -1992,16 +1992,36 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUS
 {
 }
 
-MessageDialog::~MessageDialog()
+void MessageDialog::dispose()
 {
     for (size_t i = 0; i < m_aOwnedButtons.size(); ++i)
         delete m_aOwnedButtons[i];
+    m_aOwnedButtons.clear();
+
     delete m_pSecondaryMessage;
+    m_pSecondaryMessage = NULL;
+
     delete m_pPrimaryMessage;
+    m_pSecondaryMessage = NULL;
+
     delete m_pImage;
+    m_pImage = NULL;
+
     delete m_pGrid;
+    m_pGrid = NULL;
+
     delete m_pOwnedActionArea;
+    m_pOwnedActionArea = NULL;
+
     delete m_pOwnedContentArea;
+    m_pOwnedContentArea = NULL;
+
+    Dialog::dispose();
+}
+
+MessageDialog::~MessageDialog()
+{
+    dispose();
 }
 
 void MessageDialog::response(short nResponseId)
