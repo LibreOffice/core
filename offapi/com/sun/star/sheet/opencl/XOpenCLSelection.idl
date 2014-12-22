@@ -43,18 +43,29 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
     void disableAutomaticDeviceSelection();
 
     /**
-     * Set the OpenCL device with the platform ID and device ID
-     * Uses the ID of the platform and the device
+     * Select the OpenCL device with the given platform and device
+     * number. The platform number corresponds to an index into the
+     * sequence returned by getOpenCLPlatforms, and the device number
+     * corresponds to an index into the sequence of devices in that
+     * platform.
      */
     void selectOpenCLDevice( [in] long platform, [in] long device );
 
     /**
-     * returns the platform id of the currently selected device
+     * returns the index of the platform of the currently selected
+     * device. This is an index into the sequence that
+     * getOpenCLPlatforms returns in the current instance of
+     * LibreOffice (and not some a priori defined identifier for an
+     * OpenCL platform).
      */
     long getPlatformID();
 
     /**
-     * returns the device id of the currently selected device
+     * returns the index of the currently selected device. This is an
+     * index into the sequence of devices in the OpenCLPLatform object
+     * the device is part of in the current instance of LibreOffice
+     * (and not some a priori defined identifier for a specific model
+     * of device accessed through a specific platform).
      */
     long getDeviceID();
 
