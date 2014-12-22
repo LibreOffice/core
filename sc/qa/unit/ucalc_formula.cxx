@@ -4847,4 +4847,27 @@ void Test::testExternalRefFunctions()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMatrixOp()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    for (SCROW nRow = 0; nRow < 4; ++nRow)
+    {
+        m_pDoc->SetValue(0, nRow, 0, nRow);
+    }
+    m_pDoc->SetValue(1, 0, 0, 2.0);
+    m_pDoc->SetValue(3, 0, 0, 1.0);
+    m_pDoc->SetValue(3, 1, 0, 2.0);
+    m_pDoc->SetString(2, 0, 0, "=SUMPRODUCT((A1:A4)*B1+D1)");
+    m_pDoc->SetString(2, 1, 0, "=SUMPRODUCT((A1:A4)*B1-D2)");
+
+    double nVal = m_pDoc->GetValue(2, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(16.0, nVal);
+
+    nVal = m_pDoc->GetValue(2, 1, 0);
+    CPPUNIT_ASSERT_EQUAL(4.0, nVal);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
