@@ -5282,21 +5282,6 @@ bool ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     return true;
 }
 
-namespace {
-
-void RemoveCondFormatAttributes(ScDocument* pDoc, const ScConditionalFormat* pFormat, SCTAB nTab)
-{
-    const ScRangeList& rRangeList = pFormat->GetRange();
-    pDoc->RemoveCondFormatData( rRangeList, nTab, pFormat->GetKey() );
-}
-
-void SetConditionalFormatAttributes(ScDocument* pDoc, const ScRangeList& rRanges, sal_uLong nIndex, SCTAB nTab)
-{
-    pDoc->AddCondFormatData( rRanges, nTab, nIndex );
-}
-
-}
-
 void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )
 {
     ScDocShellModificator aModificator(rDocShell);
@@ -5336,7 +5321,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
         if(pOldFormat)
         {
             pRepaintRange.reset(new ScRange( pOldFormat->GetRange().Combine() ));
-            RemoveCondFormatAttributes(&rDoc, pOldFormat, nTab);
+            rDoc.RemoveCondFormatData(pOldFormat->GetRange(), nTab, pOldFormat->GetKey());
         }
 
         rDoc.DeleteConditionalFormat(nOldFormat, nTab);
@@ -5351,7 +5336,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 
         sal_uLong nIndex = rDoc.AddCondFormat(pFormat, nTab);
 
-        SetConditionalFormatAttributes(&rDoc, rRanges, nIndex, nTab);
+        rDoc.AddCondFormatData(rRanges, nTab, nIndex);
         rDoc.SetStreamValid(nTab, false);
     }
 
@@ -5384,15 +5369,13 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     ScConditionalFormatList* pOldList = rDoc.GetCondFormList(nTab);
     for(ScConditionalFormatList::const_iterator itr = pOldList->begin(), itrEnd = pOldList->end(); itr != itrEnd; ++itr)
     {
-        RemoveCondFormatAttributes(&rDoc, &(*itr), nTab);
+        rDoc.RemoveCondFormatData(itr->GetRange(), nTab, itr->GetKey());
     }
 
     // then set new entries
     for(ScConditionalFormatList::iterator itr = pList->begin(); itr != pList->end(); ++itr)
     {
-        sal_uLong nIndex = itr->GetKey();
-        const ScRangeList& rRange = itr->GetRange();
-        SetConditionalFormatAttributes(&rDoc, rRange, nIndex, nTab);
+        rDoc.AddCondFormatData(itr->GetRange(), nTab, itr->GetKey());
     }
 
     rDoc.SetCondFormList(pList, nTab);
