@@ -49,7 +49,6 @@
 
 #include <svx/fontworkgallery.hxx>
 #include "coreservices.hxx"
-#include "fontworkgallery.hrc"
 
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
@@ -299,7 +298,6 @@ public:
     FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
 
     virtual void statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException ) SAL_OVERRIDE;
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 private:
     svt::ToolboxController& mrController;
@@ -317,33 +315,29 @@ private:
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
 
-FontworkAlignmentWindow::FontworkAlignmentWindow( svt::ToolboxController& rController, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow )
-: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_FONTWORK_ALIGNMENT ))
-, mrController( rController )
-, maImgAlgin1( SVX_RES( IMG_FONTWORK_ALIGN_LEFT_16    ) )
-, maImgAlgin2( SVX_RES( IMG_FONTWORK_ALIGN_CENTER_16  ) )
-, maImgAlgin3( SVX_RES( IMG_FONTWORK_ALIGN_RIGHT_16   ) )
-, maImgAlgin4( SVX_RES( IMG_FONTWORK_ALIGN_WORD_16    ) )
-, maImgAlgin5( SVX_RES( IMG_FONTWORK_ALIGN_STRETCH_16 ) )
-, msFontworkAlignment( ".uno:FontworkAlignment" )
+FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rController,
+    const Reference< XFrame >& rFrame, vcl::Window* pParentWindow)
+    : ToolbarMenu(rFrame, pParentWindow, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
+    , mrController(rController)
+    , maImgAlgin1(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_LEFT))
+    , maImgAlgin2(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_CENTER))
+    , maImgAlgin3(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_RIGHT))
+    , maImgAlgin4(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_WORD))
+    , maImgAlgin5(SVX_RES(RID_SVXIMG_FONTWORK_ALIGN_STRETCH))
+    , msFontworkAlignment(".uno:FontworkAlignment")
 {
-    SetHelpId( HID_POPUP_FONTWORK_ALIGN );
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
 
-    appendEntry( 0, SVX_RESSTR( STR_ALIGN_LEFT    ), maImgAlgin1 );
-    appendEntry( 1, SVX_RESSTR( STR_ALIGN_CENTER  ), maImgAlgin2 );
-    appendEntry( 2, SVX_RESSTR( STR_ALIGN_RIGHT   ), maImgAlgin3 );
-    appendEntry( 3, SVX_RESSTR( STR_ALIGN_WORD    ), maImgAlgin4 );
-    appendEntry( 4, SVX_RESSTR( STR_ALIGN_STRETCH ), maImgAlgin5 );
+    appendEntry(0, SVX_RESSTR(RID_SVXSTR_ALIGN_LEFT), maImgAlgin1);
+    appendEntry(1, SVX_RESSTR(RID_SVXSTR_ALIGN_CENTER), maImgAlgin2);
+    appendEntry(2, SVX_RESSTR(RID_SVXSTR_ALIGN_RIGHT), maImgAlgin3);
+    appendEntry(3, SVX_RESSTR(RID_SVXSTR_ALIGN_WORD), maImgAlgin4);
+    appendEntry(4, SVX_RESSTR(RID_SVXSTR_ALIGN_STRETCH), maImgAlgin5);
 
     SetOutputSizePixel( getMenuSize() );
 
-    FreeResource();
-
     AddStatusListener( msFontworkAlignment );
 }
-
-
 
 void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 {
@@ -354,8 +348,6 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
         enableEntry( i, bEnabled );
     }
 }
-
-
 
 void FontworkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Event ) throw ( RuntimeException )
 {
@@ -373,24 +365,6 @@ void FontworkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Eve
         }
     }
 }
-
-
-
-void FontworkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    ToolbarMenu::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-    {
-        appendEntry( 0, SVX_RESSTR( STR_ALIGN_LEFT    ), maImgAlgin1 );
-        appendEntry( 1, SVX_RESSTR( STR_ALIGN_CENTER  ), maImgAlgin2 );
-        appendEntry( 2, SVX_RESSTR( STR_ALIGN_RIGHT   ), maImgAlgin3 );
-        appendEntry( 3, SVX_RESSTR( STR_ALIGN_WORD    ), maImgAlgin4 );
-        appendEntry( 4, SVX_RESSTR( STR_ALIGN_STRETCH ), maImgAlgin5 );
-    }
-}
-
-
 
 IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl)
 {

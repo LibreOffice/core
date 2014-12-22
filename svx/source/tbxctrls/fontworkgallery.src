@@ -19,95 +19,62 @@
 
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
-#include "fontworkgallery.hrc"
-#include "svtools/controldims.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
-DockingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
+String RID_SVXSTR_ALIGN_LEFT
 {
-    HelpID = "svx:DockingWindow:RID_SVXFLOAT_FONTWORK_ALIGNMENT";
-    Border = FALSE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = FALSE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
+    Text [ en-US ] = "~Left Align";
+};
 
-    Text [ en-US ] = "Fontwork Alignment" ;
+String RID_SVXSTR_ALIGN_CENTER
+{
+    Text [ en-US ] = "~Center";
+};
 
-    String STR_ALIGN_LEFT
-    {
-        Text [ en-US ] = "~Left Align";
-    };
-    String STR_ALIGN_CENTER
-    {
-        Text [ en-US ] = "~Center";
-    };
-    String STR_ALIGN_RIGHT
-    {
-        Text [ en-US ] = "~Right Align";
-    };
-    String STR_ALIGN_WORD
-    {
-        Text [ en-US ] = "~Word Justify";
-    };
-    String STR_ALIGN_STRETCH
-    {
-        Text [ en-US ] = "S~tretch Justify";
-    };
+String RID_SVXSTR_ALIGN_RIGHT
+{
+    Text [ en-US ] = "~Right Align";
+};
 
-    Image IMG_FONTWORK_ALIGN_LEFT_16
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignleft_16.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_LEFT_26
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignleft_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_CENTER_16
-    {
-        ImageBitmap = Bitmap { File = "fontworkaligncentered_16.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_CENTER_26
-    {
-        ImageBitmap = Bitmap { File = "fontworkaligncentered_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_RIGHT_16
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignright_16.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_RIGHT_26
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignright_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_WORD_16
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignjustified_16.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_WORD_26
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignjustified_26.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_STRETCH_16
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignstretch_16.png"; };
-        MASKCOLOR
-    };
-    Image IMG_FONTWORK_ALIGN_STRETCH_26
-    {
-        ImageBitmap = Bitmap { File = "fontworkalignstretch_26.png"; };
-        MASKCOLOR
-    };
+String RID_SVXSTR_ALIGN_WORD
+{
+    Text [ en-US ] = "~Word Justify";
+};
+
+String RID_SVXSTR_ALIGN_STRETCH
+{
+    Text [ en-US ] = "S~tretch Justify";
+};
+
+Image RID_SVXIMG_FONTWORK_ALIGN_LEFT
+{
+    ImageBitmap = Bitmap { File = "fontworkalignleft_16.png"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_FONTWORK_ALIGN_CENTER
+{
+    ImageBitmap = Bitmap { File = "fontworkaligncentered_16.png"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_FONTWORK_ALIGN_RIGHT
+{
+    ImageBitmap = Bitmap { File = "fontworkalignright_16.png"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_FONTWORK_ALIGN_WORD
+{
+    ImageBitmap = Bitmap { File = "fontworkalignjustified_16.png"; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_FONTWORK_ALIGN_STRETCH
+{
+    ImageBitmap = Bitmap { File = "fontworkalignstretch_16.png"; };
+    MASKCOLOR
 };
 
 String RID_SVXSTR_CHARS_SPACING_VERY_TIGHT

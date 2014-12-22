@@ -83,7 +83,6 @@
 #define HID_MNU_ZOOM_WHOLE_PAGE                               "SVX_HID_MNU_ZOOM_WHOLE_PAGE"
 #define HID_POPUP_COLOR                                       "SVX_HID_POPUP_COLOR"
 #define HID_POPUP_COLOR_CTRL                                  "SVX_HID_POPUP_COLOR_CTRL"
-#define HID_POPUP_FONTWORK_ALIGN                              "SVX_HID_POPUP_FONTWORK_ALIGN"
 #define HID_POPUP_FRAME                                       "SVX_HID_POPUP_FRAME"
 #define HID_POPUP_LINE                                        "SVX_HID_POPUP_LINE"
 #define HID_POPUP_LINEEND                                     "SVX_HID_POPUP_LINEEND"
