@@ -1353,6 +1353,16 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
+void SwFmtVertOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtVertOrient"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nYPos"), BAD_CAST(OString::number(m_nYPos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eRelation"), BAD_CAST(OString::number(m_eRelation).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 // Partially implemented inline in hxx
 SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, bool bPos )

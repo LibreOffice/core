@@ -429,6 +429,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_FRM_SIZE:
                 static_cast<const SwFmtFrmSize*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_VERT_ORIENT:
+                static_cast<const SwFmtVertOrient*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -443,13 +446,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_VERT_ORIENT:
-            {
-                pWhich = "frame vertical orientation";
-                const SwFmtVertOrient* pOrient = static_cast<const SwFmtVertOrient*>(pItem);
-                oValue = "orient: " + OString::number(pOrient->GetVertOrient()) + ", relation: " + OString::number(pOrient->GetRelationOrient()) + ", position: " + OString::number(pOrient->GetPos());
-                break;
-            }
             case RES_HORI_ORIENT:
             {
                 pWhich = "frame horizontal orientation";

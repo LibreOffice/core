@@ -62,6 +62,8 @@ public:
 
     SwTwips GetPos() const { return m_nYPos; }
     void    SetPos( SwTwips nNew ) { m_nYPos = nNew; }
+
+     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
