@@ -18,7 +18,7 @@
 package helper;
 
 import java.io.File;
-import java.util.Properties;
+import java.util.HashMap;
 
 import lib.TestParameters;
 import util.PropertyName;
@@ -36,11 +36,9 @@ public class ClParser
 
     public void getCommandLineParameter(TestParameters param, String[] args)
     {
-        Properties mapping = getMapping();
-
         for (int i = 0; i < args.length;)
         {
-            String pName = getParameterFor(mapping, args[i]).trim();
+            String pName = getParameterFor(args[i]).trim();
             String pValue = "";
             if (pName.equals("TestJob"))
             {
@@ -145,33 +143,30 @@ public class ClParser
         return iniFile;
     }
 
-    /*
-     * This method maps commandline Parameters to TestParameters
+    /**
+     * Map command-line Parameters to TestParameters
      */
-    private Properties getMapping()
-    {
-        Properties map = new Properties();
-        map.setProperty("-cs", "ConnectionString");
-        map.setProperty("-tb", "TestBase");
-        map.setProperty("-tdoc", "TestDocumentPath");
-        map.setProperty("-objdsc", "DescriptionPath");
-        map.setProperty("-cmd", "AppExecutionCommand");
-        map.setProperty("-o", "TestJob");
-        map.setProperty("-sce", "TestJob");
-        map.setProperty("-p", "TestJob");
-        map.setProperty("-aca", "AdditionalConnectionArguments");
-        map.setProperty("-xcl", "ExclusionList");
-        map.setProperty("-debug", "DebugIsActive");
-        map.setProperty("-log", "LoggingIsActive");
-        map.setProperty("-dbout", "DataBaseOut");
-        map.setProperty("-nca", "NoCwsAttach");
-
-        return map;
+    private static final java.util.Map<String,String> COMMAND_LINE_OPTION_TO_TEST_PARAMETER = new HashMap<String,String>();
+    static {
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-cs", "ConnectionString");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-tb", "TestBase");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-tdoc", "TestDocumentPath");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-objdsc", "DescriptionPath");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-cmd", "AppExecutionCommand");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-o", "TestJob");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-sce", "TestJob");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-p", "TestJob");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-aca", "AdditionalConnectionArguments");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-xcl", "ExclusionList");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-debug", "DebugIsActive");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-log", "LoggingIsActive");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-dbout", "DataBaseOut");
+        COMMAND_LINE_OPTION_TO_TEST_PARAMETER.put("-nca", "NoCwsAttach");
     }
 
-    private String getParameterFor(Properties map, String name)
+    private String getParameterFor(String name)
     {
-        String ret = map.getProperty(name);
+        String ret = COMMAND_LINE_OPTION_TO_TEST_PARAMETER.get(name);
 
         if (ret == null)
         {
