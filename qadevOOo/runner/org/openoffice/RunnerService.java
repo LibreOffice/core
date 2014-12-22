@@ -18,7 +18,6 @@
 
 package org.openoffice;
 
-import helper.CfgParser;
 import helper.ClParser;
 
 import java.util.ArrayList;
@@ -75,25 +74,6 @@ public class RunnerService implements XJob, XServiceInfo,
         String standardOutProducer = (String) param.get(PropertyName.OUT_PRODUCER);
 
         ClParser cli = new ClParser();
-
-        //parse the arguments if an ini-parameter is given
-        String iniFile = cli.getIniPath(arguments);
-
-        //initialize cfgParser with ini-path
-        CfgParser ini = new CfgParser(iniFile);
-
-        //parse ConfigFile
-        ini.getIniParameters(param);
-
-
-        //parse the commandline arguments if an runnerprops-parameter is given
-        String runnerIniFile = cli.getRunnerIniPath(arguments);
-
-        //initialize cfgParser with ini-path
-        CfgParser runnerIni = new CfgParser(runnerIniFile);
-
-        //parse ConfigFile
-        runnerIni.getIniParameters(param);
 
         //parse the commandline arguments
         cli.getCommandLineParameter(param,arguments);

@@ -17,7 +17,6 @@
  */
 package org.openoffice;
 
-import helper.CfgParser;
 import helper.ClParser;
 
 import java.util.Enumeration;
@@ -149,25 +148,6 @@ public class Runner
         TestParameters param = new TestParameters();
 
         ClParser cli = new ClParser();
-
-        //parse the commandline arguments if an ini-parameter is given
-        String iniFile = cli.getIniPath(args);
-
-        //initialize cfgParser with ini-path
-        CfgParser ini = new CfgParser(iniFile);
-
-        //parse ConfigFile
-        ini.getIniParameters(param);
-
-
-        //parse the commandline arguments if an runnerprops-parameter is given
-        String runnerIniFile = cli.getRunnerIniPath(args);
-
-        //initialize cfgParser with ini-path
-        CfgParser runnerIni = new CfgParser(runnerIniFile);
-
-        //parse ConfigFile
-        runnerIni.getIniParameters(param);
 
         //parse the commandline arguments
         // TODO: no right error message, if no parameter given!
