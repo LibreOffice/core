@@ -19,14 +19,4 @@
 # the path to the test documents
 TestDocumentPath=../../testdocuments
 
-# the allowed memory increase per exported document: if the memory increase is higher than this number, the test will fail
-AllowMemoryIncrease=20
 
-# the amount of exported documents: each loaded document will be written 'ExportDocCount' times
-ExportDocCount=25
-
-# the import and export filters, separated by comma; further relations can be added with increasing numbers, like
-#'FileExportFilter4=sxd,draw_pdf_Export'
-FileExportFilter1=sxw,writer_pdf_Export
-FileExportFilter2=sxc,calc_pdf_Export
-FileExportFilter3=sxi,impress_pdf_Export

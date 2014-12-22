@@ -25,8 +25,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import lib.TestParameters;
@@ -39,6 +37,8 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 
 import util.DesktopTools;
+import util.OSName;
+import util.PropertyName;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
@@ -57,13 +57,6 @@ import com.sun.star.util.XCloseable;
  * Needed parameters:
  * <ul>
  *   <li>"TestDocumentPath" - the path where test documents are located.</li>
- *   <li>"AllowMemoryIncrease" (optional) - the allowed memory increase measured in kByte per exported document. The default is 10 kByte.</li>
- *   <li>"ExportDocCount" (optional) - the amount of exports for each document that is loaded. Is defaulted to 25.
- *   <li>"FileExportFilter" (optional) - a relation between loaded document type and used export filter. Is defaulted to
- *       writer, calc and impress. This parameter can be set with a number to give more than one relation. Example:<br>
- *       "FileExportFilter1=sxw,writer_pdf_Export"<br>
- *       "FileExportFilter2=sxc,calc_pdf_Export"<br>
- *       "FileExportFilter3=sxi,impress_pdf_Export"<br></li>
  *       All parameters are used for iteration over the test document path.
  * </ul>
  */
@@ -92,12 +85,11 @@ class TempDir
 public class CheckMemoryUsage
 {
 
-    private static final String sWriterDoc = "sxw,writer_pdf_Export";
-    private static final String sCalcDoc = "sxc,calc_pdf_Export";
-    private static final String sImpressDoc = "sxi,impress_pdf_Export";
     TempDir m_aTempDir;
     private String[][] sDocTypeExportFilter;
     private String[][] sDocuments;
+    // the allowed memory increase measured in kByte per exported document. The default is 10 kByte.
+    // the allowed memory increase per exported document: if the memory increase is higher than this number, the test will fail
     private static final int iAllowMemoryIncrease = 10;
     private int iExportDocCount = 25;
 
@@ -112,10 +104,10 @@ public class CheckMemoryUsage
 
         // some Tests need the qadevOOo TestParameters, it is like a Hashmap for Properties.
         TestParameters param = new TestParameters();
-        param.put("ServiceFactory", xMsf); // some qadevOOo functions need the ServiceFactory
+        param.put(PropertyName.SERVICE_FACTORY, xMsf); // some qadevOOo functions need the ServiceFactory
 
         // test does definitely not run on Windows.
-        if (param.get("OperatingSystem").equals("wntmsci"))
+        if (param.get(PropertyName.OPERATING_SYSTEM).equals(OSName.WNTMSCI))
         {
             System.out.println("Test can only reasonably be executed with a tool that "
                     + "displays the memory usage of StarOffice.");
@@ -127,45 +119,22 @@ public class CheckMemoryUsage
 
 
         // how many times is every document exported.
-        int count = param.getInt("ExportDocCount");
-        if (count != 0)
-        {
-            iExportDocCount = count;
-        }
+        // the amount of exported documents: each loaded document will be written 'ExportDocCount' times
+        iExportDocCount = 25;
 
         // get the temp dir for creating the command scripts.
         m_aTempDir = new TempDir(util.utils.getOfficeTemp/*Dir*/(xMsf));
 
         // get the file extension, export filter connection
-        Iterator<String> keys = param.keySet().iterator();
-        ArrayList<String> v = new ArrayList<String>();
-        while (keys.hasNext())
-        {
-            String key = keys.next();
-            if (key.startsWith("FileExportFilter"))
-            {
-                v.add((String) param.get(key));
-            }
-        }
-        // if no param given, set defaults.
-        if (v.isEmpty())
-        {
-            v.add(sWriterDoc);
-            v.add(sCalcDoc);
-            v.add(sImpressDoc);
-        }
+        // the import and export filters
         // store a file extension
-        sDocTypeExportFilter = new String[v.size()][2];
-        for (int i = 0; i < v.size(); i++)
-        {
-            // 2do: error routine for wrong given params
-            final String sVContent = v.get(i);
-            StringTokenizer t = new StringTokenizer(sVContent, ",");
-            final String sExt = t.nextToken();
-            final String sName = t.nextToken();
-            sDocTypeExportFilter[i][0] = sExt;
-            sDocTypeExportFilter[i][1] = sName;
-        }
+        sDocTypeExportFilter = new String[3][2];
+        sDocTypeExportFilter[0][0] = "sxw";
+        sDocTypeExportFilter[0][1] = "writer_pdf_Export";
+        sDocTypeExportFilter[1][0] = "sxc";
+        sDocTypeExportFilter[1][1] = "calc_pdf_Export";
+        sDocTypeExportFilter[2][0] = "sxi";
+        sDocTypeExportFilter[2][1] = "impress_pdf_Export";
 
         // get files to load and export
         String sDocumentPath = TestDocument.getUrl();
