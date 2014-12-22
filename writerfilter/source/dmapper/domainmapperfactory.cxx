@@ -24,7 +24,7 @@ Stream::Pointer_t DomainMapperFactory::createMapper(css::uno::Reference<css::uno
         utl::MediaDescriptor& rMediaDesc)
 {
 #ifdef DEBUG_WRITERFILTER
-    OUString sURL = rMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
+    OUString sURL = rMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
     ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
     writerfilter::TagLogger::Pointer_t dmapper_logger(writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
