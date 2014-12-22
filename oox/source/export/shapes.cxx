@@ -1109,6 +1109,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                             mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
                                               XML_name, "Document",
                                               FSNS(XML_r, XML_id), USS( sRelId ),
+                                              XML_spid, OString::number(GetShapeID(xShape)),
                                               FSEND );
                         }
 
