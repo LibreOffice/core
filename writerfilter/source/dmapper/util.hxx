@@ -22,12 +22,14 @@
 
 #include <com/sun/star/text/XTextRange.hpp>
 #include <string>
+#include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace writerfilter
 {
 namespace dmapper
 {
     std::string XTextRangeToString(css::uno::Reference< css::text::XTextRange > textRange);
+    void resolveSprmProps(Properties & rHandler, Sprm & rSprm);
 }
 }
 

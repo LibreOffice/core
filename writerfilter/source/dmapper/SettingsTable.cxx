@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
-#include <resourcemodel/ResourceModelHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -30,12 +29,11 @@
 #include <ConversionHelper.hxx>
 
 #include "dmapperLoggers.hxx"
+#include "util.hxx"
 
 using namespace com::sun::star;
 
 namespace writerfilter {
-
-using resourcemodel::resolveSprmProps;
 
 namespace dmapper
 {

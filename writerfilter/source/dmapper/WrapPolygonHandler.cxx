@@ -20,15 +20,14 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 
 #include <ooxml/resourceids.hxx>
-#include <resourcemodel/ResourceModelHelper.hxx>
 
 #include "ConversionHelper.hxx"
 #include "WrapPolygonHandler.hxx"
 #include "dmapperLoggers.hxx"
+#include "util.hxx"
 
 namespace writerfilter {
 
-using resourcemodel::resolveSprmProps;
 using namespace com::sun::star;
 
 namespace dmapper {

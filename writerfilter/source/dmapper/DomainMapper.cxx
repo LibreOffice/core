@@ -18,7 +18,7 @@
  */
 #include "PageBordersHandler.hxx"
 
-#include <resourcemodel/ResourceModelHelper.hxx>
+#include "util.hxx"
 #include <SdtHelper.hxx>
 #include <TDefTableHandler.hxx>
 #include <DomainMapper_Impl.hxx>
@@ -76,8 +76,6 @@ using namespace ::com::sun::star;
 using namespace oox;
 
 namespace writerfilter {
-
-using resourcemodel::resolveSprmProps;
 
 namespace dmapper{
 
@@ -2325,12 +2323,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_SdtPr_date:
     {
         if (!IsInHeaderFooter())
-            resourcemodel::resolveSprmProps(*this, rSprm);
+            resolveSprmProps(*this, rSprm);
         else
         {
             OUString sName = "ooxml:CT_SdtPr_date";
             enableInteropGrabBag(sName);
-            resourcemodel::resolveSprmProps(*this, rSprm);
+            resolveSprmProps(*this, rSprm);
             m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
             m_pImpl->disableInteropGrabBag();
         }
@@ -2505,7 +2503,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
     {
         m_pImpl->enableInteropGrabBag("cnfStyle");
-        resourcemodel::resolveSprmProps(*this, rSprm);
+        resolveSprmProps(*this, rSprm);
 
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
         pPropMap->Insert(PROP_ROW_CNF_STYLE, uno::makeAny(uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList())), true, ROW_GRAB_BAG);
@@ -2517,7 +2515,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_TcPrBase_cnfStyle:
     {
         m_pImpl->enableInteropGrabBag("cnfStyle");
-        resourcemodel::resolveSprmProps(*this, rSprm);
+        resolveSprmProps(*this, rSprm);
 
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
         pPropMap->Insert(PROP_CELL_CNF_STYLE, uno::makeAny(uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList())), true, CELL_GRAB_BAG);
@@ -2529,7 +2527,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_PPrBase_cnfStyle:
     {
         m_pImpl->enableInteropGrabBag("cnfStyle");
-        resourcemodel::resolveSprmProps(*this, rSprm);
+        resolveSprmProps(*this, rSprm);
         rContext->Insert(PROP_PARA_CNF_STYLE, uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList()), true, PARA_GRAB_BAG);
         m_pImpl->disableInteropGrabBag();
     }

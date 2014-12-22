@@ -126,7 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/ooxml/OOXMLPropertySetImpl \
     writerfilter/source/ooxml/OOXMLStreamImpl \
     writerfilter/source/ooxml/qnametostrcore \
-    writerfilter/source/resourcemodel/ResourceModelHelper \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,writerfilter,\

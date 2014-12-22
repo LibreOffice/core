@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <resourcemodel/ResourceModelHelper.hxx>
 #include <StyleSheetTable.hxx>
+#include "util.hxx"
 #include <NumberingManager.hxx>
 #include <ConversionHelper.hxx>
 #include <TblStylePrHandler.hxx>
@@ -682,14 +682,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_PPrDefault_pPr:
         case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
-            resourcemodel::resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
+            resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
         break;
         case NS_ooxml::LN_CT_RPrDefault_rPr:
         case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );
-            resourcemodel::resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
+            resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( false );
         break;

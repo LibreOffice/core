@@ -55,7 +55,6 @@
 #include <DomainMapper.hxx>
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include <ooxml/resourceids.hxx>
-#include <resourcemodel/ResourceModelHelper.hxx>
 
 #include "ConversionHelper.hxx"
 #include "GraphicHelpers.hxx"
@@ -63,10 +62,9 @@
 #include "PropertyMap.hxx"
 #include "WrapPolygonHandler.hxx"
 #include "dmapperLoggers.hxx"
+#include "util.hxx"
 
 namespace writerfilter {
-
-using resourcemodel::resolveSprmProps;
 
 namespace dmapper
 {
