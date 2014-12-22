@@ -23,6 +23,7 @@ cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
 cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
 
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
+cmd/sc_templatemenu.png cmd/sc_newdoc.png
 
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
