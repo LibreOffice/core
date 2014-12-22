@@ -63,28 +63,14 @@ public class ListSelection extends integration.forms.TestCase
     /* ------------------------------------------------------------------ */
     public void checkUserListSelection() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        boolean interactiveTest = param.getBool( "Interactive" );
-
-        if ( interactiveTest )
+        int runs = 5;
+        for ( int i = 0; i < runs; ++i )
         {
+            log.println( "Round " + ( i + 1 ) + " of " + runs );
             prepareDocument();
-            waitForUserInput();
-            closeDocumentByUI();
-        }
-        else
-        {
-            int runs = param.getInt( "Runs" );
-            if ( runs == 0 )
-                runs = 10;
-
-            for ( int i = 0; i < runs; ++i )
-            {
-                log.println( "Round " + ( i + 1 ) + " of " + runs );
-                prepareDocument();
-                impl_clickListBox();
-                synchronized( this ) { this.wait( 1000 ); }
-                closeDocument();
-            }
+            impl_clickListBox();
+            synchronized( this ) { this.wait( 1000 ); }
+            closeDocument();
         }
     }
 

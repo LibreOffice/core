@@ -41,30 +41,13 @@ public class CfgParser
 
     public CfgParser(String ini)
     {
-        if (ini != null)
-        {
-            this.iniFile = ini;
-        }
+        this.iniFile = ini;
     }
 
     public void getIniParameters(TestParameters param)
     {
         debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
-        Properties cfg = null;
-        if (iniFile.length() == 0)
-        {
-            //no iniFile given, search one in the users home directory
-            cfg = getProperties(getDefaultFileName(true));
-            //try to search the user dir if no iniFile could be found yet
-            if (cfg == null)
-            {
-                cfg = getProperties(getDefaultFileName(false));
-            }
-        }
-        else
-        {
-            cfg = getProperties(iniFile);
-        }
+        Properties cfg = getProperties(iniFile);
 
         if (cfg != null)
         {
@@ -161,28 +144,4 @@ public class CfgParser
         return prop;
     }
 
-    private String getDefaultFileName(boolean home)
-    {
-        String fileSeparator = System.getProperty("file.separator");
-        String path = "";
-        if (home)
-        {
-            //look inside the home directory
-            path = System.getProperty("user.home");
-        }
-        else
-        {
-            path = System.getProperty("user.dir");
-        }
-        if (fileSeparator.equals("/"))
-        {
-            //suppose I'm on Unix-platform
-            return path + fileSeparator + ".runner.props";
-        }
-        else
-        {
-            //suppose I'm on Windows
-            return path + fileSeparator + "runner.props";
-        }
-    }
 }
