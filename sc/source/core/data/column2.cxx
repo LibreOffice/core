@@ -2065,16 +2065,23 @@ namespace {
 
 struct CellBucket
 {
+    SCSIZE mnEmpValStart;
     SCSIZE mnNumValStart;
     SCSIZE mnStrValStart;
+    SCSIZE mnEmpValCount;
     std::vector<double> maNumVals;
     std::vector<svl::SharedString> maStrVals;
 
-    CellBucket() : mnNumValStart(0), mnStrValStart(0) {}
+    CellBucket() : mnEmpValStart(0), mnNumValStart(0), mnStrValStart(0), mnEmpValCount(0) {}
 
     void flush(ScMatrix& rMat, SCSIZE nCol)
     {
-        if (!maNumVals.empty())
+        if (mnEmpValCount)
+        {
+            rMat.PutEmptyResultVector(mnEmpValCount, nCol, mnEmpValStart);
+            reset();
+        }
+        else if (!maNumVals.empty())
         {
             const double* p = &maNumVals[0];
             rMat.PutDouble(p, maNumVals.size(), nCol, mnNumValStart);
@@ -2090,7 +2097,8 @@ struct CellBucket
 
     void reset()
     {
-        mnNumValStart = mnStrValStart = 0;
+        mnEmpValStart = mnNumValStart = mnStrValStart = 0;
+        mnEmpValCount = 0;
         maNumVals.clear();
         maStrVals.clear();
     }
@@ -2162,7 +2170,18 @@ public:
 
                     if (rCell.IsEmpty())
                     {
-                        aBucket.flush(mrMat, mnMatCol);
+                        if (aBucket.mnEmpValCount && nThisRow == nPrevRow + 1)
+                        {
+                            // Secondary empty results.
+                            ++aBucket.mnEmpValCount;
+                        }
+                        else
+                        {
+                            // First empty result.
+                            aBucket.flush(mrMat, mnMatCol);
+                            aBucket.mnEmpValStart = nThisRow - mnTopRow;
+                            ++aBucket.mnEmpValCount;
+                        }
                         continue;
                     }
 

@@ -1893,14 +1893,14 @@ void ScInterpreter::ScIsEmpty()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = pMat->IsEmpty( 0, 0) ? 1 : 0;
+                nRes = pMat->IsEmptyCell( 0, 0) ? 1 : 0;
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = pMat->IsEmpty( nC, nR) ? 1 : 0;
+                    nRes = pMat->IsEmptyCell( nC, nR) ? 1 : 0;
                 // else: false, not empty (which is what Xcl does)
             }
         }
