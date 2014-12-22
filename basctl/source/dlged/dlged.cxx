@@ -183,7 +183,6 @@ DlgEditor::DlgEditor (
     ,pVScroll(NULL)
     ,pDlgEdModel(new DlgEdModel())
     ,pDlgEdPage(new DlgEdPage(*pDlgEdModel))
-    ,pDlgEdView(new DlgEdView(*pDlgEdModel, rWindow_, *this))
     ,m_ClipboardDataFlavors(1)
     ,m_ClipboardDataFlavorsResource(2)
     ,pObjFac(new DlgEdFactory(xModel))
@@ -202,6 +201,7 @@ DlgEditor::DlgEditor (
     ,m_xDocument( xModel )
 {
     pDlgEdModel->GetItemPool().FreezeIdRanges();
+    pDlgEdView.reset(new DlgEdView(*pDlgEdModel, rWindow_, *this));
     pDlgEdModel->SetScaleUnit( MAP_100TH_MM );
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
