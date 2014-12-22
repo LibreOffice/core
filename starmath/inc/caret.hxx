@@ -116,9 +116,6 @@ struct SmCaretPosGraphEntry{
     }
 };
 
-/** Define SmCaretPosGraph to be less than one page 4096 */
-#define SmCaretPosGraphSize   255
-
 class SmCaretPosGraph;
 
 /** Iterator for SmCaretPosGraph */
@@ -178,6 +175,9 @@ public:
     }
     friend class SmCaretPosGraphIterator;
 private:
+    /** Define SmCaretPosGraph to be less than one page 4096 */
+    static const int SmCaretPosGraphSize = 255;
+
     /** Next graph, to be used when this graph is full */
     SmCaretPosGraph* pNext;
     /** Next free entry in graph */
