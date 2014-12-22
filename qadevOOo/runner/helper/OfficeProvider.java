@@ -281,10 +281,7 @@ public class OfficeProvider implements AppProvider
                 }
                 else if (isExecutable)
                 {
-                    if (!param.getBool(util.PropertyName.DONT_BACKUP_USERLAYER))
-                    {
-                        backupUserLayer(param, msf);
-                    }
+                    backupUserLayer(param, msf);
                 }
             }
             else
@@ -515,38 +512,35 @@ public class OfficeProvider implements AppProvider
         param.remove("AppProvider");
         param.remove("ServiceFactory");
 
-        if (!param.getBool(util.PropertyName.DONT_BACKUP_USERLAYER))
+        //copy user_backup into user layer
+        try
         {
-            //copy user_backup into user layer
-            try
+            final String userLayer = (String) param.get("userLayer");
+            final String copyLayer = (String) param.get("copyLayer");
+            if (userLayer != null && copyLayer != null)
             {
-                final String userLayer = (String) param.get("userLayer");
-                final String copyLayer = (String) param.get("copyLayer");
-                if (userLayer != null && copyLayer != null)
-                {
-                    deleteFilesAndDirector(new File(userLayer));
-                    final File copyFile = new File(copyLayer);
-                    dbg("copy '" + copyFile + "' -> '" + userLayer + "'");
-                    FileTools.copyDirectory(copyFile, new File(userLayer), new String[]
-                            {
-                                "temp"
-                            });
-                    dbg("copy '" + copyFile + "' -> '" + userLayer + "' finished");
+                deleteFilesAndDirector(new File(userLayer));
+                final File copyFile = new File(copyLayer);
+                dbg("copy '" + copyFile + "' -> '" + userLayer + "'");
+                FileTools.copyDirectory(copyFile, new File(userLayer), new String[]
+                        {
+                            "temp"
+                        });
+                dbg("copy '" + copyFile + "' -> '" + userLayer + "' finished");
 
-                // remove all user_backup folder in temp dir
-                // this is for the case the runner was killed and some old backup folder still stay in temp dir
+            // remove all user_backup folder in temp dir
+            // this is for the case the runner was killed and some old backup folder still stay in temp dir
 
 
-                }
-                else
-                {
-                    System.out.println("Cannot copy layer: '" + copyLayer + "' back to user layer: '" + userLayer + "'");
-                }
             }
-            catch (java.io.IOException e)
+            else
             {
-                dbg("Couldn't recover from backup\n" + e.getMessage());
+                System.out.println("Cannot copy layer: '" + copyLayer + "' back to user layer: '" + userLayer + "'");
             }
+        }
+        catch (java.io.IOException e)
+        {
+            dbg("Couldn't recover from backup\n" + e.getMessage());
         }
         return result;
     }

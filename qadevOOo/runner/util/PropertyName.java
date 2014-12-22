@@ -170,8 +170,4 @@ public interface PropertyName {
      */
     String UNXMACXI = "unxmacxi";
 
-    /**
-     * can be used to dont backup the user layer, faster office start/stop but less secure default is to backup the user layer
-     */
-    String DONT_BACKUP_USERLAYER = "DontBackupUserLayer";
 }
