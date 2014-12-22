@@ -2029,7 +2029,7 @@ template<typename T>
 void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 {
     MatrixOpWrapper<T> aFunc(rMat.maMat, aOp);
-    rMat.maMat.walk(aFunc);
+    maMat.walk(aFunc);
 }
 
 #if DEBUG_MATRIX
@@ -2505,12 +2505,12 @@ public:
 
     double operator()(double nVal) const
     {
-        return mnVal - nVal;
+        return nVal - mnVal;
     }
 
     double operator()(bool bVal) const
     {
-        return mnVal - (double)bVal;
+        return (double)bVal - mnVal;
     }
 
     svl::SharedString operator()(const svl::SharedString&) const

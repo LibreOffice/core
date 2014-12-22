@@ -1280,7 +1280,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         }
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
-        ScMatrixRef pResMat = GetNewMat(nC, nR);
+        ScMatrixRef pResMat = GetNewMat(nC, nR, true);
         if (pResMat)
         {
             svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
