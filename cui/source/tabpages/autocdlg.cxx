@@ -1489,7 +1489,7 @@ bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
         for( i = nCount; i; )
         {
             OUString aString = (*pWrdList)[ --i ];
-            if( USHRT_MAX == m_pDoubleCapsLB->GetEntryPos(aString) )
+            if( LISTBOX_ENTRY_NOTFOUND == m_pDoubleCapsLB->GetEntryPos(aString) )
             {
                 pWrdList->erase(i);
             }
