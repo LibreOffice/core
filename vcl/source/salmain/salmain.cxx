@@ -28,12 +28,12 @@
 
 #include "salinst.hxx"
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS
 #include <vcl/opengl/glxtest.hxx>
 #endif
 
 SAL_IMPLEMENT_MAIN() {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined LIBO_HEADLESS
     fire_glxtest_process();
 #endif
     tools::extendApplicationEnvironment();

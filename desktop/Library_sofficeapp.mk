@@ -101,6 +101,13 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/migration/migration \
 ))
 
+ifeq ($(ENABLE_HEADLESS),TRUE)
+$(eval $(call gb_Library_add_libs,sofficeapp,\
+	-lm \
+	-ldl \
+	-lpthread \
+))
+else
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_use_static_libraries,sofficeapp,\
     glxtest \
@@ -114,6 +121,7 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
     -lGLU \
     -lX11 \
 ))
+endif
 endif
 
 # liblibreoffice bits
