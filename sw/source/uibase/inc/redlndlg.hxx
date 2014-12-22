@@ -114,7 +114,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
-    SwRedlineAcceptDlg(vcl::Window *pParent, vcl::Window *pContentArea, bool bAutoFmt = false);
+    SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder, vcl::Window *pContentArea, bool bAutoFmt = false);
     virtual ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
