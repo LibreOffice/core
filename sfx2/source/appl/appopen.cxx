@@ -862,7 +862,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 else
                 {
                     // check for "internal" protocols that should not be forwarded to the system
-                    Sequence < OUString > aProtocols(2);
+                    std::vector < OUString > aProtocols(2);
 
                     // add special protocols that always should be treated as internal
                     aProtocols[0] = "private:*";
@@ -883,16 +883,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             Sequence < OUString > aTmp;
                             aRet >>= aTmp;
 
-                            // todo: add operator+= to SequenceAsVector class and use SequenceAsVector for aProtocols
-                            sal_Int32 nLength = aProtocols.getLength();
-                            aProtocols.realloc( nLength+aTmp.getLength() );
-                            for ( sal_Int32 n=0; n<aTmp.getLength(); n++ )
-                                aProtocols[(++nLength)-1] = aTmp[n];
+                            aProtocols.insert(aProtocols.end(),aTmp.begin(),aTmp.end());
                         }
                     }
 
                     bool bFound = false;
-                    for ( sal_Int32 nProt=0; nProt<aProtocols.getLength(); nProt++ )
+                    for ( size_t nProt=0; nProt<aProtocols.size(); nProt++ )
                     {
                         WildCard aPattern(aProtocols[nProt]);
                         if ( aPattern.Matches( aURL.Complete ) )
