@@ -1241,6 +1241,23 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
+void SwFmtSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtSurround"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+
+    OUString aPresentation;
+    GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS, SFX_MAPUNIT_100TH_MM, SFX_MAPUNIT_100TH_MM, aPresentation);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
+
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAnchorOnly"), BAD_CAST(OString::boolean(bAnchorOnly).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bContour"), BAD_CAST(OString::boolean(bContour).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bOutside"), BAD_CAST(OString::boolean(bOutside).getStr()));
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
 {
 #if SAL_TYPES_SIZEOFLONG == 8

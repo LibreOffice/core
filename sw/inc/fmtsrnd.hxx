@@ -58,6 +58,8 @@ public:
     void    SetAnchorOnly( bool bNew )      { bAnchorOnly = bNew; }
     void    SetContour( bool bNew )         { bContour = bNew; }
     void    SetOutside( bool bNew )         { bOutside = bNew; }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )

@@ -438,6 +438,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_ANCHOR:
                 static_cast<const SwFmtAnchor*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_SURROUND:
+                static_cast<const SwFmtSurround*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -452,36 +455,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_SURROUND:
-            {
-                pWhich = "frame surround";
-                const SwFmtSurround* pSurround = static_cast<const SwFmtSurround*>(pItem);
-                switch (pSurround->GetSurround())
-                {
-                case SURROUND_NONE:
-                    oValue = "none";
-                    break;
-                case SURROUND_THROUGHT:
-                    oValue = "throught";
-                    break;
-                case SURROUND_PARALLEL:
-                    oValue = "parallel";
-                    break;
-                case SURROUND_IDEAL:
-                    oValue = "ideal";
-                    break;
-                case SURROUND_LEFT:
-                    oValue = "left";
-                    break;
-                case SURROUND_RIGHT:
-                    oValue = "right";
-                    break;
-                case SURROUND_END:
-                    oValue = "end";
-                    break;
-                }
-                break;
-            }
             case RES_FOLLOW_TEXT_FLOW:
             {
                 pWhich = "frame follow text flow";
