@@ -1030,7 +1030,7 @@ void SdImportTest::testBnc862510_6()
     sal_Int32 nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
 
-    // Color should be black
+    // Color should be gray
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0x8B8B8B), nCharColor );
 
     xDocShRef->DoClose();
