@@ -465,6 +465,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 bOpenEvent = false;
                 bConversionEvent = true;
                 bConversionParamsEvent = true;
+                // It doesn't make sense to use convert-to without headless.
+                setHeadless();
             }
             else if ( oArg == "print-to-file" )
             {

@@ -79,7 +79,7 @@ namespace desktop
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
-        "like invisible but no userinteraction at all.\n"\
+        "like invisible but no user interaction at all (implies --headless).\n"\
         "show this message and exit.\n"\
         "display the version information.\n"\
         "create new text document.\n"\
