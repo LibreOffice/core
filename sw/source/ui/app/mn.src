@@ -330,7 +330,7 @@
         {\
             Identifier = FN_INSERT_CAPTION ;\
             HelpId = CMD_FN_INSERT_CAPTION ;\
-            Text [ en-US ] = "~Caption..." ;\
+            Text [ en-US ] = "Insert ~Caption..." ;\
     };
 
 #define MN_TAB1 \
@@ -1243,7 +1243,7 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
             HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
-            Text [ en-US ] = "~Image..." ;
+            Text [ en-US ] = "Format ~Image..." ;
         };
         SEPARATOR ;
 
