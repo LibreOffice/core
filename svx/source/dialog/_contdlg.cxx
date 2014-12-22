@@ -219,18 +219,27 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
     mnApplyId = m_pTbx1->GetItemId("TBI_APPLY");
     mnWorkSpaceId = m_pTbx1->GetItemId("TBI_WORKPLACE");
+    m_pTbx1->SetItemBits(mnWorkSpaceId, ToolBoxItemBits::AUTOCHECK);
     mnSelectId = m_pTbx1->GetItemId("TBI_SELECT");
+    m_pTbx1->SetItemBits(mnSelectId, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK);
     mnRectId = m_pTbx1->GetItemId("TBI_RECT");
+    m_pTbx1->SetItemBits(mnRectId, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK);
     mnCircleId = m_pTbx1->GetItemId("TBI_CIRCLE");
+    m_pTbx1->SetItemBits(mnCircleId, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK);
     mnPolyId = m_pTbx1->GetItemId("TBI_POLY");
+    m_pTbx1->SetItemBits(mnPolyId, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK);
     mnPolyEditId = m_pTbx1->GetItemId("TBI_POLYEDIT");
+    m_pTbx1->SetItemBits(mnPolyEditId, ToolBoxItemBits::AUTOCHECK);
     mnPolyMoveId = m_pTbx1->GetItemId("TBI_POLYMOVE");
+    m_pTbx1->SetItemBits(mnPolyMoveId, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK);
     mnPolyInsertId = m_pTbx1->GetItemId("TBI_POLYINSERT");
+    m_pTbx1->SetItemBits(mnPolyInsertId, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK);
     mnPolyDeleteId = m_pTbx1->GetItemId("TBI_POLYDELETE");
     mnAutoContourId = m_pTbx1->GetItemId("TBI_AUTOCONTOUR");
     mnUndoId = m_pTbx1->GetItemId("TBI_UNDO");
     mnRedoId = m_pTbx1->GetItemId("TBI_REDO");
     mnPipetteId = m_pTbx1->GetItemId("TBI_PIPETTE");
+    m_pTbx1->SetItemBits(mnPipetteId, ToolBoxItemBits::AUTOCHECK);
 
     SvxContourDlg::SetSuperClass( *this );
 
