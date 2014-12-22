@@ -72,6 +72,7 @@ public:
     void testContentXLSXStrict(); // strict OOXML
     void testContentLotus123();
     void testContentDIF();
+    void testContentXLSB();
     //void testContentXLS_XML();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testContentXLSXStrict);
     CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentDIF);
+    CPPUNIT_TEST(testContentXLSB);
     //CPPUNIT_TEST(testContentXLS_XML);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
@@ -298,6 +300,16 @@ void ScFiltersTest::testContentDIF()
 
     ScDocument& rDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(&rDoc);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentXLSB()
+{
+    ScDocShellRef xDocSh = loadDoc("universal-content.", XLSB);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testContentImpl(rDoc, XLSB);
     xDocSh->DoClose();
 }
 

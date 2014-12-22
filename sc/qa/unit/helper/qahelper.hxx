@@ -48,6 +48,7 @@
 #define HTML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
 #define DIF_FORMAT_TYPE 195
 #define XLS_XML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN)
+#define XLSB_XML_FORMAT_TYPE 268959809
 
 #define ODS      0
 #define XLS      1
@@ -58,6 +59,7 @@
 #define LOTUS123 6
 #define DIF      7
 #define XLS_XML  8
+#define XLSB     9
 
 enum StringType { PureString, FormulaValue, StringValue };
 

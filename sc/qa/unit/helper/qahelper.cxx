@@ -74,7 +74,8 @@ FileFormat aFileFormats[] = {
     { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
     { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
     { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
-    { "xml", "MS Excel 2003 XML", "calc_MS_Excel_2003_XML", XLS_XML_FORMAT_TYPE }
+    { "xml", "MS Excel 2003 XML", "calc_MS_Excel_2003_XML", XLS_XML_FORMAT_TYPE },
+    { "xlsb", "Calc MS Excel 2007 Binary", "MS Excel 2007 Binary", XLSB_XML_FORMAT_TYPE }
 };
 
 bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
