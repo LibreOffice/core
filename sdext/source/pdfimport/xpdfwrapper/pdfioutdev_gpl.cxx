@@ -149,11 +149,10 @@ bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
     int bytesToLen = -1;
     bool collectBytes = false;
     int startOfScan = 0;
-    int b2 = -1;
     int b1 = -1;
     for (; ; )
     {
-        b2 = b1;
+        const int b2 = b1;
         b1 = str->getChar();
 
         if (b1 == -1)

@@ -516,13 +516,12 @@ void SfxDocTplService_Impl::readFolderList()
     ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
     ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
 
-    NamePair_Impl*  pPair;
 
     sal_uInt16 nCount = (sal_uInt16)( std::min( aShortNames.Count(), aLongNames.Count() ) );
 
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
-        pPair = new NamePair_Impl;
+        NamePair_Impl* pPair = new NamePair_Impl;
         pPair->maShortName  = aShortNames.GetString( i );
         pPair->maLongName   = aLongNames.GetString( i );
 
@@ -1584,14 +1583,14 @@ bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 
         try
         {
-            bool bHasNonRemovable = false;
-            bool bHasShared = false;
-
             ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
             xResultSet = aGroup.createCursor( aProps, eInclude );
 
             if ( xResultSet.is() )
             {
+                bool bHasNonRemovable = false;
+                bool bHasShared = false;
+
                 uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
                 uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 

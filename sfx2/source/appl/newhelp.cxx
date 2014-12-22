@@ -616,7 +616,6 @@ void IndexTabPage_Impl::InitializeIndex()
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
             {
-                bool insert;
                 sal_uInt16 nPos;
                 int ndx,tmp;
                 OUString aIndex, aTempString;
@@ -634,7 +633,7 @@ void IndexTabPage_Impl::InitializeIndex()
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
-                    insert = ( ( ndx = aKeywordPair.indexOf( ';' ) ) == -1 ? sal_False : sal_True );
+                    const bool insert = ( ( ndx = aKeywordPair.indexOf( ';' ) ) == -1 ? sal_False : sal_True );
 
                     if ( insert )
                     {

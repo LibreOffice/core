@@ -432,11 +432,12 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     {
         // check existence of template storage
         aTemplURL = aFoundName;
-        bool bLoad = false;
 
         // should the document checked against changes in the template ?
         if ( IsQueryLoadTemplate() )
         {
+            bool bLoad = false;
+
             // load document properties of template
             bool bOK = false;
             util::DateTime aTemplDate;

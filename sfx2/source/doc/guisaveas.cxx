@@ -802,9 +802,9 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
             {
                 uno::Reference< task::XInteractionHandler > xHandler;
                 GetMediaDescr()[ OUString( "InteractionHandler" ) ] >>= xHandler;
-                bool bResult = false;
                 if ( xHandler.is() )
                 {
+                    bool bResult = false;
                     try
                     {
                         task::ErrorCodeRequest aErrorCode;

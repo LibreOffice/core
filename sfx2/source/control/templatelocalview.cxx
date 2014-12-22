@@ -469,7 +469,6 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     assert(mnCurRegionId);  // Only allowed in non root regions
 
     bool ret = true;
-    bool refresh = false;
 
     sal_uInt16 nSrcRegionId = mnCurRegionId-1;
 
@@ -486,6 +485,8 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
 
     if (pTarget && pSrc)
     {
+        bool refresh = false;
+
         sal_uInt16 nTargetRegion = pTarget->mnRegionId;
         sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
         std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)

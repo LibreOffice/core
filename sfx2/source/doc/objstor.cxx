@@ -895,8 +895,8 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 
         if( xFilterCFG.is() )
         {
-            bool bAbort = false;
             try {
+                bool bAbort = false;
                 const SfxFilter* pFilter = pMedium->GetFilter();
                 Sequence < PropertyValue > aProps;
                 Any aAny = xFilterCFG->getByName( pFilter->GetName() );
@@ -3158,10 +3158,9 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
     if ( xStorage == GetStorage() )
         return SaveChildren();
 
-    bool bOasis = true;
     if ( pImp->mpObjectContainer )
     {
-        bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+        bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
         GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SFX_CREATE_MODE_EMBEDDED == eCreateMode,xStorage);
     }
 

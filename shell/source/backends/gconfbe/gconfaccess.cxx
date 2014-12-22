@@ -820,10 +820,9 @@ std::size_t const nConfigurationValues =
 css::beans::Optional< css::uno::Any > getValue(ConfigurationValue const & data)
 {
     GConfClient* pClient = getGconfClient();
-    GConfValue* pGconfValue;
     if( ( data.nDependsOn == SETTINGS_LAST ) || isDependencySatisfied( pClient, data ) )
     {
-        pGconfValue = gconf_client_get( pClient, data.GconfItem, NULL );
+        GConfValue* pGconfValue = gconf_client_get( pClient, data.GconfItem, NULL );
 
         if( pGconfValue != NULL )
         {
