@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_1fbb1cc6",
+        "filename": "bin/find-unused-defines.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-23T17:06:05Z",
+      "side": 1,
+      "message": "what about adding uniq to the pipeline?",
+      "revId": "3999dc5695bab4ccdd4d2cc29b058df2af3e9d91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
