@@ -16,6 +16,24 @@
       "revId": "3999dc5695bab4ccdd4d2cc29b058df2af3e9d91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_5fc1a42d",
+        "filename": "bin/find-unused-defines.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-12-23T17:53:50Z",
+      "side": 1,
+      "message": "uniq removes duplicates. I need the duplicates so I can see if a constant shows up more than once.",
+      "parentUuid": "fa32b979_1fbb1cc6",
+      "revId": "3999dc5695bab4ccdd4d2cc29b058df2af3e9d91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
