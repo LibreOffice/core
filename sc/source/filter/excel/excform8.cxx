@@ -137,10 +137,6 @@ bool ExcelToSc8::HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtNa
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
 ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, sal_Size nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
-    sal_uInt8                   nOp, nLen, nByte;
-    sal_uInt16                  nUINT16;
-    double                  fDouble;
-    OUString                aString;
     bool                    bError = false;
     bool                    bArrayFormula = false;
     TokenId                 nMerk0;
@@ -171,7 +167,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
     while( (aIn.GetRecPos() < nEndPos) && !bError )
     {
-        nOp = aIn.ReaduInt8();
+        sal_uInt8 nOp = aIn.ReaduInt8();
 
         // always reset flags
         aSRD.InitFlags();
@@ -295,11 +291,13 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 GetTracer().TraceFormulaMissingArg();
                 break;
             case 0x17: // String Constant                       [314 266]
-                nLen = aIn.ReaduInt8();        // und?
-                aString = aIn.ReadUniString( nLen );            // reads Grbit even if nLen==0
+            {
+                sal_uInt8 nLen = aIn.ReaduInt8();        // und?
+                OUString aString = aIn.ReadUniString( nLen );            // reads Grbit even if nLen==0
 
                 aStack << aPool.Store( aString );
                 break;
+            }
             case 0x18:                                          // natural language formula
                 {
                 sal_uInt8   nEptg;
@@ -330,8 +328,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         aSRD.SetAddress(aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
+
+                        break;
                     }
-                    break;
                     case 0x0A:              //  Radical     13      -       ref
                     {
                         nRow = aIn.ReaduInt16();
@@ -343,14 +342,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         aSRD.SetAddress(aAddr, aEingPos);
 
                         aStack << aPool.StoreNlf( aSRD );
+
+                        break;
                     }
-                    break;
                     case 0x0B:              //  RadicalS    13      x       ref
                         aIn.Ignore( 13 );
                         aExtensions.push_back( EXTENSION_NLR );
                         aPool << ocBad;
                         aPool >> aStack;
-                    break;
+                        break;
                     case 0x0C:              //  RwS         4       x       ref
                     case 0x0D:              //  ColS        4       x       ref
                     case 0x0E:              //  RwSV        4       x       val
@@ -359,13 +359,13 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         aExtensions.push_back( EXTENSION_NLR );
                         aPool << ocBad;
                         aPool >> aStack;
-                    break;
+                        break;
                     case 0x10:              //  RadicalLel  4       -       err
                     case 0x1D:              //  SxName      4       -       val
                         aIn.Ignore( 4 );
                         aPool << ocBad;
                         aPool >> aStack;
-                    break;
+                        break;
                     default:
                         aPool << ocBad;
                         aPool >> aStack;
@@ -389,11 +389,11 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
-            }
                 break;
+            }
             case 0x1C: // Error Value                           [314 266]
             {
-                nByte = aIn.ReaduInt8();
+                sal_uInt8 nByte = aIn.ReaduInt8();
 
                 DefTokenId          eOc;
                 switch( nByte )
@@ -411,30 +411,36 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 if( eOc != ocStop )
                     aPool << ocOpen << ocClose;
                 aPool >> aStack;
-            }
+
                 break;
+            }
             case 0x1D: // Boolean                               [315 266]
-                nByte = aIn.ReaduInt8();
+            {
+                sal_uInt8 nByte = aIn.ReaduInt8();
                 if( nByte == 0 )
                     aPool << ocFalse << ocOpen << ocClose;
                 else
                     aPool << ocTrue << ocOpen << ocClose;
                 aPool >> aStack;
                 break;
+            }
             case 0x1E: // Integer                               [315 266]
-                nUINT16 = aIn.ReaduInt16();
+            {
+                sal_uInt16 nUINT16 = aIn.ReaduInt16();
                 aStack << aPool.Store( ( double ) nUINT16 );
                 break;
+            }
             case 0x1F: // Number                                [315 266]
-                fDouble = aIn.ReadDouble();
+            {
+                double fDouble = aIn.ReadDouble();
                 aStack << aPool.Store( fDouble );
                 break;
+            }
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
-                nByte = aIn.ReaduInt8();
-                nUINT16 = aIn.ReaduInt16();
-                aIn.Ignore( 4 );
+            {
+                aIn.Ignore( 7 );
                 if( bAllowArrays )
                 {
                     aStack << aPool.StoreMatrix();
@@ -446,6 +452,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     aPool >> aStack;
                 }
                 break;
+            }
             case 0x41:
             case 0x61:
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
@@ -456,8 +463,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     DoMulArgs( pFuncInfo->meOpCode, pFuncInfo->mnMaxParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
+                break;
             }
-            break;
             case 0x42:
             case 0x62:
             case 0x22: // Function, Variable Number of Arg.     [333 283]
@@ -471,13 +478,13 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     DoMulArgs( pFuncInfo->meOpCode, nParamCount );
                 else
                     DoMulArgs( ocNoName, 0 );
+                break;
             }
-            break;
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
             {
-                nUINT16 = aIn.ReaduInt16();
+                sal_uInt16 nUINT16 = aIn.ReaduInt16();
                 aIn.Ignore( 2 );
                 const XclImpName* pName = GetNameManager().GetName( nUINT16 );
                 if (pName)
@@ -488,8 +495,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     else
                         aStack << aPool.StoreName(nUINT16, pName->IsGlobal());
                 }
+                break;
             }
-            break;
             case 0x44:
             case 0x64:
             case 0x24: // Cell Reference                        [319 270]
@@ -518,8 +525,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
 
                 aStack << aPool.Store( aSRD );
-            }
                 break;
+            }
             case 0x45:
             case 0x65:
             case 0x25: // Area Reference                        [320 270]
@@ -563,8 +570,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
 
                 aStack << aPool.Store( aCRD );
-            }
                 break;
+            }
             case 0x46:
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
@@ -602,8 +609,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
                 aStack << aPool.Store( aSRD );
-            }
                 break;
+            }
             case 0x4D:
             case 0x6D:
             case 0x2D: // Area Reference Within a Name          [324    ]
@@ -630,8 +637,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     SetComplRow( aCRD );
 
                 aStack << aPool.Store( aCRD );
-            }
                 break;
+            }
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
@@ -645,13 +652,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x58:
             case 0x78:
             case 0x38: // Command-Equivalent Function           [333    ]
-                aString = "COMM_EQU_FUNC";
-                nByte = aIn.ReaduInt8();
+            {
+                OUString aString = "COMM_EQU_FUNC";
+                sal_uInt8 nByte = aIn.ReaduInt8();
                 aString += OUString::number( nByte );
                 nByte = aIn.ReaduInt8();
                 aStack << aPool.Store( aString );
                 DoMulArgs( ocPush, nByte + 1 );
                 break;
+            }
             case 0x59:
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
@@ -760,8 +769,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     aPool << ocBad;
                     aPool >> aStack;
                 }
-            }
                 break;
+            }
             case 0x5A:
             case 0x7A:
             case 0x3A: // 3-D Cell Reference                    [    275]
@@ -831,8 +840,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     else
                         aStack << aPool.Store( aSRD );
                 }
-            }
                 break;
+            }
             case 0x5B:
             case 0x7B:
             case 0x3B: // 3-D Area Reference                    [    276]
@@ -896,9 +905,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                     aStack << aPool.Store( aCRD );
                 }
-            }
                 break;
-            default: bError = true;
+            }
+            default:
+                bError = true;
         }
         bError |= !aIn.IsValid();
     }
