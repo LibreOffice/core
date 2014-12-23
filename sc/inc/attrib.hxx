@@ -380,10 +380,8 @@ public:
     const std::vector<sal_uInt32>& GetCondFormatData() const { return maIndex;}
     void AddCondFormatData( sal_uInt32 nIndex );
     void SetCondFormatData( const std::vector<sal_uInt32>& aIndex );
-    void RemoveCondFormatData( sal_uInt32 nIndex );
 
 private:
-
     std::vector<sal_uInt32> maIndex;
 };
 
