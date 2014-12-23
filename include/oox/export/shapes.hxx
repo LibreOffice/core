@@ -43,7 +43,7 @@ namespace oox { namespace drawingml {
 class OOX_DLLPUBLIC ShapeExport : public DrawingML {
 
 private:
-    static int mnSpreadsheetCounter;
+    static int mnEmbeddeDocumentCounter;
     struct ShapeCheck
     {
         bool operator()( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s1, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s2 ) const
