@@ -84,39 +84,19 @@
 #define ITEMID_CHARSCALE_W      EE_CHAR_FONTWIDTH
 #define ITEMID_COLOR            EE_CHAR_COLOR
 #define ITEMID_WORDLINEMODE     EE_CHAR_WLM
-#define ITEMID_PROPSIZE         0
 #define ITEMID_CHARSETCOLOR     0   // EE_FEATURE_NOTCONV
 #define ITEMID_CASEMAP          EE_CHAR_CASEMAP
 #define ITEMID_LANGUAGE         0
 #define ITEMID_ESCAPEMENT       EE_CHAR_ESCAPEMENT
-#define ITEMID_NOLINEBREAK      0
-#define ITEMID_NOHYPHENHERE     0
 #define ITEMID_AUTOKERN         EE_CHAR_PAIRKERNING
 #define ITEMID_KERNING          EE_CHAR_KERNING
 #define ITEMID_EMPHASISMARK     EE_CHAR_EMPHASISMARK
 #define ITEMID_CHARRELIEF       EE_CHAR_RELIEF
 
 // Paragraph Attributes
-#define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
 #define ITEMID_ADJUST           EE_PARA_JUST
-#define ITEMID_LINESPACING      EE_PARA_SBL
-#define ITEMID_WIDOWS           0
-#define ITEMID_ORPHANS          0
-#define ITEMID_HYPHENZONE       0
 
-#define ITEMID_TABSTOP          EE_PARA_TABS
 
-#define ITEMID_PAPERBIN         0
-#define ITEMID_LRSPACE          EE_PARA_LRSPACE
-#define ITEMID_ULSPACE          EE_PARA_ULSPACE
-#define ITEMID_FRAMEDIR         EE_PARA_WRITINGDIR
-#define ITEMID_PRINT            0
-#define ITEMID_OPAQUE           0
-#define ITEMID_PROTECT          0
-#define ITEMID_BACKGROUND       0
-#define ITEMID_SHADOW           0
-#define ITEMID_BOX              0
-#define ITEMID_BOXINFO          0
 #define ITEMID_BRUSH            0
 
 #define ITEMID_FIELD            EE_FEATURE_FIELD

@@ -34,170 +34,10 @@ const sal_uInt32 nMaxLegalDffRecordLength = \
                                           //  record header marks the start of
                                           //  a container.
 
-#define DFF_PST_Unknown                        0
-#define DFF_PST_SubContainerCompleted          1
-#define DFF_PST_IRRAtom                        2
-#define DFF_PST_PSS                            3
-#define DFF_PST_SubContainerException          4
-#define DFF_PST_ClientSignal1                  6
-#define DFF_PST_ClientSignal2                  7
-#define DFF_PST_PowerPointStateInfoAtom       10
-#define DFF_PST_Document                    1000
-#define DFF_PST_DocumentAtom                1001
-#define DFF_PST_EndDocument                 1002
-#define DFF_PST_SlidePersist                1003
-#define DFF_PST_SlideBase                   1004
-#define DFF_PST_SlideBaseAtom               1005
-#define DFF_PST_Slide                       1006
-#define DFF_PST_SlideAtom                   1007
-#define DFF_PST_Notes                       1008
-#define DFF_PST_NotesAtom                   1009
-#define DFF_PST_Environment                 1010
-#define DFF_PST_SlidePersistAtom            1011
-#define DFF_PST_Scheme                      1012
-#define DFF_PST_SchemeAtom                  1013
-#define DFF_PST_DocViewInfo                 1014
-#define DFF_PST_SslideLayoutAtom            1015
-#define DFF_PST_MainMaster                  1016
-#define DFF_PST_SSSlideInfoAtom             1017
-#define DFF_PST_SlideViewInfo               1018
-#define DFF_PST_GuideAtom                   1019
-#define DFF_PST_ViewInfo                    1020
-#define DFF_PST_ViewInfoAtom                1021
-#define DFF_PST_SlideViewInfoAtom           1022
-#define DFF_PST_VBAInfo                     1023
-#define DFF_PST_VBAInfoAtom                 1024
-#define DFF_PST_SSDocInfoAtom               1025
-#define DFF_PST_Summary                     1026
-#define DFF_PST_Texture                     1027
-#define DFF_PST_VBASlideInfo                1028
-#define DFF_PST_VBASlideInfoAtom            1029
-#define DFF_PST_DocRoutingSlip              1030
-#define DFF_PST_OutlineViewInfo             1031
-#define DFF_PST_SorterViewInfo              1032
-#define DFF_PST_ExObjList                   1033
-#define DFF_PST_ExObjListAtom               1034
-#define DFF_PST_PPDrawingGroup              1035
-#define DFF_PST_PPDrawing                   1036
-#define DFF_PST_NamedShows                  1040
-#define DFF_PST_NamedShow                   1041
-#define DFF_PST_NamedShowSlides             1042
-#define DFF_PST_List                        2000
-#define DFF_PST_FontCollection              2005
-#define DFF_PST_ListPlaceholder             2017
-#define DFF_PST_BookmarkCollection          2019
-#define DFF_PST_SoundCollection             2020
-#define DFF_PST_SoundCollAtom               2021
-#define DFF_PST_Sound                       2022
-#define DFF_PST_SoundData                   2023
-#define DFF_PST_BookmarkSeedAtom            2025
-#define DFF_PST_GuideList                   2026
-#define DFF_PST_RunArray                    2028
-#define DFF_PST_RunArrayAtom                2029
-#define DFF_PST_ArrayElementAtom            2030
-#define DFF_PST_Int4ArrayAtom               2031
-#define DFF_PST_ColorSchemeAtom             2032
-#define DFF_PST_OEShape                     3008
-#define DFF_PST_ExObjRefAtom                3009
-#define DFF_PST_OEPlaceholderAtom           3011
-#define DFF_PST_GrColor                     3020
-#define DFF_PST_GrectAtom                   3025
-#define DFF_PST_GratioAtom                  3031
-#define DFF_PST_Gscaling                    3032
-#define DFF_PST_GpointAtom                  3034
-#define DFF_PST_OEShapeAtom                 3035
-#define DFF_PST_OutlineTextRefAtom          3998
 #define DFF_PST_TextHeaderAtom              3999
 #define DFF_PST_TextCharsAtom               4000
-#define DFF_PST_StyleTextPropAtom           4001
-#define DFF_PST_BaseTextPropAtom            4002
-#define DFF_PST_TxMasterStyleAtom           4003
-#define DFF_PST_TxCFStyleAtom               4004
-#define DFF_PST_TxPFStyleAtom               4005
-#define DFF_PST_TextRulerAtom               4006
-#define DFF_PST_TextBookmarkAtom            4007
 #define DFF_PST_TextBytesAtom               4008
-#define DFF_PST_TxSIStyleAtom               4009
-#define DFF_PST_TextSpecInfoAtom            4010
-#define DFF_PST_DefaultRulerAtom            4011
-#define DFF_PST_FontEntityAtom              4023
-#define DFF_PST_FontEmbedData               4024
-#define DFF_PST_TypeFace                    4025
-#define DFF_PST_CString                     4026
-#define DFF_PST_ExternalObject              4027
-#define DFF_PST_MetaFile                    4033
-#define DFF_PST_ExOleObj                    4034
-#define DFF_PST_ExOleObjAtom                4035
-#define DFF_PST_ExPlainLinkAtom             4036
-#define DFF_PST_CorePict                    4037
-#define DFF_PST_CorePictAtom                4038
-#define DFF_PST_ExPlainAtom                 4039
-#define DFF_PST_SrKinsoku                   4040
-#define DFF_PST_Handout                     4041
-#define DFF_PST_ExEmbed                     4044
-#define DFF_PST_ExEmbedAtom                 4045
-#define DFF_PST_ExLink                      4046
-#define DFF_PST_ExLinkAtom_old              4047
-#define DFF_PST_BookmarkEntityAtom          4048
-#define DFF_PST_ExLinkAtom                  4049
-#define DFF_PST_SrKinsokuAtom               4050
-#define DFF_PST_ExHyperlinkAtom             4051
-#define DFF_PST_ExPlain                     4053
-#define DFF_PST_ExPlainLink                 4054
-#define DFF_PST_ExHyperlink                 4055
-#define DFF_PST_SlideNumberMCAtom           4056
-#define DFF_PST_HeadersFooters              4057
-#define DFF_PST_HeadersFootersAtom          4058
-#define DFF_PST_RecolorEntryAtom            4062
-#define DFF_PST_TxInteractiveInfoAtom       4063
-#define DFF_PST_EmFormatAtom                4065
-#define DFF_PST_CharFormatAtom              4066
-#define DFF_PST_ParaFormatAtom              4067
-#define DFF_PST_MasterText                  4068
-#define DFF_PST_RecolorInfoAtom             4071
-#define DFF_PST_ExQuickTime                 4073
-#define DFF_PST_ExQuickTimeMovie            4074
-#define DFF_PST_ExQuickTimeMovieData        4075
-#define DFF_PST_ExSubscription              4076
-#define DFF_PST_ExSubscriptionSection       4077
-#define DFF_PST_ExControl                   4078
-#define DFF_PST_ExControlAtom               4091
-#define DFF_PST_SlideListWithText           4080
-#define DFF_PST_AnimationInfoAtom           4081
-#define DFF_PST_InteractiveInfo             4082
-#define DFF_PST_InteractiveInfoAtom         4083
-#define DFF_PST_SlideList                   4084
-#define DFF_PST_UserEditAtom                4085
-#define DFF_PST_CurrentUserAtom             4086
-#define DFF_PST_DateTimeMCAtom              4087
-#define DFF_PST_GenericDateMCAtom           4088
-#define DFF_PST_HeaderMCAtom                4089
-#define DFF_PST_FooterMCAtom                4090
-#define DFF_PST_ExMediaAtom                 4100
-#define DFF_PST_ExVideo                     4101
-#define DFF_PST_ExAviMovie                  4102
-#define DFF_PST_ExMCIMovie                  4103
-#define DFF_PST_ExMIDIAudio                 4109
-#define DFF_PST_ExCDAudio                   4110
-#define DFF_PST_ExWAVAudioEmbedded          4111
-#define DFF_PST_ExWAVAudioLink              4112
 #define DFF_PST_ExOleObjStg                 4113
-#define DFF_PST_ExCDAudioAtom               4114
-#define DFF_PST_ExWAVAudioEmbeddedAtom      4115
-#define DFF_PST_AnimationInfo               4116
-#define DFF_PST_RTFDateTimeMCAtom           4117
-#define DFF_PST_ProgTags                    5000
-#define DFF_PST_ProgStringTag               5001
-#define DFF_PST_ProgBinaryTag               5002
-#define DFF_PST_BinaryTagData               5003
-#define DFF_PST_PrintOptions                6000
-#define DFF_PST_PersistPtrFullBlock         6001
-#define DFF_PST_PersistPtrIncrementalBlock  6002
-#define DFF_PST_RulerIndentAtom            10000
-#define DFF_PST_GscalingAtom               10001
-#define DFF_PST_GrColorAtom                10002
-#define DFF_PST_GLPointAtom                10003
-#define DFF_PST_GlineAtom                  10004
 
 //      Record Name                 FBT-Value Instance                  Contents                                                          Wrd Exl Ppt Ver
 
@@ -236,7 +76,6 @@ const sal_uInt32 nMaxLegalDffRecordLength = \
 #define     DFF_msofbtClientRule    0xF015 // host-defined              host-defined
 #define     DFF_msofbtCalloutRule   0xF017 //                           an FCORU                                                           X   X   X   0
 
-#define DFF_msofbtSelection         0xF119 //                           an FDGSL followed by the SPIDs of the shapes in the selection              X   0
 
 // Values for the ULONG in DFF_PST_TextHeaderAtom
 enum DFF_TextHeader {
@@ -262,14 +101,6 @@ enum DFF_TextHeader {
 // Transform
 #define DFF_Prop_Rotation                      4  //  Fixed Point 16.16 degrees
 // Protection
-#define DFF_Prop_LockRotation                119  //  sal_Bool              No rotation
-#define DFF_Prop_LockAspectRatio             120  //  sal_Bool              Don't allow changes in aspect ratio
-#define DFF_Prop_LockPosition                121  //  sal_Bool              Don't allow the shape to be moved
-#define DFF_Prop_LockAgainstSelect           122  //  sal_Bool              Shape may not be selected
-#define DFF_Prop_LockCropping                123  //  sal_Bool              No cropping this shape
-#define DFF_Prop_LockVertices                124  //  sal_Bool              Edit Points not allowed
-#define DFF_Prop_LockText                    125  //  sal_Bool              Do not edit text
-#define DFF_Prop_LockAdjustHandles           126  //  sal_Bool              Do not adjust
 #define DFF_Prop_LockAgainstGrouping         127  //  sal_Bool              Do not group this shape
 // Text
 #define DFF_Prop_lTxid                       128  //  LONG              id for the text, value determined by the host
@@ -278,39 +109,22 @@ enum DFF_TextHeader {
 #define DFF_Prop_dxTextRight                 131  //  LONG
 #define DFF_Prop_dyTextBottom                132  //  LONG
 #define DFF_Prop_WrapText                    133  //  MSO_WRAPMODE       Wrap text at shape margins
-#define DFF_Prop_scaleText                   134  //  LONG              Text zoom/scale (used if fFitTextToShape)
 #define DFF_Prop_anchorText                  135  //  MSO_ANCHOR         How to anchor the text
 #define DFF_Prop_txflTextFlow                136  //  MSO_TXFL           Text flow
 #define DFF_Prop_cdirFont                    137  //  MSO_CDIR           Font rotation
 #define DFF_Prop_hspNext                     138  //  MSO_HSP            ID of the next shape (used by Word for linked textboxes)
-#define DFF_Prop_txdir                       139  //  MSO_TXDIR          Bi-Di Text direction
-#define DFF_Prop_SelectText                  187  //  sal_Bool              sal_True if single click selects text, sal_False if two clicks
 #define DFF_Prop_AutoTextMargin              188  //  sal_Bool              use host's margin calculations
 #define DFF_Prop_RotateText                  189  //  sal_Bool              Rotate text with shape
-#define DFF_Prop_FitShapeToText              190  //  sal_Bool              Size shape to fit text size
 #define DFF_Prop_FitTextToShape              191  //  sal_Bool              Size text to fit shape size
 // GeoText
 #define DFF_Prop_gtextUNICODE                192  //  WCHAR*            UNICODE text string
-#define DFF_Prop_gtextRTF                    193  //  char*             RTF text string
 #define DFF_Prop_gtextAlign                  194  //  MSO_GEOTEXTALIGN   alignment on curve
 #define DFF_Prop_gtextSize                   195  //  LONG              default point size
 #define DFF_Prop_gtextSpacing                196  //  LONG              fixed point 16.16
 #define DFF_Prop_gtextFont                   197  //  WCHAR*            font family name
-#define DFF_Prop_gtextFReverseRows           240  //  sal_Bool  8000        Reverse row order
-#define DFF_Prop_fGtext                      241  //  sal_Bool  4000        Has text effect
-#define DFF_Prop_gtextFVertical              242  //  sal_Bool  2000        Rotate characters
-#define DFF_Prop_gtextFKern                  243  //  sal_Bool  1000        Kern characters
-#define DFF_Prop_gtextFTight                 244  //  sal_Bool   800        Tightening or tracking
 #define DFF_Prop_gtextFStretch               245  //  sal_Bool   400        Stretch to fit shape
-#define DFF_Prop_gtextFShrinkFit             246  //  sal_Bool   200        Char bounding box
-#define DFF_Prop_gtextFBestFit               247  //  sal_Bool   100        Scale text-on-path
-#define DFF_Prop_gtextFNormalize             248  //  sal_Bool    80        Stretch char height
-#define DFF_Prop_gtextFDxMeasure             249  //  sal_Bool    40        Do not measure along path
 #define DFF_Prop_gtextFBold                  250  //  sal_Bool    20        Bold font
 #define DFF_Prop_gtextFItalic                251  //  sal_Bool    10        Italic font
-#define DFF_Prop_gtextFUnderline             252  //  sal_Bool     8        Underline font
-#define DFF_Prop_gtextFShadow                253  //  sal_Bool     4        Shadow font
-#define DFF_Prop_gtextFSmallcaps             254  //  sal_Bool     2        Small caps font
 #define DFF_Prop_gtextFStrikethrough         255  //  sal_Bool     1        Strike through font
 // Blip
 #define DFF_Prop_cropFromTop                 256  //  LONG              16.16 fraction times total image width or height, as appropriate.
@@ -325,22 +139,12 @@ enum DFF_TextHeader {
 #define DFF_Prop_pictureBrightness           265  //  LONG              brightness setting
 #define DFF_Prop_pictureGamma                266  //  LONG              16.16 gamma
 #define DFF_Prop_pictureId                   267  //  LONG              Host-defined ID for OLE objects (usually a pointer)
-#define DFF_Prop_pictureDblCrMod             268  //  MSO_CLR            Modification used if shape has double shadow
-#define DFF_Prop_pictureFillCrMod            269  //  MSO_CLR
-#define DFF_Prop_pictureLineCrMod            270  //  MSO_CLR
-#define DFF_Prop_pibPrint                    271  //  IMsoBlip*         Blip to display when printing
-#define DFF_Prop_pibPrintName                272  //  WCHAR*            Blip file name
-#define DFF_Prop_pibPrintFlags               273  //  MSO_BLIPFLAGS      Blip flags
-#define DFF_Prop_fNoHitTestPicture           316  //  sal_Bool              Do not hit test the picture
-#define DFF_Prop_pictureGray                 317  //  sal_Bool              grayscale display
-#define DFF_Prop_pictureBiLevel              318  //  sal_Bool              bi-level display
 #define DFF_Prop_pictureActive               319  //  sal_Bool              Server is active (OLE objects only)
 // Geometry
 #define DFF_Prop_geoLeft                     320  //  LONG              Defines the G (geometry) coordinate space.
 #define DFF_Prop_geoTop                      321  //  LONG
 #define DFF_Prop_geoRight                    322  //  LONG
 #define DFF_Prop_geoBottom                   323  //  LONG
-#define DFF_Prop_shapePath                   324  //  MSO_SHAPEPATH
 #define DFF_Prop_pVertices                   325  //  IMsoArray         An array of points, in G units.
 #define DFF_Prop_pSegmentInfo                326  //  IMsoArray
 #define DFF_Prop_adjustValue                 327  //  LONG              Adjustment values corresponding to the positions of the
@@ -360,9 +164,7 @@ enum DFF_TextHeader {
 #define DFF_Prop_pFormulas                   342  //  LONG
 #define DFF_Prop_textRectangles              343  //  LONG
 #define DFF_Prop_connectorType               344  //  LONG              ->0=none, 1=segments, 2=custom, 3=rect
-#define DFF_Prop_fShadowOK                   378  //  sal_Bool              Shadow may be set
 #define DFF_Prop_f3DOK                       379  //  sal_Bool              3D may be set
-#define DFF_Prop_fLineOK                     380  //  sal_Bool              Line style may be set
 #define DFF_Prop_fGtextOK                    381  //  sal_Bool              Text effect (FontWork) supported
 #define DFF_Prop_fFillShadeShapeOK           382  //  BOOL
 #define DFF_Prop_fFillOK                     383  //  sal_Bool              OK to fill the shape through the UI or VBA?
@@ -372,49 +174,21 @@ enum DFF_TextHeader {
 #define DFF_Prop_fillOpacity                 386  //  LONG              Fixed 16.16
 #define DFF_Prop_fillBackColor               387  //  MSO_CLR            Background color
 #define DFF_Prop_fillBackOpacity             388  //  LONG              Shades only
-#define DFF_Prop_fillCrMod                   389  //  MSO_CLR            Modification for BW views
 #define DFF_Prop_fillBlip                    390  //  IMsoBlip*         Pattern/texture
-#define DFF_Prop_fillBlipName                391  //  WCHAR*            Blip file name
-#define DFF_Prop_fillBlipFlags               392  //  MSO_BLIPFLAGS      Blip flags
 #define DFF_Prop_fillWidth                   393  //  LONG              How big (A units) to make a metafile texture.
 #define DFF_Prop_fillHeight                  394  //  LONG
 #define DFF_Prop_fillAngle                   395  //  LONG              Fade angle - degrees in 16.16
 #define DFF_Prop_fillFocus                   396  //  LONG              Linear shaded fill focus percent
-#define DFF_Prop_fillToLeft                  397  //  LONG              Fraction 16.16
-#define DFF_Prop_fillToTop                   398  //  LONG              Fraction 16.16
 #define DFF_Prop_fillToRight                 399  //  LONG              Fraction 16.16
 #define DFF_Prop_fillToBottom                400  //  LONG              Fraction 16.16
-#define DFF_Prop_fillRectLeft                401  //  LONG              For shaded fills, use the specified rectangle instead of the shape's bounding rect to define how large the fade is going to be.
-#define DFF_Prop_fillRectTop                 402  //  LONG
-#define DFF_Prop_fillRectRight               403  //  LONG
-#define DFF_Prop_fillRectBottom              404  //  LONG
-#define DFF_Prop_fillDztype                  405  //  MSO_DZTYPE
-#define DFF_Prop_fillShadePreset             406  //  LONG              Special shades
 #define DFF_Prop_fillShadeColors             407  //  IMsoArray         a preset array of colors
-#define DFF_Prop_fillOriginX                 408  //  LONG
-#define DFF_Prop_fillOriginY                 409  //  LONG
-#define DFF_Prop_fillShapeOriginX            410  //  LONG
-#define DFF_Prop_fillShapeOriginY            411  //  LONG
-#define DFF_Prop_fillShadeType               412  //  MSO_SHADETYPE      Type of shading, if a shaded (gradient) fill.
 #define DFF_Prop_fFilled                     443  //  sal_Bool              Is shape filled?
-#define DFF_Prop_fHitTestFill                444  //  sal_Bool              Should we hit test fill?
-#define DFF_Prop_fillShape                   445  //  sal_Bool              Register pattern on shape
-#define DFF_Prop_fillUseRect                 446  //  sal_Bool              Use the large rect?
 #define DFF_Prop_fNoFillHitTest              447  //  sal_Bool              Hit test a shape as though filled
 // LineStyle
 #define DFF_Prop_lineColor                   448  //  MSO_CLR            Color of line
 #define DFF_Prop_lineOpacity                 449  //  LONG              Not implemented
 #define DFF_Prop_lineBackColor               450  //  MSO_CLR            Background color
-#define DFF_Prop_lineCrMod                   451  //  MSO_CLR            Modification for BW views
-#define DFF_Prop_lineType                    452  //  MSO_LINETYPE       Type of line
-#define DFF_Prop_lineFillBlip                453  //  IMsoBlip*         Pattern/texture
-#define DFF_Prop_lineFillBlipName            454  //  WCHAR*            Blip file name
-#define DFF_Prop_lineFillBlipFlags           455  //  MSO_BLIPFLAGS      Blip flags
-#define DFF_Prop_lineFillWidth               456  //  LONG              How big (A units) to make a metafile texture.
-#define DFF_Prop_lineFillHeight              457  //  LONG
-#define DFF_Prop_lineFillDztype              458  //  MSO_DZTYPE         How to interpret fillWidth/Height numbers.
 #define DFF_Prop_lineWidth                   459  //  LONG              A units; 1pt == 12700 EMUs
-#define DFF_Prop_lineMiterLimit              460  //  LONG              ratio (16.16) of width
 #define DFF_Prop_lineStyle                   461  //  MSO_LINESTYLE      Draw parallel lines?
 #define DFF_Prop_lineDashing                 462  //  MSO_LINEDASHING    Can be overridden by:
 #define DFF_Prop_lineDashStyle               463  //  IMsoArray         As Win32 ExtCreatePen
@@ -426,67 +200,28 @@ enum DFF_TextHeader {
 #define DFF_Prop_lineEndArrowLength          469  //  MSO_LINEENDLENGTH  Arrow at end
 #define DFF_Prop_lineJoinStyle               470  //  MSO_LINEJOIN       How to join lines
 #define DFF_Prop_lineEndCapStyle             471  //  MSO_LINECAP        How to end lines
-#define DFF_Prop_fArrowheadsOK               507  //  sal_Bool              Allow arrowheads if prop. is set
 #define DFF_Prop_fLine                       508  //  sal_Bool              Any line?
-#define DFF_Prop_fHitTestLine                509  //  sal_Bool              Should we hit test lines?
-#define DFF_Prop_lineFillShape               510  //  sal_Bool              Register pattern on shape
 #define DFF_Prop_fNoLineDrawDash             511  //  sal_Bool              Draw a dashed line if no line
 // ShadowStyle
 #define DFF_Prop_shadowType                  512  //  MSO_SHADOWTYPE     Type of effect
 #define DFF_Prop_shadowColor                 513  //  MSO_CLR            Foreground color
-#define DFF_Prop_shadowHighlight             514  //  MSO_CLR            Embossed color
-#define DFF_Prop_shadowCrMod                 515  //  MSO_CLR            Modification for BW views
 #define DFF_Prop_shadowOpacity               516  //  LONG              Fixed 16.16
 #define DFF_Prop_shadowOffsetX               517  //  LONG              Offset shadow
 #define DFF_Prop_shadowOffsetY               518  //  LONG              Offset shadow
-#define DFF_Prop_shadowSecondOffsetX         519  //  LONG              Double offset shadow
-#define DFF_Prop_shadowSecondOffsetY         520  //  LONG              Double offset shadow
-#define DFF_Prop_shadowScaleXToX             521  //  LONG              16.16
-#define DFF_Prop_shadowScaleYToX             522  //  LONG              16.16
-#define DFF_Prop_shadowScaleXToY             523  //  LONG              16.16
-#define DFF_Prop_shadowScaleYToY             524  //  LONG              16.16
-#define DFF_Prop_shadowPerspectiveX          525  //  LONG              16.16 / weight
-#define DFF_Prop_shadowPerspectiveY          526  //  LONG              16.16 / weight
-#define DFF_Prop_shadowWeight                527  //  LONG              scaling factor
-#define DFF_Prop_shadowOriginX               528  //  LONG
-#define DFF_Prop_shadowOriginY               529  //  LONG
-#define DFF_Prop_fShadow                     574  //  sal_Bool              Any shadow?
 #define DFF_Prop_fshadowObscured             575  //  sal_Bool              Excel5-style shadow
 // PerspectiveStyle
-#define DFF_Prop_perspectiveType             576  //  MSO_XFORMTYPE      Where transform applies
-#define DFF_Prop_perspectiveOffsetX          577  //  LONG              The LONG values define a transformation matrix, effectively, each value is scaled by the perspectiveWeight parameter.
-#define DFF_Prop_perspectiveOffsetY          578  //  LONG
-#define DFF_Prop_perspectiveScaleXToX        579  //  LONG
-#define DFF_Prop_perspectiveScaleYToX        580  //  LONG
-#define DFF_Prop_perspectiveScaleXToY        581  //  LONG
-#define DFF_Prop_perspectiveScaleYToY        582  //  LONG
-#define DFF_Prop_perspectivePerspectiveX     583  //  LONG
-#define DFF_Prop_perspectivePerspectiveY     584  //  LONG
-#define DFF_Prop_perspectiveWeight           585  //  LONG              Scaling factor
-#define DFF_Prop_perspectiveOriginX          586  //  LONG
-#define DFF_Prop_perspectiveOriginY          587  //  LONG
 #define DFF_Prop_fPerspective                639  //  sal_Bool              On/off
 // 3D Object
 #define DFF_Prop_c3DSpecularAmt              640  //  LONG         Fixed-point 16.16
 #define DFF_Prop_c3DDiffuseAmt               641  //  LONG         Fixed-point 16.16
 #define DFF_Prop_c3DShininess                642  //  LONG         Default gives OK results
-#define DFF_Prop_c3DEdgeThickness            643  //  LONG         Specular edge thickness
 #define DFF_Prop_c3DExtrudeForward           644  //  LONG         Distance of extrusion in EMUs
 #define DFF_Prop_c3DExtrudeBackward          645  //  LONG
-#define DFF_Prop_c3DExtrudePlane             646  //  LONG         Extrusion direction
 #define DFF_Prop_c3DExtrusionColor           647  //  MSO_CLR       Basic color of extruded part of shape; the lighting model used will determine the exact shades used when rendering.
-#define DFF_Prop_c3DCrMod                    648  //  MSO_CLR       Modification for BW views
-#define DFF_Prop_f3D                         700  //  sal_Bool         Does this shape have a 3D effect?
-#define DFF_Prop_fc3DMetallic                701  //  sal_Bool         Use metallic specularity?
-#define DFF_Prop_fc3DUseExtrusionColor       702  //  BOOL
 #define DFF_Prop_fc3DLightFace               703  //  BOOL
 // 3D Style
 #define DFF_Prop_c3DYRotationAngle           704  //  LONG            degrees (16.16) about y axis
 #define DFF_Prop_c3DXRotationAngle           705  //  LONG            degrees (16.16) about x axis
-#define DFF_Prop_c3DRotationAxisX            706  //  LONG            These specify the rotation axis; only their relative magnitudes matter.
-#define DFF_Prop_c3DRotationAxisY            707  //  LONG
-#define DFF_Prop_c3DRotationAxisZ            708  //  LONG
-#define DFF_Prop_c3DRotationAngle            709  //  LONG            degrees (16.16) about axis
 #define DFF_Prop_c3DRotationCenterX          710  //  LONG            rotation center x (16.16 or g-units)
 #define DFF_Prop_c3DRotationCenterY          711  //  LONG            rotation center y (16.16 or g-units)
 #define DFF_Prop_c3DRotationCenterZ          712  //  LONG            rotation center z (absolute (emus))
@@ -508,36 +243,13 @@ enum DFF_TextHeader {
 #define DFF_Prop_c3DFillY                    728  //  LONG            tion; only their relative
 #define DFF_Prop_c3DFillZ                    729  //  LONG            magnitudes matter
 #define DFF_Prop_c3DFillIntensity            730  //  LONG            Fixed point intensity
-#define DFF_Prop_fc3DConstrainRotation       763  //  BOOL
-#define DFF_Prop_fc3DRotationCenterAuto      764  //  BOOL
-#define DFF_Prop_fc3DParallel                765  //  sal_Bool            Parallel projection?
-#define DFF_Prop_fc3DKeyHarsh                766  //  sal_Bool            Is key lighting harsh?
 #define DFF_Prop_fc3DFillHarsh               767  //  sal_Bool            Is fill lighting harsh?
 // Shape
 #define DFF_Prop_hspMaster                   769  //  MSO_HSP          master shape
 #define DFF_Prop_cxstyle                     771  //  MSO_CXSTYLE      Type of connector
-#define DFF_Prop_bWMode                      772  //  MSO_BWMODE       Settings for modifications to be made when in different forms of black-and-white mode.
-#define DFF_Prop_bWModePureBW                773  //  MSO_BWMODE
-#define DFF_Prop_bWModeBW                    774  //  MSO_BWMODE
-#define DFF_Prop_fOleIcon                    826  //  sal_Bool            For OLE objects, whether the object is in icon form
-#define DFF_Prop_fPreferRelativeResize       827  //  sal_Bool            For UI only. Prefer relative resizing.
-#define DFF_Prop_fLockShapeType              828  //  sal_Bool            Lock the shape type (don't allow Change Shape)
-#define DFF_Prop_fDeleteAttachedObject       830  //  BOOL
 #define DFF_Prop_fBackground                 831  //  sal_Bool            If sal_True, this is the background shape.
 
 // Callout
-#define DFF_Prop_spcot                       832  //  MSO_SPCOT        Callout type
-#define DFF_Prop_dxyCalloutGap               833  //  LONG            Distance from box to first point.(EMUs)
-#define DFF_Prop_spcoa                       834  //  MSO_SPCOA        Callout angle
-#define DFF_Prop_spcod                       835  //  MSO_SPCOD        Callout drop type
-#define DFF_Prop_dxyCalloutDropSpecified     836  //  LONG            if mso_spcodSpecified, the actual drop distance
-#define DFF_Prop_dxyCalloutLengthSpecified   837  //  LONG            if fCalloutLengthSpecified, the actual distance
-#define DFF_Prop_fCallout                    889  //  sal_Bool            Is the shape a callout?
-#define DFF_Prop_fCalloutAccentBar           890  //  sal_Bool            does callout have accent bar
-#define DFF_Prop_fCalloutTextBorder          891  //  sal_Bool            does callout have a text border
-#define DFF_Prop_fCalloutMinusX              892  //  BOOL
-#define DFF_Prop_fCalloutMinusY              893  //  BOOL
-#define DFF_Prop_fCalloutDropAuto            894  //  sal_Bool            If true, then we occasionally invert the drop distance
 #define DFF_Prop_fCalloutLengthSpecified     895  //  sal_Bool            if true, we look at dxyCalloutLengthSpecified
 
 // GroupShape
@@ -549,24 +261,11 @@ enum DFF_TextHeader {
 #define DFF_Prop_dyWrapDistTop               901  //  LONG            Top wrapping distance from text (Word)
 #define DFF_Prop_dxWrapDistRight             902  //  LONG            Right wrapping distance from text (Word)
 #define DFF_Prop_dyWrapDistBottom            903  //  LONG            Bottom wrapping distance from text (Word)
-#define DFF_Prop_lidRegroup                  904  //  LONG            Regroup ID
 #define DFF_Prop_tableProperties             927  //  LONG
 #define DFF_Prop_tableRowProperties          928  //  LONG*
-#define DFF_Prop_fEditedWrap                 953  //  sal_Bool            Has the wrap polygon been edited?
-#define DFF_Prop_fBehindDocument             954  //  sal_Bool            Word-only (shape is behind text)
-#define DFF_Prop_fOnDblClickNotify           955  //  sal_Bool            Notify client on a double click
-#define DFF_Prop_fIsButton                   956  //  sal_Bool            A button shape (i.e., clicking performs an action). Set for shapes with attached hyperlinks or macros.
-#define DFF_Prop_fOneD                       957  //  sal_Bool            1D adjustment
 #define DFF_Prop_fHidden                     958  //  sal_Bool            Do not display
 #define DFF_Prop_fPrint                      959  //  sal_Bool            Print this shape
 // entsprechende BitFlags
-#define DFF_PBit_EditedWrap         0x00000040
-#define DFF_PBit_BehindDocument     0x00000020
-#define DFF_PBit_OnDblClickNotify   0x00000010
-#define DFF_PBit_IsButton           0x00000008
-#define DFF_PBit_OneD               0x00000004
-#define DFF_PBit_Hidden             0x00000002
-#define DFF_PBit_Print              0x00000001
 
 // properties of the second property set
 #define DFF_Prop_metroBlob					937 // XML ZipPackage*

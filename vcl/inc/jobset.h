@@ -25,12 +25,9 @@
 #include <unordered_map>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
-#define JOBSETUP_SYSTEM_DONTKNOW    0
 #define JOBSETUP_SYSTEM_WINDOWS     1
-#define JOBSETUP_SYSTEM_OS2         2
 #define JOBSETUP_SYSTEM_UNIX        3
 #define JOBSETUP_SYSTEM_MAC         4
-#define JOBSETUP_SYSTEM_JAVA        5
 
 struct ImplJobSetup
 {

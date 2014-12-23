@@ -23,7 +23,6 @@
 #define RID_STR_START       2000
 #define RID_MENU_START      10000
 #define RID_IMAGE_START     15000
-#define RID_FWK_DIALOG_START 0
 
 #define STR_MENU_ADDONS                         (RID_STR_START+0)
 #define STR_MENU_ADDONHELP                      (RID_STR_START+1)

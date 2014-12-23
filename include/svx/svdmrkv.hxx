@@ -51,8 +51,6 @@
 #define SDRSEARCHPASS_DIRECT       0x0000 /* Object is hit by 'direct hit' */
 #define SDRSEARCHPASS_INACTIVELIST 0x0001 /* Obj is on the page, but not in the AktGroup (at WHOLEPAGE) */
 #define SDRSEARCHPASS_MASTERPAGE   0x0002 /* Object was found on the MasterPage */
-#define SDRSEARCHPASS_BOUND        0x0010 /* Object found, butjust after Bound-Check gefunden   */
-#define SDRSEARCHPASS_NEAREST      0x0020 /* Object found, but just after Nearest-Check */
 
 enum SdrHitKind {SDRHIT_NONE,      // No hit
                  SDRHIT_OBJECT,    // Hit
@@ -81,7 +79,6 @@ enum SdrViewEditMode {SDREDITMODE_EDIT,           // Also known as arrow or poin
                       SDREDITMODE_CREATE,         // Tool for object creation
                       SDREDITMODE_GLUEPOINTEDIT}; // Glue point editing mode
 
-#define IMPSDR_MARKOBJDESCRIPTION    0x0000
 #define IMPSDR_POINTSDESCRIPTION     0x0001
 #define IMPSDR_GLUEPOINTSDESCRIPTION 0x0002
 

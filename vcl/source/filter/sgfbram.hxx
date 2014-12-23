@@ -27,12 +27,8 @@
 #define SgfSimpVect   2 /* Simple vectorformat     */
 #define SgfPostScrp   3 /* Postscript file         */
 #define SgfStarDraw   7 /* StarDraw SGV-file       */
-#define SgfDontKnow 255 /* Unknown or no SGF/SGV   */
 
 // constants for SgfHeader.SwGrCol
-#define SgfBlckWhit 1 /* black/white image                  SimpVector,  */
-#define SgfGrayscal 2 /* image with greyscale               StarDraw and */
-#define Sgf16Colors 3 /* colour image  (16 colours)         Bit Image    */
 #define SgfVectFarb 4 /* use colours in lines                            */
 #define SgfVectGray 5 /* use greyscale for lines only for                */
 #define SgfVectWdth 6 /* use line widths for lines          SimpVector   */

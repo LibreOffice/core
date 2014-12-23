@@ -26,7 +26,6 @@
 // Misc (Pool)
 // reserved: 0..99
 #define XML_STYLE_FAMILY_DATA_STYLE             0
-#define XML_STYLE_FAMILY_DATA_STYLE_NAME        "data-style"
 #define XML_STYLE_FAMILY_PAGE_MASTER            1
 #define XML_STYLE_FAMILY_PAGE_MASTER_NAME       "page-layout"
 #define XML_STYLE_FAMILY_PAGE_MASTER_PREFIX     "pm"
@@ -102,7 +101,6 @@
 // Forms/Controls
 // reserved 600..649
 #define XML_STYLE_FAMILY_CONTROL_ID             600
-#define XML_STYLE_FAMILY_CONTROL_NAME           "control"
 #define XML_STYLE_FAMILY_CONTROL_PREFIX         "ctrl"
 
 #endif // INCLUDED_XMLOFF_FAMILIES_HXX

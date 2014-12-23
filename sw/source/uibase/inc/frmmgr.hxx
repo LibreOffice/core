@@ -38,13 +38,11 @@ class   SwFmtCol;
 const SwTwips   DFLT_WIDTH      = MM50 * 4;
 const SwTwips   DFLT_HEIGHT     = MM50;
 
-#define FULL_ATTRSET    0xffff
 
 #define FRMMGR_TYPE_NONE    0x00
 #define FRMMGR_TYPE_TEXT    0x01
 #define FRMMGR_TYPE_GRF     0x02
 #define FRMMGR_TYPE_OLE     0x04
-#define FRMMGR_TYPE_LABEL   0x08
 #define FRMMGR_TYPE_ENVELP  0x10
 
 class SW_DLLPUBLIC SwFlyFrmAttrMgr

@@ -205,7 +205,6 @@ typedef enum {
     JCOPYOPT_ALL        /* copy all optional markers */
 } JCOPY_OPTION;
 
-#define JCOPYOPT_DEFAULT  JCOPYOPT_COMMENTS /* recommended default */
 
 /* Setup decompression object to save desired markers in memory */
 EXTERN(void) jcopy_markers_setup

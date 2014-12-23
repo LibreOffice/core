@@ -165,7 +165,6 @@ struct SfxObjectBarList_Impl
 #define SFX_SPLITWINDOWS_LEFT   0
 #define SFX_SPLITWINDOWS_TOP    2
 #define SFX_SPLITWINDOWS_RIGHT  1
-#define SFX_SPLITWINDOWS_BOTTOM 3
 #define SFX_SPLITWINDOWS_MAX    4
 
 

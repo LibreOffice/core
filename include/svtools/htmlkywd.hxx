@@ -281,7 +281,6 @@
 #define OOO_STRING_SVTOOLS_HTML_S_eta "eta"
 #define OOO_STRING_SVTOOLS_HTML_S_euro "euro"
 #define OOO_STRING_SVTOOLS_HTML_S_exist "exist"
-#define OOO_STRING_SVTOOLS_HTML_S_notexist "not exist"
 #define OOO_STRING_SVTOOLS_HTML_S_fnof "fnof"
 #define OOO_STRING_SVTOOLS_HTML_S_forall "forall"
 #define OOO_STRING_SVTOOLS_HTML_S_frasl "frasl"
@@ -553,7 +552,6 @@
 #define OOO_STRING_SVTOOLS_HTML_O_rows "rows"
 #define OOO_STRING_SVTOOLS_HTML_O_start "start"
 #define OOO_STRING_SVTOOLS_HTML_O_size "size"
-#define OOO_STRING_SVTOOLS_HTML_O_units "units"
 
 // values of <INPUT TYPE=...>
 #define OOO_STRING_SVTOOLS_HTML_IT_text "text"
@@ -595,7 +593,6 @@
 #define OOO_STRING_SVTOOLS_HTML_AL_justify "justify"
 #define OOO_STRING_SVTOOLS_HTML_AL_char "char"
 #define OOO_STRING_SVTOOLS_HTML_AL_all "all"
-#define OOO_STRING_SVTOOLS_HTML_AL_none "none"
 
 // values of <TR VALIGN=...>, <IMG ALIGN=...>
 #define OOO_STRING_SVTOOLS_HTML_VA_top "top"
@@ -613,7 +610,6 @@
 #define OOO_STRING_SVTOOLS_HTML_SH_circle "circle"
 #define OOO_STRING_SVTOOLS_HTML_SH_poly "poly"
 #define OOO_STRING_SVTOOLS_HTML_SH_polygon "polygon"
-#define OOO_STRING_SVTOOLS_HTML_SH_default "default"
 
 #define OOO_STRING_SVTOOLS_HTML_LG_starbasic "starbasic"
 #define OOO_STRING_SVTOOLS_HTML_LG_javascript "javascript"
@@ -647,16 +643,6 @@
 #define OOO_STRING_SVTOOLS_HTML_ULTYPE_disc "disc"
 #define OOO_STRING_SVTOOLS_HTML_ULTYPE_square "square"
 #define OOO_STRING_SVTOOLS_HTML_ULTYPE_circle "circle"
-
-// values of <FRAMESET SCROLLING=...>
-#define OOO_STRING_SVTOOLS_HTML_SCROLL_yes "yes"
-#define OOO_STRING_SVTOOLS_HTML_SCROLL_no "no"
-#define OOO_STRING_SVTOOLS_HTML_SCROLL_auto "auto"
-
-// values of <MULTICOL TYPE=...>
-#define OOO_STRING_SVTOOLS_HTML_MCTYPE_horizontal "horizontal"
-#define OOO_STRING_SVTOOLS_HTML_MCTYPE_vertical "vertical"
-#define OOO_STRING_SVTOOLS_HTML_MCTYPE_box "box"
 
 // values of <MARQUEE BEHAVIOUR=...>
 #define OOO_STRING_SVTOOLS_HTML_BEHAV_scroll "scroll"

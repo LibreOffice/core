@@ -63,7 +63,6 @@ typedef unsigned int uint32_t;
 #include <inttypes.h>   /* uint32_t */
 #endif
 
-#define UTHASH_VERSION 1.9.3
 
 #define uthash_fatal(msg) exit(-1)        /* fatal error (out of memory,etc) */
 #define uthash_malloc(sz) malloc(sz)      /* malloc fcn                      */

@@ -27,7 +27,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#define SC_SMALL3DSHADOW    COL_BLACK
 #define SC_SIZE_NONE        65535
 const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
 

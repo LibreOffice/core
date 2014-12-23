@@ -80,12 +80,9 @@
     // FREE
 #define PAGE_ADO                        RID_PAGE_START +  7
     // FREE
-#define TAB_WIZ_TYPE_SELECT             RID_PAGE_START + 10
-#define TAB_WIZ_NAME_MATCHING           RID_PAGE_START + 11
     // FREE
     // FREE
 #define PAGE_LDAP                       RID_PAGE_START + 15
-#define TAB_PAGE_USERADMIN              RID_PAGE_START + 16
 #define PAGE_MYSQL_ODBC                 RID_PAGE_START + 17
 #define PAGE_USERDRIVER                 RID_PAGE_START + 19
 #define PAGE_MYSQL_JDBC                 RID_PAGE_START + 20
@@ -94,7 +91,6 @@
 #define PAGE_MYSQL_NATIVE               RID_PAGE_START + 24
     // FREE
 #define PAGE_ORACLE_JDBC                RID_PAGE_START + 27
-#define PAGE_TABLESUBSCRIPTION          RID_PAGE_START + 28
 
     // FREE
 

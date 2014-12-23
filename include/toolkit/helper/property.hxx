@@ -233,9 +233,6 @@ namespace uno {
 #define PROPERTY_ALIGN_CENTER                   1
 #define PROPERTY_ALIGN_RIGHT                    2
 
-#define PROPERTY_STATE_OFF                      0
-#define PROPERTY_STATE_ON                       1
-#define PROPERTY_STATE_DONTCARE                 2
 
 TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const OUString& rPropertyName );
 const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );

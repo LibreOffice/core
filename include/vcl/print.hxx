@@ -51,7 +51,6 @@ namespace vcl {
 }
 
 
-#define PAGEQUEUE_ALLPAGES   0xFFFF
 
 enum PrinterSupport { SUPPORT_SET_ORIENTATION, SUPPORT_SET_PAPERBIN,
                       SUPPORT_SET_PAPERSIZE, SUPPORT_SET_PAPER,

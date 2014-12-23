@@ -199,17 +199,6 @@ enum
     EQU_CAP_POS
 };
 
-/**
- * Definitions for frame's common 'option' member.
- */
-#define DRAW_FRAME      1                         /* <-> no frame, bit 0 */
-#define NORMAL_PIC      2                         /* <-> reverse,  bit 1 */
-#define FIT_TO_COLUMN   4                         /* fig_xs is columnlen */
-#define UNKNOWN_FILE    8                         /* need check reverse for pcx mono */
-#define HYPERTEXT_FLAG  16
-#define UNKNOWN_SIZE    32
-#define FOPT_TEMP_BIT   0x00010000                /* temporary starts from 16th bits */
-
 struct CellLine
 {
     unsigned char key;
@@ -617,7 +606,6 @@ typedef union
     PicDefUnknown     picun;
 } PicDef;
 
-#define PIC_INFO_LEN    348
 /**
  * There are four kinds of image.
  * @li External image
@@ -842,10 +830,6 @@ struct ShowPageNum: public HBox
 };
 
 /* 홀수쪽시작 (21) */
-#define HIDE_HD         1                         /* bit 0 */
-#define HIDE_FT         2                         /* bit 1 */
-#define HIDE_PGNUM      4                         /* bit 2 */
-#define HIDE_FRAME      8                         /* bit 3 */
 /**
  * Controls the display of page number, header, footer and border.
  */

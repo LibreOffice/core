@@ -77,9 +77,6 @@ typedef short RSWND_STYLE;
 #define ACCELITEM_KEY                   0x02
 
 // For "Field" resources:
-#define PATTERNFORMATTER_STRICTFORMAT   0x01
-#define PATTERNFORMATTER_EDITMASK       0x02
-#define PATTERNFORMATTER_LITTERALMASK   0x04
 
 #define NUMERICFORMATTER_MIN            0x01
 #define NUMERICFORMATTER_MAX            0x02
@@ -113,7 +110,6 @@ typedef short RSWND_STYLE;
 #define RSC_TOOLBOXITEM_STATE           0x0200
 #define RSC_TOOLBOXITEM_HIDE            0x0400
 #define RSC_TOOLBOXITEM_COMMAND         0x0800
-#define RSC_TOOLBOXITEM_MENUSTRINGS     0x1000
 
 // For "ToolBox" resources:
 #define RSC_TOOLBOX_BUTTONTYPE          0x01
@@ -142,8 +138,6 @@ typedef short RSWND_STYLE;
 #define RSC_IMAGE_MASKCOLOR             0x04
 
 // For "ImageList":
-#define RSC_IMAGELIST_IMAGEBITMAP       0x01
-#define RSC_IMAGELIST_MASKBITMAP        0x02
 #define RSC_IMAGELIST_MASKCOLOR         0x04
 #define RSC_IMAGELIST_IDLIST            0x08
 #define RSC_IMAGELIST_IDCOUNT           0x10

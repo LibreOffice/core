@@ -23,26 +23,9 @@
 #define HID_SDDRAWVIEWSHELL                                     "SD_HID_SDDRAWVIEWSHELL"
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"
-#define HID_SD_OPTIONS_SNAP                                     "SD_HID_SD_OPTIONS_SNAP"
-#define HID_SD_CBX_ONLYSELECTED                                 "SD_HID_SD_CBX_ONLYSELECTED"
-#define HID_SD_BTN_FILTERDIALOG                                 "SD_HID_SD_BTN_FILTERDIALOG"
-#define HID_SD_BTN_PAGE                                         "SD_HID_SD_BTN_PAGE"
-#define HID_SD_BTN_MASTERPAGE                                   "SD_HID_SD_BTN_MASTERPAGE"
-#define HID_SD_BTN_LAYER                                        "SD_HID_SD_BTN_LAYER"
-#define HID_SD_BTN_DRAW                                         "SD_HID_SD_BTN_DRAW"
-#define HID_SD_BTN_SLIDE                                        "SD_HID_SD_BTN_SLIDE"
-#define HID_SD_BTN_OUTLINE                                      "SD_HID_SD_BTN_OUTLINE"
-#define HID_SD_BTN_NOTES                                        "SD_HID_SD_BTN_NOTES"
-#define HID_SD_BTN_HANDOUT                                      "SD_HID_SD_BTN_HANDOUT"
 #define HID_SD_WIN_DOCUMENT                                     "SD_HID_SD_WIN_DOCUMENT"
-#define HID_SD_OPTIONS_LAYOUT                                   "SD_HID_SD_OPTIONS_LAYOUT"
-#define HID_SD_EFFECT_PREVIEW                                   "SD_HID_SD_EFFECT_PREVIEW"
-#define HID_SD_CTL_NEWFOIL                                      "SD_HID_SD_CTL_NEWFOIL"
 #define HID_SD_NAVIGATOR_TLB                                    "SD_HID_SD_NAVIGATOR_TLB"
 #define HID_SD_NAVIGATOR                                        "SD_HID_SD_NAVIGATOR"
-#define HID_SD_CTL_EFFECTS                                      "SD_HID_SD_CTL_EFFECTS"
-#define HID_SD_CTL_TEXT_EFFECTS                                 "SD_HID_SD_CTL_TEXT_EFFECTS"
-#define HID_SD_CTL_SLIDE_CHANGE                                 "SD_HID_SD_CTL_SLIDE_CHANGE"
 #define HID_SD_NAVIGATOR_TBX                                    "SD_HID_SD_NAVIGATOR_TBX"
 #define HID_SD_NAVIGATOR_LB                                     "SD_HID_SD_NAVIGATOR_LB"
 #define HID_SD_NAVIGATOR_TBI_PEN                                "SD_HID_SD_NAVIGATOR_TBI_PEN"
@@ -65,7 +48,6 @@
 
 #define HID_SD_WIN_PRESENTATION                                 "SD_HID_SD_WIN_PRESENTATION"
 
-#define HID_SD_BTN_PRESENTATION                                 "SD_HID_SD_BTN_PRESENTATION"
 
 #define HID_SD_HTMLEXPORT_PAGE1                                 "SD_HID_SD_HTMLEXPORT_PAGE1"
 #define HID_SD_HTMLEXPORT_PAGE2                                 "SD_HID_SD_HTMLEXPORT_PAGE2"
@@ -74,51 +56,19 @@
 #define HID_SD_HTMLEXPORT_PAGE5                                 "SD_HID_SD_HTMLEXPORT_PAGE5"
 #define HID_SD_HTMLEXPORT_PAGE6                                 "SD_HID_SD_HTMLEXPORT_PAGE6"
 
-#define HID_SD_CHGFOIL_LAYOUT                                   "SD_HID_SD_CHGFOIL_LAYOUT"
-#define HID_SD_CHGFOIL_BACKGROUND                               "SD_HID_SD_CHGFOIL_BACKGROUND"
-#define HID_SD_CHGFOIL_OBJECTS                                  "SD_HID_SD_CHGFOIL_OBJECTS"
-#define HID_SD_CHGFOIL_NAME                                     "SD_HID_SD_CHGFOIL_NAME"
 
-#define HID_FM_CTL_SELECTION                                    "SD_HID_FM_CTL_SELECTION"
 
 #define HID_SD_TABBAR_PAGES                                     "SD_HID_SD_TABBAR_PAGES"
 #define HID_SD_TABBAR_LAYERS                                    "SD_HID_SD_TABBAR_LAYERS"
 
-#define HID_SD_UNDODELETEWARNING_DLG                            "SD_HID_SD_UNDODELETEWARNING_DLG"
-#define HID_SD_UNDODELETEWARNING_CBX                            "SD_HID_SD_UNDODELETEWARNING_CBX"
 
 #define HID_SD_NAMEDIALOG_OBJECT                                "SD_HID_SD_NAMEDIALOG_OBJECT"
 #define HID_SD_NAMEDIALOG_PAGE                                  "SD_HID_SD_NAMEDIALOG_PAGE"
 #define HID_SD_NAMEDIALOG_LINEEND                               "SD_HID_SD_NAMEDIALOG_LINEEND"
 
-#define HID_SD_TASK_PANE                                        "SD_HID_SD_TASK_PANE"
-#define HID_SD_SLIDE_DESIGNS                                    "SD_HID_SD_SLIDE_DESIGNS"
-#define HID_SD_CURRENT_MASTERS                                  "SD_HID_SD_CURRENT_MASTERS"
-#define HID_SD_RECENT_MASTERS                                   "SD_HID_SD_RECENT_MASTERS"
-#define HID_SD_ALL_MASTERS                                      "SD_HID_SD_ALL_MASTERS"
-#define HID_SD_SLIDE_LAYOUTS                                    "SD_HID_SD_SLIDE_LAYOUTS"
-#define HID_SD_CUSTOM_ANIMATIONS                                "SD_HID_SD_CUSTOM_ANIMATIONS"
-#define HID_SD_SLIDE_TRANSITIONS                                "SD_HID_SD_SLIDE_TRANSITIONS"
 
-#define HID_SD_ANIMATIONSCHEMESPANE_LB_ANIMATION_SCHEMES        "SD_HID_SD_ANIMATIONSCHEMESPANE_LB_ANIMATION_SCHEMES"
-#define HID_SD_ANIMATIONSCHEMESPANE_PB_APPLY_TO_ALL             "SD_HID_SD_ANIMATIONSCHEMESPANE_PB_APPLY_TO_ALL"
-#define HID_SD_ANIMATIONSCHEMESPANE_PB_PLAY                     "SD_HID_SD_ANIMATIONSCHEMESPANE_PB_PLAY"
-#define HID_SD_ANIMATIONSCHEMESPANE_PB_SLIDE_SHOW               "SD_HID_SD_ANIMATIONSCHEMESPANE_PB_SLIDE_SHOW"
-#define HID_SD_ANIMATIONSCHEMESPANE_CB_AUTO_PREVIEW             "SD_HID_SD_ANIMATIONSCHEMESPANE_CB_AUTO_PREVIEW"
 
-#define HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS         "SD_HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS"
-#define HID_SD_SLIDETRANSITIONPANE_LB_SPEED                     "SD_HID_SD_SLIDETRANSITIONPANE_LB_SPEED"
-#define HID_SD_SLIDETRANSITIONPANE_LB_SOUND                     "SD_HID_SD_SLIDETRANSITIONPANE_LB_SOUND"
-#define HID_SD_SLIDETRANSITIONPANE_CB_LOOP_SOUND                "SD_HID_SD_SLIDETRANSITIONPANE_CB_LOOP_SOUND"
-#define HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_ON_MOUSE          "SD_HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_ON_MOUSE"
-#define HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_AUTO              "SD_HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_AUTO"
-#define HID_SD_SLIDETRANSITIONPANE_MF_ADVANCE_AUTO_AFTER        "SD_HID_SD_SLIDETRANSITIONPANE_MF_ADVANCE_AUTO_AFTER"
-#define HID_SD_SLIDETRANSITIONPANE_PB_APPLY_TO_ALL              "SD_HID_SD_SLIDETRANSITIONPANE_PB_APPLY_TO_ALL"
-#define HID_SD_SLIDETRANSITIONPANE_PB_PLAY                      "SD_HID_SD_SLIDETRANSITIONPANE_PB_PLAY"
-#define HID_SD_SLIDETRANSITIONPANE_PB_SLIDE_SHOW                "SD_HID_SD_SLIDETRANSITIONPANE_PB_SLIDE_SHOW"
-#define HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW              "SD_HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW"
 
-#define HID_SD_TASK_PANE_VIEW_MENU                              "SD_HID_SD_TASK_PANE_VIEW_MENU"
 #define HID_SD_TASK_PANE_PREVIEW_CURRENT                        "SD_HID_SD_TASK_PANE_PREVIEW_CURRENT"
 #define HID_SD_TASK_PANE_PREVIEW_RECENT                         "SD_HID_SD_TASK_PANE_PREVIEW_RECENT"
 #define HID_SD_TASK_PANE_PREVIEW_ALL                            "SD_HID_SD_TASK_PANE_PREVIEW_ALL"
@@ -133,13 +83,10 @@
 #define HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX             "SD_HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX"
 #define HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX         "SD_HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX"
 
-#define HID_SD_SLIDESHOW_DISPLAY                                "SD_HID_SD_SLIDESHOW_DISPLAY"
 
 #define HID_SD_RULER_HORIZONTAL                                 "SD_HID_SD_RULER_HORIZONTAL"
 #define HID_SD_RULER_VERTICAL                                   "SD_HID_SD_RULER_VERTICAL"
 
-#define HID_SD_TABLE_DESIGN                                     "SD_HID_SD_TABLE_DESIGN"
-#define HID_SD_ANNOTATIONS                                      "SD_HID_SD_ANNOTATIONS"
 
 #define HID_MN_SUB_GRAPHIC                                      "SD_HID_MN_SUB_GRAPHIC"
 #define HID_MN_SUB_FIELD                                        "SD_HID_MN_SUB_FIELD"

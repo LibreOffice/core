@@ -20,11 +20,6 @@
 #ifndef _SCRIPTDLG_HRC
 #define _SCRIPTDLG_HRC
 
-#define STR_FT_NEWMACRO                 11
-#define STR_NEWLIB                      12
-#define STR_NEWMACRO                    13
-#define STR_FT_RENAME                   18
-#define STR_RENAME                      19
 
 #endif
 

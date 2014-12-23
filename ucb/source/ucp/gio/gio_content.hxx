@@ -49,7 +49,6 @@ namespace ucbhelper
 namespace gio
 {
 
-#define GIO_CONTENT_SERVICE_NAME "com.sun.star.ucb.GIOContent"
 
 #define GIO_FILE_TYPE   "application/vnd.sun.staroffice.gio-file"
 #define GIO_FOLDER_TYPE "application/vnd.sun.staroffice.gio-folder"

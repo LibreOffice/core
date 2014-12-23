@@ -33,7 +33,6 @@
 
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"
 #define COMPONENT_GETENVEXT         "component_getImplementationEnvironmentExt"
-#define COMPONENT_GETDESCRIPTION    "component_getDescription"
 #define COMPONENT_WRITEINFO         "component_writeInfo"
 #define COMPONENT_GETFACTORY        "component_getFactory"
 

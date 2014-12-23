@@ -47,7 +47,6 @@ namespace rtl
  */
 
 #define ZIP_MAXNAMELEN 512
-#define ZIP_MAXEXTRA 256
 #define ZIP_MAXENTRIES (0x10000 - 2)
 
 class ZipEnumeration;

@@ -70,7 +70,6 @@
 #define IDS_MSG_PARAM_PROCESSID         144
 #define IDS_MSG_PARAM_PROCESSID_DESCRIPTION 145
 #define IDS_MSG_PARAM_HELP_DESCRIPTION 146
-#define IDC_RICHEDIT_HEADER             1005
 #define IDC_RICHEDIT21                  1006
 #define IDC_ALLOW_CONTACT               1007
 #define IDC_EDIT_TITLE                  1008
@@ -85,7 +84,6 @@
 #define IDC_ENTER_DESCRIPTION           1017
 #define IDC_EDIT3                       1018
 #define IDC_HEADER                      1019
-#define IDC_STATICBK                    1020
 #define IDC_EDIT_PREVIEW                1021
 #define IDC_EDIT_EMAIL                  1022
 #define IDC_OPTIONS                     1023

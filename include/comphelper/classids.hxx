@@ -310,7 +310,6 @@
 
 /* aktuell */
 
-#define SO3_SIM_CLASSID  SO3_SIM_CLASSID_50
 
 /***************************************************
 * StarMath

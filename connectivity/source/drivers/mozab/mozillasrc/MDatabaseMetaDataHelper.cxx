@@ -191,7 +191,6 @@ static nsresult insertPABDescription()
 #define NS_RDF_DATASOURCE_CONTRACTID_PREFIX NS_RDF_DATASOURCE_CONTRACTID "?name="
 #define NS_ABDIRECTORYDATASOURCE_CONTRACTID \
   NS_RDF_DATASOURCE_CONTRACTID_PREFIX "addressdirectory"
-#define database_uri "@mozilla.org/rdf/datasource;1?name=addressdirectory"
 #define NS_ABDIRECTORYDATASOURCE_CID            \
 { /* 0A79186D-F754-11d2-A2DA-001083003D0C */        \
     0xa79186d, 0xf754, 0x11d2,              \

@@ -43,7 +43,6 @@ struct TabPageImpl;
 
 struct TabDlg_Impl;
 
-#define ID_TABCONTROL   1
 #define RET_USER        100
 #define RET_USER_CANCEL 101
 

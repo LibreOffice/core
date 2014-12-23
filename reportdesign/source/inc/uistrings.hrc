@@ -33,8 +33,6 @@
 #define DBPAGEFOOTER "PageFooter"
 #define DBGROUPHEADER "GroupHeader"
 #define DBGROUPFOOTER "GroupFooter"
-#define DBCOLUMNHEADER "ColumnHeader"
-#define DBCOLUMNFOOTER "ColumnFooter"
 #define DBDETAIL "Detail"
 #define REPORTCONTROLFORMAT "ReportControlFormat"
 #define CURRENT_WINDOW "CurrentWindow"
@@ -52,11 +50,6 @@
 #define PROPERTY_TITLE "Title"
 #define PROPERTY_AREA "Area"
 #define PROPERTY_FILLCOLOR "FillColor"
-#define PROPERTY_FILLGRADIENT "FillGradient"
-#define PROPERTY_FILLGRADIENTNAME "FillGradientName"
-#define PROPERTY_FILLHATCHNAME "FillHatchName"
-#define PROPERTY_FILLBITMAPNAME "FillBitmapName"
-#define PROPERTY_FILLSTYLE "FillStyle"
 #define DBTEXTBOXBOUNDCONTENT "TextBoxBoundContent"
 
 #endif // REPORTDESIGN_SHARED_UISTRINGS_HRC

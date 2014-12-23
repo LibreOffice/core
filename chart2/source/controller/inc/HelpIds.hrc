@@ -21,22 +21,12 @@
 
 #define HID_SCH_WIN_DOCUMENT                                "CHART2_HID_SCH_WIN_DOCUMENT"
 
-#define HID_SCH_CB_SECONDARY_XAXIS                          "CHART2_HID_SCH_CB_SECONDARY_XAXIS"
-#define HID_SCH_CB_SECONDARY_YAXIS                          "CHART2_HID_SCH_CB_SECONDARY_YAXIS"
-#define HID_SCH_CB_SECONDARY_ZAXIS                          "CHART2_HID_SCH_CB_SECONDARY_ZAXIS"
 
-#define HID_SCH_LEGEND_POS_LEFT                             "CHART2_HID_SCH_LEGEND_POS_LEFT"
-#define HID_SCH_LEGEND_POS_TOP                              "CHART2_HID_SCH_LEGEND_POS_TOP"
-#define HID_SCH_LEGEND_POS_RIGHT                            "CHART2_HID_SCH_LEGEND_POS_RIGHT"
-#define HID_SCH_LEGEND_POS_BOTTOM                           "CHART2_HID_SCH_LEGEND_POS_BOTTOM"
 
-#define HID_SCH_STATISTIK_MEANVALUE                         "CHART2_HID_SCH_STATISTIK_MEANVALUE"
 
 #define HID_SCH_WIZARD_ROADMAP                              "CHART2_HID_SCH_WIZARD_ROADMAP"
-#define HID_SCH_LEGEND_SHOW                                 "CHART2_HID_SCH_LEGEND_SHOW"
 #define HID_SCH_DATA_SERIES_LABEL                           "CHART2_HID_SCH_DATA_SERIES_LABEL"
 
-#define HID_INSERT_STATISTICS                               "CHART2_HID_INSERT_STATISTICS"
 
 #endif
 

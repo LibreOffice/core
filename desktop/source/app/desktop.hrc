@@ -22,7 +22,6 @@
 
 #include <svl/solar.hrc>
 
-#define RID_DESKTOP_DIALOG_START            2000
 //      RID_FIRSTSTSTART_START              3000
 #define RID_DESKTOP_STRING_START            10000
 

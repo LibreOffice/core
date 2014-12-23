@@ -43,7 +43,6 @@
 #define MN_AUTOCORR                     204
 #define MN_SET_LANGUAGE_SELECTION       205
 #define MN_SET_LANGUAGE_PARAGRAPH       206
-#define MN_SET_LANGUAGE_ALL_TEXT        207
 #define MN_SHORT_COMMENT                208
 #define MN_EXPLANATION_LINK             209
 #define MN_ADD_TO_DIC_SINGLE            210

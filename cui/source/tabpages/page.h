@@ -46,10 +46,6 @@
 #define PAPERSIZE_DL            17
 #define PAPERSIZE_DIA           18
 #define PAPERSIZE_SCREEN_4_3    19
-#define PAPERSIZE_C             20
-#define PAPERSIZE_D             21
-#define PAPERSIZE_E             22
-#define PAPERSIZE_EXECUTIVE     23
 #define PAPERSIZE_LEGAL2        24
 #define PAPERSIZE_MONARCH       25
 #define PAPERSIZE_COM675        26

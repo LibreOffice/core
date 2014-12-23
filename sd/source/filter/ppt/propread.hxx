@@ -36,27 +36,12 @@
 #define PID_TEMPLATE            0x07
 #define PID_LASTAUTHOR          0x08
 #define PID_REVNUMBER           0x09
-#define PID_EDITTIME            0x0a
-#define PID_LASTPRINTED_DTM     0x0b
 #define PID_CREATE_DTM          0x0c
-#define PID_LASTSAVED_DTM       0x0d
 
 // DocumentSummaryInformation
-#define PID_CATEGORY            0x02
-#define PID_PRESFORMAT          0x03
-#define PID_BYTECOUNT           0x04
-#define PID_LINECOUNT           0x05
-#define PID_PARACOUNT           0x06
 #define PID_SLIDECOUNT          0x07
-#define PID_NOTECOUNT           0x08
-#define PID_HIDDENCOUNT         0x09
-#define PID_MMCLIPCOUNT         0x0a
-#define PID_SCALE               0x0b
 #define PID_HEADINGPAIR         0x0c
 #define PID_DOCPARTS            0x0d
-#define PID_MANAGER             0x0e
-#define PID_COMPANY             0x0f
-#define PID_LINKSDIRTY          0x10
 
 #define VT_EMPTY            0
 #define VT_NULL             1
