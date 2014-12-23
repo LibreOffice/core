@@ -97,6 +97,9 @@ public:
     void testFdo79731();
     void testBnc904423();
     void testShapeLineStyle();
+#if !defined WNT
+    void testBnc822341();
+#endif
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -132,6 +135,10 @@ public:
     CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST(testBnc904423);
     CPPUNIT_TEST(testShapeLineStyle);
+#if !defined WNT
+    CPPUNIT_TEST(testBnc822341);
+#endif
+
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1243,6 +1250,45 @@ void SdFiltersTest::testShapeLineStyle()
 
     xDocShRef->DoClose();
 }
+
+#if !defined WNT
+
+void SdFiltersTest::testBnc822341()
+{
+    // Check import / export of embedded text document
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/odp/bnc822341.odp"));
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    // Export an LO specific ole object (imported from an ODP document)
+    {
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        const SdrPage *pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+        const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
+    }
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    // Export an MS specific ole object (imported from a PPTX document)
+    {
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+        const SdrPage *pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+        const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
+    }
+
+    xDocShRef->DoClose();
+}
+
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
 

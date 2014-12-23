@@ -52,6 +52,7 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/table/XTable.hpp>
@@ -121,7 +122,7 @@ namespace oox { namespace drawingml {
         mAny >>= variable;
 
 // not thread safe
-int ShapeExport::mnSpreadsheetCounter = 1;
+int ShapeExport::mnEmbeddeDocumentCounter = 1;
 
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport )
     : DrawingML( pFS, pFB, eDocumentType, pTextExport )
@@ -978,47 +979,90 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
             }
             else
             {
-                // this part now supports only embedded spreadsheets, it can be extended to support remaining ooxml documents
-                // only exporter, counter and object filename are specific to spreadsheet
-                Reference< XSpreadsheetDocument > xSheetDoc( mAny, UNO_QUERY );
-                if( xSheetDoc.is() && mpFB)
+                const bool bSpreadSheet = Reference< XSpreadsheetDocument >( mAny, UNO_QUERY ).is();
+                const bool bTextDocument = Reference< css::text::XTextDocument >( mAny, UNO_QUERY ).is();
+                if( ( bSpreadSheet || bTextDocument ) && mpFB)
                 {
                     Reference< XComponent > xDocument( mAny, UNO_QUERY );
                     if( xDocument.is() )
                     {
-                        Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
-                                                                                          .appendAscii( GetComponentDir() )
-                                                                                          .appendAscii( "/embeddings/spreadsheet" )
-                                                                                          .append( (sal_Int32) mnSpreadsheetCounter )
-                                                                                          .appendAscii( ".xlsx" )
-                                                                                          .makeStringAndClear(),
-                                                                                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
+                        Reference< XOutputStream > xOutStream;
+                        if( bSpreadSheet )
+                        {
+                            xOutStream = mpFB->openFragmentStream( OUStringBuffer()
+                                                                   .appendAscii( GetComponentDir() )
+                                                                   .appendAscii( "/embeddings/spreadsheet" )
+                                                                   .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter) )
+                                                                   .appendAscii( ".xlsx" )
+                                                                   .makeStringAndClear(),
+                                                                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
+                        }
+                        else
+                        {
+                            xOutStream = mpFB->openFragmentStream( OUStringBuffer()
+                                                                   .appendAscii( GetComponentDir() )
+                                                                   .appendAscii( "/embeddings/textdocument" )
+                                                                   .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter) )
+                                                                   .appendAscii( ".docx" )
+                                                                   .makeStringAndClear(),
+                                                                   "application/vnd.openxmlformats-officedocument.wordprocessingml.document" );
+                        }
+
                         // export the embedded document
                         Sequence< PropertyValue > rMedia(1);
 
                         rMedia[0].Name = utl::MediaDescriptor::PROP_STREAMFOROUTPUT();
                         rMedia[0].Value <<= xOutStream;
 
-                        Reference< XExporter > xExporter(
-                            mpFB->getComponentContext()->getServiceManager()->
-                                createInstanceWithContext(
-                                    "com.sun.star.comp.oox.xls.ExcelFilter",
-                                    mpFB->getComponentContext() ),
-                            UNO_QUERY_THROW );
+                        Reference< XExporter > xExporter;
+                        if( bSpreadSheet )
+                        {
+                            xExporter.set(
+                                mpFB->getComponentContext()->getServiceManager()->
+                                    createInstanceWithContext(
+                                        "com.sun.star.comp.oox.xls.ExcelFilter",
+                                        mpFB->getComponentContext() ),
+                                UNO_QUERY_THROW );
+                        }
+                        else
+                        {
+                            xExporter.set(
+                                mpFB->getComponentContext()->getServiceManager()->
+                                    createInstanceWithContext(
+                                        "com.sun.star.comp.Writer.WriterFilter",
+                                        mpFB->getComponentContext() ),
+                                UNO_QUERY_THROW );
+
+                        }
                         xExporter->setSourceDocument( xDocument );
                         Reference< XFilter >( xExporter, UNO_QUERY_THROW )->
                             filter( rMedia );
 
                         xOutStream->closeOutput();
 
-                        OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                                             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
-                                                             OUStringBuffer()
-                                                             .appendAscii( GetRelationCompPrefix() )
-                                                             .appendAscii( "embeddings/spreadsheet" )
-                                                             .append( (sal_Int32) mnSpreadsheetCounter ++ )
-                                                             .appendAscii( ".xlsx" )
-                                                             .makeStringAndClear() );
+                        OUString sRelId;
+                        if( bSpreadSheet )
+                        {
+                            sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                                                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
+                                                        OUStringBuffer()
+                                                        .appendAscii( GetRelationCompPrefix() )
+                                                        .appendAscii( "embeddings/spreadsheet" )
+                                                        .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter++) )
+                                                        .appendAscii( ".xlsx" )
+                                                        .makeStringAndClear() );
+                        }
+                        else
+                        {
+                            sRelId = mpFB->addRelation( mpFS->getOutputStream(),
+                                                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
+                                                        OUStringBuffer()
+                                                        .appendAscii( GetRelationCompPrefix() )
+                                                        .appendAscii( "embeddings/textdocument" )
+                                                        .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter++) )
+                                                        .appendAscii( ".docx" )
+                                                        .makeStringAndClear() );
+                        }
 
                         mpFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
 
@@ -1043,16 +1087,30 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         mpFS->startElementNS( XML_a, XML_graphicData,
                                               XML_uri, "http://schemas.openxmlformats.org/presentationml/2006/ole",
                                               FSEND );
-                        mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                        if( bSpreadSheet )
+                        {
+                            mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
                                               XML_name, "Spreadsheet",
                                               FSNS(XML_r, XML_id), USS( sRelId ),
                                               FSEND );
+                        }
+                        else
+                        {
+                            mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
+                                              XML_name, "Document",
+                                              FSNS(XML_r, XML_id), USS( sRelId ),
+                                              // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
+                                              XML_spid, "",
+                                              FSEND );
+                        }
 
                         mpFS->singleElementNS( mnXmlNamespace, XML_embed, FSEND );
 
                         // pic element
                         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
-                        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )
+                        // The spec doesn't allow <p:pic> here, but PowerPoint requires it.
+                        bool bEcma = mpFB->getVersion() == oox::core::ECMA_DIALECT;
+                        if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) && bEcma)
                         {
                             const Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
                             if ( pGraphic )
