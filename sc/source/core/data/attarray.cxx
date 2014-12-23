@@ -308,15 +308,17 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
             {
                 std::vector< sal_uInt32 > aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
                 std::vector<sal_uInt32>::iterator itr = std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex);
-                if(itr != aCondFormatData.end())
+                if(itr != aCondFormatData.end() || nIndex == 0)
                 {
                     ScCondFormatItem aItem;
-                    aCondFormatData.erase(itr);
+                    if (nIndex == 0)
+                        aCondFormatData.clear();
+                    else
+                        aCondFormatData.erase(itr);
                     aItem.SetCondFormatData( aCondFormatData );
                     aPattern.GetItemSet().Put( aItem );
                     SetPatternArea( nTempStartRow, nTempEndRow, &aPattern, true );
                 }
-
             }
         }
         else
