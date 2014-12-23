@@ -455,7 +455,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
         xMark->deleteMark(nMark);
     }
 
-    // Read Attachement
+    // Read Attachment
     if ( m_xEventAttacher.is() )
     {
         OInterfaceArray::const_iterator aAttach = m_aItems.begin();

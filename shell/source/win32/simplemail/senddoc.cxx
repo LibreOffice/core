@@ -116,7 +116,7 @@ void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 }
 
 /** @internal */
-void initAttachementList(MapiAttachmentList_t* pMapiAttachmentList)
+void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
 {
     OSL_ASSERT(pMapiAttachmentList->empty());
 
@@ -276,7 +276,7 @@ int main(int argc, char* argv[])
 
             initMapiOriginator(&mapiOriginator);
             initRecipientList(&mapiRecipientList);
-            initAttachementList(&mapiAttachmentList);
+            initAttachmentList(&mapiAttachmentList);
             initMapiMessage((gFrom.length() ? &mapiOriginator : NULL), mapiRecipientList, mapiAttachmentList, &mapiMsg);
 
             ulRet = mapi.MAPISendMail(hSession, 0, &mapiMsg, gMapiFlags, 0);

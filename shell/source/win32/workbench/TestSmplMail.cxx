@@ -120,20 +120,20 @@ int SAL_CALL main(int , char*, char* )
 
                 xSmplMailMsg->setSubject( OUString("Mapi Test") );
 
-                Sequence< OUString > attachements( 2 );
+                Sequence< OUString > attachments( 2 );
 
                 OUString aFile("D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testprx.exe");
                 OUString aFileURL;
 
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
-                attachements[0] = aFileURL;
+                attachments[0] = aFileURL;
 
                 aFile = "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\testsyssh.exe";
                 osl::FileBase::getFileURLFromSystemPath( aFile, aFileURL );
 
-                attachements[1] = aFile;
+                attachments[1] = aFile;
 
-                xSmplMailMsg->setAttachement( attachements );
+                xSmplMailMsg->setAttachement( attachments );
 
                 xSmplMailClient->sendSimpleMailMessage( xSmplMailMsg, 0 );
             }

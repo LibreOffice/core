@@ -315,7 +315,7 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebu
     glGenFramebuffers(1, &nFramebufferId);
     glCheckFramebufferStatus(GL_FRAMEBUFFER);
     glBindFramebuffer(GL_FRAMEBUFFER, nFramebufferId);
-    // attach a renderbuffer to FBO color attachement point
+    // attach a renderbuffer to FBO color attachment point
     glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferColorId);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, nRenderbufferColorId);
     glCheckFramebufferStatus(GL_FRAMEBUFFER);

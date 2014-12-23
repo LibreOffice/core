@@ -912,7 +912,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         _rxInStream->skipBytes(nObjLen);
         xMark->deleteMark(nMark);
     }
-    // reading the attachement
+    // reading the attachment
     for (sal_Int32 i = 0; i < nLen; i++)
     {
         InterfaceRef  xIfc(m_aItems[i], UNO_QUERY);
