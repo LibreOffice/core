@@ -260,7 +260,11 @@
             <menu:menuitem menu:id=".uno:FormatLine"/>
             <menu:menuitem menu:id=".uno:FormatArea"/>
             <menu:menuitem menu:id=".uno:TextAttributes"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:NameGroup"/>
+            <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PresentationLayout"/>
             <menu:menuitem menu:id=".uno:ModifyPage"/>
