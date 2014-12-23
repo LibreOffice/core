@@ -50,4 +50,5 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertFormula"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TableSort"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCaptionDialog"/>
 </toolbar:toolbar>
