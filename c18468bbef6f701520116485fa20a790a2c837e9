@@ -56,6 +56,30 @@
       "revId": "c18468bbef6f701520116485fa20a790a2c837e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_dfaff492",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-12-23T13:29:04Z",
+      "side": 0,
+      "message": "I can certainly perform a lookup in helpcontent2 to check these, but I have 2 questions first:\n\nI looked up the same constant you did and that constant is only referenced once in a tag in helpcontent2.\nHow can that be useful?\n\nSome other constants like SC_FAP_PAGE only appear to be in use in helpers/help_hid.lst\nwhich looks like an auto-generated file, so I assume that constant is actually dead?\n\nThanks.",
+      "parentUuid": "fa32b979_9fcbac72",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 25
+      },
+      "revId": "c18468bbef6f701520116485fa20a790a2c837e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
