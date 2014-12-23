@@ -1143,7 +1143,7 @@ String MN_GRF_POPUPMENU
                 };\
             };\
         };\
-    };\
+    };
 
 #define MN_ALIGNMENT_FRAME \
     MenuItem\
@@ -1194,7 +1194,7 @@ String MN_GRF_POPUPMENU
                     };\
             };\
         };\
-    };\
+    };
 
 #define MN_ROTATE_IMAGE \
     MenuItem\
@@ -1220,11 +1220,11 @@ String MN_GRF_POPUPMENU
                 };\
             };\
         };\
-    };\
+    };
 
 #define MN_ALIGN_FRAME \
-    MN_ARRANGE_FRAME
-    MN_ALIGNMENT_FRAME
+    MN_ARRANGE_FRAME   \
+    MN_ALIGNMENT_FRAME \
     MN_ANCHOR
 
 Menu MN_GRF_POPUPMENU
