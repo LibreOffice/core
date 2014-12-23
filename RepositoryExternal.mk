@@ -2001,21 +2001,53 @@ gb_ExternalProject__use_wpd :=
 
 else # !SYSTEM_WPD
 
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	wpd \
+))
+
 define gb_LinkTarget__use_wpd
 $(call gb_LinkTarget_set_include,$(1),\
 	$(WPD_CFLAGS) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwpd)/src/lib/.libs/libwpd-0.10$(gb_StaticLibrary_PLAINEXT) \
+$(call gb_LinkTarget_use_libraries,$(1),\
+	wpd \
 )
-$(call gb_LinkTarget_use_external_project,$(1),libwpd)
 
 endef
+
 define gb_ExternalProject__use_wpd
-$(call gb_ExternalProject_use_external_project,$(1),libwpd)
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Library_get_target,wpd)
 
 endef
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	libwpd \
+))
+
+define gb_LinkTarget__use_wpd
+$(call gb_LinkTarget_use_package,$(1),libwpd)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	$(WPD_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(WPD_LIBS) \
+)
+
+endef
+
+define gb_ExternalProject__use_wpd
+$(call gb_ExternalProject_use_package,$(1),libwpd)
+
+endef
+
+endif # MSC
 
 endif # SYSTEM_WPD
 
@@ -2034,21 +2066,43 @@ gb_ExternalProject__use_wpg :=
 
 else # !SYSTEM_WPG
 
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	wpg \
+))
+
 define gb_LinkTarget__use_wpg
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libwpg)/inc \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwpg)/src/lib/.libs/libwpg-0.3$(gb_StaticLibrary_PLAINEXT) \
+$(call gb_LinkTarget_use_libraries,$(1),\
+	wpg \
 )
-$(call gb_LinkTarget_use_external_project,$(1),libwpg)
 
 endef
-define gb_ExternalProject__use_wpg
-$(call gb_ExternalProject_use_external_project,$(1),libwpg)
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	libwpg \
+))
+
+define gb_LinkTarget__use_wpg
+$(call gb_LinkTarget_use_package,$(1),libwpg)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libwpg)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,libwpg)/src/lib/.libs -lwpg-0.3 \
+)
 
 endef
+
+endif # MSC
 
 endif # SYSTEM_WPG
 
