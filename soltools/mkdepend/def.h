@@ -62,7 +62,6 @@ in this Software without prior written authorization from the X Consortium.
 #define        S_IFREG  0100000
 #endif
 
-#define MAXDEFINES  512
 #define MAXFILES    65536
 
 #define MAXDIRS     64

@@ -25,6 +25,5 @@
 
 #define STR_BASICMACROS         67
 #define STR_HUMAN_APPNAME       69
-#define STR_FILTERNAME_CFG      70
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

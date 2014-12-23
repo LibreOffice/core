@@ -111,8 +111,6 @@ public:
 #define STRING_TYP_QUICKHELPTEXT    0x0040
 #define STRING_TYP_TITLE            0x0080
 
-#define MERGE_MODE_NORMAL           0x0000
-#define MERGE_MODE_LIST             0x0001
 
 typedef ::std::vector< ResData* > ResStack;
 class ParserQueue;

@@ -52,7 +52,6 @@ class Gradient;
 #define METAFILE_LABEL_NOTFOUND         GDI_METAFILE_LABEL_NOTFOUND
 #endif
 
-#define MTF_MIRROR_NONE             0x00000000UL
 #define MTF_MIRROR_HORZ             0x00000001UL
 #define MTF_MIRROR_VERT             0x00000002UL
 

@@ -36,9 +36,7 @@ class SfxChildWindow;
 class SfxChildWindowContext;
 
 #define SFX_CHILDWIN_ZOOMIN          0x01  // Fully retracted Float
-#define SFX_CHILDWIN_SMALL           0x02  // Half retracted Float
 #define SFX_CHILDWIN_FORCEDOCK       0x04  // Float forbidden
-#define SFX_CHILDWIN_AUTOHIDE        0x08  // DockingWindow in AutoHide mode
 #define SFX_CHILDWIN_TASK            0x10  // ChildWindow inside the Task
 #define SFX_CHILDWIN_CANTGETFOCUS    0x20  // ChildWindow can not get focus
 #define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled

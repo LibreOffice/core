@@ -56,9 +56,7 @@ namespace vcl_sal { class WMAdaptor; }
                                             // dither brush each time
 #define PROPERTY_BUG_FillPolygon_Tile           0x00010000  // always Toggle Fillstyle
 #define PROPERTY_BUG_DrawLine                   0x00020000  // a DrawLine is one point to short
-#define PROPERTY_BUG_Bitmap_Bit_Order           0x00100000
 
-#define PROPERTY_FEATURE_SharedMemory           0x02000000
 #define PROPERTY_FEATURE_TrustedSolaris         0x04000000
 
 #define PROPERTY_DEFAULT                        0x00000FCB

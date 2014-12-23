@@ -562,7 +562,6 @@ enum
 /* Maximum length, in bytes, of a service name represented as a */
 /* literal C-String, including the terminating NULL at the end. */
 
-#define kDNSServiceMaxServiceName 64
 
 /* Maximum length, in bytes, of a domain name represented as an *escaped* C-String */
 /* including the final trailing dot, and the C-String terminating NULL at the end. */
@@ -2465,8 +2464,6 @@ DNSServiceErrorType DNSSD_API DNSServiceSleepKeepalive
 
 #ifdef __APPLE_API_PRIVATE
 
-#define kDNSServiceCompPrivateDNS   "PrivateDNS"
-#define kDNSServiceCompMulticastDNS "MulticastDNS"
 
 #endif //__APPLE_API_PRIVATE
 

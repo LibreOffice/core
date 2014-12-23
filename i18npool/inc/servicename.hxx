@@ -61,7 +61,6 @@ Implementation Name
 #define TRLT_SERVICELNAME_PREFIX TRLT_SERVICELNAME "."
 #define TRLT_SERVICELNAME_L10N  TRLT_SERVICELNAME_PREFIX "l10n"
 
-#define TRLT_IMPLNAME "com.sun.star.i18n.Transliteration"
 #define TRLT_IMPLNAME_PREFIX "com.sun.star.i18n.Transliteration."
 //                1...5...901...5...901...5...901..4  --> 34
 

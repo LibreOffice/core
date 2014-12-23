@@ -467,12 +467,6 @@ public:
 
 
 
-#define SD_HEADERFOOTER_DATE        1
-#define SD_HEADERFOOTER_TODAYDATE   2
-#define SD_HEADERFOOTER_USERDATE    4
-#define SD_HEADERFOOTER_SLIDENUMBER 8
-#define SD_HEADERFOOTER_HEADER      16
-#define SD_HEADERFOOTER_FOOTER      32
 
 class SvxFieldItem;
 struct MSFILTER_DLLPUBLIC PPTFieldEntry
@@ -1049,7 +1043,6 @@ struct PPTTextRulerInterpreter
 
 #define PPT_SPEC_NEWLINE            0x10000
 #define PPT_SPEC_SYMBOL             0x20000
-#define PPT_SPEC_USE_STARBATS       0x40000
 
 struct StyleTextProp9
 {
@@ -1340,49 +1333,17 @@ public :
 };
 
 // PowerPoint record types
-#define PPT_PST_Unknown                         0
-#define PPT_PST_SubContainerCompleted           1
-#define PPT_PST_IRRAtom                         2
-#define PPT_PST_PSS                             3
-#define PPT_PST_SubContainerException           4
-#define PPT_PST_ClientSignal1                   6
-#define PPT_PST_ClientSignal2                   7
-#define PPT_PST_PowerPointStateInfoAtom         10
 #define PPT_PST_Document                        1000
 #define PPT_PST_DocumentAtom                    1001
-#define PPT_PST_EndDocument                     1002
-#define PPT_PST_SlidePersist                    1003
-#define PPT_PST_SlideBase                       1004
-#define PPT_PST_SlideBaseAtom                   1005
-#define PPT_PST_Slide                           1006
 #define PPT_PST_SlideAtom                       1007
-#define PPT_PST_Notes                           1008
 #define PPT_PST_NotesAtom                       1009
 #define PPT_PST_Environment                     1010
 #define PPT_PST_SlidePersistAtom                1011
-#define PPT_PST_Scheme                          1012
-#define PPT_PST_SchemeAtom                      1013
-#define PPT_PST_DocViewInfo                     1014
-#define PPT_PST_SslideLayoutAtom                1015
-#define PPT_PST_MainMaster                      1016
 #define PPT_PST_SSSlideInfoAtom                 1017
-#define PPT_PST_SlideViewInfo                   1018
-#define PPT_PST_GuideAtom                       1019
-#define PPT_PST_ViewInfo                        1020
-#define PPT_PST_ViewInfoAtom                    1021
-#define PPT_PST_SlideViewInfoAtom               1022
 #define PPT_PST_VBAInfo                         1023
 #define PPT_PST_VBAInfoAtom                     1024
 #define PPT_PST_SSDocInfoAtom                   1025
-#define PPT_PST_Summary                         1026
-#define PPT_PST_Texture                         1027
-#define PPT_PST_VBASlideInfo                    1028
-#define PPT_PST_VBASlideInfoAtom                1029
-#define PPT_PST_DocRoutingSlip                  1030
-#define PPT_PST_OutlineViewInfo                 1031
-#define PPT_PST_SorterViewInfo                  1032
 #define PPT_PST_ExObjList                       1033
-#define PPT_PST_ExObjListAtom                   1034
 #define PPT_PST_PPDrawingGroup                  1035
 #define PPT_PST_PPDrawing                       1036
 #define PPT_PST_GridSpacing10Atom               1037
@@ -1391,47 +1352,27 @@ public :
 #define PPT_PST_NamedShowSlides                 1042
 #define PPT_PST_List                            2000
 #define PPT_PST_FontCollection                  2005
-#define PPT_PST_ListPlaceholder                 2017
-#define PPT_PST_BookmarkCollection              2019
 #define PPT_PST_SoundCollection                 2020
-#define PPT_PST_SoundCollAtom                   2021
 #define PPT_PST_Sound                           2022
 #define PPT_PST_SoundData                       2023
-#define PPT_PST_BookmarkSeedAtom                2025
-#define PPT_PST_GuideList                       2026
-#define PPT_PST_RunArray                        2028
-#define PPT_PST_RunArrayAtom                    2029
-#define PPT_PST_ArrayElementAtom                2030
-#define PPT_PST_Int4ArrayAtom                   2031
 #define PPT_PST_ColorSchemeAtom                 2032
 
 // these atoms first was seen in ppt2000 in a private Tag atom
 #define PPT_PST_ExtendedBuGraContainer          2040    // consist of 4041
 #define PPT_PST_ExtendedBuGraAtom               2041    // the instance of this atom indices the current graphic
 
-#define PPT_PST_OEShape                         3008
 #define PPT_PST_ExObjRefAtom                    3009
 #define PPT_PST_OEPlaceholderAtom               3011
-#define PPT_PST_GrColor                         3020
-#define PPT_PST_GrectAtom                       3025
-#define PPT_PST_GratioAtom                      3031
-#define PPT_PST_Gscaling                        3032
-#define PPT_PST_GpointAtom                      3034
-#define PPT_PST_OEShapeAtom                     3035
 #define PPT_PST_OutlineTextRefAtom              3998
 #define PPT_PST_TextHeaderAtom                  3999
 #define PPT_PST_TextCharsAtom                   4000
 #define PPT_PST_StyleTextPropAtom               4001
-#define PPT_PST_BaseTextPropAtom                4002
 #define PPT_PST_TxMasterStyleAtom               4003
-#define PPT_PST_TxCFStyleAtom                   4004
 #define PPT_PST_TxPFStyleAtom                   4005
 #define PPT_PST_TextRulerAtom                   4006
-#define PPT_PST_TextBookmarkAtom                4007
 #define PPT_PST_TextBytesAtom                   4008
 #define PPT_PST_TxSIStyleAtom                   4009
 #define PPT_PST_TextSpecInfoAtom                4010
-#define PPT_PST_DefaultRulerAtom                4011
 
 // these atoms first was seen in ppt2000 in a private Tag atom
 #define PPT_PST_ExtendedParagraphAtom           4012
@@ -1442,52 +1383,23 @@ public :
 #define PPT_PST_TextDefaults9Atom               4016
 
 #define PPT_PST_FontEntityAtom                  4023
-#define PPT_PST_FontEmbedData                   4024
-#define PPT_PST_TypeFace                        4025
 #define PPT_PST_CString                         4026
-#define PPT_PST_ExternalObject                  4027
-#define PPT_PST_MetaFile                        4033
-#define PPT_PST_ExOleObj                        4034
 #define PPT_PST_ExOleObjAtom                    4035
-#define PPT_PST_ExPlainLinkAtom                 4036
-#define PPT_PST_CorePict                        4037
-#define PPT_PST_CorePictAtom                    4038
-#define PPT_PST_ExPlainAtom                     4039
 #define PPT_PST_SrKinsoku                       4040
-#define PPT_PST_Handout                         4041
 #define PPT_PST_ExEmbed                         4044
-#define PPT_PST_ExEmbedAtom                     4045
-#define PPT_PST_ExLink                          4046
-#define PPT_PST_ExLinkAtom_old                  4047
-#define PPT_PST_BookmarkEntityAtom              4048
-#define PPT_PST_ExLinkAtom                      4049
-#define PPT_PST_SrKinsokuAtom                   4050
 #define PPT_PST_ExHyperlinkAtom                 4051
-#define PPT_PST_ExPlain                         4053
-#define PPT_PST_ExPlainLink                     4054
 #define PPT_PST_ExHyperlink                     4055
 #define PPT_PST_SlideNumberMCAtom               4056
 #define PPT_PST_HeadersFooters                  4057
 #define PPT_PST_HeadersFootersAtom              4058
-#define PPT_PST_RecolorEntryAtom                4062
 #define PPT_PST_TxInteractiveInfoAtom           4063
-#define PPT_PST_EmFormatAtom                    4065
-#define PPT_PST_CharFormatAtom                  4066
-#define PPT_PST_ParaFormatAtom                  4067
 #define PPT_PST_MasterText                      4068
 #define PPT_PST_RecolorInfoAtom                 4071
-#define PPT_PST_ExQuickTime                     4073
-#define PPT_PST_ExQuickTimeMovie                4074
-#define PPT_PST_ExQuickTimeMovieData            4075
-#define PPT_PST_ExSubscription                  4076
-#define PPT_PST_ExSubscriptionSection           4077
 #define PPT_PST_ExControl                       4078
-#define PPT_PST_ExControlAtom                   4091
 #define PPT_PST_SlideListWithText               4080
 #define PPT_PST_AnimationInfoAtom               4081
 #define PPT_PST_InteractiveInfo                 4082
 #define PPT_PST_InteractiveInfoAtom             4083
-#define PPT_PST_SlideList                       4084
 #define PPT_PST_UserEditAtom                    4085
 #define PPT_PST_CurrentUserAtom                 4086
 #define PPT_PST_DateTimeMCAtom                  4087
@@ -1498,32 +1410,17 @@ public :
 #define PPT_PST_ExVideo                         4101
 #define PPT_PST_ExAviMovie                      4102
 #define PPT_PST_ExMCIMovie                      4103
-#define PPT_PST_ExMIDIAudio                     4109
-#define PPT_PST_ExCDAudio                       4110
-#define PPT_PST_ExWAVAudioEmbedded              4111
-#define PPT_PST_ExWAVAudioLink                  4112
-#define PPT_PST_ExOleObjStg                     4113
-#define PPT_PST_ExCDAudioAtom                   4114
-#define PPT_PST_ExWAVAudioEmbeddedAtom          4115
 #define PPT_PST_AnimationInfo                   4116
 #define PPT_PST_RTFDateTimeMCAtom               4117
 #define PPT_PST_ProgTags                        5000
-#define PPT_PST_ProgStringTag                   5001
 #define PPT_PST_ProgBinaryTag                   5002
 #define PPT_PST_BinaryTagData                   5003
-#define PPT_PST_PrintOptions                    6000
-#define PPT_PST_PersistPtrFullBlock             6001
 #define PPT_PST_PersistPtrIncrementalBlock      6002
 
 // these atoms first was seen in ppt2000 in a private Tag atom
 #define PPT_PST_PresentationAdvisorFlags9Atom   6010
 #define PPT_PST_HtmlDocInfo9Atom                6011
 
-#define PPT_PST_RulerIndentAtom                 10000
-#define PPT_PST_GscalingAtom                    10001
-#define PPT_PST_GrColorAtom                     10002
-#define PPT_PST_GLPointAtom                     10003
-#define PPT_PST_GlineAtom                       10004
 
 #define PPT_PST_HashCodeAtom                    11008
 #define PPT_PST_BuildList                       11010
@@ -1543,9 +1440,6 @@ public :
 #define PPT_ParaAttr_BulletColor    5   //00000020
 #define PPT_ParaAttr_BulletHeight   6   //00000040
 #define PPT_ParaAttr_BulletChar     7   //00000080
-#define PPT_ParaAttr_DontKnow1      8   //00000100
-#define PPT_ParaAttr_DontKnow2      9   //00000200
-#define PPT_ParaAttr_DontKnow3      10  //00000400
 #define PPT_ParaAttr_Adjust         11  //00000800 0000=Left, 0001=Center, 0002=Right, 0003=Block
 #define PPT_ParaAttr_LineFeed       12  //00001000
 #define PPT_ParaAttr_UpperDist      13  //00002000 is set to 0032 for TextFrames by default
@@ -1564,9 +1458,6 @@ public :
 #define PPT_CharAttr_Shadow             4   //00000010
 #define PPT_CharAttr_Strikeout          8   //00000100
 #define PPT_CharAttr_Embossed           9   //00000200
-#define PPT_CharAttr_ResetNumbering     10  //00000400
-#define PPT_CharAttr_EnableNumbering1   11  //00000800
-#define PPT_CharAttr_EnableNumbering2   12  //00001000
 #define PPT_CharAttr_Font               16  //00010000
 #define PPT_CharAttr_AsianOrComplexFont 21  //00200000
 #define PPT_CharAttr_ANSITypeface       22  //00400000

@@ -21,18 +21,7 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CHART_HXX
 
 /* FILE TYPE CONSTANTS: */
-#define NOCHART         0       /* Undefined chart.         */
-#define XYCHART         1       /* Standard XY chart.       */
-#define PIECHART        21      /* Standard pie chart file. */
-#define ORGCHART        26      /* Standard org chart file. */
-#define TTLCHART        31      /* Title chart file.        */
 #define BULCHART        32      /* Bullet chart file.       */
-#define TABCHART        33      /* Table chart file.        */
-#define DRWCHART        41      /* Chart with drawings only.*/
-#define MLTCHART        42      /* Multiple chart file.     */
-#define LASTCHART       45      /* The largest chart type.  */
-#define SHWFILE         46      /* Slide show file.         */
-#define SYMFILE         47      /* Symbol file.             */
 /* the following were added although SPC doesn't have a #define */
 /* for them...                                                  */
 #define AUTOTTLCHT      95      /* Autobuild TTL CHT        */

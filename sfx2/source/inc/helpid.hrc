@@ -49,12 +49,10 @@
 #define HID_HELP_BOOKMARKS_OPEN                               "SFX2_HID_HELP_BOOKMARKS_OPEN"
 #define HID_HELP_BOOKMARKS_RENAME                             "SFX2_HID_HELP_BOOKMARKS_RENAME"
 #define HID_HELP_BOOKMARKS_DELETE                             "SFX2_HID_HELP_BOOKMARKS_DELETE"
-#define HID_DID_SAVE_PACKED_XML                               "SFX2_HID_DID_SAVE_PACKED_XML"
 #define HID_HELP_TEXT_SELECTION_MODE                          "SFX2_HID_HELP_TEXT_SELECTION_MODE"
 
 #define HID_CONFIG_SAVE                                       "SFX2_HID_CONFIG_SAVE"
 
-#define HID_XMLSECDLG_MACROWARN                               "SFX2_HID_XMLSECDLG_MACROWARN"
 #define HID_HELP_ONSTARTUP_BOX                                "SFX2_HID_HELP_ONSTARTUP_BOX"
 #define HID_CTRL_CUSTOMPROPS_YES_NO                           "SFX2_HID_CTRL_CUSTOMPROPS_YES_NO"
 

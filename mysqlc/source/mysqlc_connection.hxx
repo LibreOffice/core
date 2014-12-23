@@ -44,7 +44,6 @@
 
 #include <map>
 
-#define UNUSED_PARAM __attribute__((unused))
 
 namespace sql
 {

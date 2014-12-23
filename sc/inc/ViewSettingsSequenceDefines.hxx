@@ -68,7 +68,6 @@
 #define SC_TABLE_ZOOM_TYPE                  11
 #define SC_TABLE_ZOOM_VALUE                 12
 #define SC_TABLE_PAGE_VIEW_ZOOM_VALUE       13
-#define SC_TABLE_TAB_BG_COLOR               14
 #define SC_TABLE_SHOWGRID                   15
 
 #define SC_CURSORPOSITIONX                  "CursorPositionX"

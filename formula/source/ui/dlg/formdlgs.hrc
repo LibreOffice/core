@@ -17,26 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define FT_RESULT           1
-#define WND_RESULT          2
-#define FT_EDITNAME         3
 #define BTN_HELP            6
 #define BTN_CANCEL          7
 #define BTN_BACKWARD        8
 #define BTN_FORWARD         9
 #define BTN_END             10
 #define BTN_MATRIX          11
-#define FT_FUNCNAME         12
-#define FT_FUNCDESC         13
-#define FT_HEADLINE         14
-#define GB_EDIT             15
-#define FT_FORMULA          16
 #define ED_FORMULA          17
-#define TC_FUNCTION         18
 #define ED_REF              19
 #define RB_REF              20
-#define FT_FORMULA_RESULT   21
-#define WND_FORMULA_RESULT  22
 
 // Fuer Tabpage
 #define TP_FUNCTION         1

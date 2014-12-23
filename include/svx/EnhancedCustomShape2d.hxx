@@ -53,7 +53,6 @@ struct SvxMSDffTextRectangles;
 #define HANDLE_FLAGS_MIRRORED_Y             0x0002
 #define HANDLE_FLAGS_SWITCHED               0x0004
 #define HANDLE_FLAGS_POLAR                  0x0008
-#define HANDLE_FLAGS_MAP                    0x0010
 #define HANDLE_FLAGS_RANGE_X_MINIMUM        0x0020
 #define HANDLE_FLAGS_RANGE_X_MAXIMUM        0x0040
 #define HANDLE_FLAGS_RANGE_Y_MINIMUM        0x0080

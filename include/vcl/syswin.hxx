@@ -34,19 +34,13 @@ class VclBox;
 // - Icon-Types -
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
-#define ICON_TEXT_TEMPLATE              3
 #define ICON_SPREADSHEET_DOCUMENT       4
-#define ICON_SPREADSHEET_TEMPLATE       5
 #define ICON_DRAWING_DOCUMENT           6
-#define ICON_DRAWING_TEMPLATE           7
 #define ICON_PRESENTATION_DOCUMENT      8
-#define ICON_PRESENTATION_TEMPLATE      9
-#define ICON_MASTER_DOCUMENT            10
 #define ICON_TEMPLATE                   11
 #define ICON_DATABASE_DOCUMENT          12
 #define ICON_MATH_DOCUMENT              13
 #define ICON_MACROLIBRARY               1
-#define ICON_SETUP                      500
 
 
 // - WindowStateData -

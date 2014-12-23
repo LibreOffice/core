@@ -102,7 +102,6 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRMC_BODY        7
 #define FRMC_FLY         8
 #define FRMC_SECTION     9
-#define FRMC_UNUSED      10
 #define FRMC_TAB         11
 #define FRMC_ROW         12
 #define FRMC_CELL        13

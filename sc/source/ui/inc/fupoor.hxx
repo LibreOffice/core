@@ -36,7 +36,6 @@ class SdrObject;
 //  Return values for command
 #define SC_CMD_NONE     0
 #define SC_CMD_USED     1
-#define SC_CMD_IGNORE   2
 
 /** Base class for all functions */
 class FuPoor

@@ -40,7 +40,6 @@ class SwContentType;
 #define CONTENT_TYPE_MAX            CONTENT_TYPE_DRAWOBJECT +1
 
 // types for global document
-#define GLOBAL_CONTENT_TEXT         102
 
 // strings for context menus
 #define CONTEXT_COUNT   12

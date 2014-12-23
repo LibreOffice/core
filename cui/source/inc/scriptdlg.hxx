@@ -34,7 +34,6 @@
 
 #include <boost/unordered_map.hpp>
 
-#define OBJTYPE_BASICMANAGER    1L
 #define OBJTYPE_METHOD          2L
 #define OBJTYPE_SCRIPTCONTAINER 3L
 #define OBJTYPE_SFROOT          4L

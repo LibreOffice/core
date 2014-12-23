@@ -29,14 +29,6 @@
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 
-#define FEATUREFLAG_BASICIDE                0x00000020
-#define FEATUREFLAG_MATH                    0x00000100
-#define FEATUREFLAG_CHART                   0x00000200
-#define FEATUREFLAG_CALC                    0x00000800
-#define FEATUREFLAG_DRAW                    0x00001000
-#define FEATUREFLAG_WRITER                  0x00002000
-#define FEATUREFLAG_IMPRESS                 0x00008000
-#define FEATUREFLAG_INSIGHT                 0x00010000
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

@@ -200,7 +200,6 @@ uint16_t get_uint16(const char **ptr, const char *end);
 #define put_flags put_uint32
 #define get_flags get_uint32
 
-#define put_error_code put_uint32
 #define get_error_code get_uint32
 
 int put_string(const char *str, char **ptr);

@@ -30,9 +30,6 @@
 #include "../misc/WinClip.hxx"
 
 #define AUTO_INIT                 TRUE
-#define NO_AUTO_INIT              FALSE
-#define MEM_DESTROY_ON_RELEASE    TRUE
-#define NO_MEM_DESTROY_ON_RELEASE FALSE
 
 // a helper class to manage a global memory area, the clients can write
 // into the global memory area and extract the handle to the global mem

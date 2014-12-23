@@ -46,7 +46,6 @@ struct SwBmpItemInfo
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
-#define PAGETYPE_USER_START         10
 
 class SwNumPositionTabPage : public SfxTabPage
 {

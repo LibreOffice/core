@@ -36,12 +36,6 @@
     // If done so, this class will write an version without a call to writeCommonEditProperties.
 #define PF_FAKE_FORMATTED_FIELD 0x4000
     // .... hmmm .... a fake, as the name suggests. see OFormattedFieldWrapper
-#define PF_RESERVED_2           0x2000
-#define PF_RESERVED_3           0x1000
-#define PF_RESERVED_4           0x0800
-#define PF_RESERVED_5           0x0400
-#define PF_RESERVED_6           0x0200
-#define PF_RESERVED_7           0x0100
 
 #define PF_SPECIAL_FLAGS        0xFF00
 

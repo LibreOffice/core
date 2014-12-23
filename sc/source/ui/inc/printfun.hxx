@@ -46,7 +46,6 @@ class FmFormView;
 
 #define PRINT_HEADER_WIDTH          (1.0 * TWIPS_PER_CM)
 #define PRINT_HEADER_HEIGHT         (12.8 * TWIPS_PER_POINT)
-#define PRINT_HEADER_FONTHEIGHT     200
 
                                             // Settings for headers/footers
 struct ScPrintHFParam

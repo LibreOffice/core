@@ -44,7 +44,6 @@
 
  *********************************************/
 
-#define OSL_FET_SUCCESS false
 #define OSL_FET_ERROR   true
 
 oslFileError oslTranslateFileError(bool bIsError, int Errno);

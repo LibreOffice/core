@@ -213,14 +213,6 @@ struct SfxItemPool_Impl
 
 #define SFX_ITEMPOOL_TAG_STARTPOOL_4    sal_uInt16(0x1111)
 #define SFX_ITEMPOOL_TAG_STARTPOOL_5    sal_uInt16(0xBBBB)
-#define SFX_ITEMPOOL_TAG_ITEMPOOL       sal_uInt16(0xAAAA)
-#define SFX_ITEMPOOL_TAG_ITEMS          sal_uInt16(0x2222)
-#define SFX_ITEMPOOL_TAG_ITEM           sal_uInt16(0x7777)
-#define SFX_ITEMPOOL_TAG_SIZES          sal_uInt16(0x3333)
-#define SFX_ITEMPOOL_TAG_DEFAULTS       sal_uInt16(0x4444)
-#define SFX_ITEMPOOL_TAG_VERSIONMAP     sal_uInt16(0x5555)
-#define SFX_ITEMPOOL_TAG_HEADER         sal_uInt16(0x6666)
-#define SFX_ITEMPOOL_TAG_ENDPOOL        sal_uInt16(0xEEEE)
 #define SFX_ITEMPOOL_TAG_TRICK4OLD      sal_uInt16(0xFFFF)
 
 #define SFX_ITEMPOOL_REC                sal_uInt8(0x01)
@@ -230,11 +222,7 @@ struct SfxItemPool_Impl
 #define SFX_ITEMPOOL_REC_ITEMS          sal_uInt16(0x0040)
 #define SFX_ITEMPOOL_REC_DEFAULTS       sal_uInt16(0x0050)
 
-#define SFX_ITEMSET_REC                 sal_uInt8(0x02)
 
-#define SFX_STYLES_REC                  sal_uInt8(0x03)
-#define SFX_STYLES_REC_HEADER       sal_uInt16(0x0010)
-#define SFX_STYLES_REC_STYLES       sal_uInt16(0x0020)
 
 /** Read in a Unicode string from a streamed byte string representation.
 

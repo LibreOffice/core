@@ -22,7 +22,6 @@
 
 #include "mozilla_nsprofile.h"
 
-#define _MAX_LENGTH   256
 
 class nsProfile: public nsIProfileInternal,
                  public nsIProfileChangeStatus,

@@ -38,7 +38,6 @@
 #define SFX_SLOT_ASYNCHRON     0x0020L // via Post-Message, exclusiv
                                        // to SYNCHRON
 
-#define SFX_SLOT_HASCOREID     0x0040L // Slot-ID/Which-ID execute mapping
 #define SFX_SLOT_HASDIALOG     0x0080L // Coordinates for dialogue after recofig
 
 #define SFX_SLOT_NORECORD      0x0100L // no recording

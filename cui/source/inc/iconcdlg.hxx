@@ -31,7 +31,6 @@
 #include <vcl/layout.hxx>
 #include <vector>
 
-#define CTRLS_OFFSET        3
 #define RET_USER        100
 #define RET_USER_CANCEL 101
 

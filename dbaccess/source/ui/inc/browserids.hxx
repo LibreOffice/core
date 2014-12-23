@@ -47,13 +47,11 @@
 #define ID_BROWSER_REMOVEFILTER             SID_FM_REMOVE_FILTER_SORT
 #define ID_BROWSER_FILTERED                 SID_FM_FORM_FILTERED
 #define ID_BROWSER_REFRESH                  SID_FM_REFRESH
-#define ID_BROWSER_EXPL_PREVLEVEL           SID_EXPLORER_PREVLEVEL
 #define ID_BROWSER_COLATTRSET               20  // Spaltenformatierung
 #define ID_BROWSER_COLWIDTH                 21  // Spaltenbreite
 #define ID_BROWSER_TABLEATTR                22  // table format attributes
 #define ID_BROWSER_ROWHEIGHT                23  // Zeilenhoehe
 #define ID_BROWSER_COLUMNINFO               24  // copies the column description to insert it into the table design
-#define ID_BROWSER_COUNTALL                 SID_FM_COUNTALL // count all
 #define ID_BROWSER_ADDTABLE                 SID_FM_ADDTABLE
 #define ID_BROWSER_EXPLORER                 SID_DSBROWSER_EXPLORER
 #define ID_BROWSER_DOCUMENT_DATASOURCE      SID_DOCUMENT_DATA_SOURCE

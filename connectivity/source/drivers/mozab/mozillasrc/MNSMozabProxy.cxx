@@ -195,7 +195,6 @@ nsresult MNSMozabProxy::QueryHelperStub()
 
 #define NS_LDAPCONNECTION_CONTRACTID     "@mozilla.org/network/ldap-connection;1"
 #define NS_LDAPOPERATION_CONTRACTID      "@mozilla.org/network/ldap-operation;1"
-#define NS_LDAPMESSAGE_CONTRACTID      "@mozilla.org/network/ldap-message;1"
 #define NS_LDAPURL_CONTRACTID       "@mozilla.org/network/ldap-url;1"
 
 namespace connectivity {

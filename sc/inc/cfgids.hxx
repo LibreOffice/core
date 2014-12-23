@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_INC_CFGIDS_HXX
 #define INCLUDED_SC_INC_CFGIDS_HXX
 
-#define SCCFG_DOC               SFX_ITEMTYPE_SC_BEGIN
 #define SCCFG_VIEW              (SFX_ITEMTYPE_SC_BEGIN + 1)
 #define SCCFG_APP               (SFX_ITEMTYPE_SC_BEGIN + 2)
 #define SCCFG_SPELLCHECK        (SFX_ITEMTYPE_SC_BEGIN + 3)

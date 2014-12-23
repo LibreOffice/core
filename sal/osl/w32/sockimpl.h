@@ -52,8 +52,6 @@ void __osl_destroySocketImpl(oslSocket pImpl);
 /*****************************************************************************/
 #define INTERNET_MODULE_NAME "wininet.dll"
 
-#define INTERNET_CONNECTION_MODEM  0x00000001L
-#define INTERNET_CONNECTION_LAN    0x00000002L
 #define INTERNET_CONNECTION_HANGUP 0x80000000L
 
 typedef DWORD (WINAPI *INTERNETATTEMPTCONNECT) (

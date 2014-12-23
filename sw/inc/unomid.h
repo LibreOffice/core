@@ -44,7 +44,6 @@
 #define MID_ANCHOR_PAGENUM                      1
 #define MID_ANCHOR_ANCHORFRAME                  2
 
-#define MID_URL_HYPERLINKFORMAT                 0
 #define MID_URL_HYPERLINKNAME                   1
 #define MID_URL_CLIENTMAP                       2
 #define MID_URL_SERVERMAP                       3

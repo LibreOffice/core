@@ -71,7 +71,6 @@
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1
 #define DLG_RET_CANCEL                                    0
-#define DLG_RET_BACK                                    100
 #define DLG_RET_OK_AUTOLUNCH                            101
 
 

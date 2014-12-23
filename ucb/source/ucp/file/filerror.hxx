@@ -23,7 +23,6 @@
 namespace fileaccess {
 
 // Error codes used to deliver the resulting exceptions
-#define LOWEST_FREE_ERROR                               72
 
 #define TASKHANDLER_NO_ERROR                            0
 #define TASKHANDLER_UNSUPPORTED_COMMAND                 1
@@ -53,7 +52,6 @@ namespace fileaccess {
 #define TASKHANDLING_NONAMESET_INSERT_COMMAND          23
 #define TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND      24
 
-#define TASKHANDLING_ANYOTHER_WRITE                    25   // not used
 #define TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE        26
 #define TASKHANDLING_NO_OPEN_FILE_FOR_WRITE            27
 #define TASKHANDLING_NOTCONNECTED_FOR_WRITE            28

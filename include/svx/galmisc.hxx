@@ -187,7 +187,6 @@ protected:
                                                sal_Int32 nDragImage = DND_IMAGE_NONE );
 };
 
-#define GALLERY_HINT_NONE               0x00000000
 #define GALLERY_HINT_CLOSE_THEME        0x00000001
 #define GALLERY_HINT_THEME_REMOVED      0x00000002
 #define GALLERY_HINT_THEME_RENAMED      0x00000004

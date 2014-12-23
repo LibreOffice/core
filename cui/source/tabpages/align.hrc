@@ -26,9 +26,6 @@
 #define IID_TOPLOCK                 2
 #define IID_CELLLOCK                3
 
-#define STR_BOTTOMLOCK              1
-#define STR_TOPLOCK                 2
-#define STR_CELLLOCK                3
 
 #endif
 

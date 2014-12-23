@@ -282,27 +282,15 @@ typedef int32_t DebugLevel;
 
 // Levels
 
-#define kDebugLevelMask                 0x0000FFFF
-#define kDebugLevelChatty               100
-#define kDebugLevelVerbose              500
-#define kDebugLevelTrace                800
 #define kDebugLevelInfo                 1000
 #define kDebugLevelNotice               3000
 #define kDebugLevelWarning              5000
 #define kDebugLevelAssert               6000
-#define kDebugLevelRequire              7000
 #define kDebugLevelError                8000
-#define kDebugLevelCritical             9000
-#define kDebugLevelAlert                10000
-#define kDebugLevelEmergency            11000
-#define kDebugLevelTragic               12000
 #define kDebugLevelMax                  0x0000FFFF
 
 // Level Flags
 
-#define kDebugLevelFlagMask             0xFFFF0000
-#define kDebugLevelFlagStackTrace       0x00010000
-#define kDebugLevelFlagDebugBreak       0x00020000
 
 
 /*!    @typedef    LogLevel
@@ -313,21 +301,6 @@ typedef int32_t DebugLevel;
 typedef int32_t LogLevel;
 
 #define kLogLevelUninitialized      -1L
-#define kLogLevelAll                0L
-#define kLogLevelChatty             100L
-#define kLogLevelVerbose            500L
-#define kLogLevelTrace              800L
-#define kLogLevelInfo               1000L
-#define kLogLevelNotice             3000L
-#define kLogLevelWarning            4000L
-#define kLogLevelAssert             6000L
-#define kLogLevelRequire            7000L
-#define kLogLevelError              8000L
-#define kLogLevelCritical           9000L
-#define kLogLevelAlert              10000L
-#define kLogLevelEmergency          11000L
-#define kLogLevelTragic             12000L
-#define kLogLevelOff                0x0000FFFEL
 
 #if 0
 #pragma mark == Properties ==
@@ -344,7 +317,6 @@ typedef uint32_t DebugPropertyTag;
 #define kDebugPropertyTagPrintLevelMin      0x6D696E70U     // 'minp'    Get: 1st param = DebugLevel *
                                                             //            Set: 1st param = DebugLevel
 
-#define kDebugPropertyTagPrintLevel         kDebugPropertyTagPrintLevelMin
 
 #define kDebugPropertyTagPrintLevelMax      0x706D786CU     // 'maxp'    Get: 1st param = DebugLevel *
                                                             //            Set: 1st param = DebugLevel

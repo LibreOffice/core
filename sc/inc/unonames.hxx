@@ -194,7 +194,6 @@
 //     #i66550 HLINK_FOR_SHAPES
 #define SC_UNONAME_HYPERLINK        "Hyperlink"
 #define SC_UNONAME_MOVEPROTECT      "MoveProtect"
-#define SC_UNONAME_SIZEPROTECT      "SizeProtect"
 
 //  other cell properties
 #define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
@@ -282,7 +281,6 @@
 #define SC_UNONAME_SRCOBJ           "SourceObject"
 #define SC_UNONAME_SRCTYPE          "SourceType"
 #define SC_UNONAME_STRIPDAT         "StripData"
-#define SC_UNONAME_UNIQUE           "UniqueOnly"
 #define SC_UNONAME_USEREGEX         "UseRegularExpressions"
 #define SC_UNONAME_ULIST            "UserListEnabled"
 #define SC_UNONAME_UINDEX           "UserListIndex"
