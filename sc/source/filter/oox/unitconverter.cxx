@@ -218,7 +218,7 @@ sal_uInt8 UnitConverter::calcBiffErrorCode( const OUString& rErrorCode ) const
     return (aIt == maOoxErrCodes.end()) ? BIFF_ERR_NA : aIt->second;
 }
 
-const OUString& UnitConverter::calcErrorString( sal_uInt8 nErrorCode ) const
+OUString UnitConverter::calcErrorString( sal_uInt8 nErrorCode ) const
 {
     OoxErrorCodeMap::const_iterator iFail( maOoxErrCodes.end());
     for (OoxErrorCodeMap::const_iterator aIt( maOoxErrCodes.begin()); aIt != maOoxErrCodes.end(); ++aIt)
@@ -229,7 +229,7 @@ const OUString& UnitConverter::calcErrorString( sal_uInt8 nErrorCode ) const
             iFail = aIt;
     }
     assert(iFail != maOoxErrCodes.end());   // BIFF_ERR_NA really should be in the map..
-    return iFail->first;
+    return iFail != maOoxErrCodes.end() ? iFail->first : OUString();
 }
 
 void UnitConverter::addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode )
