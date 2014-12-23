@@ -336,14 +336,14 @@ public:
     virtual void resolve(Stream& rHandler) SAL_OVERRIDE;
 
     // RTFListener
-    virtual int dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual int dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual int dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
-    virtual int dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
-    virtual int resolveChars(char ch) SAL_OVERRIDE;
-    virtual int pushState() SAL_OVERRIDE;
-    virtual int popState() SAL_OVERRIDE;
+    virtual RTFError dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual RTFError dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
+    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
+    virtual RTFError resolveChars(char ch) SAL_OVERRIDE;
+    virtual RTFError pushState() SAL_OVERRIDE;
+    virtual RTFError popState() SAL_OVERRIDE;
     virtual RTFDestinationState getDestinationState() SAL_OVERRIDE;
     virtual void setDestinationState(RTFDestinationState nDestinationState) SAL_OVERRIDE;
     virtual RTFInternalState getInternalState() SAL_OVERRIDE;
@@ -371,7 +371,7 @@ public:
     bool isInBackground();
     void setDestinationText(OUString& rString);
     /// Resolve a picture: If not inline, then anchored.
-    int resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& xShape);
+    RTFError resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& xShape);
 
     /// If this is the first run of the document, starts the initial paragraph.
     void checkFirstRun();

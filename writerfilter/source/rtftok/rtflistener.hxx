@@ -23,14 +23,14 @@ enum RTFInternalState
     INTERNAL_HEX
 };
 
-enum RTFErrors
+enum class RTFError
 {
-    ERROR_OK,
-    ERROR_GROUP_UNDER,
-    ERROR_GROUP_OVER,
-    ERROR_EOF,
-    ERROR_HEX_INVALID,
-    ERROR_CHAR_OVER
+    OK,
+    GROUP_UNDER,
+    GROUP_OVER,
+    UNEXPECTED_EOF,
+    HEX_INVALID,
+    CHAR_OVER
 };
 
 /**
@@ -44,16 +44,16 @@ class RTFListener
 public:
     virtual ~RTFListener() { }
     // Dispatching of control words and characters.
-    virtual int dispatchDestination(RTFKeyword nKeyword) = 0;
-    virtual int dispatchFlag(RTFKeyword nKeyword) = 0;
-    virtual int dispatchSymbol(RTFKeyword nKeyword) = 0;
-    virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) = 0;
-    virtual int dispatchValue(RTFKeyword nKeyword, int nParam) = 0;
-    virtual int resolveChars(char ch) = 0;
+    virtual RTFError dispatchDestination(RTFKeyword nKeyword) = 0;
+    virtual RTFError dispatchFlag(RTFKeyword nKeyword) = 0;
+    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) = 0;
+    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) = 0;
+    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) = 0;
+    virtual RTFError resolveChars(char ch) = 0;
 
     // State handling.
-    virtual int pushState() = 0;
-    virtual int popState() = 0;
+    virtual RTFError pushState() = 0;
+    virtual RTFError popState() = 0;
 
     virtual RTFDestinationState getDestinationState() = 0;
     virtual void setDestinationState(RTFDestinationState nDestinationState) = 0;

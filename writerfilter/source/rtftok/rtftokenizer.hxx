@@ -26,7 +26,7 @@ public:
     RTFTokenizer(RTFListener& rImport, SvStream* pInStream, com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> const& xStatusIndicator);
     virtual ~RTFTokenizer();
 
-    int resolveParse();
+    RTFError resolveParse();
     int asHex(char ch);
     /// Number of states on the stack.
     int getGroup() const
@@ -49,8 +49,8 @@ private:
     {
         return *m_pInStream;
     }
-    int resolveKeyword();
-    int dispatchKeyword(OString& rKeyword, bool bParam, int nParam);
+    RTFError resolveKeyword();
+    RTFError dispatchKeyword(OString& rKeyword, bool bParam, int nParam);
 
     RTFListener& m_rImport;
     SvStream* m_pInStream;

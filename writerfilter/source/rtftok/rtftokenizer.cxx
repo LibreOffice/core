@@ -55,11 +55,11 @@ RTFTokenizer::~RTFTokenizer()
 }
 
 
-int RTFTokenizer::resolveParse()
+RTFError RTFTokenizer::resolveParse()
 {
     SAL_INFO("writerfilter", OSL_THIS_FUNC);
     char ch;
-    int ret;
+    RTFError ret;
     // for hex chars
     int b = 0, count = 2;
     sal_uInt32 nPercentSize = 0;
@@ -87,11 +87,11 @@ int RTFTokenizer::resolveParse()
             m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
 
         if (m_nGroup < 0)
-            return ERROR_GROUP_UNDER;
+            return RTFError::GROUP_UNDER;
         if (m_nGroup > 0 && m_rImport.getInternalState() == INTERNAL_BIN)
         {
             ret = m_rImport.resolveChars(ch);
-            if (ret)
+            if (ret != RTFError::OK)
                 return ret;
         }
         else
@@ -101,23 +101,23 @@ int RTFTokenizer::resolveParse()
             case '{':
                 m_nGroupStart = Strm().Tell() - 1;
                 ret = m_rImport.pushState();
-                if (ret)
+                if (ret != RTFError::OK)
                     return ret;
                 break;
             case '}':
                 ret = m_rImport.popState();
-                if (ret)
+                if (ret != RTFError::OK)
                     return ret;
                 if (m_nGroup == 0)
                 {
                     if (m_rImport.isSubstream())
                         m_rImport.finishSubstream();
-                    return 0;
+                    return RTFError::OK;
                 }
                 break;
             case '\\':
                 ret = resolveKeyword();
-                if (ret)
+                if (ret != RTFError::OK)
                     return ret;
                 break;
             case 0x0d:
@@ -128,11 +128,11 @@ int RTFTokenizer::resolveParse()
                 break;
             default:
                 if (m_nGroup == 0)
-                    return ERROR_CHAR_OVER;
+                    return RTFError::CHAR_OVER;
                 if (m_rImport.getInternalState() == INTERNAL_NORMAL)
                 {
                     ret = m_rImport.resolveChars(ch);
-                    if (ret)
+                    if (ret != RTFError::OK)
                         return ret;
                 }
                 else
@@ -141,13 +141,13 @@ int RTFTokenizer::resolveParse()
                     b = b << 4;
                     sal_Int8 parsed = asHex(ch);
                     if (parsed == -1)
-                        return ERROR_HEX_INVALID;
+                        return RTFError::HEX_INVALID;
                     b += parsed;
                     count--;
                     if (!count)
                     {
                         ret = m_rImport.resolveChars(b);
-                        if (ret)
+                        if (ret != RTFError::OK)
                             return ret;
                         count = 2;
                         b = 0;
@@ -160,10 +160,10 @@ int RTFTokenizer::resolveParse()
     }
 
     if (m_nGroup < 0)
-        return ERROR_GROUP_UNDER;
+        return RTFError::GROUP_UNDER;
     else if (m_nGroup > 0)
-        return ERROR_GROUP_OVER;
-    return 0;
+        return RTFError::GROUP_OVER;
+    return RTFError::OK;
 }
 
 int RTFTokenizer::asHex(char ch)
@@ -201,7 +201,7 @@ void RTFTokenizer::popGroup()
     m_nGroup--;
 }
 
-int RTFTokenizer::resolveKeyword()
+RTFError RTFTokenizer::resolveKeyword()
 {
     char ch;
     OStringBuffer aBuf;
@@ -211,7 +211,7 @@ int RTFTokenizer::resolveKeyword()
 
     Strm().ReadChar(ch);
     if (Strm().IsEof())
-        return ERROR_EOF;
+        return RTFError::UNEXPECTED_EOF;
 
     if (!isalpha(ch))
     {
@@ -242,7 +242,7 @@ int RTFTokenizer::resolveKeyword()
         bNeg = true;
         Strm().ReadChar(ch);
         if (Strm().IsEof())
-            return ERROR_EOF;
+            return RTFError::UNEXPECTED_EOF;
     }
     if (isdigit(ch))
     {
@@ -280,10 +280,10 @@ bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
     return true;
 }
 
-int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
+RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
     if (m_rImport.getDestinationState() == DESTINATION_SKIP)
-        return 0;
+        return RTFError::OK;
     SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
              "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
     RTFSymbol aSymbol;
@@ -295,33 +295,33 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
         RTFSkipDestination aSkip(m_rImport);
         aSkip.setParsed(false);
-        return 0;
+        return RTFError::OK;
     }
 
-    int ret;
+    RTFError ret;
     switch (m_aRTFControlWords[i].nControlType)
     {
     case CONTROL_FLAG:
         // flags ignore any parameter by definition
         ret = m_rImport.dispatchFlag(m_aRTFControlWords[i].nIndex);
-        if (ret)
+        if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_DESTINATION:
         // same for destinations
         ret = m_rImport.dispatchDestination(m_aRTFControlWords[i].nIndex);
-        if (ret)
+        if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_SYMBOL:
         // and symbols
         ret = m_rImport.dispatchSymbol(m_aRTFControlWords[i].nIndex);
-        if (ret)
+        if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_TOGGLE:
         ret = m_rImport.dispatchToggle(m_aRTFControlWords[i].nIndex, bParam, nParam);
-        if (ret)
+        if (ret != RTFError::OK)
             return ret;
         break;
     case CONTROL_VALUE:
@@ -329,13 +329,13 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
         if (bParam)
         {
             ret = m_rImport.dispatchValue(m_aRTFControlWords[i].nIndex, nParam);
-            if (ret)
+            if (ret != RTFError::OK)
                 return ret;
         }
         break;
     }
 
-    return 0;
+    return RTFError::OK;
 }
 
 OUString RTFTokenizer::getPosition()

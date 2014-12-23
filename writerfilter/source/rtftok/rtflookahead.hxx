@@ -28,14 +28,14 @@ class RTFLookahead : public RTFListener
 public:
     RTFLookahead(SvStream& rStream, sal_Size nGroupStart);
     virtual ~RTFLookahead();
-    virtual int dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual int dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual int dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
-    virtual int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
-    virtual int dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
-    virtual int resolveChars(char ch) SAL_OVERRIDE;
-    virtual int pushState() SAL_OVERRIDE;
-    virtual int popState() SAL_OVERRIDE;
+    virtual RTFError dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual RTFError dispatchFlag(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual RTFError dispatchSymbol(RTFKeyword nKeyword) SAL_OVERRIDE;
+    virtual RTFError dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam) SAL_OVERRIDE;
+    virtual RTFError dispatchValue(RTFKeyword nKeyword, int nParam) SAL_OVERRIDE;
+    virtual RTFError resolveChars(char ch) SAL_OVERRIDE;
+    virtual RTFError pushState() SAL_OVERRIDE;
+    virtual RTFError popState() SAL_OVERRIDE;
     virtual RTFDestinationState getDestinationState() SAL_OVERRIDE;
     virtual void setDestinationState(RTFDestinationState nDestinationState) SAL_OVERRIDE;
     virtual RTFInternalState getInternalState() SAL_OVERRIDE;

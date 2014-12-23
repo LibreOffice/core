@@ -700,31 +700,31 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     m_pMapperStream = &rMapper;
     switch (m_pTokenizer->resolveParse())
     {
-    case ERROR_OK:
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": finished without errors");
+    case RTFError::OK:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: finished without errors");
         break;
-    case ERROR_GROUP_UNDER:
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unmatched '}'");
+    case RTFError::GROUP_UNDER:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: unmatched '}'");
         break;
-    case ERROR_GROUP_OVER:
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unmatched '{'");
+    case RTFError::GROUP_OVER:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: unmatched '{'");
         throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
-    case ERROR_EOF:
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": unexpected end of file");
+    case RTFError::UNEXPECTED_EOF:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: unexpected end of file");
         throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
-    case ERROR_HEX_INVALID:
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": invalid hex char");
+    case RTFError::HEX_INVALID:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: invalid hex char");
         throw io::WrongFormatException(m_pTokenizer->getPosition());
         break;
-    case ERROR_CHAR_OVER:
-        SAL_INFO("writerfilter", OSL_THIS_FUNC << ": characters after last '}'");
+    case RTFError::CHAR_OVER:
+        SAL_INFO("writerfilter", "RTFDocumentImpl::resolve: characters after last '}'");
         break;
     }
 }
 
-int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
+RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
 {
     SvMemoryStream aStream;
     SvStream* pStream = nullptr;
@@ -744,7 +744,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
                 b = b << 4;
                 sal_Int8 parsed = m_pTokenizer->asHex(ch);
                 if (parsed == -1)
-                    return ERROR_HEX_INVALID;
+                    return RTFError::HEX_INVALID;
                 b += parsed;
                 count--;
                 if (!count)
@@ -761,7 +761,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
 
     if (!pStream->Tell())
         // No destination text? Then we'll get it later.
-        return 0;
+        return RTFError::OK;
 
     // Store, and get its URL.
     pStream->Seek(0);
@@ -849,7 +849,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
 
         RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
-        return 0;
+        return RTFError::OK;
     }
 
     if (xPropertySet.is())
@@ -860,7 +860,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         // Send the shape directly, no section is started, to additional properties will be ignored anyway.
         Mapper().startShape(xShape);
         Mapper().endShape();
-        return 0;
+        return RTFError::OK;
     }
 
     // Send it to the dmapper.
@@ -992,10 +992,10 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pValue));
     }
 
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFDocumentImpl::resolveChars(char ch)
+RTFError RTFDocumentImpl::resolveChars(char ch)
 {
     if (m_aStates.top().nInternalState == INTERNAL_BIN)
     {
@@ -1007,7 +1007,7 @@ int RTFDocumentImpl::resolveChars(char ch)
             m_pBinaryData->WriteChar(ch);
         }
         m_aStates.top().nInternalState = INTERNAL_NORMAL;
-        return 0;
+        return RTFError::OK;
     }
 
 
@@ -1074,21 +1074,21 @@ int RTFDocumentImpl::resolveChars(char ch)
     {
         if (!bSkipped)
             m_aHexBuffer.append(ch);
-        return 0;
+        return RTFError::OK;
     }
 
     if (m_aStates.top().nDestinationState == DESTINATION_SKIP)
-        return 0;
+        return RTFError::OK;
     OString aStr = aBuf.makeStringAndClear();
     if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
     {
         if (aStr.toChar() != ';')
             m_aStates.top().aLevelNumbers.push_back(sal_Int32(ch));
-        return 0;
+        return RTFError::OK;
     }
 
     OUString aOUStr(OStringToOUString(aStr, m_aStates.top().nCurrentEncoding));
-    SAL_INFO("writerfilter", OSL_THIS_FUNC << ": collected '" << aOUStr << "'");
+    SAL_INFO("writerfilter", "RTFDocumentImpl::resolveChars: collected '" << aOUStr << "'");
 
     if (m_aStates.top().nDestinationState == DESTINATION_COLORTABLE)
     {
@@ -1103,7 +1103,7 @@ int RTFDocumentImpl::resolveChars(char ch)
         m_aHexBuffer.append(aStr);
 
     checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
-    return 0;
+    return RTFError::OK;
 }
 
 bool RTFFrame::inFrame()
@@ -1497,7 +1497,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
 
 }
 
-int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
+RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
     setNeedSect();
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
@@ -2032,7 +2032,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             {
                 m_aMathBuffer.appendOpeningTag(aSymbol.nToken);
                 m_aStates.top().nDestinationState = aSymbol.eDestination;
-                return 0;
+                return RTFError::OK;
             }
 
             SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -2046,10 +2046,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
     // new destination => use new destination text
     m_aStates.top().pDestinationText = &m_aStates.top().aDestinationText;
 
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
+RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     setNeedSect();
     if (nKeyword != RTF_HEXCHAR)
@@ -2062,7 +2062,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         // very special handling since text() will eat lone '\n'
         singleChar('\n');
-        return 0;
+        return RTFError::OK;
     }
     // Trivial symbols
     sal_uInt8 cCh = 0;
@@ -2108,7 +2108,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
         text(aStr);
-        return 0;
+        return RTFError::OK;
     }
 
     switch (nKeyword)
@@ -2117,7 +2117,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         m_bSkipUnknown = true;
         aSkip.setReset(false);
-        return 0;
+        return RTFError::OK;
     }
     break;
     case RTF_PAR:
@@ -2410,7 +2410,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     }
     break;
     }
-    return 0;
+    return RTFError::OK;
 }
 
 
@@ -2517,7 +2517,7 @@ void RTFDocumentImpl::resetTableRowProperties()
         m_nTopLevelCurrentCellX = 0;
 }
 
-int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
+RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
     setNeedSect();
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
@@ -2541,7 +2541,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nSprm));
         m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Indentation
@@ -2570,7 +2570,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_jc, pValue);
         m_bNeedPap = true;
-        return 0;
+        return RTFError::OK;
     }
 
     // Font Alignment
@@ -2599,7 +2599,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_textAlignment, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Tab kind.
@@ -2621,7 +2621,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_val, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Tab lead.
@@ -2652,7 +2652,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aTabAttributes.set(NS_ooxml::LN_CT_TabStop_leader, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Border types
@@ -2714,7 +2714,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             RTFValue::Pointer_t pValue(new RTFValue(nParam));
             lcl_putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_val, pValue);
-            return 0;
+            return RTFError::OK;
         }
     }
 
@@ -2747,7 +2747,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aSectionSprms.set(NS_ooxml::LN_EG_SectPrContents_type, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Footnote numbering
@@ -2778,7 +2778,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_CT_FtnProps_numFmt, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Footnote restart type
@@ -2800,7 +2800,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numRestart, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Endnote numbering
@@ -2831,7 +2831,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_CT_EdnProps_numFmt, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     switch (nKeyword)
@@ -2852,7 +2852,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t const pValue(new RTFValue(nParam));
         m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TrPrBase_jc, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Cell Text Flow
@@ -2910,7 +2910,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         RTFValue::Pointer_t pValue(new RTFValue(1));
         m_aStates.top().aParagraphSprms.erase(NS_ooxml::LN_inTbl);
         m_aStates.top().aParagraphSprms.set(nParam, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     switch (nKeyword)
@@ -3517,10 +3517,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     break;
     }
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
+RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
     setNeedSect();
     checkUnicode(/*bUnicode =*/ nKeyword != RTF_U, /*bHex =*/ true);
@@ -3569,7 +3569,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aTableSprms.set(nSprm, pIntValue);
-        return 0;
+        return RTFError::OK;
     }
     // Trivial character sprms.
     switch (nKeyword)
@@ -3596,7 +3596,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aCharacterSprms.set(nSprm, pIntValue);
-        return 0;
+        return RTFError::OK;
     }
     // Trivial character attributes.
     switch (nKeyword)
@@ -3631,7 +3631,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         // Language is a character property, but we should store it at a paragraph level as well for fields.
         if (nKeyword == RTF_LANG && m_bNeedPap)
             lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_EG_RPrBase_lang, nSprm, pValue);
-        return 0;
+        return RTFError::OK;
     }
     // Trivial paragraph sprms.
     switch (nKeyword)
@@ -3655,7 +3655,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             dispatchFlag(RTF_INTBL); // sets newly pushed buffer as current
             assert(m_aStates.top().pCurrentBuffer == &m_aTableBufferStack.back());
         }
-        return 0;
+        return RTFError::OK;
     }
 
     // Info group.
@@ -3695,7 +3695,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
     }
     if (nSprm > 0)
-        return 0;
+        return RTFError::OK;
 
     // Frame size / position.
     Id nId = 0;
@@ -3730,7 +3730,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().pCurrentBuffer != &m_aTableBufferStack.back())
             m_aStates.top().aFrame.setSprm(nId, nParam);
 
-        return 0;
+        return RTFError::OK;
     }
 
     // Then check for the more complex ones.
@@ -3796,7 +3796,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         }
         if (i == nRTFEncodings)
             // not found
-            return 0;
+            return RTFError::OK;
 
         m_nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
         m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
@@ -4745,10 +4745,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     break;
     }
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
+RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
     setNeedSect();
     checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
@@ -4811,7 +4811,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : NS_ooxml::LN_Value_ST_Underline_none));
         m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Accent characters (over dot / over coma).
@@ -4839,7 +4839,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_em, pValue);
-        return 0;
+        return RTFError::OK;
     }
 
     // Trivial character sprms.
@@ -4883,7 +4883,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     if (nSprm >= 0)
     {
         m_aStates.top().aCharacterSprms.set(nSprm, pBoolValue);
-        return 0;
+        return RTFError::OK;
     }
 
     switch (nKeyword)
@@ -4912,10 +4912,10 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     }
     break;
     }
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFDocumentImpl::pushState()
+RTFError RTFDocumentImpl::pushState()
 {
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
 
@@ -4988,7 +4988,7 @@ int RTFDocumentImpl::pushState()
     // state does not inherit this flag.
     m_aStates.top().bStartedTrackchange = false;
 
-    return 0;
+    return RTFError::OK;
 }
 
 writerfilter::Reference<Properties>::Pointer_t
@@ -5022,7 +5022,7 @@ void RTFDocumentImpl::resetAttributes()
     m_aStates.top().aParagraphAttributes.clear();
 }
 
-int RTFDocumentImpl::popState()
+RTFError RTFDocumentImpl::popState()
 {
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
     //                         ", dest state: " << m_aStates.top().nDestinationState);
@@ -5252,7 +5252,7 @@ int RTFDocumentImpl::popState()
                 b = b << 4;
                 sal_Int8 parsed = m_pTokenizer->asHex(ch);
                 if (parsed == -1)
-                    return ERROR_HEX_INVALID;
+                    return RTFError::HEX_INVALID;
                 b += parsed;
                 count--;
                 if (!count)
@@ -5383,7 +5383,7 @@ int RTFDocumentImpl::popState()
                 b = b << 4;
                 sal_Int8 parsed = m_pTokenizer->asHex(ch);
                 if (parsed == -1)
-                    return ERROR_HEX_INVALID;
+                    return RTFError::HEX_INVALID;
                 b += parsed;
                 count--;
                 if (!count)
@@ -6073,7 +6073,7 @@ int RTFDocumentImpl::popState()
         m_bHasFootnote = false;
     }
 
-    return 0;
+    return RTFError::OK;
 }
 
 bool RTFDocumentImpl::isInBackground()

@@ -34,52 +34,52 @@ RTFLookahead::~RTFLookahead()
 {
 }
 
-int RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/)
+RTFError RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/)
 {
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::dispatchFlag(RTFKeyword nKeyword)
+RTFError RTFLookahead::dispatchFlag(RTFKeyword nKeyword)
 {
     if (nKeyword == RTF_INTBL)
         m_bHasTable = true;
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::dispatchSymbol(RTFKeyword /*nKeyword*/)
+RTFError RTFLookahead::dispatchSymbol(RTFKeyword /*nKeyword*/)
 {
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::dispatchToggle(RTFKeyword /*nKeyword*/, bool /*bParam*/, int /*nParam*/)
+RTFError RTFLookahead::dispatchToggle(RTFKeyword /*nKeyword*/, bool /*bParam*/, int /*nParam*/)
 {
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
+RTFError RTFLookahead::dispatchValue(RTFKeyword /*nKeyword*/, int /*nParam*/)
 {
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::resolveChars(char ch)
+RTFError RTFLookahead::resolveChars(char ch)
 {
     while (!m_rStream.IsEof() && (ch != '{' && ch != '}' && ch != '\\'))
         m_rStream.ReadChar(ch);
     if (!m_rStream.IsEof())
         m_rStream.SeekRel(-1);
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::pushState()
+RTFError RTFLookahead::pushState()
 {
     m_pTokenizer->pushGroup();
-    return 0;
+    return RTFError::OK;
 }
 
-int RTFLookahead::popState()
+RTFError RTFLookahead::popState()
 {
     m_pTokenizer->popGroup();
-    return 0;
+    return RTFError::OK;
 }
 
 RTFDestinationState RTFLookahead::getDestinationState()
