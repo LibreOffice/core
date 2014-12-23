@@ -23,6 +23,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/gdimetafiletools.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <vcl/emfact.hxx>
 
 bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader )
 {
@@ -74,8 +75,19 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
 
     if ( nMetaType == 0x464d4520 )
     {
-        if ( !EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() )
-            rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
+        EmfAction* pEmfAction = NULL;
+
+        sal_uInt32 nActions=0;
+
+        do {
+            SAL_INFO("vcl.emf", "");
+            SAL_INFO("vcl.emf", "Record#: " << nActions);
+            pEmfAction = EmfAction::ReadEmfAction( rStream );
+            nActions++;
+        } while (pEmfAction->GetType() != EMR_EOF_ACTION);
+
+    //    if ( !EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() )
+    //        rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
     {

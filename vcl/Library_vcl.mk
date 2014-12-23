@@ -124,6 +124,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/gdi/emfactions \
 	vcl/opengl/DeviceInfo \
 	vcl/opengl/gdiimpl \
 	vcl/opengl/salbmp \
