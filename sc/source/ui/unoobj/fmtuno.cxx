@@ -349,7 +349,7 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    if (nIndex < static_cast<sal_Int32>(aEntries.size()))
+    if (nIndex < static_cast<sal_Int32>(aEntries.size()) && nIndex >= 0)
     {
         std::vector<ScTableConditionalEntry*>::iterator iter = aEntries.begin()+nIndex;
 
