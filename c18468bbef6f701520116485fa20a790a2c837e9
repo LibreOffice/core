@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_5fee84ed",
+        "filename": "i18npool/source/search/levdis.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-23T13:00:49Z",
+      "side": 0,
+      "message": "I\u0027d rather not have removed all these, they actually illustrate the comments. I\u0027ll rework and translate the comments at some point myself, things already got weird enough with the comment translations in the corresponding .cxx file ...",
+      "revId": "c18468bbef6f701520116485fa20a790a2c837e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_bfb3100a",
+        "filename": "include/i18nlangtag/lang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-23T13:00:49Z",
+      "side": 0,
+      "message": "Please do not remove ANYTHING from this file! All values are carefully extracted from MS documentation and would get lost this way. If it really bothers having them defined then comment them out instead.",
+      "revId": "c18468bbef6f701520116485fa20a790a2c837e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_9fcbac72",
+        "filename": "sc/inc/helpids.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-23T13:00:49Z",
+      "side": 0,
+      "message": "As a sample I looked this up in the helpcontent2 module, and as expected it is used as help ID there. Do not remove any HelpIDs without checking whether they are used in helpcontent2!",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 25
+      },
+      "revId": "c18468bbef6f701520116485fa20a790a2c837e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
