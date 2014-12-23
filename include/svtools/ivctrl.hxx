@@ -40,8 +40,6 @@ class Image;
 #define ICNVIEW_FLAG_POS_MOVED      0x0020 // Moved by Drag and Drop, but not logged
 #define ICNVIEW_FLAG_DROP_TARGET    0x0040 // Set in QueryDrop
 #define ICNVIEW_FLAG_BLOCK_EMPHASIS 0x0080 // Do not paint Emphasis
-#define ICNVIEW_FLAG_USER1          0x0100
-#define ICNVIEW_FLAG_USER2          0x0200
 #define ICNVIEW_FLAG_PRED_SET       0x0400 // Predecessor moved
 
 enum SvxIconChoiceCtrlTextMode

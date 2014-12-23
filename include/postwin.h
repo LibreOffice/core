@@ -31,10 +31,7 @@
 #undef TRANSPARENT
 #undef OPAQUE
 #define WIN32_TRANSPARENT 1
-#define WIN32_OPAQUE 2
 
-#define WIN_WB_LEFT               0
-#define WIN_WB_RIGHT              1
 #undef WB_LEFT
 #undef WB_RIGHT
 

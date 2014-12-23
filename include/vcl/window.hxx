@@ -299,7 +299,6 @@ enum class StateChangedType : sal_uInt16
 #define IMPL_SEP_BUTTON_X               5
 #define IMPL_SEP_BUTTON_Y               5
 #define IMPL_MINSIZE_MSGBOX_WIDTH       150
-#define IMPL_MINSIZE_MSGBOX_HEIGHT      80
 #define IMPL_DIALOG_OFFSET              5
 #define IMPL_DIALOG_BAR_OFFSET          3
 #define IMPL_MSGBOX_OFFSET_EXTRA_X      0

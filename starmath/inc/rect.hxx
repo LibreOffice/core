@@ -50,12 +50,6 @@ inline long SmFromTo(long nFrom, long nTo, double fRelDist)
 // Note: however, italic spaces can be negative!
 
 
-// possible flags for the 'Draw' function below (just for debugging)
-#define SM_RECT_CORE    0x0001
-#define SM_RECT_ITALIC  0x0002
-#define SM_RECT_LINES   0x0004
-#define SM_RECT_MID     0x0008
-
 // possible positions and alignments for the 'AlignTo' function
 enum RectPos
     // (RP_LEFT : align the current object to the left of the argument, ...)

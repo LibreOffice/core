@@ -72,8 +72,6 @@ const sal_uInt8 EXC_AFOPER_GREATEREQUAL     = 0x06;
 #define EXC_CHTR_OP_MOVE            0x0004
 #define EXC_CHTR_OP_INSTAB          0x0005
 #define EXC_CHTR_OP_CELL            0x0008
-#define EXC_CHTR_OP_RENAME          0x0009
-#define EXC_CHTR_OP_NAME            0x000A
 #define EXC_CHTR_OP_FORMAT          0x000B
 #define EXC_CHTR_OP_UNKNOWN         0xFFFF
 

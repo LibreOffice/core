@@ -47,7 +47,6 @@ namespace com { namespace sun { namespace star { namespace uno {
 #define FIELD_PROP_BOOL4            28
 #define FIELD_PROP_STRINGS          29
 #define FIELD_PROP_PAR5             30
-#define FIELD_PROP_PAR6             31
 
 #define FIELD_PROP_IS_FIELD_USED        32
 #define FIELD_PROP_IS_FIELD_DISPLAYED   33

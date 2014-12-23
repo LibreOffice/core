@@ -172,7 +172,6 @@ typedef struct
 #define IS_SP_SKIP_BLOCK(hch) ((hch<5) || (hch==12) || (hch==27) || (hch == 29))
 
 // file tag
-#define FILETAG_UNCOMPRESSED_BIT    0x80000000
 #define FILETAG_END_OF_COMPRESSED   0x00000000
 
 #define FILETAG_EMBEDDED_PICTURE    0x00000001

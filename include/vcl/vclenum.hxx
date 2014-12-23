@@ -49,7 +49,6 @@ enum GradientStyle
 #define HATCH_SINGLE            HatchStyle_SINGLE
 #define HATCH_DOUBLE            HatchStyle_DOUBLE
 #define HATCH_TRIPLE            HatchStyle_TRIPLE
-#define HATCH_FORCE_EQUAL_SIZE  HatchStyle_FORCE_EQUAL_SIZE
 
 enum HatchStyle
 {
@@ -63,7 +62,6 @@ enum HatchStyle
 #define LINE_NONE               LineStyle_NONE
 #define LINE_SOLID              LineStyle_SOLID
 #define LINE_DASH               LineStyle_DASH
-#define LINE_FORCE_EQUAL_SIZE   LineStyle_FORCE_EQUAL_SIZE
 
 enum LineStyle
 {

@@ -36,7 +36,6 @@
 #define SERVICE_FIXEDLINE "com.sun.star.report.FixedLine"
 #define SERVICE_SECTION "com.sun.star.report.Section"
 #define SERVICE_GROUP "com.sun.star.report.Group"
-#define SERVICE_OLEOBJECT "com.sun.star.report.OleObject"
 
 //= property names
 
@@ -56,27 +55,17 @@
 #define PROPERTY_GROUP "Group"
 #define PROPERTY_REPORTDEFINITION "ReportDefinition"
 
-#define PROPERTY_HEADER "Header"
-#define PROPERTY_FOOTER "Footer"
 #define PROPERTY_GROUPINTERVAL "GroupInterval"
 #define PROPERTY_EXPRESSION "Expression"
 #define PROPERTY_GROUPON "GroupOn"
 #define PROPERTY_SORTASCENDING "SortAscending"
-#define PROPERTY_GROUPS "Groups"
 
 #define PROPERTY_MASTERFIELDS "MasterFields"
 #define PROPERTY_DETAILFIELDS "DetailFields"
-#define PROPERTY_REPORTHEADER "ReportHeader"
-#define PROPERTY_REPORTFOOTER "ReportFooter"
-#define PROPERTY_PAGEHEADER "PageHeader"
-#define PROPERTY_PAGEFOOTER "PageFooter"
-#define PROPERTY_DETAIL "Detail"
 #define PROPERTY_CAPTION "Caption"
-#define PROPERTY_BACKGRAPHICURL "BackGraphicURL"
 #define PROPERTY_COMMAND "Command"
 #define PROPERTY_BACKGRAPHICLOCATION "BackGraphicLocation"
 #define PROPERTY_ORIENTATION "Orientation"
-#define PROPERTY_PAPERFORMAT "PaperFormat"
 #define PROPERTY_PAPERSIZE "Size"
 #define PROPERTY_GROUPKEEPTOGETHER "GroupKeepTogether"
 #define PROPERTY_PAGEHEADEROPTION "PageHeaderOption"
@@ -126,7 +115,6 @@
 #define PROPERTY_CONDITIONALPRINTEXPRESSION "ConditionalPrintExpression"
 #define PROPERTY_STARTNEWCOLUMN "StartNewColumn"
 #define PROPERTY_RESETPAGENUMBER "ResetPageNumber"
-#define PROPERTY_SHAPE "Shape"
 #define PROPERTY_PRINTWHENGROUPCHANGE "PrintWhenGroupChange"
 #define PROPERTY_STATE "State"
 #define PROPERTY_TIME_STATE "TimeState"

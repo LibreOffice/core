@@ -34,7 +34,6 @@
 #include "smmod.hxx"
 
 
-#define SYMBOLSET_NONE      0xFFFF
 #define SYMBOL_NONE     0xFFFF
 
 

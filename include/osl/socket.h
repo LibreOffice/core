@@ -33,7 +33,6 @@ extern "C" {
 /* error returns */
 #define OSL_INADDR_NONE             0xffffffff
 #define OSL_INVALID_PORT (-1)
-#define OSL_INVALID_IPX_SOCKET_NO   0xffffffff
 
 /**
     Opaque datatype SocketAddr.

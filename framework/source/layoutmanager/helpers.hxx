@@ -39,7 +39,6 @@
 
 #define UIRESOURCE_URL                  "private:resource"
 #define UIRESOURCETYPE_TOOLBAR          "toolbar"
-#define UIRESOURCETYPE_STATUSBAR        "statusbar"
 #define UIRESOURCETYPE_MENUBAR          "menubar"
 
 namespace framework

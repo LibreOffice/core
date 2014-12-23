@@ -32,7 +32,6 @@
 
 class Edit;
 
-#define SfxGeneralTabPage   SvxGeneralTabPage
 
 // class SvxGeneralTabPage -----------------------------------------------
 

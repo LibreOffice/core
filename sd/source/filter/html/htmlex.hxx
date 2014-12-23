@@ -41,11 +41,8 @@
 #include <boost/scoped_ptr.hpp>
 
 #define PUB_LOWRES_WIDTH    640
-#define PUB_LOWRES_HEIGHT   480
 #define PUB_MEDRES_WIDTH    800
-#define PUB_MEDRES_HEIGHT   600
 #define PUB_HIGHRES_WIDTH   1024
-#define PUB_HIGHRES_HEIGHT  768
 
 #define PUB_THUMBNAIL_WIDTH  256
 #define PUB_THUMBNAIL_HEIGHT 192

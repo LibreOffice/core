@@ -36,7 +36,6 @@
 // entry had or has children
 #define SV_ENTRYFLAG_HAD_CHILDREN       0x0010
 
-#define SV_ENTRYFLAG_USER_FLAGS         0xF000
 #define SV_ENTRYFLAG_SEMITRANSPARENT    0x8000      // draw semi-transparent entry bitmaps
 
 

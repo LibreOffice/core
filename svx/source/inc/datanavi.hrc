@@ -47,8 +47,6 @@
 #define IID_TEXT                5
 #define IID_OTHER               6
 
-#define STR_HEADER_PREFIX       10
-#define STR_HEADER_URL          11
 
 #endif //_SVX_DATANAVI_HRC
 

@@ -20,10 +20,6 @@
 #define INCLUDED_STARMATH_INC_SMCOMMANDS_H
 
 #define CMD_SID_ADJUST                              ".uno:Adjust"
-#define CMD_SID_ALIGN                               ".uno:ChangeAlignment"
-#define CMD_SID_DISTANCE                            ".uno:ChangeDistance"
-#define CMD_SID_FONT                                ".uno:ChangeFont"
-#define CMD_SID_FONTSIZE                            ".uno:ChangeFontSize"
 #define CMD_SID_DRAW                                ".uno:Draw"
 #define CMD_SID_VIEW100                             ".uno:View100"
 #define CMD_SID_VIEW200                             ".uno:View200"
