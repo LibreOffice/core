@@ -153,12 +153,9 @@
 {
     ItemList =
     {
+        MN_TRANSFORM
         MN_LINE
         MN_AREA
-        MN_TEXTATTR
-        MN_TRANSFORM
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
         SEPARATOR
         MN_POSITION
         MN_OBJECT_ALIGN
@@ -170,19 +167,12 @@
         MN_LEAVE_GROUP
         MN_DISMANTLE
 
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
-
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_ACTION
 #endif
         SEPARATOR
         MN_STYLEDT
-        SEPARATOR
 
     };
 };
@@ -343,11 +333,9 @@
 {
     ItemList =
     {
-        MN_LINE
         MN_TRANSFORM
+        MN_LINE
         MN_EDIT_POINTS
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
         SEPARATOR
         MN_POSITION
         MN_OBJECT_ALIGN
@@ -357,12 +345,6 @@
         SEPARATOR
         MN_LEAVE_GROUP
         MN_DISMANTLE
-
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
 
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
@@ -567,15 +549,17 @@
 {
     ItemList =
     {
-        MN_TRANSFORM
-        MN_ORIGINAL_SIZE
-        MN_LINE
-        MN_AREA
-        MN_TEXTATTR
-        SEPARATOR
-        MN_CHAR_PARAGRAPH
+        MenuItem { ITEM_CHANGE_PICTURE };
+        MenuItem { ITEM_SAVE_GRAPHIC };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
+        MenuItem { ITEM_EXTERNAL_EDIT };
         SEPARATOR
         MN_CROP
+        MN_ORIGINAL_SIZE
+        SEPARATOR
+        MN_TRANSFORM
+        MN_LINE
+        SEPARATOR
         MN_OBJECT_ALIGN
         MN_POSITION
         MN_DISTRIBUTE
@@ -583,23 +567,12 @@
         MNSUB_CONVERT
         MN_BREAK
 
-        // #i68101#
-        SEPARATOR
-        MN_OBJECT_TITLE_DESCRIPTION
-        MN_NAME_GROUP
-        // #i68101#
-
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
         SEPARATOR
         MN_ACTION
 #endif
         SEPARATOR
         MN_STYLEDT
-        SEPARATOR
-        MenuItem { ITEM_CHANGE_PICTURE };
-        MenuItem { ITEM_SAVE_GRAPHIC };
-        MenuItem { ITEM_COMPRESS_GRAPHIC };
-        MenuItem { ITEM_EXTERNAL_EDIT };
     };
 };
 
