@@ -30,9 +30,6 @@
 
 #define CTF_RPT_NUMBERFORMAT                    (XML_DB_CTF_START + 1)
 
-#define XML_STYLE_FAMILY_REPORT_ID              700
-#define XML_STYLE_FAMILY_REPORT_NAME            "report-element"
-#define XML_STYLE_FAMILY_REPORT_PREFIX          "rptelem"
 
 
 class SvXMLStylesContext;

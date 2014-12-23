@@ -91,7 +91,6 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_ODBC                      12
 #define PAGE_DBSETUPWIZARD_SPREADSHEET               13
 #define PAGE_DBSETUPWIZARD_AUTHENTIFICATION          14
-#define PAGE_DBSETUPWIZARD_MOZILLA                   15
 #define PAGE_DBSETUPWIZARD_FINAL                     16
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17
 #define PAGE_DBSETUPWIZARD_MYSQL_NATIVE              18

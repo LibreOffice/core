@@ -47,7 +47,6 @@ namespace chart
 #define CHART_CHARTAPIWRAPPER_SERVICE_NAME "com.sun.star.chart2.ChartDocumentWrapper"
 
 // accessibility
-#define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME OUString( "com.sun.star.comp.chart2.AccessibleTextComponent" )
 #define CHART_ACCESSIBLE_TEXT_SERVICE_NAME "com.sun.star.accessibility.AccessibleTextComponent"
 
 } //namespace chart

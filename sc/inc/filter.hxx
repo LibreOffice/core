@@ -41,13 +41,11 @@ typedef sal_uLong FltError;
 
 #define eERR_OK         ERRCODE_NONE                // no error
 #define eERR_OPEN       SCERR_IMPORT_OPEN
-#define eERR_UNBEK      SCERR_IMPORT_UNKNOWN        // unknown error, historical meaning
 #define eERR_NOMEM      SCERR_IMPORT_OUTOFMEM       // out of memory
 #define eERR_UNKN_WK    SCERR_IMPORT_UNKNOWN_WK     // unknown WK? format (Lotus 1-2-3)
 #define eERR_FORMAT     SCERR_IMPORT_FORMAT         // format error during reading (no formula error!)
 #define eERR_NI         SCERR_IMPORT_NI             // filter not implemented
 #define eERR_UNKN_BIFF  SCERR_IMPORT_UNKNOWN_BIFF   // unknown BIFF format (Excel)
-#define eERR_NI_BIFF    SCERR_IMPORT_NI_BIFF        // not implemented BIFF format
 #define eERR_FILEPASSWD SCERR_IMPORT_FILEPASSWD     // file password protected
 #define eERR_INTERN     SCERR_IMPORT_INTERNAL       // internal error
 #define eERR_RNGOVRFLW  SCWARN_IMPORT_RANGE_OVERFLOW// overflow of cell coordinates

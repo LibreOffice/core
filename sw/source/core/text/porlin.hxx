@@ -49,7 +49,6 @@ class SwPortionHandler;
 #define PORGRP_GLUE     0x0400
 #define PORGRP_FIX      0x0200
 #define PORGRP_TAB      0x0100
-#define PORGRP_NOTRECY  0x0080
 // Small special groups
 #define PORGRP_FIXMARG  0x0040
 //#define PORGRP_?  0x0020

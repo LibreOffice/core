@@ -28,7 +28,6 @@ namespace svx { namespace sidebar {
 
 #define DEFAULT_BULLET_TYPES                            8
 #define DEFAULT_NONE                                    10
-#define DEFAULT_NUM_TYPE_MEMBER                         5
 #define DEFAULT_NUM_VALUSET_COUNT                       8
 #define DEFAULT_NUMBERING_CACHE_FORMAT_VERSION          0x10
 

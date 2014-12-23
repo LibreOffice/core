@@ -27,13 +27,6 @@
 #define S_THUMB 80
 
 
-#define SGA_FORMAT_NONE                 0x00000000L
-#define SGA_FORMAT_STRING               0x00000001L
-#define SGA_FORMAT_GRAPHIC              0x00000010L
-#define SGA_FORMAT_SOUND                0x00000100L
-#define SGA_FORMAT_OLE                  0x00001000L
-#define SGA_FORMAT_SVDRAW               0x00010000L
-#define SGA_FORMAT_ALL                  0xFFFFFFFFL
 
 enum GalSoundType
 {

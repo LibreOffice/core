@@ -95,8 +95,6 @@ typedef std::vector<SpellPortion> SpellPortions;
 namespace basegfx { class B2DPolyPolygon; }
 
 // internal use only!
-#define PARAFLAG_DROPTARGET         0x1000
-#define PARAFLAG_DROPTARGET_EMPTY   0x2000
 #define PARAFLAG_HOLDDEPTH          0x4000
 #define PARAFLAG_SETBULLETTEXT      0x8000
 #define PARAFLAG_ISPAGE             0x0100
@@ -110,7 +108,6 @@ namespace basegfx { class B2DPolyPolygon; }
 #define OLUNDO_ATTR             EDITUNDO_USER+5
 #define OLUNDO_INSERT           EDITUNDO_USER+6
 // #define OLUNDO_MOVEPARAGRAPHS    EDITUNDO_USER+7
-#define OLUNDO_CHECKPARA        EDITUNDO_USER+8
 
 class Paragraph : protected ParagraphData
 {

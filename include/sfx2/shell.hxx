@@ -614,7 +614,6 @@ SFX_TMPL_INTERFACE(Class,SuperClass,true)                                   \
 #define SFX_VISIBILITY_FULLSCREEN       0x2000
 #define SFX_VISIBILITY_CLIENT           0x4000
 #define SFX_VISIBILITY_SERVER           0x8000
-#define SFX_VISIBILITY_NOCONTEXT        0xFFFF  // Always visible
 
 #endif
 

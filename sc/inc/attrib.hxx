@@ -146,8 +146,6 @@ public:
 // ScRangeItem: manages an area of a table
 
 #define SCR_INVALID     0x01
-#define SCR_ALLTABS     0x02
-#define SCR_TONEWTAB    0x04
 
 class ScRangeItem : public SfxPoolItem
 {

@@ -29,10 +29,6 @@ class SvMetaObject;
 class SvIdlDataBase;
 
 typedef SvMetaObject * (*CreateMetaObjectType)();
-#define IDL_WRITE_COMPILER  0x8000
-#define IDL_WRITE_BROWSER   0x4000
-#define IDL_WRITE_CALLING   0x2000
-#define IDL_WRITE_MASK      0xE000
 
 #define C_PREF  "C_"
 

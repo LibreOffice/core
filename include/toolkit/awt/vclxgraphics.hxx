@@ -40,7 +40,6 @@ namespace vcl { class Region; }
 #define INITOUTDEV_COLORS       0x0002
 #define INITOUTDEV_RASTEROP     0x0004
 #define INITOUTDEV_CLIPREGION   0x0008
-#define INITOUTDEV_ALL          0xFFFF
 
 
 

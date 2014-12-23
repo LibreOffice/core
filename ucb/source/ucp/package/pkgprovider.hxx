@@ -35,7 +35,6 @@ namespace package_ucp {
 // create instances of the provider.
 #define PACKAGE_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.PackageContentProvider"
-#define PACKAGE_CONTENT_PROVIDER_SERVICE_NAME_LENGTH    39
 
 // UCB Content Type.
 #define PACKAGE_FOLDER_CONTENT_TYPE \

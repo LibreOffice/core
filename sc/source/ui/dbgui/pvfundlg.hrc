@@ -23,7 +23,5 @@
 #define BTN_CANCEL      2
 #define BTN_HELP        3
 
-#define LB_DIMS         10
-#define FT_DIMS         11
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

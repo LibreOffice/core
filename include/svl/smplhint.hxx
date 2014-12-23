@@ -45,17 +45,6 @@
 #define SFX_HINT_USER03             0x00080000
 #define SFX_HINT_USER04             0x00100000
 #define SFX_HINT_USER05             0x00200000
-#define SFX_HINT_USER06             0x00400000
-#define SFX_HINT_USER07             0x00800000
-#define SFX_HINT_USER08             0x01000000
-#define SFX_HINT_USER09             0x02000000
-#define SFX_HINT_USER10             0x04000000
-#define SFX_HINT_USER11             0x08000000
-#define SFX_HINT_USER12             0x10000000
-#define SFX_HINT_USER13             0x20000000
-#define SFX_HINT_UNDO_OPTIONS_CHANGED 0x40000000
-#define SFX_HINT_USER_OPTIONS_CHANGED 0x80000000
-#define SFX_HINT_ALL                0xFFFFFFFF
 
 class SVL_DLLPUBLIC SfxSimpleHint: public SfxHint
 {

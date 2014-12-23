@@ -19,9 +19,6 @@
 
 #include "sc.hrc"
 
-#define STR_BTN_CLOSE   200
 
-#define STR_GROUP       1
-#define STR_UNGROUP     2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

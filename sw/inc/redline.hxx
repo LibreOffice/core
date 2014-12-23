@@ -352,10 +352,7 @@ public:
 class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 {
 #define SWREDLINE_INSERTED  1
-#define SWREDLINE_REMOVED   2
 #define SWREDLINE_FOCUS     3
-#define SWREDLINE_CHANGED   4
-#define SWREDLINE_LANGUAGE  5
 
     const SwRangeRedline* pRedline;
     sal_Int16 nWhich;

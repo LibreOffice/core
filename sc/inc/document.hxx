@@ -212,8 +212,6 @@ namespace com { namespace sun { namespace star {
 #define SC_DOC_NEW          0xFFFF
 
 #define SC_MACROCALL_ALLOWED        0
-#define SC_MACROCALL_NOTALLOWED     1
-#define SC_MACROCALL_ASK            2
 
 #define SC_ASIANCOMPRESSION_INVALID     0xff
 #define SC_ASIANKERNING_INVALID         0xff

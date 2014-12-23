@@ -36,16 +36,8 @@
 #define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
 
 #define CERT_NewTempCertificate __CERT_NewTempCertificate
-#define PK11_CreateContextByRawKey __PK11_CreateContextByRawKey
 #define PK11_GetKeyData __PK11_GetKeyData
-#define nss_InitLock __nss_InitLock
-#define CERT_ClosePermCertDB __CERT_ClosePermCertDB
 #define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate
-#define CERT_TraversePermCertsForNickname __CERT_TraversePermCertsForNickname
-#define CERT_TraversePermCertsForSubject __CERT_TraversePermCertsForSubject
-#define PBE_CreateContext __PBE_CreateContext
-#define PBE_DestroyContext __PBE_DestroyContext
-#define PBE_GenerateBits __PBE_GenerateBits
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_NSSRENAM_H
 

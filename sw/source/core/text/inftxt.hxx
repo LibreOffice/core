@@ -55,8 +55,6 @@ struct SwMultiCreator;
 class SwMultiPortion;
 class SwWrongList;
 
-/* Minimum percentage for kerning */
-#define MINKERNPERCENT 5
 #define ARROW_WIDTH 200
 #define DIR_LEFT2RIGHT 0
 #define DIR_BOTTOM2TOP 1

@@ -83,14 +83,10 @@ extern "C"
 #define IP_PORT_ZERO    0
 #define IP_PORT_FTP    21
 #define IP_PORT_TELNET 23
-#define IP_PORT_SMTP 25
-#define IP_PORT_GOPHER 70
 #define IP_PORT_HTTP1  80
 #define IP_PORT_POP3  110
 #define IP_PORT_NETBIOS_DGM  138
 #define IP_PORT_NETBIOS  139
-#define IP_PORT_IMAP  143
-#define IP_PORT_HTTPS  443
 #define IP_PORT_HTTP2  8080
 /**reference: http://www.iana.org/assignments/port-numbers */
 #define IP_PORT_MYPORT  8881    //8888
@@ -105,7 +101,6 @@ extern "C"
 #define IP_PORT_MYPORT9  8897
 #define IP_PORT_MYPORT10  8898
 
-#define IP_PORT_TMP    9999
 #define IP_PORT_INVAL  99999
 
 // service definitions.

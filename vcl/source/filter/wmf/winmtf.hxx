@@ -31,7 +31,6 @@
 
 #define ERROR                   0
 #define NULLREGION              1
-#define SIMPLEREGION            2
 #define COMPLEXREGION           3
 
 #define RGN_AND                 1
@@ -63,34 +62,19 @@ enum class BkMode
 #define DKGRAY_BRUSH            3
 #define BLACK_BRUSH             4
 #define NULL_BRUSH              5
-#define HOLLOW_BRUSH            NULL_BRUSH
 #define WHITE_PEN               6
 #define BLACK_PEN               7
 #define NULL_PEN                8
-#define OEM_FIXED_FONT          10
 #define ANSI_FIXED_FONT         11
 #define ANSI_VAR_FONT           12
-#define SYSTEM_FONT             13
-#define DEVICE_DEFAULT_FONT     14
-#define DEFAULT_PALETTE         15
 #define SYSTEM_FIXED_FONT       16
 
 #define R2_BLACK                1
-#define R2_NOTMERGEPEN          2
 #define R2_MASKNOTPEN           3
-#define R2_NOTCOPYPEN           4
-#define R2_MASKPENNOT           5
 #define R2_NOT                  6
 #define R2_XORPEN               7
-#define R2_NOTMASKPEN           8
-#define R2_MASKPEN              9
-#define R2_NOTXORPEN            10
 #define R2_NOP                  11
-#define R2_MERGENOTPEN          12
 #define R2_COPYPEN              13
-#define R2_MERGEPENNOT          14
-#define R2_MERGEPEN             15
-#define R2_WHITE                16
 
 /* Mapping modes */
 #define MM_TEXT                 1
@@ -105,18 +89,15 @@ enum class BkMode
 /* Graphics modes */
 #define GM_COMPATIBLE           1
 #define GM_ADVANCED             2
-#define GM_LAST                 2
 
 /* StretchBlt() modes */
 #define BLACKONWHITE            1
 #define WHITEONBLACK            2
 #define COLORONCOLOR            3
 #define HALFTONE                4
-#define MAXSTRETCHBLTMODE       4
 #define STRETCH_ANDSCANS        BLACKONWHITE
 #define STRETCH_ORSCANS         WHITEONBLACK
 #define STRETCH_DELETESCANS     COLORONCOLOR
-#define STRETCH_HALFTONE        HALFTONE
 
 #define LF_FACESIZE             32
 
@@ -154,14 +135,8 @@ struct WMF_EXTERNALHEADER;
 #define SRCAND                  0x008800C6L
 #define SRCINVERT               0x00660046L
 #define SRCERASE                0x00440328L
-#define NOTSRCCOPY              0x00330008L
-#define NOTSRCERASE             0x001100A6L
-#define MERGECOPY               0x00C000CAL
-#define MERGEPAINT              0x00BB0226L
 #define PATCOPY                 0x00F00021L
-#define PATPAINT                0x00FB0A09L
 #define PATINVERT               0x005A0049L
-#define DSTINVERT               0x00550009L
 #define BLACKNESS               0x00000042L
 #define WHITENESS               0x00FF0062L
 
@@ -172,23 +147,16 @@ struct WMF_EXTERNALHEADER;
 #define PS_DASHDOTDOT           4
 #define PS_NULL                 5
 #define PS_INSIDEFRAME          6
-#define PS_USERSTYLE            7
-#define PS_ALTERNATE            8
 #define PS_STYLE_MASK           15
 
 #define PS_ENDCAP_ROUND     0x000
 #define PS_ENDCAP_SQUARE    0x100
 #define PS_ENDCAP_FLAT      0x200
-#define PS_ENDCAP_MASK      0xF00
 
 #define PS_JOIN_ROUND       0x0000
 #define PS_JOIN_BEVEL       0x1000
 #define PS_JOIN_MITER       0x2000
-#define PS_JOIN_MASK        0xF000
 
-#define PS_COSMETIC         0x00000
-#define PS_GEOMETRIC        0x10000
-#define PS_TYPE_MASK        0xF0000
 
 #define ANSI_CHARSET            0
 #define DEFAULT_CHARSET         1
@@ -211,14 +179,10 @@ struct WMF_EXTERNALHEADER;
 #define MAC_CHARSET             77
 #define BALTIC_CHARSET          186
 
-#define ETO_OPAQUE              0x0002
 #define ETO_CLIPPED             0x0004
 /*WINVER >= 0x0400*/
 #define ETO_GLYPH_INDEX         0x0010
 #define ETO_RTLREADING          0x0080
-#define ETO_NUMERICSLOCAL       0x0400
-#define ETO_NUMERICSLATIN       0x0800
-#define ETO_IGNORELANGUAGE      0x1000
 /*_WIN32_WINNT >= 0x0500*/
 #define ETO_PDY                 0x2000
 
@@ -234,7 +198,6 @@ struct WMF_EXTERNALHEADER;
 #define FF_SCRIPT               0x40
 #define FF_DECORATIVE           0x50
 
-#define FW_DONTCARE             0
 #define FW_THIN                 100
 #define FW_EXTRALIGHT           200
 #define FW_LIGHT                300
@@ -243,10 +206,7 @@ struct WMF_EXTERNALHEADER;
 #define FW_SEMIBOLD             600
 #define FW_BOLD                 700
 #define FW_EXTRABOLD            800
-#define FW_HEAVY                900
 #define FW_ULTRALIGHT           200
-#define FW_REGULAR              400
-#define FW_DEMIBOLD             600
 #define FW_ULTRABOLD            800
 #define FW_BLACK                900
 
@@ -262,12 +222,6 @@ struct WMF_EXTERNALHEADER;
 #define BS_DIBPATTERN8X8        8
 #define BS_MONOPATTERN          9
 
-#define W_HS_HORIZONTAL         0
-#define W_HS_VERTICAL           1
-#define W_HS_FDIAGONAL          2
-#define W_HS_BDIAGONAL          3
-#define W_HS_CROSS              4
-#define W_HS_DIAGCROSS          5
 
 #define RDH_RECTANGLES  1
 

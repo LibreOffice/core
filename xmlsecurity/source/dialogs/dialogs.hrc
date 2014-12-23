@@ -55,8 +55,6 @@
 
 // --------- tab page Certificate viewer - Certification Path ---------
 
-#define STR_PATH_CERT_OK                8
-#define STR_PATH_CERT_NOT_VALIDATED     9
 
 #endif
 

@@ -30,8 +30,6 @@
 #define MID_PAGE_LAYOUT         2
 
 //SvxMarginItem
-#define MID_MARGIN_LR_MARGIN    0
-#define MID_MARGIN_UL_MARGIN    1
 #define MID_MARGIN_L_MARGIN     2
 #define MID_MARGIN_R_MARGIN     3
 #define MID_MARGIN_UP_MARGIN    4

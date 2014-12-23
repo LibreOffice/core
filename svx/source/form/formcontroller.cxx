@@ -868,14 +868,6 @@ Reference< XPropertySetInfo >  FormController::getPropertySetInfo() throw( Runti
 }
 
 
-#define DECL_PROP_CORE(varname, type) \
-pDesc[nPos++] = Property(FM_PROP_##varname, FM_ATTR_##varname, ::getCppuType((const type*)0),
-
-
-#define DECL_PROP1(varname, type, attrib1)  \
-    DECL_PROP_CORE(varname, type) PropertyAttribute::attrib1)
-
-
 void FormController::fillProperties(
         Sequence< Property >& /* [out] */ _rProps,
         Sequence< Property >& /* [out] */ /*_rAggregateProps*/
@@ -884,8 +876,13 @@ void FormController::fillProperties(
     _rProps.realloc(2);
     sal_Int32 nPos = 0;
     Property* pDesc = _rProps.getArray();
-    DECL_PROP1(FILTER, OUString, READONLY);
-    DECL_PROP1(FORM_OPERATIONS, Reference< XFormOperations >, READONLY);
+
+    pDesc[nPos++] = Property(FM_PROP_FILTER, FM_ATTR_FILTER,
+                             ::getCppuType((const OUString*)0),
+                             PropertyAttribute::READONLY);
+    pDesc[nPos++] = Property(FM_PROP_FORM_OPERATIONS, FM_ATTR_FORM_OPERATIONS,
+                             ::getCppuType((const Reference< XFormOperations >*)0),
+                             PropertyAttribute::READONLY);
 }
 
 

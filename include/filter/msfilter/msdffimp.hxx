@@ -135,18 +135,13 @@ typedef ::std::multiset< ::boost::shared_ptr<SvxMSDffShapeInfo>,
 #define SVXMSDFF_SETTINGS_IMPORT_EXCEL      4
 
 #define SP_FGROUP       0x001   ///< This shape is a group shape
-#define SP_FCHILD       0x002   ///< Not a top-level shape
 #define SP_FPATRIARCH   0x004   ///< This is the topmost group shape.
                                 ///< Exactly one of these per drawing.
-#define SP_FDELETED     0x008   ///< The shape has been deleted
 #define SP_FOLESHAPE    0x010   ///< The shape is an OLE object
 #define SP_FHAVEMASTER  0x020   ///< Shape has a hspMaster property
 #define SP_FFLIPH       0x040   ///< Shape is flipped horizontally
 #define SP_FFLIPV       0x080   ///< Shape is flipped vertically
-#define SP_FCONNECTOR   0x100   ///< Connector type of shape
-#define SP_FHAVEANCHOR  0x200   ///< Shape has an anchor of some kind
 #define SP_FBACKGROUND  0x400   ///< Background shape
-#define SP_FHAVESPT     0x800   ///< Shape has a shape type property
 
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in

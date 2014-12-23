@@ -95,14 +95,12 @@ enum class SvXMLImportFlags {
     SETTINGS        = 0x0040,
     FONTDECLS       = 0x0080,
     EMBEDDED        = 0x0100,
-    OOO_NAMESPACES  = 0x0100,
     ALL             = 0xffff
 };
 namespace o3tl
 {
     template<> struct typed_flags<SvXMLImportFlags> : is_typed_flags<SvXMLImportFlags, 0xffff> {};
 }
-
 
 
 class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<

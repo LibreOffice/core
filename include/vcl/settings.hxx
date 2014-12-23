@@ -153,8 +153,6 @@ struct FrameStyle
     {}
 };
 
-#define DEFAULT_WORKSPACE_GRADIENT_START_COLOR Color( 0xa3, 0xae, 0xb8 )
-#define DEFAULT_WORKSPACE_GRADIENT_END_COLOR Color( 0x73, 0x7e, 0x88 )
 
 
 // - StyleSettings -

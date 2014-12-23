@@ -32,7 +32,6 @@ class OutputDevice;
 #define XPOLYPOLY_APPEND     0xFFFF
 #define XPOLY_APPEND         0xFFFF
 
-#define XPOLY_MAXPOINTS      0xFFF0 /* Let space for the 32-Bit systems too */
 
 // point-styles in XPolygon:
 // NORMAL : start-/endpoint of a curve or a line
