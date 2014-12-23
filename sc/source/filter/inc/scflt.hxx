@@ -71,13 +71,11 @@
 #define atStrikeOut         8
 
 // Horizontal alignment
-#define hjNone              0
 #define hjLeft              1
 #define hjCenter            2
 #define hjRight             3
 
 // Vertical alignment
-#define vjNone              0
 #define vjTop               1
 #define vjCenter            2
 #define vjBottom            3
@@ -93,7 +91,6 @@
 #define raGray25            2
 #define raGray50            3
 #define raGray75            4
-#define raGray100           5
 
 // Cell protection
 #define paProtect           1
@@ -118,7 +115,6 @@
 #define vfExponentRed       13
 #define vfFormula           14
 #define vfString            15
-#define vfNone              16
 
 // Date format flags
 #define df_NDMY_Long        0
@@ -154,27 +150,16 @@
 #define dfFormula           0x0001      // formula
 #define dfZerro             0x0002      // zero values
 #define dfGrid              0x0004      // grid
-#define dfPageBreak         0x0008      // PageBreak
-#define dfColRowBar         0x0010      // Row/Col heads (Dummy)
 #define dfSyntax            0x0020      // Syntax Highlighting
-#define dfPrintPage         0x0040      // PrintView (Dummy)
 #define dfObjectAll         0x0080      // show objects
 #define dfObjectFrame       0x0100      // objects as place holder
 #define dfObjectNone        0x0200      // do not show objects
 #define dfNoteMark          0x0400      // NoteMark
-#define dfProtectMark       0x0800      // ProtectMark
 
 // Object types
-#define otNone              0           // see below
 #define otOle               1
 #define otImage             2
 #define otChart             3
-
-// Grafic types
-#define gtNone              0           // not possible
-#define gtOle               1           // Ole 1.0 Object
-#define gtImage             2           // Image (Bitmap or Metafile)
-#define gtChart             3           // Chart
 
 // Date/Time
 struct Sc10DateTime

@@ -34,7 +34,6 @@
 #define sSearchInSubDir 1022
 #define sMSContainerName 1030
 #define sSummaryHeader  1031
-#define sSummaryFrame   1032
 #define sTextImportLabel 1033
 #define sTextExportLabel 1034
 #define sGroupnameDefault   1036
@@ -51,12 +50,6 @@
 #define sConvertError2  1056
 #define sRTErrorDesc    1057
 #define sRTErrorHeader  1058
-#define sPathErrorTemplates_1_  1059
-#define sPathErrorTemplates_2_  1060
-#define sPathErrorTemplates_3_  1061
-#define sPathErrorDocument_1_   1062
-#define sPathErrorDocument_2_   1063
-#define sPathErrorDocument_3_   1064
 #define sOverwriteallFiles 	1070
 #define sreeditMacro 	1071
 #define scouldNotsaveDocument 1072

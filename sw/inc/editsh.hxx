@@ -113,7 +113,6 @@ namespace sw {
 }
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
-#define GETSELTXT_PARABRK_KEEP          1
 #define GETSELTXT_PARABRK_TO_ONLYCR     2
 
  /// For querying the INet-attributes for Navigator.

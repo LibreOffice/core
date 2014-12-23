@@ -31,9 +31,6 @@
 //panel common
 #define PROPERTYPAGE_WIDTH      109
 
-//about titlebar
-#define STR_MOREPROPERTY_QUICKHELP  3
-
 //about section page
 #define CONTROL_SPACING_VERTICAL        5
 #define CONTROL_SPACING_HORIZONTAL      3
@@ -43,12 +40,6 @@
 #define CBOX_HEIGHT         12
 #define MBOX_HEIGHT         12
 
-#define TBX_OUT_BORDER_OFFSET_X     2
-#define TBX_OUT_BORDER_OFFSET_Y     1
-
-//for 16*16 pixel bmp
-#define TOOLBOX_ITEM_HEIGHT         15
-#define TOOLBOX_ITEM_WIDTH          13
 
 //about popup panel
 #define POPUPPANEL_MARGIN_VERTICAL      7
@@ -59,11 +50,11 @@
 #define OFFSET_X        1
 #define OFFSET_Y        1
 
-#define POPUP_COLOR_PICKER_WIDTH    97
-#define POPUP_COLOR_PICKER_HEIGHT   114
 //new
 #define POPUPPANEL_MARGIN_SMALL     2
 #define POPUPPANEL_MARGIN_LARGE     5
-#endif
+
+
+#endif /* _SFX_SIDEBAR_RESOURCE_DEFINITIONS_HRC */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

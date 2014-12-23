@@ -26,7 +26,6 @@
 #include "glm/gtx/quaternion.hpp"
 
 #define DEBUG_POSITIONING 0
-#define RENDER_TO_FILE 0
 
 struct PosVecf3
 {

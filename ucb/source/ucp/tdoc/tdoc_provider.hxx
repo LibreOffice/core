@@ -42,7 +42,6 @@ namespace tdoc_ucp {
 
 #define TDOC_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.TransientDocumentsContentProvider"
-#define TDOC_CONTENT_PROVIDER_SERVICE_NAME_LENGTH   50
 
 #define TDOC_ROOT_CONTENT_TYPE \
                 "application/" TDOC_URL_SCHEME "-root"

@@ -43,12 +43,10 @@
 #define GDI_TEXT_ACTION                 13
 #define GDI_TEXTARRAY_ACTION            14
 #define GDI_STRETCHTEXT_ACTION          15
-#define GDI_ICON_ACTION                 16
 #define GDI_BITMAP_ACTION               17
 #define GDI_BITMAPSCALE_ACTION          18
 #define GDI_PEN_ACTION                  19
 #define GDI_FONT_ACTION                 20
-#define GDI_BACKBRUSH_ACTION            21
 #define GDI_FILLBRUSH_ACTION            22
 #define GDI_MAPMODE_ACTION              23
 #define GDI_CLIPREGION_ACTION           24
@@ -57,7 +55,6 @@
 #define GDI_POP_ACTION                  27
 #define GDI_MOVECLIPREGION_ACTION       28
 #define GDI_ISECTCLIPREGION_ACTION      29
-#define GDI_MTF_ACTION                  30
 #define GDI_BITMAPSCALEPART_ACTION      32
 #define GDI_GRADIENT_ACTION             33
 

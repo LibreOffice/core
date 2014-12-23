@@ -108,8 +108,6 @@ typedef sal_uInt32      ControlType;
 // popup menu
 #define CTRL_MENU_POPUP         121
 
-// The statusbar
-#define CTRL_STATUSBAR          130
 #define CTRL_PROGRESS           131
 // Progress bar for the intro window
 // (aka splash screen), in case some
@@ -352,7 +350,6 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
  */
 
 /* TABITEM constants are OR-ed together */
-#define TABITEM_NOTALIGNED     0x000   // the tabitem is an inner item
 #define TABITEM_LEFTALIGNED    0x001   // the tabitem is aligned with the left  border of the TabControl
 #define TABITEM_RIGHTALIGNED   0x002   // the tabitem is aligned with the right border of the TabControl
 #define TABITEM_FIRST_IN_GROUP 0x004   // the tabitem is the first in group of tabitems

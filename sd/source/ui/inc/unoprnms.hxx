@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNOPRNMS_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNOPRNMS_HXX
 
-#define UNO_NAME_MODEL_LANGUAGE         "CharLocale"
-#define UNO_NAME_MODEL_TABSTOP          "TabStop"
 
 #define UNO_NAME_PAGE_BACKGROUND        "Background"
 #define UNO_NAME_PAGE_LEFT              "BorderLeft"
@@ -33,7 +31,6 @@
 #define UNO_NAME_PAGE_HEIGHT            "Height"
 #define UNO_NAME_PAGE_LAYOUT            "Layout"
 #define UNO_NAME_PAGE_NUMBER            "Number"
-#define UNO_NAME_PAGE_OBJECTS           "Objects"
 #define UNO_NAME_PAGE_ORIENTATION       "Orientation"
 #define UNO_NAME_PAGE_SPEED             "Speed"
 #define UNO_NAME_PAGE_WIDTH             "Width"
@@ -67,18 +64,6 @@
 #define UNO_NAME_LAYER_VISIBLE          "IsVisible"
 #define UNO_NAME_LAYER_NAME             "Name"
 
-#define UNO_NAME_SHOW_ALLOWANIM         "AllowAnimations"
-#define UNO_NAME_SHOW_CUSTOMSHOW        "CustomShow"
-#define UNO_NAME_SHOW_FIRSTPAGE         "FirstPage"
-#define UNO_NAME_SHOW_ONTOP             "IsAlwaysOnTop"
-#define UNO_NAME_SHOW_AUTOMATIC         "IsAutomatic"
-#define UNO_NAME_SHOW_ENDLESS           "IsEndless"
-#define UNO_NAME_SHOW_FULLSCREEN        "IsFullScreen"
-#define UNO_NAME_SHOW_MOUSEVISIBLE      "IsMouseVisible"
-#define UNO_NAME_SHOW_PAGERANGE         "PageRange"
-#define UNO_NAME_SHOW_PAUSE             "Pause"
-#define UNO_NAME_SHOW_STARTWITHNAV      "StartWithNavigator"
-#define UNO_NAME_SHOW_USEPEN            "UsePen"
 
 #define UNO_NAME_SEARCH_BACKWARDS   "SearchBackwards"
 #define UNO_NAME_SEARCH_CASE        "SearchCaseSensitive"
@@ -87,7 +72,6 @@
 #define UNO_NAME_LINKDISPLAYNAME                "LinkDisplayName"
 #define UNO_NAME_LINKDISPLAYBITMAP              "LinkDisplayBitmap"
 
-#define UNO_NAME_STYLE_FAMILY   "Family"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -265,7 +265,6 @@ bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
 */
 #ifdef ENABLE_COMPONENT_SELF_CHECK
 
-#define LOGFILE_JOBURL  "joburl.log"
 
 void JobURL::impldbg_checkIt()
 {

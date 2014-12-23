@@ -149,7 +149,6 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 #define CSS1_OUTMODE_SPAN_TAG       CSS1_OUTMODE_ONOFF(SPAN_TAG)
 #define CSS1_OUTMODE_STYLE_OPT      CSS1_OUTMODE_ONOFF(STYLE_OPT)
 #define CSS1_OUTMODE_RULE           CSS1_OUTMODE_ONOFF(RULE)
-#define CSS1_OUTMODE_SPAN_TAG1      CSS1_OUTMODE_ONOFF(TAG1)
 
 // Die folgenden Flags legen fest, was ausgegeben wird
 // bit 6,7,8,9

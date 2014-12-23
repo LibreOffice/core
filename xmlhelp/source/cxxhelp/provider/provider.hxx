@@ -34,17 +34,14 @@ namespace chelp {
 // create instances of the provider.
 
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME1   "com.sun.star.help.XMLHelp"
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH1 25
 
 #define MYUCP_CONTENT_PROVIDER_SERVICE_NAME2  "com.sun.star.ucb.HelpContentProvider"
-#define MYUCP_CONTENT_PROVIDER_SERVICE_NAME_LENGTH2 36
 
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
 
 #define MYUCP_URL_SCHEME        "vnd.sun.star.help"
-#define MYUCP_URL_SCHEME_LENGTH 18
 #define MYUCP_CONTENT_TYPE      "application/vnd.sun.star.xmlhelp"    // UCB Content Type.
 
     class Databases;

@@ -178,15 +178,11 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_MENU_HIDE                  1251
 
 #define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
-#define VCLEVENT_LISTBOX_TREEEXPAND             1218
-#define VCLEVENT_LISTBOX_TREECOLLAPSE           1219
 #define VCLEVENT_LISTBOX_TREEFOCUS              1220
 #define VCLEVENT_LISTBOX_TREESELECT             1221
 #define VCLEVENT_EDIT_CARETCHANGED  1222
-#define VCLEVENT_COMBOBOX_UPDATEVALUE  1223
 
 #define VCLEVENT_LISTBOX_FOCUS             1224
-#define VCLEVENT_LISTBOX_CLEAR             1225
 
 // DockingWindow
 #define VCLEVENT_WINDOW_STARTDOCKING            1227    // pData = DockingData

@@ -23,7 +23,6 @@
 #include <vcl/graph.hxx>
 #include <svtools/svtdllapi.h>
 
-#define GRFMGR_DRAW_NOTCACHED               0x00000000UL
 #define GRFMGR_DRAW_CACHED                  0x00000001UL
 #define GRFMGR_DRAW_SMOOTHSCALE             0x00000002UL
 #define GRFMGR_DRAW_USE_DRAWMODE_SETTINGS   0x00000004UL

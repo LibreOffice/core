@@ -28,7 +28,6 @@
 #define RID_POPUP_SWPAGE_COLUMN             (RC_PROPERTYPANEL_BEGIN + 5)
 #define RID_POPUP_SWPAGE_SIZE               (RC_PROPERTYPANEL_BEGIN + 6)
 
-#define PROPERTY_PANEL_END                RID_POPUP_SWPAGE_SIZE
 
 #endif
 

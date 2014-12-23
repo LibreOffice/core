@@ -108,7 +108,6 @@ namespace com { namespace sun { namespace star {
 
 typedef sal_uInt32 SfxObjectShellFlags;
 #define SFXOBJECTSHELL_HASOPENDOC      0x01L
-#define SFXOBJECTSHELL_DONTREPLACE     0x02L
 #define SFXOBJECTSHELL_HASMENU         0x04L
 #define SFXOBJECTSHELL_DONTLOADFILTERS 0x08L
 #define SFXOBJECTSHELL_DONTCLOSE       0x10L
@@ -486,7 +485,6 @@ public:
 #define CONTENT_STYLE 0
 #define CONTENT_CONFIG 1
 #define CONTENT_MACRO 2
-#define DEF_CONTENT_COUNT 1
 
 
     virtual std::vector<Color> GetDocColors();

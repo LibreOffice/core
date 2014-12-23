@@ -27,12 +27,8 @@
 #define IDC_TITLE                       1000
 #define IDC_SUBJECT                     1001
 #define IDC_AUTHOR                      1002
-#define IDC_CREATOR                     1003
-#define IDC_LANGUAGE                    1004
 #define IDC_COMMENTS                    1005
 #define IDC_KEYWORDS                    1006
-#define IDC_EXTENDED                    1009
-#define IDC_DLGSIMPLE                   1012
 #define IDC_STATISTICSLIST              1013
 
 #define IDS_TITLE                       1014
@@ -52,7 +48,6 @@
 #define IDS_VERSION                     1028
 #define IDS_SHEETS                      1029
 #define IDS_CELLS                       1030
-#define IDS_STATISTICS                  1031
 #define IDS_PROPERTY                    1032
 #define IDS_PROPERTY_VALUE              1033
 #define IDS_PROPPAGE_SUMMARY_TITLE      1034
@@ -61,7 +56,6 @@
 #define IDS_SUBJECT_COLON               1037
 #define IDS_AUTHOR_COLON                1038
 #define IDS_OBJECTS                     1039
-#define IDS_DOCUMENT_STATISTIC          1040
 #define IDS_MODIFIED                    1041
 #define IDS_DOCUMENT_NUMBER             1042
 #define IDS_EDITING_TIME                1043

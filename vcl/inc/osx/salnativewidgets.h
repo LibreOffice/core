@@ -27,8 +27,6 @@
 //standard height of the AHIG
 //tabs
 #define TAB_HEIGHT_NORMAL 20
-#define TAB_HEIGHT_SMALL  17
-#define TAB_HEIGHT_MINI   15
 
 #define TAB_TEXT_OFFSET     12
 #define VCL_TAB_TEXT_OFFSET 2

@@ -28,7 +28,6 @@
 
 namespace vcl { class Font; }
 
-#define TEXTATTR_INVALID    0
 #define TEXTATTR_FONTCOLOR  1
 #define TEXTATTR_HYPERLINK  2
 #define TEXTATTR_FONTWEIGHT 3

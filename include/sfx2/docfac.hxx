@@ -40,18 +40,6 @@ class SfxBindings;
 
 typedef void (*SfxVoidFunc)();
 
-#define SDT_SDT_DOCFACTPRIO     10      // Explorer
-#define SDT_SW_DOCFACTPRIO      20      // Text Document
-#define SDT_SWW_DOCFACTPRIO     21      // Web Document
-#define SDT_SC_DOCFACTPRIO      30      // Table Document
-#define SDT_SI_DOCFACTPRIO      40      // Impress Document
-#define SDT_SD_DOCFACTPRIO      41      // Draw Document
-#define SDT_SCH_DOCFACTPRIO     50      // Chart Document
-#define SDT_SMA_DOCFACTPRIO     60      // Math Document
-#define SDT_SIM_DOCFACTPRIO     70      // Image Document
-#define SDT_FRM_DOCFACTPRIO    100      // Frame Document
-#define SDT_MSG_DOCFACTPRIO    110      // Message Document
-#define SDT_SDB_DOCFACTPRIO    200      // Database Document
 
 class SFX2_DLLPUBLIC SfxObjectFactory
 {

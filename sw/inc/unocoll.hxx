@@ -134,7 +134,6 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION        59
 #define SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR      60
 #define SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME   61
-#define SW_SERVICE_FIELDTYPE_DUMMY_O                    62
 #define SW_SERVICE_FIELDTYPE_DUMMY_1                    63
 #define SW_SERVICE_FIELDTYPE_DUMMY_2                    64
 #define SW_SERVICE_FIELDTYPE_DUMMY_3                    65
@@ -187,7 +186,6 @@ class SwUnoCollection
 #define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
 #define SW_SERVICE_VBAGLOBALS                           113
 
-#define SW_SERVICE_LAST                 SW_SERVICE_VBAGLOBALS
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 

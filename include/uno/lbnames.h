@@ -43,8 +43,6 @@ provoking error here, because PP ignores #error
 
 /** Environment type name for binary C UNO. */
 #define UNO_LB_UNO "uno"
-/** Environment type name for ANSI C compilers. */
-#define UNO_LB_C "c"
 /** Environment type name for Java 1.3.1 compatible virtual machine. */
 #define UNO_LB_JAVA "java"
 /** Environment type name for CLI (Common Language Infrastructure). */

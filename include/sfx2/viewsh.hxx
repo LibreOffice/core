@@ -67,10 +67,7 @@ class SfxInPlaceClient;
 #define SFX_PRINTER_CHG_SIZE        16
 #define SFX_PRINTER_ALL             31
 
-#define SFX_PRINTER_CHG_ORIENTATION_FLAG  3
-#define SFX_PRINTER_CHG_SIZE_FLAG         4
 
-#define SFX_PRINTERROR_NONE          0
 #define SFX_PRINTERROR_BUSY          1
 
 // "Verified" using www.apple.com and Netscape 3.01

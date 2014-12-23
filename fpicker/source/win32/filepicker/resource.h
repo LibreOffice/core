@@ -21,10 +21,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by Fps.rc
 
-#define IDD_DIALOG1                     101
-#define IDB_BITMAP1                     117
-#define IDB_BITMAP2                     118
-#define IDC_BUTTON1                     1008
 #define stc32                           -1
 #define IDC_STATIC                      -1
 

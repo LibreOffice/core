@@ -32,7 +32,6 @@
 #define CMD_SID_WIN_FULLSCREEN                      ".uno:FullScreen"
 #define CMD_SID_BASICIDE_HIDECURPAGE                ".uno:HideCurPage"
 #define CMD_SID_BASICIDE_MODULEDLG                  ".uno:ModuleDialog"
-#define CMD_SID_NAVIGATOR                           ".uno:Navigator"
 #define CMD_SID_BASICIDE_NEWDIALOG                  ".uno:NewDialog"
 #define CMD_SID_BASICIDE_NEWMODULE                  ".uno:NewModule"
 #define CMD_SID_OPENDOC                             ".uno:Open"

@@ -30,7 +30,6 @@
 
 // Option ranges
 
-#define SD_OPTIONS_NONE     0x00000000
 #define SD_OPTIONS_ALL      0xffffffff
 
 #define SD_OPTIONS_LAYOUT   0x00000001

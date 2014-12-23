@@ -78,8 +78,6 @@ typedef enum {
 } oslDescriptorType;
 
 typedef sal_Int32 oslDescriptorFlag;
-#define osl_Process_DFNONE       0x0000
-#define osl_Process_DFWAIT       0x0001
 
 #ifdef SAL_W32
 #   pragma pack(push, 8)

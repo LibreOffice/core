@@ -75,7 +75,6 @@ struct ConvertData;
 #define EXP_PNG                 "SVEPNG"
 
 #define BMP_SHORTNAME           "BMP"
-#define MOV_SHORTNAME           "MOV"
 #define GIF_SHORTNAME           "GIF"
 #define JPG_SHORTNAME           "JPG"
 #define MET_SHORTNAME           "MET"

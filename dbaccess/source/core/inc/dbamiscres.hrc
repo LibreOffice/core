@@ -20,30 +20,6 @@
 #ifndef _DBA_MISCRES_HRC_
 #define _DBA_MISCRES_HRC_
 
-// string ids (relative to other resources, that's why not unique)
-#define STR_MYSQL_ODBC          1
-#define STR_MYSQL_JDBC          2
-    // FREE
-#define STR_ORACLE_JDBC         4
-#define STR_JDBC                5
-#define STR_ODBC                6
-#define STR_DBASE               7
-#define STR_MSACCESS            8
-#define STR_MSACCESS2007        9
-#define STR_ADO                 10
-#define STR_FLAT                11
-#define STR_CALC                12
-#define STR_MOZILLA             13
-#define STR_LDAP                14
-#define STR_OUTLOOK             15
-#define STR_OUTLOOKEXP          16
-#define STR_EVOLUTION           17
-#define STR_EVOLUTION_GROUPWISE 18
-#define STR_EVOLUTION_LDAP      19
-#define STR_KAB                 20
-#define STR_MACAB               21
-#define STR_EMBEDDED_HSQLDB     22
-#define STR_THUNDERBIRD         23
 #define STR_MYSQL_NATIVE        24
 
 #define STR_END                 STR_MYSQL_NATIVE + 1

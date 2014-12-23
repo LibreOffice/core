@@ -20,11 +20,8 @@
 #ifndef INCLUDED_EDITENG_UNOPRNMS_HXX
 #define INCLUDED_EDITENG_UNOPRNMS_HXX
 
-#define UNO_NAME_SHAPE_SIZE                     "Size"
-#define UNO_NAME_SHAPE_POSITION                 "Position"
 
 #define UNO_NAME_CHAR_COLOR                     "CharColor"
-#define UNO_NAME_CHAR_FONT                      "CharFont"
 #define UNO_NAME_CHAR_HEIGHT                    "CharHeight"
 #define UNO_NAME_CHAR_POSTURE                   "CharPosture"
 #define UNO_NAME_CHAR_SHADOWED                  "CharShadowed"
@@ -68,21 +65,7 @@
 #define UNO_NAME_FILLTRANSPARENCEGRADIENTNAME   "FillTransparenceGradientName"
 #define UNO_NAME_FILLBMP_MODE                   "FillBitmapMode"
 
-#define UNO_NAME_FILL_GRADIENT_STYLE            "FillGradientStyle"
-#define UNO_NAME_FILL_GRADIENT_START_COLOR      "FillGradientStartColor"
-#define UNO_NAME_FILL_GRADIENT_END_COLOR        "FillGradientEndColor"
-#define UNO_NAME_FILL_GRADIENT_ANGLE            "FillGradientAngle"
-#define UNO_NAME_FILL_GRADIENT_BORDER           "FillGradientBorder"
-#define UNO_NAME_FILL_GRADIENT_OFFSET_X         "FillGradientOffsetX"
-#define UNO_NAME_FILL_GRADIENT_OFFSET_Y         "FillGradientOffsetY"
-#define UNO_NAME_FILL_GRADIENT_START_INTENSITY  "FillGradientStartIntensity"
-#define UNO_NAME_FILL_GRADIENT_END_INTENSITY    "FillGradientEndIntensity"
-#define UNO_NAME_FILL_GRADIENT_STEPS            "FillGradientSteps"
 
-#define UNO_NAME_FILL_HATCH_STYLE               "FillHatchStyle"
-#define UNO_NAME_FILL_HATCH_COLOR               "FillHatchColor"
-#define UNO_NAME_FILL_HATCH_DISTANCE            "FillHatchDistance"
-#define UNO_NAME_FILL_HATCH_ANGLE               "FillHatchAngle"
 
 #define UNO_NAME_LINESTYLE                      "LineStyle"
 #define UNO_NAME_LINEDASH                       "LineDash"
@@ -144,7 +127,6 @@
 #define UNO_NAME_MEASURETEXTUPSIDEDOWN          "MeasureTextUpsideDown"
 #define UNO_NAME_MEASUREOVERHANG                "MeasureOverhang"
 #define UNO_NAME_MEASUREUNIT                    "MeasureUnit"
-#define UNO_NAME_MEASURESCALE                   "MeasureScale"
 #define UNO_NAME_MEASURESHOWUNIT                "MeasureShowUnit"
 #define UNO_NAME_MEASUREFORMATSTRING            "MeasureFormatString"
 #define UNO_NAME_MEASURETEXTAUTOANGLE           "MeasureTextAutoAngle"
@@ -171,8 +153,6 @@
 #define UNO_NAME_MISC_OBJ_NAME                  "Name"
 #define UNO_NAME_MISC_OBJ_ROTATEANGLE           "RotateAngle"
 #define UNO_NAME_MISC_OBJ_SHEARANGLE            "ShearAngle"
-#define UNO_NAME_MISC_OBJ_ROTATION_POINT_X      "RotationPointX"
-#define UNO_NAME_MISC_OBJ_ROTATION_POINT_Y      "RotationPointY"
 #define UNO_NAME_MISC_OBJ_FRAMERECT             "FrameRect"
 #define UNO_NAME_MISC_OBJ_BOUNDRECT             "BoundRect"
 
@@ -278,24 +258,20 @@
 #define UNO_NAME_NRULE_BULLET_COLOR             "BulletColor"
 #define UNO_NAME_NRULE_BULLET_RELSIZE           "BulletRelSize"
 #define UNO_NAME_NRULE_BULLET_FONT              "BulletFont"
-#define UNO_NAME_NRULE_GRAPHICURL               "GraphicURL"
 #define UNO_NAME_NRULE_START_WITH               "StartWith"
 #define UNO_NAME_NRULE_LEFT_MARGIN              "LeftMargin"
 #define UNO_NAME_NRULE_FIRST_LINE_OFFSET        "FirstLineOffset"
 #define UNO_NAME_NRULE_ADJUST                   "Adjust"
 
 #define UNO_NAME_EDIT_FONT_DESCRIPTOR           "FontDescriptor"
-#define UNO_NAME_EDIT_FONT_STYLENAME            "FontStyleName"
 
 #define UNO_NAME_EDIT_PARA_ADJUST               "ParaAdjust"
 #define UNO_NAME_EDIT_PARA_BMARGIN              "ParaBottomMargin"
 #define UNO_NAME_EDIT_PARA_LASTLINEADJ          "ParaLastLineAdjust"
 #define UNO_NAME_EDIT_PARA_LMARGIN              "ParaLeftMargin"
-#define UNO_NAME_EDIT_PARA_LRPARAMARGIN         "ParaLeftRightParaMargin"
 #define UNO_NAME_EDIT_PARA_LINESPACING          "ParaLineSpacing"
 #define UNO_NAME_EDIT_PARA_RMARGIN              "ParaRightMargin"
 #define UNO_NAME_EDIT_PARA_TAPSTOPS             "ParaTabStops"
-#define UNO_NAME_EDIT_PARA_TBMARGIN             "ParaTopBottomMargin"
 #define UNO_NAME_EDIT_PARA_TMARGIN              "ParaTopMargin"
 #define UNO_NAME_EDIT_PARA_IS_HYPHEN            "ParaIsHyphenation"
 #define UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION    "ParaIsHangingPunctuation"
@@ -359,21 +335,6 @@
 #define UNO_NAME_GRAPHIC_GRAPHICCROP            "GraphicCrop"
 
 #define UNO_NAME_CUSTOMSHAPE_ADJUSTMENT         "CustomShapeAdjustment"
-
-// The following properties are obsolete and can eventually be removed
-#define UNO_NAME_EDIT_FONT_COLOR                "FontColor"
-#define UNO_NAME_EDIT_FONT_ESCAPEMENT           "FontEscapement"
-#define UNO_NAME_EDIT_FONT_HEIGHT               "FontHeight"
-#define UNO_NAME_EDIT_FONT_SHADOWED             "FontShadowed"
-#define UNO_NAME_EDIT_FONT_SLANT                "FontSlant"
-#define UNO_NAME_EDIT_FONT_STRIKEOUT            "FontStrikeout"
-#define UNO_NAME_EDIT_FONT_UNDERLINE            "FontUnderline"
-#define UNO_NAME_EDIT_FONT_WEIGHT               "FontWeight"
-#define UNO_NAME_EDIT_CHAR_STYLE                "CharStyle"
-#define UNO_NAME_EDIT_FONT_FAMILY               "FontFamily"
-#define UNO_NAME_EDIT_FONT_NAME                 "FontName"
-#define UNO_NAME_EDIT_FONT_CHARSET              "FontCharset"
-// End of the obsolete properties
 
 #endif
 

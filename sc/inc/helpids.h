@@ -53,8 +53,6 @@
 // Hilfe IDs fuer Dialoge / Pages (max.70) -----------------------------------
 #define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
 
-#define HID_SC_GROUP_COLS                                       "SC_HID_SC_GROUP_COLS"
-#define HID_SC_GROUP_ROWS                                       "SC_HID_SC_GROUP_ROWS"
 
 #define HID_SC_HEADER_EDIT                                      "SC_HID_SC_HEADER_EDIT"
 #define HID_SC_FOOTER_EDIT                                      "SC_HID_SC_FOOTER_EDIT"
@@ -67,13 +65,6 @@
 #define HID_SC_RENAME_NAME                                      "SC_HID_SC_RENAME_NAME"
 #define HID_SC_APPEND_NAME                                      "SC_HID_SC_APPEND_NAME"
 
-//  Funktionsautopilot: nur als Unique-IDs
-#define HID_SC_FAP_PAGE                                         "SC_HID_SC_FAP_PAGE"
-#define HID_SC_FAP_EDIT1                                        "SC_HID_SC_FAP_EDIT1"
-#define HID_SC_FAP_EDIT2                                        "SC_HID_SC_FAP_EDIT2"
-#define HID_SC_FAP_EDIT3                                        "SC_HID_SC_FAP_EDIT3"
-#define HID_SC_FAP_EDIT4                                        "SC_HID_SC_FAP_EDIT4"
-
 #define HID_SC_ADD_AUTOFMT                                      "SC_HID_SC_ADD_AUTOFMT"
 #define HID_SC_AUTOFMT_NAME                                     "SC_HID_SC_AUTOFMT_NAME"
 
@@ -81,29 +72,17 @@
 #define HID_SC_DROPMODE_LINK                                    "SC_HID_SC_DROPMODE_LINK"
 #define HID_SC_DROPMODE_COPY                                    "SC_HID_SC_DROPMODE_COPY"
 
-#define HID_SC_FAP_STRUCT                                       "SC_HID_SC_FAP_STRUCT"
 
 #define HID_SC_SCENARIO_DELETE                                  "SC_HID_SC_SCENARIO_DELETE"
 #define HID_SC_SCENARIO_EDIT                                    "SC_HID_SC_SCENARIO_EDIT"
 
 #define HID_FUNCTION_BOX                                        "SC_HID_FUNCTION_BOX"
-#define HID_SC_REDLIN_CTR                                       "SC_HID_SC_REDLIN_CTR"
-
-// Hilfe IDs fuer Objekt- und Werkzeugleisten (max.10) -----------------------
-
-#define HID_SC_TOOLBOX_TOOLS                                    "SC_HID_SC_TOOLBOX_TOOLS"
-#define HID_SC_TOOLBOX_TABLE                                    "SC_HID_SC_TOOLBOX_TABLE"
-#define HID_SC_TOOLBOX_DRAW                                     "SC_HID_SC_TOOLBOX_DRAW"
-#define HID_SC_TOOLBOX_DRTEXT                                   "SC_HID_SC_TOOLBOX_DRTEXT"
-#define HID_SC_TOOLBOX_PREVIEW                                  "SC_HID_SC_TOOLBOX_PREVIEW"
 
 //  wrong group - HID_SC_DLG_START is full
-#define HID_SC_RENAME_AUTOFMT                                   "SC_HID_SC_RENAME_AUTOFMT"
 #define HID_SC_REN_AFMT_NAME                                    "SC_HID_SC_REN_AFMT_NAME"
 
 #define HID_CHG_PROTECT                                         "SC_HID_CHG_PROTECT"
 
-#define HID_SC_RENAME_OBJECT                                    "SC_HID_SC_RENAME_OBJECT"
 
 #define HID_SC_REN_AFMT_DLG                                     "SC_HID_SC_REN_AFMT_DLG"
 
@@ -112,15 +91,6 @@
 #define HID_SCMENU_OBJARRANGE                                   "SC_HID_SCMENU_OBJARRANGE"
 #define HID_SCMENU_ANCHOR                                       "SC_HID_SCMENU_ANCHOR"
 
-#define HID_SC_FAP_BTN_FX1                                      "SC_HID_SC_FAP_BTN_FX1"
-#define HID_SC_FAP_BTN_FX2                                      "SC_HID_SC_FAP_BTN_FX2"
-#define HID_SC_FAP_BTN_FX3                                      "SC_HID_SC_FAP_BTN_FX3"
-#define HID_SC_FAP_BTN_FX4                                      "SC_HID_SC_FAP_BTN_FX4"
-#define HID_SC_FAP_BTN_REF1                                     "SC_HID_SC_FAP_BTN_REF1"
-#define HID_SC_FAP_BTN_REF2                                     "SC_HID_SC_FAP_BTN_REF2"
-#define HID_SC_FAP_BTN_REF3                                     "SC_HID_SC_FAP_BTN_REF3"
-#define HID_SC_FAP_BTN_REF4                                     "SC_HID_SC_FAP_BTN_REF4"
-#define HID_SC_FAP_FORMULA                                      "SC_HID_SC_FAP_FORMULA"
 
 #define HID_SC_SORT_ACTION                                      "SC_HID_SC_SORT_ACTION"
 #define HID_SC_SORT_AUTHOR                                      "SC_HID_SC_SORT_AUTHOR"
@@ -128,26 +98,17 @@
 #define HID_SC_SORT_COMMENT                                     "SC_HID_SC_SORT_COMMENT"
 #define HID_SORT_POSITION                                       "SC_HID_SORT_POSITION"
 #define HID_SC_CHANGES_COMMENT                                  "SC_HID_SC_CHANGES_COMMENT"
-#define HID_SC_FUNCTIONLIST                                     "SC_HID_SC_FUNCTIONLIST"
 #define HID_PASSWD_TABLE                                        "SC_HID_PASSWD_TABLE"
 #define HID_PASSWD_DOC                                          "SC_HID_PASSWD_DOC"
 
-#define HID_DATAPILOT_SERVICE                                   "SC_HID_DATAPILOT_SERVICE"
 
 // Other help IDs (max.70) ---------------------------------------------------
 #define HID_SELECTTABLES                                        "SC_HID_SELECTTABLES"
 #define HID_SC_REPLCELLSWARN                                    "SC_HID_SC_REPLCELLSWARN"
 
-#define HID_SC_DRAW_RENAME                                      "SC_HID_SC_DRAW_RENAME"
 
-#define HID_SC_DPSHOWDETAIL                                     "SC_HID_SC_DPSHOWDETAIL"
 
-#define HID_SCDLG_CONFLICTS                                     "SC_HID_SCDLG_CONFLICTS"
 
-#define HID_SC_HF_HL_DEFINED                                    "SC_HID_SC_HF_HL_DEFINED"
-#define HID_SC_HF_HR_DEFINED                                    "SC_HID_SC_HF_HR_DEFINED"
-#define HID_SC_HF_FL_DEFINED                                    "SC_HID_SC_HF_FL_DEFINED"
-#define HID_SC_HF_FR_DEFINED                                    "SC_HID_SC_HF_FR_DEFINED"
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY                                    "SC_HID_AAI_FUNC_WORKDAY"
@@ -261,39 +222,13 @@
 #define HID_DAI_FUNC_DIFFYEARS                                  "SC_HID_DAI_FUNC_DIFFYEARS"
 #define HID_DAI_FUNC_ROT13                                      "SC_HID_DAI_FUNC_ROT13"
 
-#define HID_SCPAGE_OPREDLINBE_FT_CONTENT                        "SC_HID_SCPAGE_OPREDLINBE_FT_CONTENT"
 #define HID_MN_FORMAT_STYLE                                     "SC_HID_MN_FORMAT_STYLE"
 #define HID_MN_FORMAT_ALGN                                      "SC_HID_MN_FORMAT_ALGN"
 #define HID_MN_FORMAT_LINESPACE                                 "SC_HID_MN_FORMAT_LINESPACE"
 
 // sidebar -----------------------------------------
-// AlignmentPropertyPanel -----------------------------------------
-#define HID_PROPERTYPANEL_SC_ALIGN_SECTION                      "SC_HID_PROPERTYPANEL_SC_ALIGN_SECTION"
-#define HID_PROPERTY_PANEL_ALIGN_TBX_HOR                        "SC_HID_PROPERTY_PANEL_ALIGN_TBX_HOR"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_HOR_L                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_HOR_L"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_HOR_C                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_HOR_C"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_HOR_R                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_HOR_R"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_HOR_J                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_HOR_J"
-#define HID_PROPERTY_PANEL_ALIGN_TBX_VER                        "SC_HID_PROPERTY_PANEL_ALIGN_TBX_VER"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_VER_T                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_VER_T"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_VER_C                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_VER_C"
-#define HID_PROPERTY_PANEL_ALIGN_TBI_VER_B                      "SC_HID_PROPERTY_PANEL_ALIGN_TBI_VER_B"
-#define HID_PROPERTY_PANEL_ALIGN_MBX_INDENT                     "SC_HID_PROPERTY_PANEL_ALIGN_MBX_INDENT"
-#define HID_PROPERTY_PANEL_ALIGN_CBX_WRAP                       "SC_HID_PROPERTY_PANEL_ALIGN_CBX_WRAP"
-#define HID_PROPERTY_PANEL_ALIGN_CBX_MERGE                      "SC_HID_PROPERTY_PANEL_ALIGN_CBX_MERGE"
-#define HID_PROPERTY_PANEL_ALIGN_MBX_ANGLE                      "SC_HID_PROPERTY_PANEL_ALIGN_MBX_ANGLE"
-#define HID_PROPERTY_PANEL_ALIGN_DIAL_CONTROL                   "SC_HID_PROPERTY_PANEL_ALIGN_DIAL_CONTROL"
-#define HID_PROPERTY_PANEL_ALIGN_CBX_VERT                       "SC_HID_PROPERTY_PANEL_ALIGN_CBX_VERT"
 
 // CellAppearancePropertyPanel -----------------------------------------
-#define HID_PROPERTYPANEL_SC_CELL_SECTION                       "SC_HID_PROPERTYPANEL_SC_CELL_SECTION"
-#define HID_PROPERTYPANEL_SC_TBX_BORDER                         "SC_HID_PROPERTYPANEL_SC_TBX_BORDER"
-#define HID_PROPERTYPANEL_SC_TBI_BORDER                         "SC_HID_PROPERTYPANEL_SC_TBI_BORDER"
-#define HID_PROPERTYPANEL_SC_TBX_STYLE                          "SC_HID_PROPERTYPANEL_SC_TBX_STYLE"
-#define HID_PROPERTYPANEL_SC_TBI_STYLE                          "SC_HID_PROPERTYPANEL_SC_TBI_STYLE"
-#define HID_PROPERTYPANEL_SC_TBX_LINECOLOR                      "SC_HID_PROPERTYPANEL_SC_TBX_LINECOLOR"
-#define HID_PROPERTYPANEL_SC_TBI_LINECOLOR                      "SC_HID_PROPERTYPANEL_SC_TBI_LINECOLOR"
-#define HID_PROPERTYPANEL_SC_CBOX_SHOWGRID                      "SC_HID_PROPERTYPANEL_SC_CBOX_SHOWGRID"
 #define HID_PROPERTYPANEL_SC_STYLE_VS                           "SC_HID_PROPERTYPANEL_SC_STYLE_VS"
 #define HID_PROPERTYPANEL_SC_STYLE_PB                           "SC_HID_PROPERTYPANEL_SC_STYLE_PB"
 #define HID_PROPERTYPANEL_SC_BORDER1_TBX                        "SC_HID_PROPERTYPANEL_SC_BORDER1_TBX"
@@ -315,20 +250,6 @@
 #define HID_PROPERTYPANEL_SC_BORDER_TBI_TLBR                    "SC_HID_PROPERTYPANEL_SC_BORDER_TBI_TLBR"
 #define HID_PROPERTYPANEL_SC_BORDER_TBI_TOPBOT                  "SC_HID_PROPERTYPANEL_SC_BORDER_TBI_TOPBOT"
 #define HID_PROPERTYPANEL_SC_BORDER_TBI_LEFTRIGHT               "SC_HID_PROPERTYPANEL_SC_BORDER_TBI_LEFTRIGHT"
-
-// NumberFormatPropertyPanel -----------------------------------------
-#define HID_PROPERTYPANEL_SC_NUM_SECTION                        "SC_HID_PROPERTYPANEL_SC_NUM_SECTION"
-#define HID_PROPERTY_PANEL_NUMFMT_LB_CATEGORY                   "SC_HID_PROPERTY_PANEL_NUMFMT_LB_CATEGORY"
-#define HID_PROPERTY_PANEL_NUMFMT_TBX_CATEGORY                  "SC_HID_PROPERTY_PANEL_NUMFMT_TBX_CATEGORY"
-#define HID_PROPERTY_PANEL_NUMFMT_ID_NUMBER                     "SC_HID_PROPERTY_PANEL_NUMFMT_ID_NUMBER"
-#define HID_PROPERTY_PANEL_NUMFMT_ID_PERCENT                    "SC_HID_PROPERTY_PANEL_NUMFMT_ID_PERCENT"
-#define HID_PROPERTY_PANEL_NUMFMT_ID_CURRENCY                   "SC_HID_PROPERTY_PANEL_NUMFMT_ID_CURRENCY"
-#define HID_PROPERTY_PANEL_NUMFMT_ID_DATE                       "SC_HID_PROPERTY_PANEL_NUMFMT_ID_DATE"
-#define HID_PROPERTY_PANEL_NUMFMT_ID_TEXT                       "SC_HID_PROPERTY_PANEL_NUMFMT_ID_TEXT"
-#define HID_PROPERTY_PANEL_NUMFMT_ED_DECIMALS                   "SC_HID_PROPERTY_PANEL_NUMFMT_ED_DECIMALS"
-#define HID_PROPERTY_PANEL_NUMFMT_ED_LEADZEROES                 "SC_HID_PROPERTY_PANEL_NUMFMT_ED_LEADZEROES"
-#define HID_PROPERTY_PANEL_NUMFMT_BTN_NEGRED                    "SC_HID_PROPERTY_PANEL_NUMFMT_BTN_NEGRED"
-#define HID_PROPERTY_PANEL_NUMFMT_BTN_THOUSAND                  "SC_HID_PROPERTY_PANEL_NUMFMT_BTN_THOUSAND"
 
 // Ende Hilfe IDs ------------------------------------------------------------
 
@@ -673,7 +594,6 @@
 #define HID_FUNC_GAMMAINV_MS                                    "SC_HID_FUNC_GAMMAINV_MS"
 #define HID_FUNC_GAMMALN_MS                                     "SC_HID_FUNC_GAMMALN_MS"
 #define HID_FUNC_LOGNORMDIST_MS                                 "SC_HID_FUNC_LOGNORMDIST_MS"
-#define HID_FUNC_LOGINV_MS                                      "SC_HID_FUNC_LOGINV_MS"
 #define HID_FUNC_NORMDIST_MS                                    "SC_HID_FUNC_NORMDIST_MS"
 #define HID_FUNC_NORMINV_MS                                     "SC_HID_FUNC_NORMINV_MS"
 #define HID_FUNC_STD_NORMDIST_MS                                "SC_HID_FUNC_STD_NORMDIST_MS"

@@ -32,12 +32,7 @@
 #include <sot/storinfo.hxx>
 #include <sot/sotdllapi.h>
 
-#define STORAGE_FAILIFTHERE     0x02
 #define STORAGE_TRANSACTED      0x04
-#define STORAGE_PRIORITY        0x08
-#define STORAGE_DELETEONRELEASE 0x10
-#define STORAGE_CONVERT         0x20
-#define STORAGE_UNPACKED_MODE   0x40
 #define STORAGE_DISKSPANNED_MODE   0x80
 #define STORAGE_CREATE_UNPACKED 0x44
 typedef short StorageMode;

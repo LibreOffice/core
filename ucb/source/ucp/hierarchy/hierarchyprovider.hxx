@@ -39,7 +39,6 @@ namespace hierarchy_ucp {
 
 #define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME \
                 "com.sun.star.ucb.HierarchyContentProvider"
-#define HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME_LENGTH  41
 
 #define HIERARCHY_URL_SCHEME \
                 "vnd.sun.star.hier"

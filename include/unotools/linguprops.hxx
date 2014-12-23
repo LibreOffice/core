@@ -63,14 +63,6 @@
 #define UPN_IS_TRANSLATE_COMMON_TERMS       "IsTranslateCommonTerms"
 #define UPN_IS_REVERSE_MAPPING              "IsReverseMapping"
 
-// new UNO propertynames to be used with 'dictionaries as extensions'
-#define UPN_DICTIONARIES                    "Dictionaries"
-#define UPN_SPELL_CHECKERS                  "SpellCheckers"
-#define UPN_HYPHENATORS                     "Hyphenators"
-#define UPN_THESAURI                        "Thesauri"
-#define UPN_CURRENT_ACTIVE_DICTIONARIES     "CurrentActiveDictionaries"
-#define UPN_LAST_ACTIVE_DICTIONARIES        "LastActiveDictionaries"
-
 #define UPN_IS_GRAMMAR_AUTO                 "IsAutoGrammarCheck"
 #define UPN_IS_GRAMMAR_INTERACTIVE          "IsInteractiveGrammarCheck"
 

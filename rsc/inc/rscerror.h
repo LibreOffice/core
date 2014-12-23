@@ -48,12 +48,10 @@
 #define ERR_CONT_INVALIDPOS     (ERR_RSCCONT +1 ) // Return
 #define ERR_CONT_INVALIDTYPE    (ERR_RSCCONT +2 ) // Return
 
-#define ERR_RSCCMPED        0x0250
 #define ERR_RSCINST         0x0260
 #define ERR_RSCINST_NOVARNAME   (ERR_RSCINST +1 ) // Return
 #define ERR_RSCINST_RESERVEDNAME (ERR_RSCINST +2 ) // Return
 
-#define ERR_LEX             0x0270
 #define ERR_YACC            0x0280
 #define ERR_DOUBLEID            (ERR_YACC    +1 )
 #define ERR_FALSETYPE           (ERR_YACC    +2 )

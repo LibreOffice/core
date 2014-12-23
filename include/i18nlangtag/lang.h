@@ -116,7 +116,6 @@ typedef unsigned short LanguageType;
  * The settings of the Invariant Locale are similar to US-English international
  * standards, but should not be used to display formatted data. */
 /* NOTE: this is taken from the MS documentation! Not supported by OOo/SO! */
-#define LANGUAGE_INVARIANT                  0x007F
 
 #define LANGUAGE_AFRIKAANS                  0x0436
 #define LANGUAGE_ALBANIAN                   0x041C
@@ -345,7 +344,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SAMI_SOUTHERN_SWEDEN       0x1C3B
 #define LANGUAGE_SANSKRIT                   0x044F
 #define LANGUAGE_SEPEDI                     0x046C
-#define LANGUAGE_NORTHERNSOTHO              LANGUAGE_SEPEDI /* just an alias for the already existing localization */
 #define LANGUAGE_SERBIAN_CYRILLIC_LSO       0x6C1A
 #define LANGUAGE_SERBIAN_CYRILLIC_SAM       0x0C1A  /* Serbia and Montenegro (former) */
 #define LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA    0x1C1A
@@ -399,7 +397,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TAI_NUA_CHINA              0x048F
 #define LANGUAGE_TAJIK                      0x0428
 #define LANGUAGE_TAJIK_LSO                  0x7C28
-#define LANGUAGE_TAMAZIGHT_ARABIC_MOROCCO   0x045F
 #define LANGUAGE_TAMAZIGHT_LATIN_ALGERIA    0x085F
 #define LANGUAGE_TAMAZIGHT_LATIN_LSO        0x7C5F
 #define LANGUAGE_TAMAZIGHT_MOROCCO          0x0C5F
@@ -412,7 +409,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_THAI                       0x041E
 #define LANGUAGE_TIBETAN                    0x0451
 #define LANGUAGE_DZONGKHA                   0x0851
-#define LANGUAGE_TIBETAN_BHUTAN             LANGUAGE_DZONGKHA   /* a MS error, see #i53497# */
 #define LANGUAGE_TIGRIGNA_ERITREA           0x0873
 #define LANGUAGE_TIGRIGNA_ETHIOPIA          0x0473
 #define LANGUAGE_TSONGA                     0x0431
@@ -440,29 +436,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_YUE_CHINESE_HONGKONG       0x048E
 #define LANGUAGE_ZULU                       0x0435
 
-#define LANGUAGE_qps_ploc                   0x0501  /* 'qps-ploc', qps is a reserved for local use code */
-#define LANGUAGE_qps_ploca                  0x05FE  /* 'qps-ploca', qps is a reserved for local use code */
-#define LANGUAGE_qps_plocm                  0x09FF  /* 'qps-plocm', qps is a reserved for local use code */
 
-#define LANGUAGE_ar_Ploc_SA__reserved       0x4401  /* 'ar-Ploc-SA', 'Ploc'?? */
-#define LANGUAGE_ja_Ploc_JP__reserved       0x0811  /* 'ja-Ploc-JP', 'Ploc'?? */
-#define LANGUAGE_pap_029__reserved          0x0479  /* 'pap-029' */
-#define LANGUAGE_ar_145__reserved           0x4801  /* 'ar-145' */
-#define LANGUAGE_es_419                     0x580A  /* 'es-419', not reserved, used? */
-
-/* Seems these values were used or reserved at one point of time ... */
-#define LANGUAGE_Neither_defined_nor_reserved_0x007B 0x007B
-#define LANGUAGE_Neither_defined_nor_reserved_0x007D 0x007D
-#define LANGUAGE_Neither_defined_nor_reserved_0x0089 0x0089
-#define LANGUAGE_Neither_defined_nor_reserved_0x008A 0x008A
-#define LANGUAGE_Neither_defined_nor_reserved_0x008B 0x008B
-#define LANGUAGE_Neither_defined_nor_reserved_0x008D 0x008D
-#define LANGUAGE_Neither_defined_nor_reserved_0x008E 0x008E
-#define LANGUAGE_Neither_defined_nor_reserved_0x008F 0x008F
-#define LANGUAGE_Neither_defined_nor_reserved_0x0090 0x0090
-#define LANGUAGE_Neither_defined_nor_reserved_0x0827 0x0827
-#define LANGUAGE_Neither_defined_nor_reserved_0x1C0C 0x1C0C
-#define LANGUAGE_Neither_defined_nor_reserved_0x2008 0x2008
 
 /*! use only for import/export of MS documents, number formatter maps it to
  *! LANGUAGE_SYSTEM and then to effective system language */
@@ -625,7 +599,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LIMBU                 0x0657
 #define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
 #define LANGUAGE_OBSOLETE_USER_KABYLE       0x0659
-#define LANGUAGE_USER_KABYLE                LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
 #define LANGUAGE_USER_HAITIAN               0x065A
 #define LANGUAGE_USER_BEEMBE                0x065B
 #define LANGUAGE_USER_BEKWEL                0x065C

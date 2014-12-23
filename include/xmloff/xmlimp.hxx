@@ -91,7 +91,6 @@ namespace xmloff {
 #define IMPORT_SETTINGS     0x0040
 #define IMPORT_FONTDECLS    0x0080
 #define IMPORT_EMBEDDED     0x0100
-#define IMPORT_OOO_NAMESPACES   0x0100
 #define IMPORT_ALL          0xffff
 
 

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_STARMATH_INC_HELPIDS_H
 #define INCLUDED_STARMATH_INC_HELPIDS_H
 
-#define HID_SMA_FONTDIALOG                                "STARMATH_HID_SMA_FONTDIALOG"
-#define HID_SMA_DISTANCEDIALOG                            "STARMATH_HID_SMA_DISTANCEDIALOG"
 #define HID_SMA_WIN_DOCUMENT                              "STARMATH_HID_SMA_WIN_DOCUMENT"
 #define HID_SMA_COMMAND_WIN_EDIT                          "STARMATH_HID_SMA_COMMAND_WIN_EDIT"
 
@@ -251,7 +249,6 @@
 #define HID_SMA_LRDBRACKETX                               "STARMATH_HID_SMA_LRDBRACKETX"
 #define HID_SMA_SLRDBRACKETX                              "STARMATH_HID_SMA_SLRDBRACKETX"
 
-#define HID_SMA_CONTROL_SYMBOLSET_VIEW                    "STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW"
 
 #define HID_SMA_NOSPACE                                   "STARMATH_HID_SMA_NOSPACE"
 

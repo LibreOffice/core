@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <ucbhelper/providerhelper.hxx>
 
-#define GIO_CONTENT_PROVIDER_SERVICE_NAME "com.sun.star.ucb.GIOContentProvider"
 
 namespace gio
 {

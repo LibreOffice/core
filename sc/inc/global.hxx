@@ -49,7 +49,6 @@ class Color;
 //  STRING_SCAPP was "scalc3", "scalc4", now just "scalc"
 
 #define STRING_SCAPP    "scalc"
-#define STRING_SCSTREAM "StarCalcDocument"
 
 #define STRING_STANDARD "Standard"
 
@@ -128,7 +127,6 @@ namespace sc
 #define OLE_STD_CELLS_X     4
 #define OLE_STD_CELLS_Y     5
 
-#define SC_SIZE_OPTIMUM     0xFFFF
 
                                     // repaint flags (for messages)
 #define PAINT_GRID          1
@@ -265,7 +263,6 @@ const InsertDeleteFlags IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
                                         //  step = 10pt, max. indention = 100 steps
 #define SC_INDENT_STEP      200
-#define SC_MAX_INDENT       20000
 
                                         //  scenario flags
 #define SC_SCENARIO_COPYALL     1

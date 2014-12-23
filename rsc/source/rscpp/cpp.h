@@ -108,12 +108,10 @@ extern FILE* pDefOut;                                   /* ER */
 /*
  * The following are unary.
  */
-#define FIRST_UNOP      OP_PLU          /* First Unary operand          */
 #define OP_PLU          24              /* + (draft ANSI standard)      */
 #define OP_NEG          25              /* -                            */
 #define OP_COM          26              /* ~                            */
 #define OP_NOT          27              /* !                            */
-#define LAST_UNOP       OP_NOT
 #define OP_LPA          28              /* (                            */
 #define OP_RPA          29              /* )                            */
 #define OP_END          30              /* End of expression marker     */

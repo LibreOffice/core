@@ -31,8 +31,6 @@
 #define MID_SW_FLAG_NO_ITEM_IMPORT          0x40000000
 #define MID_SW_FLAG_SPECIAL_ITEM_EXPORT 0x20000000
 #define MID_SW_FLAG_NO_ITEM_EXPORT          0x10000000
-#define MID_SW_FLAG_SPECIAL_ITEM            0xa0000000 // both import and export
-#define MID_SW_FLAG_NO_ITEM             0x50000000 // both import and export
 #define MID_SW_FLAG_ELEMENT_ITEM_IMPORT 0x08000000
 #define MID_SW_FLAG_ELEMENT_ITEM_EXPORT 0x04000000
 #define MID_SW_FLAG_ELEMENT_ITEM            0x0c000000  // both import and export

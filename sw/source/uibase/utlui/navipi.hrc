@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #define IL_CONTENT          7
-#define FT_PAGE             10
 #define TB_CONTENT          50
 #define TL_CONTENT          51
 #define LB_DOCS             53

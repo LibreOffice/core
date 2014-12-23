@@ -30,18 +30,12 @@
 #define SFX_REC_PRETAG_EXT              sal_uInt8(0x00) // Pre-Tag for Extended-Records
 #define SFX_REC_PRETAG_EOR              sal_uInt8(0xFF) // Pre-Tag for End-Of-Records
 
-#define SFX_REC_TYPE_NONE               sal_uInt8(0x00) // unknown Record type
-#define SFX_REC_TYPE_FIRST              sal_uInt8(0x01)
 #define SFX_REC_TYPE_SINGLE             sal_uInt8(0x01) // Single-Content-Record
 #define SFX_REC_TYPE_FIXSIZE            sal_uInt8(0x02) // Fix-Size-Multi-Content-Record
 #define SFX_REC_TYPE_VARSIZE_RELOC      sal_uInt8(0x03) // variable Rec-Size
 #define SFX_REC_TYPE_VARSIZE            sal_uInt8(0x04) // old (not movable)
 #define SFX_REC_TYPE_MIXTAGS_RELOC      sal_uInt8(0x07) // Mixed Tag Content-Record
 #define SFX_REC_TYPE_MIXTAGS            sal_uInt8(0x08) // old (not movable)
-#define SFX_REC_TYPE_LAST               sal_uInt8(0x08)
-#define SFX_REC_TYPE_MINI                   0x100   // Mini-Record
-#define SFX_REC_TYPE_DRAWENG                0x400   // Drawing-Engine-Record
-#define SFX_REC_TYPE_EOR                    0xF00   // End-Of-Records
 
 #define SFX_REC_HEADERSIZE_MINI     4   // size of the Mini-Record-Header
 #define SFX_REC_HEADERSIZE_SINGLE   4   // additional HEADERSIZE_MINI => 8

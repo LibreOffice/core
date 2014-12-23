@@ -92,13 +92,9 @@ struct SbiGosubStack {              // GOSUB-Stack:
 
 #define MAXRECURSION 500
 
-#define Sb_ATTR_NORMAL      0x0000
 #define Sb_ATTR_READONLY    0x0001
 #define Sb_ATTR_HIDDEN      0x0002
-#define Sb_ATTR_SYSTEM      0x0004
-#define Sb_ATTR_VOLUME      0x0008
 #define Sb_ATTR_DIRECTORY   0x0010
-#define Sb_ATTR_ARCHIVE     0x0020
 
 
 class WildCard;

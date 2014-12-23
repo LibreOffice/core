@@ -92,7 +92,6 @@ namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 #define EXPORT_SETTINGS                 0x0040
 #define EXPORT_FONTDECLS                0x0080
 #define EXPORT_EMBEDDED                 0x0100
-#define EXPORT_NODOCTYPE                0x0200
 #define EXPORT_PRETTY                   0x0400
 #define EXPORT_SAVEBACKWARDCOMPATIBLE   0x0800
 #define EXPORT_OASIS                    0x8000

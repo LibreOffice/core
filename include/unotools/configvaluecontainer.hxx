@@ -26,7 +26,6 @@
 namespace utl
 {
 
-#define CVC_READONLY_ACCESS     0x0000
 #define CVC_UPDATE_ACCESS       0x0001
 
 #define CVC_LAZY_UPDATE         0x0000

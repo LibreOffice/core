@@ -75,9 +75,6 @@ enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE 
 #define SV_LBOXTAB_ADJUST_CENTER    0x0008 // Center the item at the tabulator
 #define SV_LBOXTAB_ADJUST_NUMERIC   0x0010 // Decimal point at the tabulator (strings)
 
-// Is not supported anymore! The focus is now controlled by selection!
-#define SV_LBOXTAB_SHOW_FOCUS       0x0020 // Visualize focus
-
 #define SV_LBOXTAB_SHOW_SELECTION   0x0040 // Visualize selection state
                                            // Item needs to be able to return the surrounding polygon (D'n'D cursor)
 #define SV_LBOXTAB_EDITABLE         0x0100 // Item editable at the tabulator
@@ -97,7 +94,6 @@ enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE 
 #define TREEFLAG_MANINS         0x0004
 #define TREEFLAG_RECALCTABS     0x0008
 
-#define TREEBOX_ALLITEM_ACCROLE_TYPE_NOTSET 0x00
 #define TREEBOX_ALLITEM_ACCROLE_TYPE_LIST   0x01
 #define TREEBOX_ALLITEM_ACCROLE_TYPE_TREE   0x02
 
@@ -189,7 +185,6 @@ inline void delete_clone(const SvLBoxItem* p)
 // The DropTarget is 0 in that case
 #define SV_DRAGDROP_ENABLE_TOP      (DragDropMode)0x0020
 
-#define SVLISTBOX_ID_LBOX 0   // for SvTreeListBox::GetType()
 
 #define SVLBOX_IN_EDT           0x0001
 #define SVLBOX_EDT_ENABLED      0x0002

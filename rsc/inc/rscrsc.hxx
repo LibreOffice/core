@@ -27,11 +27,6 @@
 
 class RscTypCont;
 
-/****************** T Y P E S ********************************************/
-
-#define MAX_INPUTFILES  100
-#define MAX_SYMBOLS     10
-#define MAX_INCLUDES    10
 
 /****************** R s c C m d L i n e **********************************/
 class RscCmdLine

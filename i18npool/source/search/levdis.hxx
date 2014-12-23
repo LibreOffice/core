@@ -40,16 +40,8 @@
  LCM(31,32,33) == 32736
  */
 
-#define LEVDISDEFAULT_XOTHER    2
-#define LEVDISDEFAULT_YSHORTER  1
-#define LEVDISDEFAULT_ZLONGER   3
-#define LEVDISDEFAULT_RELAXED   TRUE
 
-#define LEVDISDEFAULTLIMIT  6       // default nLimit, passt zu x=2, y=1, z=3,
                                     // p=3, q=6, r=2
-#define LEVDISDEFAULT_P0    3       // default nRepP0, Gewichtung Ersetzen
-#define LEVDISDEFAULT_Q0    6       // default nInsQ0, Gewichtung Einfuegen
-#define LEVDISDEFAULT_R0    2       // default nDelR0, Gewichtung Loeschen
 /*
  Berechnung von angegebenen Userwerten max Ersetzen, Kuerzer, Laenger mittels
  CalcLPQR(). Unschoen: wenn in WLD z.B. nLimit durch nDelR0 erreicht ist

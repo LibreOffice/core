@@ -112,15 +112,8 @@ namespace com{namespace sun {namespace star{
 }}}
 
 // defines nur fuer die WW8-variable der INI-Datei
-#define WW8FL_NO_TEXT        1
 #define WW8FL_NO_STYLES      2
-#define WW8FL_NO_ZSTYLES     4  // keine Zeichenstyles importieren
 #define WW8FL_NO_GRAF     0x80
-
-// falls gestetzt, werden fuer Writer-Def-Styles neue Styles mit den
-// WW8-Def-Style-Eigenschaften erzeugt, statt die Writer-Standards zu
-// ueberschreiben
-#define WW8FL_NO_DEFSTYLES        0x400
 
 #define WW8FL_NO_OUTLINE         0x1000
 #define WW8FL_NO_IMPLPASP        0x4000  // no implicit para space

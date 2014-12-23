@@ -71,12 +71,6 @@ public:
     ~SwRelNumRuleSpaces();
 };
 
-#define SW_SV_BRUSH_25          0
-#define SW_SV_BRUSH_50          1
-#define SW_SV_BRUSH_75          2
-#define SW_SV_BRUSH_NULL        3
-#define SW_SV_BRUSH_SOLID       4
-#define SW_SV_BRUSH_INVALID     5
 
 // Get size of fly (if 'automatic' in WW) and check if not too small
 SW_DLLPUBLIC void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
