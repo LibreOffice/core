@@ -132,6 +132,7 @@ public:
                                 const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
 
     void    AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
+    /// if nIndex == 0, remove all conditional format data
     void    RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
 
     void    ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich );

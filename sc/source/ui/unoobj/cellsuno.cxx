@@ -2397,11 +2397,26 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                        formula::FormulaGrammar::GRAM_UNSPECIFIED :
                                        formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
-                                ScConditionalFormat* pNew = new ScConditionalFormat( 0, pDoc );    // Index wird beim Einfuegen gesetzt
-                                pFormat->FillFormat( *pNew, pDoc, eGrammar );
-                                pNew->AddRange( aRanges );
                                 SCTAB nTab = aRanges.front()->aStart.Tab();
-                                pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
+                                // To remove conditional formats for all cells in aRanges we need to:
+                                // Remove conditional format data from cells' attributes
+                                pDoc->RemoveCondFormatData( aRanges, nTab,  0 );
+                                // And also remove ranges from conditional formats list
+                                for (size_t i = 0; i < aRanges.size(); ++i)
+                                {
+                                    pDoc->GetCondFormList( aRanges[i]->aStart.Tab() )->DeleteArea(
+                                        aRanges[i]->aStart.Col(), aRanges[i]->aStart.Row(),
+                                        aRanges[i]->aEnd.Col(), aRanges[i]->aEnd.Row() );
+                                }
+
+                                // Then we can apply new conditional format if there is one
+                                if (pFormat->getCount())
+                                {
+                                    ScConditionalFormat* pNew = new ScConditionalFormat( 0, pDoc );    // Index wird beim Einfuegen gesetzt
+                                    pFormat->FillFormat( *pNew, pDoc, eGrammar );
+                                    pNew->AddRange( aRanges );
+                                    pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
+                                }
                             }
                         }
                     }
