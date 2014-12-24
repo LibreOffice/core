@@ -92,10 +92,6 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Library_add_cxxflags,svxcore,\
-    $(gb_OBJCXXFLAGS) \
-))
-
 $(eval $(call gb_Library_use_system_darwin_frameworks,svxcore,\
 	Foundation \
 ))
