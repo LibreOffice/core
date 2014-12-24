@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_bf43106c",
+        "filename": "vcl/StaticLibrary_vclmain.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-12-24T18:55:15Z",
+      "side": 1,
+      "message": "gb_Library_add_ vs gb_StaticLibrary_add_ - got it!",
+      "revId": "ff11a3c5cc05a8aa1ab3e9665734a16ac6911777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
