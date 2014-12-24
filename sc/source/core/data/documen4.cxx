@@ -1315,7 +1315,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                     if ( ValidCol(nOtherCol) && ValidRow(nOtherRow) )
                     {
                         ScAddress aOtherPos( nOtherCol, nOtherRow, nOtherTab );
-                        aOtherCell.assign(*this, aOtherPos);
+                        aOtherCell.assign(rOtherDoc, aOtherPos);
                     }
 
                     if (!aThisCell.equalsWithoutFormat(aOtherCell))
