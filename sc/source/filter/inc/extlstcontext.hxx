@@ -13,19 +13,21 @@
 #include "excelhandlers.hxx"
 #include "worksheetfragment.hxx"
 
+class ScDataBarFormatData;
+
 namespace oox {
 namespace xls {
 
 class ExtCfRuleContext : public WorksheetContextBase
 {
 public:
-    explicit ExtCfRuleContext( WorksheetContextBase& rFragment, void* pDataBar );
+    explicit ExtCfRuleContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pDataBar );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
     virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
-    void* mpTarget;
+    ScDataBarFormatData* mpTarget;
 
     bool mbFirstEntry;
 };
@@ -41,7 +43,7 @@ private:
 class ExtLstLocalContext : public WorksheetContextBase
 {
 public:
-    explicit ExtLstLocalContext( WorksheetContextBase& rFragment, void* pTarget ); // until now a ExtLst always extends an existing entry
+    explicit ExtLstLocalContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ); // until now a ExtLst always extends an existing entry
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
@@ -49,7 +51,7 @@ protected:
     virtual void        onCharacters( const OUString& rChars ) SAL_OVERRIDE;
 
 private:
-    void* mpTarget;
+    ScDataBarFormatData* mpTarget;
 };
 
 /**

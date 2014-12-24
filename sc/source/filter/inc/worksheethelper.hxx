@@ -26,6 +26,8 @@
 #include "addressconverter.hxx"
 #include "formulabase.hxx"
 
+class ScDataBarFormatData;
+
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
     namespace awt { struct Rectangle; }
@@ -57,7 +59,7 @@ class SheetViewSettings;
 class VmlDrawing;
 class WorksheetSettings;
 
-typedef ::std::map< OUString, void* >  ExtLst;
+typedef ::std::map< OUString, ScDataBarFormatData* >  ExtLst;
 
 typedef ::std::map< BinAddress, ApiTokenSequence > SharedFormulaMap;
 

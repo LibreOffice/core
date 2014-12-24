@@ -18,7 +18,7 @@ using ::oox::core::ContextHandlerRef;
 namespace oox {
 namespace xls {
 
-ExtCfRuleContext::ExtCfRuleContext( WorksheetContextBase& rFragment, void* pTarget ):
+ExtCfRuleContext::ExtCfRuleContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ):
     WorksheetContextBase( rFragment ),
     mpTarget( pTarget ),
     mbFirstEntry(true)
@@ -65,7 +65,7 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
     }
 }
 
-ExtLstLocalContext::ExtLstLocalContext( WorksheetContextBase& rFragment, void* pTarget ):
+ExtLstLocalContext::ExtLstLocalContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ):
     WorksheetContextBase(rFragment),
     mpTarget(pTarget)
 {
@@ -103,7 +103,7 @@ void ExtLstLocalContext::onCharacters( const OUString& rChars )
 {
     if (getCurrentElement() == XLS_EXT_TOKEN( id ))
     {
-        getExtLst().insert( std::pair< OUString, void*>(rChars, mpTarget) );
+        getExtLst().insert( std::pair< OUString, ScDataBarFormatData*>(rChars, mpTarget) );
     }
 }
 
@@ -127,7 +127,7 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
             if(aExt == getExtLst().end())
                 return NULL;
 
-            void* pInfo = aExt->second;
+            ScDataBarFormatData* pInfo = aExt->second;
             if (!pInfo)
             {
                 return NULL;

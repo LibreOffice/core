@@ -1047,7 +1047,7 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
     return xCondFmt;
 }
 
-ExtCfRuleRef CondFormatBuffer::createExtCfRule( void* pTarget )
+ExtCfRuleRef CondFormatBuffer::createExtCfRule(ScDataBarFormatData* pTarget)
 {
     ExtCfRuleRef extRule( new ExtCfRule( pTarget ) );
     maCfRules.push_back( extRule );
@@ -1104,7 +1104,7 @@ void ExtCfRule::finalizeImport()
     {
         case DATABAR:
         {
-            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            ScDataBarFormatData* pDataBar = mpTarget;
             if( maModel.maAxisPosition == "none" )
                 pDataBar->meAxisPosition = databar::NONE;
             else if( maModel.maAxisPosition == "middle" )
@@ -1116,19 +1116,19 @@ void ExtCfRule::finalizeImport()
         }
         case AXISCOLOR:
         {
-            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            ScDataBarFormatData* pDataBar = mpTarget;
             pDataBar->maAxisColor = RgbToRgbComponents(maModel.mnAxisColor);
             break;
         }
         case NEGATIVEFILLCOLOR:
         {
-            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            ScDataBarFormatData* pDataBar = mpTarget;
             pDataBar->mpNegativeColor.reset( new ::Color( RgbToRgbComponents(maModel.mnNegativeColor) ) );
             break;
         }
         case CFVO:
         {
-            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            ScDataBarFormatData* pDataBar = mpTarget;
             ScColorScaleEntry* pEntry = NULL;
             if(maModel.mbIsLower)
                 pEntry = pDataBar->mpLowerLimit.get();

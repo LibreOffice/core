@@ -245,9 +245,9 @@ class ExtCfRule
     };
     ExCfRuleModel maModel;
     RuleType mnRuleType;
-    void*    mpTarget;
+    ScDataBarFormatData* mpTarget;
 public:
-    ExtCfRule(void* pTarget = NULL ) : mnRuleType( ExtCfRule::UNKNOWN ), mpTarget(pTarget) {}
+    ExtCfRule(ScDataBarFormatData* pTarget = NULL ) : mnRuleType( ExtCfRule::UNKNOWN ), mpTarget(pTarget) {}
     void finalizeImport();
     void importDataBar(  const AttributeList& rAttribs );
     void importNegativeFillColor(  const AttributeList& rAttribs );
@@ -268,7 +268,7 @@ public:
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
-    ExtCfRuleRef        createExtCfRule( void* pTarget );
+    ExtCfRuleRef        createExtCfRule(ScDataBarFormatData* pTarget);
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
