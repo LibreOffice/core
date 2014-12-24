@@ -178,6 +178,7 @@ $(eval $(foreach method,\
 	add_asmobject \
 	add_asmobjects \
 	add_exception_objects \
+	add_objcxxflags_exception_objects \
 	add_x64_generated_exception_objects \
 	add_generated_cobjects \
 	add_generated_cxxobjects \

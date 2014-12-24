@@ -943,6 +943,11 @@ endif
 
 endef
 
+# call gb_LinkTarget_add_objcxxflags_exception_object,linktarget,sourcefile,cxxflags,linktargetmakefilename
+define gb_LinkTarget_add_objcxxflags_exception_object
+$(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)) $(gb_OBJCXXFLAGS))
+endef
+
 # call gb_LinkTarget_add_objcobject,linktarget,sourcefile,objcflags,linktargetmakefilename
 define gb_LinkTarget_add_objcobject
 $(if $(wildcard $(call gb_ObjCObject_get_source,$(SRCDIR),$(2))),,$(eval $(call gb_Output_error,No such source file $(call gb_ObjCObject_get_source,$(SRCDIR),$(2)))))
@@ -1142,6 +1147,11 @@ endef
 # call gb_LinkTarget_add_objcxxobjects,linktarget,sourcefiles,objcxxflags,linktargetmakefilename
 define gb_LinkTarget_add_objcxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxobject,$(1),$(obj),$(3),$(4)))
+endef
+
+# call gb_LinkTarget_add_objcxxflags_exception_objects,linktarget,sourcefiles,cxxflags,linktargetmakefilename
+define gb_LinkTarget_add_objcxxflags_exception_objects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxflags_exception_object,$(1),$(obj),$(3),$(4)))
 endef
 
 # call gb_LinkTarget_add_asmobjects,linktarget,sourcefiles,asmflags,linktargetmakefilename
