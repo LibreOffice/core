@@ -34,10 +34,14 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/module.hxx>
 
+#include <sfx2/templdlg.hxx>
+#include "templdgi.hxx"
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 
 #include <svl/style.hrc>
+#include <svl/stritem.hxx>
+#include <sfx2/dispatch.hxx>
 
 /*  SfxManageStyleSheetPage Constructor
  *
@@ -62,6 +66,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     m_pFollowLb->SetStyle(m_pFollowLb->GetStyle() | WB_SORT);
     const sal_Int32 nMaxWidth(62);
     m_pFollowLb->setMaxWidthChars(nMaxWidth);
+    get(m_pEditStyleBtn, "editstyle");
     get(m_pBaseFt, "linkedwithft");
     get(m_pBaseLb, "linkedwith");
     m_pBaseLb->SetStyle(m_pBaseLb->GetStyle() | WB_SORT);
@@ -223,6 +228,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     // It is a style with auto update? (SW only)
     if(SfxItemState::SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
         m_pAutoCB->Show();
+    m_pEditStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditStyleHdl_Impl ) );
 }
 
 
@@ -309,7 +315,53 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
 }
 
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl )
+{
 
+    OUString aTemplName(m_pFollowLb->GetSelectEntry());
+    if (Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 ))
+    {
+    }
+
+    return 0;
+
+}
+
+// Internal: Perform functions through the Dispatcher
+bool SfxManageStyleSheetPage::Execute_Impl(
+    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily,
+    sal_uInt16 nMask, const sal_uInt16* pModifier)
+{
+
+    SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
+    SfxStringItem aItem(nId, rStr);
+    SfxUInt16Item aFamily(SID_STYLE_FAMILY, nFamily);
+    SfxUInt16Item aMask( SID_STYLE_MASK, nMask );
+    SfxStringItem aUpdName(SID_STYLE_UPD_BY_EX_NAME, rStr);
+    SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );
+    const SfxPoolItem* pItems[ 6 ];
+    sal_uInt16 nCount = 0;
+    if( !rStr.isEmpty() )
+        pItems[ nCount++ ] = &aItem;
+    pItems[ nCount++ ] = &aFamily;
+    if( nMask )
+        pItems[ nCount++ ] = &aMask;
+    if ( !rRefStr.isEmpty() )
+        pItems[ nCount++ ] = &aRefName;
+
+    pItems[ nCount++ ] = 0;
+
+    sal_uInt16 nModi = pModifier ? *pModifier : 0;
+    const SfxPoolItem* mpItem = rDispatcher.Execute(
+        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
+        pItems, nModi );
+
+    if ( !mpItem )
+        return false;
+
+    return true;
+
+}
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
@@ -323,7 +375,6 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
-
 
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
