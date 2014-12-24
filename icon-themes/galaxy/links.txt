@@ -27,3 +27,7 @@ cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
+
+# flip in impress/draw
+cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
+cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
