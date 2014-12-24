@@ -126,6 +126,10 @@ public:
     /** Inserts a ISO 8601 date cell into the sheet. */
     void                setDateCell( const CellModel& rModel, const OUString& rDateString );
 
+    void                createSharedFormula(
+            const com::sun::star::table::CellAddress& rRange,
+            const ApiTokenSequence& rTokens);
+
     /** Inserts the passed token array as array formula. */
     void                createArrayFormula(
                             const ::com::sun::star::table::CellRangeAddress& rRange,
@@ -151,17 +155,17 @@ public:
     /** Final processing after the sheet has been imported. */
     void                finalizeImport();
 
-private:
-    struct XfIdRowRange;
-
     /** Sets the passed formula token array into a cell. */
     void                setCellFormula(
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
 
+private:
+    struct XfIdRowRange;
+
     /** Creates a formula token array representing the shared formula with the
         passed identifier. */
-    ApiTokenSequence    resolveSharedFormula( const BinAddress& rMapKey ) const;
+    ApiTokenSequence    resolveSharedFormula( const css::table::CellAddress& rMapKey ) const;
 
     /** Inserts the passed array formula into the sheet. */
     void                finalizeArrayFormula(
@@ -234,7 +238,7 @@ private:
     SharedFormulaMap    maSharedFormulas;       /// Maps shared formula base address to defined name token index.
     ::com::sun::star::table::CellAddress
                         maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
-    BinAddress          maSharedBaseAddr;       /// Base address of the pending shared formula.
+    css::table::CellAddress maSharedBaseAddr;       /// Base address of the pending shared formula.
     XfIdRowRange        maXfIdRowRange;         /// Cached XF identifier for a range of rows.
     XfIdRangeListMap    maXfIdRangeLists;       /// Collected XF identifiers for cell rangelists.
     MergedRangeList     maMergedRanges;         /// Merged cell ranges.
