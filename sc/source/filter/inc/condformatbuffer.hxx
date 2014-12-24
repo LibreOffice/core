@@ -113,10 +113,10 @@ public:
 
     void SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
 
-    ScDataBarFormatData* getDataBarFormatData() { return mpFormat; }
+    ScDataBarFormatData* getDataBarFormatData() { return mxFormat.get(); }
 
 private:
-    ScDataBarFormatData* mpFormat;
+    std::unique_ptr<ScDataBarFormatData> mxFormat;
 
     boost::scoped_ptr<ColorScaleRuleModelEntry> mpUpperLimit;
     boost::scoped_ptr<ColorScaleRuleModelEntry> mpLowerLimit;

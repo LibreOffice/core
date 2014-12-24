@@ -232,9 +232,9 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
 
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mpFormat(new ScDataBarFormatData)
+    mxFormat(new ScDataBarFormatData)
 {
-    mpFormat->meAxisPosition = databar::NONE;
+    mxFormat->meAxisPosition = databar::NONE;
 }
 
 void DataBarRule::importColor( const AttributeList& rAttribs )
@@ -250,7 +250,7 @@ void DataBarRule::importColor( const AttributeList& rAttribs )
 
     ::Color aColor = RgbToRgbComponents( nColor );
 
-    mpFormat->maPositiveColor = aColor;
+    mxFormat->maPositiveColor = aColor;
 }
 
 void DataBarRule::importCfvo( const AttributeList& rAttribs )
@@ -272,7 +272,7 @@ void DataBarRule::importCfvo( const AttributeList& rAttribs )
 
 void DataBarRule::importAttribs( const AttributeList& rAttribs )
 {
-    mpFormat->mbOnlyBar = !rAttribs.getBool( XML_showValue, true );
+    mxFormat->mbOnlyBar = !rAttribs.getBool( XML_showValue, true );
 }
 
 void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
@@ -280,9 +280,9 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
     ScColorScaleEntry* pUpperEntry = ConvertToModel( *mpUpperLimit.get(), pDoc, rAddr);
     ScColorScaleEntry* pLowerEntry = ConvertToModel( *mpLowerLimit.get(), pDoc, rAddr);
 
-    mpFormat->mpUpperLimit.reset( pUpperEntry );
-    mpFormat->mpLowerLimit.reset( pLowerEntry );
-    pFormat->SetDataBarData(mpFormat);
+    mxFormat->mpUpperLimit.reset( pUpperEntry );
+    mxFormat->mpLowerLimit.reset( pLowerEntry );
+    pFormat->SetDataBarData(mxFormat.release());
 }
 
 IconSetRule::IconSetRule( const CondFormat& rFormat ):
