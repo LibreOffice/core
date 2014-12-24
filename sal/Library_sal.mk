@@ -120,12 +120,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/unichars \
 ))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Library_add_cxxflags,sal,\
-    $(gb_OBJCXXFLAGS) \
-))
-endif
-
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/context \
@@ -173,16 +167,9 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
         $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
 ))
 
-# Note that the uunxapi.mm file just includes the uunxapi.cxx one
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_objcxxobjects,sal,\
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,sal,\
 	sal/osl/unx/uunxapi \
 ))
-else
-$(eval $(call gb_Library_add_exception_objects,sal,\
-	sal/osl/unx/uunxapi \
-))
-endif
 
 ifneq ($(filter $(OS),MACOSX IOS),)
 $(eval $(call gb_Library_add_exception_objects,sal,\
