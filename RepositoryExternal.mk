@@ -3768,6 +3768,7 @@ $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(INSTROOT)/$(LIBO_URE_MISC_FOLDER)/services.rdb \
 	$(call gb_UnoApi_get_target,udkapi) \
+	$(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno)
 )
 endef
 
