@@ -61,7 +61,7 @@ typedef ::std::map< OUString, void* >  ExtLst;
 // ============================================================================
 // ============================================================================
 
-typedef ::std::map< BinAddress, sal_Int32 > SharedFormulaMap;
+typedef ::std::map< BinAddress, ApiTokenSequence > SharedFormulaMap;
 
 /** An enumeration for all types of sheets in a workbook. */
 enum WorksheetType

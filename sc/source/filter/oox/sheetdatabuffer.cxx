@@ -241,6 +241,14 @@ void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDat
         setValueCell( rModel, fValue );
 }
 
+void SheetDataBuffer::createSharedFormula(const CellAddress& rAddr, const ApiTokenSequence& rTokens)
+{
+    BinAddress aAddr(rAddr);
+    maSharedFormulas[aAddr] = rTokens;
+    if( mbPendingSharedFmla )
+        setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
+}
+
 void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSequence& rTokens )
 {
     mbPendingSharedFmla = false;
@@ -270,11 +278,11 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
                 reading the formula definition it will be retried to insert the
                 formula via retryPendingSharedFormulaCell(). */
             BinAddress aBaseAddr( aTokenInfo.First );
-            aTokens = resolveSharedFormula( aBaseAddr );
+            aTokens = resolveSharedFormula( aTokenInfo.First );
             if( !aTokens.hasElements() )
             {
                 maSharedFmlaAddr = rModel.maCellAddr;
-                maSharedBaseAddr = aBaseAddr;
+                maSharedBaseAddr = aTokenInfo.First;
                 mbPendingSharedFmla = true;
             }
         }
@@ -579,10 +587,11 @@ void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTok
     }
 }
 
-ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const BinAddress& rMapKey ) const
+ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const CellAddress& rAddr ) const
 {
-    sal_Int32 nTokenIndex = ContainerHelper::getMapElement( maSharedFormulas, rMapKey, -1 );
-    return (nTokenIndex >= 0) ? getFormulaParser().convertNameToFormula( nTokenIndex ) : ApiTokenSequence();
+    BinAddress aAddr(rAddr);
+    ApiTokenSequence aTokens = ContainerHelper::getMapElement( maSharedFormulas, aAddr, ApiTokenSequence() );
+    return aTokens;
 }
 
 void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens ) const
