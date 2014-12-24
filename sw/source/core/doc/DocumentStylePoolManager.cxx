@@ -491,18 +491,14 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
         case RES_POOLCOLL_HEADLINE3:        // Headinline 3
             {
                 SvxULSpaceItem aUL( PT_7, PT_6, RES_UL_SPACE );
-                Color aCol( COL_GRAY );
                 aSet.Put( aUL );
-                aSet.Put( SvxColorItem ( aCol, RES_CHRATR_COLOR ) );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 2, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE4:        // Headinline 4
             {
                 SvxULSpaceItem aUL( PT_6, PT_6, RES_UL_SPACE );
-                Color aCol( COL_GRAY );
                 aSet.Put( aUL );
-                aSet.Put( SvxColorItem ( aCol, RES_CHRATR_COLOR ) );
                 lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 3, true );
             }
             break;
