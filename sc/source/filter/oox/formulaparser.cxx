@@ -596,7 +596,7 @@ ApiTokenSequence FormulaParserImpl::importOoxFormula( const CellAddress&, const 
 
 ApiTokenSequence FormulaParserImpl::importBiff12Formula( const CellAddress&, FormulaType, SequenceInputStream& )
 {
-    OSL_FAIL( "FormulaParserImpl::importBiff12Formula - not implemented" );
+    SAL_WARN("sc", "FormulaParserImpl::importBiff12Formula - not implemented" );
     return ApiTokenSequence();
 }
 
