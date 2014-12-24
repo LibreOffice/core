@@ -132,14 +132,21 @@ bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShap
 
 void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aRect, const awt::Point &aPos, const double fRotationAngleDegree )
 {
-    ::basegfx::B2DHomMatrix aMatrix;
-
     aPoly = basegfx::tools::createPolygonFromRect( aRect );
-    aMatrix.translate( -aRect.getWidth()/2, -aRect.getHeight()/2);
-    aMatrix.rotate( fRotationAngleDegree*M_PI/180.0 );
-    aPoly.transform( aMatrix );
-    aMatrix = ::basegfx::B2DHomMatrix();
-    aMatrix.translate( aRect.getWidth()/2+aPos.X, aRect.getHeight()/2+aPos.Y);
+
+    // For rotating the rectangle we use the opposite angle,
+    // since `B2DHomMatrix` class used for
+    // representing the transformation, performs rotations in the positive
+    // direction (from the X axis to the Y axis). However since the coordinate
+    // system used by the chart has the Y-axis pointing downward, a rotation in
+    // the positive direction means a clockwise rotation. On the contrary text
+    // labels are rotated counterclockwise.
+    // The rotation is performed around the top-left vertex of the rectangle
+    // which is then moved to its final position by using the top-left
+    // vertex of the text label bounding box (aPos) as the translation vector.
+    ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.rotate( -fRotationAngleDegree*M_PI/180.0 );
+    aMatrix.translate( aPos.X, aPos.Y);
     aPoly.transform( aMatrix );
 }
 
@@ -839,9 +846,12 @@ bool VCartesianAxis::createTextShapes(
                         // Try auto-rotating the labels at 45 degrees and
                         // start over.  This rotation angle will be stored for
                         // all future text shape creation runs.
+                        // The nRhythm parameter is reset to 1 since the layout
+                        // used for text labels is changed.
                         rAxisLabelProperties.autoRotate45();
                         m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
                         removeTextShapesFromTicks();
+                        rAxisLabelProperties.nRhythm = 1;
                         return false;
                     }
 
@@ -980,9 +990,12 @@ bool VCartesianAxis::createTextShapesSimple(
                     // Try auto-rotating the labels at 45 degrees and
                     // start over.  This rotation angle will be stored for
                     // all future text shape creation runs.
+                    // The nRhythm parameter is reset to 1 since the layout
+                    // used for text labels is changed.
                     rAxisLabelProperties.autoRotate45();
                     m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
                     removeTextShapesFromTicks();
+                    rAxisLabelProperties.nRhythm = 1;
                     return false;
                 }
 
