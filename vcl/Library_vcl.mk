@@ -92,16 +92,11 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lobjc \
 ))
 endif
+
 ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,vcl,\
     vcl/osx/OpenGLWrapper \
 ))
-
 endif
 
 ifeq ($(ENABLE_JAVA),TRUE)
@@ -131,7 +126,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/framebuffer \
 	vcl/opengl/program \
 	vcl/opengl/texture \
-    vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/source/window/openglwin \
     vcl/source/window/settings \
@@ -382,6 +376,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/xlat \
 ))
 
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,vcl,\
+    vcl/source/opengl/OpenGLContext \
+))
+
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
 ))
@@ -423,15 +421,11 @@ vcl_coretext_code= \
 
 ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vcl,\
 	-DMACOSX_BUNDLE_IDENTIFIER=\"$(MACOSX_BUNDLE_IDENTIFIER)\" \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,vcl,\
     $(vcl_coretext_code) \
 ))
 
@@ -473,7 +467,7 @@ $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/osx/salframeview \
     vcl/osx/salnsmenu \
 ))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,vcl,\
     vcl/osx/a11yfocuslistener \
     vcl/osx/a11yfocustracker \
     vcl/osx/a11ylistener \
@@ -629,10 +623,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif
 
 ifeq ($(OS),IOS)
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,vcl,\
     vcl/ios/iosinst \
     vcl/ios/dummies \
     $(vcl_really_generic_code) \

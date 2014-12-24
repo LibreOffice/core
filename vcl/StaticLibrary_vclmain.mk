@@ -19,12 +19,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_StaticLibrary_add_cxxflags,vclmain,\
-    $(gb_OBJCXXFLAGS) \
-))
-endif
-
 $(eval $(call gb_StaticLibrary_set_include,vclmain,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
@@ -35,7 +29,7 @@ $(eval $(call gb_StaticLibrary_use_api,vclmain,\
     udkapi \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,vclmain,\
+$(eval $(call gb_StaticLibrary_add_objcxxflags_exception_objects,vclmain,\
     vcl/source/salmain/salmain \
 ))
 
