@@ -88,7 +88,7 @@ RTFError RTFTokenizer::resolveParse()
 
         if (m_nGroup < 0)
             return RTFError::GROUP_UNDER;
-        if (m_nGroup > 0 && m_rImport.getInternalState() == INTERNAL_BIN)
+        if (m_nGroup > 0 && m_rImport.getInternalState() == RTFInternalState::BIN)
         {
             ret = m_rImport.resolveChars(ch);
             if (ret != RTFError::OK)
@@ -129,7 +129,7 @@ RTFError RTFTokenizer::resolveParse()
             default:
                 if (m_nGroup == 0)
                     return RTFError::CHAR_OVER;
-                if (m_rImport.getInternalState() == INTERNAL_NORMAL)
+                if (m_rImport.getInternalState() == RTFInternalState::NORMAL)
                 {
                     ret = m_rImport.resolveChars(ch);
                     if (ret != RTFError::OK)
@@ -151,7 +151,7 @@ RTFError RTFTokenizer::resolveParse()
                             return ret;
                         count = 2;
                         b = 0;
-                        m_rImport.setInternalState(INTERNAL_NORMAL);
+                        m_rImport.setInternalState(RTFInternalState::NORMAL);
                     }
                 }
                 break;

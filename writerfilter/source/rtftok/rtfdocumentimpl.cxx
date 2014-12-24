@@ -997,7 +997,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
 
 RTFError RTFDocumentImpl::resolveChars(char ch)
 {
-    if (m_aStates.top().nInternalState == INTERNAL_BIN)
+    if (m_aStates.top().nInternalState == RTFInternalState::BIN)
     {
         m_pBinaryData.reset(new SvMemoryStream());
         m_pBinaryData->WriteChar(ch);
@@ -1006,7 +1006,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
             Strm().ReadChar(ch);
             m_pBinaryData->WriteChar(ch);
         }
-        m_aStates.top().nInternalState = INTERNAL_NORMAL;
+        m_aStates.top().nInternalState = RTFInternalState::NORMAL;
         return RTFError::OK;
     }
 
@@ -1016,10 +1016,9 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     bool bUnicodeChecked = false;
     bool bSkipped = false;
 
-    while (!Strm().IsEof() && (m_aStates.top().nInternalState == INTERNAL_HEX
-                               || (ch != '{' && ch != '}' && ch != '\\')))
+    while (!Strm().IsEof() && (m_aStates.top().nInternalState == RTFInternalState::HEX || (ch != '{' && ch != '}' && ch != '\\')))
     {
-        if (m_aStates.top().nInternalState == INTERNAL_HEX || (ch != 0x0d && ch != 0x0a))
+        if (m_aStates.top().nInternalState == RTFInternalState::HEX || (ch != 0x0d && ch != 0x0a))
         {
             if (m_aStates.top().nCharsToSkip == 0)
             {
@@ -1038,7 +1037,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         }
 
         // read a single char if we're in hex mode
-        if (m_aStates.top().nInternalState == INTERNAL_HEX)
+        if (m_aStates.top().nInternalState == RTFInternalState::HEX)
             break;
 
         if (RTL_TEXTENCODING_MS_932 == m_aStates.top().nCurrentEncoding)
@@ -1067,10 +1066,10 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
 
         Strm().ReadChar(ch);
     }
-    if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
+    if (m_aStates.top().nInternalState != RTFInternalState::HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
 
-    if (m_aStates.top().nInternalState == INTERNAL_HEX && m_aStates.top().nDestinationState != DESTINATION_LEVELNUMBERS)
+    if (m_aStates.top().nInternalState == RTFInternalState::HEX && m_aStates.top().nDestinationState != DESTINATION_LEVELNUMBERS)
     {
         if (!bSkipped)
             m_aHexBuffer.append(ch);
@@ -2185,7 +2184,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     }
     break;
     case RTF_HEXCHAR:
-        m_aStates.top().nInternalState = INTERNAL_HEX;
+        m_aStates.top().nInternalState = RTFInternalState::HEX;
         break;
     case RTF_CELL:
     case RTF_NESTCELL:
@@ -4526,7 +4525,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         break;
     case RTF_BIN:
     {
-        m_aStates.top().nInternalState = INTERNAL_BIN;
+        m_aStates.top().nInternalState = RTFInternalState::BIN;
         m_aStates.top().nBinaryToRead = nParam;
     }
     break;
@@ -6135,7 +6134,7 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
 
 RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     : m_pDocumentImpl(pDocumentImpl),
-      nInternalState(INTERNAL_NORMAL),
+      nInternalState(RTFInternalState::NORMAL),
       nDestinationState(DESTINATION_NORMAL),
       nFieldStatus(FIELD_NONE),
       nBorderState(BORDER_NONE),

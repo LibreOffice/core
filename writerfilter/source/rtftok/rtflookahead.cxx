@@ -93,7 +93,7 @@ void RTFLookahead::setDestinationState(RTFDestinationState /*nDestinationState*/
 
 RTFInternalState RTFLookahead::getInternalState()
 {
-    return INTERNAL_NORMAL;
+    return RTFInternalState::NORMAL;
 }
 
 void RTFLookahead::setInternalState(RTFInternalState /*nInternalState*/)

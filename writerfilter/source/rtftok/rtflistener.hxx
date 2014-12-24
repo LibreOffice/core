@@ -16,11 +16,11 @@ namespace writerfilter
 {
 namespace rtftok
 {
-enum RTFInternalState
+enum class RTFInternalState
 {
-    INTERNAL_NORMAL,
-    INTERNAL_BIN,
-    INTERNAL_HEX
+    NORMAL,
+    BIN,
+    HEX
 };
 
 enum class RTFError
