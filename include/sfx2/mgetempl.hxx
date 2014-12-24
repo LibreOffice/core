@@ -43,6 +43,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
 
     FixedText* m_pFollowFt;
     ListBox* m_pFollowLb;
+    PushButton* m_pEditStyleBtn;
 
     FixedText* m_pBaseFt;
     ListBox* m_pBaseLb;
@@ -69,6 +70,7 @@ friend class SfxStyleDialog;
 
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
+    DECL_LINK( EditStyleHdl_Impl, void * );
 
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();
@@ -82,6 +84,9 @@ protected:
     virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;
     virtual void        Reset(const SfxItemSet *) SAL_OVERRIDE;
 
+    bool    Execute_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
+                          sal_uInt16 nFamily, sal_uInt16 nMask = 0,
+                          const sal_uInt16* pModifier = NULL );
     using TabPage::ActivatePage;
         virtual void        ActivatePage(const SfxItemSet &) SAL_OVERRIDE;
         using TabPage::DeactivatePage;
