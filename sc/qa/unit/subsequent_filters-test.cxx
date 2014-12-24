@@ -2565,7 +2565,7 @@ void ScFiltersTest::testSharedFormulaXLSB()
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
 
-    // E6:E376 should be all formulas, and they should belong to the same group.
+    // A1:A30 should be all formulas, and they should belong to the same group.
     const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,0,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
