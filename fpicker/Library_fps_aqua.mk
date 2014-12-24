@@ -44,4 +44,8 @@ $(eval $(call gb_Library_add_objcxxobjects,fps_aqua,\
 	fpicker/source/aqua/SalAquaPicker \
 ))
 
+$(eval $(call gb_Library_add_libs,fps_aqua,\
+	-lobjc \
+))
+
 # vim: set noet sw=4 ts=4:

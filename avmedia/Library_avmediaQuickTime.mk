@@ -35,6 +35,10 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,avmediaQuickTime,\
 	QTKit \
 ))
 
+$(eval $(call gb_Library_add_libs,avmediaQuickTime,\
+	-lobjc \
+))
+
 $(eval $(call gb_Library_add_objcxxobjects,avmediaQuickTime,\
 	avmedia/source/quicktime/framegrabber \
 	avmedia/source/quicktime/manager \

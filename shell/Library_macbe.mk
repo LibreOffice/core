@@ -18,6 +18,10 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,macbe1,\
 	SystemConfiguration \
 ))
 
+$(eval $(call gb_Library_add_libs,macbe1,\
+	-lobjc \
+))
+
 $(eval $(call gb_Library_use_libraries,macbe1,\
 	cppu \
 	cppuhelper \

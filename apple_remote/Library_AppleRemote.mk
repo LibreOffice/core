@@ -17,6 +17,10 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,AppleRemote,\
     IOKit \
 ))
 
+$(eval $(call gb_Library_add_libs,AppleRemote,\
+    -lobjc \
+))
+
 $(eval $(call gb_Library_add_objcobjects,AppleRemote,\
     apple_remote/source/KeyspanFrontRowControl \
     apple_remote/source/AppleRemote \
