@@ -40,14 +40,7 @@ AsynchronousCall::~AsynchronousCall (void)
     CancelRequest();
 }
 
-void AsynchronousCall::RequestCall (const Action& rAction)
-{
-    CancelRequest();
-    maAction = rAction;
-    RequestCall();
-}
-
-void AsynchronousCall::RequestCall (void)
+void AsynchronousCall::RequestCall()
 {
     if (mnCallId == 0)
     {
@@ -56,7 +49,7 @@ void AsynchronousCall::RequestCall (void)
     }
 }
 
-void AsynchronousCall::CancelRequest (void)
+void AsynchronousCall::CancelRequest()
 {
     if (mnCallId != 0)
     {

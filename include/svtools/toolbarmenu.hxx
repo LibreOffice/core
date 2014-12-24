@@ -50,14 +50,6 @@ public:
                  vcl::Window* pParentWindow,
                  WinBits nBits );
 
-    ToolbarMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                 vcl::Window* pParentWindow,
-                 const ResId& rResId );
-
-    ToolbarMenu(vcl::Window* pParentWindow,
-                const OString& rID, const OUString& rUIXMLDescription,
-                const css::uno::Reference<css::frame::XFrame>& rFrame);
-
     virtual ~ToolbarMenu();
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

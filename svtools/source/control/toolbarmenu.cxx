@@ -441,19 +441,6 @@ ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParen
     implInit(rFrame);
 }
 
-ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, const ResId& rResId )
-    : DockingWindow(pParentWindow, rResId)
-{
-    implInit(rFrame);
-}
-
-ToolbarMenu::ToolbarMenu(vcl::Window* pParentWindow, const OString& rID,
-    const OUString& rUIXMLDescription, const Reference< XFrame >& rFrame)
-    : DockingWindow(pParentWindow, rID, rUIXMLDescription, rFrame)
-{
-    implInit(rFrame);
-}
-
 void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 {
     mpImpl = new ToolbarMenu_Impl( *this, rFrame );
