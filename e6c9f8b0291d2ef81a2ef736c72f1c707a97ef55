@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_223cc392",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-25T20:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_22ee0323",
+      "range": {
+        "startLine": 531,
+        "startChar": 37,
+        "endLine": 531,
+        "endChar": 43
+      },
+      "revId": "e6c9f8b0291d2ef81a2ef736c72f1c707a97ef55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_c2f2b706",
         "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
         "patchSetId": 1
@@ -53,6 +77,30 @@
       "writtenOn": "2014-12-25T19:51:54Z",
       "side": 1,
       "message": "Nit: place this open bracket on the next line, to be consistent with the rest of this code.",
+      "range": {
+        "startLine": 632,
+        "startChar": 34,
+        "endLine": 632,
+        "endChar": 35
+      },
+      "revId": "e6c9f8b0291d2ef81a2ef736c72f1c707a97ef55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_02373fb1",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-25T20:06:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa32b979_c2f2b706",
       "range": {
         "startLine": 632,
         "startChar": 34,
