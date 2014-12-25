@@ -22,7 +22,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_opencl_test, \
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_opencl_test, \
     basegfx \
-	clew \
+    $(call gb_Helper_optional,OPENCL,clew) \
     comphelper \
     cppu \
     cppuhelper \
