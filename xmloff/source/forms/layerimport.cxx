@@ -509,7 +509,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
 void OFormLayerXMLImport_Impl::documentDone( )
 {
     SvXMLImport& rImport = getGlobalContext();
-    if ( ( rImport.getImportFlags() & IMPORT_CONTENT ) == 0 )
+    if ( !( rImport.getImportFlags() & SvXMLImportFlags::CONTENT ) )
         return;
 
     // create (and bind) the spreadsheet cell bindings

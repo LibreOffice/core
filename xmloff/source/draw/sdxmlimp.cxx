@@ -140,7 +140,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_SETTINGS:
         {
-            if( GetImport().getImportFlags() & IMPORT_SETTINGS )
+            if( GetImport().getImportFlags() & SvXMLImportFlags::SETTINGS )
             {
                 pContext = new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList );
             }
@@ -148,7 +148,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_STYLES:
         {
-            if( GetImport().getImportFlags() & IMPORT_STYLES )
+            if( GetImport().getImportFlags() & SvXMLImportFlags::STYLES )
             {
                 // office:styles inside office:document
                 pContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
@@ -157,7 +157,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_AUTOSTYLES:
         {
-            if( GetImport().getImportFlags() & IMPORT_AUTOSTYLES )
+            if( GetImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES )
             {
                 // office:automatic-styles inside office:document
                 pContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
@@ -166,7 +166,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_MASTERSTYLES:
         {
-            if( GetImport().getImportFlags() & IMPORT_MASTERSTYLES )
+            if( GetImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES )
             {
                 // office:master-styles inside office:document
                 pContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
@@ -180,7 +180,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_SCRIPT:
         {
-            if( GetImport().getImportFlags() & IMPORT_SCRIPTS )
+            if( GetImport().getImportFlags() & SvXMLImportFlags::SCRIPTS )
             {
                 // office:script inside office:document
                 pContext = GetSdImport().CreateScriptContext( rLocalName );
@@ -189,7 +189,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
         case XML_TOK_DOC_BODY:
         {
-            if( GetImport().getImportFlags() & IMPORT_CONTENT )
+            if( GetImport().getImportFlags() & SvXMLImportFlags::CONTENT )
             {
                 // office:body inside office:document
                 pContext = new SdXMLBodyContext_Impl(GetSdImport(),nPrefix,
@@ -267,26 +267,26 @@ uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno:
     return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
 }
 
-SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", false, IMPORT_ALL )
-SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", true, IMPORT_ALL )
+SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", false, SvXMLImportFlags::ALL )
+SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", true, SvXMLImportFlags::ALL )
 
-SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", false, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
-SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", true, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
+SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", false, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )
+SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", true, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )
 
-SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisContentImporter", "XMLImpressContentImportOasis", false, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
-SERVICE( XMLDrawContentImportOasis, "com.sun.star.comp.Draw.XMLOasisContentImporter", "XMLImpressContentImportOasis", true, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
+SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisContentImporter", "XMLImpressContentImportOasis", false, SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS )
+SERVICE( XMLDrawContentImportOasis, "com.sun.star.comp.Draw.XMLOasisContentImporter", "XMLImpressContentImportOasis", true, SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS )
 
-SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", false, IMPORT_META )
-SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", true, IMPORT_META )
+SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", false, SvXMLImportFlags::META )
+SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", true, SvXMLImportFlags::META )
 
-SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, IMPORT_SETTINGS )
-SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, IMPORT_SETTINGS )
+SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS )
+SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, SvXMLImportFlags::SETTINGS )
 
 // #110680#
 SdXMLImport::SdXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     OUString const & implementationName,
-    bool bIsDraw, sal_uInt16 nImportFlags )
+    bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
     mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
@@ -681,7 +681,7 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
 {
     SvXMLImportContext* pContext = 0L;
 
-    if (getImportFlags() & IMPORT_META)
+    if (getImportFlags() & SvXMLImportFlags::META)
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);

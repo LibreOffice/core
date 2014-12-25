@@ -95,12 +95,12 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetDocElemTokenMap();
-    sal_uInt16 nFlags = GetImport().getImportFlags();
+    SvXMLImportFlags nFlags = GetImport().getImportFlags();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
         case XML_TOK_DOC_AUTOSTYLES:
-            if( nFlags & IMPORT_AUTOSTYLES )
+            if( nFlags & SvXMLImportFlags::AUTOSTYLES )
                 // not nice, but this is safe, as the SchXMLDocContext class can only by
                 // instantiated by the chart import class SchXMLImport (header is not exported)
                 pContext =
@@ -108,7 +108,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
             break;
         case XML_TOK_DOC_STYLES:
             // for draw styles containing gradients/hatches/markers and dashes
-            if( nFlags & IMPORT_STYLES )
+            if( nFlags & SvXMLImportFlags::STYLES )
                 pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
@@ -118,7 +118,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
             pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_BODY:
-            if( nFlags & IMPORT_CONTENT )
+            if( nFlags & SvXMLImportFlags::CONTENT )
                 pContext = new SchXMLBodyContext_Impl( mrImportHelper, GetImport(), nPrefix, rLocalName );
             break;
     }

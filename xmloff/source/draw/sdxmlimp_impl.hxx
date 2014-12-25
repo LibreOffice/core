@@ -221,7 +221,7 @@ public:
     SdXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        bool bIsDraw, sal_uInt16 nImportFlags );
+        bool bIsDraw, SvXMLImportFlags nImportFlags );
     virtual ~SdXMLImport() throw ();
 
     // XImporter

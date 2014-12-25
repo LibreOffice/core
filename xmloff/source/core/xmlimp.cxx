@@ -354,7 +354,7 @@ SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 /*Element*/,
 
 void SvXMLImport::_InitCtor()
 {
-    if( mnImportFlags != 0 )
+    if( mnImportFlags != SvXMLImportFlags::NONE )
     {
         // implicit "xml" namespace prefix
         mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
@@ -413,7 +413,7 @@ void SvXMLImport::_InitCtor()
 
 SvXMLImport::SvXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-    OUString const & implementationName, sal_uInt16 nImportFlags ) throw ()
+    OUString const & implementationName, SvXMLImportFlags nImportFlags ) throw ()
 :   mpImpl( new SvXMLImport_Impl(xContext, implementationName) ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
@@ -1253,7 +1253,7 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
 {
 
     // if, and only if, only parts are imported, then we're in a package
-    const sal_uInt32 nTest = IMPORT_META|IMPORT_STYLES|IMPORT_CONTENT|IMPORT_SETTINGS;
+    const SvXMLImportFlags nTest = SvXMLImportFlags::META|SvXMLImportFlags::STYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SETTINGS;
     if( (mnImportFlags & nTest) == nTest )
         return false;
 
@@ -1575,7 +1575,7 @@ void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
 
 void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 {
-    if (pAutoStyles && mxNumberStyles.is() && (mnImportFlags & IMPORT_CONTENT) )
+    if (pAutoStyles && mxNumberStyles.is() && (mnImportFlags & SvXMLImportFlags::CONTENT) )
     {
         uno::Reference<xml::sax::XAttributeList> xAttrList;
         uno::Sequence< OUString > aNames = mxNumberStyles->getElementNames();

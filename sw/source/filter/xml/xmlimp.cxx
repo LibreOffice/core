@@ -404,7 +404,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 
 SwXMLImport::SwXMLImport(
     const uno::Reference< uno::XComponentContext > xContext,
-    OUString const & implementationName, sal_uInt16 nImportFlags)
+    OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
     pSttNdIdx( 0 ),
     pTableItemMapper( 0 ),
@@ -607,7 +607,7 @@ void SwXMLImport::startDocument()
         xTextCursor = xText->createTextCursor();
         SwCrsrShell *pCrsrSh = 0;
         SwDoc *pDoc = 0;
-        if( IMPORT_ALL == getImportFlags() )
+        if( SvXMLImportFlags::ALL == getImportFlags() )
         {
             pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
             OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -638,7 +638,7 @@ void SwXMLImport::startDocument()
             GetTextImport()->SetCursor( xTextCursor );
     }
 
-    if( (getImportFlags() & (IMPORT_CONTENT|IMPORT_MASTERSTYLES)) == 0 )
+    if( (!(getImportFlags() & (SvXMLImportFlags::CONTENT|SvXMLImportFlags::MASTERSTYLES))))
         return;
 
     if( !pTxtCrsr  )
@@ -652,7 +652,7 @@ void SwXMLImport::startDocument()
     if( !pDoc )
         return;
 
-    if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
+    if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
         pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
@@ -724,7 +724,7 @@ void SwXMLImport::endDocument( void )
         ClearShapeImport();
 
     SwDoc *pDoc = 0;
-    if( (getImportFlags() & IMPORT_CONTENT) != 0 && !IsStylesOnlyMode() )
+    if( (getImportFlags() & SvXMLImportFlags::CONTENT) && !IsStylesOnlyMode() )
     {
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
@@ -852,8 +852,8 @@ void SwXMLImport::endDocument( void )
 
     GetTextImport()->RedlineAdjustStartNodeCursor( false );
 
-    if( (getImportFlags() & IMPORT_CONTENT) != 0 ||
-        ((getImportFlags() & IMPORT_MASTERSTYLES) != 0 && IsStylesOnlyMode()) )
+    if( (getImportFlags() & SvXMLImportFlags::CONTENT) ||
+        ((getImportFlags() & SvXMLImportFlags::MASTERSTYLES) && IsStylesOnlyMode()) )
     {
         // pDoc might be 0. In this case UpdateTxtCollCondition is looking
         // for it itself.
@@ -868,7 +868,7 @@ void SwXMLImport::endDocument( void )
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
     {
-        if( (getImportFlags() == IMPORT_ALL ) )
+        if( (getImportFlags() == SvXMLImportFlags::ALL ) )
         {
             // Notify math objects. If we are in the package filter this will
             // be done by the filter object itself
@@ -1507,7 +1507,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImport_getImplementationName(), IMPORT_ALL );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImport_getImplementationName(), SvXMLImportFlags::ALL );
 }
 
 OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
@@ -1531,8 +1531,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
     return (cppu::OWeakObject*)new SwXMLImport(
         comphelper::getComponentContext(rSMgr),
         SwXMLImportStyles_getImplementationName(),
-        IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
-        IMPORT_FONTDECLS );
+        SvXMLImportFlags::STYLES | SvXMLImportFlags::MASTERSTYLES | SvXMLImportFlags::AUTOSTYLES |
+        SvXMLImportFlags::FONTDECLS );
 }
 
 OUString SAL_CALL SwXMLImportContent_getImplementationName() throw()
@@ -1556,8 +1556,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
     return (cppu::OWeakObject*)new SwXMLImport(
         comphelper::getComponentContext(rSMgr),
         SwXMLImportContent_getImplementationName(),
-        IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
-        IMPORT_FONTDECLS );
+        SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::CONTENT | SvXMLImportFlags::SCRIPTS |
+        SvXMLImportFlags::FONTDECLS );
 }
 
 OUString SAL_CALL SwXMLImportMeta_getImplementationName() throw()
@@ -1578,7 +1578,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImportMeta_getImplementationName(), IMPORT_META );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImportMeta_getImplementationName(), SvXMLImportFlags::META );
 }
 
 OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
@@ -1599,7 +1599,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImportSettings_getImplementationName(), IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SwXMLImport( comphelper::getComponentContext(rSMgr), SwXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS );
 }
 
 SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )

@@ -58,7 +58,7 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if (getImportFlags() & IMPORT_META)
+    if (getImportFlags() & SvXMLImportFlags::META)
     {
         uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());

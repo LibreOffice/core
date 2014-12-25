@@ -515,7 +515,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
 // #110680#
 SchXMLImport::SchXMLImport(
     const Reference< uno::XComponentContext >& xContext,
-    OUString const & implementationName, sal_uInt16 nImportFlags ) :
+    OUString const & implementationName, SvXMLImportFlags nImportFlags ) :
     SvXMLImport( xContext, implementationName, nImportFlags )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
@@ -554,7 +554,7 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
                   (IsXMLToken(rLocalName, XML_DOCUMENT_META)
-                   && (getImportFlags() & IMPORT_META) )) )
+                   && (getImportFlags() & SvXMLImportFlags::META) )) )
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY);
@@ -680,7 +680,7 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_getImplementationName(), IMPORT_ALL);
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_getImplementationName(), SvXMLImportFlags::ALL);
 }
 
 // multiple storage version: one for content / styles / meta
@@ -700,7 +700,7 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Styles_getImplementationName(), IMPORT_STYLES );
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES );
 }
 
 Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
@@ -718,7 +718,7 @@ OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Content_getImplementationName(), IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS );
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Content_getImplementationName(), SvXMLImportFlags::CONTENT | SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::FONTDECLS );
 }
 
 Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
@@ -736,7 +736,7 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Meta_getImplementationName(), IMPORT_META );
+    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -328,7 +328,7 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference< XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLImport(xContext, "", 0),
+:   SvXMLImport(xContext, "", SvXMLImportFlags::NONE),
     mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );

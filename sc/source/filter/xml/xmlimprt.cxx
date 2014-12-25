@@ -127,7 +127,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_getImplementationName(), IMPORT_ALL );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_getImplementationName(), SvXMLImportFlags::ALL );
 }
 
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
@@ -146,7 +146,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Meta_getImplementationName(), IMPORT_META );
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META );
 }
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
@@ -164,8 +164,8 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Styles_getImplementationName(), IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
+    // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlagsSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
@@ -183,8 +183,8 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Content_getImplementationName(), IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS);
+    // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::META|SvXMLImportFlags::STYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::SETTINGS|SvXMLImportFlags::FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Content_getImplementationName(), SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
@@ -202,8 +202,8 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_SETTINGS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Settings_getImplementationName(), IMPORT_SETTINGS );
+    // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::SETTINGS);
+    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Settings_getImplementationName(), SvXMLImportFlags::SETTINGS );
 }
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
@@ -356,19 +356,19 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_DOC_FONTDECLS:
-        if (GetScImport().getImportFlags() & IMPORT_FONTDECLS)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::FONTDECLS)
             pContext = GetScImport().CreateFontDeclsContext(nPrefix, rLocalName, xAttrList);
         break;
     case XML_TOK_DOC_STYLES:
-        if (GetScImport().getImportFlags() & IMPORT_STYLES)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::STYLES)
             pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, false);
         break;
     case XML_TOK_DOC_AUTOSTYLES:
-        if (GetScImport().getImportFlags() & IMPORT_AUTOSTYLES)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES)
             pContext = GetScImport().CreateStylesContext( rLocalName, xAttrList, true);
         break;
     case XML_TOK_DOC_MASTERSTYLES:
-        if (GetScImport().getImportFlags() & IMPORT_MASTERSTYLES)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES)
             pContext = new ScXMLMasterStylesContext( GetImport(), nPrefix, rLocalName,
             xAttrList );
         break;
@@ -376,16 +376,16 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
         DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
         break;
     case XML_TOK_DOC_SCRIPTS:
-        if (GetScImport().getImportFlags() & IMPORT_SCRIPTS)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::SCRIPTS)
             pContext = GetScImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
-        if (GetScImport().getImportFlags() & IMPORT_CONTENT)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::CONTENT)
             pContext = new ScXMLBodyContext_Impl( GetScImport(), nPrefix,
             rLocalName, xAttrList );
         break;
     case XML_TOK_DOC_SETTINGS:
-        if (GetScImport().getImportFlags() & IMPORT_SETTINGS)
+        if (GetScImport().getImportFlags() & SvXMLImportFlags::SETTINGS)
             pContext = new XMLDocumentSettingsContext(GetScImport(), nPrefix, rLocalName, xAttrList );
         break;
     }
@@ -1980,7 +1980,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
 
 ScXMLImport::ScXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-    OUString const & implementationName, sal_uInt16 nImportFlag)
+    OUString const & implementationName, SvXMLImportFlags nImportFlag)
 :   SvXMLImport( xContext, implementationName, nImportFlag ),
     pDoc( NULL ),
     pChangeTrackingImportHelper(NULL),
@@ -2289,7 +2289,7 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if (getImportFlags() & IMPORT_META)
+    if (getImportFlags() & SvXMLImportFlags::META)
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -2431,7 +2431,7 @@ void ScXMLImport::InsertStyles()
     GetStyles()->CopyStylesToDoc(true);
 
     // if content is going to be loaded with the same import, set bLatinDefaultStyle flag now
-    if ( getImportFlags() & IMPORT_CONTENT )
+    if ( getImportFlags() & SvXMLImportFlags::CONTENT )
         ExamineDefaultStyle();
 }
 
@@ -2987,11 +2987,11 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
 
     // if content and styles are loaded with separate imports,
     // set bLatinDefaultStyle flag at the start of the content import
-    sal_uInt16 nFlags = getImportFlags();
-    if ( ( nFlags & IMPORT_CONTENT ) && !( nFlags & IMPORT_STYLES ) )
+    SvXMLImportFlags nFlags = getImportFlags();
+    if ( ( nFlags & SvXMLImportFlags::CONTENT ) && !( nFlags & SvXMLImportFlags::STYLES ) )
         ExamineDefaultStyle();
 
-    if (getImportFlags() & IMPORT_CONTENT)
+    if (getImportFlags() & SvXMLImportFlags::CONTENT)
     {
         if (GetModel().is())
         {
@@ -3178,7 +3178,7 @@ void SAL_CALL ScXMLImport::endDocument()
           std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);
-    if (getImportFlags() & IMPORT_CONTENT)
+    if (getImportFlags() & SvXMLImportFlags::CONTENT)
     {
         if (GetModel().is())
         {

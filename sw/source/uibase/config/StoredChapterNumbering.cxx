@@ -390,7 +390,7 @@ public:
     StoredChapterNumberingImport(
             uno::Reference<uno::XComponentContext> const& xContext,
             SwChapterNumRules & rNumRules)
-        : SvXMLImport(xContext, "sw::StoredChapterNumberingImport", IMPORT_ALL)
+        : SvXMLImport(xContext, "sw::StoredChapterNumberingImport", SvXMLImportFlags::ALL)
         , m_rNumRules(rNumRules)
     {
     }

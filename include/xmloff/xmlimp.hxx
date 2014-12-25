@@ -56,6 +56,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
@@ -82,17 +83,24 @@ namespace xmloff {
     class RDFaImportHelper;
 }
 
-#define IMPORT_META         0x0001
-#define IMPORT_STYLES       0x0002
-#define IMPORT_MASTERSTYLES 0x0004
-#define IMPORT_AUTOSTYLES   0x0008
-#define IMPORT_CONTENT      0x0010
-#define IMPORT_SCRIPTS      0x0020
-#define IMPORT_SETTINGS     0x0040
-#define IMPORT_FONTDECLS    0x0080
-#define IMPORT_EMBEDDED     0x0100
-#define IMPORT_OOO_NAMESPACES   0x0100
-#define IMPORT_ALL          0xffff
+enum class SvXMLImportFlags {
+    NONE            = 0x0000,
+    META            = 0x0001,
+    STYLES          = 0x0002,
+    MASTERSTYLES    = 0x0004,
+    AUTOSTYLES      = 0x0008,
+    CONTENT         = 0x0010,
+    SCRIPTS         = 0x0020,
+    SETTINGS        = 0x0040,
+    FONTDECLS       = 0x0080,
+    EMBEDDED        = 0x0100,
+    OOO_NAMESPACES  = 0x0100,
+    ALL             = 0xffff
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvXMLImportFlags> : is_typed_flags<SvXMLImportFlags, 0xffff> {};
+}
 
 
 
@@ -148,7 +156,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
 
     SAL_DLLPRIVATE void _InitCtor();
 
-    sal_uInt16  mnImportFlags;
+    SvXMLImportFlags  mnImportFlags;
     sal_uInt16  mnErrorFlags;
     std::set< OUString > embeddedFontUrlsKnown;
 
@@ -199,7 +207,7 @@ public:
     SvXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        sal_uInt16 nImportFlags = IMPORT_ALL ) throw();
+        SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL ) throw();
 
     virtual ~SvXMLImport() throw();
 
@@ -369,7 +377,7 @@ public:
     const SvXMLStylesContext *GetStyles() const;
     const SvXMLStylesContext *GetAutoStyles() const;
 
-    sal_uInt16  getImportFlags() const { return mnImportFlags; }
+    SvXMLImportFlags  getImportFlags() const { return mnImportFlags; }
     bool    IsFormsSupported() const { return mbIsFormsSupported; }
     OUString GetAbsoluteReference(const OUString& rValue) const;
 

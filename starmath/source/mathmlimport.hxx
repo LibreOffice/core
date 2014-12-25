@@ -88,7 +88,7 @@ class SmXMLImport : public SvXMLImport
 public:
     SmXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        OUString const & implementationName, sal_uInt16 nImportFlags);
+        OUString const & implementationName, SvXMLImportFlags nImportFlags);
     virtual ~SmXMLImport() throw ();
 
     // XUnoTunnel

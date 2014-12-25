@@ -283,7 +283,7 @@ sal_Int32 ReadThroughComponent(
 
 uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(xContext, IMPORT_SETTINGS ));
+    return static_cast< XServiceInfo* >(new ORptFilter(xContext, SvXMLImportFlags::SETTINGS ));
 }
 
 OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -300,8 +300,8 @@ Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw
 
 Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
 {
-    return static_cast< XServiceInfo* >(new ORptFilter(xContext,IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
-        IMPORT_FONTDECLS ));
+    return static_cast< XServiceInfo* >(new ORptFilter(xContext, SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::CONTENT | SvXMLImportFlags::SCRIPTS |
+        SvXMLImportFlags::FONTDECLS ));
 }
 
 OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -320,8 +320,8 @@ Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  
 Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,
-        IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
-        IMPORT_FONTDECLS ));
+        SvXMLImportFlags::STYLES | SvXMLImportFlags::MASTERSTYLES | SvXMLImportFlags::AUTOSTYLES |
+        SvXMLImportFlags::FONTDECLS ));
 }
 
 OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -340,7 +340,7 @@ Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  )
 Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContext > const & xContext)
 {
     return static_cast< XServiceInfo* >(new ORptFilter(xContext,
-        IMPORT_META));
+        SvXMLImportFlags::META));
 }
 
 OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -358,7 +358,7 @@ Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) t
 
 // - ORptFilter -
 
-ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sal_uInt16 nImportFlags )
+ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext, SvXMLImportFlags nImportFlags )
     :SvXMLImport(_rxContext, getImplementationName_Static(), nImportFlags)
 {
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
@@ -1033,7 +1033,7 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,con
 {
     SvXMLImportContext* pContext = NULL;
 
-    if ( (getImportFlags() & IMPORT_META) )
+    if ( (getImportFlags() & SvXMLImportFlags::META) )
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
         pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties());

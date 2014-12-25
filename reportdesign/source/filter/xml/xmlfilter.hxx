@@ -117,7 +117,7 @@ protected:
     virtual ~ORptFilter()  throw();
 public:
 
-    ORptFilter( const Reference< XComponentContext >& _rxContext, sal_uInt16 nImportFlags = IMPORT_ALL );
+    ORptFilter( const Reference< XComponentContext >& _rxContext, SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL );
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

@@ -397,7 +397,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 
 SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-    OUString const & implementationName, sal_uInt16 nImportFlags)
+    OUString const & implementationName, SvXMLImportFlags nImportFlags)
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
     pPresLayoutElemTokenMap(0),
     pPresLayoutAttrTokenMap(0),
@@ -439,7 +439,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), IMPORT_ALL);
+    return (cppu::OWeakObject*)new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), SvXMLImportFlags::ALL);
 }
 
 
@@ -461,7 +461,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), IMPORT_META );
+    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), SvXMLImportFlags::META );
 }
 
 
@@ -483,7 +483,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS );
 }
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(

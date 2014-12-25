@@ -84,7 +84,7 @@ public:
 
     //!!  see comment for pDic member
     ConvDicXMLImport( ConvDic *pConvDic ) :
-        SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", IMPORT_ALL ),
+        SvXMLImport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLImport", SvXMLImportFlags::ALL ),
         pDic        ( pConvDic )
     {
         nLanguage       = LANGUAGE_NONE;
