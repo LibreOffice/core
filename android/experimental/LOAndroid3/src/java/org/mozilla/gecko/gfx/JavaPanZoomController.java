@@ -705,20 +705,6 @@ public class JavaPanZoomController
             maxZoomFactor = minZoomFactor = constraints.getDefaultZoom();
         }
 
-        // Ensure minZoomFactor keeps the page at least as big as the viewport.
-        if (pageRect.width() > 0) {
-            float scaleFactor = viewport.width() / pageRect.width();
-            minZoomFactor = Math.max(minZoomFactor, zoomFactor * scaleFactor);
-            if (viewport.width() > pageRect.width())
-                focusX = 0.0f;
-        }
-        /*if (pageRect.height() > 0) {
-            float scaleFactor = viewport.height() / pageRect.height();
-            minZoomFactor = Math.max(minZoomFactor, zoomFactor * scaleFactor);
-            if (viewport.height() > pageRect.height())
-                focusY = 0.0f;
-        }*/
-
         maxZoomFactor = Math.max(maxZoomFactor, minZoomFactor);
 
         if (zoomFactor < minZoomFactor) {
@@ -736,6 +722,25 @@ public class JavaPanZoomController
 
         /* Now we pan to the right origin. */
         viewportMetrics = viewportMetrics.clamp();
+
+        viewportMetrics = pushPageToCenterOfViewport(viewportMetrics);
+
+        return viewportMetrics;
+    }
+
+    private ImmutableViewportMetrics pushPageToCenterOfViewport(ImmutableViewportMetrics viewportMetrics) {
+        RectF pageRect = viewportMetrics.getPageRect();
+        RectF viewportRect = viewportMetrics.getViewport();
+
+        if (pageRect.width() < viewportRect.width()) {
+            float originX = (viewportRect.width() - pageRect.width()) / 2.0f;
+            viewportMetrics = viewportMetrics.setViewportOrigin(-originX, viewportMetrics.getOrigin().y);
+        }
+
+        if (pageRect.height() < viewportRect.height()) {
+            float originY = (viewportRect.height() - pageRect.height()) / 2.0f;
+            viewportMetrics = viewportMetrics.setViewportOrigin(viewportMetrics.getOrigin().x, -originY);
+        }
 
         return viewportMetrics;
     }
@@ -794,16 +799,6 @@ public class JavaPanZoomController
         }
 
         float spanRatio = detector.getCurrentSpan() / prevSpan;
-
-        /*
-         * Apply edge resistance if we're zoomed out smaller than the page size by scaling the zoom
-         * factor toward 1.0.
-         */
-        float resistance = Math.min(mX.getEdgeResistance(true), mY.getEdgeResistance(true));
-        if (spanRatio > 1.0f)
-            spanRatio = 1.0f + (spanRatio - 1.0f) * resistance;
-        else
-            spanRatio = 1.0f - (1.0f - spanRatio) * resistance;
 
         synchronized (mTarget.getLock()) {
             float newZoomFactor = getMetrics().zoomFactor * spanRatio;
