@@ -287,7 +287,7 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
 
 IconSetRule::IconSetRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
-    mpFormatData( new ScIconSetFormatData )
+    mxFormatData( new ScIconSetFormatData )
 {
 }
 
@@ -302,8 +302,8 @@ void IconSetRule::importCfvo( const AttributeList& rAttribs )
 void IconSetRule::importAttribs( const AttributeList& rAttribs )
 {
     maIconSetType = rAttribs.getString( XML_iconSet, OUString("3TrafficLights1") );
-    mpFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
-    mpFormatData->mbReverse = rAttribs.getBool( XML_reverse, false );
+    mxFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
+    mxFormatData->mbReverse = rAttribs.getBool( XML_reverse, false );
 }
 
 void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )
@@ -311,7 +311,7 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
     for(size_t i = 0; i < maEntries.size(); ++i)
     {
         ScColorScaleEntry* pModelEntry = ConvertToModel( maEntries[i], pDoc, rPos );
-        mpFormatData->maEntries.push_back(pModelEntry);
+        mxFormatData->maEntries.push_back(pModelEntry);
     }
 
     ScIconSetType eIconSetType = IconSet_3TrafficLights1;
@@ -324,8 +324,8 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
             break;
         }
     }
-    mpFormatData->eIconSetType = eIconSetType;
-    pFormat->SetIconSetData(mpFormatData);
+    mxFormatData->eIconSetType = eIconSetType;
+    pFormat->SetIconSetData(mxFormatData.release());
 }
 
 CondFormatRuleModel::CondFormatRuleModel() :

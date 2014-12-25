@@ -133,7 +133,7 @@ public:
 
 private:
     std::vector< ColorScaleRuleModelEntry > maEntries;
-    ScIconSetFormatData* mpFormatData;
+    std::unique_ptr<ScIconSetFormatData> mxFormatData;
     OUString maIconSetType;
 };
 
