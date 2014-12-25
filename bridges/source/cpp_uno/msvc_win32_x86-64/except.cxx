@@ -259,6 +259,8 @@ using namespace ::osl;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
+    int mscx_getRTTI_len(OUString const & rUNOname);
+
 
 static inline OUString toUNOname(
     OUString const & rRTTIname )
@@ -301,6 +303,7 @@ static inline OUString toRTTIname(
 //RTTI simulation
 
 typedef boost::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
+class __type_info_descriptor;
 
 class RTTInfos
 {
@@ -310,11 +313,12 @@ class RTTInfos
     static OUString toRawName( OUString const & rUNOname ) throw ();
 public:
     type_info * getRTTI( OUString const & rUNOname ) throw ();
+    int getRTTI_len(OUString const & rUNOname) throw ();
+    __type_info_descriptor * insert_new_type_info_descriptor(OUString const & rUNOname);
 
     RTTInfos();
     ~RTTInfos();
 };
-
 class __type_info
 {
     friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
@@ -337,6 +341,44 @@ __type_info::~__type_info() throw ()
 {
 }
 
+class __type_info_descriptor
+{
+private:
+    int type_info_size;
+    __type_info info;
+
+public:
+
+    inline __type_info_descriptor(void * m_data, const char * m_d_name) throw ()
+        : info(m_data, m_d_name)
+    {
+        type_info_size = sizeof(__type_info) + strlen(m_d_name);
+    }
+
+    type_info * get_type_info()
+    {
+        return (type_info *)&info;
+    }
+    int get_type_info_size()
+    {
+        return type_info_size;
+    }
+};
+
+__type_info_descriptor * RTTInfos::insert_new_type_info_descriptor(OUString const & rUNOname) {
+
+    // insert new type_info
+    OString aRawName(OUStringToOString(toRTTIname(rUNOname), RTL_TEXTENCODING_ASCII_US));
+    __type_info_descriptor * pRTTI = new(::rtl_allocateMemory(sizeof(__type_info_descriptor) + aRawName.getLength()))
+        __type_info_descriptor(NULL, aRawName.getStr());
+
+    // put into map
+    pair< t_string2PtrMap::iterator, bool > insertion(
+        _allRTTI.insert(t_string2PtrMap::value_type(rUNOname, pRTTI)));
+    assert(insertion.second && "### rtti insertion failed?!");
+
+    return pRTTI;
+}
 type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
     // a must be
@@ -348,21 +390,32 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
     // check if type is already available
     if (iFind == _allRTTI.end())
     {
-        // insert new type_info
-        OString aRawName( OUStringToOString( toRTTIname( rUNOname ), RTL_TEXTENCODING_ASCII_US ) );
-        __type_info * pRTTI = new( ::rtl_allocateMemory( sizeof(__type_info) + aRawName.getLength() ) )
-            __type_info( NULL, aRawName.getStr() );
-
-        // put into map
-        pair< t_string2PtrMap::iterator, bool > insertion(
-            _allRTTI.insert( t_string2PtrMap::value_type( rUNOname, pRTTI ) ) );
-        assert(insertion.second && "### rtti insertion failed?!");
-
-        return (type_info *)pRTTI;
+        // Wrap new __type_info in __type_info_descriptor to preserve length info
+        __type_info_descriptor * pRTTI = insert_new_type_info_descriptor(rUNOname);
+        return pRTTI->get_type_info();
     }
     else
     {
-        return (type_info *)iFind->second;
+        return ((__type_info_descriptor *)iFind->second)->get_type_info();
+    }
+}
+
+int RTTInfos::getRTTI_len(OUString const & rUNOname) throw ()
+{
+    MutexGuard aGuard(_aMutex);
+    t_string2PtrMap::const_iterator const iFind(_allRTTI.find(rUNOname));
+
+    // Wrap new __type_info in __type_info_descriptor to preserve length info
+    // check if type is already available
+    if (iFind == _allRTTI.end())
+    {
+        // Wrap new __type_info in __type_info_descriptor to preserve length info
+        __type_info_descriptor * pRTTI = insert_new_type_info_descriptor(rUNOname);
+        return pRTTI->get_type_info_size();
+    }
+    else
+    {
+        return ((__type_info_descriptor *)iFind->second)->get_type_info_size();
     }
 }
 
@@ -452,6 +505,8 @@ struct ExceptionType
     sal_Int32   _n1, _n2, _n3;  // thiscast
     sal_Int32   _n4;            // object_size
     sal_uInt32  _pCopyCtor;     // copyctor
+    __type_info   type_info;
+
 
     inline ExceptionType(
         unsigned char * pCode,
@@ -461,23 +516,20 @@ struct ExceptionType
         , _n1( 0 )
         , _n2( -1 )
         , _n3( 0 )
-        , _n4( pTD->nSize )
+        , _n4( pTD->nSize)
+        , type_info(NULL, "")
         {
             // As _n0 is always initialized to zero, that means the
             // hasvirtbase flag (see the ONTL catchabletype struct) is
             // off, and thus the copyctor is of the ctor_ptr kind.
-            type_info * ti = mscx_getRTTI(pTD->pTypeName);
-            assert(
-                pCodeBase <= reinterpret_cast<sal_uInt64>(ti)
-                && reinterpret_cast<sal_uInt64>(ti) - pCodeBase < 0x100000000);
-                //TODO
+            memcpy(&type_info, mscx_getRTTI(pTD->pTypeName), mscx_getRTTI_len(pTD->pTypeName));
             _pTypeInfo = static_cast<sal_uInt32>(
-                reinterpret_cast<sal_uInt64>(ti) - pCodeBase);
+            reinterpret_cast<sal_uInt64>(&type_info) - pCodeBase);
             GenerateConstructorTrampoline( pCode, pTD );
             assert(
                 pCodeBase <= reinterpret_cast<sal_uInt64>(pCode)
                 && (reinterpret_cast<sal_uInt64>(pCode) - pCodeBase
-                    < 0x100000000)); //TODO
+                    < 0x100000000));
             _pCopyCtor = static_cast<sal_uInt32>(
                 reinterpret_cast<sal_uInt64>(pCode) - pCodeBase);
         }
@@ -523,26 +575,80 @@ struct RaiseInfo
     ~RaiseInfo() throw ();
 };
 
-RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
-    : _n0( 0 )
-    , _n2( 0 )
-    , _pTD( pTD )
+/* Rewrite of 32-Bit-Code to work under 64 Bit:
+* To use the 32 Bit offset values in the ExceptionType we have to
+* allocate a single allocation block and use it for all code and date
+* all offsets inside this area are guaranteed to be in 32 bit address range.
+* So we have to calc total memory allocation size for D-tor, C-Tors,
+* ExceptionType and type_info. ExceptionType is allocated via placement new
+* to locate everything inside our mem block.
+* There is one caveat: Struct type_info is kept in
+* a map and was referenced from class ExceptionType. Therefore type_info now
+* is also member of ExceptionType and can be referenced via 32 bit offset.
+*/
+
+RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
+    : _n0(0)
+    , _n2(0)
+    , _pTD(pTD)
 {
     typelib_CompoundTypeDescription * pCompTD;
 
     // Count how many trampolines we need
     int codeSize = codeSnippetSize;
-
     // Info count
     int nLen = 0;
-    for ( pCompTD = (typelib_CompoundTypeDescription*)pTD;
-          pCompTD; pCompTD = pCompTD->pBaseTypeDescription )
+    for (pCompTD = (typelib_CompoundTypeDescription*)pTD;
+        pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
     {
         ++nLen;
         codeSize += codeSnippetSize;
     }
 
-    unsigned char * pCode = _code = (unsigned char *)::rtl_allocateMemory( codeSize );
+    // Array with size (4) and all _pTypeInfo (4*nLen)
+    int typeInfoArraySize = 4 + 4 * nLen;
+
+    // 2.Pass: Get the total needed memory for class ExceptionType
+    // (with embedded type_info) and keep the sizes for each instance
+    // is stored in alloced int array
+    int *excecptionTypeSizeArray = new int[nLen];
+
+    nLen = 0;
+    for (pCompTD = (typelib_CompoundTypeDescription*)pTD;
+        pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
+    {
+        typelib_TypeDescription * pTD = (typelib_TypeDescription *)pCompTD;
+        int typeInfoLen = mscx_getRTTI_len(pTD->pTypeName);
+        // Mem has to be on 4-byte Boundary
+        if (typeInfoLen % 4 != 0)
+        {
+            int n = typeInfoLen / 4;
+            n++;
+            typeInfoLen = n*4;
+        }
+        excecptionTypeSizeArray[nLen++] = typeInfoLen + sizeof(ExceptionType);
+    }
+
+    // Total ExceptionType related mem
+    int excTypeAddLen = 0;
+    for (int i = 0; i < nLen; i++)
+    {
+        excTypeAddLen += excecptionTypeSizeArray[i];
+    }
+
+    // Allocate mem for code and all dynamic data in one chunk to guarantee
+    // 32 bit offsets
+    const int totalSize = codeSize + typeInfoArraySize + excTypeAddLen;
+    unsigned char * pCode = _code =
+        (unsigned char *)::rtl_allocateMemory(totalSize);
+    int pCodeOffset = 0;
+
+    // New base of types array, starts after Trampoline D-Tor / C-Tors
+    DWORD * types = (DWORD *)(pCode + codeSize);
+
+    // New base of ExceptionType array, starts after types array
+    unsigned char *etMem = pCode + codeSize + typeInfoArraySize;
+    int etMemOffset = 0;
 
     _codeBase = reinterpret_cast<sal_uInt64>(pCode)
         & ~static_cast<sal_uInt64>(ExceptionInfos::allocationGranularity - 1);
@@ -551,53 +657,59 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
 #if OSL_DEBUG_LEVEL > 0
     BOOL success =
 #endif
-        VirtualProtect( pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect );
+        VirtualProtect(pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect);
     assert(success && "VirtualProtect() failed!");
 
-    ::typelib_typedescription_acquire( pTD );
+    ::typelib_typedescription_acquire(pTD);
 
-    GenerateDestructorTrampoline( pCode, pTD );
+    // Fill pCode with D-Tor code
+    GenerateDestructorTrampoline(pCode, pTD);
     _pDtor = (sal_Int32)((sal_uInt64)pCode - _codeBase);
-    pCode += codeSnippetSize;
+    pCodeOffset += codeSnippetSize;
 
     // Info count accompanied by type info ptrs: type, base type, base base type, ...
-    DWORD * types = static_cast<DWORD *>(rtl_allocateMemory(4 + 4 * nLen));
-    assert(
-        _codeBase <= reinterpret_cast<sal_uInt64>(types)
-        && reinterpret_cast<sal_uInt64>(types) - _codeBase < 0x100000000);
-        //TODO
+    // Keep offset of types_array
     _types = static_cast<sal_Int32>(
-        reinterpret_cast<sal_uInt64>(types) - _codeBase);
+        reinterpret_cast<sal_uInt64>(types)-_codeBase);
+    // Fill types: (nLen, _offset to ExceptionType1, ...ExceptionType2, ...)
     types[0] = nLen;
 
     int nPos = 1;
-    for ( pCompTD = (typelib_CompoundTypeDescription*)pTD;
-          pCompTD; pCompTD = pCompTD->pBaseTypeDescription )
+    for (pCompTD = (typelib_CompoundTypeDescription*)pTD;
+        pCompTD; pCompTD = pCompTD->pBaseTypeDescription)
     {
-        ExceptionType * et = new ExceptionType(
-            pCode, _codeBase, (typelib_TypeDescription *)pCompTD);
-        pCode += codeSnippetSize;
-        assert(
-            _codeBase <= reinterpret_cast<sal_uInt64>(et)
-            && reinterpret_cast<sal_uInt64>(et) - _codeBase < 0x100000000);
-            //TODO
+        // Create instance in mem block with placement new
+        ExceptionType * et = new(etMem + etMemOffset)ExceptionType(
+            pCode + pCodeOffset, _codeBase, (typelib_TypeDescription *)pCompTD);
+
+        // Next trampoline entry offset
+        pCodeOffset += codeSnippetSize;
+        // Next ExceptionType placement offset
+        etMemOffset += excecptionTypeSizeArray[nPos - 1];
+
+        // Keep offset of addresses of ET for D-Tor call in ~RaiseInfo
         types[nPos++]
-            = static_cast<DWORD>(reinterpret_cast<sal_uInt64>(et) - _codeBase);
+            = static_cast<DWORD>(reinterpret_cast<sal_uInt64>(et)-_codeBase);
     }
+    // Final check: end of address calculation must be end of mem
+    assert(etMem + etMemOffset == pCode + totalSize);
+
+    // remove array
+    delete excecptionTypeSizeArray;
 }
 
 RaiseInfo::~RaiseInfo() throw ()
 {
-    sal_uInt32 * pTypes =
-        (sal_uInt32 *)(_codeBase + _types) + 1;
+    sal_uInt32 * pTypes = (sal_uInt32 *)(_codeBase + _types) + 1;
 
+    // Because of placement new we have to call D.-tor, not delete!
     for ( int nTypes = *(sal_uInt32 *)(_codeBase + _types); nTypes--; )
     {
-        delete (ExceptionType *) (_codeBase + pTypes[nTypes]);
+        ExceptionType *et = (ExceptionType *)(_codeBase + pTypes[nTypes]);
+        et->~ExceptionType();
     }
-    ::rtl_freeMemory( (void*)(_codeBase +_types) );
+    // free our single block
     ::rtl_freeMemory( _code );
-
     ::typelib_typedescription_release( _pTD );
 }
 
@@ -685,6 +797,26 @@ type_info * mscx_getRTTI(
     }
     return s_pRTTIs->getRTTI( rUNOname );
 }
+int mscx_getRTTI_len(
+    OUString const & rUNOname)
+{
+    static RTTInfos * s_pRTTIs = 0;
+    if (!s_pRTTIs)
+    {
+        MutexGuard aGuard(Mutex::getGlobalMutex());
+        if (!s_pRTTIs)
+        {
+#ifdef LEAK_STATIC_DATA
+            s_pRTTIs = new RTTInfos();
+#else
+            static RTTInfos s_aRTTIs;
+            s_pRTTIs = &s_aRTTIs;
+#endif
+        }
+    }
+    return s_pRTTIs->getRTTI_len(rUNOname);
+}
+
 
 void mscx_raiseException(
     uno_Any * pUnoExc,
@@ -712,7 +844,7 @@ void mscx_raiseException(
     TYPELIB_DANGER_RELEASE( pTD );
 
     // last point to release anything not affected by stack unwinding
-    RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
+    RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 4, arFilterArgs);
 }
 
 int mscx_filterCppException(
