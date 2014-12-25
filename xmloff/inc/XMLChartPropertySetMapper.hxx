@@ -65,7 +65,7 @@ private:
     /// this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set
     virtual void handleElementItem(
         SvXMLExport& rExport,
-        const XMLPropertyState& rProperty, sal_uInt16 nFlags,
+        const XMLPropertyState& rProperty, SvXmlExportFlags nFlags,
         const ::std::vector< XMLPropertyState > *pProperties = 0,
         sal_uInt32 nIdx = 0  ) const SAL_OVERRIDE;
 

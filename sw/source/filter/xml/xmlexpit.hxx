@@ -21,15 +21,9 @@
 #define INCLUDED_SW_SOURCE_FILTER_XML_XMLEXPIT_HXX
 
 #include <tools/solar.h>
+#include <xmloff/xmlexppr.hxx>
 #include "xmlitmap.hxx"
 #include <vector>
-
-#define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
-#define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
-                                                // parent item sets
-#define XML_EXPORT_FLAG_EMPTY       0x0004      // export attribs element
-                                                // even if its empty
-#define XML_EXPORT_FLAG_IGN_WS      0x0008
 
 class SvXMLUnitConverter;
 class SfxPoolItem;
@@ -49,7 +43,7 @@ protected:
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
-                    sal_uInt16 nFlags,
+                    SvXmlExportFlags nFlags,
                     std::vector<sal_uInt16> *pIndexArray ) const;
 
     void exportXML( const SvXMLExport& rExport,
@@ -58,18 +52,18 @@ protected:
                     const SvXMLItemMapEntry &rEntry,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
-                    sal_uInt16 nFlags,
+                    SvXmlExportFlags nFlags,
                     const SfxItemSet *pSet ) const;
 
     void exportElementItems(  SvXMLExport& rExport,
                               const SvXMLUnitConverter& rUnitConverter,
                               const SfxItemSet &rSet,
-                              sal_uInt16 nFlags,
+                              SvXmlExportFlags nFlags,
                               const std::vector<sal_uInt16> &rIndexArray ) const;
 
     static const SfxPoolItem* GetItem( const SfxItemSet &rSet,
                                        sal_uInt16 nWhichId,
-                                       sal_uInt16 nFlags );
+                                       SvXmlExportFlags nFlags );
 
 public:
     SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries );
@@ -79,7 +73,7 @@ public:
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     ::xmloff::token::XMLTokenEnum ePropToken,
-                    sal_uInt16 nFlags = 0 ) const;
+                    SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
 
     /** this method is called for every item that has the
         MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
@@ -105,7 +99,7 @@ public:
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SfxItemSet& rSet,
-                                    sal_uInt16 nFlags ) const;
+                                    SvXmlExportFlags nFlags ) const;
 
     inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
 

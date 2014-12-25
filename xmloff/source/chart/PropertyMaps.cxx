@@ -292,7 +292,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
 
 void XMLChartExportPropertyMapper::handleElementItem(
     SvXMLExport& rExport,
-    const XMLPropertyState& rProperty, sal_uInt16 nFlags,
+    const XMLPropertyState& rProperty, SvXmlExportFlags nFlags,
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx ) const
 {

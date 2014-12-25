@@ -245,7 +245,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 
             rPropExp.exportXML(
                 GetExport(), rProperties,
-                nHeaderStartIndex, nHeaderEndIndex, XML_EXPORT_FLAG_IGN_WS);
+                nHeaderStartIndex, nHeaderEndIndex, SvXmlExportFlags::IGN_WS);
         }
 
         // export footer style
@@ -256,7 +256,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 
             rPropExp.exportXML(
                 GetExport(), rProperties,
-                nFooterStartIndex, nFooterEndIndex, XML_EXPORT_FLAG_IGN_WS);
+                nFooterStartIndex, nFooterEndIndex, SvXmlExportFlags::IGN_WS);
         }
     }
 }

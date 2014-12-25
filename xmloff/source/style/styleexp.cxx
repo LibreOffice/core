@@ -321,7 +321,7 @@ bool XMLStyleExport::exportStyle(
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->Filter( xPropSet, true );
         rPropMapper->exportXML( GetExport(), xPropStates,
-                                XML_EXPORT_FLAG_IGN_WS );
+                                SvXmlExportFlags::IGN_WS );
 
         rPropMapper->SetStyleName( OUString() );
 
@@ -358,7 +358,7 @@ bool XMLStyleExport::exportDefaultStyle(
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->FilterDefaults( xPropSet );
         rPropMapper->exportXML( GetExport(), xPropStates,
-                                     XML_EXPORT_FLAG_IGN_WS );
+                                     SvXmlExportFlags::IGN_WS );
     }
     return true;
 }

@@ -155,7 +155,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                                            rFmt.GetAttrSet(),
                                            GetTwipUnitConverter(),
                                            ePropToken,
-                                           XML_EXPORT_FLAG_IGN_WS );
+                                           SvXmlExportFlags::IGN_WS );
         }
     }
 }

@@ -256,7 +256,7 @@ void XMLPageExport::exportDefaultStyle()
                                           true, true );
 
                 xPageMasterExportPropMapper->exportXML( GetExport(), xPropStates,
-                                             XML_EXPORT_FLAG_IGN_WS );
+                                             SvXmlExportFlags::IGN_WS );
             }
         }
     }

@@ -760,7 +760,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             rFamily.mxMapper->exportXML(
                 GetExport(),
                 aExpStyles[i].mpProperties->GetProperties(),
-                nStart, nEnd, XML_EXPORT_FLAG_IGN_WS, bExtensionNamespace );
+                nStart, nEnd, SvXmlExportFlags::IGN_WS, bExtensionNamespace );
 
             pAntiImpl->exportStyleContent(
                 GetExport().GetDocHandler(),

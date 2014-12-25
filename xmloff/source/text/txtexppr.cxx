@@ -44,7 +44,7 @@ using namespace ::com::sun::star::text;
 void XMLTextExportPropertySetMapper::handleElementItem(
         SvXMLExport& rExp,
         const XMLPropertyState& rProperty,
-        sal_uInt16 nFlags,
+        SvXmlExportFlags nFlags,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {

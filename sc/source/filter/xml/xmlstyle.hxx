@@ -118,7 +118,7 @@ public:
     virtual void handleElementItem(
             SvXMLExport& rExport,
             const XMLPropertyState& rProperty,
-            sal_uInt16 nFlags,
+            SvXmlExportFlags nFlags,
             const ::std::vector< XMLPropertyState > *pProperties = 0,
             sal_uInt32 nIdx = 0 ) const SAL_OVERRIDE;
 

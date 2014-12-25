@@ -1532,7 +1532,7 @@ void XMLShapeExportPropertyMapper::handleSpecialItem(
 void XMLShapeExportPropertyMapper::handleElementItem(
     SvXMLExport& rExport,
     const XMLPropertyState& rProperty,
-    sal_uInt16 nFlags,
+    SvXmlExportFlags nFlags,
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx) const
 {
@@ -1717,7 +1717,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
 void XMLPageExportPropertyMapper::handleElementItem(
     SvXMLExport& rExport,
     const XMLPropertyState& rProperty,
-    sal_uInt16 nFlags,
+    SvXmlExportFlags nFlags,
     const ::std::vector< XMLPropertyState > *pProperties,
     sal_uInt32 nIdx) const
 {

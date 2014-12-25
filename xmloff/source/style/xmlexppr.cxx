@@ -749,7 +749,7 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
 void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
-        sal_uInt16 nFlags ) const
+        SvXmlExportFlags nFlags ) const
 {
     exportXML( rExport, rProperties, -1, -1,  nFlags );
 }
@@ -758,7 +758,7 @@ void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
-        sal_uInt16 nFlags, bool bExtensionNamespace ) const
+        SvXmlExportFlags nFlags, bool bExtensionNamespace ) const
 {
     sal_uInt16 nPropTypeFlags = 0;
     for( sal_uInt16 i=0; i<MAX_PROP_TYPES; ++i )
@@ -776,7 +776,7 @@ void SvXMLExportPropertyMapper::exportXML(
                         nPropMapStartIdx, nPropMapEndIdx );
 
             if( rExport.GetAttrList().getLength() > 0L ||
-                (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
+                (nFlags & SvXmlExportFlags::EMPTY) ||
                 !aIndexArray.empty() )
             {
                 sal_uInt16 nNamespace = XML_NAMESPACE_STYLE;
@@ -785,7 +785,7 @@ void SvXMLExportPropertyMapper::exportXML(
                     nNamespace = XML_NAMESPACE_LO_EXT;
                 SvXMLElementExport aElem( rExport, nNamespace,
                                   aPropTokens[i].eToken,
-                                  (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0,
+                                  bool(nFlags & SvXmlExportFlags::IGN_WS),
                                   false );
 
                 exportElementItems( rExport, rProperties, nFlags, aIndexArray );
@@ -815,7 +815,7 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
 void SvXMLExportPropertyMapper::handleElementItem(
         SvXMLExport& rExport,
         const XMLPropertyState& rProperty,
-        sal_uInt16 nFlags,
+        SvXmlExportFlags nFlags,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
@@ -833,7 +833,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const ::std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        sal_uInt16 nFlags,
+        SvXmlExportFlags nFlags,
         std::vector<sal_uInt16>* pIndexArray,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const
 {
@@ -885,7 +885,7 @@ void SvXMLExportPropertyMapper::_exportXML(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        sal_uInt16 /*nFlags*/,
+        SvXmlExportFlags /*nFlags*/,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
@@ -1020,7 +1020,7 @@ void SvXMLExportPropertyMapper::_exportXML(
 void SvXMLExportPropertyMapper::exportElementItems(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
-        sal_uInt16 nFlags,
+        SvXmlExportFlags nFlags,
         const std::vector<sal_uInt16>& rIndexArray ) const
 {
     const sal_uInt16 nCount = rIndexArray.size();

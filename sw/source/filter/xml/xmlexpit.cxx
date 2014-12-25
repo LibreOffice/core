@@ -64,7 +64,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                 const SfxItemSet& rSet,
                                 const SvXMLUnitConverter& rUnitConverter,
                                 const SvXMLNamespaceMap& rNamespaceMap,
-                                sal_uInt16 nFlags,
+                                SvXmlExportFlags nFlags,
                                 std::vector<sal_uInt16> *pIndexArray ) const
 {
     const sal_uInt16 nCount = mrMapEntries->getCount();
@@ -112,7 +112,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                  const SvXMLItemMapEntry& rEntry,
                                  const SvXMLUnitConverter& rUnitConverter,
                                  const SvXMLNamespaceMap& rNamespaceMap,
-                                 sal_uInt16 /*nFlags*/,
+                                 SvXmlExportFlags /*nFlags*/,
                                  const SfxItemSet *pSet ) const
 {
     if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
@@ -219,7 +219,7 @@ void SvXMLExportItemMapper::exportElementItems(
                           SvXMLExport& rExport,
                           const SvXMLUnitConverter& rUnitConverter,
                           const SfxItemSet &rSet,
-                          sal_uInt16 nFlags,
+                          SvXmlExportFlags nFlags,
                           const std::vector<sal_uInt16> &rIndexArray ) const
 {
     const size_t nCount = rIndexArray.size();
@@ -248,25 +248,25 @@ void SvXMLExportItemMapper::exportElementItems(
 }
 
 /** returns the item with the given WhichId from the given ItemSet if its
-    set or its default item if its not set and the XML_EXPORT_FLAG_DEEP
+    set or its default item if its not set and the SvXmlExportFlags::DEEP
     is set in the flags
 */
 const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
                                                    sal_uInt16 nWhichId,
-                                                   sal_uInt16 nFlags )
+                                                   SvXmlExportFlags nFlags )
 {
     // first get item from itemset
     const SfxPoolItem* pItem;
     SfxItemState eState =
         rSet.GetItemState( nWhichId,
-                           ( nFlags & XML_EXPORT_FLAG_DEEP ) != 0,
+                           bool( nFlags & SvXmlExportFlags::DEEP ),
                            &pItem );
 
     if( SfxItemState::SET == eState )
     {
         return pItem;
     }
-    else if( (nFlags & XML_EXPORT_FLAG_DEFAULTS) != 0 &&
+    else if( (nFlags & SvXmlExportFlags::DEFAULTS) &&
               SFX_WHICH_MAX > nWhichId )
     {
         // if its not set, try the pool if we export defaults
@@ -291,7 +291,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     XMLTokenEnum ePropToken,
-                    sal_uInt16 nFlags ) const
+                    SvXmlExportFlags nFlags ) const
 {
     std::vector<sal_uInt16> aIndexArray;
 
@@ -299,10 +299,10 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                rExport.GetNamespaceMap(), nFlags, &aIndexArray );
 
     if( rExport.GetAttrList().getLength() > 0L ||
-        (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
+        (nFlags & SvXmlExportFlags::EMPTY) ||
         !aIndexArray.empty() )
     {
-        if( (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0 )
+        if( (nFlags & SvXmlExportFlags::IGN_WS) )
         {
             rExport.IgnorableWhitespace();
         }
@@ -345,7 +345,7 @@ void SvXMLExportItemMapper::handleElementItem(
                         const SfxPoolItem& /*rItem*/,
                         const SvXMLUnitConverter& /*rUnitConverter*/,
                         const SfxItemSet& /*rSet*/,
-                        sal_uInt16 /*nFlags*/ ) const
+                        SvXmlExportFlags /*nFlags*/ ) const
 {
     OSL_FAIL( "element item not handled in xml export" );
 }

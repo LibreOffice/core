@@ -230,7 +230,7 @@ XMLPageMasterExportPropMapper::~XMLPageMasterExportPropMapper()
 void XMLPageMasterExportPropMapper::handleElementItem(
         SvXMLExport&,
         const XMLPropertyState& rProperty,
-        sal_uInt16 /*nFlags*/,
+        SvXmlExportFlags /*nFlags*/,
         const ::std::vector< XMLPropertyState >* pProperties,
         sal_uInt32 nIdx ) const
 {

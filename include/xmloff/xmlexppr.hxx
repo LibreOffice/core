@@ -25,15 +25,23 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlprmap.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
-#define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
-                                                // parent item sets
-#define XML_EXPORT_FLAG_EMPTY       0x0004      // export attribs element
-                                                // even if its empty
-#define XML_EXPORT_FLAG_IGN_WS      0x0008
+enum class SvXmlExportFlags {
+    NONE        = 0x0000,
+    DEFAULTS    = 0x0001,  // export also default items
+    DEEP        = 0x0002,  // export also items from
+                           // parent item sets
+    EMPTY       = 0x0004,  // export attribs element
+                           // even if its empty
+    IGN_WS      = 0x0008
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvXmlExportFlags> : is_typed_flags<SvXmlExportFlags, 0xf> {};
+}
 
 class SvXMLUnitConverter;
 class SvXMLAttributeList;
@@ -71,7 +79,7 @@ protected:
                      const ::std::vector< XMLPropertyState >& rProperties,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
-                     sal_uInt16 nFlags,
+                     SvXmlExportFlags nFlags,
                      std::vector<sal_uInt16>* pIndexArray,
                        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const;
 
@@ -79,14 +87,14 @@ protected:
                      const XMLPropertyState& rProperty,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
-                     sal_uInt16 nFlags,
+                     SvXmlExportFlags nFlags,
                      const ::std::vector< XMLPropertyState > *pProperties = 0,
                      sal_uInt32 nIdx = 0 ) const;
 
     void exportElementItems(
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,
-            sal_uInt16 nFlags,
+            SvXmlExportFlags nFlags,
             const std::vector<sal_uInt16>& rIndexArray ) const;
 
 public:
@@ -129,7 +137,7 @@ public:
            const ::std::vector< XMLPropertyState >& rProperties,
            const SvXMLUnitConverter& rUnitConverter,
            const SvXMLNamespaceMap& rNamespaceMap,
-           sal_uInt16 nFlags = 0 ) const;
+           SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
     /** like above but only properties whose property map index is within the
         specified range are exported */
     void exportXML(
@@ -138,12 +146,12 @@ public:
            const SvXMLUnitConverter& rUnitConverter,
            const SvXMLNamespaceMap& rNamespaceMap,
            sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
-           sal_uInt16 nFlags = 0 ) const;
+           SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
 
     void exportXML(
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,
-            sal_uInt16 nFlags = 0 ) const;
+            SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
 
     /** like above but only properties whose property map index is within the
      *  specified range are exported
@@ -154,14 +162,14 @@ public:
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
-            sal_uInt16 nFlags = 0, bool bExtensionNamespace = false ) const;
+            SvXmlExportFlags nFlags = SvXmlExportFlags::NONE, bool bExtensionNamespace = false ) const;
 
     /** this method is called for every item that has the
         MID_FLAG_ELEMENT_EXPORT flag set */
     virtual void handleElementItem(
             SvXMLExport& rExport,
             const XMLPropertyState& rProperty,
-            sal_uInt16 nFlags,
+            SvXmlExportFlags nFlags,
             const ::std::vector< XMLPropertyState > *pProperties = 0,
             sal_uInt32 nIdx = 0 ) const;
 

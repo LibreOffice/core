@@ -83,7 +83,7 @@ public:
             const SfxPoolItem& rItem,
             const SvXMLUnitConverter& rUnitConverter,
             const SfxItemSet& rSet,
-            sal_uInt16 nFlags ) const SAL_OVERRIDE;
+            SvXmlExportFlags nFlags ) const SAL_OVERRIDE;
 
     inline void SetAbsWidth( sal_uInt32 nAbs );
 };
@@ -196,7 +196,7 @@ void SwXMLTableItemMapper_Impl::handleElementItem(
         const SfxPoolItem& rItem,
         const SvXMLUnitConverter& /*rUnitConverter*/,
         const SfxItemSet&,
-        sal_uInt16 ) const
+        SvXmlExportFlags ) const
 {
     switch( rEntry.nWhichId )
     {
