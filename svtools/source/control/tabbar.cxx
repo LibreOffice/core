@@ -1168,6 +1168,16 @@ public:
         }
     }
 
+    void drawColorLine()
+    {
+        Point p1 = maPoly[1];
+        Point p2 = maPoly[2];
+        p1 += Point(1, 0);
+        p2 += Point(-1, -3);
+
+        mrParent.DrawRect(Rectangle(p1, p2));
+    }
+
     void drawTab()
     {
         mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
@@ -1188,6 +1198,13 @@ public:
         }
 
         drawOuterFrame();
+
+        if (mbCustomColored && mbSelected)
+        {
+            mrParent.SetFillColor(maCustomColor);
+            mrParent.SetLineColor(maCustomColor);
+            drawColorLine();
+        }
     }
 
     void drawPlusImage()
