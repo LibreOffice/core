@@ -109,10 +109,12 @@ void SwDDETable::ChangeContent()
     SwDDEFieldType* pDDEType = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 
     OUString aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
+    sal_Int32 nExpandTokenPos = 0;
 
     for( sal_uInt16 n = 0; n < aLines.size(); ++n )
     {
-        OUString aLine = aExpand.getToken( n, '\n' );
+        OUString aLine = aExpand.getToken( 0, '\n', nExpandTokenPos );
+        sal_Int32 nLineTokenPos = 0;
         SwTableLine* pLine = aLines[ n ];
         for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().size(); ++i )
         {
@@ -123,7 +125,7 @@ void SwDDETable::ChangeContent()
             OSL_ENSURE( pTxtNode, "No Node" );
             SwIndex aCntIdx( pTxtNode, 0 );
             pTxtNode->EraseText( aCntIdx );
-            pTxtNode->InsertText( aLine.getToken( i, '\t' ), aCntIdx );
+            pTxtNode->InsertText( aLine.getToken( 0, '\t', nLineTokenPos ), aCntIdx );
 
             SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
             pBoxFmt->LockModify();
