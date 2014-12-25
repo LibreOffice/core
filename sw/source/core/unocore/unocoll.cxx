@@ -1195,7 +1195,7 @@ sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException, std::exception)
     if(!IsValid())
         throw uno::RuntimeException();
     // Ignore TextBoxes for TextFrames.
-    return GetDoc()->GetFlyCount(eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM);
+    return static_cast<sal_Int32>(GetDoc()->GetFlyCount(eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM));
 }
 
 uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
@@ -1204,10 +1204,10 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    if(nIndex < 0 || nIndex >= USHRT_MAX)
+    if(nIndex < 0)
         throw IndexOutOfBoundsException();
     // Ignore TextBoxes for TextFrames.
-    SwFrmFmt* pFmt = GetDoc()->GetFlyNum(static_cast<sal_uInt16>(nIndex), eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM);
+    SwFrmFmt* pFmt = GetDoc()->GetFlyNum(static_cast<size_t>(nIndex), eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM);
     if(!pFmt)
         throw IndexOutOfBoundsException();
     return lcl_UnoWrapFrame(pFmt, eType);

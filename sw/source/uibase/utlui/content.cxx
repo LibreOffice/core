@@ -554,7 +554,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     "MemberCount differs");
             Point aNullPt;
             nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
-            for(sal_uInt16 i = 0; i < nMemberCount; i++)
+            for(size_t i = 0; i < nMemberCount; ++i)
             {
                 const SwFrmFmt* pFrmFmt = pWrtShell->GetFlyNum(i,eType,/*bIgnoreTextBoxes=*/true);
                 const OUString sFrmName = pFrmFmt->GetName();

@@ -2234,12 +2234,12 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrm )
     return bRet;
 }
 
-sal_uInt16 SwFEShell::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
+size_t SwFEShell::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 {
     return GetDoc()->GetFlyCount(eType, bIgnoreTextBoxes);
 }
 
-const SwFrmFmt*  SwFEShell::GetFlyNum(sal_uInt16 nIdx, FlyCntType eType, bool bIgnoreTextBoxes ) const
+const SwFrmFmt*  SwFEShell::GetFlyNum(size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes ) const
 {
     return GetDoc()->GetFlyNum(nIdx, eType, bIgnoreTextBoxes);
 }

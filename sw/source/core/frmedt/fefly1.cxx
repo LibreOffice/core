@@ -1837,14 +1837,14 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
     if (pOldChainPrev)
         mpDoc->Unchain(*pOldChainPrev);
 
-    sal_uInt16 nCnt = mpDoc->GetFlyCount(FLYCNTTYPE_FRM);
+    const size_t nCnt = mpDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
     /* potential successors resp. predecessors */
     ::std::vector< const SwFrmFmt * > aTmpSpzArray;
 
     mpDoc->FindFlyByName(rReference);
 
-    for (sal_uInt16 n = 0; n < nCnt; n++)
+    for (size_t n = 0; n < nCnt; ++n)
     {
         const SwFrmFmt & rFmt1 = *(mpDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
 

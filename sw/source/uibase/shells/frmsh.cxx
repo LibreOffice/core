@@ -94,8 +94,8 @@ using namespace ::com::sun::star::uno;
 static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
 static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rName)
 {
-    sal_uInt16 nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
-    for( sal_uInt16 i = 0; i < nCount; i++)
+    const size_t nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
+    for( size_t i = 0; i < nCount; ++i )
     {
         const SwFrmFmt* pFmt = rSh.GetFlyNum(i, FLYCNTTYPE_FRM);
         if(pFmt->GetName() == rName)

@@ -72,18 +72,18 @@
 
 using namespace ::com::sun::star;
 
-sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
+size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 {
     const SwFrmFmts& rFmts = *GetSpzFrmFmts();
-    sal_uInt16 nSize = rFmts.size();
-    sal_uInt16 nCount = 0;
+    const size_t nSize = rFmts.size();
+    size_t nCount = 0;
     const SwNodeIndex* pIdx;
 
     std::set<const SwFrmFmt*> aTextBoxes;
     if (bIgnoreTextBoxes)
         aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
 
-    for ( sal_uInt16 i = 0; i < nSize; i++)
+    for ( size_t i = 0; i < nSize; ++i)
     {
         const SwFrmFmt* pFlyFmt = rFmts[ i ];
 
@@ -123,19 +123,19 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 }
 
 /// @attention If you change this, also update SwXFrameEnumeration in unocoll.
-SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType, bool bIgnoreTextBoxes )
+SwFrmFmt* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreTextBoxes )
 {
     SwFrmFmts& rFmts = *GetSpzFrmFmts();
     SwFrmFmt* pRetFmt = 0;
-    sal_uInt16 nSize = rFmts.size();
+    const size_t nSize = rFmts.size();
     const SwNodeIndex* pIdx;
-    sal_uInt16 nCount = 0;
+    size_t nCount = 0;
 
     std::set<const SwFrmFmt*> aTextBoxes;
     if (bIgnoreTextBoxes)
         aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
 
-    for( sal_uInt16 i = 0; !pRetFmt && i < nSize; ++i )
+    for( size_t i = 0; !pRetFmt && i < nSize; ++i )
     {
         SwFrmFmt* pFlyFmt = rFmts[ i ];
 

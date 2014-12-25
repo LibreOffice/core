@@ -1686,10 +1686,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             }
             else
             {
-                sal_uInt16 nCount = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
+                const size_t nCount = pDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
                 SwFrmFmt* pChain = 0;
-                for( sal_uInt16 i = 0; i < nCount; i++)
+                for( size_t i = 0; i < nCount; ++i )
                 {
                     SwFrmFmt* pFmt2 = pDoc->GetFlyNum(i, FLYCNTTYPE_FRM);
                     if(sChainName == pFmt2->GetName() )

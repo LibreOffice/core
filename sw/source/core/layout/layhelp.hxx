@@ -69,8 +69,8 @@ public:
     sal_Int32 GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
 
-    sal_uInt16 GetFlyCount() const { return aFlyCache.size(); }
-    SwFlyCache& GetFlyCache( sal_uInt16 nIdx ) { return aFlyCache[ nIdx ]; }
+    size_t GetFlyCount() const { return aFlyCache.size(); }
+    SwFlyCache& GetFlyCache( size_t nIdx ) { return aFlyCache[ nIdx ]; }
 
     bool IsUseFlyCache() const { return bUseFlyCache; }
 };
@@ -109,7 +109,7 @@ class SwLayHelper
     sal_uLong nParagraphCnt;
     sal_uLong nStartOfContent;
     sal_uInt16 nIndex;                      // the index in the page break array
-    sal_uInt16 nFlyIdx;                     // the index in the fly cache array
+    size_t nFlyIdx;                         // the index in the fly cache array
     bool bFirst : 1;
     void _CheckFlyCache( SwPageFrm* pPage );
 public:

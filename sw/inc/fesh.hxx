@@ -376,8 +376,8 @@ public:
                                 { return GotoObj( false, eType); }
 
    /// Iterate over flys  - for Basic-collections.
-    sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
-    const SwFrmFmt* GetFlyNum(sal_uInt16 nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
+    size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
+    const SwFrmFmt* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false) const;
 
     /// If a fly is selected, it draws cursor into the first CntntFrm.
     const SwFrmFmt* SelFlyGrabCrsr();

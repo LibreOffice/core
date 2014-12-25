@@ -912,7 +912,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 {
     if( !pImpl || !pPage )
         return;
-    sal_uInt16 nFlyCount = pImpl->GetFlyCount();
+    const size_t nFlyCount = pImpl->GetFlyCount();
     // Any text frames at the page, fly cache available?
     if( pPage->GetSortedObjs() && nFlyIdx < nFlyCount )
     {
@@ -929,7 +929,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
         // sort cached objects on this page by ordnum
         std::set< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
-        sal_uInt16 nIdx = nFlyIdx;
+        size_t nIdx = nFlyIdx;
 
         SwFlyCache* pFlyC;
         while( nIdx < nFlyCount &&
