@@ -421,14 +421,21 @@
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
-    <NumberingLevel Prefix=" " NumType="4" Suffix="." />
-    <NumberingLevel Prefix=" " NumType="19" Suffix=")" />
-    <NumberingLevel Prefix=" " NumType="15" Suffix="、" />
-    <NumberingLevel Prefix=" " NumType="16" Suffix="、" />
-    <NumberingLevel Prefix=" " NumType="0" Suffix="." />
-    <NumberingLevel Prefix="(" NumType="15" Suffix=")" />
-    <NumberingLevel Prefix=" " NumType="18" Suffix="、" />
-    <NumberingLevel Prefix=" " NumType="3" Suffix="." />
+    <NumberingLevel Prefix=" " NumType="4" Suffix="." /> <!-- 1. 2. 3. -->
+    <NumberingLevel Prefix=" " NumType="4" Suffix="、" /> <!-- 1、2、3、 -->
+    <NumberingLevel Prefix="(" NumType="4" Suffix=")" /> <!-- (1) (2) (3) -->
+    <NumberingLevel Prefix=" " NumType="4" Suffix=")" /> <!-- 1) 2) 3) -->
+    <NumberingLevel Prefix=" " NumType="0" Suffix="." /> <!-- A. B. C. -->
+    <NumberingLevel Prefix=" " NumType="0" Suffix=")" /> <!-- A) B) C) -->
+    <NumberingLevel Prefix=" " NumType="1" Suffix="." /> <!-- a. b. c. -->
+    <NumberingLevel Prefix=" " NumType="1" Suffix="." /> <!-- a) b) c) -->
+    <NumberingLevel Prefix=" " NumType="2" Suffix="." /> <!-- I. II. III. -->
+    <NumberingLevel Prefix=" " NumType="3" Suffix="." /> <!-- i. ii. iii. -->
+    <NumberingLevel Prefix=" " NumType="15" Suffix="、" /> <!-- Chinese &#19968;,&#20108;,&#19977;... -->
+    <NumberingLevel Prefix="（" NumType="15" Suffix="）" /> <!-- Chinese &#19968;,&#20108;,&#19977;..., with full-width parentheses -->
+    <NumberingLevel Prefix=" " NumType="18" Suffix="、" /> <!-- Chinese Tian Gan -->
+    <NumberingLevel Prefix=" " NumType="19" Suffix="、" /> <!-- Chinese Di Zhi -->
+    <NumberingLevel Prefix=" " NumType="16" Suffix="、" /> <!-- Chinese UPPER CASE -->
   </LC_NumberingLevel>
   <LC_OutLineNumberingLevel>
     <OutlineStyle>
