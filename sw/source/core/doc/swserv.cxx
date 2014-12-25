@@ -234,7 +234,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         SwServerObject::ServerModes eSave = eType;
         if( !pChkLnk )
             const_cast<SwServerObject*>(this)->eType = NONE_SERVER;
-        for( sal_uInt16 n = rLnks.size(); n; )
+        for( size_t n = rLnks.size(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&

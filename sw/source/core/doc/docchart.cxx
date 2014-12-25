@@ -91,7 +91,7 @@ void SwDoc::DoUpdateAllCharts()
     if( pVSh )
     {
         const SwFrmFmts& rTblFmts = *GetTblFrmFmts();
-        for( sal_uInt16 n = 0; n < rTblFmts.size(); ++n )
+        for( size_t n = 0; n < rTblFmts.size(); ++n )
         {
             SwTable* pTmpTbl;
             const SwTableNode* pTblNd;
@@ -151,7 +151,7 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
     {
         const SwFrmFmt* pFmt;
         const SwFrmFmts& rTbl = *GetTblFrmFmts();
-        for( sal_uInt16 i = rTbl.size(); i; )
+        for( size_t i = rTbl.size(); i; )
             if( !( pFmt = rTbl[ --i ] )->IsDefault() &&
                 pFmt->GetName() == rNewName && IsUsed( *pFmt ) )
             {

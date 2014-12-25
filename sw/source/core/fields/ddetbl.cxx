@@ -111,12 +111,12 @@ void SwDDETable::ChangeContent()
     OUString aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
     sal_Int32 nExpandTokenPos = 0;
 
-    for( sal_uInt16 n = 0; n < aLines.size(); ++n )
+    for( size_t n = 0; n < aLines.size(); ++n )
     {
         OUString aLine = aExpand.getToken( 0, '\n', nExpandTokenPos );
         sal_Int32 nLineTokenPos = 0;
         SwTableLine* pLine = aLines[ n ];
-        for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().size(); ++i )
+        for( size_t i = 0; i < pLine->GetTabBoxes().size(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
             OSL_ENSURE( pBox->GetSttIdx(), "no content box" );
