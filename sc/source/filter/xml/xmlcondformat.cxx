@@ -86,8 +86,8 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
     ScRangeStringConverter::GetRangeListFromString(maRange, sRange, GetScImport().GetDocument(),
             formula::FormulaGrammar::CONV_ODF);
 
-    mpFormat = new ScConditionalFormat(0, GetScImport().GetDocument());
-    mpFormat->AddRange(maRange);
+    mxFormat.reset(new ScConditionalFormat(0, GetScImport().GetDocument()));
+    mxFormat->AddRange(maRange);
 }
 
 SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -101,19 +101,19 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
     switch (nToken)
     {
         case XML_TOK_CONDFORMAT_CONDITION:
-            pContext = new ScXMLCondContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            pContext = new ScXMLCondContext( GetScImport(), nPrefix, rLocalName, xAttrList, mxFormat.get() );
             break;
         case XML_TOK_CONDFORMAT_COLORSCALE:
-            pContext = new ScXMLColorScaleFormatContext( GetScImport(), nPrefix, rLocalName, mpFormat );
+            pContext = new ScXMLColorScaleFormatContext( GetScImport(), nPrefix, rLocalName, mxFormat.get() );
             break;
         case XML_TOK_CONDFORMAT_DATABAR:
-            pContext = new ScXMLDataBarFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            pContext = new ScXMLDataBarFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mxFormat.get() );
             break;
         case XML_TOK_CONDFORMAT_ICONSET:
-            pContext = new ScXMLIconSetFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            pContext = new ScXMLIconSetFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mxFormat.get() );
             break;
         case XML_TOK_CONDFORMAT_DATE:
-            pContext = new ScXMLDateContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            pContext = new ScXMLDateContext( GetScImport(), nPrefix, rLocalName, xAttrList, mxFormat.get() );
             break;
         default:
             break;
@@ -127,10 +127,15 @@ void ScXMLConditionalFormatContext::EndElement()
     ScDocument* pDoc = GetScImport().GetDocument();
 
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
-    sal_uLong nIndex = pDoc->AddCondFormat(mpFormat, nTab);
-    mpFormat->SetKey(nIndex);
+    ScConditionalFormat* pFormat = mxFormat.release();
+    sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
+    pFormat->SetKey(nIndex);
 
-    pDoc->AddCondFormatData( mpFormat->GetRange(), nTab, nIndex);
+    pDoc->AddCondFormatData( pFormat->GetRange(), nTab, nIndex);
+}
+
+ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
+{
 }
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,

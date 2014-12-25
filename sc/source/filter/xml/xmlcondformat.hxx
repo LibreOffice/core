@@ -49,7 +49,7 @@ public:
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
-    virtual ~ScXMLConditionalFormatContext() {}
+    virtual ~ScXMLConditionalFormatContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -59,7 +59,7 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 private:
 
-    ScConditionalFormat* mpFormat;
+    std::unique_ptr<ScConditionalFormat> mxFormat;
     ScRangeList maRange;
 };
 
