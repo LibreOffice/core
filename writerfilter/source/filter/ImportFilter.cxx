@@ -76,7 +76,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         if ( !xInputStream.is() )
             return sal_False;
 
-        writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::DOCUMENT_OOXML;
+        writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::SourceDocumentType::OOXML;
         writerfilter::Stream::Pointer_t pStream(
             writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>(), aMediaDesc));
         //create the tokenizer and domain mapper

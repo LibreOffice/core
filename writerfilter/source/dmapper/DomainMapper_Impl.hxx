@@ -710,9 +710,9 @@ public:
 
     DeletableTabStop                m_aCurrentTabStop;
 
-    bool IsOOXMLImport() const { return m_eDocumentType == DOCUMENT_OOXML; }
+    bool IsOOXMLImport() const { return m_eDocumentType == SourceDocumentType::OOXML; }
 
-    bool IsRTFImport() const { return m_eDocumentType == DOCUMENT_RTF; }
+    bool IsRTFImport() const { return m_eDocumentType == SourceDocumentType::RTF; }
 
     void InitPageMargins() { m_aPageMargins = _PageMar(); }
     void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );

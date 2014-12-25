@@ -25,10 +25,10 @@ namespace writerfilter
 namespace dmapper
 {
 
-enum SourceDocumentType
+enum class SourceDocumentType
 {
-    DOCUMENT_OOXML,
-    DOCUMENT_RTF
+    OOXML,
+    RTF
 };
 
 /// Interface to create a DomainMapper instance.
