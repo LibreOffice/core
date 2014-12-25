@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_62316bec",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-12-25T10:52:24Z",
+      "side": 1,
+      "message": "This was done since pCurr-\u003efirst is also sal_uInt16, so performing the addition at 64 bits and then truncating to 16 _should_ be the same of doing it at 16 bits (even in case of overflow, since only signed integers trigger undefined behavior).",
+      "parentUuid": "fa32b979_37f16ace",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_57ee6eed",
         "filename": "sw/source/core/table/swtable.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2014-12-16T23:53:06Z",
       "side": 1,
       "message": "Why long here?",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_024dff71",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-12-25T10:52:24Z",
+      "side": 1,
+      "message": "Both GetRight and GetLeft return long, and long is also used for nNewWidth/nOldWidth at lines 1225/1226, so I just aimed to consistency. Do you think it should be sal_uInt64?",
+      "parentUuid": "fa32b979_f7b9c2ed",
       "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
