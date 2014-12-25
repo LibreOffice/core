@@ -9,8 +9,12 @@
 
 $(eval $(call gb_Module_Module,clew))
 
+ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,clew,\
-	Library_clew \
+	$(if $(filter 1050,$(MACOSX_SDK_VERSION)),,Library_clew) \
 ))
+else
+$(eval $(call gb_Module_add_targets,clew,Library_clew))
+endif
 
 # vim: set noet sw=4 ts=4:

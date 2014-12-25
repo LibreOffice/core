@@ -40,7 +40,9 @@ StringArray SID_GENERAL_OPTIONS
         < "Advanced" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
         < "Basic IDE Options" ; RID_SVXPAGE_BASICIDE_OPTIONS ; > ;
         < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
+        # if HAVE_FEATURE_OPENCL
         < "OpenCL" ; RID_SVXPAGE_OPENCL ; > ;
+        # endif
     };
 };
 StringArray SID_LANGUAGE_OPTIONS

@@ -21,9 +21,11 @@ $(eval $(call gb_Library_add_libs,clew,\
 endif
 
 ifeq ($(OS),MACOSX)
+ifneq (1050,$(MACOSX_SDK_VERSION))
 $(eval $(call gb_Library_add_libs,clew,\
     -framework OpenCL \
 ))
+endif
 endif
 
 $(eval $(call gb_Library_add_cobjects,clew,\
