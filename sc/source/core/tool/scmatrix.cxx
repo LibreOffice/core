@@ -1908,6 +1908,7 @@ public:
 
     wrapped_iterator(typename T::const_iterator it_, U aOp):
         it(it_),
+        val(value_type()),
         maOp(aOp)
     {
     }
