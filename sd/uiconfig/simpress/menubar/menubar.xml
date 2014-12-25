@@ -256,6 +256,9 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:EditStyle"/>
+            <menu:menuitem menu:id=".uno:DesignerDialog"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:TransformDialog"/>
             <menu:menuitem menu:id=".uno:FormatLine"/>
             <menu:menuitem menu:id=".uno:FormatArea"/>
@@ -266,10 +269,48 @@
             <menu:menuitem menu:id=".uno:NameGroup"/>
             <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PresentationLayout"/>
-            <menu:menuitem menu:id=".uno:ModifyPage"/>
-            <menu:menuitem menu:id=".uno:DesignerDialog"/>
-            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:ArrangeMenu">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:BringToFront"/>
+                <menu:menuitem menu:id=".uno:Forward"/>
+                <menu:menuitem menu:id=".uno:Backward"/>
+                <menu:menuitem menu:id=".uno:SendToBack"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:BeforeObject"/>
+                <menu:menuitem menu:id=".uno:BehindObject"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:ReverseOrder"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:ObjectAlign">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+                <menu:menuitem menu:id=".uno:AlignCenter"/>
+                <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:AlignUp"/>
+                <menu:menuitem menu:id=".uno:AlignMiddle"/>
+                <menu:menuitem menu:id=".uno:AlignDown"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:MirrorMenu">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:MirrorVert"/>
+                <menu:menuitem menu:id=".uno:MirrorHorz"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:ConvertMenu">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:ChangeBezier"/>
+                <menu:menuitem menu:id=".uno:ChangePolygon"/>
+                <menu:menuitem menu:id=".uno:convert_to_contour"/>
+                <menu:menuitem menu:id=".uno:ConvertInto3D"/>
+                <menu:menuitem menu:id=".uno:ConvertInto3DLatheFast"/>
+                <menu:menuitem menu:id=".uno:ConvertIntoBitmap"/>
+                <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:DistributeSelection"/>
             <menu:menu menu:id=".uno:GroupMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:FormatGroup"/>
@@ -278,6 +319,9 @@
                     <menu:menuitem menu:id=".uno:LeaveGroup"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:PresentationLayout"/>
+            <menu:menuitem menu:id=".uno:ModifyPage"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
