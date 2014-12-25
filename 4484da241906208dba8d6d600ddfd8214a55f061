@@ -86,6 +86,24 @@
       "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_029bbfca",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-12-25T16:08:40Z",
+      "side": 1,
+      "message": "If you\u0027re certain the behaviour is the same, then sure, consistency would be good. Otherwise: Writer code, over the course of 20 years, tends to rely on subtleties...\n\nThus, doing it as a separate commit would be the way to go then.",
+      "parentUuid": "fa32b979_024dff71",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
