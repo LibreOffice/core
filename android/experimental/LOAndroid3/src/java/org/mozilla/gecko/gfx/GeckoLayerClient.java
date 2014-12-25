@@ -460,10 +460,15 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         return mContext;
     }
 
-    public void zoomToPageWidth(int pageWidth) {
-        if (mPanZoomController instanceof  JavaPanZoomController) {
-            ((JavaPanZoomController) mPanZoomController).animatedZoomTo(new RectF(0, 0, pageWidth, 0));
+
+    public void zoomTo(RectF rect) {
+        if (mPanZoomController instanceof JavaPanZoomController) {
+            ((JavaPanZoomController) mPanZoomController).animatedZoomTo(rect);
         }
+    }
+
+    public void zoomTo(float pageWidth, float pageHeight) {
+        zoomTo(new RectF(0, 0, pageWidth, pageHeight));
     }
 
     private class AdjustRunnable implements Runnable {

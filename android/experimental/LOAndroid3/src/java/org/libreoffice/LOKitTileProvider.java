@@ -247,6 +247,11 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     @Override
+    public boolean isTextDocument() {
+        return mDocument.getDocumentType() == Document.DOCTYPE_TEXT;
+    }
+
+    @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();

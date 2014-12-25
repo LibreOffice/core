@@ -74,6 +74,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public boolean isTextDocument() {
+        return true;
+    }
+
+    @Override
     public void changePart(int partIndex) {
     }
 

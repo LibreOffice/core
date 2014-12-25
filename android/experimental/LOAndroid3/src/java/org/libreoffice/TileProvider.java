@@ -22,4 +22,6 @@ public interface TileProvider {
     Bitmap thumbnail(int size);
 
     void close();
+
+    boolean isTextDocument();
 }

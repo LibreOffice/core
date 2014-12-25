@@ -2,6 +2,7 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.CairoImage;
@@ -45,7 +46,16 @@ public class LOKitThread extends Thread {
         mLayerClient.setPageRect(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         mViewportMetrics = mLayerClient.getViewportMetrics();
         mLayerClient.setViewportMetrics(mViewportMetrics);
-        mLayerClient.zoomToPageWidth(mTileProvider.getPageWidth());
+
+        if (mTileProvider.isTextDocument()) {
+            float centerY = mViewportMetrics.getCssViewport().centerY();
+            mLayerClient.zoomTo(new RectF (0, centerY, mTileProvider.getPageWidth(), centerY));
+        } else if (mViewportMetrics.getViewport().width() < mViewportMetrics.getViewport().height()) {
+            mLayerClient.zoomTo(mTileProvider.getPageWidth(), 0);
+        } else {
+            mLayerClient.zoomTo(0, mTileProvider.getPageHeight());
+        }
+
         mLayerClient.forceRedraw();
     }
 
