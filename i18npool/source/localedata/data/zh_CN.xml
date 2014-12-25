@@ -221,10 +221,10 @@
       <FormatCode>[HH]"时"MM"分"SS"秒"00</FormatCode>
     </FormatElement>
     <!-- Date_Time formats. Index range is from 46 to 47. -->
-    <FormatElement msgid="DateTimeFormatskey4" default="true" type="long" usage="DATE_TIME"  formatindex="46">
-      <FormatCode>YYYY"年"MM"月"D"日"HH"时"MM"分"SS"秒"</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="46">
+      <FormatCode>YYYY"年"MM"月"D"日" HH"时"MM"分"SS"秒"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey3" default="false" type="long" usage="DATE_TIME"  formatindex="47">
+    <FormatElement msgid="DateTimeFormatskey3" default="true" type="long" usage="DATE_TIME"  formatindex="47">
       <FormatCode>YYYY/MM/DD HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="58">
