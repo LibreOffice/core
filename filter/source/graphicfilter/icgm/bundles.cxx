@@ -94,7 +94,7 @@ FontEntry::FontEntry() :
 FontEntry::~FontEntry()
 {
     delete [] pFontName;
-    delete pCharSetValue;
+    delete[] pCharSetValue;
 }
 
 CGMFList::CGMFList() :
