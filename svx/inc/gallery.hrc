@@ -23,9 +23,6 @@
 #include <svx/dialogs.hrc>
 #include "galtheme.hrc"
 
-// Dialoge
-#define RID_SVXDLG_GALLERYBROWSER               (RID_SVX_GALLERY_START + 5)
-
 // Gallery-Strings
 #define RID_SVXSTR_EXTFORMAT1_SYS               (RID_SVX_GALLERY_START + 15)
 #define RID_SVXSTR_EXTFORMAT1_UI                (RID_SVX_GALLERY_START + 16)
@@ -87,11 +84,6 @@
 #define MN_RENAME 22
 #define MN_PROPERTIES 23
 #define MN_ASSIGN_ID 24
-
-// Gallery Browser
-#define GALLERY_BROWSER1    1
-#define GALLERY_BROWSER2    2
-#define GALLERY_SPLITTER    1
 
 #endif // _SVX_GALLERY_HRC
 

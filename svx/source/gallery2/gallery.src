@@ -23,44 +23,6 @@
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
-DockingWindow RID_SVXDLG_GALLERYBROWSER
-{
-    HelpId = "SVX_HID_GALLERY_BROWSER" ;
-    OutputSize = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 211, 100 ) ;
-    Text [ en-US ] = "Gallery";
-    Sizeable = TRUE;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-
-    Control GALLERY_BROWSER1
-    {
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 69, 150 ) ;
-        Border = FALSE;
-    };
-
-    Splitter GALLERY_SPLITTER
-    {
-        Pos = MAP_APPFONT ( 70 , 0 ) ;
-        Size = MAP_APPFONT ( 3, 150 ) ;
-        HScroll = TRUE;
-    };
-
-    Control GALLERY_BROWSER2
-    {
-        Pos = MAP_APPFONT ( 73, 0 ) ;
-        Size = MAP_APPFONT ( 138, 150 ) ;
-        Border = FALSE;
-    };
-};
-
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
     Text [ en-US ] = "Update";

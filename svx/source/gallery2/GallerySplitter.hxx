@@ -25,11 +25,10 @@
 class GallerySplitter : public Splitter
 {
 public:
-    GallerySplitter (
+    GallerySplitter(
         vcl::Window* pParent,
-        const ResId& rResId,
+        WinBits nStyle,
         const ::boost::function<void(void)>& rDataChangeFunctor);
-    virtual ~GallerySplitter (void);
 
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

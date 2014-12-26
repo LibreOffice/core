@@ -114,12 +114,11 @@ bool GalleryThemeListBox::PreNotify( NotifyEvent& rNEvt )
 
 GalleryBrowser1::GalleryBrowser1(
     vcl::Window* pParent,
-    const ResId& rResId,
     Gallery* pGallery,
     const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
     const ::boost::function<void(void)>& rThemeSlectionHandler)
     :
-    Control               ( pParent, rResId ),
+    Control               ( pParent, WB_TABSTOP ),
     maNewTheme            ( this, WB_3DLOOK ),
     mpThemes              ( new GalleryThemeListBox( this, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_HSCROLL | WB_VSCROLL | WB_AUTOHSCROLL | WB_SORT ) ),
     mpGallery             ( pGallery ),

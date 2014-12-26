@@ -414,8 +414,8 @@ void GalleryToolBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 
-GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, const ResId& rResId, Gallery* pGallery ) :
-    Control             ( pParent, rResId ),
+GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
+    Control             ( pParent, WB_TABSTOP ),
     mpGallery           ( pGallery ),
     mpCurTheme          ( NULL ),
     mpIconView          ( new GalleryIconView( this, NULL ) ),

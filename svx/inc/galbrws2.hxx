@@ -152,8 +152,8 @@ public:
 
 public:
 
-                        GalleryBrowser2( vcl::Window* pParent, const ResId& rResId, Gallery* pGallery );
-                        virtual ~GalleryBrowser2();
+    GalleryBrowser2(vcl::Window* pParent, Gallery* pGallery);
+    virtual ~GalleryBrowser2();
 
     void                SelectTheme( const OUString& rThemeName );
 

@@ -19,18 +19,12 @@
 
 #include "GallerySplitter.hxx"
 
-
-
 GallerySplitter::GallerySplitter(
     vcl::Window* pParent,
-    const ResId& rResId,
+    WinBits nStyle,
     const ::boost::function<void(void)>& rDataChangeFunctor)
-    : Splitter( pParent, rResId ),
-      maDataChangeFunctor(rDataChangeFunctor)
-{
-}
-
-GallerySplitter::~GallerySplitter()
+    : Splitter(pParent, nStyle)
+    , maDataChangeFunctor(rDataChangeFunctor)
 {
 }
 

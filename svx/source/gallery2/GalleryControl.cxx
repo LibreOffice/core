@@ -38,24 +38,21 @@ static const sal_Int32 gnInitialVerticalSplitPosition (150);
 GalleryControl::GalleryControl (
     SfxBindings* /*pBindings*/,
     vcl::Window* pParentWindow)
-    : Window(pParentWindow, GAL_RES(RID_SVXDLG_GALLERYBROWSER)),
+    : Window(pParentWindow, WB_SIZEABLE|WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE),
       mpGallery (Gallery::GetGalleryInstance()),
       mpSplitter(new GallerySplitter(
               this,
-              GAL_RES(GALLERY_SPLITTER),
+              WB_HSCROLL,
               ::boost::bind(&GalleryControl::InitSettings, this))),
       mpBrowser1(new GalleryBrowser1(
               this,
-              GAL_RES(GALLERY_BROWSER1),
               mpGallery,
               ::boost::bind(&GalleryControl::GalleryKeyInput,this,_1,_2),
               ::boost::bind(&GalleryControl::ThemeSelectionHasChanged, this))),
-      mpBrowser2(new GalleryBrowser2(this, GAL_RES(GALLERY_BROWSER2), mpGallery)),
+      mpBrowser2(new GalleryBrowser2(this, mpGallery)),
       maLastSize(GetOutputSizePixel()),
       mbIsInitialResize(true)
 {
-    FreeResource();
-
     mpBrowser1->SelectTheme(0);
     mpBrowser1->Show(true);
 

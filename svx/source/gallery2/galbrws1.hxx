@@ -123,7 +123,6 @@ public:
 
                             GalleryBrowser1(
                                 vcl::Window* pParent,
-                                const ResId& rResId,
                                 Gallery* pGallery,
                                 const ::boost::function<sal_Bool(const KeyEvent&,Window*)>& rKeyInputHandler,
                                 const ::boost::function<void(void)>& rThemeSlectionHandler);
