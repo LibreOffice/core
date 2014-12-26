@@ -74,7 +74,7 @@
             <menu:menuitem menu:id=".uno:Cut"/>
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
-                        <menu:menuitem menu:id=".uno:PasteSpecial"/>
+            <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
@@ -235,12 +235,36 @@
     </menu:menu>
     <menu:menu menu:id=".uno:FormatMenu">
         <menu:menupopup>
+            <menu:menu menu:id=".uno:FormatTextMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Bold"/>
+                    <menu:menuitem menu:id=".uno:Italic"/>
+                    <menu:menuitem menu:id=".uno:Underline"/>
+                    <menu:menuitem menu:id=".uno:UnderlineDouble"/>
+                    <menu:menuitem menu:id=".uno:Strikeout"/>
+                    <menu:menuitem menu:id=".uno:Overline"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SuperScript"/>
+                    <menu:menuitem menu:id=".uno:SubScript"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Shadowed"/>
+                    <menu:menuitem menu:id=".uno:OutlineFont"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:Grow"/>
+                    <menu:menuitem menu:id=".uno:Shrink"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:FormatSpacingMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SpacePara1"/>
+                    <menu:menuitem menu:id=".uno:SpacePara15"/>
+                    <menu:menuitem menu:id=".uno:SpacePara2"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ParaspaceIncrease"/>
+                    <menu:menuitem menu:id=".uno:ParaspaceDecrease"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:SetDefault"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:FontDialog"/>
-            <menu:menuitem menu:id=".uno:ParagraphDialog"/>
-            <menu:menuitem menu:id=".uno:OutlineBullet"/>
-            <menu:menuitem menu:id=".uno:PageSetup"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:TransliterateMenu">
                 <menu:menupopup>
@@ -256,19 +280,44 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:EditStyle"/>
-            <menu:menuitem menu:id=".uno:DesignerDialog"/>
+            <menu:menuitem menu:id=".uno:FontDialog"/>
+            <menu:menuitem menu:id=".uno:ParagraphDialog"/>
+            <menu:menuitem menu:id=".uno:OutlineBullet"/>
+            <menu:menuitem menu:id=".uno:PageSetup"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:TransformDialog"/>
             <menu:menuitem menu:id=".uno:FormatLine"/>
             <menu:menuitem menu:id=".uno:FormatArea"/>
             <menu:menuitem menu:id=".uno:TextAttributes"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:NameGroup"/>
             <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
             <menu:menuseparator/>
+            <menu:menu menu:id=".uno:FormatImageMenu">
+              <menu:menupopup>
+                  <menu:menuitem menu:id=".uno:OriginalSize"/>
+                  <menu:menuitem menu:id=".uno:Crop"/>
+                  <menu:menuitem menu:id=".uno:GrafAttrCrop"/>
+                  <menu:menuseparator/>
+                  <menu:menuitem menu:id=".uno:ExternalEdit"/>
+                  <menu:menuitem menu:id=".uno:ChangePicture"/>
+                  <menu:menuitem menu:id=".uno:CompressGraphic"/>
+                  <menu:menuseparator/>
+                  <menu:menuitem menu:id=".uno:SaveGraphic"/>
+              </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:ObjectAlign">
+              <menu:menupopup>
+                <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+                <menu:menuitem menu:id=".uno:AlignCenter"/>
+                <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:AlignUp"/>
+                <menu:menuitem menu:id=".uno:AlignMiddle"/>
+                <menu:menuitem menu:id=".uno:AlignDown"/>
+              </menu:menupopup>
+            </menu:menu>
             <menu:menu menu:id=".uno:ArrangeMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:BringToFront"/>
@@ -282,17 +331,9 @@
                 <menu:menuitem menu:id=".uno:ReverseOrder"/>
               </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:ObjectAlign">
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-                <menu:menuitem menu:id=".uno:AlignCenter"/>
-                <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-                <menu:menuseparator/>
-                <menu:menuitem menu:id=".uno:AlignUp"/>
-                <menu:menuitem menu:id=".uno:AlignMiddle"/>
-                <menu:menuitem menu:id=".uno:AlignDown"/>
-              </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:DistributeSelection"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ToggleObjectRotateMode"/>
             <menu:menu menu:id=".uno:MirrorMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:MirrorVert"/>
@@ -310,7 +351,7 @@
                 <menu:menuitem menu:id=".uno:ConvertIntoMetaFile"/>
               </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:DistributeSelection"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:GroupMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:FormatGroup"/>
@@ -319,6 +360,9 @@
                     <menu:menuitem menu:id=".uno:LeaveGroup"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:EditStyle"/>
+            <menu:menuitem menu:id=".uno:DesignerDialog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PresentationLayout"/>
             <menu:menuitem menu:id=".uno:ModifyPage"/>
@@ -340,7 +384,7 @@
                     <menu:menuitem menu:id=".uno:MoreDictionaries"/>
                 </menu:menupopup>
             </menu:menu>
-      <menu:menuseparator/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:BmpMask"/>
             <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
             <menu:menuseparator/>
@@ -356,7 +400,6 @@
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
             <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
