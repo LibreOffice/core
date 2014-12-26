@@ -20,9 +20,11 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:style="dropdown"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapOn" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:WrapIdeal" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:style="radio" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:style="radio" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:style="radio"/>
@@ -35,17 +37,21 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectBackOne"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
- <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:style="dropdown"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
 </toolbar:toolbar>
