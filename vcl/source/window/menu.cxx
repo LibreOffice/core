@@ -1557,9 +1557,14 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
             }
 
             // Image:
-            if (!IsMenuBar()&& ((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
+            if (!IsMenuBar() && ((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
+
+                sal_Int32 nScaleFactor = pWindow->GetDPIScaleFactor();
+                aImgSz.Height() *= nScaleFactor;
+                aImgSz.Width() *= nScaleFactor;
+
                 aImgSz.Height() += 4; // add a border for native marks
                 aImgSz.Width() += 4; // add a border for native marks
                 if ( aImgSz.Width() > aMaxImgSz.Width() )
@@ -1927,10 +1932,20 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     // Don't render an image for a check thing
                     if( pData->bChecked )
                         ImplPaintCheckBackground( pWin, aOuterCheckRect, pThisItemOnly && bHighlighted );
+
+                    Image aImage = pData->aImage;
+
+                    sal_Int32 nScaleFactor = pWindow->GetDPIScaleFactor();
+                    if (nScaleFactor != 1)
+                    {
+                        BitmapEx aBitmap = aImage.GetBitmapEx();
+                        aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+                        aImage = Image(aBitmap);
+                    }
                     aTmpPos = aOuterCheckRect.TopLeft();
-                    aTmpPos.X() += (aOuterCheckRect.GetWidth()-pData->aImage.GetSizePixel().Width())/2;
-                    aTmpPos.Y() += (aOuterCheckRect.GetHeight()-pData->aImage.GetSizePixel().Height())/2;
-                    pWin->DrawImage( aTmpPos, pData->aImage, nImageStyle );
+                    aTmpPos.X() += (aOuterCheckRect.GetWidth() - aImage.GetSizePixel().Width()) / 2;
+                    aTmpPos.Y() += (aOuterCheckRect.GetHeight() - aImage.GetSizePixel().Height()) / 2;
+                    pWin->DrawImage(aTmpPos, aImage, nImageStyle);
                 }
 
                 // Text:
