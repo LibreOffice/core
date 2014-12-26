@@ -454,7 +454,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="selection">
-                                    <property name="label" translatable="yes">
+                                    <property name="label" translatable="no">
 </property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="can_focus">True</property>
