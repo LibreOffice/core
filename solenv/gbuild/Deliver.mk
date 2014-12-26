@@ -51,7 +51,7 @@ endif
 endef
 
 define gb_Deliver__deliver
-$(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) $(if $(gb_Deliver_HARDLINK),ln,cp -P -f) $(1) $(2) && touch -hr $(1) $(2)
+$(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) $(if $(gb_Deliver_HARDLINK),ln,cp -P -f) $(1) $(2) && $(TOUCH) -hr $(1) $(2)
 endef
 
 ifneq ($(strip $(gb_Deliver_GNUCOPY)),)
