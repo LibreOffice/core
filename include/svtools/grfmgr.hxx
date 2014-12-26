@@ -34,9 +34,16 @@
 // AutoSwap defines
 
 #define GRFMGR_AUTOSWAPSTREAM_LINK      (reinterpret_cast<SvStream*>(0x00000000UL))
+
+#ifdef _WIN64
+#define GRFMGR_AUTOSWAPSTREAM_LOADED    (reinterpret_cast<SvStream*>((sal_IntPtr)(int)0xfffffffdUL))
+#define GRFMGR_AUTOSWAPSTREAM_TEMP      (reinterpret_cast<SvStream*>((sal_IntPtr)(int)0xfffffffeUL))
+#define GRFMGR_AUTOSWAPSTREAM_NONE      (reinterpret_cast<SvStream*>((sal_IntPtr)(int)0xffffffffUL))
+#else
 #define GRFMGR_AUTOSWAPSTREAM_LOADED    (reinterpret_cast<SvStream*>(0xfffffffdUL))
 #define GRFMGR_AUTOSWAPSTREAM_TEMP      (reinterpret_cast<SvStream*>(0xfffffffeUL))
 #define GRFMGR_AUTOSWAPSTREAM_NONE      (reinterpret_cast<SvStream*>(0xffffffffUL))
+#endif
 
 // Adjustment defines
 
