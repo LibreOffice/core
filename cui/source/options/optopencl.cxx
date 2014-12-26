@@ -24,6 +24,8 @@
 #include <svl/zforlist.hxx>
 #include <opencl/openclconfig.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <svtools/simptabl.hxx>
+#include "optHeaderTabListbox.hxx"
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -35,23 +37,30 @@
 
 #include "cuires.hrc"
 #include "optopencl.hxx"
+#include <svtools/treelistentry.hxx>
 
 SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, "OptOpenCLPage", "cui/ui/optopenclpage.ui", &rSet),
     maConfig(OpenCLConfig::get())
 {
     get(mpUseOpenCL, "useopencl");
-    get(mpBlackList, "blacklist");
+    get(mpBlackListTable, "blacklist");
     get(mpBlackListFrame,"blacklistframe");
     get(mpBlackListEdit, "bledit");
     get(mpBlackListAdd, "bladd");
     get(mpBlackListDelete, "bldelete");
-    get(mpWhiteList, "whitelist");
+    get(mpWhiteListTable, "whitelist");
     get(mpWhiteListFrame,"whitelistframe");
     get(mpWhiteListEdit, "wledit");
     get(mpWhiteListAdd, "wladd");
     get(mpWhiteListDelete, "wldelete");
+    get(mpOS,"os");
+    get(mpOSVersion,"osversion");
+    get(mpDevice,"device");
+    get(mpVendor,"vendor");
+    get(mpDrvVersion,"driverversion");
 
+    mpUseOpenCL->Check(maConfig.mbUseOpenCL);
     mpUseOpenCL->SetClickHdl(LINK(this, SvxOpenCLTabPage, EnableOpenCLHdl));
 
     mpBlackListEdit->SetClickHdl(LINK(this, SvxOpenCLTabPage, BlackListEditHdl));
@@ -62,17 +71,49 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     mpWhiteListAdd->SetClickHdl(LINK(this, SvxOpenCLTabPage, WhiteListAddHdl));
     mpWhiteListDelete->SetClickHdl(LINK(this, SvxOpenCLTabPage, WhiteListDeleteHdl));
 
-    mpBlackList->set_height_request(4 * mpBlackList->GetTextHeight());
-    mpWhiteList->set_height_request(4 * mpWhiteList->GetTextHeight());
+    WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
+    mpBlackList = new SvSimpleTable( *mpBlackListTable, nBits );
+    mpWhiteList = new SvSimpleTable( *mpWhiteListTable, nBits );
+
+    HeaderBar &rBlBar = mpBlackList->GetTheHeaderBar();
+    HeaderBar &rWiBar = mpWhiteList->GetTheHeaderBar();
+
+
+    WinBits nHBits = HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE;
+    rBlBar.InsertItem( 1, mpOS->GetText(),         0, nHBits );
+    rBlBar.InsertItem( 2, mpOSVersion->GetText(),  0, nHBits );
+    rBlBar.InsertItem( 3, mpVendor->GetText(),     0, nHBits );
+    rBlBar.InsertItem( 4, mpDevice->GetText(),     0, nHBits );
+    rBlBar.InsertItem( 5, mpDrvVersion->GetText(), 0, nHBits );
+
+    rWiBar.InsertItem( 1, mpOS->GetText(),         0, nHBits );
+    rWiBar.InsertItem( 2, mpOSVersion->GetText(),  0, nHBits );
+    rWiBar.InsertItem( 3, mpVendor->GetText(),     0, nHBits );
+    rWiBar.InsertItem( 4, mpDevice->GetText(),     0, nHBits );
+    rWiBar.InsertItem( 5, mpDrvVersion->GetText(), 0, nHBits );
+
+    long aTabs[] = {5, 0, 0, 0, 0, 0};
+    aTabs[2] = rBlBar.GetTextWidth(rBlBar.GetItemText(1)) + 12;
+    aTabs[3] = rBlBar.GetTextWidth(rBlBar.GetItemText(2)) + aTabs[2] + 12;
+    aTabs[4] = rBlBar.GetTextWidth(rBlBar.GetItemText(3)) + aTabs[3] + 12;
+    aTabs[5] = rBlBar.GetTextWidth(rBlBar.GetItemText(4)) + aTabs[4] + 12;
+    aTabs[6] = rBlBar.GetTextWidth(rBlBar.GetItemText(5)) + aTabs[5] + 12;
+    mpBlackList->SetTabs(aTabs, MAP_PIXEL);
+    mpWhiteList->SetTabs(aTabs, MAP_PIXEL);
 
 }
 
 SvxOpenCLTabPage::~SvxOpenCLTabPage()
 {
+    for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
+        delete (OpenCLConfig::ImplMatcher*)mpBlackList->GetEntry(i)->GetUserData();
+    for ( sal_uInt16 i = 0; i < mpWhiteList->GetEntryCount(); ++i )
+        delete (OpenCLConfig::ImplMatcher*)mpWhiteList->GetEntry(i)->GetUserData();
+    delete mpBlackList;
+    delete mpWhiteList;
 }
 
-SfxTabPage*
-SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+SfxTabPage* SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxOpenCLTabPage(pParent, *rAttrSet);
 }
@@ -101,21 +142,25 @@ namespace {
 
 OUString format(const OpenCLConfig::ImplMatcher& rImpl)
 {
-    return (rImpl.maOS + " " +
-            rImpl.maOSVersion + " " +
-            rImpl.maPlatformVendor + " " +
-            rImpl.maDevice + " " +
+    return (rImpl.maOS + "\t" +
+            rImpl.maOSVersion + "\t" +
+            rImpl.maPlatformVendor + "\t" +
+            rImpl.maDevice + "\t" +
             rImpl.maDriverVersion);
 }
 
-void fillListBox(ListBox* pListBox, const OpenCLConfig::ImplMatcherSet& rSet)
+void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rSet)
 {
     pListBox->SetUpdateMode(false);
-    pListBox->Clear();
+// kill added UserData to treeitem
+    for ( sal_uInt16 i = 0; i < pListBox->GetEntryCount(); ++i )
+        delete (OpenCLConfig::ImplMatcher*)pListBox->GetEntry(i)->GetUserData();
 
+    pListBox->Clear();
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
-        pListBox->InsertEntry(format(*i), LISTBOX_APPEND);
+        OpenCLConfig::ImplMatcher* pImpl = new OpenCLConfig::ImplMatcher(*i);
+        pListBox->InsertEntry(format(*i), NULL, false, TREELIST_APPEND, pImpl);
     }
 
     pListBox->SetUpdateMode(true);
@@ -160,7 +205,7 @@ public:
 ListEntryDialog::ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag)
     : ModalDialog(pParent, "BlackOrWhiteListEntryDialog",
                   "cui/ui/blackorwhitelistentrydialog.ui"),
-      maEntry(rEntry)
+    maEntry(rEntry)
 {
     get(mpOS, "os");
     get(mpOSVersion, "osversion");
@@ -230,19 +275,28 @@ void openListDialog(SvxOpenCLTabPage* pTabPage, OpenCLConfig::ImplMatcher& rEntr
         rEntry = aDlg.maEntry;
 }
 
-const OpenCLConfig::ImplMatcher& findCurrentEntry(OpenCLConfig::ImplMatcherSet& rSet, ListBox* pListBox)
+const OpenCLConfig::ImplMatcher& findCurrentEntry(OpenCLConfig::ImplMatcherSet& rSet, SvSimpleTable* pListBox)
 {
-    auto i = rSet.begin();
-    std::advance(i, pListBox->GetSelectEntryPos());
+    SvTreeListEntry* pEntry = pListBox->FirstSelected() ;
 
+    const OpenCLConfig::ImplMatcher* pSet = (OpenCLConfig::ImplMatcher*)pEntry->GetUserData();
+
+    for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
+    {
+        if (*i == *pSet)
+        {
+            return *i;
+        }
+    }
+    auto i = rSet.begin();
     return *i;
 }
 
 }
 
-long SvxOpenCLTabPage::EditHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag)
+long SvxOpenCLTabPage::EditHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag)
 {
-    if (pListBox->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+    if (!pListBox->FirstSelected())
         return 0;
 
     OpenCLConfig::ImplMatcher rEntry(findCurrentEntry(rSet, pListBox));
@@ -254,7 +308,7 @@ long SvxOpenCLTabPage::EditHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& 
     return 0;
 }
 
-long SvxOpenCLTabPage::AddHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag)
+long SvxOpenCLTabPage::AddHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag)
 {
     OpenCLConfig::ImplMatcher rEntry;
     openListDialog(this, rEntry, rTag);
@@ -267,9 +321,9 @@ long SvxOpenCLTabPage::AddHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& r
     return 0;
 }
 
-long SvxOpenCLTabPage::DeleteHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet)
+long SvxOpenCLTabPage::DeleteHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet)
 {
-    if (pListBox->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+    if (!pListBox->FirstSelected())
         return 0;
 
     OpenCLConfig::ImplMatcher rEntry(findCurrentEntry(rSet, pListBox));
@@ -278,6 +332,7 @@ long SvxOpenCLTabPage::DeleteHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet
 
     return 0;
 }
+
 void SvxOpenCLTabPage::EnableOpenCLHdl(VclFrame* pFrame, bool aEnable)
 {
     pFrame->Enable(aEnable);

@@ -34,13 +34,20 @@ private:
     CheckBox* mpUseOpenCL;
 
     VclFrame* mpBlackListFrame;
-    ListBox* mpBlackList;
+    SvSimpleTable* mpBlackList;
+    SvSimpleTableContainer* mpBlackListTable;
     PushButton* mpBlackListEdit;
     PushButton* mpBlackListAdd;
     PushButton* mpBlackListDelete;
+    FixedText*  mpOS;
+    FixedText*  mpOSVersion;
+    FixedText*  mpDevice;
+    FixedText*  mpVendor;
+    FixedText*  mpDrvVersion;
 
     VclFrame* mpWhiteListFrame;
-    ListBox* mpWhiteList;
+    SvSimpleTable* mpWhiteList;
+    SvSimpleTableContainer* mpWhiteListTable;
     PushButton* mpWhiteListEdit;
     PushButton* mpWhiteListAdd;
     PushButton* mpWhiteListDelete;
@@ -55,9 +62,10 @@ private:
 
     DECL_LINK(EnableOpenCLHdl, void*);
 
-    long EditHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
-    long AddHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
-    long DeleteHdl(ListBox* pListBox, OpenCLConfig::ImplMatcherSet& rSet);
+    long EditHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
+    long AddHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet, const OString& rTag);
+    long DeleteHdl(SvSimpleTable* pListBox, OpenCLConfig::ImplMatcherSet& rSet);
+
     void EnableOpenCLHdl(VclFrame* pFrame, bool aEnable);
 
 public:
