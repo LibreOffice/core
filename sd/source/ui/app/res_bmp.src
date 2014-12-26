@@ -240,7 +240,7 @@ Bitmap BMP_GRAPHIC
 };
 
 #define SfxStyleFamiliesRes1\
-    Text [ en-US ] = "Drawing Object Styles" ;\
+    Text [ en-US ] = "Graphic Styles" ;\
 
 #define SfxStyleFamiliesRes2\
     Text [ en-US ] = "Presentation Styles" ;\
