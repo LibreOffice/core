@@ -476,6 +476,8 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxTable, "textbox-table.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
+// FixMe: davido
+#ifndef _WIN64
 DECLARE_OOXMLEXPORT_TEST(testCropPixel, "crop-pixel.docx")
 {
     // If map mode of the graphic is in pixels, then we used to handle original
@@ -488,6 +490,7 @@ DECLARE_OOXMLEXPORT_TEST(testCropPixel, "crop-pixel.docx")
         CPPUNIT_ASSERT(getXPath(pXmlDoc, "//a:srcRect", "l").toInt32() <= 22452);
     }
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testEffectExtent, "effect-extent.docx")
 {
