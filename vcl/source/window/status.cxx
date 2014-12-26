@@ -129,6 +129,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbVisibleItems  = true;
     mbProgressMode  = false;
     mbInUserDraw    = false;
+    mbAdjustHiDPI   = false;
     mnItemsWidth    = STATUSBAR_OFFSET_X;
     mnDX            = 0;
     mnDY            = 0;
@@ -159,6 +160,11 @@ StatusBar::~StatusBar()
     // delete VirtualDevice
     delete mpImplData->mpVirDev;
     delete mpImplData;
+}
+
+void StatusBar::AdjustItemWidthsForHiDPI(bool bAdjustHiDPI)
+{
+    mbAdjustHiDPI = bAdjustHiDPI;
 }
 
 void StatusBar::ImplInitSettings( bool bFont,
@@ -899,6 +905,10 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
         nBits |= SIB_CENTER;
 
     // create item
+    if (mbAdjustHiDPI && GetDPIScaleFactor() != 1)
+    {
+        nWidth *= GetDPIScaleFactor();
+    }
     long nFudge = GetTextHeight()/4;
     ImplStatusItem* pItem   = new ImplStatusItem;
     pItem->mnId             = nItemId;

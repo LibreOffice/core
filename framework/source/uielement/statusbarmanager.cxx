@@ -147,6 +147,7 @@ StatusBarManager::StatusBarManager(
     m_xStatusbarControllerFactory = frame::theStatusbarControllerFactory::get(
         ::comphelper::getProcessComponentContext());
 
+    m_pStatusBar->AdjustItemWidthsForHiDPI(true);
     m_pStatusBar->SetClickHdl( LINK( this, StatusBarManager, Click ) );
     m_pStatusBar->SetDoubleClickHdl( LINK( this, StatusBarManager, DoubleClick ) );
 }
