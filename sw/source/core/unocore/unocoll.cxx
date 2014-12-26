@@ -1440,7 +1440,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         }
         if(nIndex >= 0 && static_cast<size_t>(nIndex) < rFmts.size())
         {
-            SwSectionFmt* pFmt = rFmts[(sal_uInt16)nIndex];
+            SwSectionFmt* pFmt = rFmts[nIndex];
             xRet = GetObject(*pFmt);
         }
         else
