@@ -1344,11 +1344,6 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
-AC_ARG_WITH(macosx-app-name,
-    AS_HELP_STRING([--with-macosx-app-name='My Own Office Suite'],
-        [Define the OS X app name. Default is AC_PACKAGE_NAME.]),
-,with_macosx_app_name=$PRODUCTNAME)
-
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
         [Build for the iOS Simulator, not iOS device.]),
@@ -2901,11 +2896,6 @@ if test $_os = Darwin; then
     AC_MSG_CHECKING([what OS X app bundle identifier to use])
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
-
-    AC_MSG_CHECKING([what OS X app name to use])
-    MACOSX_APP_NAME="$with_macosx_app_name"
-    AC_MSG_RESULT([$MACOSX_APP_NAME])
-
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
@@ -2918,7 +2908,6 @@ AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
-AC_SUBST(MACOSX_APP_NAME)
 AC_SUBST(MACOSX_HIGH_RESOLUTION_VALUE)
 
 dnl ===================================================================

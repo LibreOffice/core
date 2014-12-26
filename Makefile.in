@@ -310,8 +310,8 @@ endif
 
 mac-app-store-package: test-install
 ifneq ($(MACOSX_PACKAGE_SIGNING_IDENTITY),)
-	mv "$(TESTINSTALLDIR)/$(PRODUCTNAME).app" "$(MACOSX_APP_NAME).app"
-	productbuild --component "$(MACOSX_APP_NAME).app" /Applications --sign $(MACOSX_PACKAGE_SIGNING_IDENTITY) $(shell echo "$(MACOSX_APP_NAME)" | tr ' ' '-').pkg
+	mv "$(TESTINSTALLDIR)/$(PRODUCTNAME).app" "$(PRODUCTNAME).app"
+	productbuild --component "$(PRODUCTNAME).app" /Applications --sign $(MACOSX_PACKAGE_SIGNING_IDENTITY) $(shell echo "$(PRODUCTNAME)" | tr ' ' '-').pkg
 else
 	@echo You did not provide an installer signing identity with --enable-macosx-package-signing
 	@exit 1

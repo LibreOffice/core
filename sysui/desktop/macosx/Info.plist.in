@@ -1536,7 +1536,7 @@
 	<key>CFBundleExecutable</key>
 	<string>soffice</string>
 	<key>CFBundleGetInfoString</key>
-	<string>@MACOSX_APP_NAME@ @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
+	<string>@PRODUCTNAME@ @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@</string>
 	<key>CFBundleIconFile</key>
 	<string>main.icns</string>
 	<key>CFBundleShortVersionString</key>
@@ -1546,7 +1546,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>@MACOSX_APP_NAME@</string>
+	<string>@PRODUCTNAME@</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

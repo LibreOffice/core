@@ -85,7 +85,7 @@ done
 # (bootstraprc and similar that the user might adjust and image files)
 # See also https://developer.apple.com/library/mac/technotes/tn2206/
 
-id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
+id=`echo ${PRODUCTNAME} | tr ' ' '-'`
 
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
