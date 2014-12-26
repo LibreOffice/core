@@ -1344,11 +1344,6 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
-AC_ARG_WITH(macosx-app-name,
-    AS_HELP_STRING([--with-macosx-app-name='My Own Office Suite'],
-        [Define the OS X app name. Default is AC_PACKAGE_NAME.]),
-,with_macosx_app_name=$PRODUCTNAME)
-
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
         [Build for the iOS Simulator, not iOS device.]),
