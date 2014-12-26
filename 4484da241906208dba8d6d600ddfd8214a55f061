@@ -104,6 +104,24 @@
       "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_62696b8b",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-12-26T08:56:49Z",
+      "side": 1,
+      "message": "I agree. I will split this commit into two separate ones, the first leaving sal_uInt64 at this place, while the second one will convert sal_uInt64 to long.\nShall I submit (both of them) to gerrit for further review or do you think that I I just can push to master?",
+      "parentUuid": "fa32b979_029bbfca",
+      "revId": "4484da241906208dba8d6d600ddfd8214a55f061",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
