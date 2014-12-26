@@ -126,9 +126,6 @@ public:
     /** Converts the passed BIFF error code to a similar formula. */
     ApiTokenSequence    convertErrorToFormula( sal_uInt8 nErrorCode ) const;
 
-    /** Converts the passed token index of a defined name to a formula calling that name. */
-    ApiTokenSequence    convertNameToFormula( sal_Int32 nTokenIndex ) const;
-
     /** Converts the passed XML formula to an OLE link target. */
     OUString     importOleTargetLink( const OUString& rFormulaString );
 

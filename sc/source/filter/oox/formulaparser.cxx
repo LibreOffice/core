@@ -2813,20 +2813,6 @@ ApiTokenSequence FormulaParser::convertErrorToFormula( sal_uInt8 nErrorCode ) co
     return aTokens;
 }
 
-ApiTokenSequence FormulaParser::convertNameToFormula( sal_Int32 nTokenIndex ) const
-{
-    if( nTokenIndex < 0 )
-        return convertErrorToFormula( BIFF_ERR_REF );
-
-    ApiTokenSequence aTokens( 1 );
-    aTokens[ 0 ].OpCode = OPCODE_NAME;
-    NameToken aNameTokenData;
-    aNameTokenData.Global = sal_True;
-    aNameTokenData.Index = nTokenIndex;
-    aTokens[ 0 ].Data <<= aNameTokenData;
-    return aTokens;
-}
-
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )
 {
     sal_Int32 nRefId = -1;
