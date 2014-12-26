@@ -15,13 +15,13 @@ EXITCODE=${3}
 
 if test -n "$(which gdb)"
 then
-    if test "$(ls "$COREDIR"/core* 2>/dev/null | wc -l)" -eq 1
+    if test "$(find "$COREDIR" -name "core*" | wc -l)" -eq 1
     then
         COREFILE=$(ls "$COREDIR"/core*)
         echo
         echo "It looks like ${EXECUTABLE} generated a core file at ${COREFILE}"
         echo "Backtraces:"
-        GDBCOMMANDFILE=`mktemp`
+        GDBCOMMANDFILE=$(mktemp)
         echo "thread apply all backtrace full" > "$GDBCOMMANDFILE"
         gdb -x "$GDBCOMMANDFILE" --batch "$EXECUTABLE" "$COREFILE"
         rm "$GDBCOMMANDFILE"
