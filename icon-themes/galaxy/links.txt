@@ -32,3 +32,14 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # flip in impress/draw
 cmd/sc_mirrorhorz.png cmd/sc_fliphorizontal.png
 cmd/sc_mirrorvert.png cmd/sc_flipvertical.png
+
+# image/object context menu entries
+cmd/sc_wrapmenu.png cmd/sc_wrapon.png
+cmd/sc_alignframemenu.png cmd/sc_objectalign.png
+cmd/sc_anchormenu.png cmd/sc_toggleanchortype.png
+cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
+cmd/sc_savegraphic.png cmd/sc_save.png
+
+# menu submenu entries
+cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
+

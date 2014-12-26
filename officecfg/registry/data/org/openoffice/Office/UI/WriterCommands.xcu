@@ -2303,6 +2303,25 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Wrap</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AlignFrameMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Alignment</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ArrangeFrameMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Arrange</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:AutoFormatMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -2322,6 +2341,9 @@
       <node oor:name=".uno:SaveGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Save Images...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ContinueNumbering" oor:op="replace">

@@ -1235,6 +1235,12 @@ Menu MN_GRF_POPUPMENU
         MenuItem { ITEM_CHANGE_PICTURE };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_SAVE_GRAPHIC };
+        SEPARATOR ;
+
+        MN_ANCHOR
+        MN_MOUSE_FRAME_WITH_CONTOUR
+        MN_ALIGNMENT_FRAME
+        MN_ARRANGE_FRAME
         MN_ROTATE_IMAGE
         SEPARATOR ;
 
@@ -1245,10 +1251,6 @@ Menu MN_GRF_POPUPMENU
             HelpId = CMD_FN_FORMAT_GRAFIC_DLG ;
             Text [ en-US ] = "Format ~Image..." ;
         };
-        SEPARATOR ;
-
-        MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITH_CONTOUR
     };
 };
 
