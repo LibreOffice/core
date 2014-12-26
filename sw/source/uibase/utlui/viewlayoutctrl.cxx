@@ -39,8 +39,8 @@ struct SwViewLayoutControl::SwViewLayoutControl_Impl
     Image       maImageBookMode_Active;
 };
 
-SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
-    SfxStatusBarControl( _nSlotId, _nId, rStb ),
+SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStatusBar ) :
+    SfxStatusBarControl( _nSlotId, _nId, rStatusBar ),
     mpImpl( new SwViewLayoutControl_Impl )
 {
     mpImpl->mnState = 0;
@@ -52,7 +52,8 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
     mpImpl->maImageBookMode             = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
     mpImpl->maImageBookMode_Active      = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
 
-    if ( rStb.GetDPIScaleFactor() > 1)
+    sal_Int32 nScaleFactor = rStatusBar.GetDPIScaleFactor();
+    if (nScaleFactor != 1)
     {
         Image arr[6] = {mpImpl->maImageSingleColumn, mpImpl->maImageSingleColumn_Active,
                         mpImpl->maImageAutomatic, mpImpl->maImageAutomatic_Active,
@@ -60,9 +61,9 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
 
         for (int i = 0; i < 6; i++)
         {
-            BitmapEx b = arr[i].GetBitmapEx();
-            b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
-            arr[i] = Image(b);
+            BitmapEx aBitmap = arr[i].GetBitmapEx();
+            aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+            arr[i] = Image(aBitmap);
         }
 
         mpImpl->maImageSingleColumn = arr[0];
@@ -74,7 +75,6 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
         mpImpl->maImageBookMode = arr[4];
         mpImpl->maImageBookMode_Active = arr[5];
     }
-
 }
 
 SwViewLayoutControl::~SwViewLayoutControl()
@@ -124,8 +124,8 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
                                 mpImpl->maImageAutomatic.GetSizePixel().Width() +
                                 mpImpl->maImageBookMode.GetSizePixel().Width();
 
-    const long nXOffset = (aRect.GetWidth()  - nImageWidthSum)/2;
-    const long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height())/2;
+    const long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
+    const long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
 
     aRect.Left() = aRect.Left() + nXOffset;
     aRect.Top()  = aRect.Top() + nYOffset;
