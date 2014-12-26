@@ -69,11 +69,11 @@ enum RTFFormFieldTypes
     FORMFIELD_LIST
 };
 
-enum RTFBmpStyles
+enum class RTFBmpStyle
 {
-    BMPSTYLE_NONE,
-    BMPSTYLE_PNG,
-    BMPSTYLE_JPEG
+    NONE,
+    PNG,
+    JPEG
 };
 
 enum RTFFieldStatus
@@ -173,7 +173,7 @@ public:
     sal_uInt16 nScaleX, nScaleY;
     short nCropT, nCropB, nCropL, nCropR;
     sal_uInt16 eWMetafile;
-    RTFBmpStyles nStyle;
+    RTFBmpStyle eStyle;
 };
 
 class RTFParserState;

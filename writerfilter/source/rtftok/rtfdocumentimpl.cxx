@@ -776,7 +776,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         pExtHeader = nullptr;
     OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, pExtHeader);
 
-    if (m_aStates.top().aPicture.nStyle != BMPSTYLE_NONE)
+    if (m_aStates.top().aPicture.eStyle != RTFBmpStyle::NONE)
     {
         // In case of PNG/JPEG, the real size is known, don't use the values
         // provided by picw and pich.
@@ -3294,10 +3294,10 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         // Noop, this is the default in Writer.
         break;
     case RTF_PNGBLIP:
-        m_aStates.top().aPicture.nStyle = BMPSTYLE_PNG;
+        m_aStates.top().aPicture.eStyle = RTFBmpStyle::PNG;
         break;
     case RTF_JPEGBLIP:
-        m_aStates.top().aPicture.nStyle = BMPSTYLE_JPEG;
+        m_aStates.top().aPicture.eStyle = RTFBmpStyle::JPEG;
         break;
     case RTF_POSYT:
         m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_doc_ST_YAlign_top);
@@ -6208,7 +6208,7 @@ RTFPicture::RTFPicture()
       nCropL(0),
       nCropR(0),
       eWMetafile(0),
-      nStyle(BMPSTYLE_NONE)
+      eStyle(RTFBmpStyle::NONE)
 {
 }
 
