@@ -153,7 +153,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         OUString sMethod( pDescs[i].EventMethod );
 
         const sal_Char *pOpt = 0;
-        for( sal_uInt16 j=0; aEventListenerTable[j]; j++ )
+        for( int j=0; aEventListenerTable[j]; j++ )
         {
             if( sListener.equalsAscii( aEventListenerTable[j] ) &&
                 sMethod.equalsAscii( aEventMethodTable[j] ) )
@@ -215,12 +215,11 @@ static bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 bool SwHTMLWriter::HasControls() const
 {
     sal_uInt32 nStartIdx = pCurPam->GetPoint()->nNode.GetIndex();
-    sal_uInt16 i;
+    size_t i = 0;
 
     // Skip all controls in front of the current paragraph
-    for( i = 0; i < aHTMLControls.size() &&
-        aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
-        ;
+    while ( i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx < nStartIdx )
+        ++i;
 
     return i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx == nStartIdx;
 }
@@ -247,10 +246,9 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
                                     : pCurPam->GetPoint()->nNode.GetIndex();
 
     // Ueberspringen von Controls vor dem interesanten Bereich
-    sal_uInt16 i;
-    for( i = 0; i < aHTMLControls.size() &&
-        aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
-        ;
+    size_t i = 0;
+    while ( i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx < nStartIdx )
+        ++i;
 
     if( !pStartNd )
     {
@@ -1332,11 +1330,11 @@ void SwHTMLWriter::GetControls()
     // und VCForm in einem Array gemerkt.
     // Ueber dieses Array laesst sich dann feststellen, wo form::Forms geoeffnet
     // und geschlossen werden muessen.
-    sal_uInt16 i;
+
     if( pHTMLPosFlyFrms )
     {
         // die absatz-gebundenen Controls einsammeln
-        for( i=0; i<pHTMLPosFlyFrms->size(); i++ )
+        for( size_t i=0; i<pHTMLPosFlyFrms->size(); i++ )
         {
             const SwHTMLPosFlyFrm* pPosFlyFrm = (*pHTMLPosFlyFrms)[ i ];
             if( HTML_OUT_CONTROL != pPosFlyFrm->GetOutFn() )
@@ -1354,7 +1352,7 @@ void SwHTMLWriter::GetControls()
 
     // und jetzt die in einem zeichengebundenen Rahmen
     const SwFrmFmts* pSpzFrmFmts = pDoc->GetSpzFrmFmts();
-    for( i=0; i<pSpzFrmFmts->size(); i++ )
+    for( size_t i=0; i<pSpzFrmFmts->size(); i++ )
     {
         const SwFrmFmt *pFrmFmt = (*pSpzFrmFmts)[i];
         if( RES_DRAWFRMFMT != pFrmFmt->Which() )
