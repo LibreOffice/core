@@ -203,7 +203,7 @@ DECLARE_HTMLEXPORT_TEST(testExportImageProperties, "HTMLImage.odt")
     //
     // It would make sense to switch to use CSS and use "real world" units instead
     // i.e. (style="margin: 0cm 1.5cm; width: 1cm; height: 1cm")
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(_WIN64)
     assertXPath(pDoc, "/html/body/p/a/font/img", "hspace", "38");
     assertXPath(pDoc, "/html/body/p/a/font/img", "vspace", "19");
     assertXPath(pDoc, "/html/body/p/a/font/img", "width", "222");
