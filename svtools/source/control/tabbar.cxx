@@ -1066,9 +1066,6 @@ void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
     Window::MouseButtonUp( rMEvt );
 }
 
-
-
-
 namespace {
 
 class TabBarPaintGuard
@@ -1101,7 +1098,6 @@ public:
     explicit TabDrawer(TabBar& rParent) :
         mrParent(rParent),
         mpStyleSettings(&mrParent.GetSettings().GetStyleSettings()),
-        maPoly(4),
         mbSelected(false),
         mbCustomColored(false),
         mbSpecialTab(false),
@@ -1114,27 +1110,44 @@ public:
         WinBits nWinStyle = mrParent.GetStyle();
 
         // draw extra line if above and below border
-        if ( (nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER) )
+        if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
         {
             Size aOutputSize = mrParent.GetOutputSizePixel();
             Rectangle aOutRect = mrParent.GetPageArea();
 
             // also draw border in 3D for 3D-tabs
-            if ( nWinStyle & WB_3DTAB )
+            if (nWinStyle & WB_3DTAB)
             {
-                mrParent.SetLineColor( mpStyleSettings->GetShadowColor() );
-                mrParent.DrawLine( Point( aOutRect.Left(), 0 ), Point( aOutputSize.Width(), 0 ) );
+                mrParent.SetLineColor(mpStyleSettings->GetShadowColor());
+                mrParent.DrawLine(Point(aOutRect.Left(), 0), Point(aOutputSize.Width(), 0));
             }
 
             // draw border (line above and line below)
-            mrParent.SetLineColor( mpStyleSettings->GetDarkShadowColor() );
-            mrParent.DrawLine( aOutRect.TopLeft(), Point( aOutputSize.Width()-1, aOutRect.Top() ) );
+            mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
+            mrParent.DrawLine(aOutRect.TopLeft(), Point(aOutputSize.Width() - 1, aOutRect.Top()));
         }
     }
 
     void drawOuterFrame()
     {
-        mrParent.DrawPolygon(maPoly);
+        mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
+
+        // set correct FillInBrush depending on status
+        if (mbSelected)
+        {
+            // Currently selected Tab
+            mrParent.SetFillColor(maSelectedColor);
+        }
+        else if (mbCustomColored)
+        {
+            mrParent.SetFillColor(maCustomColor);
+        }
+        else
+        {
+            mrParent.SetFillColor(maUnselectedColor);
+        }
+
+        mrParent.DrawRect(maRect);
     }
 
     void drawText(const OUString& aText)
@@ -1149,60 +1162,36 @@ public:
         if (mbEnabled)
             mrParent.DrawText(aPos, aText);
         else
-            mrParent.DrawCtrlText( aPos, aText, 0, aText.getLength(),
-                                   (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
+            mrParent.DrawCtrlText(aPos, aText, 0, aText.getLength(),
+                                    (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC));
     }
 
-    void drawOverTopBorder(bool b3DTab)
+    void drawOverTopBorder()
     {
-        Point p1 = maPoly[0];
-        Point p2 = maPoly[3];
-        p1.X() += 1;
-        p2.X() -= 1;
-        Rectangle aDelRect(p1, p2);
+        Point aTopLeft  = maRect.TopLeft()  + Point(1, 0);
+        Point aTopRight = maRect.TopRight() + Point(-1, 0);
+
+        Rectangle aDelRect(aTopLeft, aTopRight);
         mrParent.DrawRect(aDelRect);
-        if (b3DTab)
-        {
-            aDelRect.Top()--;
-            mrParent.DrawRect(aDelRect);
-        }
     }
 
     void drawColorLine()
     {
-        Point p1 = maPoly[1];
-        Point p2 = maPoly[2];
-        p1 += Point(1, 0);
-        p2 += Point(-1, -3);
+        mrParent.SetFillColor(maCustomColor);
+        mrParent.SetLineColor(maCustomColor);
 
-        mrParent.DrawRect(Rectangle(p1, p2));
+        Rectangle aLineRect(maRect.BottomLeft(), maRect.BottomRight());
+        aLineRect.Top() -= 3;
+
+        mrParent.DrawRect(aLineRect);
     }
 
     void drawTab()
     {
-        mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
-
-        // set correct FillInBrush depending on status
-        if ( mbSelected )
-        {
-            // Currently selected Tab
-            mrParent.SetFillColor( maSelectedColor );
-        }
-        else if ( mbCustomColored )
-        {
-            mrParent.SetFillColor( maCustomColor );
-        }
-        else
-        {
-            mrParent.SetFillColor( maUnselectedColor );
-        }
-
         drawOuterFrame();
 
         if (mbCustomColored && mbSelected)
         {
-            mrParent.SetFillColor(maCustomColor);
-            mrParent.SetLineColor(maCustomColor);
             drawColorLine();
         }
     }
@@ -1233,34 +1222,26 @@ public:
     void setRect(const Rectangle& rRect)
     {
         maRect = rRect;
-
-        long nOffY = mrParent.GetPageArea().getY();
-
-        // first draw filled polygon
-        maPoly[0] = Point( rRect.Left(),  nOffY );
-        maPoly[1] = Point( rRect.Left(),  rRect.Bottom() );
-        maPoly[2] = Point( rRect.Right(), rRect.Bottom() );
-        maPoly[3] = Point( rRect.Right(), nOffY );
     }
 
-    void setSelected(bool b)
+    void setSelected(bool bSelected)
     {
-        mbSelected = b;
+        mbSelected = bSelected;
     }
 
-    void setCustomColored(bool b)
+    void setCustomColored(bool bCustomColored)
     {
-        mbCustomColored = b;
+        mbCustomColored = bCustomColored;
     }
 
-    void setSpecialTab(bool b)
+    void setSpecialTab(bool bSpecialTab)
     {
-        mbSpecialTab = b;
+        mbSpecialTab = bSpecialTab;
     }
 
-    void setEnabled(bool b)
+    void setEnabled(bool bEnabled)
     {
-        mbEnabled = b;
+        mbEnabled = bEnabled;
     }
 
     void setSelectedFillColor(const Color& rColor)
@@ -1283,7 +1264,6 @@ private:
     const StyleSettings*  mpStyleSettings;
 
     Rectangle       maRect;
-    Polygon         maPoly;
 
     Color       maSelectedColor;
     Color       maCustomColor;
@@ -1295,7 +1275,7 @@ private:
     bool        mbEnabled:1;
 };
 
-}
+} // anonymous namespace
 
 void TabBar::Paint( const Rectangle& rect )
 {
@@ -1399,7 +1379,7 @@ void TabBar::Paint( const Rectangle& rect )
             {
                 SetLineColor();
                 SetFillColor(aSelectColor);
-                aDrawer.drawOverTopBorder(mnWinStyle & WB_3DTAB);
+                aDrawer.drawOverTopBorder();
                 return;
             }
 
