@@ -105,10 +105,12 @@ static SvXMLTokenMapEntry aTableElemTokenMap[] =
             XML_TOK_TABLE_HEADER_COLS },
     { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS },
     { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COL },
+    { XML_NAMESPACE_LO_EXT, XML_TABLE_COLUMN,           XML_TOK_TABLE_COL },
     { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,
             XML_TOK_TABLE_HEADER_ROWS },
     { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,              XML_TOK_TABLE_ROWS },
     { XML_NAMESPACE_TABLE, XML_TABLE_ROW,               XML_TOK_TABLE_ROW },
+    { XML_NAMESPACE_LO_EXT, XML_TABLE_ROW,              XML_TOK_TABLE_ROW },
     { XML_NAMESPACE_OFFICE, XML_DDE_SOURCE,
             XML_TOK_OFFICE_DDE_SOURCE },
 
@@ -968,7 +970,7 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_TABLE == nPrefix )
+    if( XML_NAMESPACE_TABLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_TABLE_CELL ) )
         {
