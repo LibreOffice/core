@@ -5078,8 +5078,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if (nTextRotationAngle)
             {
-                while (nTextRotationAngle > 360000)
-                    nTextRotationAngle-=9000;
                 switch (nTextRotationAngle)
                 {
                     case 9000:
