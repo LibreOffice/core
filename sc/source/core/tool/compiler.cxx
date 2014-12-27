@@ -1322,6 +1322,52 @@ struct ConventionXL_OOX : public ConventionXL_A1
          * CellStr. */
     }
 
+    static void parseExternalDocNameOOX(const OUString& rFormula, sal_Int32& rSrcPos)
+    {
+        sal_Int32 nLen = rFormula.getLength();
+        const sal_Unicode* p = rFormula.getStr();
+        for (sal_Int32 i = rSrcPos; i < nLen; ++i)
+        {
+            sal_Unicode c = p[i];
+            if (i == rSrcPos)
+            {
+                // first character must be '['.
+                if (c != '[')
+                    return;
+            }
+            else if (c == ']')
+            {
+                rSrcPos = i + 1;
+            }
+        }
+    }
+
+    virtual ParseResult parseAnyToken( const OUString& rFormula,
+                                       sal_Int32 nSrcPos,
+                                       const CharClass* pCharClass) const SAL_OVERRIDE
+    {
+        parseExternalDocNameOOX(rFormula, nSrcPos);
+
+        ParseResult aRet;
+        if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
+            return aRet;
+
+        static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
+            KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
+        static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
+        // '?' allowed in range names
+        const OUString aAddAllowed("?!");
+        return pCharClass->parseAnyToken( rFormula,
+                nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
+    }
+
+    virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
+            const ScDocument* pDoc,
+            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const SAL_OVERRIDE
+    {
+        return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
+    }
+
     virtual void makeExternalRefStr(
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& /*rFileName*/,
         const OUString& rTabName, const ScSingleRefData& rRef ) const SAL_OVERRIDE
