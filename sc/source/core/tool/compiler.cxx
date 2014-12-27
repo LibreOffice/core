@@ -1338,6 +1338,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
             else if (c == ']')
             {
                 rSrcPos = i + 1;
+                return;
             }
         }
     }
