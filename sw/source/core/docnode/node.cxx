@@ -717,6 +717,9 @@ SwFrmFmt* SwNode::GetFlyFmt() const
             for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
             {
                 SwFrmFmt* pFmt = rFrmFmtTbl[n];
+                // Only Writer fly frames can contain Writer nodes.
+                if (pFmt->Which() != RES_FLYFRMFMT)
+                    continue;
                 const SwFmtCntnt& rCntnt = pFmt->GetCntnt();
                 if( rCntnt.GetCntntIdx() &&
                     &rCntnt.GetCntntIdx()->GetNode() == pSttNd )
