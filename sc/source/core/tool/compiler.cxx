@@ -986,6 +986,10 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 
 struct ConventionXL
 {
+    virtual ~ConventionXL()
+    {
+    }
+
     static void GetTab(
         const ScAddress& rPos, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, OUString& rTabName )
@@ -1100,7 +1104,7 @@ struct ConventionXL
         }
     }
 
-    static void parseExternalDocName( const OUString& rFormula, sal_Int32& rSrcPos )
+    virtual void parseExternalDocName( const OUString& rFormula, sal_Int32& rSrcPos ) const
     {
         sal_Int32 nLen = rFormula.getLength();
         const sal_Unicode* p = rFormula.getStr();
@@ -1236,7 +1240,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                                        sal_Int32 nSrcPos,
                                        const CharClass* pCharClass) const SAL_OVERRIDE
     {
-        ConventionXL::parseExternalDocName(rFormula, nSrcPos);
+        parseExternalDocName(rFormula, nSrcPos);
 
         ParseResult aRet;
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
@@ -1320,6 +1324,27 @@ struct ConventionXL_OOX : public ConventionXL_A1
          * [N]'Sheet Name'!DefinedName
          * Similar to makeExternalRefStr() but with DefinedName instead of
          * CellStr. */
+    }
+
+    virtual void parseExternalDocName(const OUString& rFormula, sal_Int32& rSrcPos) const SAL_OVERRIDE
+    {
+        sal_Int32 nLen = rFormula.getLength();
+        const sal_Unicode* p = rFormula.getStr();
+        for (sal_Int32 i = rSrcPos; i < nLen; ++i)
+        {
+            sal_Unicode c = p[i];
+            if (i == rSrcPos)
+            {
+                // first character must be '['.
+                if (c != '[')
+                    return;
+            }
+            else if (c == ']')
+            {
+                rSrcPos = i + 1;
+                return;
+            }
+        }
     }
 
     virtual void makeExternalRefStr(
@@ -1461,7 +1486,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                                sal_Int32 nSrcPos,
                                const CharClass* pCharClass) const SAL_OVERRIDE
     {
-        ConventionXL::parseExternalDocName(rFormula, nSrcPos);
+        parseExternalDocName(rFormula, nSrcPos);
 
         ParseResult aRet;
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
