@@ -609,8 +609,7 @@ bool BackendImpl::PackageImpl::checkPlatform(
     else
     {
         ret = false;
-        OUString msg(
-            "unsupported platform");
+        OUString msg("unsupported platform");
         Any e(
             css::deployment::PlatformException(
                 msg, static_cast<OWeakObject *>(this), this));

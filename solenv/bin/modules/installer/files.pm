@@ -47,7 +47,7 @@ sub read_file
 
 #   Don't use "my @localfile = <IN>" here, because
 #   perl has a problem with the internal "large_and_huge_malloc" function
-#   when calling perl using MacOS 10.5 with a perl built with MacOS 10.4
+#   when calling perl using Mac OS X 10.5 with a perl built with Mac OS X 10.4
     while ( my $line = <IN> ) {
         push @localfile, $line;
     }

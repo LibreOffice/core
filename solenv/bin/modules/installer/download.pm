@@ -259,10 +259,10 @@ sub tar_package
 }
 
 #########################################################
-# Setting installation languages
+# Get product’s default language
 #########################################################
 
-sub get_downloadname_language
+sub get_language_default_for_product
 {
     my ($languagestringref) = @_;
 
@@ -292,10 +292,10 @@ sub get_downloadname_language
 }
 
 #########################################################
-# Setting download name
+# Get the name of product
 #########################################################
 
-sub get_downloadname_productname
+sub get_name_of_product
 {
     my ($allvariables) = @_;
 
@@ -307,136 +307,29 @@ sub get_downloadname_productname
 }
 
 #########################################################
-# Setting download version
+# Get version for the download name
 #########################################################
 
-sub get_download_version
+sub get_version_for_download_name
 {
     my ($allvariables) = @_;
 
     my $version = "";
 
     $version = $allvariables->{'PRODUCTVERSION'};
-    if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'} ne "" )) { $version = $version . $allvariables->{'PRODUCTEXTENSION'}; }
+    if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'} ne "" ))
+    {
+        $version = $version . $allvariables->{'PRODUCTEXTENSION'};
+    }
 
     return $version;
 }
 
-#################################################################
-# Setting the platform name for download
-#################################################################
-
-sub get_download_platformname
-{
-    my $platformname = "";
-
-    if ( $installer::globals::islinuxbuild )
-    {
-        $platformname = "Linux";
-    }
-    elsif ( $installer::globals::issolarisbuild )
-    {
-        $platformname = "Solaris";
-    }
-    elsif ( $installer::globals::iswindowsbuild )
-    {
-        $platformname = "Win";
-    }
-    elsif ( $installer::globals::isfreebsdbuild )
-    {
-        $platformname = "FreeBSD";
-    }
-    elsif ( $installer::globals::ismacbuild )
-    {
-        $platformname = "MacOS";
-    }
-    else
-    {
-        $platformname = $installer::globals::os;
-    }
-
-    return $platformname;
-}
-
 #########################################################
-# Setting the architecture for the download name
+# Get the type of functionality for the download name
 #########################################################
 
-sub get_download_architecture
-{
-    my $arch = "";
-
-    if ( $installer::globals::issolarissparcbuild )
-    {
-        $arch = "Sparc";
-    }
-    elsif ( $installer::globals::issolarisx86build )
-    {
-        $arch = "x86";
-    }
-    elsif ( $installer::globals::iswindowsbuild )
-    {
-        if ( $installer::globals::iswin64build )
-        {
-            $arch = "x64";
-        }
-        else
-        {
-            $arch = "x86";
-        }
-    }
-    elsif ( $installer::globals::cpuname eq 'INTEL' )
-    {
-        $arch = "x86";
-    }
-    elsif ( $installer::globals::cpuname eq 'POWERPC' )
-    {
-        $arch = "PPC";
-    }
-    elsif ( $installer::globals::cpuname eq 'POWERPC64' )
-    {
-        $arch = "PPC";
-    }
-    elsif ( $installer::globals::cpuname eq 'X86_64' )
-    {
-        $arch = "x86-64";
-    }
-
-    return $arch;
-}
-
-#########################################################
-# Setting the content type for the download name
-#########################################################
-
-sub get_download_content
-{
-    my ($allvariables) = @_;
-
-    my $content = "";
-
-    # content type included in the installer
-    if ( $installer::globals::isrpmbuild )
-    {
-        $content = "rpm";
-    }
-    elsif ( $installer::globals::isdebbuild )
-    {
-        $content = "deb";
-    }
-    elsif ( $installer::globals::packageformat eq "archive" )
-    {
-        $content = "archive";
-    }
-
-    return $content;
-}
-
-#########################################################
-# Setting the functionality type for the download name
-#########################################################
-
-sub get_download_functionality
+sub get_type_of_functionality_for_download_name
 {
     my ($allvariables) = @_;
 
@@ -467,26 +360,101 @@ sub get_download_functionality
 }
 
 ###############################################################################################
-# Setting the download file name
+# Get the download file name
 # Syntax:
 # (PRODUCTNAME)_(VERSION)_(OS)_(ARCH)_(INSTALLTYPE)_(LANGUAGE).(FILEEXTENSION)
 ###############################################################################################
 
-sub set_download_filename
+sub get_download_file_name
 {
     my ($languagestringref, $allvariables) = @_;
 
-    my $start = get_downloadname_productname($allvariables);
-    my $versionstring = get_download_version($allvariables);
-    my $platform = get_download_platformname();
-    my $architecture = get_download_architecture();
-    my $content = get_download_content($allvariables);
-    my $functionality = get_download_functionality($allvariables);
-    my $language = get_downloadname_language($languagestringref);
+    my $language = get_language_default_for_product($languagestringref);
+    my $productname = get_name_of_product($allvariables);
+    my $versionstring = get_version_for_download_name($allvariables);
+    my $functionality = get_type_of_functionality_for_download_name($allvariables);
 
-    # Setting the extension happens automatically
+    # operating system for the download name
+    my $osname = "";
+    if ( $installer::globals::islinuxbuild )
+    {
+        $osname = "Linux";
+    }
+    elsif ( $installer::globals::issolarisbuild )
+    {
+        $osname = "Solaris";
+    }
+    elsif ( $installer::globals::iswindowsbuild )
+    {
+        $osname = "Win";
+    }
+    elsif ( $installer::globals::isfreebsdbuild )
+    {
+        $osname = "FreeBSD";
+    }
+    elsif ( $installer::globals::ismacbuild )
+    {
+        $osname = "MacOSX";
+    }
+    else
+    {
+        $osname = $installer::globals::os;
+    }
 
-    my $filename = $start . "_" . $versionstring . "_" . $platform . "_" . $architecture . "_" . $content . "_" . $functionality . "_" . $language;
+    # architecture for the download name
+    my $architecture = "";
+    if ( $installer::globals::issolarissparcbuild )
+    {
+        $architecture = "Sparc";
+    }
+    elsif ( $installer::globals::issolarisx86build )
+    {
+        $architecture = "x86";
+    }
+    elsif ( $installer::globals::iswindowsbuild )
+    {
+        if ( $installer::globals::iswin64build )
+        {
+            $architecture = "x64";
+        }
+        else
+        {
+            $architecture = "x86";
+        }
+    }
+    elsif ( $installer::globals::cpuname eq 'INTEL' )
+    {
+        $architecture = "x86";
+    }
+    elsif ( $installer::globals::cpuname eq 'POWERPC' )
+    {
+        $architecture = "PPC";
+    }
+    elsif ( $installer::globals::cpuname eq 'POWERPC64' )
+    {
+        $architecture = "PPC64";
+    }
+    elsif ( $installer::globals::cpuname eq 'X86_64' )
+    {
+        $architecture = "x86-64";
+    }
+
+    # type of content for the download name
+    my $contenttype = "";
+    if ( $installer::globals::isrpmbuild )
+    {
+        $contenttype = "rpm";
+    }
+    elsif ( $installer::globals::isdebbuild )
+    {
+        $contenttype = "deb";
+    }
+    elsif ( $installer::globals::packageformat eq "archive" )
+    {
+        $contenttype = "archive";
+    }
+
+    my $filename = $productname . "_" . $versionstring . "_" . $osname . "_" . $architecture . "_" . $contenttype . "_" . $functionality . "_" . $language;
 
     # get rid of duplicit "_" delimiters when some strings are empty
     $filename =~ s/\_\_\_/\_/g;
@@ -576,7 +544,7 @@ sub resolve_variables_in_downloadname
     elsif ( $installer::globals::issolarissparcbuild ) { $os = "solsparc"; }
     elsif ( $installer::globals::issolarisx86build ) { $os = "solia"; }
     elsif ( $installer::globals::islinuxbuild ) { $os = "linux"; }
-    elsif ( $installer::globals::platformid eq 'macosx_x86_64' ) { $os = "macosxx"; }
+    elsif ( $installer::globals::ismacbuild ) { $os = "macosx"; }
     else { $os = ""; }
     $downloadname =~ s/\{os\}/$os/;
 
@@ -708,7 +676,7 @@ sub create_download_sets
 
     # evaluating the name of the download file
 
-    if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $downloadname = set_download_filename($languagestringref, $allvariableshashref); }
+    if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $downloadname = get_download_file_name($languagestringref, $allvariableshashref); }
     else { $downloadname = resolve_variables_in_downloadname($allvariableshashref, $downloadname, $languagestringref); }
 
     if ( ! $installer::globals::iswindowsbuild )    # Unix specific part

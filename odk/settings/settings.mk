@@ -367,15 +367,36 @@ endif
 ###########################################################################
 ifeq "$(PLATFORM)" "macosx"
 
+UNOPKG_PLATFORM=MacOSX_$(PROCTYPE)
+
+ifeq "$(PROCTYPE)" "x86"
+UNOPKG_PLATFORM=MacOSX_x86
+CC=gcc
+LINK=g++
+LIB=g++
+endif
+
+ifeq "$(PROCTYPE)" "powerpc"
+UNOPKG_PLATFORM=MacOSX_PowerPC
+CC=gcc
+LINK=g++
+LIB=g++
+endif
+
+ifeq "$(PROCTYPE)" "x86_64"
 UNOPKG_PLATFORM=MacOSX_x86_64
+CC=clang++
+LINK=clang++
+LIB=clang++
+endif
+
+JAVA_PROC_TYPE=$(PROCTYPE)
 JAVABIN=Commands
 
 OS=MACOSX
 PS=/
 ICL=\$$
-CC=clang++
-LINK=clang++
-LIB=clang++
+
 ECHO=@echo
 MKDIR=mkdir -p
 CAT=cat

@@ -86,6 +86,10 @@ namespace
             ret = checkOSandCPU("Solaris", "x86");
         else if (token == "aix_powerpc")
             ret = checkOSandCPU("AIX", "PowerPC");
+        else if (token == "macosx_powerpc")
+            ret = checkOSandCPU("MacOSX", "PowerPC");
+        else if (token == "macosx_x86")
+            ret = checkOSandCPU("MacOSX", "x86");
         else if (token == "macosx_x86_64")
             ret = checkOSandCPU("MacOSX", "X86_64");
         else if (token == "linux_x86")

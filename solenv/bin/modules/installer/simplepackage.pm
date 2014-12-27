@@ -510,7 +510,7 @@ sub create_simple_package
 
         if ( $allvariables->{'OOODOWNLOADNAME'} )
         {
-            $packagename = installer::download::set_download_filename(\$locallanguage, $allvariables);
+            $packagename = installer::download::get_download_file_name(\$locallanguage, $allvariables);
         }
         else
         {
@@ -678,7 +678,7 @@ sub create_simple_package
     my $extensionfolder = get_extensions_dir($subfolderdir);
     installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
 
-    if ( $installer::globals::platformid eq 'macosx_x86_64' )
+    if ( $installer::globals::ismacbuild )
     {
         installer::worker::put_scpactions_into_installset("$installdir/$packagename");
     }

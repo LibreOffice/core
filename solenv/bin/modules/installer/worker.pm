@@ -153,16 +153,17 @@ sub analyze_and_save_logfile
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
 
-    # Saving the list of patchfiles in a patchlist directory in the install directory
-    if ( $installer::globals::creating_windows_installer_patch ) { _save_patchlist_file($installlogdir, $numberedlogfilename); }
+    if ( $installer::globals::iswindowsbuild )
+    {
+        # Saving the list of patchfiles in a patchlist directory in the install directory
+        if ( $installer::globals::creating_windows_installer_patch ) { _save_patchlist_file($installlogdir, $numberedlogfilename); }
+        if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
-    if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
-
-    # Exiting the packaging process, if an error occurred.
-    # This is important, to get an error code "-1", if an error was found in the log file,
-    # that did not break the packaging process
-
-    if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
+        # Exiting the packaging process, if an error occurred.
+        # This is important, to get an error code "-1", if an error was found in the log file,
+        # that did not break the packaging process
+        if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
+    }
 
     return ($is_success, $finalinstalldir);
 }

@@ -233,9 +233,8 @@ sub run {
     if ( $installer::globals::iswindowsbuild ) { installer::control::read_lcidlist($includepatharrayref); }
 
     ####################################################################
-    # MacOS dmg build requires special DS_Store file to arrange icons
+    # MacOSX dmg build uses .DS_Store file for Finder to arrange icons
     ####################################################################
-    # if (($installer::globals::ismacdmgbuild) && ($installer::globals::product eq "OpenOffice_Dev")) { $installer::globals::devsnapshotbuild = 1; }
 
     #####################################################################
     # Including additional inc files for variable settings, if defined
@@ -325,7 +324,6 @@ sub run {
 
     if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
     if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
-#   if (($installer::globals::devsnapshotbuild)) { installer::scriptitems::use_dev_copy_scpaction($scpactionsinproductarrayref); }
     # TODO: why is this not done in scp2 based on the value of $(ENABLE_RELEASE_BUILD)?
     if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
 
@@ -898,8 +896,8 @@ sub run {
             # Creating directories
             ####################################################
 
-            if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { installer::download::set_download_filename($languagestringref, $allvariableshashref); }
-            else { installer::download::resolve_variables_in_downloadname($allvariableshashref, "", $languagestringref); }
+            if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::get_download_file_name($languagestringref, $allvariableshashref); }
+            else { $$downloadname = installer::download::resolve_variables_in_downloadname($allvariableshashref, "", $languagestringref); }
 
             $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
 
@@ -1637,7 +1635,7 @@ sub run {
             if ( $installer::globals::iswindowsbuild )
             {
                 $create_download = 0;
-                if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::set_download_filename($languagestringref, $allvariableshashref); }
+                if ( $allvariableshashref->{'OOODOWNLOADNAME'} ) { $$downloadname = installer::download::get_download_file_name($languagestringref, $allvariableshashref); }
                 else { $$downloadname = installer::download::resolve_variables_in_downloadname($allvariableshashref, $$downloadname, $languagestringref); }
                 installer::systemactions::rename_one_file( $finalinstalldir . $installer::globals::separator . $installer::globals::shortmsidatabasename, $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi" );
                 if ( defined($ENV{'WINDOWS_BUILD_SIGNING'}) && ($ENV{'WINDOWS_BUILD_SIGNING'} eq 'TRUE') && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} eq '0'))
@@ -1646,7 +1644,7 @@ sub run {
                     if ( defined($ENV{'PFXFILE'}) ) { $systemcall .= "-f $ENV{'PFXFILE'} "; }
                     if ( defined($ENV{'PFXPASSWORD'}) ) { $systemcall .= "-p $ENV{'PFXPASSWORD'} "; }
                     if ( defined($ENV{'TIMESTAMPURL'}) ) { $systemcall .= "-t $ENV{'TIMESTAMPURL'} "; } else { $systemcall .= "-t http://timestamp.globalsign.com/scripts/timestamp.dll "; }
-                    $systemcall .= "-d \"" . installer::download::get_downloadname_productname($allvariableshashref) . " " . installer::download::get_download_version($allvariableshashref) . " " . installer::download::get_downloadname_language($languagestringref) . " " . installer::download::get_download_functionality($allvariableshashref) . "\" ";
+                    $systemcall .= "-d \"" . installer::download::get_name_of_product($allvariableshashref) . " " . installer::download::get_version_for_download_name($allvariableshashref) . " " . installer::download::get_language_default_for_product($languagestringref) . " " . installer::download::get_type_of_functionality_for_download_name($allvariableshashref) . "\" ";
                     $systemcall .= $finalinstalldir . $installer::globals::separator . $$downloadname . ".msi";
                     installer::logger::print_message( "... code signing and timestamping with signtool.exe ...\n" );
 
