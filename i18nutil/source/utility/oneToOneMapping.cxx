@@ -62,24 +62,25 @@ oneToOneMappingWithFlag::oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF
       mnFlag    ( rnFlag ),
       mbHasIndex( false )
 {
+    memset(mpIndex, 0, sizeof(mpIndex));
 }
 
 oneToOneMappingWithFlag::~oneToOneMappingWithFlag()
 {
     if( mbHasIndex )
-        for( int i = 0; i < 256; i++ )
-            if( mpIndex[i] )
-                delete [] mpIndex[i];
+    {
+        for (size_t i = 0; i < SAL_N_ELEMENTS(mpIndex); ++i)
+            delete [] mpIndex[i];
+    }
 }
-
 
 void oneToOneMappingWithFlag::makeIndex()
 {
     if( !mbHasIndex && mpTableWF )
     {
-        int i, j, current = -1;
+        int current = -1;
 
-        for( i = 0; i < 256; i++ )
+        for (size_t i = 0; i < SAL_N_ELEMENTS(mpIndex); ++i)
             mpIndex[i] = NULL;
 
         for( size_t k = 0; k < mnSize; k++ )
@@ -91,7 +92,7 @@ void oneToOneMappingWithFlag::makeIndex()
                 current = high;
                 mpIndex[high] = new UnicodePairWithFlag*[256];
 
-                for( j = 0; j < 256; j++ )
+                for (int j = 0; j < 256; ++j)
                     mpIndex[high][j] = NULL;
             }
             mpIndex[high][low] = &mpTableWF[k];
