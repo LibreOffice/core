@@ -88,7 +88,10 @@ sub resolve_filelist_flag
                         if ($use_internal_rights)
                         {
                             my $st = stat($path);
-                            $newfile{'UnixRights'} = sprintf("%o", $st->mode & 0777);
+                            if ($st)
+                            {
+                                $newfile{'UnixRights'} = sprintf("%o", $st->mode & 0777);
+                            }
                         }
 
                         push @newfiles, \%newfile;
