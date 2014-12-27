@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_022bbfec",
+        "filename": "desktop/Library_sofficeapp.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-27T18:39:06Z",
+      "side": 1,
+      "message": "will check thanks",
+      "parentUuid": "fa32b979_02ddff13",
+      "revId": "aefb1d1298d88cd15dddca6af3eb717e7f41c3b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_62c16b2e",
         "filename": "include/vcl/opengl/OpenGLContext.hxx",
         "patchSetId": 8
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_42f2279c",
+        "filename": "include/vcl/opengl/OpenGLContext.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-27T18:39:06Z",
+      "side": 1,
+      "message": "That\u0027s more of a FIXME :)",
+      "parentUuid": "fa32b979_62c16b2e",
+      "revId": "aefb1d1298d88cd15dddca6af3eb717e7f41c3b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa32b979_22e283d6",
         "filename": "svx/Executable_gengal.mk",
         "patchSetId": 8
@@ -47,6 +83,24 @@
       "writtenOn": "2014-12-27T06:10:42Z",
       "side": 1,
       "message": "Are you sure that you don\u0027t need -ldl and -lpthread?",
+      "revId": "aefb1d1298d88cd15dddca6af3eb717e7f41c3b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_62ef2bb1",
+        "filename": "svx/Executable_gengal.mk",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-12-27T18:39:06Z",
+      "side": 1,
+      "message": "will check, thanks for pointing out",
+      "parentUuid": "fa32b979_22e283d6",
       "revId": "aefb1d1298d88cd15dddca6af3eb717e7f41c3b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
