@@ -1371,17 +1371,16 @@ void addPlainStructBaseArguments(
             "unexpected entity \"" + base
             + "\" in call to addPlainStructBaseArguments");
     }
-    rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
-        dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
-    assert(ent2.is());
-    if (!ent2->getDirectBase().isEmpty()) {
+    unoidl::PlainStructTypeEntity& ent2(
+        dynamic_cast<unoidl::PlainStructTypeEntity&>(*ent.get()));
+    if (!ent2.getDirectBase().isEmpty()) {
         addPlainStructBaseArguments(
             manager, dependencies, methodDescriptor, code,
-            ent2->getDirectBase(), index);
+            ent2.getDirectBase(), index);
     }
     for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
-             ent2->getDirectMembers().begin());
-         i != ent2->getDirectMembers().end(); ++i)
+             ent2.getDirectMembers().begin());
+         i != ent2.getDirectMembers().end(); ++i)
     {
         methodDescriptor->addParameter(i->type, false, true, 0);
         addLoadLocal(manager, code, index, false, i->type, false, dependencies);
