@@ -1950,7 +1950,7 @@ public:
         return *this;
     }
 
-    value_type operator*() const
+    value_type& operator*() const
     {
         val = calcVal();
         return val;
