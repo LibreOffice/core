@@ -240,6 +240,7 @@
                         </child>
                         <child>
                           <object class="svxlo-SvxTextEncodingBox" id="charsetlist:border">
+                            <property name="dropdown">False</property>
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                           </object>
