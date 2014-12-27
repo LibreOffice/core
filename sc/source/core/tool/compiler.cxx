@@ -986,6 +986,10 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 
 struct ConventionXL
 {
+    virtual ~ConventionXL()
+    {
+    }
+
     static void GetTab(
         const ScAddress& rPos, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, OUString& rTabName )
@@ -1100,7 +1104,7 @@ struct ConventionXL
         }
     }
 
-    static void parseExternalDocName( const OUString& rFormula, sal_Int32& rSrcPos )
+    virtual void parseExternalDocName( const OUString& rFormula, sal_Int32& rSrcPos ) const
     {
         sal_Int32 nLen = rFormula.getLength();
         const sal_Unicode* p = rFormula.getStr();
@@ -1236,7 +1240,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                                        sal_Int32 nSrcPos,
                                        const CharClass* pCharClass) const SAL_OVERRIDE
     {
-        ConventionXL::parseExternalDocName(rFormula, nSrcPos);
+        parseExternalDocName(rFormula, nSrcPos);
 
         ParseResult aRet;
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
@@ -1322,7 +1326,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
          * CellStr. */
     }
 
-    static void parseExternalDocNameOOX(const OUString& rFormula, sal_Int32& rSrcPos)
+    virtual void parseExternalDocName(const OUString& rFormula, sal_Int32& rSrcPos) const SAL_OVERRIDE
     {
         sal_Int32 nLen = rFormula.getLength();
         const sal_Unicode* p = rFormula.getStr();
@@ -1341,25 +1345,6 @@ struct ConventionXL_OOX : public ConventionXL_A1
                 return;
             }
         }
-    }
-
-    virtual ParseResult parseAnyToken( const OUString& rFormula,
-                                       sal_Int32 nSrcPos,
-                                       const CharClass* pCharClass) const SAL_OVERRIDE
-    {
-        parseExternalDocNameOOX(rFormula, nSrcPos);
-
-        ParseResult aRet;
-        if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
-            return aRet;
-
-        static const sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
-            KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
-        static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
-        // '?' allowed in range names
-        const OUString aAddAllowed("?!");
-        return pCharClass->parseAnyToken( rFormula,
-                nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
 
     virtual void makeExternalRefStr(
@@ -1501,7 +1486,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
                                sal_Int32 nSrcPos,
                                const CharClass* pCharClass) const SAL_OVERRIDE
     {
-        ConventionXL::parseExternalDocName(rFormula, nSrcPos);
+        parseExternalDocName(rFormula, nSrcPos);
 
         ParseResult aRet;
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
