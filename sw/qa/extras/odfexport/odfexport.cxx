@@ -402,6 +402,11 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1, xText), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell->getString());
+
+    // Table inside a textbox should be in the extension namespace.
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+        // This failed, as draw:custom-shape had a table:table child.
+        assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", "Table1");
 }
 
 DECLARE_ODFEXPORT_TEST(testImageWithSpecialID, "document_with_two_images_with_special_IDs.odt")
@@ -457,6 +462,11 @@ DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+}
+
+DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
+{
+    // Just make sure the output is valid.
 }
 
 #endif

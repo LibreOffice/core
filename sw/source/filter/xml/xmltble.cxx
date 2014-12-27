@@ -50,6 +50,7 @@
 #include "xmlexp.hxx"
 #include <boost/foreach.hpp>
 #include <o3tl/sorted_vector.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -461,10 +462,11 @@ class SwXMLTableInfo_Impl
     const SwTable *pTable;
     Reference < XTextSection > xBaseSection;
     bool bBaseSectionValid;
+    sal_uInt32 m_nPrefix;
 
 public:
 
-    inline SwXMLTableInfo_Impl( const SwTable *pTbl );
+    inline SwXMLTableInfo_Impl( const SwTable *pTbl, sal_uInt16 nPrefix );
 
     const SwTable *GetTable() const { return pTable; }
     const SwFrmFmt *GetTblFmt() const { return pTable->GetFrmFmt(); }
@@ -472,11 +474,14 @@ public:
     bool IsBaseSectionValid() const { return bBaseSectionValid; }
     const Reference < XTextSection >& GetBaseSection() const { return xBaseSection; }
     inline void SetBaseSection( const Reference < XTextSection >& rBase );
+    /// The namespace (table or loext) that should be used for the elements.
+    sal_uInt16 GetPrefix() const { return m_nPrefix; }
 };
 
-inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl( const SwTable *pTbl ) :
+inline SwXMLTableInfo_Impl::SwXMLTableInfo_Impl( const SwTable *pTbl, sal_uInt16 nPrefix ) :
     pTable( pTbl ),
-    bBaseSectionValid( false )
+    bBaseSectionValid( false ),
+    m_nPrefix(nPrefix)
 {
 }
 
@@ -719,7 +724,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         SwXMLTableColumnsSortByWidth_Impl aExpCols;
         SwXMLTableFrmFmtsSort_Impl aExpRows;
         SwXMLTableFrmFmtsSort_Impl aExpCells;
-        SwXMLTableInfo_Impl aTblInfo( &rTbl );
+        SwXMLTableInfo_Impl aTblInfo( &rTbl, XML_NAMESPACE_TABLE );
         ExportTableLinesAutoStyles( rTbl.GetTabLines(), nAbsWidth, nBaseWidth,
                                     pTblFmt->GetName(), aExpCols, aExpRows, aExpCells,
                                     aTblInfo, true);
@@ -828,7 +833,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                 }
 
                 // export cell element
-                SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
+                SvXMLElementExport aElem( *this, rTblInfo.GetPrefix(),
                                         XML_TABLE_CELL, true, true );
 
                 // export cell content
@@ -879,8 +884,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
     }
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                  XML_TABLE_ROW, true, true );
+        SvXMLElementExport aElem( *this, rTblInfo.GetPrefix(), XML_TABLE_ROW, true, true );
         const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
         const size_t nBoxes = rBoxes.size();
 
@@ -894,7 +898,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const long nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
-                SvXMLElementExport aElem2( *this, XML_NAMESPACE_TABLE,
+                SvXMLElementExport aElem2( *this, rTblInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
             }
@@ -927,7 +931,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
             for( size_t i=nOldCol; i<nCol; ++i )
             {
-                SvXMLElementExport aElemExport( *this, XML_NAMESPACE_TABLE,
+                SvXMLElementExport aElemExport( *this, rTblInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
             }
@@ -1001,8 +1005,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
             }
 
             {
-                SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
-                                          XML_TABLE_COLUMN, true, true );
+                SvXMLElementExport aElem( *this, rTblInfo.GetPrefix(), XML_TABLE_COLUMN, true, true );
             }
 
             nColRep = 1;
@@ -1065,9 +1068,16 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                       EncodeStyleName( pTblFmt->GetName() ) );
     }
 
+    sal_uInt16 nPrefix = XML_NAMESPACE_TABLE;
+    if (const SwFrmFmt* pFlyFormat = rTblNd.GetFlyFmt())
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_TABLE,
-                                  true, true );
+        std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(rTblNd.GetDoc());
+        if (aTextBoxes.find(pFlyFormat) != aTextBoxes.end())
+            nPrefix = XML_NAMESPACE_LO_EXT;
+    }
+
+    {
+        SvXMLElementExport aElem( *this, nPrefix, XML_TABLE, true, true );
 
         // export DDE source (if this is a DDE table)
         if ( rTbl.ISA(SwDDETable) )
@@ -1101,7 +1111,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                                        XML_DDE_SOURCE, true, false);
         }
 
-        SwXMLTableInfo_Impl aTblInfo( &rTbl );
+        SwXMLTableInfo_Impl aTblInfo( &rTbl, nPrefix );
         ExportTableLines( rTbl.GetTabLines(), aTblInfo, rTbl.GetRowsToRepeat() );
 
         BOOST_FOREACH( SwTableLine *pLine, ((SwTable &)rTbl).GetTabLines() )
