@@ -3090,11 +3090,10 @@ sal_uInt32 ExceptionType::getTotalMemberCount(OUString const & base) const {
         throw CannotDumpException(
             "exception type base " + base + " is not an exception type");
     }
-    rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
-        dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
-    assert(ent2.is());
-    return getTotalMemberCount(ent2->getDirectBase())
-        + ent2->getDirectMembers().size(); //TODO: overflow
+    unoidl::ExceptionTypeEntity& ent2(
+        dynamic_cast< unoidl::ExceptionTypeEntity&>(*ent.get()));
+    return getTotalMemberCount(ent2.getDirectBase())
+        + ent2.getDirectMembers().size(); //TODO: overflow
 }
 
 class EnumType: public CppuType {
