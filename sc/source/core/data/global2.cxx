@@ -327,7 +327,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
         if ( pMedium )
         {
             bool bWasAbs = true;
-            aAbsName = pMedium->GetURLObject().smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
+            aAbsName = pMedium->GetURLObject().smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::DECODE_TO_IURI);
         }
         else
         {   // This can't happen, but ...
