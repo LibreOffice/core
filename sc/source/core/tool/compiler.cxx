@@ -1362,13 +1362,6 @@ struct ConventionXL_OOX : public ConventionXL_A1
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
 
-    virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
-            const ScDocument* pDoc,
-            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const SAL_OVERRIDE
-    {
-        return ConventionXL::parseExternalName( rSymbol, rFile, rName, pDoc, pExternalLinks);
-    }
-
     virtual void makeExternalRefStr(
         OUStringBuffer& rBuffer, const ScAddress& rPos, sal_uInt16 nFileId, const OUString& /*rFileName*/,
         const OUString& rTabName, const ScSingleRefData& rRef ) const SAL_OVERRIDE
