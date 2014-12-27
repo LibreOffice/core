@@ -2082,6 +2082,9 @@ bool PlainStructType::dumpBaseMembers(
         rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
             dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
         assert(ent2.is());
+        if (!ent2.is()) {
+            return false;
+        }
         hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType);
         for (std::vector< unoidl::PlainStructTypeEntity::Member >::
                  const_iterator i(ent2->getDirectMembers().begin());
