@@ -64,8 +64,10 @@ private:
     OUString toString(sal_Int32 nVal) const;
     SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
+#if HAVE_FEATURE_OPENCL
     OpenCLConfig::ImplMatcherSet& CurrentWhiteOrBlackList();
     const OpenCLConfig::ImplMatcher& CurrentWhiteOrBlackListEntry();
+#endif
 
 private:
     SvxCheckListBox* mpLbSettings;
