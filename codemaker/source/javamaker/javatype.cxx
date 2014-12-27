@@ -1579,20 +1579,19 @@ void addExceptionBaseArguments(
             "unexpected entity \"" + base
             + "\" in call to addExceptionBaseArguments");
     }
-    rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
-        dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
-    assert(ent2.is());
+    unoidl::ExceptionTypeEntity& ent2(
+        dynamic_cast<unoidl::ExceptionTypeEntity&>(*ent.get()));
     bool baseException = base == "com.sun.star.uno.Exception";
     if (!baseException) {
         addExceptionBaseArguments(
             manager, dependencies, methodDescriptor, code,
-            ent2->getDirectBase(), index);
+            ent2.getDirectBase(), index);
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
-             ent2->getDirectMembers().begin());
-         i != ent2->getDirectMembers().end(); ++i)
+             ent2.getDirectMembers().begin());
+         i != ent2.getDirectMembers().end(); ++i)
     {
-        if (!baseException || i != ent2->getDirectMembers().begin()) {
+        if (!baseException || i != ent2.getDirectMembers().begin()) {
             methodDescriptor->addParameter(i->type, false, true, 0);
             addLoadLocal(
                 manager, code, index, false, i->type, false, dependencies);
