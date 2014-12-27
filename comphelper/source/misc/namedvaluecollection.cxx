@@ -26,10 +26,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <functional>
 #include <algorithm>
-
+#include <functional>
+#include <unordered_map>
 
 namespace comphelper
 {
@@ -49,7 +48,7 @@ namespace comphelper
 
     //= NamedValueCollection_Impl
 
-    typedef ::boost::unordered_map< OUString, Any, OUStringHash >    NamedValueRepository;
+    typedef std::unordered_map< OUString, Any, OUStringHash >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
     {

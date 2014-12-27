@@ -47,7 +47,7 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include "errobject.hxx"
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -167,7 +167,7 @@ void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ ) thr
 namespace {
 
 typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
-typedef boost::unordered_map< const StarBASIC *, DocBasicItemRef > DocBasicItemMap;
+typedef std::unordered_map< const StarBASIC *, DocBasicItemRef > DocBasicItemMap;
 
 class GaDocBasicItems : public rtl::Static<DocBasicItemMap,GaDocBasicItems> {};
 
@@ -1177,7 +1177,7 @@ struct ClassModuleRunInitItem
 // Derive from unordered_map type instead of typedef
 // to allow forward declaration in sbmod.hxx
 class ModuleInitDependencyMap : public
-    boost::unordered_map< OUString, ClassModuleRunInitItem,
+    std::unordered_map< OUString, ClassModuleRunInitItem,
                           OUStringHash, ::std::equal_to< OUString > >
 {};
 

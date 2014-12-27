@@ -29,8 +29,7 @@
 #include "osl/thread.hxx"
 #include "osl/mutex.hxx"
 
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 
 using namespace com::sun::star;
 
@@ -58,7 +57,7 @@ size_t oslThreadIdentifier_hash::operator()(oslThreadIdentifier s1) const
     return s1;
 }
 
-typedef ::boost::unordered_map<oslThreadIdentifier,
+typedef std::unordered_map<oslThreadIdentifier,
                         uno_Environment *,
                         oslThreadIdentifier_hash,
                         oslThreadIdentifier_equal>  ThreadMap;

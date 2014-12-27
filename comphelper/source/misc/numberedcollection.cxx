@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <algorithm>
 #include <comphelper/numberedcollection.hxx>
-
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
-
 
 namespace comphelper{
 

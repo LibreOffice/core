@@ -19,8 +19,8 @@
 
 #include "sal/config.h"
 
-#include <boost/unordered_map.hpp>
 #include <cassert>
+#include <unordered_map>
 #include <stdio.h>
 
 #include <osl/diagnose.h>
@@ -381,7 +381,7 @@ struct uno_ThreadPool_Hash
 
 
 
-typedef ::boost::unordered_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
+typedef std::unordered_map< uno_ThreadPool, ThreadPoolHolder, uno_ThreadPool_Hash, uno_ThreadPool_Equal > ThreadpoolHashSet;
 
 static ThreadpoolHashSet *g_pThreadpoolHashSet;
 

@@ -132,7 +132,7 @@ public:
 };
 
 
-typedef boost::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash, ::std::equal_to< OUString > > ModuleInfoMap;
+typedef std::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash, ::std::equal_to< OUString > > ModuleInfoMap;
 
 typedef ::cppu::ImplHelper1< ::com::sun::star::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
 
@@ -140,7 +140,7 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 {
     friend class SfxScriptLibraryContainer;
 
-    typedef boost::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash > ModuleInfoMap;
+    typedef std::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash > ModuleInfoMap;
 
     bool mbLoadedSource;
     bool mbLoadedBinary;

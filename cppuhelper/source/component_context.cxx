@@ -26,7 +26,7 @@
 #include <stdio.h>
 #endif
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #ifdef CONTEXT_DIAG
 #include <map>
 #endif
@@ -347,7 +347,7 @@ protected:
             , lateInit( lateInit_ )
             {}
     };
-    typedef ::boost::unordered_map< OUString, ContextEntry * , OUStringHash > t_map;
+    typedef std::unordered_map< OUString, ContextEntry * , OUStringHash > t_map;
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;

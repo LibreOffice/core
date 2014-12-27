@@ -39,8 +39,8 @@
 #include <rtl/uri.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 #include <list>
+#include <unordered_map>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -594,7 +594,7 @@ void Bootstrap_Impl::expandValue(
 namespace {
 
 struct bootstrap_map: private boost::noncopyable {
-    typedef boost::unordered_map<
+    typedef std::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash, std::equal_to< rtl::OUString > > t;
 

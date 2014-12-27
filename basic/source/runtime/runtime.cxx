@@ -21,7 +21,7 @@
 
 #include <algorithm>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1792,7 +1792,7 @@ struct SbxVariablePtrHash
         { return reinterpret_cast<size_t>(pVar); }
 };
 
-typedef boost::unordered_map< SbxVariable*, DimAsNewRecoverItem,
+typedef std::unordered_map< SbxVariable*, DimAsNewRecoverItem,
                               SbxVariablePtrHash >  DimAsNewRecoverHash;
 
 class GaDimAsNewRecoverHash : public rtl::Static<DimAsNewRecoverHash, GaDimAsNewRecoverHash> {};

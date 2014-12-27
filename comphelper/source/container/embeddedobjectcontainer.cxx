@@ -41,15 +41,15 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <boost/unordered_map.hpp>
 #include <algorithm>
+#include <unordered_map>
 
 
 using namespace ::com::sun::star;
 
 namespace comphelper {
 
-typedef boost::unordered_map<OUString, uno::Reference <embed::XEmbeddedObject>, OUStringHash>
+typedef std::unordered_map<OUString, uno::Reference <embed::XEmbeddedObject>, OUStringHash>
 EmbeddedObjectContainerNameMap;
 
 struct EmbedImpl

@@ -54,7 +54,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class TextEngine;
 class TextView;
@@ -383,7 +383,7 @@ private:
 };
 
 
-typedef ::boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
                          css::beans::PropertyValue,
                          OUStringHash,
                          ::std::equal_to< OUString > > tPropValMap;

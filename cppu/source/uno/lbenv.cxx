@@ -41,7 +41,7 @@
 #include "destr.hxx"
 #include "loadmodule.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 #include <stdio.h>
 
@@ -104,18 +104,16 @@ struct FctPtrHash :
 
 
 // mapping from environment name to environment
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     OUString, uno_Environment *, OUStringHash > OUString2EnvironmentMap;
 
 // mapping from ptr to object entry
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     void *, ObjectEntry *, FctPtrHash,
     ::std::equal_to< void * > > Ptr2ObjectMap;
 // mapping from oid to object entry
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     OUString, ObjectEntry *, OUStringHash > OId2ObjectMap;
-
-
 
 struct EnvironmentsData
 {

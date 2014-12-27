@@ -22,7 +22,8 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+
 namespace comphelper
 {
     struct PropertyInfo
@@ -43,10 +44,10 @@ namespace comphelper
     };
 }
 
-typedef boost::unordered_map < OUString,
+typedef std::unordered_map < OUString,
                         ::comphelper::PropertyInfo const *,
                         OUStringHash > PropertyInfoHash;
-typedef boost::unordered_map < OUString,
+typedef std::unordered_map < OUString,
                         ::comphelper::PropertyData*,
                         OUStringHash > PropertyDataHash;
 #endif

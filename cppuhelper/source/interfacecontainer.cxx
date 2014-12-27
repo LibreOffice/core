@@ -26,7 +26,6 @@
 #include <osl/mutex.hxx>
 
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 

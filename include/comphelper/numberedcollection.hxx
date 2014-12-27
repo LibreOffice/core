@@ -30,9 +30,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
-
+#include <boost/functional/hash.hpp>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 
 namespace comphelper{
@@ -58,7 +58,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
             ::sal_Int32 nNumber;
         };
 
-        typedef ::boost::unordered_map<
+        typedef std::unordered_map<
                     long                    ,
                     TNumberedItem           ,
                     ::boost::hash< long >     ,

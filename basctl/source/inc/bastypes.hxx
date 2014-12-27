@@ -26,7 +26,7 @@
 #include <svtools/tabbar.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class SbModule;
 class SfxItemSet;
@@ -287,7 +287,7 @@ public:
         ItemType               GetCurrentType() const { return m_eCurrentType; }
     };
 private:
-    typedef boost::unordered_map<Key, Item, Key::Hash> Map;
+    typedef std::unordered_map<Key, Item, Key::Hash> Map;
     Map m_aMap;
 };
 

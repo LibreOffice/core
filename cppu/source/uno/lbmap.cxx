@@ -21,10 +21,10 @@
 
 #include "IdentityMapping.hxx"
 
-#include <boost/unordered_map.hpp>
-#include <set>
 #include <algorithm>
 #include <cassert>
+#include <set>
+#include <unordered_map>
 
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -127,9 +127,9 @@ struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
         { return reinterpret_cast<size_t>(pKey); }
 };
 
-typedef boost::unordered_map<
+typedef std::unordered_map<
     OUString, MappingEntry *, OUStringHash > t_OUString2Entry;
-typedef boost::unordered_map<
+typedef std::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;

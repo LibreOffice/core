@@ -21,8 +21,7 @@
 #define INCLUDED_CPPU_SOURCE_THREADPOOL_THREADPOOL_HXX
 
 #include <list>
-
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <osl/conditn.h>
 
@@ -58,7 +57,7 @@ namespace cppu_threadpool {
             }
     };
 
-    typedef ::boost::unordered_map
+    typedef std::unordered_map
     <
         ::rtl::ByteSequence, // ThreadID
         ::std::pair < JobQueue * , JobQueue * >,

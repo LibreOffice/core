@@ -20,9 +20,8 @@
 #ifndef INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 #define INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 
-#include <boost/unordered_map.hpp>
-
 #include <algorithm>
+#include <unordered_map>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -41,7 +40,7 @@ namespace comphelper{
             such name sequences very easy ...
  */
 
-struct SequenceAsHashMapBase : public ::boost::unordered_map<
+struct SequenceAsHashMapBase : public std::unordered_map<
     OUString                    ,
     ::com::sun::star::uno::Any         ,
     OUStringHash                ,

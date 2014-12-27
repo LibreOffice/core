@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_NAMECONT_HXX
 #define INCLUDED_BASIC_SOURCE_INC_NAMECONT_HXX
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -70,7 +70,7 @@ typedef ::cppu::WeakImplHelper3<
 
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
-    typedef boost::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
+    typedef std::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
     ::com::sun::star::uno::Sequence< OUString > mNames;

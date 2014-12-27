@@ -83,7 +83,7 @@
 
 #include <math.h>
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 
@@ -3301,7 +3301,7 @@ Reference< XTypeDescriptionEnumeration > getTypeDescriptorEnumeration( const OUS
     return xEnum;
 }
 
-typedef boost::unordered_map< OUString, Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
+typedef std::unordered_map< OUString, Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
 
 VBAConstantHelper&
 VBAConstantHelper::instance()

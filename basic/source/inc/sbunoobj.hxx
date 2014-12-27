@@ -34,7 +34,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 #include <map>
 #include <boost/shared_ptr.hpp>
@@ -393,7 +393,7 @@ public:
     virtual void Clear() SAL_OVERRIDE;
 };
 
-typedef boost::unordered_map< OUString, ::com::sun::star::uno::Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
+typedef std::unordered_map< OUString, ::com::sun::star::uno::Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
 
 typedef std::vector< OUString > VBAConstantsVector;
 

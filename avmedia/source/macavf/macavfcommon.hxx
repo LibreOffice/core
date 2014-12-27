@@ -25,7 +25,7 @@
 #import <AVFoundation/AVFoundation.h>
 #include <postmac.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -67,7 +67,7 @@ namespace avmedia { namespace macavf {
 class MacAVObserverHandler;
 } }
 
-typedef boost::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
+typedef std::unordered_map<NSObject*,avmedia::macavf::MacAVObserverHandler*> HandlersForObject;
 
 @interface MacAVObserverObject : NSObject
 {

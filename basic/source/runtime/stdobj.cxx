@@ -24,7 +24,6 @@
 #include <sal/macros.h>
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
-#include <boost/unordered_map.hpp>
 // The nArgs-field of a table entry is encrypted as follows:
 // At the moment it is assumed that properties don't need any
 // parameters!
