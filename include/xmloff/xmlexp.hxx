@@ -61,6 +61,7 @@
 #include <tools/fldunit.hxx>
 
 #include <list>
+#include <o3tl/typed_flags_set.hxx>
 
 class SvXMLNamespaceMap;
 class SvXMLAttributeList;
@@ -83,20 +84,27 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
-#define EXPORT_META                     0x0001
-#define EXPORT_STYLES                   0x0002
-#define EXPORT_MASTERSTYLES             0x0004
-#define EXPORT_AUTOSTYLES               0x0008
-#define EXPORT_CONTENT                  0x0010
-#define EXPORT_SCRIPTS                  0x0020
-#define EXPORT_SETTINGS                 0x0040
-#define EXPORT_FONTDECLS                0x0080
-#define EXPORT_EMBEDDED                 0x0100
-#define EXPORT_NODOCTYPE                0x0200
-#define EXPORT_PRETTY                   0x0400
-#define EXPORT_SAVEBACKWARDCOMPATIBLE   0x0800
-#define EXPORT_OASIS                    0x8000
-#define EXPORT_ALL                      0x7fff
+enum class SvXMLExportFlags {
+    NONE                     = 0,
+    META                     = 0x0001,
+    STYLES                   = 0x0002,
+    MASTERSTYLES             = 0x0004,
+    AUTOSTYLES               = 0x0008,
+    CONTENT                  = 0x0010,
+    SCRIPTS                  = 0x0020,
+    SETTINGS                 = 0x0040,
+    FONTDECLS                = 0x0080,
+    EMBEDDED                 = 0x0100,
+    NODOCTYPE                = 0x0200,
+    PRETTY                   = 0x0400,
+    SAVEBACKWARDCOMPATIBLE   = 0x0800,
+    OASIS                    = 0x8000,
+    ALL                      = 0x0fff
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x8fff> {};
+}
 
 class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
              ::com::sun::star::document::XFilter,
@@ -149,8 +157,8 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     const enum ::xmloff::token::XMLTokenEnum meClass;
     SAL_DLLPRIVATE void _InitCtor();
 
-    sal_uInt16  mnExportFlags;
-    sal_uInt16  mnErrorFlags;
+    SvXMLExportFlags  mnExportFlags;
+    sal_uInt16        mnErrorFlags;
 
 public:
 
@@ -174,7 +182,7 @@ private:
     void GetViewSettingsAndViews(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
 
 protected:
-    void setExportFlags( sal_uInt16 nExportFlags ) { mnExportFlags = nExportFlags; }
+    void setExportFlags( SvXMLExportFlags nExportFlags ) { mnExportFlags = nExportFlags; }
 
     // Get (modifyable) namespace map
     SvXMLNamespaceMap& _GetNamespaceMap() { return *mpNamespaceMap; }
@@ -273,7 +281,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         const enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID,
-        sal_uInt16 nExportFlag = EXPORT_ALL );
+        SvXMLExportFlags nExportFlag = SvXMLExportFlags::ALL );
 
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
@@ -494,7 +502,7 @@ public:
     inline bool IsSaveLinkedSections() { return mbSaveLinkedSections; }
 
     // get export flags
-    sal_uInt16 getExportFlags() const { return mnExportFlags; }
+    SvXMLExportFlags getExportFlags() const { return mnExportFlags; }
 
     bool ExportEmbeddedOwnObject(
         ::com::sun::star::uno::Reference<

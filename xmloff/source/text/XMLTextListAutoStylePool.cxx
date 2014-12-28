@@ -146,8 +146,8 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     Reference<ucb::XAnyCompareFactory> xCompareFac( rExp.GetModel(), uno::UNO_QUERY );
     if( xCompareFac.is() )
         mxNumRuleCompare = xCompareFac->createAnyCompareByName( OUString( "NumberingRules" ) );
-    sal_uInt16 nExportFlags = rExport.getExportFlags();
-    bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
+    SvXMLExportFlags nExportFlags = rExport.getExportFlags();
+    bool bStylesOnly = (nExportFlags & SvXMLExportFlags::STYLES) && !(nExportFlags & SvXMLExportFlags::CONTENT);
     if( bStylesOnly )
         sPrefix = "ML";
 

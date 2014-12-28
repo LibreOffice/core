@@ -160,7 +160,7 @@ SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
     SetGraphicResolver( xGrfResolver );
-    setExportFlags( 0 );
+    setExportFlags( SvXMLExportFlags::NONE );
 }
 
 SvxXMLXTableExportComponent::~SvxXMLXTableExportComponent()

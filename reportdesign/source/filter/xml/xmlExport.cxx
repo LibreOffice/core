@@ -72,7 +72,7 @@ namespace rptxml
 
     Reference< XInterface > ORptExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_SETTINGS ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::SETTINGS ));
     }
 
     OUString ORptExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -89,7 +89,7 @@ namespace rptxml
 
     Reference< XInterface > ORptContentExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_CONTENT ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::CONTENT ));
     }
 
     OUString ORptContentExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -107,8 +107,8 @@ namespace rptxml
 
     Reference< XInterface > ORptStylesExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-            EXPORT_FONTDECLS|EXPORT_OASIS ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
+            SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS ));
     }
 
     OUString ORptStylesExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -126,7 +126,7 @@ namespace rptxml
 
     Reference< XInterface > ORptMetaExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_META ));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::META ));
     }
 
     OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -144,7 +144,7 @@ namespace rptxml
 
     Reference< XInterface > ODBFullExportHelper::create(Reference< XComponentContext > const & xContext)
     {
-        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), EXPORT_ALL));
+        return static_cast< XServiceInfo* >(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::ALL));
     }
 
     OUString ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -212,11 +212,11 @@ void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
     }
 }
 
-ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, sal_uInt16 nExportFlag)
-: SvXMLExport( util::MeasureUnit::MM_100TH, _rxContext, implementationName, XML_REPORT, EXPORT_OASIS)
+ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag)
+: SvXMLExport( util::MeasureUnit::MM_100TH, _rxContext, implementationName, XML_REPORT, SvXMLExportFlags::OASIS)
 ,m_bAllreadyFilled(false)
 {
-    setExportFlags( EXPORT_OASIS | nExportFlag);
+    setExportFlags( SvXMLExportFlags::OASIS | nExportFlag);
     GetMM100UnitConverter().SetCoreMeasureUnit(css::util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(css::util::MeasureUnit::CM);
 
@@ -231,29 +231,29 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
 
 
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS) )
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
 
-    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
-    if( (getExportFlags() & EXPORT_SETTINGS) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::SETTINGS )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
     // RDFa: needed for content and header/footer styles
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
     }
     // GRDDL: to convert RDFa and meta.xml to RDF
-    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_GRDDL),GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
     }
@@ -304,7 +304,7 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext, OUStrin
 
 Reference< XInterface > ORptExport::create(Reference< XComponentContext > const & xContext)
 {
-    return *(new ORptExport(xContext, getImplementationName_Static(), EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
+    return *(new ORptExport(xContext, getImplementationName_Static(), SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::FONTDECLS));
 }
 
 
@@ -1336,7 +1336,7 @@ void ORptExport::collectComponentStyles()
 void ORptExport::_ExportAutoStyles()
 {
     // there are no styles that require their own autostyles
-    if ( getExportFlags() & EXPORT_CONTENT )
+    if ( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         collectComponentStyles();
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE
@@ -1365,9 +1365,9 @@ void ORptExport::_ExportAutoStyles()
         GetShapeExport()->exportAutoStyles();
     }
     // exported in _ExportMasterStyles
-    if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::MASTERSTYLES )
         GetPageExport()->collectAutoStyles( false );
-    if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::MASTERSTYLES )
         GetPageExport()->exportAutoStyles();
 }
 

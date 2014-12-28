@@ -44,7 +44,7 @@ using namespace ::xmloff::token;
 
 XMLMetaExportComponent::XMLMetaExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-    OUString const & implementationName, sal_uInt16 nFlags )
+    OUString const & implementationName, SvXMLExportFlags nFlags )
 :   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName, XML_TEXT, nFlags )
 {
 }
@@ -74,7 +74,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 {
     uno::Reference< xml::sax::XDocumentHandler > xDocHandler = GetDocHandler();
 
-    if( (getExportFlags() & EXPORT_OASIS) == 0 )
+    if( !(getExportFlags() & SvXMLExportFlags::OASIS) )
     {
         uno::Reference< uno::XComponentContext > xContext = getComponentContext();
         try
@@ -200,7 +200,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), EXPORT_META|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS);
 }
 
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
@@ -221,7 +221,7 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), EXPORT_META);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), SvXMLExportFlags::META);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

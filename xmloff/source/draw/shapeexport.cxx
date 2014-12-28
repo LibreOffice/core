@@ -192,7 +192,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
 {
     uno::Reference< drawing::XShape > xCustomShapeReplacement;
 
-    if( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
+    if( !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) )
     {
         OUString aType( xShape->getShapeType() );
         if( aType == "com.sun.star.drawing.CustomShape" )
@@ -661,7 +661,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         if ( ( GetExport().GetModelType() != SvtModuleOptions::E_WRITER &&
                GetExport().GetModelType() != SvtModuleOptions::E_WRITERWEB &&
                GetExport().GetModelType() != SvtModuleOptions::E_WRITERGLOBAL ) ||
-             ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 ||
+             !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) ||
              aShapeInfo.meShapeType == XmlShapeTypeDrawGroupShape ||
              ( aShapeInfo.meShapeType == XmlShapeTypeDrawCustomShape &&
                aShapeInfo.xCustomShapeReplacement.is() ) )
@@ -1330,7 +1330,7 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
        the OASIS Open Office file format to the OpenOffice.org file format. (#i28749#)
     */
     uno::Any aAny;
-    if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
+    if ( !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
          xPropSet->getPropertySetInfo()->hasPropertyByName("TransformationInHoriL2R") )
     {
         aAny = xPropSet->getPropertyValue("TransformationInHoriL2R");
@@ -2262,7 +2262,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, true );
 
-        const bool bSaveBackwardsCompatible = ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+        const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
 
         if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
         {
@@ -2488,7 +2488,7 @@ void XMLShapeExport::ImpExportConnectorShape(
        direction the shape is in. Thus, this code provides the conversion from
        the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
     */
-    if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
+    if ( !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
          xProps->getPropertySetInfo()->hasPropertyByName("StartPositionInHoriL2R") &&
          xProps->getPropertySetInfo()->hasPropertyByName("EndPositionInHoriL2R") )
     {
@@ -2660,7 +2660,7 @@ void XMLShapeExport::ImpExportMeasureShape(
        direction the shape is in. Thus, this code provides the conversion from
        the OASIS Open Office file format to the OpenOffice.org file format. (#i36248#)
     */
-    if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 &&
+    if ( !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
          xProps->getPropertySetInfo()->hasPropertyByName("StartPositionInHoriL2R") &&
          xProps->getPropertySetInfo()->hasPropertyByName("EndPositionInHoriL2R") )
     {
@@ -2755,12 +2755,12 @@ void XMLShapeExport::ImpExportOLE2Shape(
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
         bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
-        bool bExportEmbedded(0 != (mrExport.getExportFlags() & EXPORT_EMBEDDED));
+        bool bExportEmbedded(mrExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);
         OUString sPersistName;
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, true );
 
-        const bool bSaveBackwardsCompatible = ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+        const bool bSaveBackwardsCompatible = bool( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
 
         if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
         {
@@ -2855,7 +2855,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     // in case it is not an OASIS format the object should be asked to store replacement image if possible
 
                     OUString sURLRequest( sURL );
-                    if ( ( mrExport.getExportFlags() & EXPORT_OASIS ) == 0 )
+                    if ( !( mrExport.getExportFlags() & SvXMLExportFlags::OASIS ) )
                         sURLRequest +=  "?oasis=false";
                     mrExport.AddEmbeddedObjectAsBase64( sURLRequest );
                 }
@@ -4896,7 +4896,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
         const bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 );
-        const bool bExportEmbedded(0 != (mrExport.getExportFlags() & EXPORT_EMBEDDED));
+        const bool bExportEmbedded(mrExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);
 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW, XML_FRAME, bCreateNewline, true );
 

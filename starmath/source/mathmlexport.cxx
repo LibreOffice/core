@@ -363,7 +363,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
 
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-    OUString const & implementationName, sal_uInt16 nExportFlags)
+    OUString const & implementationName, SvXMLExportFlags nExportFlags)
 :   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_MATH,
                 nExportFlags)
 ,   pTree(0) ,
@@ -413,7 +413,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     // EXPORT_OASIS is required here although there is no difference between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExport_getImplementationName(), EXPORT_OASIS|EXPORT_ALL );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExport_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::ALL );
 }
 
 OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
@@ -433,7 +433,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMetaOOO_getImplementationName(), EXPORT_META );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMetaOOO_getImplementationName(), SvXMLExportFlags::META );
 }
 
 OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
@@ -453,7 +453,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMeta_getImplementationName(), EXPORT_OASIS|EXPORT_META );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportMeta_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::META );
 }
 
 OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
@@ -473,7 +473,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettingsOOO_getImplementationName(), EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettingsOOO_getImplementationName(), SvXMLExportFlags::SETTINGS );
 }
 
 OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
@@ -493,7 +493,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettings_getImplementationName(), EXPORT_OASIS|EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportSettings_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::SETTINGS );
 }
 
 OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
@@ -515,12 +515,12 @@ throw( uno::Exception )
 {
     // The EXPORT_OASIS flag is only required to avoid that a transformer is
     // chanied in
-    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportContent_getImplementationName(), EXPORT_OASIS|EXPORT_CONTENT );
+    return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExportContent_getImplementationName(), SvXMLExportFlags::OASIS|SvXMLExportFlags::CONTENT );
 }
 
 sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 {
-    if ( (getExportFlags() & EXPORT_CONTENT) == 0 )
+    if ( !(getExportFlags() & SvXMLExportFlags::CONTENT) )
     {
         SvXMLExport::exportDoc( eClass );
     }

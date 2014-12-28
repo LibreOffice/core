@@ -77,7 +77,7 @@ XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
     // written by different SwXMLExport instance, and would therefore write each
     // font file twice without complicated checking for duplicates, so handle
     // the embedding only in one of them.
-    if(( getExportFlags() & EXPORT_CONTENT ) == 0 )
+    if( !( getExportFlags() & SvXMLExportFlags::CONTENT) )
         blockFontEmbedding = true;
     if( !getDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_FONTS ))
         blockFontEmbedding = true;

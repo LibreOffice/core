@@ -262,7 +262,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 // but also for the OOo XML Flat format (used by binfilter),
                 // because there, the transformation to OOo is done after the
                 // complete export of the chart in OASIS format.
-                if( mrExport.getExportFlags() & EXPORT_OASIS )
+                if( mrExport.getExportFlags() & SvXMLExportFlags::OASIS )
                     property->mnIndex = -1;
                 break;
         }

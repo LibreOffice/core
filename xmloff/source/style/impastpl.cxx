@@ -409,8 +409,8 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         bool bAsFamily )
 {
     // store family in a list if not already stored
-    sal_uInt16 nExportFlags = GetExport().getExportFlags();
-    bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
+    SvXMLExportFlags nExportFlags = GetExport().getExportFlags();
+    bool bStylesOnly = (nExportFlags & SvXMLExportFlags::STYLES) && !(nExportFlags & SvXMLExportFlags::CONTENT);
 
     OUString aPrefix( rStrPrefix );
     if( bStylesOnly )

@@ -393,7 +393,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     pUnoText->SetSelection( rSel );
     mxText = pUnoText;
 
-    setExportFlags( EXPORT_AUTOSTYLES|EXPORT_CONTENT );
+    setExportFlags( SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT );
 }
 
 SvxXMLTextExportComponent::~SvxXMLTextExportComponent()

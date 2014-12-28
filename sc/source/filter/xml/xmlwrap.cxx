@@ -694,7 +694,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         pExport->SetSharedData(pSharedData);
 
         // if there are sheets to copy, get the source stream
-        if ( sName == "content.xml" && lcl_HasValidStream(rDoc) && ( pExport->getExportFlags() & EXPORT_OASIS ) )
+        if ( sName == "content.xml" && lcl_HasValidStream(rDoc) && ( pExport->getExportFlags() & SvXMLExportFlags::OASIS ) )
         {
             // old stream is still in this file's storage - open read-only
 

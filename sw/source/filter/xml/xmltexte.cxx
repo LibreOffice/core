@@ -436,7 +436,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     {
     case SV_EMBEDDED_OUTPLACE:
     case SV_EMBEDDED_OWN:
-        if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
+        if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )
         {
             OUString sURL;
 
@@ -600,7 +600,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         switch( nType )
         {
         case SV_EMBEDDED_OWN:
-            if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+            if( rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED )
             {
                 Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
                 OSL_ENSURE( xEOS.is(), "no embedded object supplier for own object" );
@@ -609,11 +609,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             }
             break;
         case SV_EMBEDDED_OUTPLACE:
-            if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+            if( rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED )
             {
                 OUString sURL( sEmbeddedObjectProtocol + rOLEObj.GetCurrentPersistName() );
 
-                if ( ( rXMLExport.getExportFlags() & EXPORT_OASIS ) == 0 )
+                if ( !( rXMLExport.getExportFlags() & SvXMLExportFlags::OASIS ) )
                     sURL += "?oasis=false";
 
                 rXMLExport.AddEmbeddedObjectAsBase64( sURL );
@@ -678,7 +678,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     if( SV_EMBEDDED_OUTPLACE==nType || SV_EMBEDDED_OWN==nType )
     {
         OUString sURL( sGraphicObjectProtocol + rOLEObj.GetCurrentPersistName() );
-        if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
+        if( !(rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED) )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rXMLExport, sURL, false );
@@ -687,7 +687,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,
                                   XML_IMAGE, false, true );
 
-        if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+        if( rXMLExport.getExportFlags() & SvXMLExportFlags::EMBEDDED )
             GetExport().AddEmbeddedObjectAsBase64( sURL );
     }
 

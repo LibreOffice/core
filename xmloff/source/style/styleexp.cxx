@@ -191,7 +191,7 @@ bool XMLStyleExport::exportStyle(
                 /* Empty value for style:default-outline-level does exist
                    since ODF 1.2. Thus, suppress its export for former versions. (#i104889#)
                 */
-                if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
+                if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
                      GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,

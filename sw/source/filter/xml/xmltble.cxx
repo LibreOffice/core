@@ -666,7 +666,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                         rTblInfo.SetBaseSection( xTextSection );
                     }
 
-                    const bool bExportContent = (getExportFlags() & EXPORT_CONTENT ) != 0;
+                    const bool bExportContent = bool(getExportFlags() & SvXMLExportFlags::CONTENT );
                     if ( !bExportContent )
                     {
                         // AUTOSTYLES - not needed anymore if we are currently exporting content.xml
@@ -1153,7 +1153,7 @@ void SwXMLTextParagraphExport::exportTable(
                 // the table is located in header/footer:
                 // During the flat XML export (used e.g. by .sdw-export)
                 // ALL flags are set at the same time.
-                const bool bExportStyles = ( GetExport().getExportFlags() & EXPORT_STYLES ) != 0;
+                const bool bExportStyles = bool( GetExport().getExportFlags() & SvXMLExportFlags::STYLES );
                 if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
                     static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles( *pTblNd );
             }

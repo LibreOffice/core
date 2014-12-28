@@ -184,7 +184,7 @@ protected:
     virtual                 ~ORptExport(){};
 public:
 
-    ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, sal_uInt16 nExportFlag);
+    ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );

@@ -1048,7 +1048,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     // States for shape positioning properties (#i28749#)
     if ( eAnchor != TextContentAnchorType_AS_CHARACTER &&
-         ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
+         !( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) )
     {
         // no export of shape positioning properties,
         // if shape isn't anchored as-character and

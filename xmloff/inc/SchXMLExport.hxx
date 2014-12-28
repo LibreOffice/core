@@ -54,7 +54,7 @@ public:
     SchXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         OUString const & implementationName,
-        sal_uInt16 nExportFlags = EXPORT_ALL );
+        SvXMLExportFlags nExportFlags = SvXMLExportFlags::ALL );
     virtual ~SchXMLExport();
 
     rtl::Reference< XMLPropertySetMapper > GetPropertySetMapper() const;

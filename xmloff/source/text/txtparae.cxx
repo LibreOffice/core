@@ -836,7 +836,7 @@ void XMLTextParagraphExport::exportListChange(
     }
 
     const bool bExportODF =
-                ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0;
+                bool( GetExport().getExportFlags() & SvXMLExportFlags::OASIS );
     const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
                                     GetExport().getDefaultVersion();
 
@@ -1097,7 +1097,7 @@ void XMLTextParagraphExport::exportListChange(
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                                       aBuffer.makeStringAndClear() );
         }
-        if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
+        if ( ( GetExport().getExportFlags() & SvXMLExportFlags::OASIS ) &&
              GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {
             const OUString sListStyleName( rNextInfo.GetNumRulesName() );

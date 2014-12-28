@@ -1049,7 +1049,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             double fTemp = xIter->getIterateInterval();
             if( fTemp )
             {
-                if( 0 == ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
+                if( !( mrExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE ) )
                 {
                     // issue 146582
                     OUStringBuffer buf;

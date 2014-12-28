@@ -61,7 +61,7 @@ using ::com::sun::star::xml::sax::XDocumentHandler;
 
 XMLAutoTextEventExport::XMLAutoTextEventExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-    OUString const & implementationName, sal_uInt16 nFlags
+    OUString const & implementationName, SvXMLExportFlags nFlags
     )
 :   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_AUTO_TEXT, nFlags)
 {
@@ -106,7 +106,7 @@ void XMLAutoTextEventExport::initialize(
 
 sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
 {
-    if( (getExportFlags() & EXPORT_OASIS) == 0 )
+    if( !(getExportFlags() & SvXMLExportFlags::OASIS) )
     {
         Reference< uno::XComponentContext> xContext = getComponentContext();
         try
@@ -226,7 +226,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExport_getImplementationName(), EXPORT_ALL|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExport_getImplementationName(), SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS);
 }
 
 // methods to support the component registration
@@ -248,7 +248,7 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExportOOO_getImplementationName(), EXPORT_ALL);
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExportOOO_getImplementationName(), SvXMLExportFlags::ALL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -308,36 +308,36 @@ void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandle
 void SvXMLExport::_InitCtor()
 {
     // note: it is not necessary to add XML_NP_XML (it is declared implicitly)
-    if( (getExportFlags() & ~EXPORT_OASIS) != 0 )
+    if( getExportFlags() & ~SvXMLExportFlags::OASIS )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
     }
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
     }
-    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
-    if( (getExportFlags() & EXPORT_SETTINGS) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::SETTINGS )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
-    if( (getExportFlags() & (EXPORT_META|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
     }
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
 
     // namespaces for documents
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DC),    GetXMLToken(XML_N_DC),      XML_NAMESPACE_DC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_TEXT),  GetXMLToken(XML_N_TEXT),    XML_NAMESPACE_TEXT );
@@ -365,17 +365,17 @@ void SvXMLExport::_InitCtor()
                 XML_NAMESPACE_LO_EXT);
         }
     }
-    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
     }
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
     }
-    if( (getExportFlags() & EXPORT_CONTENT ) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
@@ -384,19 +384,19 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FORMX), GetXMLToken(XML_N_FORMX), XML_NAMESPACE_FORMX );
     }
     // RDFa: needed for content and header/footer styles
-    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XHTML),
             GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
     }
     // GRDDL: to convert RDFa and meta.xml to RDF
-    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_GRDDL),
             GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
     }
     // CSS Text Level 3 for distributed text justification.
-    if ( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES)) != 0 )
+    if ( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES) )
     {
         mpNamespaceMap->Add(
             GetXMLToken(XML_NP_CSS3TEXT), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
@@ -417,7 +417,7 @@ void SvXMLExport::_InitCtor()
     _DetermineModelType();
 
     // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
-    if( (getExportFlags() & EXPORT_OASIS) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::OASIS )
     {
         mpImpl->mbSaveBackwardCompatibleODF =
             officecfg::Office::Common::Save::Document::
@@ -440,7 +440,7 @@ SvXMLExport::SvXMLExport(
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
     const uno::Reference< uno::XComponentContext >& xContext,
     OUString const & implementationName,
-    const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
+    const enum XMLTokenEnum eClass, SvXMLExportFlags nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
     m_xContext(xContext), m_implementationName(implementationName),
     mpAttrList( new SvXMLAttributeList ),
@@ -485,7 +485,7 @@ SvXMLExport::SvXMLExport(
     mpXMLErrors( NULL ),
     mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
-    mnExportFlags( 0 ),
+    mnExportFlags( SvXMLExportFlags::NONE ),
     mnErrorFlags( ERROR_NO ),
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(true)
@@ -524,7 +524,7 @@ SvXMLExport::SvXMLExport(
     mpXMLErrors( NULL ),
     mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
-    mnExportFlags( 0 ),
+    mnExportFlags( SvXMLExportFlags::NONE ),
     mnErrorFlags( ERROR_NO ),
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(true)
@@ -570,7 +570,7 @@ SvXMLExport::~SvXMLExport()
                     if (xPropertySetInfo->hasPropertyByName(sRepeat))
                         mxExportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
                 }
-                if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
+                if (mpNumExport && (mnExportFlags & (SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::STYLES)))
                 {
                     OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                     if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
@@ -623,12 +623,12 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
             {
                 uno::Any aAny = mxExportInfo->getPropertyValue(sUsePrettyPrinting);
                 if (::cppu::any2bool(aAny))
-                    mnExportFlags |= EXPORT_PRETTY;
+                    mnExportFlags |= SvXMLExportFlags::PRETTY;
                 else
-                    mnExportFlags &= ~EXPORT_PRETTY;
+                    mnExportFlags &= ~SvXMLExportFlags::PRETTY;
             }
 
-            if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
+            if (mpNumExport && (mnExportFlags & (SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::STYLES)))
             {
                 OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                 if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
@@ -643,9 +643,9 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     }
 
     if ( mpImpl->mbSaveBackwardCompatibleODF )
-        mnExportFlags |= EXPORT_SAVEBACKWARDCOMPATIBLE;
+        mnExportFlags |= SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE;
     else
-        mnExportFlags &= ~EXPORT_SAVEBACKWARDCOMPATIBLE;
+        mnExportFlags &= ~SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE;
 
     // namespaces for user defined attributes
     Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
@@ -806,8 +806,8 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
     {
         const sal_Int32 nPropCount = aDescriptor.getLength();
 
-        const sal_uInt32 nTest =
-            EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS;
+        const SvXMLExportFlags nTest =
+            SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS;
         if( (mnExportFlags & nTest) == nTest && msOrigFileName.isEmpty() )
         {
             // evaluate descriptor only for flat files and if a base URI
@@ -1202,7 +1202,7 @@ void SvXMLExport::ImplExportStyles( bool )
     }
 
     // transfer style names (+ families) TO other components (if appropriate)
-    if( ( ( mnExportFlags & EXPORT_CONTENT ) == 0 ) && mxExportInfo.is() )
+    if( ( !( mnExportFlags & SvXMLExportFlags::CONTENT ) ) && mxExportInfo.is() )
     {
         static OUString sStyleNames( "StyleNames" );
         static OUString sStyleFamilies( "StyleFamilies" );
@@ -1224,7 +1224,7 @@ void SvXMLExport::ImplExportAutoStyles( bool )
     // transfer style names (+ families) FROM other components (if appropriate)
     OUString sStyleNames( "StyleNames" );
     OUString sStyleFamilies( "StyleFamilies" );
-    if( ( ( mnExportFlags & EXPORT_STYLES ) == 0 )
+    if( ( !( mnExportFlags & SvXMLExportFlags::STYLES ) )
         && mxExportInfo.is()
         && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
         && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
@@ -1292,7 +1292,7 @@ void SvXMLExport::SetBodyAttributes()
 }
 
 static void
-lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
+lcl_AddGrddl(SvXMLExport & rExport, const SvXMLExportFlags /*nExportMode*/)
 {
     // check version >= 1.2
     switch (rExport.getDefaultVersion()) {
@@ -1303,7 +1303,7 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
 
     // #i115030#: disabled, the XSLT is not finished, and not available via HTTP
 #if 0
-    if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
+    if (SvXMLExportFlags::SETTINGS != nExportMode) // meta, content, styles
     {
         rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
             OUString("http://FIXME") );
@@ -1354,7 +1354,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             }
         }
     }
-    if( (getExportFlags() & EXPORT_OASIS) == 0 )
+    if( (getExportFlags() & SvXMLExportFlags::OASIS) == SvXMLExportFlags::NONE )
     {
         try
         {
@@ -1443,26 +1443,26 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     {
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
-        const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS);
+        const SvXMLExportFlags nExportMode = mnExportFlags & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS);
 
         lcl_AddGrddl(*this, nExportMode);
 
-        if( EXPORT_META == nExportMode )
+        if( SvXMLExportFlags::META == nExportMode )
         {
             // export only meta
             eRootService = XML_DOCUMENT_META;
         }
-        else if ( EXPORT_SETTINGS == nExportMode )
+        else if ( SvXMLExportFlags::SETTINGS == nExportMode )
         {
             // export only settings
             eRootService = XML_DOCUMENT_SETTINGS;
         }
-        else if( EXPORT_STYLES == nExportMode )
+        else if( SvXMLExportFlags::STYLES == nExportMode )
         {
             // export only styles
             eRootService = XML_DOCUMENT_STYLES;
         }
-        else if( EXPORT_CONTENT == nExportMode )
+        else if( SvXMLExportFlags::CONTENT == nExportMode )
         {
             // export only content
             eRootService = XML_DOCUMENT_CONTENT;
@@ -1483,35 +1483,35 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, true, true );
 
         // meta information
-        if( mnExportFlags & EXPORT_META )
+        if( mnExportFlags & SvXMLExportFlags::META )
             ImplExportMeta();
 
         // settings
-        if( mnExportFlags & EXPORT_SETTINGS )
+        if( mnExportFlags & SvXMLExportFlags::SETTINGS )
             ImplExportSettings();
 
         // scripts
-        if( mnExportFlags & EXPORT_SCRIPTS )
+        if( mnExportFlags & SvXMLExportFlags::SCRIPTS )
             _ExportScripts();
 
         // font declerations
-        if( mnExportFlags & EXPORT_FONTDECLS )
+        if( mnExportFlags & SvXMLExportFlags::FONTDECLS )
             _ExportFontDecls();
 
         // styles
-        if( mnExportFlags & EXPORT_STYLES )
+        if( mnExportFlags & SvXMLExportFlags::STYLES )
             ImplExportStyles( false );
 
         // autostyles
-        if( mnExportFlags & EXPORT_AUTOSTYLES )
+        if( mnExportFlags & SvXMLExportFlags::AUTOSTYLES )
             ImplExportAutoStyles( false );
 
         // masterstyles
-        if( mnExportFlags & EXPORT_MASTERSTYLES )
+        if( mnExportFlags & SvXMLExportFlags::MASTERSTYLES )
             ImplExportMasterStyles( false );
 
         // contnt
-        if( mnExportFlags & EXPORT_CONTENT )
+        if( mnExportFlags & SvXMLExportFlags::CONTENT )
             ImplExportContent();
     }
 
@@ -1580,7 +1580,7 @@ void SvXMLExport::_ExportScripts()
     SvXMLElementExport aElement( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS, true, true );
 
     // export Basic macros (only for FlatXML)
-    if ( mnExportFlags & EXPORT_EMBEDDED )
+    if ( mnExportFlags & SvXMLExportFlags::EMBEDDED )
     {
         OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
         aValue += ":Basic";
@@ -1955,7 +1955,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     if( rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
         mxGraphicResolver.is() )
     {
-        if( (getExportFlags() & EXPORT_EMBEDDED) == 0 )
+        if( !(getExportFlags() & SvXMLExportFlags::EMBEDDED) )
             sRet = mxGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
         else
             sRet.clear();
@@ -1970,7 +1970,7 @@ bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObje
 {
     bool bRet = false;
 
-    if( (getExportFlags() & EXPORT_EMBEDDED) != 0 &&
+    if( (getExportFlags() & SvXMLExportFlags::EMBEDDED) &&
         rGraphicObjectURL.startsWith( msGraphicObjectProtocol ) &&
         mxGraphicResolver.is() )
     {
@@ -2252,7 +2252,7 @@ void SvXMLExport::StartElement(const OUString& rName,
     {
         try
         {
-            if( bIgnWSOutside && ((mnExportFlags & EXPORT_PRETTY) == EXPORT_PRETTY))
+            if( bIgnWSOutside && ((mnExportFlags & SvXMLExportFlags::PRETTY) == SvXMLExportFlags::PRETTY))
                 mxHandler->ignorableWhitespace( msWS );
             mxHandler->startElement( rName, GetXAttrList() );
         }
@@ -2325,7 +2325,7 @@ void SvXMLExport::EndElement(const OUString& rName,
     {
         try
         {
-            if( bIgnWSInside && ((mnExportFlags & EXPORT_PRETTY) == EXPORT_PRETTY))
+            if( bIgnWSInside && ((mnExportFlags & SvXMLExportFlags::PRETTY) == SvXMLExportFlags::PRETTY))
                 mxHandler->ignorableWhitespace( msWS );
             mxHandler->endElement( rName );
         }
@@ -2341,7 +2341,7 @@ void SvXMLExport::EndElement(const OUString& rName,
 
 void SvXMLExport::IgnorableWhitespace()
 {
-    if ((mnExportFlags & EXPORT_PRETTY) != EXPORT_PRETTY)
+    if ((mnExportFlags & SvXMLExportFlags::PRETTY) != SvXMLExportFlags::PRETTY)
         return;
 
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)

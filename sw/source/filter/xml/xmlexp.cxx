@@ -84,7 +84,7 @@ using namespace ::xmloff::token;
 
 SwXMLExport::SwXMLExport(
     const uno::Reference< uno::XComponentContext > xContext,
-    OUString const & implementationName, sal_uInt16 nExportFlags)
+    OUString const & implementationName, SvXMLExportFlags nExportFlags)
 :   SvXMLExport( util::MeasureUnit::INCH, xContext, implementationName, XML_TEXT,
         nExportFlags ),
     pTableItemMapper( 0 ),
@@ -135,8 +135,8 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     SwDoc *pDoc = getDoc();
 
     bool bExtended = false;
-    if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
-                             EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
+                            SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
         if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         {
@@ -195,7 +195,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SetExtended( bExtended );
 
-    if( (getExportFlags() & EXPORT_META) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::META)
     {
         // Update doc stat, so that correct values are exported and
         // the progress works correctly.
@@ -231,7 +231,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
 
-    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
         //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
         SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
@@ -276,7 +276,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // set redline mode if we export STYLES or CONTENT, unless redline
     // mode is taken care of outside (through info XPropertySet)
     bool bSaveRedline =
-        ( (getExportFlags() & (EXPORT_CONTENT|EXPORT_STYLES)) != 0 );
+        bool( getExportFlags() & (SvXMLExportFlags::CONTENT|SvXMLExportFlags::STYLES) );
     if( bSaveRedline )
     {
         // if the info property set has a ShowChanges property,
@@ -522,7 +522,7 @@ Reference< XInterface > SAL_CALL SwXMLExportOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportOOO_getImplementationName(), EXPORT_ALL);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportOOO_getImplementationName(), SvXMLExportFlags::ALL);
 }
 
 OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw()
@@ -544,8 +544,8 @@ Reference< XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(
     throw( Exception )
 {
     return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportStylesOOO_getImplementationName(),
-        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-        EXPORT_FONTDECLS );
+        SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
+        SvXMLExportFlags::FONTDECLS );
 }
 
 OUString SAL_CALL SwXMLExportContentOOO_getImplementationName() throw()
@@ -567,8 +567,8 @@ Reference< XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(
     throw( Exception )
 {
     return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportContentOOO_getImplementationName(),
-        EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-        EXPORT_FONTDECLS );
+        SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS |
+        SvXMLExportFlags::FONTDECLS );
 }
 
 OUString SAL_CALL SwXMLExportMetaOOO_getImplementationName() throw()
@@ -589,7 +589,7 @@ Reference< XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportMetaOOO_getImplementationName(), EXPORT_META);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportMetaOOO_getImplementationName(), SvXMLExportFlags::META);
 }
 
 OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw()
@@ -610,7 +610,7 @@ Reference< XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettingsOOO_getImplementationName(), EXPORT_SETTINGS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettingsOOO_getImplementationName(), SvXMLExportFlags::SETTINGS);
 }
 
 // OASIS
@@ -632,7 +632,7 @@ Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExport_getImplementationName(), EXPORT_ALL|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExport_getImplementationName(), SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS);
 }
 
 OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw()
@@ -654,8 +654,8 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
     throw( Exception )
 {
     return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportStyles_getImplementationName(),
-        EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-        EXPORT_FONTDECLS|EXPORT_OASIS );
+        SvXMLExportFlags::STYLES | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::AUTOSTYLES |
+        SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS );
 }
 
 OUString SAL_CALL SwXMLExportContent_getImplementationName() throw()
@@ -678,8 +678,8 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
 {
     return (cppu::OWeakObject*)new SwXMLExport(
         comphelper::getComponentContext(rSMgr), SwXMLExportContent_getImplementationName(),
-        EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-        EXPORT_FONTDECLS|EXPORT_OASIS );
+        SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS |
+        SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS );
 }
 
 OUString SAL_CALL SwXMLExportMeta_getImplementationName() throw()
@@ -700,7 +700,7 @@ Reference< XInterface > SAL_CALL SwXMLExportMeta_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportMeta_getImplementationName(), EXPORT_META|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportMeta_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS);
 }
 
 OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw()
@@ -721,7 +721,7 @@ Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettings_getImplementationName(), EXPORT_SETTINGS|EXPORT_OASIS);
+    return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettings_getImplementationName(), SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS);
 }
 
 namespace

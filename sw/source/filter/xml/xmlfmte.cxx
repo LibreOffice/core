@@ -180,9 +180,9 @@ void SwXMLExport::_ExportAutoStyles()
     // the order in which they are exported. Otherwise, caching will
     // fail.
 
-    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
+    if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
     {
-        if( (getExportFlags() & EXPORT_CONTENT) == 0 )
+        if( !(getExportFlags() & SvXMLExportFlags::CONTENT) )
         {
             // only master pages are exported => styles for frames bound
             // to frames (but none for frames bound to pages) need to be
@@ -192,17 +192,17 @@ void SwXMLExport::_ExportAutoStyles()
     }
 
     // exported in _ExportMasterStyles
-    if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::MASTERSTYLES )
         GetPageExport()->collectAutoStyles( false );
 
     // if we don't export styles (i.e. in content stream only, but not
     // in single-stream case), then we can save ourselves a bit of
     // work and memory by not collecting field masters
-    if( (getExportFlags() & EXPORT_STYLES ) == 0 )
+    if( !(getExportFlags() & SvXMLExportFlags::STYLES) )
         GetTextParagraphExport()->exportUsedDeclarations( false );
 
     // exported in _ExportContent
-    if( (getExportFlags() & EXPORT_CONTENT) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         GetTextParagraphExport()->exportTrackedChanges( true );
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
@@ -224,14 +224,14 @@ void SwXMLExport::_ExportAutoStyles()
 
     GetTextParagraphExport()->exportTextAutoStyles();
     GetShapeExport()->exportAutoStyles();
-    if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
+    if( getExportFlags() & SvXMLExportFlags::MASTERSTYLES )
         GetPageExport()->exportAutoStyles();
 
     // we rely on data styles being written after cell styles in the
     // ExportFmt() method; so be careful when changing order.
     exportAutoDataStyles();
 
-    sal_uInt16 nContentAutostyles = EXPORT_CONTENT | EXPORT_AUTOSTYLES;
+    SvXMLExportFlags nContentAutostyles = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES;
     if ( ( getExportFlags() & nContentAutostyles ) == nContentAutostyles )
         GetFormExport()->exportAutoStyles();
 }

@@ -173,7 +173,7 @@ protected:
     virtual                 ~ODBExport(){};
 public:
 
-    ODBExport(const Reference< XComponentContext >& _rxContext, sal_uInt16 nExportFlag = EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_PRETTY | EXPORT_FONTDECLS | EXPORT_SCRIPTS );
+    ODBExport(const Reference< XComponentContext >& _rxContext, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
     static OUString SAL_CALL getImplementationName_Static()
         throw (css::uno::RuntimeException);

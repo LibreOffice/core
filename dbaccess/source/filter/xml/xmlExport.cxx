@@ -104,7 +104,7 @@ namespace dbaxml
 
     Reference< XInterface > SAL_CALL ODBExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
-        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_SETTINGS | EXPORT_PRETTY ));
+        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
     }
 
     OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -121,7 +121,7 @@ namespace dbaxml
 
     Reference< XInterface > SAL_CALL ODBFullExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
-        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB),EXPORT_ALL));
+        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), SvXMLExportFlags::ALL));
     }
     OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
@@ -183,9 +183,9 @@ namespace dbaxml
             // nothing to do here
         }
     };
-ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16 nExportFlag)
+ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, SvXMLExportFlags nExportFlag)
 : SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, getImplementationName_Static(), XML_DATABASE,
-        EXPORT_OASIS | nExportFlag)
+        SvXMLExportFlags::OASIS | nExportFlag)
 ,m_aTypeCollection(_rxContext)
 ,m_bAllreadyFilled(false)
 {
@@ -198,19 +198,19 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext,sal_uInt16
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_DB), GetXMLToken(XML_N_DB_OASIS), XML_NAMESPACE_DB );
 
-    if( (nExportFlag & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
+    if( nExportFlag & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS) )
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
 
-    if( (nExportFlag & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
+    if( nExportFlag & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::SETTINGS) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     }
-    if( (nExportFlag & EXPORT_SETTINGS) != 0 )
+    if( nExportFlag & SvXMLExportFlags::SETTINGS )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
-    if( (nExportFlag & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
+    if( nExportFlag & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS) )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
@@ -1258,7 +1258,7 @@ void ODBExport::_ExportMasterStyles()
 void ODBExport::_ExportAutoStyles()
 {
     // there are no styles that require their own autostyles
-    if ( getExportFlags() & EXPORT_CONTENT )
+    if ( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         collectComponentStyles();
         GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE

@@ -101,6 +101,45 @@ inline typename o3tl::typed_flags<E>::Wrap operator ~(
 }
 
 template<typename E>
+inline typename o3tl::typed_flags<E>::Wrap operator ^(E lhs, E rhs) {
+    assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
+    assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs) >= 0);
+    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
+        static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs)
+        ^ static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs));
+}
+
+template<typename E>
+inline typename o3tl::typed_flags<E>::Wrap operator ^(
+    E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
+{
+    assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
+    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
+        static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs)
+        ^ static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs));
+}
+
+template<typename E>
+inline typename o3tl::typed_flags<E>::Wrap operator ^(
+    typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
+{
+    assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs) >= 0);
+    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
+        static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs)
+        ^ static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs));
+}
+
+template<typename E>
+inline typename o3tl::typed_flags<E>::Wrap operator ^(
+    typename o3tl::typed_flags<E>::Wrap lhs,
+    typename o3tl::typed_flags<E>::Wrap rhs)
+{
+    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
+        static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs)
+        ^ static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs));
+}
+
+template<typename E>
 inline typename o3tl::typed_flags<E>::Wrap operator &(E lhs, E rhs) {
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs) >= 0);

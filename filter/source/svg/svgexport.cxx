@@ -323,7 +323,7 @@ SVGExport::SVGExport(
     : SvXMLExport( util::MeasureUnit::MM_100TH,
                    xContext, "",
                    xmloff::token::XML_TOKEN_INVALID,
-                   EXPORT_META|EXPORT_PRETTY )
+                   SvXMLExportFlags::META|SvXMLExportFlags::PRETTY )
 {
     SetDocHandler( rxHandler );
     GetDocHandler()->startDocument();

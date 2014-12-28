@@ -49,7 +49,7 @@ void Test::setUp()
 
     pExport = new SchXMLExport(
         comphelper::getProcessComponentContext(), "SchXMLExport.Compact",
-        EXPORT_ALL);
+        SvXMLExportFlags::ALL);
 }
 
 void Test::tearDown()

@@ -1118,7 +1118,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         bool bCmd = GetBoolProperty(sPropertyIsShowFormula, rPropSet);
         ProcessDisplay(true, bCmd);
         // #i81766# for older versions export of the value-type
-        bool bExportValueType = !bCmd && ( GetExport().getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+        bool bExportValueType = !bCmd && ( GetExport().getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
         // show style, unless name will be shown
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
@@ -1358,7 +1358,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       sPresentation);
         sal_Int32 nDummy = 0; // MapPageNumberName need int
         ProcessString(XML_SELECT_PAGE, MapPageNumberName(rPropSet, nDummy));
-        if( 0 == ( GetExport().getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
+        if( !( GetExport().getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE ) )
             ExportElement(XML_PAGE_CONTINUATION, sPresentation);
         else
             ExportElement(XML_PAGE_CONTINUATION_STRING, sPresentation);

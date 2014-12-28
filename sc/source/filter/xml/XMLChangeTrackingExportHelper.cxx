@@ -195,7 +195,7 @@ void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependA
 
     // #i80033# save old "dependence" element if backward compatibility is requested,
     // correct "dependency" element otherwise
-    const bool bSaveBackwardsCompatible = ( rExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+    const bool bSaveBackwardsCompatible = bool( rExport.getExportFlags() & SvXMLExportFlags::SAVEBACKWARDCOMPATIBLE );
     SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE,
         bSaveBackwardsCompatible ? XML_DEPENDENCE : XML_DEPENDENCY,
         true, true);
