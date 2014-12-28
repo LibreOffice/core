@@ -116,7 +116,7 @@ namespace comphelper
         ::osl::MutexGuard aGuard( m_pImpl->aMutex );
 
         // remove all events for this processor
-        ::std::remove_if( m_pImpl->aEvents.begin(), m_pImpl->aEvents.end(), EqualProcessor( _xProcessor ) );
+        m_pImpl->aEvents.erase(::std::remove_if( m_pImpl->aEvents.begin(), m_pImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_pImpl->aEvents.end());
     }
 
 
