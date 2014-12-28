@@ -204,7 +204,6 @@ class RscTypCont
     RscTop *    InitClassMenuItem( RscTop * pSuper, RscTop * pClassBitmap,
                                    RscTop * pClassKeyCode );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
-    RscTop *    InitClassSplitter( RscTop * pSuper );
     RscTop *    InitClassSplitWindow( RscTop * pSuper );
     RscTop *    InitClassTime( RscTop * pSuper );
     RscTop *    InitClassDate( RscTop * pSuper );

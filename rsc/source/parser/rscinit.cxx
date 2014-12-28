@@ -86,7 +86,6 @@ void RscTypCont::Init()
     RscTop   *  pClassAccel;
     RscTop   *  pClassMenuItem;
     RscTop   *  pClassMenu;
-    RscTop   *  pClassSplitter;
     RscTop   *  pClassSplitWindow;
     RscTop   *  pClassSpinButton;
     RscTop   *  pClassTime;
@@ -420,9 +419,6 @@ void RscTypCont::Init()
                                  RSC_MENUITEM_MENU );
 }
 {
-    pClassSplitter = InitClassSplitter( pClassWindow );
-    pRoot->Insert( pClassSplitter );
-
     pClassSplitWindow = InitClassSplitWindow( pClassWindow );
     pRoot->Insert( pClassSplitWindow );
 
