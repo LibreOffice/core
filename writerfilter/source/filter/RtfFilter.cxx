@@ -25,7 +25,7 @@
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <osl/diagnose.h>
+#include <memory>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -77,10 +77,9 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         OUString aOutStr;
         if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aOutStr))
         {
-            SvStream* pOut = utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE);
-            SvStream* pIn = utl::UcbStreamHelper::CreateStream(xInputStream);
+            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE));
+            std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
             pOut->WriteStream(*pIn);
-            delete pOut;
             return true;
         }
 
@@ -109,7 +108,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         pDocument->resolve(*pStream);
         bResult = true;
         sal_uInt32 nEndTime = osl_getGlobalTimer();
-        SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
+        SAL_INFO("writerfilter.profile", "RtfFilter::filter: finished in " << nEndTime - nStartTime << " ms");
     }
     catch (const io::WrongFormatException& e)
     {
