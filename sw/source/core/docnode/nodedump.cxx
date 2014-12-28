@@ -37,6 +37,7 @@
 #include "pagedesc.hxx"
 #include "fchrfmt.hxx"
 #include "fmtfollowtextflow.hxx"
+#include "fmtwrapinfluenceonobjpos.hxx"
 #include <swmodule.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/intitem.hxx>
@@ -445,6 +446,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_FOLLOW_TEXT_FLOW:
                 static_cast<const SwFmtFollowTextFlow*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                static_cast<const SwFmtWrapInfluenceOnObjPos*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -459,11 +463,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_WRAP_INFLUENCE_ON_OBJPOS:
-            {
-                pWhich = "frame wrap influence on object position";
-                break;
-            }
             case XATTR_FILLSTYLE:
             {
                 pWhich = "fill style";
