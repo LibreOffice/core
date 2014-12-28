@@ -66,7 +66,6 @@ using ::com::sun::star::uno::Any;
 using ::std::vector;
 using ::std::find;
 using ::std::find_if;
-using ::std::remove_if;
 using ::std::distance;
 using ::std::pair;
 using ::std::list;
