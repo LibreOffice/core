@@ -1501,7 +1501,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             }
 
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
-            xShapeExport->exportShape(xShape.get(), i, SEF_DEFAULT|SEF_EXPORT_NO_WS,&aRefPoint);
+            xShapeExport->exportShape(xShape.get(), i, SEF_DEFAULT|XMLShapeExportFlags::NO_WS,&aRefPoint);
         }
     }
 }

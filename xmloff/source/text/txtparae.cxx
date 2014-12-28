@@ -2561,13 +2561,13 @@ static bool lcl_txtpara_isBoundAsChar(
     return bIsBoundAsChar;
 }
 
-sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
+XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet,
     bool bShape,
     OUString *pMinHeightValue,
     OUString *pMinWidthValue)
 {
-    sal_Int32 nShapeFeatures = SEF_DEFAULT;
+    XMLShapeExportFlags nShapeFeatures = SEF_DEFAULT;
 
     // draw:name (#97662#: not for shapes, since those names will be
     // treated in the shape export)
@@ -2610,7 +2610,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     else
     {
         // #92210#
-        nShapeFeatures |= SEF_EXPORT_NO_WS;
+        nShapeFeatures |= XMLShapeExportFlags::NO_WS;
     }
 
     // OD 2004-06-01 #i27691# - correction: no export of svg:x, if object
@@ -2632,7 +2632,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         }
     }
     else if( TextContentAnchorType_AS_CHARACTER == eAnchor )
-        nShapeFeatures = (nShapeFeatures & ~SEF_EXPORT_X);
+        nShapeFeatures = (nShapeFeatures & ~XMLShapeExportFlags::X);
 
     if( !bShape || TextContentAnchorType_AS_CHARACTER == eAnchor  )
     {
@@ -2649,7 +2649,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
                                       sValue.makeStringAndClear() );
         }
         if( bShape )
-            nShapeFeatures = (nShapeFeatures & ~SEF_EXPORT_Y);
+            nShapeFeatures = (nShapeFeatures & ~XMLShapeExportFlags::Y);
     }
 
     Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
@@ -2871,7 +2871,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                     case FT_SHAPE:
                         {
                             Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
-                            sal_Int32 nFeatures =
+                            XMLShapeExportFlags nFeatures =
                                 addTextFrameAttributes( xPropSet, true );
                             GetExport().GetShapeExport()
                                 ->exportShape( xShape, -1, nFeatures );

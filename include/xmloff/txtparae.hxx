@@ -44,6 +44,7 @@ class XMLIndexMarkExport;
 class XMLRedlineExport;
 struct XMLPropertyState;
 class MultiPropertySetHelper;
+enum class XMLShapeExportFlags;
 
 namespace com { namespace sun { namespace star
 {
@@ -260,7 +261,7 @@ public:
 
 protected:
 
-    sal_Int32 addTextFrameAttributes(
+    XMLShapeExportFlags addTextFrameAttributes(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
         bool bShape,
