@@ -44,16 +44,23 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:style="dropdown" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomObjects"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AnimationEffects"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:PageSetup"/>
+ <toolbar:toolbaritem xlink:href=".uno:SlideMasterPage"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="10157"/>
+ <toolbar:toolbaritem xlink:href=".uno:PresentationCurrentSlide"/>
 </toolbar:toolbar>
