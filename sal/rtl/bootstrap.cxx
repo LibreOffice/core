@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#define NOMINMAX
+
 #include <config_features.h>
 #include <config_folders.h>
 
