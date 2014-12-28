@@ -13,7 +13,7 @@
 #include "excelhandlers.hxx"
 #include "worksheetfragment.hxx"
 
-class ScDataBarFormatData;
+struct ScDataBarFormatData;
 
 namespace oox {
 namespace xls {

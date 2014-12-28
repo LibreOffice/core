@@ -26,7 +26,7 @@
 #include "addressconverter.hxx"
 #include "formulabase.hxx"
 
-class ScDataBarFormatData;
+struct ScDataBarFormatData;
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
