@@ -54,6 +54,8 @@ public:
     sal_uInt16 GetLower() const { return nLower; }
     sal_uInt16 GetLeft () const { return nLeft; }
     sal_uInt16 GetRight() const { return nRight; }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 typedef boost::ptr_vector<SwColumn> SwColumns;
@@ -160,6 +162,8 @@ public:
     /** As above except that it @return the width of PrtArea -
      that corresponds to what constitutes the column for the user. */
     sal_uInt16 CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline const SwFmtCol &SwAttrSet::GetCol(bool bInP) const

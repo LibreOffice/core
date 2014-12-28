@@ -449,6 +449,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_WRAP_INFLUENCE_ON_OBJPOS:
                 static_cast<const SwFmtWrapInfluenceOnObjPos*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_COL:
+                static_cast<const SwFmtCol*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -506,13 +509,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case XATTR_FILLBMP_STRETCH:
                 pWhich = "fill bitmap stretch";
                 break;
-            case RES_COL:
-            {
-                pWhich = "columns formatting";
-                const SwFmtCol* pFmtCol = static_cast<const SwFmtCol*>(pItem);
-                oValue = "number of columns: " + OString::number(pFmtCol->GetColumns().size());
-                break;
-            }
             case RES_PROTECT:
                 pWhich = "protect";
                 break;

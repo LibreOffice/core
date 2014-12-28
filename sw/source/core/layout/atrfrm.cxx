@@ -790,6 +790,17 @@ bool SwColumn::operator==( const SwColumn &rCmp ) const
             GetLower() == rCmp.GetLower();
 }
 
+void SwColumn::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swColumn"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWish"), BAD_CAST(OString::number(nWish).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(nUpper).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(nLower).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeft"), BAD_CAST(OString::number(nLeft).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRight"), BAD_CAST(OString::number(nRight).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     : SfxPoolItem( RES_COL ),
     m_eLineStyle( rCpy.m_eLineStyle ),
@@ -1114,6 +1125,27 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
     }
     return bRet;
+}
+
+void SwFmtCol::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtCol"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLineStyle"), BAD_CAST(OString::number(m_eLineStyle).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineWidth"), BAD_CAST(OString::number(m_nLineWidth).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aLineColor"), BAD_CAST(m_aLineColor.AsRGBHexString().toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLineHeight"), BAD_CAST(OString::number(m_nLineHeight).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eAdj"), BAD_CAST(OString::number(m_eAdj).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(m_nWidth).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidthAdjustValue"), BAD_CAST(OString::number(m_aWidthAdjustValue).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bOrtho"), BAD_CAST(OString::boolean(m_bOrtho).getStr()));
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("aColumns"));
+    for (const SwColumn& rColumn : m_aColumns)
+        rColumn.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 // Partially implemented inline in hxx
