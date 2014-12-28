@@ -9,6 +9,8 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <initializer_list>
+
 #if !defined(MACOSX)
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -32,6 +34,21 @@ public:
     bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
         // Only test import of .odt document
         return OString(filename).endsWith(".odt");
+    }
+
+    bool mustValidate(const char* filename) const SAL_OVERRIDE
+    {
+        std::vector<const char*> aBlacklist = {
+            // These are known problems, they should be fixed one by one.
+            "fdo86963.odt",
+            "shape-relsize.odt",
+            "charborder.odt",
+            "fdo60769.odt",
+            "first-header-footer.odt",
+            "fdo38244.odt"
+        };
+
+        return std::find(aBlacklist.begin(), aBlacklist.end(), filename) == aBlacklist.end();
     }
 };
 
