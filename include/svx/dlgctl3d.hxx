@@ -27,20 +27,14 @@
 #include <svx/svxdllapi.h>
 #include <basegfx/vector/b3dvector.hxx>
 
-
-
 class FmFormModel;
 class FmFormPage;
 class E3dView;
 class E3dPolyScene;
 class E3dObject;
 
-
-
 #define PREVIEW_OBJECTTYPE_SPHERE           0x0000
 #define PREVIEW_OBJECTTYPE_CUBE             0x0001
-
-
 
 class SVX_DLLPUBLIC Svx3DPreviewControl : public Control
 {
@@ -55,13 +49,13 @@ protected:
     void Construct();
 
 public:
-    Svx3DPreviewControl(vcl::Window* pParent, const ResId& rResId);
     Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~Svx3DPreviewControl();
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void Reset();
     virtual void SetObjectType(sal_uInt16 nType);
@@ -69,8 +63,6 @@ public:
     SfxItemSet Get3DAttributes() const;
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };
-
-
 
 class SVX_DLLPUBLIC Svx3DLightControl : public Svx3DPreviewControl
 {
@@ -149,8 +141,6 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-
-
 class SVX_DLLPUBLIC SvxLightCtl3D : public Control
 {
 private:
@@ -165,8 +155,7 @@ private:
     Link                    maUserSelectionChangeCallback;
 
 public:
-    SvxLightCtl3D( vcl::Window* pParent, const ResId& rResId);
-    SvxLightCtl3D( vcl::Window* pParent);
+    SvxLightCtl3D(vcl::Window* pParent);
     virtual ~SvxLightCtl3D();
 
     // react to size changes

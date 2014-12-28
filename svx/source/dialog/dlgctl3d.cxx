@@ -41,22 +41,6 @@
 
 using namespace com::sun::star;
 
-Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, const ResId& rResId)
-:   Control(pParent, rResId),
-    mpModel(0),
-    mpFmPage(0),
-    mp3DView(0),
-    mpScene(0),
-    mp3DObj(0),
-    mnObjectType(PREVIEW_OBJECTTYPE_SPHERE)
-{
-    Construct();
-
-    // do not paint background self, DrawingLayer paints this buffered and as page
-    SetControlBackground();
-    SetBackground();
-}
-
 Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
 :   Control(pParent, nStyle),
     mpModel(0),
@@ -71,6 +55,16 @@ Svx3DPreviewControl::Svx3DPreviewControl(vcl::Window* pParent, WinBits nStyle)
     // do not paint background self, DrawingLayer paints this buffered and as page
     SetControlBackground();
     SetBackground();
+}
+
+Size Svx3DPreviewControl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(80, 100), MAP_APPFONT);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvx3DPreviewControl(vcl::Window *pParent, VclBuilder::stringmap &)
+{
+    return new Svx3DPreviewControl(pParent);
 }
 
 Svx3DPreviewControl::~Svx3DPreviewControl()
@@ -952,19 +946,6 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
     return basegfx::B3DVector();
 }
 
-
-
-SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent, const ResId& rResId)
-:   Control(pParent, rResId),
-    maLightControl(this, 0),
-    maHorScroller(this, WB_HORZ | WB_DRAG),
-    maVerScroller(this, WB_VERT | WB_DRAG),
-    maSwitcher(this, 0)
-{
-    // init members
-    Init();
-}
-
 SvxLightCtl3D::SvxLightCtl3D( vcl::Window* pParent)
 :   Control(pParent, WB_BORDER | WB_TABSTOP),
     maLightControl(this, 0),
@@ -985,7 +966,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxLightCtl3D(vcl::Win
 {
     return new SvxLightCtl3D(pParent);
 }
-
 
 void SvxLightCtl3D::Init()
 {

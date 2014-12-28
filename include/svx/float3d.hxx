@@ -60,134 +60,114 @@ class SVX_DLLPUBLIC Svx3DWin : public SfxDockingWindow
     using Window::Update;
 
 private:
-    ImageButton         aBtnGeo;
-    ImageButton         aBtnRepresentation;
-    ImageButton         aBtnLight;
-    ImageButton         aBtnTexture;
-    ImageButton         aBtnMaterial;
-    ImageButton         aBtnUpdate;
-    ImageButton         aBtnAssign;
+    PushButton*         m_pBtnGeo;
+    PushButton*         m_pBtnRepresentation;
+    PushButton*         m_pBtnLight;
+    PushButton*         m_pBtnTexture;
+    PushButton*         m_pBtnMaterial;
+    PushButton*         m_pBtnUpdate;
+    PushButton*         m_pBtnAssign;
 
 // geometry
-    FixedLine           aFLGeometrie;
-    FixedText           aFtPercentDiagonal;
-    MetricField         aMtrPercentDiagonal;
-    FixedText           aFtBackscale;
-    MetricField         aMtrBackscale;
-    FixedText           aFtEndAngle;
-    MetricField         aMtrEndAngle;
-    FixedText           aFtDepth;
-    MetricField         aMtrDepth;
-      FixedLine           aFLSegments;
+    VclContainer*       m_pFLGeometrie;
+    FixedText*          m_pFtPercentDiagonal;
+    MetricField*        m_pMtrPercentDiagonal;
+    FixedText*          m_pFtBackscale;
+    MetricField*        m_pMtrBackscale;
+    FixedText*          m_pFtEndAngle;
+    MetricField*        m_pMtrEndAngle;
+    FixedText*          m_pFtDepth;
+    MetricField*        m_pMtrDepth;
 
-    FixedText           aFtHorizontal;
-    NumericField        aNumHorizontal;
-    FixedText           aFtVertical;
-    NumericField        aNumVertical;
-       FixedLine           aFLNormals;
+    VclContainer*       m_pFLSegments;
+    NumericField*       m_pNumHorizontal;
+    NumericField*       m_pNumVertical;
 
-    ImageButton         aBtnNormalsObj;
-    ImageButton         aBtnNormalsFlat;
-    ImageButton         aBtnNormalsSphere;
-    ImageButton         aBtnNormalsInvert;
-    ImageButton         aBtnTwoSidedLighting;
+    VclContainer*       m_pFLNormals;
+    PushButton*         m_pBtnNormalsObj;
+    PushButton*         m_pBtnNormalsFlat;
+    PushButton*         m_pBtnNormalsSphere;
+    PushButton*         m_pBtnNormalsInvert;
+    PushButton*         m_pBtnTwoSidedLighting;
+    PushButton*         m_pBtnDoubleSided;
 
-    ImageButton         aBtnDoubleSided;
-    FixedLine           aFLRepresentation;
 // presentation
-    FixedText           aFtShademode;
-    ListBox             aLbShademode;
-    FixedLine           aFLShadow;
-    ImageButton         aBtnShadow3d;
-    FixedText           aFtSlant;
-    MetricField         aMtrSlant;
-    FixedText           aFtDistance;
-    MetricField         aMtrDistance;
-    FixedText           aFtFocalLeng;
-    MetricField         aMtrFocalLength;
-    FixedLine           aFLCamera;
-    FixedLine           aFLLight;
+    VclContainer*       m_pFLRepresentation;
+    ListBox*            m_pLbShademode;
+
+    VclContainer*       m_pFLShadow;
+    PushButton*         m_pBtnShadow3d;
+    FixedText*          m_pFtSlant;
+    MetricField*        m_pMtrSlant;
+
+    VclContainer*       m_pFLCamera;
+    MetricField*        m_pMtrDistance;
+    MetricField*        m_pMtrFocalLength;
 
 // lighting
-    ImageButton         aBtnLight1;
-    ImageButton         aBtnLight2;
-    ImageButton         aBtnLight3;
-    ImageButton         aBtnLight4;
-    ImageButton         aBtnLight5;
-    ImageButton         aBtnLight6;
-    ImageButton         aBtnLight7;
-    ImageButton         aBtnLight8;
-    FixedText           aFTLightsource;
-    ColorLB             aLbLight1;
-    ColorLB             aLbLight2;
-    ColorLB             aLbLight3;
-    ColorLB             aLbLight4;
-    ColorLB             aLbLight5;
-    ColorLB             aLbLight6;
-    ColorLB             aLbLight7;
-    ColorLB             aLbLight8;
-
-    ImageButton         aBtnLightColor;
-
-    // #99694# Keyboard shortcuts activate the next control, so the
-    // order needed to be changed here
-    FixedText           aFTAmbientlight;    // Text label
-    ColorLB             aLbAmbientlight;    // ListBox
-    ImageButton         aBtnAmbientColor;   // color button
-
-       FixedLine           aFLTexture;
+    VclContainer*       m_pFLLight;
+    PushButton*         m_pBtnLight1;
+    PushButton*         m_pBtnLight2;
+    PushButton*         m_pBtnLight3;
+    PushButton*         m_pBtnLight4;
+    PushButton*         m_pBtnLight5;
+    PushButton*         m_pBtnLight6;
+    PushButton*         m_pBtnLight7;
+    PushButton*         m_pBtnLight8;
+    ColorLB*            m_pLbLight1;
+    ColorLB*            m_pLbLight2;
+    ColorLB*            m_pLbLight3;
+    ColorLB*            m_pLbLight4;
+    ColorLB*            m_pLbLight5;
+    ColorLB*            m_pLbLight6;
+    ColorLB*            m_pLbLight7;
+    ColorLB*            m_pLbLight8;
+    PushButton*         m_pBtnLightColor;
+    ColorLB*            m_pLbAmbientlight;    // ListBox
+    PushButton*         m_pBtnAmbientColor;   // color button
 
 // Textures
-    FixedText           aFtTexKind;
-    ImageButton         aBtnTexLuminance;
-    ImageButton         aBtnTexColor;
-    FixedText           aFtTexMode;
-    ImageButton         aBtnTexReplace;
-    ImageButton         aBtnTexModulate;
-    ImageButton         aBtnTexBlend;
-    FixedText           aFtTexProjectionX;
-    ImageButton         aBtnTexObjectX;
-    ImageButton         aBtnTexParallelX;
-    ImageButton         aBtnTexCircleX;
-    FixedText           aFtTexProjectionY;
-    ImageButton         aBtnTexObjectY;
-    ImageButton         aBtnTexParallelY;
-    ImageButton         aBtnTexCircleY;
-    FixedText           aFtTexFilter;
-    ImageButton         aBtnTexFilter;
+    VclContainer*       m_pFLTexture;
+    PushButton*         m_pBtnTexLuminance;
+    PushButton*         m_pBtnTexColor;
+    PushButton*         m_pBtnTexReplace;
+    PushButton*         m_pBtnTexModulate;
+    PushButton*         m_pBtnTexBlend;
+    PushButton*         m_pBtnTexObjectX;
+    PushButton*         m_pBtnTexParallelX;
+    PushButton*         m_pBtnTexCircleX;
+    PushButton*         m_pBtnTexObjectY;
+    PushButton*         m_pBtnTexParallelY;
+    PushButton*         m_pBtnTexCircleY;
+    PushButton*         m_pBtnTexFilter;
 
 // material
 // material editor
-       FixedLine           aFLMaterial;
-    FixedText           aFtMatFavorites;
-    ListBox             aLbMatFavorites;
-    FixedText           aFtMatColor;
-    ColorLB             aLbMatColor;
-    ImageButton         aBtnMatColor;
-    FixedText           aFtMatEmission;
-    ColorLB             aLbMatEmission;
-    ImageButton         aBtnEmissionColor;
-       FixedLine           aFLMatSpecular;
-    FixedText           aFtMatSpecular;
-    ColorLB             aLbMatSpecular;
-    ImageButton         aBtnSpecularColor;
-    FixedText           aFtMatSpecularIntensity;
-    MetricField         aMtrMatSpecularIntensity;
+    VclContainer*       m_pFLMaterial;
+    ListBox*            m_pLbMatFavorites;
+    ColorLB*            m_pLbMatColor;
+    PushButton*         m_pBtnMatColor;
+    ColorLB*            m_pLbMatEmission;
+    PushButton*         m_pBtnEmissionColor;
 
-    Svx3DPreviewControl aCtlPreview;
-    SvxLightCtl3D       aCtlLightPreview;
+    VclContainer*       m_pFLMatSpecular;
+    ColorLB*            m_pLbMatSpecular;
+    PushButton*         m_pBtnSpecularColor;
+    MetricField*        m_pMtrMatSpecularIntensity;
+
+    Svx3DPreviewControl* m_pCtlPreview;
+    SvxLightCtl3D*      m_pCtlLightPreview;
 
 // bottom part
-    ImageButton         aBtnConvertTo3D;
-    ImageButton         aBtnLatheObject;
-    ImageButton         aBtnPerspective;
+    PushButton*         m_pBtnConvertTo3D;
+    PushButton*         m_pBtnLatheObject;
+    PushButton*         m_pBtnPerspective;
 
 // the rest ...
     Image               aImgLightOn;
     Image               aImgLightOff;
     bool                bUpdate;
     ViewType3D          eViewType;
-    Size                aSize;
 
     // Model, Page, View etc. for favourites
     FmFormModel*        pModel;
@@ -230,8 +210,8 @@ private:
     SVX_DLLPRIVATE sal_uInt16   GetLightSource( const PushButton* pBtn = NULL );
     SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = NULL );
 
-    SVX_DLLPRIVATE bool         GetUILightState( const ImageButton& rBtn ) const;
-    SVX_DLLPRIVATE void         SetUILightState( ImageButton& aBtn, bool bState );
+    SVX_DLLPRIVATE bool         GetUILightState( const PushButton& rBtn ) const;
+    SVX_DLLPRIVATE void         SetUILightState( PushButton& aBtn, bool bState );
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
