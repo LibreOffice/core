@@ -428,7 +428,7 @@ SvXMLImport::SvXMLImport(
     mpXMLErrors( NULL ),
     mpStyleMap(0),
     mnImportFlags( nImportFlags ),
-    mnErrorFlags(0),
+    mnErrorFlags(SvXMLErrorFlags::NO),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
     mbIsGraphicLoadOnDemandSupported( true )
@@ -1776,11 +1776,11 @@ void SvXMLImport::SetError(
 {
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= ERROR_ERROR_OCCURRED;
+        mnErrorFlags |= SvXMLErrorFlags::ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= ERROR_WARNING_OCCURRED;
+        mnErrorFlags |= SvXMLErrorFlags::WARNING_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
-        mnErrorFlags |= ERROR_DO_NOTHING;
+        mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
 
     // create error list on demand
     if ( mpXMLErrors == NULL )

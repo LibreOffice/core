@@ -74,6 +74,7 @@ class XMLFontStylesContext;
 class XMLEventImportHelper;
 class XMLErrors;
 class StyleMap;
+enum class SvXMLErrorFlags;
 
 typedef std::vector<SvXMLImportContext *> SvXMLImportContexts_Impl;
 typedef std::vector< ::css::uno::Reference< ::css::xml::sax::XFastContextHandler>>
@@ -157,7 +158,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
     SAL_DLLPRIVATE void _InitCtor();
 
     SvXMLImportFlags  mnImportFlags;
-    sal_uInt16  mnErrorFlags;
+    SvXMLErrorFlags  mnErrorFlags;
     std::set< OUString > embeddedFontUrlsKnown;
 
 protected:
@@ -415,7 +416,7 @@ public:
                                   const OUString& rMsg2 );
 
     /** return current error flags */
-    sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }
+    SvXMLErrorFlags GetErrorFlags()  { return mnErrorFlags; }
 
     virtual void DisposingModel();
 

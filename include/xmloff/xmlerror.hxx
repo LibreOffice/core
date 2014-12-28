@@ -22,6 +22,7 @@
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
 
@@ -79,11 +80,16 @@
 
 // 16bit error flag constants for use in the
 // SvXMLExport/SvXMLImport error flags
-#define ERROR_NO                0x0000
-#define ERROR_DO_NOTHING        0x0001
-#define ERROR_ERROR_OCCURRED     0x0002
-#define ERROR_WARNING_OCCURRED   0x0004
-
+enum class SvXMLErrorFlags {
+    NO                = 0x0000,
+    DO_NOTHING        = 0x0001,
+    ERROR_OCCURRED    = 0x0002,
+    WARNING_OCCURRED  = 0x0004,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvXMLErrorFlags> : is_typed_flags<SvXMLErrorFlags, 0x7> {};
+}
 
 
 

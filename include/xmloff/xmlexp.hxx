@@ -73,6 +73,7 @@ class XMLSettingsExportHelper;
 class XMLImageMapExport;
 class XMLErrors;
 class LanguageTag;
+enum class SvXMLErrorFlags;
 
 // Shapes in Writer cannot be named via context menu (#i51726#)
 #include <unotools/moduleoptions.hxx>
@@ -158,7 +159,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     SAL_DLLPRIVATE void _InitCtor();
 
     SvXMLExportFlags  mnExportFlags;
-    sal_uInt16        mnErrorFlags;
+    SvXMLErrorFlags   mnErrorFlags;
 
 public:
 
@@ -545,7 +546,7 @@ public:
         const ::com::sun::star::uno::Sequence< OUString> & rMsgParams);
 
     /** return current error flags (logical 'or' of all error flags so far) */
-    sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }
+    SvXMLErrorFlags GetErrorFlags()  { return mnErrorFlags; }
 
     virtual void DisposingModel();
 

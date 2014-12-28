@@ -455,7 +455,7 @@ SvXMLExport::SvXMLExport(
     mbExtended( false ),
     meClass( eClass ),
     mnExportFlags( nExportFlags ),
-    mnErrorFlags( ERROR_NO ),
+    mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(true)
 {
@@ -486,7 +486,7 @@ SvXMLExport::SvXMLExport(
     mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( SvXMLExportFlags::NONE ),
-    mnErrorFlags( ERROR_NO ),
+    mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(true)
 {
@@ -525,7 +525,7 @@ SvXMLExport::SvXMLExport(
     mbExtended( false ),
     meClass( XML_TOKEN_INVALID ),
     mnExportFlags( SvXMLExportFlags::NONE ),
-    mnErrorFlags( ERROR_NO ),
+    mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(true)
 {
@@ -864,7 +864,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
     }
 
     // return true only if no error occurred
-    return (GetErrorFlags() & (ERROR_DO_NOTHING|ERROR_ERROR_OCCURRED)) == 0;
+    return (GetErrorFlags() & (SvXMLErrorFlags::DO_NOTHING|SvXMLErrorFlags::ERROR_OCCURRED)) == SvXMLErrorFlags::NO;
 }
 
 void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException, std::exception)
@@ -2248,7 +2248,7 @@ void SvXMLExport::StartElement(sal_uInt16 nPrefix,
 void SvXMLExport::StartElement(const OUString& rName,
                         bool bIgnWSOutside )
 {
-    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
     {
         try
         {
@@ -2276,7 +2276,7 @@ void SvXMLExport::StartElement(const OUString& rName,
 
 void SvXMLExport::Characters(const OUString& rChars)
 {
-    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
     {
         try
         {
@@ -2321,7 +2321,7 @@ void SvXMLExport::EndElement(const OUString& rName,
     SAL_WARN_IF(!mpImpl->mNamespaceMaps.empty() &&
         (mpImpl->mNamespaceMaps.top().second >= mpImpl->mDepth), "xmloff.core", "SvXMLExport: NamespaceMaps corrupted");
 
-    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
     {
         try
         {
@@ -2344,7 +2344,7 @@ void SvXMLExport::IgnorableWhitespace()
     if ((mnExportFlags & SvXMLExportFlags::PRETTY) != SvXMLExportFlags::PRETTY)
         return;
 
-    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    if ((mnErrorFlags & SvXMLErrorFlags::DO_NOTHING) != SvXMLErrorFlags::DO_NOTHING)
     {
         try
         {
@@ -2371,11 +2371,11 @@ void SvXMLExport::SetError(
 
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= ERROR_ERROR_OCCURRED;
+        mnErrorFlags |= SvXMLErrorFlags::ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= ERROR_WARNING_OCCURRED;
+        mnErrorFlags |= SvXMLErrorFlags::WARNING_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
-        mnErrorFlags |= ERROR_DO_NOTHING;
+        mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
 
     // create error lsit on demand
     if ( mpXMLErrors == NULL )
