@@ -25,9 +25,4 @@
  <toolbar:toolbaritem xlink:href=".uno:AssignLayout" toolbar:style="dropdownonly"/>
  <toolbar:toolbaritem xlink:href=".uno:PresentationLayout" toolbar:visible="false" toolbar:helpid="27064"/>
  <toolbar:toolbaritem xlink:href=".uno:ExpandPage" toolbar:visible="false" toolbar:helpid="27343"/>
- <toolbar:toolbaritem xlink:href=".uno:PageSetup"/>
- <toolbar:toolbaritem xlink:href=".uno:SlideMasterPage"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="10157"/>
- <toolbar:toolbaritem xlink:href=".uno:PresentationCurrentSlide"/>
 </toolbar:toolbar>

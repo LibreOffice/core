@@ -36,16 +36,17 @@
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:DistributeSelection"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:style="auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AnimationEffects"/>
+ <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomObjects"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
