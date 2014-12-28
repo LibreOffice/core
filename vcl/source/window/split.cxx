@@ -149,22 +149,6 @@ Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
     SetFillColor();
 }
 
-Splitter::Splitter( vcl::Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_SPLITTER )
-{
-    ImplInitSplitterData();
-    rResId.SetRT( RSC_SPLITTER );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    SetLineColor();
-    SetFillColor();
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 Splitter::~Splitter()
 {
     TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
