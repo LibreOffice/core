@@ -793,7 +793,7 @@ Menu MN_TAB_POPUPMENU
     {\
         Identifier = FN_FRAME_WRAP_CONTOUR ; \
         HelpId = CMD_FN_FRAME_WRAP_CONTOUR ; \
-        Text [ en-US ] = "~Contour" ; \
+        Text [ en-US ] = "Enable ~Contour" ; \
     };
 
 #define MN_EDIT_CONTOUR \
@@ -837,6 +837,19 @@ Menu MN_TAB_POPUPMENU
                     HelpId = CMD_FN_FRAME_WRAP_IDEAL ; \
                     Text [ en-US ] = "~Optimal Page Wrap" ; \
                 };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP_LEFT ; \
+                    Text [ en-US ] = "Wrap ~Before" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP_RIGHT ; \
+                    Text [ en-US ] = "Wrap ~After" ; \
+                };\
+                SEPARATOR ; \
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
