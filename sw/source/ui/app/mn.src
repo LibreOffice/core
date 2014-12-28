@@ -840,6 +840,18 @@ Menu MN_TAB_POPUPMENU
                 MenuItem\
                 {\
                     RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP_LEFT ; \
+                    Text [ en-US ] = "Wrap ~Before" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = FN_FRAME_WRAP_RIGHT ; \
+                    Text [ en-US ] = "Wrap ~After" ; \
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU ; \
                     HelpId = CMD_FN_FRAME_WRAPTHRU ; \
                     Text [ en-US ] = "~Wrap Through" ; \
