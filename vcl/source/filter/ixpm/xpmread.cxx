@@ -23,6 +23,7 @@
 #include "rgbtable.hxx"
 #define _XPMPRIVATE
 #include "xpmread.hxx"
+#include <cstring>
 
 // -------------
 // - XPMReader -
@@ -348,7 +349,8 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
             {
                 if ( pRGBTable[ i ].name == NULL )
                     break;
-                if ( pRGBTable[ i ].name[ mnParaSize ] == 0 )
+                if ( std::strlen(pRGBTable[i].name) > mnParaSize &&
+                        pRGBTable[ i ].name[ mnParaSize ] == 0 )
                 {
                     if ( ImplCompare ( (unsigned char*)pRGBTable[ i ].name,
                             mpPara, mnParaSize, XPMCASENONSENSITIVE ) )
