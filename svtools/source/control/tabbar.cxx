@@ -2577,9 +2577,13 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
     long        nY = (maWinSize.Height()/2)-1;
     sal_uInt16      nCurPos = GetPagePos( mnCurPageId );
 
-    SetLineColor( aBlackColor );
+    sal_Int32 nTriangleWidth = 3 * GetDPIScaleFactor();
+
     if ( mnDropPos < nItemCount )
     {
+        SetLineColor(aBlackColor);
+        SetFillColor(aBlackColor);
+
         pItem = (*mpItemList)[ mnDropPos ];
         nX = pItem->maRect.Left();
         if ( mnDropPos == nCurPos )
@@ -2587,23 +2591,36 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
         else
             nX++;
         if ( !pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
-            SetLineColor( pItem->maTabTextColor );
-        DrawLine( Point( nX, nY ), Point( nX, nY ) );
-        DrawLine( Point( nX+1, nY-1 ), Point( nX+1, nY+1 ) );
-        DrawLine( Point( nX+2, nY-2 ), Point( nX+2, nY+2 ) );
-        SetLineColor( aBlackColor );
+        {
+            SetLineColor(pItem->maTabTextColor);
+            SetFillColor(pItem->maTabTextColor);
+        }
+
+        Polygon aPoly(3);
+        aPoly.SetPoint(Point(nX, nY), 0);
+        aPoly.SetPoint(Point(nX + nTriangleWidth, nY - nTriangleWidth), 1);
+        aPoly.SetPoint(Point(nX + nTriangleWidth, nY + nTriangleWidth), 2);
+        DrawPolygon(aPoly);
     }
     if ( (mnDropPos > 0) && (mnDropPos < nItemCount+1) )
     {
+        SetLineColor(aBlackColor);
+        SetFillColor(aBlackColor);
+
         pItem = (*mpItemList)[ mnDropPos-1 ];
         nX = pItem->maRect.Right();
         if ( mnDropPos == nCurPos )
             nX++;
         if ( !pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
-            SetLineColor( pItem->maTabTextColor );
-        DrawLine( Point( nX, nY ), Point( nX, nY ) );
-        DrawLine( Point( nX-1, nY-1 ), Point( nX-1, nY+1 ) );
-        DrawLine( Point( nX-2, nY-2 ), Point( nX-2, nY+2 ) );
+        {
+            SetLineColor(pItem->maTabTextColor);
+            SetFillColor(pItem->maTabTextColor);
+        }
+        Polygon aPoly(3);
+        aPoly.SetPoint(Point(nX, nY ), 0);
+        aPoly.SetPoint(Point(nX - nTriangleWidth, nY - nTriangleWidth), 1);
+        aPoly.SetPoint(Point(nX - nTriangleWidth, nY + nTriangleWidth), 2);
+        DrawPolygon(aPoly);
     }
 
     return mnDropPos;
