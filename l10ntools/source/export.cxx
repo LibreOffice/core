@@ -1155,16 +1155,19 @@ void Export::MergeRest( ResData *pResData )
                 }
 
                 MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
-                OString sText;
-                bool bText = pEntrys && pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, true );
 
-                if( bText && !sText.isEmpty())
+                if( pEntrys )
                 {
-                    ConvertMergeContent( sText );
-                    sLine =
-                        sLine.copy( 0 , sLine.indexOf('"') ) +
-                        sText +
-                        sLine.copy( sLine.lastIndexOf('"') + 1 );
+                    OString sText;
+                    pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, false );
+                    if( !sText.isEmpty())
+                    {
+                        ConvertMergeContent( sText );
+                        sLine =
+                            sLine.copy( 0 , sLine.indexOf('"') ) +
+                            sText +
+                            sLine.copy( sLine.lastIndexOf('"') + 1 );
+                    }
                 }
 
                 OString sText1( "\t" );
