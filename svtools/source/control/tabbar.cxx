@@ -167,8 +167,9 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     : Window( pParent, nWinStyle & WB_3DLOOK )
     , mnStartWidth(0)
 {
-    SetPointer( Pointer( POINTER_HSIZEBAR ) );
-    SetSizePixel( Size( 7, 0 ) );
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+    SetPointer(Pointer(POINTER_HSIZEBAR));
+    SetSizePixel(Size(7 * nScaleFactor, 0));
 }
 
 
