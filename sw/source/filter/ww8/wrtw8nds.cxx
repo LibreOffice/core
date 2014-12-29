@@ -2359,7 +2359,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         {
             AttrOutput().EndRun();
             //write the postponed text run
-            bPostponeWritingText = false ;
             AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
             AttrOutput().SetAnchorIsLinkedToNode( false );
             AttrOutput().ResetFlyProcessingFlag();
@@ -2375,7 +2374,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
         {
             //write the postponed text run
-            bPostponeWritingText = false ;
             AttrOutput().RunText( aSavedSnippet, eChrSet );
             AttrOutput().EndRun();
         }
