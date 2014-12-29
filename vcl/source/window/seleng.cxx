@@ -39,7 +39,7 @@ SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet,
 {
     eSelMode = SINGLE_SELECTION;
     pFunctionSet = pFuncSet;
-    nFlags = SELENG_EXPANDONMOVE;
+    nFlags = SelectionEngineFlags::EXPANDONMOVE;
     nLockedMods = 0;
 
     aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
@@ -72,20 +72,20 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
     {
         if ( IsAddMode() )
         {
-            if ( !(nFlags & SELENG_HAS_ANCH) )
+            if ( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
             {
                 pFunctionSet->CreateAnchor();
-                nFlags |= SELENG_HAS_ANCH;
+                nFlags |= SelectionEngineFlags::HAS_ANCH;
             }
         }
         else
         {
-            if ( !(nFlags & SELENG_HAS_ANCH) )
+            if ( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
             {
                 if( ShouldDeselect( bMod1 ) )
                     pFunctionSet->DeselectAll();
                 pFunctionSet->CreateAnchor();
-                nFlags |= SELENG_HAS_ANCH;
+                nFlags |= SelectionEngineFlags::HAS_ANCH;
             }
         }
     }
@@ -93,11 +93,11 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
     {
         if ( IsAddMode() )
         {
-            if ( nFlags & SELENG_HAS_ANCH )
+            if ( nFlags & SelectionEngineFlags::HAS_ANCH )
             {
                 // pFunctionSet->CreateCursor();
                 pFunctionSet->DestroyAnchor();
-                nFlags &= (~SELENG_HAS_ANCH);
+                nFlags &= (~SelectionEngineFlags::HAS_ANCH);
             }
         }
         else
@@ -106,14 +106,14 @@ void SelectionEngine::CursorPosChanging( bool bShift, bool bMod1 )
                 pFunctionSet->DeselectAll();
             else
                 pFunctionSet->DestroyAnchor();
-            nFlags &= (~SELENG_HAS_ANCH);
+            nFlags &= (~SelectionEngineFlags::HAS_ANCH);
         }
     }
 }
 
 bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 {
-    nFlags &= (~SELENG_CMDEVT);
+    nFlags &= (~SelectionEngineFlags::CMDEVT);
     if ( !pFunctionSet || !pWin || rMEvt.GetClicks() > 1 || rMEvt.IsRight() )
         return false;
 
@@ -131,7 +131,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
     if( !rMEvt.IsRight() )
     {
         pWin->CaptureMouse();
-        nFlags |= SELENG_IN_SEL;
+        nFlags |= SelectionEngineFlags::IN_SEL;
     }
     else
     {
@@ -143,11 +143,11 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
         case 0:     // KEY_NO_KEY
         {
             bool bSelAtPoint = pFunctionSet->IsSelectionAtPoint( aPos );
-            nFlags &= (~SELENG_IN_ADD);
-            if ( (nFlags & SELENG_DRG_ENAB) && bSelAtPoint )
+            nFlags &= (~SelectionEngineFlags::IN_ADD);
+            if ( (nFlags & SelectionEngineFlags::DRG_ENAB) && bSelAtPoint )
             {
-                nFlags |= SELENG_WAIT_UPEVT;
-                nFlags &= ~(SELENG_IN_SEL);
+                nFlags |= SelectionEngineFlags::WAIT_UPEVT;
+                nFlags &= ~(SelectionEngineFlags::IN_SEL);
                 pWin->ReleaseMouse();
                 return true;  // wait for STARTDRAG-Command-Event
             }
@@ -157,12 +157,12 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
                     pFunctionSet->DeselectAll();
                 else
                     pFunctionSet->DestroyAnchor();
-                   nFlags &= (~SELENG_HAS_ANCH); // bHasAnchor = false;
+                   nFlags &= (~SelectionEngineFlags::HAS_ANCH); // bHasAnchor = false;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             // special case Single-Selection, to enable simple Select+Drag
-            if (eSelMode == SINGLE_SELECTION && (nFlags & SELENG_DRG_ENAB))
-                nFlags |= SELENG_WAIT_UPEVT;
+            if (eSelMode == SINGLE_SELECTION && (nFlags & SelectionEngineFlags::DRG_ENAB))
+                nFlags |= SelectionEngineFlags::WAIT_UPEVT;
             return true;
         }
 
@@ -170,20 +170,20 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             if ( eSelMode == SINGLE_SELECTION )
             {
                 pWin->ReleaseMouse();
-                nFlags &= (~SELENG_IN_SEL);
+                nFlags &= (~SelectionEngineFlags::IN_SEL);
                 return false;
             }
-            if ( nFlags & SELENG_ADD_ALW )
-                nFlags |= SELENG_IN_ADD;
+            if ( nFlags & SelectionEngineFlags::ADD_ALW )
+                nFlags |= SelectionEngineFlags::IN_ADD;
             else
-                nFlags &= (~SELENG_IN_ADD);
+                nFlags &= (~SelectionEngineFlags::IN_ADD);
 
-            if( !(nFlags & SELENG_HAS_ANCH) )
+            if( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
             {
-                if ( !(nFlags & SELENG_IN_ADD) )
+                if ( !(nFlags & SelectionEngineFlags::IN_ADD) )
                     pFunctionSet->DeselectAll();
                 pFunctionSet->CreateAnchor();
-                nFlags |= SELENG_HAS_ANCH;
+                nFlags |= SelectionEngineFlags::HAS_ANCH;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             return true;
@@ -192,15 +192,15 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             // allow Control only for Multi-Select
             if ( eSelMode != MULTIPLE_SELECTION )
             {
-                nFlags &= (~SELENG_IN_SEL);
+                nFlags &= (~SelectionEngineFlags::IN_SEL);
                 pWin->ReleaseMouse();
                 return true;  // skip Mouse-Click
             }
-            if ( nFlags & SELENG_HAS_ANCH )
+            if ( nFlags & SelectionEngineFlags::HAS_ANCH )
             {
                 // pFunctionSet->CreateCursor();
                 pFunctionSet->DestroyAnchor();
-                nFlags &= (~SELENG_HAS_ANCH);
+                nFlags &= (~SelectionEngineFlags::HAS_ANCH);
             }
             if ( pFunctionSet->IsSelectionAtPoint( aPos ) )
             {
@@ -217,14 +217,14 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             if ( eSelMode != MULTIPLE_SELECTION )
             {
                 pWin->ReleaseMouse();
-                nFlags &= (~SELENG_IN_SEL);
+                nFlags &= (~SelectionEngineFlags::IN_SEL);
                 return false;
             }
-            nFlags |= SELENG_IN_ADD; //bIsInAddMode = true;
-            if ( !(nFlags & SELENG_HAS_ANCH) )
+            nFlags |= SelectionEngineFlags::IN_ADD; //bIsInAddMode = true;
+            if ( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
             {
                 pFunctionSet->CreateAnchor();
-                nFlags |= SELENG_HAS_ANCH;
+                nFlags |= SelectionEngineFlags::HAS_ANCH;
             }
             pFunctionSet->SetCursorAtPoint( aPos );
             return true;
@@ -238,7 +238,8 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
     aWTimer.Stop();
     if( !pFunctionSet || !pWin )
     {
-        nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
+        const SelectionEngineFlags nMask = (SelectionEngineFlags::CMDEVT | SelectionEngineFlags::WAIT_UPEVT | SelectionEngineFlags::IN_SEL);
+        nFlags &= ~nMask;
         return false;
     }
 
@@ -247,7 +248,7 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
        ReleaseMouse();
     }
 
-    if( (nFlags & SELENG_WAIT_UPEVT) && !(nFlags & SELENG_CMDEVT) &&
+    if( (nFlags & SelectionEngineFlags::WAIT_UPEVT) && !(nFlags & SelectionEngineFlags::CMDEVT) &&
         eSelMode != SINGLE_SELECTION)
     {
         // MouseButtonDown in Sel but no CommandEvent yet
@@ -258,21 +259,22 @@ bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
             if( !(nModifier & KEY_SHIFT) )
             {
                 pFunctionSet->DestroyAnchor();
-                nFlags &= (~SELENG_HAS_ANCH); // uncheck anchor
+                nFlags &= (~SelectionEngineFlags::HAS_ANCH); // uncheck anchor
             }
             pFunctionSet->DeselectAtPoint( aLastMove.GetPosPixel() );
-            nFlags &= (~SELENG_HAS_ANCH); // uncheck anchor
+            nFlags &= (~SelectionEngineFlags::HAS_ANCH); // uncheck anchor
             pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel(), true );
         }
         else
         {
             pFunctionSet->DeselectAll();
-            nFlags &= (~SELENG_HAS_ANCH); // uncheck anchor
+            nFlags &= (~SelectionEngineFlags::HAS_ANCH); // uncheck anchor
             pFunctionSet->SetCursorAtPoint( aLastMove.GetPosPixel() );
         }
     }
 
-    nFlags &= ~(SELENG_CMDEVT | SELENG_WAIT_UPEVT | SELENG_IN_SEL);
+    const SelectionEngineFlags nMask = (SelectionEngineFlags::CMDEVT | SelectionEngineFlags::WAIT_UPEVT | SelectionEngineFlags::IN_SEL);
+    nFlags &= ~nMask;
     return true;
 }
 
@@ -286,11 +288,11 @@ void SelectionEngine::ReleaseMouse()
 bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 {
 
-    if ( !pFunctionSet || !(nFlags & SELENG_IN_SEL) ||
-         (nFlags & (SELENG_CMDEVT | SELENG_WAIT_UPEVT)) )
+    if ( !pFunctionSet || !(nFlags & SelectionEngineFlags::IN_SEL) ||
+         (nFlags & (SelectionEngineFlags::CMDEVT | SelectionEngineFlags::WAIT_UPEVT)) )
         return false;
 
-    if( !(nFlags & SELENG_EXPANDONMOVE) )
+    if( !(nFlags & SelectionEngineFlags::EXPANDONMOVE) )
         return false; // wait for DragEvent!
 
     aLastMove = rMEvt;
@@ -303,10 +305,10 @@ bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     aWTimer.Start();
     if ( eSelMode != SINGLE_SELECTION )
     {
-        if ( !(nFlags & SELENG_HAS_ANCH) )
+        if ( !(nFlags & SelectionEngineFlags::HAS_ANCH) )
         {
             pFunctionSet->CreateAnchor();
-            nFlags |= SELENG_HAS_ANCH;
+            nFlags |= SelectionEngineFlags::HAS_ANCH;
         }
     }
 
@@ -319,10 +321,10 @@ void SelectionEngine::SetWindow( vcl::Window* pNewWin )
 {
     if( pNewWin != pWin )
     {
-        if ( pWin && (nFlags & SELENG_IN_SEL) )
+        if ( pWin && (nFlags & SelectionEngineFlags::IN_SEL) )
             pWin->ReleaseMouse();
         pWin = pNewWin;
-        if ( pWin && ( nFlags & SELENG_IN_SEL ) )
+        if ( pWin && ( nFlags & SelectionEngineFlags::IN_SEL ) )
             pWin->CaptureMouse();
     }
 }
@@ -330,9 +332,10 @@ void SelectionEngine::SetWindow( vcl::Window* pNewWin )
 void SelectionEngine::Reset()
 {
     aWTimer.Stop();
-    if ( nFlags & SELENG_IN_SEL )
+    if ( nFlags & SelectionEngineFlags::IN_SEL )
         pWin->ReleaseMouse();
-    nFlags &= ~(SELENG_HAS_ANCH | SELENG_IN_SEL);
+    SelectionEngineFlags nMask = (SelectionEngineFlags::HAS_ANCH | SelectionEngineFlags::IN_SEL);
+    nFlags &= ~nMask;
     nLockedMods = 0;
 }
 
@@ -342,10 +345,10 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
     if ( !pFunctionSet || !pWin || aWTimer.IsActive() )
         return;
     aWTimer.Stop();
-    nFlags |= SELENG_CMDEVT;
+    nFlags |= SelectionEngineFlags::CMDEVT;
     if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
     {
-        if ( nFlags & SELENG_DRG_ENAB )
+        if ( nFlags & SelectionEngineFlags::DRG_ENAB )
         {
             DBG_ASSERT( rCEvt.IsMouseEvent(), "STARTDRAG: Not a MouseEvent" );
             if ( pFunctionSet->IsSelectionAtPoint( rCEvt.GetMousePosPixel() ) )
@@ -354,13 +357,14 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
                                aLastMove.GetClicks(), aLastMove.GetMode(),
                                aLastMove.GetButtons(), aLastMove.GetModifier() );
                 pFunctionSet->BeginDrag();
-                nFlags &= ~(SELENG_CMDEVT|SELENG_WAIT_UPEVT|SELENG_IN_SEL);
+                const SelectionEngineFlags nMask = (SelectionEngineFlags::CMDEVT|SelectionEngineFlags::WAIT_UPEVT|SelectionEngineFlags::IN_SEL);
+                nFlags &= ~nMask;
             }
             else
-                nFlags &= ~SELENG_CMDEVT;
+                nFlags &= ~SelectionEngineFlags::CMDEVT;
         }
         else
-            nFlags &= ~SELENG_CMDEVT;
+            nFlags &= ~SelectionEngineFlags::CMDEVT;
     }
 }
 

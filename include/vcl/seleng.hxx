@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace vcl { class Window; }
 class CommandEvent;
@@ -63,15 +64,20 @@ public:
 
 // - SelectionEngine -
 
-
-#define SELENG_DRG_ENAB     0x0001
-#define SELENG_IN_SEL       0x0002
-#define SELENG_IN_ADD       0x0004
-#define SELENG_ADD_ALW      0x0008
-#define SELENG_HAS_ANCH     0x0020
-#define SELENG_CMDEVT       0x0040
-#define SELENG_WAIT_UPEVT   0x0080
-#define SELENG_EXPANDONMOVE 0x0100
+enum class SelectionEngineFlags {
+    DRG_ENAB     = 0x0001,
+    IN_SEL       = 0x0002,
+    IN_ADD       = 0x0004,
+    ADD_ALW      = 0x0008,
+    HAS_ANCH     = 0x0020,
+    CMDEVT       = 0x0040,
+    WAIT_UPEVT   = 0x0080,
+    EXPANDONMOVE = 0x0100,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SelectionEngineFlags> : is_typed_flags<SelectionEngineFlags, 0x01ff> {};
+}
 
 class VCL_DLLPUBLIC SelectionEngine
 {
@@ -84,7 +90,7 @@ private:
     SelectionMode       eSelMode;
     sal_uLong               nUpdateInterval;
     sal_uInt16              nLockedMods;
-    sal_uInt16              nFlags;
+    SelectionEngineFlags    nFlags;
     DECL_DLLPRIVATE_LINK( ImpWatchDog, void* );
 
     inline bool         ShouldDeselect( bool bModifierKey1 ) const;
@@ -157,15 +163,15 @@ public:
     void                ExpandSelectionOnMouseMove( bool bExpand = true )
                         {
                             if( bExpand )
-                                nFlags |= SELENG_EXPANDONMOVE;
+                                nFlags |= SelectionEngineFlags::EXPANDONMOVE;
                             else
-                                nFlags &= ~SELENG_EXPANDONMOVE;
+                                nFlags &= ~SelectionEngineFlags::EXPANDONMOVE;
                         }
 };
 
 inline bool SelectionEngine::IsAddMode()  const
 {
-    if ( nFlags & (SELENG_IN_ADD | SELENG_ADD_ALW) )
+    if ( nFlags & (SelectionEngineFlags::IN_ADD | SelectionEngineFlags::ADD_ALW) )
         return true;
     else
         return false;
@@ -174,30 +180,30 @@ inline bool SelectionEngine::IsAddMode()  const
 inline void SelectionEngine::SetAddMode( bool bNewMode )
 {
     if ( bNewMode )
-        nFlags |= SELENG_IN_ADD;
+        nFlags |= SelectionEngineFlags::IN_ADD;
     else
-        nFlags &= (~SELENG_IN_ADD);
+        nFlags &= (~SelectionEngineFlags::IN_ADD);
 }
 
 inline void SelectionEngine::EnableDrag( bool bOn )
 {
     if ( bOn )
-        nFlags |= SELENG_DRG_ENAB;
+        nFlags |= SelectionEngineFlags::DRG_ENAB;
     else
-        nFlags &= (~SELENG_DRG_ENAB);
+        nFlags &= (~SelectionEngineFlags::DRG_ENAB);
 }
 
 inline void SelectionEngine::AddAlways( bool bOn )
 {
     if( bOn )
-        nFlags |= SELENG_ADD_ALW;
+        nFlags |= SelectionEngineFlags::ADD_ALW;
     else
-        nFlags &= (~SELENG_ADD_ALW);
+        nFlags &= (~SelectionEngineFlags::ADD_ALW);
 }
 
 inline bool SelectionEngine::IsAlwaysAdding() const
 {
-    if ( nFlags & SELENG_ADD_ALW )
+    if ( nFlags & SelectionEngineFlags::ADD_ALW )
         return true;
     else
         return false;
@@ -205,7 +211,7 @@ inline bool SelectionEngine::IsAlwaysAdding() const
 
 inline bool SelectionEngine::IsInSelection() const
 {
-    if ( nFlags & SELENG_IN_SEL )
+    if ( nFlags & SelectionEngineFlags::IN_SEL )
         return true;
     else
         return false;
@@ -213,7 +219,7 @@ inline bool SelectionEngine::IsInSelection() const
 
 inline bool SelectionEngine::HasAnchor() const
 {
-    if ( nFlags & SELENG_HAS_ANCH )
+    if ( nFlags & SelectionEngineFlags::HAS_ANCH )
         return true;
     else
         return false;
@@ -222,9 +228,9 @@ inline bool SelectionEngine::HasAnchor() const
 inline void SelectionEngine::SetAnchor( bool bAnchor )
 {
     if ( bAnchor )
-        nFlags |= SELENG_HAS_ANCH;
+        nFlags |= SelectionEngineFlags::HAS_ANCH;
     else
-        nFlags &= (~SELENG_HAS_ANCH);
+        nFlags &= (~SelectionEngineFlags::HAS_ANCH);
 }
 
 #endif // INCLUDED_VCL_SELENG_HXX
