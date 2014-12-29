@@ -611,9 +611,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
                 ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
 
-                if( IsComplColRange( nColFirst, nColLast ) )
+                bool bColRel = aCRD.Ref1.IsColRel() || aCRD.Ref2.IsColRel();
+                bool bRowRel = aCRD.Ref1.IsRowRel() || aCRD.Ref2.IsRowRel();
+
+                if( !bColRel && IsComplColRange( nColFirst, nColLast ) )
                     SetComplCol( aCRD );
-                else if( IsComplRowRange( nRowFirst, nRowLast ) )
+                else if( !bRowRel && IsComplRowRange( nRowFirst, nRowLast ) )
                     SetComplRow( aCRD );
 
                 aStack << aPool.Store( aCRD );
