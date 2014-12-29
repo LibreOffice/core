@@ -113,6 +113,10 @@ struct _LibreOfficeKitDocumentClass
   void (*getDocumentSize) (LibreOfficeKitDocument* pThis,
                            long* pWidth,
                            long* pHeight);
+
+  // Initialize document for rendering.
+  void (*initializeForRendering) (LibreOfficeKitDocument* pThis);
+
 #endif // LOK_USE_UNSTABLE_API
 };
 

@@ -87,6 +87,12 @@ public:
     {
         mpDoc->pClass->getDocumentSize(mpDoc, pWidth, pHeight);
     }
+
+    inline void initializeForRendering()
+    {
+        mpDoc->pClass->initializeForRendering(mpDoc);
+    }
+
 #endif // LOK_USE_UNSTABLE_API
 };
 

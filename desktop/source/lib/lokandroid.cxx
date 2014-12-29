@@ -165,6 +165,13 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
     return nWidth;
 }
 
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_initializeForRendering
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->initializeForRendering(pDocument);
+}
+
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs
     (JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sFormat, jstring sOptions)
 {

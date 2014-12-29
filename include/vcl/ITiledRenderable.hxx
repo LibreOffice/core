@@ -83,6 +83,10 @@ public:
     {
         (void) ePartMode;
     }
+
+    virtual void initializeForTiledRendering()
+    {
+    }
 };
 
 } // namespace vcl
