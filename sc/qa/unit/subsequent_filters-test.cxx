@@ -174,6 +174,7 @@ public:
     void testSharedFormulaWrappedRefsXLS();
     void testSharedFormulaBIFF5();
     void testSharedFormulaXLSB();
+    void testSharedFormulaXLS();
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
@@ -257,6 +258,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaWrappedRefsXLS);
     CPPUNIT_TEST(testSharedFormulaBIFF5);
     CPPUNIT_TEST(testSharedFormulaXLSB);
+    CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
@@ -2574,6 +2576,27 @@ void ScFiltersTest::testSharedFormulaXLSB()
     for(SCROW nRow = 0; nRow < 30; ++nRow)
     {
         ASSERT_DOUBLES_EQUAL(3.0, rDoc.GetValue(0, nRow, 0));
+    }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs.", XLS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+
+    // A1:A30 should be all formulas, and they should belong to the same group.
+    const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(29), pFC->GetSharedLength());
+
+    for(SCROW nRow = 0; nRow < 30; ++nRow)
+    {
+        ASSERT_DOUBLES_EQUAL(double(nRow+1), rDoc.GetValue(0, nRow, 0));
     }
 
     xDocSh->DoClose();
