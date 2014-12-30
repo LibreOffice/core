@@ -77,6 +77,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRTABLECREATION		:	sLocal = &quot;Table &apos;%0&apos; could not be created&quot;
 				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Field &apos;%0&apos; could not be created&quot;
 				Case &quot;ERR&quot; &amp; ERRSUBFORMNOTFOUND		:	sLocal = &quot;Subform &apos;%0&apos; not found in parent form &apos;%1&apos;&quot;
+				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;Current window is not a document&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Object&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
@@ -86,6 +87,7 @@ Dim sLocal As String
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Field&quot;
 				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Temporary variable&quot;
+				Case &quot;COMAMANDBAR&quot;					:	sLocal = &quot;Command bar&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;Error #&quot;
 				Case &quot;ERROCCUR&quot;						:	sLocal = &quot;occurred&quot;
@@ -183,6 +185,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRTABLECREATION		:	sLocal = &quot;La table &apos;%0&apos; n&apos;a pas pu être créée&quot;
 				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être créé&quot;
 				Case &quot;ERR&quot; &amp; ERRSUBFORMNOTFOUND		:	sLocal = &quot;Sous-formulaire &apos;%0&apos; non trouvé dans le formulaire parent &apos;%1&apos;&quot;
+				Case &quot;ERR&quot; &amp; ERRWINDOW				:	sLocal = &quot;La fenêtre courante n&apos;est pas un document&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Objet&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
@@ -191,6 +194,7 @@ Dim sLocal As String
 				Case &quot;REPORT&quot;						:	sLocal = &quot;Rapport&quot;
 				Case &quot;RECORDSET&quot;					:	sLocal = &quot;Recordset&quot;
 				Case &quot;FIELD&quot;						:	sLocal = &quot;Champ&quot;
+				Case &quot;COMAMANDBAR&quot;					:	sLocal = &quot;Barre de commande&quot;
 				Case &quot;TEMPVAR&quot;						:	sLocal = &quot;Variable temporaire&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;ERR#&quot;							:	sLocal = &quot;L&apos;erreur #&quot;

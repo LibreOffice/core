@@ -72,6 +72,8 @@ Dim vNames() As Variant, oProperty As Object
 			Set Item = Application.AllDialogs(pvItem)
 		Case COLLALLFORMS
 			Set Item = Application.AllForms(pvItem)
+		Case COLLCOMMANDBARS
+			Set Item = Application.CommandBars(pvItem)
 		Case COLLCONTROLS
 			Select Case _ParentType
 				Case OBJCONTROL, OBJSUBFORM

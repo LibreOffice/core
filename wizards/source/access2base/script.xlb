@@ -27,4 +27,6 @@
  <library:element library:name="Recordset"/>
  <library:element library:name="TempVar"/>
  <library:element library:name="Root_"/>
+ <library:element library:name="UtilProperty"/>
+ <library:element library:name="CommandBar"/>
 </library:library>

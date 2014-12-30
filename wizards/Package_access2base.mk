@@ -24,6 +24,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	acConstants.xba \
 	Application.xba \
 	Collect.xba \
+	CommandBar.xba \
 	Compatible.xba \
 	Control.xba \
 	Database.xba \
@@ -49,6 +50,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	TempVar.xba \
 	Test.xba \
 	Trace.xba \
+	UtilProperty.xba \
 	Utils.xba \
 ))
 

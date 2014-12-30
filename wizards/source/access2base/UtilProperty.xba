@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="UtilProperty" script:language="StarBasic">REM =======================================================================================================================
+REM ===					The Access2Base library is a part of the LibreOffice project.									===
+REM ===					Full documentation is available on http://www.access2base.com									===
+REM =======================================================================================================================
+
+&apos;**********************************************************************
+&apos;	UtilProperty module
+&apos;
+&apos;	Module of utilities to manipulate arrays of PropertyValue&apos;s.
+&apos;**********************************************************************
+
+&apos;**********************************************************************
+&apos;	Copyright (c) 2003-2004 Danny Brewer
+&apos;	d29583@groovegarden.com
+&apos;**********************************************************************
+
+&apos;**********************************************************************
+&apos;	If you make changes, please append to the change log below.
+&apos;
+&apos;	Change Log
+&apos;		Danny Brewer			Revised 2004-02-25-01
+&apos;		Jean-Pierre Ledure		Adapted to Access2Base coding conventions
+&apos;**********************************************************************
+
+REM =======================================================================================================================
+Public Function _MakePropertyValue(ByVal Optional psName As String, Optional pvValue As Variant) As com.sun.star.beans.PropertyValue
+&apos;   Create and return a new com.sun.star.beans.PropertyValue.
+
+Dim oPropertyValue As Object
+	Set oPropertyValue = createUnoStruct( &quot;com.sun.star.beans.PropertyValue&quot; )
+	If Not IsMissing(psName) Then oPropertyValue.Name = psName
+	If Not IsMissing(pvValue) Then oPropertyValue.Value = pvValue
+	_MakePropertyValue() = oPropertyValue
+	
+End Function	&apos;	_MakePropertyValue V1.3.0
+
+REM =======================================================================================================================
+Public Function _NumPropertyValues(pvPropertyValuesArray As Variant) As Integer
+&apos; Return the number of PropertyValue&apos;s in an array.
+&apos; Parameters:
+&apos; 	pvPropertyValuesArray - an array of PropertyValue&apos;s, that is an array of com.sun.star.beans.PropertyValue.
+&apos; Returns zero if the array contains no elements.
+
+Dim iNumProperties As Integer
+	If Not IsArray(pvPropertyValuesArray) Then iNumProperties = 0 Else iNumProperties = UBound(pvPropertyValuesArray) + 1
+	_NumPropertyValues() = iNumProperties
+
+End Function	&apos;	_NumPropertyValues V1.3.0
+
+REM =======================================================================================================================
+Public Function _FindPropertyIndex(pvPropertyValuesArray, ByVal psPropName As String ) As Integer
+&apos; Find a particular named property from an array of PropertyValue&apos;s.
+&apos; Finds the index in the array of PropertyValue&apos;s and returns it, or returns -1 if it was not found.
+
+Dim iNumProperties As Integer, i As Integer, vProp As Variant
+	iNumProperties = _NumPropertyValues(pvPropertyValuesArray)
+	For i = 0 To iNumProperties - 1
+		vProp = pvPropertyValuesArray(i)
+		If UCase(vProp.Name) = UCase(psPropName) Then
+			_FindPropertyIndex() = i
+			Exit Function
+		EndIf
+	Next i
+	_FindPropertyIndex() = -1
+
+End Function	&apos;	_FindPropertyIndex V1.3.0
+
+REM =======================================================================================================================
+Public Function _FindProperty(pvPropertyValuesArray, ByVal psPropName As String) As com.sun.star.beans.PropertyValue
+&apos; Find a particular named property from an array of PropertyValue&apos;s.
+&apos; Finds the PropertyValue and returns it, or returns Null if not found.
+
+Dim iPropIndex As Integer
+	iPropIndex = _FindPropertyIndex(pvPropertyValuesArray, psPropName)
+	If iPropIndex &gt;= 0 Then
+		vProp = pvPropertyValuesArray(iPropIndex) &apos; access array subscript
+		_FindProperty() = vProp
+	EndIf
+
+End Function	&apos;	_FindProperty V1.3.0
+
+REM =======================================================================================================================
+Function _GetPropertyValue(pvPropertyValuesArray, ByVal psPropName As String, Optional pvDefaultValue) As Variant
+&apos; Get the value of a particular named property from an array of PropertyValue&apos;s.
+&apos; vDefaultValue      -   This value is returned if the property is not found in the array.
+
+Dim iPropIndex As Integer, vProp As Variant, vValue As Variant
+	iPropIndex = _FindPropertyIndex(pvPropertyValuesArray, psPropName)
+	If iPropIndex &gt;= 0 Then
+		vProp = pvPropertyValuesArray(iPropIndex)	&apos; access array subscript
+		vValue = vProp.Value						&apos; get the value from the PropertyValue
+		_GetPropertyValue() = vValue
+	Else
+		If IsMissing(pvDefaultValue) Then pvDefaultValue = Null
+		_GetPropertyValue() = pvDefaultValue
+   EndIf
+End Function	&apos;	_GetPropertyValue V1.3.0
+
+REM =======================================================================================================================
+Sub _SetPropertyValue(pvPropertyValuesArray, ByVal psPropName As String, ByVal pvValue)
+&apos; Set the value of a particular named property from an array of PropertyValue&apos;s.
+
+Dim iPropIndex As Integer, vProp As Variant, iNumProperties As Integer
+	iPropIndex = _FindPropertyIndex(pvPropertyValuesArray, psPropName)
+	&apos; Did we find it?
+	If iPropIndex &gt;= 0 Then
+	&apos; Found, the PropertyValue is already in the array. Just modify its value.
+		vProp = pvPropertyValuesArray(iPropIndex)	&apos; access array subscript
+		vProp.Value = pvValue						&apos; set the property value.
+		pvPropertyValuesArray(iPropIndex) = vProp	&apos; put it back into array
+	Else
+	&apos; Not found, the array contains no PropertyValue with this name. Append new element to array.
+		iNumProperties = _NumPropertyValues(pvPropertyValuesArray)
+		If iNumProperties = 0 Then
+			pvPropertyValuesArray = Array(_MakePropertyValue(psPropName, pvValue))
+		Else
+		&apos; Make array larger.
+			Redim Preserve pvPropertyValuesArray(iNumProperties)
+			&apos; Assign new PropertyValue
+			pvPropertyValuesArray(iNumProperties) = _MakePropertyValue(psPropName, pvValue)
+		EndIf
+	EndIf
+
+End Sub		&apos;	_SetPropertyValue V1.3.0
+
+REM =======================================================================================================================
+Sub _DeleteProperty(pvPropertyValuesArray, ByVal psPropName As String)
+&apos; Delete a particular named property from an array of PropertyValue&apos;s.
+
+Dim iPropIndex As Integer
+	iPropIndex = _FindPropertyIndex(pvPropertyValuesArray, psPropName)
+	_DeleteIndexedProperty(pvPropertyValuesArray, iPropIndex)
+
+End Sub		&apos;	_DeletePropertyValue V1.3.0
+
+REM =======================================================================================================================
+Public Sub _DeleteIndexedProperty(pvPropertyValuesArray, ByVal piPropIndex As Integer)
+&apos; Delete a particular indexed property from an array of PropertyValue&apos;s.
+
+Dim iNumProperties As Integer, i As Integer
+	iNumProperties = _NumPropertyValues(pvPropertyValuesArray)
+
+	&apos; Did we find it?
+	If piPropIndex &lt; 0 Then
+		&apos; Do nothing
+	ElseIf iNumProperties = 1 Then
+		&apos; Just return a new empty array
+		pvPropertyValuesArray = Array()
+	Else
+		&apos; If it is NOT the last item in the array, then shift other elements down into it&apos;s position.
+		If piPropIndex &lt; iNumProperties - 1 Then
+			&apos; Bump items down lower in the array.
+			For i = piPropIndex To iNumProperties - 2
+				pvPropertyValuesArray(i) = pvPropertyValuesArray(i + 1)
+			Next i
+		EndIf
+		&apos; Redimension the array to have one feweer element.
+		Redim Preserve pvPropertyValuesArray(iNumProperties - 2)
+	EndIf
+
+End Sub		&apos;	_DeleteIndexedProperty V1.3.0
+
+REM =======================================================================================================================
+Public Function _PropValuesToStr(pvPropertyValuesArray) As String
+&apos; Convenience function to return a string which explains what PropertyValue&apos;s are in the array of PropertyValue&apos;s.
+
+Dim iNumProperties As Integer, sResult As String, i As Integer, vProp As Variant
+Dim sName As String, vValue As Variant
+	iNumProperties = _NumPropertyValues(pvPropertyValuesArray)
+
+	sResult = Cstr(iNumProperties) &amp; &quot; Properties:&quot;
+	For i = 0 To iNumProperties - 1
+		vProp = pvPropertyValuesArray(i)
+		sName = vProp.Name
+		vValue = vProp.Value
+		sResult = sResult &amp; Chr(13) &amp; &quot;  &quot; &amp; sName &amp; &quot; = &quot; &amp; _CStr(vValue)
+	Next i
+	_PropValuesToStr() = sResult
+
+End Function	&apos;	_PropValuesToStr V1.3.0
+</script:module>

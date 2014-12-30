@@ -2018,15 +2018,6 @@ Public Function _getUpperShortcut(ByVal psShortcut As String, ByVal psLastCompon
 End Function		&apos;	_getUpperShortcut
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _MakePropertyValue(ByVal Optional psName As String, ByVal Optional pvValue As Variant) As com.sun.star.beans.PropertyValue
-&apos;Build PropertyValue(s) array
-
-Dim oPropertyValue As New com.sun.star.beans.PropertyValue
-	If Not IsMissing(psName) Then oPropertyValue.Name = psName
-	If Not IsMissing(pvValue) Then oPropertyValue.Value = pvValue
-	_MakePropertyValue() = oPropertyValue
-End Function	&apos;	_MakePropertyValue
-
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OpenObject(ByVal psObjectType As String _
 			, ByVal pvObjectName As Variant _

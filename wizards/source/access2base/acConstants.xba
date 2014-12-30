@@ -8,7 +8,7 @@ REM ============================================================================
 Option Explicit
 
 REM Access2Base -----------------------------------------------------
-Global Const Access2Base_Version = &quot;1.2.0&quot;
+Global Const Access2Base_Version = &quot;1.3.0&quot;
 
 REM AcCloseSave
 REM -----------------------------------------------------------------
@@ -349,4 +349,12 @@ REM -----------------------------------------------------------------
 Global Const dbEditNone = 0
 Global Const dbEditInProgress = 1
 Global Const dbEditAdd = 2
+
+REM Toolbars
+REM -----------------------------------------------------------------
+Global Const msoBarTypeNormal = 0		&apos;	Usual toolbar
+Global Const msoBarTypeMenuBar = 1		&apos;	Menu bar
+Global Const msoBarTypePopup = 2		&apos;	Shortcut menu
+Global Const msoBarTypeStatusBar = 11	&apos;	Status bar
+Global Const msoBarTypeFloater = 12		&apos;	Floating window
 </script:module>
