@@ -26,8 +26,9 @@ $(call gb_ExternalProject_get_state_target,librevenge,build) :
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--with-pic \
-			--enable-shared \
-			--disable-static \
+			$(if $(DISABLE_DYNLOADING), \
+				--disable-shared --enable-static, \
+				--enable-shared --disable-static) \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \

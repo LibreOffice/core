@@ -24,8 +24,9 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 		export PKG_CONFIG="" \
 		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
-			--enable-shared \
-			--disable-static \
+			$(if $(DISABLE_DYNLOADING), \
+				--disable-shared --enable-static, \
+				--enable-shared --disable-static) \
 			--without-docs \
 			--disable-tools \
 			--disable-debug \
