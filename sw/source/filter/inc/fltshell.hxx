@@ -148,7 +148,6 @@ protected:
     SwDoc* pDoc;
     bool bIsEndStack;
 
-    void MoveAttrs( const SwPosition&  rPos );
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
     virtual sal_Int32 GetCurrAttrCP() const {return -1;}
     virtual bool IsParaEndInCPs(sal_Int32 nStart,sal_Int32 nEnd,bool bSdOD=true) const;
@@ -159,6 +158,7 @@ protected:
     bool HasSdOD();
 
 public:
+    void MoveAttrs( const SwPosition&  rPos );
     enum Flags
     {
         HYPO,
