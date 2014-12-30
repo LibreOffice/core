@@ -136,6 +136,7 @@ public:
     void testImageWithSpecialID();
 
     void testSupBookVirtualPath();
+    void testSheetLocalRangeNameXLS();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -182,6 +183,7 @@ public:
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
+    CPPUNIT_TEST(testSheetLocalRangeNameXLS);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2489,6 +2491,30 @@ void ScExportTest::testImageWithSpecialID()
         }
         xDocSh2->DoClose();
     }
+}
+
+void ScExportTest::testSheetLocalRangeNameXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("named-ranges-local.", XLS);
+    xDocSh->DoHardRecalc(true);
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLS);
+    xDocSh->DoClose();
+    xDocSh2->DoHardRecalc(true);
+
+    ScDocument& rDoc = xDocSh2->GetDocument();
+    ScRangeName* pRangeName = rDoc.GetRangeName(0);
+    CPPUNIT_ASSERT(pRangeName);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pRangeName->size());
+
+    OUString aFormula;
+    rDoc.GetFormula(3, 11, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(local_name2)"), aFormula);
+    ASSERT_DOUBLES_EQUAL(14.0, rDoc.GetValue(3, 11, 0));
+
+    rDoc.GetFormula(6, 4, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
+
+    xDocSh2->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
