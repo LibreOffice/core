@@ -2583,23 +2583,58 @@ void ScFiltersTest::testSharedFormulaXLSB()
 
 void ScFiltersTest::testSharedFormulaXLS()
 {
-    ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs.", XLS);
-    CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll();
-
-    // A1:A30 should be all formulas, and they should belong to the same group.
-    const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,1,0));
-    CPPUNIT_ASSERT(pFC);
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
-    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(29), pFC->GetSharedLength());
-
-    for(SCROW nRow = 0; nRow < 30; ++nRow)
     {
-        ASSERT_DOUBLES_EQUAL(double(nRow+1), rDoc.GetValue(0, nRow, 0));
+        // fdo#80091
+        ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs1.", XLS);
+        CPPUNIT_ASSERT(xDocSh.Is());
+        ScDocument& rDoc = xDocSh->GetDocument();
+        rDoc.CalcAll();
+
+        // A1:A30 should be all formulas, and they should belong to the same group.
+        const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,1,0));
+        CPPUNIT_ASSERT(pFC);
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(29), pFC->GetSharedLength());
+
+        for(SCROW nRow = 0; nRow < 30; ++nRow)
+        {
+            ASSERT_DOUBLES_EQUAL(double(nRow+1), rDoc.GetValue(0, nRow, 0));
+        }
+
+        xDocSh->DoClose();
     }
 
-    xDocSh->DoClose();
+    {
+        // fdo#84556 and some related tests
+        ScDocShellRef xDocSh = loadDoc("shared-formula/relative-refs2.", XLS);
+        CPPUNIT_ASSERT(xDocSh.Is());
+        ScDocument& rDoc = xDocSh->GetDocument();
+        rDoc.CalcAll();
+
+        {
+            const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(2,1,0));
+            CPPUNIT_ASSERT(pFC);
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
+            OUString aFormula;
+            rDoc.GetFormula(2, 1, 0, aFormula);
+            CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B9:D9)"), aFormula);
+        }
+
+        {
+            const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(4,8,0));
+            CPPUNIT_ASSERT(pFC);
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
+            OUString aFormula;
+            rDoc.GetFormula(4, 8, 0, aFormula);
+            CPPUNIT_ASSERT_EQUAL(OUString("=SUM(G9:EY9)"), aFormula);
+        }
+
+        xDocSh->DoClose();
+    }
 }
 
 void ScFiltersTest::testExternalRefCacheXLSX()
