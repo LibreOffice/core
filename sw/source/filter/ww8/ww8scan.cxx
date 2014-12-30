@@ -4346,7 +4346,7 @@ void WW8PLCFx_AtnBook::advance()
     }
 }
 
-sal_uInt16 WW8PLCFx_AtnBook::getHandle() const
+long WW8PLCFx_AtnBook::getHandle() const
 {
     if (!m_pBook[0] || !m_pBook[1])
         return LONG_MAX;

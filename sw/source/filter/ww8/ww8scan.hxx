@@ -796,7 +796,7 @@ public:
     virtual void advance() SAL_OVERRIDE;
 
     /// Handle is the unique ID of an annotation mark.
-    sal_uInt16 getHandle() const;
+    long getHandle() const;
     bool getIsEnd() const;
 };
 
