@@ -177,7 +177,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     if( CSS1_NULL==nRet )
                     {
                         aToken.clear();
-                        sal_uInt16 nBlockLvl = 0;
+                        int nBlockLvl = 0;
                         sal_Unicode cQuoteCh = 0;
                         bool bDone = false, bEscape = false;
                         while( !bDone && !IsEOF() )
@@ -620,7 +620,7 @@ CSS1Token CSS1Parser::GetNextToken()
                       (('r'==aToken[0] || 'R'==aToken[0]) &&
                        aToken.equalsIgnoreAsciiCase( "rgb" )) ) )
                 {
-                    sal_uInt16 nNestCnt = 0;
+                    int nNestCnt = 0;
                     OUStringBuffer sTmpBuffer2( 64L );
                     do {
                         sTmpBuffer2.append( cNextCh );
@@ -1279,7 +1279,7 @@ bool CSS1Expression::GetColor( Color &rColor ) const
             OUString aColorStr(aValue.copy(4, aValue.getLength() - 5));
 
             sal_Int32 nPos = 0;
-            sal_uInt16 nCol = 0;
+            int nCol = 0;
 
             while( nCol < 3 && nPos < aColorStr.getLength() )
             {
