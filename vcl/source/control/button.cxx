@@ -1009,16 +1009,16 @@ void PushButton::ImplDrawPushButton( bool bLayout )
                 // for CTRL_LISTBOX/PART_BUTTON_DOWN and CTRL_COMBOBOX/PART_BUTTON_DOWN
 
                 ImplControlValue    aControlValue;
-                ControlState        nState = 0;
+                ControlState        nState = ControlState::NONE;
 
-                if ( mbPressed )                        nState |= CTRL_STATE_PRESSED;
-                if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= CTRL_STATE_PRESSED;
-                if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
-                if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
-                if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+                if ( mbPressed )                        nState |= ControlState::PRESSED;
+                if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= ControlState::PRESSED;
+                if ( HasFocus() )                       nState |= ControlState::FOCUSED;
+                if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= ControlState::DEFAULT;
+                if ( Window::IsEnabled() )              nState |= ControlState::ENABLED;
 
                 if ( IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ) )
-                    nState |= CTRL_STATE_ROLLOVER;
+                    nState |= ControlState::ROLLOVER;
 
                 bNativeOK = DrawNativeControl( aCtrlType, PART_BUTTON_DOWN, aInRect, nState,
                                                 aControlValue, OUString() );
@@ -1040,16 +1040,16 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     {
         PushButtonValue aControlValue;
         Rectangle        aCtrlRegion( aInRect );
-        ControlState     nState = 0;
+        ControlState     nState = ControlState::NONE;
 
-        if ( mbPressed || IsChecked() )                   nState |= CTRL_STATE_PRESSED;
-        if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED ) nState |= CTRL_STATE_PRESSED;
-        if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
-        if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
-        if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+        if ( mbPressed || IsChecked() )                   nState |= ControlState::PRESSED;
+        if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED ) nState |= ControlState::PRESSED;
+        if ( HasFocus() )                       nState |= ControlState::FOCUSED;
+        if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= ControlState::DEFAULT;
+        if ( Window::IsEnabled() )              nState |= ControlState::ENABLED;
 
         if ( bRollOver )
-            nState |= CTRL_STATE_ROLLOVER;
+            nState |= ControlState::ROLLOVER;
 
         if( GetStyle() & WB_BEVELBUTTON )
             aControlValue.mbBevelButton = true;
@@ -1073,7 +1073,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
         aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
 
-        if( ((nState & CTRL_STATE_ROLLOVER)) || ! (GetStyle() & WB_FLATBUTTON) )
+        if( ((nState & ControlState::ROLLOVER)) || ! (GetStyle() & WB_FLATBUTTON) )
         {
             bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                             aControlValue, OUString()/*PushButton::GetText()*/ );
@@ -1085,7 +1085,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
 
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent( this,
-                                   (nState&CTRL_STATE_ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
+                                   (nState&ControlState::ROLLOVER) ? WINDOW_DRAW_ROLLOVER : 0,
                                    aInRect, bLayout, bDrawMenuSep );
 
         if ( HasFocus() )
@@ -1135,7 +1135,7 @@ void PushButton::ImplSetDefButton( bool bSet )
                                              // will not work if the theme has dynamic adornment sizes
         ImplControlValue aControlValue;
         Rectangle        aCtrlRegion( aCtrlRect );
-        ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
+        ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
 
         // get native size of a 'default' button
         // and adjust the VCL button if more space for adornment is required
@@ -1910,15 +1910,15 @@ void RadioButton::ImplDrawRadioButtonState()
     {
         ImplControlValue            aControlValue( mbChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
         Rectangle                   aCtrlRect( maStateRect.TopLeft(), maStateRect.GetSize() );
-        ControlState                nState = 0;
+        ControlState                nState = ControlState::NONE;
 
-        if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= CTRL_STATE_PRESSED;
-        if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
-        if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
-        if ( IsEnabled() )                      nState |= CTRL_STATE_ENABLED;
+        if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= ControlState::PRESSED;
+        if ( HasFocus() )                       nState |= ControlState::FOCUSED;
+        if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= ControlState::DEFAULT;
+        if ( IsEnabled() )                      nState |= ControlState::ENABLED;
 
         if ( IsMouseOver() && maMouseRect.IsInside( GetPointerPosPixel() ) )
-            nState |= CTRL_STATE_ROLLOVER;
+            nState |= ControlState::ROLLOVER;
 
         bNativeOK = DrawNativeControl( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRect, nState,
                     aControlValue,OUString() );
@@ -2746,7 +2746,7 @@ Size RadioButton::ImplGetRadioImageSize() const
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
         Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
-        ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
+        ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
         Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a radio button
@@ -2858,7 +2858,7 @@ void RadioButton::ImplSetMinimumNWFSize()
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                ControlState::DEFAULT|ControlState::ENABLED, aControlValue, OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
         Size aSize = aContentRgn.GetSize();
@@ -3027,12 +3027,12 @@ void CheckBox::ImplDrawCheckBoxState()
     {
         ImplControlValue    aControlValue( meState == TRISTATE_TRUE ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
         Rectangle           aCtrlRegion( maStateRect );
-        ControlState        nState = 0;
+        ControlState        nState = ControlState::NONE;
 
-        if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
-        if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
-        if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= CTRL_STATE_PRESSED;
-        if ( IsEnabled() )                      nState |= CTRL_STATE_ENABLED;
+        if ( HasFocus() )                       nState |= ControlState::FOCUSED;
+        if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= ControlState::DEFAULT;
+        if ( ImplGetButtonState() & BUTTON_DRAW_PRESSED )   nState |= ControlState::PRESSED;
+        if ( IsEnabled() )                      nState |= ControlState::ENABLED;
 
         if ( meState == TRISTATE_TRUE )
             aControlValue.setTristateVal( BUTTONVALUE_ON );
@@ -3040,7 +3040,7 @@ void CheckBox::ImplDrawCheckBoxState()
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
         if ( IsMouseOver() && maMouseRect.IsInside( GetPointerPosPixel() ) )
-            nState |= CTRL_STATE_ROLLOVER;
+            nState |= ControlState::ROLLOVER;
 
         bNativeOK = DrawNativeControl( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                                  aControlValue, OUString() );
@@ -3621,7 +3621,7 @@ Size CheckBox::ImplGetCheckImageSize() const
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
         Rectangle        aCtrlRegion( Point( 0, 0 ), GetSizePixel() );
-        ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
+        ControlState     nState = ControlState::DEFAULT|ControlState::ENABLED;
         Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a check box
@@ -3712,7 +3712,7 @@ void CheckBox::ImplSetMinimumNWFSize()
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                ControlState::DEFAULT|ControlState::ENABLED, aControlValue, OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
         Size aSize = aContentRgn.GetSize();
@@ -3845,13 +3845,13 @@ void DisclosureButton::ImplDrawCheckBoxState()
 
     ImplControlValue    aControlValue( GetState() == TRISTATE_TRUE ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
     Rectangle           aCtrlRegion( aStateRect );
-    ControlState        nState = 0;
+    ControlState        nState = ControlState::NONE;
 
-    if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
-    if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
-    if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+    if ( HasFocus() )                       nState |= ControlState::FOCUSED;
+    if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= ControlState::DEFAULT;
+    if ( Window::IsEnabled() )              nState |= ControlState::ENABLED;
     if ( IsMouseOver() && GetMouseRect().IsInside( GetPointerPosPixel() ) )
-        nState |= CTRL_STATE_ROLLOVER;
+        nState |= ControlState::ROLLOVER;
 
     if( ! DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                            aControlValue, OUString() ) )

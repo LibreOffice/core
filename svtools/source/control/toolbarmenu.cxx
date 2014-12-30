@@ -586,7 +586,7 @@ static long ImplGetNativeCheckAndRadioSize( vcl::Window* pWin, long& rCheckHeigh
         if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
                                           ControlPart(PART_MENU_ITEM_CHECK_MARK),
                                           aCtrlRegion,
-                                          ControlState(CTRL_STATE_ENABLED),
+                                          ControlState(ControlState::ENABLED),
                                           aVal,
                                           OUString(),
                                           aNativeBounds,
@@ -602,7 +602,7 @@ static long ImplGetNativeCheckAndRadioSize( vcl::Window* pWin, long& rCheckHeigh
         if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
                                           ControlPart(PART_MENU_ITEM_RADIO_MARK),
                                           aCtrlRegion,
-                                          ControlState(CTRL_STATE_ENABLED),
+                                          ControlState(ControlState::ENABLED),
                                           aVal,
                                           OUString(),
                                           aNativeBounds,
@@ -896,7 +896,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                 Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
                 DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
                                    aCtrlRect,
-                                   CTRL_STATE_ENABLED,
+                                   ControlState::ENABLED,
                                    ImplControlValue(),
                                    OUString() );
                 if( bHighlight && IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
@@ -904,7 +904,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                     bDrawItemRect = false;
                     if( !DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
                                                     aItemRect,
-                                                    CTRL_STATE_SELECTED | ( pEntry->mbEnabled? CTRL_STATE_ENABLED: 0 ),
+                                                    ControlState::SELECTED | ( pEntry->mbEnabled ? ControlState::ENABLED : ControlState::NONE ),
                                                     ImplControlValue(),
                                                     OUString() ) )
                     {
@@ -1277,7 +1277,7 @@ static void ImplPaintCheckBackground( vcl::Window* i_pWindow, const Rectangle& i
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
-        ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
+        ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
 
@@ -1396,16 +1396,16 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                                                  ? PART_MENU_ITEM_RADIO_MARK
                                                  : PART_MENU_ITEM_CHECK_MARK);
 
-                            ControlState nState = 0;
+                            ControlState nState = ControlState::NONE;
 
                             if ( pEntry->mbChecked )
-                                nState |= CTRL_STATE_PRESSED;
+                                nState |= ControlState::PRESSED;
 
                             if ( pEntry->mbEnabled )
-                                nState |= CTRL_STATE_ENABLED;
+                                nState |= ControlState::ENABLED;
 
                             if ( bHighlighted )
-                                nState |= CTRL_STATE_SELECTED;
+                                nState |= ControlState::SELECTED;
 
                             long nCtrlHeight = (pEntry->mnBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;

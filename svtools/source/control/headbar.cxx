@@ -306,7 +306,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     vcl::Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(pDev) : NULL;
     ImplControlValue aControlValue(0);
     Rectangle aCtrlRegion;
-    ControlState nState(0);
+    ControlState nState(ControlState::NONE);
 
     Rectangle aRect = rItemRect;
 
@@ -368,9 +368,9 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     {
         aCtrlRegion=aRect;
         aControlValue.setTristateVal(BUTTONVALUE_ON);
-        nState|=CTRL_STATE_ENABLED;
+        nState|=ControlState::ENABLED;
         if(bHigh)
-            nState|=CTRL_STATE_PRESSED;
+            nState|=ControlState::PRESSED;
         pWin->DrawNativeControl( CTRL_LISTHEADER, PART_BUTTON,
                                  aCtrlRegion, nState, aControlValue,
                                  OUString() );
@@ -593,9 +593,9 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                 aCtrlRegion=Rectangle(Point(nArrowX,aRect.Top()),Size(nArrowWidth,aRect.GetHeight()));
                 // control value passes 1 if arrow points down, 0 otherwise
                 aControlValue.setNumericVal((nBits&HIB_DOWNARROW)?1:0);
-                nState|=CTRL_STATE_ENABLED;
+                nState|=ControlState::ENABLED;
                 if(bHigh)
-                    nState|=CTRL_STATE_PRESSED;
+                    nState|=ControlState::PRESSED;
                 pWin->DrawNativeControl( CTRL_LISTHEADER, PART_ARROW,
                                          aCtrlRegion, nState, aControlValue,
                                          OUString() );

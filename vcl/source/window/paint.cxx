@@ -1168,10 +1168,10 @@ void Window::Erase()
     if( aCtrlPart != 0 && ! IsControlBackground() )
     {
         Rectangle           aCtrlRegion( Point(), GetOutputSizePixel() );
-        ControlState        nState = 0;
+        ControlState        nState = ControlState::NONE;
 
         if( IsEnabled() )
-            nState |= CTRL_STATE_ENABLED;
+            nState |= ControlState::ENABLED;
 
         bNativeOK = DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
                                        nState, ImplControlValue(), OUString() );

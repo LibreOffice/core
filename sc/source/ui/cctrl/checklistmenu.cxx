@@ -243,7 +243,7 @@ void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
     {
         SetClipRegion();
         bNativeDrawn = DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
             ImplControlValue(), OUString());
     }
     else
@@ -380,7 +380,7 @@ void ScMenuFloatingWindow::drawSeparator(size_t nPos)
         IntersectClipRegion(aRegion);
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
             ImplControlValue(), OUString());
 
         Pop();
@@ -389,10 +389,10 @@ void ScMenuFloatingWindow::drawSeparator(size_t nPos)
     bool bNativeDrawn = false;
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
     {
-        ControlState nState = 0;
+        ControlState nState = ControlState::NONE;
         const MenuItemData& rData = maMenuItems[nPos];
         if (rData.mbEnabled)
-            nState |= CTRL_STATE_ENABLED;
+            nState |= ControlState::ENABLED;
 
         bNativeDrawn = DrawNativeControl(
             CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
@@ -670,7 +670,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
         IntersectClipRegion(Rectangle(aPos, aSize));
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
             ImplControlValue(), OUString());
 
         Pop();
@@ -679,9 +679,9 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
     bool bNativeDrawn = true;
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
     {
-        ControlState nState = bSelected ? CTRL_STATE_SELECTED : 0;
+        ControlState nState = bSelected ? ControlState::SELECTED : ControlState::NONE;
         if (maMenuItems[nPos].mbEnabled)
-            nState |= CTRL_STATE_ENABLED;
+            nState |= ControlState::ENABLED;
         bNativeDrawn = DrawNativeControl(
             CTRL_MENU_POPUP, PART_MENU_ITEM, aRegion, nState, ImplControlValue(), OUString());
     }

@@ -46,13 +46,13 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
     const ImplControlValue& aValue )
 {
     QStyle::State nState =
-        ( (nControlState & CTRL_STATE_DEFAULT)?  QStyle::State_None:      QStyle::State_None ) |
-        ( (nControlState & CTRL_STATE_ENABLED)?  QStyle::State_Enabled:   QStyle::State_None ) |
-        ( (nControlState & CTRL_STATE_FOCUSED)?  QStyle::State_HasFocus:  QStyle::State_None ) |
-        ( (nControlState & CTRL_STATE_PRESSED)?  QStyle::State_Sunken:    QStyle::State_None ) |
-        ( (nControlState & CTRL_STATE_SELECTED)? QStyle::State_Selected : QStyle::State_None ) |
-        ( (nControlState & CTRL_STATE_ROLLOVER)? QStyle::State_MouseOver: QStyle::State_None );
-        //TODO ( (nControlState & CTRL_STATE_HIDDEN)?   QStyle::State_:   QStyle::State_None ) |
+        ( (nControlState & ControlState::DEFAULT)?  QStyle::State_None:      QStyle::State_None ) |
+        ( (nControlState & ControlState::ENABLED)?  QStyle::State_Enabled:   QStyle::State_None ) |
+        ( (nControlState & ControlState::FOCUSED)?  QStyle::State_HasFocus:  QStyle::State_None ) |
+        ( (nControlState & ControlState::PRESSED)?  QStyle::State_Sunken:    QStyle::State_None ) |
+        ( (nControlState & ControlState::SELECTED)? QStyle::State_Selected : QStyle::State_None ) |
+        ( (nControlState & ControlState::ROLLOVER)? QStyle::State_MouseOver: QStyle::State_None );
+        //TODO ( (nControlState & ControlState::HIDDEN)?   QStyle::State_:   QStyle::State_None ) |
 
     switch ( aValue.getTristateVal() )
     {
@@ -274,11 +274,11 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if (part == PART_MENU_ITEM)
         {
             QStyleOptionMenuItem option;
-            if ( ( nControlState & CTRL_STATE_ROLLOVER )
+            if ( ( nControlState & ControlState::ROLLOVER )
                 && QApplication::style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
                 option.state |= QStyle::State_Selected;
 
-            if ( nControlState & CTRL_STATE_SELECTED ) // Passing State_Sunken is currently not documented.
+            if ( nControlState & ControlState::SELECTED ) // Passing State_Sunken is currently not documented.
                 option.state |= QStyle::State_Sunken;  // But some kinds of QStyle interpret it.
 
             draw( QStyle::CE_MenuBarItem, &option, m_image,
@@ -337,7 +337,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QStyleOptionMenuItem option;
             option.checkType = ( part == PART_MENU_ITEM_CHECK_MARK )
                 ? QStyleOptionMenuItem::NonExclusive : QStyleOptionMenuItem::Exclusive;
-            option.checked = ( nControlState & CTRL_STATE_PRESSED );
+            option.checked = ( nControlState & ControlState::PRESSED );
             // widgetRect is now the rectangle for the checkbox/radiobutton itself, but Qt
             // paints the whole menu item, so translate position (and it'll be clipped);
             // it is also necessary to fill the background transparently first, as this
@@ -484,7 +484,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             option.pageStep = sbVal->mnVisibleSize;
 
             //setup the active control...always the slider
-            if (sbVal->mnThumbState & CTRL_STATE_ROLLOVER)
+            if (sbVal->mnThumbState & ControlState::ROLLOVER)
                 option.activeSubControls = QStyle::SC_ScrollBarSlider;
 
             draw( QStyle::CC_ScrollBar, &option, m_image,
@@ -503,9 +503,9 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if( value.getType() == CTRL_SPINBUTTONS )
         {
             const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
-            if( (pSpinVal->mnUpperState & CTRL_STATE_PRESSED) )
+            if( (pSpinVal->mnUpperState & ControlState::PRESSED) )
                 option.activeSubControls |= QStyle::SC_SpinBoxUp;
-            if( (pSpinVal->mnLowerState & CTRL_STATE_PRESSED) )
+            if( (pSpinVal->mnLowerState & ControlState::PRESSED) )
                 option.activeSubControls |= QStyle::SC_SpinBoxDown;
         }
 
@@ -671,7 +671,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             {
                 styleOption.state = vclStateValue2StateFlag(controlState, val);
 
-                if ( controlState & CTRL_STATE_DEFAULT )
+                if ( controlState & ControlState::DEFAULT )
                 {
                     int size = QApplication::style()->pixelMetric(
                         QStyle::PM_ButtonDefaultIndicator, &styleOption );

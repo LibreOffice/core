@@ -122,12 +122,12 @@ void TabPage::Paint( const Rectangle& )
     {
         const ImplControlValue aControlValue;
 
-        ControlState nState = CTRL_STATE_ENABLED;
+        ControlState nState = ControlState::ENABLED;
         int part = PART_ENTIRE_CONTROL;
         if ( !IsEnabled() )
-            nState &= ~CTRL_STATE_ENABLED;
+            nState &= ~ControlState::ENABLED;
         if ( HasFocus() )
-            nState |= CTRL_STATE_FOCUSED;
+            nState |= ControlState::FOCUSED;
         Point aPoint;
         // pass the whole window region to NWF as the tab body might be a gradient or bitmap
         // that has to be scaled properly, clipping makes sure that we do not paint too much

@@ -241,7 +241,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     Rectangle aBoundingRgn, aContentRgn;
     const ImplControlValue aControlValue;
     if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                           CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                           ControlState::ENABLED, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
     {
         return aContentRgn.GetSize();
@@ -824,26 +824,26 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) )
     {
         Rectangle           aCtrlRegion( pItem->maRect );
-        ControlState        nState = 0;
+        ControlState        nState = ControlState::NONE;
 
         if( pItem->mnId == mnCurPageId )
         {
-            nState |= CTRL_STATE_SELECTED;
+            nState |= ControlState::SELECTED;
             // only the selected item can be focussed
             if ( HasFocus() )
-                nState |= CTRL_STATE_FOCUSED;
+                nState |= ControlState::FOCUSED;
         }
         if ( IsEnabled() )
-            nState |= CTRL_STATE_ENABLED;
+            nState |= ControlState::ENABLED;
         if( IsMouseOver() && pItem->maRect.IsInside( GetPointerPosPixel() ) )
         {
-            nState |= CTRL_STATE_ROLLOVER;
+            nState |= ControlState::ROLLOVER;
             for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
                  it != mpTabCtrlData->maItemList.end(); ++it )
             {
                 if( (&(*it) != pItem) && (it->maRect.IsInside( GetPointerPosPixel() ) ) )
                 {
-                    nState &= ~CTRL_STATE_ROLLOVER; // avoid multiple highlighted tabs
+                    nState &= ~ControlState::ROLLOVER; // avoid multiple highlighted tabs
                     break;
                 }
             }
@@ -1096,12 +1096,12 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     {
         const ImplControlValue aControlValue;
 
-        ControlState nState = CTRL_STATE_ENABLED;
+        ControlState nState = ControlState::ENABLED;
         int part = PART_ENTIRE_CONTROL;
         if ( !IsEnabled() )
-            nState &= ~CTRL_STATE_ENABLED;
+            nState &= ~ControlState::ENABLED;
         if ( HasFocus() )
-            nState |= CTRL_STATE_FOCUSED;
+            nState |= ControlState::FOCUSED;
 
         vcl::Region aClipRgn( GetActiveClipRegion() );
         aClipRgn.Intersect( aRect );

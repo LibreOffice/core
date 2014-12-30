@@ -2647,7 +2647,7 @@ void ImplWin::ImplDraw( bool bLayout )
 
     if( ! bLayout )
     {
-        ControlState nState = CTRL_STATE_ENABLED;
+        ControlState nState = ControlState::ENABLED;
         if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )
         {
@@ -2658,9 +2658,9 @@ void ImplWin::ImplDraw( bool bLayout )
 
             ImplControlValue aControlValue;
             if ( !pWin->IsEnabled() )
-                nState &= ~CTRL_STATE_ENABLED;
+                nState &= ~ControlState::ENABLED;
             if ( pWin->HasFocus() )
-                nState |= CTRL_STATE_FOCUSED;
+                nState |= ControlState::FOCUSED;
 
             // The listbox is painted over the entire control including the
             // border, but ImplWin does not contain the border => correction
@@ -2679,7 +2679,7 @@ void ImplWin::ImplDraw( bool bLayout )
             }
 
             if( bMouseOver )
-                nState |= CTRL_STATE_ROLLOVER;
+                nState |= ControlState::ROLLOVER;
 
             // if parent has no border, then nobody has drawn the background
             // since no border window exists. so draw it here.
@@ -2708,14 +2708,14 @@ void ImplWin::ImplDraw( bool bLayout )
                 Color aColor;
                 if( ImplGetSVData()->maNWFData.mbDDListBoxNoTextArea )
                 {
-                    if( bNativeOK && (nState & CTRL_STATE_ROLLOVER) )
+                    if( bNativeOK && (nState & ControlState::ROLLOVER) )
                         aColor = rStyleSettings.GetButtonRolloverTextColor();
                     else
                         aColor = rStyleSettings.GetButtonTextColor();
                 }
                 else
                 {
-                    if( bNativeOK && (nState & CTRL_STATE_ROLLOVER) )
+                    if( bNativeOK && (nState & ControlState::ROLLOVER) )
                         aColor = rStyleSettings.GetFieldRolloverTextColor();
                     else
                         aColor = rStyleSettings.GetFieldTextColor();

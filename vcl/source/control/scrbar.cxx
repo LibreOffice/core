@@ -274,9 +274,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
         if ( GetStyle() & WB_HORZ )
         {
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, IsRTLEnabled()? PART_BUTTON_RIGHT: PART_BUTTON_LEFT,
-                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
+                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
                  GetNativeControlRegion( CTRL_SCROLLBAR, IsRTLEnabled()? PART_BUTTON_LEFT: PART_BUTTON_RIGHT,
-                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
+                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
                 maBtn2Rect = aBtn2Region;
@@ -291,7 +291,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             }
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_HORZ_AREA,
-                     aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
+                     aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
                 maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
@@ -315,9 +315,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
         else
         {
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_UP,
-                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
+                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
                  GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_DOWN,
-                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
+                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
                 maBtn2Rect = aBtn2Region;
@@ -332,7 +332,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             }
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_VERT_AREA,
-                     aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
+                     aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
                 maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
@@ -461,7 +461,7 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
     // Draw the entire background if the control supports it
     if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
     {
-        ControlState        nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
+        ControlState        nState = ( IsEnabled() ? ControlState::ENABLED : ControlState::NONE ) | ( HasFocus() ? ControlState::FOCUSED : ControlState::NONE );
 
         scrValue.mnMin = mnMinRange;
         scrValue.mnMax = mnMaxRange;
@@ -470,13 +470,13 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
         scrValue.maThumbRect = maThumbRect;
         scrValue.maButton1Rect = maBtn1Rect;
         scrValue.maButton2Rect = maBtn2Rect;
-        scrValue.mnButton1State = ((mnStateFlags & SCRBAR_STATE_BTN1_DOWN) ? CTRL_STATE_PRESSED : 0) |
-                            ((!(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE)) ? CTRL_STATE_ENABLED : 0);
-        scrValue.mnButton2State = ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? CTRL_STATE_PRESSED : 0) |
-                            ((!(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE)) ? CTRL_STATE_ENABLED : 0);
-        scrValue.mnThumbState = nState | ((mnStateFlags & SCRBAR_STATE_THUMB_DOWN) ? CTRL_STATE_PRESSED : 0);
-        scrValue.mnPage1State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? CTRL_STATE_PRESSED : 0);
-        scrValue.mnPage2State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? CTRL_STATE_PRESSED : 0);
+        scrValue.mnButton1State = ((mnStateFlags & SCRBAR_STATE_BTN1_DOWN) ? ControlState::PRESSED : ControlState::NONE) |
+                            ((!(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE)) ? ControlState::ENABLED : ControlState::NONE);
+        scrValue.mnButton2State = ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? ControlState::PRESSED : ControlState::NONE) |
+                            ((!(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE)) ? ControlState::ENABLED : ControlState::NONE);
+        scrValue.mnThumbState = nState | ((mnStateFlags & SCRBAR_STATE_THUMB_DOWN) ? ControlState::PRESSED : ControlState::NONE);
+        scrValue.mnPage1State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? ControlState::PRESSED : ControlState::NONE);
+        scrValue.mnPage2State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? ControlState::PRESSED : ControlState::NONE);
 
         if( IsMouseOver() )
         {
@@ -484,15 +484,15 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             if( pRect )
             {
                 if( pRect == &maThumbRect )
-                    scrValue.mnThumbState |= CTRL_STATE_ROLLOVER;
+                    scrValue.mnThumbState |= ControlState::ROLLOVER;
                 else if( pRect == &maBtn1Rect )
-                    scrValue.mnButton1State |= CTRL_STATE_ROLLOVER;
+                    scrValue.mnButton1State |= ControlState::ROLLOVER;
                 else if( pRect == &maBtn2Rect )
-                    scrValue.mnButton2State |= CTRL_STATE_ROLLOVER;
+                    scrValue.mnButton2State |= ControlState::ROLLOVER;
                 else if( pRect == &maPage1Rect )
-                    scrValue.mnPage1State |= CTRL_STATE_ROLLOVER;
+                    scrValue.mnPage1State |= ControlState::ROLLOVER;
                 else if( pRect == &maPage2Rect )
-                    scrValue.mnPage2State |= CTRL_STATE_ROLLOVER;
+                    scrValue.mnPage2State |= ControlState::ROLLOVER;
             }
         }
 
@@ -527,11 +527,11 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             sal_uInt32  part2 = bHorz ? PART_TRACK_HORZ_RIGHT : PART_TRACK_VERT_LOWER;
             Rectangle   aCtrlRegion1( maPage1Rect );
             Rectangle   aCtrlRegion2( maPage2Rect );
-            ControlState nState1 = (IsEnabled() ? CTRL_STATE_ENABLED : 0) | (HasFocus() ? CTRL_STATE_FOCUSED : 0);
+            ControlState nState1 = (IsEnabled() ? ControlState::ENABLED : ControlState::NONE) | (HasFocus() ? ControlState::FOCUSED : ControlState::NONE);
             ControlState nState2 = nState1;
 
-            nState1 |= ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? CTRL_STATE_PRESSED : 0);
-            nState2 |= ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? CTRL_STATE_PRESSED : 0);
+            nState1 |= ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? ControlState::PRESSED : ControlState::NONE);
+            nState2 |= ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? ControlState::PRESSED : ControlState::NONE);
 
             if( IsMouseOver() )
             {
@@ -539,9 +539,9 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
                 if( pRect )
                 {
                     if( pRect == &maPage1Rect )
-                        nState1 |= CTRL_STATE_ROLLOVER;
+                        nState1 |= ControlState::ROLLOVER;
                     else if( pRect == &maPage2Rect )
-                        nState2 |= CTRL_STATE_ROLLOVER;
+                        nState2 |= ControlState::ROLLOVER;
                 }
             }
 
@@ -559,21 +559,21 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             sal_uInt32  part2 = bHorz ? PART_BUTTON_RIGHT : PART_BUTTON_DOWN;
             Rectangle   aCtrlRegion1( maBtn1Rect );
             Rectangle   aCtrlRegion2( maBtn2Rect );
-            ControlState nState1 = HasFocus() ? CTRL_STATE_FOCUSED : 0;
+            ControlState nState1 = HasFocus() ? ControlState::FOCUSED : ControlState::NONE;
             ControlState nState2 = nState1;
 
             if ( !Window::IsEnabled() || !IsEnabled() )
-                nState1 = (nState2 &= ~CTRL_STATE_ENABLED);
+                nState1 = (nState2 &= ~ControlState::ENABLED);
             else
-                nState1 = (nState2 |= CTRL_STATE_ENABLED);
+                nState1 = (nState2 |= ControlState::ENABLED);
 
-            nState1 |= ((mnStateFlags & SCRBAR_STATE_BTN1_DOWN) ? CTRL_STATE_PRESSED : 0);
-            nState2 |= ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? CTRL_STATE_PRESSED : 0);
+            nState1 |= ((mnStateFlags & SCRBAR_STATE_BTN1_DOWN) ? ControlState::PRESSED : ControlState::NONE);
+            nState2 |= ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? ControlState::PRESSED : ControlState::NONE);
 
             if(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE)
-                nState1 &= ~CTRL_STATE_ENABLED;
+                nState1 &= ~ControlState::ENABLED;
             if(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE)
-                nState2 &= ~CTRL_STATE_ENABLED;
+                nState2 &= ~ControlState::ENABLED;
 
             if( IsMouseOver() )
             {
@@ -581,9 +581,9 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
                 if( pRect )
                 {
                     if( pRect == &maBtn1Rect )
-                        nState1 |= CTRL_STATE_ROLLOVER;
+                        nState1 |= ControlState::ROLLOVER;
                     else if( pRect == &maBtn2Rect )
-                        nState2 |= CTRL_STATE_ROLLOVER;
+                        nState2 |= ControlState::ROLLOVER;
                 }
             }
 
@@ -597,14 +597,14 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
         }
         if ( (nDrawFlags & SCRBAR_DRAW_THUMB) && !maThumbRect.IsEmpty() )
         {
-            ControlState    nState = IsEnabled() ? CTRL_STATE_ENABLED : 0;
+            ControlState    nState = IsEnabled() ? ControlState::ENABLED : ControlState::NONE;
             Rectangle       aCtrlRegion( maThumbRect );
 
             if ( mnStateFlags & SCRBAR_STATE_THUMB_DOWN )
-                nState |= CTRL_STATE_PRESSED;
+                nState |= ControlState::PRESSED;
 
             if ( HasFocus() )
-                nState |= CTRL_STATE_FOCUSED;
+                nState |= ControlState::FOCUSED;
 
             if( IsMouseOver() )
             {
@@ -612,7 +612,7 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
                 if( pRect )
                 {
                     if( pRect == &maThumbRect )
-                        nState |= CTRL_STATE_ROLLOVER;
+                        nState |= ControlState::ROLLOVER;
                 }
             }
 

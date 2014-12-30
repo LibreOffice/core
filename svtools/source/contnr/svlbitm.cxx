@@ -362,11 +362,11 @@ void SvLBoxButton::Paint(
         ImplAdjustBoxSize( aSize, eCtrlType, &rDev );
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( rPos, aSize );
-        ControlState        nState = 0;
+        ControlState        nState = ControlState::NONE;
 
-        //states CTRL_STATE_DEFAULT, CTRL_STATE_PRESSED and CTRL_STATE_ROLLOVER are not implemented
-        if ( IsStateHilighted() )                   nState |= CTRL_STATE_FOCUSED;
-        if ( nStyle != IMAGE_DRAW_DISABLE )         nState |= CTRL_STATE_ENABLED;
+        //states ControlState::DEFAULT, ControlState::PRESSED and ControlState::ROLLOVER are not implemented
+        if ( IsStateHilighted() )                   nState |= ControlState::FOCUSED;
+        if ( nStyle != IMAGE_DRAW_DISABLE )         nState |= ControlState::ENABLED;
 
         if ( IsStateChecked() )
             aControlValue.setTristateVal( BUTTONVALUE_ON );
@@ -400,7 +400,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, vcl::
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
-        ControlState        nState = CTRL_STATE_ENABLED;
+        ControlState        nState = ControlState::ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
 

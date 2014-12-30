@@ -606,7 +606,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                             Rectangle aBgRegion( tmp, GetOutputSizePixel() );
                             DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
                                     aBgRegion,
-                                    CTRL_STATE_ENABLED,
+                                    ControlState::ENABLED,
                                     aControlValue,
                                     OUString() );
                         }
@@ -614,11 +614,11 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                         ImplAddNWFSeparator( this, aControlValue );
 
                         // draw selected item
-                        ControlState nState = CTRL_STATE_ENABLED;
+                        ControlState nState = ControlState::ENABLED;
                         if ( bRollover )
-                            nState |= CTRL_STATE_ROLLOVER;
+                            nState |= ControlState::ROLLOVER;
                         else
-                            nState |= CTRL_STATE_SELECTED;
+                            nState |= ControlState::SELECTED;
                         DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
                                            aRect,
                                            nState,
@@ -651,7 +651,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                             Point aPt;
                             Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
 
-                            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, OUString() );
+                            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED, aMenubarValue, OUString() );
                         }
 
                         ImplAddNWFSeparator( this, aMenubarValue );
@@ -885,7 +885,7 @@ void MenuBarWindow::Paint( const Rectangle& )
             Point aPt;
             Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
-            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, OUString() );
+            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, ControlState::ENABLED, aMenubarValue, OUString() );
         }
 
         ImplAddNWFSeparator( this, aMenubarValue );

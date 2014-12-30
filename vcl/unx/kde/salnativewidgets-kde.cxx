@@ -516,7 +516,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     pWidget->move( 0, 0 );
 
     // Enable/disable the widget
-    pWidget->setEnabled( nState & CTRL_STATE_ENABLED );
+    pWidget->setEnabled( nState & ControlState::ENABLED );
 
     // Create pixmap to paint to
     KDEX11Pixmap xPixmap( pWidget->width(), pWidget->height() );
@@ -598,15 +598,15 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         QStyle::SCFlags eActive = QStyle::SC_None;
         if ( pValue )
         {
-            if ( pValue->mnUpperState & CTRL_STATE_PRESSED )
+            if ( pValue->mnUpperState & ControlState::PRESSED )
                 eActive = QStyle::SC_SpinWidgetUp;
-            else if ( pValue->mnLowerState & CTRL_STATE_PRESSED )
+            else if ( pValue->mnLowerState & ControlState::PRESSED )
                 eActive = QStyle::SC_SpinWidgetDown;
 
             // Update the enable/disable state of the widget
-            if ( ( nState & CTRL_STATE_ENABLED ) ||
-                ( pValue->mnUpperState & CTRL_STATE_ENABLED ) ||
-                ( pValue->mnLowerState & CTRL_STATE_ENABLED ) )
+            if ( ( nState & ControlState::ENABLED ) ||
+                ( pValue->mnUpperState & ControlState::ENABLED ) ||
+                ( pValue->mnLowerState & ControlState::ENABLED ) )
             {
                 pWidget->setEnabled( true );
                 nStyle |= QStyle::Style_Enabled;
@@ -615,8 +615,8 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
                 pWidget->setEnabled( false );
 
             // Mouse-over effect
-            if ( (pValue->mnUpperState & CTRL_STATE_ROLLOVER) ||
-                (pValue->mnLowerState & CTRL_STATE_ROLLOVER) )
+            if ( (pValue->mnUpperState & ControlState::ROLLOVER) ||
+                (pValue->mnLowerState & ControlState::ROLLOVER) )
             nStyle |= QStyle::Style_MouseOver;
         }
 
@@ -692,38 +692,38 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         if ( strcmp( QMotifPlusStyle_String, pStyleName ) == 0 )
         {
             nStyle |= QStyle::Style_MouseOver;
-            if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
+            if ( pValue->mnThumbState & ControlState::ROLLOVER )
                 eActive = QStyle::SC_ScrollBarSlider;
         }
         else if ( strcmp( QSGIStyle_String, pStyleName ) == 0 )
         {
             nStyle |= QStyle::Style_MouseOver;
-            if ( pValue->mnButton1State & CTRL_STATE_ROLLOVER )
+            if ( pValue->mnButton1State & ControlState::ROLLOVER )
                 eActive = QStyle::SC_ScrollBarSubLine;
-            else if ( pValue->mnButton2State & CTRL_STATE_ROLLOVER )
+            else if ( pValue->mnButton2State & ControlState::ROLLOVER )
                 eActive = QStyle::SC_ScrollBarAddLine;
-            else if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
+            else if ( pValue->mnThumbState & ControlState::ROLLOVER )
                 eActive = QStyle::SC_ScrollBarSlider;
         }
 
-        if ( pValue->mnButton1State & CTRL_STATE_PRESSED )
+        if ( pValue->mnButton1State & ControlState::PRESSED )
            eActive = QStyle::SC_ScrollBarSubLine;
-        else if ( pValue->mnButton2State & CTRL_STATE_PRESSED )
+        else if ( pValue->mnButton2State & ControlState::PRESSED )
             eActive = QStyle::SC_ScrollBarAddLine;
-        else if ( pValue->mnThumbState & CTRL_STATE_PRESSED )
+        else if ( pValue->mnThumbState & ControlState::PRESSED )
             eActive = QStyle::SC_ScrollBarSlider;
-        else if ( pValue->mnPage1State & CTRL_STATE_PRESSED )
+        else if ( pValue->mnPage1State & ControlState::PRESSED )
             eActive = QStyle::SC_ScrollBarSubPage;
-        else if ( pValue->mnPage2State & CTRL_STATE_PRESSED )
+        else if ( pValue->mnPage2State & ControlState::PRESSED )
             eActive = QStyle::SC_ScrollBarAddPage;
 
         // Update the enable/disable state of the widget
-        if ( ( nState & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnButton1State & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnButton2State & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnThumbState & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnPage1State & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnPage2State & CTRL_STATE_ENABLED ) )
+        if ( ( nState & ControlState::ENABLED ) ||
+            ( pValue->mnButton1State & ControlState::ENABLED ) ||
+            ( pValue->mnButton2State & ControlState::ENABLED ) ||
+            ( pValue->mnThumbState & ControlState::ENABLED ) ||
+            ( pValue->mnPage1State & ControlState::ENABLED ) ||
+            ( pValue->mnPage2State & ControlState::ENABLED ) )
         {
             pWidget->setEnabled( true );
             nStyle |= QStyle::Style_Enabled;
@@ -1201,13 +1201,13 @@ QStyle::SFlags WidgetPainter::vclStateValue2SFlags( ControlState nState,
     const ImplControlValue& aValue )
 {
     QStyle::SFlags nStyle =
-    ( (nState & CTRL_STATE_DEFAULT)?  QStyle::Style_ButtonDefault: QStyle::Style_Default ) |
-    ( (nState & CTRL_STATE_ENABLED)?  QStyle::Style_Enabled:       QStyle::Style_Default ) |
-    ( (nState & CTRL_STATE_FOCUSED)?  QStyle::Style_HasFocus:      QStyle::Style_Default ) |
-    ( (nState & CTRL_STATE_PRESSED)?  QStyle::Style_Down:          QStyle::Style_Raised )  |
-    ( (nState & CTRL_STATE_SELECTED)? QStyle::Style_Selected :     QStyle::Style_Default ) |
-    ( (nState & CTRL_STATE_ROLLOVER)? QStyle::Style_MouseOver:     QStyle::Style_Default );
-    //TODO ( (nState & CTRL_STATE_HIDDEN)?   QStyle::Style_: QStyle::Style_Default ) |
+    ( (nState & ControlState::DEFAULT)?  QStyle::Style_ButtonDefault: QStyle::Style_Default ) |
+    ( (nState & ControlState::ENABLED)?  QStyle::Style_Enabled:       QStyle::Style_Default ) |
+    ( (nState & ControlState::FOCUSED)?  QStyle::Style_HasFocus:      QStyle::Style_Default ) |
+    ( (nState & ControlState::PRESSED)?  QStyle::Style_Down:          QStyle::Style_Raised )  |
+    ( (nState & ControlState::SELECTED)? QStyle::Style_Selected :     QStyle::Style_Default ) |
+    ( (nState & ControlState::ROLLOVER)? QStyle::Style_MouseOver:     QStyle::Style_Default );
+    //TODO ( (nState & ControlState::HIDDEN)?   QStyle::Style_: QStyle::Style_Default ) |
 
     switch ( aValue.getTristateVal() )
     {
@@ -1413,7 +1413,7 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
-        pWidgetPainter->pushButton( rControlRegion, (nState & CTRL_STATE_DEFAULT) ),
+        pWidgetPainter->pushButton( rControlRegion, (nState & ControlState::DEFAULT) ),
         nState, aValue, this );
     }
     else if ( (nType == CTRL_RADIOBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
@@ -1542,14 +1542,14 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     {
     // Metrics of the push button
     case CTRL_PUSHBUTTON:
-        pWidget = pWidgetPainter->pushButton( rControlRegion, ( nState & CTRL_STATE_DEFAULT ) );
+        pWidget = pWidgetPainter->pushButton( rControlRegion, ( nState & ControlState::DEFAULT ) );
 
         switch ( nPart )
         {
         case PART_ENTIRE_CONTROL:
             qRect = qBoundingRect;
 
-            if ( nState & CTRL_STATE_DEFAULT )
+            if ( nState & ControlState::DEFAULT )
             {
             int nIndicatorSize = QApplication::style().pixelMetric(
                 QStyle::PM_ButtonDefaultIndicator, pWidget );

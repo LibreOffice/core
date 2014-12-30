@@ -753,7 +753,7 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                     MenupopupValue aVal( pMenu->nTextPos-GUTTERBORDER, aItemRect );
                     DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
                                        aCtrlRect,
-                                       CTRL_STATE_ENABLED,
+                                       ControlState::ENABLED,
                                        aVal,
                                        OUString() );
                     if( bHighlight &&
@@ -762,7 +762,7 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                         bDrawItemRect = false;
                         if( !DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
                                                         aItemRect,
-                                                        CTRL_STATE_SELECTED | ( pData->bEnabled? CTRL_STATE_ENABLED: 0 ),
+                                                        ControlState::SELECTED | ( pData->bEnabled? ControlState::ENABLED: ControlState::NONE ),
                                                         aVal,
                                                         OUString() ) )
                         {
@@ -1095,7 +1095,7 @@ void MenuFloatingWindow::Paint( const Rectangle& )
         ImplControlValue aVal( pMenu->nTextPos-GUTTERBORDER );
         DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
                            Rectangle( Point( nX, 0 ), aPxSize ),
-                           CTRL_STATE_ENABLED,
+                           ControlState::ENABLED,
                            aVal,
                            OUString() );
         InitMenuClipRegion();

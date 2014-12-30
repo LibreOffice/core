@@ -156,7 +156,7 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
         Rectangle aArea( aPoint, pThis->GetOutputSizePixel() );
 
         if ( pThis->GetNativeControlRegion(CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
-                aArea, 0, aControlValue, OUString(), aBound, aContent) )
+                aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             width = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
         }
@@ -270,7 +270,7 @@ void ToolBox::ImplDrawGrip( ToolBox* pThis )
             aToolbarValue.maGripRect = pWrapper->GetDragArea();
             Point aPt;
             Rectangle           aCtrlRegion( aPt, pThis->GetOutputSizePixel() );
-            ControlState        nState = CTRL_STATE_ENABLED;
+            ControlState        nState = ControlState::ENABLED;
 
             bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
                                             aCtrlRegion, nState, aToolbarValue, OUString() );
@@ -457,7 +457,7 @@ bool ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const vcl::Region & )
     // use NWF
     Point aPt;
     Rectangle aCtrlRegion( aPt, pThis->GetOutputSizePixel() );
-    ControlState  nState = CTRL_STATE_ENABLED;
+    ControlState  nState = ControlState::ENABLED;
 
     return pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                     aCtrlRegion, nState, ImplControlValue(), OUString() );
@@ -1669,7 +1669,7 @@ bool ToolBox::ImplCalcItem()
         {
             if( GetNativeControlRegion( CTRL_TOOLBAR, PART_BUTTON,
                                         aReg,
-                                        CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                        ControlState::ENABLED | ControlState::ROLLOVER,
                                         aVal, OUString(),
                                         aNativeBounds, aNativeContent ) )
             {
@@ -1694,7 +1694,7 @@ bool ToolBox::ImplCalcItem()
         aReg = aRect;
         if( GetNativeControlRegion( CTRL_COMBOBOX, PART_ENTIRE_CONTROL,
                                     aReg,
-                                    CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                    ControlState::ENABLED | ControlState::ROLLOVER,
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
@@ -1706,7 +1706,7 @@ bool ToolBox::ImplCalcItem()
         aReg = aRect;
         if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL,
                                     aReg,
-                                    CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                    ControlState::ENABLED | ControlState::ROLLOVER,
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
@@ -1718,7 +1718,7 @@ bool ToolBox::ImplCalcItem()
         aReg = aRect;
         if( GetNativeControlRegion( CTRL_SPINBOX, PART_ENTIRE_CONTROL,
                                     aReg,
-                                    CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+                                    ControlState::ENABLED | ControlState::ROLLOVER,
                                     aVal, OUString(),
                                     aNativeBounds, aNativeContent ) )
         {
@@ -2859,7 +2859,7 @@ void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
     if( IsNativeControlSupported( CTRL_TOOLBAR, nPart ) )
     {
         ImplControlValue    aControlValue;
-        ControlState        nState = 0;
+        ControlState        nState = ControlState::NONE;
         bNativeOk = DrawNativeControl( CTRL_TOOLBAR, nPart,
                                        rRect, nState, aControlValue, OUString() );
     }
@@ -2906,11 +2906,11 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
     if( !bIsWindow && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
-        ControlState        nState = 0;
+        ControlState        nState = ControlState::NONE;
 
-        if ( highlight == 1 )   nState |= CTRL_STATE_PRESSED;
-        if ( highlight == 2 )     nState |= CTRL_STATE_ROLLOVER;
-        if ( bEnabled )         nState |= CTRL_STATE_ENABLED;
+        if ( highlight == 1 )   nState |= ControlState::PRESSED;
+        if ( highlight == 2 )     nState |= ControlState::ROLLOVER;
+        if ( bEnabled )         nState |= ControlState::ENABLED;
 
         aControlValue.setTristateVal( bChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
 

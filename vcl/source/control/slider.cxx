@@ -135,7 +135,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
             Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_HORZ,
-                                         aControlRegion, 0, ImplControlValue(), OUString(),
+                                         aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
                 maThumbRect.Left() = mnThumbPixPos - aThumbBounds.GetWidth()/2;
@@ -169,7 +169,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
             Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_VERT,
-                                         aControlRegion, 0, ImplControlValue(), OUString(),
+                                         aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
                 maThumbRect.Top() = mnThumbPixPos - aThumbBounds.GetHeight()/2;
@@ -314,7 +314,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
         ImplCalc( false );
 
     ControlPart nPart = (GetStyle() & WB_HORZ) ? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA;
-    ControlState   nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
+    ControlState   nState = ( IsEnabled() ? ControlState::ENABLED : ControlState::NONE ) | ( HasFocus() ? ControlState::FOCUSED : ControlState::NONE );
     SliderValue    sldValue;
 
     sldValue.mnMin       = mnMinRange;
@@ -325,7 +325,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
     if( IsMouseOver() )
     {
         if( maThumbRect.IsInside( GetPointerPosPixel() ) )
-            sldValue.mnThumbState |= CTRL_STATE_ROLLOVER;
+            sldValue.mnThumbState |= ControlState::ROLLOVER;
     }
 
     const Rectangle aCtrlRegion( Point(0,0), GetOutputSizePixel() );

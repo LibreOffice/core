@@ -1086,7 +1086,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                 Rectangle aBounds( aCtrlRegion );
                 Rectangle aContent( aCtrlRegion );
                 if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                                  CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                                  ControlState::ENABLED, aControlValue, OUString(),
                                                   aBounds, aContent ) )
                 {
                     mnLeftBorder    = aContent.Left() - aBounds.Left();
@@ -1259,12 +1259,12 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     if ( aCtrlType && pCtrl->IsNativeControlSupported(aCtrlType, aCtrlPart) )
     {
         ImplControlValue aControlValue;
-        ControlState     nState = CTRL_STATE_ENABLED;
+        ControlState     nState = ControlState::ENABLED;
 
         if ( !pWin->IsEnabled() )
-            nState &= ~CTRL_STATE_ENABLED;
+            nState &= ~ControlState::ENABLED;
         if ( pWin->HasFocus() )
-            nState |= CTRL_STATE_FOCUSED;
+            nState |= ControlState::FOCUSED;
         else if( mbNWFBorder )
         {
             // FIXME: this is curently only on OS X, see if other platforms can profit
@@ -1272,7 +1272,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             // FIXME: for OS X focus rings all controls need to support GetNativeControlRegion
             // for the dropdown style
             if( pCtrl->HasFocus() || pCtrl->HasChildPathFocus() )
-                nState |= CTRL_STATE_FOCUSED;
+                nState |= ControlState::FOCUSED;
         }
 
         bool bMouseOver = false;
@@ -1281,7 +1281,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             pCtrlChild = pCtrlChild->GetWindow( WINDOW_NEXT );
 
         if( bMouseOver )
-            nState |= CTRL_STATE_ROLLOVER;
+            nState |= ControlState::ROLLOVER;
 
         Point aPoint;
         Rectangle aCtrlRegion( aPoint, Size( mnWidth, mnHeight ) );

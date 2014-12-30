@@ -168,7 +168,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
             aControlValue.mbIsTopDockingArea = true;
         }
 
-        ControlState        nState = CTRL_STATE_ENABLED;
+        ControlState        nState = ControlState::ENABLED;
         const bool isFooter = GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
 
         if (( GetAlign() == WINDOWALIGN_TOP && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter  )

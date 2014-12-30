@@ -67,10 +67,10 @@ namespace svt
     {
         ControlState lcl_ItemToControlState( const ItemFlags i_nItemFlags )
         {
-            ControlState nState = CTRL_STATE_ENABLED;
-            if ( i_nItemFlags & ITEM_STATE_FOCUSED )    nState |= CTRL_STATE_FOCUSED | CTRL_STATE_PRESSED;
-            if ( i_nItemFlags & ITEM_STATE_HOVERED )    nState |= CTRL_STATE_ROLLOVER;
-            if ( i_nItemFlags & ITEM_STATE_ACTIVE )     nState |= CTRL_STATE_SELECTED;
+            ControlState nState = ControlState::ENABLED;
+            if ( i_nItemFlags & ITEM_STATE_FOCUSED )    nState |= ControlState::FOCUSED | ControlState::PRESSED;
+            if ( i_nItemFlags & ITEM_STATE_HOVERED )    nState |= ControlState::ROLLOVER;
+            if ( i_nItemFlags & ITEM_STATE_ACTIVE )     nState |= ControlState::SELECTED;
             return nState;
         }
     }
@@ -288,7 +288,7 @@ namespace svt
 
         aBackground.Top() = aBackground.Bottom();
         getTargetDevice().DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aBackground,
-            CTRL_STATE_ENABLED, ImplControlValue(), OUString() );
+            ControlState::ENABLED, ImplControlValue(), OUString() );
     }
 
 

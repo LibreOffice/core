@@ -1166,7 +1166,7 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
         Rectangle aBoundingRgn( aCtrlRegion );
         Rectangle aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                             CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                             ControlState::ENABLED, aControlValue, OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {
             // comment: the magical +6 is for the extra border in bordered

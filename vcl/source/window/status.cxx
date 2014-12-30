@@ -505,7 +505,7 @@ void DrawProgress( vcl::Window* pWindow, const Point& rPos,
             pWindow->IntersectClipRegion( rFramePosSize );
         }
         bool bNativeOK = pWindow->DrawNativeControl( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                     CTRL_STATE_ENABLED, aValue, OUString() );
+                                                     ControlState::ENABLED, aValue, OUString() );
         if( bNeedErase )
             pWindow->Pop();
         if( bNativeOK )
@@ -642,7 +642,7 @@ void StatusBar::ImplCalcProgressRect()
         Rectangle aControlRegion( Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                 CTRL_STATE_ENABLED, aValue, OUString(),
+                                                 ControlState::ENABLED, aValue, OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) ) )
         {
             long nProgressHeight = aNativeControlRegion.GetHeight();
@@ -1442,7 +1442,7 @@ Size StatusBar::CalcWindowSizePixel() const
         Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL,
-                    aControlRegion, CTRL_STATE_ENABLED, aValue, OUString(),
+                    aControlRegion, ControlState::ENABLED, aValue, OUString(),
                     aNativeControlRegion, aNativeContentRegion ) )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
@@ -1456,7 +1456,7 @@ Size StatusBar::CalcWindowSizePixel() const
         Rectangle aBound, aContent;
         Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
         if( GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
-                    aNatRgn, 0, aControlValue, OUString(), aBound, aContent) )
+                    aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             mpImplData->mnItemBorderWidth =
                 ( aBound.GetHeight() - aContent.GetHeight() ) / 2;

@@ -350,7 +350,7 @@ public:
     GdkX11Pixmap*  m_pixmap;
     GdkX11Pixmap*  m_mask;
 
-    NWPixmapCacheData() : m_nType(0), m_nState(0), m_pixmap(0), m_mask(0) {}
+    NWPixmapCacheData() : m_nType(0), m_nState(ControlState::NONE), m_pixmap(0), m_mask(0) {}
     ~NWPixmapCacheData()
         { SetPixmap( NULL, NULL ); };
     void SetPixmap( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask );
@@ -424,7 +424,7 @@ void NWPixmapCache::ThemeChanged()
 
 bool  NWPixmapCache::Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap, GdkX11Pixmap** pMask )
 {
-    aState &= ~CTRL_CACHING_ALLOWED; // mask clipping flag
+    aState &= ~ControlState::CACHING_ALLOWED; // mask clipping flag
     int i;
     for(i=0; i<m_size; i++)
     {
@@ -444,10 +444,10 @@ bool  NWPixmapCache::Find( ControlType aType, ControlState aState, const Rectang
 
 void NWPixmapCache::Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask )
 {
-    if( !(aState & CTRL_CACHING_ALLOWED) )
+    if( !(aState & ControlState::CACHING_ALLOWED) )
         return;
 
-    aState &= ~CTRL_CACHING_ALLOWED; // mask clipping flag
+    aState &= ~ControlState::CACHING_ALLOWED; // mask clipping flag
     m_idx = (m_idx+1) % m_size; // just wrap
     pData[m_idx].m_nType = aType;
     pData[m_idx].m_nState = aState;
@@ -1404,7 +1404,7 @@ bool GtkSalGraphics::NWPaintGTKArrow(
             const OUString& )
 {
     GtkArrowType arrowType(aValue.getNumericVal()&1?GTK_ARROW_DOWN:GTK_ARROW_UP);
-    GtkStateType stateType(nState&CTRL_STATE_PRESSED?GTK_STATE_ACTIVE:GTK_STATE_NORMAL);
+    GtkStateType stateType(nState&ControlState::PRESSED?GTK_STATE_ACTIVE:GTK_STATE_NORMAL);
 
     GdkRectangle clipRect;
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
@@ -1606,12 +1606,12 @@ bool GtkSalGraphics::NWPaintGTKButtonReal(
        else
            shadowType=GTK_SHADOW_OUT;
 
-       if(nState & CTRL_STATE_ROLLOVER)
+       if(nState & ControlState::ROLLOVER)
            stateType=GTK_STATE_PRELIGHT;
        else
            stateType=GTK_STATE_NORMAL;
 
-       if(nState & CTRL_STATE_PRESSED)
+       if(nState & ControlState::PRESSED)
        {
            stateType=GTK_STATE_ACTIVE;
            shadowType=GTK_SHADOW_IN;
@@ -1661,7 +1661,7 @@ bool GtkSalGraphics::NWPaintGTKButtonReal(
         bDrawFocus = false;
 
     gint xi = x, yi = y, wi = w, hi = h;
-    if ( (nState & CTRL_STATE_DEFAULT) && bDrawFocus )
+    if ( (nState & ControlState::DEFAULT) && bDrawFocus )
     {
         xi += aDefBorder.left;
         yi += aDefBorder.top;
@@ -1697,7 +1697,7 @@ bool GtkSalGraphics::NWPaintGTKButtonReal(
 
         if ( GTK_IS_BUTTON(button) )
         {
-            if ( (nState & CTRL_STATE_DEFAULT) )
+            if ( (nState & ControlState::DEFAULT) )
                 gtk_paint_box( button->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
                                &clipRect, button, "buttondefault", x, y, w, h );
 
@@ -1768,7 +1768,7 @@ static Rectangle NWGetButtonArea( SalX11Screen nScreen,
     if ( (w < 16) || (h < 16) )
         bDrawFocus = false;
 
-    if ( (nState & CTRL_STATE_DEFAULT) && bDrawFocus )
+    if ( (nState & ControlState::DEFAULT) && bDrawFocus )
     {
         x -= aDefBorder.left;
         y -= aDefBorder.top;
@@ -2136,7 +2136,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                    x, y,
                    scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
 
-    if ( nState & CTRL_STATE_FOCUSED )
+    if ( nState & ControlState::FOCUSED )
     {
         gtk_paint_focus( style, gdkDrawable, GTK_STATE_ACTIVE,
                          gdkRect, GTK_WIDGET(scrollbarWidget), "trough",
@@ -2467,10 +2467,10 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
     const SpinbuttonValue *    pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
     Rectangle            upBtnRect;
     ControlPart        upBtnPart = PART_BUTTON_UP;
-    ControlState        upBtnState = CTRL_STATE_ENABLED;
+    ControlState        upBtnState = ControlState::ENABLED;
     Rectangle            downBtnRect;
     ControlPart        downBtnPart = PART_BUTTON_DOWN;
-    ControlState        downBtnState = CTRL_STATE_ENABLED;
+    ControlState        downBtnState = ControlState::ENABLED;
 
     NWEnsureGTKButton( m_nXScreen );
     NWEnsureGTKSpinButton( m_nXScreen );
@@ -2822,7 +2822,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
             pixmapRect.Move( -2, 0 );
             pixmapRect.SetSize( Size( pixmapRect.GetWidth() + 2, pixmapRect.GetHeight() ) );
         }
-        if ( nState & CTRL_STATE_SELECTED )
+        if ( nState & ControlState::SELECTED )
         {
             // In GTK+, the selected tab is 2px taller than all other tabs
             pixmapRect.Move( 0, -2 );
@@ -2881,7 +2881,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
             case CTRL_TAB_ITEM:
             {
-                stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
+                stateType = ( nState & ControlState::SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
 
                 // First draw the background
                 gtk_paint_flat_box(gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap,
@@ -2892,7 +2892,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
                                        pixmapRect.GetHeight()+rControlRectangle.Top());
 
                 // Now the tab itself
-                if( nState & CTRL_STATE_ROLLOVER )
+                if( nState & ControlState::ROLLOVER )
                     g_object_set_data(G_OBJECT(gdkPixmap),tabPrelitDataName,reinterpret_cast<gpointer>(TRUE));
 
                 gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
@@ -2901,7 +2901,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
                 g_object_steal_data(G_OBJECT(gdkPixmap),tabPrelitDataName);
 
-                if ( nState & CTRL_STATE_SELECTED )
+                if ( nState & ControlState::SELECTED )
                 {
                     gtk_paint_flat_box( m_pWindow->style, gdkPixmap, stateType, GTK_SHADOW_NONE, NULL, m_pWindow,
                         "base", 0, (pixmapRect.GetHeight() - 1), pixmapRect.GetWidth(), 1 );
@@ -3017,7 +3017,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
 
     NWEnsureGTKToolbar( m_nXScreen );
     if( nPart == PART_BUTTON ) // toolbar buttons cannot focus in gtk
-        nState &= ~CTRL_STATE_FOCUSED;
+        nState &= ~ControlState::FOCUSED;
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
     x = rControlRectangle.Left();
@@ -3031,7 +3031,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
         NWSetWidgetState( gWidgetData[m_nXScreen].gToolbarWidget, nState, stateType );
 
         GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gToolbarWidget, GTK_SENSITIVE );
-        if ( nState & CTRL_STATE_ENABLED )
+        if ( nState & ControlState::ENABLED )
             GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gToolbarWidget, GTK_SENSITIVE );
 
         if( nPart == PART_DRAW_BACKGROUND_HORZ )
@@ -3045,7 +3045,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
         NWSetWidgetState( gWidgetData[m_nXScreen].gHandleBoxWidget, nState, stateType );
 
         GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gHandleBoxWidget, GTK_SENSITIVE );
-        if ( nState & CTRL_STATE_ENABLED )
+        if ( nState & ControlState::ENABLED )
             GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gHandleBoxWidget, GTK_SENSITIVE );
 
         gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(gWidgetData[m_nXScreen].gHandleBoxWidget), shadowType );
@@ -3063,8 +3063,8 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
     // handle button
     else if( nPart == PART_BUTTON )
     {
-        bool bPaintButton = (nState & CTRL_STATE_PRESSED)
-            || (nState & CTRL_STATE_ROLLOVER);
+        bool bPaintButton = (nState & ControlState::PRESSED)
+            || (nState & ControlState::ROLLOVER);
         if( aValue.getTristateVal() == BUTTONVALUE_ON )
         {
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pButtonWidget),TRUE);
@@ -3197,7 +3197,7 @@ bool GtkSalGraphics::NWPaintGTKMenubar(
 
     if( nPart == PART_MENU_ITEM )
     {
-        if( nState & CTRL_STATE_SELECTED )
+        if( nState & ControlState::SELECTED )
         {
             gtk_widget_style_get( gWidgetData[m_nXScreen].gMenuItemMenubarWidget,
                                   "selected_shadow_type", &selected_shadow_type,
@@ -3218,7 +3218,7 @@ bool GtkSalGraphics::NWPaintGTKMenubar(
             NWSetWidgetState( gWidgetData[m_nXScreen].gMenubarWidget, nState, stateType );
 
             GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gMenubarWidget, GTK_SENSITIVE );
-            if ( nState & CTRL_STATE_ENABLED )
+            if ( nState & ControlState::ENABLED )
                 GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gMenubarWidget, GTK_SENSITIVE );
 
             // for translucent menubar styles paint background first
@@ -3242,7 +3242,7 @@ bool GtkSalGraphics::NWPaintGTKMenubar(
 
         else if( nPart == PART_MENU_ITEM )
         {
-            if( nState & CTRL_STATE_SELECTED )
+            if( nState & ControlState::SELECTED )
             {
                 gtk_paint_box( gWidgetData[m_nXScreen].gMenuItemMenubarWidget->style,
                                gdkDrawable,
@@ -3270,7 +3270,7 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
     // #i50745# gtk does not draw disabled menu entries (and crux theme
     // even crashes) in very old (Fedora Core 4 vintage) gtk's
     if (gtk_major_version <= 2 && gtk_minor_version <= 8 &&
-        nPart == PART_MENU_ITEM && ! (nState & CTRL_STATE_ENABLED) )
+        nPart == PART_MENU_ITEM && ! (nState & ControlState::ENABLED) )
         return true;
 
     GtkStateType    stateType;
@@ -3288,7 +3288,7 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
     h = rControlRectangle.GetHeight();
 
     if( nPart == PART_MENU_ITEM &&
-        ( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) ) )
+        ( nState & (ControlState::SELECTED|ControlState::ROLLOVER) ) )
     {
         gtk_widget_style_get( gWidgetData[m_nXScreen].gMenuItemMenuWidget,
                               "selected_shadow_type", &selected_shadow_type,
@@ -3298,7 +3298,7 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
     NWSetWidgetState( gWidgetData[m_nXScreen].gMenuWidget, nState, stateType );
 
     GTK_WIDGET_UNSET_FLAGS( gWidgetData[m_nXScreen].gMenuWidget, GTK_SENSITIVE );
-    if ( nState & CTRL_STATE_ENABLED )
+    if ( nState & ControlState::ENABLED )
         GTK_WIDGET_SET_FLAGS( gWidgetData[m_nXScreen].gMenuWidget, GTK_SENSITIVE );
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
@@ -3330,9 +3330,9 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
         }
         else if( nPart == PART_MENU_ITEM )
         {
-            if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
+            if( nState & (ControlState::SELECTED|ControlState::ROLLOVER) )
             {
-                if( nState & CTRL_STATE_ENABLED )
+                if( nState & ControlState::ENABLED )
                 gtk_paint_box( gWidgetData[m_nXScreen].gMenuItemMenuWidget->style,
                                gdkDrawable,
                                GTK_STATE_PRELIGHT,
@@ -3353,7 +3353,7 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
             GtkShadowType nShadowType;
             NWConvertVCLStateToGTKState( nState, &nStateType, &nShadowType );
 
-            if ( (nState & CTRL_STATE_SELECTED) && (nState & CTRL_STATE_ENABLED) )
+            if ( (nState & ControlState::SELECTED) && (nState & ControlState::ENABLED) )
                 nStateType = GTK_STATE_PRELIGHT;
 
             NWSetWidgetState( pWidget, nState, nStateType );
@@ -3397,7 +3397,7 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
             GtkShadowType nShadowType;
             NWConvertVCLStateToGTKState( nState, &nStateType, &nShadowType );
 
-            if ( (nState & CTRL_STATE_SELECTED) && (nState & CTRL_STATE_ENABLED) )
+            if ( (nState & ControlState::SELECTED) && (nState & ControlState::ENABLED) )
                 nStateType = GTK_STATE_PRELIGHT;
 
             NWSetWidgetState( gWidgetData[m_nXScreen].gMenuItemMenuWidget,
@@ -3610,7 +3610,7 @@ bool GtkSalGraphics::NWPaintGTKSlider(
                               "trough-border", &trough_border,
                               NULL);
 
-        GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
+        GtkStateType eState = (nState & ControlState::ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
         if( nPart == PART_TRACK_HORZ_AREA )
         {
             gtk_paint_box( pWidget->style,
@@ -4265,14 +4265,14 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
     *nGTKShadow = GTK_SHADOW_OUT;
     *nGTKState = GTK_STATE_INSENSITIVE;
 
-    if ( nVCLState & CTRL_STATE_ENABLED )
+    if ( nVCLState & ControlState::ENABLED )
     {
-        if ( nVCLState & CTRL_STATE_PRESSED )
+        if ( nVCLState & ControlState::PRESSED )
         {
             *nGTKState = GTK_STATE_ACTIVE;
             *nGTKShadow = GTK_SHADOW_IN;
         }
-        else if ( nVCLState & CTRL_STATE_ROLLOVER )
+        else if ( nVCLState & ControlState::ROLLOVER )
         {
             *nGTKState = GTK_STATE_PRELIGHT;
             *nGTKShadow = GTK_SHADOW_OUT;
@@ -4296,11 +4296,11 @@ static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateTy
     GTK_WIDGET_UNSET_FLAGS( widget, GTK_SENSITIVE );
     GTK_WIDGET_SET_FLAGS( widget, gWidgetDefaultFlags[reinterpret_cast<long>(widget)] );
 
-    if ( nState & CTRL_STATE_DEFAULT )
+    if ( nState & ControlState::DEFAULT )
         GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_DEFAULT );
-    if ( !GTK_IS_TOGGLE_BUTTON(widget) && (nState & CTRL_STATE_FOCUSED) )
+    if ( !GTK_IS_TOGGLE_BUTTON(widget) && (nState & ControlState::FOCUSED) )
         GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_FOCUS );
-    if ( nState & CTRL_STATE_ENABLED )
+    if ( nState & ControlState::ENABLED )
         GTK_WIDGET_SET_FLAGS( widget, GTK_SENSITIVE );
     gtk_widget_set_state( widget, nGtkState );
 }

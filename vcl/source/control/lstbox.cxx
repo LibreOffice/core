@@ -121,7 +121,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 Rectangle aBoundingRgn( aCtrlRegion );
                 Rectangle aContentRgn( aCtrlRegion );
                 if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                            CTRL_STATE_ENABLED, aControlValue, OUString(),
+                                            ControlState::ENABLED, aControlValue, OUString(),
                                             aBoundingRgn, aContentRgn ) )
                 {
                     sal_Int32 nHeight = aBoundingRgn.GetHeight();
@@ -634,7 +634,7 @@ void ListBox::Resize()
         Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
         if ( GetNativeControlRegion( CTRL_LISTBOX, PART_BUTTON_DOWN,
-                    aArea, 0, aControlValue, OUString(), aBound, aContent) )
+                    aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             long nTop = 0;
             // Convert back from border space to local coordinates
@@ -647,7 +647,7 @@ void ListBox::Resize()
 
             // Adjust the size of the edit field
             if ( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT,
-                        aArea, 0, aControlValue, OUString(), aBound, aContent) )
+                        aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
             {
                 // Convert back from border space to local coordinates
                 aContent.Move( -aPoint.X(), -aPoint.Y() );
@@ -1217,7 +1217,7 @@ Size ListBox::CalcMinimumSize() const
         Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
         Rectangle aArea( aPoint, aTestSize );
-        if( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0,
+        if( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT, aArea, ControlState::NONE,
                     aControlValue, OUString(), aBound, aContent) )
         {
             // use the themes drop down size
@@ -1234,7 +1234,7 @@ Size ListBox::CalcMinimumSize() const
         ImplControlValue aControlValue;
         Rectangle aRect( Point( 0, 0 ), aSz );
         Rectangle aContent, aBound;
-        if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0,
+        if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, ControlState::NONE,
                     aControlValue, OUString(), aBound, aContent) )
         {
             if( aBound.GetHeight() > aSz.Height() )

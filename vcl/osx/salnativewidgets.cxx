@@ -449,30 +449,30 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
    kThemeStatePressedUp = 2,
    kThemeStatePressedDown = 3
 
-#define CTRL_STATE_ENABLED      0x0001
-#define CTRL_STATE_FOCUSED      0x0002
-#define CTRL_STATE_PRESSED      0x0004
-#define CTRL_STATE_ROLLOVER     0x0008
-#define CTRL_STATE_HIDDEN       0x0010
-#define CTRL_STATE_DEFAULT      0x0020
-#define CTRL_STATE_SELECTED     0x0040
+#define ControlState::ENABLED      0x0001
+#define ControlState::FOCUSED      0x0002
+#define ControlState::PRESSED      0x0004
+#define ControlState::ROLLOVER     0x0008
+#define ControlState::HIDDEN       0x0010
+#define ControlState::DEFAULT      0x0020
+#define ControlState::SELECTED     0x0040
 #define CTRL_CACHING_ALLOWED    0x8000  // set when the control is completely visible (i.e. not clipped)
 */
 UInt32 AquaSalGraphics::getState( ControlState nState )
 {
     const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
-    if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
+    if( !(nState & ControlState::ENABLED) || ! bDrawActive )
     {
-        if( (nState & CTRL_STATE_HIDDEN) == 0 )
+        if( ! (nState & ControlState::HIDDEN) )
             return kThemeStateInactive;
         else
             return kThemeStateUnavailableInactive;
     }
 
-    if( (nState & CTRL_STATE_HIDDEN) != 0 )
+    if( nState & ControlState::HIDDEN )
         return kThemeStateUnavailable;
 
-    if( (nState & CTRL_STATE_PRESSED) != 0 )
+    if( nState & ControlState::PRESSED )
         return kThemeStatePressed;
 
     return kThemeStateActive;
@@ -481,7 +481,7 @@ UInt32 AquaSalGraphics::getState( ControlState nState )
 UInt32 AquaSalGraphics::getTrackState( ControlState nState )
 {
     const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
-    if( (nState & CTRL_STATE_ENABLED) == 0 || ! bDrawActive )
+    if( ! (nState & ControlState::ENABLED) || ! bDrawActive )
             return kThemeTrackInactive;
 
     return kThemeTrackActive;
@@ -527,7 +527,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aComboInfo.value = kThemeButtonOn;
             aComboInfo.adornment = kThemeAdornmentNone;
 
-            if( (nState & CTRL_STATE_FOCUSED) != 0 )
+            if( nState & ControlState::FOCUSED )
                 aComboInfo.adornment |= kThemeAdornmentFocus;
 
             HIThemeDrawButton(&rc, &aComboInfo, mrContext, kHIThemeOrientationNormal,&rc);
@@ -605,7 +605,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 // the Aqua grey theme when the item is selected is drawn here.
                 aMenuItemDrawInfo.itemType = kThemeMenuItemPlain;
 
-                if ((nPart == PART_MENU_ITEM ) && (nState & CTRL_STATE_SELECTED))
+                if ((nPart == PART_MENU_ITEM ) && (nState & ControlState::SELECTED))
                 {
                     // the blue theme when the item is selected is drawn here.
                     aMenuItemDrawInfo.state = kThemeMenuSelected;
@@ -625,10 +625,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 bOK = true;
             }
             else if(( nPart == PART_MENU_ITEM_CHECK_MARK )||( nPart == PART_MENU_ITEM_RADIO_MARK )) {
-                if( nState & CTRL_STATE_PRESSED ) {//checked, else it is not displayed (see vcl/source/window/menu.cxx)
+                if( nState & ControlState::PRESSED ) {//checked, else it is not displayed (see vcl/source/window/menu.cxx)
                     HIThemeTextInfo aTextInfo;
                     aTextInfo.version = 0;
-                    aTextInfo.state = ((nState & CTRL_STATE_ENABLED)==0) ? kThemeStateInactive: kThemeStateActive;
+                    aTextInfo.state = (nState & ControlState::ENABLED) ? kThemeStateInactive: kThemeStateActive;
                     aTextInfo.fontID = kThemeMenuItemMarkFont;
                     aTextInfo.horizontalFlushness=kHIThemeTextHorizontalFlushCenter;
                     aTextInfo.verticalFlushness=kHIThemeTextVerticalFlushTop;
@@ -636,7 +636,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     aTextInfo.truncationPosition=kHIThemeTextTruncationNone;
                     //aTextInfo.truncationMaxLines unused because of kHIThemeTextTruncationNone
 
-                    if( nState & CTRL_STATE_SELECTED) aTextInfo.state = kThemeStatePressed; //item highlighted
+                    if( nState & ControlState::SELECTED) aTextInfo.state = kThemeStatePressed; //item highlighted
 
                     UniChar mark=( nPart == PART_MENU_ITEM_CHECK_MARK ) ? kCheckUnicode: kBulletUnicode;//0x2713;
                     CFStringRef cfString = CFStringCreateWithCharactersNoCopy(kCFAllocatorDefault, &mark, 1, kCFAllocatorNull);
@@ -683,7 +683,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 rc.origin.x += FOCUS_RING_WIDTH/2;
                 rc.size.width -= FOCUS_RING_WIDTH;
 
-                if( (nState & CTRL_STATE_DEFAULT) != 0 )
+                if( nState & ControlState::DEFAULT )
                 {
                     AquaBlinker::Blink( mpFrame, buttonRect );
                     // show correct animation phase
@@ -701,10 +701,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aPushInfo.state = getState( nState );
             aPushInfo.value = ImplGetButtonValue( aValue.getTristateVal() );
 
-            aPushInfo.adornment = (( nState & CTRL_STATE_DEFAULT ) != 0) ?
-            kThemeAdornmentDefault :
-            kThemeAdornmentNone;
-            if( (nState & CTRL_STATE_FOCUSED) != 0 )
+            aPushInfo.adornment = ( nState & ControlState::DEFAULT ) ?
+               kThemeAdornmentDefault :
+               kThemeAdornmentNone;
+            if( nState & ControlState::FOCUSED )
                 aPushInfo.adornment |= kThemeAdornmentFocus;
 
             HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, NULL );
@@ -732,10 +732,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             ButtonValue aButtonValue = aValue.getTristateVal();
             aInfo.value = ImplGetButtonValue( aButtonValue );
 
-            aInfo.adornment = (( nState & CTRL_STATE_DEFAULT ) != 0) ?
-            kThemeAdornmentDefault :
-            kThemeAdornmentNone;
-            if( (nState & CTRL_STATE_FOCUSED) != 0 )
+            aInfo.adornment = ( nState & ControlState::DEFAULT ) ?
+              kThemeAdornmentDefault :
+              kThemeAdornmentNone;
+            if( nState & ControlState::FOCUSED )
                 aInfo.adornment |= kThemeAdornmentFocus;
             HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
             bOK = true;
@@ -845,7 +845,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTrackDraw.attributes = kThemeTrackShowThumb;
                 if( nPart == PART_TRACK_HORZ_AREA )
                     aTrackDraw.attributes |= kThemeTrackHorizontal;
-                aTrackDraw.enableState = (nState & CTRL_STATE_ENABLED)
+                aTrackDraw.enableState = (nState & ControlState::ENABLED)
                                          ? kThemeTrackActive : kThemeTrackInactive;
 
                 SliderTrackInfo aSlideInfo;
@@ -888,21 +888,21 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aScrollInfo.viewsize = pScrollbarVal->mnVisibleSize;
                 aScrollInfo.pressState = 0;
 
-                if ( pScrollbarVal->mnButton1State & CTRL_STATE_ENABLED )
+                if ( pScrollbarVal->mnButton1State & ControlState::ENABLED )
                 {
-                    if ( pScrollbarVal->mnButton1State & CTRL_STATE_PRESSED )
+                    if ( pScrollbarVal->mnButton1State & ControlState::PRESSED )
                         aScrollInfo.pressState = kThemeTopOutsideArrowPressed;
                 }
 
-                if ( pScrollbarVal->mnButton2State & CTRL_STATE_ENABLED )
+                if ( pScrollbarVal->mnButton2State & ControlState::ENABLED )
                 {
-                    if ( pScrollbarVal->mnButton2State & CTRL_STATE_PRESSED )
+                    if ( pScrollbarVal->mnButton2State & ControlState::PRESSED )
                         aScrollInfo.pressState = kThemeBottomOutsideArrowPressed;
                 }
 
-                if ( pScrollbarVal->mnThumbState & CTRL_STATE_ENABLED )
+                if ( pScrollbarVal->mnThumbState & ControlState::ENABLED )
                 {
-                    if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )
+                    if ( pScrollbarVal->mnThumbState & ControlState::PRESSED )
                         aScrollInfo.pressState = kThemeThumbPressed;
                 }
 
@@ -945,10 +945,10 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             aTabItemDrawInfo.size=kHIThemeTabSizeNormal;
             aTabItemDrawInfo.adornment=kHIThemeTabAdornmentTrailingSeparator;
             //State
-            if(nState & CTRL_STATE_SELECTED) {
+            if(nState & ControlState::SELECTED) {
                 aTabItemDrawInfo.style=kThemeTabFront;
             }
-            if(nState & CTRL_STATE_FOCUSED) {
+            if(nState & ControlState::FOCUSED) {
                 aTabItemDrawInfo.adornment|=kHIThemeTabAdornmentFocus;
             }
 
@@ -1001,7 +1001,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aListInfo.value = kThemeButtonOn;
 
                 aListInfo.adornment = kThemeAdornmentDefault;
-                if( (nState & CTRL_STATE_FOCUSED) != 0 )
+                if( nState & ControlState::FOCUSED )
                     aListInfo.adornment |= kThemeAdornmentFocus;
 
                 HIThemeDrawButton(&rc, &aListInfo, mrContext, kHIThemeOrientationNormal,&rc);
@@ -1020,7 +1020,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 rc.size.height+=1;
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
-                if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
+                if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
                 bOK=true;
                 break;
@@ -1049,7 +1049,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
             HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
-            if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
+            if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
             bOK=true;
         }
@@ -1078,12 +1078,12 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
                 HIThemeDrawFrame(&rc, &aTextDrawInfo, mrContext, kHIThemeOrientationNormal);
 
-                if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
+                if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
                 //buttons:
                 const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
-                ControlState nUpperState = CTRL_STATE_ENABLED;//state of the upper button
-                ControlState nLowerState = CTRL_STATE_ENABLED;//and of the lower button
+                ControlState nUpperState = ControlState::ENABLED;//state of the upper button
+                ControlState nLowerState = ControlState::ENABLED;//and of the lower button
                 if(pSpinButtonVal) {//pSpinButtonVal is sometimes null
                     nUpperState = (ControlState) pSpinButtonVal->mnUpperState;
                     nLowerState = (ControlState) pSpinButtonVal->mnLowerState;
@@ -1091,13 +1091,13 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     HIThemeButtonDrawInfo aSpinInfo;
                     aSpinInfo.kind = kThemeIncDecButton;
                     aSpinInfo.state = kThemeStateActive;
-                    if(nUpperState & CTRL_STATE_PRESSED)
+                    if(nUpperState & ControlState::PRESSED)
                         aSpinInfo.state = kThemeStatePressedUp;
-                    else if(nLowerState & CTRL_STATE_PRESSED)
+                    else if(nLowerState & ControlState::PRESSED)
                         aSpinInfo.state = kThemeStatePressedDown;
-                    else if((nUpperState & ~CTRL_STATE_ENABLED)||(nLowerState & ~CTRL_STATE_ENABLED))
+                    else if((nUpperState & ~ControlState::ENABLED)||(nLowerState & ~ControlState::ENABLED))
                         aSpinInfo.state = kThemeStateInactive;
-                    else if((nUpperState & CTRL_STATE_ROLLOVER)||(nLowerState & CTRL_STATE_ROLLOVER))
+                    else if((nUpperState & ControlState::ROLLOVER)||(nLowerState & ControlState::ROLLOVER))
                         aSpinInfo.state = kThemeStateRollover;
 
                     Rectangle aSpinRect( pSpinButtonVal->maUpperRect );
@@ -1122,11 +1122,11 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                                                     break;
                     }
 
-                    aSpinInfo.adornment = ( ((nUpperState & CTRL_STATE_DEFAULT) != 0 ) ||
-                                            ((nLowerState & CTRL_STATE_DEFAULT) != 0 )) ?
+                    aSpinInfo.adornment = ( (nUpperState & ControlState::DEFAULT) ||
+                                            (nLowerState & ControlState::DEFAULT) ) ?
                                        kThemeAdornmentDefault :
                                        kThemeAdornmentNone;
-                    if( ((nUpperState & CTRL_STATE_FOCUSED) != 0 ) || ((nLowerState & CTRL_STATE_FOCUSED) != 0 ))
+                    if( (nUpperState & ControlState::FOCUSED) || (nLowerState & ControlState::FOCUSED))
                         aSpinInfo.adornment |= kThemeAdornmentFocus;
 
                     HIThemeDrawButton( &buttonRc, &aSpinInfo, mrContext, kHIThemeOrientationNormal, NULL );

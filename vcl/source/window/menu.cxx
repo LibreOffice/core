@@ -1402,7 +1402,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize( const vcl::Window* pWin, long& rCheck
             if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
                                               ControlPart(PART_MENU_ITEM_CHECK_MARK),
                                               aCtrlRegion,
-                                              ControlState(CTRL_STATE_ENABLED),
+                                              ControlState(ControlState::ENABLED),
                                               aVal,
                                               OUString(),
                                               aNativeBounds,
@@ -1418,7 +1418,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize( const vcl::Window* pWin, long& rCheck
             if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
                                               ControlPart(PART_MENU_ITEM_RADIO_MARK),
                                               aCtrlRegion,
-                                              ControlState(CTRL_STATE_ENABLED),
+                                              ControlState(ControlState::ENABLED),
                                               aVal,
                                               OUString(),
                                               aNativeBounds,
@@ -1446,7 +1446,7 @@ bool Menu::ImplGetNativeSubmenuArrowSize( vcl::Window* pWin, Size& rArrowSize, l
             if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
                                               ControlPart(PART_MENU_SUBMENU_ARROW),
                                               aCtrlRegion,
-                                              ControlState(CTRL_STATE_ENABLED),
+                                              ControlState(ControlState::ENABLED),
                                               aVal,
                                               OUString(),
                                               aNativeBounds,
@@ -1678,7 +1678,7 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
             if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
                                                  ControlPart(PART_ENTIRE_CONTROL),
                                                  aCtrlRegion,
-                                                 ControlState(CTRL_STATE_ENABLED),
+                                                 ControlState(ControlState::ENABLED),
                                                  aVal,
                                                  OUString(),
                                                  aNativeBounds,
@@ -1711,7 +1711,7 @@ static void ImplPaintCheckBackground( vcl::Window* i_pWindow, const Rectangle& i
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( i_rRect );
-        ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
+        ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
 
@@ -1822,11 +1822,11 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
                                                         PART_MENU_SEPARATOR ) )
                     {
-                        ControlState nState = 0;
+                        ControlState nState = ControlState::NONE;
                         if ( pData->bEnabled )
-                            nState |= CTRL_STATE_ENABLED;
+                            nState |= ControlState::ENABLED;
                         if ( bHighlighted )
-                            nState |= CTRL_STATE_SELECTED;
+                            nState |= ControlState::SELECTED;
                         Size aSz( pData->aSz );
                         aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX;
                         Rectangle aItemRect( aPos, aSz );
@@ -1876,16 +1876,16 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                                                  ? PART_MENU_ITEM_RADIO_MARK
                                                  : PART_MENU_ITEM_CHECK_MARK);
 
-                            ControlState nState = 0;
+                            ControlState nState = ControlState::NONE;
 
                             if ( pData->bChecked )
-                                nState |= CTRL_STATE_PRESSED;
+                                nState |= ControlState::PRESSED;
 
                             if ( pData->bEnabled )
-                                nState |= CTRL_STATE_ENABLED;
+                                nState |= ControlState::ENABLED;
 
                             if ( bHighlighted )
-                                nState |= CTRL_STATE_SELECTED;
+                                nState |= ControlState::SELECTED;
 
                             long nCtrlHeight = (pData->nBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;
@@ -2015,7 +2015,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
                                                         PART_MENU_SUBMENU_ARROW ) )
                     {
-                        ControlState nState = 0;
+                        ControlState nState = ControlState::NONE;
                         Size aTmpSz( 0, 0 );
                         long aSpacing = 0;
 
@@ -2027,9 +2027,9 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                         }
 
                         if ( pData->bEnabled )
-                            nState |= CTRL_STATE_ENABLED;
+                            nState |= ControlState::ENABLED;
                         if ( bHighlighted )
-                            nState |= CTRL_STATE_SELECTED;
+                            nState |= ControlState::SELECTED;
 
                         aTmpPos.X() = aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpaceX;
                         aTmpPos.Y() = aPos.Y() + ( pData->aSz.Height() - aTmpSz.Height() ) / 2;

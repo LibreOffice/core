@@ -3156,9 +3156,9 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                 {
                     ImplControlValue    aControlValue;
                     Rectangle           aCtrlRegion( aPos,  pImg->GetSizePixel() );
-                    ControlState        nState = 0;
+                    ControlState        nState = ControlState::NONE;
 
-                    if ( IsEnabled() )  nState |= CTRL_STATE_ENABLED;
+                    if ( IsEnabled() )  nState |= ControlState::ENABLED;
 
                     if ( IsExpanded(pEntry) )
                         aControlValue.setTristateVal( BUTTONVALUE_ON );//expanded node

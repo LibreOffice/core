@@ -391,11 +391,11 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
     if( nControlPart == PART_BUTTON_DOWN )
     {
         *pLunaPart = SPNP_DOWN;
-        if( rState & CTRL_STATE_PRESSED )
+        if( rState & ControlState::PRESSED )
             *pLunaState = DNS_PRESSED;
-        else if( !(rState & CTRL_STATE_ENABLED) )
+        else if( !(rState & ControlState::ENABLED) )
             *pLunaState = DNS_DISABLED;
-        else if( rState & CTRL_STATE_ROLLOVER )
+        else if( rState & ControlState::ROLLOVER )
             *pLunaState = DNS_HOT;
         else
             *pLunaState = DNS_NORMAL;
@@ -403,11 +403,11 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
     if( nControlPart == PART_BUTTON_UP )
     {
         *pLunaPart = SPNP_UP;
-        if( rState & CTRL_STATE_PRESSED )
+        if( rState & ControlState::PRESSED )
             *pLunaState = UPS_PRESSED;
-        else if( !(rState & CTRL_STATE_ENABLED) )
+        else if( !(rState & ControlState::ENABLED) )
             *pLunaState = UPS_DISABLED;
-        else if( rState & CTRL_STATE_ROLLOVER )
+        else if( rState & ControlState::ROLLOVER )
             *pLunaState = UPS_HOT;
         else
             *pLunaState = UPS_NORMAL;
@@ -415,11 +415,11 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
     if( nControlPart == PART_BUTTON_RIGHT )
     {
         *pLunaPart = SPNP_UPHORZ;
-        if( rState & CTRL_STATE_PRESSED )
+        if( rState & ControlState::PRESSED )
             *pLunaState = DNHZS_PRESSED;
-        else if( !(rState & CTRL_STATE_ENABLED) )
+        else if( !(rState & ControlState::ENABLED) )
             *pLunaState = DNHZS_DISABLED;
-        else if( rState & CTRL_STATE_ROLLOVER )
+        else if( rState & ControlState::ROLLOVER )
             *pLunaState = DNHZS_HOT;
         else
             *pLunaState = DNHZS_NORMAL;
@@ -427,11 +427,11 @@ void ImplConvertSpinbuttonValues( int nControlPart, const ControlState& rState, 
     if( nControlPart == PART_BUTTON_LEFT )
     {
         *pLunaPart = SPNP_DOWNHORZ;
-        if( rState & CTRL_STATE_PRESSED )
+        if( rState & ControlState::PRESSED )
             *pLunaState = UPHZS_PRESSED;
-        else if( !(rState & CTRL_STATE_ENABLED) )
+        else if( !(rState & ControlState::ENABLED) )
             *pLunaState = UPHZS_DISABLED;
-        else if( rState & CTRL_STATE_ROLLOVER )
+        else if( rState & ControlState::ROLLOVER )
             *pLunaState = UPHZS_HOT;
         else
             *pLunaState = UPHZS_NORMAL;
@@ -539,11 +539,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_UP )
         {
             iPart = SBP_ARROWBTN;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = ABS_UPPRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = ABS_UPDISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = ABS_UPHOT;
             else
                 iState = ABS_UPNORMAL;
@@ -553,11 +553,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_DOWN )
         {
             iPart = SBP_ARROWBTN;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = ABS_DOWNPRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = ABS_DOWNDISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = ABS_DOWNHOT;
             else
                 iState = ABS_DOWNNORMAL;
@@ -567,11 +567,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_LEFT )
         {
             iPart = SBP_ARROWBTN;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = ABS_LEFTPRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = ABS_LEFTDISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = ABS_LEFTHOT;
             else
                 iState = ABS_LEFTNORMAL;
@@ -581,11 +581,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_RIGHT )
         {
             iPart = SBP_ARROWBTN;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = ABS_RIGHTPRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = ABS_RIGHTDISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = ABS_RIGHTHOT;
             else
                 iState = ABS_RIGHTNORMAL;
@@ -595,11 +595,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
             iPart = (nPart == PART_THUMB_HORZ) ? SBP_THUMBBTNHORZ : SBP_THUMBBTNVERT;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = SCRBS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = SCRBS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = SCRBS_HOT;
             else
                 iState = SCRBS_NORMAL;
@@ -630,11 +630,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 case PART_TRACK_VERT_LOWER: iPart = SBP_LOWERTRACKVERT; break;
             }
 
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = SCRBS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = SCRBS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = SCRBS_HOT;
             else
                 iState = SCRBS_NORMAL;
@@ -689,11 +689,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_DOWN )
         {
             iPart = SPNP_DOWN;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = DNS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = DNS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = DNS_HOT;
             else
                 iState = DNS_NORMAL;
@@ -701,11 +701,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_UP )
         {
             iPart = SPNP_UP;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = UPS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = UPS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = UPS_HOT;
             else
                 iState = UPS_NORMAL;
@@ -713,11 +713,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_RIGHT )
         {
             iPart = SPNP_DOWNHORZ;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = DNHZS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = DNHZS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = DNHZS_HOT;
             else
                 iState = DNHZS_NORMAL;
@@ -725,11 +725,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_LEFT )
         {
             iPart = SPNP_UPHORZ;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = UPHZS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = UPHZS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = UPHZS_HOT;
             else
                 iState = UPHZS_NORMAL;
@@ -742,11 +742,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_DOWN )
         {
             iPart = CP_DROPDOWNBUTTON;
-            if( nState & CTRL_STATE_PRESSED )
+            if( nState & ControlState::PRESSED )
                 iState = CBXS_PRESSED;
-            else if( !(nState & CTRL_STATE_ENABLED) )
+            else if( !(nState & ControlState::ENABLED) )
                 iState = CBXS_DISABLED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = CBXS_HOT;
             else
                 iState = CBXS_NORMAL;
@@ -756,15 +756,15 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == CTRL_PUSHBUTTON )
     {
         iPart = BP_PUSHBUTTON;
-        if( nState & CTRL_STATE_PRESSED )
+        if( nState & ControlState::PRESSED )
             iState = PBS_PRESSED;
-        else if( !(nState & CTRL_STATE_ENABLED) )
+        else if( !(nState & ControlState::ENABLED) )
             iState = PBS_DISABLED;
-        else if( nState & CTRL_STATE_ROLLOVER )
+        else if( nState & ControlState::ROLLOVER )
             iState = PBS_HOT;
-        else if( nState & CTRL_STATE_DEFAULT )
+        else if( nState & ControlState::DEFAULT )
             iState = PBS_DEFAULTED;
-        //else if( nState & CTRL_STATE_FOCUSED )
+        //else if( nState & ControlState::FOCUSED )
         //    iState = PBS_DEFAULTED;    // may need to draw focus rect
         else
             iState = PBS_NORMAL;
@@ -777,16 +777,16 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         iPart = BP_RADIOBUTTON;
         bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
 
-        if( nState & CTRL_STATE_PRESSED )
+        if( nState & ControlState::PRESSED )
             iState = bChecked ? RBS_CHECKEDPRESSED : RBS_UNCHECKEDPRESSED;
-        else if( !(nState & CTRL_STATE_ENABLED) )
+        else if( !(nState & ControlState::ENABLED) )
             iState = bChecked ? RBS_CHECKEDDISABLED : RBS_UNCHECKEDDISABLED;
-        else if( nState & CTRL_STATE_ROLLOVER )
+        else if( nState & ControlState::ROLLOVER )
             iState = bChecked ? RBS_CHECKEDHOT : RBS_UNCHECKEDHOT;
         else
             iState = bChecked ? RBS_CHECKEDNORMAL : RBS_UNCHECKEDNORMAL;
 
-        //if( nState & CTRL_STATE_FOCUSED )
+        //if( nState & ControlState::FOCUSED )
         //    iState |= PBS_DEFAULTED;    // may need to draw focus rect
 
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
@@ -797,20 +797,20 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         iPart = BP_CHECKBOX;
         ButtonValue v = aValue.getTristateVal();
 
-        if( nState & CTRL_STATE_PRESSED )
+        if( nState & ControlState::PRESSED )
             iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDPRESSED :
                     ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDPRESSED : CBS_MIXEDPRESSED );
-        else if( !(nState & CTRL_STATE_ENABLED) )
+        else if( !(nState & ControlState::ENABLED) )
             iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDDISABLED :
                     ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDDISABLED : CBS_MIXEDDISABLED );
-        else if( nState & CTRL_STATE_ROLLOVER )
+        else if( nState & ControlState::ROLLOVER )
             iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDHOT :
                     ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDHOT : CBS_MIXEDHOT );
         else
             iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDNORMAL :
                     ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDNORMAL : CBS_MIXEDNORMAL );
 
-        //if( nState & CTRL_STATE_FOCUSED )
+        //if( nState & ControlState::FOCUSED )
         //    iState |= PBS_DEFAULTED;    // may need to draw focus rect
 
         //SIZE sz;
@@ -823,11 +823,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( ( nType == CTRL_EDITBOX ) || ( nType == CTRL_MULTILINE_EDITBOX ) )
     {
         iPart = EP_EDITTEXT;
-        if( !(nState & CTRL_STATE_ENABLED) )
+        if( !(nState & ControlState::ENABLED) )
             iState = ETS_DISABLED;
-        else if( nState & CTRL_STATE_FOCUSED )
+        else if( nState & ControlState::FOCUSED )
             iState = ETS_FOCUSED;
-        else if( nState & CTRL_STATE_ROLLOVER )
+        else if( nState & ControlState::ROLLOVER )
             iState = ETS_HOT;
         else
             iState = ETS_NORMAL;
@@ -875,9 +875,9 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iPart = TABP_TABITEMRIGHTEDGE;
         else iPart = TABP_TABITEM;
 
-        if( !(nState & CTRL_STATE_ENABLED) )
+        if( !(nState & ControlState::ENABLED) )
             iState = TILES_DISABLED;
-        else if( nState & CTRL_STATE_SELECTED )
+        else if( nState & ControlState::SELECTED )
         {
             iState = TILES_SELECTED;
             // increase the selected tab
@@ -892,9 +892,9 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             rc.top-=2;
             rc.bottom+=2;
         }
-        else if( nState & CTRL_STATE_ROLLOVER )
+        else if( nState & ControlState::ROLLOVER )
             iState = TILES_HOT;
-        else if( nState & CTRL_STATE_FOCUSED )
+        else if( nState & ControlState::FOCUSED )
             iState = TILES_FOCUSED;    // may need to draw focus rect
         else
             iState = TILES_NORMAL;
@@ -907,14 +907,14 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         {
             iPart = TP_BUTTON;
             bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
-            if( !(nState & CTRL_STATE_ENABLED) )
+            if( !(nState & ControlState::ENABLED) )
                 //iState = TS_DISABLED;
                 // disabled buttons are typically not painted at all but we need visual
                 // feedback when travelling by keyboard over disabled entries
                 iState = TS_HOT;
-            else if( nState & CTRL_STATE_PRESSED )
+            else if( nState & ControlState::PRESSED )
                 iState = TS_PRESSED;
-            else if( nState & CTRL_STATE_ROLLOVER )
+            else if( nState & ControlState::ROLLOVER )
                 iState = bChecked ? TS_HOTCHECKED : TS_HOT;
             else
                 iState = bChecked ? TS_CHECKED : TS_NORMAL;
@@ -967,20 +967,20 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
         else if( nPart == PART_MENU_ITEM )
         {
-            if( nState & CTRL_STATE_ENABLED )
+            if( nState & ControlState::ENABLED )
             {
-                if( nState & CTRL_STATE_SELECTED )
+                if( nState & ControlState::SELECTED )
                     iState = MBI_PUSHED;
-                else if( nState & CTRL_STATE_ROLLOVER )
+                else if( nState & ControlState::ROLLOVER )
                     iState = MBI_HOT;
                 else
                     iState = MBI_NORMAL;
             }
             else
             {
-                if( nState & CTRL_STATE_SELECTED )
+                if( nState & ControlState::SELECTED )
                     iState = MBI_DISABLEDPUSHED;
-                else if( nState & CTRL_STATE_ROLLOVER )
+                else if( nState & ControlState::ROLLOVER )
                     iState = MBI_DISABLEDHOT;
                 else
                     iState = MBI_DISABLED;
@@ -1040,7 +1040,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         aThumbRect.right  = pVal->maThumbRect.Right();
         aThumbRect.bottom = pVal->maThumbRect.Bottom();
         iPart = (nPart == PART_TRACK_HORZ_AREA) ? TKP_THUMB : TKP_THUMBVERT;
-        iState = (nState & CTRL_STATE_ENABLED) ? TUS_NORMAL : TUS_DISABLED;
+        iState = (nState & ControlState::ENABLED) ? TUS_NORMAL : TUS_DISABLED;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, aThumbRect, aCaption );
     }
 
@@ -1089,15 +1089,15 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
             else if( nPart == PART_MENU_ITEM )
             {
-                if( (nState & CTRL_STATE_ENABLED) )
-                    iState = (nState & CTRL_STATE_SELECTED) ? MPI_HOT : MPI_NORMAL;
+                if( (nState & ControlState::ENABLED) )
+                    iState = (nState & ControlState::SELECTED) ? MPI_HOT : MPI_NORMAL;
                 else
-                    iState = (nState & CTRL_STATE_SELECTED) ? MPI_DISABLEDHOT : MPI_DISABLED;
+                    iState = (nState & ControlState::SELECTED) ? MPI_DISABLEDHOT : MPI_DISABLED;
                 return ImplDrawTheme( hTheme, hDC, MENU_POPUPITEM, iState, rc, aCaption );
             }
             else if( nPart == PART_MENU_ITEM_CHECK_MARK || nPart == PART_MENU_ITEM_RADIO_MARK )
             {
-                if( (nState & CTRL_STATE_PRESSED) )
+                if( (nState & ControlState::PRESSED) )
                 {
                     RECT aBGRect = rc;
                     if( aValue.getType() == CTRL_MENU_POPUP )
@@ -1117,12 +1117,12 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                         }
                         rc = aBGRect;
                     }
-                    iState = (nState & CTRL_STATE_ENABLED) ? MCB_NORMAL : MCB_DISABLED;
+                    iState = (nState & ControlState::ENABLED) ? MCB_NORMAL : MCB_DISABLED;
                     ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
                     if( nPart == PART_MENU_ITEM_CHECK_MARK )
-                        iState = (nState & CTRL_STATE_ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
+                        iState = (nState & ControlState::ENABLED) ? MC_CHECKMARKNORMAL : MC_CHECKMARKDISABLED;
                     else
-                        iState = (nState & CTRL_STATE_ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
+                        iState = (nState & ControlState::ENABLED) ? MC_BULLETNORMAL : MC_BULLETDISABLED;
                     return ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption );
                 }
                 else
@@ -1501,7 +1501,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             if ( pValue->isBothAligned() )
                 --aControlRect.Right();
 
-            if ( nState & CTRL_STATE_SELECTED )
+            if ( nState & ControlState::SELECTED )
             {
                 aControlRect.Left() -= 2;
                 if ( pValue && !pValue->isBothAligned() )

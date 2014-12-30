@@ -2754,7 +2754,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     Rectangle aContent, aBound;
     if( GetNativeControlRegion(
                    eCtrlType, PART_ENTIRE_CONTROL,
-                   aRect, 0, aControlValue, OUString(), aBound, aContent) )
+                   aRect, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
     {
         if( aBound.GetHeight() > aSize.Height() )
             aSize.Height() = aBound.GetHeight();

@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 /* Control Types:
  *
@@ -232,17 +233,21 @@ typedef sal_uInt32      ControlPart;
  *   functions until an ENABLED or HIDDEN is passed
  *   in the ControlState.
  */
-
-typedef sal_uInt32      ControlState;
-
-#define CTRL_STATE_ENABLED      0x0001
-#define CTRL_STATE_FOCUSED      0x0002
-#define CTRL_STATE_PRESSED      0x0004
-#define CTRL_STATE_ROLLOVER     0x0008
-#define CTRL_STATE_HIDDEN       0x0010
-#define CTRL_STATE_DEFAULT      0x0020
-#define CTRL_STATE_SELECTED     0x0040
-#define CTRL_CACHING_ALLOWED    0x8000  // set when the control is completely visible (i.e. not clipped)
+enum class ControlState {
+    NONE         = 0,
+    ENABLED      = 0x0001,
+    FOCUSED      = 0x0002,
+    PRESSED      = 0x0004,
+    ROLLOVER     = 0x0008,
+    HIDDEN       = 0x0010,
+    DEFAULT      = 0x0020,
+    SELECTED     = 0x0040,
+    CACHING_ALLOWED  = 0x8000,  // set when the control is completely visible (i.e. not clipped)
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0x8007f> {};
+}
 
 /* ButtonValue:
  *
@@ -322,8 +327,8 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         : ImplControlValue( CTRL_SCROLLBAR, BUTTONVALUE_DONTKNOW, 0 )
         {
             mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;
-            mnButton1State = 0; mnButton2State = 0;
-            mnThumbState = 0; mnPage1State = 0; mnPage2State = 0;
+            mnButton1State = ControlState::NONE; mnButton2State = ControlState::NONE;
+            mnThumbState = ControlState::NONE; mnPage1State = ControlState::NONE; mnPage2State = ControlState::NONE;
         };
         virtual ~ScrollbarValue();
         virtual ScrollbarValue* clone() const SAL_OVERRIDE;
@@ -340,7 +345,7 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
 
         SliderValue()
         : ImplControlValue( CTRL_SLIDER, BUTTONVALUE_DONTKNOW, 0 )
-        , mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( 0 )
+        , mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( ControlState::NONE )
         {}
         virtual ~SliderValue();
         virtual SliderValue* clone() const SAL_OVERRIDE;
@@ -397,8 +402,8 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 
         SpinbuttonValue()
             : ImplControlValue( CTRL_SPINBUTTONS, BUTTONVALUE_DONTKNOW, 0 )
-            , mnUpperState(0)
-            , mnLowerState(0)
+            , mnUpperState(ControlState::NONE)
+            , mnLowerState(ControlState::NONE)
             , mnUpperPart(0)
             , mnLowerPart(0)
         {

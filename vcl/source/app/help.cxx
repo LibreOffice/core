@@ -356,7 +356,7 @@ void HelpTextWindow::Paint( const Rectangle& )
         Rectangle aCtrlRegion( Point( 0, 0 ), GetOutputSizePixel() );
         ImplControlValue    aControlValue;
         bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                       0, aControlValue, OUString() );
+                                        ControlState::NONE, aControlValue, OUString() );
     }
 
     // paint text

@@ -42,22 +42,22 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
     *nGTKShadow = GTK_SHADOW_OUT;
     *nGTKState = GTK_STATE_FLAG_NORMAL;
 
-    if (!( nVCLState & CTRL_STATE_ENABLED ))
+    if (!( nVCLState & ControlState::ENABLED ))
         *nGTKState = GTK_STATE_FLAG_INSENSITIVE;
 
-    if ( nVCLState & CTRL_STATE_PRESSED )
+    if ( nVCLState & ControlState::PRESSED )
     {
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_ACTIVE);
         *nGTKShadow = GTK_SHADOW_IN;
     }
 
-    if ( nVCLState & CTRL_STATE_ROLLOVER )
+    if ( nVCLState & ControlState::ROLLOVER )
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_PRELIGHT);
 
-    if ( nVCLState & CTRL_STATE_SELECTED )
+    if ( nVCLState & ControlState::SELECTED )
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_SELECTED);
 
-    if ( nVCLState & CTRL_STATE_FOCUSED )
+    if ( nVCLState & ControlState::FOCUSED )
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_FOCUSED);
 }
 
@@ -412,7 +412,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     if ( has_slider )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateFlags, &shadowType );
-        if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )
+        if ( pScrollbarVal->mnThumbState & ControlState::PRESSED )
             stateFlags = (GtkStateFlags) (stateFlags | GTK_STATE_PRELIGHT);
 
         gtk_style_context_save(context);
@@ -601,9 +601,9 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
     GtkShadowType        shadowType;
     const SpinbuttonValue *    pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
     ControlPart        upBtnPart = PART_BUTTON_UP;
-    ControlState        upBtnState = CTRL_STATE_ENABLED;
+    ControlState        upBtnState = ControlState::ENABLED;
     ControlPart        downBtnPart = PART_BUTTON_DOWN;
-    ControlState        downBtnState = CTRL_STATE_ENABLED;
+    ControlState        downBtnState = ControlState::ENABLED;
 
     if ( pSpinVal )
     {

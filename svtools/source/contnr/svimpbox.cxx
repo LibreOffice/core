@@ -1055,7 +1055,7 @@ void SvImpLBox::DrawNet()
         ImplControlValue    aControlValue;
         Point  aTemp(0,0);   // temporary needed for g++ 3.3.5
         Rectangle aCtrlRegion( aTemp, Size( 0, 0 ) );
-        ControlState        nState = CTRL_STATE_ENABLED;
+        ControlState        nState = ControlState::ENABLED;
         if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
                                       aCtrlRegion, nState, aControlValue, OUString() ) )
         {

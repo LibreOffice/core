@@ -593,7 +593,7 @@ void SplashScreen::Paint( const Rectangle&)
         Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                             CTRL_STATE_ENABLED, aValue, OUString(),
+                                             ControlState::ENABLED, aValue, OUString(),
                                              aNativeControlRegion, aNativeContentRegion ) )
         {
               long nProgressHeight = aNativeControlRegion.GetHeight();
@@ -602,7 +602,7 @@ void SplashScreen::Paint( const Rectangle&)
         }
 
         if( (DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) )
+                                            ControlState::ENABLED, aValue, _sProgressText )) )
         {
             return;
         }

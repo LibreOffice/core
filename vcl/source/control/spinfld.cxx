@@ -43,28 +43,28 @@ void ImplGetSpinbuttonValue( vcl::Window *pWin, const Rectangle& rUpperRect,
 
     Point aPointerPos = pWin->GetPointerPosPixel();
 
-    ControlState nState = CTRL_STATE_ENABLED;
+    ControlState nState = ControlState::ENABLED;
     if ( bUpperIn )
-        nState |= CTRL_STATE_PRESSED;
+        nState |= ControlState::PRESSED;
     if ( !pWin->IsEnabled() || !bUpperEnabled )
-        nState &= ~CTRL_STATE_ENABLED;
+        nState &= ~ControlState::ENABLED;
     if ( pWin->HasFocus() )
-        nState |= CTRL_STATE_FOCUSED;
+        nState |= ControlState::FOCUSED;
     if( pWin->IsMouseOver() && rUpperRect.IsInside( aPointerPos ) )
-        nState |= CTRL_STATE_ROLLOVER;
+        nState |= ControlState::ROLLOVER;
     rValue.mnUpperState = nState;
 
-    nState = CTRL_STATE_ENABLED;
+    nState = ControlState::ENABLED;
     if ( bLowerIn )
-        nState |= CTRL_STATE_PRESSED;
+        nState |= ControlState::PRESSED;
     if ( !pWin->IsEnabled() || !bLowerEnabled )
-        nState &= ~CTRL_STATE_ENABLED;
+        nState &= ~ControlState::ENABLED;
     if ( pWin->HasFocus() )
-        nState |= CTRL_STATE_FOCUSED;
+        nState |= ControlState::FOCUSED;
     // for overlapping spins: highlight only one
     if( pWin->IsMouseOver() && rLowerRect.IsInside( aPointerPos ) &&
                               !rUpperRect.IsInside( aPointerPos ) )
-        nState |= CTRL_STATE_ROLLOVER;
+        nState |= ControlState::ROLLOVER;
     rValue.mnLowerState = nState;
 
     rValue.mnUpperPart = bHorz ? PART_BUTTON_LEFT : PART_BUTTON_UP;
@@ -83,7 +83,7 @@ bool ImplDrawNativeSpinfield( vcl::Window *pWin, const SpinbuttonValue& rSpinbut
             pWin->IsNativeControlSupported(CTRL_SPINBOX, rSpinbuttonValue.mnLowerPart) )
         {
             // only paint the embedded spin buttons, all buttons are painted at once
-            bNativeOK = pWin->DrawNativeControl( CTRL_SPINBOX, PART_ALL_BUTTONS, Rectangle(), CTRL_STATE_ENABLED,
+            bNativeOK = pWin->DrawNativeControl( CTRL_SPINBOX, PART_ALL_BUTTONS, Rectangle(), ControlState::ENABLED,
                         rSpinbuttonValue, OUString() );
         }
         else
@@ -107,13 +107,13 @@ bool ImplDrawNativeSpinfield( vcl::Window *pWin, const SpinbuttonValue& rSpinbut
             Rectangle aNatRgn( aPt, aSize );
             if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
                 pBorder->GetNativeControlRegion( CTRL_SPINBOX, PART_ENTIRE_CONTROL,
-                                                 aNatRgn, 0, rSpinbuttonValue, OUString(), aBound, aContent) )
+                                                 aNatRgn, ControlState::NONE, rSpinbuttonValue, OUString(), aBound, aContent) )
             {
                 aSize = aContent.GetSize();
             }
 
             Rectangle aRgn( aPt, aSize );
-            bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
+            bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, ControlState::ENABLED,
                         rSpinbuttonValue, OUString() );
 
             pBorder->SetClipRegion(vcl::Region(oldRgn));
@@ -129,7 +129,7 @@ bool ImplDrawNativeSpinbuttons( vcl::Window *pWin, const SpinbuttonValue& rSpinb
     if( pWin->IsNativeControlSupported(CTRL_SPINBUTTONS, PART_ENTIRE_CONTROL) )
     {
         // only paint the standalone spin buttons, all buttons are painted at once
-        bNativeOK = pWin->DrawNativeControl( CTRL_SPINBUTTONS, PART_ALL_BUTTONS, Rectangle(), CTRL_STATE_ENABLED,
+        bNativeOK = pWin->DrawNativeControl( CTRL_SPINBUTTONS, PART_ALL_BUTTONS, Rectangle(), ControlState::ENABLED,
                     rSpinbuttonValue, OUString() );
     }
     return bNativeOK;
@@ -676,9 +676,9 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
 
             bNativeRegionOK =
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_UP,
-                    aArea, 0, aControlValue, OUString(), aBound, aContentUp) &&
+                    aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContentUp) &&
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_DOWN,
-                    aArea, 0, aControlValue, OUString(), aBound, aContentDown);
+                    aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContentDown);
 
             if( bNativeRegionOK )
             {
@@ -731,7 +731,7 @@ void SpinField::Resize()
 
             // adjust position and size of the edit field
             if ( GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
-                        aArea, 0, aControlValue, OUString(), aBound, aContent) )
+                        aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
             {
                 // convert back from border space to local coordinates
                 aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
@@ -925,9 +925,9 @@ Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
         Rectangle aEntireBound, aEntireContent, aEditBound, aEditContent;
         if (
                GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
-                   aArea, 0, aControlValue, OUString(), aEntireBound, aEntireContent) &&
+                   aArea, ControlState::NONE, aControlValue, OUString(), aEntireBound, aEntireContent) &&
                GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
-                   aArea, 0, aControlValue, OUString(), aEditBound, aEditContent)
+                   aArea, ControlState::NONE, aControlValue, OUString(), aEditBound, aEditContent)
            )
         {
             aSz.Width() += (aEntireContent.GetWidth() - aEditContent.GetWidth());
