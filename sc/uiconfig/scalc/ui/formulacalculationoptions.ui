@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.6 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.6"/>
+  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">100</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">100</property>
+  </object>
   <object class="GtkDialog" id="FormulaCalculationOptions">
     <property name="can_focus">False</property>
     <property name="vexpand">True</property>
@@ -13,10 +20,135 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
+        <child>
+          <object class="GtkFrame" id="frame1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <object class="GtkAlignment" id="alignment1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <object class="GtkGrid" id="grid7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="labelConvT2N">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Conversion from text to number:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="checkEmptyAsZero">
+                        <property name="label" translatable="yes">Treat _empty string as zero</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="labelSyntaxRef">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Reference syntax for string reference:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="comboSyntaxRef">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <items>
+                          <item id="0" translatable="yes">Use formula syntax</item>
+                          <item id="1">Calc A1</item>
+                          <item id="2">Excel A1</item>
+                          <item id="3">Excel R1C1</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="comboConversion">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <items>
+                          <item id="0" translatable="yes">Generate #VALUE! error</item>
+                          <item id="1" translatable="yes">Treat as zero</item>
+                          <item id="2" translatable="yes">Convert only if unambiguous</item>
+                          <item id="3" translatable="yes">Convert also locale dependent</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Contents to Numbers</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
@@ -30,7 +162,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -44,7 +176,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -56,614 +188,301 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="grid1">
+          <object class="GtkFrame" id="frame2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="row_spacing">12</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
-              <object class="svxcorelo-SvxCheckListBox" id="settings:border">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Check List Box-selection1"/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid2">
+              <object class="GtkAlignment" id="alignment2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="column_spacing">12</property>
+                <property name="top_padding">6</property>
+                <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkLabel" id="label1">
+                  <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Value:</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid4">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="column_homogeneous">True</property>
-                    <child>
-                      <object class="GtkRadioButton" id="true">
-                        <property name="label" translatable="yes">True</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">false</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="false">
-                        <property name="label" translatable="yes">False</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">true</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="edit">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinbutton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="halign">start</property>
-                        <property name="invisible_char">●</property>
-                        <property name="adjustment">adjustment1</property>
-                        <property name="climb_rate">1</property>
-                        <property name="update_policy">if-valid</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="valign">center</property>
-                        <property name="invisible_char">●</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">4</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="annotation">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="string_conversion_caption">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Conversion from text to number</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="string_conversion_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">How to treat text when encountered as operand in an arithmetic operation or as argument to a function that expects a number instead. Unambiguous conversion is possible for integer numbers including exponents and ISO 8601 dates and times in their extended formats with separators. Fractional numeric values with decimal separators or dates other than ISO 8601 are locale dependent. Note that in locale dependent conversions the resulting numeric value may differ between locales!</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="string_conversion_as_error">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Generate #VALUE! error</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="string_conversion_as_zero">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Treat as zero</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="string_conversion_unambiguous">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Convert only unambiguous</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="string_conversion_locale_dependent">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Convert also locale dependent</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="empty_str_as_zero_caption">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Treat empty string as zero</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="empty_str_as_zero_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">This option determines how an empty string is treated when used in arithmetic operations. If you have set "Conversion from text to number" to either "Generate #VALUE! error" or "Treat as zero", you cannot choose (here) if conversion of an empty string to a number will generate an error or if it will treat empty strings as zero. Otherwise this option determines how empty strings are treated.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">11</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="ref_syntax_caption">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Reference syntax for string reference</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">12</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="ref_syntax_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Formula syntax to use when parsing references given in string parameters. This affects built-in functions such as INDIRECT that takes a reference as a string value.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">13</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="use_formula_syntax">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Use formula syntax</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">14</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_subset_enabled">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Use OpenCL only for a subset of operations</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">15</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_subset_enabled_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Use OpenCL only for some of the operations that spreadsheet formulas are translated to.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">16</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_minimum_size">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Minimum data size for OpenCL use</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">17</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_minimum_size_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">18</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_subset_opcodes">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Subset of opcodes for which OpenCL is used</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">19</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_subset_opcodes_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">The list of operator and function opcodes for which to use OpenCL. If a formula contains only these operators and functions, it might be calculated using OpenCL.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">20</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="grid6">
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="row_spacing">6</property>
-                <child>
-                  <object class="svtlo-SvTreeListBox" id="opencl_list:border">
-                    <property name="visible">True</property>
-                    <property name="app_paintable">True</property>
-                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="Tree List-selection1"/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid3">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
-                    <child>
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Automatic selection of platform/device:</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="automatic_select_true">
-                        <property name="label" translatable="yes">True</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">automatic_select_false</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkRadioButton" id="automatic_select_false">
-                        <property name="label" translatable="yes">False</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">automatic_select_true</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
-                      <object class="GtkLabel" id="frequency_label">
-                        <property name="visible">True</property>
+                      <object class="GtkGrid" id="grid6">
                         <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="row_spacing">6</property>
+                        <child>
+                          <object class="svtlo-SvTreeListBox" id="opencl_list:border">
+                            <property name="visible">True</property>
+                            <property name="app_paintable">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Tree List-selection"/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="grid3">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="label2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Automatic selection of platform/device:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="automatic_select_true">
+                                <property name="label" translatable="yes">True</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="xalign">0</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">automatic_select_false</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="automatic_select_false">
+                                <property name="label" translatable="yes">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="xalign">0</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">automatic_select_true</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="grid5">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
+                            <child>
+                              <object class="GtkLabel" id="frequency_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Frequency:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="compute_units_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Compute units:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="memory_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Memory (in MB):</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="frequency">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="compute_units">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="memory">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="software">
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Internal, software interpreter</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test">
+                        <property name="label" translatable="yes">_Test OpenCL</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">5</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="CBUseOpenCL">
+                        <property name="label" translatable="yes">Use Open_CL only for a subset of operations</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Frequency:</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="compute_units_label">
+                      <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Compute units:</property>
+                        <property name="label" translatable="yes">Minimum data size for OpenCL use:</property>
+                        <property name="ellipsize">end</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="memory_label">
+                      <object class="GtkSpinButton" id="spinOpenCLSize">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Memory (in MB):</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="frequency">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="compute_units">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="memory">
+                      <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="vexpand">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Subset of OpCodes for which OpenCL is used:</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
+                        <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <object class="GtkTextView" id="entry">
+                        <property name="width_request">60</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="margin_left">50</property>
+                        <property name="wrap_mode">word-char</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkLabel" id="software">
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Internal, software interpreter</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">27</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="test">
-                <property name="label" translatable="yes">_Test</property>
+            <child type="label">
+              <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">OpenCL Settings</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">28</property>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -674,19 +493,10 @@
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">both</property>
     <widgets>
-      <widget name="annotation"/>
-      <widget name="ref_syntax_desc"/>
-      <widget name="empty_str_as_zero_desc"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="true"/>
-      <widget name="false"/>
-      <widget name="edit"/>
+      <widget name="comboSyntaxRef"/>
+      <widget name="comboConversion"/>
+      <widget name="spinOpenCLSize"/>
     </widgets>
   </object>
 </interface>

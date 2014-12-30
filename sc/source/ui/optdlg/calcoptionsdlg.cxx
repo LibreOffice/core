@@ -35,15 +35,6 @@
 
 namespace {
 
-typedef enum {
-    CALC_OPTION_STRING_CONVERSION,
-    CALC_OPTION_EMPTY_AS_ZERO,
-    CALC_OPTION_REF_SYNTAX,
-    CALC_OPTION_ENABLE_OPENCL_SUBSET,
-    CALC_OPTION_OPENCL_MIN_SIZE,
-    CALC_OPTION_OPENCL_SUBSET_OPS,
-} CalcOptionOrder;
-
 class OptionString : public SvLBoxString
 {
     OUString maDesc;
@@ -118,41 +109,14 @@ formula::FormulaGrammar::AddressConvention toAddressConvention(sal_Int32 nPos)
     return formula::FormulaGrammar::CONV_UNSPECIFIED;
 }
 
-ScCalcConfig::StringConversion toStringConversion(sal_Int32 nPos)
-{
-    switch (nPos)
-    {
-        case 0:
-            return ScCalcConfig::STRING_CONVERSION_AS_ERROR;
-        case 1:
-            return ScCalcConfig::STRING_CONVERSION_AS_ZERO;
-        case 2:
-            return ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
-        case 3:
-            return ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
-    }
-
-    return ScCalcConfig::STRING_CONVERSION_AS_ERROR;
-}
-
 }
 
 ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig)
     : ModalDialog(pParent, "FormulaCalculationOptions",
         "modules/scalc/ui/formulacalculationoptions.ui")
-    , maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString())
-    , maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString())
-    , maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString())
     , maConfig(rConfig)
     , mbSelectedEmptyStringAsZero(rConfig.mbEmptyStringAsZero)
 {
-    get(mpLbSettings, "settings");
-    get(mpLbOptionEdit, "edit");
-    get(mpFtAnnotation, "annotation");
-    get(mpBtnTrue, "true");
-    get(mpBtnFalse, "false");
-    get(mpSpinButton, "spinbutton");
-    get(mpEditField, "entry");
     get(mpTestButton, "test");
     get(mpOpenclInfoList, "opencl_list");
     get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
@@ -161,7 +125,30 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpFtComputeUnits, "compute_units");
     get(mpFtMemory, "memory");
 
-    mpSpinButton->SetModifyHdl(LINK(this, ScCalcOptionsDialog, NumModifiedHdl));
+    get(mpConversion,"comboConversion");
+    mpConversion->SelectEntryPos(rConfig.meStringConversion, true);
+    mpConversion->SetSelectHdl(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
+
+    get(mpEmptyAsZero,"checkEmptyAsZero");
+    mpEmptyAsZero->Check(rConfig.mbEmptyStringAsZero);
+    mpEmptyAsZero->SetClickHdl(LINK(this, ScCalcOptionsDialog, AsZeroModifiedHdl));
+
+    get(mpSyntax,"comboSyntaxRef");
+    mpSyntax->SelectEntryPos(rConfig.meStringRefAddressSyntax);
+    mpSyntax->SetSelectHdl(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
+
+    get(mpUseOpenCL,"CBUseOpenCL");
+    mpUseOpenCL->Check(rConfig.mbOpenCLSubsetOnly);
+    mpUseOpenCL->SetClickHdl(LINK(this, ScCalcOptionsDialog, CBUseOpenCLHdl));
+
+    get(mpSpinButton,"spinOpenCLSize");
+    mpSpinButton->SetValue(rConfig.mnOpenCLMinimumFormulaGroupSize);
+    mpSpinButton->SetModifyHdl(LINK(this, ScCalcOptionsDialog, SpinOpenCLMinSizeHdl));
+
+    get(mpEditField, "entry");
+    mpEditField->SetText(ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes));
+    mpEditField->set_height_request(4 * mpEditField->GetTextHeight());
+
     mpEditField->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
 
     mpOpenclInfoList->set_height_request(4* mpOpenclInfoList->GetTextHeight());
@@ -172,82 +159,12 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     mpBtnAutomaticSelectionTrue->SetToggleHdl(LINK(this, ScCalcOptionsDialog, BtnAutomaticSelectHdl));
 
-    maCaptionStringRefSyntax = get<vcl::Window>("ref_syntax_caption")->GetText();
-    maDescStringRefSyntax = get<vcl::Window>("ref_syntax_desc")->GetText();
-    maUseFormulaSyntax = get<vcl::Window>("use_formula_syntax")->GetText();
-
-    maCaptionStringConversion = get<vcl::Window>("string_conversion_caption")->GetText();
-    maDescStringConversion = get<vcl::Window>("string_conversion_desc")->GetText();
-    maStringConversionAsError = get<vcl::Window>("string_conversion_as_error")->GetText();
-    maStringConversionAsZero = get<vcl::Window>("string_conversion_as_zero")->GetText();
-    maStringConversionUnambiguous = get<vcl::Window>("string_conversion_unambiguous")->GetText();
-    maStringConversionLocaleDependent = get<vcl::Window>("string_conversion_locale_dependent")->GetText();
-
-    maCaptionEmptyStringAsZero = get<vcl::Window>("empty_str_as_zero_caption")->GetText();
-    maDescEmptyStringAsZero = get<vcl::Window>("empty_str_as_zero_desc")->GetText();
-
-    maCaptionOpenCLSubsetEnabled = get<vcl::Window>("opencl_subset_enabled")->GetText();
-    maDescOpenCLSubsetEnabled = get<vcl::Window>("opencl_subset_enabled_desc")->GetText();
-
-    maCaptionOpenCLMinimumFormulaSize = get<vcl::Window>("opencl_minimum_size")->GetText();
-    maDescOpenCLMinimumFormulaSize = get<vcl::Window>("opencl_minimum_size_desc")->GetText();
-
-    maCaptionOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes")->GetText();
-    maDescOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes_desc")->GetText();
-
     maSoftware = get<vcl::Window>("software")->GetText();
 
-    mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
-    mpLbSettings->SetStyle(mpLbSettings->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
-    mpLbSettings->SetHighlightRange();
-
-    Link aLink = LINK(this, ScCalcOptionsDialog, SettingsSelHdl);
-    mpLbSettings->SetSelectHdl(aLink);
-    mpLbOptionEdit->SetSelectHdl(aLink);
-
     mpTestButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, TestClickHdl));
-
-    aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
-    mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
-
-    maTrue = mpBtnTrue->GetText();
-    maFalse = mpBtnFalse->GetText();
-
-    FillOptionsList();
-    SelectionChanged();
 }
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
-
-SvTreeListEntry *ScCalcOptionsDialog::createItem(const OUString &rCaption, const OUString& sValue) const
-{
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
-    OptionString* pItem = new OptionString(rCaption, sValue);
-    pEntry->AddItem(pItem);
-    return pEntry;
-}
-
-void ScCalcOptionsDialog::setValueAt(size_t nPos, const OUString &rValue)
-{
-    SvTreeList *pModel = mpLbSettings->GetModel();
-    SvTreeListEntry* pEntry = pModel->GetEntry(NULL, nPos);
-    if (!pEntry)
-    {
-        SAL_WARN("sc", "missing entry at " << nPos << " in value view");
-        return;
-    }
-    OptionString* pOpt = dynamic_cast<OptionString *>(pEntry->GetItem(2));
-    if (!pOpt)
-    {
-        SAL_WARN("sc", "missing option string item so can't set " << rValue);
-        return;
-    }
-
-    pOpt->SetValue(rValue);
-    pModel->InvalidateEntry(pEntry);
-}
 
 #if HAVE_FEATURE_OPENCL
 
@@ -290,277 +207,6 @@ void ScCalcOptionsDialog::fillOpenCLList()
 }
 
 #endif
-
-namespace {
-void addOption( SvTreeList* pModel, OptionString* pItem )
-{
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
-    pEntry->AddItem(pItem);
-    pModel->Insert(pEntry);
-}
-}
-
-void ScCalcOptionsDialog::FillOptionsList()
-{
-    mpLbSettings->SetUpdateMode(false);
-    mpLbSettings->Clear();
-
-    SvTreeList* pModel = mpLbSettings->GetModel();
-
-    {
-        // String conversion for arithmetic operations.
-        OptionString* pItem = new OptionString(
-            maCaptionStringConversion, toString(maConfig.meStringConversion));
-        addOption( pModel, pItem);
-    }
-
-    pModel->Insert(createItem(maCaptionEmptyStringAsZero,toString(maConfig.mbEmptyStringAsZero)));
-
-    {
-        // Syntax for INDIRECT function.
-        OptionString* pItem = new OptionString(
-            maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
-        addOption( pModel, pItem);
-    }
-
-#if HAVE_FEATURE_OPENCL
-    pModel->Insert(createItem(maCaptionOpenCLSubsetEnabled,toString(maConfig.mbOpenCLSubsetOnly)));
-    pModel->Insert(createItem(maCaptionOpenCLMinimumFormulaSize,toString(maConfig.mnOpenCLMinimumFormulaGroupSize)));
-    pModel->Insert(createItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
-
-    fillOpenCLList();
-
-    mpBtnAutomaticSelectionFalse->Check(!maConfig.mbOpenCLAutoSelect);
-    mpBtnAutomaticSelectionTrue->Check(maConfig.mbOpenCLAutoSelect);
-#endif
-
-    mpLbSettings->SetUpdateMode(true);
-}
-
-void ScCalcOptionsDialog::SelectionChanged()
-{
-    sal_uLong nSelectedPos = mpLbSettings->GetSelectEntryPos();
-    switch ((CalcOptionOrder)nSelectedPos)
-    {
-        case CALC_OPTION_REF_SYNTAX:
-        {
-            // Formula syntax for INDIRECT function.
-            mpBtnTrue->Hide();
-            mpBtnFalse->Hide();
-            mpSpinButton->Hide();
-            mpEditField->Hide();
-            mpLbOptionEdit->Show();
-            mpOpenclInfoList->GetParent()->Hide();
-
-            mpLbOptionEdit->Clear();
-            mpLbOptionEdit->InsertEntry(maUseFormulaSyntax);
-            mpLbOptionEdit->InsertEntry(maCalcA1);
-            mpLbOptionEdit->InsertEntry(maExcelA1);
-            mpLbOptionEdit->InsertEntry(maExcelR1C1);
-            switch (maConfig.meStringRefAddressSyntax)
-            {
-                case formula::FormulaGrammar::CONV_OOO:
-                    mpLbOptionEdit->SelectEntryPos(1);
-                break;
-                case formula::FormulaGrammar::CONV_XL_A1:
-                    mpLbOptionEdit->SelectEntryPos(2);
-                break;
-                case formula::FormulaGrammar::CONV_XL_R1C1:
-                    mpLbOptionEdit->SelectEntryPos(3);
-                break;
-                case formula::FormulaGrammar::CONV_UNSPECIFIED:
-                default:
-                    mpLbOptionEdit->SelectEntryPos(0);
-            }
-            mpFtAnnotation->SetText(maDescStringRefSyntax);
-        }
-        break;
-
-        case CALC_OPTION_STRING_CONVERSION:
-        {
-            // String conversion for arithmetic operations.
-            mpBtnTrue->Hide();
-            mpBtnFalse->Hide();
-            mpSpinButton->Hide();
-            mpEditField->Hide();
-            mpLbOptionEdit->Show();
-            mpOpenclInfoList->GetParent()->Hide();
-
-            mpLbOptionEdit->Clear();
-            mpLbOptionEdit->InsertEntry(maStringConversionAsError);
-            mpLbOptionEdit->InsertEntry(maStringConversionAsZero);
-            mpLbOptionEdit->InsertEntry(maStringConversionUnambiguous);
-            mpLbOptionEdit->InsertEntry(maStringConversionLocaleDependent);
-            switch (maConfig.meStringConversion)
-            {
-                case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
-                    mpLbOptionEdit->SelectEntryPos(0);
-                break;
-                case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
-                    mpLbOptionEdit->SelectEntryPos(1);
-                break;
-                case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
-                    mpLbOptionEdit->SelectEntryPos(2);
-                break;
-                case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
-                    mpLbOptionEdit->SelectEntryPos(3);
-                break;
-            }
-            mpFtAnnotation->SetText(maDescStringConversion);
-        }
-        break;
-
-        // booleans
-        case CALC_OPTION_EMPTY_AS_ZERO:
-        case CALC_OPTION_ENABLE_OPENCL_SUBSET:
-        {
-            mpLbOptionEdit->Hide();
-            mpBtnTrue->Show();
-            mpBtnFalse->Show();
-            mpSpinButton->Hide();
-            mpEditField->Hide();
-
-            bool bValue = false;
-            bool bEnable = true;
-            if ( nSelectedPos == CALC_OPTION_EMPTY_AS_ZERO )
-            {
-                bValue = maConfig.mbEmptyStringAsZero;
-                mpFtAnnotation->SetText(maDescEmptyStringAsZero);
-                mpOpenclInfoList->GetParent()->Hide();
-                switch (maConfig.meStringConversion)
-                {
-                    case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
-                    case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
-                        bEnable = false;
-                        break;
-                    case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
-                    case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
-                        break;  // nothing
-                }
-            }
-            else if ( nSelectedPos == CALC_OPTION_ENABLE_OPENCL_SUBSET )
-            {
-                bValue = maConfig.mbOpenCLSubsetOnly;
-                mpFtAnnotation->SetText(maDescOpenCLSubsetEnabled);
-                mpOpenclInfoList->GetParent()->Hide();
-            }
-            else
-            {
-                assert(false);
-            }
-
-            if ( bValue )
-            {
-                mpBtnTrue->Check(true);
-                mpBtnFalse->Check(false);
-            }
-            else
-            {
-                mpBtnTrue->Check(false);
-                mpBtnFalse->Check(true);
-            }
-            if (bEnable)
-            {
-                mpBtnTrue->Enable();
-                mpBtnFalse->Enable();
-            }
-            else
-            {
-                mpBtnTrue->Disable();
-                mpBtnFalse->Disable();
-            }
-        }
-        break;
-
-        // numeric fields
-        case CALC_OPTION_OPENCL_MIN_SIZE:
-        {
-            // just one numeric field so far
-            sal_Int32 nValue = maConfig.mnOpenCLMinimumFormulaGroupSize;
-            mpLbOptionEdit->Hide();
-            mpBtnTrue->Hide();
-            mpBtnFalse->Hide();
-            mpSpinButton->Show();
-            mpEditField->Hide();
-            mpOpenclInfoList->GetParent()->Hide();
-            mpFtAnnotation->SetText(maDescOpenCLMinimumFormulaSize);
-            mpSpinButton->SetValue(nValue);
-        }
-        break;
-
-        // strings
-        case CALC_OPTION_OPENCL_SUBSET_OPS:
-        {
-            // just one string field so far
-            OUString sValue = ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes);
-            mpLbOptionEdit->Hide();
-            mpBtnTrue->Hide();
-            mpBtnFalse->Hide();
-            mpSpinButton->Hide();
-            mpEditField->Show();
-            mpOpenclInfoList->GetParent()->Hide();
-            mpFtAnnotation->SetText(maDescOpenCLSubsetOpCodes);
-            mpEditField->SetText(sValue);
-        }
-        break;
-
-    }
-}
-
-void ScCalcOptionsDialog::ListOptionValueChanged()
-{
-    sal_uLong nSelected = mpLbSettings->GetSelectEntryPos();
-    switch ((CalcOptionOrder) nSelected)
-    {
-        case CALC_OPTION_REF_SYNTAX:
-        {
-            // Formula syntax for INDIRECT function.
-            sal_Int32 nPos = mpLbOptionEdit->GetSelectEntryPos();
-            maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
-
-            setValueAt(nSelected, toString(maConfig.meStringRefAddressSyntax));
-        }
-        break;
-
-        case CALC_OPTION_STRING_CONVERSION:
-        {
-            // String conversion for arithmetic operations.
-            sal_Int32 nPos = mpLbOptionEdit->GetSelectEntryPos();
-            maConfig.meStringConversion = toStringConversion(nPos);
-
-            setValueAt(nSelected, toString(maConfig.meStringConversion));
-
-            switch (maConfig.meStringConversion)
-            {
-                case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
-                    maConfig.mbEmptyStringAsZero = false;
-                    setValueAt(CALC_OPTION_EMPTY_AS_ZERO, toString(maConfig.mbEmptyStringAsZero));
-                    mpLbOptionEdit->SelectEntryPos(0);
-                break;
-                case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
-                    maConfig.mbEmptyStringAsZero = true;
-                    setValueAt(CALC_OPTION_EMPTY_AS_ZERO, toString(maConfig.mbEmptyStringAsZero));
-                    mpLbOptionEdit->SelectEntryPos(1);
-                break;
-                case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
-                case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
-                    // Reset to the value the user selected before.
-                    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
-                    setValueAt(CALC_OPTION_EMPTY_AS_ZERO, toString(maConfig.mbEmptyStringAsZero));
-                break;
-            }
-        }
-        break;
-
-        case CALC_OPTION_EMPTY_AS_ZERO:
-        case CALC_OPTION_ENABLE_OPENCL_SUBSET:
-        case CALC_OPTION_OPENCL_MIN_SIZE:
-        case CALC_OPTION_OPENCL_SUBSET_OPS:
-        break;
-    }
-}
 
 void ScCalcOptionsDialog::OpenCLAutomaticSelectionChanged()
 {
@@ -607,104 +253,53 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
 #endif
 }
 
-void ScCalcOptionsDialog::RadioValueChanged()
+IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, CheckBox*, pCheckBox )
 {
-    sal_uLong nSelected = mpLbSettings->GetSelectEntryPos();
-    bool bValue = mpBtnTrue->IsChecked();
-    switch (nSelected)
-    {
-        case CALC_OPTION_REF_SYNTAX:
-        case CALC_OPTION_STRING_CONVERSION:
-            return;
-        case CALC_OPTION_EMPTY_AS_ZERO:
-            maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = bValue;
-            break;
-        case CALC_OPTION_ENABLE_OPENCL_SUBSET:
-            maConfig.mbOpenCLSubsetOnly = bValue;
-            break;
-    }
-
-    setValueAt(nSelected, toString(bValue));
-}
-
-void ScCalcOptionsDialog::SpinButtonValueChanged()
-{
-    // We know that the mpSpinButton is used for only one thing at the moment,
-    // the OpenCL minimum formula size
-    sal_Int64 nVal = mpSpinButton->GetValue();
-    maConfig.mnOpenCLMinimumFormulaGroupSize = nVal;
-}
-
-void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
-{
-    Edit& rEdit(dynamic_cast<Edit&>(*pCtrl));
-
-    OUString sVal = rEdit.GetText();
-
-    if (&rEdit == mpEditField)
-    {
-        // We know that the mpEditField is used for only one thing at the moment,
-        // the OpenCL subset list of opcodes
-        maConfig.maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
-    }
-}
-
-OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const
-{
-    switch (eConv)
-    {
-        case formula::FormulaGrammar::CONV_OOO:
-            return maCalcA1;
-        case formula::FormulaGrammar::CONV_XL_A1:
-            return maExcelA1;
-        case formula::FormulaGrammar::CONV_XL_R1C1:
-            return maExcelR1C1;
-        case formula::FormulaGrammar::CONV_UNSPECIFIED:
-        default:
-            ;
-    }
-    return maUseFormulaSyntax;
-}
-
-OUString ScCalcOptionsDialog::toString(ScCalcConfig::StringConversion eConv) const
-{
-    switch (eConv)
-    {
-        case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
-            return maStringConversionAsError;
-        case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
-            return maStringConversionAsZero;
-        case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
-            return maStringConversionUnambiguous;
-        case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
-            return maStringConversionLocaleDependent;
-    }
-    return maStringConversionAsError;
-}
-
-OUString ScCalcOptionsDialog::toString(bool bVal) const
-{
-    return bVal ? maTrue : maFalse;
-}
-
-OUString ScCalcOptionsDialog::toString(sal_Int32 nVal) const
-{
-    return OUString::number(nVal);
-}
-
-IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
-{
-    if (pCtrl == mpLbSettings)
-        SelectionChanged();
-    else if (pCtrl == mpLbOptionEdit)
-        ListOptionValueChanged();
-
+    maConfig.mbEmptyStringAsZero = pCheckBox->IsChecked();
     return 0;
 }
 
-IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnToggleHdl)
+IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
 {
-    RadioValueChanged();
+
+  maConfig.meStringConversion = (ScCalcConfig::StringConversion)pConv->GetSelectEntryPos();
+    switch (maConfig.meStringConversion)
+    {
+         case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+                    maConfig.mbEmptyStringAsZero = false;
+                    mpEmptyAsZero->Check(false);
+                    mpEmptyAsZero->Enable(false);
+         break;
+         case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+                    maConfig.mbEmptyStringAsZero = true;
+                    mpEmptyAsZero->Check(true);
+                    mpEmptyAsZero->Enable(false);
+         break;
+         case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+         case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+                    // Reset to the value the user selected before.
+                    maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
+                    mpEmptyAsZero->Enable(true);
+         break;
+     }
+    return 0;
+}
+
+IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox*, pSyntax)
+{
+    maConfig.meStringRefAddressSyntax = toAddressConvention(pSyntax->GetSelectEntryPos());
+    return 0;
+}
+
+IMPL_LINK(ScCalcOptionsDialog, CBUseOpenCLHdl, CheckBox*, pCheckBox)
+{
+    maConfig.mbOpenCLSubsetOnly = pCheckBox->IsChecked();
+    return 0;
+}
+
+IMPL_LINK(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, NumericField*, pSpin)
+{
+    maConfig.mnOpenCLMinimumFormulaGroupSize = pSpin->GetValue();
     return 0;
 }
 
@@ -720,15 +315,9 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, DeviceSelHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScCalcOptionsDialog, NumModifiedHdl)
+IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Edit*, pCtrl)
 {
-    SpinButtonValueChanged();
-    return 0;
-}
-
-IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Control*, pCtrl)
-{
-    EditFieldValueChanged(pCtrl);
+    maConfig.maOpenCLSubsetOpCodes = ScStringToOpCodeSet(pCtrl->GetText());
     return 0;
 }
 
