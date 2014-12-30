@@ -2080,8 +2080,8 @@ void XclExpFmlaCompImpl::ProcessDefinedName( const XclExpScToken& rTokData )
 {
     SCTAB nTab = SCTAB_GLOBAL;
     bool bGlobal = rTokData.mpScToken->IsGlobal();
-    if (!bGlobal && mxData->mpScBasePos)
-        nTab = mxData->mpScBasePos->Tab();
+    if (!bGlobal)
+        nTab = GetCurrScTab();
 
     XclExpNameManager& rNameMgr = GetNameManager();
     sal_uInt16 nNameIdx = rNameMgr.InsertName(nTab, rTokData.mpScToken->GetIndex());
