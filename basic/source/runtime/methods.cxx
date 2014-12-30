@@ -1205,7 +1205,7 @@ RTLFUNC(Mid)
         }
         OUString aArgStr = rPar.Get(1)->GetOUString();
         sal_Int32 nStartPos = rPar.Get(2)->GetLong();
-        if ( nStartPos == 0 )
+        if ( nStartPos < 1 )
         {
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
         }
@@ -1279,12 +1279,18 @@ RTLFUNC(Mid)
             else
             {
                 OUString aResultStr;
-                if(nLen < 0)
+                if (nStartPos > aArgStr.getLength())
+                {
+                    aResultStr = "";
+                }
+                else if(nArgCount == 2)
                 {
                     aResultStr = aArgStr.copy( nStartPos);
                 }
                 else
                 {
+                    if (nLen < 0)
+                        nLen = 0;
                     if(nStartPos + nLen > aArgStr.getLength())
                     {
                         nLen = aArgStr.getLength() - nStartPos;
