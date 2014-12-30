@@ -19,7 +19,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+
 #include <svx/checklbx.hxx>
+
 #include <svtools/treelistbox.hxx>
 
 #include "calcconfig.hxx"
@@ -35,47 +37,42 @@ public:
     ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig);
     virtual ~ScCalcOptionsDialog();
 
-    DECL_LINK( SettingsSelHdl, Control* );
-    DECL_LINK( BtnToggleHdl, void* );
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( NumModifiedHdl, void * );
-    DECL_LINK( EditModifiedHdl, Control * );
+    DECL_LINK( EditModifiedHdl, Edit * );
     DECL_LINK( TestClickHdl, PushButton* );
+    DECL_LINK( AsZeroModifiedHdl, CheckBox*);
+    DECL_LINK( ConversionModifiedHdl, ListBox*);
+    DECL_LINK( SyntaxModifiedHdl, ListBox*);
+    DECL_LINK( CBUseOpenCLHdl, CheckBox*);
+    DECL_LINK( SpinOpenCLMinSizeHdl, NumericField*);
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
 private:
-    void FillOptionsList();
-    void SelectionChanged();
-    void ListOptionValueChanged();
-    void RadioValueChanged();
     void OpenCLAutomaticSelectionChanged();
     void SelectedDeviceChanged();
-    void SpinButtonValueChanged();
-    void EditFieldValueChanged(Control *pCtrl);
 #if HAVE_FEATURE_OPENCL
     void fillOpenCLList();
 #endif
 
-    OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
-    OUString toString(ScCalcConfig::StringConversion eConv) const;
-    OUString toString(bool bVal) const;
-    OUString toString(sal_Int32 nVal) const;
     SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
     OpenCLConfig::ImplMatcherSet& CurrentWhiteOrBlackList();
     const OpenCLConfig::ImplMatcher& CurrentWhiteOrBlackListEntry();
 
 private:
-    SvxCheckListBox* mpLbSettings;
+
+    CheckBox*     mpEmptyAsZero;
+    ListBox*      mpConversion;
+    ListBox*      mpSyntax;
+    CheckBox*     mpUseOpenCL;
+    NumericField* mpSpinButton;
+    VclMultiLineEdit* mpEditField;
+    PushButton* mpTestButton;
 
     ListBox* mpLbOptionEdit;
-    RadioButton* mpBtnTrue;
-    RadioButton* mpBtnFalse;
-    NumericField* mpSpinButton;
-    Edit* mpEditField;
-    PushButton* mpTestButton;
 
     FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
@@ -85,37 +82,6 @@ private:
     SvTreeListBox* mpOpenclInfoList;
     RadioButton* mpBtnAutomaticSelectionTrue;
     RadioButton* mpBtnAutomaticSelectionFalse;
-
-    OUString maTrue;
-    OUString maFalse;
-
-    OUString maCalcA1;
-    OUString maExcelA1;
-    OUString maExcelR1C1;
-
-    OUString maCaptionStringRefSyntax;
-    OUString maDescStringRefSyntax;
-    OUString maUseFormulaSyntax;
-
-    OUString maStringConversionAsError;
-    OUString maStringConversionAsZero;
-    OUString maStringConversionUnambiguous;
-    OUString maStringConversionLocaleDependent;
-
-    OUString maCaptionStringConversion;
-    OUString maDescStringConversion;
-
-    OUString maCaptionEmptyStringAsZero;
-    OUString maDescEmptyStringAsZero;
-
-    OUString maCaptionOpenCLSubsetEnabled;
-    OUString maDescOpenCLSubsetEnabled;
-
-    OUString maCaptionOpenCLMinimumFormulaSize;
-    OUString maDescOpenCLMinimumFormulaSize;
-
-    OUString maCaptionOpenCLSubsetOpCodes;
-    OUString maDescOpenCLSubsetOpCodes;
 
     OUString maSoftware;
 
