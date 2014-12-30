@@ -36,9 +36,11 @@ namespace
             unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
 
         void test();
+        void testSize();
 
         CPPUNIT_TEST_SUITE(SotTest);
         CPPUNIT_TEST(test);
+        CPPUNIT_TEST(testSize);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -118,6 +120,30 @@ namespace
         testDir(OUString(),
             getURLFromSrc("/sot/qa/cppunit/data/"),
             OUString());
+    }
+
+    void SotTest::testSize()
+    {
+        OUString aURL(getURLFromSrc("/sot/qa/cppunit/data/pass/fdo84229-1.compound"));
+        SvFileStream aStream(aURL, STREAM_READ);
+        SotStorageRef xObjStor = new SotStorage(aStream);
+        CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
+                               xObjStor.Is() && !xObjStor->GetError());
+        SotStorageStreamRef xStream = xObjStor->OpenSotStream("Book");
+        CPPUNIT_ASSERT_MESSAGE("stream failed to open",
+                               xStream.Is() && !xObjStor->GetError());
+        CPPUNIT_ASSERT_MESSAGE("error in opened stream", !xStream->GetError());
+        sal_uLong nPos = xStream->GetSize();
+        CPPUNIT_ASSERT_MESSAGE("odd stream length", nPos == 13312);
+
+        xStream->Seek(STREAM_SEEK_TO_END);
+        CPPUNIT_ASSERT_MESSAGE("error seeking to end", !xStream->GetError());
+        // cf. comment in Pos2Page, not extremely intuitive ...
+        CPPUNIT_ASSERT_MESSAGE("stream not at beginning", xStream->Tell() == xStream->GetSize());
+        xStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+        CPPUNIT_ASSERT_MESSAGE("error seeking to beginning", !xStream->GetError());
+        CPPUNIT_ASSERT_MESSAGE("stream not at beginning", xStream->Tell() == 0);
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(SotTest);
