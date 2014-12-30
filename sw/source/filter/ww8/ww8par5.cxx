@@ -220,6 +220,18 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     return 0;
 }
 
+long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
+{
+    if (WW8PLCFx_AtnBook* pAtnBook = pPlcxMan->GetAtnBook())
+    {
+        if (pAtnBook->getIsEnd())
+            pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_ANNOTATIONMARK, true, pAtnBook->getHandle());
+        else
+            pReffedStck->NewAttr(*pPaM->GetPoint(), CntUInt16Item(RES_FLTR_ANNOTATIONMARK, pAtnBook->getHandle()));
+    }
+    return 0;
+}
+
 //    general help methods to separate parameters
 
 /// translate FieldParameter names into the system character set and
