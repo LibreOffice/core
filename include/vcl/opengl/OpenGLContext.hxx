@@ -166,10 +166,10 @@ struct ProgramKey
     OUString maVertexShader;
     OUString maFragmentShader;
 
-    ProgramKey( const OUString& rVertexShader, const OUString& rFragmentShader )
+    ProgramKey( const OUString& rVertexShader, const OUString& rFragmentShader ):
+        maVertexShader(rVertexShader),
+        maFragmentShader(rFragmentShader)
     {
-        maVertexShader = rVertexShader;
-        maFragmentShader = rFragmentShader;
     }
 };
 
