@@ -395,6 +395,11 @@ public:
         placesNewSize.Height() = aSize.Height();
         _pImp->_pPlaces->SetSizePixel( placesNewSize );
     }
+
+    virtual void GetFocus() SAL_OVERRIDE
+    {
+        _pFileView->GrabFocus();
+    }
 };
 
 SvtFileDialog::~SvtFileDialog()
@@ -452,6 +457,7 @@ void SvtFileDialog::Init_Impl
     get(_pImp->_pCbOptions, "options");
     get(_pImp->_pFtFileName, "file_name_label");
     get(_pImp->_pEdFileName, "file_name");
+    _pImp->_pEdFileName->GetFocus();
     get(_pImp->_pFtFileType, "file_type_label");
     get(_pImp->_pLbFilter, "file_type");
     get(_pImp->_pEdCurrentPath, "current_path");
@@ -522,6 +528,7 @@ void SvtFileDialog::Init_Impl
     _pContainer->set_width_request(aSize.Width());
     _pContainer->set_hexpand(true);
     _pContainer->set_vexpand(true);
+    _pContainer->SetStyle( _pContainer->GetStyle() | WB_TABSTOP );
 
     _pFileView = new SvtFileView( _pContainer, WB_BORDER,
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
