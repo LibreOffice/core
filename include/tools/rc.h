@@ -115,10 +115,6 @@ typedef short RSWND_STYLE;
 #define METRICFIELD_LAST                0x02
 #define METRICFIELD_SPINSIZE            0x04
 
-#define CURRENCYFIELD_FIRST             0x01
-#define CURRENCYFIELD_LAST              0x02
-#define CURRENCYFIELD_SPINSIZE          0x04
-
 #define DATEFIELD_FIRST                 0x01
 #define DATEFIELD_LAST                  0x02
 
