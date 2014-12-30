@@ -10,7 +10,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TRACKCHANGESHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <DomainMapper_Impl.hxx>
 
@@ -38,8 +38,7 @@ public:
     // Compute the UNO properties for the track changes object based on the received tokens.
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getRedlineProperties() const;
 };
-typedef boost::shared_ptr
-    < TrackChangesHandler >  TrackChangesHandlerPtr;
+typedef std::shared_ptr<TrackChangesHandler> TrackChangesHandlerPtr;
 }}
 
 #endif

@@ -69,7 +69,7 @@ public:
 
 };
 
-typedef boost::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
+typedef std::shared_ptr<TextEffectsHandler> TextEffectsHandlerPtr;
 
 }}
 

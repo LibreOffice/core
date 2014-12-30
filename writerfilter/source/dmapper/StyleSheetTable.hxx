@@ -76,9 +76,9 @@ public:
     virtual ~StyleSheetEntry();
 };
 
-typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
+typedef std::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
 typedef ::std::deque<StyleSheetEntryPtr> StyleSheetEntryDeque;
-typedef boost::shared_ptr<StyleSheetEntryDeque> StyleSheetEntryDequePtr;
+typedef std::shared_ptr<StyleSheetEntryDeque> StyleSheetEntryDequePtr;
 
 class DomainMapper;
 class StyleSheetTable :
@@ -117,7 +117,7 @@ private:
 
     void applyDefaults(bool bParaProperties);
 };
-typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
+typedef std::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 
 
 class TableStyleSheetEntry :
@@ -152,7 +152,7 @@ public:
 protected:
     PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );
 };
-typedef boost::shared_ptr<TableStyleSheetEntry> TableStyleSheetEntryPtr;
+typedef std::shared_ptr<TableStyleSheetEntry> TableStyleSheetEntryPtr;
 
 }}
 

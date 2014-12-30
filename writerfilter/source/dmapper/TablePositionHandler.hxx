@@ -10,7 +10,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEPOSITIONHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace writerfilter
@@ -94,7 +94,7 @@ public:
     bool operator== (const TablePositionHandler& rHandler) const;
 };
 
-typedef boost::shared_ptr<TablePositionHandler> TablePositionHandlerPtr;
+typedef std::shared_ptr<TablePositionHandler> TablePositionHandlerPtr;
 } // namespace dmapper
 } // namespace writerfilter
 

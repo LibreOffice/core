@@ -221,7 +221,7 @@ struct AnchoredContext
         xTextContent( xContent ), bToRemove( false ) {}
 };
 
-typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
+typedef std::shared_ptr<FieldContext>  FieldContextPtr;
 
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
@@ -362,7 +362,7 @@ private:
 
 
     // TableManagers are stacked: one for each stream to avoid any confusion
-    std::stack< boost::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
+    std::stack< std::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
     TableDataHandler::Pointer_t m_pTableHandler;
 
     //each context needs a stack of currently used attributes
@@ -683,13 +683,13 @@ public:
 
     DomainMapperTableManager& getTableManager()
     {
-        boost::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
+        std::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
         return *pMngr.get( );
     }
 
     void appendTableManager( )
     {
-        boost::shared_ptr<DomainMapperTableManager> pMngr(new DomainMapperTableManager());
+        std::shared_ptr<DomainMapperTableManager> pMngr(new DomainMapperTableManager());
         m_aTableManagers.push( pMngr );
     }
 
@@ -783,7 +783,7 @@ public:
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;
 
-    boost::shared_ptr<SdtHelper> m_pSdtHelper;
+    std::shared_ptr<SdtHelper> m_pSdtHelper;
 
     /// Document background color, applied to every page style.
     boost::optional<sal_Int32> m_oBackgroundColor;

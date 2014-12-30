@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_MEASUREHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -57,7 +57,7 @@ public:
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag();
 };
-typedef boost::shared_ptr
+typedef std::shared_ptr
     < MeasureHandler >  MeasureHandlerPtr;
 }}
 

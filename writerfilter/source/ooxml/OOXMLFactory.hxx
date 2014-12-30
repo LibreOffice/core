@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFACTORY_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <dmapper/resourcemodel.hxx>
 
@@ -65,7 +65,7 @@ struct AttributeInfo
 
 class OOXMLFactory_ns {
 public:
-    typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
+    typedef std::shared_ptr<OOXMLFactory_ns> Pointer_t;
 
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);

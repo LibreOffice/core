@@ -450,7 +450,7 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
 
 
 void TDefTableHandler::fillCellProperties(
-            size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties ) const
+            size_t nCell, ::std::shared_ptr< TablePropertyMap > pCellProperties ) const
 {
     if( m_aCellBorderPositions.size() > nCell )
     {

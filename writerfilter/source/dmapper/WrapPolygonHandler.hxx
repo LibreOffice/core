@@ -33,7 +33,7 @@ class WrapPolygon
 {
 public:
     typedef comphelper::SequenceAsVector<css::awt::Point> Points_t;
-    typedef ::boost::shared_ptr<WrapPolygon> Pointer_t;
+    typedef ::std::shared_ptr<WrapPolygon> Pointer_t;
 
 private:
     Points_t mPoints;

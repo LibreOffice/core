@@ -22,8 +22,7 @@
 
 #include "LoggedResources.hxx"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 #include <map>
 #include <utility>
 
@@ -48,7 +47,7 @@ public:
     std::pair<OUString, OUString>& m_rPositionOffsets;
     std::pair<OUString, OUString>& m_rAligns;
 };
-typedef boost::shared_ptr<PositionHandler> PositionHandlerPtr;
+typedef std::shared_ptr<PositionHandler> PositionHandlerPtr;
 
 class WrapHandler: public LoggedProperties
 {
@@ -65,7 +64,7 @@ public:
     virtual void lcl_attribute( Id aName, Value& rVal ) SAL_OVERRIDE;
     virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;
 };
-typedef boost::shared_ptr<WrapHandler> WrapHandlerPtr;
+typedef std::shared_ptr<WrapHandler> WrapHandlerPtr;
 
 } }
 

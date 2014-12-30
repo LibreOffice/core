@@ -61,7 +61,7 @@ class OOXMLParserState
     std::vector<SavedAlternateState> maSavedAlternateStates;
 
 public:
-    typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
+    typedef std::shared_ptr<OOXMLParserState> Pointer_t;
 
     OOXMLParserState();
     virtual ~OOXMLParserState();

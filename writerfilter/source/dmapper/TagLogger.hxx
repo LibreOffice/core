@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <dmapper/resourcemodel.hxx>
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <libxml/xmlwriter.h>
 
 namespace writerfilter
@@ -33,7 +33,7 @@ namespace writerfilter
     class IdToString
     {
     public:
-        typedef boost::shared_ptr<IdToString> Pointer_t;
+        typedef std::shared_ptr<IdToString> Pointer_t;
         virtual std::string toString(const Id & id) const = 0;
 
     protected:
@@ -44,7 +44,7 @@ namespace writerfilter
     class TagLogger
     {
     public:
-        typedef boost::shared_ptr<TagLogger> Pointer_t;
+        typedef std::shared_ptr<TagLogger> Pointer_t;
 
     private:
         xmlTextWriterPtr pWriter;

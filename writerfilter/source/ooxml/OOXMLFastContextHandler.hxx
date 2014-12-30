@@ -41,12 +41,12 @@ namespace writerfilter {
 namespace ooxml
 {
 
-typedef boost::shared_ptr<Stream> StreamPointer_t;
+typedef std::shared_ptr<Stream> StreamPointer_t;
 
 class OOXMLFastContextHandler: public ::cppu::WeakImplHelper1<css::xml::sax::XFastContextHandler>
 {
 public:
-    typedef boost::shared_ptr<OOXMLFastContextHandler> Pointer_t;
+    typedef std::shared_ptr<OOXMLFastContextHandler> Pointer_t;
 
     enum ResourceEnum_t { UNKNOWN, STREAM, PROPERTIES, TABLE, SHAPE };
 

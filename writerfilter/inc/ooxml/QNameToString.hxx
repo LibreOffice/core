@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 #define INCLUDED_WRITERFILTER_INC_OOXML_QNAMETOSTRING_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <map>
 #include <string>
 #include <iostream>
@@ -31,7 +31,7 @@ namespace writerfilter
 
 class QNameToString
 {
-    typedef boost::shared_ptr<QNameToString> Pointer_t;
+    typedef std::shared_ptr<QNameToString> Pointer_t;
     typedef std::map < Id, std::string > Map;
 
     static Pointer_t pInstance;

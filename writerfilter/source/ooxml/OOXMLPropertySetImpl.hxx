@@ -38,7 +38,7 @@ namespace ooxml
 class OOXMLValue : public Value
 {
 public:
-    typedef boost::shared_ptr<OOXMLValue> Pointer_t;
+    typedef std::shared_ptr<OOXMLValue> Pointer_t;
     OOXMLValue();
     virtual ~OOXMLValue();
 
@@ -65,7 +65,7 @@ private:
     Type_t meType;
 
 public:
-    typedef boost::shared_ptr<OOXMLProperty> Pointer_t;
+    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
 
     OOXMLPropertyImpl(Id id, OOXMLValue::Pointer_t pValue, Type_t eType);
     OOXMLPropertyImpl(const OOXMLPropertyImpl & rSprm);
@@ -281,7 +281,7 @@ public:
 class OOXMLTableImpl : public OOXMLTable
 {
 public:
-    typedef boost::shared_ptr<OOXMLValue> ValuePointer_t;
+    typedef std::shared_ptr<OOXMLValue> ValuePointer_t;
 private:
     typedef std::vector<ValuePointer_t> PropertySets_t;
     PropertySets_t mPropertySets;

@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_OLEHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 
@@ -104,7 +104,7 @@ public:
                                     getReplacement() const { return m_xReplacement; }
 
 };
-typedef boost::shared_ptr< OLEHandler >  OLEHandlerPtr;
+typedef std::shared_ptr< OLEHandler >  OLEHandlerPtr;
 }}
 
 #endif

@@ -123,7 +123,7 @@ public:
     void handleWrapTextValue(sal_uInt32 nVal);
 };
 
-typedef boost::shared_ptr<GraphicImport> GraphicImportPtr;
+typedef std::shared_ptr<GraphicImport> GraphicImportPtr;
 
 }}
 

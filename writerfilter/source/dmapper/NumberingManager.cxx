@@ -140,7 +140,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
     }
 }
 
-void ListLevel::SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
+void ListLevel::SetParaStyle( std::shared_ptr< StyleSheetEntry > pStyle )
 {
     if (!pStyle)
         return;

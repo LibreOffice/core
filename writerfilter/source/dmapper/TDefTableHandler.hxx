@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TDEFTABLEHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 namespace com{ namespace sun{ namespace star{
     namespace table {
@@ -76,15 +76,15 @@ public:
     virtual ~TDefTableHandler();
 
     size_t                                      getCellCount() const;
-    void                                        fillCellProperties( size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties) const;
-    ::boost::shared_ptr<PropertyMap>            getRowProperties() const;
+    void                                        fillCellProperties( size_t nCell, ::std::shared_ptr< TablePropertyMap > pCellProperties) const;
+    ::std::shared_ptr<PropertyMap>            getRowProperties() const;
     sal_Int32                                   getTableWidth() const;
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
 };
-typedef boost::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
+typedef std::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
 }}
 
 #endif

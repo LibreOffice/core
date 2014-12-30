@@ -30,11 +30,11 @@ namespace dmapper {
 
 typedef css::uno::Reference< css::text::XTextRange > Handle_t;
 typedef ::com::sun::star::uno::Sequence< Handle_t> CellSequence_t;
-typedef boost::shared_ptr<CellSequence_t> CellSequencePointer_t;
+typedef std::shared_ptr<CellSequence_t> CellSequencePointer_t;
 typedef ::com::sun::star::uno::Sequence< CellSequence_t > RowSequence_t;
-typedef boost::shared_ptr<RowSequence_t> RowSequencePointer_t;
+typedef std::shared_ptr<RowSequence_t> RowSequencePointer_t;
 typedef ::com::sun::star::uno::Sequence< RowSequence_t> TableSequence_t;
-typedef boost::shared_ptr<TableSequence_t> TableSequencePointer_t;
+typedef std::shared_ptr<TableSequence_t> TableSequencePointer_t;
 typedef ::com::sun::star::text::XTextAppendAndConvert Text_t;
 typedef ::com::sun::star::uno::Reference<Text_t> TextReference_t;
 
@@ -88,7 +88,7 @@ class DomainMapperTableHandler : public TableDataHandler
     RowPropertyValuesSeq_t endTableGetRowProperties();
 
 public:
-    typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
+    typedef std::shared_ptr<DomainMapperTableHandler> Pointer_t;
 
     DomainMapperTableHandler(TextReference_t const& xText,
                              DomainMapper_Impl& rDMapper_Impl);

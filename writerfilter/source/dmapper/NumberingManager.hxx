@@ -54,12 +54,12 @@ class ListLevel : public PropertyMap
     OUString                               m_sGraphicURL;
     com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > m_sGraphicBitmap;
     sal_Int32                                     m_nTabstop;
-    boost::shared_ptr< StyleSheetEntry >          m_pParaStyle;
+    std::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
 
 public:
 
-    typedef boost::shared_ptr< ListLevel > Pointer;
+    typedef std::shared_ptr< ListLevel > Pointer;
 
     ListLevel() :
         m_nIStartAt(-1)
@@ -82,12 +82,12 @@ public:
     void SetGraphicURL( const OUString& sValue ) { m_sGraphicURL = sValue; };
     void SetGraphicBitmap( com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > const& sValue )
         { m_sGraphicBitmap = sValue; }
-    void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
+    void SetParaStyle( std::shared_ptr< StyleSheetEntry > pStyle );
     void AddRGBXchNums( const OUString& sValue ) { m_sRGBXchNums += sValue; };
 
     // Getters
     OUString GetBulletChar( ) { return m_sBulletChar; };
-    boost::shared_ptr< StyleSheetEntry > GetParaStyle( ) { return m_pParaStyle; };
+    std::shared_ptr< StyleSheetEntry > GetParaStyle( ) { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
 
     // UNO mapping functions
@@ -113,7 +113,7 @@ private:
 class NumPicBullet
 {
 public:
-    typedef boost::shared_ptr<NumPicBullet> Pointer;
+    typedef std::shared_ptr<NumPicBullet> Pointer;
     NumPicBullet();
     virtual ~NumPicBullet();
 
@@ -147,7 +147,7 @@ private:
     ::rtl::OUString                      m_sNumStyleLink;
 
 public:
-    typedef boost::shared_ptr< AbstractListDef > Pointer;
+    typedef std::shared_ptr< AbstractListDef > Pointer;
 
     AbstractListDef( );
     virtual ~AbstractListDef( );
@@ -184,7 +184,7 @@ private:
     css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
 public:
-    typedef boost::shared_ptr< ListDef > Pointer;
+    typedef std::shared_ptr< ListDef > Pointer;
 
     ListDef( );
     virtual ~ListDef( );
@@ -249,7 +249,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory);
     virtual ~ListsManager();
 
-    typedef boost::shared_ptr< ListsManager >  Pointer;
+    typedef std::shared_ptr< ListsManager >  Pointer;
 
     // Config methods
     void SetLFOImport( bool bLFOImport ) { m_bIsLFOImport = bLFOImport; };

@@ -25,7 +25,7 @@ class RTFValue
     : public Value
 {
 public:
-    typedef boost::shared_ptr<RTFValue> Pointer_t;
+    typedef std::shared_ptr<RTFValue> Pointer_t;
     RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms,
              css::uno::Reference<css::drawing::XShape> const& xShape,
              css::uno::Reference<css::io::XInputStream> const& xStream,
@@ -61,13 +61,13 @@ private:
     RTFValue& operator=(RTFValue const& rOther);
     int m_nValue;
     OUString m_sValue;
-    boost::shared_ptr<RTFSprms> m_pAttributes;
-    boost::shared_ptr<RTFSprms> m_pSprms;
+    std::shared_ptr<RTFSprms> m_pAttributes;
+    std::shared_ptr<RTFSprms> m_pSprms;
     css::uno::Reference<css::drawing::XShape> m_xShape;
     css::uno::Reference<css::io::XInputStream> m_xStream;
     css::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
     bool m_bForceString;
-    boost::shared_ptr<RTFShape> m_pShape;
+    std::shared_ptr<RTFShape> m_pShape;
 };
 } // namespace rtftok
 } // namespace writerfilter

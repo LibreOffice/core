@@ -24,7 +24,7 @@
 
 #include <ooxml/resourceids.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <stack>
 #include "TagLogger.hxx"
 
@@ -43,7 +43,7 @@ namespace dmapper
 class TableDataHandler
 {
 public:
-    typedef boost::shared_ptr<TableDataHandler> Pointer_t;
+    typedef std::shared_ptr<TableDataHandler> Pointer_t;
 
     /**
        Handle start of table.
@@ -383,7 +383,7 @@ protected:
     }
 
 private:
-    typedef boost::shared_ptr< css::uno::Reference<css::text::XTextRange> > T_p;
+    typedef std::shared_ptr< css::uno::Reference<css::text::XTextRange> > T_p;
 
     /**
        depth of the current cell

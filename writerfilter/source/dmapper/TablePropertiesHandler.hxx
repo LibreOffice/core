@@ -25,7 +25,7 @@
 #include <TableManager.hxx>
 #include <dmapper/resourcemodel.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <vector>
 
@@ -95,7 +95,7 @@ private:
             m_pCurrentProperties->InsertProps(pProps);
     };
 };
-typedef boost::shared_ptr<TablePropertiesHandler> TablePropertiesHandlerPtr;
+typedef std::shared_ptr<TablePropertiesHandler> TablePropertiesHandlerPtr;
 
 } }
 

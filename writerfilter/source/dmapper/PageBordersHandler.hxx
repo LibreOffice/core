@@ -23,7 +23,7 @@
 #include "PropertyMap.hxx"
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/table/BorderLine2.hpp>
 
@@ -68,7 +68,7 @@ public:
     };
     void SetBorders( SectionPropertyMap* pSectContext );
 };
-typedef boost::shared_ptr< PageBordersHandler > PageBordersHandlerPtr;
+typedef std::shared_ptr< PageBordersHandler > PageBordersHandlerPtr;
 
 } }
 

@@ -28,7 +28,7 @@ namespace ooxml
 class OOXMLProperty : public Sprm
 {
 public:
-    typedef boost::shared_ptr<OOXMLProperty> Pointer_t;
+    typedef std::shared_ptr<OOXMLProperty> Pointer_t;
 
     virtual ~OOXMLProperty();
 
@@ -49,7 +49,7 @@ public:
 class OOXMLPropertySet : public writerfilter::Reference<Properties>
 {
 public:
-    typedef boost::shared_ptr<OOXMLPropertySet> Pointer_t;
+    typedef std::shared_ptr<OOXMLPropertySet> Pointer_t;
 
     virtual ~OOXMLPropertySet();
 

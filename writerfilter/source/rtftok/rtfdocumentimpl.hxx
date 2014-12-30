@@ -87,7 +87,7 @@ struct TableRowBuffer;
 
 /// A buffer storing dmapper calls.
 typedef ::boost::tuple<RTFBufferTypes, RTFValue::Pointer_t,
-        ::boost::shared_ptr<TableRowBuffer> > Buf_t;
+        ::std::shared_ptr<TableRowBuffer> > Buf_t;
 typedef std::deque< Buf_t > RTFBuffer_t;
 
 /// holds one nested table row
@@ -324,7 +324,7 @@ class RTFDocumentImpl
     : public RTFDocument, public RTFListener
 {
 public:
-    typedef ::boost::shared_ptr<RTFDocumentImpl> Pointer_t;
+    typedef ::std::shared_ptr<RTFDocumentImpl> Pointer_t;
     RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
                     css::uno::Reference<css::lang::XComponent> const& xDstDoc,
@@ -447,10 +447,10 @@ private:
     css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xModelFactory;
     css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
-    boost::shared_ptr<SvStream> m_pInStream;
+    std::shared_ptr<SvStream> m_pInStream;
     Stream* m_pMapperStream;
-    boost::shared_ptr<RTFSdrImport> m_pSdrImport;
-    boost::shared_ptr<RTFTokenizer> m_pTokenizer;
+    std::shared_ptr<RTFSdrImport> m_pSdrImport;
+    std::shared_ptr<RTFTokenizer> m_pTokenizer;
     RTFStack m_aStates;
     /// Read by RTF_PARD.
     RTFParserState m_aDefaultState;
@@ -483,7 +483,7 @@ private:
     RTFSprms m_aSettingsTableSprms;
 
     oox::StorageRef m_xStorage;
-    boost::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
+    std::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
 
     /// cell props buffer for nested tables, reset by \nestrow
     /// the \nesttableprops is a destination and must follow the
@@ -546,9 +546,9 @@ private:
      *  (if we don't use the \objdata we use the \result element)*/
     bool m_bObject;
     /// Contents of the objdata group.
-    boost::shared_ptr<SvStream> m_pObjectData;
+    std::shared_ptr<SvStream> m_pObjectData;
     /// If the data for a picture is a binary one, it's stored here.
-    boost::shared_ptr<SvStream> m_pBinaryData;
+    std::shared_ptr<SvStream> m_pBinaryData;
 
     RTFReferenceTable::Entries_t m_aFontTableEntries;
     int m_nCurrentFontIndex;

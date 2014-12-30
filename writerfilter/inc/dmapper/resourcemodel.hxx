@@ -22,7 +22,6 @@
 
 #include <string>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <sal/types.h>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -86,7 +85,7 @@ public:
         @attention The ownership of a reference is transferred when
         the reference is passed.
     */
-    typedef boost::shared_ptr< Reference<T> > Pointer_t;
+    typedef std::shared_ptr< Reference<T> > Pointer_t;
 
     /**
        Resolves the reference.
@@ -136,7 +135,7 @@ protected:
 class Table
 {
 public:
-    typedef boost::shared_ptr<Table> Pointer_t;
+    typedef std::shared_ptr<Table> Pointer_t;
 
     /**
        Receives an entry of the table.
@@ -184,7 +183,7 @@ public:
     /**
        Pointer to this stream.
      */
-    typedef boost::shared_ptr<Stream> Pointer_t;
+    typedef std::shared_ptr<Stream> Pointer_t;
 
     /**
        Receives start mark for group with the same section properties.

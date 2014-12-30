@@ -24,7 +24,7 @@
 
 #include <DomainMapper.hxx>
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <comphelper/sequenceasvector.hxx>
 
 namespace writerfilter {
@@ -79,7 +79,7 @@ private:
     void resolveSprmProps(Sprm & rSprm);
 };
 
-typedef boost::shared_ptr< TblStylePrHandler > TblStylePrHandlerPtr;
+typedef std::shared_ptr< TblStylePrHandler > TblStylePrHandlerPtr;
 
 }}
 

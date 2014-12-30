@@ -481,17 +481,17 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
     return bRet;
 }
 
-boost::shared_ptr< vector<sal_Int32> > DomainMapperTableManager::getCurrentGrid( )
+std::shared_ptr< vector<sal_Int32> > DomainMapperTableManager::getCurrentGrid( )
 {
     return m_aTableGrid.back( );
 }
 
-boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpans( )
+std::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentSpans( )
 {
     return m_aGridSpans.back( );
 }
 
-boost::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentCellWidths( )
+std::shared_ptr< vector< sal_Int32 > > DomainMapperTableManager::getCurrentCellWidths( )
 {
     return m_aCellWidths.back( );
 }

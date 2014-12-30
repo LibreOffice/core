@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SECTIONCOLUMNHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace writerfilter {
@@ -59,7 +59,7 @@ public:
     const std::vector<_Column>& GetColumns() const { return aCols;}
 
 };
-typedef boost::shared_ptr< SectionColumnHandler >          SectionColumnHandlerPtr;
+typedef std::shared_ptr< SectionColumnHandler >          SectionColumnHandlerPtr;
 }}
 
 #endif

@@ -36,7 +36,7 @@ class DomainMapper;
 
 class DomainMapperTableManager : public TableManager
 {
-    typedef boost::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
+    typedef std::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
 
     sal_uInt32      m_nRow;
     ::std::vector< sal_uInt32 > m_nCell;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_FONTTABLE_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "LoggedResources.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -32,7 +32,7 @@ namespace dmapper
 struct FontTable_Impl;
 struct FontEntry
 {
-    typedef boost::shared_ptr<FontEntry> Pointer_t;
+    typedef std::shared_ptr<FontEntry> Pointer_t;
 
     OUString sFontName;
     OUString sFontName1;
@@ -93,7 +93,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     virtual void lcl_endShape( ) SAL_OVERRIDE;
 
 };
-typedef boost::shared_ptr< FontTable >          FontTablePtr;
+typedef std::shared_ptr< FontTable >          FontTablePtr;
 
 class EmbeddedFontHandler : public LoggedProperties
 {

@@ -26,7 +26,7 @@ class RTFDocument
 {
 public:
     /// Pointer to this stream.
-    typedef boost::shared_ptr<RTFDocument> Pointer_t;
+    typedef std::shared_ptr<RTFDocument> Pointer_t;
 
     virtual ~RTFDocument() { }
 

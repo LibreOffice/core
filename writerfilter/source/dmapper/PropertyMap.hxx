@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.h>
 #include "PropertyIds.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/optional.hpp>
 #include <map>
 #include <vector>
@@ -84,7 +84,7 @@ struct RedlineParams
     /// This can hold properties of runs that had formatted 'track changes' properties
     css::uno::Sequence<css::beans::PropertyValue> m_aRevertProperties;
 };
-typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
+typedef std::shared_ptr< RedlineParams > RedlineParamsPtr;
 
 class PropValue
 {
@@ -145,7 +145,7 @@ public:
     void Erase( PropertyIds eId);
 
     //Imports properties from pMap, overwriting those with the same PropertyIds as the current map
-    void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
+    void InsertProps(const std::shared_ptr<PropertyMap> pMap);
 
     //Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional<Property> getProperty( PropertyIds eId ) const;
@@ -177,7 +177,7 @@ public:
     static com::sun::star::table::ShadowFormat getShadowFromBorder(com::sun::star::table::BorderLine2 aBorder);
 
 };
-typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
+typedef std::shared_ptr<PropertyMap>  PropertyMapPtr;
 
 class SectionPropertyMap : public PropertyMap
 {
@@ -326,7 +326,7 @@ public:
     /// Handling of margins, header and footer for any kind of sections breaks.
     void HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl);
 };
-typedef boost::shared_ptr<SectionPropertyMap> SectionPropertyMapPtr;
+typedef std::shared_ptr<SectionPropertyMap> SectionPropertyMapPtr;
 
 
 
@@ -428,7 +428,7 @@ public:
 
     void ResetFrameProperties();
 };
-typedef boost::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
+typedef std::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 /*-------------------------------------------------------------------------
     property map of a stylesheet
   -----------------------------------------------------------------------*/
@@ -581,7 +581,7 @@ public:
 
     virtual void insertTableProperties( const PropertyMap* ) SAL_OVERRIDE;
 };
-typedef boost::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
+typedef std::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
 } //namespace dmapper
 } //namespace writerfilter
 #endif

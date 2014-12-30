@@ -20,7 +20,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_CELLCOLORHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -53,7 +53,7 @@ public:
     CellColorHandler( );
     virtual ~CellColorHandler();
 
-    ::boost::shared_ptr<TablePropertyMap>            getProperties();
+    ::std::shared_ptr<TablePropertyMap>            getProperties();
 
     void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 
@@ -62,7 +62,7 @@ public:
     void disableInteropGrabBag();
     bool isInteropGrabBagEnabled();
 };
-typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
+typedef std::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}
 
 #endif

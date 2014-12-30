@@ -88,7 +88,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
 };
-typedef boost::shared_ptr< SettingsTable >          SettingsTablePtr;
+typedef std::shared_ptr< SettingsTable >          SettingsTablePtr;
 }}
 
 #endif

@@ -23,7 +23,7 @@
 #include <dmapper/resourcemodel.hxx>
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace writerfilter
 {
@@ -53,7 +53,7 @@ class CellData
     bool mbOpen;
 
 public:
-    typedef boost::shared_ptr<CellData> Pointer_t;
+    typedef std::shared_ptr<CellData> Pointer_t;
 
     CellData(css::uno::Reference<css::text::XTextRange> start, TablePropertyMapPtr pProps)
     : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
@@ -132,7 +132,7 @@ class RowData
     mutable TablePropertyMapPtr mpProperties;
 
 public:
-    typedef boost::shared_ptr<RowData> Pointer_t;
+    typedef std::shared_ptr<RowData> Pointer_t;
 
     RowData() {}
 
@@ -293,7 +293,7 @@ class TableData
     void newRow() { mpRow = RowPointer_t(new RowData()); }
 
 public:
-    typedef boost::shared_ptr<TableData> Pointer_t;
+    typedef std::shared_ptr<TableData> Pointer_t;
 
     TableData(unsigned int nDepth) : mnDepth(nDepth) { newRow(); }
     ~TableData() {}

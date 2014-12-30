@@ -2209,7 +2209,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     break;
     case RTF_NESTROW:
     {
-        boost::shared_ptr<TableRowBuffer> const pBuffer(
+        std::shared_ptr<TableRowBuffer> const pBuffer(
             new TableRowBuffer(
                 m_aTableBufferStack.back(),
                 m_aNestedTableCellsSprms,

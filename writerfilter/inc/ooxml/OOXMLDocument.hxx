@@ -76,7 +76,7 @@ class OOXMLStream
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
         FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, ACTIVEX, ACTIVEXBIN, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, SIGNATURE };
-    typedef boost::shared_ptr<OOXMLStream> Pointer_t;
+    typedef std::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
 
@@ -121,7 +121,7 @@ public:
     /**
        Pointer to this stream.
     */
-    typedef boost::shared_ptr<OOXMLDocument> Pointer_t;
+    typedef std::shared_ptr<OOXMLDocument> Pointer_t;
 
     virtual ~OOXMLDocument() {}
 

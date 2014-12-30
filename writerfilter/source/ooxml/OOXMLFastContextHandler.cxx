@@ -1522,7 +1522,7 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
     mpParserState->startTable();
     mnTableDepth++;
 
-    boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
     {
         OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
         OOXMLProperty::Pointer_t pProp
@@ -1540,7 +1540,7 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 {
     endAction(Element);
 
-    boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
+    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
     {
         OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
         OOXMLProperty::Pointer_t pProp

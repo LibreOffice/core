@@ -10,6 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 
+#include <memory>
 #include <rtflistener.hxx>
 #include <rtftokenizer.hxx>
 
@@ -49,7 +50,7 @@ public:
         return m_bHasTable;
     }
 private:
-    boost::shared_ptr<RTFTokenizer> m_pTokenizer;
+    std::shared_ptr<RTFTokenizer> m_pTokenizer;
     SvStream& m_rStream;
     bool m_bHasTable;
 };

@@ -10,7 +10,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_LATENTSTYLEHANDLER_HXX
 
 #include "LoggedResources.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -36,7 +36,7 @@ public:
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getAttributes() const;
 };
 
-typedef boost::shared_ptr<LatentStyleHandler> LatentStyleHandlerPtr;
+typedef std::shared_ptr<LatentStyleHandler> LatentStyleHandlerPtr;
 } // namespace dmapper
 } // namespace writerfilter
 

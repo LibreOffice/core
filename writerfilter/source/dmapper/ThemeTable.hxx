@@ -56,7 +56,7 @@ public:
     OUString fromLocaleToScriptTag(const OUString& sLocale);
     OUString fromLCIDToScriptTag(LanguageType lang);
 };
-typedef boost::shared_ptr< ThemeTable >          ThemeTablePtr;
+typedef std::shared_ptr< ThemeTable >          ThemeTablePtr;
 }}
 
 #endif

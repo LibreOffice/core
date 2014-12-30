@@ -18,7 +18,7 @@
 #include "oox/token/tokens.hxx"
 #include <algorithm>
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/tuple/tuple.hpp>
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>

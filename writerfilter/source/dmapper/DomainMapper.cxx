@@ -2780,7 +2780,7 @@ void DomainMapper::PopStyleSheetProperties( bool bAffectTableMngr )
     }
 }
 
-void DomainMapper::PushListProperties( ::boost::shared_ptr<PropertyMap> pListProperties )
+void DomainMapper::PushListProperties( ::std::shared_ptr<PropertyMap> pListProperties )
 {
     m_pImpl->PushListProperties( pListProperties );
 }
@@ -3164,7 +3164,7 @@ void DomainMapper::lcl_info(const std::string & /*info_*/)
 {
 }
 
-void DomainMapper::handleUnderlineType(const Id nId, const ::boost::shared_ptr<PropertyMap> pContext)
+void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap> pContext)
 {
     sal_Int16 nUnderline = awt::FontUnderline::NONE;
 
@@ -3228,7 +3228,7 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::boost::shared_ptr<P
     pContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny(nUnderline));
 }
 
-void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight)
+void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight)
 {
     sal_Int16 nAdjust = 0;
     sal_Int16 nLastLineAdjust = 0;

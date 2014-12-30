@@ -31,7 +31,7 @@ namespace dmapper {
 class FormControlHelper
 {
 public:
-    typedef boost::shared_ptr<FormControlHelper> Pointer_t;
+    typedef std::shared_ptr<FormControlHelper> Pointer_t;
     FormControlHelper(FieldId eFieldId,
                       css::uno::Reference<css::text::XTextDocument> const& rTextDocument,
                       FFDataHandler::Pointer_t pFFData);
@@ -43,7 +43,7 @@ public:
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
-    typedef boost::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
+    typedef std::shared_ptr<FormControlHelper_Impl> ImplPointer_t;
     ImplPointer_t m_pImpl;
 
     bool createCheckbox(css::uno::Reference<css::text::XTextRange> const& xTextRange,
