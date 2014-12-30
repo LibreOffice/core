@@ -357,12 +357,16 @@ void StgStrm::scanBuildPageChainCache(sal_Int32 *pOptionalCalcSize)
 
         //returned second is false if it already exists
         if (!nUsedPageNumbers.insert(nBgn).second)
+        {
+            SAL_WARN ("sot", "Error: page number " << nBgn << " already in chain for stream");
             bError = true;
+        }
 
         nOptSize += nPageSize;
     }
     if (bError)
     {
+        SAL_WARN("sot", "returning wrong format error");
         if (pOptionalCalcSize)
             rIo.SetError( ERRCODE_IO_WRONGFORMAT );
         m_aPagesCache.clear();
@@ -424,11 +428,18 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
 
     if ( nIdx > m_aPagesCache.size() )
     {
-        rIo.SetError( SVSTREAM_FILEFORMAT_ERROR );
+        SAL_WARN("sot", "seek to index " << nIdx <<
+                 " beyond page cache size " << m_aPagesCache.size());
+        // fdo#84229 - handle seek to end and back as eg. XclImpStream expects
+        nIdx = m_aPagesCache.size();
         nPage = STG_EOF;
-        nOffset = nPageSize;
+        nOffset = 0;
+        // Intriguingly in the past we didn't reset nPos to match the real
+        // length of the stream thus: nPos = nPageSize * nIdx; so retain
+        // this behavior for now.
         return false;
     }
+
     // special case: seek to 1st byte of new, unallocated page
     // (in case the file size is a multiple of the page size)
     if( nBytePos == nSize && !nOffset && nIdx > 0 && nIdx == m_aPagesCache.size() )
