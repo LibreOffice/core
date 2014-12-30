@@ -1752,6 +1752,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     }
 
     pBook = new WW8PLCFx_Book(pTblSt, *pWwFib);
+    pAtnBook = new WW8PLCFx_AtnBook(pTblSt, *pWwFib);
 }
 
 WW8ScannerBase::~WW8ScannerBase()
@@ -4234,6 +4235,138 @@ const OUString* WW8PLCFx_Book::GetName() const
     return pRet;
 }
 
+WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTblSt, const WW8Fib& rFib)
+    : WW8PLCFx(rFib.GetFIBVersion(), /*bSprm=*/false),
+    m_bIsEnd(false)
+{
+    if (!rFib.fcPlcfAtnbkf || !rFib.lcbPlcfAtnbkf || !rFib.fcPlcfAtnbkl || !rFib.lcbPlcfAtnbkl)
+    {
+        m_pBook[0] = m_pBook[1] = 0;
+        nIMax = 0;
+    }
+    else
+    {
+        m_pBook[0] = new WW8PLCFspecial(pTblSt, rFib.fcPlcfAtnbkf, rFib.lcbPlcfAtnbkf, 4);
+        m_pBook[1] = new WW8PLCFspecial(pTblSt, rFib.fcPlcfAtnbkl, rFib.lcbPlcfAtnbkl, 0);
+
+        nIMax = m_pBook[0]->GetIMax();
+        if (m_pBook[1]->GetIMax() < nIMax)
+            nIMax = m_pBook[1]->GetIMax();
+    }
+}
+
+WW8PLCFx_AtnBook::~WW8PLCFx_AtnBook()
+{
+    delete m_pBook[1];
+    delete m_pBook[0];
+}
+
+sal_uInt32 WW8PLCFx_AtnBook::GetIdx() const
+{
+    return nIMax ? m_pBook[0]->GetIdx() : 0;
+}
+
+void WW8PLCFx_AtnBook::SetIdx( sal_uLong nI )
+{
+    if( nIMax )
+        m_pBook[0]->SetIdx( nI );
+}
+
+sal_uLong WW8PLCFx_AtnBook::GetIdx2() const
+{
+    if (nIMax)
+        return m_pBook[1]->GetIdx() | ( m_bIsEnd ? 0x80000000 : 0 );
+    else
+        return 0;
+}
+
+void WW8PLCFx_AtnBook::SetIdx2( sal_uLong nI )
+{
+    if( nIMax )
+    {
+        m_pBook[1]->SetIdx( nI & 0x7fffffff );
+        m_bIsEnd = static_cast<bool>(( nI >> 31 ) & 1);
+    }
+}
+
+bool WW8PLCFx_AtnBook::SeekPos(WW8_CP nCpPos)
+{
+    if (!m_pBook[0])
+        return false;
+
+    bool bOk = m_pBook[0]->SeekPosExact(nCpPos);
+    bOk &= m_pBook[1]->SeekPosExact(nCpPos);
+    m_bIsEnd = false;
+
+    return bOk;
+}
+
+WW8_CP WW8PLCFx_AtnBook::Where()
+{
+    return m_pBook[static_cast<int>(m_bIsEnd)]->Where();
+}
+
+long WW8PLCFx_AtnBook::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
+{
+    void* pData;
+    rEnd = WW8_CP_MAX;
+    rLen = 0;
+
+    if (!m_pBook[0] || !m_pBook[1] || !nIMax || (m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx()) >= nIMax)
+    {
+        rStart = rEnd = WW8_CP_MAX;
+        return -1;
+    }
+
+    (void)m_pBook[static_cast<int>(m_bIsEnd)]->Get(rStart, pData);
+    return m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx();
+}
+
+void WW8PLCFx_AtnBook::advance()
+{
+    if( m_pBook[0] && m_pBook[1] && nIMax )
+    {
+        (*m_pBook[static_cast<int>(m_bIsEnd)]).advance();
+
+        sal_uLong l0 = m_pBook[0]->Where();
+        sal_uLong l1 = m_pBook[1]->Where();
+        if( l0 < l1 )
+            m_bIsEnd = false;
+        else if( l1 < l0 )
+            m_bIsEnd = true;
+        else
+        {
+            const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
+            long nPairFor = (p == NULL)? 0L : SVBT16ToShort(*((SVBT16*) p));
+            if (nPairFor == m_pBook[1]->GetIdx())
+                m_bIsEnd = false;
+            else
+                m_bIsEnd = !m_bIsEnd;
+        }
+    }
+}
+
+sal_uInt16 WW8PLCFx_AtnBook::getHandle() const
+{
+    if (!m_pBook[0] || !m_pBook[1])
+        return LONG_MAX;
+
+    if (m_bIsEnd)
+        return m_pBook[1]->GetIdx();
+    else
+    {
+        if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
+            return SVBT16ToShort(*(static_cast<const SVBT16*>(p)));
+        else
+            return LONG_MAX;
+    }
+}
+
+bool WW8PLCFx_AtnBook::getIsEnd() const
+{
+    return m_bIsEnd;
+}
+
 #ifndef DUMP
 
 // Am Ende eines Absatzes reichen bei WW6 die Attribute bis hinter das <CR>.
@@ -4374,12 +4507,14 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pChp = &aD[7];
         pPap = &aD[8];
         pSep = &aD[9];
+        pAtnBkm = &aD[10];
 
         pSep->pPLCFx = pBase->pSepPLCF;
         pFtn->pPLCFx = pBase->pFtnPLCF;
         pEdn->pPLCFx = pBase->pEdnPLCF;
         pBkm->pPLCFx = pBase->pBook;
         pAnd->pPLCFx = pBase->pAndPLCF;
+        pAtnBkm->pPLCFx = pBase->pAtnBook;
 
     }
     else
@@ -4397,7 +4532,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
         pPap = &aD[5];
         pSep = &aD[6]; // Dummy
 
-        pAnd = pFtn = pEdn = 0;     // unbenutzt bei SpezText
+        pAnd = pAtnBkm = pFtn = pEdn = 0;     // unbenutzt bei SpezText
     }
 
     pChp->pPLCFx = pBase->pChpPLCF;
@@ -4674,6 +4809,8 @@ void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = eEDN;
     else if( p == pBkm )
         pRes->nSprmId = eBKN;
+    else if (p == pAtnBkm)
+        pRes->nSprmId = eATNBKN;
     else if( p == pAnd )
         pRes->nSprmId = eAND;
     else if( p == pPcd )
@@ -4692,6 +4829,8 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
     if( &aD[nIdx] == pBkm )
         pRes->nSprmId = eBKN;
+    else if (&aD[nIdx] == pAtnBkm)
+        pRes->nSprmId = eATNBKN;
     else if( &aD[nIdx] == pPcd )
     {
         //We slave the piece table attributes to the piece table, the piece
