@@ -827,17 +827,17 @@ void ImportExcel::Shrfmla( void )
 
     const ScTokenArray* pErgebnis;
 
-    pFormConv->Reset();
-    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
-
-    OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray is NULL!" );
-
     // The shared range in this record is erroneous more than half the time.
-    // Don't ever rely on it.
+    // Don't ever rely on it. Use the one from the formula cell above.
     SCCOL nCol1 = mpLastFormula->mnCol;
     SCROW nRow1 = mpLastFormula->mnRow;
 
     ScAddress aPos(nCol1, nRow1, GetCurrScTab());
+    pFormConv->Reset(aPos);
+    pFormConv->Convert( pErgebnis, maStrm, nLenExpr, true, FT_SharedFormula );
+
+    OSL_ENSURE( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray is NULL!" );
+
     pExcRoot->pShrfmlaBuff->Store(aPos, *pErgebnis);
 
     // Create formula cell for the last formula record.
