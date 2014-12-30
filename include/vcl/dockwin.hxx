@@ -247,6 +247,7 @@ private:
     sal_Int32           mnDockRight;
     sal_Int32           mnDockBottom;
     WinBits         mnFloatBits;
+    Idle            maLayoutIdle;
     bool            mbDockCanceled:1,
                     mbDockPrevented:1,
                     mbFloatPrevented:1,
@@ -268,6 +269,7 @@ private:
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
+    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         DockingWindow (const DockingWindow &);
@@ -291,6 +293,7 @@ public:
 
     SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDefferedInit; }
+    SAL_DLLPRIVATE bool    hasPendingLayout() const { return maLayoutIdle.IsActive(); }
     void                   doDeferredInit(WinBits nBits);
 protected:
                     DockingWindow( WindowType nType );
@@ -361,9 +364,10 @@ public:
     void            SetOutputSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
     Size            GetOutputSizePixel() const;
 
-    virtual void     SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual void SetText( const OUString& rStr ) SAL_OVERRIDE;
     virtual OUString GetText() const SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
 };
 
 inline void DockingWindow::SetPin( bool bPin )

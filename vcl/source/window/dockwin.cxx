@@ -329,6 +329,10 @@ void DockingWindow::ImplInitDockingWindowData()
     mbIsCalculatingInitialLayoutSize = false;
     mbInitialLayoutDone = false;
     mpDialogParent = NULL;
+
+    //To-Do, reuse maResizeTimer
+    maLayoutIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    maLayoutIdle.SetIdleHdl( LINK( this, DockingWindow, ImplHandleLayoutTimerHdl ) );
 }
 
 void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -1078,6 +1082,8 @@ bool DockingWindow::isLayoutEnabled() const
 
 void DockingWindow::setOptimalLayoutSize()
 {
+    maLayoutIdle.Stop();
+
     //resize DockingWindow to fit requisition on initial show
     Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
 
@@ -1119,6 +1125,32 @@ Size DockingWindow::GetOptimalSize() const
         + 2*nBorderWidth;
 
     return Window::CalcWindowSize(aSize);
+}
+
+void DockingWindow::queue_resize(StateChangedType /*eReason*/)
+{
+    if (hasPendingLayout() || isCalculatingInitialLayoutSize())
+        return;
+    if (!isLayoutEnabled())
+        return;
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnOptimalWidthCache = -1;
+    pWindowImpl->mnOptimalHeightCache = -1;
+    maLayoutIdle.Start();
+}
+
+IMPL_LINK(DockingWindow, ImplHandleLayoutTimerHdl, void*, EMPTYARG)
+{
+    if (!isLayoutEnabled())
+    {
+        SAL_WARN("vcl.layout", "DockingWindow has become non-layout because extra children have been added directly to it.");
+        return 0;
+    }
+
+    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
+    assert(pBox);
+    setPosSizeOnContainee(GetSizePixel(), *pBox);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
