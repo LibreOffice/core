@@ -1179,15 +1179,8 @@ void OpenGLContext::reset()
     // destroy all programs
     if( !maPrograms.empty() )
     {
-        boost::unordered_map<ProgramKey, OpenGLProgram*>::iterator it;
 
         makeCurrent();
-        it = maPrograms.begin();
-        while( it != maPrograms.end() )
-        {
-            delete it->second;
-            it++;
-        }
         maPrograms.clear();
     }
 
@@ -1545,10 +1538,10 @@ void OpenGLContext::ReleaseFramebuffers()
 
 OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
 {
-    boost::unordered_map<ProgramKey, OpenGLProgram*>::iterator it;
     ProgramKey aKey( rVertexShader, rFragmentShader );
 
-    it = maPrograms.find( aKey );
+    boost::ptr_map<ProgramKey, OpenGLProgram>::iterator
+        it = maPrograms.find( aKey );
     if( it != maPrograms.end() )
         return it->second;
 
@@ -1559,7 +1552,7 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
         return NULL;
     }
 
-    maPrograms[aKey] = pProgram;
+    maPrograms.insert(aKey, pProgram);
     return pProgram;
 }
 
