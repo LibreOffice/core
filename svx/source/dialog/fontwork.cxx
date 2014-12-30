@@ -30,7 +30,6 @@
 #include "svx/dlgutil.hxx"
 
 #include <svx/dialogs.hrc>
-#include "fontwork.hrc"
 #include <svx/fontwork.hxx>
 #include <editeng/outlobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -163,11 +162,9 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 ) :
 
     SfxChildWindow( _pParent, nId )
-
 {
-    pWindow = new SvxFontWorkDialog( pBindings, this, _pParent,
-                                     SVX_RES( RID_SVXDLG_FONTWORK ) );
-    SvxFontWorkDialog* pDlg = static_cast<SvxFontWorkDialog*>(pWindow);
+    SvxFontWorkDialog* pDlg = new SvxFontWorkDialog(pBindings, this, _pParent);
+    pWindow = pDlg;
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
@@ -175,42 +172,62 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 }
 
 // Floating Window to the attribution of text effects
-
-SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
-                                      SfxChildWindow *pCW,
-                                      vcl::Window* _pParent,
-                                      const ResId& rResId ) :
-    SfxDockingWindow( pBindinx, pCW, _pParent, rResId ),
-
-    aTbxStyle       (this, ResId(TBX_STYLE,*rResId.GetResMgr())),
-    aTbxAdjust      (this, ResId(TBX_ADJUST,*rResId.GetResMgr())),
-
-    aFbDistance     (this, ResId(FB_DISTANCE,*rResId.GetResMgr())),
-    aMtrFldDistance (this, ResId(MTR_FLD_DISTANCE,*rResId.GetResMgr())),
-    aFbTextStart    (this, ResId(FB_TEXTSTART,*rResId.GetResMgr())),
-    aMtrFldTextStart(this, ResId(MTR_FLD_TEXTSTART,*rResId.GetResMgr())),
-
-    aTbxShadow      (this, ResId(TBX_SHADOW,*rResId.GetResMgr())),
-
-    aFbShadowX      (this, ResId(FB_SHADOW_X,*rResId.GetResMgr())),
-    aMtrFldShadowX  (this, ResId(MTR_FLD_SHADOW_X,*rResId.GetResMgr())),
-    aFbShadowY      (this, ResId(FB_SHADOW_Y,*rResId.GetResMgr())),
-    aMtrFldShadowY  (this, ResId(MTR_FLD_SHADOW_Y,*rResId.GetResMgr())),
-
-    aShadowColorLB  (this, ResId(CLB_SHADOW_COLOR,*rResId.GetResMgr())),
-    rBindings       (*pBindinx),
-
-    nLastStyleTbxId(0),
-    nLastAdjustTbxId(0),
-    nLastShadowTbxId(0),
-    nSaveShadowX    (0),
-    nSaveShadowY    (0),
-    nSaveShadowAngle(450),
-    nSaveShadowSize (100),
-
-    maImageList     (ResId(IL_FONTWORK,*rResId.GetResMgr()))
+SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
+                                     SfxChildWindow *pCW,
+                                     vcl::Window* _pParent)
+    : SfxDockingWindow(pBindinx, pCW, _pParent, "DockingFontwork", "svx/ui/dockingfontwork.ui")
+    , rBindings(*pBindinx)
+    , nLastStyleTbxId(0)
+    , nLastAdjustTbxId(0)
+    , nLastShadowTbxId(0)
+    , nSaveShadowX(0)
+    , nSaveShadowY(0)
+    , nSaveShadowAngle(450)
+    , nSaveShadowSize (100)
 {
-    FreeResource();
+    get(m_pMtrFldDistance, "distance");
+    get(m_pMtrFldTextStart, "indent");
+    get(m_pMtrFldShadowX, "distancex");
+    get(m_pMtrFldShadowY, "distancey");
+    get(m_pShadowColorLB, "color");
+    get(m_pFbShadowX, "shadowx");
+    get(m_pFbShadowY, "shadowy");
+
+    get(m_pTbxStyle, "style");
+    nStyleOffId = m_pTbxStyle->GetItemId(0);
+    m_pTbxStyle->SetItemBits(nStyleOffId, ToolBoxItemBits::AUTOCHECK);
+    nStyleRotateId = m_pTbxStyle->GetItemId(1);
+    m_pTbxStyle->SetItemBits(nStyleRotateId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nStyleUprightId = m_pTbxStyle->GetItemId(2);
+    m_pTbxStyle->SetItemBits(nStyleUprightId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nStyleSlantXId = m_pTbxStyle->GetItemId(3);
+    m_pTbxStyle->SetItemBits(nStyleSlantXId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nStyleSlantYId = m_pTbxStyle->GetItemId(4);
+    m_pTbxStyle->SetItemBits(nStyleSlantYId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+
+    get(m_pTbxShadow, "shadow");
+    nShowFormId = m_pTbxShadow->GetItemId(0);
+    m_pTbxShadow->SetItemBits(nShowFormId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
+    nOutlineId = m_pTbxShadow->GetItemId(1);
+    m_pTbxShadow->SetItemBits(nOutlineId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nShadowOffId = m_pTbxShadow->GetItemId(2);
+    m_pTbxShadow->SetItemBits(nShadowOffId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nShadowNormalId = m_pTbxShadow->GetItemId(3);
+    m_pTbxShadow->SetItemBits(nShadowNormalId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nShadowSlantId = m_pTbxShadow->GetItemId(4);
+    m_pTbxShadow->SetItemBits(nShadowSlantId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+
+    get(m_pTbxAdjust, "adjust");
+    nAdjustMirrorId = m_pTbxAdjust->GetItemId(0);
+    m_pTbxAdjust->SetItemBits(nAdjustMirrorId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
+    nAdjustLeftId = m_pTbxAdjust->GetItemId(1);
+    m_pTbxAdjust->SetItemBits(nAdjustLeftId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::CHECKABLE);
+    nAdjustCenterId = m_pTbxAdjust->GetItemId(2);
+    m_pTbxAdjust->SetItemBits(nAdjustCenterId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nAdjustRightId = m_pTbxAdjust->GetItemId(3);
+    m_pTbxAdjust->SetItemBits(nAdjustRightId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
+    nAdjustAutoSizeId = m_pTbxAdjust->GetItemId(4);
+    m_pTbxAdjust->SetItemBits(nAdjustAutoSizeId, ToolBoxItemBits::AUTOCHECK|ToolBoxItemBits::RADIOCHECK);
 
     ApplyImageList();
 
@@ -226,44 +243,44 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     pCtrlItems[9] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWXVAL, *this, rBindings);
     pCtrlItems[10] = new SvxFontWorkControllerItem(SID_FORMTEXT_SHDWYVAL, *this, rBindings);
 
-    Size aSize = aTbxStyle.CalcWindowSizePixel();
-    aTbxStyle.SetSizePixel(aSize);
-    aTbxStyle.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectStyleHdl_Impl) );
+    Size aSize = m_pTbxStyle->CalcWindowSizePixel();
+    m_pTbxStyle->SetSizePixel(aSize);
+    m_pTbxStyle->SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectStyleHdl_Impl) );
 
-    aTbxAdjust.SetSizePixel(aSize);
-    aTbxAdjust.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectAdjustHdl_Impl) );
+    m_pTbxAdjust->SetSizePixel(aSize);
+    m_pTbxAdjust->SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectAdjustHdl_Impl) );
 
-    aTbxShadow.SetSizePixel(aSize);
-    aTbxShadow.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
+    m_pTbxShadow->SetSizePixel(aSize);
+    m_pTbxShadow->SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
 
     Link aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
-    aMtrFldDistance.SetModifyHdl( aLink );
-    aMtrFldTextStart.SetModifyHdl( aLink );
-    aMtrFldShadowX.SetModifyHdl( aLink );
-    aMtrFldShadowY.SetModifyHdl( aLink );
+    m_pMtrFldDistance->SetModifyHdl( aLink );
+    m_pMtrFldTextStart->SetModifyHdl( aLink );
+    m_pMtrFldShadowX->SetModifyHdl( aLink );
+    m_pMtrFldShadowY->SetModifyHdl( aLink );
 
     // Set System metric
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
-    SetFieldUnit( aMtrFldDistance, eDlgUnit, true );
-    SetFieldUnit( aMtrFldTextStart, eDlgUnit, true );
-    SetFieldUnit( aMtrFldShadowX, eDlgUnit, true );
-    SetFieldUnit( aMtrFldShadowY, eDlgUnit, true );
+    SetFieldUnit(*m_pMtrFldDistance, eDlgUnit, true);
+    SetFieldUnit(*m_pMtrFldTextStart, eDlgUnit, true);
+    SetFieldUnit(*m_pMtrFldShadowX, eDlgUnit, true);
+    SetFieldUnit(*m_pMtrFldShadowY, eDlgUnit, true);
     if( eDlgUnit == FUNIT_MM )
     {
-        aMtrFldDistance.SetSpinSize( 50 );
-        aMtrFldTextStart.SetSpinSize( 50 );
-        aMtrFldShadowX.SetSpinSize( 50 );
-        aMtrFldShadowY.SetSpinSize( 50 );
+        m_pMtrFldDistance->SetSpinSize( 50 );
+        m_pMtrFldTextStart->SetSpinSize( 50 );
+        m_pMtrFldShadowX->SetSpinSize( 50 );
+        m_pMtrFldShadowY->SetSpinSize( 50 );
     }
     else
     {
-        aMtrFldDistance.SetSpinSize( 10 );
-        aMtrFldTextStart.SetSpinSize( 10 );
-        aMtrFldShadowX.SetSpinSize( 10 );
-        aMtrFldShadowY.SetSpinSize( 10 );
+        m_pMtrFldDistance->SetSpinSize( 10 );
+        m_pMtrFldTextStart->SetSpinSize( 10 );
+        m_pMtrFldShadowX->SetSpinSize( 10 );
+        m_pMtrFldShadowY->SetSpinSize( 10 );
     }
 
-    aShadowColorLB.SetSelectHdl( LINK(this, SvxFontWorkDialog, ColorSelectHdl_Impl) );
+    m_pShadowColorLB->SetSelectHdl( LINK(this, SvxFontWorkDialog, ColorSelectHdl_Impl) );
 
     aInputIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
     aInputIdle.SetIdleHdl(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
@@ -325,38 +342,38 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 {
     if ( pItem )
     {
-        sal_uInt16 nId = TBI_STYLE_OFF;
+        sal_uInt16 nId = nStyleOffId;
 
         switch ( pItem->GetValue() )
         {
-            case XFT_ROTATE : nId = TBI_STYLE_ROTATE;   break;
-            case XFT_UPRIGHT: nId = TBI_STYLE_UPRIGHT;  break;
-            case XFT_SLANTX : nId = TBI_STYLE_SLANTX;   break;
-            case XFT_SLANTY : nId = TBI_STYLE_SLANTY;   break;
+            case XFT_ROTATE : nId = nStyleRotateId;   break;
+            case XFT_UPRIGHT: nId = nStyleUprightId;  break;
+            case XFT_SLANTX : nId = nStyleSlantXId;   break;
+            case XFT_SLANTY : nId = nStyleSlantYId;   break;
             default: ;//prevent warning
         }
-        aTbxStyle.Enable();
+        m_pTbxStyle->Enable();
 
         // Make sure that there is always exactly one checked toolbox item.
         if ( pItem->GetValue() == XFT_NONE )
         {
-            aTbxStyle.CheckItem(TBI_STYLE_ROTATE, false);
-            aTbxStyle.CheckItem(TBI_STYLE_UPRIGHT, false);
-            aTbxStyle.CheckItem(TBI_STYLE_SLANTX, false);
-            aTbxStyle.CheckItem(TBI_STYLE_SLANTY, false);
+            m_pTbxStyle->CheckItem(nStyleRotateId, false);
+            m_pTbxStyle->CheckItem(nStyleUprightId, false);
+            m_pTbxStyle->CheckItem(nStyleSlantXId, false);
+            m_pTbxStyle->CheckItem(nStyleSlantYId, false);
 
-            aTbxStyle.CheckItem(TBI_STYLE_OFF, true);
+            m_pTbxStyle->CheckItem(nStyleOffId, true);
         }
         else
         {
-            aTbxStyle.CheckItem(TBI_STYLE_OFF, false);
-            aTbxStyle.CheckItem(nId);
+            m_pTbxStyle->CheckItem(nStyleOffId, false);
+            m_pTbxStyle->CheckItem(nId);
         }
 
         nLastStyleTbxId = nId;
     }
     else
-        aTbxStyle.Disable();
+        m_pTbxStyle->Disable();
 }
 
 // Set adjust buttons
@@ -367,33 +384,33 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
     {
         sal_uInt16 nId;
 
-        aTbxAdjust.Enable();
-        aMtrFldDistance.Enable();
+        m_pTbxAdjust->Enable();
+        m_pMtrFldDistance->Enable();
 
         if ( pItem->GetValue() == XFT_LEFT || pItem->GetValue() == XFT_RIGHT )
         {
-            if ( pItem->GetValue() == XFT_LEFT )    nId = TBI_ADJUST_LEFT;
-            else                                    nId = TBI_ADJUST_RIGHT;
-            aMtrFldTextStart.Enable();
+            if ( pItem->GetValue() == XFT_LEFT )    nId = nAdjustLeftId;
+            else                                    nId = nAdjustRightId;
+            m_pMtrFldTextStart->Enable();
         }
         else
         {
-            if ( pItem->GetValue() == XFT_CENTER )  nId = TBI_ADJUST_CENTER;
-            else                                    nId = TBI_ADJUST_AUTOSIZE;
-            aMtrFldTextStart.Disable();
+            if ( pItem->GetValue() == XFT_CENTER )  nId = nAdjustCenterId;
+            else                                    nId = nAdjustAutoSizeId;
+            m_pMtrFldTextStart->Disable();
         }
 
-        if ( !aTbxAdjust.IsItemChecked(nId) )
+        if ( !m_pTbxAdjust->IsItemChecked(nId) )
         {
-            aTbxAdjust.CheckItem(nId);
+            m_pTbxAdjust->CheckItem(nId);
         }
         nLastAdjustTbxId = nId;
     }
     else
     {
-        aTbxAdjust.Disable();
-        aMtrFldTextStart.Disable();
-        aMtrFldDistance.Disable();
+        m_pTbxAdjust->Disable();
+        m_pMtrFldTextStart->Disable();
+        m_pMtrFldDistance->Disable();
     }
 }
 
@@ -402,9 +419,9 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
 void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
 {
     // Use HasChildPathFocus() instead of HasFocus() at SpinFields
-    if ( pItem && !aMtrFldDistance.HasChildPathFocus() )
+    if ( pItem && !m_pMtrFldDistance->HasChildPathFocus() )
     {
-        SetMetricValue( aMtrFldDistance, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+        SetMetricValue(*m_pMtrFldDistance, pItem->GetValue(), SFX_MAPUNIT_100TH_MM);
     }
 }
 
@@ -413,9 +430,9 @@ void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
 void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
 {
     // Use HasChildPathFocus() instead of HasFocus() at SpinFields
-    if ( pItem && !aMtrFldTextStart.HasChildPathFocus() )
+    if ( pItem && !m_pMtrFldTextStart->HasChildPathFocus() )
     {
-        SetMetricValue( aMtrFldTextStart, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+        SetMetricValue(*m_pMtrFldTextStart, pItem->GetValue(), SFX_MAPUNIT_100TH_MM);
     }
 }
 
@@ -424,7 +441,7 @@ void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
 void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 {
     if ( pItem )
-        aTbxAdjust.CheckItem(TBI_ADJUST_MIRROR, pItem->GetValue());
+        m_pTbxAdjust->CheckItem(nAdjustMirrorId, pItem->GetValue());
 }
 
 // Set button for contour display
@@ -432,7 +449,7 @@ void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
 {
     if ( pItem )
-        aTbxShadow.CheckItem(TBI_SHOWFORM, !pItem->GetValue());
+        m_pTbxShadow->CheckItem(nShowFormId, !pItem->GetValue());
 }
 
 // Set button for text border
@@ -440,7 +457,7 @@ void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
 void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
 {
     if ( pItem )
-        aTbxShadow.CheckItem(TBI_OUTLINE, pItem->GetValue());
+        m_pTbxShadow->CheckItem(nOutlineId, pItem->GetValue());
 }
 
 // Set shadow buttons
@@ -452,52 +469,52 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
     {
         sal_uInt16 nId;
 
-        aTbxShadow.Enable();
+        m_pTbxShadow->Enable();
 
         if ( pItem->GetValue() == XFTSHADOW_NONE )
         {
-            nId = TBI_SHADOW_OFF;
-            aFbShadowX.Hide();
-            aFbShadowY.Hide();
-            aMtrFldShadowX.Disable();
-            aMtrFldShadowY.Disable();
-            aShadowColorLB.Disable();
+            nId = nShadowOffId;
+            m_pFbShadowX->Hide();
+            m_pFbShadowY->Hide();
+            m_pMtrFldShadowX->Disable();
+            m_pMtrFldShadowY->Disable();
+            m_pShadowColorLB->Disable();
         }
         else
         {
-            aFbShadowX.Show();
-            aFbShadowY.Show();
-            aMtrFldShadowX.Enable();
-            aMtrFldShadowY.Enable();
-            aShadowColorLB.Enable();
+            m_pFbShadowX->Show();
+            m_pFbShadowY->Show();
+            m_pMtrFldShadowX->Enable();
+            m_pMtrFldShadowY->Enable();
+            m_pShadowColorLB->Enable();
 
             if ( pItem->GetValue() == XFTSHADOW_NORMAL )
             {
-                nId = TBI_SHADOW_NORMAL;
+                nId = nShadowNormalId;
                 const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
 
-                aMtrFldShadowX.SetUnit( eDlgUnit );
-                aMtrFldShadowX.SetDecimalDigits(2);
-                aMtrFldShadowX.SetMin(LONG_MIN);
-                aMtrFldShadowX.SetMax(LONG_MAX);
+                m_pMtrFldShadowX->SetUnit( eDlgUnit );
+                m_pMtrFldShadowX->SetDecimalDigits(2);
+                m_pMtrFldShadowX->SetMin(LONG_MIN);
+                m_pMtrFldShadowX->SetMax(LONG_MAX);
                 if( eDlgUnit == FUNIT_MM )
-                    aMtrFldShadowX.SetSpinSize( 50 );
+                    m_pMtrFldShadowX->SetSpinSize( 50 );
                 else
-                    aMtrFldShadowX.SetSpinSize( 10 );
+                    m_pMtrFldShadowX->SetSpinSize( 10 );
 
-                aMtrFldShadowY.SetUnit( eDlgUnit );
-                aMtrFldShadowY.SetDecimalDigits(2);
-                aMtrFldShadowY.SetMin(LONG_MIN);
-                aMtrFldShadowY.SetMax(LONG_MAX);
+                m_pMtrFldShadowY->SetUnit( eDlgUnit );
+                m_pMtrFldShadowY->SetDecimalDigits(2);
+                m_pMtrFldShadowY->SetMin(LONG_MIN);
+                m_pMtrFldShadowY->SetMax(LONG_MAX);
                 if( eDlgUnit == FUNIT_MM )
-                    aMtrFldShadowY.SetSpinSize( 50 );
+                    m_pMtrFldShadowY->SetSpinSize( 50 );
                 else
-                    aMtrFldShadowY.SetSpinSize( 10 );
+                    m_pMtrFldShadowY->SetSpinSize( 10 );
 
                 if ( bRestoreValues )
                 {
-                    SetMetricValue( aMtrFldShadowX, nSaveShadowX, SFX_MAPUNIT_100TH_MM );
-                    SetMetricValue( aMtrFldShadowY, nSaveShadowY, SFX_MAPUNIT_100TH_MM );
+                    SetMetricValue(*m_pMtrFldShadowX, nSaveShadowX, SFX_MAPUNIT_100TH_MM);
+                    SetMetricValue(*m_pMtrFldShadowY, nSaveShadowY, SFX_MAPUNIT_100TH_MM);
 
                     XFormTextShadowXValItem aXItem( nSaveShadowX );
                     XFormTextShadowYValItem aYItem( nSaveShadowY );
@@ -508,24 +525,24 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             }
             else
             {
-                nId = TBI_SHADOW_SLANT;
+                nId = nShadowSlantId;
 
-                aMtrFldShadowX.SetUnit(FUNIT_CUSTOM);
-                aMtrFldShadowX.SetDecimalDigits(1);
-                aMtrFldShadowX.SetMin(-1800);
-                aMtrFldShadowX.SetMax( 1800);
-                aMtrFldShadowX.SetSpinSize(10);
+                m_pMtrFldShadowX->SetUnit(FUNIT_DEGREE);
+                m_pMtrFldShadowX->SetDecimalDigits(1);
+                m_pMtrFldShadowX->SetMin(-1800);
+                m_pMtrFldShadowX->SetMax( 1800);
+                m_pMtrFldShadowX->SetSpinSize(10);
 
-                aMtrFldShadowY.SetUnit(FUNIT_PERCENT);
-                aMtrFldShadowY.SetDecimalDigits(0);
-                aMtrFldShadowY.SetMin(-999);
-                aMtrFldShadowY.SetMax( 999);
-                aMtrFldShadowY.SetSpinSize(10);
+                m_pMtrFldShadowY->SetUnit(FUNIT_PERCENT);
+                m_pMtrFldShadowY->SetDecimalDigits(0);
+                m_pMtrFldShadowY->SetMin(-999);
+                m_pMtrFldShadowY->SetMax( 999);
+                m_pMtrFldShadowY->SetSpinSize(10);
 
                 if ( bRestoreValues )
                 {
-                    aMtrFldShadowX.SetValue(nSaveShadowAngle);
-                    aMtrFldShadowY.SetValue(nSaveShadowSize);
+                    m_pMtrFldShadowX->SetValue(nSaveShadowAngle);
+                    m_pMtrFldShadowY->SetValue(nSaveShadowSize);
                     XFormTextShadowXValItem aXItem(nSaveShadowAngle);
                     XFormTextShadowYValItem aYItem(nSaveShadowSize);
                     GetBindings().GetDispatcher()->Execute(
@@ -534,9 +551,9 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             }
         }
 
-        if ( !aTbxShadow.IsItemChecked(nId) )
+        if ( !m_pTbxShadow->IsItemChecked(nId) )
         {
-            aTbxShadow.CheckItem(nId);
+            m_pTbxShadow->CheckItem(nId);
         }
         nLastShadowTbxId = nId;
 
@@ -544,10 +561,10 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
     }
     else
     {
-        aTbxShadow.Disable();
-        aMtrFldShadowX.Disable();
-        aMtrFldShadowY.Disable();
-        aShadowColorLB.Disable();
+        m_pTbxShadow->Disable();
+        m_pMtrFldShadowX->Disable();
+        m_pMtrFldShadowY->Disable();
+        m_pShadowColorLB->Disable();
     }
 }
 
@@ -556,7 +573,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
 void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pItem)
 {
     if ( pItem )
-        aShadowColorLB.SelectEntry(pItem->GetColorValue());
+        m_pShadowColorLB->SelectEntry(pItem->GetColorValue());
 }
 
 // Enter X-value for shadow in edit field
@@ -564,7 +581,7 @@ void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pIte
 void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 {
     // Use HasChildPathFocus() instead of HasFocus() at SpinFields
-    if ( pItem && !aMtrFldShadowX.HasChildPathFocus() )
+    if ( pItem && !m_pMtrFldShadowX->HasChildPathFocus() )
     {
         // #i19251#
         // sal_Int32 nValue = pItem->GetValue();
@@ -573,7 +590,7 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
         // The two involved fields/items are used double and contain/give different
         // values regarding to the access method. Thus, here we need to separate the access
         // methos regarding to the kind of value accessed.
-        if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
+        if (m_pTbxShadow->IsItemChecked(nShadowSlantId))
         {
             // #i19251#
             // There is no value correction necessary at all, i think this
@@ -581,11 +598,11 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
             // involved fields/items are used double and contain/give different
             // values regarding to the access method.
             // nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
-            aMtrFldShadowX.SetValue(pItem->GetValue());
+            m_pMtrFldShadowX->SetValue(pItem->GetValue());
         }
         else
         {
-            SetMetricValue( aMtrFldShadowX, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+            SetMetricValue(*m_pMtrFldShadowX, pItem->GetValue(), SFX_MAPUNIT_100TH_MM);
         }
     }
 }
@@ -595,43 +612,45 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
 {
     // Use HasChildPathFocus() instead of HasFocus() at SpinFields
-    if ( pItem && !aMtrFldShadowY.HasChildPathFocus() )
+    if ( pItem && !m_pMtrFldShadowY->HasChildPathFocus() )
     {
         // #i19251#
         // The two involved fields/items are used double and contain/give different
         // values regarding to the access method. Thus, here we need to separate the access
         // methos regarding to the kind of value accessed.
-        if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
+        if (m_pTbxShadow->IsItemChecked(nShadowSlantId))
         {
-            aMtrFldShadowY.SetValue(pItem->GetValue());
+            m_pMtrFldShadowY->SetValue(pItem->GetValue());
         }
         else
         {
-            SetMetricValue( aMtrFldShadowY, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
+            SetMetricValue(*m_pMtrFldShadowY, pItem->GetValue(), SFX_MAPUNIT_100TH_MM);
         }
     }
 }
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
 {
-    sal_uInt16 nId = aTbxStyle.GetCurItemId();
+    sal_uInt16 nId = m_pTbxStyle->GetCurItemId();
 
     // Execute this block when a different toolbox item has been clicked or
     // when the off item has been clicked.  The later is necessary to
     // override the toolbox behaviour of unchecking the item after second
     // click on it: One of the items has to be checked at all times (when
     // enabled that is.)
-    if (nId == TBI_STYLE_OFF || nId != nLastStyleTbxId )
+    if (nId == nStyleOffId || nId != nLastStyleTbxId )
     {
         XFormTextStyle eStyle = XFT_NONE;
 
-        switch ( nId )
-        {
-            case TBI_STYLE_ROTATE   : eStyle = XFT_ROTATE;  break;
-            case TBI_STYLE_UPRIGHT  : eStyle = XFT_UPRIGHT; break;
-            case TBI_STYLE_SLANTX   : eStyle = XFT_SLANTX;  break;
-            case TBI_STYLE_SLANTY   : eStyle = XFT_SLANTY;  break;
-        }
+        if (nId == nStyleRotateId)
+            eStyle = XFT_ROTATE;
+        else if (nId == nStyleUprightId)
+            eStyle = XFT_UPRIGHT;
+        else if (nId == nStyleSlantXId)
+            eStyle = XFT_SLANTX;
+        else if (nId == nStyleSlantYId)
+            eStyle = XFT_SLANTY;
+
         XFormTextStyleItem aItem( eStyle );
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_STYLE, SfxCallMode::RECORD, &aItem, 0L );
         SetStyle_Impl( &aItem );
@@ -642,23 +661,24 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
 {
-    sal_uInt16 nId = aTbxAdjust.GetCurItemId();
+    sal_uInt16 nId = m_pTbxAdjust->GetCurItemId();
 
-    if ( nId == TBI_ADJUST_MIRROR )
+    if (nId == nAdjustMirrorId)
     {
-        XFormTextMirrorItem aItem(aTbxAdjust.IsItemChecked(nId));
+        XFormTextMirrorItem aItem(m_pTbxAdjust->IsItemChecked(nId));
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_MIRROR, SfxCallMode::SLOT, &aItem, 0L );
     }
     else if ( nId != nLastAdjustTbxId )
     {
         XFormTextAdjust eAdjust = XFT_AUTOSIZE;
 
-        switch ( nId )
-        {
-            case TBI_ADJUST_LEFT    : eAdjust = XFT_LEFT;   break;
-            case TBI_ADJUST_CENTER  : eAdjust = XFT_CENTER; break;
-            case TBI_ADJUST_RIGHT   : eAdjust = XFT_RIGHT;  break;
-        }
+        if (nId == nAdjustLeftId)
+            eAdjust = XFT_LEFT;
+        else if (nId == nAdjustCenterId)
+            eAdjust = XFT_CENTER;
+        else if (nId == nAdjustRightId)
+            eAdjust = XFT_RIGHT;
+
         XFormTextAdjustItem aItem(eAdjust);
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_ADJUST, SfxCallMode::RECORD, &aItem, 0L );
         SetAdjust_Impl(&aItem);
@@ -669,36 +689,36 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
 {
-    sal_uInt16 nId = aTbxShadow.GetCurItemId();
+    sal_uInt16 nId = m_pTbxShadow->GetCurItemId();
 
-    if ( nId == TBI_SHOWFORM )
+    if (nId == nShowFormId)
     {
-        XFormTextHideFormItem aItem(!aTbxShadow.IsItemChecked(nId));
+        XFormTextHideFormItem aItem(!m_pTbxShadow->IsItemChecked(nId));
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_HIDEFORM, SfxCallMode::RECORD, &aItem, 0L );
     }
-    else if ( nId == TBI_OUTLINE )
+    else if (nId == nOutlineId)
     {
-        XFormTextOutlineItem aItem(aTbxShadow.IsItemChecked(nId));
+        XFormTextOutlineItem aItem(m_pTbxShadow->IsItemChecked(nId));
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_OUTLINE, SfxCallMode::RECORD, &aItem, 0L );
     }
-    else if ( nId != nLastShadowTbxId )
+    else if (nId != nLastShadowTbxId)
     {
         XFormTextShadow eShadow = XFTSHADOW_NONE;
 
-        if ( nLastShadowTbxId == TBI_SHADOW_NORMAL )
+        if (nLastShadowTbxId == nShadowNormalId)
         {
-            nSaveShadowX = GetCoreValue( aMtrFldShadowX, SFX_MAPUNIT_100TH_MM );
-            nSaveShadowY = GetCoreValue( aMtrFldShadowY, SFX_MAPUNIT_100TH_MM );
+            nSaveShadowX = GetCoreValue(*m_pMtrFldShadowX, SFX_MAPUNIT_100TH_MM);
+            nSaveShadowY = GetCoreValue(*m_pMtrFldShadowY, SFX_MAPUNIT_100TH_MM);
         }
-        else if ( nLastShadowTbxId == TBI_SHADOW_SLANT )
+        else if (nLastShadowTbxId == nShadowSlantId)
         {
-            nSaveShadowAngle = static_cast<long>(aMtrFldShadowX.GetValue());
-            nSaveShadowSize  = static_cast<long>(aMtrFldShadowY.GetValue());
+            nSaveShadowAngle = static_cast<long>(m_pMtrFldShadowX->GetValue());
+            nSaveShadowSize  = static_cast<long>(m_pMtrFldShadowY->GetValue());
         }
         nLastShadowTbxId = nId;
 
-        if ( nId == TBI_SHADOW_NORMAL )     eShadow = XFTSHADOW_NORMAL;
-        else if ( nId == TBI_SHADOW_SLANT ) eShadow = XFTSHADOW_SLANT;
+        if ( nId == nShadowNormalId)     eShadow = XFTSHADOW_NORMAL;
+        else if (nId == nShadowSlantId) eShadow = XFTSHADOW_SLANT;
 
         XFormTextShadowItem aItem(eShadow);
         GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHADOW, SfxCallMode::RECORD, &aItem, 0L );
@@ -720,25 +740,25 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     // listen, this is however not possible at the moment due to compabillity
     // issues.
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
-    if( eDlgUnit != aMtrFldDistance.GetUnit() )
+    if( eDlgUnit != m_pMtrFldDistance->GetUnit() )
     {
-        SetFieldUnit( aMtrFldDistance, eDlgUnit, true );
-        SetFieldUnit( aMtrFldTextStart, eDlgUnit, true );
-        aMtrFldDistance.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
-        aMtrFldTextStart.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
+        SetFieldUnit(*m_pMtrFldDistance, eDlgUnit, true);
+        SetFieldUnit(*m_pMtrFldTextStart, eDlgUnit, true);
+        m_pMtrFldDistance->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
+        m_pMtrFldTextStart->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
     }
-    if( eDlgUnit != aMtrFldShadowX.GetUnit() &&
-        aTbxShadow.IsItemChecked( TBI_SHADOW_NORMAL ) )
+    if( eDlgUnit != m_pMtrFldShadowX->GetUnit() &&
+        m_pTbxShadow->IsItemChecked(nShadowNormalId) )
     {
-        SetFieldUnit( aMtrFldShadowX, eDlgUnit, true );
-        SetFieldUnit( aMtrFldShadowY, eDlgUnit, true );
-        aMtrFldShadowX.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
-        aMtrFldShadowY.SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
+        SetFieldUnit(*m_pMtrFldShadowX, eDlgUnit, true);
+        SetFieldUnit(*m_pMtrFldShadowY, eDlgUnit, true);
+        m_pMtrFldShadowX->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
+        m_pMtrFldShadowY->SetSpinSize( eDlgUnit == FUNIT_MM ? 50 : 10 );
     }
 
-    long nValue = GetCoreValue( aMtrFldDistance, SFX_MAPUNIT_100TH_MM );
+    long nValue = GetCoreValue(*m_pMtrFldDistance, SFX_MAPUNIT_100TH_MM);
     XFormTextDistanceItem aDistItem( nValue );
-    nValue = GetCoreValue( aMtrFldTextStart, SFX_MAPUNIT_100TH_MM );
+    nValue = GetCoreValue(*m_pMtrFldTextStart, SFX_MAPUNIT_100TH_MM);
     XFormTextStartItem aStartItem( nValue );
 
     sal_Int32 nValueX(0L);
@@ -748,15 +768,15 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     // The two involved fields/items are used double and contain/give different
     // values regarding to the access method. Thus, here we need to separate the access
     // methos regarding to the kind of value accessed.
-    if(nLastShadowTbxId == TBI_SHADOW_NORMAL)
+    if (nLastShadowTbxId == nShadowNormalId)
     {
-        nValueX = GetCoreValue( aMtrFldShadowX, SFX_MAPUNIT_100TH_MM );
-        nValueY = GetCoreValue( aMtrFldShadowY, SFX_MAPUNIT_100TH_MM );
+        nValueX = GetCoreValue(*m_pMtrFldShadowX, SFX_MAPUNIT_100TH_MM);
+        nValueY = GetCoreValue(*m_pMtrFldShadowY, SFX_MAPUNIT_100TH_MM);
     }
-    else if(nLastShadowTbxId == TBI_SHADOW_SLANT)
+    else if (nLastShadowTbxId == nShadowSlantId)
     {
-        nValueX = static_cast<long>(aMtrFldShadowX.GetValue());
-        nValueY = static_cast<long>(aMtrFldShadowY.GetValue());
+        nValueX = static_cast<long>(m_pMtrFldShadowX->GetValue());
+        nValueY = static_cast<long>(m_pMtrFldShadowY->GetValue());
     }
 
     XFormTextShadowXValItem aShadowXItem( nValueX );
@@ -770,7 +790,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl)
 {
-    XFormTextShadowColorItem aItem( "", aShadowColorLB.GetSelectEntryColor() );
+    XFormTextShadowColorItem aItem( "", m_pShadowColorLB->GetSelectEntryColor() );
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SfxCallMode::RECORD, &aItem, 0L );
     return 0;
 }
@@ -780,8 +800,8 @@ void SvxFontWorkDialog::SetColorList(const XColorListRef &pList)
     if ( pList.is() && pList != pColorList )
     {
         pColorList = pList;
-        aShadowColorLB.Clear();
-        aShadowColorLB.Fill(pColorList);
+        m_pShadowColorLB->Clear();
+        m_pShadowColorLB->Fill(pColorList);
     }
 }
 
@@ -789,37 +809,18 @@ void SvxFontWorkDialog::SetActive(bool /*bActivate*/)
 {
 }
 
-void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            ApplyImageList();
-
-    SfxDockingWindow::DataChanged( rDCEvt );
-}
-
 void SvxFontWorkDialog::ApplyImageList()
 {
-    ImageList& rImgLst = maImageList;
-
-    aTbxStyle.SetImageList( rImgLst );
-    aTbxAdjust.SetImageList( rImgLst );
-    aTbxShadow.SetImageList( rImgLst );
-
-    switch( nLastShadowTbxId )
+    if (nLastShadowTbxId == nShadowSlantId)
     {
-    case TBI_SHADOW_SLANT:
-        aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_ANGLE ) );
-        aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_SIZE ) );
-        break;
-    default:
-        aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_XDIST ) );
-        aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_YDIST ) );
-        break;
+        m_pFbShadowX->SetImage(Image(SVX_RES(RID_SVXIMG_SHADOW_ANGLE)));
+        m_pFbShadowY->SetImage(Image(SVX_RES(RID_SVXIMG_SHADOW_SIZE)));
     }
-
-    aFbDistance.SetImage( rImgLst.GetImage( TBI_DISTANCE ) );
-    aFbTextStart.SetImage( rImgLst.GetImage( TBI_TEXTSTART ) );
-
+    else
+    {
+        m_pFbShadowX->SetImage(Image(SVX_RES(RID_SVXIMG_SHADOW_XDIST)));
+        m_pFbShadowY->SetImage(Image(SVX_RES(RID_SVXIMG_SHADOW_YDIST)));
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -174,9 +174,6 @@
 // Menu for the ruler
 #define RID_SVXMN_RULER                     (RID_SVX_START +  92)
 
-// FontWork dialog
-#define RID_SVXDLG_FONTWORK                 (RID_SVX_START +  93)
-
 // for Toolbox-Control style
 #define RID_SVXTBX_STYLE                    (RID_SVX_START + 120)
 #define RID_SVX_STYLE_MENU                  (RID_SVX_START + 121)
@@ -1086,9 +1083,13 @@
 #define RID_SVXIMG_FONTWORK_ALIGN_RIGHT  (RID_SVX_START + 1375)
 #define RID_SVXIMG_FONTWORK_ALIGN_WORD   (RID_SVX_START + 1376)
 #define RID_SVXIMG_FONTWORK_ALIGN_STRETCH (RID_SVX_START + 1377)
+#define RID_SVXIMG_SHADOW_ANGLE          (RID_SVX_START + 1378)
+#define RID_SVXIMG_SHADOW_SIZE           (RID_SVX_START + 1379)
+#define RID_SVXIMG_SHADOW_XDIST          (RID_SVX_START + 1380)
+#define RID_SVXIMG_SHADOW_YDIST          (RID_SVX_START + 1381)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1378)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1382)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be

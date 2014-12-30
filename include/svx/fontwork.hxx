@@ -91,35 +91,49 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 
-    ToolBox         aTbxStyle;
-    ToolBox         aTbxAdjust;
+    ToolBox*        m_pTbxStyle;
+    ToolBox*        m_pTbxAdjust;
 
-    FixedImage      aFbDistance;
-    MetricField     aMtrFldDistance;
-    FixedImage      aFbTextStart;
-    MetricField     aMtrFldTextStart;
+    MetricField*    m_pMtrFldDistance;
+    MetricField*    m_pMtrFldTextStart;
 
-    ToolBox         aTbxShadow;
+    ToolBox*        m_pTbxShadow;
 
-    FixedImage      aFbShadowX;
-    MetricField     aMtrFldShadowX;
-    FixedImage      aFbShadowY;
-    MetricField     aMtrFldShadowY;
+    FixedImage*     m_pFbShadowX;
+    MetricField*    m_pMtrFldShadowX;
+    FixedImage*     m_pFbShadowY;
+    MetricField*    m_pMtrFldShadowY;
 
-    ColorLB         aShadowColorLB;
+    ColorLB*        m_pShadowColorLB;
 
     SfxBindings&    rBindings;
     Idle            aInputIdle;
 
-    sal_uInt16          nLastStyleTbxId;
-    sal_uInt16          nLastAdjustTbxId;
-    sal_uInt16          nLastShadowTbxId;
+    sal_uInt16      nLastStyleTbxId;
+    sal_uInt16      nStyleOffId;
+    sal_uInt16      nStyleRotateId;
+    sal_uInt16      nStyleUprightId;
+    sal_uInt16      nStyleSlantXId;
+    sal_uInt16      nStyleSlantYId;
+
+    sal_uInt16      nLastAdjustTbxId;
+    sal_uInt16      nAdjustMirrorId;
+    sal_uInt16      nAdjustLeftId;
+    sal_uInt16      nAdjustCenterId;
+    sal_uInt16      nAdjustRightId;
+    sal_uInt16      nAdjustAutoSizeId;
+
+    sal_uInt16      nLastShadowTbxId;
+    sal_uInt16      nShowFormId;
+    sal_uInt16      nOutlineId;
+    sal_uInt16      nShadowOffId;
+    sal_uInt16      nShadowNormalId;
+    sal_uInt16      nShadowSlantId;
+
     long            nSaveShadowX;
     long            nSaveShadowY;
     long            nSaveShadowAngle;
     long            nSaveShadowSize;
-
-    ImageList       maImageList;
 
     XColorListRef   pColorList;
 
@@ -147,7 +161,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void ApplyImageList();
 
  protected:
@@ -156,10 +169,8 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
                                               SfxChildAlignment eAlign ) SAL_OVERRIDE;
 
  public:
-    SvxFontWorkDialog(  SfxBindings *pBindinx,
-                        SfxChildWindow *pCW,
-                        vcl::Window* pParent,
-                        const ResId& rResId );
+    SvxFontWorkDialog(SfxBindings *pBinding, SfxChildWindow *pCW,
+                      vcl::Window* pParent);
     virtual ~SvxFontWorkDialog();
 
     void SetColorList(const XColorListRef &pTable);

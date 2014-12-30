@@ -42,7 +42,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/dialog/compressgraphicdialog.src \
     svx/source/dialog/dlgctrl.src \
     svx/source/dialog/docrecovery.src \
-    svx/source/dialog/fontwork.src \
     svx/source/dialog/frmsel.src \
     svx/source/dialog/imapdlg.src \
     svx/source/dialog/language.src \

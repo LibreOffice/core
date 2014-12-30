@@ -2302,6 +2302,26 @@ Image RID_SVXIMG_REDCROSS
     ImageBitmap = Bitmap { File = "nu02.png"; };
 };
 
+Image  RID_SVXIMG_SHADOW_ANGLE
+{
+    ImageBitmap = Bitmap { File = "fw018.png"; };
+};
+
+Image  RID_SVXIMG_SHADOW_SIZE
+{
+    ImageBitmap = Bitmap { File = "fw019.png"; };
+};
+
+Image  RID_SVXIMG_SHADOW_XDIST
+{
+    ImageBitmap = Bitmap { File = "fw016.png"; };
+};
+
+Image  RID_SVXIMG_SHADOW_YDIST
+{
+    ImageBitmap = Bitmap { File = "fw017.png"; };
+};
+
 String RID_SVXSTR_SUCCESSRECOV
 {
     Text[ en-US ] = "Successfully recovered";
