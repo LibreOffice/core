@@ -981,14 +981,6 @@ struct WW8_STRINGID
     SVBT16 reserved3;
 };
 
-/// The ATNBE structure contains information about an annotation bookmark in the document.
-struct WW8_ATNBE
-{
-    SVBT16 nBmc;
-    SVBT32 nTag;
-    SVBT32 nTagOld;
-};
-
 struct WW8_WKB
 {
     // M.M. This is the WkbPLCF struct

@@ -2192,79 +2192,6 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
             sAuthor = *pA;
         else
             sAuthor = sInitials;
-
-        // If there is a bookmark tag, a text range should be commented.
-        sal_uInt32 nTagBkmk = SVBT32ToUInt32(pDescri->ITagBkmk);
-        if (nTagBkmk != 0xFFFFFFFF)
-        {
-            int nAtnIndex = GetAnnotationIndex(nTagBkmk);
-            if (nAtnIndex != -1)
-            {
-                WW8_CP nStart = GetAnnotationStart(nAtnIndex);
-                WW8_CP nEnd = GetAnnotationEnd(GetAnnotationEndIndex(nAtnIndex));
-                //It is unfortunately fragile and wrong to assume that two
-                //character positions in the original word document, which is
-                //what nStart and nEnd are, will equate to the same length in
-                //the destination writer document.
-                //
-                //Better would be, while writing the content into the writer
-                //document to store the equivalent writer document positions
-                //that relate to each annotation index as the parser passes
-                //those points.
-                sal_Int32 nLen = nEnd - nStart;
-                // the start and end positions are apparently stored in
-                // different arrays, so in an invalid file only one could exist
-                if(SAL_MAX_INT32 != nEnd && SAL_MAX_INT32 != nStart && nLen > 0)
-                {
-                    if (pPaM->GetPoint()->nContent.GetIndex() >= nLen)
-                    {
-                        pPaM->SetMark();
-                        pPaM->GetPoint()->nContent -= nLen;
-                    }
-                    else if (pPaM->GetPoint()->nNode.GetNode().IsTxtNode() )
-                    {
-                        pPaM->SetMark();
-                        nLen -= pPaM->GetPoint()->nContent.GetIndex();
-
-                        SwTxtNode* pTxtNode = 0;
-
-                        // Find first text node which is affected by the comment
-                        while (nLen > 0)
-                        {
-                            // Move to previous content node
-                            bool bSuccess = pPaM->Move(fnMoveBackward, fnGoNode);
-
-                            if (!bSuccess)
-                            {
-                                nLen = 0;
-                                break;
-                            }
-
-                            --nLen; // End line character
-
-                            SwNode& rNode = pPaM->GetPoint()->nNode.GetNode();
-
-                            // Subtract previous text node's length
-                            if (rNode.IsTxtNode())
-                            {
-                                pTxtNode = rNode.GetTxtNode();
-                                if (nLen < pTxtNode->Len())
-                                    break;
-                                else
-                                    nLen -= pTxtNode->Len();
-                            }
-                        }
-
-                        // Set position of the text range's first character
-                        if( pTxtNode )
-                        {
-                            pTxtNode->MakeStartIndex(&pPaM->GetPoint()->nContent);
-                            pPaM->GetPoint()->nContent += pTxtNode->Len() - nLen;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     sal_uInt32 nDateTime = 0;
@@ -2292,15 +2219,8 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     pCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFmtFld(aPostIt), 0);
     pCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
-
-    // If this is a range, create the associated fieldmark.
-    if (pPaM->HasMark())
-    {
-        IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
-        pMarksAccess->makeAnnotationMark(*pPaM, aPostIt.GetName());
-        pPaM->Exchange();
-        pPaM->DeleteMark();
-    }
+    // If this is a range, make sure that it ends after the just inserted character, not before it.
+    pReffedStck->MoveAttrs(*aEnd.GetPoint());
 
     return 0;
 }
@@ -6008,66 +5928,6 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
     if (mpAtnNames && nIdx < mpAtnNames->size())
         pRet = &((*mpAtnNames)[nIdx]);
     return pRet;
-}
-
-int SwWW8ImplReader::GetAnnotationIndex(sal_uInt32 nTag)
-{
-    if (!mpAtnIndexes.get() && pWwFib->lcbSttbfAtnbkmk)
-    {
-        mpAtnIndexes.reset(new std::map<sal_uInt32, int>());
-        std::vector<OUString> aStrings;
-        std::vector<ww::bytes> aEntries;
-        WW8ReadSTTBF(!bVer67, *pTableStream, pWwFib->fcSttbfAtnbkmk, pWwFib->lcbSttbfAtnbkmk, sizeof(struct WW8_ATNBE), eStructCharSet, aStrings, &aEntries);
-        for (size_t i = 0; i < aStrings.size() && i < aEntries.size(); ++i)
-        {
-            ww::bytes aEntry = aEntries[i];
-            WW8_ATNBE* pAtnbeStruct = (WW8_ATNBE*)(&aEntry[0]);
-            mpAtnIndexes->insert(std::pair<sal_uInt32, int>(SVBT32ToUInt32(pAtnbeStruct->nTag), i));
-        }
-    }
-    if (mpAtnIndexes.get())
-    {
-        std::map<sal_uInt32, int>::iterator it = mpAtnIndexes->find(nTag);
-        if (it != mpAtnIndexes->end())
-            return it->second;
-    }
-    return -1;
-}
-
-sal_uInt16 SwWW8ImplReader::GetAnnotationEndIndex(sal_uInt16 nStart)
-{
-    WW8_CP nStartAkt;
-    void* p;
-    if (mpAtnStarts->GetData(nStart, nStartAkt, p) && p)
-    {
-        // p is an FBKF, and its first 2 bytes is the ibkl member, which is the end index.
-        return SVBT16ToShort(*((SVBT16*)p));
-    }
-    return nStart;
-}
-
-WW8_CP SwWW8ImplReader::GetAnnotationStart(int nIndex)
-{
-    if (!mpAtnStarts.get() && pWwFib->lcbPlcfAtnbkf)
-        // A PLCFBKF is a PLC whose data elements are FBKF structures (4 bytes each).
-        mpAtnStarts.reset(new WW8PLCFspecial(pTableStream, pWwFib->fcPlcfAtnbkf, pWwFib->lcbPlcfAtnbkf, 4));
-
-    if (mpAtnStarts.get())
-        return mpAtnStarts->GetPos(nIndex);
-    else
-        return SAL_MAX_INT32;
-}
-
-WW8_CP SwWW8ImplReader::GetAnnotationEnd(int nIndex)
-{
-    if (!mpAtnEnds.get() && pWwFib->lcbPlcfAtnbkl)
-        // The Plcfbkl structure is a PLC that contains only CPs and no additional data.
-        mpAtnEnds.reset(new WW8PLCFspecial(pTableStream, pWwFib->fcPlcfAtnbkl, pWwFib->lcbPlcfAtnbkl, 0));
-
-    if (mpAtnEnds.get())
-        return mpAtnEnds->GetPos(nIndex);
-    else
-        return SAL_MAX_INT32;
 }
 
 sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
