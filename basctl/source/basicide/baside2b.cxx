@@ -1762,7 +1762,7 @@ bool WatchWindow::RemoveSelectedWatch()
         aTreeListBox.GetModel()->Remove( pEntry );
         pEntry = aTreeListBox.GetCurEntry();
         if ( pEntry )
-            aXEdit.SetText( ((WatchItem*)pEntry->GetUserData())->maName );
+            aXEdit.SetText( static_cast<WatchItem*>(pEntry->GetUserData())->maName );
         else
             aXEdit.SetText( OUString() );
         if ( !aTreeListBox.GetEntryCount() )
@@ -2117,7 +2117,7 @@ WatchTreeListBox::~WatchTreeListBox()
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        delete (WatchItem*)pEntry->GetUserData();
+        delete static_cast<WatchItem*>(pEntry->GetUserData());
         pEntry = Next( pEntry );
     }
 }
@@ -2145,7 +2145,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
         return;
 
     SvTreeListEntry* pEntry = pParent;
-    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+    WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
 
     SbxDimArray* pArray = pItem->mpArray;
     SbxDimArray* pRootArray = pItem->GetRootArray();
@@ -2232,11 +2232,11 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
     SbxBase* pSBX = NULL;
     rbArrayElement = false;
 
-    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+    WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
     OUString aVName( pItem->maName );
 
     SvTreeListEntry* pParentEntry = GetParent( pEntry );
-    WatchItem* pParentItem = pParentEntry ? (WatchItem*)pParentEntry->GetUserData() : NULL;
+    WatchItem* pParentItem = pParentEntry ? static_cast<WatchItem*>(pParentEntry->GetUserData()) : NULL;
     if( pParentItem )
     {
         SbxObject* pObj = pParentItem->mpObject;
@@ -2269,7 +2269,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
 
 bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
-    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+    WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
 
     bool bEdit = false;
     if ( StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError() )
@@ -2348,7 +2348,7 @@ void implCollapseModifiedObjectEntry( SvTreeListEntry* pParent, WatchTreeListBox
     {
         implCollapseModifiedObjectEntry( pDeleteEntry, pThis );
 
-        delete (WatchItem*)pDeleteEntry->GetUserData();
+        delete static_cast<WatchItem*>(pDeleteEntry->GetUserData());
         pModel->Remove( pDeleteEntry );
     }
 }
@@ -2409,7 +2409,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+        WatchItem* pItem = static_cast<WatchItem*>(pEntry->GetUserData());
         DBG_ASSERT( !pItem->maName.isEmpty(), "Var? - Must not be empty!" );
         OUString aWatchStr;
         OUString aTypeStr;
@@ -2504,10 +2504,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 {
                     if (SbxObject* pObj = dynamic_cast<SbxObject*>(pVar->GetObject()))
                     {
-                        // Check if member list has changed
-                        bool bObjChanged = false;
                         if (pItem->mpObject && !pItem->maMemberList.empty())
                         {
+                            bool bObjChanged = false; // Check if member list has changed
                             SbxArray* pProps = pObj->GetProperties();
                             sal_uInt16 nPropCount = pProps->Count();
                             for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
