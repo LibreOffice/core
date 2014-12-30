@@ -145,22 +145,6 @@
         Text [ en-US ] = "Display Objects from Master" ; \
     };
 
-#define MN_HIDE_SLIDE \
-    MenuItem\
-    {\
-        Identifier = SID_HIDE_SLIDE ; \
-        HelpId = CMD_SID_HIDE_SLIDE ; \
-        Text [ en-US ] = "~Hide Slide" ; \
-    };
-
-#define MN_SHOW_SLIDE \
-    MenuItem\
-    {\
-        Identifier = SID_SHOW_SLIDE ; \
-        HelpId = CMD_SID_SHOW_SLIDE ; \
-        Text [ en-US ] = "~Show Slide" ; \
-    };
-
 #define MN_PAGE_MENU \
     MenuItem\
     {\
