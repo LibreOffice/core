@@ -88,6 +88,7 @@ public:
     //ods, xls, xlsx filter tests
     void testBasicCellContentODS();
     void testRangeNameXLS();
+    void testRangeNameLocalXLS();
     void testRangeNameXLSX();
     void testHyperlinksXLSX();
     void testHardRecalcODS();
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
+    CPPUNIT_TEST(testRangeNameLocalXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
     CPPUNIT_TEST(testHyperlinksXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
@@ -359,6 +361,27 @@ void ScFiltersTest::testRangeNameXLS()
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#44587
     testFile( aCSVPath, rDoc, 1);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testRangeNameLocalXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("named-ranges-local.", XLS);
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScRangeName* pRangeName = rDoc.GetRangeName(0);
+    CPPUNIT_ASSERT(pRangeName);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pRangeName->size());
+
+    OUString aFormula;
+    rDoc.GetFormula(3, 11, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUM(local_name2)"), aFormula);
+    ASSERT_DOUBLES_EQUAL(14.0, rDoc.GetValue(3, 11, 0));
+
+    rDoc.GetFormula(6, 4, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=local_name1"), aFormula);
 
     xDocSh->DoClose();
 }
