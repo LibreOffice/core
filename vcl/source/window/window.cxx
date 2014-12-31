@@ -133,6 +133,9 @@ namespace
 
 void Window::dispose()
 {
+    if (!mpWindowImpl)
+        return;
+
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
 

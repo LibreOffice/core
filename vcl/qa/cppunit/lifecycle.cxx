@@ -20,14 +20,29 @@ class LifecycleTest : public test::BootstrapFixture
 public:
     LifecycleTest() : BootstrapFixture(true, false) {}
 
+    void testMultiDispose();
     void testIsolatedWidgets();
     void testParentedWidgets();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
+    CPPUNIT_TEST(testMultiDispose);
     CPPUNIT_TEST(testIsolatedWidgets);
     CPPUNIT_TEST(testParentedWidgets);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void LifecycleTest::testMultiDispose()
+{
+    VclReference<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
+                                                 WB_APP|WB_STDWORK));
+    CPPUNIT_ASSERT(xWin.get() != NULL);
+    xWin->dispose();
+    xWin->dispose();
+    xWin->dispose();
+    CPPUNIT_ASSERT(xWin->GetWindow(0) == NULL);
+    CPPUNIT_ASSERT(xWin->GetChild(0) == NULL);
+    CPPUNIT_ASSERT(xWin->GetChildCount() == 0);
+}
 
 void LifecycleTest::testWidgets(vcl::Window *pParent)
 {

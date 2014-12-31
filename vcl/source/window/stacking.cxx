@@ -1023,6 +1023,8 @@ void Window::SetParent( vcl::Window* pNewParent )
 
 sal_uInt16 Window::GetChildCount() const
 {
+    if (!mpWindowImpl)
+        return 0;
 
     sal_uInt16  nChildCount = 0;
     vcl::Window* pChild = mpWindowImpl->mpFirstChild;
@@ -1037,6 +1039,8 @@ sal_uInt16 Window::GetChildCount() const
 
 vcl::Window* Window::GetChild( sal_uInt16 nChild ) const
 {
+    if (!mpWindowImpl)
+        return NULL;
 
     sal_uInt16  nChildCount = 0;
     vcl::Window* pChild = mpWindowImpl->mpFirstChild;
@@ -1053,6 +1057,8 @@ vcl::Window* Window::GetChild( sal_uInt16 nChild ) const
 
 vcl::Window* Window::GetWindow( sal_uInt16 nType ) const
 {
+    if (!mpWindowImpl)
+        return 0;
 
     switch ( nType )
     {
