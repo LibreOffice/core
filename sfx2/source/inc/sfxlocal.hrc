@@ -25,8 +25,8 @@
 #include <sfx2/sfx.hrc>
 
 // Strings ---------------------------------------------------------------
-
 #define STR_SFX_NEWOFFICEDOC                (RID_SFX_SFXLOCAL_START +  0)
+#define STR_SFX_REMOVE_PROPERTY             (RID_SFX_SFXLOCAL_START +  1)
 #define STR_SFX_FILEDLG_ACTUALVERSION       (RID_SFX_SFXLOCAL_START +  2)
 #define STR_SFX_EXPLORERFILE_INSERT         (RID_SFX_SFXLOCAL_START +  3)
 #define STR_SFX_EXPLORERFILE_BUTTONINSERT   (RID_SFX_SFXLOCAL_START +  4)
@@ -39,15 +39,9 @@
 #define STR_SFX_QUERY_WRONG_TYPE            (RID_SFX_SFXLOCAL_START + 11)
 
 // Controls --------------------------------------------------------------
-
 #define SFX_CB_PROPERTY_NAME                (RID_SFX_SFXLOCAL_START +  0)
-#define SFX_ED_PROPERTY_VALUE               (RID_SFX_SFXLOCAL_START +  1)
 #define SFX_LB_PROPERTY_TYPE                (RID_SFX_SFXLOCAL_START +  4)
-#define SFX_PB_PROPERTY_REMOVE              (RID_SFX_SFXLOCAL_START +  5)
 #define SFX_WIN_PROPERTY_YESNO              (RID_SFX_SFXLOCAL_START +  6)
-#define SFX_FLD_DATE                        (RID_SFX_SFXLOCAL_START +  10)
-#define SFX_FLD_TIME                        (RID_SFX_SFXLOCAL_START +  11)
-#define SFX_FLD_DURATION                    (RID_SFX_SFXLOCAL_START +  12)
 #define SFX_ST_DURATION_FORMAT              (RID_SFX_SFXLOCAL_START +  13)
 
 #define SFX_CMIS_PROPERTY_NAME              (RID_SFX_SFXLOCAL_START +  14)

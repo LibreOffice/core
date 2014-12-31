@@ -1294,8 +1294,10 @@ util::Duration  DurationDialog_Impl::GetDuration() const
     return aRet;
 }
 
-CustomPropertiesDurationField::CustomPropertiesDurationField( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-        Edit( pParent, rResId ), m_pLine( pLine )
+CustomPropertiesDurationField::CustomPropertiesDurationField(vcl::Window* pParent, WinBits nStyle,
+                                                             CustomPropertyLine* pLine)
+    : Edit(pParent, nStyle)
+    , m_pLine(pLine)
 
 {
     SetDuration( util::Duration(false, 0, 0, 0, 0, 0, 0, 0) );
@@ -1369,14 +1371,14 @@ void CustomPropertiesYesNoButton::Resize()
 CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aNameBox      ( pParent, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this ),
-    m_aValueEdit    ( pParent, SfxResId( SFX_ED_PROPERTY_VALUE ), this ),
-    m_aDateField    ( pParent, SfxResId( SFX_FLD_DATE), this),
-    m_aTimeField    ( pParent, SfxResId( SFX_FLD_TIME), this),
+    m_aValueEdit    ( pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ),
+    m_aDateField    ( pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ),
+    m_aTimeField    ( pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ),
     m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ).toString() ),
-    m_aDurationField( pParent, SfxResId( SFX_FLD_DURATION), this),
+    m_aDurationField( pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ),
     m_aEditButton(    pParent, SfxResId( SFX_PB_EDIT ), this),
     m_aYesNoButton  ( pParent, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
-    m_aRemoveButton ( pParent, SfxResId( SFX_PB_PROPERTY_REMOVE ), this ),
+    m_aRemoveButton ( pParent, 0, this ),
     m_bIsDate       ( false ),
     m_bIsRemoved    ( false ),
     m_bTypeLostFocus( false )
@@ -1386,6 +1388,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aDateField.SetExtDateFormat( XTDATEF_SYSTEM_SHORT_YYYY );
 
     m_aRemoveButton.SetModeImage(Image(SfxResId(SFX_IMG_PROPERTY_REMOVE)));
+    m_aRemoveButton.SetQuickHelpText(SfxResId(STR_SFX_REMOVE_PROPERTY).toString());
 }
 
 void CustomPropertyLine::SetRemoved()
@@ -1413,19 +1416,23 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_pHeaderAccValue(pHeaderAccValue),
     m_aNameBox      ( this, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( this, SfxResId( SFX_LB_PROPERTY_TYPE ) ),
-    m_aValueEdit    ( this, SfxResId( SFX_ED_PROPERTY_VALUE ) ),
-    m_aDateField    ( this, SfxResId( SFX_FLD_DATE) ),
-    m_aTimeField    ( this, SfxResId( SFX_FLD_TIME) ),
-    m_aDurationField( this, SfxResId( SFX_FLD_DURATION) ),
+    m_aValueEdit    ( this, WB_BORDER|WB_TABSTOP|WB_LEFT ),
+    m_aDateField    ( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ),
+    m_aTimeField    ( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ),
+    m_aDurationField( this, WB_BORDER|WB_TABSTOP|WB_READONLY ),
     m_aEditButton(    this, SfxResId( SFX_PB_EDIT )),
     m_aYesNoButton  ( this, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
-    m_aRemoveButton ( this, SfxResId( SFX_PB_PROPERTY_REMOVE ) ),
+    m_aRemoveButton ( this, 0 ),
     m_nScrollPos (0),
     m_pCurrentLine (NULL),
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {
+    m_aRemoveButton.SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MAP_APPFONT));
+
+    m_aValueEdit.SetSizePixel(LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+
     m_aEditLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
     m_aBoxLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );

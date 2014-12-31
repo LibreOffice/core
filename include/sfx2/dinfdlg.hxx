@@ -262,7 +262,6 @@ public:
 };
 
 // class CustomPropertiesRemoveButton ------------------------------------
-
 struct CustomPropertyLine;
 
 class CustomPropertiesEdit : public Edit
@@ -271,11 +270,13 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
-    inline CustomPropertiesEdit(
-        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            Edit( pParent, rResId ), m_pLine( pLine ) {}
+    CustomPropertiesEdit(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
+        : Edit(pParent, nStyle)
+        , m_pLine(pLine)
+    {
+    }
 
-    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
 class CustomPropertiesTypeBox : public ListBox
@@ -294,17 +295,20 @@ public:
 class CustomPropertiesDateField : public DateField
 {
 private:
-    CustomPropertyLine*             m_pLine;
+    CustomPropertyLine* m_pLine;
 
 public:
     ::boost::optional<sal_Int16> m_TZ;
 
-    inline CustomPropertiesDateField(
-        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            DateField( pParent, rResId ), m_pLine( pLine ) {}
+    CustomPropertiesDateField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
+        : DateField(pParent, nStyle)
+        , m_pLine(pLine)
+    {
+    }
 
-    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
+
 class CustomPropertiesTimeField : public TimeField
 {
 private:
@@ -313,12 +317,16 @@ private:
 public:
     bool m_isUTC;
 
-    inline CustomPropertiesTimeField(
-        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            TimeField( pParent, rResId ), m_pLine( pLine ), m_isUTC(false) {}
+    CustomPropertiesTimeField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
+        : TimeField(pParent, nStyle)
+        , m_pLine(pLine)
+        , m_isUTC(false)
+    {
+    }
 
-    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
+
 class CustomPropertiesDurationField : public Edit
 {
     CustomPropertyLine*             m_pLine;
@@ -326,7 +334,7 @@ class CustomPropertiesDurationField : public Edit
 protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) SAL_OVERRIDE;
 public:
-    CustomPropertiesDurationField( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    CustomPropertiesDurationField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
     virtual ~CustomPropertiesDurationField();
 
     void SetDuration( const com::sun::star::util::Duration& rDuration );
@@ -350,11 +358,13 @@ private:
     CustomPropertyLine*             m_pLine;
 
 public:
-    inline CustomPropertiesRemoveButton(
-        vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-            ImageButton( pParent, rResId ), m_pLine( pLine ) {}
+    CustomPropertiesRemoveButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
+        : ImageButton(pParent, nStyle)
+        , m_pLine(pLine)
+    {
+    }
 
-    inline CustomPropertyLine*      GetLine() const { return m_pLine; }
+    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
 class CustomPropertiesYesNoButton : public Control

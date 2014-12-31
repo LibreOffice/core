@@ -90,41 +90,6 @@ ListBox SFX_LB_PROPERTY_TYPE
     };
 };
 
-Edit SFX_ED_PROPERTY_VALUE
-{
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 127 , 2 ) ;
-    Size = MAP_APPFONT ( 61 , RSC_CD_TEXTBOX_HEIGHT ) ;
-    TabStop = TRUE ;
-    Left = TRUE ;
-};
-DateField SFX_FLD_DATE
-{
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 127 , 2 ) ;
-    Size = MAP_APPFONT ( 29 , RSC_CD_TEXTBOX_HEIGHT ) ;
-    TabStop = TRUE ;
-    Left = TRUE ;
-    Spin = TRUE;
-};
-TimeField SFX_FLD_TIME
-{
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 159 , 2 ) ;
-    Size = MAP_APPFONT ( 29 , RSC_CD_TEXTBOX_HEIGHT ) ;
-    TabStop = TRUE ;
-    Left = TRUE ;
-    Spin = TRUE;
-};
-
-Edit SFX_FLD_DURATION
-{
-    Readonly = TRUE;
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 159 , 2 ) ;
-    Size = MAP_APPFONT ( 61 - RSC_CD_TEXTBOX_HEIGHT - 2, RSC_CD_TEXTBOX_HEIGHT ) ;
-    TabStop = TRUE ;
-};
 PushButton SFX_PB_EDIT
 {
     Pos = MAP_APPFONT ( 159 , 2 ) ;
@@ -160,12 +125,11 @@ Control SFX_WIN_PROPERTY_YESNO
     };
 };
 
-ImageButton SFX_PB_PROPERTY_REMOVE
+String STR_SFX_REMOVE_PROPERTY
 {
-    Pos = MAP_APPFONT( 190 , 1 );
-    Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
-    QuickHelpText [ en-US ] = "Remove Property" ;
+    Text [ en-US ] = "Remove Property" ;
 };
+
 Image SFX_IMG_PROPERTY_REMOVE
 {
     ImageBitmap = Bitmap { File = "deleterow.bmp" ; };
