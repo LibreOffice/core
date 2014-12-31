@@ -210,7 +210,7 @@ map<sal_uInt16,OUString,CompareUShort> & GetItemWhichMap()
         aItemWhichMap[RES_LAYOUT_SPLIT] = "LAYOUT_SPLIT";
         aItemWhichMap[RES_CHAIN] = "CHAIN";
         aItemWhichMap[RES_TEXTGRID] = "TEXTGRID";
-        aItemWhichMap[RES_LINENUMBER  ] = "LINENUMBER  ";
+        aItemWhichMap[RES_LINENUMBER  ] = "LINENUMBER";
         aItemWhichMap[RES_FTN_AT_TXTEND] = "FTN_AT_TXTEND";
         aItemWhichMap[RES_END_AT_TXTEND] = "END_AT_TXTEND";
         aItemWhichMap[RES_COLUMNBALANCE] = "COLUMNBALANCE";
