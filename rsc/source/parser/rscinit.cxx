@@ -44,7 +44,6 @@
 void RscTypCont::Init()
 {
     RscEnum *   pFieldUnits;
-    RscEnum *   pTimeFieldFormat;
     RscEnum *   pColor;
     RscEnum *   pMapUnit;
     RscEnum *   pKey;
@@ -88,7 +87,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMenu;
     RscTop   *  pClassSplitWindow;
     RscTop   *  pClassSpinButton;
-    RscTop   *  pClassTime;
     RscTop   *  pClassDate;
     RscTop   *  pClassSpinField;
     RscTop   *  pClassNumericField;
@@ -273,7 +271,6 @@ void RscTypCont::Init()
 {
     InitLangType();
     aBaseLst.push_back( pFieldUnits      = InitFieldUnitsType() );
-    aBaseLst.push_back( pTimeFieldFormat = InitTimeFieldFormat() );
     aBaseLst.push_back( pColor           = InitColor() );
     aBaseLst.push_back( pMapUnit         = InitMapUnit() );
     aBaseLst.push_back( pKey             = InitKey() );
@@ -441,9 +438,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassSpinButton );
 }
 {
-    pClassTime = InitClassTime( pClassMgr );
-    pRoot->Insert( pClassTime );
-
     pClassDate = InitClassDate( pClassMgr );
     pRoot->Insert( pClassDate );
 }
@@ -474,12 +468,6 @@ void RscTypCont::Init()
 
     pClassDateField = InitClassDateField( pClassTmp, pClassDate );
     pRoot->Insert( pClassDateField );
-    }
-    { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassTimeFormatter( pClassSpinField, pClassTime,
-                                                 pTimeFieldFormat );
-    aBaseLst.push_back( pClassTmp );
-
     }
 }
 {

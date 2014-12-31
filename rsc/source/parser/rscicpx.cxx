@@ -929,34 +929,6 @@ RscTop * RscTypCont::InitClassSplitWindow( RscTop * pSuper )
     return pClassSplitWindow;
 }
 
-RscTop * RscTypCont::InitClassTime( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassTime;
-
-    // Klasse anlegen
-    nId = pHS->getID( "Time" );
-    pClassTime = new RscClass( nId, RSC_TIME, pSuper );
-    pClassTime->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassTime );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Hour", VARNAME );
-    pClassTime->SetVariable( nId, &a0to23Short, NULL, 0, TIME_HOUR  );
-
-    nId = aNmTb.Put( "Minute", VARNAME );
-    pClassTime->SetVariable( nId, &a0to59Short, NULL, 0, TIME_MINUTE  );
-
-    nId = aNmTb.Put( "Second", VARNAME );
-    pClassTime->SetVariable( nId, &a0to59Short, NULL, 0, TIME_SECOND  );
-
-    nId = aNmTb.Put( "Sec100", VARNAME ); // weiss noch nich
-    pClassTime->SetVariable( nId, &a0to99Short, NULL, 0, TIME_SEC100  );
-
-    return pClassTime;
-}
-
 RscTop * RscTypCont::InitClassDate( RscTop * pSuper )
 {
     Atom        nId;
@@ -1066,41 +1038,6 @@ RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
                                                                         0, DATEFORMATTER_VALUE );
 
         return pClassDateF;
-}
-
-RscTop * RscTypCont::InitClassTimeFormatter( RscTop * pSuper,
-                        RscTop * pClassTime,
-                        RscEnum * pTimeFieldFormat )
-{
-    Atom        nId;
-    RscTop *    pClassTimeF;
-
-    // Klasse anlegen
-    nId = pHS->getID( "TimeFormatter" );
-    pClassTimeF = new RscClass( nId, RSC_NOTYPE, pSuper );
-    pClassTimeF->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Minimum", VARNAME );
-    pClassTimeF->SetVariable( nId, pClassTime, NULL,
-                              0, TIMEFORMATTER_MIN );
-    nId = aNmTb.Put( "Maximum", VARNAME );
-    pClassTimeF->SetVariable( nId, pClassTime, NULL,
-                              0, TIMEFORMATTER_MAX );
-    nId = aNmTb.Put( "Format", VARNAME );
-    pClassTimeF->SetVariable( nId, pTimeFieldFormat, NULL,
-                              0, TIMEFORMATTER_TIMEFIELDFORMAT );
-    nId = aNmTb.Put( "Duration", VARNAME );
-    pClassTimeF->SetVariable( nId, &aBool, NULL,
-                              0, TIMEFORMATTER_DURATION );
-    nId = aNmTb.Put( "StrictFormat", VARNAME );
-    pClassTimeF->SetVariable( nId, &aBool, NULL,
-                              0, TIMEFORMATTER_STRICTFORMAT );
-    nId = aNmTb.Put( "Value", VARNAME );
-    pClassTimeF->SetVariable( nId, pClassTime, NULL,
-                              0, TIMEFORMATTER_VALUE );
-
-    return pClassTimeF;
 }
 
 RscTop * RscTypCont::InitClassSpinField( RscTop * pSuper )

@@ -2412,48 +2412,6 @@ TimeFormatter::TimeFormatter() :
     ImplInit();
 }
 
-void TimeFormatter::ImplLoadRes( const ResId& rResId )
-{
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        sal_uLong   nMask = pMgr->ReadLong();
-
-        if ( TIMEFORMATTER_MIN & nMask )
-        {
-            SetMin( tools::Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
-            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        }
-
-        if ( TIMEFORMATTER_MAX & nMask )
-        {
-            SetMax( tools::Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
-            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        }
-
-        if ( TIMEFORMATTER_TIMEFIELDFORMAT & nMask )
-            meFormat = (TimeFieldFormat)pMgr->ReadLong();
-
-        if ( TIMEFORMATTER_DURATION & nMask )
-            mbDuration = pMgr->ReadShort() != 0;
-
-        if ( TIMEFORMATTER_STRICTFORMAT & nMask )
-            SetStrictFormat( pMgr->ReadShort() != 0 );
-
-        if ( TIMEFORMATTER_VALUE & nMask )
-        {
-            maFieldTime = tools::Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            if ( maFieldTime > GetMax() )
-                maFieldTime = GetMax();
-            if ( maFieldTime < GetMin() )
-                maFieldTime = GetMin();
-            maLastTime = maFieldTime;
-
-            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        }
-    }
-}
-
 TimeFormatter::~TimeFormatter()
 {
 }

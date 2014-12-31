@@ -99,14 +99,6 @@ typedef short RSWND_STYLE;
 //#define DATEFORMATTER_I12             0x10 // removed (2005-06-17)
 #define DATEFORMATTER_VALUE             0x20
 
-#define TIMEFORMATTER_MIN               0x01
-#define TIMEFORMATTER_MAX               0x02
-#define TIMEFORMATTER_TIMEFIELDFORMAT   0x04
-#define TIMEFORMATTER_DURATION          0x08
-#define TIMEFORMATTER_STRICTFORMAT      0x10
-//#define TIMEFORMATTER_I12             0x20 // removed (2005-06-17)
-#define TIMEFORMATTER_VALUE             0x40
-
 #define NUMERICFIELD_FIRST              0x01
 #define NUMERICFIELD_LAST               0x02
 #define NUMERICFIELD_SPINSIZE           0x04
