@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/vclref.hxx>
 
 // parameter to pass to the dialog constructor if really no parent is wanted
 // whereas NULL chooses the default dialog parent
@@ -47,8 +48,8 @@ private:
     bool            mbInClose;
     bool            mbModalMode;
 
-    VclButtonBox*   mpActionArea;
-    VclBox*         mpContentArea;
+    VclReference<VclButtonBox> mpActionArea;
+    VclReference<VclBox>       mpContentArea;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -74,8 +75,8 @@ protected:
 
 protected:
     friend class VclBuilder;
-    void set_action_area(VclButtonBox *pBox);
-    void set_content_area(VclBox *pBox);
+    void set_action_area(const VclReference<VclButtonBox> &xBox);
+    void set_content_area(const VclReference<VclBox> &xBox);
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
@@ -88,8 +89,8 @@ public:
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    VclButtonBox* get_action_area() { return mpActionArea;}
-    VclBox* get_content_area() { return mpContentArea;}
+    VclButtonBox* get_action_area() { return mpActionArea.get(); }
+    VclBox* get_content_area() { return mpContentArea.get(); }
 
     virtual bool    Close() SAL_OVERRIDE;
 
@@ -121,6 +122,7 @@ public:
 
     void            GrabFocusToFirstControl();
 };
+typedef VclReference<Dialog> DialogRef;
 
 // - ModelessDialog -
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
@@ -131,6 +133,7 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
 };
+typedef VclReference<ModelessDialog> ModelessDialogRef;
 
 // - ModalDialog -
 class VCL_DLLPUBLIC ModalDialog : public Dialog
@@ -150,6 +153,7 @@ private:
     SAL_DLLPRIVATE         ModalDialog (const ModalDialog &) SAL_DELETED_FUNCTION;
     SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) SAL_DELETED_FUNCTION;
 };
+typedef VclReference<ModalDialog> ModalDialogRef;
 
 #endif // INCLUDED_VCL_DIALOG_HXX
 

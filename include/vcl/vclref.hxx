@@ -50,7 +50,7 @@ public:
     /** Copy constructor...
      */
     inline VclReference (const VclReference<reference_type> & handle)
-        : m_rInnerRef (handle)
+        : m_rInnerRef (handle.m_rInnerRef)
     {}
 
 
