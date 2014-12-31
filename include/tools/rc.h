@@ -118,9 +118,6 @@ typedef short RSWND_STYLE;
 #define DATEFIELD_FIRST                 0x01
 #define DATEFIELD_LAST                  0x02
 
-#define TIMEFIELD_FIRST                 0x01
-#define TIMEFIELD_LAST                  0x02
-
 // For "ToolBoxItem" resources:
 #define RSC_TOOLBOXITEM_ID              0x0001
 #define RSC_TOOLBOXITEM_TYPE            0x0002

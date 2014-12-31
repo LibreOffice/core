@@ -219,7 +219,6 @@ class RscTypCont
     RscTop *    InitClassNumericField( RscTop * pSuper );
     RscTop *    InitClassMetricField( RscTop * pSuper );
     RscTop *    InitClassDateField( RscTop * pSuper, RscTop * pClassDate );
-    RscTop *    InitClassTimeField( RscTop * pSuper, RscTop * pClassTime );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );

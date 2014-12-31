@@ -94,7 +94,6 @@ void RscTypCont::Init()
     RscTop   *  pClassNumericField;
     RscTop   *  pClassMetricField;
     RscTop   *  pClassDateField;
-    RscTop   *  pClassTimeField;
     RscTop   *  pClassDockingWindow;
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
@@ -481,8 +480,6 @@ void RscTypCont::Init()
                                                  pTimeFieldFormat );
     aBaseLst.push_back( pClassTmp );
 
-    pClassTimeField = InitClassTimeField( pClassTmp, pClassTime );
-    pRoot->Insert( pClassTimeField );
     }
 }
 {

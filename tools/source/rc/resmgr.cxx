@@ -1483,7 +1483,6 @@ OString ResMgr::GetAutoHelpId()
                     case RSC_NUMERICFIELD:      aHID.append( "NumericField" );     break;
                     case RSC_METRICFIELD:       aHID.append( "MetricField" );      break;
                     case RSC_DATEFIELD:         aHID.append( "DateField" );        break;
-                    case RSC_TIMEFIELD:         aHID.append( "TimeField" );        break;
                     case RSC_IMAGEBUTTON:       aHID.append( "ImageButton" );      break;
                     default:
                         // no type, no auto HID

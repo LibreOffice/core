@@ -667,11 +667,9 @@ private:
 
 protected:
     SAL_DLLPRIVATE void     ImplTimeSpinArea( bool bUp );
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
     explicit                TimeField( vcl::Window* pParent, WinBits nWinStyle );
-    explicit                TimeField( vcl::Window* pParent, const ResId& );
     virtual                 ~TimeField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

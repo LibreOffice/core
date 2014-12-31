@@ -2652,47 +2652,6 @@ TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-TimeField::TimeField( vcl::Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_TIMEFIELD ),
-    maFirst( GetMin() ),
-    maLast( GetMax() )
-{
-    rResId.SetRT( RSC_TIMEFIELD );
-    WinBits nStyle = ImplInitRes( rResId );
-    SpinField::ImplInit( pParent, nStyle );
-    SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
-void TimeField::ImplLoadRes( const ResId& rResId )
-{
-    SpinField::ImplLoadRes( rResId );
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-
-        sal_uLong      nMask = ReadLongRes();
-
-        if ( TIMEFIELD_FIRST & nMask )
-        {
-            maFirst = tools::Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        }
-        if ( TIMEFIELD_LAST & nMask )
-        {
-            maLast = tools::Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        }
-    }
-
-    Reformat();
-}
-
 TimeField::~TimeField()
 {
 }

@@ -1193,27 +1193,6 @@ RscTop * RscTypCont::InitClassDateField( RscTop * pSuper, RscTop * pClassDate )
     return pClassDateField;
 }
 
-RscTop * RscTypCont::InitClassTimeField( RscTop * pSuper, RscTop * pClassTime )
-{
-    Atom        nId;
-    RscTop *    pClassTimeField;
-
-    // Klasse anlegen
-    nId = pHS->getID( "TimeField" );
-    pClassTimeField = new RscClass( nId, RSC_TIMEFIELD, pSuper );
-    pClassTimeField->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassTimeField );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "First", VARNAME );
-    pClassTimeField->SetVariable( nId, pClassTime, NULL, 0, TIMEFIELD_FIRST );
-    nId = aNmTb.Put( "Last", VARNAME );
-    pClassTimeField->SetVariable( nId, pClassTime, NULL, 0, TIMEFIELD_LAST );
-
-    return pClassTimeField;
-}
-
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
                                              RscEnum * pMapUnit )
 {

@@ -79,7 +79,6 @@
 #define RSC_METRICFIELD         (RSC_NOTYPE + 0x64)
 
 #define RSC_DATEFIELD           (RSC_NOTYPE + 0x66)
-#define RSC_TIMEFIELD           (RSC_NOTYPE + 0x67)
 
 
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
