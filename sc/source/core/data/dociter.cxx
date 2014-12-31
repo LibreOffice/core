@@ -1492,7 +1492,7 @@ public:
 
         if (nEndRow < nLastRow)
         {
-            assert(nEndRow > nFirstRow);
+            assert(nEndRow >= nFirstRow);
             mnHighIndex = nEndRow - nFirstRow;
 
             maBlockMap.insert(BlockMapType::value_type(aLoPos.first->size, aLoPos.first));
