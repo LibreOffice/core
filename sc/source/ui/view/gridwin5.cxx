@@ -242,8 +242,17 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     //to hyperlink tooltips/help text
     SvtSecurityOptions aSecOpt;
     bool bCtrlClickHlink = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
-    //Global string STR_CTRLCLICKHYPERLINK i.e, "ctrl+click to open hyperlink:"
+    //Global string STR_CTRLCLICKHYPERLINK i.e,
+    // "ctrl-click to follow link:" for not MacOS
+    // "⌘-click to follow link:" for MacOs
+    vcl::KeyCode aCode( KEY_SPACE );
+    vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
+    OUString aModStr( aModifiedCode.GetName() );
+    aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
+    aModStr = aModStr.replaceAll("+", OUString());
     OUString aCtrlClickHlinkStr = ScGlobal::GetRscString( STR_CTRLCLICKHYPERLINK );
+
+    aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
     //Global string STR_CLICKHYPERLINK i.e, "click to open hyperlink"
     OUString aClickHlinkStr = ScGlobal::GetRscString( STR_CLICKHYPERLINK );
     bool bDone = false;
