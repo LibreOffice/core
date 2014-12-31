@@ -4232,21 +4232,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     const SvxBorderLine* pTop = rBoxItem.GetLine(BOX_LINE_TOP);
     const SvxBorderLine* pBottom = rBoxItem.GetLine(BOX_LINE_BOTTOM);
     if (pLeft || pRight || pTop || pBottom)
-    {
-        m_pSerializer->startElementNS( XML_a, XML_ln,
-                                       XML_w, "9525",
-                                       FSEND );
-        m_pSerializer->singleElementNS( XML_a, XML_noFill,
-                                        FSEND );
-        m_pSerializer->singleElementNS( XML_a, XML_miter,
-                                        XML_lim, "800000",
-                                        FSEND );
-        m_pSerializer->singleElementNS( XML_a, XML_headEnd,
-                                        FSEND );
-        m_pSerializer->singleElementNS( XML_a, XML_tailEnd,
-                                        FSEND );
-        m_pSerializer->endElementNS( XML_a, XML_ln );
-    }
+        m_rExport.SdrExporter().writeBoxItemLine(rBoxItem);
 
     m_rExport.SdrExporter().writeDMLEffectLst(*pFrmFmt);
 
@@ -7720,20 +7706,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                             XML_dashstyle, "dash" );
                 }
                 else
-                {
-                    OString sWidth(OString::number(TwipsToEMU(fConverted)));
-                    m_pSerializer->startElementNS(XML_a, XML_ln,
-                            XML_w, sWidth.getStr(),
-                            FSEND);
-                    m_pSerializer->startElementNS(XML_a, XML_solidFill, FSEND);
-                    m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
-                            XML_val, sColor,
-                            FSEND);
-                    m_pSerializer->endElementNS(XML_a, XML_solidFill);
-                    if( drawing::LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
-                        m_pSerializer->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
-                    m_pSerializer->endElementNS(XML_a, XML_ln);
-                }
+                    m_rExport.SdrExporter().writeBoxItemLine(rBox);
             }
         }
 

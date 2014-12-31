@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -1309,6 +1310,29 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
     m_pImpl->m_rExport.WriteText();
     m_pImpl->m_bFlyFrameGraphic = false;
     m_pImpl->m_bFrameBtLr = false;
+}
+
+void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBoxItem)
+{
+    sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
+    const editeng::SvxBorderLine* pTop = rBoxItem.GetTop();
+    double fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
+    OString sWidth(OString::number(TwipsToEMU(fConverted)));
+    pFS->startElementNS(XML_a, XML_ln,
+                        XML_w, sWidth.getStr(),
+                        FSEND);
+
+    pFS->startElementNS(XML_a, XML_solidFill, FSEND);
+    OString sColor(msfilter::util::ConvertColor(pTop->GetColor()));
+    pFS->singleElementNS(XML_a, XML_srgbClr,
+                         XML_val, sColor,
+                         FSEND);
+    pFS->endElementNS(XML_a, XML_solidFill);
+
+    if (drawing::LineStyle_DASH == pTop->GetBorderLineStyle()) // Line Style is Dash type
+        pFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
+
+    pFS->endElementNS(XML_a, XML_ln);
 }
 
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly)

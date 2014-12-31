@@ -104,6 +104,8 @@ public:
     bool isTextBox(const SwFrmFmt& rFrmFmt);
     /// Writes text from Textbox for <w:framePr>
     void writeOnlyTextOfFrame(sw::Frame* pParentFrame);
+    /// Writes the drawingML <a:ln> markup of a box item.
+    void writeBoxItemLine(const SvxBoxItem& rBoxItem);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
