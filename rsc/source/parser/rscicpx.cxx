@@ -929,31 +929,6 @@ RscTop * RscTypCont::InitClassSplitWindow( RscTop * pSuper )
     return pClassSplitWindow;
 }
 
-RscTop * RscTypCont::InitClassDate( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassDate;
-
-    // Klasse anlegen
-    nId = pHS->getID( "Date" );
-    pClassDate = new RscClass( nId, RSC_DATE, pSuper );
-    pClassDate->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassDate );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Year", VARNAME );
-    pClassDate->SetVariable( nId, &a0to9999Short, NULL, 0, DATE_YEAR  );
-
-    nId = aNmTb.Put( "Month", VARNAME );
-    pClassDate->SetVariable( nId, &a1to12Short, NULL, 0, DATE_MONTH  );
-
-    nId = aNmTb.Put( "Day", VARNAME );
-    pClassDate->SetVariable( nId, &a1to31Short, NULL, 0, DATE_DAY  );
-
-    return pClassDate;
-}
-
 RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
 {
     Atom        nId;
@@ -1007,37 +982,6 @@ RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
                                0, METRICFORMATTER_CUSTOMUNITTEXT );
 
     return pClassMetric;
-}
-
-RscTop * RscTypCont::InitClassDateFormatter( RscTop * pSuper,
-                        RscTop * pClassDate )
-{
-    Atom        nId;
-    RscTop *    pClassDateF;
-
-    // Klasse anlegen
-    nId = pHS->getID( "DateFormatter" );
-    pClassDateF = new RscClass( nId, RSC_NOTYPE, pSuper );
-    pClassDateF->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Minimum", VARNAME );
-    pClassDateF->SetVariable( nId, pClassDate, NULL,
-                                                                        0, DATEFORMATTER_MIN );
-    nId = aNmTb.Put( "Maximum", VARNAME );
-    pClassDateF->SetVariable( nId, pClassDate, NULL,
-                                                                        0, DATEFORMATTER_MAX );
-    nId = aNmTb.Put( "LongFormat", VARNAME );
-    pClassDateF->SetVariable( nId, &aBool, NULL,
-                                                                        0, DATEFORMATTER_LONGFORMAT );
-    nId = aNmTb.Put( "StrictFormat", VARNAME );
-    pClassDateF->SetVariable( nId, &aBool, NULL,
-                                                                        0, DATEFORMATTER_STRICTFORMAT );
-    nId = aNmTb.Put( "Value", VARNAME );
-    pClassDateF->SetVariable( nId, pClassDate, NULL,
-                                                                        0, DATEFORMATTER_VALUE );
-
-        return pClassDateF;
 }
 
 RscTop * RscTypCont::InitClassSpinField( RscTop * pSuper )
@@ -1107,27 +1051,6 @@ RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
                                     0, METRICFIELD_SPINSIZE  );
 
     return pClassMetricField;
-}
-
-RscTop * RscTypCont::InitClassDateField( RscTop * pSuper, RscTop * pClassDate )
-{
-    Atom        nId;
-    RscTop *    pClassDateField;
-
-    // Klasse anlegen
-    nId = pHS->getID( "DateField" );
-    pClassDateField = new RscClass( nId, RSC_DATEFIELD, pSuper );
-    pClassDateField->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassDateField );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "First", VARNAME );
-    pClassDateField->SetVariable( nId, pClassDate, NULL, 0, DATEFIELD_FIRST );
-    nId = aNmTb.Put( "Last", VARNAME );
-    pClassDateField->SetVariable( nId, pClassDate, NULL, 0, DATEFIELD_LAST );
-
-    return pClassDateField;
 }
 
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,

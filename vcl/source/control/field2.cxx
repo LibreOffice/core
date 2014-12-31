@@ -1431,42 +1431,6 @@ DateFormatter::DateFormatter() :
     ImplInit();
 }
 
-void DateFormatter::ImplLoadRes( const ResId& rResId )
-{
-    ResMgr*     pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        sal_uLong       nMask = pMgr->ReadLong();
-
-        if ( DATEFORMATTER_MIN & nMask )
-        {
-            maMin = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
-        }
-        if ( DATEFORMATTER_MAX & nMask )
-        {
-            maMax = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
-        }
-        if ( DATEFORMATTER_LONGFORMAT & nMask )
-            mbLongFormat = pMgr->ReadShort() != 0;
-
-        if ( DATEFORMATTER_STRICTFORMAT & nMask )
-            SetStrictFormat( pMgr->ReadShort() != 0 );
-
-        if ( DATEFORMATTER_VALUE & nMask )
-        {
-            maFieldDate = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
-            if ( maFieldDate > maMax )
-                maFieldDate = maMax;
-            if ( maFieldDate < maMin )
-                maFieldDate = maMin;
-            maLastDate = maFieldDate;
-        }
-    }
-}
-
 DateFormatter::~DateFormatter()
 {
     delete mpCalendarWrapper;
@@ -1771,49 +1735,6 @@ DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
     ResetLastDate();
-}
-
-DateField::DateField( vcl::Window* pParent, const ResId& rResId ) :
-    SpinField( WINDOW_DATEFIELD ),
-    maFirst( GetMin() ),
-    maLast( GetMax() )
-{
-    rResId.SetRT( RSC_DATEFIELD );
-    WinBits nStyle = ImplInitRes( rResId );
-    SpinField::ImplInit( pParent, nStyle );
-    SetField( this );
-    SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-
-    ResetLastDate();
-}
-
-void DateField::ImplLoadRes( const ResId& rResId )
-{
-    SpinField::ImplLoadRes( rResId );
-
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( pMgr )
-    {
-        DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-
-        sal_uLong  nMask = ReadLongRes();
-        if ( DATEFIELD_FIRST & nMask )
-        {
-            maFirst = Date( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        }
-        if ( DATEFIELD_LAST & nMask )
-        {
-            maLast = Date( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-        }
-    }
-
-    Reformat();
 }
 
 DateField::~DateField()

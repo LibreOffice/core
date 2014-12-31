@@ -78,9 +78,6 @@
 #define RSC_NUMERICFIELD        (RSC_NOTYPE + 0x63)
 #define RSC_METRICFIELD         (RSC_NOTYPE + 0x64)
 
-#define RSC_DATEFIELD           (RSC_NOTYPE + 0x66)
-
-
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
 #define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)
 #define RSC_DOCKINGWINDOW       (RSC_NOTYPE + 0x72)

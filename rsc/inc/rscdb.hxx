@@ -205,17 +205,14 @@ class RscTypCont
                                    RscTop * pClassKeyCode );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
     RscTop *    InitClassSplitWindow( RscTop * pSuper );
-    RscTop *    InitClassDate( RscTop * pSuper );
 
     RscTop *    InitClassNumericFormatter( RscTop * pSuper );
     RscTop *    InitClassMetricFormatter( RscTop * pSuper,
                                           RscEnum * pFieldUnits );
-    RscTop *    InitClassDateFormatter( RscTop * pSuper, RscTop * pClassDate );
 
     RscTop *    InitClassSpinField( RscTop * pSuper );
     RscTop *    InitClassNumericField( RscTop * pSuper );
     RscTop *    InitClassMetricField( RscTop * pSuper );
-    RscTop *    InitClassDateField( RscTop * pSuper, RscTop * pClassDate );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );

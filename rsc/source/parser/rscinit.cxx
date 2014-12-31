@@ -87,11 +87,9 @@ void RscTypCont::Init()
     RscTop   *  pClassMenu;
     RscTop   *  pClassSplitWindow;
     RscTop   *  pClassSpinButton;
-    RscTop   *  pClassDate;
     RscTop   *  pClassSpinField;
     RscTop   *  pClassNumericField;
     RscTop   *  pClassMetricField;
-    RscTop   *  pClassDateField;
     RscTop   *  pClassDockingWindow;
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
@@ -438,10 +436,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassSpinButton );
 }
 {
-    pClassDate = InitClassDate( pClassMgr );
-    pRoot->Insert( pClassDate );
-}
-{
     pClassSpinField = InitClassSpinField( pClassEdit );
     pRoot->Insert( pClassSpinField );
 }
@@ -461,13 +455,6 @@ void RscTypCont::Init()
 
     pClassMetricField = InitClassMetricField( pClassTmp );
     pRoot->Insert( pClassMetricField );
-    }
-    { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate );
-    aBaseLst.push_back( pClassTmp );
-
-    pClassDateField = InitClassDateField( pClassTmp, pClassDate );
-    pRoot->Insert( pClassDateField );
     }
 }
 {

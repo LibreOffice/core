@@ -325,7 +325,6 @@ private:
 protected:
                             DateFormatter();
 
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE const Date& ImplGetFieldDate() const    { return maFieldDate; }
     SAL_DLLPRIVATE bool     ImplDateReformat( const OUString& rStr, OUString& rOutStr,
                                               const AllSettings& rSettings );
@@ -630,11 +629,9 @@ private:
 
 protected:
     SAL_DLLPRIVATE void     ImplDateSpinArea( bool bUp );
-    SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
 public:
     explicit                DateField( vcl::Window* pParent, WinBits nWinStyle );
-    explicit                DateField( vcl::Window* pParent, const ResId& );
     virtual                 ~DateField();
 
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
