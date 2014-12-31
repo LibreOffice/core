@@ -47,8 +47,6 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
         return SPECIAL_FACTOR;
 }
 
-
-
 void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
 {
     m_pUserEdit->Disable();
@@ -90,8 +88,6 @@ void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
     }
 }
 
-
-
 void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
 {
     switch ( nBtnId )
@@ -109,11 +105,9 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
             break;
 
         default:
-            OSL_FAIL( "Falsche Button-Nummer!!!" );
+            OSL_FAIL("Wrong button number!" );
     }
 }
-
-
 
 void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 {
@@ -123,8 +117,6 @@ void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
     m_pUserEdit->SetMax( nMax );
     m_pUserEdit->SetLast( nMax );
 }
-
-
 
 SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     : SfxModalDialog(pParent, "ZoomDialog", "cui/ui/zoomdialog.ui")
@@ -284,15 +276,11 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     }
 }
 
-
-
 SvxZoomDialog::~SvxZoomDialog()
 {
     delete pOutSet;
     pOutSet = 0;
 }
-
-
 
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
@@ -308,8 +296,6 @@ IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 {
     if ( !m_pUserBtn->IsChecked() )
@@ -317,8 +303,6 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
     bModified = true;
     return 0;
 }
-
-
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
@@ -343,14 +327,12 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
     }
     else
     {
-        OSL_FAIL( "Wrong Button" );
+        OSL_FAIL("Wrong Button");
         return 0;
     }
 
     return 0;
 }
-
-
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
 {
@@ -370,8 +352,6 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
     return 0;
 }
 
-
-
 IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
 {
     if (pChk == m_pBookModeChk && !m_pColumnsBtn->IsChecked())
@@ -381,8 +361,6 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
 
     return 0;
 }
-
-
 
 IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 {
@@ -425,7 +403,7 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         }
         else
         {
-            OSL_FAIL( "Wrong Button" );
+            OSL_FAIL("Wrong Button");
             return 0;
         }
         pOutSet = new SfxItemSet( rSet );
@@ -436,10 +414,10 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
             pOutSet->Put(aViewLayoutItem);
 
         // memorize value from the UserEdit beyond the dialog
-        SfxObjectShell* pSh = SfxObjectShell::Current();
+        SfxObjectShell* pShell = SfxObjectShell::Current();
 
-        if ( pSh )
-            pSh->PutItem( SfxUInt16Item( SID_ATTR_ZOOM_USER,
+        if ( pShell )
+            pShell->PutItem( SfxUInt16Item( SID_ATTR_ZOOM_USER,
                                          (sal_uInt16)m_pUserEdit->GetValue() ) );
         EndDialog( RET_OK );
     }
@@ -447,6 +425,5 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         EndDialog( RET_CANCEL );
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
