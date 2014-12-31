@@ -72,6 +72,8 @@ Dim sFilter As String, oWindow As Object, oDatabase As Object, oTarget As Object
 				Set oTarget = _DatabaseForm(._Name, pvControlName)
 			Case acQuery, acTable
 				If pvControlName &lt;&gt; &quot;&quot; Then Goto Exit_Function
+				If IsNull(.Frame.Controller.FormOperations) Then Goto Error_NotApplicable
+						&apos;	FormOperations returns &lt;Null&gt; in OpenOffice
 				Set oTarget = .Frame.Controller.FormOperations.Cursor
 			Case Else		&apos;	Ignore action
 				Goto Exit_Function
@@ -762,7 +764,8 @@ Public Function GoToRecord(Optional ByVal pvObjectType As Variant _
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	GoToRecord = False
 	
-	Utils._SetCalledSub(&quot;GoToRecord&quot;)
+Const cstThisSub = &quot;GoTorecord&quot;
+	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvObjectName) Then pvObjectName = &quot;&quot;
 	If IsMissing(pvObjectType) Then pvObjectType = acActiveDataObject
 &apos;	If IsMissing(pvObjectType) Then
@@ -791,6 +794,8 @@ Dim sObjectName, iLengthName As Integer
 					Case acForm
 						Set oResultSet = _DatabaseForm(._Name, &quot;&quot;)
 					Case acQuery, acTable
+						If IsNull(.Frame.Controller.FormOperations) Then Goto Error_NotApplicable
+								&apos;	FormOperations returns &lt;Null&gt; in OpenOffice
 						Set oResultSet = .Frame.Controller.FormOperations.Cursor
 					Case Else		&apos;	Ignore action
 						Goto Exit_Function
@@ -820,9 +825,12 @@ Dim sObjectName, iLengthName As Integer
 			Set oResultSet = ofForm.DatabaseForm
 		Case acDataQuery
 			Set oWindow = _SelectWindow(acQuery, pvObjectName)
+			If IsNull(oWindow.Frame.Controller.FormOperations) Then Goto Error_NotApplicable
+						&apos;	FormOperations returns &lt;Null&gt; in OpenOffice
 			Set oResultSet = oWindow.Frame.Controller.FormOperations.Cursor
 		Case acDataTable
 			Set oWindow = _SelectWindow(acTable, pvObjectName)
+			If IsNull(oWindow.Frame.Controller.FormOperations) Then Goto Error_NotApplicable
 			Set oResultSet = oWindow.Frame.Controller.FormOperations.Cursor
 		Case Else
 	End Select
@@ -858,16 +866,19 @@ Dim sObjectName, iLengthName As Integer
 	End Select
 	
 Exit_Function:
-	Utils._ResetCalledSub(&quot;GoToRecord&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;GoToRecord&quot;, Erl)
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
 	GoTo Exit_Function
 Error_Target:
 	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(2, pvObjectName))
 	Goto Exit_Function
 Error_Offset:
 	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(4, pvOffset))
+	Goto Exit_Function
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0, 1, cstThisSub)
 	Goto Exit_Function
 End Function		&apos;	GoToRecord
 
@@ -1860,6 +1871,8 @@ Dim sOrder As String, oWindow As Object, oDatabase As Object, oTarget As Object
 				Set oTarget = _DatabaseForm(._Name, pvControlName)
 			Case acQuery, acTable
 				If pvControlName &lt;&gt; &quot;&quot; Then Goto Exit_Function
+				If IsNull(.Frame.Controller.FormOperations) Then Goto Error_NotApplicable
+						&apos;	FormOperations returns &lt;Null&gt; in OpenOffice
 				Set oTarget = .Frame.Controller.FormOperations.Cursor
 			Case Else		&apos;	Ignore action
 				Goto Exit_Function
@@ -2017,7 +2030,6 @@ Public Function _getUpperShortcut(ByVal psShortcut As String, ByVal psLastCompon
 	
 End Function		&apos;	_getUpperShortcut
 
-REM -----------------------------------------------------------------------------------------------------------------------
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _OpenObject(ByVal psObjectType As String _
 			, ByVal pvObjectName As Variant _
