@@ -123,7 +123,7 @@ public:
     virtual void                Beep();
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
-    virtual SalIndicatorState   GetIndicatorState();
+    virtual KeyIndicatorState   GetIndicatorState();
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );

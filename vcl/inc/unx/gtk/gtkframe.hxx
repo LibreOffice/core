@@ -419,7 +419,7 @@ public:
     // get current modifier and button mask
     virtual SalPointerState     GetPointerState() SAL_OVERRIDE;
 
-    virtual SalIndicatorState   GetIndicatorState() SAL_OVERRIDE;
+    virtual KeyIndicatorState   GetIndicatorState() SAL_OVERRIDE;
 
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
 

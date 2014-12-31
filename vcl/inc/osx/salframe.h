@@ -142,7 +142,7 @@ public:
     virtual void                Beep() SAL_OVERRIDE;
     virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
     virtual SalPointerState     GetPointerState() SAL_OVERRIDE;
-    virtual SalIndicatorState   GetIndicatorState() SAL_OVERRIDE;
+    virtual KeyIndicatorState   GetIndicatorState() SAL_OVERRIDE;
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
     virtual void                SetParent( SalFrame* pNewParent ) SAL_OVERRIDE;
     virtual bool                SetPluginParent( SystemParentData* pNewParent ) SAL_OVERRIDE;

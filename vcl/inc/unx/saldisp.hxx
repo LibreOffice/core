@@ -307,7 +307,7 @@ public:
 
     void            ModifierMapping();
     void            SimulateKeyPress( sal_uInt16 nKeyCode );
-    sal_uInt16          GetIndicatorState() const;
+    KeyIndicatorState  GetIndicatorState() const;
     OUString          GetKeyNameFromKeySym( KeySym keysym ) const;
     OUString       GetKeyName( sal_uInt16 nKeyCode ) const;
     sal_uInt16          GetKeyCode( KeySym keysym, char*pcPrintable ) const;

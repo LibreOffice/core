@@ -1425,11 +1425,9 @@ SalPointerState AquaSalFrame::GetPointerState()
     return state;
 }
 
-SalFrame::SalIndicatorState AquaSalFrame::GetIndicatorState()
+KeyIndicatorState AquaSalFrame::GetIndicatorState()
 {
-    SalIndicatorState aState;
-    aState.mnState = 0;
-    return aState;
+    return KeyIndicatorState::NONE;
 }
 
 void AquaSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )

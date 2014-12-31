@@ -707,18 +707,18 @@ void SalDisplay::SimulateKeyPress( sal_uInt16 nKeyCode )
     }
 }
 
-sal_uInt16 SalDisplay::GetIndicatorState() const
+KeyIndicatorState SalDisplay::GetIndicatorState() const
 {
     unsigned int _state = 0;
-    sal_uInt16 nState = 0;
+    KeyIndicatorState nState = KeyIndicatorState::NONE;
     XkbGetIndicatorState(pDisp_, XkbUseCoreKbd, &_state);
 
     if ((_state & 0x00000001))
-        nState |= INDICATOR_CAPSLOCK;
+        nState |= KeyIndicatorState::CAPSLOCK;
     if ((_state & 0x00000002))
-        nState |= INDICATOR_NUMLOCK;
+        nState |= KeyIndicatorState::NUMLOCK;
     if ((_state & 0x00000004))
-        nState |= INDICATOR_SCROLLLOCK;
+        nState |= KeyIndicatorState::SCROLLLOCK;
 
     return nState;
 }

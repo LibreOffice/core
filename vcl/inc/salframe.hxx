@@ -200,12 +200,7 @@ public:
 
     virtual SalPointerState GetPointerState() = 0;
 
-    struct SalIndicatorState
-    {
-        sal_uInt16  mnState;
-    };
-
-    virtual SalIndicatorState GetIndicatorState() = 0;
+    virtual KeyIndicatorState GetIndicatorState() = 0;
 
     virtual void            SimulateKeyPress( sal_uInt16 nKeyCode ) = 0;
 

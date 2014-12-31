@@ -460,11 +460,9 @@ SalFrame::SalPointerState SvpSalFrame::GetPointerState()
     return aState;
 }
 
-SalFrame::SalIndicatorState SvpSalFrame::GetIndicatorState()
+KeyIndicatorState SvpSalFrame::GetIndicatorState()
 {
-    SalIndicatorState aState;
-    aState.mnState = 0;
-    return aState;
+    return KeyIndicatorState::NONE;
 }
 
 void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )

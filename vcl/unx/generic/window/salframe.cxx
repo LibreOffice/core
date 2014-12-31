@@ -2708,11 +2708,9 @@ SalFrame::SalPointerState X11SalFrame::GetPointerState()
     return aState;
 }
 
-SalFrame::SalIndicatorState X11SalFrame::GetIndicatorState()
+KeyIndicatorState X11SalFrame::GetIndicatorState()
 {
-    SalIndicatorState aState;
-    aState.mnState = vcl_sal::getSalDisplay(GetGenericData())->GetIndicatorState();
-    return aState;
+    return vcl_sal::getSalDisplay(GetGenericData())->GetIndicatorState();
 }
 
 void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )

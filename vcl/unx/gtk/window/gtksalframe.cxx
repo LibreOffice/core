@@ -2819,16 +2819,14 @@ SalFrame::SalPointerState GtkSalFrame::GetPointerState()
     return aState;
 }
 
-SalFrame::SalIndicatorState GtkSalFrame::GetIndicatorState()
+KeyIndicatorState GtkSalFrame::GetIndicatorState()
 {
-    SalIndicatorState aState;
 #if !GTK_CHECK_VERSION(3,0,0)
-    aState.mnState = GetGtkSalData()->GetGtkDisplay()->GetIndicatorState();
+    return GetGtkSalData()->GetGtkDisplay()->GetIndicatorState();
 #else
     g_warning ("missing get indicator state");
-    aState.mnState = 0;
+    return KeyIndicatorState::NONE;
 #endif
-    return aState;
 }
 
 void GtkSalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )

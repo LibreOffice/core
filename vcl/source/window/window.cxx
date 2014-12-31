@@ -1863,9 +1863,9 @@ void Window::doLazyDelete()
     vcl::LazyDeletor<vcl::Window>::Delete( this );
 }
 
-sal_uInt16 Window::GetIndicatorState() const
+KeyIndicatorState Window::GetIndicatorState() const
 {
-    return mpWindowImpl->mpFrame->GetIndicatorState().mnState;
+    return mpWindowImpl->mpFrame->GetIndicatorState();
 }
 
 void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const

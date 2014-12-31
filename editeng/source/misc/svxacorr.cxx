@@ -1387,7 +1387,7 @@ SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             ;
         else
         {
-            bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & INDICATOR_CAPSLOCK);
+            bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & KeyIndicatorState::CAPSLOCK);
             bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
 
             nRet = 0;

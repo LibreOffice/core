@@ -1437,11 +1437,11 @@ public:
         Scroll Lock.  Use the following mask to retrieve the state of each
         indicator:
 
-            INDICATOR_CAPS_LOCK
-            INDICATOR_NUM_LOCK
-            INDICATOR_SCROLL_LOCK
+            KeyIndicatorState::CAPS_LOCK
+            KeyIndicatorState::NUM_LOCK
+            KeyIndicatorState::SCROLL_LOCK
       */
-    sal_uInt16 GetIndicatorState() const;
+    KeyIndicatorState GetIndicatorState() const;
 
     void SimulateKeyPress( sal_uInt16 nKeyCode ) const;
 

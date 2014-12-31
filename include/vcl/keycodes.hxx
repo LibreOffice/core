@@ -24,6 +24,7 @@
 #undef DELETE
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 // Key-Gruppen
 #define KEYGROUP_NUM    ((sal_uInt16)::com::sun::star::awt::KeyGroup::NUM)
@@ -169,9 +170,16 @@
 #define MOUSE_MIDDLE    ((sal_uInt16)0x0002)
 #define MOUSE_RIGHT     ((sal_uInt16)0x0004)
 
-#define INDICATOR_CAPSLOCK      0x0001
-#define INDICATOR_NUMLOCK       0x0002
-#define INDICATOR_SCROLLLOCK    0x0004
+enum class KeyIndicatorState {
+    NONE          = 0x0000,
+    CAPSLOCK      = 0x0001,
+    NUMLOCK       = 0x0002,
+    SCROLLLOCK    = 0x0004
+};
+namespace o3tl
+{
+    template<> struct typed_flags<KeyIndicatorState> : is_typed_flags<KeyIndicatorState, 0x0007> {};
+}
 
 #endif // INCLUDED_VCL_KEYCODES_HXX
 

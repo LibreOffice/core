@@ -2884,18 +2884,18 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
     return aState;
 }
 
-SalFrame::SalIndicatorState WinSalFrame::GetIndicatorState()
+KeyIndicatorState WinSalFrame::GetIndicatorState()
 {
-    SalIndicatorState aState;
+    KeyIndicatorState aState = KeyIndicatorState::NONE;
     aState.mnState = 0;
     if (::GetKeyState(VK_CAPITAL))
-        aState.mnState |= INDICATOR_CAPSLOCK;
+        aState |= KeyIndicatorState::CAPSLOCK;
 
     if (::GetKeyState(VK_NUMLOCK))
-        aState.mnState |= INDICATOR_NUMLOCK;
+        aState |= KeyIndicatorState::NUMLOCK;
 
     if (::GetKeyState(VK_SCROLL))
-        aState.mnState |= INDICATOR_SCROLLLOCK;
+        aState |= KeyIndicatorState::SCROLLLOCK;
 
     return aState;
 }
