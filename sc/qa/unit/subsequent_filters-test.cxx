@@ -175,7 +175,9 @@ public:
     void testSharedFormulaWrappedRefsXLS();
     void testSharedFormulaBIFF5();
     void testSharedFormulaXLSB();
+#if 0
     void testSharedFormulaXLS();
+#endif
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
@@ -260,7 +262,9 @@ public:
     CPPUNIT_TEST(testSharedFormulaWrappedRefsXLS);
     CPPUNIT_TEST(testSharedFormulaBIFF5);
     CPPUNIT_TEST(testSharedFormulaXLSB);
+#if 0
     CPPUNIT_TEST(testSharedFormulaXLS);
+#endif
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
@@ -2604,6 +2608,8 @@ void ScFiltersTest::testSharedFormulaXLSB()
     xDocSh->DoClose();
 }
 
+#if 0
+
 void ScFiltersTest::testSharedFormulaXLS()
 {
     {
@@ -2659,6 +2665,8 @@ void ScFiltersTest::testSharedFormulaXLS()
         xDocSh->DoClose();
     }
 }
+
+#endif
 
 void ScFiltersTest::testExternalRefCacheXLSX()
 {
