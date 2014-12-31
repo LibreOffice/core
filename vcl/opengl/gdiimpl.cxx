@@ -1396,11 +1396,11 @@ void OpenGLSalGraphicsImpl::invert(
 
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {
-
+        SAL_WARN("vcl.opengl", "check where this call is coming from! NOT IMPLEMENTED YET!");
     }
     else if( nFlags & SAL_INVERT_50 )
     {
-
+        SAL_WARN("vcl.opengl", "check where this call is coming from! NOT IMPLEMENTED YET!");
     }
     else // just invert
     {
@@ -1417,11 +1417,11 @@ void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, 
 
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {
-
+        SAL_WARN("vcl.opengl", "check where this call is coming from! NOT IMPLEMENTED YET!");
     }
     else if( nFlags & SAL_INVERT_50 )
     {
-
+        SAL_WARN("vcl.opengl", "check where this call is coming from! NOT IMPLEMENTED YET!");
     }
     else // just invert
     {
