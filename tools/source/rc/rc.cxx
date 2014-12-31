@@ -39,50 +39,6 @@ void Resource::GetRes( const ResId& rResId )
     IncrementRes( sizeof( RSHEADER_TYPE ) );
 }
 
-namespace tools {
-
-Time::Time( const ResId& rResId )
-{
-    nTime = 0;
-    rResId.SetRT( RSC_TIME );
-    ResMgr* pResMgr = NULL;
-
-    ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
-
-    sal_uIntPtr nObjMask = (sal_uInt16)pResMgr->ReadLong();
-
-    if ( 0x01 & nObjMask )
-        SetHour( (sal_uInt16)pResMgr->ReadShort() );
-    if ( 0x02 & nObjMask )
-        SetMin( (sal_uInt16)pResMgr->ReadShort() );
-    if ( 0x04 & nObjMask )
-        SetSec( (sal_uInt16)pResMgr->ReadShort() );
-    if ( 0x08 & nObjMask )
-        // TODO: when we change the place that writes this binary resource format to match:
-        // SetNanoSec( pResMgr->ReadLong() );
-        // In the meantime:
-        SetNanoSec( pResMgr->ReadShort() * ::tools::Time::nanoPerCenti );
-}
-
-} /* namespace tools */
-
-Date::Date( const ResId& rResId ) : nDate(0)
-{
-    rResId.SetRT( RSC_DATE );
-    ResMgr* pResMgr = NULL;
-
-    ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
-
-    sal_uIntPtr nObjMask = (sal_uInt16)pResMgr->ReadLong();
-
-    if ( 0x01 & nObjMask )
-        SetYear( (sal_uInt16)pResMgr->ReadShort() );
-    if ( 0x02 & nObjMask )
-        SetMonth( (sal_uInt16)pResMgr->ReadShort() );
-    if ( 0x04 & nObjMask )
-        SetDay( (sal_uInt16)pResMgr->ReadShort() );
-}
-
 OUString ResId::toString() const
 {
     SetRT( RSC_STRING );

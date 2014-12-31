@@ -23,8 +23,6 @@
 #include <tools/solar.h>
 #include <com/sun/star/util/Time.hpp>
 
-class ResId;
-
 /**
  @WARNING: This class can serve both as wall clock time and time duration, and
            the mixing of these concepts leads to problems such as there being
@@ -68,7 +66,6 @@ public:
                     Time( TimeInitEmpty )
                         { nTime = 0; }
                     Time( TimeInitSystem );
-                    Time( const ResId & rResId );
                     Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime );
                     Time( const ::com::sun::star::util::Time& rTime );

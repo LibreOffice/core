@@ -23,8 +23,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <sal/log.hxx>
 
-class ResId;
-
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };
 
@@ -53,7 +51,6 @@ public:
                     Date( DateInitEmpty)
                         { nDate = 0; }
                     Date( DateInitSystem );
-                    Date( const ResId & rResId );
                     Date( sal_uInt32 _nDate ) { Date::nDate = _nDate; }
                     Date( const Date& rDate )
                         { nDate = rDate.nDate; }
