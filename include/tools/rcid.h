@@ -83,10 +83,6 @@
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx
 
-#define RT_SYS_BITMAP           (RSC_NOTYPE + 0xf2)
-#define RT_SYS_STRING           (RSC_NOTYPE + 0xf3) // special case
-#define RT_SYS_FILE             (RSC_NOTYPE + 0xf4) // not implemented
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
