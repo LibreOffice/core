@@ -203,19 +203,6 @@ RscEnum * RscTypCont::InitFieldUnitsType()
     return pFieldUnits;
 }
 
-RscEnum * RscTypCont::InitTimeFieldFormat()
-{
-    RscEnum * pTimeFieldFormat;
-    pTimeFieldFormat = new RscEnum( pHS->getID( "EnumTimeFieldFormat" ),
-                                    RSC_NOTYPE );
-
-    SETCONST( pTimeFieldFormat, "TIMEF_NONE", TimeFieldFormat::F_NONE );
-    SETCONST( pTimeFieldFormat, "TIMEF_SEC", TimeFieldFormat::F_SEC );
-    SETCONST( pTimeFieldFormat, "TIMEF_100TH_SEC", TimeFieldFormat::F_100TH_SEC );
-
-    return pTimeFieldFormat;
-}
-
 RscEnum * RscTypCont::InitColor()
 {
     RscEnum * pColor;

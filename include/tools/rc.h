@@ -92,13 +92,6 @@ typedef short RSWND_STYLE;
 #define METRICFORMATTER_UNIT            0x01
 #define METRICFORMATTER_CUSTOMUNITTEXT  0x02
 
-#define DATEFORMATTER_MIN               0x01
-#define DATEFORMATTER_MAX               0x02
-#define DATEFORMATTER_LONGFORMAT        0x04
-#define DATEFORMATTER_STRICTFORMAT      0x08
-//#define DATEFORMATTER_I12             0x10 // removed (2005-06-17)
-#define DATEFORMATTER_VALUE             0x20
-
 #define NUMERICFIELD_FIRST              0x01
 #define NUMERICFIELD_LAST               0x02
 #define NUMERICFIELD_SPINSIZE           0x04
@@ -106,9 +99,6 @@ typedef short RSWND_STYLE;
 #define METRICFIELD_FIRST               0x01
 #define METRICFIELD_LAST                0x02
 #define METRICFIELD_SPINSIZE            0x04
-
-#define DATEFIELD_FIRST                 0x01
-#define DATEFIELD_LAST                  0x02
 
 // For "ToolBoxItem" resources:
 #define RSC_TOOLBOXITEM_ID              0x0001
@@ -160,13 +150,6 @@ typedef short RSWND_STYLE;
 
 // FIXME obsolete, should be removed by MM
 #define RSC_COLOR                       (RSC_NOTYPE + 0x16)
-#define TIME_HOUR                       0x01
-#define TIME_MINUTE                     0x02
-#define TIME_SECOND                     0x04
-#define TIME_SEC100                     0x08
-#define DATE_YEAR                       0x01
-#define DATE_MONTH                      0x02
-#define DATE_DAY                        0x04
 
 #endif
 

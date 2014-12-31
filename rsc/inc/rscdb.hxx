@@ -39,7 +39,6 @@ class RscCmdLine;
 enum class SymbolType : sal_uInt16;
 enum class ToolBoxItemBits;
 enum class WindowBorderStyle : sal_Int16;
-enum class TimeFieldFormat : sal_Int32;
 enum class KeyFuncType : sal_Int32;
 enum class MenuItemBits : sal_Int16;
 enum class ToolBoxItemType;
@@ -150,14 +149,11 @@ class RscTypCont
     inline void SETCONST( RscConst *p1, Atom p2, ToolBoxItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, WindowBorderStyle p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, KeyFuncType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
-    inline void SETCONST( RscConst *p1, Atom p2, TimeFieldFormat p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
-    inline void SETCONST( RscConst *p1, const char * p2, TimeFieldFormat p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, MenuItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, ToolBoxItemType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     RscEnum *   InitLangType();
     RscEnum *   InitFieldUnitsType();
-    RscEnum *   InitTimeFieldFormat();
     RscEnum *   InitColor();
     RscEnum *   InitMapUnit();
     RscEnum *   InitKey();
@@ -242,12 +238,6 @@ public:
     RscIdRange          aIdUShort;
     RscIdRange          aIdNoZeroUShort;
     RscBreakRange       aNoZeroShort;
-    RscRange            a1to12Short;
-    RscRange            a0to23Short;
-    RscRange            a1to31Short;
-    RscRange            a0to59Short;
-    RscRange            a0to99Short;
-    RscRange            a0to9999Short;
     RscIdRange          aIdLong;
     RscString           aString;
     RscString           aStringLiteral;
