@@ -166,10 +166,6 @@
 #define MODKEY_MOD2      (MODKEY_LMOD2|MODKEY_RMOD2)
 #define MODKEY_MOD3      (MODKEY_LMOD3|MODKEY_RMOD3)
 
-#define MOUSE_LEFT      ((sal_uInt16)0x0001)
-#define MOUSE_MIDDLE    ((sal_uInt16)0x0002)
-#define MOUSE_RIGHT     ((sal_uInt16)0x0004)
-
 enum class KeyIndicatorState {
     NONE          = 0x0000,
     CAPSLOCK      = 0x0001,
