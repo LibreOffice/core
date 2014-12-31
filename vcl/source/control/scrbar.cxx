@@ -502,6 +502,20 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
         aCtrlRegion.Union( maPage1Rect );
         aCtrlRegion.Union( maPage2Rect );
         aCtrlRegion.Union( maThumbRect );
+
+        Rectangle aRequestedRegion(Point(0,0), GetOutputSizePixel());
+        // if the actual native control region is smaller then the region that
+        // we requested the control to draw in, then draw a background rectangle
+        // to avoid drawing artifacts in the uncovered region
+        if (aCtrlRegion.GetWidth() < aRequestedRegion.GetWidth() ||
+            aCtrlRegion.GetHeight() < aRequestedRegion.GetHeight())
+        {
+            Color aFaceColor = GetSettings().GetStyleSettings().GetFaceColor();
+            SetFillColor(aFaceColor);
+            SetLineColor(aFaceColor);
+            DrawRect(aRequestedRegion);
+        }
+
         bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT),
                         aCtrlRegion, nState, scrValue, OUString() );
     }
@@ -613,7 +627,7 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
 {
     DecorationView          aDecoView( pOutDev );
     Rectangle               aTempRect;
-    sal_uInt16                  nStyle;
+    sal_uInt16              nStyle;
     const StyleSettings&    rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
     SymbolType              eSymbolType;
     bool                    bEnabled = IsEnabled();
