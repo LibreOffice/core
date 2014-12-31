@@ -1477,8 +1477,7 @@ public:
             if (ocPush == tmpCur->GetOpCode())
             {
 
-                pCurDVR = static_cast<
-                                          const formula::DoubleVectorRefToken*>(tmpCur);
+                pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
                 if (!
                     ((!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                         || (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()))
@@ -1498,8 +1497,7 @@ public:
             tmpCur = vSubArguments[i]->GetFormulaToken();
             if (ocPush == tmpCur->GetOpCode())
             {
-                pCurDVR = static_cast<
-                                          const formula::DoubleVectorRefToken*>(tmpCur);
+                pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
                 if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                 {
                     ss << "        int currentCount";
@@ -1580,8 +1578,7 @@ public:
                         tmpCur = vSubArguments[i]->GetFormulaToken();
                         if (ocPush == tmpCur->GetOpCode())
                         {
-                            pCurDVR = static_cast<
-                                                      const formula::DoubleVectorRefToken*>(tmpCur);
+                            pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
                             if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                             {
                                 temp3 << "        currentCount";
@@ -1657,8 +1654,7 @@ public:
                     tmpCur = vSubArguments[i]->GetFormulaToken();
                     if (ocPush == tmpCur->GetOpCode())
                     {
-                        pCurDVR = static_cast<
-                                                  const formula::DoubleVectorRefToken*>(tmpCur);
+                        pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
                         if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                         {
                             temp4 << "        currentCount";
@@ -2030,9 +2026,7 @@ public:
                 {
                     if (VectorRef* VR = dynamic_cast<VectorRef*>(it->get()))
                         vclmem.push_back(SumIfsArgs(VR->GetCLBuffer()));
-                    else if (DynamicKernelConstantArgument* CA =
-                        dynamic_cast<
-                                         DynamicKernelConstantArgument*>(it->get()))
+                    else if (DynamicKernelConstantArgument* CA = dynamic_cast<DynamicKernelConstantArgument*>(it->get()))
                         vclmem.push_back(SumIfsArgs(CA->GetDouble()));
                     else
                         vclmem.push_back(SumIfsArgs((cl_mem)NULL));
