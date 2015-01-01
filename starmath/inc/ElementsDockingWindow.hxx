@@ -28,6 +28,7 @@
 
 #include <document.hxx>
 #include <node.hxx>
+#include <memory>
 
 class SmElement
 {
@@ -85,7 +86,7 @@ class SmElementsControl : public Control
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    typedef boost::shared_ptr<SmElement>    SmElementPointer;
+    typedef std::shared_ptr<SmElement>    SmElementPointer;
     typedef std::vector< SmElementPointer > SmElementList;
 
     SmDocShell*   mpDocShell;

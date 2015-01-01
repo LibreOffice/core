@@ -30,7 +30,7 @@
 #include "rect.hxx"
 #include "format.hxx"
 #include <boost/ptr_container/ptr_deque.hpp>
-
+#include <memory>
 
 #define ATTR_BOLD       0x0001
 #define ATTR_ITALIC     0x0002
@@ -59,7 +59,7 @@ class SmDocShell;
 class SmNode;
 class SmStructureNode;
 
-typedef boost::shared_ptr<SmNode> SmNodePointer;
+typedef std::shared_ptr<SmNode> SmNodePointer;
 typedef boost::ptr_deque<SmNode> SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
 typedef std::vector< SmStructureNode * > SmStructureNodeArray;
