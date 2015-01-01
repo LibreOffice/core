@@ -265,7 +265,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
         aAction.SetComplete( false );
         if ( mnLockPaint )
             aAction.SetPaint( false );
-        aAction.SetInputType( VCL_INPUT_KEYBOARD );
+        aAction.SetInputType( VclInputFlags::KEYBOARD );
         aAction.Action();
     }
 

@@ -27,6 +27,7 @@
 #include <tools/debug.hxx>
 
 #include <vcl/keycodes.hxx>
+#include <vcl/event.hxx>
 
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>

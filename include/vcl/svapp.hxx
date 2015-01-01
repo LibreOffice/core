@@ -649,7 +649,7 @@ public:
 
      @see GetLastInputInterval
     */
-    static bool                 AnyInput( sal_uInt16 nType = VCL_INPUT_ANY );
+    static bool                 AnyInput( VclInputFlags nType = VCL_INPUT_ANY );
 
     /** The interval from the last time that input was received.
 

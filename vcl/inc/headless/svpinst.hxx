@@ -156,7 +156,7 @@ public:
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
     virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
-    virtual bool            AnyInput( sal_uInt16 nType ) SAL_OVERRIDE;
+    virtual bool            AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() SAL_OVERRIDE;

@@ -788,7 +788,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
     if ( bModified )
     {
         // Idle-Formatter only if AnyInput
-        if ( bAllowIdle && Application::AnyInput( VCL_INPUT_KEYBOARD) )
+        if ( bAllowIdle && Application::AnyInput( VclInputFlags::KEYBOARD) )
             mpImpl->mpTextEngine->IdleFormatAndUpdate( this );
         else
             mpImpl->mpTextEngine->FormatAndUpdate( this);

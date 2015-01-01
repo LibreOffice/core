@@ -63,7 +63,7 @@ public:
     virtual bool                CheckYieldMutex();
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool                AnyInput( sal_uInt16 nType );
+    virtual bool                AnyInput( VclInputFlags nType );
     virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* );
     virtual void                DestroyMenu( SalMenu* );
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );

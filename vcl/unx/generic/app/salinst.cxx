@@ -80,8 +80,8 @@ X11SalInstance::~X11SalInstance()
 
 struct PredicateReturn
 {
-    sal_uInt16  nType;
-    bool    bRet;
+    VclInputFlags nType;
+    bool          bRet;
 };
 
 extern "C" {
@@ -92,7 +92,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
     if ( pPre->bRet )
         return False;
 
-    sal_uInt16 nType;
+    VclInputFlags nType;
 
     switch( pEvent->type )
     {
@@ -101,36 +101,36 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
         case MotionNotify:
         case EnterNotify:
         case LeaveNotify:
-            nType = VCL_INPUT_MOUSE;
+            nType = VclInputFlags::MOUSE;
             break;
 
         case KeyPress:
         //case KeyRelease:
-            nType = VCL_INPUT_KEYBOARD;
+            nType = VclInputFlags::KEYBOARD;
             break;
         case Expose:
         case GraphicsExpose:
         case NoExpose:
-            nType = VCL_INPUT_PAINT;
+            nType = VclInputFlags::PAINT;
             break;
         default:
-            nType = 0;
+            nType = VclInputFlags::NONE;
     }
 
-    if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & VCL_INPUT_OTHER) ) )
+    if ( (nType & pPre->nType) || ( nType == VclInputFlags::NONE && (pPre->nType & VclInputFlags::OTHER) ) )
         pPre->bRet = true;
 
     return False;
 }
 }
 
-bool X11SalInstance::AnyInput(sal_uInt16 nType)
+bool X11SalInstance::AnyInput(VclInputFlags nType)
 {
     SalGenericData *pData = GetGenericData();
     Display *pDisplay  = vcl_sal::getSalDisplay(pData)->GetDisplay();
     bool bRet = false;
 
-    if( (nType & VCL_INPUT_TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
+    if( (nType & VclInputFlags::TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
         bRet = true;
     else if (XPending(pDisplay) )
     {

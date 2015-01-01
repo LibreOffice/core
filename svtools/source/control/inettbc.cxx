@@ -809,7 +809,7 @@ void SvtMatchContext_Impl::doExecute()
 
 void SvtURLBox::TryAutoComplete()
 {
-    if( Application::AnyInput( VCL_INPUT_KEYBOARD ) ) return;
+    if( Application::AnyInput( VclInputFlags::KEYBOARD ) ) return;
 
     OUString aCurText = GetText();
     Selection aSelection( GetSelection() );

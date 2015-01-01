@@ -448,7 +448,7 @@ sal_uInt16 Application::GetDispatchLevel()
     return ImplGetSVData()->maAppData.mnDispatchLevel;
 }
 
-bool Application::AnyInput( sal_uInt16 nType )
+bool Application::AnyInput( VclInputFlags nType )
 {
     return ImplGetSVData()->mpDefInst->AnyInput( nType );
 }

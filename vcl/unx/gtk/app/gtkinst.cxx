@@ -128,17 +128,17 @@ static sal_uInt16 categorizeEvent(const GdkEvent *pEvent)
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_SCROLL:
-        nType = VCL_INPUT_MOUSE;
+        nType = VclInputFlags::MOUSE;
         break;
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-        nType = VCL_INPUT_KEYBOARD;
+        nType = VclInputFlags::KEYBOARD;
         break;
     case GDK_EXPOSE:
-        nType = VCL_INPUT_PAINT;
+        nType = VclInputFlags::PAINT;
         break;
     default:
-        nType = VCL_INPUT_OTHER;
+        nType = VclInputFlags::OTHER;
         break;
     }
     return nType;
@@ -405,10 +405,10 @@ bool GtkInstance::IsTimerExpired()
     return false;
 }
 
-bool GtkInstance::AnyInput( sal_uInt16 nType )
+bool GtkInstance::AnyInput( VclInputFlags nType )
 {
     EnsureInit();
-    if( (nType & VCL_INPUT_TIMER) && IsTimerExpired() )
+    if( (nType & VclInputFlags::TIMER) && IsTimerExpired() )
         return true;
 #if !GTK_CHECK_VERSION(3,0,0)
     bool bRet = X11SalInstance::AnyInput(nType);
@@ -426,7 +426,7 @@ bool GtkInstance::AnyInput( sal_uInt16 nType )
     {
         aEvents.push(pEvent);
         sal_uInt16 nEventType = categorizeEvent(pEvent);
-        if ( (nEventType & nType) || ( ! nEventType && (nType & VCL_INPUT_OTHER) ) )
+        if ( (nEventType & nType) || ( ! nEventType && (nType & VclInputFlags::OTHER) ) )
         {
             bRet = true;
             break;

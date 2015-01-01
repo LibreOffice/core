@@ -1382,7 +1382,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         DBG_ASSERT( !bReadOnly, "ReadOnly but modified???" );
         // Idle-Formatter only when AnyInput.
         if ( bAllowIdle && pImpEditEngine->GetStatus().UseIdleFormatter()
-                && Application::AnyInput( VCL_INPUT_KEYBOARD) )
+                && Application::AnyInput( VclInputFlags::KEYBOARD) )
             pImpEditEngine->IdleFormatAndUpdate( pEditView );
         else
             pImpEditEngine->FormatAndUpdate( pEditView );

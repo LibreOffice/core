@@ -2409,7 +2409,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     comphelper::string::padToLength(aBuf,
                         m_aInBuffer.getLength() + aKeyEvent.GetRepeat() + 1, aCh);
                     m_aInBuffer = aBuf.makeStringAndClear();
-                    bFlushCharBuffer = Application::AnyInput( VCL_INPUT_KEYBOARD );
+                    bFlushCharBuffer = Application::AnyInput( VclInputFlags::KEYBOARD );
                     bFlushBuffer = !bFlushCharBuffer;
                     if( bFlushCharBuffer )
                         m_aKeyInputFlushTimer.Start();

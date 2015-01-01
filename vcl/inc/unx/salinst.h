@@ -66,7 +66,7 @@ public:
     virtual SalSession*         CreateSalSession() SAL_OVERRIDE;
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
-    virtual bool                AnyInput( sal_uInt16 nType ) SAL_OVERRIDE;
+    virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
     virtual void                FillFontPathList( std::list< OString >& o_rFontPaths ) SAL_OVERRIDE;

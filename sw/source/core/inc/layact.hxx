@@ -70,7 +70,7 @@ class SwLayAction
     std::clock_t nStartTicks;      // The Action's starting time; if too much time passes the
                                 // WaitCrsr can be enabled via CheckWaitCrsr()
 
-    sal_uInt16 nInputType;      // Which input should terminate processing
+    VclInputFlags nInputType;      // Which input should terminate processing
     sal_uInt16 nEndPage;        // StatBar control
     sal_uInt16 nCheckPageNum;   // CheckPageDesc() was delayed if != USHRT_MAX
                                 // check from this page onwards
@@ -137,13 +137,13 @@ public:
     bool IsPaintExtraData()     const       { return bPaintExtraData;}
     bool IsInterrupt()          const       { return IsInput(); }
 
-    sal_uInt16 GetInputType()    const { return nInputType; }
+    VclInputFlags GetInputType()    const { return nInputType; }
 
     // adjusting Action to the wanted behaviour
     void SetPaint       ( bool bNew )   { bPaint = bNew; }
     void SetComplete    ( bool bNew )   { bComplete = bNew; }
     void SetStatBar     ( bool bNew );
-    void SetInputType   ( sal_uInt16 nNew ) { nInputType = nNew; }
+    void SetInputType   ( VclInputFlags nNew ) { nInputType = nNew; }
     void SetCalcLayout  ( bool bNew )   { bCalcLayout = bNew; }
     void SetReschedule  ( bool bNew )   { bReschedule = bNew; }
     void SetWaitAllowed ( bool bNew )   { bWaitAllowed = bNew; }

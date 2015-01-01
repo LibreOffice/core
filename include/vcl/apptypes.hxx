@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/rtti.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #define EXC_RSCNOTLOADED   ((sal_uInt16)0x0100)
 #define EXC_SYSTEM         ((sal_uInt16)0x0300)
@@ -31,14 +32,22 @@
 #define EXC_MAJORTYPE      ((sal_uInt16)0xFF00)
 #define EXC_MINORTYPE      ((sal_uInt16)0x00FF)
 
-#define VCL_INPUT_MOUSE                 0x0001
-#define VCL_INPUT_KEYBOARD              0x0002
-#define VCL_INPUT_PAINT                 0x0004
-#define VCL_INPUT_TIMER                 0x0008
-#define VCL_INPUT_OTHER                 0x0010
-#define VCL_INPUT_APPEVENT              0x0020
-#define VCL_INPUT_MOUSEANDKEYBOARD      (VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD)
-#define VCL_INPUT_ANY                   (VCL_INPUT_MOUSEANDKEYBOARD | VCL_INPUT_PAINT | VCL_INPUT_TIMER | VCL_INPUT_OTHER | VCL_INPUT_APPEVENT)
+enum class VclInputFlags {
+    NONE                  = 0x0000,
+    MOUSE                 = 0x0001,
+    KEYBOARD              = 0x0002,
+    PAINT                 = 0x0004,
+    TIMER                 = 0x0008,
+    OTHER                 = 0x0010,
+    APPEVENT              = 0x0020,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<VclInputFlags> : is_typed_flags<VclInputFlags, 0x003f> {};
+}
+
+#define VCL_INPUT_MOUSEANDKEYBOARD    (VclInputFlags::MOUSE | VclInputFlags::KEYBOARD)
+#define VCL_INPUT_ANY                 (VCL_INPUT_MOUSEANDKEYBOARD | VclInputFlags::PAINT | VclInputFlags::TIMER | VclInputFlags::OTHER | VclInputFlags::APPEVENT)
 
 #endif // INCLUDED_VCL_APPTYPES_HXX
 

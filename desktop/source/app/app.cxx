@@ -1533,7 +1533,7 @@ int Desktop::Main()
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
-                (!Application::AnyInput( VCL_INPUT_APPEVENT )                          ))
+                (!Application::AnyInput( VclInputFlags::APPEVENT )                          ))
             {
                  SAL_INFO( "desktop.app", "{ create BackingComponent" );
                  ShowBackingComponent(this);
@@ -2413,7 +2413,7 @@ void Desktop::OpenClients()
     if ( xList->hasElements() )
         return;
 
-    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VCL_INPUT_APPEVENT ) )
+    if ( rArgs.IsQuickstart() || rArgs.IsInvisible() || Application::AnyInput( VclInputFlags::APPEVENT ) )
         // soffice was started as tray icon ...
         return;
 

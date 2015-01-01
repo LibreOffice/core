@@ -40,7 +40,7 @@ public:
     SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
 
     // mainloop pieces
-    virtual bool AnyInput( sal_uInt16 nType );
+    virtual bool AnyInput( VclInputFlags nType );
 
     void RedrawWindows(ANativeWindow_Buffer *pBuffer);
     SalFrame *getFocusFrame() const;

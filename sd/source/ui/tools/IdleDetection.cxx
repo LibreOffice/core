@@ -43,7 +43,7 @@ sal_Int32 IdleDetection::GetIdleState (const vcl::Window* pWindow)
 
 sal_Int32 IdleDetection::CheckInputPending (void)
 {
-    if (Application::AnyInput(VCL_INPUT_MOUSE | VCL_INPUT_KEYBOARD | VCL_INPUT_PAINT))
+    if (Application::AnyInput(VclInputFlags::MOUSE | VclInputFlags::KEYBOARD | VclInputFlags::PAINT))
         return IDET_SYSTEM_EVENT_PENDING;
     else
         return IDET_IDLE;

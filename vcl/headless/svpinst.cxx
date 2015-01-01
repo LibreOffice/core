@@ -348,9 +348,9 @@ void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
     }
 }
 
-bool SvpSalInstance::AnyInput( sal_uInt16 nType )
+bool SvpSalInstance::AnyInput( VclInputFlags nType )
 {
-    if( (nType & VCL_INPUT_TIMER) != 0 )
+    if( nType & VclInputFlags::TIMER )
         return CheckTimeout( false );
     return false;
 }

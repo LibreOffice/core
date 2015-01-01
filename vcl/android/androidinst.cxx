@@ -197,9 +197,9 @@ AndroidSalInstance::~AndroidSalInstance()
     LOGI("destroyed Android Sal Instance");
 }
 
-bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
+bool AndroidSalInstance::AnyInput( VclInputFlags nType )
 {
-    if( (nType & VCL_INPUT_TIMER) != 0 )
+    if( nType & VclInputFlags::TIMER )
         return CheckTimeout( false );
 
     // Unfortunately there is no way to check for a specific type of

@@ -454,7 +454,6 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 }
 
 #define CALCMAX                 1000    // Berechnungen
-#define ABORT_EVENTS            (VCL_INPUT_ANY & ~VCL_INPUT_TIMER & ~VCL_INPUT_OTHER)
 
 namespace {
 
@@ -683,6 +682,9 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
 
         // Quit if either 1) its duration exceeds 50 ms, or 2) there is any
         // pending event after processing 32 cells.
+        VclInputFlags ABORT_EVENTS = VCL_INPUT_ANY;
+        ABORT_EVENTS &= ~VclInputFlags::TIMER;
+        ABORT_EVENTS &= ~VclInputFlags::OTHER;
         if ((50L < tools::Time::GetSystemTicks() - aScope.getStartTime()) || (nCount > 31 && Application::AnyInput(ABORT_EVENTS)))
             nCount = CALCMAX;
     }

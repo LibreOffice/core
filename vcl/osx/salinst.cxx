@@ -699,17 +699,17 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-bool AquaSalInstance::AnyInput( sal_uInt16 nType )
+bool AquaSalInstance::AnyInput( VclInputFlags nType )
 {
-    if( nType & VCL_INPUT_APPEVENT )
+    if( nType & VclInputFlags::APPEVENT )
     {
         if( ! aAppEventList.empty() )
             return true;
-        if( nType == VCL_INPUT_APPEVENT )
+        if( nType == VclInputFlags::APPEVENT )
             return false;
     }
 
-    if( nType & VCL_INPUT_TIMER )
+    if( nType & VclInputFlags::TIMER )
     {
         if( AquaSalTimer::pRunningTimer )
         {
@@ -722,7 +722,7 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
     }
 
     unsigned/*NSUInteger*/ nEventMask = 0;
-    if( nType & VCL_INPUT_MOUSE)
+    if( nType & VclInputFlags::MOUSE)
         nEventMask |=
             NSLeftMouseDownMask    | NSRightMouseDownMask    | NSOtherMouseDownMask |
             NSLeftMouseUpMask      | NSRightMouseUpMask      | NSOtherMouseUpMask |
@@ -730,12 +730,12 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
             NSScrollWheelMask |
             // NSMouseMovedMask |
             NSMouseEnteredMask | NSMouseExitedMask;
-    if( nType & VCL_INPUT_KEYBOARD)
+    if( nType & VclInputFlags::KEYBOARD)
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
-    if( nType & VCL_INPUT_OTHER)
+    if( nType & VclInputFlags::OTHER)
         nEventMask |= NSTabletPoint;
-    // TODO: VCL_INPUT_PAINT / more VCL_INPUT_OTHER
-    if( !nType)
+    // TODO: VclInputFlags::PAINT / more VclInputFlags::OTHER
+    if( !bool(nType) )
         return false;
 
     NSEvent* pEvent = [NSApp nextEventMatchingMask: nEventMask untilDate: nil

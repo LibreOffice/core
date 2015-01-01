@@ -1916,7 +1916,7 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
 
 IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
 {
-    if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
+    if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {
         aSpellIdle.Start();
         return 0; // Later again ...

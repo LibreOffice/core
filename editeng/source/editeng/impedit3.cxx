@@ -309,7 +309,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
 
 IMPL_LINK_NOARG(ImpEditEngine, OnlineSpellHdl)
 {
-    if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) && GetUpdateMode() && IsFormatted() )
+    if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) && GetUpdateMode() && IsFormatted() )
         DoOnlineSpelling();
     else
         aOnlineSpellIdle.Start();

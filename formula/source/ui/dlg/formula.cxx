@@ -582,7 +582,7 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult )
     {
         // Only calculate the value when there isn't any more keyboard input:
 
-        if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) )
+        if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) )
         {
             bResult = m_pHelper->calculateValue(rStrExp,rStrResult);
         }
@@ -620,7 +620,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp)
     {
         // Only calculate the value when there isn't any more keyboard input:
 
-        if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) )
+        if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) )
         {
             pStructPage->ClearStruct();
 

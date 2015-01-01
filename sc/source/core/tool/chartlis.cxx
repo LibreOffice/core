@@ -594,7 +594,7 @@ void ScChartListenerCollection::StartTimer()
 
 IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl)
 {
-    if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
+    if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {
         aIdle.Start();
         return 0;

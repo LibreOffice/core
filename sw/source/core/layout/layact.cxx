@@ -113,7 +113,7 @@ void SwLayAction::CheckWaitCrsr()
 inline void SwLayAction::CheckIdleEnd()
 {
     if ( !IsInput() )
-        bInput = GetInputType() && Application::AnyInput( GetInputType() );
+        bInput = bool(GetInputType()) && Application::AnyInput( GetInputType() );
 }
 
 void SwLayAction::SetStatBar( bool bNew )
@@ -283,7 +283,7 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     pWait( 0 ),
     nPreInvaPage( USHRT_MAX ),
     nStartTicks( std::clock() ),
-    nInputType( 0 ),
+    nInputType( VclInputFlags::NONE ),
     nEndPage( USHRT_MAX ),
     nCheckPageNum( USHRT_MAX )
 {
@@ -308,7 +308,7 @@ void SwLayAction::Reset()
 {
     pOptTab = 0;
     nStartTicks = std::clock();
-    nInputType = 0;
+    nInputType = VclInputFlags::NONE;
     nEndPage = nPreInvaPage = nCheckPageNum = USHRT_MAX;
     bPaint = bComplete = bWaitAllowed = bCheckPages = true;
     bInput = bAgain = bNextCycle = bCalcLayout = bIdle = bReschedule =
@@ -1935,7 +1935,7 @@ bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     bAllValid = false;
                 if ( aRepaint.HasArea() )
                     pImp->GetShell()->InvalidateWindows( aRepaint );
-                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VCL_INPUT_OTHER|VCL_INPUT_PAINT ) )
+                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VclInputFlags::OTHER|VclInputFlags::PAINT ) )
                     return true;
                 break;
             }
@@ -1966,7 +1966,7 @@ bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     // #i122885# handle smarttag problems gracefully and provide diagnostics
                     SAL_WARN( "sw.core", "SMART_TAGS Exception:" << e.Message);
                 }
-                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VCL_INPUT_OTHER|VCL_INPUT_PAINT ) )
+                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VclInputFlags::OTHER|VclInputFlags::PAINT ) )
                     return true;
                 break;
             }

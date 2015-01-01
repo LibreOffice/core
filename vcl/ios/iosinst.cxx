@@ -92,9 +92,9 @@ IosSalInstance::~IosSalInstance()
 
 #if 0
 
-bool IosSalInstance::AnyInput( sal_uInt16 nType )
+bool IosSalInstance::AnyInput( VclInputFlags nType )
 {
-    if( (nType & VCL_INPUT_TIMER) != 0 )
+    if( nType & VclInputFlags::TIMER )
         return CheckTimeout( false );
 
     // Unfortunately there is no way to check for a specific type of

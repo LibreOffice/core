@@ -788,11 +788,11 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return nRet;
 }
 
-bool WinSalInstance::AnyInput( sal_uInt16 nType )
+bool WinSalInstance::AnyInput( VclInputFlags nType )
 {
     MSG aMsg;
 
-    if ( (nType & (VCL_INPUT_ANY)) == (VCL_INPUT_ANY) )
+    if ( (nType & VCL_INPUT_ANY) == VCL_INPUT_ANY )
     {
         // revert bugfix for #108919# which never reported timeouts when called from the timer handler
         // which made the application completely unresponsive during background formatting
@@ -801,7 +801,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
     }
     else
     {
-        if ( nType & VCL_INPUT_MOUSE )
+        if ( nType & VclInputFlags::MOUSE )
         {
             // Test for mouse input
             if ( PeekMessageW( &aMsg, 0, WM_MOUSEFIRST, WM_MOUSELAST,
@@ -809,7 +809,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
                 return true;
         }
 
-        if ( nType & VCL_INPUT_KEYBOARD )
+        if ( nType & VclInputFlags::KEYBOARD )
         {
             // Test for key input
             if ( PeekMessageW( &aMsg, 0, WM_KEYDOWN, WM_KEYDOWN,
@@ -824,7 +824,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
             }
         }
 
-        if ( nType & VCL_INPUT_PAINT )
+        if ( nType & VclInputFlags::PAINT )
         {
             // Test for paint input
             if ( PeekMessageW( &aMsg, 0, WM_PAINT, WM_PAINT,
@@ -848,7 +848,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
                 return true;
         }
 
-        if ( nType & VCL_INPUT_TIMER )
+        if ( nType & VclInputFlags::TIMER )
         {
             // Test for timer input
             if ( PeekMessageW( &aMsg, 0, WM_TIMER, WM_TIMER,
@@ -857,7 +857,7 @@ bool WinSalInstance::AnyInput( sal_uInt16 nType )
 
         }
 
-        if ( nType & VCL_INPUT_OTHER )
+        if ( nType & VclInputFlags::OTHER )
         {
             // Test for any input
             if ( PeekMessageW( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )

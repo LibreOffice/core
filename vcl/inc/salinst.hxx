@@ -56,6 +56,7 @@ class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
+enum class VclInputFlags;
 
 class VCL_PLUGIN_PUBLIC SalInstance
 {
@@ -125,7 +126,7 @@ public:
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
     virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents ) = 0;
-    virtual bool            AnyInput( sal_uInt16 nType ) = 0;
+    virtual bool            AnyInput( VclInputFlags nType ) = 0;
 
     // menus
     virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pMenu );
