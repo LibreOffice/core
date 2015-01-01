@@ -1,0 +1,43 @@
+From b74fc4236cbc58719cc5f6c7fbb3a2213fefa41a Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Thu, 1 Jan 2015 20:29:36 +0100
+Subject: [PATCH] error C1083: Cannot open include file: 'config.h': No such
+ file or directory
+
+---
+ src/OdfGenerator.cxx | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/OdfGenerator.cxx b/src/OdfGenerator.cxx
+index 0534528..c9ace1d 100644
+--- src/OdfGenerator.cxx
++++ src/OdfGenerator.cxx
+@@ -24,7 +24,9 @@
+  * Corel Corporation or Corel Corporation Limited."
+  */
+ 
++#ifdef HAVE_CONFIG_H
+ #include "config.h"
++#endif
+ 
+ #include <math.h>
+ 
+@@ -123,6 +125,7 @@ void OdfGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList &propL
+ 		}
+ 	}
+ 
++#if HAVE_CONFIG_H
+ 	if (generator.empty())
+ 	{
+ 		generator = PACKAGE "/" VERSION;
+@@ -133,6 +136,7 @@ void OdfGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList &propL
+ 		generator += PACKAGE "/" VERSION;
+ 		generator += ")";
+ 	}
++#endif
+ 
+ 	mMetaDataStorage.push_back(new TagOpenElement("meta:generator"));
+ 	mMetaDataStorage.push_back(new CharDataElement(generator.c_str()));
+-- 
+2.1.2
+
