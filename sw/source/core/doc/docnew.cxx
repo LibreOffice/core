@@ -116,7 +116,6 @@
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx>
-#include <boost/foreach.hpp>
 
 //UUUU
 #include <svx/xfillit0.hxx>
@@ -507,18 +506,18 @@ SwDoc::~SwDoc()
 
     // Any of the FrmFormats can still have indices registered.
     // These need to be destroyed now at the latest.
-    BOOST_FOREACH( SwFrmFmt* pFmt, *mpFrmFmtTbl )
+    for( SwFrmFmt* pFmt : *mpFrmFmtTbl )
         lcl_DelFmtIndices( pFmt );
-    BOOST_FOREACH( SwFrmFmt* pFmt, *mpSpzFrmFmtTbl )
+    for( SwFrmFmt* pFmt : *mpSpzFrmFmtTbl )
         lcl_DelFmtIndices( pFmt );
-    BOOST_FOREACH( SwSectionFmt* pFmt, *mpSectionFmtTbl )
+    for( SwSectionFmt* pFmt : *mpSectionFmtTbl )
         lcl_DelFmtIndices( pFmt );
 
     // The formats/styles that follow depend on the default formats.
     // Destroy these only after destroying the FmtIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
+    for(SwPageDesc *pPageDesc : maPageDescs)
         delete pPageDesc;
     maPageDescs.clear();
 
@@ -707,7 +706,7 @@ void SwDoc::ClearDoc()
     // destruction of numbering rules and creation of new outline rule
     // *after* the document nodes are deleted.
     mpOutlineRule = NULL;
-    BOOST_FOREACH( SwNumRule* pNumRule, *mpNumRuleTbl )
+    for( SwNumRule* pNumRule : *mpNumRuleTbl )
         delete pNumRule;
     mpNumRuleTbl->clear();
 
@@ -725,7 +724,7 @@ void SwDoc::ClearDoc()
     if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
         maPageDescs.erase(maPageDescs.begin() + nDummyPgDsc);
 
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
+    for( SwPageDesc *pPageDesc : maPageDescs )
         delete pPageDesc;
     maPageDescs.clear();
 

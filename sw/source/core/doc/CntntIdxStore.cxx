@@ -18,7 +18,6 @@
  */
 
 #include <bookmrk.hxx>
-#include <boost/foreach.hpp>
 #include <boost/function.hpp>
 #include <boost/make_shared.hpp>
 #include <cntfrm.hxx>
@@ -207,7 +206,7 @@ namespace
 #if 0
     static void DumpEntries(std::vector<MarkEntry>* pEntries)
     {
-        BOOST_FOREACH(MarkEntry& aEntry, *pEntries)
+        for (MarkEntry& aEntry : *pEntries)
             aEntry.Dump();
     }
 #endif
@@ -253,7 +252,7 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
 void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aBkmkEntries)
+    for (const MarkEntry& aEntry : m_aBkmkEntries)
     {
         if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
         {
@@ -268,7 +267,7 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
 {
     SwRedlineTbl const & pRedlineTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
     long int nIdx = 0;
-    BOOST_FOREACH(const SwRangeRedline* pRdl, std::make_pair(pRedlineTbl.begin(), pRedlineTbl.end()))
+    for (const SwRangeRedline* pRdl : pRedlineTbl)
     {
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
@@ -295,7 +294,7 @@ void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
 void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
 {
     const SwRedlineTbl& rRedlTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
+    for (const MarkEntry& aEntry : m_aRedlineEntries)
     {
         SwPosition* const pPos = (SwPosition*)( aEntry.m_bOther
             ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
@@ -316,7 +315,7 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
             return; // if we have a layout and no DrawObjs, we can skip this
     }
     MarkEntry aSave = { 0, false, 0 };
-    BOOST_FOREACH(const SwFrmFmt* pFrmFmt, *pDoc->GetSpzFrmFmts())
+    for (const SwFrmFmt* pFrmFmt : *pDoc->GetSpzFrmFmts())
     {
         if ( RES_FLYFRMFMT == pFrmFmt->Which() || RES_DRAWFRMFMT == pFrmFmt->Which() )
         {
@@ -350,7 +349,7 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
 void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto)
 {
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-    BOOST_FOREACH(const MarkEntry& aEntry, m_aFlyEntries)
+    for (const MarkEntry& aEntry : m_aFlyEntries)
     {
         if(!aEntry.m_bOther)
         {
@@ -380,7 +379,7 @@ void CntntIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto
 
 void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
-    BOOST_FOREACH(const SwUnoCrsr* pUnoCrsr, pDoc->GetUnoCrsrTbl())
+    for (const SwUnoCrsr* pUnoCrsr : pDoc->GetUnoCrsrTbl())
     {
         for(SwPaM& rPaM : (const_cast<SwUnoCrsr*>(pUnoCrsr))->GetRingContainer())
         {
@@ -399,7 +398,7 @@ void CntntIdxStoreImpl::SaveUnoCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCn
 
 void CntntIdxStoreImpl::RestoreUnoCrsrs(updater_t& rUpdater)
 {
-    BOOST_FOREACH(const PaMEntry& aEntry, m_aUnoCrsrEntries)
+    for (const PaMEntry& aEntry : m_aUnoCrsrEntries)
     {
         rUpdater(aEntry.m_pPaM->GetBound(!aEntry.m_isMark), aEntry.m_nCntnt);
     }
@@ -431,7 +430,7 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
 
 void CntntIdxStoreImpl::RestoreShellCrsrs(updater_t& rUpdater)
 {
-    BOOST_FOREACH(const PaMEntry& aEntry, m_aShellCrsrEntries)
+    for (const PaMEntry& aEntry : m_aShellCrsrEntries)
     {
         rUpdater(aEntry.m_pPaM->GetBound(aEntry.m_isMark), aEntry.m_nCntnt);
     }

@@ -10,7 +10,6 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <boost/foreach.hpp>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -1317,7 +1316,7 @@ void SwDocTest::testIntrusiveRing()
     aRing5.MoveTo(&aRing4);
     CPPUNIT_ASSERT_EQUAL(aRing4.GetRingContainer().size(), static_cast<size_t>(2));
     aRing4.GetRingContainer().merge(aRing1.GetRingContainer());
-    BOOST_FOREACH(TestRing* pRing, vRings)
+    for(TestRing* pRing : vRings)
     {
         CPPUNIT_ASSERT_EQUAL(pRing->GetRingContainer().size(), static_cast<size_t>(5));
     }

@@ -50,7 +50,6 @@
 #include "undobj.hxx"
 #include "switerator.hxx"
 #include <UndoTable.hxx>
-#include <boost/foreach.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -180,7 +179,7 @@ bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
     if (!rBox.GetLines().empty())
     {
         pPara->bInsertLines = true;
-        BOOST_FOREACH( _FndLine & rFndLine, rBox.GetLines() )
+        for( _FndLine & rFndLine : rBox.GetLines() )
             _FindLine( rFndLine, pPara );
         if ( pPara->bInsertLines )
         {

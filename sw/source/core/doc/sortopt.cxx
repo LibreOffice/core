@@ -19,7 +19,6 @@
 
 #include <i18nlangtag/lang.h>
 #include <sortopt.hxx>
-#include <boost/foreach.hpp>
 
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
@@ -69,7 +68,7 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
 
 SwSortOptions::~SwSortOptions()
 {
-    BOOST_FOREACH(SwSortKey *pKey, aKeys)
+    for( SwSortKey *pKey : aKeys )
         delete pKey;
 }
 

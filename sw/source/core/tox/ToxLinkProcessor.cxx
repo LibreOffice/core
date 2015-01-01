@@ -13,7 +13,6 @@
 #include "ndtxt.hxx"
 #include <poolfmt.hrc>
 
-#include <boost/foreach.hpp>
 #include <stdexcept>
 
 namespace sw {
@@ -64,7 +63,7 @@ ToxLinkProcessor::ObtainPoolId(const OUString& characterStyle) const
 void
 ToxLinkProcessor::InsertLinkAttributes(SwTxtNode& node)
 {
-    BOOST_FOREACH(ClosedLink& clink, mClosedLinks) {
+    for (ClosedLink& clink : mClosedLinks) {
         node.InsertItem(clink.mINetFmt, clink.mStartTextPos, clink.mEndTextPos);
     }
 }

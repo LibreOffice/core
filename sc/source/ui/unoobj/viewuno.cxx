@@ -67,7 +67,6 @@
 #include "scextopt.hxx"
 #include "preview.hxx"
 #include <svx/sdrhittesthelper.hxx>
-#include <boost/foreach.hpp>
 #include "formatsh.hxx"
 #include <sfx2/app.hxx>
 
@@ -1341,7 +1340,7 @@ void ScTabViewObj::EndMouseListening()
 {
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    BOOST_FOREACH(const XMouseClickHandlerUnoRef rListener, aMouseClickHandlers)
+    for (const XMouseClickHandlerUnoRef rListener : aMouseClickHandlers)
     {
         try
         {
@@ -1362,7 +1361,7 @@ void ScTabViewObj::EndActivationListening()
 {
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    BOOST_FOREACH(const XActivationEventListenerUnoRef rListener, aActivationListeners)
+    for (const XActivationEventListenerUnoRef rListener : aActivationListeners)
     {
         try
         {
@@ -1746,7 +1745,7 @@ void ScTabViewObj::SelectionChanged()
     aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    BOOST_FOREACH(const XSelectionChangeListenerUnoRef rListener, aSelectionChgListeners)
+    for (const XSelectionChangeListenerUnoRef rListener : aSelectionChgListeners)
         rListener->selectionChanged( aEvent );
 
     // handle sheet events
@@ -2038,7 +2037,7 @@ void ScTabViewObj::VisAreaChanged()
 {
     beans::PropertyChangeEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    BOOST_FOREACH(const XViewPropertyChangeListenerUnoRef rListener, aPropertyChgListeners)
+    for (const XViewPropertyChangeListenerUnoRef rListener : aPropertyChgListeners)
         rListener->propertyChange( aEvent );
 }
 
@@ -2156,7 +2155,7 @@ void ScTabViewObj::RangeSelDone( const OUString& rText )
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
 
-    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, listeners)
+    for (const XRangeSelectionListenerUnoRef rListener : listeners)
         rListener->done( aEvent );
 }
 
@@ -2169,7 +2168,7 @@ void ScTabViewObj::RangeSelAborted( const OUString& rText )
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
 
-    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, listeners)
+    for (const XRangeSelectionListenerUnoRef rListener : listeners)
         rListener->aborted( aEvent );
 }
 
@@ -2182,7 +2181,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
     // copy on the stack because listener could remove itself
     XRangeSelectionChangeListenerVector const listener(aRangeChgListeners);
 
-    BOOST_FOREACH(const XRangeSelectionChangeListenerUnoRef rListener, listener)
+    for (const XRangeSelectionChangeListenerUnoRef rListener : listener)
         rListener->descriptorChanged( aEvent );
 }
 
