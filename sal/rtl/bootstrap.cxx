@@ -43,6 +43,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <list>
+#include <algorithm>
 #include <unordered_map>
 
 #ifdef ANDROID
