@@ -38,7 +38,7 @@ void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
         if (bHMirr)
             fTemp = nTempX - fTemp;
         pMapIX[nX] = MinMax((long) fTemp, 0, nTemp);
-        pMapFX[nX] = (long) (fTemp - pMapIX[nX]) * 128.0;
+        pMapFX[nX] = (long) ((fTemp - pMapIX[nX]) * 128.0);
     }
 }
 
