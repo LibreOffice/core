@@ -341,7 +341,7 @@ void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreF
 {
     sal_Size nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
-    RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
+    auto pImpl = std::make_shared<RTFDocumentImpl>(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator);
     pImpl->setSuperstream(this);
     pImpl->setStreamType(nId);
     pImpl->setIgnoreFirst(rIgnoreFirst);

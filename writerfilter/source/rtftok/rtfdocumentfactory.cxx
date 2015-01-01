@@ -20,7 +20,7 @@ RTFDocument::Pointer_t RTFDocumentFactory::createDocument(css::uno::Reference< c
         css::uno::Reference< css::frame::XFrame > const& xFrame,
         css::uno::Reference< css::task::XStatusIndicator > const& xStatusIndicator)
 {
-    return RTFDocument::Pointer_t(new RTFDocumentImpl(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator));
+    return std::make_shared<RTFDocumentImpl>(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator);
 }
 
 } // namespace rtftok
