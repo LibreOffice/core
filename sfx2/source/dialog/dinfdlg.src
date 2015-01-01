@@ -90,12 +90,11 @@ ListBox SFX_LB_PROPERTY_TYPE
     };
 };
 
-PushButton SFX_PB_EDIT
+String SFX_ST_EDIT
 {
-    Pos = MAP_APPFONT ( 159 , 2 ) ;
-    Size = MAP_APPFONT ( RSC_CD_TEXTBOX_HEIGHT , RSC_CD_TEXTBOX_HEIGHT ) ;
     Text = "...";
 };
+
 String SFX_ST_DURATION_FORMAT
 {
     Text [en-US] = " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6";

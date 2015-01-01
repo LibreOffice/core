@@ -1335,8 +1335,10 @@ void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration
     SetText( sText );
 }
 
-CustomPropertiesEditButton::CustomPropertiesEditButton( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine ) :
-        PushButton( pParent, rResId ), m_pLine( pLine )
+CustomPropertiesEditButton::CustomPropertiesEditButton(vcl::Window* pParent, WinBits nStyle,
+                                                       CustomPropertyLine* pLine)
+    : PushButton(pParent, nStyle)
+    , m_pLine(pLine)
 {
     SetClickHdl( LINK( this, CustomPropertiesEditButton, ClickHdl ));
 }
@@ -1376,7 +1378,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aTimeField    ( pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT, this ),
     m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ).toString() ),
     m_aDurationField( pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ),
-    m_aEditButton(    pParent, SfxResId( SFX_PB_EDIT ), this),
+    m_aEditButton   ( pParent, WB_TABSTOP, this ),
     m_aYesNoButton  ( pParent, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( pParent, 0, this ),
     m_bIsDate       ( false ),
@@ -1389,6 +1391,8 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
 
     m_aRemoveButton.SetModeImage(Image(SfxResId(SFX_IMG_PROPERTY_REMOVE)));
     m_aRemoveButton.SetQuickHelpText(SfxResId(STR_SFX_REMOVE_PROPERTY).toString());
+
+    m_aEditButton.SetText(SfxResId(SFX_ST_EDIT).toString());
 }
 
 void CustomPropertyLine::SetRemoved()
@@ -1420,7 +1424,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aDateField    ( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ),
     m_aTimeField    ( this, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ),
     m_aDurationField( this, WB_BORDER|WB_TABSTOP|WB_READONLY ),
-    m_aEditButton(    this, SfxResId( SFX_PB_EDIT )),
+    m_aEditButton(    this, WB_TABSTOP ),
     m_aYesNoButton  ( this, SfxResId( SFX_WIN_PROPERTY_YESNO ) ),
     m_aRemoveButton ( this, 0 ),
     m_nScrollPos (0),
@@ -1429,9 +1433,14 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {
+    m_aEditButton.SetPosSizePixel(
+        LogicToPixel(Point(159, 2), MAP_APPFONT),
+        LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
     m_aRemoveButton.SetSizePixel(LogicToPixel(Size(RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT), MAP_APPFONT));
 
-    m_aValueEdit.SetSizePixel(LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
+    m_aValueEdit.SetPosSizePixel(
+        LogicToPixel(Point(159, 2), MAP_APPFONT),
+        LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
 
     m_aEditLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );

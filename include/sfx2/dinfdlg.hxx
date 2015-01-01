@@ -346,7 +346,7 @@ class CustomPropertiesEditButton : public PushButton
     CustomPropertyLine*             m_pLine;
 
 public:
-    CustomPropertiesEditButton( vcl::Window* pParent, const ResId& rResId, CustomPropertyLine* pLine );
+    CustomPropertiesEditButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine);
     virtual ~CustomPropertiesEditButton();
 
     DECL_LINK(ClickHdl, void *);
@@ -394,7 +394,7 @@ struct CustomPropertyLine
     CustomPropertiesTimeField       m_aTimeField;
     const OUString                  m_sDurationFormat;
     CustomPropertiesDurationField   m_aDurationField;
-    CustomPropertiesEditButton     m_aEditButton;
+    CustomPropertiesEditButton      m_aEditButton;
     CustomPropertiesYesNoButton     m_aYesNoButton;
     CustomPropertiesRemoveButton    m_aRemoveButton;
 

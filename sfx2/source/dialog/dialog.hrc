@@ -60,8 +60,8 @@
 
 #define STR_PDF_EXPORT_SEND             ( RC_DIALOG_BEGIN + 120 )
 #define IMG_INFO                        ( RC_DIALOG_BEGIN + 122 )
-#define SFX_PB_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 
+#define SFX_ST_EDIT                     ( RC_DIALOG_BEGIN + 124 )
 #define STR_STYLE_ELEMTLIST             ( RC_DIALOG_BEGIN + 125 )
 #define STR_FONT_TABPAGE                ( RC_DIALOG_BEGIN + 126 )
 
