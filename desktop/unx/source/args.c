@@ -38,6 +38,7 @@ static struct {
     { "invisible",  0, 1, 0, 0, 0, NULL },
     { "quickstart", 0, 1, 0, 0, 0, NULL },
     { "minimized",  0, 1, 0, 0, 0, NULL },
+    { "convert-to",  0, 1, 0, 0, 0, NULL },
 
     /* pagein bits */
     { "writer",     0, 0, 0, 0, 0, "pagein-writer"  },
