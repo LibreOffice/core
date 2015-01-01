@@ -1023,15 +1023,14 @@ namespace pcr
     DropDownEditControl::DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle )
         :DropDownEditControl_Base( _pParent, _nStyle )
         ,m_pFloatingEdit( NULL )
-        ,m_pImplEdit( NULL )
         ,m_pDropdownButton( NULL )
         ,m_nOperationMode( eStringList )
         ,m_bDropdown( false )
     {
         SetCompoundControl( true );
 
-        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
-        SetSubEdit( m_pImplEdit );
+        m_pImplEdit = MultiLineEditRef( new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) ) );
+        SetSubEdit( m_pImplEdit.get() );
         m_pImplEdit->Show();
 
         if ( _nStyle & WB_DROPDOWN )
@@ -1065,11 +1064,7 @@ namespace pcr
             boost::scoped_ptr<vcl::Window> aTemp(m_pFloatingEdit);
             m_pFloatingEdit = NULL;
         }
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pImplEdit);
-            SetSubEdit( NULL );
-            m_pImplEdit = NULL;
-        }
+        SetSubEdit(EditRef());
         {
             boost::scoped_ptr<vcl::Window> aTemp(m_pDropdownButton);
             m_pDropdownButton = NULL;
@@ -1106,7 +1101,7 @@ namespace pcr
             {
                 if ( m_pHelper )
                 {
-                    m_pHelper->LoseFocusHdl( m_pImplEdit );
+                    m_pHelper->LoseFocusHdl( m_pImplEdit.get() );
                     m_pHelper->activateNextControl();
                 }
             }

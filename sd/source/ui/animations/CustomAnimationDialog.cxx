@@ -320,7 +320,7 @@ Control* FontPropertyBox::getControl()
 class DropdownMenuBox : public Edit
 {
 public:
-    DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
+    DropdownMenuBox( vcl::Window* pParent, const EditRef &pSubControl, PopupMenu* pMenu );
     virtual ~DropdownMenuBox();
 
     void Resize() SAL_OVERRIDE;
@@ -329,12 +329,12 @@ public:
     void SetMenuSelectHdl( const Link& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
 private:
-    Edit* mpSubControl;
+    EditRef     mpSubControl;
     MenuButton* mpDropdownButton;
-    PopupMenu* mpMenu;
+    PopupMenu*  mpMenu;
 };
 
-DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
+DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, const EditRef &pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
@@ -350,8 +350,7 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, Popup
 
 DropdownMenuBox::~DropdownMenuBox()
 {
-    SetSubEdit( 0 );
-    delete mpSubControl;
+    SetSubEdit(EditRef());
     delete mpDropdownButton;
     delete mpMenu;
 }
@@ -407,7 +406,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclReference<MetricField> mpMetric;
 };
 
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
@@ -419,7 +418,7 @@ CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Windo
     mpMetric->SetMax( 1000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
@@ -450,7 +449,7 @@ IMPL_LINK( CharHeightPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void CharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         double fValue = 0.0;
         rValue >>= fValue;
@@ -487,7 +486,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclReference<MetricField> mpMetric;
     Link maModifyHdl;
 };
 
@@ -508,7 +507,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
         mpMenu->InsertItem( i, aStr );
     }
 
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
@@ -534,7 +533,7 @@ void TransparencyPropertyBox::updateMenu()
 IMPL_LINK_NOARG(TransparencyPropertyBox, implModifyHdl)
 {
     updateMenu();
-    maModifyHdl.Call(mpMetric);
+    maModifyHdl.Call(mpMetric.get());
 
     return 0;
 }
@@ -552,7 +551,7 @@ IMPL_LINK( TransparencyPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void TransparencyPropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         double fValue = 0.0;
         rValue >>= fValue;
@@ -591,7 +590,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclReference<MetricField> mpMetric;
     Link maModifyHdl;
 };
 
@@ -606,7 +605,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
@@ -640,7 +639,7 @@ void RotationPropertyBox::updateMenu()
 IMPL_LINK_NOARG(RotationPropertyBox, implModifyHdl)
 {
     updateMenu();
-    maModifyHdl.Call(mpMetric);
+    maModifyHdl.Call(mpMetric.get());
 
     return 0;
 }
@@ -677,7 +676,7 @@ IMPL_LINK( RotationPropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         double fValue = 0.0;
         rValue >>= fValue;
@@ -716,7 +715,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    MetricField* mpMetric;
+    VclReference<MetricField> mpMetric;
     Link maModifyHdl;
     int mnDirection;
 };
@@ -731,7 +730,7 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
@@ -764,7 +763,7 @@ void ScalePropertyBox::updateMenu()
 IMPL_LINK_NOARG(ScalePropertyBox, implModifyHdl)
 {
     updateMenu();
-    maModifyHdl.Call(mpMetric);
+    maModifyHdl.Call(mpMetric.get());
 
     return 0;
 }
@@ -810,7 +809,7 @@ IMPL_LINK( ScalePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
 
 void ScalePropertyBox::setValue( const Any& rValue, const OUString& )
 {
-    if( mpMetric )
+    if( mpMetric.get() )
     {
         ValuePair aValues;
         rValue >>= aValues;
@@ -878,7 +877,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    Edit* mpEdit;
+    EditRef mpEdit;
     Link maModifyHdl;
 
     float mfFontWeight;
@@ -950,7 +949,7 @@ IMPL_LINK( FontStylePropertyBox, implMenuSelectHdl, MenuButton*, pPb )
     }
 
     update();
-    maModifyHdl.Call(mpEdit);
+    maModifyHdl.Call(mpEdit.get());
 
     return 0;
 }

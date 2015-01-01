@@ -12,6 +12,9 @@
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/combobox.hxx>
+#include <vcl/field.hxx>
 
 class LifecycleTest : public test::BootstrapFixture
 {
@@ -20,6 +23,7 @@ class LifecycleTest : public test::BootstrapFixture
 public:
     LifecycleTest() : BootstrapFixture(true, false) {}
 
+    void testCast();
     void testMultiDispose();
     void testIsolatedWidgets();
     void testParentedWidgets();
@@ -30,6 +34,17 @@ public:
     CPPUNIT_TEST(testParentedWidgets);
     CPPUNIT_TEST_SUITE_END();
 };
+
+// A compile time sanity check
+void LifecycleTest::testCast()
+{
+//    VclReference<PushButton> xButton(new PushButton(NULL, 0));
+//    VclReference<vcl::Window> xWindow(xButton);
+
+//    VclReference<MetricField> xField(new MetricField(NULL, 0));
+//    VclReference<SpinField> xSpin(xField);
+//    VclReference<Edit> xEdit(xField);
+}
 
 void LifecycleTest::testMultiDispose()
 {
@@ -54,7 +69,9 @@ void LifecycleTest::testWidgets(vcl::Window *pParent)
     // Some widgets really insist on adoption.
     if (pParent)
     {
-        { CheckBoxPtr     aPtr(new CheckBox(pParent));  }
+        { CheckBoxPtr     aPtr(new CheckBox(pParent));    }
+//        { EditRef         aPtr(new Edit(pParent));        }
+//        { ComboBoxPtr     aPtr(new ComboBox(pParent)); }
     }
 //    { RadioButtonPtr  aPtr(new RadioButton(pParent));  }
 }

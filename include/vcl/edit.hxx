@@ -28,6 +28,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>
+#include <vcl/vclref.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com {
@@ -68,7 +69,7 @@ enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOM
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
 {
 private:
-    Edit*               mpSubEdit;
+    VclReference<Edit>  mpSubEdit;
     Timer*              mpUpdateDataTimer;
     TextFilter*         mpFilterText;
     DDInfo*             mpDDInfo;
@@ -85,7 +86,7 @@ private:
     sal_Int32           mnMaxWidthChars;
     AutocompleteAction  meAutocompleteAction;
     sal_Unicode         mcEchoChar;
-    bool            mbModified:1,
+    bool                mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -164,6 +165,7 @@ public:
                         Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
                         Edit( vcl::Window* pParent, const ResId& rResId );
                         virtual ~Edit();
+                        virtual void dispose() SAL_OVERRIDE;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -186,7 +188,7 @@ public:
 
     virtual void        SetModifyFlag();
     virtual void        ClearModifyFlag();
-    virtual bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
+    virtual bool        IsModified() const { return mpSubEdit.get() ? mpSubEdit->mbModified : mbModified; }
 
     virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
@@ -235,8 +237,8 @@ public:
     virtual const Link& GetModifyHdl() const { return maModifyHdl; }
     virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
 
-    void                SetSubEdit( Edit* pEdit );
-    Edit*               GetSubEdit() const { return mpSubEdit; }
+    void                SetSubEdit( VclReference<Edit> pEdit );
+    Edit*               GetSubEdit() const { return mpSubEdit.get(); }
 
     boost::signals2::signal< void ( Edit* ) > autocompleteSignal;
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
@@ -268,6 +270,7 @@ public:
     // global style settings (needed by sc's inputwin.cxx)
     static Size GetMinimumEditSize();
 };
+typedef VclReference<Edit> EditRef;
 
 #endif // INCLUDED_VCL_EDIT_HXX
 

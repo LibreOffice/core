@@ -75,7 +75,6 @@ public:
         // hold it alive for the lifetime of this method
         ::rtl::Reference<reference_type> aTmp(m_rInnerRef);
         m_rInnerRef.clear(); // we should use some 'swap' method ideally ;-)
-        assert(aTmp.get());
         if (aTmp.get())
             aTmp->dispose();
     }

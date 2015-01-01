@@ -1317,6 +1317,8 @@ bool Window::IsWait() const
 
 vcl::Cursor* Window::GetCursor() const
 {
+    if (!mpWindowImpl)
+        return NULL;
     return mpWindowImpl->mpCursor;
 }
 

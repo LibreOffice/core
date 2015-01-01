@@ -657,6 +657,8 @@ void Window::ImplStartDnd()
 
 Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
 {
+    if( !mpWindowImpl )
+        return Reference< css::datatransfer::dnd::XDropTarget >();
 
     if( ! mpWindowImpl->mxDNDListenerContainer.is() )
     {
