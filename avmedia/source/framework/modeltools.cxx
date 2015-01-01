@@ -26,7 +26,6 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
 #include <config_features.h>
@@ -174,7 +173,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
         json_parser::read_json( sUrl, aTree );
 
         // Buffers for geometry and animations
-        BOOST_FOREACH(ptree::value_type &rVal,aTree.get_child("buffers"))
+        for( ptree::value_type &rVal : aTree.get_child("buffers") )
         {
             const std::string sBufferUri(rVal.second.get<std::string>("path"));
             vExternals.push_back(sBufferUri);
@@ -185,7 +184,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
         boost::optional< ptree& > aImages = aTree.get_child_optional("images");
         if( aImages )
         {
-            BOOST_FOREACH(ptree::value_type &rVal,aImages.get())
+            for( ptree::value_type &rVal : aImages.get() )
             {
                 const std::string sImageUri(rVal.second.get<std::string>("path"));
                 if( !sImageUri.empty() )
@@ -197,7 +196,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed:
             }
         }
         // Shaders (contains names only)
-        BOOST_FOREACH(ptree::value_type &rVal,aTree.get_child("programs"))
+        for( ptree::value_type &rVal : aTree.get_child("programs") )
         {
             vExternals.push_back(rVal.second.get<std::string>("fragmentShader") + ".glsl");
             vExternals.push_back(rVal.second.get<std::string>("vertexShader") + ".glsl");

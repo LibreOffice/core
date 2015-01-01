@@ -22,7 +22,6 @@
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 #include <algorithm>
-#include <boost/foreach.hpp>
 
 using namespace ::editeng;
 
@@ -86,7 +85,7 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
     const SwTableLines& rLines = pBox->GetTabLines();
     if( !rLines.empty() )
     {
-        BOOST_FOREACH( const SwTableLine* pLine, rLines )
+        for( const SwTableLine* pLine : rLines )
             lcl_GCBorder_GetLastBox_L( pLine, pPara );
     }
     else
@@ -311,7 +310,7 @@ static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara )
     {
         _SwGCLineBorder aPara( *pBox );
         aPara.pShareFmts = pPara->pShareFmts;
-        BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
+        for( const SwTableLine* pLine : pBox->GetTabLines() )
             sw_GC_Line_Border( pLine, &aPara );
     }
 }

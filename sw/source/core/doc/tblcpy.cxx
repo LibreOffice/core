@@ -45,7 +45,6 @@
 #include <redline.hxx>
 #include <fmtfsize.hxx>
 #include <list>
-#include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 
 static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
@@ -1037,7 +1036,7 @@ static void _FndCntntBox( const SwTableBox* pBox, SwSelBoxes* pPara )
 {
     if( !pBox->GetTabLines().empty() )
     {
-        BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
+        for( const SwTableLine* pLine : pBox->GetTabLines() )
             _FndCntntLine( pLine, pPara );
     }
     else
@@ -1046,7 +1045,7 @@ static void _FndCntntBox( const SwTableBox* pBox, SwSelBoxes* pPara )
 
 static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
 {
-    BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
+    for( const SwTableBox* pBox : pLine->GetTabBoxes() )
         _FndCntntBox(pBox, pPara );
 }
 

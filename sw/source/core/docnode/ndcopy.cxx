@@ -28,7 +28,6 @@
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <svtools/fmtfield.hxx>
-#include <boost/foreach.hpp>
 #include <vector>
 
 
@@ -191,7 +190,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
     {
         _CopyTable aPara( *pCT );
         aPara.pInsBox = pNewBox;
-        BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
+        for( const SwTableLine* pLine : pBox->GetTabLines() )
             lcl_CopyTblLine( pLine, &aPara );
     }
     else if( pNewBox->IsInHeadline( &pCT->pTblNd->GetTable() ))
@@ -309,7 +308,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     _MapTblFrmFmts aMapArr;
     _CopyTable aPara( pDoc, aMapArr, GetIndex(), *pTblNd, &GetTable() );
 
-    BOOST_FOREACH(const SwTableLine* pLine, GetTable().GetTabLines() )
+    for( const SwTableLine* pLine : GetTable().GetTabLines() )
         lcl_CopyTblLine( pLine, &aPara );
 
     if( pDDEType )

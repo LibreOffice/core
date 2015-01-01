@@ -44,8 +44,6 @@
 #include <ndtxt.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
-//#include <rtl/string.h>
-#include <boost/foreach.hpp>
 
 
 using namespace ::com::sun::star;
@@ -250,7 +248,7 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        BOOST_FOREACH( const SwSectionFmt* pFmt, m_rDoc.GetSections() )
+        for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -266,7 +264,7 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
     }
 
     _FindItem aPara( GetAppCharClass().lowercase( rItem ));
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rDoc.GetTblFrmFmts() )
+    for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -293,7 +291,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        BOOST_FOREACH( const SwSectionFmt* pFmt, m_rDoc.GetSections() )
+        for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -310,7 +308,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
     OUString sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rDoc.GetTblFrmFmts() )
+    for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -346,7 +344,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
-        BOOST_FOREACH( const SwSectionFmt* pFmt, m_rDoc.GetSections() )
+        for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -369,7 +367,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
 
     _FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rDoc.GetTblFrmFmts() )
+    for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -458,7 +456,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
         if( sCmp == "table" )
         {
             sName = rCC.lowercase( sName );
-            BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rDoc.GetTblFrmFmts() )
+            for( const SwFrmFmt* pFmt : *m_rDoc.GetTblFrmFmts() )
             {
                 if (!(lcl_FindTable(pFmt, &aPara)))
                     break;
@@ -539,7 +537,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
 
         if( !m_rDoc.GetSections().empty() )
         {
-            BOOST_FOREACH( const SwSectionFmt* pFmt, m_rDoc.GetSections() )
+            for( const SwSectionFmt* pFmt : m_rDoc.GetSections() )
             {
                 if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                     break;

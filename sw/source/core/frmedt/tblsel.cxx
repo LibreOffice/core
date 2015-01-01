@@ -48,7 +48,6 @@
 #include <frmtool.hxx>
 #include <switerator.hxx>
 #include <deque>
-#include <boost/foreach.hpp>
 
 // see also swtable.cxx
 #define COLFUZZY 20L
@@ -1413,7 +1412,7 @@ static bool lcl_CheckCol( _FndBox const& rFndBox, bool* pPara )
         }
         else
         {
-            BOOST_FOREACH( _FndLine const& rFndLine, rFndBox.GetLines() )
+            for( _FndLine const& rFndLine : rFndBox.GetLines() )
                 lcl_CheckRow( rFndLine, pPara );
         }
     }

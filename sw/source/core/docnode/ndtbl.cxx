@@ -93,7 +93,6 @@
 #include <fldupde.hxx>
 #include <switerator.hxx>
 #include <o3tl/numeric.hxx>
-#include <boost/foreach.hpp>
 #include <tools/datetimeutils.hxx>
 
 #ifdef DBG_UTIL
@@ -1497,7 +1496,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
     // Delete the Box's Lines
     if( !pBox->GetTabLines().empty() )
     {
-        BOOST_FOREACH( SwTableLine* pLine, pBox->GetTabLines() )
+        for( SwTableLine* pLine : pBox->GetTabLines() )
             lcl_DelLine( pLine, pDelPara );
     }
     else
@@ -1574,7 +1573,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // "Delete" the Table and merge all Lines/Boxes
     _DelTabPara aDelPara( *this, cCh, pUndo );
-    BOOST_FOREACH( SwTableLine *pLine, pTblNd->pTable->GetTabLines() )
+    for( SwTableLine *pLine : pTblNd->pTable->GetTabLines() )
         lcl_DelLine( pLine, &aDelPara );
 
     // We just created a TextNode with fitting separator for every TableLine.
@@ -3332,7 +3331,7 @@ static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara )
     if( pBox->GetSttNd() )
         pPara->ChgBox( pBox );
     else
-        BOOST_FOREACH( SwTableLine* pLine, pBox->GetTabLines() )
+        for( SwTableLine* pLine : pBox->GetTabLines() )
             lcl_SplitTable_CpyLine( pLine, pPara );
 }
 
@@ -3420,7 +3419,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
 
         // Move the affected Boxes. Make the Formats unique and correct the StartNodes
         _SplitTable_Para aPara( pNewTblNd, rTbl );
-        BOOST_FOREACH( SwTableLine* pNewLine, rNewTbl.GetTabLines() )
+        for( SwTableLine* pNewLine : rNewTbl.GetTabLines() )
             lcl_SplitTable_CpyLine( pNewLine, &aPara );
         rTbl.CleanUpBottomRowSpan( nDeleted );
     }
@@ -3689,7 +3688,7 @@ static bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
         }
     }
     else
-        BOOST_FOREACH( _FndLine& rFndLine, rBox.GetLines() )
+        for( _FndLine& rFndLine : rBox.GetLines() )
             lcl_SetAFmtLine( rFndLine, pSetPara );
 
     if (!rBox.GetUpper()->GetUpper()) // a BaseLine
