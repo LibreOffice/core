@@ -20,14 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEIMAGEMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEIMAGEMANAGER_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-#include <list>
-#include <boost/unordered_map.hpp>
-#include <memory>
-
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -52,6 +44,10 @@
 
 #include <vcl/image.hxx>
 #include <rtl/ref.hxx>
+
+#include <list>
+#include <memory>
+#include <vector>
 
 namespace framework
 {

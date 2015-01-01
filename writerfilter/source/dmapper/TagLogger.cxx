@@ -21,7 +21,7 @@
 #include <string.h>
 #include "TagLogger.hxx"
 #include <ooxml/QNameToString.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace css;
 
@@ -92,7 +92,7 @@ namespace writerfilter
 
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
     {
-        typedef boost::unordered_map<std::string, TagLogger::Pointer_t> TagLoggerHashMap_t;
+        typedef std::unordered_map<std::string, TagLogger::Pointer_t> TagLoggerHashMap_t;
         static TagLoggerHashMap_t tagLoggers;
 
         TagLoggerHashMap_t::iterator aIt = tagLoggers.end();

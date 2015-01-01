@@ -73,8 +73,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class ExecutablePackageImpl;
 
-    typedef ::boost::unordered_map< OUString, Reference<XInterface>,
-                             OUStringHash > t_string2object;
+    typedef std::unordered_map< OUString, Reference<XInterface>,
+                                OUStringHash > t_string2object;
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(

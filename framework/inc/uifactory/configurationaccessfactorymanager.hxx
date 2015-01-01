@@ -31,7 +31,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace framework {
 
@@ -57,10 +57,10 @@ namespace framework {
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        class FactoryManagerMap : public boost::unordered_map< OUString,
-                                                     OUString,
-                                                     OUStringHash,
-                                                     ::std::equal_to< OUString > >
+        class FactoryManagerMap : public std::unordered_map<OUString,
+                                                            OUString,
+                                                            OUStringHash,
+                                                            std::equal_to< OUString > >
         {
             inline void free()
             {

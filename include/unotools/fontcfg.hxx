@@ -27,8 +27,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace utl
@@ -50,7 +50,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
     };
 
-    boost::unordered_map< OUString, LocaleAccess, OUStringHash > m_aConfig;
+    std::unordered_map< OUString, LocaleAccess, OUStringHash > m_aConfig;
 
     OUString tryLocale( const OUString& rBcp47, const OUString& rType ) const;
 
@@ -153,8 +153,8 @@ private:
 
         LocaleSubst() : bConfigRead( false ) {}
     };
-    boost::unordered_map< OUString, LocaleSubst, OUStringHash > m_aSubst;
-    typedef boost::unordered_set< OUString, OUStringHash > UniqueSubstHash;
+    std::unordered_map< OUString, LocaleSubst, OUStringHash > m_aSubst;
+    typedef std::unordered_set< OUString, OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
     void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,

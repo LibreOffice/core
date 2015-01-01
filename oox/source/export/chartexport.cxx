@@ -88,7 +88,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 #include <set>
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 #include <rtl/math.hxx>
 
@@ -2543,7 +2543,7 @@ struct LabelPlacementParam
     bool mbExport;
     sal_Int32 meDefault;
 
-    boost::unordered_set<sal_Int32> maAllowedValues;
+    std::unordered_set<sal_Int32> maAllowedValues;
 
     LabelPlacementParam() :
         mbExport(true),

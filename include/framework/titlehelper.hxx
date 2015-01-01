@@ -40,7 +40,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <framework/fwedllapi.h>
 
 

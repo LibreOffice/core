@@ -45,8 +45,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
-#include <boost/unordered_map.hpp>
 #include <osl/file.hxx>
+#include <unordered_map>
 
 #include "vbahelper/vbahelper.hxx"
 #include "vbahelper/vbaapplicationbase.hxx"
@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
 static const char aSpreadsheetDocument[] = "com.sun.star.sheet.SpreadsheetDocument";
 static const char aTextDocument[] = "com.sun.star.text.TextDocument";
 
-typedef  boost::unordered_map< OUString,
+typedef  std::unordered_map< OUString,
 sal_Int32, OUStringHash,
 ::std::equal_to< OUString > > NameIndexHash;
 

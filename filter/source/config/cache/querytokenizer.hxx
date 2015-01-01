@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_QUERYTOKENIZER_HXX
 
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
+#include <unordered_map>
 
 
 namespace filter{
@@ -45,10 +45,10 @@ namespace filter{
     @attention  This class is not threadsafe implemented. Because its not necessary.
                 But you have to make sure, that ist not used as such :-)
  */
-class QueryTokenizer : public ::boost::unordered_map< OUString                    ,
-                                               OUString                    ,
-                                               OUStringHash                ,
-                                               ::std::equal_to< OUString > >
+class QueryTokenizer : public std::unordered_map< OUString                    ,
+                                                  OUString                    ,
+                                                  OUStringHash                ,
+                                                  std::equal_to< OUString > >
 {
 
     // member

@@ -21,9 +21,6 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
-#include <vector>
-#include <list>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -108,6 +105,9 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <txtlists.hxx>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <list>
+#include <unordered_map>
+#include <vector>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -198,7 +198,7 @@ namespace
             };
 
         private:
-            typedef boost::unordered_map<
+            typedef std::unordered_map<
                 Reference<XTextFrame>,
                 TextContentSet,
                 FrameRefHash> framebound_map_t;

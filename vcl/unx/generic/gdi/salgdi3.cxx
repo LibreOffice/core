@@ -30,7 +30,6 @@
 #include <sys/types.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <boost/unordered_set.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <osl/file.hxx>
 #include <osl/module.hxx>

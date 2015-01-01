@@ -16,10 +16,10 @@
 
 #include "officecfg/Office/Common.hxx"
 #include <algorithm>
+#include <unordered_map>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/utility.hpp>
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/awt/ContainerWindowProvider.hpp>

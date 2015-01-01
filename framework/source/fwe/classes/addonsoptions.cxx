@@ -32,8 +32,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <algorithm>
+#include <unordered_map>
 #include <vector>
 
 //  namespaces
@@ -234,10 +234,10 @@ class AddonsOptions_Impl : public ConfigItem
             void addImage(ImageSize eSize, const Image &rImage, const OUString &rURL);
         };
 
-        typedef boost::unordered_map< OUString, ImageEntry, OUStringHash, ::std::equal_to< OUString > > ImageManager;
-        typedef boost::unordered_map< OUString, sal_uInt32, OUStringHash, ::std::equal_to< OUString > > StringToIndexMap;
+        typedef std::unordered_map< OUString, ImageEntry, OUStringHash, std::equal_to< OUString > > ImageManager;
+        typedef std::unordered_map< OUString, sal_uInt32, OUStringHash, std::equal_to< OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
-        typedef ::boost::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash, ::std::equal_to< OUString > > ToolbarMergingInstructions;
+        typedef std::unordered_map< OUString, MergeToolbarInstructionContainer, OUStringHash, std::equal_to< OUString > > ToolbarMergingInstructions;
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree

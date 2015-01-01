@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_STDTYPES_H
 #define INCLUDED_FRAMEWORK_INC_STDTYPES_H
 
-#include <vector>
 #include <queue>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <vector>
 
 #include "general.h"
 
@@ -120,15 +120,15 @@ class OUStringList : public ::comphelper::SequenceAsVector< OUString >
 typedef ::std::queue< OUString > OUStringQueue;
 
 /**
-    Basic hash based on a boost::unordered_map() which provides key=[OUString] and value=[template type] pairs
+    Basic hash based on a std::unordered_map() which provides key=[OUString] and value=[template type] pairs
     It implements some additional funtionality which can be useful but
     is missing at the normal hash implementation.
 */
 template< class TType >
-class BaseHash : public ::boost::unordered_map< OUString                    ,
-                                         TType                              ,
-                                         OUStringHash                  ,
-                                         ::std::equal_to< OUString > >
+class BaseHash : public std::unordered_map< OUString                    ,
+                                            TType                              ,
+                                            OUStringHash                  ,
+                                            std::equal_to< OUString > >
 {
     public:
 

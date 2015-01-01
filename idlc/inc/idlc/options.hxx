@@ -22,7 +22,7 @@
 
 #include <idlc/idlctypes.hxx>
 
-typedef ::boost::unordered_map< OString,
+typedef std::unordered_map< OString,
                          OString,
                          OStringHash > OptionMap;
 

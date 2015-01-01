@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 #define INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 
-#include <stack>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
@@ -59,7 +58,8 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 
-
+#include <stack>
+#include <unordered_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -175,7 +175,7 @@ struct BulletListItemInfo
 class SVGTextWriter
 {
   public:
-    typedef ::boost::unordered_map< OUString, BulletListItemInfo, OUStringHash >         BulletListItemInfoMap;
+    typedef std::unordered_map< OUString, BulletListItemInfo, OUStringHash >         BulletListItemInfoMap;
 
   private:
     SVGExport&                                  mrExport;

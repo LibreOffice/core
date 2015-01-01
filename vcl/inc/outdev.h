@@ -140,7 +140,7 @@ private:
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef ::boost::unordered_map<FontSelectPattern,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
+    typedef std::unordered_map<FontSelectPattern,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
 public:

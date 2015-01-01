@@ -42,11 +42,11 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
-#include <map>
-#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <algorithm>
 #include <functional>
+#include <map>
+#include <unordered_map>
 #include "osl/file.hxx"
 
 #include <vcl/tabctrl.hxx>
@@ -77,8 +77,8 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > SimpleNameContainer
 template< typename T >
 class SimpleNamedThingContainer : public SimpleNameContainer_BASE
 {
-    typedef boost::unordered_map< OUString, Reference< T >, OUStringHash,
-       ::std::equal_to< OUString > > NamedThingsHash;
+    typedef std::unordered_map< OUString, Reference< T >, OUStringHash,
+       std::equal_to< OUString > > NamedThingsHash;
     NamedThingsHash things;
     ::osl::Mutex m_aMutex;
 public:

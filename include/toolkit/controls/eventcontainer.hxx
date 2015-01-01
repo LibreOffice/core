@@ -26,8 +26,9 @@
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <unordered_map>
+
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
                                  ::com::sun::star::container::XContainer > NameContainerHelper;
 
@@ -36,7 +37,7 @@ namespace toolkit
 {
 
 // Hashtable to optimize
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     sal_Int32,

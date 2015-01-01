@@ -36,8 +36,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 
 namespace svt
 {
@@ -98,7 +97,7 @@ namespace svt
     };
 
     typedef ::boost::shared_ptr< IValueNormalization > PValueNormalization;
-    typedef ::boost::unordered_map< OUString, PValueNormalization, OUStringHash >    NormalizerCache;
+    typedef std::unordered_map< OUString, PValueNormalization, OUStringHash >    NormalizerCache;
 
 
     //= CellValueConversion_Data

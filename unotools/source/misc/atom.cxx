@@ -34,7 +34,7 @@ AtomProvider::~AtomProvider()
 
 int AtomProvider::getAtom( const OUString& rString, bool bCreate )
 {
-    ::boost::unordered_map< OUString, int, OUStringHash >::iterator it = m_aAtomMap.find( rString );
+    std::unordered_map< OUString, int, OUStringHash >::iterator it = m_aAtomMap.find( rString );
     if( it != m_aAtomMap.end() )
         return it->second;
     if( ! bCreate )
@@ -48,7 +48,7 @@ int AtomProvider::getAtom( const OUString& rString, bool bCreate )
 const OUString& AtomProvider::getString( int nAtom ) const
 {
     static OUString aEmpty;
-    ::boost::unordered_map< int, OUString, ::boost::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
+    std::unordered_map< int, OUString, ::boost::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
 
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
@@ -59,13 +59,13 @@ MultiAtomProvider::MultiAtomProvider()
 
 MultiAtomProvider::~MultiAtomProvider()
 {
-    for( ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it = m_aAtomLists.begin(); it != m_aAtomLists.end(); ++it )
+    for( std::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it = m_aAtomLists.begin(); it != m_aAtomLists.end(); ++it )
         delete it->second;
 }
 
 int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, bool bCreate )
 {
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
+    std::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return it->second->getAtom( rString, bCreate );
@@ -81,7 +81,7 @@ int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, bool bCr
 
 const OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
-    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
+    std::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return it->second->getString( atom );

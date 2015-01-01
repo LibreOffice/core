@@ -34,8 +34,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <boost/utility.hpp>
 #include <cassert>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -409,6 +407,8 @@
 #include <tools/multisel.hxx>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
+#include <unordered_map>
+#include <unordered_set>
 #include <unotools/docinfohelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontcvt.hxx>

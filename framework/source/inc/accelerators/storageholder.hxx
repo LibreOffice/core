@@ -56,10 +56,10 @@ class StorageHolder
         };
 
         /** @short  TODO */
-        typedef ::boost::unordered_map< OUString                    ,
-                                 TStorageInfo                       ,
-                                 OUStringHash                ,
-                                 ::std::equal_to< OUString > > TPath2StorageInfo;
+        typedef std::unordered_map< OUString                    ,
+                                    TStorageInfo                       ,
+                                    OUStringHash                ,
+                                    std::equal_to< OUString > > TPath2StorageInfo;
 
     // member
     private:

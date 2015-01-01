@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/unordered_map.hpp>
-#include <vector>
 #include <string.h>
+#include <unordered_map>
+#include <vector>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
@@ -912,7 +912,7 @@ struct hashObjectContainer_Impl
     }
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     Reference< XInterface >,
     sal_Int32,

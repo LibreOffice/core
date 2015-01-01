@@ -26,8 +26,6 @@
 #include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
-#include <boost/unordered_map.hpp>
-#include <map>
 
 namespace com { namespace sun { namespace star {
     namespace chart {

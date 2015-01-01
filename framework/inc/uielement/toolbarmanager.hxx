@@ -52,6 +52,8 @@
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
 
+#include <unordered_map>
+
 class PopupMenu;
 class ToolBox;
 
@@ -170,11 +172,11 @@ class ToolBarManager : public ToolbarManager_Base
         bool RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut );
 
     protected:
-        typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
+        typedef std::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
-        typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
+        typedef std::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
 
         bool m_bDisposed : 1,
              m_bSmallSymbols : 1,

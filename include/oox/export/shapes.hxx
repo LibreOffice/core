@@ -26,7 +26,7 @@
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/fract.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star {
 namespace beans {
@@ -58,7 +58,7 @@ private:
     };
 
 public:
-    typedef boost::unordered_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+    typedef std::unordered_map< const css::uno::Reference< css::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
 
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;

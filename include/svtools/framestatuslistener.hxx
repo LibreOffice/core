@@ -31,7 +31,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace svt
 {
@@ -82,10 +82,10 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::boost::unordered_map< OUString,
-                                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > URLToDispatchMap;
+        typedef std::unordered_map< OUString,
+                                    css::uno::Reference< css::frame::XDispatch >,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > URLToDispatchMap;
 
         bool                                                                                m_bInitialized : 1,
                                                                                             m_bDisposed : 1;

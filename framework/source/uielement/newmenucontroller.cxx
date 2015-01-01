@@ -339,7 +339,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         AddInfo         aAddInfo;
 
         // retrieve additional parameters from bookmark menu and
-        // store it in a boost::unordered_map.
+        // store it in a unordered_map.
         for ( sal_uInt16 i = 0; i < pSubMenu->GetItemCount(); i++ )
         {
             sal_uInt16 nItemId = pSubMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ) );

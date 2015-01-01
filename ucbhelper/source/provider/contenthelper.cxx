@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/CommandInfoChange.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
@@ -33,6 +32,8 @@
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
+
+#include <unordered_map>
 
 using namespace com::sun::star;
 
@@ -74,7 +75,7 @@ struct hashPtr
     }
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     XPropertiesChangeListenerPtr,
     PropertyEventSequence*,

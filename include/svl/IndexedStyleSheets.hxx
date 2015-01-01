@@ -18,7 +18,7 @@
 
 #include <svl/svldllapi.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 class SfxStyleSheetBase;
@@ -178,7 +178,7 @@ private:
      *
      * @internal
      * Must be an unordered map. A regular map is too slow for some files. */
-    typedef boost::unordered_multimap<rtl::OUString, unsigned, rtl::OUStringHash> MapType;
+    typedef std::unordered_multimap<rtl::OUString, unsigned, rtl::OUStringHash> MapType;
 
     /** A map which stores the positions of style sheets by their name */
     MapType mPositionsByName;

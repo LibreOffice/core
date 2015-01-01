@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
@@ -37,5 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <string.h>
+#include <unordered_map>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

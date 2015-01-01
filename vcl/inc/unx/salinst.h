@@ -37,7 +37,7 @@ class SalXLib;
 class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalGenericInstance
 {
 private:
-    boost::unordered_map< Atom, com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > > m_aInstances;
+    std::unordered_map< Atom, com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > > m_aInstances;
 
 protected:
     SalXLib *mpXLib;

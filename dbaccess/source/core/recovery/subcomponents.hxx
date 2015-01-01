@@ -26,8 +26,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <map>
+#include <unordered_map>
 
 namespace dbaccess
 {
@@ -62,8 +62,8 @@ namespace dbaccess
         }
     };
 
-    typedef ::boost::unordered_map< OUString, SubComponentDescriptor, OUStringHash > MapStringToCompDesc;
-    typedef ::std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
+    typedef std::unordered_map< OUString, SubComponentDescriptor, OUStringHash > MapStringToCompDesc;
+    typedef std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
 } // namespace dbaccess
 

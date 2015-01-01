@@ -70,6 +70,7 @@
 
 #include <functional>
 #include <map>
+#include <unordered_map>
 
 #include <boost/ptr_container/ptr_map.hpp>
 
@@ -1584,7 +1585,7 @@ class PerXMinMaxCalculator
     typedef std::pair<double, double> MinMaxType;
     typedef std::map<size_t, MinMaxType> SeriesMinMaxType;
     typedef boost::ptr_map<double, SeriesMinMaxType> GroupMinMaxType;
-    typedef boost::unordered_map<double, MinMaxType> TotalStoreType;
+    typedef std::unordered_map<double, MinMaxType> TotalStoreType;
     GroupMinMaxType maSeriesGroup;
     size_t mnCurSeries;
 

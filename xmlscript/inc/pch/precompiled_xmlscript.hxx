@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
@@ -78,6 +77,7 @@
 #include <tools/date.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/time.hxx>
+#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

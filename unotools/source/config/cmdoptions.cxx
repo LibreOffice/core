@@ -31,7 +31,7 @@
 #include "itemholder1.hxx"
 
 #include <algorithm>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace ::std;
 using namespace ::utl;
@@ -76,7 +76,7 @@ class SvtCmdOptions
         }
 
     private:
-        typedef boost::unordered_map<OUString, sal_Int32, OUStringHash>
+        typedef std::unordered_map<OUString, sal_Int32, OUStringHash>
             CommandHashMap;
 
         CommandHashMap m_aCommandHashMap;

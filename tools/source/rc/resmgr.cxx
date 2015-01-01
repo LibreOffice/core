@@ -47,12 +47,11 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/simplerm.hxx>
 
-#include <functional>
 #include <algorithm>
-#include <boost/unordered_map.hpp>
+#include <functional>
 #include <list>
 #include <set>
-
+#include <unordered_map>
 
 using namespace osl;
 
@@ -89,7 +88,7 @@ class InternalResMgr
     OUString                        aResName;
     bool                            bSingular;
     LanguageTag                     aLocale;
-    boost::unordered_map<sal_uInt64, int>* pResUseDump;
+    std::unordered_map<sal_uInt64, int>* pResUseDump;
 
                             InternalResMgr( const OUString& rFileURL,
                                             const OUString& aPrefix,
@@ -123,7 +122,7 @@ class ResMgrContainer
             {}
     };
 
-    boost::unordered_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
+    std::unordered_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
     LanguageTag     m_aDefLocale;
 
     ResMgrContainer() : m_aDefLocale( LANGUAGE_SYSTEM) { init(); }
@@ -160,7 +159,7 @@ ResMgrContainer& ResMgrContainer::get()
 
 ResMgrContainer::~ResMgrContainer()
 {
-    for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
+    for( std::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
         OSL_TRACE( "Resource file %s loaded %d times",
@@ -231,7 +230,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                                             )
 {
     LanguageTag aLocale( rLocale );
-    boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
+    std::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
     ::std::vector< OUString > aFallbacks( aLocale.getFallbackStrings( true));
     if (!isAlreadyPureenUS( aLocale))
@@ -378,7 +377,7 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
         delete pResMgr;
     else
     {
-        boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
+        std::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
         m_aResFiles.find( pResMgr->aResName );
         if( it != m_aResFiles.end() )
         {
@@ -456,7 +455,7 @@ InternalResMgr::~InternalResMgr()
                 RTL_TEXTENCODING_UTF8));
             aStm.WriteLine(aLine.makeStringAndClear());
 
-            for( boost::unordered_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
+            for( std::unordered_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
                  it != pResUseDump->end(); ++it )
             {
                 sal_uInt64 nKeyId = it->first;
@@ -509,7 +508,7 @@ bool InternalResMgr::Create()
             const sal_Char* pLogFile = getenv( "STAR_RESOURCE_LOGGING" );
             if ( pLogFile )
             {
-                pResUseDump = new boost::unordered_map<sal_uInt64, int>;
+                pResUseDump = new std::unordered_map<sal_uInt64, int>;
                 for( sal_uInt32 i = 0; i < nEntries; ++i )
                     (*pResUseDump)[pContent[i].nTypeAndId] = 1;
             }

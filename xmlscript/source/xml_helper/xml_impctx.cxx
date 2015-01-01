@@ -31,10 +31,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <vector>
-#include <boost/unordered_map.hpp>
-
 #include <memory>
+#include <unordered_map>
+#include <vector>
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -56,7 +55,7 @@ OUString getImplementationName_DocumentHandlerImpl()
     return OUString( "com.sun.star.comp.xml.input.SaxDocumentHandler" );
 }
 
-typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
+typedef std::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
 
 struct PrefixEntry
 {
@@ -66,7 +65,7 @@ struct PrefixEntry
         { m_Uids.reserve( 4 ); }
 };
 
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     OUString, PrefixEntry *, OUStringHash > t_OUString2PrefixMap;
 
 struct ElementEntry

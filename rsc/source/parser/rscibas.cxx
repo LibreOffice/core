@@ -43,7 +43,7 @@
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 void RscTypCont::SETCONST( RscConst * pClass, const char * szString, sal_uInt32 nVal )
 {
@@ -64,7 +64,7 @@ void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
 }
 
 
-typedef boost::unordered_map< OString, sal_uInt32, OStringHash > langmap;
+typedef std::unordered_map< OString, sal_uInt32, OStringHash > langmap;
 static langmap ULong_Iso_map;
 
 sal_uInt32 GetLangId(const OString &rLang)

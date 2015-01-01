@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <string>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -154,11 +154,11 @@ struct joaat_hash
 
 #define pref_hash joaat_hash
 
-typedef boost::unordered_map<std::string, std::string, pref_hash> Stringtable;
+typedef std::unordered_map<std::string, std::string, pref_hash> Stringtable;
 typedef std::list<std::string> LinkedList;
 typedef std::vector<std::string> HashSet;
 
-typedef boost::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef std::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
 
 class StreamTable
 {

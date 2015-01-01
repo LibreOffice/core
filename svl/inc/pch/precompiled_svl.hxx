@@ -23,7 +23,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/awt/Point.hpp>
@@ -162,6 +161,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/wldcrd.hxx>
 #include <ucbhelper/content.hxx>
+#include <unordered_map>
 #include <unotools/bootstrap.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>

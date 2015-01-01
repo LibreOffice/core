@@ -30,10 +30,11 @@
 #include <vcl/lstbox.hxx>
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
-typedef ::boost::unordered_map< OUString, ::std::pair< OUString, OUString >, OUStringHash, ::std::equal_to< OUString > > EventsHash;
+typedef std::unordered_map< OUString, std::pair< OUString, OUString >,
+                            OUStringHash, std::equal_to< OUString > > EventsHash;
 
 struct EventDisplayName
 {

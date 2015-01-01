@@ -20,9 +20,9 @@
 #ifndef INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 
-#include <boost/unordered_map.hpp>
 #include <deque>
 #include <list>
+#include <unordered_map>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -172,10 +172,10 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 /** @short  represent an item list of a FilterCache
             instance.
  */
-typedef ::boost::unordered_map< OUString                    ,
-                         CacheItem                          ,
-                         OUStringHash                ,
-                         ::std::equal_to< OUString > > CacheItemList;
+typedef std::unordered_map< OUString                    ,
+                            CacheItem                          ,
+                            OUStringHash                ,
+                            std::equal_to< OUString > > CacheItemList;
 
 
 
@@ -191,10 +191,10 @@ typedef ::boost::unordered_map< OUString                    ,
             there we need key-value pairs too, which can't be provided
             by a pure vector!
  */
-typedef ::boost::unordered_map< OUString                    ,
-                         OUStringList                       ,
-                         OUStringHash                ,
-                         ::std::equal_to< OUString > > CacheItemRegistration;
+typedef std::unordered_map< OUString                    ,
+                            OUStringList                       ,
+                            OUStringHash                ,
+                            std::equal_to< OUString > > CacheItemRegistration;
 
 
 

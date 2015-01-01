@@ -22,12 +22,12 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace dp_misc
 {
 
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     OString, OString, OStringHash > t_string2string_map;
 
 // Class to read obsolete registered extensions

@@ -19,8 +19,8 @@
 
 #include "acceptor.hxx"
 
-#include <boost/unordered_set.hpp>
 #include <algorithm>
+#include <unordered_set>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -57,7 +57,7 @@ namespace io_acceptor {
     };
 
 
-    typedef ::boost::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+    typedef std::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
                              ReferenceHash< ::com::sun::star::io::XStreamListener>,
                              ReferenceEqual< ::com::sun::star::io::XStreamListener> >
             XStreamListener_hash_set;

@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 
 #include "officeipcthread.hxx"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 namespace desktop
@@ -39,7 +39,7 @@ namespace desktop
     running office without UI.
 */
 
-class DispatchWatcherHashMap : public ::boost::unordered_map< OUString, sal_Int32, OUStringHash, ::std::equal_to< OUString >  >
+class DispatchWatcherHashMap : public std::unordered_map< OUString, sal_Int32, OUStringHash, std::equal_to< OUString >  >
 {
     public:
         inline void free()

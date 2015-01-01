@@ -20,11 +20,10 @@
 #ifndef INCLUDED_CODEMAKER_OPTIONS_HXX
 #define INCLUDED_CODEMAKER_OPTIONS_HXX
 
-#include <boost/unordered_map.hpp>
-
 #include <codemaker/global.hxx>
+#include <unordered_map>
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
     ::rtl::OString,
     ::rtl::OString,

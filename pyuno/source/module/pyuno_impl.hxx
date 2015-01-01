@@ -33,8 +33,8 @@
 
 #include <pyuno/pyuno.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -163,7 +163,7 @@ static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP );
 
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
     PyRef,
     com::sun::star::uno::WeakReference< com::sun::star::script::XInvocation >,
@@ -172,7 +172,7 @@ typedef ::boost::unordered_map
 > PyRef2Adapter;
 
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
 OUString,
 PyRef,
@@ -180,7 +180,7 @@ OUStringHash,
 std::equal_to<OUString>
 > ExceptionClassMap;
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     com::sun::star::uno::Sequence< sal_Int16 >,
@@ -188,7 +188,7 @@ typedef ::boost::unordered_map
     std::equal_to< OUString >
 > MethodOutIndexMap;
 
-typedef ::boost::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
+typedef std::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
 
 int PyUNO_initType();
 

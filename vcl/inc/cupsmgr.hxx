@@ -38,13 +38,13 @@ struct FPtrHash
 
 class CUPSManager : public PrinterInfoManager
 {
-    boost::unordered_map< FILE*, OString, FPtrHash >       m_aSpoolFiles;
-    int                                                         m_nDests;
-    void*                                                       m_pDests;
-    bool                                                        m_bNewDests;
-    boost::unordered_map< OUString, int, OUStringHash >       m_aCUPSDestMap;
+    std::unordered_map< FILE*, OString, FPtrHash >         m_aSpoolFiles;
+    int                                                    m_nDests;
+    void*                                                  m_pDests;
+    bool                                                   m_bNewDests;
+    std::unordered_map< OUString, int, OUStringHash >      m_aCUPSDestMap;
 
-    boost::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
+    std::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
 
     OString                                                m_aUser;
     /** this is a security risk, but the CUPS API demands

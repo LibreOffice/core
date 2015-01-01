@@ -113,9 +113,7 @@ void OpenGLProgram::SetAlphaCoord( const GLvoid* pData )
 
 GLuint OpenGLProgram::GetUniformLocation( const OString& rName )
 {
-    boost::unordered_map<OString, GLuint>::iterator it;
-
-    it = maUniformLocations.find( rName );
+    auto it = maUniformLocations.find( rName );
     if( it == maUniformLocations.end() )
     {
         GLuint nLocation = glGetUniformLocation( mnId, (char*) rName.getStr() );

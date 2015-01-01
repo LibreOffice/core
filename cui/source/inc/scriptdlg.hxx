@@ -32,7 +32,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #define OBJTYPE_BASICMANAGER    1L
 #define OBJTYPE_METHOD          2L
@@ -43,8 +43,8 @@
 #define INPUTMODE_NEWMACRO      2
 #define INPUTMODE_RENAME        3
 
-typedef ::boost::unordered_map < OUString, OUString ,
-    OUStringHash, ::std::equal_to< OUString > > Selection_hash;
+typedef std::unordered_map < OUString, OUString,
+                             OUStringHash, std::equal_to< OUString > > Selection_hash;
 
 class SFEntry;
 

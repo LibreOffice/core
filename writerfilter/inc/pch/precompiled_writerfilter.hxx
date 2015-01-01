@@ -20,7 +20,6 @@
 #include <boost/optional.hpp>
 #include <memory>
 #include <boost/tuple/tuple.hpp>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -227,6 +226,7 @@
 #include <tools/mapunit.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/stream.hxx>
+#include <unordered_map>
 #include <unotools/datetime.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localfilehelper.hxx>

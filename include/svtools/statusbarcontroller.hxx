@@ -31,10 +31,8 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
-
-#include <boost/unordered_map.hpp>
-
 #include <tools/gen.hxx>
+#include <unordered_map>
 
 namespace svt
 {
@@ -103,10 +101,10 @@ class SVT_DLLPUBLIC StatusbarController :
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::boost::unordered_map< OUString,
-                                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > URLToDispatchMap;
+        typedef std::unordered_map< OUString,
+                                    css::uno::Reference< css::frame::XDispatch >,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const OUString& aCommandURL );

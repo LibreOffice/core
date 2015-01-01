@@ -32,7 +32,6 @@
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
 
 #include "dp_identifier.hxx"
 #include "dp_activepackages.hxx"

@@ -12,8 +12,8 @@
 #include <unotools/charclass.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace svl {
 
@@ -24,9 +24,9 @@ inline sal_Int32 getRefCount( const rtl_uString* p )
     return (p->refCount & 0x3FFFFFFF);
 }
 
-typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
+typedef std::unordered_set<OUString, OUStringHash> StrHashType;
 typedef std::pair<StrHashType::iterator, bool> InsertResultType;
-typedef boost::unordered_map<const rtl_uString*, OUString> StrStoreType;
+typedef std::unordered_map<const rtl_uString*, OUString> StrStoreType;
 
 InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr )
 {

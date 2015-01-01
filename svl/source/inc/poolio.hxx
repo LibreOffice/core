@@ -22,8 +22,8 @@
 
 #include <svl/SfxBroadcaster.hxx>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <deque>
+#include <unordered_map>
 #include <vector>
 
 class SfxPoolItem;
@@ -72,7 +72,7 @@ typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
     typedef std::vector<sal_uInt32> FreeList;
-    typedef boost::unordered_map<SfxPoolItem*,sal_uInt32> Hash;
+    typedef std::unordered_map<SfxPoolItem*,sal_uInt32> Hash;
 
 public:
     /// Track list of indices into our array that contain an empty slot

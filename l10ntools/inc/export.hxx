@@ -29,9 +29,9 @@
 #include <osl/file.hxx>
 #include <osl/file.h>
 
-#include <boost/unordered_map.hpp>
 #include <iterator>
 #include <set>
+#include <unordered_map>
 #include <vector>
 #include <queue>
 #include <string>
@@ -46,10 +46,10 @@
 
 class MergeEntrys;
 
-typedef boost::unordered_map<OString, OString, OStringHash>
+typedef std::unordered_map<OString, OString, OStringHash>
     OStringHashMap;
 
-typedef boost::unordered_map<OString, bool, OStringHash>
+typedef std::unordered_map<OString, bool, OStringHash>
     OStringBoolHashMap;
 
 #define SOURCE_LANGUAGE "en-US"
@@ -247,7 +247,7 @@ class MergeData;
 class MergeDataHashMap
 {
     private:
-        typedef boost::unordered_map<OString, MergeData*, OStringHash> HashMap_t;
+        typedef std::unordered_map<OString, MergeData*, OStringHash> HashMap_t;
 
     public:
         MergeDataHashMap():bFirstSearch(true){};

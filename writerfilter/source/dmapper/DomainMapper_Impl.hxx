@@ -31,7 +31,8 @@
 #include <stack>
 #include <queue>
 #include <boost/optional.hpp>
-#include <boost/unordered_map.hpp>
+#include <boost/tuple/tuple.hpp>
+#include <unordered_map>
 
 #include <ooxml/resourceids.hxx>
 
@@ -269,7 +270,7 @@ struct AnnotationPosition
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xStart;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xEnd;
 };
-typedef boost::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
+typedef std::unordered_map< sal_Int32, AnnotationPosition > AnnotationPositions_t;
 
 struct LineNumberSettings
 {

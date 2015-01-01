@@ -11,7 +11,7 @@
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TEXTURECACHE_HXX
 
 #include <sal/types.h>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star {
     namespace geometry { struct IntegerSize2D; }
@@ -52,7 +52,7 @@ namespace oglcanvas
             unsigned int nTexture;
             bool bOld;
         };
-        typedef boost::unordered_map<sal_uInt32,CacheEntry> TextureCacheMapT;
+        typedef std::unordered_map<sal_uInt32,CacheEntry> TextureCacheMapT;
         mutable TextureCacheMapT maCache;
         mutable sal_uInt32       mnMissCount;
         mutable sal_uInt32       mnHitCount;

@@ -22,9 +22,9 @@
 #include <tools/color.hxx>
 #include <opengl/texture.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
-typedef boost::unordered_map< OString, GLuint, OStringHash > UniformCache;
+typedef std::unordered_map< OString, GLuint, OStringHash > UniformCache;
 typedef std::list< OpenGLTexture > TextureList;
 
 class VCL_PLUGIN_PUBLIC OpenGLProgram

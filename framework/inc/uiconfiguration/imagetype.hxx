@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_IMAGETYPE_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_IMAGETYPE_HXX
 
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
+#include <unordered_map>
 
 namespace framework
 {
@@ -33,14 +33,14 @@ enum ImageType
     ImageType_COUNT
 };
 
-typedef boost::unordered_map< OUString,
-                       OUString,
-                       OUStringHash,
-                       ::std::equal_to< OUString > > CommandToImageNameMap;
-typedef boost::unordered_map< OUString,
-                       bool,
-                       OUStringHash,
-                       ::std::equal_to< OUString > > CommandMap;
+typedef std::unordered_map< OUString,
+                            OUString,
+                            OUStringHash,
+                            std::equal_to< OUString > > CommandToImageNameMap;
+typedef std::unordered_map< OUString,
+                            bool,
+                            OUStringHash,
+                            std::equal_to< OUString > > CommandMap;
 
 }
 

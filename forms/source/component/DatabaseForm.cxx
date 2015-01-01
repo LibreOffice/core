@@ -82,7 +82,7 @@
 #include <osl/mutex.hxx>
 
 #include <ctype.h>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 // compatibility: DatabaseCursorType is dead, but for compatibility reasons we still have to write it ...
 namespace com {

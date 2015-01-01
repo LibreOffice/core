@@ -28,7 +28,7 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/vclenum.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class PhysicalFontFace;
 class PhysicalFontFamily;
@@ -246,7 +246,7 @@ private:
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::pair<sal_UCS4,FontWeight> GFBCacheKey;
     struct GFBCacheKey_Hash{ size_t operator()( const GFBCacheKey& ) const; };
-    typedef ::boost::unordered_map<GFBCacheKey,OUString,GFBCacheKey_Hash> UnicodeFallbackList;
+    typedef ::std::unordered_map<GFBCacheKey,OUString,GFBCacheKey_Hash> UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 

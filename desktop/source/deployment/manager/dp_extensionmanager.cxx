@@ -54,7 +54,6 @@
 #include <boost/bind.hpp>
 
 #include <list>
-#include <boost/unordered_map.hpp>
 #include <algorithm>
 #include <set>
 

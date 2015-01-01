@@ -20,6 +20,7 @@
 #include <svl/broadcast.hxx>
 #include <svl/listener.hxx>
 #include <svl/smplhint.hxx>
+#include <algorithm>
 
 void SvtBroadcaster::Normalize() const
 {

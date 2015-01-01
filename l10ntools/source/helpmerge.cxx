@@ -21,6 +21,7 @@
 
 #include <fstream>
 #include <functional>
+#include <memory>
 
 #include <osl/file.hxx>
 #include <sal/log.hxx>

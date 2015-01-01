@@ -20,9 +20,9 @@
 #ifndef INCLUDED_VCL_INC_JOBSET_H
 #define INCLUDED_VCL_INC_JOBSET_H
 
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <vcl/prntypes.hxx>
+#include <unordered_map>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
 #define JOBSETUP_SYSTEM_DONTKNOW    0
@@ -46,7 +46,7 @@ struct ImplJobSetup
     long            mnPaperHeight;      // paper height (100th mm)
     sal_uIntPtr         mnDriverDataLen;    // length of system specific data
     sal_uInt8*          mpDriverData;       // system specific data (will be streamed a byte block)
-    ::boost::unordered_map< OUString, OUString, OUStringHash >         maValueMap;
+    std::unordered_map< OUString, OUString, OUStringHash >         maValueMap;
 
                     ImplJobSetup();
                     ImplJobSetup( const ImplJobSetup& rJobSetup );

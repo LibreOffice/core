@@ -39,7 +39,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -92,7 +92,7 @@ public:
 private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    typedef ::boost::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 >, OUStringHash, ::std::equal_to< OUString > > ModuleToModuleCfgMgr;
+    typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 >, OUStringHash, std::equal_to< OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 
@@ -108,7 +108,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
 {
     try
     {
-        // Retrieve known modules and insert them into our boost::unordered_map to speed-up access time.
+        // Retrieve known modules and insert them into our unordered_map to speed-up access time.
         Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY_THROW );
         const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
         const OUString*                pNameSeq   = aNameSeq.getConstArray();

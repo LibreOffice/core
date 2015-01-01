@@ -22,7 +22,7 @@
 
 #include <rtl/string.hxx>
 
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 /// @HTML
 
@@ -63,7 +63,7 @@ private:
     GeneratedTypeSet(GeneratedTypeSet &); // not implemented
     void operator =(const GeneratedTypeSet&); // not implemented
 
-    boost::unordered_set< OString, OStringHash > m_set;
+    std::unordered_set< OString, OStringHash > m_set;
 };
 
 }

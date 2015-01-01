@@ -28,9 +28,9 @@
 
 #include <unotools/pathoptions.hxx>
 
-#include <boost/unordered_map.hpp>
-
 #include "itemholder1.hxx"
+
+#include <unordered_map>
 
 using namespace ::utl;
 using namespace ::osl;
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::uno;
 
 #define PROPERTYCOUNT                   1
 
-typedef boost::unordered_map<OUString, sal_Int32, OUStringHash>
+typedef std::unordered_map<OUString, sal_Int32, OUStringHash>
     ExtensionHashMap;
 
 class SvtExtendedSecurityOptions_Impl : public ConfigItem

@@ -22,11 +22,11 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
-
-#include <boost/unordered_map.hpp>
-#include <list>
 #include <com/sun/star/util/XAtomServer.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <boost/functional/hash.hpp>
+#include <list>
+#include <unordered_map>
 
 #define INVALID_ATOM 0
 
@@ -41,8 +41,8 @@ namespace utl {
     class AtomProvider
     {
         int                                     m_nAtoms;
-        ::boost::unordered_map< int, OUString, ::boost::hash< int > > m_aStringMap;
-        ::boost::unordered_map< OUString, int, OUStringHash >           m_aAtomMap;
+        std::unordered_map< int, OUString, ::boost::hash< int > > m_aStringMap;
+        std::unordered_map< OUString, int, OUStringHash >           m_aAtomMap;
     public:
         AtomProvider();
         ~AtomProvider();
@@ -53,7 +53,7 @@ namespace utl {
 
     class UNOTOOLS_DLLPUBLIC MultiAtomProvider
     {
-        ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > > m_aAtomLists;
+        std::unordered_map< int, AtomProvider*, ::boost::hash< int > > m_aAtomLists;
     public:
         MultiAtomProvider();
         ~MultiAtomProvider();

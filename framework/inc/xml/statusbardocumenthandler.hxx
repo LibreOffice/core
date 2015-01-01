@@ -27,7 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <stdtypes.h>
 #include <framework/fwedllapi.h>
 
@@ -104,10 +104,10 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
     private:
         OUString getErrorLineString();
 
-        class StatusBarHashMap : public ::boost::unordered_map< OUString             ,
-                                                         StatusBar_XML_Entry            ,
-                                                         OUStringHash,
-                                                         ::std::equal_to< OUString > >
+        class StatusBarHashMap : public std::unordered_map<OUString             ,
+                                                           StatusBar_XML_Entry            ,
+                                                           OUStringHash,
+                                                           std::equal_to< OUString > >
         {
             public:
                 inline void free()

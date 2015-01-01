@@ -36,7 +36,7 @@
 #include "svdata.hxx"
 #include "window.h"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 struct ImplTabItem
@@ -62,8 +62,8 @@ struct ImplTabItem
 
 struct ImplTabCtrlData
 {
-    boost::unordered_map< int, int >        maLayoutPageIdToLine;
-    boost::unordered_map< int, int >        maLayoutLineToPageId;
+    std::unordered_map< int, int >        maLayoutPageIdToLine;
+    std::unordered_map< int, int >        maLayoutLineToPageId;
     std::vector< Rectangle >        maTabRectangles;
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
@@ -2025,7 +2025,7 @@ Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) cons
 
     if( HasLayoutData() )
     {
-        boost::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
+        std::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
             Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( it->second );

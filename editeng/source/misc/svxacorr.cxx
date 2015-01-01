@@ -64,6 +64,8 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/help.hxx>
+#include <set>
+#include <unordered_map>
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -2697,7 +2699,7 @@ struct CompareSvxAutocorrWordList
 namespace {
 
 typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
-typedef boost::unordered_map<OUString, SvxAutocorrWord*, OUStringHash> AutocorrWordHashType;
+typedef std::unordered_map<OUString, SvxAutocorrWord*, OUStringHash> AutocorrWordHashType;
 
 }
 

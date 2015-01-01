@@ -20,10 +20,8 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_UICOMMANDDESCRIPTION_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_UICOMMANDDESCRIPTION_HXX
 
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 #include <stdtypes.h>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
@@ -84,15 +82,15 @@ private:
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-        typedef ::boost::unordered_map< OUString,
-                                 OUString,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > ModuleToCommandFileMap;
+        typedef std::unordered_map< OUString,
+                                    OUString,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > ModuleToCommandFileMap;
 
-        typedef ::boost::unordered_map< OUString,
-                                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > UICommandsHashMap;
+        typedef std::unordered_map< OUString,
+                                    css::uno::Reference< css::container::XNameAccess >,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > UICommandsHashMap;
 
     protected:
         UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, bool  );

@@ -58,9 +58,9 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vector>
 #include <map>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <vector>
 
 namespace chart {
 
@@ -96,7 +96,7 @@ public:
 
 private:
 
-    boost::unordered_map<TextCacheKey, BitmapEx, TextCacheKeyHash> maCache;
+    std::unordered_map<TextCacheKey, BitmapEx, TextCacheKeyHash> maCache;
 };
 
 class DummyXShape : public cppu::WeakAggImplHelper6<

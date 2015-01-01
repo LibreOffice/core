@@ -33,6 +33,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
+#include <unordered_map>
 
 //  Namespace
 
@@ -73,10 +74,10 @@ private:
         ControllerInfo(const OUString& _aImplementationName,const OUString& _aValue) : m_aImplementationName(_aImplementationName),m_aValue(_aValue){}
         ControllerInfo(){}
     };
-    class MenuControllerMap : public boost::unordered_map< OUString,
+    class MenuControllerMap : public std::unordered_map< OUString,
                                                          ControllerInfo,
                                                          OUStringHash,
-                                                         ::std::equal_to< OUString > >
+                                                         std::equal_to< OUString > >
     {
         inline void free()
         {

@@ -19,10 +19,10 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
 #define INCLUDED_DESKTOP_SOURCE_MIGRATION_MIGRATION_IMPL_HXX
 
-#include <vector>
 #include <algorithm>
 #include <memory>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <vector>
 
 #include "migration.hxx"
 
@@ -125,10 +125,8 @@ struct MigrationItem
     OUString GetPrevSibling() const { return m_sPrevSibling; }
 };
 
-typedef ::boost::unordered_map< OUString,
-                         ::std::vector< MigrationItem >,
-                         OUStringHash,
-                         ::std::equal_to< OUString > > MigrationHashMap;
+typedef std::unordered_map< OUString, std::vector< MigrationItem >,
+                            OUStringHash, std::equal_to< OUString > > MigrationHashMap;
 
 struct MigrationItemInfo
 {

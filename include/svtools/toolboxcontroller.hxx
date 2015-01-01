@@ -39,7 +39,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <tools/link.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ToolBox;
 
@@ -151,10 +151,10 @@ class SVT_DLLPUBLIC ToolboxController :
 
         DECL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, DispatchInfo* );
 
-        typedef ::boost::unordered_map< OUString,
-                                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > URLToDispatchMap;
+        typedef std::unordered_map< OUString,
+                                    css::uno::Reference< css::frame::XDispatch >,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const OUString& aCommandURL );

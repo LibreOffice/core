@@ -30,6 +30,7 @@
 #include <basebmp/scanlineformats.hxx>
 
 #include <list>
+#include <map>
 
 #include <time.h>
 

@@ -32,8 +32,8 @@
 
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
-#include "boost/unordered_map.hpp"
 #include "export.hxx"
+#include <unordered_map>
 
 class XMLParentNode;
 class XMLElement;
@@ -135,13 +135,13 @@ public:
 };
 
 /// Mapping numeric Language code <-> XML Element
-typedef boost::unordered_map<OString, XMLElement*, OStringHash> LangHashMap;
+typedef std::unordered_map<OString, XMLElement*, OStringHash> LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
-typedef boost::unordered_map<OString, LangHashMap*, OStringHash> XMLHashMap;
+typedef std::unordered_map<OString, LangHashMap*, OStringHash> XMLHashMap;
 
 /// Mapping XML tag names <-> have localizable strings
-typedef boost::unordered_map<OString, sal_Bool, OStringHash> TagMap;
+typedef std::unordered_map<OString, sal_Bool, OStringHash> TagMap;
 
 /** Holds information of a XML file, is root node of tree
  */

@@ -42,11 +42,11 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
-#include <list>
-#include <boost/unordered_map.hpp>
-#include <vector>
-#include <memory>
 #include <algorithm>
+#include <list>
+#include <memory>
+#include <unordered_map>
+#include <vector>
 #include "dp_compbackenddb.hxx"
 
 using namespace ::dp_misc;
@@ -265,8 +265,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     bool m_unorc_modified;
     bool bSwitchedRdbFiles;
 
-    typedef ::boost::unordered_map< OUString, Reference<XInterface>,
-                             OUStringHash > t_string2object;
+    typedef std::unordered_map< OUString, Reference<XInterface>,
+                                OUStringHash > t_string2object;
     t_string2object m_backendObjects;
 
     // PackageRegistryBackend

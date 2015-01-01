@@ -19,12 +19,12 @@
 
 #include "EnhancedCustomShapeToken.hxx"
 #include <osl/mutex.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <string.h>
 
 namespace xmloff { namespace EnhancedCustomShapeToken {
 
-typedef boost::unordered_map< const char*, EnhancedCustomShapeTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+typedef std::unordered_map< const char*, EnhancedCustomShapeTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {

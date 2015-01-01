@@ -63,10 +63,9 @@
 
 #include <config_lgpl.h>
 #include <math.h>
-#include <vector>
 #include <memory>
-#include <boost/unordered_map.hpp>
 #include <map>
+#include <vector>
 #include <assert.h>
 #include <string>
 

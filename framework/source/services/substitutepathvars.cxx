@@ -50,7 +50,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <string.h>
 
 using namespace com::sun::star::uno;
@@ -107,7 +107,7 @@ struct SubstituteRule
     EnvironmentType          aEnvType;
 };
 
-typedef boost::unordered_map<OUString, SubstituteRule, OUStringHash>
+typedef std::unordered_map<OUString, SubstituteRule, OUStringHash>
     SubstituteVariables;
 
 typedef std::vector< SubstituteRule > SubstituteRuleVector;
@@ -282,7 +282,7 @@ protected:
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    typedef boost::unordered_map<OUString, PreDefVariable, OUStringHash>
+    typedef std::unordered_map<OUString, PreDefVariable, OUStringHash>
         VarNameToIndexMap;
 
     VarNameToIndexMap            m_aPreDefVarMap;         // Mapping from pre-def variable names to enum for array access

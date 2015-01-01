@@ -19,10 +19,10 @@
 #ifndef INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
 #define INCLUDED_VCL_SOURCE_GDI_PDFWRITER_IMPL_HXX
 
-#include <vector>
 #include <map>
-#include <boost/unordered_map.hpp>
 #include <list>
+#include <unordered_map>
+#include <vector>
 
 #include <boost/shared_array.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -437,8 +437,8 @@ public:
         {}
     };
 
-    typedef boost::unordered_map< OString, SvMemoryStream*, OStringHash > PDFAppearanceStreams;
-    typedef boost::unordered_map< OString, PDFAppearanceStreams, OStringHash > PDFAppearanceMap;
+    typedef std::unordered_map< OString, SvMemoryStream*, OStringHash > PDFAppearanceStreams;
+    typedef std::unordered_map< OString, PDFAppearanceStreams, OStringHash > PDFAppearanceMap;
 
     struct PDFWidget : public PDFAnnotation
     {
@@ -643,7 +643,7 @@ private:
     bool                                m_bEmitStructure;
     bool                                m_bNewMCID;
     /* role map of struct tree root */
-    boost::unordered_map< OString, OString, OStringHash >
+    std::unordered_map< OString, OString, OStringHash >
                                         m_aRoleMap;
 
     /* contains all widgets used in the PDF
@@ -651,8 +651,8 @@ private:
     std::vector<PDFWidget>              m_aWidgets;
     /* maps radio group id to index of radio group control in m_aWidgets */
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
-    /* boost::unordered_map for field names, used to ensure unique field names */
-    boost::unordered_map< OString, sal_Int32, OStringHash > m_aFieldNameMap;
+    /* unordered_map for field names, used to ensure unique field names */
+    std::unordered_map< OString, sal_Int32, OStringHash > m_aFieldNameMap;
 
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */

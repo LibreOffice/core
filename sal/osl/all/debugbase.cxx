@@ -24,6 +24,7 @@
 #include "osl/diagnose.hxx"
 #include "sal/log.hxx"
 #include "boost/bind.hpp"
+#include <algorithm>
 #include <vector>
 
 namespace {

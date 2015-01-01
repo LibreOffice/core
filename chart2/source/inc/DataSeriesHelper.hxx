@@ -29,9 +29,8 @@
 #include "StackMode.hxx"
 #include "charttoolsdllapi.hxx"
 
-#include <vector>
 #include <functional>
-#include <boost/unordered_map.hpp>
+#include <vector>
 
 namespace chart
 {

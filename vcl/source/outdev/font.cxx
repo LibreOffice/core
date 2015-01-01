@@ -49,9 +49,9 @@
 
 #include "../gdi/pdfwriter_impl.hxx"
 
+#include <boost/functional/hash.hpp>
 #include <cmath>
 #include <cstring>
-
 #include <memory>
 #include <algorithm>
 

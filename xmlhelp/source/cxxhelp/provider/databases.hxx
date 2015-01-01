@@ -23,9 +23,9 @@
 #include <sal/config.h>
 
 #include <set>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -279,27 +279,27 @@ namespace chelp {
 
         std::vector< OUString >    m_avModules;
 
-        typedef boost::unordered_map< OUString,helpdatafileproxy::Hdf*,OUStringHash >   DatabasesTable;
+        typedef std::unordered_map< OUString,helpdatafileproxy::Hdf*,OUStringHash >   DatabasesTable;
         DatabasesTable m_aDatabases;         // Language and module dependent databases
 
-        typedef  boost::unordered_map< OUString,OUString,OUStringHash > LangSetTable;
+        typedef std::unordered_map< OUString,OUString,OUStringHash > LangSetTable;
         LangSetTable m_aLangSet;   // Mapping to of lang-country to lang
 
-        typedef boost::unordered_map< OUString,StaticModuleInformation*,OUStringHash > ModInfoTable;
+        typedef std::unordered_map< OUString,StaticModuleInformation*,OUStringHash > ModInfoTable;
         ModInfoTable m_aModInfo;   // Module information
 
-        typedef boost::unordered_map< OUString,KeywordInfo*,OUStringHash > KeywordInfoTable;
+        typedef std::unordered_map< OUString,KeywordInfo*,OUStringHash > KeywordInfoTable;
         KeywordInfoTable m_aKeywordInfo;   // Module information
 
         typedef
-        boost::unordered_map<
+        std::unordered_map<
         OUString,
              ::com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >,
             OUStringHash >         ZipFileTable;
         ZipFileTable m_aZipFileTable;   // No closing of an once opened jarfile
 
         typedef
-        boost::unordered_map<
+        std::unordered_map<
         OUString,
              ::com::sun::star::uno::Reference< com::sun::star::i18n::XCollator >,
             OUStringHash >      CollatorTable;
@@ -307,7 +307,7 @@ namespace chelp {
 
 
         typedef
-        boost::unordered_set<
+        std::unordered_set<
             OString,
             OStringHash >      EmptyActiveTextSet;
         EmptyActiveTextSet  m_aEmptyActiveTextSet;
@@ -329,7 +329,7 @@ namespace chelp {
     };
 
     // Hashtable to cache extension help status
-    typedef boost::unordered_map
+    typedef std::unordered_map
     <
         OUString,
         bool,

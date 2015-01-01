@@ -39,7 +39,7 @@
 #include <vcl/mnemonic.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -101,10 +101,10 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
         bool                  fillCache();
 
     private:
-        typedef ::boost::unordered_map< OUString,
-                                 OUString,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > IdToInfoCache;
+        typedef std::unordered_map< OUString,
+                                    OUString,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > IdToInfoCache;
 
         bool initializeConfigAccess();
 

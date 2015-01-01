@@ -93,7 +93,7 @@ static FT_Library aLibFT = 0;
 // enable linking with old FT versions
 static int nFTVERSION = 0;
 
-typedef ::boost::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
+typedef std::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 

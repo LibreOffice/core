@@ -73,10 +73,10 @@ struct TTabPageInfo
         css::uno::Sequence< css::beans::NamedValue >  m_lProperties;
 };
 
-typedef ::boost::unordered_map< ::sal_Int32                    ,
-                         TTabPageInfo                   ,
-                         Int32HashCode                  ,
-                         ::std::equal_to< ::sal_Int32 > > TTabPageInfoHash;
+typedef std::unordered_map< ::sal_Int32                    ,
+                            TTabPageInfo                   ,
+                            Int32HashCode                  ,
+                            std::equal_to< ::sal_Int32 > > TTabPageInfoHash;
 
 /*-************************************************************************************************************
     @short  implements a helper service providing a dockable tab control window

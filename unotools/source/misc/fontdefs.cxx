@@ -19,8 +19,8 @@
 
 #include <unotools/fontdefs.hxx>
 #include <unotools/fontcfg.hxx>
-#include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <unordered_map>
 
 struct ImplLocalizedFontName
 {
@@ -421,7 +421,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
-        typedef boost::unordered_map<const OUString, const char*, OUStringHash> FontNameDictionary;
+        typedef std::unordered_map<const OUString, const char*, OUStringHash> FontNameDictionary;
         static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
         // the font name dictionary needs to be intialized once
         if( aDictionary.empty() )

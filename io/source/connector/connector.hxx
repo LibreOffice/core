@@ -26,7 +26,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 #include <osl/socket.hxx>
 #include <osl/pipe.hxx>
 
@@ -51,7 +51,7 @@ namespace stoc_connector
         }
     };
 
-    typedef ::boost::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
+    typedef std::unordered_set< ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>,
                              ReferenceHash< ::com::sun::star::io::XStreamListener>,
                              ReferenceEqual< ::com::sun::star::io::XStreamListener> >
             XStreamListener_hash_set;

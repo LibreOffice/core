@@ -334,7 +334,7 @@ void CUPSManager::initialize()
         // behaviour
         aPrinter.m_aInfo.m_pParser = NULL;
         aPrinter.m_aInfo.m_aContext.setParser( NULL );
-        boost::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
+        std::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
         if( c_it != m_aDefaultContexts.end() )
         {
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
@@ -351,7 +351,7 @@ void CUPSManager::initialize()
     // remove everything that is not a CUPS printer and not
     // a special purpose printer (PDF, Fax)
     std::list< OUString > aRemovePrinters;
-    for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
+    for( std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
          it != m_aPrinters.end(); ++it )
     {
         if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
@@ -426,7 +426,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         if (m_nDests && m_pDests)
         {
-            boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+            std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
             m_aCUPSDestMap.find( aPrinter );
             if( dest_it != m_aCUPSDestMap.end() )
             {
@@ -503,13 +503,13 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 
 void CUPSManager::setupJobContextData( JobData& rData )
 {
-    boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+    std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rData.m_aPrinterName );
 
     if( dest_it == m_aCUPSDestMap.end() )
         return PrinterInfoManager::setupJobContextData( rData );
 
-    boost::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
+    std::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
     {
@@ -630,7 +630,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
-    boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+    std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
     {
@@ -638,7 +638,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner, rFaxNumber );
     }
 
-    boost::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
+    std::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
     if( it != m_aSpoolFiles.end() )
     {
         fclose( pFile );
@@ -763,7 +763,7 @@ bool CUPSManager::removePrinter( const OUString& rName, bool bCheck )
 bool CUPSManager::setDefaultPrinter( const OUString& rName )
 {
     bool bSuccess = false;
-    boost::unordered_map< OUString, int, OUStringHash >::iterator nit =
+    std::unordered_map< OUString, int, OUStringHash >::iterator nit =
         m_aCUPSDestMap.find( rName );
     if( nit != m_aCUPSDestMap.end() && m_aCUPSMutex.tryToAcquire() )
     {
@@ -787,10 +787,10 @@ bool CUPSManager::writePrinterConfig()
     bool bDestModified = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator prt =
+    for( std::unordered_map< OUString, Printer, OUStringHash >::iterator prt =
              m_aPrinters.begin(); prt != m_aPrinters.end(); ++prt )
     {
-        boost::unordered_map< OUString, int, OUStringHash >::iterator nit =
+        std::unordered_map< OUString, int, OUStringHash >::iterator nit =
             m_aCUPSDestMap.find( prt->first );
         if( nit == m_aCUPSDestMap.end() )
             continue;

@@ -27,7 +27,7 @@
 #include <xmloff/xmlstyle.hxx>
 
 //UUUU
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 struct XMLPropertyState;
 class SvXMLStylesContext;
@@ -37,7 +37,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 //UUUU
-typedef boost::unordered_set<OUString, OUStringHash> OldFillStyleDefinitionSet;
+typedef std::unordered_set<OUString, OUStringHash> OldFillStyleDefinitionSet;
 
 class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 {

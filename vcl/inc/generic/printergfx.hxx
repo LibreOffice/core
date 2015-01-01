@@ -27,7 +27,6 @@
 #include "vclpluginapi.h"
 
 #include <list>
-#include <boost/unordered_map.hpp>
 
 namespace psp {
 

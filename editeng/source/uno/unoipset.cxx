@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/eitem.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>

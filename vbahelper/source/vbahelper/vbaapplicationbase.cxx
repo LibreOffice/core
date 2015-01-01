@@ -34,7 +34,6 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
 
@@ -46,6 +45,8 @@
 #include <basic/vbahelper.hxx>
 
 #include "vbacommandbars.hxx"
+
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -144,7 +145,7 @@ struct VbaTimerInfoHash
 };
 
 // ====VbaTimerHashMap==================================
-typedef ::boost::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
+typedef std::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
 
 // ====VbaApplicationBase_Impl==================================
 struct VbaApplicationBase_Impl

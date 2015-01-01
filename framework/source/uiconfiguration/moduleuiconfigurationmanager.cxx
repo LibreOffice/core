@@ -168,7 +168,7 @@ private:
         css::uno::Reference< css::container::XIndexAccess > xSettings;
     };
 
-    typedef ::boost::unordered_map< OUString, UIElementData, OUStringHash, ::std::equal_to< OUString > > UIElementDataHashMap;
+    typedef std::unordered_map< OUString, UIElementData, OUStringHash, std::equal_to< OUString > > UIElementDataHashMap;
 
     struct UIElementType
     {
@@ -185,9 +185,9 @@ private:
         css::uno::Reference< css::embed::XStorage > xStorage;
     };
 
-    typedef ::std::vector< UIElementType > UIElementTypesVector;
-    typedef ::std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-    typedef ::boost::unordered_map< OUString, UIElementInfo, OUStringHash, ::std::equal_to< OUString > > UIElementInfoHashMap;
+    typedef std::vector< UIElementType > UIElementTypesVector;
+    typedef std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+    typedef std::unordered_map< OUString, UIElementInfo, OUStringHash, std::equal_to< OUString > > UIElementInfoHashMap;
 
     void            impl_Initialize();
     void            implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
@@ -397,7 +397,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
                             aUIElementData.bDefaultNode = false;
                         }
 
-                        // Create boost::unordered_map entries for all user interface elements inside the storage. We don't load the
+                        // Create std::unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
@@ -517,7 +517,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
     impl_preloadUIElementTypeList( LAYER_USERDEFINED, nElementType );
     impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-    // first try to look into our user-defined vector/boost::unordered_map combination
+    // first try to look into our user-defined vector/unordered_map combination
     UIElementDataHashMap& rUserHashMap = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::iterator pIter = rUserHashMap.find( aResourceURL );
     if ( pIter != rUserHashMap.end() )
@@ -531,7 +531,7 @@ ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl
         }
     }
 
-    // Not successful, we have to look into our default vector/boost::unordered_map combination
+    // Not successful, we have to look into our default vector/unordered_map combination
     UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
     pIter = rDefaultHashMap.find( aResourceURL );
     if ( pIter != rDefaultHashMap.end() )
@@ -1547,7 +1547,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         // preload list of element types on demand
         impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-        // Look into our default vector/boost::unordered_map combination
+        // Look into our default vector/unordered_map combination
         UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
         UIElementDataHashMap::iterator pIter = rDefaultHashMap.find( ResourceURL );
         if ( pIter != rDefaultHashMap.end() )

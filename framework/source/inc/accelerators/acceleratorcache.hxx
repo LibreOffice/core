@@ -57,10 +57,10 @@ class AcceleratorCache
         /** TODO document me
             keys -> commands
         */
-        typedef ::boost::unordered_map< css::awt::KeyEvent ,
-                                 OUString    ,
-                                 KeyEventHashCode   ,
-                                 KeyEventEqualsFunc > TKey2Commands;
+        typedef std::unordered_map< css::awt::KeyEvent ,
+                                    OUString    ,
+                                    KeyEventHashCode   ,
+                                    KeyEventEqualsFunc > TKey2Commands;
 
     // member
 

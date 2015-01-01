@@ -165,7 +165,7 @@ OUString DefaultFontConfiguration::tryLocale( const OUString& rBcp47, const OUSt
 {
     OUString aRet;
 
-    boost::unordered_map< OUString, LocaleAccess, OUStringHash >::const_iterator it = m_aConfig.find( rBcp47 );
+    std::unordered_map< OUString, LocaleAccess, OUStringHash >::const_iterator it = m_aConfig.find( rBcp47 );
     if( it != m_aConfig.end() )
     {
         if( !it->second.xAccess.is() )
@@ -1021,7 +1021,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
 
 void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
 {
-    boost::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator it = m_aSubst.find( rBcp47 );
+    std::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator it = m_aSubst.find( rBcp47 );
     if( it != m_aSubst.end() )
     {
         if( ! it->second.bConfigRead )
@@ -1121,7 +1121,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
 
     for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
     {
-        boost::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator lang = m_aSubst.find( *fb );
+        std::unordered_map< OUString, LocaleSubst, OUStringHash >::const_iterator lang = m_aSubst.find( *fb );
         if( lang != m_aSubst.end() )
         {
             if( ! lang->second.bConfigRead )

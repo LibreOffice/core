@@ -21,7 +21,7 @@
 #define INCLUDED_REGISTRY_SOURCE_REGIMPL_HXX
 
 #include <set>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <registry/registry.h>
 #include <rtl/ustring.hxx>
@@ -156,7 +156,7 @@ private:
                         const OUString& sName,
                         sal_Int16 nSpace) const;
 
-    typedef boost::unordered_map< OUString, ORegKey*, OUStringHash > KeyMap;
+    typedef std::unordered_map< OUString, ORegKey*, OUStringHash > KeyMap;
 
     sal_uInt32      m_refCount;
     osl::Mutex          m_mutex;

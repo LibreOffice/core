@@ -24,14 +24,14 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
 #include <boost/utility.hpp>
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
+#include <unordered_map>
 #include <vector>
 
-typedef boost::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVarTypes;
+typedef std::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVarTypes;
 /* variable name, type */
-typedef boost::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
+typedef std::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
 /* procedure, CodeCompleteVarTypes */
 
 class BASIC_DLLPUBLIC CodeCompleteOptions

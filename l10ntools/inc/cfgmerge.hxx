@@ -23,12 +23,11 @@
 #include "sal/config.h"
 
 #include <fstream>
+#include <unordered_map>
 #include <vector>
-
-#include "boost/unordered_map.hpp"
 #include "po.hxx"
 
-typedef boost::unordered_map<OString, OString, OStringHash> OStringHashMap;
+typedef std::unordered_map<OString, OString, OStringHash> OStringHashMap;
 
 
 

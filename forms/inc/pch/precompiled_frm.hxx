@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
@@ -339,6 +338,7 @@
 #include <ucbhelper/activedatasink.hxx>
 #include <ucbhelper/content.hxx>
 #include <uno/mapping.hxx>
+#include <unordered_map>
 #include <unotools/datetime.hxx>
 #include <unotools/desktopterminationobserver.hxx>
 #include <unotools/lingucfg.hxx>

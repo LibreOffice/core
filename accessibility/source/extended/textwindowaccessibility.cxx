@@ -26,7 +26,6 @@
 
 #include <algorithm>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace accessibility
 {

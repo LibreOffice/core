@@ -20,13 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHEDATA_HXX
 #define INCLUDED_FRAMEWORK_INC_CLASSES_FILTERCACHEDATA_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <boost/unordered_map.hpp>
-#include <vector>
-#include <iterator>
-
 #include <classes/checkediterator.hxx>
 #include <classes/wildcard.hxx>
 #include <classes/converter.hxx>
@@ -44,6 +37,10 @@
 #include <unotools/configitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
+
+#include <iterator>
+#include <unordered_map>
+#include <vector>
 
 namespace framework{
 
@@ -323,10 +320,10 @@ struct ContentHandler
 // and could be used in a generic way
 
 template< class HashType >
-class SetNodeHash : public ::boost::unordered_map< OUString                    ,
-                                            HashType                           ,
-                                            OUStringHash                  ,
-                                            ::std::equal_to< OUString > >
+class SetNodeHash : public std::unordered_map< OUString                    ,
+                                               HashType                           ,
+                                               OUStringHash                  ,
+                                               std::equal_to< OUString > >
 {
 
     // interface
@@ -361,10 +358,10 @@ class SetNodeHash : public ::boost::unordered_map< OUString                    ,
 // It's an optimism to find registered services faster!
 // The preferred hash maps file extensions to preferred types to find these ones faster.
 
-class PerformanceHash   :   public  ::boost::unordered_map<    OUString                     ,
+class PerformanceHash   :   public  std::unordered_map< OUString                     ,
                                                         OUStringList                        ,
                                                         OUStringHash                    ,
-                                                        ::std::equal_to< OUString >  >
+                                                        std::equal_to< OUString >  >
 {
     public:
 

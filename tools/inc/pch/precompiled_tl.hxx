@@ -24,7 +24,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <boost/checked_delete.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
@@ -83,6 +82,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unordered_map>
 #include <vector>
 #include <zlib.h>
 

@@ -32,14 +32,14 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOASISEventMap_Impl:
-    public ::boost::unordered_map< NameKey_Impl, OUString,
+    public std::unordered_map< NameKey_Impl, OUString,
                             NameHash_Impl, NameHash_Impl >
 {
 public:

@@ -342,7 +342,7 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
-            ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
+            std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, it->first, RTL_TEXTENCODING_UTF8);

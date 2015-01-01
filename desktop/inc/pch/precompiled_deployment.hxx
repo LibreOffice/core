@@ -17,9 +17,9 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <cassert>
+#include <unordered_map>
+#include <unordered_set>
 #include <com/sun/star/beans/Ambiguous.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

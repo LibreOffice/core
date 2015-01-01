@@ -102,8 +102,8 @@ private:
     FontCharMapPtr  mpFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
-    // TODO: change to boost::unordered_multimap when a use case requires a m:n mapping
-    typedef ::boost::unordered_map<int,int> Int2IntMap;
+    // TODO: change to std::unordered_multimap when a use case requires a m:n mapping
+    typedef std::unordered_map<int,int> Int2IntMap;
     mutable Int2IntMap* mpChar2Glyph;
     mutable Int2IntMap* mpGlyph2Char;
     void InitHashes() const;
@@ -143,7 +143,7 @@ public:
     ServerFont* CreateFont( const FontSelectPattern& );
 
 private:
-    typedef ::boost::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
+    typedef std::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
     FontList            maFontList;
 
     sal_IntPtr          mnMaxFontId;

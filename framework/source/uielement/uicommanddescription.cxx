@@ -140,10 +140,10 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                                                 std::vector< OUString >& aImageMirrorVector);
 
     private:
-        typedef ::boost::unordered_map< OUString,
-                                 CmdToInfoMap,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > CommandToInfoCache;
+        typedef std::unordered_map< OUString,
+                                    CmdToInfoMap,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > CommandToInfoCache;
 
         bool initializeConfigAccess();
 

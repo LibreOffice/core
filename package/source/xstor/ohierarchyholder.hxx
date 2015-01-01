@@ -29,8 +29,8 @@
 
 #include <rtl/ref.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <list>
+#include <unordered_map>
 #include <vector>
 
 struct OHierarchyElement_Impl;
@@ -43,7 +43,7 @@ struct eqFunc
         return r1 == r2;
     }
 };
-typedef ::boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl >,
                          OUStringHash,
                          eqFunc > OHierarchyElementList_Impl;

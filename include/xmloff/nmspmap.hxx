@@ -23,12 +23,12 @@
 #include <sal/config.h>
 
 #include <map>
+#include <unordered_map>
 #include <utility>
 
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -67,9 +67,9 @@ struct QNamePairHash
     }
 };
 
-typedef ::boost::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
-typedef ::boost::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash > NameSpaceHash;
-typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
+typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
+typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash > NameSpaceHash;
+typedef std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {

@@ -18,7 +18,6 @@
  */
 
 #include "oox/ole/vbamodule.hxx"
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>

@@ -31,13 +31,13 @@
 #include <com/sun/star/deployment/XPackageManager.hpp>
 #include <osl/mutex.hxx>
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace dp_manager {
 
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     OUString,
-    ::std::vector<css::uno::Reference<css::deployment::XPackage> >,
+    std::vector<css::uno::Reference<css::deployment::XPackage> >,
     OUStringHash > id2extensions;
 
 class ExtensionManager : private ::dp_misc::MutexHolder,

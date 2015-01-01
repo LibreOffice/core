@@ -28,7 +28,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace writerperfect
 {
@@ -118,8 +118,8 @@ struct OLEStreamData
     rtl::OString name;
 };
 
-typedef boost::unordered_map<rtl::OUString, std::size_t, rtl::OUStringHash> NameMap_t;
-typedef boost::unordered_map<rtl::OUString, SotStorageRefWrapper, rtl::OUStringHash> OLEStorageMap_t;
+typedef std::unordered_map<rtl::OUString, std::size_t, rtl::OUStringHash> NameMap_t;
+typedef std::unordered_map<rtl::OUString, SotStorageRefWrapper, rtl::OUStringHash> OLEStorageMap_t;
 
 /** Representation of an OLE2 storage.
   *

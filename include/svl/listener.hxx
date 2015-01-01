@@ -21,14 +21,14 @@
 
 #include <svl/svldllapi.h>
 
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 class SvtBroadcaster;
 class SfxHint;
 
 class SVL_DLLPUBLIC SvtListener
 {
-    typedef boost::unordered_set<SvtBroadcaster*> BroadcastersType;
+    typedef std::unordered_set<SvtBroadcaster*> BroadcastersType;
     BroadcastersType maBroadcasters;
 
     const SvtListener&  operator=(const SvtListener &); // n.i., ist verboten

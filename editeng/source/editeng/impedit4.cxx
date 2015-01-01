@@ -76,10 +76,10 @@
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/edtdlg.hxx>
 
-#include <vector>
 #include <boost/scoped_ptr.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -454,7 +454,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput.WriteChar( '}' );
     rOutput << endl;
 
-    boost::unordered_map<SfxStyleSheetBase*, sal_uInt32> aStyleSheetToIdMap;
+    std::unordered_map<SfxStyleSheetBase*, sal_uInt32> aStyleSheetToIdMap;
     // StyleSheets...
     if ( GetStyleSheetPool() )
     {

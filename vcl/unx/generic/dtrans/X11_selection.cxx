@@ -201,9 +201,9 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
     return aEncoding;
 }
 
-::boost::unordered_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
+std::unordered_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
 {
-    static ::boost::unordered_map< OUString, SelectionManager*, OUStringHash > aInstances;
+    static std::unordered_map< OUString, SelectionManager*, OUStringHash > aInstances;
     return aInstances;
 }
 
@@ -465,7 +465,7 @@ SelectionManager::~SelectionManager()
     {
         osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
-        ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it;
+        std::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it;
         for( it = getInstances().begin(); it != getInstances().end(); ++it )
             if( it->second == this )
             {
@@ -522,7 +522,7 @@ SelectionManager::~SelectionManager()
 
 SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 {
-    ::boost::unordered_map< Atom, Selection* >::iterator it =
+    std::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
     return it != m_aSelections.end() ? it->second->m_pAdaptor : NULL;
 }
@@ -681,7 +681,7 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
         aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
     SelectionManager* pInstance = NULL;
 
-    ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
+    std::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
     if( it != getInstances().end() )
         pInstance = it->second;
     else pInstance = getInstances()[ aDisplayName ] = new SelectionManager();
@@ -693,7 +693,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ::boost::unordered_map< Atom, OUString >::const_iterator it;
+    std::unordered_map< Atom, OUString >::const_iterator it;
     if( ( it = m_aAtomToString.find( aAtom ) ) == m_aAtomToString.end() )
     {
         static OUString aEmpty;
@@ -712,7 +712,7 @@ Atom SelectionManager::getAtom( const OUString& rString )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ::boost::unordered_map< OUString, Atom, OUStringHash >::const_iterator it;
+    std::unordered_map< OUString, Atom, OUStringHash >::const_iterator it;
     if( ( it = m_aStringToAtom.find( rString ) ) == m_aStringToAtom.end() )
     {
         static Atom nNoDisplayAtoms = 1;
@@ -857,7 +857,7 @@ OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, in
 bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData )
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
-    ::boost::unordered_map< Atom, Selection* >::iterator it;
+    std::unordered_map< Atom, Selection* >::iterator it;
     bool bSuccess = false;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -994,7 +994,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
 {
     bool bSuccess = false;
 
-    ::boost::unordered_map< Atom, Selection* >::iterator it;
+    std::unordered_map< Atom, Selection* >::iterator it;
     {
         osl::MutexGuard aGuard(m_aMutex);
 
@@ -1205,7 +1205,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
 
 bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >& rTypes )
 {
-    ::boost::unordered_map< Atom, Selection* >::iterator it;
+    std::unordered_map< Atom, Selection* >::iterator it;
     {
         osl::MutexGuard aGuard(m_aMutex);
 
@@ -1408,7 +1408,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
 PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
 {
-    boost::unordered_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
+    std::unordered_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
     if( it == m_aSelections.end() )
         return NULL;
     if( ! it->second->m_pPixmap )
@@ -1510,10 +1510,10 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "using INCR protocol\n" );
-            boost::unordered_map< ::Window, boost::unordered_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
+            std::unordered_map< ::Window, std::unordered_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
             if( win_it != m_aIncrementals.end() )
             {
-                boost::unordered_map< Atom, IncrementalTransfer >::const_iterator inc_it = win_it->second.find( property );
+                std::unordered_map< Atom, IncrementalTransfer >::const_iterator inc_it = win_it->second.find( property );
                 if( inc_it != win_it->second.end() )
                 {
                     const IncrementalTransfer& rInc = inc_it->second;
@@ -1781,7 +1781,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
 #endif
     bool bHandled = false;
 
-    ::boost::unordered_map< Atom, Selection* >::iterator it =
+    std::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.atom );
     if( it != m_aSelections.end() &&
         rNotify.state == PropertyNewValue &&
@@ -1904,13 +1904,13 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
     // feed incrementals
     if( rNotify.state == PropertyDelete )
     {
-        boost::unordered_map< ::Window, boost::unordered_map< Atom, IncrementalTransfer > >::iterator it;
+        std::unordered_map< ::Window, std::unordered_map< Atom, IncrementalTransfer > >::iterator it;
         it = m_aIncrementals.find( rNotify.window );
         if( it != m_aIncrementals.end() )
         {
             bHandled = true;
             int nCurrentTime = time( NULL );
-            boost::unordered_map< Atom, IncrementalTransfer >::iterator inc_it;
+            std::unordered_map< Atom, IncrementalTransfer >::iterator inc_it;
             // throw out aborted transfers
             std::list< Atom > aTimeouts;
             for( inc_it = it->second.begin(); inc_it != it->second.end(); ++inc_it )
@@ -2006,7 +2006,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
     if( rNotify.requestor != m_aWindow && rNotify.requestor != m_aCurrentDropWindow )
         fprintf( stderr, "Warning: selection notify for unknown window 0x%lx\n", rNotify.requestor );
 #endif
-    ::boost::unordered_map< Atom, Selection* >::iterator it =
+    std::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.selection );
     if (
         (rNotify.requestor == m_aWindow || rNotify.requestor == m_aCurrentDropWindow) &&
@@ -2087,7 +2087,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 
     bool bHandled = false;
 
-    ::boost::unordered_map< ::Window, DropTargetEntry >::iterator it =
+    std::unordered_map< ::Window, DropTargetEntry >::iterator it =
           m_aDropTargets.find( aTarget );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2455,7 +2455,7 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
     if( m_bDropSent )
         return;
 
-    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
+    std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
     if( it != m_aDropTargets.end() )
     {
@@ -2516,7 +2516,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     bool bHandled = false;
 
     // for shortcut
-    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
+    std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
 #if OSL_DEBUG_LEVEL > 1
     switch( rMessage.type )
@@ -3009,7 +3009,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, ::Window aRoot )
     dsde.DropAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
     dsde.UserAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
 
-    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
+    std::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
     if( aNewCurrentWindow != m_aDropWindow )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -3162,7 +3162,7 @@ void SelectionManager::startDrag(
         int root_x(0), root_y(0), win_x(0), win_y(0);
         unsigned int mask(0);
 
-        ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
+        std::unordered_map< ::Window, DropTargetEntry >::const_iterator it;
         it = m_aDropTargets.begin();
         while( it != m_aDropTargets.end() )
         {
@@ -3558,7 +3558,7 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
                      );
 #endif
             SelectionAdaptor* pAdaptor = getAdaptor( rEvent.xselectionclear.selection );
-            boost::unordered_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
+            std::unordered_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
             if( it != m_aSelections.end() )
                 it->second->m_bOwner = false;
             aGuard.clear();
@@ -3683,7 +3683,7 @@ void SelectionManager::run( void* pThis )
             osl::ClearableMutexGuard aGuard(This->m_aMutex);
             std::list< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
 
-            for( boost::unordered_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
+            for( std::unordered_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
             {
                 if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
                 {
@@ -3846,7 +3846,7 @@ void SelectionManager::deregisterHandler( Atom selection )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ::boost::unordered_map< Atom, Selection* >::iterator it =
+    std::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
     if( it != m_aSelections.end() )
     {
@@ -3873,7 +3873,7 @@ void SelectionManager::registerDropTarget( ::Window aWindow, DropTarget* pTarget
     osl::MutexGuard aGuard(m_aMutex);
 
     // sanity check
-    ::boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
+    std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( aWindow );
     if( it != m_aDropTargets.end() )
         OSL_FAIL( "attempt to register window as drop target twice" );
@@ -3918,7 +3918,7 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
     if( aWindow == m_aDragSourceWindow && m_aDragRunning.check() )
     {
         // abort drag
-        boost::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
+        std::unordered_map< ::Window, DropTargetEntry >::const_iterator it =
             m_aDropTargets.find( m_aDropWindow );
         if( it != m_aDropTargets.end() )
         {

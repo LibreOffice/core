@@ -22,10 +22,9 @@
 
 #include <rtl/ustring.hxx>
 #include <xmloff/nmspmap.hxx>
-
-#include <boost/unordered_map.hpp>
 #include "TransformerActionInit.hxx"
 #include "TransformerAction.hxx"
+#include <unordered_map>
 
 struct NameKey_Impl
 {
@@ -133,7 +132,7 @@ struct TransformerAction_Impl
 };
 
 class XMLTransformerActions :
-    public ::boost::unordered_map< NameKey_Impl, TransformerAction_Impl,
+    public std::unordered_map< NameKey_Impl, TransformerAction_Impl,
                             NameHash_Impl, NameHash_Impl >
 {
 public:

@@ -109,10 +109,10 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
     private:
         OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::boost::unordered_map<   OUString                 ,
-                                                        ToolBox_XML_Entry               ,
-                                                        OUStringHash,
-                                                        ::std::equal_to< OUString >  >
+        class ToolBoxHashMap : public std::unordered_map<OUString                 ,
+                                                         ToolBox_XML_Entry               ,
+                                                         OUStringHash,
+                                                         std::equal_to< OUString >  >
         {
             public:
                 inline void free()

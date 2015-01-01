@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <rtl/string.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 typedef sal_uInt32 Atom;
 
@@ -30,8 +30,8 @@ typedef sal_uInt32 Atom;
 class AtomContainer
 {
     Atom m_nNextID;
-    boost::unordered_map< OString, Atom, OStringHash > m_aStringToID;
-    boost::unordered_map< Atom, OString > m_aIDToString;
+    std::unordered_map< OString, Atom, OStringHash > m_aStringToID;
+    std::unordered_map< Atom, OString > m_aIDToString;
 
     public:
     AtomContainer();

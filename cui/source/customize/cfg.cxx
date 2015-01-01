@@ -3659,10 +3659,8 @@ bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
 
 SvxEntries* ToolbarSaveInData::GetEntries()
 {
-    typedef ::boost::unordered_map< OUString,
-                             bool,
-                             OUStringHash,
-                             ::std::equal_to< OUString > > ToolbarInfo;
+    typedef std::unordered_map<OUString, bool,
+                               OUStringHash, std::equal_to< OUString > > ToolbarInfo;
 
     ToolbarInfo aToolbarInfo;
 
@@ -3721,7 +3719,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 pEntry->SetStyle( GetSystemStyle( url ) );
 
 
-                // insert into boost::unordered_map to filter duplicates from the parent
+                // insert into std::unordered_map to filter duplicates from the parent
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
                 OUString custom(CUSTOM_TOOLBAR_STR);
@@ -4741,10 +4739,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     pTbSymbol->set_height_request(aTbSize.Height());
     pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL | WB_LINESPACING);
 
-    typedef ::boost::unordered_map< OUString,
-                             bool,
-                             OUStringHash,
-                             ::std::equal_to< OUString > > ImageInfo;
+    typedef std::unordered_map< OUString, bool,
+                                OUStringHash, std::equal_to< OUString > > ImageInfo;
 
     pTbSymbol->SetPageScroll( true );
 

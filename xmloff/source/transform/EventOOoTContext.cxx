@@ -28,14 +28,14 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public ::boost::unordered_map< OUString, NameKey_Impl, OUStringHash >
+    public std::unordered_map< OUString, NameKey_Impl, OUStringHash >
 {
 public:
 

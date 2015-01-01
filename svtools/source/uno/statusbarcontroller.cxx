@@ -372,7 +372,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
+            // Put into the unordered_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }

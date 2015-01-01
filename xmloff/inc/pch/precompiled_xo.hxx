@@ -39,7 +39,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -552,6 +551,7 @@
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <typeinfo>
+#include <unordered_map>
 #include <unotools/bootstrap.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>

@@ -34,7 +34,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include "vcl/vclenum.hxx"
 #include <vcl/settings.hxx>
@@ -175,7 +175,7 @@ struct NWFWidgetData
 // Keep a hash table of Widgets->default flags so that we can
 // easily and quickly reset each to a default state before using
 // them
-static boost::unordered_map<long, guint>    gWidgetDefaultFlags;
+static std::unordered_map<long, guint>    gWidgetDefaultFlags;
 class WidgetDataVector
 {
 private:

@@ -29,8 +29,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <boost/unordered_map.hpp>
-
 namespace framework
 {
 

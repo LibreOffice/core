@@ -22,7 +22,6 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -77,6 +76,7 @@
 #include <svtools/bindablecontrolhelper.hxx>
 #include <svx/svdobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <unordered_map>
 #include <vcl/window.hxx>
 #include <vector>
 

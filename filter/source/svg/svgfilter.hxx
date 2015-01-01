@@ -43,8 +43,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/process.h>
@@ -63,9 +61,9 @@
 #include <svx/svdxcgv.hxx>
 #include <svx/svdobj.hxx>
 #include <xmloff/xmlexp.hxx>
-
 #include <cstdio>
-
+#include <unordered_set>
+#include <unordered_map>
 
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::beans;
@@ -201,18 +199,18 @@ class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XExtendedFilterDetection >
 {
 public:
-    typedef ::boost::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface >    ObjectMap;
-    typedef ::boost::unordered_set< Reference< XInterface >, HashReferenceXInterface >                          ObjectSet;
+    typedef std::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface >    ObjectMap;
+    typedef std::unordered_set< Reference< XInterface >, HashReferenceXInterface >                          ObjectSet;
     typedef Sequence< Reference< XInterface > >                                                                 ObjectSequence;
     typedef Sequence< Reference< XDrawPage > >                                                                  XDrawPageSequence;
 
-    typedef ::boost::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
-    typedef ::boost::unordered_map< OUString, UCharSet, OUStringHash >                                          UCharSetMap;
-    typedef ::boost::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
+    typedef std::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
+    typedef std::unordered_map< OUString, UCharSet, OUStringHash >                                          UCharSetMap;
+    typedef std::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
 
-    typedef ::boost::unordered_map< Reference< XInterface >, OUString, HashReferenceXInterface >         UOStringMap;
+    typedef std::unordered_map< Reference< XInterface >, OUString, HashReferenceXInterface >         UOStringMap;
 
-    typedef ::boost::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap >                  MetaBitmapActionSet;
+    typedef std::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap >                  MetaBitmapActionSet;
 
 private:
 

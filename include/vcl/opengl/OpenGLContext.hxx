@@ -51,7 +51,6 @@ class NSOpenGLView;
 
 #include <vcl/vclopengl_dllapi.hxx>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>

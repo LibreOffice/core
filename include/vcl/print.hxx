@@ -36,8 +36,8 @@
 #include <com/sun/star/view/PrintableState.hpp>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <set>
+#include <unordered_map>
 
 class SalInfoPrinter;
 struct SalPrinterQueueInfo;
@@ -569,7 +569,7 @@ public:
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
     protected:
-    boost::unordered_map< OUString, css::uno::Any, OUStringHash >        m_aPropertyMap;
+    std::unordered_map< OUString, css::uno::Any, OUStringHash >  m_aPropertyMap;
     css::uno::Sequence< css::beans::PropertyValue >              m_aUIProperties;
 
     public:

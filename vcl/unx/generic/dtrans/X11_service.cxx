@@ -73,7 +73,7 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     }
     Atom nSelection = rManager.getAtom(sel);
 
-    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );
+    std::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );
     if( it != m_aInstances.end() )
         return it->second;
 

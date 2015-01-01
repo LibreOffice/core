@@ -21,9 +21,9 @@
 
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
-#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <rtl/string.hxx>
+#include <unordered_map>
 
 namespace helpdatafileproxy {
 
@@ -63,8 +63,8 @@ namespace helpdatafileproxy {
             { return m_pBuffer; }
     };
 
-    typedef boost::unordered_map< OString,std::pair<int,int>,OStringHash >   StringToValPosMap;
-    typedef boost::unordered_map< OString,OString,OStringHash >     StringToDataMap;
+    typedef std::unordered_map< OString,std::pair<int,int>,OStringHash >   StringToValPosMap;
+    typedef std::unordered_map< OString,OString,OStringHash >     StringToDataMap;
 
     class Hdf : hdf_internal::Noncopyable
     {

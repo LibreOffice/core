@@ -23,7 +23,7 @@
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 /*
  * UNO III Implementation
  */
@@ -40,10 +40,10 @@ struct equalOUString
   }
 };
 
-typedef ::boost::unordered_map< OUString,
-                                 SfxItemPropertySimpleEntry,
-                                 OUStringHash,
-                                 equalOUString > SfxItemPropertyHashMap_t;
+typedef std::unordered_map< OUString,
+                            SfxItemPropertySimpleEntry,
+                            OUStringHash,
+                            equalOUString > SfxItemPropertyHashMap_t;
 
 class SfxItemPropertyMap_Impl : public SfxItemPropertyHashMap_t
 {

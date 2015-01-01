@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_PRINTERINFOMANAGER_HXX
 #define INCLUDED_VCL_PRINTERINFOMANAGER_HXX
 
-#include <boost/unordered_map.hpp>
 #include <list>
+#include <unordered_map>
 
 #include <vcl/dllapi.h>
 #include <vcl/helper.hxx>
@@ -97,7 +97,7 @@ protected:
         PrinterInfo             m_aInfo;
     };
 
-    boost::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
+    std::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
     std::list< WatchFile >            m_aWatchFiles;
     OUString                     m_aDefaultPrinter;

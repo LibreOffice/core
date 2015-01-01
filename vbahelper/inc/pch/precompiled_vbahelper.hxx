@@ -22,7 +22,6 @@
 #include <basic/sbx.hxx>
 #include <basic/vbahelper.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -165,6 +164,7 @@
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <unordered_map>
 #include <unotools/eventcfg.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>

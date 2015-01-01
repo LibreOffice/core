@@ -30,8 +30,8 @@
 #include <svx/svxdllapi.h>
 
 #include <rtl/ustring.hxx>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace accessibility {
 
@@ -184,9 +184,8 @@ private:
     /** This hash map allows the fast look up of a type descriptor for a
         given service name.
     */
-    typedef ::boost::unordered_map<
-        OUString,ShapeTypeId,
-        OUStringHash> tServiceNameToSlotId;
+    typedef std::unordered_map<OUString,ShapeTypeId,
+                               OUStringHash> tServiceNameToSlotId;
     mutable tServiceNameToSlotId maServiceNameToSlotId;
 
     /**  Determine the slot id of the specified shape type.  With this id

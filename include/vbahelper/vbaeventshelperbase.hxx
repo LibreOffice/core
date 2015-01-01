@@ -22,7 +22,7 @@
 
 #include <deque>
 #include <map>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -169,8 +169,8 @@ protected:
     SfxObjectShell* mpShell;
 
 private:
-    typedef ::std::map< sal_Int32, EventHandlerInfo > EventHandlerInfoMap;
-    typedef boost::unordered_map< OUString, ModulePathMap, OUStringHash > EventHandlerPathMap;
+    typedef std::map< sal_Int32, EventHandlerInfo > EventHandlerInfoMap;
+    typedef std::unordered_map< OUString, ModulePathMap, OUStringHash > EventHandlerPathMap;
 
     EventHandlerInfoMap maEventInfos;
     EventHandlerPathMap maEventPaths;

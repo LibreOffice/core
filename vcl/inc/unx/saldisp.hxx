@@ -31,9 +31,9 @@ class   SalXLib;
 #include <vcl/ptrstyle.hxx>
 #include <sal/types.h>
 #include <osl/mutex.h>
-#include <vector>
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <vector>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>
 #include <generic/gendata.hxx>
@@ -204,7 +204,7 @@ public:
         RenderEntry() : m_aPixmap( 0 ), m_aPicture( 0 ) {}
     };
 
-    typedef boost::unordered_map<int,RenderEntry> RenderEntryMap;
+    typedef std::unordered_map<int,RenderEntry> RenderEntryMap;
 
     struct ScreenData
     {

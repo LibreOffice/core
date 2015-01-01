@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 #define STR_EVENT_STARTAPP                   0
@@ -58,9 +58,9 @@
 #define STR_EVENT_MODECHANGED               26
 #define STR_EVENT_STORAGECHANGED            27
 
-typedef ::boost::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< OUString > > EventBindingHash;
-typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > > FrameVector;
-typedef ::std::vector< OUString > SupportedEventsVector;
+typedef std::unordered_map< OUString, OUString, OUStringHash, std::equal_to< OUString > > EventBindingHash;
+typedef std::vector< css::uno::WeakReference< css::frame::XFrame > > FrameVector;
+typedef std::vector< OUString > SupportedEventsVector;
 
 class GlobalEventConfig_Impl : public utl::ConfigItem
 {

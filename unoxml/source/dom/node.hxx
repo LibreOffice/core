@@ -44,7 +44,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace DOM
 {
@@ -70,7 +70,7 @@ namespace DOM
         };
 
         typedef std::vector< std::vector<Namespace> > NamespaceVectorType;
-        typedef boost::unordered_map< OUString,
+        typedef std::unordered_map< OUString,
                                sal_Int32,
                                OUStringHash > NamespaceMapType;
 

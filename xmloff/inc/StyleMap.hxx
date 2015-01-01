@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 struct StyleNameKey_Impl
 {
@@ -64,7 +64,7 @@ inline bool StyleNameHash_Impl::operator()(
 
 class StyleMap :
     public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XUnoTunnel>,
-    public ::boost::unordered_map< StyleNameKey_Impl, OUString,
+    public std::unordered_map< StyleNameKey_Impl, OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >
 {
 

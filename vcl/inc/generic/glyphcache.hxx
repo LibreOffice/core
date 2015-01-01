@@ -27,7 +27,6 @@
 #include FT_GLYPH_H
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <basebmp/bitmapdevice.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -37,6 +36,8 @@
 
 #include <outfont.hxx>
 #include <sallayout.hxx>
+
+#include <unordered_map>
 
 class FtFontInfo;
 class GlyphCachePeer;
@@ -87,7 +88,7 @@ private:
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
-    typedef ::boost::unordered_map<FontSelectPattern,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+    typedef std::unordered_map<FontSelectPattern,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
     sal_uLong                       mnMaxSize;      // max overall cache size in bytes
     mutable sal_uLong               mnBytesUsed;
@@ -221,7 +222,7 @@ private:
 
     ServerFontLayoutEngine* GetLayoutEngine();
 
-    typedef ::boost::unordered_map<int,GlyphData> GlyphList;
+    typedef std::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
 
     const FontSelectPattern    maFontSelData;
@@ -256,7 +257,7 @@ private:
     bool            mbArtBold;
     bool            mbUseGamma;
 
-    typedef ::boost::unordered_map<int,int> GlyphSubstitution;
+    typedef std::unordered_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
 
     ServerFontLayoutEngine*     mpLayoutEngine;

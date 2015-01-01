@@ -14,7 +14,7 @@
 #include <vcl/svapp.hxx>
 #include <filter/msfilter/util.hxx>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace msfilter {
 namespace util {
@@ -1301,7 +1301,7 @@ static struct {
     {"textBox", mso_sptTextBox},
 };
 
-typedef boost::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
+typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
 static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
 
 const char* GetOOXMLPresetGeometry( const char* sShapeType )
@@ -1319,7 +1319,7 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
     return i == pCustomShapeTypeTranslationHashMap->end() ? "rect" : i->second;
 }
 
-typedef boost::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
+typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
 static DMLToVMLTranslationHashMap* pDMLToVMLMap;
 
 MSO_SPT GETVMLShapeType(const OString& aType)

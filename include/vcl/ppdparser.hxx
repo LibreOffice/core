@@ -20,8 +20,8 @@
 #define INCLUDED_VCL_PPDPARSER_HXX
 
 #include <list>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 #include <tools/stream.hxx>
 #include <rtl/string.hxx>
@@ -62,8 +62,8 @@ class VCL_DLLPUBLIC PPDKey
 {
     friend class PPDParser;
 
-    typedef ::boost::unordered_map< OUString, PPDValue, OUStringHash > hash_type;
-    typedef ::std::vector< PPDValue* > value_type;
+    typedef std::unordered_map< OUString, PPDValue, OUStringHash > hash_type;
+    typedef std::vector< PPDValue* > value_type;
 
     OUString            m_aKey;
     hash_type           m_aValues;
@@ -126,8 +126,8 @@ class VCL_DLLPUBLIC PPDParser
     friend class CUPSManager;
     friend class PPDCache;
 
-    typedef ::boost::unordered_map< OUString, PPDKey*, OUStringHash > hash_type;
-    typedef ::std::vector< PPDKey* > value_type;
+    typedef std::unordered_map< OUString, PPDKey*, OUStringHash > hash_type;
+    typedef std::vector< PPDKey* > value_type;
 
     void insertKey( const OUString& rKey, PPDKey* pKey );
 public:
@@ -268,7 +268,7 @@ public:
 
 class VCL_DLLPUBLIC PPDContext
 {
-    typedef ::boost::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
+    typedef std::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;
     const PPDParser*                                    m_pParser;
 

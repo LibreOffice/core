@@ -440,9 +440,9 @@
 
 
 
-    typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;
-    typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
-    typedef ::std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
+    typedef std::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;
+    typedef std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
+    typedef std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 
     // for creating class-unique PropertySetInfo's, we need some info:
     namespace { struct ServiceSpecifierMap : public rtl::Static< HashMapString2Int, ServiceSpecifierMap > {}; }

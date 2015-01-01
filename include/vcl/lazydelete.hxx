@@ -22,8 +22,8 @@
 
 #include <vcl/dllapi.h>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 2
@@ -116,7 +116,7 @@ namespace vcl
         };
 
         std::vector< DeleteObjectEntry >    m_aObjects;
-        typedef boost::unordered_map< sal_IntPtr, unsigned int > PtrToIndexMap;
+        typedef std::unordered_map< sal_IntPtr, unsigned int > PtrToIndexMap;
         PtrToIndexMap                       m_aPtrToIndex;
 
         /** strict weak ordering function to bring objects to be destroyed lazily

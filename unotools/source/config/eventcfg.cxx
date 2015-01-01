@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weakref.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 

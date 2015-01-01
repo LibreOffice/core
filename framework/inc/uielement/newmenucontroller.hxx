@@ -41,7 +41,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/menu.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace framework
 {
@@ -86,7 +86,7 @@ namespace framework
                 OUString aImageId;
             };
 
-            typedef ::boost::unordered_map< int, AddInfo > AddInfoForId;
+            typedef std::unordered_map< int, AddInfo > AddInfoForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,

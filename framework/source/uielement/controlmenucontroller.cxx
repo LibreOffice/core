@@ -221,10 +221,10 @@ private:
     virtual void impl_setPopupMenu() SAL_OVERRIDE;
     virtual void impl_select(const uno::Reference< frame::XDispatch >& _xDispatch,const util::URL& aURL) SAL_OVERRIDE;
 
-    class UrlToDispatchMap : public ::boost::unordered_map< OUString,
-                                                     uno::Reference< frame::XDispatch >,
-                                                     OUStringHash,
-                                                     ::std::equal_to< OUString > >
+    class UrlToDispatchMap : public std::unordered_map< OUString,
+                                                        uno::Reference< frame::XDispatch >,
+                                                        OUStringHash,
+                                                        std::equal_to< OUString > >
     {
         public:
             inline void free()

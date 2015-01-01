@@ -23,8 +23,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -46,7 +45,7 @@ class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
     Reference<deployment::XPackageManager> m_xBundledMgr;
     Reference<deployment::XPackageManager> m_xTmpMgr;
     Reference<deployment::XPackageManager> m_xBakMgr;
-    typedef ::boost::unordered_map<
+    typedef std::unordered_map<
         OUString, WeakReference<deployment::XPackageManager>,
         OUStringHash > t_string2weakref;
     t_string2weakref m_managers;

@@ -25,17 +25,17 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/property.hxx>
-#include <map>
 #include "charttoolsdllapi.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <map>
+#include <unordered_map>
 
 namespace chart
 {
 
 typedef int tPropertyValueMapKey;
 
-typedef boost::unordered_map<tPropertyValueMapKey, com::sun::star::uno::Any> tPropertyValueMap;
+typedef std::unordered_map<tPropertyValueMapKey, css::uno::Any> tPropertyValueMap;
 
 namespace PropertyHelper
 {

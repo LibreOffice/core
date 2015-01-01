@@ -31,8 +31,8 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <boost/unordered_map.hpp>
 #include <map>
+#include <unordered_map>
 #include <boost/optional.hpp>
 
 class SvBorder;
@@ -210,27 +210,27 @@ public:
 private:
     static Theme& GetCurrentTheme();
 
-    ::std::vector<Image> maImages;
-    ::std::vector<Color> maColors;
-    ::std::vector<Paint> maPaints;
-    ::std::vector<sal_Int32> maIntegers;
-    ::std::vector<bool> maBooleans;
-    ::std::vector<Rectangle> maRectangles;
+    std::vector<Image> maImages;
+    std::vector<Color> maColors;
+    std::vector<Paint> maPaints;
+    std::vector<sal_Int32> maIntegers;
+    std::vector<bool> maBooleans;
+    std::vector<Rectangle> maRectangles;
     bool mbIsHighContrastMode;
     bool mbIsHighContrastModeSetManually;
 
-    typedef ::boost::unordered_map<rtl::OUString,ThemeItem, rtl::OUStringHash> PropertyNameToIdMap;
+    typedef std::unordered_map<rtl::OUString,ThemeItem, rtl::OUStringHash> PropertyNameToIdMap;
     PropertyNameToIdMap maPropertyNameToIdMap;
-    typedef ::std::vector<rtl::OUString> PropertyIdToNameMap;
+    typedef std::vector<rtl::OUString> PropertyIdToNameMap;
     PropertyIdToNameMap maPropertyIdToNameMap;
     typedef ::std::vector<css::uno::Any> RawValueContainer;
     RawValueContainer maRawValues;
 
-    typedef ::std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
-    typedef ::std::map<ThemeItem,ChangeListenerContainer> ChangeListeners;
+    typedef std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
+    typedef std::map<ThemeItem,ChangeListenerContainer> ChangeListeners;
     ChangeListeners maChangeListeners;
-    typedef ::std::vector<css::uno::Reference<css::beans::XVetoableChangeListener> > VetoableListenerContainer;
-    typedef ::std::map<ThemeItem,VetoableListenerContainer> VetoableListeners;
+    typedef std::vector<css::uno::Reference<css::beans::XVetoableChangeListener> > VetoableListenerContainer;
+    typedef std::map<ThemeItem,VetoableListenerContainer> VetoableListeners;
     VetoableListeners maVetoableListeners;
 
     enum PropertyType

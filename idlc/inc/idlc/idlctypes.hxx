@@ -21,11 +21,11 @@
 
 #include <stdio.h>
 
-#include <boost/unordered_map.hpp>
 #include <list>
-#include <vector>
-#include <string>
 #include <set>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -44,8 +44,8 @@ typedef ::std::set< OString, LessString >    StringSet;
 
 class AstDeclaration;
 
-typedef ::boost::unordered_map< OString, AstDeclaration*, OStringHash > DeclMap;
-typedef ::std::list< AstDeclaration* > DeclList;
+typedef std::unordered_map< OString, AstDeclaration*, OStringHash > DeclMap;
+typedef std::list< AstDeclaration* > DeclList;
 
 class AstScope;
 AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope);

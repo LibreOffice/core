@@ -44,8 +44,8 @@
 
 #include "itemholder1.hxx"
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 using namespace osl;
 using namespace utl;
@@ -72,11 +72,11 @@ enum VarNameProperty
     VAR_NEEDS_FILEURL
 };
 
-typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> NameToHandleMap;
+typedef std::unordered_map<OUString, sal_Int32, OUStringHash> NameToHandleMap;
 
-typedef boost::unordered_map<sal_Int32, sal_Int32> EnumToHandleMap;
+typedef std::unordered_map<sal_Int32, sal_Int32> EnumToHandleMap;
 
-typedef boost::unordered_map<OUString, VarNameProperty, OUStringHash>
+typedef std::unordered_map<OUString, VarNameProperty, OUStringHash>
     VarNameToEnumMap;
 
 // class SvtPathOptions_Impl ---------------------------------------------

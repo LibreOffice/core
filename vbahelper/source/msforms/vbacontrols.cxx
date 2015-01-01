@@ -32,7 +32,7 @@
 #include "vbacontrol.hxx"
 #include <cppuhelper/implbase2.hxx>
 #include <ooo/vba/XControlProvider.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -40,8 +40,8 @@ using namespace ooo::vba;
 
 typedef ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess > ArrayWrapImpl;
 
-typedef  boost::unordered_map< OUString, sal_Int32, OUStringHash,
-    ::std::equal_to< OUString >  > ControlIndexMap;
+typedef  std::unordered_map< OUString, sal_Int32, OUStringHash,
+                             std::equal_to< OUString >  > ControlIndexMap;
 typedef  std::vector< uno::Reference< awt::XControl > > ControlVec;
 
 class ControlArrayWrapper : public ArrayWrapImpl

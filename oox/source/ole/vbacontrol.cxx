@@ -37,7 +37,7 @@
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
 #include "oox/ole/vbahelper.hxx"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace oox {
 namespace ole {
@@ -419,7 +419,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                     BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
                     pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );
                 }
-                typedef boost::unordered_map< sal_uInt32, ::boost::shared_ptr< VbaFormControl > > IdToPageMap;
+                typedef std::unordered_map< sal_uInt32, ::boost::shared_ptr< VbaFormControl > > IdToPageMap;
                 IdToPageMap idToPage;
                 VbaFormControlVector::iterator it = maControls.begin();
                 VbaFormControlVector::iterator it_end = maControls.end();

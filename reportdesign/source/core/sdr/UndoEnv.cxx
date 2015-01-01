@@ -72,7 +72,7 @@ struct PropertyInfo
     }
 };
 
-typedef ::boost::unordered_map< OUString, PropertyInfo, OUStringHash >    PropertiesInfo;
+typedef std::unordered_map< OUString, PropertyInfo, OUStringHash >    PropertiesInfo;
 
 struct ObjectInfo
 {

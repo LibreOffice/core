@@ -20,13 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_SOURCE_UICONFIGURATION_IMAGEMANAGERIMPL_HXX
 #define INCLUDED_FRAMEWORK_SOURCE_UICONFIGURATION_IMAGEMANAGERIMPL_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-#include <list>
-#include <boost/unordered_map.hpp>
-
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -52,6 +45,10 @@
 #include <vcl/image.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+
+#include <list>
+#include <unordered_map>
+#include <vector>
 
 namespace framework
 {
@@ -137,10 +134,10 @@ namespace framework
 
             void clear();
 
-            typedef boost::unordered_map< OUString,
-                                   sal_Bool,
-                                   OUStringHash,
-                                   ::std::equal_to< OUString > > ImageNameMap;
+            typedef std::unordered_map< OUString,
+                                        sal_Bool,
+                                        OUStringHash,
+                                        std::equal_to< OUString > > ImageNameMap;
 
             enum Layer
             {

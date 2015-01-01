@@ -46,7 +46,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -150,7 +150,7 @@ private:
 
     struct UIElementType;
     friend struct UIElementType;
-    typedef ::boost::unordered_map< OUString, UIElementData, OUStringHash, ::std::equal_to< OUString > > UIElementDataHashMap;
+    typedef std::unordered_map< OUString, UIElementData, OUStringHash, std::equal_to< OUString > > UIElementDataHashMap;
 
     struct UIElementType
     {
@@ -167,9 +167,9 @@ private:
         css::uno::Reference< css::embed::XStorage > xStorage;
     };
 
-    typedef ::std::vector< UIElementType > UIElementTypesVector;
-    typedef ::std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-    typedef ::boost::unordered_map< OUString, UIElementInfo, OUStringHash, ::std::equal_to< OUString > > UIElementInfoHashMap;
+    typedef std::vector< UIElementType > UIElementTypesVector;
+    typedef std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+    typedef std::unordered_map< OUString, UIElementInfo, OUStringHash, std::equal_to< OUString > > UIElementInfoHashMap;
 
     void            impl_Initialize();
     void            implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
@@ -315,7 +315,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
                         aUIElementData.bModified    = false;
                         aUIElementData.bDefault     = false;
 
-                        // Create boost::unordered_map entries for all user interface elements inside the storage. We don't load the
+                        // Create unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
@@ -434,7 +434,7 @@ UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElemen
     // preload list of element types on demand
     impl_preloadUIElementTypeList( nElementType );
 
-    // try to look into our document vector/boost::unordered_map combination
+    // try to look into our document vector/unordered_map combination
     UIElementDataHashMap& rUserHashMap = m_aUIElements[nElementType].aElementsHashMap;
     UIElementDataHashMap::iterator pIter = rUserHashMap.find( aResourceURL );
     if ( pIter != rUserHashMap.end() )

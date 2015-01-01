@@ -28,7 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <stdtypes.h>
 
 namespace framework{
@@ -108,10 +108,10 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper1< ::com::sun::s
     private:
         OUString getErrorLineString();
 
-        class ImageHashMap : public ::boost::unordered_map< OUString     ,
-                                                     Image_XML_Entry        ,
-                                                     OUStringHash,
-                                                     ::std::equal_to< OUString > >
+        class ImageHashMap : public std::unordered_map< OUString     ,
+                                                        Image_XML_Entry        ,
+                                                        OUStringHash,
+                                                        std::equal_to< OUString > >
         {
             public:
                 inline void free()

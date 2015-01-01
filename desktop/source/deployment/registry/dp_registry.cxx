@@ -42,9 +42,9 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/deployment/PackageRegistryBackend.hpp>
-#include <boost/unordered_map.hpp>
 #include <set>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -72,13 +72,13 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
             return str1.equalsIgnoreAsciiCase( str2 );
         }
     };
-    typedef ::boost::unordered_map<
+    typedef std::unordered_map<
         OUString, Reference<deployment::XPackageRegistry>,
         ci_string_hash, ci_string_equals > t_string2registry;
-    typedef ::boost::unordered_map<
+    typedef std::unordered_map<
         OUString, OUString,
         ci_string_hash, ci_string_equals > t_string2string;
-    typedef ::std::set<
+    typedef std::set<
         Reference<deployment::XPackageRegistry> > t_registryset;
 
     t_string2registry m_mediaType2backend;
@@ -189,7 +189,7 @@ void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
     m_allBackends.insert( xBackend );
-    typedef ::boost::unordered_set<OUString, OUStringHash> t_stringset;
+    typedef std::unordered_set<OUString, OUStringHash> t_stringset;
     t_stringset ambiguousFilters;
 
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(

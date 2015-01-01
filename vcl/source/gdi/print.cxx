@@ -438,7 +438,7 @@ ImplPrnQueueList::~ImplPrnQueueList()
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
-    boost::unordered_map< OUString, sal_Int32, OUStringHash >::iterator it =
+    std::unordered_map< OUString, sal_Int32, OUStringHash >::iterator it =
         m_aNameToIndex.find( pData->maPrinterName );
     if( it == m_aNameToIndex.end() )
     {
@@ -461,7 +461,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
 {
     ImplPrnQueueData* pData = NULL;
-    boost::unordered_map<OUString,sal_Int32,OUStringHash>::iterator it =
+    std::unordered_map<OUString,sal_Int32,OUStringHash>::iterator it =
         m_aNameToIndex.find( rPrinter );
     if( it != m_aNameToIndex.end() )
         pData = &m_aQueueInfos[it->second];
@@ -1554,7 +1554,7 @@ OUString Printer::GetPaperName( Paper ePaper )
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpPaperNames )
     {
-        pSVData->mpPaperNames = new boost::unordered_map< int, OUString >();
+        pSVData->mpPaperNames = new std::unordered_map< int, OUString >();
         if( ImplGetResMgr() )
         {
             ResStringArray aPaperStrings( VclResId( RID_STR_PAPERNAMES ) );
@@ -1575,7 +1575,7 @@ OUString Printer::GetPaperName( Paper ePaper )
         }
     }
 
-    boost::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
+    std::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
     return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
 }
 

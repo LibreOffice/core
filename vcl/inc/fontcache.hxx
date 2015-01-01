@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include "fontmanager.hxx"
 
@@ -42,7 +42,7 @@ class VCL_PLUGIN_PUBLIC FontCache
         FontCacheEntry      m_aEntry;
     };
 
-    typedef boost::unordered_map< OString, FontFile, OStringHash > FontDirMap;
+    typedef std::unordered_map< OString, FontFile, OStringHash > FontDirMap;
     struct FontDir
     {
         sal_Int64   m_nTimestamp;
@@ -53,7 +53,7 @@ class VCL_PLUGIN_PUBLIC FontCache
         FontDir() : m_nTimestamp(0), m_bNoFiles(false), m_bUserOverrideOnly( false ) {}
     };
 
-    typedef boost::unordered_map< int, FontDir > FontCacheData;
+    typedef std::unordered_map< int, FontDir > FontCacheData;
     FontCacheData   m_aCache;
     OUString        m_aCacheFile;
     bool            m_bDoFlush;

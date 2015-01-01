@@ -19,13 +19,13 @@
 #ifndef INCLUDED_TOOLS_PSTM_HXX
 #define INCLUDED_TOOLS_PSTM_HXX
 
-#include <boost/unordered_map.hpp>
 #include <tools/toolsdllapi.h>
 #include <tools/unqidx.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
 #include <map>
+#include <unordered_map>
 
 #define ERRCODE_IO_NOFACTORY ERRCODE_IO_WRONGFORMAT
 
@@ -38,7 +38,7 @@ typedef void * (*SvCreateInstancePersist)( SvPersistBase ** );
 
 class TOOLS_DLLPUBLIC SvClassManager
 {
-    typedef boost::unordered_map<sal_Int32, SvCreateInstancePersist> Map;
+    typedef std::unordered_map<sal_Int32, SvCreateInstancePersist> Map;
     Map aAssocTable;
 
 public:

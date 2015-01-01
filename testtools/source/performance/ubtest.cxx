@@ -21,8 +21,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <boost/unordered_map.hpp>
 #include <map>
+#include <unordered_map>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -550,9 +550,7 @@ void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nT
     _entries[ pText ] = TimeEntry( nLoop, nTicks );
 }
 
-
-typedef boost::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
-
+typedef std::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
 
 static void benchmark(
     TimingSheet & rSheet, const Reference< XInterface > & xInstance, sal_Int64 nLoop )

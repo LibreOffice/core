@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -33,12 +32,14 @@
 #include "osl/mutex.hxx"
 #include "cppuhelper/weakref.hxx"
 
+#include <unordered_map>
+
 using namespace com::sun::star;
 
 namespace ucbhelper_impl
 {
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     uno::WeakReference< ucb::XContent >,

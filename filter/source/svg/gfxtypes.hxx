@@ -12,10 +12,9 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
+#include <unordered_set>
+#include <unordered_map>
 
 namespace svgi
 {
@@ -336,8 +335,8 @@ struct StateHash
     }
 };
 
-typedef boost::unordered_set<State, StateHash> StatePool;
-typedef boost::unordered_map<sal_Int32, State> StateMap;
+typedef std::unordered_set<State, StateHash> StatePool;
+typedef std::unordered_map<sal_Int32, State> StateMap;
 
 } // namespace svgi
 

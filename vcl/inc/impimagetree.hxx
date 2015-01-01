@@ -22,9 +22,8 @@
 
 #include "sal/config.h"
 
+#include <unordered_map>
 #include <vector>
-
-#include <boost/unordered_map.hpp>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -58,8 +57,8 @@ public:
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
-    typedef boost::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
-    typedef boost::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
+    typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
+    typedef std::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
 
     struct IconSet {
         OUString maURL;
@@ -72,7 +71,7 @@ private:
     };
 
     /// Map between the theme name(s) and the content.
-    typedef boost::unordered_map<OUString, IconSet, OUStringHash> StyleIconSet;
+    typedef std::unordered_map<OUString, IconSet, OUStringHash> StyleIconSet;
 
     /// Remember all the (used) icon styles and individual icons in them.
     StyleIconSet maIconSet;

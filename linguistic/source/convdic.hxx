@@ -26,9 +26,9 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-#include <boost/unordered_map.hpp>
-#include <set>
 #include <memory>
+#include <set>
+#include <unordered_map>
 #include "linguistic/misc.hxx"
 #include "defs.hxx"
 
@@ -57,12 +57,12 @@ struct StrEQ
     }
 };
 
-typedef boost::unordered_multimap< const OUString, OUString,
+typedef std::unordered_multimap< const OUString, OUString,
                        const OUStringHash, StrEQ > ConvMap;
 
 typedef std::set< OUString, StrLT > ConvMapKeySet;
 
-typedef boost::unordered_multimap< const OUString, sal_Int16,
+typedef std::unordered_multimap< const OUString, sal_Int16,
                        OUStringHash, StrEQ > PropTypeMap;
 
 

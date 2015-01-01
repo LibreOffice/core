@@ -57,7 +57,6 @@
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star;
 

@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -195,6 +194,7 @@
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <uno/data.h>
+#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

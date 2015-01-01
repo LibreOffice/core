@@ -43,7 +43,7 @@
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <config_version.h>
 
@@ -336,7 +336,7 @@ struct ImplSVData
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
     ::vcl::SettingsConfigItem* mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
-    boost::unordered_map< int, OUString >* mpPaperNames;
+    std::unordered_map< int, OUString >* mpPaperNames;
 
     Link maDeInitHook;
 };

@@ -24,8 +24,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/unordered_map.hpp>
 #include "itemholder1.hxx"
+
+#include <unordered_map>
 
 using namespace utl;
 using namespace com::sun::star::beans;
@@ -42,7 +43,7 @@ static sal_Int32                    nRefCount = 0;
 class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
 {
 private:
-    typedef boost::unordered_map< OUString, sal_Bool, OUStringHash, ::std::equal_to< OUString > > OptionNodeList;
+    typedef std::unordered_map< OUString, sal_Bool, OUStringHash, std::equal_to< OUString > > OptionNodeList;
 
     OUString        m_sPathDelimiter;
     OptionNodeList  m_aOptionNodeList;

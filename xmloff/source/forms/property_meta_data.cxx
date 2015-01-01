@@ -27,7 +27,7 @@
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace xmloff { namespace metadata
 {
@@ -68,7 +68,7 @@ namespace xmloff { namespace metadata
         // one big instance, since in this case, every instance can quickly decide whether it is responsible
         // for some attribute or property, and otherwise delegate to the next instance.
 
-        typedef ::boost::unordered_map< OUString, const PropertyDescription*, OUStringHash > DescriptionsByName;
+        typedef std::unordered_map< OUString, const PropertyDescription*, OUStringHash > DescriptionsByName;
 
         const DescriptionsByName& lcl_getPropertyDescriptions()
         {
@@ -105,7 +105,7 @@ namespace xmloff { namespace metadata
             return s_indexedPropertyGroups;
         }
 
-        typedef ::boost::unordered_map< OUString, XMLTokenEnum, OUStringHash > ReverseTokenLookup;
+        typedef std::unordered_map< OUString, XMLTokenEnum, OUStringHash > ReverseTokenLookup;
 
         const ReverseTokenLookup& getReverseTokenLookup()
         {
@@ -131,7 +131,7 @@ namespace xmloff { namespace metadata
             }
         };
 
-        typedef ::boost::unordered_multimap< AttributeDescription, PropertyGroup, AttributeHash > AttributeGroups;
+        typedef std::unordered_multimap< AttributeDescription, PropertyGroup, AttributeHash > AttributeGroups;
 
         const AttributeGroups& lcl_getAttributeGroups()
         {
@@ -150,7 +150,7 @@ namespace xmloff { namespace metadata
             return s_attributeGroups;
         }
 
-        typedef ::boost::unordered_map< AttributeDescription, PropertyGroups, AttributeHash > AttributesWithoutGroup;
+        typedef std::unordered_map< AttributeDescription, PropertyGroups, AttributeHash > AttributesWithoutGroup;
 
         const AttributesWithoutGroup& lcl_getAttributesWithoutGroups()
         {

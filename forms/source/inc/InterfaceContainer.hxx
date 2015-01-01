@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 #define INCLUDED_FORMS_SOURCE_INC_INTERFACECONTAINER_HXX
 
-#include <boost/unordered_map.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -45,6 +44,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase8.hxx>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -76,8 +76,8 @@ namespace frm
         ElementDescription& operator=( const ElementDescription& ); // never implemented
     };
 
-typedef ::std::vector<InterfaceRef> OInterfaceArray;
-typedef ::boost::unordered_multimap< OUString, InterfaceRef, OUStringHash > OInterfaceMap;
+typedef std::vector<InterfaceRef> OInterfaceArray;
+typedef std::unordered_multimap< OUString, InterfaceRef, OUStringHash > OInterfaceMap;
 
 
 // OInterfaceContainer

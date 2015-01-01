@@ -21,11 +21,11 @@
 #define INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERTOKENMAP_HXX
 
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
 #include <xmloff/xmltoken.hxx>
+#include <unordered_map>
 
 class XMLTransformerTokenMap :
-    public ::boost::unordered_map< OUString, ::xmloff::token::XMLTokenEnum,
+    public std::unordered_map< OUString, ::xmloff::token::XMLTokenEnum,
                                    OUStringHash >
 {
 public:

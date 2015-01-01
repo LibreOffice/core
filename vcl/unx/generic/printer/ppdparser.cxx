@@ -21,7 +21,6 @@
 #include <stdio.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <comphelper/string.hxx>
 #include "vcl/ppdparser.hxx"
@@ -44,6 +43,8 @@
 #include <salhelper/linkhelper.hxx>
 
 #include "com/sun/star/lang/Locale.hpp"
+
+#include <unordered_map>
 
 namespace psp
 {
@@ -71,8 +72,8 @@ namespace psp
             }
         };
 
-        typedef boost::unordered_map< com::sun::star::lang::Locale, OUString, LocaleHash, LocaleEqual > translation_map;
-        typedef boost::unordered_map< OUString, translation_map, OUStringHash > key_translation_map;
+        typedef std::unordered_map< css::lang::Locale, OUString, LocaleHash, LocaleEqual > translation_map;
+        typedef std::unordered_map< OUString, translation_map, OUStringHash > key_translation_map;
 
         key_translation_map     m_aTranslations;
         public:
@@ -244,7 +245,7 @@ namespace psp
     {
     public:
         std::list< PPDParser* > aAllParsers;
-        boost::unordered_map< OUString, OUString, OUStringHash >* pAllPPDFiles;
+        std::unordered_map< OUString, OUString, OUStringHash >* pAllPPDFiles;
         PPDCache()
             : pAllPPDFiles(NULL)
         {}
@@ -448,7 +449,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     if( rPPDCache.pAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles = new boost::unordered_map< OUString, OUString, OUStringHash >();
+    rPPDCache.pAllPPDFiles = new std::unordered_map< OUString, OUString, OUStringHash >();
 
     // check installation directories
     std::list< OUString > aPathList;
@@ -483,7 +484,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
     PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )
     {
-        boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
+        std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
         PPDCache &rPPDCache = thePPDCache::get();
 
         bool bRetry = true;

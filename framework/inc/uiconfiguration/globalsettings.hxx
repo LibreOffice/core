@@ -20,13 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GLOBALSETTINGS_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_GLOBALSETTINGS_HXX
 
-/** Attention: stl headers must(!) be included at first. Otherwise it can make trouble
-               with solaris headers ...
-*/
-#include <vector>
-#include <list>
-#include <boost/unordered_map.hpp>
-
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -39,6 +32,9 @@
 
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
+
+#include <vector>
+#include <list>
 
 namespace framework
 {

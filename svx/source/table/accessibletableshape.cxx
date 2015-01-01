@@ -59,7 +59,7 @@ struct hash
     }
 };
 
-typedef boost::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
+typedef std::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
 
 class AccessibleTableShapeImpl : public cppu::WeakImplHelper1< XModifyListener >
 {

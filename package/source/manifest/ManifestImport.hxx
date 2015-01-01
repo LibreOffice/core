@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-typedef ::boost::unordered_map< OUString, OUString, OUStringHash, eqFunc > StringHashMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash, eqFunc > StringHashMap;
 
 struct ManifestScopeEntry
 {

@@ -64,7 +64,7 @@ struct PopupControllerEntry
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > m_xDispatchProvider;
 };
 
-typedef boost::unordered_map< OUString, PopupControllerEntry, OUStringHash, ::std::equal_to< OUString > > PopupControllerCache;
+typedef std::unordered_map< OUString, PopupControllerEntry, OUStringHash, std::equal_to< OUString > > PopupControllerCache;
 
 class BmkMenu;
 class AddonMenu;

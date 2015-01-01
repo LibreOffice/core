@@ -34,8 +34,8 @@
 
 #include <osl/conditn.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <list>
+#include <unordered_map>
 
 #include <prex.h>
 #include <X11/Xlib.h>
@@ -153,7 +153,7 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        static ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >& getInstances();
+        static std::unordered_map< OUString, SelectionManager*, OUStringHash >& getInstances();
 
         // for INCR type selection transfer
         // INCR protocol is used if the data cannot
@@ -323,7 +323,7 @@ namespace x11 {
         // drag and drop
 
         int                         m_nCurrentProtocolVersion;
-        ::boost::unordered_map< ::Window, DropTargetEntry >
+        std::unordered_map< ::Window, DropTargetEntry >
                                     m_aDropTargets;
 
         // some special atoms that are needed often
@@ -353,16 +353,16 @@ namespace x11 {
         Atom                        m_nXdndActionPrivate;
 
         // caching for atoms
-        ::boost::unordered_map< Atom, OUString >
+        std::unordered_map< Atom, OUString >
                                     m_aAtomToString;
-        ::boost::unordered_map< OUString, Atom, OUStringHash >
+        std::unordered_map< OUString, Atom, OUStringHash >
                                     m_aStringToAtom;
 
         // the registered selections
-        ::boost::unordered_map< Atom, Selection* >
+        std::unordered_map< Atom, Selection* >
                                     m_aSelections;
         // IncrementalTransfers in progress
-        boost::unordered_map< ::Window, boost::unordered_map< Atom, IncrementalTransfer > >
+        std::unordered_map< ::Window, std::unordered_map< Atom, IncrementalTransfer > >
                                     m_aIncrementals;
 
         // do not use X11 multithreading capabilities

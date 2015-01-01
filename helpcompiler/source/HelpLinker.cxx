@@ -177,7 +177,7 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
 class HelpKeyword
 {
 private:
-    typedef boost::unordered_map<std::string, Data, pref_hash> DataHashtable;
+    typedef std::unordered_map<std::string, Data, pref_hash> DataHashtable;
     DataHashtable _hash;
 
 public:

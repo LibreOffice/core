@@ -20,14 +20,14 @@
 #ifndef INCLUDED_RSC_INC_RSCLEX_HXX
 #define INCLUDED_RSC_INC_RSCLEX_HXX
 
-#include <boost/unordered_set.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <unordered_set>
 
 // a buffer for unique strings
 class StringContainer
 {
-    boost::unordered_set< OString, OStringHash >      m_aStrings;
+    std::unordered_set< OString, OStringHash >      m_aStrings;
 public:
     StringContainer() {}
     ~StringContainer() {}

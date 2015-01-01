@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 #include <map>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -154,7 +154,7 @@ private:
     bool                            mbMirroredY;
     sal_Int32                       mnTextRotateAngle;
 
-    typedef boost::unordered_map< sal_Int32, PropertyMap > PresetDataMap;
+    typedef std::unordered_map< sal_Int32, PropertyMap > PresetDataMap;
 
     static PresetDataMap maPresetDataMap;
     static void initializePresetDataMap();

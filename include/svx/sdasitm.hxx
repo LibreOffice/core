@@ -27,9 +27,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
-#include <map>
 #include <svx/svxdllapi.h>
+#include <map>
+#include <unordered_map>
 
 class SdrCustomShapeEngineItem : public SfxStringItem
 {
@@ -53,8 +53,8 @@ private:
     {
         size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    typedef boost::unordered_map <PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
-    typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> PropertyHashMap;
+    typedef std::unordered_map <PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
+    typedef std::unordered_map<OUString, sal_Int32, OUStringHash> PropertyHashMap;
 
     PropertyHashMap     aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;

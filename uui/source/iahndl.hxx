@@ -20,8 +20,6 @@
 #ifndef INCLUDED_UUI_SOURCE_IAHNDL_HXX
 #define INCLUDED_UUI_SOURCE_IAHNDL_HXX
 
-#include <vector>
-
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -35,6 +33,9 @@
 #include <tools/errcode.hxx>
 #include <tools/rc.hxx>
 #include <tools/wintypes.hxx>
+
+#include <unordered_map>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace awt {
@@ -59,8 +60,6 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <boost/unordered_map.hpp>
-
 namespace vcl { class Window; }
 
 struct InteractionHandlerData
@@ -78,7 +77,7 @@ typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
 
-typedef ::boost::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
 
 class UUIInteractionHelper
 {

@@ -42,8 +42,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -215,10 +215,10 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper2< XNameCo
         bool                  impl_initializeConfigAccess();
 
     private:
-        typedef ::boost::unordered_map< OUString,
-                                 WindowStateInfo,
-                                 OUStringHash,
-                                 ::std::equal_to< OUString > > ResourceURLToInfoCache;
+        typedef std::unordered_map< OUString,
+                                    WindowStateInfo,
+                                    OUStringHash,
+                                    std::equal_to< OUString > > ResourceURLToInfoCache;
 
         osl::Mutex m_aMutex;
         OUString                     m_aConfigWindowAccess;
@@ -1320,15 +1320,15 @@ public:
     virtual sal_Bool SAL_CALL hasElements()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    typedef ::boost::unordered_map< OUString,
-                             OUString,
-                             OUStringHash,
-                             ::std::equal_to< OUString > > ModuleToWindowStateFileMap;
+    typedef std::unordered_map< OUString,
+                                OUString,
+                                OUStringHash,
+                                std::equal_to< OUString > > ModuleToWindowStateFileMap;
 
-    typedef ::boost::unordered_map< OUString,
-                             css::uno::Reference< css::container::XNameAccess >,
-                             OUStringHash,
-                             ::std::equal_to< OUString > > ModuleToWindowStateConfigHashMap;
+    typedef std::unordered_map< OUString,
+                                css::uno::Reference< css::container::XNameAccess >,
+                                OUStringHash,
+                                std::equal_to< OUString > > ModuleToWindowStateConfigHashMap;
 
 private:
     css::uno::Reference< css::uno::XComponentContext>         m_xContext;

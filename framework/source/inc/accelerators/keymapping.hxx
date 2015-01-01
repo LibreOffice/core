@@ -55,10 +55,10 @@ class KeyMapping
         typedef BaseHash< sal_Int16 > Identifier2CodeHash;
 
         /** @short  hash structure to map key codes to identifier. */
-        typedef ::boost::unordered_map< sal_Int16                    ,
-                                 OUString              ,
-                                 ShortHashCode                ,
-                                 ::std::equal_to< sal_Int16 > > Code2IdentifierHash;
+        typedef std::unordered_map< sal_Int16                    ,
+                                    OUString              ,
+                                    ShortHashCode                ,
+                                    std::equal_to< sal_Int16 > > Code2IdentifierHash;
 
     // member
 
