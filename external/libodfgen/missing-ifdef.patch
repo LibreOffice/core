@@ -22,22 +22,6 @@ index 0534528..c9ace1d 100644
  
  #include <math.h>
  
-@@ -123,6 +125,7 @@ void OdfGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList &propL
- 		}
- 	}
- 
-+#if HAVE_CONFIG_H
- 	if (generator.empty())
- 	{
- 		generator = PACKAGE "/" VERSION;
-@@ -133,6 +136,7 @@ void OdfGenerator::setDocumentMetaData(const librevenge::RVNGPropertyList &propL
- 		generator += PACKAGE "/" VERSION;
- 		generator += ")";
- 	}
-+#endif
- 
- 	mMetaDataStorage.push_back(new TagOpenElement("meta:generator"));
- 	mMetaDataStorage.push_back(new CharDataElement(generator.c_str()));
 -- 
 2.1.2
 
