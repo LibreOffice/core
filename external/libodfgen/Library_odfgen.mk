@@ -28,6 +28,8 @@ $(eval $(call gb_Library_add_defs,odfgen,\
 	-DDLL_EXPORT \
 	-DLIBODFGEN_BUILD \
 	-DNDEBUG \
+	-DPACKAGE=\"libodfgen\" \
+	-DVERSION=\"0.1.$(ODFGEN_VERSION_MICRO)\" \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,odfgen,\
