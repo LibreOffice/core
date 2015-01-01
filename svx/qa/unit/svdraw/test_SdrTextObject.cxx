@@ -15,8 +15,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <boost/foreach.hpp>
-
 class SdrTextObjTest : public CppUnit::TestFixture {
 public:
     void AllFamiliesCanBeRestoredFromSavedString();
@@ -33,7 +31,7 @@ void SdrTextObjTest::AllFamiliesCanBeRestoredFromSavedString() {
     allFamilies.push_back(SFX_STYLE_FAMILY_PAGE);
     allFamilies.push_back(SFX_STYLE_FAMILY_PSEUDO);
 
-    BOOST_FOREACH(SfxStyleFamily family, allFamilies) {
+    for (SfxStyleFamily family : allFamilies) {
       OUString styleName = "styleName";
       SdrTextObj::AppendFamilyToStyleName(styleName, family);
       SfxStyleFamily readFamily = SdrTextObj::ReadFamilyFromStyleName(styleName);

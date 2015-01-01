@@ -55,7 +55,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lrspitem.hxx>
 #include <switerator.hxx>
-#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -593,7 +592,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
         if( pTmp )
         {
             aNodeArgs.nIndx = nIndex;
-            BOOST_FOREACH( SwFrmFmt *pFmt, *pTmp )
+            for( SwFrmFmt *pFmt : *pTmp )
                 lcl_MinMaxNode( pFmt, &aNodeArgs );
         }
     }

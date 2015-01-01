@@ -27,7 +27,6 @@
 
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
-#include <boost/foreach.hpp>
 
 // AppData-Structure for SBX:
 
@@ -175,7 +174,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();
     SbxBase* pNew = NULL;
-    BOOST_FOREACH(SbxFactory& rFac, r.aFacs)
+    for( SbxFactory& rFac : r.aFacs )
     {
         pNew = rFac.Create( nSbxId, nCreator );
         if( pNew )
@@ -189,7 +188,7 @@ SbxObject* SbxBase::CreateObject( const OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
     SbxObject* pNew = NULL;
-    BOOST_FOREACH(SbxFactory& rFac, r.aFacs)
+    for( SbxFactory& rFac : r.aFacs )
     {
         pNew = rFac.CreateObject( rClass );
         if( pNew )

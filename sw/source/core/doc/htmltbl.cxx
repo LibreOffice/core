@@ -41,7 +41,6 @@
 #include "ndindex.hxx"
 #include "switerator.hxx"
 #include <o3tl/numeric.hxx>
-#include <boost/foreach.hpp>
 #ifdef DBG_UTIL
 #include "tblrwcl.hxx"
 #endif
@@ -1575,7 +1574,7 @@ static void lcl_ResizeBox( const SwTableBox* pBox, sal_uInt16* pWidth )
     if( !pBox->GetSttNd() )
     {
         sal_uInt16 nWidth = 0;
-        BOOST_FOREACH( const SwTableLine *pLine, pBox->GetTabLines() )
+        for( const SwTableLine *pLine : pBox->GetTabLines() )
             lcl_ResizeLine( pLine, &nWidth );
         pBox->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
         *pWidth = *pWidth + nWidth;
@@ -1590,7 +1589,7 @@ static void lcl_ResizeLine( const SwTableLine* pLine, sal_uInt16 *pWidth )
 {
     sal_uInt16 nOldWidth = *pWidth;
     *pWidth = 0;
-    BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
+    for( const SwTableBox* pBox : pLine->GetTabBoxes() )
         lcl_ResizeBox(pBox, pWidth );
 
     SAL_WARN_IF( nOldWidth && std::abs(*pWidth-nOldWidth) >= COLFUZZY, "sw.core",
@@ -1661,7 +1660,7 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
     if( IsTopTable() )
     {
         sal_uInt16 nCalcTabWidth = 0;
-        BOOST_FOREACH( const SwTableLine *pLine, pSwTable->GetTabLines() )
+        for( const SwTableLine *pLine : pSwTable->GetTabLines() )
             lcl_ResizeLine( pLine, &nCalcTabWidth );
         SAL_WARN_IF( std::abs( nRelTabWidth-nCalcTabWidth ) >= COLFUZZY, "sw.core",
                      "Table width is not equal to the row width" );

@@ -58,7 +58,6 @@
 #include <o3tl/numeric.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/foreach.hpp>
 #include <switerator.hxx>
 #include <docary.hxx>
 
@@ -378,7 +377,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
         _CpyPara aPara( *pCpyPara, pBox );
         aPara.nDelBorderFlag &= 7;
 
-        BOOST_FOREACH( _FndLine & rFndLine, rFndBox.GetLines() )
+        for( _FndLine & rFndLine : rFndBox.GetLines() )
             lcl_CopyRow( rFndLine, &aPara );
     }
     else
@@ -623,7 +622,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     {
         if( bBehind )
             aCpyPara.nDelBorderFlag = 1;
-        BOOST_FOREACH( _FndLine& rFndLine, pFndBox->GetLines() )
+        for( _FndLine& rFndLine : pFndBox->GetLines() )
             lcl_CopyRow( rFndLine, &aCpyPara );
     }
 
@@ -1628,11 +1627,11 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     // Move the Boxes extending into the selected Area from left/right
     aPara.SetLeft( pLeftBox );
-    BOOST_FOREACH(_FndLine& rFndLine, pFndBox->GetLines() )
+    for (_FndLine& rFndLine : pFndBox->GetLines() )
         lcl_Merge_MoveLine( rFndLine, &aPara );
 
     aPara.SetRight( pRightBox );
-    BOOST_FOREACH(_FndLine& rFndLine, pFndBox->GetLines() )
+    for(_FndLine& rFndLine : pFndBox->GetLines() )
         lcl_Merge_MoveLine( rFndLine, &aPara );
 
     if( pLeftBox->GetTabLines().empty() )
@@ -1870,7 +1869,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
             pCpyPara->pInsLine->GetTabBoxes().insert( pCpyPara->pInsLine->GetTabBoxes().begin() + pCpyPara->nInsPos++, pBox );
             _CpyPara aPara( *pCpyPara, pBox );
             aPara.nNewSize = nSize;     // get the size
-            BOOST_FOREACH(_FndLine const& rFndLine, rFndBox.GetLines())
+            for(_FndLine const& rFndLine : rFndBox.GetLines())
                 lcl_CopyLineToDoc( rFndLine, &aPara );
         }
         else
@@ -2027,7 +2026,7 @@ bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     // Copy
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
-    BOOST_FOREACH( _FndLine& rFndLine, aFndBox.GetLines() )
+    for( _FndLine& rFndLine : aFndBox.GetLines() )
          lcl_CopyLineToDoc( rFndLine, &aPara );
     if( rTblNd.GetTable().IsNewModel() )
     {   // The copied line must not contain any row span attributes > 1
@@ -2121,7 +2120,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
     // Copy
-    BOOST_FOREACH( _FndLine& rFndLine, aFndBox.GetLines() )
+    for( _FndLine& rFndLine : aFndBox.GetLines() )
          lcl_CopyLineToDoc( rFndLine, &aPara );
 
     // Set the "right" margin above/below
@@ -2323,13 +2322,13 @@ static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox )
     if( pSttNd )
         pSttNd->CheckSectionCondColl();
     else
-        BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
+        for( const SwTableLine* pLine : pBox->GetTabLines() )
             sw_LineSetHeadCondColl( pLine );
 }
 
 void sw_LineSetHeadCondColl( const SwTableLine* pLine )
 {
-    BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
+    for( const SwTableBox* pBox : pLine->GetTabBoxes() )
         lcl_BoxSetHeadCondColl(pBox);
 }
 
