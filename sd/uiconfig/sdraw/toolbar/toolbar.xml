@@ -46,7 +46,6 @@
  <toolbar:toolbaritem xlink:href=".uno:ConvertInto3DLatheFast" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:style="radio dropdown" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:style="dropdown" toolbar:visible="false"/>
