@@ -57,12 +57,12 @@ struct StrEQ
     }
 };
 
-typedef std::unordered_multimap< const OUString, OUString,
+typedef std::unordered_multimap< OUString, OUString,
                        const OUStringHash, StrEQ > ConvMap;
 
 typedef std::set< OUString, StrLT > ConvMapKeySet;
 
-typedef std::unordered_multimap< const OUString, sal_Int16,
+typedef std::unordered_multimap< OUString, sal_Int16,
                        OUStringHash, StrEQ > PropTypeMap;
 
 
