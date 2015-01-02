@@ -919,7 +919,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 // and the prop data; this seems somewhat futile given the various ways how the
 // modified height is calculated (with and without conversion between twips and
 // 100th mm; with an additional eCoreMetric input in one of the SetHeight
-// overloads), and indeed known to occassionally produce nRet values that would
+// overloads), and indeed known to occasionally produce nRet values that would
 // be negative, so just guard against negative results here and throw the hands
 // up in despair:
 static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, bool bCoreInTwip)

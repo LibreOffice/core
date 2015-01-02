@@ -74,7 +74,7 @@
  *
  * There is a procedure in parseAFM.c, called parseFile, that can be
  * called from any application wishing to get information from the AFM File.
- * This procedure expects 3 parameters: a vaild file descriptor, a pointer
+ * This procedure expects 3 parameters: a valid file descriptor, a pointer
  * to a (FontInfo *) variable (for which space will be allocated and then
  * will be filled in with the data requested), and a mask specifying
  * which data from the AFM File should be saved in the FontInfo structure.
@@ -126,7 +126,7 @@ namespace psp {
  * parser went on. This could include problems like the count for any given
  * section does not add up to how many entries there actually were, or
  * there was a key that was not recognized. The return record may contain
- * vaild data or it may not.
+ * valid data or it may not.
  *
  * earlyEOF means that an End of File was encountered before expected. This
  * may mean that the AFM file had been truncated, or improperly formed.

@@ -1347,7 +1347,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
         sal_uInt16      nId      = aObjBarList[n].nId;
         bool    bDestroy = aObjBarList[n].bDestroy;
 
-        // Determine the vaild mode for the ToolBox
+        // Determine the valid mode for the ToolBox
         sal_uInt16 nTbxMode = aObjBarList[n].nMode;
         bool bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
                                   ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );

@@ -365,7 +365,7 @@ namespace accessibility
         /** Query select state of the text managed by this object
 
             @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method aquires it anyway.
+            the solar mutex, but this method acquires it anyway.
 
             @return sal_True, if the text or parts of it are currently selected
         */
@@ -376,13 +376,13 @@ namespace accessibility
         /** Implements getAccessibleChildCount
 
             @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method aquires it anyway.
+            the solar mutex, but this method acquires it anyway.
         */
         virtual sal_Int32 GetChildCount();
         /** Implements getAccessibleChild
 
             @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method aquires it anyway.
+            the solar mutex, but this method acuires it anyway.
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
 
@@ -404,7 +404,7 @@ namespace accessibility
         /** Implements getAccessibleAt
 
             @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method aquires it anyway.
+            the solar mutex, but this method acquires it anyway.
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL GetAt( const ::com::sun::star::awt::Point& aPoint );
 

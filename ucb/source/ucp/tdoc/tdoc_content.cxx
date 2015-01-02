@@ -1926,7 +1926,7 @@ void Content::transfer(
 
     if ( ( rInfo.SourceURL.getLength() < TDOC_URL_SCHEME_LENGTH + 2 ) )
     {
-        // Invaild length (to short).
+        // Invalid length (to short).
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::InteractiveBadTransferURLException(
                             OUString(),

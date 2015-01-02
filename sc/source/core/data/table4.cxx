@@ -1451,7 +1451,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     // when filling vertically, the inner position is the row position whereas
     // when filling horizontally the column position becomes the inner
     // position. The term 'outer' refers to the column position when filling
-    // vertically, or the row positon when filling horizontally. The fill is
+    // vertically, or the row position when filling horizontally. The fill is
     // performed once in each 'outer' position e.g. when filling vertically,
     // we perform the fill once in each column.
 

@@ -487,7 +487,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
     SetWindow( pNavigator );
 
     //  handle configurations elsewhere,
-    //  onyl size of pInfo matters now
+    //  only size of pInfo matters now
 
     Size aInfoSize = pParent->GetOutputSizePixel();     // outside defined size
     Size aNavSize = pNavigator->GetOutputSizePixel();   // Default-Size

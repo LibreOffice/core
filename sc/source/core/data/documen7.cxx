@@ -352,7 +352,7 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
     OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPrevious();
     assert(pPrev != pCell);                 // pointing to itself?!?
-    // if the cell is first or somwhere in chain
+    // if the cell is first or somewhere in chain
     if ( pPrev || pFormulaTree == pCell )
     {
         ScFormulaCell* pNext = pCell->GetNext();
@@ -369,7 +369,7 @@ void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
         if ( pNext )
         {
             assert(pEOFormulaTree != pCell); // if this cell is also tail something's wrong
-            pNext->SetPrevious( pPrev );    // sucessor exists, set predecessor
+            pNext->SetPrevious( pPrev );    // successor exists, set predecessor
         }
         else
         {
@@ -542,7 +542,7 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
     OSL_ENSURE( pCell, "RemoveFromFormulaTrack: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPreviousTrack();
     assert(pPrev != pCell);                     // pointing to itself?!?
-    // if the cell is first or somwhere in chain
+    // if the cell is first or somewhere in chain
     if ( pPrev || pFormulaTrack == pCell )
     {
         ScFormulaCell* pNext = pCell->GetNextTrack();
@@ -559,7 +559,7 @@ void ScDocument::RemoveFromFormulaTrack( ScFormulaCell* pCell )
         if ( pNext )
         {
             assert(pEOFormulaTrack != pCell);   // if this cell is also tail something's wrong
-            pNext->SetPreviousTrack( pPrev );   // sucessor exists, set predecessor
+            pNext->SetPreviousTrack( pPrev );   // successor exists, set predecessor
         }
         else
         {

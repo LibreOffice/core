@@ -427,7 +427,7 @@ SAL_DLLPUBLIC oslSocket SAL_CALL osl_createSocket(
 
 /** Retrieves the Address of the local end of the socket.
     Note that a socket must be bound or connected before
-    a vaild address can be returned.
+    a valid address can be returned.
     @return 0 if socket-address could not be created, otherwise you get
     the created Socket-Address.
 */
@@ -435,7 +435,7 @@ SAL_DLLPUBLIC oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket Socket);
 
 /** Retrieves the Address of the remote end of the socket.
     Note that a socket must be connected before
-    a vaild address can be returned.
+    a valid address can be returned.
     @return 0 if socket-address could not be created, otherwise you get
     the created Socket-Address.
 */

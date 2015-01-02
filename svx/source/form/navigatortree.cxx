@@ -1678,7 +1678,7 @@ namespace svxform
         if ((nSelectedEntries == 0) || bRootSelected)    // still root ?
             return;                                     // -> only selected element -> leave
 
-        DBG_ASSERT(!m_bPrevSelectionMixed, "NavigatorTree::DeleteSelection() : delete permitted if mark and selection are inconsistant");
+        DBG_ASSERT(!m_bPrevSelectionMixed, "NavigatorTree::DeleteSelection() : delete permitted if mark and selection are inconsistent");
 
         // i need the FormModel later
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
@@ -1688,10 +1688,10 @@ namespace svxform
         if (!pFormModel)
             return;
 
-        // now i have to safeguard the DeleteList : if you delete a form and a dependent element
-        // - in this order - than the SvLBoxEntryPtr of the dependent element is allready invlaid,
-        // when it should be deleted ... you have to prohibit this GPF, that of course would happen,
-        // so i take the 'normalized' list
+        // now I have to safeguard the DeleteList: if you delete a form and a dependent element
+        // - in this order - than the SvLBoxEntryPtr of the dependent element is already invalid,
+        // when it should be deleted... you have to prohibit this GPF, that of course would happen,
+        // so I take the 'normalized' list
         CollectSelectionData( SDI_NORMALIZED );
 
         // see below for why we need this mapping from models to shapes
@@ -1901,7 +1901,7 @@ namespace svxform
                 {
                     FmEntryDataArray::iterator it = arredToSelect.find(pCurrent);
                     if ( it != arredToSelect.end() )
-                    {   // entry allready selected, but also in SelectList
+                    {   // entry already selected, but also in SelectList
                         // remove it from there
                         arredToSelect.erase(it);
                     } else

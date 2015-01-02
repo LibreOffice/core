@@ -339,7 +339,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         int GroupCount = CurDBMetaData.GroupFieldNames.length;
         DBColumn CurDBColumn;
-        // Note for some reason the table might lose its name and has to be renamed therefor
+        // Note for some reason the table might lose its name and has to be renamed therefore
         String OldTableName = CurRecordTable.xTableName.getName();
         if (OldTableName.compareTo(TBLRECORDSECTION) != 0)
         {

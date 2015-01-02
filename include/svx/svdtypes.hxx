@@ -66,7 +66,7 @@ enum SdrConvertType {SDRCONVERT_POLY,   // create pure polygon
 // drLayerAdmin::GetLayerID(const String&) returns a value.
 #define SDRLAYER_NOTFOUND 0xFF
 // You can use this value in the methods of SdrLayerSet, but sal_False is returned
-// everytime or the methode does nothing.
+// every time or the methode does nothing.
 // type deklaration for Layer-IDs
 typedef sal_uInt8 SdrLayerID;
 

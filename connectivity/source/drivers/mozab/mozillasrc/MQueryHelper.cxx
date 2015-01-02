@@ -208,7 +208,7 @@ MQueryHelperResultEntry*
 MQueryHelper::getByIndex( sal_uInt32 nRow )
 {
     // Row numbers are from 1 to N, need to ensure this, and then
-    // substract 1
+    // subtract 1
     if ( nRow < 1 ) {
         return( NULL );
     }

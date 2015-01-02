@@ -111,7 +111,7 @@ public:
     void RecalcLogicSnapMagnetic(const OutputDevice& rOut) { SetSnapMagnetic(rOut.PixelToLogic(Size(nMagnSizPix,nMagnSizPix))); }
     void SetActualWin(const OutputDevice* pWin) { SdrPaintView::SetActualWin(pWin); if (pWin!=NULL) RecalcLogicSnapMagnetic(*pWin); }
 
-    // Coordinates refered to the view!
+    // Coordinates referred to the view!
     // Returnvalues are SDRSNAP_NOTSNAPPED,SDRSNAP_XSNAPPED,
     // SDRSNAP_YSNAPPED or SDRSNAP_XYSNAPPED
     sal_uInt16 SnapPos(Point& rPnt, const SdrPageView* pPV) const;
@@ -223,7 +223,7 @@ public:
     //   and the Mouse was dragged from zero to the coordinates
     //   (80,30). Now there are 2 alternatives to determine the edge length
     //   of the square: 30 and 80.
-    //   The standard Ortho-Function took 30 ( everytime the smaller length)
+    //   The standard Ortho-Function took 30 (every time the smaller length)
     //   If BigOrtho is switched on, you get a square with edge length of 80.
     // The same also applies to Resize.
     // Default value for BigOrtho is on. persistent.

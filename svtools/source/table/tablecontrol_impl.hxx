@@ -407,7 +407,7 @@ namespace svt { namespace table
         /** scrolls the view by the given number of rows
 
             The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            situations where the they must not necessarily be fulfilled.
 
             @return
                 the number of rows by which the viewport was scrolled. This may differ
@@ -423,7 +423,7 @@ namespace svt { namespace table
         /** scrolls the view by the given number of columns
 
             The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            situations where the they must not necessarily be fulfilled.
 
             @return
                 the number of columns by which the viewport was scrolled. This may differ
