@@ -29,7 +29,6 @@
 #include "jawt.h"
 
 #include "sal/types.h"
-#include "comp_LocalOfficeWindow.h"
 
 #define SYSTEM_XWINDOW 6
 
