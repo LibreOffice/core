@@ -334,10 +334,20 @@ static void WriteDop( WW8Export& rWrt )
         DefaultItemGet<SvxTabStopItem>(*rWrt.pDoc, RES_PARATR_TABSTOP);
     rDop.dxaTab = (sal_uInt16)rTabStop[0].GetTabPos();
 
-    // Zoom factor
+    // Zoom factor and type
     SwViewShell *pViewShell(rWrt.pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
-    if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
-        rDop.wScaleSaved = pViewShell->GetViewOptions()->GetZoom();
+    if (pViewShell)
+    {
+        switch ( pViewShell->GetViewOptions()->GetZoomType() )
+        {
+            case SVX_ZOOM_WHOLEPAGE: rDop.zkSaved = 1; break;
+            case SVX_ZOOM_PAGEWIDTH: rDop.zkSaved = 2; break;
+            case SVX_ZOOM_OPTIMAL:   rDop.zkSaved = 3; break;
+            default:                 rDop.zkSaved = 0;
+                rDop.wScaleSaved = pViewShell->GetViewOptions()->GetZoom();
+                break;
+        }
+    }
 
     // Werte aus der DocStatistik (werden aufjedenfall fuer die
     // DocStat-Felder benoetigt!)
