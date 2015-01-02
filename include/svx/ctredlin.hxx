@@ -98,8 +98,9 @@ private:
     DateTime        aDaTiFilterFirst;
     DateTime        aDaTiFilterLast;
     OUString        aAuthor;
-    Color           aEntryColor;
-    OUString        aCurEntry;
+    Color           maEntryColor;
+    Image           maEntryImage;
+    OUString        maEntryString;
     utl::TextSearch* pCommentSearcher;
     Link            aColCompareLink;
 
@@ -136,10 +137,10 @@ public:
     bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime);
     bool            IsValidComment(const OUString &rComment);
 
-    SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,
-                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
+    SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData,
+                                SvTreeListEntry* pParent = NULL, sal_uIntPtr nPos=TREELIST_APPEND);
 
-    SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,const Color&,
+    SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData, const Color&,
                                 SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
 
 

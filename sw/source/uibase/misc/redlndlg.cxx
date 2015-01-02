@@ -312,12 +312,9 @@ void SwRedlineAcceptDlg::InitAuthors()
                                 !bOnlyFormatedRedlines );
 }
 
-OUString SwRedlineAcceptDlg::GetRedlineText( const SwRangeRedline& rRedln,
-                                        DateTime &rDateTime, sal_uInt16 nStack)
+OUString SwRedlineAcceptDlg::GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack)
 {
-    OUString sEntry(GetActionText(rRedln, nStack));
-    sEntry += "\t";
-    sEntry += rRedln.GetAuthorString(nStack);
+    OUString sEntry(rRedln.GetAuthorString(nStack));
     sEntry += "\t";
 
     const DateTime &rDT = rRedln.GetTimeStamp(nStack);
@@ -329,6 +326,28 @@ OUString SwRedlineAcceptDlg::GetRedlineText( const SwRangeRedline& rRedln,
     sEntry += rRedln.GetComment(nStack);
 
     return sEntry;
+}
+
+Image SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack)
+{
+    const static Image aInserted(SW_RES(IMG_REDLINE_INSERTED));
+    const static Image aDeleted(SW_RES(IMG_REDLINE_DELETED));
+    const static Image aFormated(SW_RES(IMG_REDLINE_FORMATED));
+    const static Image aTableChgd(SW_RES(IMG_REDLINE_TABLECHG));
+    const static Image aFmtCollSet(SW_RES(IMG_REDLINE_FMTCOLLSET));
+    const static Image aAutoFormat(SW_RES(IMG_REDLINE_AUTOFMT));
+
+    switch (rRedln.GetType(nStack))
+    {
+        case nsRedlineType_t::REDLINE_INSERT:  return aInserted;
+        case nsRedlineType_t::REDLINE_DELETE:  return aDeleted;
+        case nsRedlineType_t::REDLINE_FORMAT:  return aFormated;
+        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: return aFormated;
+        case nsRedlineType_t::REDLINE_TABLE:   return aTableChgd;
+        case nsRedlineType_t::REDLINE_FMTCOLL: return aFmtCollSet;
+    }
+
+    return Image();
 }
 
 OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack)
@@ -585,7 +604,8 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             pData->bDisabled = true;
             sChild = GetRedlineText(rRedln, pData->aDateTime, nStack);
 
-            SvTreeListEntry* pChild = pTable->InsertEntry(sChild, pData, pParent->pTLBParent);
+            SvTreeListEntry* pChild = pTable->InsertEntry(GetActionImage(rRedln, nStack),
+                    sChild, pData, pParent->pTLBParent);
 
             pRedlineChild->pTLBChild = pChild;
             if (!bValidParent)
@@ -731,7 +751,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pData->bDisabled = false;
 
         sParent = GetRedlineText(rRedln, pData->aDateTime);
-        pParent = pTable->InsertEntry(sParent, pData, 0, i);
+        pParent = pTable->InsertEntry(GetActionImage(rRedln), sParent, pData, 0, i);
         if( pCurrRedline == &rRedln )
         {
             pTable->SetCurEntry( pParent );
