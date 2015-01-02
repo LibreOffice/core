@@ -98,8 +98,9 @@ private:
     DateTime        aDaTiFilterFirst;
     DateTime        aDaTiFilterLast;
     OUString        aAuthor;
-    Color           aEntryColor;
-    OUString        aCurEntry;
+    Color           maEntryColor;
+    Image           maEntryImage;
+    OUString        maEntryString;
     utl::TextSearch* pCommentSearcher;
     Link            aColCompareLink;
 
@@ -136,19 +137,32 @@ public:
     bool            IsValidEntry(const OUString &rAuthor, const DateTime &rDateTime);
     bool            IsValidComment(const OUString &rComment);
 
-    SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,
-                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
+    /** Insert a redline entry.
 
-    SvTreeListEntry*    InsertEntry(const OUString& ,RedlinData *pUserData,const Color&,
-                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=TREELIST_APPEND);
+        The rStr contains the entire redline entry; the columns are delimited by '\t'.
+    */
+    SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData,
+                                 SvTreeListEntry* pParent = NULL, sal_uIntPtr nPos = TREELIST_APPEND);
 
+    /** Insert a redline entry.
+
+        The rStr contains the entire redline entry; the columns are delimited by '\t'.
+    */
+    SvTreeListEntry* InsertEntry(const OUString &rStr, RedlinData *pUserData, const Color&,
+                                 SvTreeListEntry* pParent = NULL, sal_uIntPtr nPos = TREELIST_APPEND);
+
+    /** Insert a redline entry.
+
+        rRedlineType contains the image for this redline entry (plus for insertion, minus for deletion etc.).
+        rStr contains the rest of the redline entry; the columns are delimited by '\t'.
+    */
+    SvTreeListEntry* InsertEntry(const Image &rRedlineType, const OUString &rStr, RedlinData *pUserData,
+                                 SvTreeListEntry* pParent = NULL, sal_uIntPtr nPos = TREELIST_APPEND);
 
     virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
 
     void            SetColCompareHdl(const Link& rLink ) { aColCompareLink = rLink; }
     const Link&     GetColCompareHdl() const { return aColCompareLink; }
-
-
 };
 
 

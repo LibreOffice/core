@@ -110,6 +110,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE void          InitAuthors();
 
     SAL_DLLPRIVATE OUString      GetRedlineText(const SwRangeRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
+    SAL_DLLPRIVATE Image         GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
     SAL_DLLPRIVATE OUString      GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack = 0);
     SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
