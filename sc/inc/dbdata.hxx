@@ -203,6 +203,7 @@ public:
         const_iterator end() const;
         const ScDBData* findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
         const ScDBData* findByRange(const ScRange& rRange) const;
+        void deleteOnTab(SCTAB nTab);
         ScDBData* getByRange(const ScRange& rRange);
         void insert(ScDBData* p);
         bool empty() const;
