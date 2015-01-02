@@ -36,10 +36,6 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-#if OSL_DEBUG_LEVEL > 1
-using namespace ::rtl;
-#endif
-
 
 namespace cppu
 {
@@ -97,19 +93,13 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     }
     else
     {
-#if OSL_DEBUG_LEVEL > 1
-        OUStringBuffer buf( 128 );
-        buf.append( "### exception occurred querying for interface " );
-        buf.append( * reinterpret_cast< OUString const * >( &pDestType->pTypeName ) );
-        buf.append( ": [" );
-        buf.append( * reinterpret_cast< OUString const * >( &pExc->pType->pTypeName ) );
-        buf.append( "] " );
-        // Message is very first member
-        buf.append( * reinterpret_cast< OUString const * >( pExc->pData ) );
-        OString cstr(
-            OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr.getStr() );
-#endif
+        SAL_WARN(
+            "cppu",
+            "exception occurred querying for interface "
+                << OUString(pDestType->pTypeName) << ": ["
+                << OUString(pExc->pType->pTypeName) << "] "
+                << *reinterpret_cast<OUString const *>(pExc->pData));
+                    // Message is very first member
         uno_any_destruct( pExc, 0 );
     }
     return ret;
