@@ -230,7 +230,7 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aPathBtn.SetClickHdl( aLink );
     Size aBoxSize = aPathCtrl.GetOutputSizePixel();
     pHeaderBar = new HeaderBar( &aPathCtrl, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    pHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 16 ) );
+    pHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.Width(), 20 ) );
     pHeaderBar->SetSelectHdl( LINK( this, SvxPathTabPage, HeaderSelect_Impl ) );
     pHeaderBar->SetEndDragHdl( LINK( this, SvxPathTabPage, HeaderEndDrag_Impl ) );
     Size aSz;
