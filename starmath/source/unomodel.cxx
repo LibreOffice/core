@@ -23,12 +23,10 @@
 #include <svtools/ctrltool.hxx>
 #include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <editeng/paperinf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/print.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -329,7 +327,6 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
                                     // PropertySetHelper interfaces
                                     static_cast< XPropertySet* > ( this ),
                                     static_cast< XMultiPropertySet* > ( this ),
-                                    //static_cast< XPropertyState* > ( this ),
                                     // my own interfaces
                                     static_cast< XServiceInfo*  > ( this ),
                                     static_cast< XRenderable*  > ( this ) );
