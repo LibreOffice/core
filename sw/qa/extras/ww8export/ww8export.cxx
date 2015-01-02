@@ -449,7 +449,7 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
     uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
     // After first import, there was an off-by-one during import, so this was "efore.\nA1\nB1\nAfte". (Notice the additional "e" prefix.)
     // After export and import, things got worse, this was "\nA1\nB1\nAfte".
-    CPPUNIT_ASSERT_EQUAL(OUString("fore.\nA1\nB1\nAfte"), xField->getAnchor()->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("fore." SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING "Afte"), xField->getAnchor()->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
