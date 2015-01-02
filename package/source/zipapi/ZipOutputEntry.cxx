@@ -32,6 +32,8 @@
 #include <ZipPackageBuffer.hxx>
 #include <ZipPackageStream.hxx>
 
+#include <algorithm>
+
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;

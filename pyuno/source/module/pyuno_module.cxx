@@ -84,7 +84,7 @@ class fillStructState
     // Keyword arguments used
     PyObject *used;
     // Which structure members are initialised
-    std::unordered_map <const OUString, bool, OUStringHash> initialised;
+    std::unordered_map <OUString, bool, OUStringHash> initialised;
     // How many positional arguments are consumed
     // This is always the so-many first ones
     sal_Int32 nPosConsumed;
