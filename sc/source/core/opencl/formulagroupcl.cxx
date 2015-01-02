@@ -3564,7 +3564,7 @@ void DynamicKernel::Launch( size_t nr )
         global_work_size, NULL, 0, NULL, NULL);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
-    err = clFinish(kEnv.mpkCmdQueue);
+    err = clFlush(kEnv.mpkCmdQueue);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
 }
@@ -3698,7 +3698,7 @@ public:
 
     bool isValid() const { return mpKernel != NULL; }
 
-    void waitForResult()
+    void fetchResultFromKernel()
     {
         if (!isValid())
             return;
@@ -3848,6 +3848,16 @@ void genRPNTokens( ScDocument& rDoc, const ScAddress& rTopPos, ScTokenArray& rCo
     aComp.CompileTokenArray(); // Regenerate RPN tokens.
 }
 
+bool waitForResults()
+{
+    // Obtain cl context
+    ::opencl::KernelEnv kEnv;
+    ::opencl::setKernelEnv(&kEnv);
+
+    cl_int err = clFinish(kEnv.mpkCmdQueue);
+    return err == CL_SUCCESS;
+}
+
 }
 
 bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
@@ -3864,7 +3874,10 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     if (!aRes.isValid())
         return false;
 
-    aRes.waitForResult();
+    if (!waitForResults())
+        return false;
+
+    aRes.fetchResultFromKernel();
 
     return aRes.pushResultToDocument(rDoc, rTopPos);
 }
