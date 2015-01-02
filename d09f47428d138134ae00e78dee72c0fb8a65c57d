@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_ddaa9c85",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2015-01-02T23:31:44Z",
+      "side": 1,
+      "message": "You forgot to replace this with ptr_vector\u0027s erase_if.",
+      "revId": "d09f47428d138134ae00e78dee72c0fb8a65c57d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
