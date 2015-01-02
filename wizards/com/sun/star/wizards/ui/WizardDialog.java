@@ -461,15 +461,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     });
 
             setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
-            // add a window listener, to know
-            // if the user used "escape" key to
-            // close the dialog.
-            xWindow.addWindowListener(new XWindowListenerAdapter() {
-                @Override
-                public void windowHidden(EventObject event) {
-                    cancelWizard_1();
-                }
-            });
         }
         catch (java.lang.Exception jexception)
         {
