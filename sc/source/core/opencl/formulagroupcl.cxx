@@ -3305,117 +3305,26 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
 class DynamicKernel : public CompiledFormula
 {
 public:
-    DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize ) :
-        mpRoot(r),
-        mpProgram(NULL),
-        mpKernel(NULL),
-        mpResClmem(NULL),
-        mnResultSize(nResultSize) {}
+    DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize );
+    virtual ~DynamicKernel();
 
     static DynamicKernel* create( ScTokenArray& rCode, int nResultSize );
+
     /// OpenCL code generation
-    void CodeGen()
-    {
-        // Travese the tree of expression and declare symbols used
-        const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mpRoot, new OpNop(mnResultSize), mnResultSize);
+    void CodeGen();
 
-        std::stringstream decl;
-        if (::opencl::gpuEnv.mnKhrFp64Flag)
-        {
-            decl << "#pragma OPENCL EXTENSION cl_khr_fp64: enable\n";
-        }
-        else if (::opencl::gpuEnv.mnAmdFp64Flag)
-        {
-            decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
-        }
-        // preambles
-        decl << publicFunc;
-        DK->DumpInlineFun(inlineDecl, inlineFun);
-        for (std::set<std::string>::iterator set_iter = inlineDecl.begin();
-            set_iter != inlineDecl.end(); ++set_iter)
-        {
-            decl << *set_iter;
-        }
-
-        for (std::set<std::string>::iterator set_iter = inlineFun.begin();
-            set_iter != inlineFun.end(); ++set_iter)
-        {
-            decl << *set_iter;
-        }
-        mSyms.DumpSlidingWindowFunctions(decl);
-        mKernelSignature = DK->DumpOpName();
-        decl << "__kernel void DynamicKernel" << mKernelSignature;
-        decl << "(__global double *result, ";
-        DK->GenSlidingWindowDecl(decl);
-        decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
-            DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
-        mFullProgramSrc = decl.str();
-#ifdef SAL_DETAIL_ENABLE_LOG_INFO
-        std::stringstream area;
-        if (mKernelSignature[0] == '_')
-            area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
-        else
-            area << "sc.opencl.source." << mKernelSignature;
-        SAL_INFO(area.str().c_str(), "Program to be compiled:\n" << linenumberify(mFullProgramSrc));
-#endif
-    }
     /// Produce kernel hash
-    std::string GetMD5()
-    {
-#ifdef MD5_KERNEL
-        if (mKernelHash.empty())
-        {
-            std::stringstream md5s;
-            // Compute MD5SUM of kernel body to obtain the name
-            sal_uInt8 result[RTL_DIGEST_LENGTH_MD5];
-            rtl_digest_MD5(
-                mFullProgramSrc.c_str(),
-                mFullProgramSrc.length(), result,
-                RTL_DIGEST_LENGTH_MD5);
-            for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; i++)
-            {
-                md5s << std::hex << (int)result[i];
-            }
-            mKernelHash = md5s.str();
-        }
-        return mKernelHash;
-#else
-        return "";
-#endif
-    }
+    std::string GetMD5();
+
     /// Create program, build, and create kerenl
     /// TODO cache results based on kernel body hash
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
     void CreateKernel();
+
     /// Prepare buffers, marshal them to GPU, and launch the kernel
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
-    void Launch( size_t nr )
-    {
-        // Obtain cl context
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
-        cl_int err;
-        // The results
-        mpResClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags)CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
-            nr * sizeof(double), NULL, &err);
-        if (CL_SUCCESS != err)
-            throw OpenCLError(err, __FILE__, __LINE__);
-        err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
-        if (CL_SUCCESS != err)
-            throw OpenCLError(err, __FILE__, __LINE__);
-        // The rest of buffers
-        mSyms.Marshal(mpKernel, nr, mpProgram);
-        size_t global_work_size[] = { nr };
-        err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
-            global_work_size, NULL, 0, NULL, NULL);
-        if (CL_SUCCESS != err)
-            throw OpenCLError(err, __FILE__, __LINE__);
-        err = clFinish(kEnv.mpkCmdQueue);
-        if (CL_SUCCESS != err)
-            throw OpenCLError(err, __FILE__, __LINE__);
-    }
-    virtual ~DynamicKernel();
+    void Launch( size_t nr );
+
     cl_mem GetResultBuffer() const { return mpResClmem; }
 
 private:
@@ -3433,6 +3342,13 @@ private:
     int mnResultSize;
 };
 
+DynamicKernel::DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize ) :
+    mpRoot(r),
+    mpProgram(NULL),
+    mpKernel(NULL),
+    mpResClmem(NULL),
+    mnResultSize(nResultSize) {}
+
 DynamicKernel::~DynamicKernel()
 {
     if (mpResClmem)
@@ -3445,6 +3361,77 @@ DynamicKernel::~DynamicKernel()
     }
     // mpProgram is not going to be released here -- it's cached.
 }
+
+void DynamicKernel::CodeGen()
+{
+    // Travese the tree of expression and declare symbols used
+    const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mpRoot, new OpNop(mnResultSize), mnResultSize);
+
+    std::stringstream decl;
+    if (::opencl::gpuEnv.mnKhrFp64Flag)
+    {
+        decl << "#pragma OPENCL EXTENSION cl_khr_fp64: enable\n";
+    }
+    else if (::opencl::gpuEnv.mnAmdFp64Flag)
+    {
+        decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
+    }
+    // preambles
+    decl << publicFunc;
+    DK->DumpInlineFun(inlineDecl, inlineFun);
+    for (std::set<std::string>::iterator set_iter = inlineDecl.begin();
+        set_iter != inlineDecl.end(); ++set_iter)
+    {
+        decl << *set_iter;
+    }
+
+    for (std::set<std::string>::iterator set_iter = inlineFun.begin();
+        set_iter != inlineFun.end(); ++set_iter)
+    {
+        decl << *set_iter;
+    }
+    mSyms.DumpSlidingWindowFunctions(decl);
+    mKernelSignature = DK->DumpOpName();
+    decl << "__kernel void DynamicKernel" << mKernelSignature;
+    decl << "(__global double *result, ";
+    DK->GenSlidingWindowDecl(decl);
+    decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
+        DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
+    mFullProgramSrc = decl.str();
+#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+    std::stringstream area;
+    if (mKernelSignature[0] == '_')
+        area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
+    else
+        area << "sc.opencl.source." << mKernelSignature;
+    SAL_INFO(area.str().c_str(), "Program to be compiled:\n" << linenumberify(mFullProgramSrc));
+#endif
+}
+
+std::string DynamicKernel::GetMD5()
+{
+#ifdef MD5_KERNEL
+    if (mKernelHash.empty())
+    {
+        std::stringstream md5s;
+        // Compute MD5SUM of kernel body to obtain the name
+        sal_uInt8 result[RTL_DIGEST_LENGTH_MD5];
+        rtl_digest_MD5(
+            mFullProgramSrc.c_str(),
+            mFullProgramSrc.length(), result,
+            RTL_DIGEST_LENGTH_MD5);
+        for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; i++)
+        {
+            md5s << std::hex << (int)result[i];
+        }
+        mKernelHash = md5s.str();
+    }
+    return mKernelHash;
+#else
+    return "";
+#endif
+}
+
 /// Build code
 void DynamicKernel::CreateKernel()
 {
@@ -3554,6 +3541,34 @@ void DynamicKernel::CreateKernel()
     if (err != CL_SUCCESS)
         throw OpenCLError(err, __FILE__, __LINE__);
 }
+
+void DynamicKernel::Launch( size_t nr )
+{
+    // Obtain cl context
+    ::opencl::KernelEnv kEnv;
+    ::opencl::setKernelEnv(&kEnv);
+    cl_int err;
+    // The results
+    mpResClmem = clCreateBuffer(kEnv.mpkContext,
+        (cl_mem_flags)CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+        nr * sizeof(double), NULL, &err);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err, __FILE__, __LINE__);
+    err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err, __FILE__, __LINE__);
+    // The rest of buffers
+    mSyms.Marshal(mpKernel, nr, mpProgram);
+    size_t global_work_size[] = { nr };
+    err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
+        global_work_size, NULL, 0, NULL, NULL);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err, __FILE__, __LINE__);
+    err = clFinish(kEnv.mpkCmdQueue);
+    if (CL_SUCCESS != err)
+        throw OpenCLError(err, __FILE__, __LINE__);
+}
+
 // Symbol lookup. If there is no such symbol created, allocate one
 // kernel with argument with unique name and return so.
 // The template argument T must be a subclass of DynamicKernelArgument
