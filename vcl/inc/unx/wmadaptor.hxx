@@ -174,7 +174,7 @@ public:
     virtual ~WMAdaptor();
 
     /*
-     *  creates a vaild WMAdaptor instance for the SalDisplay
+     *  creates a valid WMAdaptor instance for the SalDisplay
      */
     static WMAdaptor* createWMAdaptor( SalDisplay* );
 

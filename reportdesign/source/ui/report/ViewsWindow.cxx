@@ -1242,7 +1242,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
     {
         EndDragObj_removeInvisibleObjects();
 
-        // we need to manipulate the current clickpoint, we substract the old delta from BeginDrag
+        // we need to manipulate the current clickpoint, we subtract the old delta from BeginDrag
         aNewPos -= m_aDragDelta;
 
         uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;

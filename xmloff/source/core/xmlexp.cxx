@@ -2438,7 +2438,7 @@ SvXMLExport::AddAttributeIdLegacy(
         sal_uInt16 const nLegacyPrefix, OUString const& rValue)
 {
     switch (getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_011: // fall through
         case SvtSaveOptions::ODFVER_010: break;
         default: // ODF 1.2: xml:id
             AddAttribute(XML_NAMESPACE_XML, XML_ID, rValue);
@@ -2454,7 +2454,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
 {
     // check version >= 1.2
     switch (getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_011: // fall through
         case SvtSaveOptions::ODFVER_010: return;
         default: break;
     }
@@ -2505,7 +2505,7 @@ SvXMLExport::AddAttributesRDFa(
 {
     // check version >= 1.2
     switch (getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_011: // fall through
         case SvtSaveOptions::ODFVER_010: return;
         default: break;
     }

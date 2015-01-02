@@ -1887,7 +1887,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
         {
             const OUString aString = (*aIt)->GetName();
 
-            /* rFmt is not a vaild successor or predecessor of
+            /* rFmt is not a valid successor or predecessor of
                itself */
             if (aString != rReference && aString != rFmt.GetName())
             {

@@ -437,7 +437,7 @@ OUString CDOTransferable::byteStreamToOUString( ByteSequence_t& aByteStream )
     sal_Int32 nWChars;
     sal_Int32 nMemSize = aByteStream.getLength( );
 
-    // if there is a trailing L"\0" substract 1 from length
+    // if there is a trailing L"\0" subtract 1 from length
     if ( 0 == aByteStream[ aByteStream.getLength( ) - 2 ] &&
          0 == aByteStream[ aByteStream.getLength( ) - 1 ] )
         nWChars = static_cast< sal_Int32 >( nMemSize / sizeof( sal_Unicode ) ) - 1;

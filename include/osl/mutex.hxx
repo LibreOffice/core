@@ -221,7 +221,7 @@ namespace osl
                 pResetT( &rT )
         {}
 
-        /** Re-aquires the mutex or interface.
+        /** Re-acquires the mutex or interface.
         */
         void reset()
         {

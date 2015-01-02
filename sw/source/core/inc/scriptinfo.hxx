@@ -328,7 +328,7 @@ public:
  */
     static bool IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen );
 
-/** Performes a thai justification on the kerning array
+/** Performs a thai justification on the kerning array
 
     @descr  Add some extra space for thai justification to the
             positions in the kerning array.

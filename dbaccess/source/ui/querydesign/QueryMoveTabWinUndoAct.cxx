@@ -28,7 +28,7 @@ void OJoinMoveTabWinUndoAct::TogglePosition()
 
     m_pTabWin->SetPosPixel(m_ptNextPosition - ptFrameScrollPos);
 
-    // it looks like ptFrameScrollPos is meaningless, then I substract it here and add it to ptNext, and
+    // it looks like ptFrameScrollPos is meaningless, then I subtract it here and add it to ptNext, and
     // next time I subtract again...
     // AbetptFrameScrollPos could have changed next time...
     m_pOwner->EnsureVisible(m_pTabWin);

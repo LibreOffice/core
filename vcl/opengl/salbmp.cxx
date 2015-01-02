@@ -494,7 +494,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 
         if( !maPendingOps.empty() )
         {
-            SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
+            SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediately" );
             if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
                 return NULL;
         }
