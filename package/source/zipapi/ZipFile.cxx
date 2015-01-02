@@ -33,6 +33,7 @@
 #include <rtl/digest.h>
 #include <osl/diagnose.h>
 
+#include <algorithm>
 #include <vector>
 
 #include "blowfishcontext.hxx"
