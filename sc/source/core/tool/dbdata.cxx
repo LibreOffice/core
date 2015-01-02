@@ -762,6 +762,12 @@ const ScDBData* ScDBCollection::AnonDBs::findByRange(const ScRange& rRange) cons
     return itr == maDBs.end() ? NULL : &(*itr);
 }
 
+void ScDBCollection::AnonDBs::deleteOnTab(SCTAB nTab)
+{
+    FindByTable func(nTab);
+    remove_if(maDBs.begin(), maDBs.end(), func);
+}
+
 ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
 {
     const ScDBData* pData = findByRange(rRange);
@@ -905,7 +911,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
     for (; itr != itrEnd; ++itr)
         maNamedDBs.erase(*itr);
 
-    remove_if(maAnonDBs.begin(), maAnonDBs.end(), func);
+    maAnonDBs.deleteOnTab(nTab);
 }
 
 void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
