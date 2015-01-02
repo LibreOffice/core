@@ -22,7 +22,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_set.hpp>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <rtl/tencinfo.h>
@@ -70,6 +69,8 @@
 #include "ww8attributeoutput.hxx"
 #include "docxattributeoutput.hxx"
 #include "rtfattributeoutput.hxx"
+
+#include <unordered_set>
 
 using namespace css;
 using namespace sw::util;
@@ -306,7 +307,7 @@ void MSWordStyles::BuildStylesTable()
 
 void MSWordStyles::BuildStyleIds()
 {
-    boost::unordered_set<OString, OStringHash> aUsed;
+    std::unordered_set<OString, OStringHash> aUsed;
 
     m_aStyleIds.push_back("Normal");
     aUsed.insert("normal");

@@ -50,12 +50,12 @@
 #include "dpglobal.hxx"
 #include "dpresfilter.hxx"
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <vector>
 #include <list>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace sheet {
@@ -130,7 +130,7 @@ private:
      * Compile a list of dimension indices that are either, column, row or
      * page dimensions (i.e. all but data dimensions).
      */
-    void                    GetCategoryDimensionIndices(::boost::unordered_set<sal_Int32>& rCatDims);
+    void                    GetCategoryDimensionIndices(std::unordered_set<sal_Int32>& rCatDims);
 
     /**
      * Set visibilities of individual rows in the cache table based on the
@@ -670,7 +670,7 @@ public:
 };
 
 // hash map from name to index in the member array, for fast name access
-typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > ScDPMembersHashMap;
+typedef std::unordered_map< OUString, sal_Int32, OUStringHash > ScDPMembersHashMap;
 
 class ScDPMembers : public cppu::WeakImplHelper2<
                             com::sun::star::container::XNameAccess,

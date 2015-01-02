@@ -79,8 +79,6 @@
 #include <vector>
 #include <memory>
 
-#include <boost/unordered_map.hpp>
-
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::unary_function;

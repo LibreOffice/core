@@ -24,8 +24,7 @@
 #include <SwGetPoolIdFromName.hxx>
 #include "swdllapi.h"
 
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 #include <vector>
 
 /** This class holds all data about the names of styles used in the user
@@ -74,8 +73,7 @@
 
 struct SwTableEntry;
 
-typedef ::boost::unordered_map<const OUString, sal_uInt16, OUStringHash>
-    NameToIdHash;
+typedef std::unordered_map<OUString, sal_uInt16, OUStringHash> NameToIdHash;
 
 class SwStyleNameMapper
 {

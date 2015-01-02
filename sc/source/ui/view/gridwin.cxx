@@ -661,9 +661,9 @@ public:
 
 class AddSelectedItemString : public std::unary_function<ScQueryEntry::Item, void>
 {
-    boost::unordered_set<OUString, OUStringHash>& mrSet;
+    std::unordered_set<OUString, OUStringHash>& mrSet;
 public:
-    AddSelectedItemString(boost::unordered_set<OUString, OUStringHash>& r) :
+    AddSelectedItemString(std::unordered_set<OUString, OUStringHash>& r) :
         mrSet(r) {}
 
     void operator() (const ScQueryEntry::Item& rItem)
@@ -702,7 +702,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
     ScQueryEntry* pEntry = aParam.FindEntryByField(nCol, false);
-    boost::unordered_set<OUString, OUStringHash> aSelected;
+    std::unordered_set<OUString, OUStringHash> aSelected;
     if (pEntry && pEntry->bDoQuery)
     {
         if (pEntry->eOp == SC_EQUAL)

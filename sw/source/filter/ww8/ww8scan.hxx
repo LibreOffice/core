@@ -23,14 +23,14 @@
 #ifndef LONG_MAX
 #include <limits.h>
 #endif
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <stack>
-#include <vector>
 #include <list>
-#include <algorithm>
+#include <stack>
+#include <unordered_map>
+#include <vector>
 
-#include <boost/unordered_map.hpp>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
@@ -85,7 +85,7 @@ public:
     }
 
 private:
-    typedef boost::unordered_map<sal_uInt16, SprmInfo> Map;
+    typedef std::unordered_map<sal_uInt16, SprmInfo> Map;
 
     Map map_;
 };

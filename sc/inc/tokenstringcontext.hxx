@@ -12,7 +12,7 @@
 
 #include "compiler.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ScDocument;
 
@@ -26,9 +26,9 @@ namespace sc {
  */
 struct SC_DLLPUBLIC TokenStringContext
 {
-    typedef boost::unordered_map<sal_uInt16, OUString> IndexNameMapType;
-    typedef boost::unordered_map<size_t, std::vector<OUString> > IndexNamesMapType;
-    typedef boost::unordered_map<SCTAB, IndexNameMapType> TabIndexMapType;
+    typedef std::unordered_map<sal_uInt16, OUString> IndexNameMapType;
+    typedef std::unordered_map<size_t, std::vector<OUString> > IndexNamesMapType;
+    typedef std::unordered_map<SCTAB, IndexNameMapType> TabIndexMapType;
 
     formula::FormulaGrammar::Grammar meGram;
     formula::FormulaCompiler::OpCodeMapPtr mxOpCodeMap;

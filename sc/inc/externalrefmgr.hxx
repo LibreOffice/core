@@ -34,9 +34,9 @@
 #include <formula/token.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <list>
 #include <set>
@@ -119,8 +119,8 @@ private:
         TokenRef   mxToken;
         sal_uLong  mnFmtIndex;
     };
-    typedef ::boost::unordered_map<SCCOL, Cell>            RowDataType;
-    typedef ::boost::unordered_map<SCROW, RowDataType>     RowsDataType;
+    typedef std::unordered_map<SCCOL, Cell>            RowDataType;
+    typedef std::unordered_map<SCROW, RowDataType>     RowsDataType;
 
 public:
     /**
@@ -201,7 +201,7 @@ public:
     };
 
     typedef ::boost::shared_ptr<Table> TableTypeRef;
-    typedef ::boost::unordered_map< OUString, size_t, OUStringHash>
+    typedef std::unordered_map< OUString, size_t, OUStringHash>
         TableNameIndexMap;
 
     ScExternalRefCache();
@@ -327,9 +327,9 @@ private:
         }
     };
 
-    typedef ::boost::unordered_map<OUString, TokenArrayRef, OUStringHash> RangeNameMap;
-    typedef ::boost::unordered_map<ScRange, TokenArrayRef, RangeHash> RangeArrayMap;
-    typedef ::boost::unordered_map<OUString, OUString, OUStringHash> NamePairMap;
+    typedef std::unordered_map<OUString, TokenArrayRef, OUStringHash> RangeNameMap;
+    typedef std::unordered_map<ScRange, TokenArrayRef, RangeHash> RangeArrayMap;
+    typedef std::unordered_map<OUString, OUString, OUStringHash> NamePairMap;
 
     /** Represents data cached for a single external document. */
     struct DocItem
@@ -351,7 +351,7 @@ private:
 
         DocItem() : mbInitFromSource(false) {}
     };
-    typedef ::boost::unordered_map<sal_uInt16, DocItem>  DocDataType;
+    typedef std::unordered_map<sal_uInt16, DocItem>  DocDataType;
     DocItem* getDocItem(sal_uInt16 nFileId) const;
 
 private:
@@ -363,8 +363,8 @@ class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelpe
 {
 public:
 
-    typedef ::std::set<ScFormulaCell*>                      RefCellSet;
-    typedef ::boost::unordered_map<sal_uInt16, RefCellSet>         RefCellMap;
+    typedef std::set<ScFormulaCell*>                      RefCellSet;
+    typedef std::unordered_map<sal_uInt16, RefCellSet>         RefCellMap;
 
     enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
 
@@ -414,13 +414,13 @@ private:
         SrcShell() : maLastAccess( tools::Time::SYSTEM ) {}
     };
 
-    typedef ::boost::unordered_map<sal_uInt16, SrcShell>           DocShellMap;
-    typedef ::boost::unordered_map<sal_uInt16, bool>               LinkedDocMap;
+    typedef std::unordered_map<sal_uInt16, SrcShell>           DocShellMap;
+    typedef std::unordered_map<sal_uInt16, bool>               LinkedDocMap;
 
-    typedef ::boost::unordered_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
+    typedef std::unordered_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
-    typedef ::boost::unordered_set<LinkListener*, LinkListener::Hash>  LinkListeners;
-    typedef ::boost::unordered_map<sal_uInt16, LinkListeners>          LinkListenerMap;
+    typedef std::unordered_set<LinkListener*, LinkListener::Hash>  LinkListeners;
+    typedef std::unordered_map<sal_uInt16, LinkListeners>          LinkListenerMap;
 
 public:
     /** Source document meta-data container. */

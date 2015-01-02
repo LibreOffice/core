@@ -29,9 +29,9 @@
 #include <vector>
 #include <list>
 
-#include <boost/unordered_set.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <unordered_set>
 
 class ScDocument;
 class ScChartUnoData;
@@ -49,14 +49,14 @@ public:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) SAL_OVERRIDE;
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        ::boost::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
+        std::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChartListener& mrParent;
-        ::boost::unordered_set<sal_uInt16> maFileIds;
+        std::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 
@@ -138,7 +138,7 @@ public:
     };
 
     typedef boost::ptr_map<OUString, ScChartListener> ListenersType;
-    typedef boost::unordered_set<OUString, OUStringHash> StringSetType;
+    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 private:
     ListenersType maListeners;
     enum UpdateStatus

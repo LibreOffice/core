@@ -67,11 +67,11 @@
 
 #include <svl/sharedstringpool.hxx>
 
+#include <unordered_set>
 #include <vector>
 #include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_set.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <mdds/flat_segment_tree.hpp>
@@ -2928,7 +2928,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, bool bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
     StrSetType aStrSet;
 
     bool    bStarted = false;

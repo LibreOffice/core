@@ -23,7 +23,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
@@ -263,6 +262,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unicode/ubidi.h>
+#include <unordered_set>
 #include <unotools/configmgr.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <unotools/fltrcfg.hxx>

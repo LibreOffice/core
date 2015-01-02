@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_FORMULAPARSERPOOL_HXX
 #define INCLUDED_SC_INC_FORMULAPARSERPOOL_HXX
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 
 class ScDocument;
@@ -41,7 +41,7 @@ public:
                         getFormulaParser( const OUString& rNamespace );
 
 private:
-    typedef ::boost::unordered_map<
+    typedef std::unordered_map<
         OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >,
         OUStringHash,

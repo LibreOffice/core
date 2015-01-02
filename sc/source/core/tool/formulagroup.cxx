@@ -26,11 +26,11 @@
 #endif
 #include <rtl/bootstrap.hxx>
 
-#include <vector>
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <cstdio>
+#include <unordered_map>
+#include <vector>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
@@ -312,7 +312,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                                                 ScFormulaCellGroupRef& xGroup,
                                                 ScTokenArray& rCode)
 {
-    typedef boost::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
+    typedef std::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
 
     // Decompose the group into individual cells and calculate them individually.
 

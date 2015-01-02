@@ -12,9 +12,9 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
-typedef boost::unordered_set<OUString, OUStringHash> ScDPUniqueStringSet;
+typedef std::unordered_set<OUString, OUStringHash> ScDPUniqueStringSet;
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

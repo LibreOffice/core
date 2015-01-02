@@ -23,8 +23,6 @@
 #include <list>
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
@@ -34,6 +32,9 @@
 
 #include "scdllapi.h"
 #include "calcmacros.hxx"
+
+#include <unordered_map>
+#include <unordered_set>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -114,8 +115,8 @@ private:
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
 
 public:
-    typedef boost::unordered_set<OUString, OUStringHash> MemberSetType;
-    typedef boost::unordered_map <OUString, ScDPSaveMember*, OUStringHash> MemberHash;
+    typedef std::unordered_set<OUString, OUStringHash> MemberSetType;
+    typedef std::unordered_map <OUString, ScDPSaveMember*, OUStringHash> MemberHash;
     typedef std::list <ScDPSaveMember*> MemberList;
 
 private:
@@ -218,7 +219,7 @@ public:
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xDim );
 
-    void UpdateMemberVisibility(const ::boost::unordered_map< OUString, bool, OUStringHash>& rData);
+    void UpdateMemberVisibility(const std::unordered_map< OUString, bool, OUStringHash>& rData);
 
     bool HasInvisibleMember() const;
 
@@ -231,9 +232,9 @@ public:
 
 class ScDPSaveData
 {
-    typedef boost::unordered_map<OUString, size_t, OUStringHash> DupNameCountType;
+    typedef std::unordered_map<OUString, size_t, OUStringHash> DupNameCountType;
 public:
-    typedef boost::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
+    typedef std::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
     typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
 
 private:

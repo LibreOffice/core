@@ -15,7 +15,7 @@
 #include <map>
 #include <vector>
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -91,7 +91,7 @@ private:
     {
         size_t operator() (const NamePairType& rPair) const;
     };
-    typedef boost::unordered_map<NamePairType, double, NamePairHash> LeafValuesType;
+    typedef std::unordered_map<NamePairType, double, NamePairHash> LeafValuesType;
     LeafValuesType maLeafValues;
 
     OUString maPrimaryDimName;

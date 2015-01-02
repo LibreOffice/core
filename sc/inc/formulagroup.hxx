@@ -23,10 +23,10 @@
 #include <svl/sharedstringpool.hxx>
 
 #include <set>
+#include <unordered_map>
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_map.hpp>
 
 class ScDocument;
 class ScTokenArray;
@@ -84,7 +84,7 @@ struct FormulaGroupContext : boost::noncopyable
         ColArray( NumArrayType* pNumArray, StrArrayType* pStrArray );
     };
 
-    typedef boost::unordered_map<ColKey, ColArray, ColKey::Hash> ColArraysType;
+    typedef std::unordered_map<ColKey, ColArray, ColKey::Hash> ColArraysType;
 
     NumArrayStoreType maNumArrays; /// manage life cycle of numeric arrays.
     StrArrayStoreType maStrArrays; /// manage life cycle of string arrays.

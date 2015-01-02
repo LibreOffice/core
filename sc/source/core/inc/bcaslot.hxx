@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
 #define INCLUDED_SC_SOURCE_CORE_INC_BCASLOT_HXX
 
-#include <set>
-#include <boost/unordered_set.hpp>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <functional>
+#include <set>
+#include <unordered_set>
+#include <boost/ptr_container/ptr_map.hpp>
 
 #include <svl/broadcast.hxx>
 
@@ -118,7 +118,7 @@ struct ScBroadcastAreaEqual
     }
 };
 
-typedef ::boost::unordered_set< ScBroadcastAreaEntry, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
+typedef std::unordered_set< ScBroadcastAreaEntry, ScBroadcastAreaHash, ScBroadcastAreaEqual > ScBroadcastAreas;
 
 struct ScBroadcastAreaBulkHash
 {
@@ -136,7 +136,7 @@ struct ScBroadcastAreaBulkEqual
     }
 };
 
-typedef ::boost::unordered_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
+typedef std::unordered_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
         ScBroadcastAreaBulkEqual > ScBroadcastAreasBulk;
 
 class ScBroadcastAreaSlotMachine;
@@ -160,7 +160,7 @@ private:
      */
     bool mbHasErasedArea;
 
-    ScBroadcastAreas::const_iterator FindBroadcastArea( const ScRange& rRange, bool bGroupListening ) const;
+    ScBroadcastAreas::iterator FindBroadcastArea( const ScRange& rRange, bool bGroupListening );
 
     /**
         More hypothetical (memory would probably be doomed anyway) check
@@ -175,10 +175,10 @@ private:
     /** Finally erase all areas pushed as to-be-erased. */
     void                FinallyEraseAreas();
 
-    bool                isMarkedErased( const ScBroadcastAreas::iterator& rIter )
-                            {
-                                return (*rIter).mbErasure;
-                            }
+    bool                isMarkedErased( const ScBroadcastAreas::const_iterator& rIter ) const
+    {
+        return rIter->mbErasure;
+    }
 
 public:
                         ScBroadcastAreaSlot( ScDocument* pDoc,

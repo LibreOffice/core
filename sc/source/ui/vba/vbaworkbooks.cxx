@@ -53,7 +53,6 @@
 #include "vbaworkbooks.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <vector>
 #include <osl/file.hxx>
 using namespace ::ooo::vba;

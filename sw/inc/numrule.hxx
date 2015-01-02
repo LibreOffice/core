@@ -27,9 +27,9 @@
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <hints.hxx>
-#include <boost/unordered_map.hpp>
 #include <SwNumberTreeTypes.hxx>
 #include <ndarr.hxx>
+#include <unordered_map>
 #include <vector>
 #include <charfmt.hxx>
 
@@ -125,8 +125,8 @@ private:
     /** container for associated paragraph styles */
     tParagraphStyleList maParagraphStyleList;
 
-    /** boost::unordered_map containing "name->rule" relation */
-    boost::unordered_map<OUString, SwNumRule *, OUStringHash> * mpNumRuleMap;
+    /** unordered_map containing "name->rule" relation */
+    std::unordered_map<OUString, SwNumRule *, OUStringHash> * mpNumRuleMap;
 
     OUString msName;
     SwNumRuleType meRuleType;
@@ -207,7 +207,7 @@ public:
        @param pNumRuleMap      map to register in
      */
     void SetNumRuleMap(
-                boost::unordered_map<OUString, SwNumRule *, OUStringHash>* pNumRuleMap );
+                std::unordered_map<OUString, SwNumRule *, OUStringHash>* pNumRuleMap );
 
     static OUString GetOutlineRuleName();
 

@@ -14,8 +14,8 @@
 #include "address.hxx"
 #include "columnset.hxx"
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 
 class ScDocument;
 
@@ -27,8 +27,8 @@ namespace sc {
  */
 class UpdatedRangeNames
 {
-    typedef boost::unordered_set<sal_uInt16> NameIndicesType;
-    typedef boost::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;
+    typedef std::unordered_set<sal_uInt16> NameIndicesType;
+    typedef std::unordered_map<SCTAB, NameIndicesType> UpdatedNamesType;
 
     UpdatedNamesType maUpdatedNames;
 

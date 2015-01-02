@@ -159,7 +159,7 @@ ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
         // deleted.
         ScBroadcastArea* pArea = (*aIter).mpArea;
         // Erase all so no hash will be accessed upon destruction of the
-        // boost::unordered_map.
+        // unordered_map.
         aBroadcastAreaTbl.erase( aIter++);
         if (!pArea->DecRef())
             delete pArea;
@@ -248,7 +248,7 @@ void ScBroadcastAreaSlot::EndListeningArea(
     OSL_ENSURE(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
     {
-        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange, bGroupListening));
+        ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange, bGroupListening));
         if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
             return;
         rpArea = (*aIter).mpArea;
@@ -264,7 +264,7 @@ void ScBroadcastAreaSlot::EndListeningArea(
     {
         if (rpArea && !rpArea->GetBroadcaster().HasListeners())
         {
-            ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange, bGroupListening));
+            ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange, bGroupListening));
             if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
                 return;
             OSL_ENSURE( (*aIter).mpArea == rpArea, "EndListeningArea: area pointer mismatch");
@@ -275,8 +275,8 @@ void ScBroadcastAreaSlot::EndListeningArea(
     }
 }
 
-ScBroadcastAreas::const_iterator ScBroadcastAreaSlot::FindBroadcastArea(
-        const ScRange& rRange, bool bGroupListening ) const
+ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
+        const ScRange& rRange, bool bGroupListening )
 {
     aTmpSeekBroadcastArea.UpdateRange( rRange);
     aTmpSeekBroadcastArea.SetGroupListening(bGroupListening);

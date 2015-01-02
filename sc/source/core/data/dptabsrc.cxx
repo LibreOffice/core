@@ -20,10 +20,9 @@
 #include "dptabsrc.hxx"
 
 #include <algorithm>
-#include <vector>
 #include <set>
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_set>
+#include <vector>
 
 #include <rtl/math.hxx>
 #include <svl/itemprop.hxx>
@@ -493,7 +492,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     aResVisData.fillFieldFilters(aFilterCriteria);
 
     Sequence< Sequence<Any> > aTabData;
-    boost::unordered_set<sal_Int32> aCatDims;
+    std::unordered_set<sal_Int32> aCatDims;
     GetCategoryDimensionIndices(aCatDims);
     pData->GetDrillDownData(aFilterCriteria, aCatDims, aTabData);
     return aTabData;
@@ -687,9 +686,9 @@ namespace {
 class CategoryDimInserter : std::unary_function<long, void>
 {
     ScDPSource& mrSource;
-    boost::unordered_set<sal_Int32>& mrCatDims;
+    std::unordered_set<sal_Int32>& mrCatDims;
 public:
-    CategoryDimInserter(ScDPSource& rSource, boost::unordered_set<sal_Int32>& rCatDims) :
+    CategoryDimInserter(ScDPSource& rSource, std::unordered_set<sal_Int32>& rCatDims) :
         mrSource(rSource),
         mrCatDims(rCatDims) {}
 
@@ -702,9 +701,9 @@ public:
 
 }
 
-void ScDPSource::GetCategoryDimensionIndices(boost::unordered_set<sal_Int32>& rCatDims)
+void ScDPSource::GetCategoryDimensionIndices(std::unordered_set<sal_Int32>& rCatDims)
 {
-    boost::unordered_set<sal_Int32> aCatDims;
+    std::unordered_set<sal_Int32> aCatDims;
 
     CategoryDimInserter aInserter(*this, aCatDims);
     std::for_each(maColDims.begin(), maColDims.end(), aInserter);
@@ -773,7 +772,7 @@ void ScDPSource::FilterCacheByPageDimensions()
     }
     if (!aCriteria.empty())
     {
-        boost::unordered_set<sal_Int32> aCatDims;
+        std::unordered_set<sal_Int32> aCatDims;
         GetCategoryDimensionIndices(aCatDims);
         pData->FilterCacheTable(aCriteria, aCatDims);
         bPageFiltered = true;

@@ -63,7 +63,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
-#include <boost/unordered_set.hpp>
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -73,6 +72,8 @@
 #include <xmloff/xformsimport.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
+
+#include <unordered_set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1084,7 +1085,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    boost::unordered_set< OUString, OUStringHash > aSet;
+    std::unordered_set< OUString, OUStringHash > aSet;
     aSet.insert("ForbiddenCharacters");
     aSet.insert("IsKernAsianPunctuation");
     aSet.insert("CharacterCompressionType");

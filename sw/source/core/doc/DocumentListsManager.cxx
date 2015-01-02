@@ -73,7 +73,7 @@ SwList* DocumentListsManager::getListByName( const OUString& sListId ) const
 {
     SwList* pList = 0;
 
-    boost::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
+    std::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
                                             aListIter = maLists.find( sListId );
     if ( aListIter != maLists.end() )
     {
@@ -120,7 +120,7 @@ SwList* DocumentListsManager::getListForListStyle( const OUString& sListStyleNam
 {
     SwList* pList = 0;
 
-    boost::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
+    std::unordered_map< OUString, SwList*, OUStringHash >::const_iterator
                             aListIter = maListStyleLists.find( sListStyleName );
     if ( aListIter != maListStyleLists.end() )
     {
@@ -189,7 +189,7 @@ void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyl
 
 DocumentListsManager::~DocumentListsManager()
 {
-    for ( boost::unordered_map< OUString, SwList*, OUStringHash >::iterator
+    for ( std::unordered_map< OUString, SwList*, OUStringHash >::iterator
                                            aListIter = maLists.begin();
         aListIter != maLists.end();
         ++aListIter )

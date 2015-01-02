@@ -12,7 +12,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 /**
  * Provide mapping from ODF text formatting styles to EditEngine's, for
@@ -36,8 +36,8 @@ public:
     const Entry* getEntryByItemID(sal_uInt16 nItemID) const;
 
 private:
-    typedef boost::unordered_map<OUString, const Entry*, OUStringHash> StrToEntriesType;
-    typedef boost::unordered_map<sal_uInt16, const Entry*> IndexToEntriesType;
+    typedef std::unordered_map<OUString, const Entry*, OUStringHash> StrToEntriesType;
+    typedef std::unordered_map<sal_uInt16, const Entry*> IndexToEntriesType;
     StrToEntriesType maAPIEntries;
     IndexToEntriesType maItemIDEntries;
 };

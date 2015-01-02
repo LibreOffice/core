@@ -28,10 +28,10 @@
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-#include <vector>
 #include <map>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -235,7 +235,7 @@ struct ScDPParentDimData
 };
 
 typedef std::vector <ScDPParentDimData *>                 DimMemberArray;
-typedef boost::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
+typedef std::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
 
 class ResultMembers
 {
@@ -674,8 +674,8 @@ private:
     {
         size_t operator()(const ScDPItemData& r) const;
     };
-    typedef ::boost::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
-    typedef ::boost::unordered_map<OUString, VisibleMemberType, OUStringHash> DimMemberType;
+    typedef std::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
+    typedef std::unordered_map<OUString, VisibleMemberType, OUStringHash> DimMemberType;
     DimMemberType maDimensions;
 
     ScDPSource* mpSource;

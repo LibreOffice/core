@@ -38,17 +38,17 @@
 #include <tabvwsh.hxx>
 #include <docuno.hxx>
 #include <sc.hrc>
-#include <boost/unordered_map.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include "unonames.hxx"
 #include "markdata.hxx"
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
-typedef  boost::unordered_map< OUString,
+typedef  std::unordered_map< OUString,
 SCTAB, OUStringHash,
 ::std::equal_to< OUString > > NameIndexHash;
 

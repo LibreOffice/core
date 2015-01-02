@@ -22,8 +22,8 @@
 
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_set>
+#include <unordered_map>
 
 namespace sw {
     namespace mark {
@@ -109,7 +109,7 @@ namespace sw {
             // additional container for fieldmarks
             container_t m_vFieldmarks;
 
-            boost::unordered_set<OUString, OUStringHash> m_aMarkNamesSet;
+            std::unordered_set<OUString, OUStringHash> m_aMarkNamesSet;
 
             // container for annotation marks
             container_t m_vAnnotationMarks;

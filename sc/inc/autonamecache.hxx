@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SC_INC_AUTONAMECACHE_HXX
 #define INCLUDED_SC_INC_AUTONAMECACHE_HXX
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 #include "address.hxx"
 #include "global.hxx"
 
-typedef ::std::vector< ScAddress > ScAutoNameAddresses;
-typedef ::boost::unordered_map< OUString, ScAutoNameAddresses, OUStringHash > ScAutoNameHashMap;
+typedef std::vector< ScAddress > ScAutoNameAddresses;
+typedef std::unordered_map< OUString, ScAutoNameAddresses, OUStringHash > ScAutoNameHashMap;
 
 /**  Cache for faster lookup of automatic names during CompileXML
      (during CompileXML, no document content is changed). */

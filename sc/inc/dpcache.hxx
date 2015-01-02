@@ -27,9 +27,9 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_set.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
+#include <unordered_set>
 #include <vector>
 #include <set>
 
@@ -44,7 +44,7 @@ struct ScDPNumGroupInfo;
  */
 class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
-    typedef boost::unordered_set<OUString, OUStringHash> StringSetType;
+    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
 
 public:
     typedef std::vector<ScDPItemData> ItemsType;

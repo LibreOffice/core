@@ -75,8 +75,8 @@
 #include "docparam.hxx"
 #include "cellvalue.hxx"
 
+#include <unordered_set>
 #include <vector>
-#include <boost/unordered_set.hpp>
 
 using namespace com::sun::star;
 using ::std::vector;
@@ -493,7 +493,7 @@ void lcl_GetColumnTypes(
     SCCOL nLastCol = rDataRange.aEnd.Col();
     SCROW nLastRow = rDataRange.aEnd.Row();
 
-    typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
     StrSetType aFieldNames;
 
     long nField = 0;

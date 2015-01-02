@@ -26,8 +26,8 @@
 #include "dpitemdata.hxx"
 #include "calcmacros.hxx"
 
+#include <unordered_set>
 #include <vector>
-#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <mdds/flat_segment_tree.hpp>
@@ -119,7 +119,7 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
+    void filterByPageDimension(const std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
@@ -136,9 +136,9 @@ public:
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
-    void filterTable(const ::std::vector<Criterion>& rCriteria,
+    void filterTable(const std::vector<Criterion>& rCriteria,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
-                     const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
+                     const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
@@ -159,7 +159,7 @@ private:
      * @param nRow index of row to be tested.
      * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
 
 private:
 

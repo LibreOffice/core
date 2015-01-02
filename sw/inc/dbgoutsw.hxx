@@ -21,10 +21,10 @@
 
 #ifdef DBG_UTIL
 
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <tox.hxx>
 #include <cstdio>
+#include <unordered_map>
 
 class SwCntntNode;
 class SwNode;
@@ -78,11 +78,11 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
-OUString lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
+OUString lcl_dbg_out(const std::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
     OUString aResult("[");
 
-    typename boost::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
+    typename std::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
     for (aIt = rMap.begin(); aIt != rMap.end(); aIt++)
     {
@@ -102,7 +102,7 @@ OUString lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & 
 }
 
 template<typename tKey, typename tMember, typename fHashFunction>
-const char * dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
+const char * dbg_out(const std::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
     return dbg_out(lcl_dbg_out(rMap));
 }

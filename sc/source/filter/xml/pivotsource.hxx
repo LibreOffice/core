@@ -14,8 +14,8 @@
 #include <dpsdbtab.hxx>
 #include <dpobject.hxx>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace sc {
 
@@ -25,8 +25,8 @@ namespace sc {
  */
 struct PivotTableSources
 {
-    typedef boost::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
-    typedef boost::unordered_map<ScDPObject*, SelectedPagesType> SelectedPagesMapType;
+    typedef std::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
+    typedef std::unordered_map<ScDPObject*, SelectedPagesType> SelectedPagesMapType;
 
     struct SelectedPages
     {

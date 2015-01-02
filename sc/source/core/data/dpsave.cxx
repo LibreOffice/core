@@ -47,8 +47,8 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
@@ -677,9 +677,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_DP_HAS_HIDDEN_MEMBER, bHasHiddenMember);
 }
 
-void ScDPSaveDimension::UpdateMemberVisibility(const boost::unordered_map<OUString, bool, OUStringHash>& rData)
+void ScDPSaveDimension::UpdateMemberVisibility(const std::unordered_map<OUString, bool, OUStringHash>& rData)
 {
-    typedef boost::unordered_map<OUString, bool, OUStringHash> DataMap;
+    typedef std::unordered_map<OUString, bool, OUStringHash> DataMap;
     MemberList::iterator itrMem = maMemberList.begin(), itrMemEnd = maMemberList.end();
     for (; itrMem != itrMemEnd; ++itrMem)
     {
@@ -1329,7 +1329,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         return;
 
     // First, build a dimension name-to-index map.
-    typedef boost::unordered_map<OUString, long, OUStringHash> NameIndexMap;
+    typedef std::unordered_map<OUString, long, OUStringHash> NameIndexMap;
     NameIndexMap aMap;
     long nColCount = pData->GetColumnCount();
     for (long i = 0; i < nColCount; ++i)
@@ -1372,7 +1372,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
 
 void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
 {
-    typedef boost::unordered_map<OUString, long, OUStringHash> NameIndexMap;
+    typedef std::unordered_map<OUString, long, OUStringHash> NameIndexMap;
 
     // First, build a dimension name-to-index map.
     NameIndexMap aMap;

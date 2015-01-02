@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SC_INC_DPGROUP_HXX
 #define INCLUDED_SC_INC_DPGROUP_HXX
 
+#include <unordered_set>
 #include <vector>
-#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "dptabdat.hxx"
@@ -119,7 +119,7 @@ public:
 
 class ScDPGroupTableData : public ScDPTableData
 {
-    typedef ::boost::unordered_set< OUString, OUStringHash, ::std::equal_to< OUString > > StringHashSet;
+    typedef std::unordered_set< OUString, OUStringHash, ::std::equal_to< OUString > > StringHashSet;
 
     ::boost::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;
@@ -165,9 +165,9 @@ public:
     virtual bool                    IsRepeatIfEmpty() SAL_OVERRIDE;
 
     virtual void                    CreateCacheTable() SAL_OVERRIDE;
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) SAL_OVERRIDE;
-    virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
-                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
+    virtual void                    FilterCacheTable(const std::vector<ScDPFilteredCache::Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rDataDims) SAL_OVERRIDE;
+    virtual void                    GetDrillDownData(const std::vector<ScDPFilteredCache::Criterion>& rCriteria,
+                                                     const std::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) SAL_OVERRIDE;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) SAL_OVERRIDE;
     virtual const ScDPFilteredCache&   GetCacheTable() const SAL_OVERRIDE;

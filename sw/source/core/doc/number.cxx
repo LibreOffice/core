@@ -42,10 +42,10 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 
-#include <boost/unordered_map.hpp>
-
 #include <list.hxx>
+
 #include <algorithm>
+#include <unordered_map>
 
 #include <unotools/saveopt.hxx>
 
@@ -149,7 +149,7 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
     }
 }
 
-void SwNumRule::SetNumRuleMap(boost::unordered_map<OUString, SwNumRule *, OUStringHash> *
+void SwNumRule::SetNumRuleMap(std::unordered_map<OUString, SwNumRule *, OUStringHash> *
                               pNumRuleMap)
 {
     mpNumRuleMap = pNumRuleMap;

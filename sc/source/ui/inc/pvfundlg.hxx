@@ -36,7 +36,7 @@
 #include "pivot.hxx"
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 typedef sfx::ListBoxWrapper< sal_Int32 > ScDPListBoxWrapper;
 
@@ -56,7 +56,7 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
-    typedef ::boost::unordered_map< OUString, OUString, OUStringHash > NameMapType;
+    typedef std::unordered_map< OUString, OUString, OUStringHash > NameMapType;
 public:
     explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
@@ -178,7 +178,7 @@ private:
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
 
-    typedef ::boost::unordered_map<OUString, ScDPName, OUStringHash> NameMapType;
+    typedef std::unordered_map<OUString, ScDPName, OUStringHash> NameMapType;
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
@@ -203,7 +203,7 @@ private:
     ListBox*            mpLbDims;
     OKButton*           mpBtnOk;
 
-    typedef ::boost::unordered_map<OUString, long, OUStringHash> DimNameIndexMap;
+    typedef std::unordered_map<OUString, long, OUStringHash> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 };

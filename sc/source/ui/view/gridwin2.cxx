@@ -46,15 +46,14 @@
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
+#include <unordered_map>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::std::vector;
 using ::std::unique_ptr;
-using ::boost::unordered_map;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -528,7 +527,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
 {
-    typedef boost::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
+    typedef std::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
 
     if (!mpDPFieldPopup)
         return;

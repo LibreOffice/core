@@ -37,9 +37,9 @@
 #include <math.h>
 #include <float.h>
 #include <algorithm>
+#include <unordered_map>
 #include <boost/checked_delete.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -3884,7 +3884,7 @@ void ScDPResultVisibilityData::addVisibleMember(const OUString& rDimName, const 
 
 void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criterion>& rFilters) const
 {
-    typedef boost::unordered_map<OUString, long, OUStringHash> FieldNameMapType;
+    typedef std::unordered_map<OUString, long, OUStringHash> FieldNameMapType;
     FieldNameMapType aFieldNames;
     ScDPTableData* pData = mpSource->GetData();
     long nColumnCount = pData->GetColumnCount();

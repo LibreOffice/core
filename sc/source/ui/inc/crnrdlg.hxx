@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ScViewData;
 class ScDocument;
@@ -64,7 +64,7 @@ private:
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
-    typedef ::boost::unordered_map< OUString, ScRange, OUStringHash > NameRangeMap;
+    typedef std::unordered_map< OUString, ScRange, OUStringHash > NameRangeMap;
     NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;

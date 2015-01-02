@@ -18,18 +18,18 @@
  */
 
 #include "swstylemanager.hxx"
-#include <boost/unordered_map.hpp>
 #include <svl/stylepool.hxx>
 #include <doc.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>
 #include <swtypes.hxx>
 #include <istyleaccess.hxx>
+#include <unordered_map>
 
-typedef ::boost::unordered_map< const OUString,
-                         StylePool::SfxItemSet_Pointer_t,
-                         OUStringHash,
-                         ::std::equal_to< OUString > > SwStyleNameCache;
+typedef std::unordered_map< OUString,
+                            StylePool::SfxItemSet_Pointer_t,
+                            OUStringHash,
+                            std::equal_to< OUString > > SwStyleNameCache;
 
 class SwStyleCache
 {

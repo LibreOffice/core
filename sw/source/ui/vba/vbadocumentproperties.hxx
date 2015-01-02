@@ -22,7 +22,6 @@
 #include <ooo/vba/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
-#include <boost/unordered_map.hpp>
 
 typedef CollTestImplHelper< ov::XDocumentProperties > SwVbaDocumentproperties_BASE;
 

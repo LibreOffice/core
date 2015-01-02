@@ -13,7 +13,7 @@
 #include "address.hxx"
 #include <editeng/misspellrange.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace sc {
 
@@ -40,7 +40,7 @@ struct SpellCheckContext
         bool operator== (const CellPos& r) const;
     };
 
-    typedef boost::unordered_map<CellPos, std::vector<editeng::MisspellRanges>, CellPos::Hash> CellMapType;
+    typedef std::unordered_map<CellPos, std::vector<editeng::MisspellRanges>, CellPos::Hash> CellMapType;
 
     CellPos maPos;
     CellMapType maMisspellCells;

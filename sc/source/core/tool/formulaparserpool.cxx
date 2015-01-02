@@ -46,9 +46,9 @@ public:
                             const OUString& rNamespace );
 
 private:
-    typedef ::boost::unordered_map<
+    typedef std::unordered_map<
         OUString, Reference< XSingleComponentFactory >,
-        OUStringHash, ::std::equal_to< OUString > > FactoryMap;
+        OUStringHash, std::equal_to< OUString > > FactoryMap;
 
     Reference< XComponentContext > mxContext;   /// Global component context.
     FactoryMap          maFactories;            /// All parser factories, mapped by formula namespace.

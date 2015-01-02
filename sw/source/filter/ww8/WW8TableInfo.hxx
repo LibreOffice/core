@@ -19,12 +19,12 @@
 
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8TABLEINFO_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8TABLEINFO_HXX
-#include <boost/unordered_map.hpp>
 #include <string>
 #include <map>
 #include <set>
 #include <functional>
 #include <boost/shared_ptr.hpp>
+#include <unordered_map>
 #include <vector>
 #include <sal/types.h>
 #include <swrect.hxx>
@@ -293,13 +293,13 @@ public:
 class WW8TableInfo
 {
     friend class WW8TableNodeInfoInner;
-    typedef boost::unordered_map<const SwNode *, WW8TableNodeInfo::Pointer_t, hashNode > Map_t;
+    typedef std::unordered_map<const SwNode *, WW8TableNodeInfo::Pointer_t, hashNode > Map_t;
     Map_t mMap;
 
-    typedef boost::unordered_map<const SwTable *, WW8TableCellGrid::Pointer_t, hashTable > CellGridMap_t;
+    typedef std::unordered_map<const SwTable *, WW8TableCellGrid::Pointer_t, hashTable > CellGridMap_t;
     CellGridMap_t mCellGridMap;
 
-    typedef boost::unordered_map<const SwTable *, const SwNode *, hashTable > FirstInTableMap_t;
+    typedef std::unordered_map<const SwTable *, const SwNode *, hashTable > FirstInTableMap_t;
     FirstInTableMap_t mFirstInTableMap;
 
     WW8TableNodeInfo *

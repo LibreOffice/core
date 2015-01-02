@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_HTMLPARS_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_HTMLPARS_HXX
 
-#include <memory>
-#include <stack>
-#include <vector>
 #include <list>
+#include <memory>
 #include <map>
+#include <stack>
+#include <unordered_map>
+#include <vector>
 #include <o3tl/sorted_vector.hxx>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/unordered_map.hpp>
 
 #include "rangelst.hxx"
 #include "eeparser.hxx"
@@ -48,7 +48,7 @@ class ScHTMLTable;
  */
 class ScHTMLStyles
 {
-    typedef ::boost::unordered_map<OUString, OUString, OUStringHash> PropsType;
+    typedef std::unordered_map<OUString, OUString, OUStringHash> PropsType;
     typedef ::boost::ptr_map<OUString, PropsType> NamePropsType;
     typedef ::boost::ptr_map<OUString, NamePropsType> ElemsType;
 

@@ -22,8 +22,8 @@
 
 #include <xmloff/maptype.hxx>
 #include <editeng/editdata.hxx>
+#include <unordered_set>
 #include <vector>
-#include <boost/unordered_set.hpp>
 
 #include "address.hxx"
 
@@ -104,7 +104,7 @@ struct ScLoadedNamespaceEntry
 
 class ScSheetSaveData
 {
-    boost::unordered_set<OUString, OUStringHash>  maInitialPrefixes;
+    std::unordered_set<OUString, OUStringHash>  maInitialPrefixes;
     std::vector<ScLoadedNamespaceEntry>              maLoadedNamespaces;
 
     std::vector<ScCellStyleEntry> maCellStyles;

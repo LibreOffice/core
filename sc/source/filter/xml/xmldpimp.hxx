@@ -32,7 +32,7 @@
 #include "queryparam.hxx"
 #include "xmlimprt.hxx"
 
-#include <boost/unordered_set.hpp>
+#include <unordered_map>
 
 class ScDPSaveNumGroupDimension;
 class ScDPSaveGroupDimension;
@@ -71,7 +71,7 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
-    typedef boost::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
+    typedef std::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
 
     struct GrandTotalItem
     {

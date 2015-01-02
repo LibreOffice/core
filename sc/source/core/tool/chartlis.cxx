@@ -142,9 +142,9 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
         // was listening to.
 
         ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
-        const boost::unordered_set<sal_uInt16>& rFileIds = r.mpExtRefListener->getAllFileIds();
+        const std::unordered_set<sal_uInt16>& rFileIds = r.mpExtRefListener->getAllFileIds();
         mpExtRefListener.reset(new ExternalRefListener(*this, mpDoc));
-        boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+        std::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
         {
             pRefMgr->addLinkListener(*itr, mpExtRefListener.get());
@@ -163,8 +163,8 @@ ScChartListener::~ScChartListener()
     {
         // Stop listening to all external files.
         ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
-        const boost::unordered_set<sal_uInt16>& rFileIds = mpExtRefListener->getAllFileIds();
-        boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+        const std::unordered_set<sal_uInt16>& rFileIds = mpExtRefListener->getAllFileIds();
+        std::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
             pRefMgr->removeLinkListener(*itr, mpExtRefListener.get());
     }

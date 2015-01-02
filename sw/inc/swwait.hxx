@@ -22,7 +22,7 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 class SwDocShell;
 class SfxDispatcher;
@@ -43,7 +43,7 @@ private:
 
     SwDocShell& mrDoc;
     const bool mbLockUnlockDispatcher;
-    boost::unordered_set< SfxDispatcher* > mpLockedDispatchers;
+    std::unordered_set< SfxDispatcher* > mpLockedDispatchers;
 };
 
 #endif

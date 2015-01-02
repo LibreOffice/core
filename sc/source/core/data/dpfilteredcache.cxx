@@ -257,7 +257,7 @@ bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
     return bFilter && bPage;
 }
 
-void ScDPFilteredCache::filterByPageDimension(const vector<Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
+void ScDPFilteredCache::filterByPageDimension(const vector<Criterion>& rCriteria, const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     SCROW nRowSize = getRowSize();
 
@@ -308,7 +308,7 @@ const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColu
 }
 
 void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
-                                 const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
+                                 const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
     sal_Int32 nColSize = getColSize();
@@ -391,7 +391,7 @@ bool ScDPFilteredCache::empty() const
 }
 
 bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
-                                    const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const
+                                    const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const
 {
     sal_Int32 nColSize = getColSize();
     vector<Criterion>::const_iterator itrEnd = rCriteria.end();

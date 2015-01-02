@@ -21,9 +21,8 @@
 #include <orcus/spreadsheet/import_interface.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_map.hpp>
-
 #include <map>
+#include <unordered_map>
 
 class ScDocumentImport;
 class ScOrcusSheet;
@@ -235,7 +234,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
         StringCellCache(const ScAddress& rPos, size_t nIndex);
     };
 
-    typedef boost::unordered_map<OUString, size_t, OUStringHash> StringHashType;
+    typedef std::unordered_map<OUString, size_t, OUStringHash> StringHashType;
     typedef std::vector<StringCellCache> StringCellCaches;
 
     ScDocumentImport maDoc;

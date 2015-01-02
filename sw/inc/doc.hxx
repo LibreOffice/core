@@ -47,12 +47,12 @@
 #include <charfmt.hxx>
 #include <docary.hxx>
 
-#include <boost/unordered_map.hpp>
-
 #include <svtools/embedhlp.hxx>
-#include <vector>
-#include <set>
+
 #include <memory>
+#include <set>
+#include <unordered_map>
+#include <vector>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -339,7 +339,7 @@ class SW_DLLPUBLIC SwDoc :
     mutable SwNumRuleTbl    *mpNumRuleTbl;   //< List of all named NumRules.
 
     // Hash map to find numrules by name
-    mutable boost::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
+    mutable std::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
 
     SwUnoCrsrTbl    *mpUnoCrsrTbl;
 

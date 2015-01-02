@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYOUTER_HXX
 
 #include "swtypes.hxx"
+#include <unordered_map>
 
 class SwEndnoter;
 class SwDoc;
@@ -33,7 +34,6 @@ class SwTxtFrm;
 class SwRowFrm;
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
-#include <boost/unordered_map.hpp>
 class SwFlowFrm;
 class SwLayoutFrm;
 
@@ -89,7 +89,7 @@ private:
                    p_key1.mnFreeSpaceInNewUpper == p_key2.mnFreeSpaceInNewUpper;
         }
     };
-    boost::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
+    std::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
 public:

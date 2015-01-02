@@ -106,7 +106,7 @@ public:
     }
 
 private:
-    typedef boost::unordered_map<SCCOL, Item*> ColCacheType;
+    typedef std::unordered_map<SCCOL, Item*> ColCacheType;
     ColCacheType maCache;
     sc::TokenStringContext maCxt;
 };

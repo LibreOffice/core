@@ -29,15 +29,8 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include "excelvbahelper.hxx"
-#include <boost/unordered_map.hpp>
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
-/* #TODO see if this hash table is 'really' necessary
-typedef ::boost::unordered_map< OUString,
-css::uno::Reference< ov::excel::XChartObject >,
-    OUStringHash,
-    ::std::equal_to< OUString > > aHashTable;
-*/
 
 class ScVbaChartObjects : public ChartObjects_BASE
 {

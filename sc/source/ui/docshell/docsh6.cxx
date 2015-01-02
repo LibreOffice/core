@@ -342,7 +342,7 @@ void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 
 void ScDocShell::UpdateLinks()
 {
-    typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
 
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
     StrSetType aNames;

@@ -23,8 +23,8 @@
 #include <xmloff/XMLTextTableContext.hxx>
 
 // STL include
-#include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <unordered_map>
 #include <vector>
 
 class SwXMLImport;
@@ -76,7 +76,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
-    typedef boost::unordered_map<TableBoxIndex,SwTableBoxFmt*,
+    typedef std::unordered_map<TableBoxIndex,SwTableBoxFmt*,
                           TableBoxIndexHasher> map_BoxFmt;
     map_BoxFmt* pSharedBoxFormats;
 

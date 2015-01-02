@@ -27,7 +27,6 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::std::list;
-using ::boost::unordered_map;
 
 using namespace ::com::sun::star;
 

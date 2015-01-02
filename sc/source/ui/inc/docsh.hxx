@@ -35,11 +35,10 @@
 #include "optutil.hxx"
 #include "docuno.hxx"
 
-#include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
-
 #include <config_telepathy.h>
+#include <unordered_map>
 
 class ScRefreshTimerProtector;
 class ScEditEngineDefaulter;
@@ -73,7 +72,7 @@ class ScCollaboration;
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
 
-typedef ::boost::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
+typedef std::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
 

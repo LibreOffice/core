@@ -11,13 +11,13 @@
 #define INCLUDED_SC_REORDERMAP_HXX
 
 #include <types.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace sc {
 
 class ColRowReorderMapType
 {
-    typedef boost::unordered_map<SCCOLROW,SCCOLROW> DataType;
+    typedef std::unordered_map<SCCOLROW,SCCOLROW> DataType;
     DataType maData;
 public:
     typedef DataType::value_type value_type;

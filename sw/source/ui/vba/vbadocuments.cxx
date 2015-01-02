@@ -47,7 +47,6 @@
 #include "vbadocuments.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <osl/file.hxx>
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

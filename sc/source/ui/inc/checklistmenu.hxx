@@ -16,8 +16,8 @@
 #include <vcl/timer.hxx>
 #include <svx/checklbx.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star {
 
@@ -212,7 +212,7 @@ class ScCheckListBox : public SvTreeListBox
 class ScCheckListMenuWindow : public ScMenuFloatingWindow
 {
 public:
-    typedef boost::unordered_map<OUString, bool, OUStringHash> ResultType;
+    typedef std::unordered_map<OUString, bool, OUStringHash> ResultType;
 
     /**
      * Extended data that the client code may need to store.  Create a

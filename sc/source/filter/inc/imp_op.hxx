@@ -34,7 +34,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class SvStream;
 
@@ -88,7 +88,7 @@ protected:
         sal_uInt16 mnXF;
         ScFormulaCell* mpCell;
     };
-    typedef boost::unordered_map<SCCOL, LastFormula> LastFormulaMapType;
+    typedef std::unordered_map<SCCOL, LastFormula> LastFormulaMapType;
 
     static const double     fExcToTwips;        // translate 1/256 chars -> Twips
 

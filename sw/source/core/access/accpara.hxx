@@ -29,9 +29,9 @@
 #include <txmsrt.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
-#include <boost/unordered_map.hpp>
 #include <accselectionhelper.hxx>
 #include <calbck.hxx>
+#include <unordered_map>
 
 class SwField;
 class SwTxtFrm;
@@ -49,7 +49,7 @@ namespace com { namespace sun { namespace star {
     namespace style { struct TabStop; }
 } } }
 
-typedef ::boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
                          ::com::sun::star::beans::PropertyValue,
                          OUStringHash,
                          ::std::equal_to< OUString > > tAccParaPropValMap;

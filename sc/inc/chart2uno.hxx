@@ -49,9 +49,9 @@
 #include <svl/itemprop.hxx>
 
 #include <list>
+#include <unordered_set>
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_set.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -383,14 +383,14 @@ private:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) SAL_OVERRIDE;
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        const ::boost::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
+        const std::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChart2DataSequence&       mrParent;
-        ::boost::unordered_set<sal_uInt16> maFileIds;
+        std::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 

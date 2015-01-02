@@ -29,7 +29,6 @@
 #include <rtl/ustring.hxx>
 
 #include <boost/static_assert.hpp>
-#include <boost/unordered_map.hpp>
 #include <vector>
 
 class ImageList;

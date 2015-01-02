@@ -694,7 +694,7 @@ OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
 
 namespace {
 
-typedef boost::unordered_set<OUString, OUStringHash> LabelSet;
+typedef std::unordered_set<OUString, OUStringHash> LabelSet;
 
 class InsertLabel : public std::unary_function<OUString, void>
 {

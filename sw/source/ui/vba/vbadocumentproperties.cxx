@@ -393,7 +393,7 @@ public:
     }
 };
 
-typedef boost::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
+typedef std::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
 
 class BuiltInIndexHelper
 {
@@ -637,7 +637,7 @@ typedef ::cppu::WeakImplHelper3< com::sun::star::container::XIndexAccess
         ,com::sun::star::container::XEnumerationAccess
         > PropertiesImpl_BASE;
 
-typedef boost::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
+typedef std::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
 typedef ::cppu::WeakImplHelper1< com::sun::star::container::XEnumeration > DocPropEnumeration_BASE;
 class DocPropEnumeration : public DocPropEnumeration_BASE
@@ -659,7 +659,7 @@ public:
     }
 };
 
-typedef boost::unordered_map< OUString, uno::Reference< XDocumentProperty >, OUStringHash, ::std::equal_to< OUString > > DocPropsByName;
+typedef std::unordered_map< OUString, uno::Reference< XDocumentProperty >, OUStringHash, ::std::equal_to< OUString > > DocPropsByName;
 
 class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {

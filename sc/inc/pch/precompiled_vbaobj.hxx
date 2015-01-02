@@ -23,7 +23,6 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -315,6 +314,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <unordered_map>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>

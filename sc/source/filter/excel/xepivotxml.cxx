@@ -403,7 +403,7 @@ struct DataField
 
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
 {
-    typedef boost::unordered_map<OUString, long, OUStringHash> NameToIdMapType;
+    typedef std::unordered_map<OUString, long, OUStringHash> NameToIdMapType;
 
     const XclExpXmlPivotCaches::Entry* pCacheEntry = mrCaches.GetCache(nCacheId);
     if (!pCacheEntry)

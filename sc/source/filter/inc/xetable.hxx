@@ -31,10 +31,10 @@
 #include "xestyle.hxx"
 #include "xeextlst.hxx"
 
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
+#include <unordered_set>
+#include <unordered_map>
 
 /* ============================================================================
 Export of cell tables including row and column description.
@@ -195,8 +195,8 @@ private:
      */
     bool IsValidTokenArray( const ScTokenArray& rArray ) const;
 
-    typedef boost::unordered_map<const ScTokenArray*, XclExpShrfmlaRef> TokensType;
-    typedef boost::unordered_set<const ScTokenArray*> BadTokenArraysType;
+    typedef std::unordered_map<const ScTokenArray*, XclExpShrfmlaRef> TokensType;
+    typedef std::unordered_set<const ScTokenArray*> BadTokenArraysType;
 
     TokensType         maRecMap;    /// Map containing the SHRFMLA records.
     BadTokenArraysType maBadTokens; /// shared tokens we should *not* export as SHRFMLA

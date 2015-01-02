@@ -15,9 +15,9 @@
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <memory>
+#include <unordered_map>
+#include <unordered_set>
 
 class ScDocument;
 class ScFormulaCell;
@@ -38,7 +38,7 @@ public:
     void BroadcastModuleUpdate(const OUString& aModuleName);
 
 private:
-    typedef boost::unordered_map< OUString, bool, OUStringHash, ::std::equal_to< OUString > > NameBoolMap;
+    typedef std::unordered_map< OUString, bool, OUStringHash, ::std::equal_to< OUString > > NameBoolMap;
     NameBoolMap mhFuncToVolatile;
     com::sun::star::uno::Reference< com::sun::star::container::XContainerListener > mxContainerListener;
 

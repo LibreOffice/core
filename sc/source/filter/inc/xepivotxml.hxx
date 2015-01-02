@@ -14,7 +14,7 @@
 #include <xeroot.hxx>
 
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ScDPCache;
 class ScDPCollection;
@@ -75,7 +75,7 @@ private:
 class XclExpXmlPivotTableManager : protected XclExpRoot
 {
     typedef boost::ptr_map<SCTAB, XclExpXmlPivotTables> TablesType;
-    typedef boost::unordered_map<const ScDPObject*, sal_Int32> CacheIdMapType;
+    typedef std::unordered_map<const ScDPObject*, sal_Int32> CacheIdMapType;
 public:
     XclExpXmlPivotTableManager( const XclExpRoot& rRoot );
 

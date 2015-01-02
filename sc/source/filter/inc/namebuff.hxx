@@ -29,8 +29,8 @@
 #include "rangenam.hxx"
 #include "formulacell.hxx"
 
-#include <boost/unordered_map.hpp>
 #include <list>
+#include <unordered_map>
 
 class ScTokenArray;
 class NameBuffer;
@@ -139,7 +139,7 @@ inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
  */
 class SharedFormulaBuffer : public ExcRoot
 {
-    typedef boost::unordered_map<ScAddress, ScTokenArray*, ScAddressHashFunctor> TokenArraysType;
+    typedef std::unordered_map<ScAddress, ScTokenArray*, ScAddressHashFunctor> TokenArraysType;
     TokenArraysType maTokenArrays;
 
 public:

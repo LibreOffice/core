@@ -8,6 +8,7 @@
  */
 
 #include "columnset.hxx"
+#include <algorithm>
 
 namespace sc {
 

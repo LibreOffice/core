@@ -13,7 +13,7 @@
 #include <address.hxx>
 #include <svl/listener.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ScRangeList;
 
@@ -27,8 +27,8 @@ class RefQueryFormulaGroup : public SvtListener::QueryBase
 {
 public:
     typedef std::vector<SCROW> ColType;
-    typedef boost::unordered_map<SCCOL,ColType> ColsType;
-    typedef boost::unordered_map<SCTAB,ColsType> TabsType;
+    typedef std::unordered_map<SCCOL,ColType> ColsType;
+    typedef std::unordered_map<SCTAB,ColsType> TabsType;
 
     RefQueryFormulaGroup();
     virtual ~RefQueryFormulaGroup();

@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_set.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <i18nlangtag/languagetag.hxx>
@@ -127,6 +126,8 @@
 #include <svx/hlnkitem.hxx>
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
+
+#include <unordered_set>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -1730,7 +1731,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     }
 
     bool bFound = false;
-    ::boost::unordered_set<size_t> aLoopWatch;
+    std::unordered_set<size_t> aLoopWatch;
     while (pSty && !bFound)
     {
         const SfxPoolItem* pTabs;

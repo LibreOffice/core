@@ -32,7 +32,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
-using ::boost::unordered_map;
 using ::std::list;
 using ::std::for_each;
 using ::std::pair;
@@ -86,7 +85,7 @@ public:
     }
 
 private:
-    typedef boost::unordered_map<OUString, list<ScFormulaCell*>, OUStringHash> ModuleCellMap;
+    typedef std::unordered_map<OUString, list<ScFormulaCell*>, OUStringHash> ModuleCellMap;
     ModuleCellMap maCells;
 };
 
@@ -126,7 +125,7 @@ public:
 
 void ScMacroManager::InitUserFuncData()
 {
-    // Clear boost::unordered_map
+    // Clear unordered_map
     mhFuncToVolatile.clear();
     OUString sProjectName("Standard");
 

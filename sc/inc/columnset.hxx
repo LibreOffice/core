@@ -12,9 +12,9 @@
 
 #include "address.hxx"
 
+#include <unordered_set>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
 
 namespace sc {
 
@@ -23,8 +23,8 @@ namespace sc {
  */
 class ColumnSet
 {
-    typedef boost::unordered_set<SCCOL> ColsType;
-    typedef boost::unordered_map<SCTAB, ColsType> TabsType;
+    typedef std::unordered_set<SCCOL> ColsType;
+    typedef std::unordered_map<SCTAB, ColsType> TabsType;
     TabsType maTabs;
 
 public:

@@ -33,8 +33,8 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-#include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <unordered_map>
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -93,7 +93,7 @@ class ScXMLExport : public SvXMLExport
     rtl::Reference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     rtl::Reference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
-    typedef ::boost::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
+    typedef std::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
     NumberFormatIndexMap                aNumFmtIndexMap;
     ScMySharedData*                     pSharedData;
     ScColumnStyles*                 pColumnStyles;

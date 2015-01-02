@@ -56,8 +56,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <cassert>
 #include <cctype>
 #include <cfloat>
@@ -1047,6 +1045,8 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>
+#include <unordered_map>
+#include <unordered_set>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/charclass.hxx>

@@ -175,7 +175,8 @@ public:
     }
 };
 
-typedef boost::unordered_map< OUString, OUString, OUStringHash > StringHashMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash > StringHashMap;
+
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
     StringHashMap mTemplateToProject;

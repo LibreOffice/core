@@ -22,7 +22,7 @@
 
 #include <IDocumentListsAccess.hxx>
 #include <boost/utility.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class SwList;
 class SwDoc;
@@ -56,7 +56,7 @@ class DocumentListsManager : public IDocumentListsAccess,
 
         SwDoc& m_rDoc;
 
-        typedef boost::unordered_map<OUString, SwList*, OUStringHash> tHashMapForLists;
+        typedef std::unordered_map<OUString, SwList*, OUStringHash> tHashMapForLists;
         // container to hold the lists of the text document
         tHashMapForLists maLists;
         // relation between list style and its default list

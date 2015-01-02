@@ -16,7 +16,6 @@
 
 #include <basic/sbuno.hxx>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -181,6 +180,7 @@
 #include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <unordered_map>
 #include <unotools/pathoptions.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include <vbahelper/vbahelper.hxx>

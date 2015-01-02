@@ -32,7 +32,7 @@
 #include <mdds/multi_type_vector_custom_func1.hpp>
 #include <mdds/multi_type_vector_custom_func3.hpp>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ScDocument;
 struct ScRefCellValue;
@@ -125,8 +125,8 @@ struct ColumnBlockConstPosition
 
 class ColumnBlockPositionSet
 {
-    typedef boost::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
-    typedef boost::unordered_map<SCTAB, ColumnsType> TablesType;
+    typedef std::unordered_map<SCCOL, ColumnBlockPosition> ColumnsType;
+    typedef std::unordered_map<SCTAB, ColumnsType> TablesType;
 
     ScDocument& mrDoc;
     TablesType maTables;

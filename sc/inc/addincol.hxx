@@ -35,13 +35,13 @@
 
 #include "types.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class SfxObjectShell;
 class ScUnoAddInFuncData;
 class ScFuncDesc;
 
-typedef ::boost::unordered_map< OUString, const ScUnoAddInFuncData*, OUStringHash > ScAddInHashMap;
+typedef std::unordered_map< OUString, const ScUnoAddInFuncData*, OUStringHash > ScAddInHashMap;
 
 enum ScAddInArgumentType
 {

@@ -18,7 +18,6 @@
  */
 #include "vbawindows.hxx"
 
-#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -27,12 +26,14 @@
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
 
+#include <unordered_map>
+
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef  boost::unordered_map< OUString,
+typedef  std::unordered_map< OUString,
 sal_Int32, OUStringHash,
-::std::equal_to< OUString > > NameIndexHash;
+std::equal_to< OUString > > NameIndexHash;
 
 static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
 {

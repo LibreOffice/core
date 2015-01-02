@@ -23,9 +23,9 @@
 #include "global.hxx"
 #include <formula/opcode.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <boost/unordered_map.hpp>
 #include <list>
 #include <memory>
+#include <unordered_map>
 
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -40,7 +40,7 @@ struct ScCellKeyword
     ScCellKeyword(const sal_Char* pName, OpCode eOpCode, const ::com::sun::star::lang::Locale& rLocale);
 };
 
-typedef ::boost::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash > ScCellKeywordHashMap;
+typedef std::unordered_map< OUString, ::std::list<ScCellKeyword>, OUStringHash > ScCellKeywordHashMap;
 
 /** Translate cell function keywords.
 

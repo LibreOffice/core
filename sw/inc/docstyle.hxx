@@ -25,8 +25,8 @@
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 #include "swdllapi.h"
-#include <boost/unordered_map.hpp>
 
+#include <unordered_map>
 #include <vector>
 
 class SwDoc;
@@ -142,7 +142,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     class SwPoolFmtList
     {
         std::vector<OUString> maImpl;
-        typedef boost::unordered_map<OUString, sal_uInt32, OUStringHash> UniqueHash;
+        typedef std::unordered_map<OUString, sal_uInt32, OUStringHash> UniqueHash;
         UniqueHash maUnique;
         void rehash();
     public:
