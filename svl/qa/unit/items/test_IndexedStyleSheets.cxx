@@ -133,6 +133,7 @@ void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
     std::vector<unsigned> r = iss.FindPositionsByName(name1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Two style sheets are found by 'name1'",
             2u, static_cast<unsigned>(r.size()));
+    std::sort (r.begin(), r.end());
     CPPUNIT_ASSERT_EQUAL(0u, r.at(0));
     CPPUNIT_ASSERT_EQUAL(2u, r.at(1));
 
