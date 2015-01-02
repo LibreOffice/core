@@ -500,8 +500,6 @@ void createKnotVector(const lcl_tSizeType n, const sal_uInt32 p, double* t, doub
 void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p,const double* u, double* rowN)
 {
     // get N_p(t_k) recursively, only N_(i-p) till N_(i) are relevant, all other N_# are zero
-    double fRightFactor = 0.0;
-    double fLeftFactor = 0.0;
 
     // initialize with indicator function degree 0
     rowN[p] = 1.0; // all others are zero
@@ -510,7 +508,8 @@ void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p
     for (sal_uInt32 s = 1; s <= p; ++s)
     {
         // first element
-        fRightFactor = ( u[i+1] - tk ) / ( u[i+1]- u[i-s+1] );
+        double fLeftFactor = 0.0;
+        double fRightFactor = ( u[i+1] - tk ) / ( u[i+1]- u[i-s+1] );
         // i-s "true index" - (i-p)"shift" = p-s
         rowN[p-s] = fRightFactor * rowN[p-s+1];
 
@@ -589,8 +588,6 @@ void SplineCalculater::CalculateCubicSplines(
 
         // generate a spline for each coordinate. It holds the complete
         // information to calculate each point of the curve
-        double fXDerivation;
-        double fYDerivation;
         lcl_SplineCalculation* aSplineX;
         lcl_SplineCalculation* aSplineY;
         // lcl_SplineCalculation* aSplineZ; the z-coordinates of all points in
@@ -610,8 +607,8 @@ void SplineCalculater::CalculateCubicSplines(
         {
             double fInfty;
             ::rtl::math::setInf( &fInfty, false );
-            fXDerivation = fInfty;
-            fYDerivation = fInfty;
+            double fXDerivation = fInfty;
+            double fYDerivation = fInfty;
             aSplineX = new lcl_SplineCalculation( aInputX, fXDerivation, fXDerivation );
             aSplineY = new lcl_SplineCalculation( aInputY, fYDerivation, fYDerivation );
         }
@@ -626,10 +623,6 @@ void SplineCalculater::CalculateCubicSplines(
         double* pNewZ = rResult.SequenceZ[nOuter].getArray();
 
         sal_uInt32 nNewPointIndex = 0; // Index in result points
-        // needed for inner loop
-        double    fInc;   // step for intermediate points
-        sal_uInt32 nj;     // for loop
-        double    fParam; // a intermediate parameter value
 
         for( sal_uInt32 ni = 0; ni < nMaxIndexPoints; ni++ )
         {
@@ -640,10 +633,10 @@ void SplineCalculater::CalculateCubicSplines(
             nNewPointIndex++;
 
             // calculate intermediate points
-            fInc = ( aParameter[ ni+1 ] - aParameter[ni] ) / static_cast< double >( nGranularity );
-            for(nj = 1; nj < nGranularity; nj++)
+            double fInc = ( aParameter[ ni+1 ] - aParameter[ni] ) / static_cast< double >( nGranularity );
+            for(sal_uInt32 nj = 1; nj < nGranularity; nj++)
             {
-                fParam = aParameter[ni] + ( fInc * static_cast< double >( nj ) );
+                double fParam = aParameter[ni] + ( fInc * static_cast< double >( nj ) );
 
                 pNewX[nNewPointIndex]=aSplineX->GetInterpolatedValue( fParam );
                 pNewY[nNewPointIndex]=aSplineY->GetInterpolatedValue( fParam );
@@ -912,10 +905,9 @@ void SplineCalculater::CalculateBSplines(
                     }
                     for (sal_uInt32 lcl_Degree = 1; lcl_Degree <= p; ++lcl_Degree)
                     {
-                        double fFactor = 0.0;
                         for (lcl_tSizeType i = nLow; i >= nLow + lcl_Degree - p; --i)
                         {
-                            fFactor = ( ux - u[i] ) / ( u[i+p+1-lcl_Degree] - u[i]);
+                            double fFactor = ( ux - u[i] ) / ( u[i+p+1-lcl_Degree] - u[i]);
                             aP[i] = (1 - fFactor)* aP[i-1] + fFactor * aP[i];
                         }
                     }
@@ -928,10 +920,9 @@ void SplineCalculater::CalculateBSplines(
                     }
                     for (sal_uInt32 lcl_Degree = 1; lcl_Degree <= p; ++lcl_Degree)
                     {
-                        double fFactor = 0.0;
                         for (lcl_tSizeType i = nLow; i >= nLow +lcl_Degree - p; --i)
                         {
-                            fFactor = ( ux - u[i] ) / ( u[i+p+1-lcl_Degree] - u[i]);
+                            double fFactor = ( ux - u[i] ) / ( u[i+p+1-lcl_Degree] - u[i]);
                             aP[i] = (1 - fFactor)* aP[i-1] + fFactor * aP[i];
                         }
                     }
