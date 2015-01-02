@@ -43,6 +43,7 @@
 #include "salgdi.hxx"
 
 #include "quartz/salgdicommon.hxx"
+#include <boost/unordered_map.hpp>
 
 class AquaSalFrame;
 class ImplDevFontAttributes;
