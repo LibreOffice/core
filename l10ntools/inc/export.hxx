@@ -250,8 +250,17 @@ class MergeDataHashMap
         typedef std::unordered_map<OString, MergeData*, OStringHash> HashMap_t;
 
     public:
-        MergeDataHashMap():bFirstSearch(true){};
-        ~MergeDataHashMap(){};
+        MergeDataHashMap()
+            : bFirstSearch(true)
+            , aLastInsertion(m_aHashMap.end())
+            , aLastFound(m_aHashMap.end())
+            , aFirstInOrder(m_aHashMap.end())
+        {
+        }
+
+        ~MergeDataHashMap()
+        {
+        }
 
         typedef HashMap_t::iterator iterator;
         typedef HashMap_t::const_iterator const_iterator;
@@ -267,10 +276,10 @@ class MergeDataHashMap
 
     private:
         bool bFirstSearch;
+        HashMap_t m_aHashMap;
         iterator aLastInsertion;
         iterator aLastFound;
         iterator aFirstInOrder;
-        HashMap_t m_aHashMap;
 };
 
 
