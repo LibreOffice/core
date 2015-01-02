@@ -164,9 +164,8 @@ namespace desktop
             RTL_TEXTENCODING_ASCII_US));
         for ( sal_Int32 i = 0; i < n; ++i )
         {
-            using comphelper::string::getToken;
-            fprintf(stdout, "%s", getToken(bsLeft, i, '\n').getStr());
-            fprintf(stdout, "%s\n", getToken(bsRight, i, '\n').getStr());
+            fprintf(stdout, "%s", bsLeft.getToken(i, '\n').getStr());
+            fprintf(stdout, "%s\n", bsRight.getToken(i, '\n').getStr());
         }
         fprintf(stdout, "%s", OUStringToOString(aHelpMessage_bottom,
                     RTL_TEXTENCODING_ASCII_US).getStr());

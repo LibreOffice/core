@@ -203,7 +203,7 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
 
             for( sal_Int32 i = 0; ( i < nCount ) && ( nRow < nHeight ); ++i )
             {
-                const OString aToken(comphelper::string::getToken(aLine,i, ','));
+                const OString aToken(aLine.getToken(i, ','));
                 const sal_Int32 nLen = aToken.getLength();
                 bool bProcessed = false;
 

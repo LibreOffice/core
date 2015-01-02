@@ -950,7 +950,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         sal_Int32 nLibs = comphelper::string::getTokenCount(aLibs, LIB_SEP);
         for ( sal_Int32 nLib = 0; nLib < nLibs; nLib++ )
         {
-            OUString aLibInfo(comphelper::string::getToken(aLibs, nLib, LIB_SEP));
+            OUString aLibInfo(aLibs.getToken(nLib, LIB_SEP));
             // TODO: Remove == 2
             DBG_ASSERT( ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 2 ) || ( comphelper::string::getTokenCount(aLibInfo, LIBINFO_SEP) == 3 ), "Invalid Lib-Info!" );
             OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP ) );
@@ -1795,7 +1795,7 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUStri
         for (sal_Int32 n = 0; n < nCount; ++n)
         {
             sQuotedArgs += "\"";
-            sQuotedArgs += comphelper::string::getToken(sArgs2, n, ',');
+            sQuotedArgs += sArgs2.getToken(n, ',');
             sQuotedArgs += "\"";
             if ( n < nCount - 1 )
             {

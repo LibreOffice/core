@@ -703,7 +703,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             OUString sExtension = aURL.getExtension();
             if (sExtension.isEmpty())
             {
-                sExtension = comphelper::string::getToken(pSfxFlt->GetWildcard().getGlob(), 1, '.');
+                sExtension = pSfxFlt->GetWildcard().getGlob().getToken(1, '.');
                 sPath += "." + sExtension;
             }
             OUString sStat = OUString(SW_RES(STR_STATSTR_LETTER)) + " " + OUString::number( nDoc );

@@ -394,7 +394,7 @@ bool ORTFImportExport::Write()
         m_pStream->WriteCharPtr( "\\f" );
         m_pStream->WriteInt32AsString(j);
         m_pStream->WriteCharPtr( "\\fcharset0\\fnil " );
-        m_pStream->WriteCharPtr( comphelper::string::getToken(aFonts, j, ';').getStr() );
+        m_pStream->WriteCharPtr( aFonts.getToken(j, ';').getStr() );
         m_pStream->WriteChar( ';' );
     }
     m_pStream->WriteChar( '}' ) ;

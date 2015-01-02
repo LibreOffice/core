@@ -924,8 +924,7 @@ namespace sfx2
         const SfxFilter* pDefaultFilter = SfxFilterContainer::GetDefaultFilter_Impl(_rFactory);
         // Only use one extension (#i32434#)
         // (and always the first if there are more than one)
-        using comphelper::string::getToken;
-        sExtension = getToken(pDefaultFilter->GetWildcard().getGlob(), 0, ';');
+        sExtension = pDefaultFilter->GetWildcard().getGlob().getToken(0, ';');
         sUIName = addExtension( pDefaultFilter->GetUIName(), sExtension, false, _rFileDlgImpl );
         try
         {
@@ -945,7 +944,7 @@ namespace sfx2
 
             // Only use one extension (#i32434#)
             // (and always the first if there are more than one)
-            sExtension = getToken(pFilter->GetWildcard().getGlob(), 0, ';');
+            sExtension = pFilter->GetWildcard().getGlob().getToken(0, ';');
             sUIName = addExtension( pFilter->GetUIName(), sExtension, false, _rFileDlgImpl );
             try
             {

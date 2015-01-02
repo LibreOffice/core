@@ -211,11 +211,11 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
 
     if( bMultiPath )
     {
-        aRelURL = INetURLObject( comphelper::string::getToken(rMultiPath, 0, ';') );
+        aRelURL = INetURLObject( rMultiPath.getToken(0, ';') );
 
         for( sal_Int32 i = 0; i < nTokenCount; ++i )
         {
-            aCurURL = INetURLObject(comphelper::string::getToken(rMultiPath, i, ';'));
+            aCurURL = INetURLObject(rMultiPath.getToken(i, ';'));
 
             ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
 

@@ -84,8 +84,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-using ::comphelper::string::getToken;
-
 /*
  *  static helpers
  */

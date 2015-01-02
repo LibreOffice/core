@@ -726,7 +726,7 @@ bool lcl_matchFilter( const rtl::OUString& rFilter, const rtl::OUString& rExt )
 
     for ( int n = 0; n != nCount; ++n )
     {
-        const rtl::OUString aToken = comphelper::string::getToken( rFilter, n, ';' );
+        const rtl::OUString aToken = rFilter.getToken( n, ';' );
         if ( aToken == rExt )
             return true;
     }

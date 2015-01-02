@@ -45,7 +45,6 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
     if ( bAvailable )
     {
         using comphelper::string::getTokenCount;
-        using comphelper::string::getToken;
 
         sal_Int32 nTokenCount = getTokenCount(rTree, '/');
         sal_Int32 i = 0;
@@ -56,7 +55,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
             --nTokenCount;
 
         Any aAny;
-        aAny <<= getToken(rTree, i++, '/');
+        aAny <<= rTree.getToken(i++, '/');
 
         // creation arguments: nodepath
         PropertyValue aPathArgument;
@@ -88,7 +87,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
                     bAvailable = false;
                 else
                 {
-                    OUString aNode( getToken(rTree, i, '/') );
+                    OUString aNode( rTree.getToken(i, '/') );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
                         bAvailable = false;
                     else

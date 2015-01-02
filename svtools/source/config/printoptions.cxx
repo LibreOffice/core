@@ -130,9 +130,8 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
         if (m_xCfg.is())
         {
             using comphelper::string::getTokenCount;
-            using comphelper::string::getToken;
             sal_Int32 nTokenCount = getTokenCount(rConfigRoot, '/');
-            OUString sTok = getToken(rConfigRoot, nTokenCount - 1, '/');
+            OUString sTok = rConfigRoot.getToken(nTokenCount - 1, '/');
             m_xCfg->getByName(sTok) >>= m_xNode;
         }
     }

@@ -168,38 +168,6 @@ COMPHELPER_DLLPUBLIC OString strip(const OString &rIn,
 COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
     sal_Unicode c);
 
-/** Returns a token in an OString
-
-    @deprecated  Use OString::getToken(nToken, cTok) instead.
-
-  @param    rIn         the input OString
-  @param    nToken      the number of the token to return
-  @param    cTok        the character which separate the tokens.
-  @return   the token   if token is negative or doesn't exist an empty token
-                        is returned
-*/
-inline OString getToken(const OString &rIn,
-    sal_Int32 nToken, sal_Char cTok)
-{
-    return rIn.getToken(nToken, cTok);
-}
-
-/** Returns a token in an OUString
-
-    @deprecated  Use OUString::getToken(nToken, cTok) instead.
-
-  @param    rIn         the input OUString
-  @param    nToken      the number of the token to return
-  @param    cTok        the character which separate the tokens.
-  @return   the token   if token is negative or doesn't exist an empty token
-                        is returned
-*/
-inline OUString getToken(const OUString &rIn,
-    sal_Int32 nToken, sal_Unicode cTok)
-{
-    return rIn.getToken(nToken, cTok);
-}
-
 /** Returns number of tokens in an OUString
 
   @param    rIn     the input OString

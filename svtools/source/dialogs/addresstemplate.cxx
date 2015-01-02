@@ -654,7 +654,7 @@ void AssignmentPersistentData::Commit()
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
         m_pImpl->aLogicalFieldNames.reserve(nAdjustedTokenCount);
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
-            m_pImpl->aLogicalFieldNames.push_back(comphelper::string::getToken(sLogicalFieldNames, i, ';'));
+            m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.getToken(i, ';'));
 
         PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize));
             // so the dialog will at least show up before we do the loading of the

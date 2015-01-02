@@ -52,7 +52,7 @@ void ScGlobal::InitAddIns()
     sal_Int32 nTokens = comphelper::string::getTokenCount(aMultiPath, ';');
     for (sal_Int32 j = 0; j < nTokens; ++j)
     {
-        OUString aPath = comphelper::string::getToken(aMultiPath, j, ';');
+        OUString aPath = aMultiPath.getToken(j, ';');
         if (aPath.isEmpty())
             continue;
 

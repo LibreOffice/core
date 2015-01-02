@@ -104,7 +104,7 @@ SfxFilter::~SfxFilter()
 
 OUString SfxFilter::GetDefaultExtension() const
 {
-    return comphelper::string::getToken(GetWildcard().getGlob(), 0, ';');
+    return GetWildcard().getGlob().getToken(0, ';');
 }
 
 

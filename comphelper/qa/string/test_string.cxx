@@ -359,19 +359,19 @@ void TestString::testToken()
     OString aIn("10.11.12");
     OString aOut;
 
-    aOut = ::comphelper::string::getToken(aIn, -1, '.');
+    aOut = aIn.getToken(-1, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
 
-    aOut = ::comphelper::string::getToken(aIn, 0, '.');
+    aOut = aIn.getToken(0, '.');
     CPPUNIT_ASSERT(aOut == "10");
 
-    aOut = ::comphelper::string::getToken(aIn, 1, '.');
+    aOut = aIn.getToken(1, '.');
     CPPUNIT_ASSERT(aOut == "11");
 
-    aOut = ::comphelper::string::getToken(aIn, 2, '.');
+    aOut = aIn.getToken(2, '.');
     CPPUNIT_ASSERT(aOut == "12");
 
-    aOut = ::comphelper::string::getToken(aIn, 3, '.');
+    aOut = aIn.getToken(3, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
 }
 

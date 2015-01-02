@@ -126,7 +126,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
         bool bOneMore = true;
         while ( bOneMore )
         {
-            aIsoToken = comphelper::string::getToken(aEnvIsoTokens, nTokenCounter, ' ');
+            aIsoToken = aEnvIsoTokens.getToken(nTokenCounter, ' ');
             if ( !aIsoToken.isEmpty() )
             {
                 SetConstant( rNames.Put( aIsoToken.getStr(), CONSTNAME, mnLangId ), mnLangId );

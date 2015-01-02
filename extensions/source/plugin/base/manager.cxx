@@ -91,7 +91,7 @@ const Sequence< OUString >& PluginManager::getAdditionalSearchPaths()
             sal_Int32 nPaths = comphelper::string::getTokenCount(aPluginPath, ';');
             aPaths.realloc( nPaths );
             for( sal_uInt16 i = 0; i < nPaths; i++ )
-                aPaths.getArray()[i] = comphelper::string::getToken(aPluginPath, i, ';');
+                aPaths.getArray()[i] = aPluginPath.getToken(i, ';');
         }
     }
 

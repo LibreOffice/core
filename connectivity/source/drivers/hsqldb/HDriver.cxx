@@ -276,8 +276,8 @@ namespace connectivity
                                 {
                                     if ( sLine.isEmpty() )
                                         continue;
-                                    const OString sIniKey = comphelper::string::getToken(sLine, 0, '=');
-                                    const OString sValue = comphelper::string::getToken(sLine, 1, '=');
+                                    const OString sIniKey = sLine.getToken(0, '=');
+                                    const OString sValue = sLine.getToken(1, '=');
                                     if( sIniKey == "hsqldb.compatible_version" )
                                     {
                                         sVersionString = sValue;
@@ -292,10 +292,9 @@ namespace connectivity
                                 }
                                 if (!sVersionString.isEmpty())
                                 {
-                                    using comphelper::string::getToken;
-                                    const sal_Int32 nMajor = getToken(sVersionString, 0, '.').toInt32();
-                                    const sal_Int32 nMinor = getToken(sVersionString, 1, '.').toInt32();
-                                    const sal_Int32 nMicro = getToken(sVersionString, 2, '.').toInt32();
+                                    const sal_Int32 nMajor = sVersionString.getToken(0, '.').toInt32();
+                                    const sal_Int32 nMinor = sVersionString.getToken(1, '.').toInt32();
+                                    const sal_Int32 nMicro = sVersionString.getToken(2, '.').toInt32();
                                     if (     nMajor > 1
                                         || ( nMajor == 1 && nMinor > 8 )
                                         || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )

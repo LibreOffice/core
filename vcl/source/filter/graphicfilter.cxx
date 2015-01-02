@@ -80,7 +80,6 @@
 using namespace ::com::sun::star;
 
 using comphelper::string::getTokenCount;
-using comphelper::string::getToken;
 
 typedef ::std::vector< GraphicFilter* > FilterList_impl;
 static FilterList_impl* pFilterHdlList = NULL;
@@ -1698,7 +1697,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
         ImpFilterLibCache &rCache = Cache::get();
         for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
-            pFilter = rCache.GetFilter( getToken(aFilterPath, i, ';'), aFilterName );
+            pFilter = rCache.GetFilter( aFilterPath.getToken(i, ';'), aFilterName );
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -2112,7 +2111,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
             for ( i = 0; i < nTokenCount; i++ )
             {
 #ifndef DISABLE_DYNLOADING
-                OUString aPhysicalName( ImpCreateFullFilterPath( getToken(aFilterPath, i, ';'), aFilterName ) );
+                OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
                 PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(EXPORT_FUNCTION_NAME));

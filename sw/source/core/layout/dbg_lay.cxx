@@ -296,7 +296,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         return;
     if( '[' == rLine[0] )   // section: FrmIds, type or funciton
     {
-        OString aTmp = comphelper::string::getToken(rLine, 0, ']');
+        OString aTmp = rLine.getToken(0, ']');
         if (aTmp == "[frmid")      // section FrmIds
         {
             nInitFile = 1;

@@ -54,7 +54,6 @@
 #include <vector>
 #include <algorithm>
 
-using comphelper::string::getToken;
 using comphelper::string::getTokenCount;
 
 OString*  pStdParType  = NULL;
@@ -851,9 +850,9 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
         while( aIStm.ReadLine( aLine ) )
         {
             if( ( getTokenCount(aLine, '=') == 2 ) &&
-                ( getToken(aLine, 0, '=').indexOf("File") != -1 ) )
+                ( aLine.getToken(0, '=').indexOf("File") != -1 ) )
             {
-                OString aBaseFileName( getToken(getToken(aLine, 1, '"'), 0, '.') );
+                OString aBaseFileName( aLine.getToken(1, '"').getToken(0, '.') );
 
                 if( GetImageFilePath( rOutputFile, rContext, aBaseFileName, aFilePath, pSysListFile ) )
                 {
@@ -883,7 +882,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     }
                     while (aLine.indexOf("Prefix") == -1);
 
-                    const OString aPrefix( getToken(aLine, 1, '"') );
+                    const OString aPrefix( aLine.getToken(1, '"') );
                     aIStm.Seek( nImgListStartPos );
 
                     do

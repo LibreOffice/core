@@ -409,7 +409,7 @@ namespace
                     OUString aListener = (*pCurrentListeners).getTypeName();
                     sal_Int32 nTokens = comphelper::string::getTokenCount(aListener, '.');
                     if (nTokens)
-                        aListener = comphelper::string::getToken(aListener, nTokens - 1, '.');
+                        aListener = aListener.getToken(nTokens - 1, '.');
 
                     if (aListener == pCurrent->ListenerType.getStr())
                         // the current ScriptEventDescriptor doesn't match the current listeners class

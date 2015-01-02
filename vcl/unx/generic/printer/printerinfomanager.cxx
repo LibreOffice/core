@@ -230,15 +230,13 @@ void PrinterInfoManager::initialize()
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_eOrientation = aValue.equalsIgnoreAsciiCase("Landscape") ? orientation::Landscape : orientation::Portrait;
 
-            using comphelper::string::getToken;
-
             aValue = aConfig.ReadKey( "MarginAdjust" );
             if (!aValue.isEmpty())
             {
-                m_aGlobalDefaults.m_nLeftMarginAdjust = getToken(aValue, 0, ',').toInt32();
-                m_aGlobalDefaults.m_nRightMarginAdjust  = getToken(aValue, 1, ',').toInt32();
-                m_aGlobalDefaults.m_nTopMarginAdjust = getToken(aValue, 2, ',').toInt32();
-                m_aGlobalDefaults.m_nBottomMarginAdjust = getToken(aValue, 3, ',').toInt32();
+                m_aGlobalDefaults.m_nLeftMarginAdjust = aValue.getToken(0, ',').toInt32();
+                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.getToken(1, ',').toInt32();
+                m_aGlobalDefaults.m_nTopMarginAdjust = aValue.getToken(2, ',').toInt32();
+                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.getToken(3, ',').toInt32();
             }
 
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
@@ -415,15 +413,13 @@ void PrinterInfoManager::initialize()
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase("Landscape") ? orientation::Landscape : orientation::Portrait;
 
-                using comphelper::string::getToken;
-
                 aValue = aConfig.ReadKey( "MarginAdjust" );
                 if (!aValue.isEmpty())
                 {
-                    aPrinter.m_aInfo.m_nLeftMarginAdjust = getToken(aValue, 0, ',' ).toInt32();
-                    aPrinter.m_aInfo.m_nRightMarginAdjust = getToken(aValue, 1, ',' ).toInt32();
-                    aPrinter.m_aInfo.m_nTopMarginAdjust = getToken(aValue, 2, ',' ).toInt32();
-                    aPrinter.m_aInfo.m_nBottomMarginAdjust = getToken(aValue, 3, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nLeftMarginAdjust = aValue.getToken(0, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nRightMarginAdjust = aValue.getToken(1, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nTopMarginAdjust = aValue.getToken(2, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nBottomMarginAdjust = aValue.getToken(3, ',' ).toInt32();
                 }
 
                 aValue = aConfig.ReadKey( "ColorDepth" );
