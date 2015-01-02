@@ -82,6 +82,7 @@
 #include <docufld.hxx>
 #include <swfltopt.hxx>
 #include <viewsh.hxx>
+#include <viewopt.hxx>
 #include <shellres.hxx>
 #include <mdiexp.hxx>
 #include <statstr.hrc>
@@ -1900,7 +1901,13 @@ void SwWW8ImplReader::ImportDop()
         aViewProps[1].Name = "VisibleBottom";
         aViewProps[1].Value <<= sal_Int32(0);
         aViewProps[2].Name = "ZoomType";
-        aViewProps[2].Value <<= sal_Int16(0);
+        //Import zoom type
+        switch (pWDop->zkSaved) {
+            case 1:  aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_WHOLEPAGE); break;
+            case 2:  aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_PAGEWIDTH); break;
+            case 3:  aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_OPTIMAL);   break;
+            default: aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_PERCENT);   break;
+        }
 
         uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
         uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(xComponentContext);

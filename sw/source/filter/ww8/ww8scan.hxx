@@ -1628,7 +1628,7 @@ public:
     sal_Int32   lKeyProtDoc;        //      document protection password key, only valid if dop.fProtEnabled, dop.fLockAtn or dop.fLockRev are 1.
     sal_uInt16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
     sal_uInt16  wScaleSaved : 9;    ///< Specifies the zoom percentage that was in use when the document was saved.
-    sal_uInt16  zkSaved : 2;
+    sal_uInt16  zkSaved : 2;        //      document zoom type: 0 percent, 1 whole/entire page, 2 page width, 3 text width/optimal
     bool        fRotateFontW6 : 1;
     bool        iGutterPos : 1 ;
 
