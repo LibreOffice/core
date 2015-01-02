@@ -58,7 +58,7 @@ private:
     };
 
 public:
-    typedef std::unordered_map< const css::uno::Reference< css::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+    typedef std::unordered_map< css::uno::Reference< css::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
 
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;
