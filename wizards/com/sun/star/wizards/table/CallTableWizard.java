@@ -56,6 +56,9 @@ public class CallTableWizard
     {
 
         private PropertyValue[] m_wizardContext;
+        // the next two fields are accessed by reflection, do not delete!
+        public String           Command;
+        public final Integer    CommandType = com.sun.star.sdb.CommandType.TABLE;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          */
