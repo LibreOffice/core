@@ -37,7 +37,7 @@ private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
-    typedef std::unordered_map<const OUString, PhysicalFontFamily*,OUStringHash> PhysicalFontFamilies;
+    typedef std::unordered_map<OUString, PhysicalFontFamily*,OUStringHash> PhysicalFontFamilies;
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
