@@ -1402,15 +1402,23 @@ Public Function RunCommand(Optional pvCommand As Variant) As Boolean
 &apos;	Execute command via DispatchHelper
 
 	If _ErrorHandler() Then On Local Error Goto Exit_Function			&apos;	Avoid any abort
-	Utils._SetCalledSub(&quot;RunCommand&quot;)
+Const cstThisSub = &quot;RunCommand&quot;
+	Utils._SetCalledSub(cstThisSub)
 	
 Dim iVBACommand As Integer, sOOCommand As String, sDispatch As String
 	If IsMissing(pvCommand) Then Call _TraceArguments()
 	If Not ( Utils._CheckArgument(pvCommand, 1, Utils._AddNumeric(vbString)) ) Then Goto Exit_Function
 	
+Const cstUnoPrefix = &quot;.uno:&quot;
 	If VarType(pvCommand) = vbString Then
 		sOOCommand = pvCommand
 		iVBACommand = -1
+		If Len(sOOCommand) &gt; Len(cstUnoPrefix) Then
+			If Left(sOOCommand, Len(cstUnoPrefix)) = cstUnoPrefix Then
+				Call _DispatchCommand(sOOCommand)
+				Goto Exit_Function
+			End If
+		End If
 	Else
 		sOOCommand = &quot;&quot;
 		iVBACommand = pvCommand
@@ -1596,19 +1604,14 @@ Dim iVBACommand As Integer, sOOCommand As String, sDispatch As String
 			sDispatch = pvCommand
 	End Select
 	
-Dim oDocument As Object, oDispatcher As Object, oArgs() As new com.sun.star.beans.PropertyValue, sTargetFrameName As String
-Dim oResult As Variant
-	oDocument = _SelectWindow().Frame
-	oDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
-	sTargetFrameName = &quot;&quot;
-	oResult = oDispatcher.executeDispatch(oDocument, &quot;.uno:&quot; &amp; sDispatch, sTargetFrameName, 0, oArgs())
+	Call _DispatchCommand(cstUnoPrefix &amp; sDispatch)
 
 Exit_Function:
 	RunCommand = True
-	Utils._ResetCalledSub(&quot;RunCommand&quot;)
+	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:
-	TraceError(TRACEABORT, Err, &quot;RunCommand&quot;, Erl)
+	TraceError(TRACEABORT, Err, Utils._CalledSub(), Erl)
 	GoTo Exit_Function
 End Function	&apos;	RunCommand	V0.7.0
 
@@ -1995,7 +1998,19 @@ Trace_SubFormNotFound:
 	Goto Exit_Function
 End Function		&apos;	_DatabaseForm	V1.2.0
 
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Sub _DispatchCommand(ByVal psCommand As String)
+&apos;	Execute command given as argument - &quot;.uno:&quot; is presumed already present
+Dim oDocument As Object, oDispatcher As Object, oArgs() As new com.sun.star.beans.PropertyValue, sTargetFrameName As String
+Dim oResult As Variant
+Dim sCommand As String
 
+	Set oDocument = _SelectWindow().Frame
+	Set oDispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	sTargetFrameName = &quot;&quot;
+	oResult = oDispatcher.executeDispatch(oDocument, psCommand, sTargetFrameName, 0, oArgs())
+
+End Sub				&apos;	_DispatchCommand	V1.3.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _getTempDirectoryURL()	As String
