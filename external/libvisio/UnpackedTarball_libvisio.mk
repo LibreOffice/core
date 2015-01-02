@@ -11,10 +11,4 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libvisio))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libvisio,$(VISIO_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
-	external/libvisio/libvisio_quote.patch.1 \
-	external/libvisio/vsdx-metadata.patch.1 \
-	external/libvisio/vsd-metadata.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
