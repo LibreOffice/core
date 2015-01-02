@@ -79,7 +79,7 @@ namespace desktop
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
-        "like invisible but no user interaction at all (implies --headless).\n"\
+        "like invisible but no user interaction at all.\n"\
         "show this message and exit.\n"\
         "display the version information.\n"\
         "create new text document.\n"\
@@ -114,7 +114,7 @@ namespace desktop
         "      Eg. --infilter=\"Calc Office Open XML\"\n"\
         "          --infilter=\"Text (encoded):UTF8,LF,,,\"\n"\
         "--convert-to output_file_extension[:output_filter_name[:output_filter_options]] [--outdir output_dir] files\n"\
-        "      Batch convert files.\n"\
+        "      Batch convert files (implies --headless).\n"\
         "      If --outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. --convert-to pdf *.doc\n"\
         "          --convert-to pdf:writer_pdf_Export --outdir /home/user *.doc\n"\
