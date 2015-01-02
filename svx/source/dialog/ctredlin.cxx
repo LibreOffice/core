@@ -321,23 +321,35 @@ bool SvxRedlinTable::IsValidComment(const OUString &rCommentStr)
     return pCommentSearcher->SearchForward( rCommentStr, &nStartPos, &nEndPos);
 }
 
-SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,
-                                SvTreeListEntry* pParent,sal_uIntPtr nPos)
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
+        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uIntPtr nPos)
 {
     const Color aColor = (pUserData && pUserData->bDisabled) ? Color(COL_GRAY) : GetTextColor();
+
     return InsertEntry(rStr, pUserData, aColor, pParent, nPos);
 }
 
-SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,RedlinData *pUserData,const Color& aColor,
-                                SvTreeListEntry* pParent,sal_uIntPtr nPos)
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const OUString& rStr,
+        RedlinData *pUserData, const Color& rColor, SvTreeListEntry* pParent, sal_uIntPtr nPos)
 {
-    aEntryColor=aColor;
+    maEntryColor = rColor;
+    maEntryImage = Image();
 
     sal_Int32 nIndex = 0;
-    const OUString aFirstStr( rStr.getToken(0, '\t', nIndex ) );
-    aCurEntry = nIndex>0 ? rStr.copy(nIndex) : OUString();
+    const OUString aFirstStr(rStr.getToken(0, '\t', nIndex));
+    maEntryString = nIndex > 0 ? rStr.copy(nIndex) : OUString();
 
-    return SvSimpleTable::InsertEntry( aFirstStr, pParent, false, nPos, pUserData );
+    return SvSimpleTable::InsertEntry(aFirstStr, pParent, false, nPos, pUserData);
+}
+
+SvTreeListEntry* SvxRedlinTable::InsertEntry(const Image &rRedlineType, const OUString& rStr,
+        RedlinData *pUserData, SvTreeListEntry* pParent, sal_uIntPtr nPos)
+{
+    maEntryColor = (pUserData && pUserData->bDisabled) ? Color(COL_GRAY) : GetTextColor();
+    maEntryImage = rRedlineType;
+    maEntryString = rStr;
+
+    return SvSimpleTable::InsertEntry(OUString(), pParent, false, nPos, pUserData);
 }
 
 SvTreeListEntry* SvxRedlinTable::CreateEntry() const
@@ -346,31 +358,30 @@ SvTreeListEntry* SvxRedlinTable::CreateEntry() const
 }
 
 void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
-    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
+        const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
-    SvLBoxString* pString;
-    SvLBoxContextBmp* pContextBmp;
-
-    if( nTreeFlags & TREEFLAG_CHKBTN )
+    if (nTreeFlags & TREEFLAG_CHKBTN)
     {
-        SvLBoxButton* pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
-        pEntry->AddItem( pButton );
+        pEntry->AddItem(new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData));
     }
 
-    pContextBmp= new SvLBoxContextBmp(pEntry,0, rColl,rExp, true);
-    pEntry->AddItem( pContextBmp );
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, rColl, rExp, true));
 
-    pString = new SvLBoxColorString( pEntry, 0, rStr ,aEntryColor);
-    pEntry->AddItem( pString );
+    // the type of the change
+    assert((rStr.isEmpty() && !!maEntryImage) || (!rStr.isEmpty() && !maEntryImage));
 
+    if (rStr.isEmpty())
+        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, maEntryImage, maEntryImage, true));
+    else
+        pEntry->AddItem(new SvLBoxColorString(pEntry, 0, rStr, maEntryColor));
+
+    // the change tracking entries
     sal_Int32 nIndex = 0;
-    // TODO: verify if TabCount() is always >0 here!
-    const sal_uInt16 nCount = TabCount()-1;
-    for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
+    const sal_uInt16 nCount = TabCount() - 1;
+    for (sal_uInt16 nToken = 0; nToken < nCount; nToken++)
     {
-        const OUString aToken = GetToken(aCurEntry, nIndex);
-        SvLBoxColorString* pStr = new SvLBoxColorString( pEntry, 0, aToken, aEntryColor);
-        pEntry->AddItem( pStr );
+        const OUString aToken = GetToken(maEntryString, nIndex);
+        pEntry->AddItem(new SvLBoxColorString(pEntry, 0, aToken, maEntryColor));
     }
 }
 
