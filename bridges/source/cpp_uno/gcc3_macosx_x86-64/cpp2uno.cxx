@@ -459,10 +459,11 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
+    Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,
     sal_Int32 functionCount, sal_Int32 nVtableOffset )
 {
+    const sal_PtrDiff writetoexecdiff = 0;
     (*slots) -= functionCount;
     Slot * s = *slots;
     for ( sal_Int32 nPos = 0; nPos < type->nMembers; ++nPos )
