@@ -1520,7 +1520,7 @@ Resource RID_GLOBSTR
     };
     String STR_CHANGED_DELETE
     {
-        Text [ en-US ] = "#1deleted" ;
+        Text [ en-US ] = "#1 deleted" ;
     };
     String STR_CHANGED_MOVE
     {
