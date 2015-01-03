@@ -1406,6 +1406,12 @@ private:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel );
 
+    SAL_DLLPRIVATE void DrawDeviceAlphaBitmapSlowPath(
+                                const Bitmap& rBitmap, const AlphaMask& rAlpha,
+                                Rectangle aDstRect, Rectangle aBmpRect,
+                                Size& aOutSz, Point& aOutPt);
+
+
     SAL_DLLPRIVATE bool         BlendBitmap(
                                     const SalTwoRect&   rPosAry,
                                     const Bitmap&       rBmp );
