@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include "attrib.hxx"
+#include <algorithm>
 
 class ScDocument;
 class ScEditDataArray;
