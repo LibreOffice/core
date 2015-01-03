@@ -79,7 +79,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/weak_ptr.hpp>
 #include <canvas/canvastools.hxx>
 #include <canvas/elapsedtime.hxx>
@@ -836,6 +835,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>
 #include <tools/wldcrd.hxx>
+#include <unordered_map>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/confignode.hxx>

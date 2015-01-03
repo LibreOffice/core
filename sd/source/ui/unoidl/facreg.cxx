@@ -28,9 +28,8 @@
 #include "sal/types.h"
 
 #include <string.h>
-
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
+#include <unordered_map>
 
 using namespace com::sun::star;
 
@@ -69,7 +68,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::boost::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
+typedef std::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
 
 namespace {
 static ::boost::shared_ptr<FactoryMap> spFactoryMap;

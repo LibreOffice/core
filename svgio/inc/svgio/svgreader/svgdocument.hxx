@@ -22,6 +22,7 @@
 
 #include <boost/utility.hpp>
 #include <svgio/svgreader/svgnode.hxx>
+#include <unordered_map>
 
 namespace svgio
 {
@@ -37,14 +38,14 @@ namespace svgio
             const OUString     maAbsolutePath;
 
             /// hash mapper to find nodes by their id
-            typedef boost::unordered_map< const OUString, const SvgNode*,
+            typedef std::unordered_map< OUString, const SvgNode*,
                       OUStringHash,
                       ::std::equal_to< OUString > > IdTokenMapper;
             typedef std::pair< const OUString, const SvgNode* > IdTokenValueType;
             IdTokenMapper           maIdTokenMapperList;
 
             /// hash mapper to find css styles by their id
-            typedef boost::unordered_map< const OUString, const SvgStyleAttributes*, OUStringHash, ::std::equal_to< OUString > > IdStyleTokenMapper;
+            typedef std::unordered_map< OUString, const SvgStyleAttributes*, OUStringHash, ::std::equal_to< OUString > > IdStyleTokenMapper;
             typedef std::pair< const OUString, const SvgStyleAttributes* > IdStyleTokenValueType;
             IdStyleTokenMapper      maIdStyleTokenMapperList;
 

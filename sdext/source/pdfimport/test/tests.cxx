@@ -49,8 +49,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 #include <cassert>
 #include <rtl/ustring.hxx>
@@ -433,8 +433,8 @@ namespace
         {
         }
 
-        typedef boost::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
-        typedef boost::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
+        typedef std::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
+        typedef std::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 

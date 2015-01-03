@@ -25,7 +25,6 @@ class SdrPage;
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {

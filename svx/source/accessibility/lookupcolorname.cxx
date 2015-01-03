@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
-#include "boost/unordered_map.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/drawing/ColorTable.hpp"
@@ -35,6 +34,7 @@
 #include "vcl/svapp.hxx"
 
 #include <lookupcolorname.hxx>
+#include <unordered_map>
 
 namespace {
 
@@ -45,7 +45,7 @@ public:
     OUString lookUp(long color) const;
 
 private:
-    typedef boost::unordered_map< long, OUString > Map;
+    typedef std::unordered_map< long, OUString > Map;
 
     Map map_;
 };

@@ -24,8 +24,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace pdfparse
 {
@@ -180,7 +180,7 @@ struct PDFArray : public PDFContainer
 
 struct PDFDict : public PDFContainer
 {
-    typedef boost::unordered_map<OString,PDFEntry*,OStringHash> Map;
+    typedef std::unordered_map<OString,PDFEntry*,OStringHash> Map;
     Map m_aMap;
 
     PDFDict() {}

@@ -24,8 +24,8 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace sd { namespace framework {
 
@@ -114,8 +114,8 @@ private:
             css::drawing::framework::XConfigurationChangeListener> mxListener;
         css::uno::Any maUserData;
     };
-    typedef ::std::vector<ListenerDescriptor> ListenerList;
-    typedef ::boost::unordered_map
+    typedef std::vector<ListenerDescriptor> ListenerList;
+    typedef std::unordered_map
         <OUString,
          ListenerList,
          OUStringHash> ListenerMap;

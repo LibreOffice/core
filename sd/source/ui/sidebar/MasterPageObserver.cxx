@@ -22,8 +22,8 @@
 #include <algorithm>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include <boost/unordered_map.hpp>
 #include <set>
+#include <unordered_map>
 #include <vector>
 #include <svl/lstner.hxx>
 #include <osl/doublecheckedlocking.h>
@@ -73,7 +73,7 @@ private:
         size_t operator()(SdDrawDocument* argument) const
         { return reinterpret_cast<unsigned long>(argument); }
     };
-    typedef ::boost::unordered_map<SdDrawDocument*,
+    typedef std::unordered_map<SdDrawDocument*,
                             MasterPageObserver::MasterPageNameSet,
                             DrawDocHash>
         MasterPageContainer;

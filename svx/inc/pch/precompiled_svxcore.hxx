@@ -100,7 +100,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/spirit/include/classic_core.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -816,6 +815,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
+#include <unordered_map>
 #include <vector>
 #include <xmloff/xmlictxt.hxx>
 

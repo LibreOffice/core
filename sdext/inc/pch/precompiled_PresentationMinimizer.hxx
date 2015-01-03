@@ -17,7 +17,6 @@
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/URLTransformer.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/MessageBoxButtons.hpp>
@@ -107,6 +106,7 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <string.h>
+#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

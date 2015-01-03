@@ -26,7 +26,7 @@
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace
 {
@@ -61,7 +61,7 @@ namespace svx
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::XPropertySet;
 
-    typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
+    typedef std::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;

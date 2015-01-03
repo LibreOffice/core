@@ -19,9 +19,9 @@
 
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
-typedef boost::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
@@ -306,7 +306,7 @@ OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
         : OUString();
 }
 
-typedef boost::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> TypeACCNameHashMap;
+typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> TypeACCNameHashMap;
 
 static TypeACCNameHashMap* pACCHashMap = NULL;
 struct ACCNameTypeTable

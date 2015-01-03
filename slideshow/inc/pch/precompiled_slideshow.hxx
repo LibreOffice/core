@@ -49,7 +49,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/weak_ptr.hpp>
 #include <canvas/canvastools.hxx>
 #include <canvas/debug.hxx>
@@ -208,6 +207,7 @@
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <unordered_map>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/animate.hxx>

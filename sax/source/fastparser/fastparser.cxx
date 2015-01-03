@@ -38,8 +38,8 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <stack>
+#include <unordered_map>
 #include <vector>
 #include <queue>
 #include <cassert>
@@ -68,7 +68,7 @@ struct Entity;
 
 typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 
-typedef ::boost::unordered_map< OUString, sal_Int32,
+typedef std::unordered_map< OUString, sal_Int32,
         OUStringHash, ::std::equal_to< OUString > > NamespaceMap;
 
 typedef std::vector<Event> EventList;

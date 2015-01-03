@@ -26,7 +26,7 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 #include "targetpropertiescreator.hxx"
@@ -59,7 +59,7 @@ namespace internal
              */
             sal_Int16                           mnParagraphIndex;
 
-            /// Comparison needed for boost::unordered_map
+            /// Comparison needed for unordered_map
             bool operator==( const ShapeHashKey& rRHS ) const
             {
                 return mxRef == rRHS.mxRef && mnParagraphIndex == rRHS.mnParagraphIndex;
@@ -89,7 +89,7 @@ namespace internal
         };
 
         // A hash map which maps a XShape to the corresponding vector of initial properties
-        typedef ::boost::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeHash;
+        typedef std::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeHash;
 
 
         class NodeFunctor

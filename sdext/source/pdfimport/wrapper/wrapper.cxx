@@ -61,7 +61,7 @@
 #include <vcl/virdev.hxx>
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <string.h>
 #ifdef WNT
 #include <stdlib.h>
@@ -134,7 +134,7 @@ enum parseKey {
 
 class Parser
 {
-    typedef boost::unordered_map< sal_Int64,
+    typedef std::unordered_map< sal_Int64,
                            FontAttributes > FontMapType;
 
     const uno::Reference<uno::XComponentContext> m_xContext;

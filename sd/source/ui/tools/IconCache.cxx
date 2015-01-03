@@ -20,9 +20,9 @@
 #include "tools/IconCache.hxx"
 
 #include "sdresid.hxx"
-#include <boost/unordered_map.hpp>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
+#include <unordered_map>
 
 namespace sd {
 
@@ -39,7 +39,7 @@ private:
     */
     static IconCache* mpInstance;
 
-    typedef ::boost::unordered_map<sal_uInt16,Image> ImageContainer;
+    typedef std::unordered_map<sal_uInt16,Image> ImageContainer;
     ImageContainer maContainer;
 
     Image GetIcon (sal_uInt16 nResourceId);

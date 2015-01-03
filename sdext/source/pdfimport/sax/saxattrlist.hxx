@@ -21,8 +21,8 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_SAX_SAXATTRLIST_HXX
 
 #include <rtl/ustring.hxx>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
@@ -44,11 +44,11 @@ namespace pdfi
             : m_aName( i_rName ), m_aValue( i_rValue ) {}
         };
         std::vector< AttrEntry >                                    m_aAttributes;
-        boost::unordered_map< OUString, size_t, OUStringHash >   m_aIndexMap;
+        std::unordered_map< OUString, size_t, OUStringHash >   m_aIndexMap;
 
     public:
         SaxAttrList() {}
-        SaxAttrList( const boost::unordered_map< OUString, OUString, OUStringHash >& );
+        SaxAttrList( const std::unordered_map< OUString, OUString, OUStringHash >& );
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList();
 

@@ -23,10 +23,10 @@
 namespace pdfi
 {
 
-SaxAttrList::SaxAttrList( const boost::unordered_map< OUString, OUString, OUStringHash >& rMap )
+SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString, OUStringHash >& rMap )
 {
     m_aAttributes.reserve(rMap.size());
-    for( boost::unordered_map< OUString,
+    for( std::unordered_map< OUString,
                         OUString,
                         OUStringHash >::const_iterator it = rMap.begin();
          it != rMap.end(); ++it )
@@ -80,7 +80,7 @@ OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex ) throw(std::
 
 OUString SAL_CALL SaxAttrList::getValueByName(const OUString& i_rName) throw(std::exception)
 {
-    boost::unordered_map< OUString, size_t, OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
+    std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
     return (it != m_aIndexMap.end()) ? m_aAttributes[it->second].m_aValue : OUString();
 }
 

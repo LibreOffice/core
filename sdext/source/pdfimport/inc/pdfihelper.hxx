@@ -31,9 +31,9 @@
 #include "com/sun/star/rendering/PathCapType.hpp"
 #include "com/sun/star/rendering/PathJoinType.hpp"
 
+#include <unordered_map>
 #include <vector>
 #include <boost/functional/hash.hpp>
-#include <boost/unordered_map.hpp>
 
 // virtual resolution of the PDF OutputDev in dpi
 #define PDFI_OUTDEV_RESOLUTION 7200
@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace task
 
 namespace pdfi
 {
-    typedef boost::unordered_map< OUString, OUString, OUStringHash > PropertyMap;
+    typedef std::unordered_map< OUString, OUString, OUStringHash > PropertyMap;
     typedef sal_Int32 ImageId;
 
     /// What to do with a polygon. values can be ORed together

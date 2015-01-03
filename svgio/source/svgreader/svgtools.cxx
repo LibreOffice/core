@@ -23,7 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svgio/svgreader/svgtoken.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace svgio
 {
@@ -635,7 +635,7 @@ namespace svgio
 
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName, bool bCaseIndependent)
         {
-            typedef boost::unordered_map< OUString, Color,
+            typedef std::unordered_map< OUString, Color,
                       OUStringHash,
                       ::std::equal_to< OUString >
                       > ColorTokenMapper;

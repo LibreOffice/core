@@ -157,7 +157,7 @@ private:
         sal_Int32 nId;
         sal_Int32 nLastIndex;
     };
-    typedef ::boost::unordered_map< OUString, struct AuthorComments, OUStringHash > AuthorsMap;
+    typedef std::unordered_map< OUString, struct AuthorComments, OUStringHash > AuthorsMap;
     AuthorsMap maAuthors;
 
     void WriteAuthors();

@@ -28,8 +28,8 @@
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
 
-#include <boost/unordered_map.hpp>
 #include <iterator>
+#include <unordered_map>
 
 namespace sd {
 
@@ -153,7 +153,7 @@ private:
     mutable ::osl::Mutex maMutex;
 
     class ShellHash { public: size_t operator()(const SfxShell* p) const { return reinterpret_cast<size_t>(p);} };
-    typedef ::boost::unordered_multimap<const SfxShell*,SharedShellFactory,ShellHash>
+    typedef std::unordered_multimap<const SfxShell*,SharedShellFactory,ShellHash>
         FactoryList;
     FactoryList maShellFactories;
 
@@ -161,11 +161,11 @@ private:
         to put on the shell stack each view shell in this list is asked for
         its sub-shells (typically toolbars).
     */
-    typedef ::std::list<ShellDescriptor> ActiveShellList;
+    typedef std::list<ShellDescriptor> ActiveShellList;
     ActiveShellList maActiveViewShells;
 
-    typedef ::std::list<ShellDescriptor> SubShellSubList;
-    typedef ::boost::unordered_map<const SfxShell*,SubShellSubList,ShellHash> SubShellList;
+    typedef std::list<ShellDescriptor> SubShellSubList;
+    typedef std::unordered_map<const SfxShell*,SubShellSubList,ShellHash> SubShellList;
     SubShellList maActiveSubShells;
 
     /** In this member we remember what shells we have pushed on the shell

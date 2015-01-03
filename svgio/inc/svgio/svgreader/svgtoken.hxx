@@ -21,7 +21,6 @@
 #define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGTOKEN_HXX
 
 #include <rtl/ustring.hxx>
-#include <boost/unordered_map.hpp>
 
 namespace svgio
 {

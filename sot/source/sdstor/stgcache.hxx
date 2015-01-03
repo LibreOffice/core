@@ -26,8 +26,9 @@
 #include <tools/stream.hxx>
 #include <stgelem.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
+#include <boost/functional/hash.hpp>
 #include <salhelper/simplereferenceobject.hxx>
+#include <unordered_map>
 
 class UCBStorageStream;
 class StgPage;
@@ -36,7 +37,7 @@ class StorageBase;
 
 class StgCache
 {
-    typedef boost::unordered_map
+    typedef std::unordered_map
     <
         sal_Int32, rtl::Reference< StgPage >,
         boost::hash< sal_Int32 >, std::equal_to< sal_Int32 >

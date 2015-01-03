@@ -732,7 +732,7 @@ void PDFOutDev::updateFont(GfxState *state)
         Ref* pID = gfxFont->getID();
         // TODO(Q3): Portability problem
         long long fontID = (long long)pID->gen << 32 | (long long)pID->num;
-        boost::unordered_map< long long, FontAttributes >::const_iterator it =
+        std::unordered_map< long long, FontAttributes >::const_iterator it =
             m_aFontMap.find( fontID );
         if( it == m_aFontMap.end() )
         {

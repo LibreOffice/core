@@ -30,12 +30,12 @@
 
 #include <CustomAnimationEffect.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace sd {
 
-typedef boost::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash > EffectsSubTypeMap;
-typedef boost::unordered_map< OUString, OUString, OUStringHash > UStringMap;
+typedef std::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash > EffectsSubTypeMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash > UStringMap;
 typedef std::vector< OUString > UStringList;
 
 class CustomAnimationPreset
@@ -74,7 +74,7 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef boost::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash> EffectDescriptorMap;
+typedef std::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory

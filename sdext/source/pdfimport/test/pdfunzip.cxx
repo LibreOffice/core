@@ -296,7 +296,7 @@ int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFi
         if( pTrailer && pTrailer->m_pDict )
         {
             // search for AdditionalStreams entry
-            boost::unordered_map<OString,PDFEntry*,OStringHash>::iterator add_stream;
+            std::unordered_map<OString,PDFEntry*,OStringHash>::iterator add_stream;
             add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
             if( add_stream != pTrailer->m_pDict->m_aMap.end() )
             {
@@ -323,7 +323,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
         if( ! pDict )
             continue;
 
-        boost::unordered_map<OString,PDFEntry*,OStringHash>::iterator map_it =
+        std::unordered_map<OString,PDFEntry*,OStringHash>::iterator map_it =
                 pDict->m_aMap.find( "Type" );
         if( map_it == pDict->m_aMap.end() )
             continue;

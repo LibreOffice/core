@@ -20,7 +20,6 @@
 #endif
 
 #include "boost/noncopyable.hpp"
-#include "boost/unordered_map.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/drawing/ColorTable.hpp"
@@ -519,6 +518,7 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/xtextedt.hxx>
+#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

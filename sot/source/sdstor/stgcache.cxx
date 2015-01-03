@@ -29,6 +29,8 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
+#include <algorithm>
+
 ////////////////////////////// class StgPage
 // This class implements buffer functionality. The cache will always return
 // a page buffer, even if a read fails. It is up to the caller to determine

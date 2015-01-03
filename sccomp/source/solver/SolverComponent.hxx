@@ -30,7 +30,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class ResMgr;
 
@@ -52,7 +52,7 @@ struct ScSolverCellEqual
     bool operator()( const css::table::CellAddress& rAddr1, const css::table::CellAddress& rAddr2 ) const;
 };
 
-typedef boost::unordered_map< css::table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
+typedef std::unordered_map< css::table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
 typedef cppu::WeakImplHelper3<
                 com::sun::star::sheet::XSolver,

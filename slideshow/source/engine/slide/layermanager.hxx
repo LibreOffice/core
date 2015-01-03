@@ -31,11 +31,11 @@
 #include "layer.hxx"
 #include "tools.hxx"
 
-#include <vector>
-#include <map>
-#include <boost/unordered_map.hpp>
 #include <algorithm>
 #include <functional>
+#include <map>
+#include <unordered_map>
+#include <vector>
 
 namespace basegfx {
     class B2DRange;
@@ -230,7 +230,7 @@ namespace slideshow
 
                 Provides quicker lookup than ShapeSet for simple mappings
              */
-            typedef ::boost::unordered_map<
+            typedef std::unordered_map<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >,
                 ShapeSharedPtr,

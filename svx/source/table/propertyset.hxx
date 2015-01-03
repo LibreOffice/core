@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <rtl/ref.hxx>
 #include <functional>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 #include <cppuhelper/implbase1.hxx>
@@ -33,12 +33,8 @@
 
 namespace sdr { namespace table {
 
-
-
 typedef std::vector< ::com::sun::star::beans::Property > PropertyVector;
-typedef boost::unordered_map< OUString, ::sal_uInt32, OUStringHash, ::std::equal_to< OUString > > PropertyMap;
-
-
+typedef std::unordered_map< OUString, ::sal_uInt32, OUStringHash, std::equal_to< OUString > > PropertyMap;
 
 class FastPropertySetInfo : public ::cppu::WeakAggImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {

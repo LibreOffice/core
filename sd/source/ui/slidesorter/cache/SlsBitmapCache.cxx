@@ -85,7 +85,7 @@ public:
 };
 
 class BitmapCache::CacheBitmapContainer
-    : public ::boost::unordered_map<CacheKey, CacheEntry, CacheHash>
+    : public std::unordered_map<CacheKey, CacheEntry, CacheHash>
 {
 public:
     CacheBitmapContainer (void) {}

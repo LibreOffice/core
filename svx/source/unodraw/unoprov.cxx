@@ -27,7 +27,6 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <boost/unordered_map.hpp>
 #include <tools/fldunit.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -43,6 +42,7 @@
 #include <svx/svdobj.hxx>
 
 #include <shapeimpl.hxx>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
@@ -801,7 +801,7 @@ comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPrope
     return aSvxAdditionalDefaultsPropertyMap_Impl;
 }
 
-typedef ::boost::unordered_map< OUString, sal_uInt32, OUStringHash > UHashMapImpl;
+typedef std::unordered_map< OUString, sal_uInt32, OUStringHash > UHashMapImpl;
 
 namespace {
 

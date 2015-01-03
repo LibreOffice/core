@@ -531,7 +531,7 @@ void PDFDict::insertValue( const OString& rName, PDFEntry* pValue )
     if( ! pValue )
         eraseValue( rName );
 
-    boost::unordered_map<OString,PDFEntry*,OStringHash>::iterator it = m_aMap.find( rName );
+    std::unordered_map<OString,PDFEntry*,OStringHash>::iterator it = m_aMap.find( rName );
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
@@ -625,7 +625,7 @@ unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
     if( ! m_pDict )
         return 0;
     // find /Length entry, can either be a direct or indirect number object
-    boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+    std::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
         m_pDict->m_aMap.find( "Length" );
     if( it == m_pDict->m_aMap.end() )
         return 0;
@@ -675,7 +675,7 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
             return false;
         }
         // is there a filter entry ?
-        boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+        std::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
             m_pStream->m_pDict->m_aMap.find( "Filter" );
         if( it != m_pStream->m_pDict->m_aMap.end() )
         {
@@ -840,7 +840,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 if( bDeflate && rWriteContext.m_bDeflate )
                 {
                     // delete flatedecode filter
-                    boost::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
+                    std::unordered_map<OString,PDFEntry*,OStringHash>::const_iterator it =
                     pClone->m_pStream->m_pDict->m_aMap.find( "Filter" );
                     if( it != pClone->m_pStream->m_pDict->m_aMap.end() )
                     {

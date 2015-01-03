@@ -18,8 +18,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
-#include <boost/unordered_set.hpp>
 #include <map>
+#include <unordered_set>
 
 //#define erDEBUG
 
@@ -52,7 +52,7 @@ struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
 struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
 }
 
-typedef ::boost::unordered_set< OUString, OUStringHash > KnownTagSet;
+typedef std::unordered_set< OUString, OUStringHash > KnownTagSet;
 namespace {
 struct theKnowns : public rtl::Static< KnownTagSet, theKnowns > {};
 struct theMutex : public rtl::Static< osl::Mutex, theMutex > {};

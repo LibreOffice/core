@@ -47,7 +47,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     for( unsigned int n = 0; n < rStyle.SubStyles.size(); ++n )
         aSearchStyle.SubStyles.push_back( impl_getStyleId( *rStyle.SubStyles[n], true ) );
 
-    boost::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator it =
+    std::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator it =
         m_aStyleToId.find( aSearchStyle );
 
     if( it != m_aStyleToId.end() )
@@ -85,7 +85,7 @@ sal_Int32 StyleContainer::getStandardStyleId( const OString& rName )
 
 const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 {
-    boost::unordered_map< sal_Int32, HashedStyle >::const_iterator it =
+    std::unordered_map< sal_Int32, HashedStyle >::const_iterator it =
         m_aIdToStyle.find( nStyleId );
     return it != m_aIdToStyle.end() ? &(it->second.Properties) : NULL;
 }
@@ -93,7 +93,7 @@ const PropertyMap* StyleContainer::getProperties( sal_Int32 nStyleId ) const
 sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& rNewProps )
 {
     sal_Int32 nRet = -1;
-    boost::unordered_map< sal_Int32, HashedStyle >::iterator it =
+    std::unordered_map< sal_Int32, HashedStyle >::iterator it =
         m_aIdToStyle.find( nStyleId );
     if( it != m_aIdToStyle.end() )
     {
@@ -121,7 +121,7 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             aSearchStyle.IsSubStyle             = it->second.IsSubStyle;
 
             // find out whether this new style already exists
-            boost::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
+            std::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
                 m_aStyleToId.find( aSearchStyle );
             if( new_it != m_aStyleToId.end() )
             {
@@ -147,7 +147,7 @@ OUString StyleContainer::getStyleName( sal_Int32 nStyle ) const
 {
     OUStringBuffer aRet( 64 );
 
-    boost::unordered_map< sal_Int32, HashedStyle >::const_iterator style_it =
+    std::unordered_map< sal_Int32, HashedStyle >::const_iterator style_it =
         m_aIdToStyle.find( nStyle );
     if( style_it != m_aIdToStyle.end() )
     {
@@ -184,7 +184,7 @@ void StyleContainer::impl_emitStyle( sal_Int32           nStyleId,
                                      EmitContext&        rContext,
                                      ElementTreeVisitor& rContainedElemVisitor )
 {
-    boost::unordered_map< sal_Int32, HashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
+    std::unordered_map< sal_Int32, HashedStyle >::const_iterator it = m_aIdToStyle.find( nStyleId );
     if( it != m_aIdToStyle.end() )
     {
         const HashedStyle& rStyle = it->second;
@@ -210,7 +210,7 @@ void StyleContainer::emit( EmitContext&        rContext,
                            ElementTreeVisitor& rContainedElemVisitor )
 {
     std::vector< sal_Int32 > aMasterPageSection, aAutomaticStyleSection, aOfficeStyleSection;
-    for( boost::unordered_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
+    for( std::unordered_map< sal_Int32, HashedStyle >::iterator it = m_aIdToStyle.begin();
          it != m_aIdToStyle.end(); ++it )
     {
         if( ! it->second.IsSubStyle )

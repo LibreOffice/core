@@ -50,9 +50,8 @@
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
 
-#include <vector>
-#include <boost/unordered_map.hpp>
 #include <algorithm>
+#include <vector>
 
 using namespace ::com::sun::star;
 

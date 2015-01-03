@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star {
     namespace animations { class XAnimationNode; }
@@ -38,7 +38,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef boost::unordered_map< OUString, OUString, OUStringHash > UStringMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash > UStringMap;
 
 class TransitionPreset
 {

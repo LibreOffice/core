@@ -24,7 +24,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/graphic/XSvgParser.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -65,6 +64,7 @@
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <unordered_map>
 #include <vcl/bitmapex.hxx>
 #include <vcl/graphicfilter.hxx>
 

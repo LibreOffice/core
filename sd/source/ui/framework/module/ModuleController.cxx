@@ -22,7 +22,7 @@
 #include "tools/ConfigurationAccess.hxx"
 #include <comphelper/processfactory.hxx>
 #include <boost/bind.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <tools/diagnose_ex.h>
 
@@ -39,7 +39,7 @@ static const sal_uInt32 snFactoryPropertyCount (2);
 static const sal_uInt32 snStartupPropertyCount (1);
 
 class ModuleController::ResourceToFactoryMap
-    : public ::boost::unordered_map<
+    : public std::unordered_map<
     OUString,
     OUString,
     OUStringHash>
@@ -49,7 +49,7 @@ public:
 };
 
 class ModuleController::LoadedFactoryContainer
-    : public ::boost::unordered_map<
+    : public std::unordered_map<
     OUString,
     WeakReference<XInterface>,
     OUStringHash>

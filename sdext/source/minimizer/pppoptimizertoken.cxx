@@ -21,10 +21,10 @@
 #include "pppoptimizertoken.hxx"
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
-#include <boost/unordered_map.hpp>
 #include <string.h>
+#include <unordered_map>
 
-typedef boost::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+typedef std::unordered_map< const char*, PPPOptimizerTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
