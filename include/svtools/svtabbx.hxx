@@ -65,7 +65,7 @@ protected:
 public:
     SvTabListBox( vcl::Window* pParent, WinBits = WB_BORDER );
     virtual ~SvTabListBox();
-    void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
+    void            SetTabs(const long* pTabs, MapUnit = MAP_APPFONT);
     sal_uInt16          TabCount() const { return (sal_uInt16)nTabCount; }
     using SvTreeListBox::GetTab;
     long            GetTab( sal_uInt16 nTab ) const;

@@ -42,9 +42,7 @@
 #define FLT_DATE_BETWEEN    4
 #define FLT_DATE_SAVE       5
 
-
-//  Struct for sorting data
-
+/// Struct for sorting data.
 class SVX_DLLPUBLIC RedlinData
 {
 public:
@@ -55,6 +53,7 @@ public:
     void*           pData;
 };
 
+/// Entries for list.
 class SvxRedlinEntry : public SvTreeListEntry
 {
 public:
@@ -62,7 +61,7 @@ public:
         virtual     ~SvxRedlinEntry();
 };
 
-// Class for the representation of Strings depending on the font
+/// Class for the representation of Strings depending on the font.
 class SvLBoxColorString : public SvLBoxString
 {
 private:
@@ -75,6 +74,10 @@ public:
                     SvLBoxColorString();
                     virtual ~SvLBoxColorString();
 
+    /** Paint function of the SvLBoxColorString class.
+
+        The relevant text with the selected color is drawn in the output device.
+    */
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 
@@ -108,8 +111,6 @@ protected:
 
     virtual sal_Int32       ColCompare(SvTreeListEntry*,SvTreeListEntry*) SAL_OVERRIDE;
     virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
-
-
 
 public:
 
@@ -165,9 +166,7 @@ public:
     const Link&     GetColCompareHdl() const { return aColCompareLink; }
 };
 
-
-//  Filter- Tabpage
-
+/// Tabpage with the filter text entries etc.
 class SVX_DLLPUBLIC SvxTPFilter: public TabPage
 {
 private:
@@ -208,7 +207,6 @@ private:
     DECL_LINK( ModifyDate, void* );
     DECL_LINK( RefHandle, PushButton* );
 
-
 protected:
 
     void            ShowDateFields(sal_uInt16 nKind);
@@ -232,7 +230,7 @@ public:
     void            SetLastTime(const tools::Time &aTime);
 
     void            SetDateMode(sal_uInt16 nMode);
-    sal_uInt16          GetDateMode();
+    sal_uInt16      GetDateMode();
 
     void            ClearAuthors();
     void            InsertAuthor( const OUString& rString, sal_Int32  nPos = LISTBOX_APPEND );
@@ -241,7 +239,6 @@ public:
     sal_Int32       SelectAuthor(const OUString& aString);
     void            SetComment(const OUString& rComment);
     OUString        GetComment()const;
-
 
     // Methods for Calc {
     void            SetRange(const OUString& rString);
@@ -293,15 +290,10 @@ public:
 
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
-
     // } Methods for Calc
 };
 
-
-
-//  View- Tabpage
-
-
+/// Tabpage with the redlining entries.
 class SVX_DLLPUBLIC SvxTPView: public TabPage
 {
 private:
@@ -398,7 +390,6 @@ public:
     SvxTPView*      GetViewPage() { return pTPView;}
     SvxRedlinTable* GetViewTable();
 };
-
 
 #endif // INCLUDED_SVX_CTREDLIN_HXX
 

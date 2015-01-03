@@ -168,7 +168,7 @@ void SvSimpleTable::SetTabs()
     }
 }
 
-void SvSimpleTable::SetTabs( long* pTabs, MapUnit eMapUnit)
+void SvSimpleTable::SetTabs(const long* pTabs, MapUnit eMapUnit)
 {
     SvHeaderTabListBox::SetTabs(pTabs,eMapUnit);
 }

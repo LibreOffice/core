@@ -118,7 +118,7 @@ SvTabListBox::~SvTabListBox()
 #endif
 }
 
-void SvTabListBox::SetTabs( long* pTabs, MapUnit eMapUnit )
+void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
 {
     DBG_ASSERT(pTabs,"SetTabs:NULL-Ptr");
     if( !pTabs )

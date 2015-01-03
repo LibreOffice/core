@@ -33,32 +33,18 @@
 #include <svx/ctredlin.hxx>
 #include "helpid.hrc"
 
-
-//  Local Defines and Function
-
-
-static long nStaticTabs[]=
-{
-    5,10,65,120,170,220
-};
-
 #define WRITER_DATE     2
 #define CALC_DATE       3
 
-RedlinData::RedlinData()
-    :
-        aDateTime( DateTime::EMPTY )
+RedlinData::RedlinData() : aDateTime(DateTime::EMPTY)
 {
     bDisabled=false;
     pData=NULL;
 }
+
 RedlinData::~RedlinData()
 {
 }
-
-
-//  class SvxRedlinEntry (Entries for list)
-
 
 SvxRedlinEntry::SvxRedlinEntry()
     : SvTreeListEntry()
@@ -70,9 +56,6 @@ SvxRedlinEntry::~SvxRedlinEntry()
     RedlinData* pRedDat=(RedlinData*) GetUserData();
     delete pRedDat;
 }
-
-// Functions in the inserts Items of SvxRedlinTable
-
 
 SvLBoxColorString::SvLBoxColorString(SvTreeListEntry*pEntry, sal_uInt16 nFlags, const OUString& rStr,
     const Color& rCol)
@@ -99,12 +82,6 @@ SvLBoxItem* SvLBoxColorString::Create() const
 void SvLBoxColorString::Paint(
     const Point& rPos, SvTreeListBox& rDev,
     const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
-/* [Description]
-
-   Paint function of the SvLBoxColorString class. The relevant text with the
-   selected color is drawn in the output device.
-*/
-
 {
     Color aColor=rDev.GetTextColor();
     Color a2Color=aColor;
@@ -192,7 +169,6 @@ void SvxRedlinTable::SetCalcView(bool bFlag)
     }
 }
 
-
 void SvxRedlinTable::UpdateFilterTest()
 {
     Date aDateMax( Date::SYSTEM );
@@ -201,7 +177,6 @@ void SvxRedlinTable::UpdateFilterTest()
     Date aDateMin(1,1,1989);
     tools::Time aTMin(0);
     tools::Time aTMax(23,59,59);
-
 
     DateTime aDTMin(aDateMin);
     DateTime aDTMax(aDateMax);
@@ -235,7 +210,6 @@ void SvxRedlinTable::UpdateFilterTest()
                                 break;
     }
 }
-
 
 void SvxRedlinTable::SetFilterDate(bool bFlag)
 {
@@ -414,7 +388,8 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     m_pRejectAll->SetClickHdl(aLink);
     m_pUndo->SetClickHdl(aLink);
 
-    m_pViewData->SetTabs(nStaticTabs);
+    const long pTabs[] = { 5, 10, 65, 120, 170, 220 };
+    m_pViewData->SetTabs(pTabs);
 }
 
 void SvxTPView::ActivatePage()
@@ -1101,8 +1076,6 @@ void SvxAcceptChgCtr::ShowViewPage()
 {
     SetCurPageId(m_nViewPageId);
 }
-
-
 
 SvxRedlinTable* SvxAcceptChgCtr::GetViewTable()
 {
