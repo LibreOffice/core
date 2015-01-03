@@ -213,7 +213,8 @@ void SwUiWriterTest::testFdo69893()
     SwDoc* pDoc = createDoc("fdo69893.odt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    pWrtShell->SelAll();
+    pWrtShell->SelAll(); // A1 is empty -> selects the whole table.
+    pWrtShell->SelAll(); // Selects the whole document.
 
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
