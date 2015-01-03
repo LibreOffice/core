@@ -733,9 +733,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     }
                     while (nI >= 0);
                     RTFSprms aPathAttributes;
-                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, RTFValue::Pointer_t(new RTFValue(*oX)));
-                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, RTFValue::Pointer_t(new RTFValue(*oY)));
-                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo, RTFValue::Pointer_t(new RTFValue(aPathAttributes)), RTFOverwrite::NO_APPEND);
+                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, std::make_shared<RTFValue>(*oX));
+                    aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, std::make_shared<RTFValue>(*oY));
+                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo, std::make_shared<RTFValue>(aPathAttributes), RTFOverwrite::NO_APPEND);
                 }
             }
             while (nCharIndex >= 0);
@@ -890,7 +890,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     if (m_rImport.isInBackground())
     {
         RTFSprms aAttributes;
-        aAttributes.set(NS_ooxml::LN_CT_Background_color, RTFValue::Pointer_t(new RTFValue(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>())));
+        aAttributes.set(NS_ooxml::LN_CT_Background_color, std::make_shared<RTFValue>(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>()));
         writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
         m_rImport.Mapper().props(pProperties);
 
