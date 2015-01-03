@@ -8,6 +8,7 @@
  */
 
 #include "refupdatecontext.hxx"
+#include <algorithm>
 
 namespace sc {
 
