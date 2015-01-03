@@ -438,7 +438,7 @@ public:
     // OtherPos of the bookmarks also inserted.
     void CreateBookmarkTbl();
     // Search alle Bookmarks in the range and return it in the Array.
-    sal_uInt16 GetBookmarks( const SwCntntNode& rNd,
+    bool GetBookmarks( const SwCntntNode& rNd,
                         sal_Int32 nStt, sal_Int32 nEnd,
                         std::vector< const ::sw::mark::IMark* >& rArr );
 

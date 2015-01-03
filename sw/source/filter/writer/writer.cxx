@@ -398,7 +398,7 @@ void Writer::CreateBookmarkTbl()
 }
 
 // search alle Bookmarks in the range and return it in the Array
-sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
+bool Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
     sal_Int32 nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
     OSL_ENSURE( rArr.empty(), "there are still entries available" );
@@ -435,7 +435,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
             }
         }
     }
-    return rArr.size();
+    return !rArr.empty();
 }
 
 // Storage-specific
