@@ -132,7 +132,12 @@ long SwWrtShell::SelAll()
         boost::scoped_ptr<SwPosition> pStartPos;
         boost::scoped_ptr<SwPosition> pEndPos;
         SwShellCrsr* pTmpCrsr = 0;
-        if( !HasWholeTabSelection() )
+
+        // Query these early, before we move the cursor.
+        bool bHasWholeTabSelection = HasWholeTabSelection();
+        bool bIsCursorInTable = IsCrsrInTbl();
+
+        if (!bHasWholeTabSelection)
         {
             if ( IsSelection() && IsCrsrPtAtEnd() )
                 SwapPam();
@@ -157,8 +162,16 @@ long SwWrtShell::SelAll()
         SttSelect();
         GoEnd(true, &bMoveTable);
 
-        bool bStartsWithTable = StartsWithTable();
-        if (bStartsWithTable)
+        bool bNeedsExtendedSelectAll = StartsWithTable();
+
+        // If the cursor was in a table, then we only need the extended select
+        // all if the whole table is already selected, to still allow selecting
+        // only a single cell or a single table before selecting the whole
+        // document.
+        if (bNeedsExtendedSelectAll && bIsCursorInTable)
+            bNeedsExtendedSelectAll = bHasWholeTabSelection;
+
+        if (bNeedsExtendedSelectAll)
         {
             // Disable table cursor to make sure getShellCrsr() returns m_pCurCrsr, not m_pTblCrsr.
             if (IsTableMode())
@@ -185,7 +198,7 @@ long SwWrtShell::SelAll()
                 // In this both cases we select to the end of document
                 if( ( *pTmpCrsr->GetPoint() < *pEndPos ||
                     ( *pStartPos == *pTmpCrsr->GetMark() &&
-                      *pEndPos == *pTmpCrsr->GetPoint() ) ) && !bStartsWithTable)
+                      *pEndPos == *pTmpCrsr->GetPoint() ) ) && !bNeedsExtendedSelectAll)
                     SwCrsrShell::SttEndDoc(false);
             }
         }

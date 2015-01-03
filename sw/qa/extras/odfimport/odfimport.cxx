@@ -397,7 +397,13 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
     {
-        pWrtShell->SelAll();
+        pWrtShell->SelAll(); // Selects A1.
+        SwTxtNode& rCellEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
+        // fdo#72486 This was "Hello.", i.e. a single select-all selected the whole document, not just the cell only.
+        CPPUNIT_ASSERT_EQUAL(OUString("A1"), rCellEnd.GetTxt());
+
+        pWrtShell->SelAll(); // Selects the whole table.
+        pWrtShell->SelAll(); // Selects the whole document.
         SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
 
@@ -434,7 +440,9 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
     CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     // Ctrl-A
-    pWrtShell->SelAll();
+    pWrtShell->SelAll(); // Selects A1.
+    pWrtShell->SelAll(); // Selects the whole table.
+    pWrtShell->SelAll(); // Selects the whole document.
 
     // Ctrl-C
     SwTransferable* pTransferable = new SwTransferable(*pWrtShell);
@@ -463,7 +471,9 @@ DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
-    pWrtShell->SelAll();
+    pWrtShell->SelAll(); // Selects A1.
+    pWrtShell->SelAll(); // Selects the whole table.
+    pWrtShell->SelAll(); // Selects the whole document.
     SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
     // This was "Footnote.", as Ctrl-A also selected footnotes, but it should not.
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
@@ -480,7 +490,9 @@ DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
 
-    pWrtShell->SelAll();
+    pWrtShell->SelAll(); // Selects A1.
+    pWrtShell->SelAll(); // Selects the whole table.
+    pWrtShell->SelAll(); // Selects the whole document.
     SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
     // This was "", as Ctrl-A also selected headers, but it should not.
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
