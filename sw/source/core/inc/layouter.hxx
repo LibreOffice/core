@@ -89,7 +89,7 @@ private:
                    p_key1.mnFreeSpaceInNewUpper == p_key2.mnFreeSpaceInNewUpper;
         }
     };
-    std::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
+    std::unordered_map< tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
 public:
