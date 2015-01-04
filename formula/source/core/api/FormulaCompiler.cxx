@@ -515,7 +515,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
         SAL_WARN_IF( !(mpTable[eOp].isEmpty() || (mpTable[eOp] == rStr) ||
                     (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
                     (eOp == ocArrayRowSep)), "formula.core",
-                "OpCodeMap::putOpCode: reusing OpCode " << eOp
+                "OpCodeMap::putOpCode: reusing OpCode " << static_cast<sal_uInt16>(eOp)
                 << ", replacing '" << mpTable[eOp] << "' with '" << rStr << "' in "
                 << (mbEnglish ? "" : "non-") << "English map 0x" << ::std::hex << meGrammar);
         mpTable[eOp] = rStr;
@@ -877,7 +877,8 @@ FormulaCompiler::OpCodeMap::~OpCodeMap()
 void FormulaCompiler::OpCodeMap::putCopyOpCode( const OUString& rSymbol, OpCode eOp )
 {
     SAL_WARN_IF( !mpTable[eOp].isEmpty() && rSymbol.isEmpty(), "formula.core",
-            "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << eOp << " '" << mpTable[eOp] << "' with empty name!");
+            "OpCodeMap::putCopyOpCode: NOT replacing OpCode " << static_cast<sal_uInt16>(eOp)
+            << " '" << mpTable[eOp] << "' with empty name!");
     if (!mpTable[eOp].isEmpty() && rSymbol.isEmpty())
         mpHashMap->insert( OpCodeHashMap::value_type( mpTable[eOp], eOp));
     else
