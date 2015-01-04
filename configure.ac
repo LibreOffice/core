@@ -11483,9 +11483,8 @@ test_font_map()
     FONTFILE_LOWER="$(echo $FONTFILE | $AWK '{print tolower($0)}')"
 
     TESTEXPR="'${FONTFILE_LOWER}' = '$(echo $FONT | $AWK '{print tolower($0)}').ttf'"
-    while true ; do
+    while test "$#" -ge 1 ; do
         MAPPING="$(echo $1 | $AWK '{print tolower($0)}')"; shift
-        test -n "$MAPPING" || break
         TESTEXPR="${TESTEXPR} -o '${FONTFILE_LOWER}' = '$MAPPING-regular.ttf'"
     done
     if test $TESTEXPR
