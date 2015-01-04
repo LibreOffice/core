@@ -25,7 +25,7 @@
 #include <formula/ExternalReferenceHelper.hxx>
 #include <limits.h>
 
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 namespace svl {
 
@@ -89,6 +89,8 @@ public:
     // Implementation and usage only in token.cxx
     inline  bool    isRewriteNeeded( OpCode eOp ) const;
 };
+
+typedef std::unordered_set<OpCode, std::hash<std::underlying_type<OpCode>::type> > unordered_opcode_set;
 
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {
@@ -166,7 +168,7 @@ public:
      * @return true if the token array contains at least one of the specified
      *         opcode tokens, false otherwise.
      */
-    bool HasOpCodes( const boost::unordered_set<OpCode>& rOpCodes ) const;
+    bool HasOpCodes( const unordered_opcode_set& rOpCodes ) const;
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }

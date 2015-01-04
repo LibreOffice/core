@@ -26,7 +26,6 @@
 #include <tools/debug.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -35,6 +34,8 @@
 #include <formula/grammar.hxx>
 #include <formula/token.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
+
+#include <unordered_map>
 
 #define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChose) */
 #define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */
@@ -60,8 +61,8 @@ struct FormulaArrayStack
 };
 
 
-typedef ::boost::unordered_map< OUString, OpCode, OUStringHash, ::std::equal_to< OUString > > OpCodeHashMap;
-typedef ::boost::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< OUString > > ExternalHashMap;
+typedef std::unordered_map< OUString, OpCode, OUStringHash, ::std::equal_to< OUString > > OpCodeHashMap;
+typedef std::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< OUString > > ExternalHashMap;
 
 class FORMULA_DLLPUBLIC FormulaCompiler : boost::noncopyable
 {

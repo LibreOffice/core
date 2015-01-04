@@ -711,13 +711,13 @@ namespace {
 class RecompileByOpcodeHandler
 {
     ScDocument* mpDoc;
-    const boost::unordered_set<OpCode>& mrOps;
+    const formula::unordered_opcode_set& mrOps;
     sc::EndListeningContext& mrEndListenCxt;
     sc::CompileFormulaContext& mrCompileFormulaCxt;
 
 public:
     RecompileByOpcodeHandler(
-        ScDocument* pDoc, const boost::unordered_set<OpCode>& rOps,
+        ScDocument* pDoc, const formula::unordered_opcode_set& rOps,
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt ) :
         mpDoc(pDoc),
         mrOps(rOps),
@@ -849,7 +849,7 @@ void ScColumn::PreprocessRangeNameUpdate(
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    boost::unordered_set<OpCode> aOps;
+    formula::unordered_opcode_set aOps;
     aOps.insert(ocBad);
     aOps.insert(ocColRowName);
     aOps.insert(ocName);
@@ -863,7 +863,7 @@ void ScColumn::PreprocessDBDataUpdate(
     // Collect all formula groups.
     std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
 
-    boost::unordered_set<OpCode> aOps;
+    formula::unordered_opcode_set aOps;
     aOps.insert(ocBad);
     aOps.insert(ocColRowName);
     aOps.insert(ocDBArea);

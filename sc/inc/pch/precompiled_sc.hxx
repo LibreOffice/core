@@ -53,8 +53,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <cassert>
 #include <climits>
 #include <cmath>
@@ -898,6 +896,8 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <unicode/uchar.h>
+#include <unordered_map>
+#include <unordered_set>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/bootstrap.hxx>
