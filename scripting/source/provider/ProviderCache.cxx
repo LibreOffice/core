@@ -93,7 +93,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
     ProviderDetails_hash::iterator h_itEnd =  m_hProviderDetailsCache.end();
     ProviderDetails_hash::iterator h_it = m_hProviderDetailsCache.begin();
     // should assert if size !>  0
-    if (  m_hProviderDetailsCache.size() )
+    if (  !m_hProviderDetailsCache.empty() )
     {
         sal_Int32 providerIndex = 0;
     sal_Int32 index = 0;

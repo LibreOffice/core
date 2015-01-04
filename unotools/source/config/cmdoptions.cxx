@@ -61,7 +61,7 @@ class SvtCmdOptions
 
         bool HasEntries() const
         {
-            return ( m_aCommandHashMap.size() > 0 );
+            return ( !m_aCommandHashMap.empty() );
         }
 
         bool Lookup( const OUString& aCmd ) const

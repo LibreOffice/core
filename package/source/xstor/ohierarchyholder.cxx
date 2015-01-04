@@ -235,7 +235,7 @@ void OHierarchyElement_Impl::TestForClosing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !m_aOpenStreams.size() && !m_aChildren.size() )
+        if ( m_aOpenStreams.empty() && m_aChildren.empty() )
         {
             if ( m_rParent.is() )
             {

@@ -126,7 +126,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        return ( IdToOleNameHash.size() > 0 );
+        return ( !IdToOleNameHash.empty() );
     }
     // XNameAcess
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE

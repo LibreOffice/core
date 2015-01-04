@@ -140,7 +140,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        return ( things.size() > 0 );
+        return ( !things.empty() );
     }
 };
 

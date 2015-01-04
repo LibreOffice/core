@@ -5187,7 +5187,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
             break;
     }
 
-    if( rWidget.m_aAppearances.size() )
+    if( !rWidget.m_aAppearances.empty() )
     {
         rAnnotDict.append( "/AP<<\n" );
         for( PDFAppearanceMap::iterator dict_it = rWidget.m_aAppearances.begin(); dict_it != rWidget.m_aAppearances.end(); ++dict_it )

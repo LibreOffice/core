@@ -172,13 +172,13 @@ void FilterCache::takeOver(const FilterCache& rClone)
     // c4) clone_2 take over unchanged filters(!) and changed types(!)
     // c5) c4 overwrites c3!
 
-    if (rClone.m_lChangedTypes.size()>0)
+    if (!rClone.m_lChangedTypes.empty())
         m_lTypes = rClone.m_lTypes;
-    if (rClone.m_lChangedFilters.size()>0)
+    if (!rClone.m_lChangedFilters.empty())
         m_lFilters = rClone.m_lFilters;
-    if (rClone.m_lChangedFrameLoaders.size()>0)
+    if (!rClone.m_lChangedFrameLoaders.empty())
         m_lFrameLoaders = rClone.m_lFrameLoaders;
-    if (rClone.m_lChangedContentHandlers.size()>0)
+    if (!rClone.m_lChangedContentHandlers.empty())
         m_lContentHandlers = rClone.m_lContentHandlers;
 
     m_lChangedTypes.clear();
@@ -1009,11 +1009,11 @@ void FilterCache::impl_validateAndOptimize()
     if (
         (
             (bSomeTypesShouldExist) &&
-            (m_lTypes.size() < 1  )
+            (m_lTypes.empty())
         ) ||
         (
             (bAllFiltersShouldExist) &&
-            (m_lFilters.size() < 1 )
+            (m_lFilters.empty())
         )
        )
     {

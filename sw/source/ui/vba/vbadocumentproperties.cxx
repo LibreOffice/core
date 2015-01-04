@@ -727,7 +727,7 @@ protected:
     }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        return mDocProps.size() > 0;
+        return !mDocProps.empty();
     }
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {

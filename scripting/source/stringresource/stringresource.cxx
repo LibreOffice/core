@@ -2202,7 +2202,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
     xTextOutputStream->writeString( aLineFeedStr );
 
     const IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
-    if( rHashMap.size() > 0 )
+    if( !rHashMap.empty() )
     {
         // Sort ids according to read order
         const IdToIndexMap& rIndexMap = pLocaleItem->m_aIdToIndexMap;

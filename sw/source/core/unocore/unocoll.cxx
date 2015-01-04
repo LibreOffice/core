@@ -234,7 +234,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
 
-        return ( mTemplateToProject.size() > 0 );
+        return ( !mTemplateToProject.empty() );
     }
 
 };
