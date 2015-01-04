@@ -1302,7 +1302,10 @@ void ScTabView::ScrollLines( long nDeltaX, long nDeltaY )
         ScrollY(nDeltaY,WhichV(eWhich));
 }
 
-static SCROW lcl_LastVisible( ScViewData& rViewData )
+namespace
+{
+
+SCROW lcl_LastVisible( ScViewData& rViewData )
 {
     //  wenn am Dokumentende viele Zeilen ausgeblendet sind (welcher Trottel macht sowas?),
     //  soll dadurch nicht auf breite Zeilenkoepfe geschaltet werden
@@ -1316,6 +1319,8 @@ static SCROW lcl_LastVisible( ScViewData& rViewData )
         --nVis;
     return nVis;
 }
+
+} // anonymous namespace
 
 void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY )
 {
@@ -1884,7 +1889,10 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-static bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, vcl::Window* pWin )
+namespace
+{
+
+bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, vcl::Window* pWin )
 {
     if (pWin)
     {
@@ -1899,6 +1907,8 @@ static bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, vcl::Window* pWin 
     }
     return false;
 }
+
+} // anonymous namespace
 
 void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
 {
