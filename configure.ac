@@ -4527,22 +4527,6 @@ dnl Check for syslog header
 dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
 
-dnl ===================================================================
-dnl Set the ENABLE_CRASHDUMP variable.
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable crashdump feature])
-if test "$enable_crashdump" = "yes"; then
-    ENABLE_CRASHDUMP="TRUE"
-    BUILD_TYPE="$BUILD_TYPE CRASHREP"
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_FEATURE_CRASHDUMP)
-else
-    ENABLE_CRASHDUMP=""
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_CRASHDUMP)
-
-
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])

@@ -30,9 +30,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 			scp2/winexplorerext \
 		) \
 	) \
-	$(if $(filter TRUE,$(ENABLE_CRASHDUMP)),\
-		scp2/crashrep \
-	) \
 	$(if $(WITH_EXTENSION_INTEGRATION),\
 		scp2/extensions \
 	) \

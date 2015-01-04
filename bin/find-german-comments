@@ -253,7 +253,6 @@ class Parser:
             "cppu" : 1,
             "cppuhelper" : 1,
             "cpputools" : 1,
-            "crashrep" : 1,
             "cui" : 1,
             "dbaccess" : 1,
             "desktop" : 1,

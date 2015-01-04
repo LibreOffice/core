@@ -23,8 +23,8 @@ unxlngi.DOC_COMPARATOR_OUTPUT_PATH=/net/so-gfxcmp-lin/export/gfxcmp/document-poo
 DB_CONNECTION_STRING=server:jakobus,db:jobs_convwatch,user:admin,passwd:admin
 
 # Set path to an existing office installation
-wntmsci.AppExecutionCommand=C:\\home\\${USERNAME}\\staroffice8\\program\\soffice.exe  --norestore --nocrashreport --accept=socket,host=localhost,port=8100;urp;
-unxlngi.AppExecutionCommand=/opt/staroffice8/program/soffice                          --norestore --nocrashreport --accept=socket,host=localhost,port=8100;urp;
+wntmsci.AppExecutionCommand=C:\\home\\${USERNAME}\\staroffice8\\program\\soffice.exe  --norestore --accept=socket,host=localhost,port=8100;urp;
+unxlngi.AppExecutionCommand=/opt/staroffice8/program/soffice                          --norestore --accept=socket,host=localhost,port=8100;urp;
 
 # Set the 'Continue' Property to true, to leave out already done tests.
 Continue=true
