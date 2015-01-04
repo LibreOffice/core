@@ -1450,7 +1450,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                                 aSet.SetPoint(aPoint, (sal_uInt16)j);
                             }
                             // Close polygon if it isn't closed already.
-                            aSet.Optimize( POLY_OPTIMIZE_CLOSE );
+                            aSet.Optimize( PolyOptimizeFlags::CLOSE );
                             aPoly.Insert( aSet );
                         }
                         pNoTxt->SetContourAPI( &aPoly );

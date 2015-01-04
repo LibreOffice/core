@@ -697,30 +697,30 @@ double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 )
     return sqrt( fDx * fDx + fDy * fDy );
 }
 
-void Polygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData )
+void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData )
 {
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "Optimizing could fail with beziers!" );
 
     sal_uInt16 nSize = mpImplPolygon->mnPoints;
 
-    if( nOptimizeFlags && nSize )
+    if( bool(nOptimizeFlags) && nSize )
     {
-        if( nOptimizeFlags & POLY_OPTIMIZE_EDGES )
+        if( nOptimizeFlags & PolyOptimizeFlags::EDGES )
         {
             const Rectangle aBound( GetBoundRect() );
             const double    fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
             const sal_uInt16    nPercent = pData ? pData->GetPercentValue() : 50;
 
-            Optimize( POLY_OPTIMIZE_NO_SAME );
+            Optimize( PolyOptimizeFlags::NO_SAME );
             ImplReduceEdges( *this, fArea, nPercent );
         }
-        else if( nOptimizeFlags & ( POLY_OPTIMIZE_REDUCE | POLY_OPTIMIZE_NO_SAME ) )
+        else if( nOptimizeFlags & ( PolyOptimizeFlags::REDUCE | PolyOptimizeFlags::NO_SAME ) )
         {
             Polygon         aNewPoly;
             const Point&    rFirst = mpImplPolygon->mpPointAry[ 0 ];
             sal_uIntPtr         nReduce;
 
-            if( nOptimizeFlags & ( POLY_OPTIMIZE_REDUCE ) )
+            if( nOptimizeFlags & ( PolyOptimizeFlags::REDUCE ) )
                 nReduce = pData ? pData->GetAbsValue() : 4UL;
             else
                 nReduce = 0UL;
@@ -757,13 +757,13 @@ void Polygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pDat
 
         if( nSize > 1 )
         {
-            if( ( nOptimizeFlags & POLY_OPTIMIZE_CLOSE ) &&
+            if( ( nOptimizeFlags & PolyOptimizeFlags::CLOSE ) &&
                 ( mpImplPolygon->mpPointAry[ 0 ] != mpImplPolygon->mpPointAry[ nSize - 1 ] ) )
             {
                 SetSize( mpImplPolygon->mnPoints + 1 );
                 mpImplPolygon->mpPointAry[ mpImplPolygon->mnPoints - 1 ] = mpImplPolygon->mpPointAry[ 0 ];
             }
-            else if( ( nOptimizeFlags & POLY_OPTIMIZE_OPEN ) &&
+            else if( ( nOptimizeFlags & PolyOptimizeFlags::OPEN ) &&
                      ( mpImplPolygon->mpPointAry[ 0 ] == mpImplPolygon->mpPointAry[ nSize - 1 ] ) )
             {
                 const Point& rFirst = mpImplPolygon->mpPointAry[ 0 ];

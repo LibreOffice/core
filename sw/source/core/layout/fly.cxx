@@ -2529,7 +2529,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
             if( !aClip.Height() )
                 aClip.Height( 1 );
             rContour.Clip( aClip.SVRect() );
-            rContour.Optimize(POLY_OPTIMIZE_CLOSE);
+            rContour.Optimize(PolyOptimizeFlags::CLOSE);
             bRet = true;
         }
     }

@@ -290,7 +290,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
                 aPoly.SetPoint( aPoint, nPoint );
             }
 
-            aPoly.Optimize( POLY_OPTIMIZE_CLOSE );
+            aPoly.Optimize( PolyOptimizeFlags::CLOSE );
             pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aAltText, aDesc, aTarget, aName, mbIsActive, false );
         }
         break;

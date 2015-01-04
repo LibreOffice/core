@@ -693,7 +693,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
                     ImplLimitPolyPoly( aPolyPoly );
 
                     if( nFlags & BMP_VECTORIZE_REDUCE_EDGES )
-                        aPolyPoly.Optimize( POLY_OPTIMIZE_EDGES );
+                        aPolyPoly.Optimize( PolyOptimizeFlags::EDGES );
 
                     if( aPolyPoly.Count() )
                     {
@@ -760,7 +760,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
         ImplLimitPolyPoly( rPolyPoly );
 
         if( nFlags & BMP_VECTORIZE_REDUCE_EDGES )
-            rPolyPoly.Optimize( POLY_OPTIMIZE_EDGES );
+            rPolyPoly.Optimize( PolyOptimizeFlags::EDGES );
 
         // #i14895#:setting the correct direction for polygons
         // that represent holes and non-holes; non-hole polygons

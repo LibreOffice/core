@@ -531,7 +531,7 @@ void FrameSelectorImpl::DrawBackground()
     tools::PolyPolygon aPPoly;
     for( FrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
         (*aIt)->MergeFocusToPolyPolygon( aPPoly );
-    aPPoly.Optimize( POLY_OPTIMIZE_CLOSE );
+    aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
     maVirDev.SetLineColor( maBackCol );
     maVirDev.SetFillColor( maBackCol );
     maVirDev.DrawPolyPolygon( aPPoly );
@@ -687,7 +687,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
         // no frame border selected -> draw tracking rectangle around entire control
         aPPoly.Insert( Polygon( Rectangle( maVirDevPos, maVirDev.GetOutputSizePixel() ) ) );
 
-    aPPoly.Optimize( POLY_OPTIMIZE_CLOSE );
+    aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
     for( sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx )
         mrFrameSel.InvertTracking( aPPoly.GetObject( nIdx ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
 }

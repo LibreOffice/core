@@ -223,9 +223,9 @@ void PolyPolygon::Clear()
     }
 }
 
-void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData )
+void PolyPolygon::Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData )
 {
-    if(nOptimizeFlags && Count())
+    if(bool(nOptimizeFlags) && Count())
     {
         // #115630# ImplDrawHatch does not work with beziers included in the polypolygon, take care of that
         bool bIsCurve(false);
@@ -250,7 +250,7 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
         else
         {
             double      fArea;
-            const bool  bEdges = ( nOptimizeFlags & POLY_OPTIMIZE_EDGES ) == POLY_OPTIMIZE_EDGES;
+            const bool  bEdges = ( nOptimizeFlags & PolyOptimizeFlags::EDGES ) == PolyOptimizeFlags::EDGES;
             sal_uInt16      nPercent = 0;
 
             if( bEdges )
@@ -259,7 +259,7 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
 
                 fArea = ( aBound.GetWidth() + aBound.GetHeight() ) * 0.5;
                 nPercent = pData ? pData->GetPercentValue() : 50;
-                nOptimizeFlags &= ~POLY_OPTIMIZE_EDGES;
+                nOptimizeFlags &= ~PolyOptimizeFlags::EDGES;
             }
 
             // watch for ref counter
@@ -274,11 +274,11 @@ void PolyPolygon::Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* 
             {
                 if( bEdges )
                 {
-                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( POLY_OPTIMIZE_NO_SAME );
+                    mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( PolyOptimizeFlags::NO_SAME );
                     Polygon::ImplReduceEdges( *( mpImplPolyPolygon->mpPolyAry[ i ] ), fArea, nPercent );
                 }
 
-                if( nOptimizeFlags )
+                if( bool(nOptimizeFlags) )
                     mpImplPolyPolygon->mpPolyAry[ i ]->Optimize( nOptimizeFlags, pData );
             }
         }

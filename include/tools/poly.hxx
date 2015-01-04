@@ -22,17 +22,25 @@
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
 
 #define POLY_APPEND             (0xFFFF)
 #define POLYPOLY_APPEND         (0xFFFF)
 
-#define POLY_OPTIMIZE_OPEN      0x00000001UL
-#define POLY_OPTIMIZE_CLOSE     0x00000002UL
-#define POLY_OPTIMIZE_NO_SAME   0x00000004UL
-#define POLY_OPTIMIZE_REDUCE    0x00000008UL
-#define POLY_OPTIMIZE_EDGES     0x00000010UL
+enum class PolyOptimizeFlags {
+    NONE      = 0x0000,
+    OPEN      = 0x0001,
+    CLOSE     = 0x0002,
+    NO_SAME   = 0x0004,
+    REDUCE    = 0x0008,
+    EDGES     = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<PolyOptimizeFlags> : is_typed_flags<PolyOptimizeFlags, 0x001f> {};
+}
 
 enum PolyStyle
 {
@@ -134,7 +142,7 @@ public:
     bool                IsRightOrientated() const;
     double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
     void                Clip( const Rectangle& rRect, bool bPolygon = true );
-    void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
 
@@ -223,7 +231,7 @@ public:
     sal_uInt16          Count() const;
     Rectangle           GetBoundRect() const;
     void                Clip( const Rectangle& rRect );
-    void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( PolyOptimizeFlags nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
 
