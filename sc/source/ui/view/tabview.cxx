@@ -339,8 +339,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
         nSplitSizeY = 1;
 
-    const long nOverlap = 0;    // ScrollBar::GetWindowOverlapPixel();
-
     aBorderPos = rOffset;
     aFrameSize = rSize;
 
@@ -377,7 +375,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         if (bVScroll)
         {
             nBarX = nScrollBarSize;
-            nSizeX -= nBarX - nOverlap;
+            nSizeX -= nBarX;
         }
         if (bHScroll)
         {
@@ -386,14 +384,14 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             if (!mbInlineWithScrollbar)
                 nBarY += nScrollBarSize;
 
-            nSizeY -= nBarY - nOverlap;
+            nSizeY -= nBarY;
         }
 
         //  window at the bottom right
         lcl_SetPosSize( aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
                         nTotalWidth, bLayoutRTL );
 
-        if (bHScroll)                               // Scrollbars horizontal
+        if (bHScroll) // Scrollbars horizontal
         {
             long nSizeLt = 0;       // left scroll bar
             long nSizeRt = 0;       // right scroll bar
@@ -403,7 +401,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             {
                 case SC_SPLIT_NONE:
                     nSizeSp = nSplitSizeX;
-                    nSizeLt = nSizeX - nSizeSp + nOverlap;          // Ecke ueberdecken
+                    nSizeLt = nSizeX - nSizeSp; // Covert the corner
                     break;
                 case SC_SPLIT_NORMAL:
                     nSizeSp = nSplitSizeX;
@@ -429,7 +427,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
                 if (mbInlineWithScrollbar)
                 {
-                    nTabSize = pTabControl->GetSizePixel().Width() - nOverlap;
+                    nTabSize = pTabControl->GetSizePixel().Width();
 
                      if ( aViewData.GetHSplitMode() != SC_SPLIT_FIX ) // left Scrollbar
                      {
@@ -450,42 +448,41 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
             if (mbInlineWithScrollbar)
             {
-                Point aTabPoint(nPosX - nOverlap, nPosY + nSizeY);
-                Size aTabSize(nTabSize + nOverlap, nBarY);
+                Point aTabPoint(nPosX, nPosY + nSizeY);
+                Size aTabSize(nTabSize, nBarY);
                 lcl_SetPosSize(*pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
                 pTabControl->SetSheetLayoutRTL(bLayoutRTL);
 
-                Point aHScrollLeftPoint(nPosX + nTabSize - nOverlap, nPosY + nSizeY);
-                Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nBarY);
-                lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
+                Point aHScrollLeftPoint(nPosX + nTabSize, nPosY + nSizeY);
+                Size aHScrollLeftSize(nSizeLt, nBarY);
+                lcl_SetPosSize(aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
 
                 Point aHSplitterPoint(nPosX + nTabSize + nSizeLt, nPosY + nSizeY);
                 Size aHSplitterSize(nSizeSp, nBarY);
                 lcl_SetPosSize(*pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
-                Point aHScrollRightPoint(nPosX + nTabSize + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
-                Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nBarY);
+                Point aHScrollRightPoint(nPosX + nTabSize + nSizeLt + nSizeSp, nPosY + nSizeY);
+                Size aHScrollRightSize(nSizeRt, nBarY);
                 lcl_SetPosSize(aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
             }
             else
             {
-                Point aTabPoint(nPosX - nOverlap, nPosY + nSizeY + nScrollBarSize);
+                Point aTabPoint(nPosX, nPosY + nSizeY + nScrollBarSize);
                 Size aTabSize(nSizeX, nTabWidth);
-                lcl_SetPosSize( *pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL );
-                pTabControl->SetSheetLayoutRTL( bLayoutRTL );
+                lcl_SetPosSize(*pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
+                pTabControl->SetSheetLayoutRTL(bLayoutRTL);
 
-                Point aHScrollLeftPoint(nPosX - nOverlap, nPosY + nSizeY);
-                Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nScrollBarSize);
-                lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL );
+                Point aHScrollLeftPoint(nPosX, nPosY + nSizeY);
+                Size aHScrollLeftSize(nSizeLt, nScrollBarSize);
+                lcl_SetPosSize(aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
 
                 Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
                 Size aHSplitterSize(nSizeSp, nScrollBarSize);
-                lcl_SetPosSize( *pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL );
+                lcl_SetPosSize(*pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
-                Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
-                Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nScrollBarSize);
-
-                lcl_SetPosSize( aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL );
+                Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp, nPosY + nSizeY);
+                Size aHScrollRightSize(nSizeRt, nScrollBarSize);
+                lcl_SetPosSize(aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
             }
             //  SetDragRectPixel is done below
         }
@@ -513,13 +510,13 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             }
             nSizeDn = nSizeY - nSizeUp - nSizeSp;
 
-            lcl_SetPosSize( aVScrollTop, Point(nPosX+nSizeX, nPosY-nOverlap),
-                                            Size(nBarX,nSizeUp+2*nOverlap), nTotalWidth, bLayoutRTL );
-            lcl_SetPosSize( *pVSplitter, Point( nPosX+nSizeX, nPosY+nSizeUp ),
+            lcl_SetPosSize( aVScrollTop, Point(nPosX + nSizeX, nPosY),
+                                            Size(nBarX, nSizeUp), nTotalWidth, bLayoutRTL );
+            lcl_SetPosSize( *pVSplitter, Point( nPosX + nSizeX, nPosY+nSizeUp ),
                                             Size( nBarX, nSizeSp ), nTotalWidth, bLayoutRTL );
-            lcl_SetPosSize( aVScrollBottom, Point(nPosX+nSizeX,
-                                                nPosY+nSizeUp+nSizeSp-nOverlap),
-                                            Size(nBarX, nSizeDn+2*nOverlap), nTotalWidth, bLayoutRTL );
+            lcl_SetPosSize( aVScrollBottom, Point(nPosX + nSizeX,
+                                                nPosY + nSizeUp + nSizeSp),
+                                            Size(nBarX, nSizeDn), nTotalWidth, bLayoutRTL );
 
             //  SetDragRectPixel is done below
         }
@@ -538,14 +535,14 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         nBarY = aHScrollLeft.GetSizePixel().Height();
         nBarX = aVScrollBottom.GetSizePixel().Width();
 
-        long nSize1 = nSizeX + nOverlap;
+        long nSize1 = nSizeX;
 
         long nTabSize = nSize1;
         if (nTabSize < 0) nTabSize = 0;
 
-        lcl_SetPosSize( *pTabControl, Point(nPosX-nOverlap, nPosY+nSizeY-nBarY),
-                                        Size(nTabSize+nOverlap, nBarY), nTotalWidth, bLayoutRTL );
-        nSizeY -= nBarY - nOverlap;
+        lcl_SetPosSize( *pTabControl, Point(nPosX, nPosY+nSizeY-nBarY),
+                                        Size(nTabSize, nBarY), nTotalWidth, bLayoutRTL );
+        nSizeY -= nBarY;
         lcl_SetPosSize( aScrollBarBox, Point( nPosX+nSizeX, nPosY+nSizeY ), Size( nBarX, nBarY ),
                                         nTotalWidth, bLayoutRTL );
 
