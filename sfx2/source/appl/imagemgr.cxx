@@ -41,7 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui;
 
-typedef boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
                        WeakReference< XImageManager >,
                        OUStringHash,
                        ::std::equal_to< OUString > > ModuleIdToImagegMgr;

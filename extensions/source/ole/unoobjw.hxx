@@ -76,21 +76,21 @@ struct MemberInfo
     OUString name;
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     DISPID,
     OUStringHash
 > NameToIdMap;
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     sal_Bool,
     OUStringHash
 > BadNameMap;
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     DISPID,
     MemberInfo

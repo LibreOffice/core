@@ -65,7 +65,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -136,7 +136,7 @@ bool isDerivedFrom( Reference<XIdlClass> xToTestClass, Reference<XIdlClass> xDer
 // part of the new Instance-related ImplIntrospectionAccess
 
 // Hashtable for the search of names
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     sal_Int32,
@@ -147,7 +147,7 @@ IntrospectionNameMap;
 
 // Hashtable to assign exact names to the Lower-Case
 // converted names, for the support of XExactName
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     OUString,

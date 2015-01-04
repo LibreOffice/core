@@ -123,7 +123,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str
 com::sun::star::uno::Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const com::sun::star::uno::Sequence< sal_Int32> &source );
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
     OString,
     OString,

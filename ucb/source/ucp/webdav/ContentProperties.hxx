@@ -23,9 +23,9 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_CONTENTPROPERTIES_HXX
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -39,14 +39,7 @@ namespace http_dav_ucp
 
 struct DAVResource;
 
-
-
-
-
 // PropertyValueMap.
-
-
-
 class PropertyValue
 {
 private:
@@ -67,7 +60,7 @@ public:
 
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     PropertyValue,

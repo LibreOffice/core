@@ -37,7 +37,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATICS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATICS_HXX
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -103,15 +103,13 @@ struct TypeDetails
     bool isSearchable;
 };
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
    OUString,
    sal_Int32,
    OUStringHash,
    ::std::equal_to< OUString >
 > BaseTypeMap;
-
-
 
 struct ImplementationStatics
 {

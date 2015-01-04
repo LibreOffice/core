@@ -24,7 +24,6 @@
 
  *************************************************************************/
 
-#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -34,6 +33,7 @@
 #include "pkgprovider.hxx"
 #include "pkgcontent.hxx"
 #include "pkguri.hxx"
+#include <unordered_map>
 
 using namespace com::sun::star;
 
@@ -86,12 +86,8 @@ public:
 };
 
 
-
 // Packages.
-
-
-
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     Package*,
@@ -106,13 +102,7 @@ class Packages : public PackageMap {};
 using namespace package_ucp;
 
 
-
-
 // ContentProvider Implementation.
-
-
-
-
 ContentProvider::ContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext ),

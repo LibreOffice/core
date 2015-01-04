@@ -74,11 +74,11 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <boost/unordered_map.hpp>
-
 #include <sfx2/event.hxx>
 #include <sfx2/viewfac.hxx>
 #include "sfxbasecontroller_internal.hxx"
+
+#include <unordered_map>
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
@@ -141,8 +141,7 @@ static const GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
     { 0                 ,   0                                                   }
 };
 
-typedef boost::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
-
+typedef std::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
 {

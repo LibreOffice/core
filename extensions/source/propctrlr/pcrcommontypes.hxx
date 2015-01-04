@@ -23,14 +23,14 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <rtl/ustring.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 
 namespace pcr
 {
 
 
-    typedef ::boost::unordered_map< OUString, ::com::sun::star::beans::Property, OUStringHash >
+    typedef std::unordered_map< OUString, ::com::sun::star::beans::Property, OUStringHash >
         PropertyMap;
 
 

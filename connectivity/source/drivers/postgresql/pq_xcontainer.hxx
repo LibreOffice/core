@@ -36,9 +36,6 @@
 
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCONTAINER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XCONTAINER_HXX
-#include <boost/unordered_map.hpp>
-#include <vector>
-
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -51,6 +48,9 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 
 #include <cppuhelper/compbase8.hxx>
+
+#include <unordered_map>
+#include <vector>
 
 #include "pq_connection.hxx"
 #include "pq_statics.hxx"
@@ -86,7 +86,7 @@ public:
     }
 };
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
    OUString,
    sal_Int32,

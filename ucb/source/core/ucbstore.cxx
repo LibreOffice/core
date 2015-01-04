@@ -25,7 +25,7 @@
   *************************************************************************/
 
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -92,8 +92,6 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
     return OUString( aBuffer.makeStringAndClear() );
 }
 
-
-
 #define STORE_CONTENTPROPERTIES_KEY "/org.openoffice.ucb.Store/ContentProperties"
 
 // describe path of cfg entry
@@ -101,13 +99,8 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
 // true->async. update; false->sync. update
 #define CFGPROPERTY_LAZYWRITE       "lazywrite"
 
-
-
 // PropertySetMap_Impl.
-
-
-
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     PersistentPropertySet*,
@@ -115,12 +108,7 @@ typedef boost::unordered_map
 >
 PropertySetMap_Impl;
 
-
-
 // class PropertySetInfo_Impl
-
-
-
 class PropertySetInfo_Impl : public cppu::WeakImplHelper1 < XPropertySetInfo >
 {
     Reference< XComponentContext >    m_xContext;

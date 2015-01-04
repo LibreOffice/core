@@ -26,11 +26,9 @@
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #include <connectivity/FValue.hxx>
-
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
-
 #include "MErrorResource.hxx"
+#include <unordered_map>
 
 namespace connectivity
 {
@@ -155,7 +153,7 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            typedef ::boost::unordered_map< OString, OUString, OStringHash >  FieldMap;
+            typedef std::unordered_map< OString, OUString, OStringHash >  FieldMap;
 
             FieldMap                m_Fields;
 

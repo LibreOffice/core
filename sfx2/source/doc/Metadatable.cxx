@@ -28,10 +28,10 @@
 
 #include <boost/bind.hpp>
 
-#include <memory>
-#include <boost/unordered_map.hpp>
-#include <list>
 #include <algorithm>
+#include <list>
+#include <memory>
+#include <unordered_map>
 #if OSL_DEBUG_LEVEL > 0
 #include <typeinfo>
 #endif
@@ -393,11 +393,11 @@ XmlIdRegistry::GetXmlIdForElement(const Metadatable& i_rObject) const
 /// generate unique xml:id
 template< typename T >
 /*static*/ OUString create_id(const
-    ::boost::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
+    std::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
     const OUString prefix(s_prefix);
-    typename ::boost::unordered_map< OUString, T, OUStringHash >
+    typename std::unordered_map< OUString, T, OUStringHash >
         ::const_iterator iter;
     OUString id;
 
@@ -433,7 +433,7 @@ template< typename T >
 typedef ::std::list< Metadatable* > XmlIdList_t;
 
 /// Idref -> (content.xml element list, styles.xml element list)
-typedef ::boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
     ::std::pair< XmlIdList_t, XmlIdList_t >, OUStringHash > XmlIdMap_t;
 
 /// pointer hash template
@@ -446,7 +446,7 @@ template<typename T> struct PtrHash
 };
 
 /// element -> (stream name, idref)
-typedef ::boost::unordered_map< const Metadatable*,
+typedef std::unordered_map< const Metadatable*,
     ::std::pair< OUString, OUString>, PtrHash<Metadatable> >
     XmlIdReverseMap_t;
 
@@ -926,13 +926,13 @@ struct RMapEntry
 };
 
 /// element -> (stream name, idref, source)
-typedef ::boost::unordered_map< const Metadatable*,
+typedef std::unordered_map< const Metadatable*,
     struct RMapEntry,
     PtrHash<Metadatable> >
     ClipboardXmlIdReverseMap_t;
 
 /// Idref -> (content.xml element, styles.xml element)
-typedef ::boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
     ::std::pair< Metadatable*, Metadatable* >, OUStringHash >
     ClipboardXmlIdMap_t;
 

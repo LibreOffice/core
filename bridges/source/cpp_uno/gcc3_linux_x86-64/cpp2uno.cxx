@@ -20,7 +20,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <boost/unordered_map.hpp>
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
@@ -43,8 +42,6 @@
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
-
-
 
 // Perform the UNO call
 //

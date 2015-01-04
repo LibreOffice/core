@@ -23,8 +23,8 @@
 #include "ole2uno.hxx"
 #include "wincrap.hxx"
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -53,9 +53,9 @@ namespace ole_adapter
 
 
 
-typedef boost::unordered_map<OUString, pair<DISPID, unsigned short>, OUStringHash> DispIdMap;
+typedef std::unordered_map<OUString, pair<DISPID, unsigned short>, OUStringHash> DispIdMap;
 
-typedef boost::unordered_multimap<OUString, unsigned int, OUStringHash> TLBFuncIndexMap;
+typedef std::unordered_multimap<OUString, unsigned int, OUStringHash> TLBFuncIndexMap;
 
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.

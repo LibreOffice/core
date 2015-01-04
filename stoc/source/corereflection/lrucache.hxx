@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 /** Implementation of a least recently used (lru) cache.
     <br>
@@ -42,7 +42,7 @@ class LRU_Cache
         CacheEntry *        pPred;
         CacheEntry *        pSucc;
     };
-    typedef ::boost::unordered_map< t_Key, CacheEntry *, t_KeyHash > t_Key2Element;
+    typedef std::unordered_map< t_Key, CacheEntry *, t_KeyHash > t_Key2Element;
 
     mutable ::osl::Mutex        _aCacheMutex;
     sal_Int32                   _nCachedElements;

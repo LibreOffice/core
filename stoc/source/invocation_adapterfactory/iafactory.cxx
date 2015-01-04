@@ -18,9 +18,6 @@
  */
 
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
@@ -48,8 +45,10 @@
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
+#include <unordered_map>
+#include <unordered_set>
 
+#define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
 
 using namespace ::std;
 using namespace ::osl;
@@ -76,8 +75,8 @@ struct hash_ptr
     inline size_t operator() ( void * p ) const
         { return reinterpret_cast<size_t>(p); }
 };
-typedef boost::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
-typedef boost::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
+typedef std::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
+typedef std::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
 
 
 class FactoryImpl

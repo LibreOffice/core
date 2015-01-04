@@ -25,10 +25,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <vector>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
-#include <list>
 #include <osl/file.hxx>
 
 #include "osl/mutex.hxx"
@@ -58,6 +54,10 @@
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include "filtask.hxx"
 #include "filnot.hxx"
+#include <list>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace fileaccess {
 
@@ -130,7 +130,7 @@ namespace fileaccess {
             }
         };
 
-        typedef boost::unordered_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
+        typedef std::unordered_set< MyProperty,hMyProperty,eMyProperty > PropertySet;
         typedef std::list< Notifier* >                              NotifierList;
 
 
@@ -151,7 +151,7 @@ namespace fileaccess {
             com::sun::star::uno::Reference< com::sun::star::beans::XPropertyAccess >        xA;
         };
 
-        typedef boost::unordered_map< OUString,UnqPathData,OUStringHash > ContentMap;
+        typedef std::unordered_map< OUString,UnqPathData,OUStringHash > ContentMap;
 
     public:
 

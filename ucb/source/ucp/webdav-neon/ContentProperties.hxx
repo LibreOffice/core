@@ -31,8 +31,8 @@
 
 #include <config_lgpl.h>
 #include <memory>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -46,14 +46,7 @@ namespace webdav_ucp
 
 struct DAVResource;
 
-
-
-
-
 // PropertyValueMap.
-
-
-
 class PropertyValue
 {
 private:
@@ -74,7 +67,7 @@ public:
 
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     PropertyValue,

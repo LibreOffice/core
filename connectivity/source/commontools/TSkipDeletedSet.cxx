@@ -20,6 +20,7 @@
 #include "TSkipDeletedSet.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <algorithm>
 
 using namespace connectivity;
 

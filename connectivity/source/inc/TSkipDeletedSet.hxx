@@ -21,7 +21,7 @@
 
 #include "TResultSetHelper.hxx"
 #include <rtl/alloc.h>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
 

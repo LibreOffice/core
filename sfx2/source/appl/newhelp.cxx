@@ -36,7 +36,6 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-#include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -107,6 +106,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 
+#include <unordered_map>
 #include <vector>
 
 using namespace ::ucbhelper;
@@ -552,7 +552,7 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 namespace sfx2 {
 
-    typedef ::boost::unordered_map< OUString, int, OUStringHash > KeywordInfo;
+    typedef std::unordered_map< OUString, int, OUStringHash > KeywordInfo;
 }
 
 #define NEW_ENTRY( url, bool ) \

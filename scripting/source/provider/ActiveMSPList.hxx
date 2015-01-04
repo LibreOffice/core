@@ -19,9 +19,6 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_ACTIVEMSPLIST_HXX
 #define INCLUDED_SCRIPTING_SOURCE_PROVIDER_ACTIVEMSPLIST_HXX
 
-#include <boost/unordered_map.hpp>
-#include <map>
-
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -36,22 +33,21 @@
 
 #include <comphelper/stl_types.hxx>
 
+#include <map>
+#include <unordered_map>
+
 namespace func_provider
 {
 
 //Typedefs
+typedef std::map  <   css::uno::Reference< css::uno::XInterface >
+                  ,   css::uno::Reference< css::script::provider::XScriptProvider >
+                  ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
+                  >   ScriptComponent_map;
 
-
-
-typedef ::std::map  <   css::uno::Reference< css::uno::XInterface >
-                    ,   css::uno::Reference< css::script::provider::XScriptProvider >
-                    ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
-                    >   ScriptComponent_map;
-
-typedef ::boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
     css::uno::Reference< css::script::provider::XScriptProvider >,
-    OUStringHash,
-            ::std::equal_to< OUString > > Msp_hash;
+    OUStringHash, std::equal_to< OUString > > Msp_hash;
 
 class NonDocMSPCreator;
 

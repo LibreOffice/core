@@ -1413,7 +1413,7 @@ struct DatabaseTypeDescription
     OUString typeType;
 };
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
     sal_Int32,
     DatabaseTypeDescription,

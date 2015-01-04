@@ -30,8 +30,8 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_PROPERTYMAP_HXX
 
 #include <config_lgpl.h>
-#include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/Property.hpp>
+#include <unordered_set>
 
 namespace webdav_ucp {
 
@@ -54,7 +54,7 @@ struct hashPropertyName
     }
 };
 
-typedef boost::unordered_set
+typedef std::unordered_set
 <
     ::com::sun::star::beans::Property,
     hashPropertyName,

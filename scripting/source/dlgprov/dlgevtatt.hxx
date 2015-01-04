@@ -32,20 +32,15 @@
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 
 namespace dlgprov
 {
-
-
-
     // class DialogEventsAttacherImpl
-
-    typedef boost::unordered_map< OUString,
+    typedef std::unordered_map< OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
         OUStringHash,
-        ::std::equal_to< OUString > > ListenerHash;
+        std::equal_to< OUString > > ListenerHash;
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::XScriptEventsAttacher > DialogEventsAttacherImpl_BASE;

@@ -21,7 +21,6 @@
 
 #include <iomanip>
 
-#include <boost/unordered_map.hpp>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
@@ -67,6 +66,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -78,7 +78,7 @@ static sal_uInt16 nTimeOut = 300;
 #define TIMEOUT_UPDATING     20
 #define TIMEOUT_IDLE       2500
 
-typedef boost::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
+typedef std::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
 
 

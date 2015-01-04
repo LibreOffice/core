@@ -33,8 +33,8 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 
 namespace stringresource
@@ -53,7 +53,7 @@ namespace stringresource
 
 
 // Hashtable to map string ids to string
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     OUString,
@@ -61,7 +61,7 @@ typedef boost::unordered_map
 >
 IdToStringMap;
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     sal_Int32,

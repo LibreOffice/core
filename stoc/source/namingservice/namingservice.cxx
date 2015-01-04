@@ -18,7 +18,6 @@
  */
 
 
-#include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <uno/dispatcher.h>
@@ -33,6 +32,8 @@
 
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+
+#include <unordered_map>
 
 using namespace cppu;
 using namespace osl;
@@ -61,7 +62,7 @@ static OUString ns_getImplementationName()
     return OUString(IMPLNAME);
 }
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     Reference<XInterface >,

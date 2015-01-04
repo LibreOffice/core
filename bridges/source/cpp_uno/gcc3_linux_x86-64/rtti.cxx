@@ -21,11 +21,12 @@
 
 #include <cassert>
 #include <typeinfo>
+#include <unordered_map>
 #include <utility>
+#include <vector>
 
 #include <dlfcn.h>
 
-#include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
@@ -39,7 +40,7 @@ namespace {
 
 class RTTI
 {
-    typedef boost::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
+    typedef std::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
 
     osl::Mutex m_mutex;
     t_rtti_map m_rttis;

@@ -20,9 +20,9 @@
 #include "ole2uno.hxx"
 
 #include <stdio.h>
-#include <vector>
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <vector>
 
 #include <osl/diagnose.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -68,7 +68,7 @@ extern "C" const GUID IID_IDispatchEx;
 
 namespace ole_adapter
 {
-boost::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
+std::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
 static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException(const CannotConvertException &e, unsigned int * puArgErr);

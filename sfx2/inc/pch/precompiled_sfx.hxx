@@ -50,7 +50,6 @@
 #include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -708,6 +707,7 @@
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <uno/current_context.hxx>
 #include <uno/mapping.hxx>
+#include <unordered_map>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/cmdoptions.hxx>

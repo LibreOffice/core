@@ -19,13 +19,12 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_FILE_FILNOT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_FILE_FILNOT_HXX
 
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include "filglob.hxx"
-
+#include <unordered_map>
 
 namespace fileaccess {
 
@@ -81,7 +80,7 @@ namespace fileaccess {
     };
 
 
-    typedef boost::unordered_map< OUString,
+    typedef std::unordered_map< OUString,
                            com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >,
                            OUStringHash >      ListenerMap;
 

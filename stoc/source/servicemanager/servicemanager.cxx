@@ -22,8 +22,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
 #include <cppuhelper/queryinterface.hxx>
@@ -54,6 +52,9 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XUnloadingPreference.hpp>
+
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace com::sun::star;
 using namespace css::uno;
@@ -142,7 +143,7 @@ struct equaltoRef_Impl
         { return rName1 == rName2; }
 };
 
-typedef boost::unordered_set
+typedef std::unordered_set
 <
     Reference<XInterface >,
     hashRef_Impl,
@@ -290,20 +291,20 @@ Any ImplementationEnumeration_Impl::nextElement()
 /*****************************************************************************
     Hash tables
 *****************************************************************************/
-typedef boost::unordered_set
+typedef std::unordered_set
 <
     OUString,
     OUStringHash
 > HashSet_OWString;
 
-typedef boost::unordered_multimap
+typedef std::unordered_multimap
 <
     OUString,
     Reference<XInterface >,
     OUStringHash
 > HashMultimap_OWString_Interface;
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,
     Reference<XInterface >,

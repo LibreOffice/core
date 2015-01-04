@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 #include <vector>
 #include <string.h>
 #include "osl/diagnose.h"
@@ -107,7 +107,7 @@ struct hashPtr
     }
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     ne_request*,
     RequestData,

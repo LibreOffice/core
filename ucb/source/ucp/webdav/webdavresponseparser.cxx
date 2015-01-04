@@ -29,15 +29,12 @@
 #include <com/sun/star/ucb/LockType.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <map>
-#include <boost/unordered_map.hpp>
-
-
+#include <unordered_map>
 
 using namespace com::sun::star;
 
 
 // WebDAVNamespace enum and StringToEnum converter
-
 namespace
 {
     enum WebDAVNamespace
@@ -99,7 +96,7 @@ namespace
 
     WebDAVName StrToWebDAVName(const OUString& rStr)
     {
-        typedef boost::unordered_map< OUString, WebDAVName, OUStringHash > WebDAVNameMapper;
+        typedef std::unordered_map< OUString, WebDAVName, OUStringHash > WebDAVNameMapper;
         typedef std::pair< OUString, WebDAVName > WebDAVNameValueType;
         static WebDAVNameMapper aWebDAVNameMapperList;
 

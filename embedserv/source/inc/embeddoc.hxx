@@ -27,15 +27,15 @@
 #include <oleidl.h>
 #include <objidl.h>
 
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/SEQUENCE.h>
+#include <unordered_map>
 
 #include "embeddocaccess.hxx"
 #include "docholder.hxx"
 
-typedef ::boost::unordered_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
-typedef ::boost::unordered_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
+typedef std::unordered_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
+typedef std::unordered_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
 class CIIAObj;

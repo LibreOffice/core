@@ -18,8 +18,6 @@
  */
 
 
-#include <boost/unordered_map.hpp>
-
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <rtl/byteseq.hxx>
@@ -38,6 +36,8 @@
 #include <com/sun/star/security/RuntimePermission.hpp>
 #include <com/sun/star/io/FilePermission.hpp>
 #include <com/sun/star/connection/SocketPermission.hpp>
+
+#include <unordered_map>
 
 #define IMPL_NAME "com.sun.star.security.comp.stoc.FilePolicy"
 
@@ -63,7 +63,7 @@ class FilePolicy
     AccessControl m_ac;
 
     Sequence< Any > m_defaultPermissions;
-    typedef boost::unordered_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
+    typedef std::unordered_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
     t_permissions m_userPermissions;
     bool m_init;
 

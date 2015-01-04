@@ -24,8 +24,8 @@
 #include <unotools/confignode.hxx>
 
 #include <osl/mutex.hxx>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace connectivity
 {
@@ -50,7 +50,7 @@ namespace connectivity
                 {
                 }
             };
-            typedef ::boost::unordered_map< OUString, AliasEntry, OUStringHash > AliasMap;
+            typedef std::unordered_map< OUString, AliasEntry, OUStringHash > AliasMap;
 
         private:
             AliasMap    m_aAliasMap;

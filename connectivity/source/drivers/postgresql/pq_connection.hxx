@@ -38,7 +38,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_CONNECTION_HXX
 
 #include <config_lgpl.h>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -57,8 +56,10 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase6.hxx>
+#include <boost/functional/hash.hpp>
 
 #include <libpq-fe.h>
+#include <unordered_map>
 
 namespace pq_sdbc_driver
 {
@@ -145,7 +146,7 @@ struct HashByteSequence
     }
 };
 
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     ::rtl::ByteSequence,
     ::com::sun::star::uno::WeakReference< com::sun::star::sdbc::XCloseable >,
     HashByteSequence,
@@ -155,7 +156,7 @@ typedef ::std::vector< OString > OStringVector;
 
 
 
-typedef ::boost::unordered_map
+typedef std::unordered_map
 <
     const sal_Int32,
     OUString,

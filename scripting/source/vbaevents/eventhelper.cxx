@@ -76,7 +76,7 @@
 #include <comphelper/evtmethodhelper.hxx>
 
 #include <list>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <service.hxx>
 
@@ -192,7 +192,7 @@ struct TranslateInfo
 };
 
 
-typedef boost::unordered_map< OUString,
+typedef std::unordered_map< OUString,
 std::list< TranslateInfo >,
 OUStringHash,
 ::std::equal_to< OUString > > EventInfoHash;
@@ -498,7 +498,7 @@ public:
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
-typedef boost::unordered_map< OUString, Any, OUStringHash,
+typedef std::unordered_map< OUString, Any, OUStringHash,
 ::std::equal_to< OUString > > EventSupplierHash;
 
     EventSupplierHash m_hEvents;

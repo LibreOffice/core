@@ -20,9 +20,9 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYPROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYPROVIDER_HXX
 
-#include <boost/unordered_map.hpp>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star {
     namespace container {
@@ -50,8 +50,6 @@ namespace hierarchy_ucp {
 #define HIERARCHY_LINK_CONTENT_TYPE \
                 "application/" HIERARCHY_URL_SCHEME "-link"
 
-
-
 struct ConfigProviderMapEntry
 {
     com::sun::star::uno::Reference<
@@ -63,15 +61,13 @@ struct ConfigProviderMapEntry
     ConfigProviderMapEntry() : bTriedToGetRootReadAccess( false ) {}
 };
 
-typedef boost::unordered_map
+typedef std::unordered_map
 <
     OUString,  // servcie specifier
     ConfigProviderMapEntry,
     OUStringHash
 >
 ConfigProviderMap;
-
-
 
 class HierarchyContentProvider : public ::ucbhelper::ContentProviderImplHelper,
                                  public com::sun::star::lang::XInitialization

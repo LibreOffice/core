@@ -37,7 +37,7 @@
 #include <list>
 #include <algorithm>
 #endif
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -77,9 +77,9 @@ inline typelib_TypeDescription * getTypeByName( const OUString & rName )
     return pTypeDescr;
 }
 
-typedef boost::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlField >,
+typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlField >,
     OUStringHash > OUString2Field;
-typedef boost::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlMethod >,
+typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlMethod >,
     OUStringHash > OUString2Method;
 
 

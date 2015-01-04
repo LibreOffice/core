@@ -32,7 +32,7 @@
 #include "ole2uno.hxx"
 
 #include "unotypewrapper.hxx"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 // for some reason DECIMAL_NEG (wtypes.h) which contains BYTE is not resolved.
 typedef unsigned char   BYTE;
@@ -63,17 +63,17 @@ using namespace com::sun::star::bridge::oleautomation;
 using namespace boost;
 namespace ole_adapter
 {
-extern boost::unordered_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
-extern boost::unordered_map<sal_uInt32, sal_uInt32> WrapperToAdapterMap;
-typedef boost::unordered_map<sal_uInt32, sal_uInt32>::iterator IT_Wrap;
-typedef boost::unordered_map<sal_uInt32, sal_uInt32>::iterator CIT_Wrap;
+extern std::unordered_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
+extern std::unordered_map<sal_uInt32, sal_uInt32> WrapperToAdapterMap;
+typedef std::unordered_map<sal_uInt32, sal_uInt32>::iterator IT_Wrap;
+typedef std::unordered_map<sal_uInt32, sal_uInt32>::iterator CIT_Wrap;
 //Maps IUnknown pointers to a weak reference of the respective wrapper class (e.g.
 // IUnknownWrapperImpl. It is the responsibility of the wrapper to remove the entry when
 // it is being destroyed.
 // Used to ensure that an Automation object is always mapped to the same UNO objects.
-extern boost::unordered_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
-typedef boost::unordered_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Com;
-typedef boost::unordered_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Com;
+extern std::unordered_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
+typedef std::unordered_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Com;
+typedef std::unordered_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Com;
 
 // Maps XInterface pointers to a weak reference of its wrapper class (i.e.
 // InterfaceOleWrapper_Impl). It is the responsibility of the wrapper to remove the entry when
@@ -81,9 +81,9 @@ typedef boost::unordered_map<sal_uInt32, WeakReference<XInterface> >::const_iter
 // is mapped to IDispatch which is kept alive in the COM environment. If the same
 // UNO interface is mapped again to COM then the IDispach of the first mapped instance
 // must be returned.
-extern boost::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
-typedef boost::unordered_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Uno;
-typedef boost::unordered_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Uno;
+extern std::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
+typedef std::unordered_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Uno;
+typedef std::unordered_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Uno;
 #ifdef __MINGW32__
 inline void reduceRange( Any& any);
 #endif
@@ -1391,7 +1391,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const Any & rObj, VARIANT
         else
         {
             Reference<XInterface> xIntComWrapper = xInt;
-            typedef boost::unordered_map<sal_uInt32,sal_uInt32>::iterator _IT;
+            typedef std::unordered_map<sal_uInt32,sal_uInt32>::iterator _IT;
             // Adapter? then get the COM wrapper to which the adapter delegates its calls
             _IT it= AdapterToWrapperMap.find( (sal_uInt32) xInt.get());
             if( it != AdapterToWrapperMap.end() )
@@ -1881,7 +1881,7 @@ Reference<XInterface> UnoConversionUtilities<T>::createAdapter(const Sequence<Ty
         // in a global map. Thus we can determine in a call to createUnoObjectWrapper whether the UNO
         // object is a wrapped COM object. In that case we extract the original COM object rather than
         // creating a wrapper around the UNO object.
-        typedef boost::unordered_map<sal_uInt32,sal_uInt32>::value_type VALUE;
+        typedef std::unordered_map<sal_uInt32,sal_uInt32>::value_type VALUE;
         AdapterToWrapperMap.insert( VALUE( (sal_uInt32) xIntAdapted.get(), (sal_uInt32) receiver.get()));
         WrapperToAdapterMap.insert( VALUE( (sal_uInt32) receiver.get(), (sal_uInt32) xIntAdapted.get()));
     }

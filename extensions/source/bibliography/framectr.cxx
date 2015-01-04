@@ -51,7 +51,7 @@
 #include <vcl/edit.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 using namespace osl;
 using namespace cppu;
@@ -98,7 +98,7 @@ static const DispatchInfo SupportedCommandsArray[] =
     { 0                         ,   0                               , false }
 };
 
-typedef ::boost::unordered_map< OUString, CacheDispatchInfo, OUStringHash, ::std::equal_to< OUString > > CmdToInfoCache;
+typedef std::unordered_map< OUString, CacheDispatchInfo, OUStringHash, ::std::equal_to< OUString > > CmdToInfoCache;
 
 const CmdToInfoCache& GetCommandToInfoCache()
 {

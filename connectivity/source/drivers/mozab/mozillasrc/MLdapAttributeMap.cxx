@@ -29,8 +29,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <boost/unordered_map.hpp>
-
+#include <unordered_map>
 
 namespace connectivity { namespace mozab {
 
@@ -62,7 +61,7 @@ namespace connectivity { namespace mozab {
             }
         };
 
-        typedef ::boost::unordered_map< OString, CardPropertyData, OStringHash > MapPropertiesToAttributes;
+        typedef std::unordered_map< OString, CardPropertyData, OStringHash > MapPropertiesToAttributes;
 
         #define DEF_CARD_ACCESS( PropertyName ) \
             &nsIAbCard::Get##PropertyName, &nsIAbCard::Set##PropertyName

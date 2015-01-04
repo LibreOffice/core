@@ -19,7 +19,6 @@
 
 
 #include <stdio.h>
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <sfx2/imgmgr.hxx>
@@ -39,6 +38,8 @@
 #include <rtl/instance.hxx>
 
 #include <comphelper/processfactory.hxx>
+
+#include <unordered_map>
 
 const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
 
@@ -71,7 +72,7 @@ public:
 
 namespace
 {
-    typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
+    typedef std::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
 
     class theImageManagerImplMap :
         public rtl::Static<SfxImageManagerImplMap, theImageManagerImplMap> {};
@@ -247,7 +248,7 @@ SfxImageManager::~SfxImageManager()
 
 namespace
 {
-    typedef boost::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager> > SfxImageManagerMap;
+    typedef std::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager> > SfxImageManagerMap;
 
     class theImageManagerMap :
         public rtl::Static<SfxImageManagerMap, theImageManagerMap> {};

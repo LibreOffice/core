@@ -33,8 +33,8 @@
 #include <rtl/ref.hxx>
 
 #include <set>
+#include <unordered_map>
 #include <vector>
-#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 

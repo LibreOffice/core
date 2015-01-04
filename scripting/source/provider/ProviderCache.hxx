@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_PROVIDERCACHE_HXX
 #define INCLUDED_SCRIPTING_SOURCE_PROVIDER_PROVIDERCACHE_HXX
 
-#include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -32,6 +31,8 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
+
+#include <unordered_map>
 
 namespace func_provider
 {
@@ -45,7 +46,7 @@ struct ProviderDetails
     css::uno::Reference< css::lang::XSingleComponentFactory > factory;
     css::uno::Reference< css::script::provider::XScriptProvider > provider;
 };
-typedef ::boost::unordered_map < OUString, ProviderDetails , OUStringHash,
+typedef std::unordered_map < OUString, ProviderDetails , OUStringHash,
             ::std::equal_to< OUString > > ProviderDetails_hash;
 
 

@@ -158,13 +158,11 @@ public:
     }
 };
 
-
-//typedef ::std::map< OUString, Reference< browse::XBrowseNode > >
-typedef ::boost::unordered_map< OUString, Reference< browse::XBrowseNode >,
+//typedef std::map< OUString, Reference< browse::XBrowseNode > >
+typedef std::unordered_map< OUString, Reference< browse::XBrowseNode >,
     OUStringHash, ::std::equal_to< OUString > >
         BrowseNodeAggregatorHash;
-typedef ::std::vector< OUString > vString;
-
+typedef std::vector< OUString > vString;
 
 struct alphaSort
 {

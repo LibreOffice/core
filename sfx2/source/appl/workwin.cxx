@@ -20,7 +20,6 @@
 #include <config_features.h>
 #include <comphelper/processfactory.hxx>
 #include <stdio.h>
-#include <boost/unordered_map.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -55,6 +54,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <unordered_map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -324,7 +324,7 @@ namespace
     class FilledToolBarResIdToResourceURLMap
     {
     private:
-        typedef boost::unordered_map< sal_Int32, OUString > ToolBarResIdToResourceURLMap;
+        typedef std::unordered_map< sal_Int32, OUString > ToolBarResIdToResourceURLMap;
         ToolBarResIdToResourceURLMap m_aResIdToResourceURLMap;
     public:
         FilledToolBarResIdToResourceURLMap()
