@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/math.hxx>
+#include <stdexcept>
 #include <vector>
 
 using namespace com::sun::star;
