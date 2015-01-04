@@ -65,6 +65,12 @@ std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
     return rStrm;
 }
 
+std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
+{
+    rStrm << static_cast<sal_uInt16>(rCode);
+    return rStrm;
+}
+
 FileFormat aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
