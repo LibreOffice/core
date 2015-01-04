@@ -442,6 +442,13 @@
           </constraints>
           <value>9</value>
         </prop>
+        <prop oor:name="TabbarInlineWithScrollbar" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies if the tabbar should be shown inline with the scrollbar.</desc>
+            <label>Inline tabbar with scrollbar</label>
+          </info>
+          <value>false</value>
+        </prop>
         <group oor:name="TabStop">
           <!-- OldPath: Calc/Layout -->
           <!-- OldLocation: Soffice.cfg -->

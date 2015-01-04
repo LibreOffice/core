@@ -165,6 +165,7 @@ private:
     bool                bBlockNeg:1;              // is no longer highlighted?
     bool                bBlockCols:1;             // are whole columns selected?
     bool                bBlockRows:1;             // are whole rows selected?
+    bool                mbInlineWithScrollbar:1;  // should inline with scrollbar?
 
     void            Init();
 

@@ -59,6 +59,9 @@
 
 #define SC_ICONSIZE     36
 
+#define SC_SCROLLBAR_MIN 30
+#define SC_TABBAR_MIN 6
+
 using namespace ::com::sun::star;
 
 //  Corner-Button
@@ -228,7 +231,8 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     bDragging( false ),
     bBlockNeg( false ),
     bBlockCols( false ),
-    bBlockRows( false )
+    bBlockRows( false ),
+    mbInlineWithScrollbar( false )
 {
     Init();
 }
@@ -377,7 +381,11 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         }
         if (bHScroll)
         {
-            nBarY = nScrollBarSize + nTabWidth;
+            nBarY = nTabWidth;
+
+            if (!mbInlineWithScrollbar)
+                nBarY += nScrollBarSize;
+
             nSizeY -= nBarY - nOverlap;
         }
 
@@ -408,6 +416,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             }
             nSizeRt = nSizeX - nSizeLt - nSizeSp;
 
+            long nTabSize = 0;
+
             if (bTabControl)
             {
                 // pending relative tab bar width from extended document options
@@ -416,26 +426,67 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                     SetRelTabBarWidth( mfPendingTabBarWidth );
                     mfPendingTabBarWidth = -1.0;
                 }
+
+                if (mbInlineWithScrollbar)
+                {
+                    nTabSize = pTabControl->GetSizePixel().Width() - nOverlap;
+
+                     if ( aViewData.GetHSplitMode() != SC_SPLIT_FIX ) // left Scrollbar
+                     {
+                        if (nTabSize > nSizeLt-SC_SCROLLBAR_MIN)
+                            nTabSize = nSizeLt-SC_SCROLLBAR_MIN;
+                        if (nTabSize < SC_TABBAR_MIN) nTabSize = SC_TABBAR_MIN;
+                            nSizeLt -= nTabSize;
+                        }
+                    else // right Scrollbar
+                    {
+                        if (nTabSize > nSizeRt-SC_SCROLLBAR_MIN)
+                            nTabSize = nSizeRt-SC_SCROLLBAR_MIN;
+                        if (nTabSize < SC_TABBAR_MIN) nTabSize = SC_TABBAR_MIN;
+                            nSizeRt -= nTabSize;
+                    }
+                }
             }
 
-            Point aTabPoint(nPosX - nOverlap, nPosY + nSizeY + nScrollBarSize);
-            Size aTabSize(nSizeX, nBarY - nScrollBarSize);
-            lcl_SetPosSize( *pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL );
-            pTabControl->SetSheetLayoutRTL( bLayoutRTL );
+            if (mbInlineWithScrollbar)
+            {
+                Point aTabPoint(nPosX - nOverlap, nPosY + nSizeY);
+                Size aTabSize(nTabSize + nOverlap, nBarY);
+                lcl_SetPosSize(*pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL);
+                pTabControl->SetSheetLayoutRTL(bLayoutRTL);
 
-            Point aHScrollLeftPoint(nPosX - nOverlap, nPosY + nSizeY);
-            Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nScrollBarSize);
-            lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL );
+                Point aHScrollLeftPoint(nPosX + nTabSize - nOverlap, nPosY + nSizeY);
+                Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nBarY);
+                lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL);
 
-            Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
-            Size aHSplitterSize(nSizeSp, nScrollBarSize);
-            lcl_SetPosSize( *pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL );
+                Point aHSplitterPoint(nPosX + nTabSize + nSizeLt, nPosY + nSizeY);
+                Size aHSplitterSize(nSizeSp, nBarY);
+                lcl_SetPosSize(*pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL);
 
-            Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
-            Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nScrollBarSize);
+                Point aHScrollRightPoint(nPosX + nTabSize + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
+                Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nBarY);
+                lcl_SetPosSize(aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL);
+            }
+            else
+            {
+                Point aTabPoint(nPosX - nOverlap, nPosY + nSizeY + nScrollBarSize);
+                Size aTabSize(nSizeX, nTabWidth);
+                lcl_SetPosSize( *pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL );
+                pTabControl->SetSheetLayoutRTL( bLayoutRTL );
 
-            lcl_SetPosSize( aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL );
+                Point aHScrollLeftPoint(nPosX - nOverlap, nPosY + nSizeY);
+                Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nScrollBarSize);
+                lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL );
 
+                Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
+                Size aHSplitterSize(nSizeSp, nScrollBarSize);
+                lcl_SetPosSize( *pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL );
+
+                Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
+                Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nScrollBarSize);
+
+                lcl_SetPosSize( aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL );
+            }
             //  SetDragRectPixel is done below
         }
 

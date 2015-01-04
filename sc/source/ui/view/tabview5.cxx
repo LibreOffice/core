@@ -51,6 +51,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <officecfg/Office/Calc.hxx>
+
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -64,6 +66,8 @@ void ScTabView::Init()
     pFrameWin->EnableRTL( false );
 
     sal_uInt16 i;
+
+    mbInlineWithScrollbar = officecfg::Office::Calc::Layout::Other::TabbarInlineWithScrollbar::get();
 
     aScrollTimer.SetTimeout(10);
     aScrollTimer.SetTimeoutHdl( LINK( this, ScTabView, TimerHdl ) );
@@ -94,7 +98,10 @@ void ScTabView::Init()
     pHSplitter->SetKeyboardStepSize( 1 );
     pVSplitter->SetKeyboardStepSize( 1 );
 
-    pTabControl = new ScTabControl( pFrameWin, &aViewData );
+    pTabControl = new ScTabControl(pFrameWin, &aViewData);
+    if (mbInlineWithScrollbar)
+        pTabControl->SetStyle(pTabControl->GetStyle() | WB_SIZEABLE);
+
     /*  #i97900# The tab control has to remain in RTL mode if GUI is RTL, this
         is needed to draw the 3D effect correctly. The base TabBar implementes
         mirroring independent from the GUI direction. Have to set RTL mode
