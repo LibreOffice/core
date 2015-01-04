@@ -31,7 +31,7 @@
 
 #include "svdata.hxx"
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 SalSystem* WinSalInstance::CreateSalSystem()
 {
@@ -105,7 +105,7 @@ bool WinSalSystem::initMonitors()
         DISPLAY_DEVICEW aDev;
         aDev.cb = sizeof( aDev );
         DWORD nDevice = 0;
-        boost::unordered_map< OUString, int, OUStringHash > aDeviceStringCount;
+        std::unordered_map< OUString, int, OUStringHash > aDeviceStringCount;
         while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
         {
             if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
@@ -130,7 +130,7 @@ bool WinSalSystem::initMonitors()
         EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
 
         // append monitor numbers to name strings
-        boost::unordered_map< OUString, int, OUStringHash > aDevCount( aDeviceStringCount );
+        std::unordered_map< OUString, int, OUStringHash > aDevCount( aDeviceStringCount );
         unsigned int nMonitorCount = m_aMonitors.size();
         for( unsigned int i = 0; i < nMonitorCount; i++ )
         {

@@ -42,9 +42,9 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
-typedef boost::unordered_map<int,int> IntMap;
+typedef std::unordered_map<int,int> IntMap;
 
 // Graphite headers
 #include <config_graphite.h>
