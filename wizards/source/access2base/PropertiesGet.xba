@@ -38,6 +38,12 @@ Public Function getBackColor(Optional pvObject As Variant) As Variant
 End Function		&apos;	getBackColor
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getBeginGroup(Optional pvObject As Variant) As Variant
+	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getBeginGroup&quot;)
+	getBeginGroup = PropertiesGet._getProperty(pvObject, &quot;BeginGroup&quot;)
+End Function		&apos;	getBeginGroup
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getBOF(Optional pvObject As Variant) As Variant
 	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getBOF&quot;)
 	getBOF = PropertiesGet._getProperty(pvObject, &quot;BOF&quot;)
@@ -66,6 +72,12 @@ Public Function getBorderStyle(Optional pvObject As Variant) As Variant
 	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getBorderStyle&quot;)
 	getBorderStyle = PropertiesGet._getProperty(pvObject, &quot;BorderStyle&quot;)
 End Function		&apos;	getBorderStyle
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getBuiltin(Optional pvObject As Variant) As Boolean
+	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getBuiltin&quot;)
+	getBuiltin = PropertiesGet._getProperty(pvObject, &quot;Builtin&quot;)
+End Function		&apos;	getBuiltin
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getButtonLeft(Optional pvObject As Variant) As Boolean
@@ -675,6 +687,12 @@ Public Function getTextAlign(Optional pvObject As Variant) As Variant
 End Function		&apos;	getTextAlign
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function getTooltipText(Optional pvObject As Variant) As Variant
+	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getTooltipText&quot;)
+	getTooltipText = PropertiesGet._getProperty(pvObject, &quot;TooltipText&quot;)
+End Function		&apos;	getTooltipText
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getTripleState(Optional pvObject As Variant) As Variant
 	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getTripleState&quot;)
 	getTripleState = PropertiesGet._getProperty(pvObject, &quot;TripleState&quot;)
@@ -762,6 +780,9 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;BackColor&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.BackColor
+		Case UCase(&quot;BeginGroup&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCOMMANDBARCONTROL) Then Goto Exit_Function
+			_getProperty = pvItem.BeginGroup
 		Case UCase(&quot;BOF&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJRECORDSET) Then Goto Exit_Function
 			_getProperty = pvItem.BOF
@@ -777,6 +798,9 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;BorderStyle&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.BorderStyle
+		Case UCase(&quot;Builtin&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCOMMANDBAR, OBJCOMMANDBARCONTROL)) Then Goto Exit_Function
+			_getProperty = pvItem.Builtin
 		Case UCase(&quot;ButtonLeft&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJEVENT) Then Goto Exit_Function
 			_getProperty = pvItem.ButtonLeft
@@ -790,7 +814,7 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.Cancel
 		Case UCase(&quot;Caption&quot;)
-			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL, OBJCOMMANDBARCONTROL)) Then Goto Exit_Function
 			_getProperty = pvItem.Caption
 		Case UCase(&quot;ClickCount&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJEVENT) Then Goto Exit_Function
@@ -885,6 +909,9 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;Height&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG)) Then Goto Exit_Function
 			_getProperty = pvItem.Height
+		Case UCase(&quot;Index&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCOMMANDBARCONTROL) Then Goto Exit_Function
+			_getProperty = pvItem.Index
 		Case UCase(&quot;IsLoaded&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJFORM) Then Goto Exit_Function
 			_getProperty = pvItem.IsLoaded
@@ -930,14 +957,18 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 			_getProperty = pvItem.MultiSelect
 		Case UCase(&quot;Name&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, _
-				Array(OBJFORM, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJDIALOG, OBJTABLEDEF, OBJRECORDSET, OBJFIELD, OBJTEMPVAR) _
+				Array(OBJFORM, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJDIALOG, OBJTABLEDEF, OBJRECORDSET, OBJFIELD, OBJTEMPVAR, OBJCOMMANDBAR) _
 				) Then Goto Exit_Function
 			_getProperty = pvItem.Name
 		Case UCase(&quot;ObjectType&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJDATABASE, OBJCOLLECTION, OBJFORM, OBJDIALOG, OBJSUBFORM, OBJCONTROL _
-				, OBJEVENT, OBJOPTIONGROUP, OBJPROPERTY, OBJRECORDSET, OBJTABLEDEF, OBJFIELD, OBJTEMPVAR) _
+				, OBJEVENT, OBJOPTIONGROUP, OBJPROPERTY, OBJRECORDSET, OBJTABLEDEF, OBJFIELD, OBJTEMPVAR _
+				, OBJCOMMANDBAR, OBJCOMMANDBARCONTROL) _
 				) Then Goto Exit_Function
 			_getProperty = pvItem.ObjectType
+		Case UCase(&quot;OnAction&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCOMMANDBARCONTROL) Then Goto Exit_Function
+			_getProperty = pvItem.OnAction
 		Case UCase(&quot;OpenArgs&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJFORM) Then Goto Exit_Function
 			_getProperty = pvItem.OpenArgs
@@ -954,7 +985,7 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
 			_getProperty = pvItem.Page
 		Case UCase(&quot;Parent&quot;)
-			If Not Utils._CheckArgument(pvItem, 1, Array(OBJSUBFORM, OBJCONTROL)) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJSUBFORM, OBJCONTROL, OBJCOMMANDBARCONTROL)) Then Goto Exit_Function
 			_getProperty = pvItem.Parent
 		Case UCase(&quot;Recommendation&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJEVENT) Then Goto Exit_Function
@@ -1022,6 +1053,9 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;TextAlign&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.TextAlign
+		Case UCase(&quot;TooltipText&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCOMMANDBARCONTROL) Then Goto Exit_Function
+			_getProperty = pvItem.TooltipText
 		Case UCase(&quot;TripleState&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.TripleState
@@ -1032,7 +1066,7 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCONTROL, OBJOPTIONGROUP, OBJPROPERTY, OBJFIELD, OBJTEMPVAR)) Then Goto Exit_Function
 			_getProperty = pvItem.Value
 		Case UCase(&quot;Visible&quot;)
-			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL, OBJCOMMANDBAR, OBJCOMMANDBARCONTROL)) Then Goto Exit_Function
 			_getProperty = pvItem.Visible
 		Case UCase(&quot;Width&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG)) Then Goto Exit_Function
@@ -1167,7 +1201,8 @@ Dim i As Integer, j As Integer, iCount As Integer
 	Set vProperties = Nothing
 	Select Case pvObject._Type
 		Case OBJCOLLECTION, OBJPROPERTY, OBJFORM, OBJEVENT, OBJSUBFORM, OBJCONTROL, OBJOPTIONGROUP _
-				, OBJDATABASE, OBJTABLEDEF, OBJQUERYDEF, OBJDIALOG, OBJFIELD, OBJRECORDSET, OBJTEMPVAR
+				, OBJDATABASE, OBJTABLEDEF, OBJQUERYDEF, OBJDIALOG, OBJFIELD, OBJRECORDSET, OBJTEMPVAR _
+				, OBJCOMMANDBAR, OBJCOMMANDBARCONTROL
 			vPropertiesList = pvObject._PropertiesList()
 		Case Else
 	End Select

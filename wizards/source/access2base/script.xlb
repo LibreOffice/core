@@ -29,4 +29,5 @@
  <library:element library:name="Root_"/>
  <library:element library:name="UtilProperty"/>
  <library:element library:name="CommandBar"/>
+ <library:element library:name="CommandBarControl"/>
 </library:library>

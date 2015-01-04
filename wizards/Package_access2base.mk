@@ -25,6 +25,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvaccess2base,$(LIBO_SHARE_FOLD
 	Application.xba \
 	Collect.xba \
 	CommandBar.xba \
+	CommandBarControl.xba \
 	Compatible.xba \
 	Control.xba \
 	Database.xba \

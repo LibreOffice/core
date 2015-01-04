@@ -62,7 +62,12 @@ Property Get Item(ByVal Optional pvItem As Variant) As Variant
 Const cstThisSub = &quot;Collection.getItem&quot;
 	Utils._SetCalledSub(cstThisSub)
 	If IsMissing(pvItem) Then Goto Exit_Function	&apos;	To allow object watching in Basic IDE, do not generate error
-	If Not Utils._CheckArgument(pvItem, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	Select Case _CollType
+		Case COLLCOMMANDBARCONTROLS					&apos;	Have no name
+			If Not Utils._CheckArgument(pvItem, 1, Utils._AddNumeric()) Then Goto Exit_Function
+		Case Else
+			If Not Utils._CheckArgument(pvItem, 1, Utils._AddNumeric(vbString)) Then Goto Exit_Function
+	End Select
 
 Dim vNames() As Variant, oProperty As Object
 
@@ -74,6 +79,8 @@ Dim vNames() As Variant, oProperty As Object
 			Set Item = Application.AllForms(pvItem)
 		Case COLLCOMMANDBARS
 			Set Item = Application.CommandBars(pvItem)
+		Case COLLCOMMANDBARCONTROLS
+			Set Item = Application.CommandBars(_ParentName).CommandBarControls(pvItem)
 		Case COLLCONTROLS
 			Select Case _ParentType
 				Case OBJCONTROL, OBJSUBFORM

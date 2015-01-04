@@ -188,6 +188,12 @@ Public Function setMultiSelect(Optional pvObject As Variant, ByVal Optional pvVa
 End Function		&apos;	setMultiSelect
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setOnAction(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setOnAction&quot;)
+	setOnAction = PropertiesSet._setProperty(pvObject, &quot;OnAction&quot;, pvValue)
+End Function		&apos;	setOnAction
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setOptionValue(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
 	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setOptionValue&quot;)
 	setOptionValue = PropertiesSet._setProperty(pvObject, &quot;OptionValue&quot;, pvValue)
@@ -308,6 +314,12 @@ Public Function setTextAlign(Optional pvObject As Variant, ByVal Optional pvValu
 	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setTextAlign&quot;)
 	setTextAlign = PropertiesSet._setProperty(pvObject, &quot;TextAlign&quot;, pvValue)
 End Function		&apos;	setTextAlign
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Function setTooltipText(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
+	If IsMissing(pvObject) Or IsMissing(pvValue) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;setTooltipText&quot;)
+	setTooltipText = PropertiesSet._setProperty(pvObject, &quot;TooltipText&quot;, pvValue)
+End Function		&apos;	setTooltipText
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function setTripleState(Optional pvObject As Variant, ByVal Optional pvValue As Variant) As Boolean
@@ -477,6 +489,9 @@ Dim ocButton As Variant, iRadioIndex As Integer
 		Case UCase(&quot;MultiSelect&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.MultiSelect = pvValue
+		Case UCase(&quot;OnAction&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCOMMANDBARCONTROL) Then Goto Exit_Function
+			pvItem.OnAction = pvValue
 		Case UCase(&quot;OptionValue&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.OptionValue = pvValue
@@ -528,6 +543,9 @@ Dim ocButton As Variant, iRadioIndex As Integer
 		Case UCase(&quot;TextAlign&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.TextAlign = pvValue
+		Case UCase(&quot;TooltipText&quot;)
+			If Not Utils._CheckArgument(pvItem, 1, OBJCOMMANDBARCONTROL) Then Goto Exit_Function
+			pvItem.TooltipText = pvValue
 		Case UCase(&quot;TripleState&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			pvItem.TripleState = pvValue
@@ -535,7 +553,7 @@ Dim ocButton As Variant, iRadioIndex As Integer
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCONTROL, OBJOPTIONGROUP, OBJFIELD, OBJTEMPVAR)) Then Goto Exit_Function
 			pvItem.Value = pvValue
 		Case UCase(&quot;Visible&quot;)
-			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL)) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG, OBJCONTROL, OBJCOMMANDBAR, OBJCOMMANDBARCONTROL)) Then Goto Exit_Function
 			pvItem.Visible = pvValue
 		Case UCase(&quot;Width&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJFORM, OBJDIALOG)) Then Goto Exit_Function

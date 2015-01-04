@@ -1398,8 +1398,9 @@ Error_Sub:
 End Sub				&apos;	RunApp		V0.8.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function RunCommand(Optional pvCommand As Variant) As Boolean
+Public Function RunCommand(Optional pvCommand As Variant, Optional pbReturnCommand As Boolean) As Variant
 &apos;	Execute command via DispatchHelper
+&apos;	pbReturnCommand = internal parameter to only return the exact command string (always absent if uno prefix present in pvCommand)
 
 	If _ErrorHandler() Then On Local Error Goto Exit_Function			&apos;	Avoid any abort
 Const cstThisSub = &quot;RunCommand&quot;
@@ -1408,16 +1409,17 @@ Const cstThisSub = &quot;RunCommand&quot;
 Dim iVBACommand As Integer, sOOCommand As String, sDispatch As String
 	If IsMissing(pvCommand) Then Call _TraceArguments()
 	If Not ( Utils._CheckArgument(pvCommand, 1, Utils._AddNumeric(vbString)) ) Then Goto Exit_Function
+	If IsMissing(pbReturnCommand) Then pbReturnCommand = False
+	
+	RunCommand = True
 	
 Const cstUnoPrefix = &quot;.uno:&quot;
 	If VarType(pvCommand) = vbString Then
 		sOOCommand = pvCommand
 		iVBACommand = -1
-		If Len(sOOCommand) &gt; Len(cstUnoPrefix) Then
-			If Left(sOOCommand, Len(cstUnoPrefix)) = cstUnoPrefix Then
-				Call _DispatchCommand(sOOCommand)
-				Goto Exit_Function
-			End If
+		If _IsLeft(sOOCommand, cstUnoPrefix) Then
+			Call _DispatchCommand(sOOCommand)
+			Goto Exit_Function
 		End If
 	Else
 		sOOCommand = &quot;&quot;
@@ -1604,10 +1606,9 @@ Const cstUnoPrefix = &quot;.uno:&quot;
 			sDispatch = pvCommand
 	End Select
 	
-	Call _DispatchCommand(cstUnoPrefix &amp; sDispatch)
+	If pbReturnCommand Then RunCommand = cstUnoPrefix &amp; sDispatch Else Call _DispatchCommand(cstUnoPrefix &amp; sDispatch)
 
 Exit_Function:
-	RunCommand = True
 	Utils._ResetCalledSub(cstThisSub)
 	Exit Function
 Error_Function:

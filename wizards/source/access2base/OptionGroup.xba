@@ -124,7 +124,7 @@ Dim ocControl As Variant, iArgNr As Integer, i As Integer
 		Goto Exit_Function
 	End If
 	
-	If Len(_A2B_.CalledSub) &gt; 12 And Left(_A2B_.CalledSub, 12) = &quot;OptionGroup.&quot; Then iArgNr = 1 Else iArgNr = 2
+	If _IsLeft(_A2B_.CalledSub, &quot;OptionGroup.&quot;) Then iArgNr = 1 Else iArgNr = 2
 	If Not Utils._CheckArgument(pvIndex, iArgNr, Utils._AddNumeric()) Then Goto Exit_Function
 	If pvIndex &lt; 0 Or pvIndex &gt; _Count - 1 Then Goto Trace_Error_Index
 				
@@ -266,7 +266,7 @@ Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Varia
 &apos;Execute
 Dim i As Integer, iRadioIndex As Integer, oModel As Object, iArgNr As Integer
 
-	If Len(_A2B_.CalledSub) &gt; 12 And Left(_A2B_.CalledSub, 12) = &quot;OptionGroup.&quot; Then iArgNr = 1 Else iArgNr = 2
+	If _IsLeft(_A2B_.CalledSub, &quot;OptionGroup.&quot;) Then iArgNr = 1 Else iArgNr = 2
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Value&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value

@@ -616,7 +616,7 @@ Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Varia
 &apos;Execute
 Dim iArgNr As Integer
 
-	If Len(_A2B_.CalledSub) &gt; 7 And Left(_A2B_.CalledSub, 7) = &quot;Dialog.&quot; Then iArgNr = 1 Else iArgNr = 2
+	If _IsLeft(_A2B_.CalledSub, &quot;Dialog.&quot;) Then iArgNr = 1 Else iArgNr = 2
 	If IsNull(UnoDialog) Then Goto Trace_Error_Dialog
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Caption&quot;)

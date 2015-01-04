@@ -163,7 +163,7 @@ Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Varia
 &apos;Execute
 Dim iArgNr As Integer
 
-	If Len(_A2B_.CalledSub) &gt; 8 And Left(_A2B_.CalledSub, 8) = &quot;TempVar.&quot; Then iArgNr = 1 Else iArgNr = 2
+	If _IsLeft(_A2B_.CalledSub, &quot;TempVar.&quot;) Then iArgNr = 1 Else iArgNr = 2
 	Select Case UCase(psProperty)
 		Case UCase(&quot;Value&quot;)
 			_Value = pvValue

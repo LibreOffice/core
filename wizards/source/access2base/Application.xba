@@ -79,35 +79,37 @@ Global Const DBCONNECTFORM			=	2			&apos;	Connection from a database-aware form 
 Global Const DBCONNECTANY			=	3			&apos;	Connection from any document for data access only (OpenDatabase)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Global Const COLLALLDIALOGS 	= &quot;ALLDIALOGS&quot;
-Global Const COLLALLFORMS		= &quot;ALLFORMS&quot;
-Global Const COLLCOMMANDBARS	= &quot;COMMANDBARS&quot;
-Global Const COLLCONTROLS		= &quot;CONTROLS&quot;
-Global Const COLLFORMS			= &quot;FORMS&quot;
-Global Const COLLFIELDS			= &quot;FIELDS&quot;
-Global Const COLLPROPERTIES		= &quot;PROPERTIES&quot;
-Global Const COLLQUERYDEFS		= &quot;QUERYDEFS&quot;
-Global Const COLLRECORDSETS		= &quot;RECORDSETS&quot;
-Global Const COLLTABLEDEFS		= &quot;TABLEDEFS&quot;
-Global Const COLLTEMPVARS		= &quot;TEMPVARS&quot;
+Global Const COLLALLDIALOGS 		= &quot;ALLDIALOGS&quot;
+Global Const COLLALLFORMS			= &quot;ALLFORMS&quot;
+Global Const COLLCOMMANDBARS		= &quot;COMMANDBARS&quot;
+Global Const COLLCOMMANDBARCONTROLS	= &quot;COMMANDBARCONTROLS&quot;
+Global Const COLLCONTROLS			= &quot;CONTROLS&quot;
+Global Const COLLFORMS				= &quot;FORMS&quot;
+Global Const COLLFIELDS				= &quot;FIELDS&quot;
+Global Const COLLPROPERTIES			= &quot;PROPERTIES&quot;
+Global Const COLLQUERYDEFS			= &quot;QUERYDEFS&quot;
+Global Const COLLRECORDSETS			= &quot;RECORDSETS&quot;
+Global Const COLLTABLEDEFS			= &quot;TABLEDEFS&quot;
+Global Const COLLTEMPVARS			= &quot;TEMPVARS&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Global Const OBJAPPLICATION	= &quot;APPLICATION&quot;
-Global Const OBJCOLLECTION	= &quot;COLLECTION&quot;
-Global Const OBJCOMMANDBAR	= &quot;COMMANDBAR&quot;
-Global Const OBJCONTROL		= &quot;CONTROL&quot;
-Global Const OBJDATABASE	= &quot;DATABASE&quot;
-Global Const OBJDIALOG		= &quot;DIALOG&quot;
-Global Const OBJEVENT		= &quot;EVENT&quot;
-Global Const OBJFIELD		= &quot;FIELD&quot;
-Global Const OBJFORM		= &quot;FORM&quot;
-Global Const OBJOPTIONGROUP	= &quot;OPTIONGROUP&quot;
-Global Const OBJPROPERTY	= &quot;PROPERTY&quot;
-Global Const OBJQUERYDEF	= &quot;QUERYDEF&quot;
-Global Const OBJRECORDSET	= &quot;RECORDSET&quot;
-Global Const OBJSUBFORM		= &quot;SUBFORM&quot;
-Global Const OBJTABLEDEF	= &quot;TABLEDEF&quot;
-Global Const OBJTEMPVAR		= &quot;TEMPVAR&quot;
+Global Const OBJAPPLICATION			= &quot;APPLICATION&quot;
+Global Const OBJCOLLECTION			= &quot;COLLECTION&quot;
+Global Const OBJCOMMANDBAR			= &quot;COMMANDBAR&quot;
+Global Const OBJCOMMANDBARCONTROL	= &quot;COMMANDBARCONTROL&quot;
+Global Const OBJCONTROL				= &quot;CONTROL&quot;
+Global Const OBJDATABASE			= &quot;DATABASE&quot;
+Global Const OBJDIALOG				= &quot;DIALOG&quot;
+Global Const OBJEVENT				= &quot;EVENT&quot;
+Global Const OBJFIELD				= &quot;FIELD&quot;
+Global Const OBJFORM				= &quot;FORM&quot;
+Global Const OBJOPTIONGROUP			= &quot;OPTIONGROUP&quot;
+Global Const OBJPROPERTY			= &quot;PROPERTY&quot;
+Global Const OBJQUERYDEF			= &quot;QUERYDEF&quot;
+Global Const OBJRECORDSET			= &quot;RECORDSET&quot;
+Global Const OBJSUBFORM				= &quot;SUBFORM&quot;
+Global Const OBJTABLEDEF			= &quot;TABLEDEF&quot;
+Global Const OBJTEMPVAR				= &quot;TEMPVAR&quot;
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const CTLCONTROL			= &quot;CONTROL&quot;		&apos;	ClassId
@@ -471,11 +473,9 @@ Const cstCustom = &quot;CUSTOM&quot;
 				For i = 0 To UBound(vUIElements)
 					sToolbarFullName = _GetPropertyValue(vUIElements(i), &quot;ResourceURL&quot;)
 					sToolbarName = Split(sToolbarFullName, &quot;/&quot;)(2)
-					If Len(sToolbarName) &gt; Len(cstCustom) Then
-						If Left(UCase(sToolbarName), Len(cstCustom)) = cstCustom Then
-							sToolbarName = _GetPropertyValue(vUIElements(i), &quot;UIName&quot;)
-							iBuiltin = 2
-						End If
+					If _IsLeft(UCase(sToolbarName), UCase(cstCustom)) Then
+						sToolbarName = _GetPropertyValue(vUIElements(i), &quot;UIName&quot;)
+						iBuiltin = 2
 					End If
 
 					iObjectsCount = iObjectsCount + 1

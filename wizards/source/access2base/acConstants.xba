@@ -357,4 +357,8 @@ Global Const msoBarTypeMenuBar = 1		&apos;	Menu bar
 Global Const msoBarTypePopup = 2		&apos;	Shortcut menu
 Global Const msoBarTypeStatusBar = 11	&apos;	Status bar
 Global Const msoBarTypeFloater = 12		&apos;	Floating window
+
+Global Const msoControlButton = 1		&apos;	Command button
+Global Const msoControlPopup = 10		&apos;	Popup, submenu
+
 </script:module>

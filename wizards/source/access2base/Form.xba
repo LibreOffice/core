@@ -787,7 +787,7 @@ Private Function _PropertySet(ByVal psProperty As String, ByVal pvValue As Varia
 Dim iArgNr As Integer
 Dim oDatabase As Object
 
-	If Len(_A2B_.CalledSub) &gt; 5 And Left(_A2B_.CalledSub, 5) = &quot;Form.&quot; Then iArgNr = 1 Else iArgNr = 2
+	If _Isleft(_A2B_.CalledSub, &quot;Form.&quot;) Then iArgNr = 1 Else iArgNr = 2
 	If Not IsLoaded Then Goto Trace_Error_Form
 	Select Case UCase(psProperty)
 		Case UCase(&quot;AllowAdditions&quot;)

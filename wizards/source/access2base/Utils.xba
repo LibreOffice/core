@@ -426,6 +426,19 @@ Dim oInspect1 As Object, oInspect2 As Object, oInspect3 As Object
 End Function	&apos;	InspectPropertyType	V1.0.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function _IsLeft(psString As String, psLeft As String) As Boolean
+&apos;	Return True if left part of psString = psLeft
+
+Dim iLength As Integer
+	iLength = Len(psLeft)
+	_IsLeft = False
+	If Len(psString) &gt;= iLength Then
+		If Left(psString, iLength) = psLeft Then _IsLeft = True
+	End If
+
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _IsPseudo(pvObject As Variant, ByVal pvType As Variant) As Boolean
 &apos;	Test pvObject:	does it exist ?
 &apos;					is the _Type item = one of the proposed pvTypes ?
@@ -496,6 +509,10 @@ Dim oDoc As Object, oForms As Variant
 				End If
 			Case OBJOPTIONGROUP
 				bPseudoExists = ( .Count &gt; 0 )
+			Case OBJCOMMANDBAR
+				bPseudoExists = ( Not IsNull(._Window) )
+			Case OBJCOMMANDBARCONTROL
+				bPseudoExists = ( Not IsNull(._ParentCommandBar) )
 			Case OBJEVENT
 				bPseudoExists = ( Not IsNull(._EventSource) )
 			Case OBJPROPERTY
@@ -569,7 +586,7 @@ Dim vSubStrings() As Variant, i As Integer, iLen As Integer
 End Function	&apos;	PCase		V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Sub _ResetCalledSub(ByVal psSub As String) As String
+Public Sub _ResetCalledSub(ByVal psSub As String)
 &apos;	Called in bottom of each public function. _A2B_.CalledSub variable is used for error handling
 &apos;	Used to trace routine in/outs and to clarify error messages
 		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	Only is Utils module recompiled
@@ -578,7 +595,30 @@ Public Sub _ResetCalledSub(ByVal psSub As String) As String
 End Sub			&apos;	ResetCalledSub
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Sub _SetCalledSub(ByVal psSub As String) As String
+Public Function _RunScript(ByVal psScript As String, Optional pvArgs() As Variant) As Boolean
+&apos;	Execute a given script with pvArgs() array of arguments
+
+	On Local Error Goto Error_Function
+	_RunScript = False
+	If IsNull(ThisComponent) Then Goto Exit_Function
+
+Dim oSCriptProvider As Object, oScript As Object, vResult As Variant
+
+	Set oScriptProvider = ThisComponent.ScriptProvider()
+	Set oScript = oScriptProvider.getScript(psScript)
+	If IsMissing(pvArgs()) Then pvArgs() = Array()
+	vResult = oScript.Invoke(pvArgs(), Array(), Array())
+	_RunScript = True
+
+Exit_Function:
+	Exit Function
+Error_Function:
+	_RunScript = False
+	Goto Exit_Function
+End Function
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub _SetCalledSub(ByVal psSub As String)
 &apos;	Called in top of each public function.
 &apos;	Used to trace routine in/outs and to clarify error messages
 		If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current LibO/AOO session

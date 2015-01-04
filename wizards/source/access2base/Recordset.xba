@@ -1072,7 +1072,7 @@ Dim cstThisSub As String
 Dim iArgNr As Integer
 Dim oObject As Object
 
-	If Len(_A2B_.CalledSub) &gt; 10 And Left(_A2B_.CalledSub, 10) = &quot;Recordset.&quot; Then iArgNr = 1 Else iArgNr = 2
+	If _IsLeft(_A2B_.CalledSub, &quot;Recordset.&quot;) Then iArgNr = 1 Else iArgNr = 2
 	Select Case UCase(psProperty)
 		Case UCase(&quot;AbsolutePosition&quot;)
 			If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
