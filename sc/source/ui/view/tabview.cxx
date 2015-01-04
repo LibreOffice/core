@@ -433,15 +433,17 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                      {
                         if (nTabSize > nSizeLt-SC_SCROLLBAR_MIN)
                             nTabSize = nSizeLt-SC_SCROLLBAR_MIN;
-                        if (nTabSize < SC_TABBAR_MIN) nTabSize = SC_TABBAR_MIN;
-                            nSizeLt -= nTabSize;
-                        }
+                        if (nTabSize < SC_TABBAR_MIN)
+                            nTabSize = SC_TABBAR_MIN;
+                        nSizeLt -= nTabSize;
+                    }
                     else // right Scrollbar
                     {
                         if (nTabSize > nSizeRt-SC_SCROLLBAR_MIN)
                             nTabSize = nSizeRt-SC_SCROLLBAR_MIN;
-                        if (nTabSize < SC_TABBAR_MIN) nTabSize = SC_TABBAR_MIN;
-                            nSizeRt -= nTabSize;
+                        if (nTabSize < SC_TABBAR_MIN)
+                            nTabSize = SC_TABBAR_MIN;
+                        nSizeRt -= nTabSize;
                     }
                 }
             }
