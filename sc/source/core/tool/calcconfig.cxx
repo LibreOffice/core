@@ -184,12 +184,12 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
             OUString element(s.copy(fromIndex, semicolon - fromIndex));
             sal_Int32 n = element.toInt32();
             if (n > 0 || (n == 0 && element == "0"))
-                result.insert(static_cast<OpCodeEnum>(n));
+                result.insert(static_cast<OpCode>(n));
             else if (pHashMap)
             {
                 auto opcode(pHashMap->find(element));
                 if (opcode != pHashMap->end())
-                    result.insert(static_cast<OpCodeEnum>(opcode->second));
+                    result.insert(static_cast<OpCode>(opcode->second));
                 else
                     SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
             }

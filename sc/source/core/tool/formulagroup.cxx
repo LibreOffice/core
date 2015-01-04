@@ -547,7 +547,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     rPlatformId = aPlatformId;
 }
 
-void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely, const std::set<OpCodeEnum>& rSubsetToEnable)
+void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely, const std::set<OpCode>& rSubsetToEnable)
 {
     boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::UseOpenCL::set(bEnable, batch);

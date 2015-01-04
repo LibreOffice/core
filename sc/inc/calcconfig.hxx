@@ -49,7 +49,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     OUString maOpenCLDevice;
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
 
-    typedef std::set<OpCodeEnum> OpCodeSet;
+    typedef std::set<OpCode> OpCodeSet;
 
     OpCodeSet maOpenCLSubsetOpCodes;
 

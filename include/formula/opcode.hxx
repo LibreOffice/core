@@ -23,7 +23,7 @@
 #include <formula/compiler.hrc>
 #include <sal/types.h>
 
-enum OpCodeEnum
+enum OpCode : sal_uInt16
 {
     // Special commands
         ocPush              = SC_OPCODE_PUSH,
@@ -474,14 +474,6 @@ enum OpCodeEnum
     // no OpCode
         ocNone              = SC_OPCODE_NONE
 };
-
-#ifndef DBG_UTIL
-// save memory since compilers tend to int an enum
-typedef sal_uInt16 OpCode;
-#else
-// have enum names in debugger
-typedef OpCodeEnum OpCode;
-#endif
 
 #endif
 
