@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_bdf55884",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-01-04T10:47:40Z",
+      "side": 1,
+      "message": "When you test equality, please use CPPUNIT_ASSERT_EQUAL(), that prints both the actual and the expected value on failure, so helps debugging when the test fails.",
+      "revId": "05e4ab4f7105ea893f3d5a6f8121bd19e52b52b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
