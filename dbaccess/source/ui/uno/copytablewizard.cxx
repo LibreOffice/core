@@ -1167,13 +1167,13 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         }
 
         ++nRowCount;
-        bool bInsertAutoIncrement = true;
         ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
         ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnMapping.end();
 
         aCopyEvent.Error.clear();
         try
         {
+            bool bInsertAutoIncrement = true;
             // notify listeners
             m_aCopyTableListeners.notifyEach( &XCopyTableListener::copyingRow, aCopyEvent );
 

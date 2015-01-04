@@ -136,7 +136,6 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
-    bool bNumberFormatKeyFoundViaAttachedData = false;
     sal_Int32 nAxisIndex = 0;
     sal_Int32 nDimensionIndex = 1;
     AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
@@ -235,6 +234,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
         {
             typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
             tNumberformatFrequency aKeyMap;
+            bool bNumberFormatKeyFoundViaAttachedData = false;
 
             try
             {

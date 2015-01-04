@@ -543,9 +543,6 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
     // All other status events will be processed here
-    bool bSetCheckmark      = false;
-    bool bCheckmark         = false;
-
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
     aLock.clear();
@@ -560,6 +557,8 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
         if (!pVCLPopupMenu)
             return;
 
+        bool bSetCheckmark      = false;
+        bool bCheckmark         = false;
         for ( sal_uInt16 i = 0; i < pVCLPopupMenu->GetItemCount(); i++ )
         {
             sal_uInt16 nId = pVCLPopupMenu->GetItemId( i );

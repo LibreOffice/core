@@ -306,10 +306,10 @@ sal_Int32 ReadThroughComponent(
     if ( xStorage.is() )
     {
         uno::Reference< io::XStream > xDocStream;
-        bool bEncrypted = false;
 
         try
         {
+            bool bEncrypted = false;
             // open stream (and set parser input)
         OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )

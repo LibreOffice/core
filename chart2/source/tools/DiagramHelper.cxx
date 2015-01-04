@@ -1297,11 +1297,10 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
     {
         uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
 
-        //find position of series.
-        bool bFound = false;
-
         if( xGivenDataSeries.is() && xCooSysContainer.is() )
         {
+            //find position of series.
+            bool bFound = false;
             uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
 
             for( sal_Int32 nCS = 0; !bFound && nCS < aCooSysList.getLength(); ++nCS )

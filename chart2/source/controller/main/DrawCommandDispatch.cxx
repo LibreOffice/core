@@ -287,13 +287,13 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
 
     ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
     SdrObjKind eKind = OBJ_NONE;
-    bool bCreate = false;
 
     sal_uInt16 nFeatureId = 0;
     OUString aBaseCommand;
     OUString aCustomShapeType;
     if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
     {
+        bool bCreate = false;
         m_nFeatureId = nFeatureId;
         m_aCustomShapeType = aCustomShapeType;
 

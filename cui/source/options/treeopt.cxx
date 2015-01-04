@@ -1179,10 +1179,10 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             pRet->Put(aOptSet);
 
             utl::MiscCfg    aMisc;
-            const SfxPoolItem* pItem;
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
+                const SfxPoolItem* pItem = NULL;
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
 
                 // miscellaneous - Year2000
@@ -1229,11 +1229,11 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             aHyphen.GetMinLead()  = (sal_uInt8)nMinLead;
             aHyphen.GetMinTrail() = (sal_uInt8)nMinTrail;
 
-            const SfxPoolItem* pItem;
-            SfxPoolItem* pClone;
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
+                const SfxPoolItem* pItem = NULL;
+                SfxPoolItem* pClone = NULL;
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_LANGUAGE, static_cast<const SvxLanguageItem*>(pItem)->GetLanguage()));
@@ -1312,7 +1312,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         case SID_GENERAL_OPTIONS:
         {
             utl::MiscCfg    aMisc;
-            const SfxPoolItem* pItem;
+            const SfxPoolItem* pItem = NULL;
             SfxItemSet aOptSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
@@ -1386,7 +1386,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 {
     bool bSaveSpellCheck = false;
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem = NULL;
 
     if ( SfxItemState::SET == rSet.GetItemState( SID_SPELL_MODIFIED, false, &pItem ) )
     {
@@ -1407,7 +1407,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     if ( pViewFrame )
     {
         SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-        pItem = 0;
+        pItem = NULL;
         if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SfxCallMode::ASYNCHRON, pItem, 0L);

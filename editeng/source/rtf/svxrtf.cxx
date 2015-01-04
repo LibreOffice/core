@@ -454,12 +454,12 @@ void SvxRTFParser::ReadColorTable()
 
 void SvxRTFParser::ReadFontTable()
 {
-    int nToken;
+    int nToken = 0;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     vcl::Font* pFont = new vcl::Font();
     short nFontNo(0), nInsFontNo (0);
     OUString sAltNm, sFntNm;
-    bool bIsAltFntNm = false, bCheckNewFont;
+    bool bIsAltFntNm = false;
 
     rtl_TextEncoding nSystemChar = lcl_GetDefaultTextEncodingForRTF();
     pFont->SetCharSet( nSystemChar );
@@ -467,7 +467,7 @@ void SvxRTFParser::ReadFontTable()
 
     while( _nOpenBrakets && IsParserWorking() )
     {
-        bCheckNewFont = false;
+        bool bCheckNewFont = false;
         switch( ( nToken = GetNextToken() ))
         {
             case '}':
@@ -601,7 +601,7 @@ void SvxRTFParser::ReadOLEData()
 OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 {
     rStr.clear();
-    int _nOpenBrakets = 1, nToken;  // the first was already detected earlier!!
+    int _nOpenBrakets = 1, nToken = 0;  // the first was already detected earlier!!
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -661,7 +661,7 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
 
 void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
-    int _nOpenBrakets = 1, nToken;  // the first was already detected earlier!!
+    int _nOpenBrakets = 1, nToken = 0;  // the first was already detected earlier!!
     DBG_ASSERT(m_xDocProps.is(),
         "SvxRTFParser::ReadInfo: no DocumentProperties");
     OUString sStr, sComment;
