@@ -159,13 +159,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,quickstart, \
 ))
 endif
 
-ifneq ($(ENABLE_CRASHDUMP),)
-$(eval $(call gb_Helper_register_executables_for_install,OOO,crashrep, \
-	crashrep \
-	$(if $(filter WNT,$(OS)),crashrep_com) \
-))
-endif
-
 $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 	$(if $(filter WNT,$(OS)), \
 		python \

@@ -146,7 +146,4 @@
  */
 #define HAVE_FEATURE_COLLADA 0
 
-/* see --enable-crashdump: */
-#define HAVE_FEATURE_CRASHDUMP 0
-
 #endif

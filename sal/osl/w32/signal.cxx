@@ -99,131 +99,12 @@ static oslSignalAction CallSignalHandler(oslSignalInfo *pInfo)
 /* SignalHandlerFunction    */
 /*****************************************************************************/
 
-#define REPORTENV_PARAM     "-crashreportenv:"
-#define REPORTENV_PARAM2    "/crashreportenv:"
-
-static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
-{
-    BOOL    fSuccess = FALSE;
-    BOOL    fAutoReport = FALSE;
-    TCHAR   szBuffer[1024];
-    ::osl::LongPathBuffer< sal_Char > aPath( MAX_LONG_PATH );
-    LPTSTR  lpFilePart;
-    PROCESS_INFORMATION ProcessInfo;
-    STARTUPINFO StartupInfo;
-    int     argi;
-
-    if ( !bErrorReportingEnabled )
-        return FALSE;
-
-    /* Check if crash reporter was disabled by command line */
-
-    for ( argi = 1; argi < __argc; argi++ )
-    {
-        if (
-            0 == stricmp( __argv[argi], "--nocrashreport" ) ||
-            0 == stricmp( __argv[argi], "/nocrashreport" )
-            )
-            return FALSE;
-        else if (
-            0 == stricmp( __argv[argi], "--autocrashreport" ) ||
-            0 == stricmp( __argv[argi], "/autocrashreport" )
-            )
-            fAutoReport = TRUE;
-        else if (
-            0 == strnicmp( __argv[argi], REPORTENV_PARAM, strlen(REPORTENV_PARAM) ) ||
-            0 == strnicmp( __argv[argi], REPORTENV_PARAM2, strlen(REPORTENV_PARAM2) )
-            )
-        {
-            const char *envparam = __argv[argi] + strlen(REPORTENV_PARAM);
-            const char *delim = strchr(envparam, '=' );
-
-            if ( delim )
-            {
-                CHAR    *lpVariable;
-                CHAR    *lpValue;
-                const char *variable = envparam;
-                size_t variable_len = delim - envparam;
-                const char *value = delim + 1;
-                size_t value_len = strlen(envparam) - variable_len - 1;
-
-                if ( '\"' == *value )
-                {
-                    const char *quote;
-
-                    value++;
-                    value_len--;
-
-                    quote = strchr( value, '\"' );
-                    if ( quote )
-                        value_len = quote - value;
-                }
-
-                lpVariable = reinterpret_cast< CHAR* >( _alloca( variable_len + 1 ) );
-                memcpy( lpVariable, variable, variable_len );
-                lpVariable[variable_len] = 0;
-
-                lpValue = reinterpret_cast< CHAR* >( _alloca( value_len + 1) );
-                memcpy( lpValue, value, value_len );
-                lpValue[value_len] = 0;
-
-                SetEnvironmentVariable( lpVariable, lpValue );
-            }
-        }
-    }
-
-    if ( SearchPath( NULL, TEXT( "crashrep.exe" ), NULL, aPath.getBufSizeInSymbols(), aPath, &lpFilePart ) )
-    {
-        ZeroMemory( &StartupInfo, sizeof(StartupInfo) );
-        StartupInfo.cb = sizeof(StartupInfo.cb);
-
-        sntprintf( szBuffer, SAL_N_ELEMENTS(szBuffer),
-            _T("%s -p %lu -excp 0x%p -t %lu%s"),
-            static_cast<sal_Char*>( aPath ),
-            GetCurrentProcessId(),
-            lpEP,
-            GetCurrentThreadId(),
-            fAutoReport ? _T(" -noui -send") : _T(" -noui") );
-
-        if (
-            CreateProcess(
-                NULL,
-                szBuffer,
-                NULL,
-                NULL,
-                FALSE,
-#ifdef UNICODE
-                CREATE_UNICODE_ENVIRONMENT,
-#else
-                0,
-#endif
-                NULL, NULL, &StartupInfo, &ProcessInfo )
-            )
-        {
-            DWORD   dwExitCode;
-
-            WaitForSingleObject( ProcessInfo.hProcess, INFINITE );
-            if ( GetExitCodeProcess( ProcessInfo.hProcess, &dwExitCode ) && 0 == dwExitCode )
-
-            fSuccess = TRUE;
-
-        }
-    }
-
-    return fSuccess;
-}
-
-/*****************************************************************************/
-/* SignalHandlerFunction    */
-/*****************************************************************************/
-
 /* magic Microsoft C++ compiler exception constant */
 #define EXCEPTION_MSC_CPP_EXCEPTION 0xe06d7363
 
 static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
     static sal_Bool     bNested = sal_False;
-    sal_Bool        bRaiseCrashReporter = sal_False;
     oslSignalInfo   Info;
     oslSignalAction Action;
 
@@ -238,17 +119,14 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
         case EXCEPTION_MSC_CPP_EXCEPTION:
         case EXCEPTION_ACCESS_VIOLATION:
             Info.Signal = osl_Signal_AccessViolation;
-            bRaiseCrashReporter = sal_True;
             break;
 
         case EXCEPTION_INT_DIVIDE_BY_ZERO:
             Info.Signal = osl_Signal_IntegerDivideByZero;
-            bRaiseCrashReporter = sal_True;
             break;
 
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:
             Info.Signal = osl_Signal_FloatDivideByZero;
-            bRaiseCrashReporter = sal_True;
             break;
 
         case EXCEPTION_BREAKPOINT:
@@ -257,21 +135,13 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 
         default:
             Info.Signal = osl_Signal_System;
-            bRaiseCrashReporter = sal_True;
             break;
     }
 
     if ( !bNested )
     {
         bNested = sal_True;
-
-        if ( bRaiseCrashReporter && ReportCrash( lpEP ) )
-        {
-            CallSignalHandler(&Info);
-            Action = osl_Signal_ActKillApp;
-        }
-        else
-            Action = CallSignalHandler(&Info);
+        Action = CallSignalHandler(&Info);
     }
     else
         Action = osl_Signal_ActKillApp;

@@ -275,7 +275,6 @@ public class Bootstrap {
             cmdArray[1] = "--nologo";
             cmdArray[2] = "--nodefault";
             cmdArray[3] = "--norestore";
-            cmdArray[4] = "--nocrashreport";
             cmdArray[5] = "--nolockcheck";
             cmdArray[6] = "--accept=pipe,name=" + sPipeName + ";urp;";
 

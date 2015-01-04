@@ -219,15 +219,15 @@ public class RecoveryTools {
 
 
     /**
-     * The office must be started WITH restore and crashreporter functionality.
-     * Therefore the parameter '<CODE>--norestore</CODE>' and '<CODE>--nocrashreport</CODE>'
+     * The office must be started WITH restore functionality.
+     * Therefore the parameter '<CODE>--norestore</CODE>'
      * was removed from the <CODE>AppExecutionCommand</CODE> parameter
      */
     public void removeParametersFromAppExecutionCommand(){
 
         //remove some params to start office
         String office = (String) param.get("AppExecutionCommand");
-        String[] params = {"--norestore", "--nocrashreport"};
+        String[] params = {"--norestore"};
 
         for (int i = 0; i < params.length; i++){
             int index = office.indexOf(params[i]);
