@@ -46,7 +46,6 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	cppu \
 	cppuhelper \
 	cpputools \
-	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	cui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
 	desktop \
