@@ -430,6 +430,7 @@ Dim oWindow As Object, iWindowType As Integer
 Dim i As Integer, j As Integer, k As Integer, bFound As Boolean
 Dim sSupportedModules() As Variant, vModules() As Variant, oModuleUI As Object
 Dim oToolbar As Object, sToolbarName As String, vUIElements() As Variant, sToolbarFullName As String, iBuiltin As Integer
+Dim sFileSuffix As String
 
 Const cstCustom = &quot;CUSTOM&quot;
 
@@ -450,17 +451,33 @@ Const cstCustom = &quot;CUSTOM&quot;
 	
 	iWindowType = oWindow.WindowType
 	Select Case iWindowType			&apos;	Supported window types only
-		Case	acForm
+		Case acForm
 			sSupportedModules = Array(	&quot;com.sun.star.sdb.FormDesign&quot;	)
-		Case	acBasicIDE _
-				, acDatabaseWindow _
-				, acReport _
-				, acDocument _
-				, acTable _
-				, acQuery _
-				, acDiagram
-			sSupportedModules = Array()
+		Case acBasicIDE
+			sSupportedModules = Array(	&quot;com.sun.star.script.BasicIDE&quot;	)
+		Case acDatabaseWindow
+			sSupportedModules = Array(	&quot;com.sun.star.sdb.OfficeDatabaseDocument&quot;	)
+		Case acReport
+			sSupportedModules = Array(	&quot;com.sun.star.sdb.TextReportDesign&quot;	)
+		Case acDocument
+			sFileSuffix = &quot;&quot;
+			If Len(oWindow._Name) &gt; 4 Then sFileSuffix = LCase(Right(oWindow._Name, 4))
+			Select Case sFileSuffix
+				Case &quot;.ods&quot;				:	sSupportedModules = Array(	&quot;com.sun.star.sheet.SpreadsheetDocument&quot;	)
+				Case &quot;.odt&quot;, &quot;.odm&quot;		:	sSupportedModules = Array(	&quot;com.sun.star.text.TextDocument&quot;	)
+				Case &quot;.odp&quot;				:	sSupportedModules = Array(	&quot;com.sun.star.presentation.PresentationDocument&quot;	)
+				Case &quot;.odg&quot;				:	sSupportedModules = Array(	&quot;com.sun.star.drawing.DrawingDocument&quot;	)
+				Case &quot;.odf&quot;				:	sSupportedModules = Array(	&quot;com.sun.star.formula.FormulaProperties&quot;	)
+				Case Else				:	sSupportedModules = Array()
+			End Select
+		Case acTable, acQuery
+			sSupportedModules = Array(	&quot;com.sun.star.sdb.DataSourceBrowser&quot; _
+										, &quot;com.sun.star.sdb.TableDataView&quot; _
+										)
+		Case acDiagram
+			sSupportedModules = Array(	&quot;com.sun.star.sdb.RelationDesign&quot;	)
 		Case Else
+			sSupportedModules = Array()
 	End Select
 
 	&apos;	Find all standard and custom toolbars stored in LibO/AOO Base
