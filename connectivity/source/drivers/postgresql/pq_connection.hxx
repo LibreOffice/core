@@ -158,7 +158,7 @@ typedef ::std::vector< OString > OStringVector;
 
 typedef std::unordered_map
 <
-    const sal_Int32,
+    sal_Int32,
     OUString,
     ::boost::hash< sal_Int32 >,
     ::std::equal_to< sal_Int32 >
