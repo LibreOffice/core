@@ -29,8 +29,8 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-#include <boost/unordered_map.hpp>
 #include <memory>
+#include <unordered_map>
 #include <boost/shared_ptr.hpp>
 
 /* An interface to get the clipboard data in either
@@ -119,7 +119,7 @@ private:
 
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
-  typedef boost::unordered_map< OUString, NSString*, OUStringHash > OfficeOnlyTypes;
+  typedef std::unordered_map< OUString, NSString*, OUStringHash > OfficeOnlyTypes;
   mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };
 

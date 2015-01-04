@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/unordered_map.hpp>
-
 #include "impfont.hxx"
 #include "outfont.hxx"
 #include "PhysicalFontCollection.hxx"

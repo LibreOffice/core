@@ -146,8 +146,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
@@ -396,6 +394,8 @@
 #include <uno/current_context.hxx>
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
+#include <unordered_map>
+#include <unordered_set>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>

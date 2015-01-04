@@ -43,7 +43,7 @@
 #include "salgdi.hxx"
 
 #include "quartz/salgdicommon.hxx"
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 class AquaSalFrame;
 class ImplDevFontAttributes;
@@ -133,7 +133,7 @@ private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
 
-    typedef boost::unordered_map<sal_IntPtr,CoreTextFontData*> CTFontContainer;
+    typedef std::unordered_map<sal_IntPtr,CoreTextFontData*> CTFontContainer;
     CTFontContainer maFontContainer;
 };
 

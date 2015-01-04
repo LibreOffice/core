@@ -29,7 +29,7 @@
 #include <vcl/fontcapabilities.hxx>
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/unordered_set.hpp>
+#include <unordered_set>
 
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
@@ -134,7 +134,7 @@ private:
 
     void                    ReadGsubTable( HDC ) const;
 
-    typedef boost::unordered_set<sal_UCS4> UcsHashSet;
+    typedef std::unordered_set<sal_UCS4> UcsHashSet;
     mutable UcsHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:
