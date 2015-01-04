@@ -85,9 +85,9 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryTe
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
-    bool bCase = false;
     try
     {
+        bool bCase = false;
         Reference<XConnection> xConnection = rController.getConnection();
         if(xConnection.is())
         {

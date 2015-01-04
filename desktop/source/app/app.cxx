@@ -2690,7 +2690,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 void Desktop::OpenSplashScreen()
 {
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
-    bool bVisible = false;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !rCmdLine.IsInvisible() &&
          !rCmdLine.IsHeadless() &&
@@ -2726,7 +2725,7 @@ void Desktop::OpenSplashScreen()
         if ( rCmdLine.HasSplashPipe() )
             aSplashService = "com.sun.star.office.PipeSplashScreen";
 
-        bVisible = true;
+        bool bVisible = true;
         Sequence< Any > aSeq( 2 );
         aSeq[0] <<= bVisible;
         aSeq[1] <<= aAppName;

@@ -283,7 +283,6 @@ void HelpLinker::initIndexerPreProcessor()
 */
 void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerException)
 {
-    bool bIndexForExtension = true;
 
     if( bExtensionMode )
     {
@@ -337,6 +336,7 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
     // catch HelpProcessingException to avoid locking data bases
     try
     {
+        bool bIndexForExtension = true;
         // lastly, initialize the indexBuilder
         if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
             initIndexerPreProcessor();

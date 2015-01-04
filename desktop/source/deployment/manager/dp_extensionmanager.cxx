@@ -680,7 +680,6 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
     Reference<css::deployment::XPackage> xExtensionBackup;
 
     uno::Any excOccurred2;
-    bool bUserDisabled = false;
     bool bCanInstall = doChecksForAddExtension(
         xPackageManager,
         properties,
@@ -690,6 +689,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
         xOldExtension );
 
     {
+        bool bUserDisabled = false;
         // In this garded section (getMutex) we must not use the argument xCmdEnv
         // because it may bring up dialogs (XInteractionHandler::handle) this
         //may potententially deadlock. See issue

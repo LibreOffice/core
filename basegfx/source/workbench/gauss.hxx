@@ -49,14 +49,14 @@ bool eliminate(     Matrix&         matrix,
                     const BaseType& minPivot    )
 {
     BaseType    temp;
-    int         max, i, j, k;   /* *must* be signed, when looping like: j>=0 ! */
 
+    /* i, j, k *must* be signed, when looping like: j>=0 ! */
     /* eliminate below main diagonal */
-    for(i=0; i<cols-1; ++i)
+    for(int i=0; i<cols-1; ++i)
     {
         /* find best pivot */
-        max = i;
-        for(j=i+1; j<rows; ++j)
+        int max = i;
+        for(int j=i+1; j<rows; ++j)
             if( fabs(matrix[ j*cols + i ]) > fabs(matrix[ max*cols + i ]) )
                 max = j;
 
@@ -65,7 +65,7 @@ bool eliminate(     Matrix&         matrix,
             return false;   /* pivot too small! */
 
         /* interchange rows 'max' and 'i' */
-        for(k=0; k<cols; ++k)
+        for(int k=0; k<cols; ++k)
         {
             temp = matrix[ i*cols + k ];
             matrix[ i*cols + k ] = matrix[ max*cols + k ];
@@ -73,8 +73,8 @@ bool eliminate(     Matrix&         matrix,
         }
 
         /* eliminate column */
-        for(j=i+1; j<rows; ++j)
-            for(k=cols-1; k>=i; --k)
+        for(int j=i+1; j<rows; ++j)
+            for(int k=cols-1; k>=i; --k)
                 matrix[ j*cols + k ] -= matrix[ i*cols + k ] *
                     matrix[ j*cols + i ] / matrix[ i*cols + i ];
     }
@@ -110,13 +110,13 @@ bool substitute(    const Matrix&   matrix,
                     Vector&         result  )
 {
     BaseType    temp;
-    int         j,k;    /* *must* be signed, when looping like: j>=0 ! */
 
+    /* j, k *must* be signed, when looping like: j>=0 ! */
     /* substitute backwards */
-    for(j=rows-1; j>=0; --j)
+    for(int j=rows-1; j>=0; --j)
     {
         temp = 0.0;
-        for(k=j+1; k<cols-1; ++k)
+        for(int k=j+1; k<cols-1; ++k)
             temp += matrix[ j*cols + k ] * result[k];
 
         if( matrix[ j*cols + j ] == 0.0 )

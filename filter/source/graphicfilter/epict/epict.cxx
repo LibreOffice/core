@@ -335,7 +335,6 @@ void PictWriter::WritePolygon(const Polygon & rPoly)
 {
     sal_uInt16 nDataSize,i,nSize;
     short nMinX = 0, nMinY = 0, nMaxX = 0, nMaxY = 0;
-    short nx,ny;
     Polygon aPoly(rPoly);
 
     nSize=aPoly.GetSize();
@@ -354,8 +353,8 @@ void PictWriter::WritePolygon(const Polygon & rPoly)
                                                    aSrcMapMode,
                                                    aTargetMapMode );
 
-        nx = (short) aPoint.X();
-        ny = (short) aPoint.Y();
+        short nx = (short) aPoint.X();
+        short ny = (short) aPoint.Y();
 
         if ( i==0 || nMinX>nx )
             nMinX=nx;
@@ -1308,21 +1307,18 @@ void PictWriter::SetAttrForText()
 
 void PictWriter::WriteTextArray(Point & rPoint, const OUString& rString, const long* pDXAry)
 {
-    bool bDelta;
-    Point aPt;
-
     if ( pDXAry == NULL )
         WriteOpcode_Text( rPoint, rString, false );
     else
     {
-        bDelta = false;
+        bool bDelta = false;
         sal_Int32 nLen = rString.getLength();
         for ( sal_Int32 i = 0; i < nLen; i++ )
         {
             sal_Unicode c = rString[ i ];
             if ( c && ( c != 0x20 ) )
             {
-                aPt = rPoint;
+                Point aPt = rPoint;
                 if ( i > 0 )
                     aPt.X() += pDXAry[ i - 1 ];
 

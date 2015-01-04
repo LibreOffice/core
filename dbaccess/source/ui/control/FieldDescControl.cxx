@@ -1669,12 +1669,11 @@ OUString OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldD
     if ( bCheck )
     {
         sal_uInt32 nFormatKey;
-        bool bTextFormat = false;
 
         try
         {
             double nValue = 0.0;
-            bTextFormat = isTextFormat(_pFieldDescr,nFormatKey);
+            bool bTextFormat = isTextFormat(_pFieldDescr,nFormatKey);
             if ( _pFieldDescr->GetControlDefault() >>= sDefault )
             {
                 if ( !bTextFormat )
