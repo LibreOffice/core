@@ -191,13 +191,6 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     pTable->SetSelectionMode(MULTIPLE_SELECTION);
     pTable->SetHighlightRange(1);
 
-    static long aStaticTabs[]=
-    {
-        4,10,70,120,170
-    };
-
-    pTable->SetTabs(aStaticTabs);
-
     pTable->SortByCol(nSortMode, bSortDir);
 
     aOldSelectHdl = pTable->GetSelectHdl();

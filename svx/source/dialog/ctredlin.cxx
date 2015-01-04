@@ -387,9 +387,6 @@ SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     m_pReject->SetClickHdl(aLink);
     m_pRejectAll->SetClickHdl(aLink);
     m_pUndo->SetClickHdl(aLink);
-
-    const long pTabs[] = { 5, 10, 65, 120, 170, 220 };
-    m_pViewData->SetTabs(pTabs);
 }
 
 void SvxTPView::ActivatePage()
@@ -419,6 +416,9 @@ SvxTPView::~SvxTPView()
 
 void SvxTPView::InsertWriterHeader()
 {
+    const long pTabs[] = { 5, 10, 20, 70, 120, 170 };
+    m_pViewData->SetTabs(pTabs);
+
     OUString aStrTab('\t');
     OUString aString(get<FixedText>("action")->GetText());
     aString += aStrTab;
@@ -433,6 +433,9 @@ void SvxTPView::InsertWriterHeader()
 
 void SvxTPView::InsertCalcHeader()
 {
+    const long pTabs[] = { 5, 10, 65, 120, 170, 220 };
+    m_pViewData->SetTabs(pTabs);
+
     OUString aStrTab('\t');
     OUString aString(get<FixedText>("action")->GetText());
     aString += aStrTab;
