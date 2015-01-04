@@ -1276,34 +1276,17 @@ bool CSS1Expression::GetColor( Color &rColor ) const
                 break;
             }
 
-            OUString aColorStr(aValue.copy(4, aValue.getLength() - 5));
-
-            sal_Int32 nPos = 0;
-            int nCol = 0;
-
-            while( nCol < 3 && nPos < aColorStr.getLength() )
+            sal_Int32 nPos = 4; // start after "rgb("
+            for ( int nCol = 0; nCol < 3 && nPos > 0; ++nCol )
             {
-                sal_Unicode c;
-                while( nPos < aColorStr.getLength() &&
-                        ((c=aColorStr[nPos]) == ' ' || c == '\t' ||
-                        c == '\n' || c== '\r' ) )
-                    nPos++;
+                const OUString aNumber = aValue.getToken(0, ',', nPos);
 
-                sal_Int32 nEnd = aColorStr.indexOf( ',', nPos );
-                OUString aNumber;
-                if( nEnd == -1 )
+                sal_Int32 nNumber = aNumber.toInt32();
+                if( nNumber<0 )
                 {
-                    aNumber = aColorStr.copy(nPos);
-                    nPos = aColorStr.getLength();
+                    nNumber = 0;
                 }
-                else
-                {
-                    aNumber = aColorStr.copy( nPos, nEnd-nPos );
-                    nPos = nEnd+1;
-                }
-
-                sal_uInt16 nNumber = (sal_uInt16)aNumber.toInt32();
-                if( aNumber.indexOf('%') >= 0 )
+                else if( aNumber.indexOf('%') >= 0 )
                 {
                     if( nNumber > 100 )
                         nNumber = 100;
@@ -1313,8 +1296,7 @@ bool CSS1Expression::GetColor( Color &rColor ) const
                 else if( nNumber > 255 )
                     nNumber = 255;
 
-                aColors[nCol] = (sal_uInt8)nNumber;
-                nCol ++;
+                aColors[nCol] = static_cast<sal_uInt8>(nNumber);
             }
 
             rColor.SetRed( aColors[0] );
