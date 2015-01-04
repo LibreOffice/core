@@ -152,7 +152,6 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             OUString("--nologo"),
             OUString("--nodefault"),
             OUString("--norestore"),
-            OUString("--nocrashreport"),
             OUString("--nolockcheck"),
             OUString("--accept=pipe,name=" + sPipeName + ";urp;")
         };
