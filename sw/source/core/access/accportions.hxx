@@ -147,9 +147,9 @@ public:
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTxtFrm->GetCharRect
-    /// Returns the core position, and fills thr rpPos either with NULL or
+    /// Returns the core position, and fills rpPos either with NULL or
     /// with the &rPos, after putting the appropriate data into it.
-    sal_uInt16 FillSpecialPos( sal_Int32 nPos,
+    sal_Int32 FillSpecialPos( sal_Int32 nPos,
                            SwSpecialPos& rPos,
                            SwSpecialPos*& rpPos ) const;
 

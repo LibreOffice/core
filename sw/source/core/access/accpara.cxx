@@ -1375,20 +1375,14 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwAccessiblePa
     SwSpecialPos aSpecialPos;
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
-    sal_uInt16 nPos = 0;
-
     /*  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
          length of the string in the core. This way GetCharRect
          returns the rectangle for a cursor at the end of the
          paragraph. */
-    if (bBehindText)
-    {
-        nPos = pNode->GetTxt().getLength();
-    }
-    else
-        nPos = GetPortionData().FillSpecialPos
-            (nIndex, aSpecialPos, aMoveState.pSpecialPos );
+    const sal_Int32 nPos = bBehindText
+        ? pNode->GetTxt().getLength()
+        : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;
@@ -2425,20 +2419,14 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     SwSpecialPos aSpecialPos;
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
-    sal_uInt16 nPos = 0;
-
     /**  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
          length of the string in the core. This way GetCharRect
          returns the rectangle for a cursor at the end of the
          paragraph. */
-    if (bBehindText)
-    {
-        nPos = pNode->GetTxt().getLength();
-    }
-    else
-        nPos = GetPortionData().FillSpecialPos
-            (nIndex, aSpecialPos, aMoveState.pSpecialPos );
+    const sal_Int32 nPos = bBehindText
+        ? pNode->GetTxt().getLength()
+        : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;

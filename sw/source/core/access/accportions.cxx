@@ -582,7 +582,7 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_Int32 nPos ) const
     return nRet;
 }
 
-sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
+sal_Int32 SwAccessiblePortionData::FillSpecialPos(
     sal_Int32 nPos,
     SwSpecialPos& rPos,
     SwSpecialPos*& rpPos ) const
@@ -674,7 +674,7 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
         rPos.nLineOfst = nLineOffset;
     }
 
-    return static_cast<sal_uInt16>( nModelPos );
+    return nModelPos;
 }
 
 bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
