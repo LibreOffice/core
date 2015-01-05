@@ -755,13 +755,13 @@ bool SwAccessibleParagraph::GetWordBoundary(
     if( g_pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
-        sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
+        const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
         lang::Locale aLocale = g_pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // which type of word are we interested in?
         // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
-        const sal_uInt16 nWordType = i18n::WordType::ANY_WORD;
+        const sal_Int16 nWordType = i18n::WordType::ANY_WORD;
 
         // get word boundary, as the Break-Iterator sees fit.
         rBound = g_pBreakIt->GetBreakIter()->getWordBoundary(
@@ -842,12 +842,12 @@ bool SwAccessibleParagraph::GetGlyphBoundary(
     if( g_pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
-        sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
+        const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
         lang::Locale aLocale = g_pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // get word boundary, as the Break-Iterator sees fit.
-        const sal_uInt16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
+        const sal_Int16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
         sal_Int32 nDone = 0;
         rBound.endPos = g_pBreakIt->GetBreakIter()->nextCharacters(
              rText, nPos, aLocale, nIterMode, 1, nDone );
@@ -1467,7 +1467,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         if (pField)
         {
             strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
-            sal_uInt16 nWhich = pField->GetTyp()->Which();
+            const sal_uInt16 nWhich = pField->GetTyp()->Which();
             rtl::OUString sEntry;
             sal_Int32 subType = 0;
             switch (nWhich)
@@ -1477,8 +1477,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             case RES_GETREFFLD:
                 {
-                    sal_uInt16 nSub = pField->GetSubType();
-                    switch( nSub )
+                    switch( pField->GetSubType() )
                     {
                     case REF_BOOKMARK:
                         {
@@ -1523,8 +1522,8 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             case RES_JUMPEDITFLD:
                 {
-                    sal_uInt16 nFormat= pField->GetFormat();
-                    sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
+                    const sal_uInt16 nFormat= pField->GetFormat();
+                    const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
                     if (nFormat < nSize)
                     {
                         sEntry = aMgr.GetFormatStr(pField->GetTypeId(), nFormat);
@@ -1584,7 +1583,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     {
                         strTypeName = sEntry;
                         sal_uInt32 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
-                        sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
+                        const sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
                         if (nSize > 0 && nExSub > 0)
                         {
                             //Get extra subtype string
@@ -3734,7 +3733,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                             // selection starts in this node:
                             // then check whether it's before or inside our part of
                             // the paragraph, and if so, get the proper position
-                            sal_uInt16 nCoreStart = pStart->nContent.GetIndex();
+                            const sal_Int32 nCoreStart = pStart->nContent.GetIndex();
                             if( nCoreStart <
                                 GetPortionData().GetFirstValidCorePosition() )
                             {
@@ -3770,7 +3769,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 
                             // selection ends in this node: then select everything
                             // before our part of the node
-                            sal_uInt16 nCoreEnd = pEnd->nContent.GetIndex();
+                            const sal_Int32 nCoreEnd = pEnd->nContent.GetIndex();
                             if( nCoreEnd >
                                     GetPortionData().GetLastValidCorePosition() )
                             {

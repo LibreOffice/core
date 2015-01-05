@@ -508,7 +508,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
              {
                  pSentences->push_back( nCurrent );
 
-                 sal_uInt16 nModelPos = GetModelPosition( nCurrent );
+                 const sal_Int32 nModelPos = GetModelPosition( nCurrent );
 
                  sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
                      sAccessibleString, nCurrent,
