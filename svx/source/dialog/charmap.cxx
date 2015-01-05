@@ -1448,7 +1448,7 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x11680, 0x116CF, RID_SUBSETSTR_TAKRI ) );
                     break;
 #endif
-#if U_ICU_VERSION_MAJOR_NUM >= 53
+#if U_ICU_VERSION_MAJOR_NUM >= 54
                 case UBLOCK_BASSA_VAH:
                     aAllSubsets.push_back( Subset( 0x16AD0, 0x16AFF, RID_SUBSETSTR_BASSA_VAH ) );
                     break;
