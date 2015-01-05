@@ -379,7 +379,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 for ( n = 1; n < argc2; n++ )
                 {
                     if ( 0 == _tcsnicmp( argv2[n], _T("-headless"), 9 ) ||
-                         0 == _tcsnicmp( argv2[n], _T("--headless"), 9 ) )
+                         0 == _tcsnicmp( argv2[n], _T("--headless"), 10 ) )
                     {
                         bHeadlessMode = TRUE;
                     }
