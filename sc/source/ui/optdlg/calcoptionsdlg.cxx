@@ -35,62 +35,6 @@
 
 namespace {
 
-class OptionString : public SvLBoxString
-{
-    OUString maDesc;
-    OUString maValue;
-public:
-    OptionString(const OUString& rDesc, const OUString& rValue) :
-        maDesc(rDesc), maValue(rValue) {}
-
-    void SetValue(const OUString &rValue) { maValue = rValue; }
-
-    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
-
-    virtual void InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData) SAL_OVERRIDE;
-};
-
-void OptionString::InitViewData(
-    SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
-{
-    if( !pViewData )
-        pViewData = pView->GetViewDataItem( pEntry, this );
-
-    OUString aDesc = maDesc + ": ";
-    Size aDescSize(pView->GetTextWidth(aDesc), pView->GetTextHeight());
-
-    vcl::Font aOldFont = pView->GetFont();
-    vcl::Font aFont = aOldFont;
-    aFont.SetWeight(WEIGHT_BOLD);
-    //To not make the SvTreeListBox try and recalculate all rows, call the
-    //underlying SetFont, we just want to know what size this text will be
-    //and are going to reset the font to the original again afterwards
-    pView->Control::SetFont(aFont);
-    Size aValueSize(pView->GetTextWidth(maValue), pView->GetTextHeight());
-    pView->Control::SetFont(aOldFont);
-
-    pViewData->maSize = Size(aDescSize.Width() + aValueSize.Width(), std::max(aDescSize.Height(), aValueSize.Height()));
-}
-
-void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
-{
-    Point aPos = rPos;
-    OUString aDesc = maDesc + ": ";
-    rDev.DrawText(aPos, aDesc);
-
-    aPos.X() += rDev.GetTextWidth(aDesc);
-    vcl::Font aOldFont = rDev.GetFont();
-    vcl::Font aFont = aOldFont;
-    aFont.SetWeight(WEIGHT_BOLD);
-
-    //To not make the SvTreeListBox try and recalculate all rows, call the
-    //underlying SetFont, we are going to draw this string and then going to
-    //reset the font to the original again afterwards
-    rDev.Control::SetFont(aFont);
-    rDev.DrawText(aPos, maValue);
-    rDev.Control::SetFont(aOldFont);
-}
-
 formula::FormulaGrammar::AddressConvention toAddressConvention(sal_Int32 nPos)
 {
     switch (nPos)
