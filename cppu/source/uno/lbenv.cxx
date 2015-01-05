@@ -1077,6 +1077,7 @@ static bool loadEnv(OUString const  & cLibStem,
     return true;
 }
 
+}
 
 extern "C"
 {
@@ -1178,7 +1179,5 @@ void SAL_CALL uno_getRegisteredEnvironments(
 }
 
 } // extern "C"
-
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
