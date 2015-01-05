@@ -29,6 +29,7 @@ public:
     void testParentedWidgets();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
+    CPPUNIT_TEST(testCast);
     CPPUNIT_TEST(testMultiDispose);
     CPPUNIT_TEST(testIsolatedWidgets);
     CPPUNIT_TEST(testParentedWidgets);
@@ -38,12 +39,15 @@ public:
 // A compile time sanity check
 void LifecycleTest::testCast()
 {
-//    VclReference<PushButton> xButton(new PushButton(NULL, 0));
-//    VclReference<vcl::Window> xWindow(xButton);
+    VclReference<PushButton> xButton(new PushButton(NULL, 0));
+    VclReference<vcl::Window> xWindow(xButton);
 
-//    VclReference<MetricField> xField(new MetricField(NULL, 0));
-//    VclReference<SpinField> xSpin(xField);
-//    VclReference<Edit> xEdit(xField);
+    VclReference<MetricField> xField(new MetricField(NULL, 0));
+    VclReference<SpinField> xSpin(xField);
+    VclReference<Edit> xEdit(xField);
+
+// the following line should NOT compile
+//    VclReference<PushButton> xButton2(xWindow);
 }
 
 void LifecycleTest::testMultiDispose()

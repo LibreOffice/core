@@ -2165,33 +2165,32 @@ short MessageDialog::Execute()
             case VCL_BUTTONS_NONE:
                 break;
             case VCL_BUTTONS_OK:
-                pBtn = PushButtonPtr(new OKButton(pButtonBox));
+                pBtn = new OKButton(pButtonBox);
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn.get()] = RET_OK;
                 break;
             case VCL_BUTTONS_CLOSE:
-                pBtn = PushButtonPtr(new CloseButton(pButtonBox));
+                pBtn = new CloseButton(pButtonBox);
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn.get()] = RET_CLOSE;
                 break;
             case VCL_BUTTONS_CANCEL:
-                pBtn = PushButtonPtr(new CancelButton(pButtonBox));
+                pBtn = new CancelButton(pButtonBox);
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn.get()] = RET_CANCEL;
                 break;
             case VCL_BUTTONS_YES_NO:
-                pBtn = PushButtonPtr(new PushButton(pButtonBox));
-                pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
-                pBtn->Show();
+                pBtn = new PushButton(pButtonBox);
+                pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes)                pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn.get()] = RET_YES;
 
-                pBtn = PushButtonPtr(new PushButton(pButtonBox));
+                pBtn = new PushButton(pButtonBox);
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::No));
                 pBtn->Show();
@@ -2199,12 +2198,12 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn.get()] = RET_NO;
                 break;
             case VCL_BUTTONS_OK_CANCEL:
-                pBtn = PushButtonPtr(new OKButton(pButtonBox));
+                pBtn = new OKButton(pButtonBox);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn.get()] = RET_OK;
 
-                pBtn = PushButtonPtr(new CancelButton(pButtonBox));
+                pBtn = new CancelButton(pButtonBox);
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
