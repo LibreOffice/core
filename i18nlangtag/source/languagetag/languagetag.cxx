@@ -25,6 +25,9 @@
 
 #if defined(ENABLE_LIBLANGTAG)
 #define LT_HAVE_INLINE
+    // TODO: remove above line again for liblangtag >= 0.5.5, cf.
+    // <https://bitbucket.org/tagoh/liblangtag/commits/9324836a0d1c> "Fix a
+    // build issue with inline keyword"
 #include <liblangtag/langtag.h>
 #else
 /* Replacement code for LGPL phobic and Android systems.
