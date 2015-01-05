@@ -41,11 +41,13 @@ bool ReVisibility::VisitFunctionDecl(FunctionDecl const * decl) {
     if (!ignoreLocation(decl) && hasExplicitVisibilityAttr(decl)
         && !isFriendDecl(decl))
     {
+        Decl const * first = nullptr;
         for (Decl const * p = decl;;) {
             p = p->getPreviousDecl();
             if (p == nullptr) {
                 break;
             }
+            first = p;
             if (hasExplicitVisibilityAttr(p) && !isFriendDecl(p)) {
                 report(
                     DiagnosticsEngine::Warning,
@@ -57,8 +59,24 @@ bool ReVisibility::VisitFunctionDecl(FunctionDecl const * decl) {
                     "Previous visibility declaration is here",
                     p->getAttr<VisibilityAttr>()->getLocation())
                     << p->getAttr<VisibilityAttr>()->getRange();
-                break;
+                return true;
             }
+        }
+        if (decl->isThisDeclarationADefinition() && first != nullptr
+            && !(compiler.getSourceManager().getFilename(
+                     compiler.getSourceManager().getSpellingLoc(
+                         decl->getLocation()))
+                 .startswith(SRCDIR "/libreofficekit/")))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "Visibility declaration on definition, not first declaration",
+                decl->getAttr<VisibilityAttr>()->getLocation())
+                << decl->getAttr<VisibilityAttr>()->getRange();
+            report(
+                DiagnosticsEngine::Note, "First declaration is here",
+                first->getLocation())
+                << first->getSourceRange();
         }
     }
     return true;
