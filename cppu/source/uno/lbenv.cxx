@@ -133,11 +133,7 @@ struct EnvironmentsData
     bool isDisposing;
 };
 
-namespace
-{
-    struct theEnvironmentsData : public rtl::Static< EnvironmentsData, theEnvironmentsData > {};
-}
-
+struct theEnvironmentsData : public rtl::Static< EnvironmentsData, theEnvironmentsData > {};
 
 struct uno_DefaultEnvironment : public uno_ExtEnvironment
 {
@@ -696,6 +692,7 @@ static void writeLine(
     writeLine( stream, aLine.getStr(), pFilter );
 }
 
+}
 
 extern "C" void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
@@ -839,12 +836,12 @@ namespace
     };
 
     class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
-}
-
 
 inline static const OUString & unoenv_getStaticOIdPart()
 {
     return theStaticOIdPart::get().getOIdPart();
+}
+
 }
 
 extern "C"
@@ -902,6 +899,7 @@ static void SAL_CALL unoenv_releaseInterface(
 }
 }
 
+namespace {
 
 EnvironmentsData::~EnvironmentsData()
 {
