@@ -157,12 +157,12 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 
 namespace SwReaderWriter {
 
-SW_DLLPUBLIC Reader* GetReader( ReaderWriterEnum eReader )
+Reader* GetReader( ReaderWriterEnum eReader )
 {
     return aReaderWriter[eReader].GetReader();
 }
 
-SW_DLLPUBLIC void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
+void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
         if ( aFilterDetect[n].IsFilter( rFltName ) )

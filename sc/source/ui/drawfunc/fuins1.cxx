@@ -43,7 +43,7 @@
 
 using namespace ::com::sun::star;
 
-void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
+void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
     if ( !rPage.Width() || !rPage.Height() )
         return;

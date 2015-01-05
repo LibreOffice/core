@@ -909,7 +909,7 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 
 
 // Returns true in case of success, false in case of error
-HELPLINKER_DLLPUBLIC bool compileExtensionHelp
+bool compileExtensionHelp
 (
     const OUString& aOfficeHelpPath,
     const OUString& aExtensionName,

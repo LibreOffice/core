@@ -1258,7 +1258,7 @@ typereg_Version TypeRegistryEntry::getVersion() const {
 
 extern "C" {
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
+sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
     void const * buffer, sal_uInt32 length, sal_Bool copy,
     typereg_Version maxVersion, void ** result)
     SAL_THROW_EXTERN_C()
@@ -1301,7 +1301,7 @@ static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_
     return handle;
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_acquire(void * hEntry) SAL_THROW_EXTERN_C()
+void TYPEREG_CALLTYPE typereg_reader_acquire(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
 
@@ -1309,7 +1309,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_acquire(void * hEntry) SAL_TH
         pEntry->m_refCount++;
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_release(void * hEntry) SAL_THROW_EXTERN_C()
+void TYPEREG_CALLTYPE typereg_reader_release(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
 
@@ -1320,7 +1320,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_release(void * hEntry) SAL_TH
     }
 }
 
-REG_DLLPUBLIC typereg_Version TYPEREG_CALLTYPE typereg_reader_getVersion(void * handle) SAL_THROW_EXTERN_C() {
+typereg_Version TYPEREG_CALLTYPE typereg_reader_getVersion(void * handle) SAL_THROW_EXTERN_C() {
     if (handle != nullptr) {
         try {
             return static_cast< TypeRegistryEntry * >(handle)->getVersion();
@@ -1357,7 +1357,7 @@ static sal_uInt16 TYPEREG_CALLTYPE getMajorVersion(TypeReaderImpl hEntry)
     return 0;
 }
 
-REG_DLLPUBLIC RTTypeClass TYPEREG_CALLTYPE typereg_reader_getTypeClass(void * hEntry) SAL_THROW_EXTERN_C()
+RTTypeClass TYPEREG_CALLTYPE typereg_reader_getTypeClass(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
     if (pEntry != nullptr) {
@@ -1371,7 +1371,7 @@ REG_DLLPUBLIC RTTypeClass TYPEREG_CALLTYPE typereg_reader_getTypeClass(void * hE
     return RT_TYPE_INVALID;
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_isPublished(void * hEntry) SAL_THROW_EXTERN_C()
+sal_Bool TYPEREG_CALLTYPE typereg_reader_isPublished(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry * entry = static_cast< TypeRegistryEntry * >(hEntry);
     if (entry != nullptr) {
@@ -1384,7 +1384,7 @@ REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_isPublished(void * hEntry
     return false;
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getTypeName(void * hEntry, rtl_uString** pTypeName)
+void TYPEREG_CALLTYPE typereg_reader_getTypeName(void * hEntry, rtl_uString** pTypeName)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1434,7 +1434,7 @@ static void TYPEREG_CALLTYPE getUik(TypeReaderImpl hEntry, RTUik* uik)
     }
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getDocumentation(void * hEntry, rtl_uString** pDoku)
+void TYPEREG_CALLTYPE typereg_reader_getDocumentation(void * hEntry, rtl_uString** pDoku)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1452,7 +1452,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getDocumentation(void * hEntr
     rtl_uString_new(pDoku);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFileName(void * hEntry, rtl_uString** pFileName)
+void TYPEREG_CALLTYPE typereg_reader_getFileName(void * hEntry, rtl_uString** pFileName)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1471,7 +1471,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFileName(void * hEntry, rt
 }
 
 
-REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getFieldCount(void * hEntry) SAL_THROW_EXTERN_C()
+sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getFieldCount(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
 
@@ -1485,7 +1485,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getFieldCount(TypeReaderImpl hEntry)
     return typereg_reader_getFieldCount(hEntry);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldName(void * hEntry, rtl_uString** pFieldName, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getFieldName(void * hEntry, rtl_uString** pFieldName, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1501,7 +1501,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldName(void * hEntry, r
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldTypeName(void * hEntry, rtl_uString** pFieldType, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getFieldTypeName(void * hEntry, rtl_uString** pFieldType, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1518,7 +1518,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldTypeName(void * hEntr
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void * hEntry, sal_uInt16 index)
+RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void * hEntry, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1528,7 +1528,7 @@ REG_DLLPUBLIC RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getFieldFlags(void *
     return pEntry->m_pFields->getFieldAccess(index);
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_getFieldValue(
+sal_Bool TYPEREG_CALLTYPE typereg_reader_getFieldValue(
     void * hEntry, sal_uInt16 index, RTValueType * type,
     RTConstValueUnion * value)
     SAL_THROW_EXTERN_C()
@@ -1555,7 +1555,7 @@ static RTValueType TYPEREG_CALLTYPE getFieldConstValue(TypeReaderImpl hEntry, sa
     return t;
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldDocumentation(void * hEntry, rtl_uString** pDoku, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getFieldDocumentation(void * hEntry, rtl_uString** pDoku, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1572,7 +1572,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldDocumentation(void * 
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldFileName(void * hEntry, rtl_uString** pFieldFileName, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getFieldFileName(void * hEntry, rtl_uString** pFieldFileName, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1590,7 +1590,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFieldFileName(void * hEntr
 }
 
 
-REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodCount(void * hEntry) SAL_THROW_EXTERN_C()
+sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodCount(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
 
@@ -1604,7 +1604,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getMethodCount(TypeReaderImpl hEntry)
     return typereg_reader_getMethodCount(hEntry);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodName(void * hEntry, rtl_uString** pMethodName, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getMethodName(void * hEntry, rtl_uString** pMethodName, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1621,7 +1621,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodName(void * hEntry, 
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodParameterCount(
+sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodParameterCount(
     void * hEntry, sal_uInt16 index) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1636,7 +1636,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getMethodParamCount(TypeReaderImpl hEntry, sa
     return typereg_reader_getMethodParameterCount(hEntry, index);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodParameterTypeName(void * hEntry, rtl_uString** pMethodParamType, sal_uInt16 index, sal_uInt16 paramIndex)
+void TYPEREG_CALLTYPE typereg_reader_getMethodParameterTypeName(void * hEntry, rtl_uString** pMethodParamType, sal_uInt16 index, sal_uInt16 paramIndex)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1653,7 +1653,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodParameterTypeName(vo
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodParameterName(void * hEntry, rtl_uString** pMethodParamName, sal_uInt16 index, sal_uInt16 paramIndex)
+void TYPEREG_CALLTYPE typereg_reader_getMethodParameterName(void * hEntry, rtl_uString** pMethodParamName, sal_uInt16 index, sal_uInt16 paramIndex)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1670,7 +1670,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodParameterName(void *
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC RTParamMode TYPEREG_CALLTYPE typereg_reader_getMethodParameterFlags(void * hEntry, sal_uInt16 index, sal_uInt16 paramIndex)
+RTParamMode TYPEREG_CALLTYPE typereg_reader_getMethodParameterFlags(void * hEntry, sal_uInt16 index, sal_uInt16 paramIndex)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1680,7 +1680,7 @@ REG_DLLPUBLIC RTParamMode TYPEREG_CALLTYPE typereg_reader_getMethodParameterFlag
     return pEntry->m_pMethods->getMethodParamMode(index, paramIndex);
 }
 
-REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodExceptionCount(
+sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodExceptionCount(
     void * hEntry, sal_uInt16 index) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1695,7 +1695,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getMethodExcCount(TypeReaderImpl hEntry, sal_
     return typereg_reader_getMethodExceptionCount(hEntry, index);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodExceptionTypeName(void * hEntry, rtl_uString** pMethodExcpType, sal_uInt16 index, sal_uInt16 excIndex)
+void TYPEREG_CALLTYPE typereg_reader_getMethodExceptionTypeName(void * hEntry, rtl_uString** pMethodExcpType, sal_uInt16 index, sal_uInt16 excIndex)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1712,7 +1712,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodExceptionTypeName(vo
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodReturnTypeName(void * hEntry, rtl_uString** pMethodReturnType, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getMethodReturnTypeName(void * hEntry, rtl_uString** pMethodReturnType, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1729,7 +1729,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodReturnTypeName(void 
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC RTMethodMode TYPEREG_CALLTYPE typereg_reader_getMethodFlags(void * hEntry, sal_uInt16 index)
+RTMethodMode TYPEREG_CALLTYPE typereg_reader_getMethodFlags(void * hEntry, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1739,7 +1739,7 @@ REG_DLLPUBLIC RTMethodMode TYPEREG_CALLTYPE typereg_reader_getMethodFlags(void *
     return pEntry->m_pMethods->getMethodMode(index);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodDocumentation(void * hEntry, rtl_uString** pMethodDoku, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getMethodDocumentation(void * hEntry, rtl_uString** pMethodDoku, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1756,7 +1756,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getMethodDocumentation(void *
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getReferenceCount(void * hEntry) SAL_THROW_EXTERN_C()
+sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getReferenceCount(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
 
@@ -1770,7 +1770,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getReferenceCount(TypeReaderImpl hEntry)
     return typereg_reader_getReferenceCount(hEntry);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getReferenceTypeName(void * hEntry, rtl_uString** pReferenceName, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getReferenceTypeName(void * hEntry, rtl_uString** pReferenceName, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1787,7 +1787,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getReferenceTypeName(void * h
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC RTReferenceType TYPEREG_CALLTYPE typereg_reader_getReferenceSort(void * hEntry, sal_uInt16 index)
+RTReferenceType TYPEREG_CALLTYPE typereg_reader_getReferenceSort(void * hEntry, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1797,7 +1797,7 @@ REG_DLLPUBLIC RTReferenceType TYPEREG_CALLTYPE typereg_reader_getReferenceSort(v
     return pEntry->m_pReferences->getReferenceType(index);
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getReferenceDocumentation(void * hEntry, rtl_uString** pReferenceDoku, sal_uInt16 index)
+void TYPEREG_CALLTYPE typereg_reader_getReferenceDocumentation(void * hEntry, rtl_uString** pReferenceDoku, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1814,7 +1814,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getReferenceDocumentation(voi
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-REG_DLLPUBLIC RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getReferenceFlags(void * hEntry, sal_uInt16 index)
+RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getReferenceFlags(void * hEntry, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1824,7 +1824,7 @@ REG_DLLPUBLIC RTFieldAccess TYPEREG_CALLTYPE typereg_reader_getReferenceFlags(vo
     return pEntry->m_pReferences->getReferenceAccess(index);
 }
 
-REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getSuperTypeCount(void * hEntry)
+sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getSuperTypeCount(void * hEntry)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1834,7 +1834,7 @@ REG_DLLPUBLIC sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getSuperTypeCount(void 
     return pEntry->m_nSuperTypes;
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
+void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
     void * hEntry, rtl_uString ** pSuperTypeName, sal_uInt16 index)
     SAL_THROW_EXTERN_C()
 {
@@ -1854,7 +1854,7 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
     rtl_uString_new(pSuperTypeName);
 }
 
-REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
+RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
 {
     static RegistryTypeReader_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)

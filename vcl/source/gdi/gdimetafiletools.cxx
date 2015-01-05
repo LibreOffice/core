@@ -1057,7 +1057,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     }
 }
 
-bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource)
+bool usesClipActions(const GDIMetaFile& rSource)
 {
     const sal_uLong nObjCount(rSource.GetActionSize());
 

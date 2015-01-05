@@ -651,7 +651,7 @@ void SAL_CALL uno_getMappingByName(
 }
 
 
-CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
+void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -689,7 +689,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     }
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
+void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
 {
@@ -714,7 +714,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
 }
 
 
-CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
+void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -724,7 +724,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     rData.aCallbacks.insert( pCallback );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
+void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {

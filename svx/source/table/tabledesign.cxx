@@ -769,7 +769,7 @@ void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Re
 
 
 
-SVX_DLLPUBLIC Reference< XNameAccess > CreateTableDesignFamily()
+Reference< XNameAccess > CreateTableDesignFamily()
 {
     return new TableDesignFamily();
 }

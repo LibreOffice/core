@@ -244,7 +244,7 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
     return aBitmap;
 }
 
-bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
+bool isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBack, BitmapColor& o_rFront)
 {
     if(!rBitmapEx.IsTransparent())
     {

@@ -102,7 +102,7 @@ static uno_Environment * s_getCurrent(void)
 }
 
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
+extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * pTypeName)
     SAL_THROW_EXTERN_C()
 {
     if (*ppEnv)
@@ -306,13 +306,13 @@ static void s_environment_invoke_v(uno_Environment * pCurrEnv, uno_Environment *
         pNextEnv->release(pNextEnv);
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke_v(uno_Environment * pTargetEnv, uno_EnvCallee * pCallee, va_list * pParam)
+extern "C" void SAL_CALL uno_Environment_invoke_v(uno_Environment * pTargetEnv, uno_EnvCallee * pCallee, va_list * pParam)
     SAL_THROW_EXTERN_C()
 {
     s_environment_invoke_v(s_getCurrent(), pTargetEnv, pCallee, pParam);
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke(uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
+extern "C" void SAL_CALL uno_Environment_invoke(uno_Environment * pEnv, uno_EnvCallee * pCallee, ...)
     SAL_THROW_EXTERN_C()
 {
     va_list param;
@@ -322,7 +322,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_Environment_invoke(uno_Environment *
     va_end(param);
 }
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
+extern "C" void SAL_CALL uno_Environment_enter(uno_Environment * pTargetEnv)
     SAL_THROW_EXTERN_C()
 {
     uno_Environment * pNextEnv = NULL;
@@ -355,7 +355,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * 
     }
 }
 
-CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
+int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
     SAL_THROW_EXTERN_C()
 {
     int result = 1;

@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 namespace sfx2 {
 
-sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
+sal_uInt32 LoadOlePropertySet(
     uno::Reference< document::XDocumentProperties> i_xDocProps,
     SotStorage* i_pStorage )
 {
@@ -194,7 +194,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
     return (nGlobError != ERRCODE_NONE) ? nGlobError : nDocError;
 }
 
-bool SFX2_DLLPUBLIC SaveOlePropertySet(
+bool SaveOlePropertySet(
     uno::Reference< document::XDocumentProperties> i_xDocProps,
     SotStorage* i_pStorage,
     const uno::Sequence<sal_uInt8> * i_pThumb,
@@ -305,7 +305,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);
 }
 
-uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
+uno::Sequence<sal_uInt8> convertMetaFile(GDIMetaFile* i_pThumb)
 {
     if (i_pThumb) {
         BitmapEx aBitmap;

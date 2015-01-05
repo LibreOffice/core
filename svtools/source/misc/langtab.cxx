@@ -52,7 +52,7 @@ namespace {
 struct theLanguageTable : public rtl::Static< SvtLanguageTableImpl, theLanguageTable > {};
 }
 
-SVT_DLLPUBLIC const OUString ApplyLreOrRleEmbedding( const OUString &rText )
+const OUString ApplyLreOrRleEmbedding( const OUString &rText )
 {
     const sal_Int32 nLen = rText.getLength();
     if (nLen == 0)

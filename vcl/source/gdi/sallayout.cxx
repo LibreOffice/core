@@ -219,13 +219,13 @@ sal_UCS4 GetVerticalChar( sal_UCS4 )
     return 0; // #i14788# input method is responsible vertical char changes
 }
 
-VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
+sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
     nChar = u_charMirror( nChar );
     return nChar;
 }
 
-VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
+sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
 {
     // currently only conversion from ASCII digits is interesting
     if( (nChar < '0') || ('9' < nChar) )

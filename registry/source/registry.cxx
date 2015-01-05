@@ -401,7 +401,7 @@ static RegError REGISTRY_CALLTYPE dumpRegistry(RegHandle hReg,
 
 //  initRegistry_Api
 
-REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
+Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
 {
     static Registry_Api aApi= {&acquire,
                                &release,
@@ -452,7 +452,7 @@ REG_DLLPUBLIC Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
 
 //  reg_loadRegKey
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
+RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
                                        rtl_uString* keyName,
                                        rtl_uString* regFileName)
 {
@@ -469,7 +469,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
 
 //  reg_saveKey
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
+RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
                                        rtl_uString* keyName,
                                        rtl_uString* regFileName)
 {
@@ -486,7 +486,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
 
 //  reg_mergeKey
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
+RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
                                         rtl_uString* keyName,
                                         rtl_uString* regFileName,
                                         sal_Bool bWarnings,
@@ -505,7 +505,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
 
 //  reg_createRegistry
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
+RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registryName,
                                               RegHandle* phRegistry)
 {
     RegError ret;
@@ -526,7 +526,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_createRegistry(rtl_uString* registr
 
 //  reg_openRootKey
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
+RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
                                           RegKeyHandle* phRootKey)
 {
     return openRootKey(hRegistry, phRootKey);
@@ -536,7 +536,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 
 //  reg_getName
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
+RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
 {
     return getName(hRegistry, pName);
 }
@@ -545,7 +545,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uS
 
 //  reg_isReadOnly
 
-REG_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
+sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
 {
     return isReadOnly(hRegistry);
 }
@@ -554,7 +554,7 @@ REG_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
 
 //  reg_openRegistry
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
+RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryName,
                                             RegHandle* phRegistry,
                                             RegAccessMode accessMode)
 {
@@ -576,7 +576,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_openRegistry(rtl_uString* registryN
 
 //  reg_closeRegistry
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
+RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
 {
     if (hRegistry)
     {
@@ -593,7 +593,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
 
 //  reg_destroyRegistry
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
+RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry,
                                                rtl_uString* registryName)
 {
     return destroyRegistry(hRegistry, registryName);
@@ -603,7 +603,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry
 
 //  reg_dumpRegistry
 
-REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey)
+RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey)
 {
     ORegKey *pKey;
 

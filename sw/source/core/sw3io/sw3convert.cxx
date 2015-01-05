@@ -169,7 +169,7 @@ static const OldFormats aOldGetSetExpFmt30[] =
     { NF_NUMERIC_START,                 0  }        // End of table
 };
 
-SW_DLLPUBLIC void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
+void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
                                 sal_uInt16& rSubType, sal_uLong &rFmt,
                                 sal_uInt16 nVersion )
 {

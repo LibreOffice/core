@@ -181,7 +181,7 @@ namespace vcl
             }
         }
 
-        ::BitmapEx VCL_DLLPUBLIC bitmapExFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
+        ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap )
         {
             SAL_INFO( "vcl.helper", "::vcl::unotools::bitmapExFromXBitmap()" );
 
@@ -563,7 +563,7 @@ namespace vcl
             };
         }
 
-        uno::Reference<rendering::XColorSpace> VCL_DLLPUBLIC createStandardColorSpace()
+        uno::Reference<rendering::XColorSpace> createStandardColorSpace()
         {
             return new StandardColorSpace();
         }
@@ -599,7 +599,7 @@ namespace vcl
             return aColor;
         }
 
-        uno::Sequence< double > VCL_DLLPUBLIC colorToDoubleSequence(
+        uno::Sequence< double > colorToDoubleSequence(
             const Color&                                    rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
@@ -613,7 +613,7 @@ namespace vcl
             return xColorSpace->convertFromARGB(aSeq);
         }
 
-        Color VCL_DLLPUBLIC doubleSequenceToColor(
+        Color doubleSequenceToColor(
             const uno::Sequence< double >&                  rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {

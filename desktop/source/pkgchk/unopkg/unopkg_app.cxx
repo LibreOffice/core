@@ -177,7 +177,7 @@ Reference<deployment::XPackage> findPackage(
 
 } // anon namespace
 
-extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
+extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();
     bool bNoOtherErrorMsg = false;

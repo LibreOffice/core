@@ -176,21 +176,21 @@ bool equalSequence(
 extern "C"
 {
 
-CPPU_DLLPUBLIC void SAL_CALL uno_type_constructData(
+void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
     _defaultConstructData( pMem, pType, 0 );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_constructData(
+void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C()
 {
     _defaultConstructData( pMem, pTypeDescr->pWeakRef, pTypeDescr );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
+void SAL_CALL uno_type_destructData(
     void * pValue, typelib_TypeDescriptionReference * pType,
     uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
@@ -198,7 +198,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_destructData(
     _destructData( pValue, pType, 0, release );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
+void SAL_CALL uno_destructData(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
@@ -207,7 +207,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_destructData(
     _destructData( pValue, pTypeDescr->pWeakRef, pTypeDescr, release );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
+void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
@@ -216,7 +216,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyData(
     _copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
+void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
@@ -225,7 +225,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyData(
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
+void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_Mapping * mapping )
@@ -234,7 +234,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_type_copyAndConvertData(
     _copyConstructData( pDest, pSource, pType, 0, 0, mapping );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
+void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
@@ -243,7 +243,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
     _copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
 }
 
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
+sal_Bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -255,7 +255,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_equalData(
         queryInterface, release );
 }
 
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
+sal_Bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TD,
     void * pVal2, typelib_TypeDescription * pVal2TD,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -267,7 +267,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_equalData(
         queryInterface, release );
 }
 
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
+sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -279,7 +279,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_assignData(
         queryInterface, acquire, release );
 }
 
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
+sal_Bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTD,
     void * pSource, typelib_TypeDescription * pSourceTD,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -291,7 +291,7 @@ CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_assignData(
         queryInterface, acquire, release );
 }
 
-CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_type_isAssignableFromData(
+sal_Bool SAL_CALL uno_type_isAssignableFromData(
     typelib_TypeDescriptionReference * pAssignable,
     void * pFrom, typelib_TypeDescriptionReference * pFromType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )

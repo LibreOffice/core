@@ -1471,7 +1471,7 @@ bool isSingleScriptType( sal_uInt16 nScriptType )
 
 // returns: true if a word for thesaurus look-up was found at the current cursor position.
 // The status string will be word + iso language string (e.g. "light#en-US")
-bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
+bool GetStatusValueForThesaurusFromContext(
     OUString &rStatusVal,
     LanguageType &rLang,
     const EditView &rEditView )
@@ -1499,7 +1499,7 @@ bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
 }
 
 
-void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText )
+void ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText )
 {
     // get selection to use
     ESelection aCurSel( rEditView.GetSelection() );

@@ -1216,7 +1216,7 @@ static void TYPEREG_CALLTYPE setFileName(TypeWriterImpl hEntry, rtl_uString* fil
     static_cast< TypeWriter * >(hEntry)->m_fileName = toByteString(fileName);
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_writer_setFieldData(
+sal_Bool TYPEREG_CALLTYPE typereg_writer_setFieldData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     rtl_uString const * fileName, RTFieldAccess flags, rtl_uString const * name,
     rtl_uString const * typeName, RTValueType valueType,
@@ -1249,7 +1249,7 @@ static void TYPEREG_CALLTYPE setFieldData(TypeWriterImpl    hEntry,
         constValue);
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodData(
+sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTMethodMode flags, rtl_uString const * name,
     rtl_uString const * returnTypeName, sal_uInt16 parameterCount,
@@ -1279,7 +1279,7 @@ static void TYPEREG_CALLTYPE setMethodData(TypeWriterImpl   hEntry,
         hEntry, index, doku, mode, name, returnTypeName, paramCount, excCount);
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodParameterData(
+sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodParameterData(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
     RTParamMode flags, rtl_uString const * name, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
@@ -1305,7 +1305,7 @@ static void TYPEREG_CALLTYPE setParamData(TypeWriterImpl    hEntry,
         hEntry, index, paramIndex, mode, name, type);
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodExceptionTypeName(
+sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodExceptionTypeName(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
     rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
@@ -1327,7 +1327,7 @@ static void TYPEREG_CALLTYPE setExcData(TypeWriterImpl  hEntry,
     typereg_writer_setMethodExceptionTypeName(hEntry, index, excIndex, type);
 }
 
-REG_DLLPUBLIC void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 * size)
+void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 * size)
     SAL_THROW_EXTERN_C()
 {
     TypeWriter * writer = static_cast< TypeWriter * >(handle);
@@ -1356,7 +1356,7 @@ static sal_uInt32 TYPEREG_CALLTYPE getBlopSize(TypeWriterImpl hEntry)
     return size;
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_writer_setReferenceData(
+sal_Bool TYPEREG_CALLTYPE typereg_writer_setReferenceData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     RTReferenceType sort, RTFieldAccess flags, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
@@ -1380,7 +1380,7 @@ static void TYPEREG_CALLTYPE setReferenceData(TypeWriterImpl    hEntry,
     typereg_writer_setReferenceData(hEntry, index, doku, refType, access, name);
 }
 
-REG_DLLPUBLIC void * TYPEREG_CALLTYPE typereg_writer_create(
+void * TYPEREG_CALLTYPE typereg_writer_create(
     typereg_Version version, rtl_uString const * documentation,
     rtl_uString const * fileName, RTTypeClass typeClass, sal_Bool published,
     rtl_uString const * typeName, sal_uInt16 superTypeCount,
@@ -1397,11 +1397,11 @@ REG_DLLPUBLIC void * TYPEREG_CALLTYPE typereg_writer_create(
     }
 }
 
-REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C() {
+void TYPEREG_CALLTYPE typereg_writer_destroy(void * handle) SAL_THROW_EXTERN_C() {
     delete static_cast< TypeWriter * >(handle);
 }
 
-REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_writer_setSuperTypeName(
+sal_Bool TYPEREG_CALLTYPE typereg_writer_setSuperTypeName(
     void * handle, sal_uInt16 index, rtl_uString const * typeName)
     SAL_THROW_EXTERN_C()
 {
@@ -1430,7 +1430,7 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     return t;
 }
 
-REG_DLLPUBLIC RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
+RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
 {
     static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)

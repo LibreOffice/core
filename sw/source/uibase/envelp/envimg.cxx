@@ -45,7 +45,7 @@ using namespace ::com::sun::star::uno;
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
-SW_DLLPUBLIC OUString MakeSender()
+OUString MakeSender()
 {
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 

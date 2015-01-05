@@ -20,7 +20,7 @@
 #include "uno/EnvDcp.h"
 
 
-CPPU_DLLPUBLIC void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvTypeName)
+void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvTypeName)
 {
     sal_Int32 colIdx = rtl_ustr_indexOfChar_WithLength(pEnvDcp->buffer, pEnvDcp->length, ':');
     if (colIdx >= 0)
@@ -30,7 +30,7 @@ CPPU_DLLPUBLIC void uno_EnvDcp_getTypeName(rtl_uString const * pEnvDcp, rtl_uStr
         rtl_uString_newFromStr(ppEnvTypeName, pEnvDcp->buffer);
 }
 
-CPPU_DLLPUBLIC void uno_EnvDcp_getPurpose(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvPurpose)
+void uno_EnvDcp_getPurpose(rtl_uString const * pEnvDcp, rtl_uString ** ppEnvPurpose)
 {
     sal_Int32 colIdx = rtl_ustr_indexOfChar_WithLength(pEnvDcp->buffer, pEnvDcp->length, ':');
     if (colIdx >= 0)

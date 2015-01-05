@@ -68,17 +68,17 @@ Size getDrawListBoxOptimalSize(const vcl::Window *pReference)
     return pReference->LogicToPixel(Size(88, 110), MAP_APPFONT);
 }
 
-Size SFX2_DLLPUBLIC getPreviewStripSize(const vcl::Window *pReference)
+Size getPreviewStripSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(70 , 40), MapMode(MAP_APPFONT));
 }
 
-Size SFX2_DLLPUBLIC getPreviewOptionsSize(const vcl::Window *pReference)
+Size getPreviewOptionsSize(const vcl::Window *pReference)
 {
     return pReference->LogicToPixel(Size(70 , 27), MapMode(MAP_APPFONT));
 }
 
-OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper)
+OUString getWidestTime(const LocaleDataWrapper& rWrapper)
 {
     Date aDate(22, 12, 2000);
     tools::Time aTime(22, 59, 59);
@@ -86,7 +86,7 @@ OUString SFX2_DLLPUBLIC getWidestTime(const LocaleDataWrapper& rWrapper)
     return formatTime(aDateTime, rWrapper);
 }
 
-OUString SFX2_DLLPUBLIC formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper)
+OUString formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper)
 {
     OUString sString = rWrapper.getDate(rDateTime);
     sString += OUString(' ');

@@ -254,7 +254,7 @@ namespace toolkitform
 
     /** creates a PDF compatible control descriptor for the given control
     */
-    std::unique_ptr<vcl::PDFWriter::AnyWidget> TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
+    std::unique_ptr<vcl::PDFWriter::AnyWidget> describePDFControl( const Reference< XControl >& _rxControl,
         ::vcl::PDFExtOutDevData& i_pdfExportData )
     {
         std::unique_ptr<vcl::PDFWriter::AnyWidget> Descriptor;

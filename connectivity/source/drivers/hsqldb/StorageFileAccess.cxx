@@ -40,7 +40,7 @@ using namespace ::connectivity::hsqldb;
  * Method:    isStreamElement
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
  */
-SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement
+jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
     TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
@@ -92,7 +92,7 @@ SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileA
  * Method:    removeElement
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
-SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
+void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
@@ -127,7 +127,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAcces
  * Method:    renameElement
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
-SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
+void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
   (JNIEnv * env, jobject /*obj_this*/,jstring key, jstring oldname, jstring newname)
 {
 #ifdef HSQLDB_DBG

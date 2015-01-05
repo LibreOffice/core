@@ -2288,7 +2288,6 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
     }
 }
 
-SAL_DLLPUBLIC_EXPORT // export just for test
 boost::tuple<OUString, std::vector<OUString>, std::vector<OUString> >
 lcl_SplitFieldCommand(const OUString& rCommand)
 {

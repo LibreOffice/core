@@ -697,7 +697,7 @@ static void writeLine(
 }
 
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
+extern "C" void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C()
 {
@@ -782,7 +782,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironment(
 }
 
 
-extern "C" CPPU_DLLPUBLIC void SAL_CALL uno_dumpEnvironmentByName(
+extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvDcp, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C()
 {
@@ -1130,7 +1130,7 @@ static uno_Environment * initDefaultEnvironment(
 }
 
 
-CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
+void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
@@ -1142,7 +1142,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_createEnvironment(
     *ppEnv = initDefaultEnvironment( rEnvDcp, pContext );
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
+void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
     SAL_THROW_EXTERN_C()
 {
@@ -1164,7 +1164,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_getEnvironment(
     }
 }
 
-CPPU_DLLPUBLIC void SAL_CALL uno_getRegisteredEnvironments(
+void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C()

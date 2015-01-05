@@ -159,7 +159,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
 
 
 
-SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
+void getAllHit3DObjectsSortedFrontToBack(
     const basegfx::B2DPoint& rPoint,
     const E3dScene& rScene,
     ::std::vector< const E3dCompoundObject* >& o_rResult)

@@ -31,7 +31,7 @@
 
 using namespace ::com::sun::star;
 
-BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
+BitmapEx convertPrimitive2DSequenceToBitmapEx(
     const Primitive2DSequence& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels)

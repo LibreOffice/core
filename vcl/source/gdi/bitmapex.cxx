@@ -1160,7 +1160,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     }
 }
 
-BitmapEx VCL_DLLPUBLIC createBlendFrame(
+BitmapEx createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,
@@ -1184,7 +1184,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     return BitmapEx();
 }
 
-BitmapEx VCL_DLLPUBLIC createBlendFrame(
+BitmapEx createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,

@@ -363,7 +363,7 @@ ScOrcusFilters* ScFormatFilterPluginImpl::GetOrcusFilters()
 #endif
 }
 
-SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
+ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
 {
     return new ScFormatFilterPluginImpl();
 }
