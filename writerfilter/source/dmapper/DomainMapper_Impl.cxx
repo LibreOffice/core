@@ -90,7 +90,7 @@ namespace writerfilter {
 namespace dmapper{
 
 //line numbering for header/footer
-void lcl_linenumberingHeaderFooter( PropertyNameSupplier& rPropNameSupplier, uno::Reference<container::XNameContainer> xStyles, OUString rname, DomainMapper_Impl* dmapper )
+void lcl_linenumberingHeaderFooter( PropertyNameSupplier& rPropNameSupplier, uno::Reference<container::XNameContainer> xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
 {
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
