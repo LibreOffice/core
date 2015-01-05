@@ -229,7 +229,7 @@ class LetterWizardDialogResources(object):
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 64),
         "Marine" : oWizardResource.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 65),
-        "RedLine" : oWizardResource.getResText(
+        "Red Line" : oWizardResource.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 66)}
 
         #Common Resources
