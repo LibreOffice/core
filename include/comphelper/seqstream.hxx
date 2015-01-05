@@ -76,7 +76,7 @@ private:
 };
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream > OSequenceOutputStream_Base;
 
-class OSequenceOutputStream : public OSequenceOutputStream_Base
+class COMPHELPER_DLLPUBLIC OSequenceOutputStream : public OSequenceOutputStream_Base
 {
 protected:
     ::com::sun::star::uno::Sequence< sal_Int8 >&    m_rSequence;
