@@ -24,6 +24,8 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 
+#include <comphelper/seqstream.hxx>
+
 #include <osl/file.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 
@@ -33,6 +35,7 @@
 #include "fonthdl.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/maptype.hxx>
+#include <xmloff/XMLBase64ImportContext.hxx>
 
 
 using namespace ::com::sun::star;
@@ -251,6 +254,12 @@ SvXMLImportContext * XMLFontStyleContextFontFaceUri::CreateChildContext(
 {
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_FORMAT ))
         return new XMLFontStyleContextFontFaceFormat( GetImport(), nPrefix, rLocalName, xAttrList, *this );
+    if( linkPath.isEmpty() && ( nPrefix == XML_NAMESPACE_OFFICE ) && IsXMLToken( rLocalName, XML_BINARY_DATA ) )
+    {
+        mxBase64Stream.set( new comphelper::OSequenceOutputStream( maFontData ) );
+        if( mxBase64Stream.is() )
+            return new XMLBase64ImportContext( GetImport(), nPrefix, rLocalName, xAttrList, mxBase64Stream );
+    }
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
@@ -276,9 +285,9 @@ const char* EOT_FORMAT      = "embedded-opentype";
 
 void XMLFontStyleContextFontFaceUri::EndElement()
 {
-    if( linkPath.getLength() == 0 )
+    if( ( linkPath.getLength() == 0 ) && ( maFontData.getLength() == 0 ) )
     {
-        SAL_WARN( "xmloff", "svg:font-face-uri tag with no link; ignoring." );
+        SAL_WARN( "xmloff", "svg:font-face-uri tag with no link or base64 data; ignoring." );
         return;
     }
     bool eot;
@@ -298,7 +307,10 @@ void XMLFontStyleContextFontFaceUri::EndElement()
         SAL_WARN( "xmloff", "Unknown format of embedded font; assuming TTF." );
         eot = false;
     }
-    handleEmbeddedFont( linkPath, eot );
+    if ( maFontData.getLength() == 0 )
+        handleEmbeddedFont( linkPath, eot );
+    else
+        handleEmbeddedFont( maFontData, eot );
 }
 
 void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bool eot )
@@ -326,6 +338,15 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
     }
     else
         SAL_WARN( "xmloff", "External URL for font file not handled." );
+}
+
+void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::css::uno::Sequence< sal_Int8 >& rData, const bool eot )
+{
+    const uno::Reference< io::XInputStream > xInput( new comphelper::SequenceInputStream( rData ) );
+    const OUString fontName = font.familyName();
+    if( EmbeddedFontsHelper::addEmbeddedFont( xInput, fontName, "?", std::vector< unsigned char >(), eot ) )
+        GetImport().NotifyEmbeddedFontRead();
+    xInput->closeInput();
 }
 
 SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(

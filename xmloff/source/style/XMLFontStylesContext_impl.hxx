@@ -22,6 +22,10 @@
 
 #include <xmloff/xmlstyle.hxx>
 
+namespace com { namespace sun { namespace star { namespace io {
+    class XOutputStream;
+} } } }
+
 /// Handles <style:font-face>
 class XMLFontStyleContextFontFace : public SvXMLStyleContext
 {
@@ -91,7 +95,11 @@ class XMLFontStyleContextFontFaceUri : public SvXMLStyleContext
     const XMLFontStyleContextFontFace& font;
     OUString format;
     OUString linkPath;
+    ::css::uno::Sequence< sal_Int8 > maFontData;
+    ::css::uno::Reference< ::css::io::XOutputStream > mxBase64Stream;
+
     void handleEmbeddedFont( const OUString& url, bool eot );
+    void handleEmbeddedFont( const ::css::uno::Sequence< sal_Int8 >& rData, bool eot );
 public:
 
     TYPEINFO_OVERRIDE();
