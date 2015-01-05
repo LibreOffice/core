@@ -810,7 +810,7 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
         return true;    // nothing to read
 
     bool bTryUtf8 = false;
-    sal_uInt16 nFlag;
+    sal_uInt16 nFlag(0);
     sal_sSize nBack = sizeof(nFlag);
     this->ReadUInt16( nFlag );
     switch ( nFlag )
@@ -847,7 +847,7 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     }
     if (bTryUtf8)
     {
-        unsigned char nChar;
+        unsigned char nChar(0);
         nBack += sizeof(nChar);
         this->ReadUChar( nChar );
         if (nChar == 0xbf)
