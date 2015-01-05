@@ -156,25 +156,21 @@ void SwAccessiblePortionData::Special(
             break;
         case POR_GRFNUM:
         case POR_BULLET:
-                break;
+            break;
         case POR_FLD:
         case POR_HIDDEN:
         case POR_COMBINED:
         case POR_ISOREF:
-            {
-                //When the filed content is empty, input a special character.
-                if (rText.isEmpty())
-                    sDisplay = OUString(sal_Unicode(0xfffc));
-                else
-                    sDisplay = rText;
-                aFieldPosition.push_back(aBuffer.getLength());
-                aFieldPosition.push_back(aBuffer.getLength() + rText.getLength());
-                break;
-            }
+            // When the filed content is empty, input a special character.
+            if (rText.isEmpty())
+                sDisplay = OUString(sal_Unicode(0xfffc));
+            else
+                sDisplay = rText;
+            aFieldPosition.push_back(aBuffer.getLength());
+            aFieldPosition.push_back(aBuffer.getLength() + rText.getLength());
+            break;
         case POR_FTNNUM:
-            {
-                break;
-            }
+            break;
         case POR_FTN:
             {
                 sDisplay = rText;
@@ -192,10 +188,8 @@ void SwAccessiblePortionData::Special(
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case POR_CONTROLCHAR:
-        {
             sDisplay = OUString( rText ) + OUString( pTxtNode->GetTxt()[nModelPosition] );
             break;
-        }
         default:
             sDisplay = OUString( rText );
             break;
@@ -302,7 +296,7 @@ bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
         case POR_HIDDEN:
             bGray = !pViewOptions->IsPagePreview() &&
                 !pViewOptions->IsReadonly() && SwViewOption::IsFieldShadings();
-        break;
+            break;
         case POR_TAB:       bGray = pViewOptions->IsTab();          break;
         case POR_SOFTHYPH:  bGray = pViewOptions->IsSoftHyph();     break;
         case POR_BLANK:     bGray = pViewOptions->IsHardBlank();    break;
@@ -493,47 +487,47 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
     if( pSentences == NULL )
     {
-         OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
-         OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
-         if( g_pBreakIt->GetBreakIter().is() )
-         {
-             pSentences = new Positions_t();
-             pSentences->reserve(10);
+        OSL_ENSURE( g_pBreakIt != NULL, "We always need a break." );
+        OSL_ENSURE( g_pBreakIt->GetBreakIter().is(), "No break-iterator." );
+        if( g_pBreakIt->GetBreakIter().is() )
+        {
+            pSentences = new Positions_t();
+            pSentences->reserve(10);
 
-             // use xBreak->endOfSentence to iterate over all words; store
-             // positions in pSentences
-             sal_Int32 nCurrent = 0;
-             sal_Int32 nLength = sAccessibleString.getLength();
-             do
-             {
-                 pSentences->push_back( nCurrent );
+            // use xBreak->endOfSentence to iterate over all words; store
+            // positions in pSentences
+            sal_Int32 nCurrent = 0;
+            sal_Int32 nLength = sAccessibleString.getLength();
+            do
+            {
+                pSentences->push_back( nCurrent );
 
-                 const sal_Int32 nModelPos = GetModelPosition( nCurrent );
+                const sal_Int32 nModelPos = GetModelPosition( nCurrent );
 
-                 sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
-                     sAccessibleString, nCurrent,
-                     g_pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
+                sal_Int32 nNew = g_pBreakIt->GetBreakIter()->endOfSentence(
+                    sAccessibleString, nCurrent,
+                    g_pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
 
-                 if( (nNew < 0) && (nNew > nLength) )
-                     nNew = nLength;
-                 else if (nNew <= nCurrent)
-                     nNew = nCurrent + 1;   // ensure forward progress
+                if( (nNew < 0) && (nNew > nLength) )
+                    nNew = nLength;
+                else if (nNew <= nCurrent)
+                    nNew = nCurrent + 1;   // ensure forward progress
 
-                 nCurrent = nNew;
-             }
-             while (nCurrent < nLength);
+                nCurrent = nNew;
+            }
+            while (nCurrent < nLength);
 
-             // finish with two terminators
-             pSentences->push_back( nLength );
-             pSentences->push_back( nLength );
-         }
-         else
-         {
-             // no break iterator -> empty word
-             rBound.startPos = 0;
-             rBound.endPos = 0;
-             return;
-         }
+            // finish with two terminators
+            pSentences->push_back( nLength );
+            pSentences->push_back( nLength );
+        }
+        else
+        {
+            // no break iterator -> empty word
+            rBound.startPos = 0;
+            rBound.endPos = 0;
+            return;
+        }
     }
 
     FillBoundary( rBound, *pSentences, FindBreak( *pSentences, nPos ) );
@@ -679,7 +673,8 @@ sal_Int32 SwAccessiblePortionData::FillSpecialPos(
 
 bool SwAccessiblePortionData::FillBoundaryIFDateField( com::sun::star::i18n::Boundary& rBound, const sal_Int32 nPos )
 {
-    if( aFieldPosition.size() < 2 ) return false;
+    if( aFieldPosition.size() < 2 )
+        return false;
     for( size_t i = 0; i < aFieldPosition.size() - 1; i += 2 )
     {
         if( nPos < aFieldPosition[ i + 1 ]  &&  nPos >= aFieldPosition[ i ] )
@@ -739,7 +734,7 @@ bool SwAccessiblePortionData::GetEditableRange(
             nStartPortion = nLastPortion + 1;
     }
 
-    for( size_t nPor = nStartPortion; nPor <= nLastPortion; nPor ++ )
+    for( size_t nPor = nStartPortion; nPor <= nLastPortion; nPor++ )
     {
         bIsEditable &= ! IsReadOnlyPortion( nPor );
     }
