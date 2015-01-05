@@ -934,23 +934,22 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
             {
                 case 8 :
                 {
-                    sal_uInt8 nLast;
                     if ( bByteSwap )
                     {
                         if ( nPredictor == 2 )
                         {
-                            nLast = BYTESWAP( (sal_uInt8)*pt++ );
+                            sal_uInt8 nLast = 0;
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
+                                nLast += nx == 0 ? BYTESWAP( (sal_uInt8)*pt++ ) : *pt++;
                                 pAcc->SetPixelIndex( nY, nx, nLast );
-                                nLast = nLast + *pt++;
                             }
                         }
                         else
                         {
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
-                                nLast = *pt++;
+                                sal_uInt8 nLast = *pt++;
                                 pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uLong)nLast) - nMinSampleValue) * nMinMax ) );
                             }
                         }
@@ -959,11 +958,11 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                     {
                         if ( nPredictor == 2 )
                         {
-                            nLast = *pt++;
+                            sal_uInt8 nLast = 0;
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
+                                nLast += *pt++;
                                 pAcc->SetPixelIndex( nY, nx, nLast );
-                                nLast = nLast + *pt++;
                             }
                         }
                         else
