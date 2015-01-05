@@ -118,11 +118,9 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
     }
     if (!aTableStyles.getLength())
         return;
-    // HACK
-    // Ms Office seems to have an internal limitation of 4091 styles
-    // and refuses to load .docx with more, even though the spec seems to allow that;
-    // so simply if there are more styles, don't export those
-    nCountStylesToWrite = (nCountStylesToWrite > aTableStyles.getLength()) ?  aTableStyles.getLength(): nCountStylesToWrite;
+
+    if (nCountStylesToWrite > aTableStyles.getLength())
+        nCountStylesToWrite = aTableStyles.getLength();
 
     for (sal_Int32 i = 0; i < nCountStylesToWrite; ++i)
     {
