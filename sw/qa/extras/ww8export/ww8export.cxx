@@ -18,6 +18,7 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/view/DocumentZoomType.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -113,6 +114,16 @@ DECLARE_WW8EXPORT_TEST(testZoom, "zoom.doc")
     sal_Int16 nValue = 0;
     xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+}
+
+DECLARE_WW8EXPORT_TEST(testZoomType, "zoomtype.doc")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
+    sal_Int16 nValue = 0;
+    xPropertySet->getPropertyValue("ZoomType") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(view::DocumentZoomType::PAGE_WIDTH), nValue);
 }
 
 DECLARE_WW8EXPORT_TEST(test56513, "fdo56513.doc")
