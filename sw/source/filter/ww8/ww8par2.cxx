@@ -1272,8 +1272,9 @@ void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pPar
     // sprmTTableBorders
     if( nBrcVer == 6 )
     {
-        for( int i = 0; i < 6; ++i )
-            aDefBrcs[i] = WW8_BRC( ((WW8_BRCVer6*)&pParams)[i] );
+        WW8_BRCVer6 *pVer6 = (WW8_BRCVer6*)pParams;
+        for (int i = 0; i < 6; ++i)
+            aDefBrcs[i] = WW8_BRC(pVer6[i]);
     }
     else if ( nBrcVer == 8 )
     {
