@@ -173,6 +173,8 @@ bool equalSequence(
     return _equalSequence( pDest, pSource, pElementType, queryInterface, release );
 }
 
+}
+
 extern "C"
 {
 
@@ -318,15 +320,12 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     _release( p, release );
     return (0 != p);
 }
+
 }
 
-
-
-
-
-
-
 #if OSL_DEBUG_LEVEL > 1
+
+namespace cppu {
 
 #if defined( SAL_W32)
 #pragma pack(push, 8)
@@ -591,8 +590,8 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 
 static BinaryCompatible_Impl aTest;
 
-#endif
-
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
