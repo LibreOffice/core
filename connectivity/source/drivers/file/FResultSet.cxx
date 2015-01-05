@@ -1296,6 +1296,7 @@ bool OResultSet::OpenImpl()
     m_nRowPos = -1;
     m_nFilePos  = 0;
     m_nRowCountResult = -1;
+    m_pTable->seekRow(IResultSetHelper::ABSOLUTE1, 0, m_nFilePos);
 
     m_nLastVisitedPos = m_pTable->getCurrentLastPos();
 
