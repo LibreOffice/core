@@ -25,7 +25,6 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <boost/math/special_functions/next.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <comphelper/random.hxx>
 
@@ -218,7 +217,7 @@ namespace drawinglayer
     {
         double getRandomColorRange()
         {
-            return comphelper::rng::uniform_real_distribution(0.0, boost::math::nextafter(1.0, DBL_MAX));
+            return comphelper::rng::uniform_real_distribution(0.0, std::nextafter(1.0, DBL_MAX));
         }
     }
 
