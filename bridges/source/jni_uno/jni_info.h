@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 #include "jni_base.h"
 
@@ -114,7 +114,7 @@ struct JNI_type_info_holder: private boost::noncopyable
         {}
 };
 
-typedef ::boost::unordered_map<
+typedef std::unordered_map<
     OUString, JNI_type_info_holder, OUStringHash > t_str2type;
 
 class JNI_info: private boost::noncopyable
