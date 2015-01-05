@@ -93,11 +93,11 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     rWiBar.InsertItem( 5, mpDrvVersion->GetText(), 0, nHBits );
 
     long aTabs[] = {5, 0, 0, 0, 0, 0};
-    aTabs[2] = rBlBar.GetTextWidth(rBlBar.GetItemText(1)) + 12;
-    aTabs[3] = rBlBar.GetTextWidth(rBlBar.GetItemText(2)) + aTabs[2] + 12;
-    aTabs[4] = rBlBar.GetTextWidth(rBlBar.GetItemText(3)) + aTabs[3] + 12;
-    aTabs[5] = rBlBar.GetTextWidth(rBlBar.GetItemText(4)) + aTabs[4] + 12;
-    aTabs[6] = rBlBar.GetTextWidth(rBlBar.GetItemText(5)) + aTabs[5] + 12;
+    aTabs[1] = rBlBar.GetTextWidth(rBlBar.GetItemText(1)) + 12;
+    aTabs[2] = rBlBar.GetTextWidth(rBlBar.GetItemText(2)) + aTabs[1] + 12;
+    aTabs[3] = rBlBar.GetTextWidth(rBlBar.GetItemText(3)) + aTabs[2] + 12;
+    aTabs[4] = rBlBar.GetTextWidth(rBlBar.GetItemText(4)) + aTabs[3] + 12;
+    aTabs[5] = rBlBar.GetTextWidth(rBlBar.GetItemText(5)) + aTabs[4] + 12;
     mpBlackList->SetTabs(aTabs, MAP_PIXEL);
     mpWhiteList->SetTabs(aTabs, MAP_PIXEL);
 
