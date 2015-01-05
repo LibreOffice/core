@@ -2396,6 +2396,11 @@ String RID_FAXWIZARDDIALOG_START + 55
     Text [ en-US] = "Modern Fax from Private";
 };
 
+String RID_FAXWIZARDDIALOG_START + 56
+{
+    Text [ en-US] = "Fax";
+};
+
 // Fax Wizard Communication Start
 String RID_FAXWIZARDCOMMUNICATION_START + 1
 {

@@ -105,7 +105,7 @@ class FaxWizardDialogResources(object):
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 39)
         self.resLabel2_value = oWizardResource.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 40)
-    
+
         #Create a Dictionary for the constants values.
         self.dictConstants = {
         "#to#" : oWizardResource.getResText(
@@ -129,6 +129,8 @@ class FaxWizardDialogResources(object):
         self.dictPrivateTemplate = {
         "Bottle" : oWizardResource.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 49),
+        "Fax" : oWizardResource.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 56),
         "Lines" : oWizardResource.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 50),
         "Marine" : oWizardResource.getResText(
@@ -144,7 +146,7 @@ class FaxWizardDialogResources(object):
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 54),
         "Modern Fax from Private" : oWizardResource.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 55)}
-        
+
         #Common Resources
         self.resOverwriteWarning = oWizardResource.getResText(
             FaxWizardDialogResources.RID_RID_COMMON_START + 19)
