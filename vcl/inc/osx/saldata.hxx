@@ -33,6 +33,8 @@
 #include "svdata.hxx"
 #include "salwtype.hxx"
 
+#include <boost/functional/hash.hpp>
+
 #include <list>
 #include <map>
 #include <unordered_set>
