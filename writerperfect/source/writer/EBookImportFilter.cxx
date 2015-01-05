@@ -35,6 +35,8 @@ bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, Od
     rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
     assert(!aFilterName.isEmpty());
 
+    if (aFilterName == "BroadBand eBook")
+        type = EBOOKDocument::TYPE_BBEB;
     if (aFilterName == "FictionBook 2")
         type = EBOOKDocument::TYPE_FICTIONBOOK2;
     else if (aFilterName == "PalmDoc")
@@ -64,6 +66,9 @@ bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
     {
         switch (type)
         {
+        case EBOOKDocument::TYPE_BBEB :
+            rTypeName = "writer_BroadBand_eBook";
+            break;
         case EBOOKDocument::TYPE_FICTIONBOOK2 :
             rTypeName = "writer_FictionBook_2";
             break;
