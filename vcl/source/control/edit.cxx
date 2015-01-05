@@ -279,6 +279,8 @@ void Edit::dispose()
     }
 
     SetType(WINDOW_WINDOW);
+
+    Control::dispose();
 }
 
 void Edit::ImplInitEditData()
