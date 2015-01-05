@@ -33,6 +33,7 @@ class SwParagraphNumTabPage : public SfxTabPage
     ListBox*                 m_pOutlineLvLB;
     VclHBox*                 m_pNumberStyleBX;
     ListBox*                 m_pNumberStyleLB;
+    PushButton*              m_pEditNumStyleBtn;
 
     TriStateBox*             m_pNewStartCB;
     VclHBox*                 m_pNewStartBX;
@@ -55,10 +56,14 @@ class SwParagraphNumTabPage : public SfxTabPage
     DECL_LINK(NewStartHdl_Impl, void *);
     DECL_LINK( StyleHdl_Impl, ListBox* );
     DECL_LINK(LineCountHdl_Impl, void *);
+    DECL_LINK(EditNumStyleHdl_Impl, void *);
 
 protected:
         SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     void aCountParaFL();
+    bool    ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
+                          sal_uInt16 nFamily, sal_uInt16 nMask = 0,
+                          const sal_uInt16* pModifier = NULL );
 
 public:
         virtual ~SwParagraphNumTabPage();

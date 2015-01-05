@@ -32,6 +32,11 @@
 #include <numpara.hxx>
 
 #include <app.hrc>
+#include <svl/stritem.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/sfxhelp.hxx>
+#include <sfx2/viewsh.hxx>
 
 static const sal_uInt16 aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
@@ -50,7 +55,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
 
     get(m_pNumberStyleBX,          "boxNUMBER_STYLE");
     get(m_pNumberStyleLB,          "comboLB_NUMBER_STYLE");
-
+    get(m_pEditNumStyleBtn,        "editnumstyle");
     get(m_pNewStartBX,             "boxNEW_START");
     get(m_pNewStartCB,             "checkCB_NEW_START");
     m_pNewStartCB->SetState(TRISTATE_FALSE);
@@ -84,6 +89,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
     m_pNumberStyleLB->SetSelectHdl(LINK(this, SwParagraphNumTabPage, StyleHdl_Impl));
     m_pCountParaCB->SetClickHdl(LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
     m_pRestartParaCountCB->SetClickHdl( LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    m_pEditNumStyleBtn->SetClickHdl( LINK(this, SwParagraphNumTabPage, EditNumStyleHdl_Impl));
 }
 
 SwParagraphNumTabPage::~SwParagraphNumTabPage()
@@ -281,6 +287,7 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, NewStartHdl_Impl)
     return 0;
 }
 
+
 IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl)
 {
     m_pRestartParaCountCB->Enable(m_pCountParaCB->IsChecked());
@@ -290,6 +297,50 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl)
     m_pRestartBX->Enable(bEnableRestartValue);
 
     return 0;
+}
+
+IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl)
+{
+    OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
+    if( !( aTemplName == "None" ) )
+        ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PARA, 0 );
+    return 0;
+}
+
+// Internal: Perform functions through the Dispatcher
+bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
+    sal_uInt16 nId, const OUString &rStr, const OUString& rRefStr, sal_uInt16 nFamily,
+    sal_uInt16 nMask, const sal_uInt16* pModifier)
+{
+
+    SfxDispatcher &rDispatcher = *SfxViewShell::Current()->GetDispatcher();
+    SfxStringItem aItem(nId, rStr);
+    SfxUInt16Item aFamily(SID_STYLE_FAMILY, nFamily);
+    SfxUInt16Item aMask( SID_STYLE_MASK, nMask );
+    SfxStringItem aUpdName(SID_STYLE_UPD_BY_EX_NAME, rStr);
+    SfxStringItem aRefName( SID_STYLE_REFERENCE, rRefStr );
+    const SfxPoolItem* pItems[ 6 ];
+    sal_uInt16 nCount = 0;
+    if( !rStr.isEmpty() )
+        pItems[ nCount++ ] = &aItem;
+    pItems[ nCount++ ] = &aFamily;
+    if( nMask )
+        pItems[ nCount++ ] = &aMask;
+    if( !rRefStr.isEmpty() )
+        pItems[ nCount++ ] = &aRefName;
+
+    pItems[ nCount++ ] = 0;
+
+    sal_uInt16 nModi = pModifier ? *pModifier : 0;
+    const SfxPoolItem* mpItem = rDispatcher.Execute(
+        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
+        pItems, nModi );
+
+    if ( !mpItem )
+        return false;
+
+    return true;
+
 }
 
 IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox*, pBox )
