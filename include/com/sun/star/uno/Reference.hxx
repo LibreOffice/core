@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <cppu/cppudllapi.h>
 
 namespace com
 {
@@ -56,10 +57,10 @@ inline XInterface * Reference< interface_type >::iquery(
 {
     return BaseReference::iquery(pInterface, interface_type::static_type());
 }
-extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
+extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
-extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
+extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 

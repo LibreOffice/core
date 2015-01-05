@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 
 namespace com
@@ -576,7 +577,7 @@ inline bool SAL_CALL operator != ( const Any & rAny, const C & value )
     return (! operator == ( rAny, value ));
 }
 
-extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
+extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
     uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
