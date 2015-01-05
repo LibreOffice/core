@@ -101,7 +101,7 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
     m_pImpl->m_pSerializer->singleElementNS(XML_w, XML_cnfStyle, xAttributeList);
 }
 
-void DocxTableStyleExport::TableStyles(sal_uInt16 nCountStylesToWrite)
+void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?
     uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);

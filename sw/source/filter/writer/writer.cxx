@@ -313,7 +313,7 @@ void Writer::PutNumFmtFontsInAttrPool()
     const vcl::Font* pDefFont = &numfunc::GetDefBulletFont();
     bool bCheck = false;
 
-    for( sal_uInt16 nGet = rListTbl.size(); nGet; )
+    for( size_t nGet = rListTbl.size(); nGet; )
         if( pDoc->IsUsed( *(pRule = rListTbl[ --nGet ] )))
             for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
                 if( SVX_NUM_CHAR_SPECIAL == (pFmt = &pRule->Get( nLvl ))->GetNumberingType() ||

@@ -235,21 +235,21 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
     {
         const SwTable * pTable = getTable();
         const SwTableLines& rTableLines = pTable->GetTabLines();
-        sal_uInt16 nNumOfLines = rTableLines.size();
+        const size_t nNumOfLines = rTableLines.size();
 
         // Go over all the rows - and for each row - calculate where
         // there is a separator between columns
         WidthsPtr pSeparators(new Widths);
-        for ( sal_uInt32 nLineIndex = 0; nLineIndex < nNumOfLines; nLineIndex++)
+        for ( size_t nLineIndex = 0; nLineIndex < nNumOfLines; ++nLineIndex )
         {
             const SwTableLine *pCurrentLine = rTableLines[nLineIndex];
             const SwTableBoxes & rTabBoxes = pCurrentLine->GetTabBoxes();
-            sal_uInt32 nBoxes = rTabBoxes.size();
+            size_t nBoxes = rTabBoxes.size();
             if ( nBoxes > MAXTABLECELLS )
                 nBoxes = MAXTABLECELLS;
 
             sal_uInt32 nSeparatorPosition = 0;
-            for (sal_uInt32 nBoxIndex = 0; nBoxIndex < nBoxes; nBoxIndex++)
+            for (size_t nBoxIndex = 0; nBoxIndex < nBoxes; ++nBoxIndex)
             {
                 const SwFrmFmt* pBoxFmt = rTabBoxes[ nBoxIndex ]->GetFrmFmt();
                 const SwFmtFrmSize& rLSz = pBoxFmt->GetFrmSize();
@@ -641,11 +641,11 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
     {
         const SwTableLines & rLines = pTable->GetTabLines();
 
-        for (sal_uInt16 n = 0; n < rLines.size(); n++)
+        for (size_t n = 0; n < rLines.size(); ++n)
         {
             const SwTableLine * pLine = rLines[n];
 
-            pPrev = processTableLine(pTable, pLine, n, 1, pPrev);
+            pPrev = processTableLine(pTable, pLine, static_cast<sal_uInt32>(n), 1, pPrev);
         }
 
     }
@@ -672,11 +672,11 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
 
     WW8TableNodeInfo::Pointer_t pTextNodeInfo;
 
-    for (sal_uInt16 n = 0; n < rBoxes.size(); n++)
+    for (size_t n = 0; n < rBoxes.size(); ++n)
     {
         const SwTableBox * pBox = rBoxes[n];
 
-        pPrev = processTableBox(pTable, pBox, nRow, n, nDepth, n == rBoxes.size() - 1, pPrev);
+        pPrev = processTableBox(pTable, pBox, nRow, static_cast<sal_uInt32>(n), nDepth, n == rBoxes.size() - 1, pPrev);
     }
 
     SAL_INFO( "sw.ww8", "</processTableLine>" );
@@ -700,12 +700,12 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
 
     if (!rLines.empty())
     {
-        for (sal_uInt32 n = 0; n < rLines.size(); n++)
+        for (size_t n = 0; n < rLines.size(); ++n)
         {
             const SwTableLine * pLine = rLines[n];
             const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
 
-            for (sal_uInt16 nBox = 0; nBox < rBoxes.size(); nBox++)
+            for (size_t nBox = 0; nBox < rBoxes.size(); ++nBox)
                 pNodeInfo = processTableBoxLines(rBoxes[nBox], pTable, pBoxToSet, nRow, nCell, nDepth);
         }
     }

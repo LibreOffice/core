@@ -24,7 +24,7 @@ class DocxTableStyleExport
     struct Impl;
     boost::shared_ptr<Impl> m_pImpl;
 public:
-    void TableStyles(sal_uInt16 nCountStylesToWrite);
+    void TableStyles(sal_Int32 nCountStylesToWrite);
 
     /// Writes <w:rPr>...</w:rPr> based on grab-bagged character properties.
     void CharFormat(css::uno::Sequence<css::beans::PropertyValue>& rRPr);
