@@ -35,6 +35,10 @@
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 
+extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
+    uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C();
+
 namespace com
 {
 namespace sun
@@ -576,11 +580,6 @@ inline bool SAL_CALL operator != ( const Any & rAny, const C & value )
 {
     return (! operator == ( rAny, value ));
 }
-
-extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
-    uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
-    SAL_THROW_EXTERN_C();
-
 
 template <typename T>
 T Any::get() const
