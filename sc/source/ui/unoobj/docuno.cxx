@@ -28,6 +28,7 @@
 #include <svx/unoshape.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
 #include <svl/smplhint.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -2446,6 +2447,50 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
 
     return aRet;
 #endif
+}
+
+namespace {
+
+void setOpcodeSubsetTest(bool bFlag)
+    throw (uno::RuntimeException, std::exception)
+{
+    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Calc::Formula::Calculation::OpenCLSubsetOnly::set(bFlag, batch);
+    batch->commit();
+}
+
+}
+
+void ScModelObj::enableOpcodeSubsetTest()
+    throw (uno::RuntimeException, std::exception)
+{
+    setOpcodeSubsetTest(true);
+}
+
+void ScModelObj::disableOpcodeSubsetTest()
+    throw (uno::RuntimeException, std::exception)
+{
+    setOpcodeSubsetTest(false);
+}
+
+sal_Bool ScModelObj::isOpcodeSubsetTested()
+    throw (uno::RuntimeException, std::exception)
+{
+    return officecfg::Office::Calc::Formula::Calculation::OpenCLSubsetOnly::get();
+}
+
+void ScModelObj::setFormulaCellNumberLimit( sal_Int32 number )
+    throw (uno::RuntimeException, std::exception)
+{
+    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(number, batch);
+    batch->commit();
+}
+
+sal_Int32 ScModelObj::getFormulaCellNumberLimit()
+    throw (uno::RuntimeException, std::exception)
+{
+    return officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::get().get();
 }
 
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :

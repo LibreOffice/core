@@ -353,6 +353,20 @@ public:
         SAL_CALL getOpenCLPlatforms()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    virtual void SAL_CALL enableOpcodeSubsetTest()
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL disableOpcodeSubsetTest()
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual sal_Bool SAL_CALL isOpcodeSubsetTested()
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL setFormulaCellNumberLimit( sal_Int32 number )
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual sal_Int32 SAL_CALL getFormulaCellNumberLimit()
+                                throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ITiledRenderable
     virtual void paintTile( VirtualDevice& rDevice,

@@ -74,6 +74,31 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
      */
     sequence< OpenCLPlatform > getOpenCLPlatforms();
 
+    /*
+     * Sets OpenCL to be considered only for formulas that use only a specific subset of opcodes.
+     */
+    void enableOpcodeSubsetTest();
+
+    /*
+     * Sets OpenCL to be considered for formulas regardless of what opcodes they contain.
+     */
+    void disableOpcodeSubsetTest();
+
+    /*
+     * Returns whether OpenCL is considered or not depending on the opcodes a formula uses.
+     */
+    boolean isOpcodeSubsetTested();
+
+    /*
+     * Sets the lower limit on the number of cells involved in a formula for OpenCL to be considered.
+     */
+    void setFormulaCellNumberLimit( [in] long number );
+
+    /*
+     * Returns the lower limit on the number of cells involved in a formula for OpenCL to be considered.
+     */
+    long getFormulaCellNumberLimit();
+
 };
 
 }; }; }; }; };
