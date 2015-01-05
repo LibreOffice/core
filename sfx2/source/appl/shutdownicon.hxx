@@ -170,9 +170,6 @@ extern "C" {
     void aqua_init_systray();
     void aqua_shutdown_systray();
 #  endif
-    // external plugin systray impl.
-    void plugin_init_sys_tray();
-    void plugin_shutdown_sys_tray();
 }
 
 #endif

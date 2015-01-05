@@ -55,6 +55,13 @@
 
 using namespace ::osl;
 
+extern "C" {
+
+void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray();
+void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray();
+
+}
+
 static ResMgr *pVCLResMgr;
 static GtkStatusIcon* pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
@@ -360,7 +367,7 @@ static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*
 }
 #endif
 
-void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
+void plugin_init_sys_tray()
 {
     ::SolarMutexGuard aGuard;
 
@@ -411,7 +418,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 #endif
 }
 
-void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
+void plugin_shutdown_sys_tray()
 {
     ::SolarMutexGuard aGuard;
     if( !pTrayIcon )
