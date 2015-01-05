@@ -1414,12 +1414,12 @@ bool ImplReadDIB(
     SvStream& rIStm,
     bool bFileHeader)
 {
-    const sal_uInt16 nOldFormat(rIStm.GetNumberFormatInt());
+    const SvStreamEndian nOldFormat(rIStm.GetEndian());
     const sal_uLong nOldPos(rIStm.Tell());
     sal_uLong nOffset(0UL);
     bool bRet(false);
 
-    rIStm.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    rIStm.SetEndian(SvStreamEndian::LITTLE);
 
     if(bFileHeader)
     {
@@ -1443,7 +1443,7 @@ bool ImplReadDIB(
         rIStm.Seek(nOldPos);
     }
 
-    rIStm.SetNumberFormatInt(nOldFormat);
+    rIStm.SetEndian(nOldFormat);
 
     return bRet;
 }
@@ -1462,7 +1462,7 @@ bool ImplWriteDIB(
     {
         BitmapReadAccess* pAcc = const_cast< Bitmap& >(rSource).AcquireReadAccess();
         BitmapReadAccess* pAccAlpha = 0;
-        const sal_uInt16 nOldFormat(rOStm.GetNumberFormatInt());
+        const SvStreamEndian nOldFormat(rOStm.GetEndian());
         const sal_uLong nOldPos(rOStm.Tell());
 
         if(pSourceAlpha)
@@ -1479,7 +1479,7 @@ bool ImplWriteDIB(
             }
         }
 
-        rOStm.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        rOStm.SetEndian(SvStreamEndian::LITTLE);
 
         if(pAcc)
         {
@@ -1509,7 +1509,7 @@ bool ImplWriteDIB(
             rOStm.Seek(nOldPos);
         }
 
-        rOStm.SetNumberFormatInt(nOldFormat);
+        rOStm.SetEndian(nOldFormat);
     }
 
     return bRet;

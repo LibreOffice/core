@@ -111,8 +111,8 @@ bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        sal_uInt16 nOStmOldModus = m_rOStm.GetNumberFormatInt();
-        m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        SvStreamEndian nOStmOldModus = m_rOStm.GetEndian();
+        m_rOStm.SetEndian( SvStreamEndian::BIG );
 
         if ( ImplWriteHeader() )
         {
@@ -121,7 +121,7 @@ bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConf
             ImplWriteBody();
         }
 
-        m_rOStm.SetNumberFormatInt( nOStmOldModus );
+        m_rOStm.SetEndian( nOStmOldModus );
 
         aBmp.ReleaseAccess( mpAcc );
     }

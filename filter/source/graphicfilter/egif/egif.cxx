@@ -116,7 +116,7 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
     if ( pFilterConfigItem )
         nInterlaced = pFilterConfigItem->ReadInt32( "Interlaced", 0 );
 
-    m_rGIF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    m_rGIF.SetEndian( SvStreamEndian::LITTLE );
 
     if( rGraphic.IsAnimated() )
     {

@@ -805,11 +805,11 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
     GIFReader*  pGIFReader = static_cast<GIFReader*>(rGraphic.GetContext());
-    sal_uInt16  nOldFormat = rStm.GetNumberFormatInt();
+    SvStreamEndian nOldFormat = rStm.GetEndian();
     ReadState   eReadState;
     bool        bRet = true;
 
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.SetEndian( SvStreamEndian::LITTLE );
 
     if( !pGIFReader )
         pGIFReader = new GIFReader( rStm );
@@ -830,7 +830,7 @@ bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
         rGraphic.SetContext( pGIFReader );
     }
 
-    rStm.SetNumberFormatInt( nOldFormat );
+    rStm.SetEndian( nOldFormat );
 
     return bRet;
 }

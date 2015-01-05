@@ -447,9 +447,9 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConver
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
     const sal_uLong         nPos = rIStm.Tell();
-    const sal_uInt16        nOldFormat = rIStm.GetNumberFormatInt();
+    const SvStreamEndian    nOldFormat = rIStm.GetEndian();
 
-    rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rIStm.SetEndian( SvStreamEndian::LITTLE );
 
     char    aCode[ 5 ];
     Size    aPrefSz;
@@ -472,7 +472,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         || ( nVersion != 200 ) )
     {
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        rIStm.SetNumberFormatInt( nOldFormat );
+        rIStm.SetEndian( nOldFormat );
         rIStm.Seek( nPos );
         return;
     }
@@ -1344,14 +1344,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         aLIStack.pop();
     }
 
-    rIStm.SetNumberFormatInt( nOldFormat );
+    rIStm.SetEndian( nOldFormat );
 }
 
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
     sal_uLong           nCountPos;
     vcl::Font           aSaveFont;
-    const sal_uInt16    nOldFormat = rOStm.GetNumberFormatInt();
+    const SvStreamEndian nOldFormat = rOStm.GetEndian();
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
     bool                bRop_0_1 = false;
@@ -1359,7 +1359,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     Color               aLineCol( COL_BLACK );
     ::std::stack< Color* >  aLineColStack;
 
-    rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rOStm.SetEndian( SvStreamEndian::LITTLE );
 
     // Write MagicCode
     rOStm.WriteCharPtr( "SVGDI" );                                   // Identifier
@@ -1379,7 +1379,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     rOStm.Seek( nCountPos );
     rOStm.WriteInt32( nActCount );
     rOStm.Seek( nActPos );
-    rOStm.SetNumberFormatInt( nOldFormat );
+    rOStm.SetEndian( nOldFormat );
 
     // cleanup push-pop stack if necessary
     while ( !aLineColStack.empty() )

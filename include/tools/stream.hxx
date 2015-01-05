@@ -72,8 +72,7 @@ typedef sal_uInt16 StreamMode;
 #define STREAM_SEEK_TO_BEGIN            0L
 #define STREAM_SEEK_TO_END              SAL_MAX_UINT64
 
-#define NUMBERFORMAT_INT_BIGENDIAN      (sal_uInt16)0x0000
-#define NUMBERFORMAT_INT_LITTLEENDIAN   (sal_uInt16)0xFFFF
+enum class SvStreamEndian { BIG, LITTLE };
 
 #define COMPRESSMODE_NONE               (sal_uInt16)0x0000
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
@@ -217,7 +216,7 @@ private:
     bool            bSwap;
     bool            bIsEof;
     sal_uInt32      nError;
-    sal_uInt16      nNumberFormatInt;
+    SvStreamEndian  nEndian;
     sal_uInt16      nCompressMode;
     LineEnd         eLineDelimiter;
     rtl_TextEncoding eStreamCharSet;
@@ -269,10 +268,8 @@ public:
     void            SetError( sal_uInt32 nErrorCode );
     virtual void    ResetError();
 
-    void            SetNumberFormatInt( sal_uInt16 nNewFormat );
-    sal_uInt16      GetNumberFormatInt() const { return nNumberFormatInt; }
-    /// Enable/disable swapping of endians, may be needed for Unicode import/export
-    inline void     SetEndianSwap( bool bVal );
+    void            SetEndian( SvStreamEndian SvStreamEndian );
+    SvStreamEndian  GetEndian() const { return nEndian; }
     /// returns status of endian swap flag
     bool            IsEndianSwap() const { return bSwap; }
 
@@ -479,15 +476,6 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
 {
     (*f)(rStr);
     return rStr;
-}
-
-inline void SvStream::SetEndianSwap( bool bVal )
-{
-#ifdef OSL_BIGENDIAN
-    SetNumberFormatInt( bVal ? NUMBERFORMAT_INT_LITTLEENDIAN : NUMBERFORMAT_INT_BIGENDIAN );
-#else
-    SetNumberFormatInt( bVal ? NUMBERFORMAT_INT_BIGENDIAN : NUMBERFORMAT_INT_LITTLEENDIAN );
-#endif
 }
 
 TOOLS_DLLPUBLIC SvStream& endl( SvStream& rStr );

@@ -37,7 +37,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
     SvStorage *pStg)
     : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
 {
-    refStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    refStrm->SetEndian(SvStreamEndian::LITTLE);
     WW8Fib aWwFib(*refStrm, nVersion);
 
     if (aWwFib.nFibBack >= 0x6A)   //Word97
@@ -47,7 +47,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
-            xTableStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+            xTableStream->SetEndian(SvStreamEndian::LITTLE);
             pGlossary =
                 new WW8GlossaryFib(*refStrm, nVersion, *xTableStream, aWwFib);
         }

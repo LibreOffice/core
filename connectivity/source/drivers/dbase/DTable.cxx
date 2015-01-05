@@ -241,7 +241,7 @@ void ODbaseTable::readHeader()
             case dBaseIVMemoSQL:
             case dBaseIIIMemo:
             case FoxProMemo:
-                m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
                 if ( m_aHeader.db_frei[17] != 0x00
                     && !m_aHeader.db_frei[18] && !m_aHeader.db_frei[19] && getConnection()->isTextEncodingDefaulted() )
                 {
@@ -283,7 +283,7 @@ void ODbaseTable::readHeader()
                 }
                 break;
             case dBaseIVMemo:
-                m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
                 break;
             default:
             {
@@ -566,7 +566,7 @@ void ODbaseTable::construct()
 
 bool ODbaseTable::ReadMemoHeader()
 {
-    m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    m_pMemoStream->SetEndian(SvStreamEndian::LITTLE);
     m_pMemoStream->RefreshBuffer();         // make sure that the header information is actually read again
     m_pMemoStream->Seek(0L);
 
@@ -603,7 +603,7 @@ bool ODbaseTable::ReadMemoHeader()
         case FoxProMemo:
             m_aMemoHeader.db_typ    = MemoFoxPro;
             m_pMemoStream->Seek(6L);
-            m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+            m_pMemoStream->SetEndian(SvStreamEndian::BIG);
             (*m_pMemoStream).ReadUInt16( m_aMemoHeader.db_size );
             break;
         default:

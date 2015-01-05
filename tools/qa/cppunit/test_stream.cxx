@@ -187,7 +187,7 @@ namespace
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(aMemStream.eof());
 
-        aMemStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+        aMemStream.SetEndian(SvStreamEndian::BIG);
         aMemStream.Seek(0);
         foo[0] = 0;
         foo[1] = 3;
@@ -197,7 +197,7 @@ namespace
         CPPUNIT_ASSERT(!aMemStream.bad());
         CPPUNIT_ASSERT(!aMemStream.eof());
 
-        aMemStream.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        aMemStream.SetEndian(SvStreamEndian::LITTLE);
         aMemStream.Seek(0);
         foo[0] = 3;
         foo[1] = 0;

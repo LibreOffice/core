@@ -137,7 +137,7 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
     if ( m_rTGA.GetError() )
         return false;
 
-    m_rTGA.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    m_rTGA.SetEndian( SvStreamEndian::LITTLE );
 
     // Kopf einlesen:
 

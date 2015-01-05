@@ -163,12 +163,12 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
         }
     }
 
-    const sal_uInt16    nOldFormat = m_rOStm.GetNumberFormatInt();
+    const SvStreamEndian nOldFormat = m_rOStm.GetEndian();
     mnStreamOfs = m_rOStm.Tell();
 
     // we will use the BIG Endian Mode
     // TIFF header
-    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    m_rOStm.SetEndian( SvStreamEndian::BIG );
     m_rOStm.WriteUInt32( 0x4d4d002a );      // TIFF identifier
     mnLatestIfdPos = m_rOStm.Tell();
     m_rOStm.WriteUInt32( 0 );
@@ -230,7 +230,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
                 mbStatus = false;
         }
     }
-    m_rOStm.SetNumberFormatInt( nOldFormat );
+    m_rOStm.SetEndian( nOldFormat );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

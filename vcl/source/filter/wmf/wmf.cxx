@@ -28,8 +28,8 @@ bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
 {
     sal_uInt32 nMetaType;
     sal_uInt32 nOrgPos = rStreamWMF.Tell();
-    sal_uInt16 nOrigNumberFormat = rStreamWMF.GetNumberFormatInt();
-    rStreamWMF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    SvStreamEndian nOrigNumberFormat = rStreamWMF.GetEndian();
+    rStreamWMF.SetEndian( SvStreamEndian::LITTLE );
     rStreamWMF.Seek( 0x28 );
     rStreamWMF.ReadUInt32( nMetaType );
     rStreamWMF.Seek( nOrgPos );
@@ -49,7 +49,7 @@ bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
     SAL_INFO("vcl.emf", "\t\t\tsize: " << rGDIMetaFile.GetSizeBytes());
 #endif
 
-    rStreamWMF.SetNumberFormatInt( nOrigNumberFormat );
+    rStreamWMF.SetEndian( nOrigNumberFormat );
     return !rStreamWMF.GetError();
 }
 
@@ -58,11 +58,11 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
     sal_uInt32 nMetaType(0);
     sal_uInt32 nOrgPos = rStream.Tell();
 
-    sal_uInt16 nOrigNumberFormat = rStream.GetNumberFormatInt();
-    rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    SvStreamEndian nOrigNumberFormat = rStream.GetEndian();
+    rStream.SetEndian( SvStreamEndian::LITTLE );
     //exception-safe reset nOrigNumberFormat at end of scope
     const ::comphelper::ScopeGuard aScopeGuard(
-        boost::bind(&SvStream::SetNumberFormatInt, ::boost::ref(rStream),
+        boost::bind(&SvStream::SetEndian, ::boost::ref(rStream),
           nOrigNumberFormat));
 
     rStream.Seek( 0x28 );

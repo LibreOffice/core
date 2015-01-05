@@ -595,7 +595,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
     rBitmap.lock();
     SvMemoryStream& aConverter = rBitmap.getStream();
     aConverter.Seek( 0 );
-    aConverter.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    aConverter.SetEndian( SvStreamEndian::LITTLE );
 
     // write bitmap stream header
     aConverter.WriteChar( 'B' ).WriteChar( 'M' );

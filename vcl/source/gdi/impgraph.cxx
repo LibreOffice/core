@@ -948,10 +948,10 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     sal_uInt32      nId;
     sal_Int32       nType;
     sal_Int32       nLen;
-    const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
+    const SvStreamEndian nOldFormat = rIStm.GetEndian();
     bool            bRet = false;
 
-    rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rIStm.SetEndian( SvStreamEndian::LITTLE );
     rIStm.ReadUInt32( nId );
 
     // check version
@@ -1069,7 +1069,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     else
         bRet = true;
 
-    rIStm.SetNumberFormatInt( nOldFormat );
+    rIStm.SetEndian( nOldFormat );
 
     return bRet;
 }
@@ -1082,10 +1082,10 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
     {
         const MapMode   aMapMode( ImplGetPrefMapMode() );
         const Size      aSize( ImplGetPrefSize() );
-        const sal_uInt16    nOldFormat = rOStm.GetNumberFormatInt();
+        const SvStreamEndian nOldFormat = rOStm.GetEndian();
         sal_uLong           nDataFieldPos;
 
-        rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        rOStm.SetEndian( SvStreamEndian::LITTLE );
 
         // write correct version ( old style/new style header )
         if( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 )
@@ -1144,7 +1144,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             }
         }
 
-        rOStm.SetNumberFormatInt( nOldFormat );
+        rOStm.SetEndian( nOldFormat );
     }
 
     return bRet;
@@ -1484,10 +1484,10 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
             else
             {
                 BitmapEx        aBmpEx;
-                const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
+                const SvStreamEndian nOldFormat = rIStm.GetEndian();
 
                 rIStm.SeekRel( -4 );
-                rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+                rIStm.SetEndian( SvStreamEndian::LITTLE );
                 ReadDIBBitmapEx(aBmpEx, rIStm);
 
                 if( !rIStm.GetError() )
@@ -1565,7 +1565,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     }
                 }
 
-                rIStm.SetNumberFormatInt( nOldFormat );
+                rIStm.SetEndian( nOldFormat );
             }
         }
     }
@@ -1599,8 +1599,8 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
             else
             {
                 // own format
-                const sal_uInt16 nOldFormat = rOStm.GetNumberFormatInt();
-                rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+                const SvStreamEndian nOldFormat = rOStm.GetEndian();
+                rOStm.SetEndian( SvStreamEndian::LITTLE );
 
                 switch( rImpGraphic.ImplGetType() )
                 {
@@ -1643,7 +1643,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                     break;
                 }
 
-                rOStm.SetNumberFormatInt( nOldFormat );
+                rOStm.SetEndian( nOldFormat );
             }
         }
         else

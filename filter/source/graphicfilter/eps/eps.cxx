@@ -328,7 +328,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     }
 
     mpPS = &rTargetStream;
-    mpPS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    mpPS->SetEndian( SvStreamEndian::LITTLE );
 
     // default values for the dialog options
     mnLevel = 2;

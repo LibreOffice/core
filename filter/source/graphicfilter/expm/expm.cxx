@@ -119,8 +119,8 @@ bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        sal_uInt16 nOStmOldModus = m_rOStm.GetNumberFormatInt();
-        m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        SvStreamEndian nOStmOldModus = m_rOStm.GetEndian();
+        m_rOStm.SetEndian( SvStreamEndian::BIG );
 
         mnColors = mpAcc->GetPaletteEntryCount();
         if ( ImplWriteHeader() )
@@ -130,7 +130,7 @@ bool XPMWriter::WriteXPM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
             m_rOStm.WriteCharPtr( "\x22XPMENDEXT\x22\x0a};" );
         }
 
-        m_rOStm.SetNumberFormatInt(nOStmOldModus);
+        m_rOStm.SetEndian(nOStmOldModus);
 
         aBmp.ReleaseAccess( mpAcc );
     }

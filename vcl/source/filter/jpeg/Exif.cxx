@@ -93,7 +93,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     sal_uInt32 aSize = rStream.Tell();
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-    rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStream.SetEndian( SvStreamEndian::BIG );
     rStream.ReadUInt16( aMagic16 );
 
     // Compare JPEG magic bytes

@@ -727,7 +727,7 @@ ImportCGM( OUString const & rFileName, uno::Reference< frame::XModel > const & r
                     boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream( rFileName, STREAM_READ ));
                     if ( pIn )
                     {
-                        pIn->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+                        pIn->SetEndian( SvStreamEndian::BIG );
                         sal_uInt64 const nInSize = pIn->remainingSize();
                         pIn->Seek( 0 );
 

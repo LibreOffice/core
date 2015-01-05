@@ -155,7 +155,7 @@ bool ODbaseIndex::openIndexFile()
                 m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
             if(m_pFileStream)
             {
-                m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
                 m_pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
                 (*m_pFileStream) >> *this;
             }
@@ -497,7 +497,7 @@ bool ODbaseIndex::CreateImpl()
         ::dbtools::throwGenericSQLException( sError, *this );
     }
 
-    m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
     m_pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
 
     // firstly the result must be sorted

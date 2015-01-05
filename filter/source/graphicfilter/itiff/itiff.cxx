@@ -57,7 +57,6 @@ private:
     BitmapWriteAccess*      pMaskAcc;
 
     sal_uLong               nOrigPos;                   // start position in pTIFF
-    sal_uInt16              nOrigNumberFormat;          // number format of pTIFF at the beginning
 
 
     sal_uInt16              nDataType;
@@ -134,7 +133,6 @@ public:
         , pAlphaMask(NULL)
         , pMaskAcc(NULL)
         , nOrigPos(0)
-        , nOrigNumberFormat(0)
         , nDataType(0)
         , bByteSwap(false)
         , nNewSubFile(0)
@@ -1141,9 +1139,9 @@ void TIFFReader::ReadHeader()
 
     pTIFF->ReadUChar( nbyte1 );
     if ( nbyte1 == 'I' )
-        pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        pTIFF->SetEndian( SvStreamEndian::LITTLE );
     else
-        pTIFF->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        pTIFF->SetEndian( SvStreamEndian::BIG );
 
     pTIFF->ReadUChar( nbyte2 ).ReadUInt16( nushort );
     if ( nbyte1 != nbyte2 || ( nbyte1 != 'I' && nbyte1 != 'M' ) || nushort != 0x002a )
@@ -1176,7 +1174,8 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
     pTIFF = &rTIFF;
     nMaxPos = nOrigPos = pTIFF->Tell();
-    nOrigNumberFormat = pTIFF->GetNumberFormatInt();
+    // number format of pTIFF at the beginning
+    SvStreamEndian nOrigNumberFormat = pTIFF->GetEndian();
 
     MayCallback( 0 );
 
@@ -1399,7 +1398,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     }
 
     // seek to end of TIFF if succeeded
-    pTIFF->SetNumberFormatInt( nOrigNumberFormat );
+    pTIFF->SetEndian( nOrigNumberFormat );
     pTIFF->Seek( bStatus ? nMaxPos : nOrigPos );
 
     if ( aAnimation.Count() )

@@ -93,7 +93,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     if ( m_rPCX.GetError() )
         return false;
 
-    m_rPCX.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    m_rPCX.SetEndian(SvStreamEndian::LITTLE);
 
     // read header:
 

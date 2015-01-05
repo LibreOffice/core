@@ -1722,7 +1722,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     nLastPercent=0;
 
     pWMF=&rTargetStream;
-    pWMF->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    pWMF->SetEndian(SvStreamEndian::LITTLE);
 
     nMaxRecordSize=0;
 

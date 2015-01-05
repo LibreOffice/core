@@ -155,7 +155,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bNoBitmapCaching=false;
     bReadOnly=false;
     nStreamCompressMode=COMPRESSMODE_NONE;
-    nStreamNumberFormat=NUMBERFORMAT_INT_BIGENDIAN;
+    nStreamNumberFormat=SvStreamEndian::BIG;
     nDefaultTabulator=0;
     mpNumberFormatter = NULL;
     bTransparentTextFrames=false;
@@ -177,7 +177,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
         get();
 
 #ifdef OSL_LITENDIAN
-    nStreamNumberFormat=NUMBERFORMAT_INT_LITTLEENDIAN;
+    nStreamNumberFormat=SvStreamEndian::LITTLE;
 #endif
     bExtColorTable=bUseExtColorTable;
 

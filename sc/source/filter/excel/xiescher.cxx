@@ -4018,7 +4018,7 @@ void XclImpDrawing::ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpS
         if( (nHdrSize == 12) && (nPlanes == 1) && (nDepth == 32) )
         {
             rStrm.Ignore( 3 );
-            aMemStrm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+            aMemStrm.SetEndian( SvStreamEndian::LITTLE );
             aMemStrm.WriteUInt32( nHdrSize ).WriteUInt16( nWidth ).WriteUInt16( nHeight ).WriteUInt16( nPlanes ).WriteUInt16( nDepth );
             rStrm.CopyToStream( aMemStrm, rStrm.GetRecLeft() );
         }

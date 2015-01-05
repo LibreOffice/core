@@ -109,7 +109,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
             else if ( nHeader == 0x3C00 )
             {
                 bTryUtf16 = true;
-                pInStream->SetEndianSwap( !pInStream->IsEndianSwap() );
+                pInStream->SetEndian( pInStream->GetEndian() == SvStreamEndian::LITTLE ? SvStreamEndian::BIG : SvStreamEndian::LITTLE );
             }
             pInStream->Seek( STREAM_SEEK_TO_BEGIN );
         }

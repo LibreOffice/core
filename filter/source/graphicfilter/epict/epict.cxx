@@ -2204,7 +2204,7 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
     }
 
     pPict=&rTargetStream;
-    pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+    pPict->SetEndian(SvStreamEndian::BIG);
 
     aLineColor=Color( COL_BLACK );
     aFillColor=Color( COL_WHITE );

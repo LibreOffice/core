@@ -512,7 +512,7 @@ PropRead::PropRead( SvStorage& rStorage, const OUString& rName ) :
         mpSvStream = rStorage.OpenSotStream( rName, STREAM_STD_READ );
         if ( mpSvStream )
         {
-            mpSvStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+            mpSvStream->SetEndian( SvStreamEndian::LITTLE );
             memset( mApplicationCLSID, 0, 16 );
             mbStatus = true;
         }

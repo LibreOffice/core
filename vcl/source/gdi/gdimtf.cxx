@@ -2746,10 +2746,10 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
     if( !rIStm.GetError() )
     {
         char    aId[ 7 ];
-        sal_uLong   nStmPos = rIStm.Tell();
-        sal_uInt16  nOldFormat = rIStm.GetNumberFormatInt();
+        sal_uLong      nStmPos = rIStm.Tell();
+        SvStreamEndian nOldFormat = rIStm.GetEndian();
 
-        rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        rIStm.SetEndian( SvStreamEndian::LITTLE );
 
         aId[ 0 ] = 0;
         aId[ 6 ] = 0;
@@ -2805,7 +2805,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             rIStm.Seek( nStmPos );
         }
 
-        rIStm.SetNumberFormatInt( nOldFormat );
+        rIStm.SetEndian( nOldFormat );
     }
     else
     {
@@ -2857,9 +2857,9 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 {
     VersionCompat*   pCompat;
     const sal_uInt32 nStmCompressMode = rOStm.GetCompressMode();
-    sal_uInt16       nOldFormat = rOStm.GetNumberFormatInt();
+    SvStreamEndian   nOldFormat = rOStm.GetEndian();
 
-    rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rOStm.SetEndian( SvStreamEndian::LITTLE );
     rOStm.Write( "VCLMTF", 6 );
 
     pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
@@ -2882,7 +2882,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
         pAct = (MetaAction*)NextAction();
     }
 
-    rOStm.SetNumberFormatInt( nOldFormat );
+    rOStm.SetEndian( nOldFormat );
 
     return rOStm;
 }

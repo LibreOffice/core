@@ -157,10 +157,11 @@ sal_uLong SwASCWriter::WriteStream()
                                 Strm().WriteUChar( 0xEF ).WriteUChar( 0xBB ).WriteUChar( 0xBF );
                                 break;
                             case RTL_TEXTENCODING_UCS2:
-                                Strm().SetEndianSwap(false);
 #ifdef OSL_LITENDIAN
+                                Strm().SetEndian(SvStreamEndian::LITTLE);
                                 Strm().WriteUChar( 0xFF ).WriteUChar( 0xFE );
 #else
+                                Strm().SetEndian(SvStreamEndian::BIG);
                                 Strm().WriteUChar( 0xFE ).WriteUChar( 0xFF );
 #endif
                                 break;

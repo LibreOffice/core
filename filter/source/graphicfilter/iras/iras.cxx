@@ -95,7 +95,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( m_rRAS.GetError() )
         return false;
 
-    m_rRAS.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    m_rRAS.SetEndian( SvStreamEndian::BIG );
     m_rRAS.ReadUInt32( nMagicNumber );
     if ( nMagicNumber != SUNRASTER_MAGICNUMBER )
         return false;

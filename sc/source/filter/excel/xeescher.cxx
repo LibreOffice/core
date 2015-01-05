@@ -1615,7 +1615,7 @@ void XclExpObjectManager::InitStream( bool bTempFile )
     if( !mxDffStrm.get() )
         mxDffStrm.reset( new SvMemoryStream );
 
-    mxDffStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    mxDffStrm->SetEndian( SvStreamEndian::LITTLE );
 }
 
 XclExpEmbeddedObjectManager::XclExpEmbeddedObjectManager(

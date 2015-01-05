@@ -1447,7 +1447,7 @@ void WW8Export::CreateEscher()
     {
         OSL_ENSURE( !pEscher, "wer hat den Pointer nicht geloescht?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
-        pEscherStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        pEscherStrm->SetEndian(SvStreamEndian::LITTLE);
         pEscher = new SwEscherEx(pEscherStrm, *this);
     }
 }
@@ -1495,7 +1495,7 @@ SvStream* SwEscherExGlobal::ImplQueryPictureStream()
 {
     // this function will be called exactly once
     mxPicStrm.reset( new SvMemoryStream );
-    mxPicStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    mxPicStrm->SetEndian(SvStreamEndian::LITTLE);
     return mxPicStrm.get();
 }
 
@@ -2113,7 +2113,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
             {
                 Polygon aPoly = CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
                 SvMemoryStream aPolyDump;
-                aPolyDump.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                aPolyDump.SetEndian(SvStreamEndian::LITTLE);
 
                 sal_uInt16 nLen = aPoly.GetSize();
                 aPolyDump.WriteUInt16( nLen );

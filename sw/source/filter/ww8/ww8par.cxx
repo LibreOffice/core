@@ -4237,7 +4237,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     , maCurrAttrCP(-1)
     , mbOnLoadingMain(false)
 {
-    pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    pStrm->SetEndian( SvStreamEndian::LITTLE );
     maApos.push_back(false);
 }
 
@@ -4842,13 +4842,13 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
         SvStorageStreamRef refMainStream = rRoot->OpenSotStream( OUString( "WordDocument" ));
-        refMainStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        refMainStream->SetEndian(SvStreamEndian::LITTLE);
         WW8Fib aWwFib( *refMainStream, 8 );
         SvStorageStreamRef xTableStream = rRoot->OpenSotStream(OUString::createFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
-            xTableStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+            xTableStream->SetEndian(SvStreamEndian::LITTLE);
             WW8Customizations aGblCustomisations( xTableStream, aWwFib );
             aGblCustomisations.Import( mpDocShell );
         }
@@ -5368,7 +5368,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
                 STREAM_STD_READ);
 
             pTableStream = &rTableStream;
-            pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+            pTableStream->SetEndian( SvStreamEndian::LITTLE );
 
             rDataStream = pStg->OpenSotStream(OUString(SL::aData),
                 STREAM_STD_READ | STREAM_NOCREATE );
@@ -5376,7 +5376,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
             {
                 pDataStream = &rDataStream;
-                pDataStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                pDataStream->SetEndian(SvStreamEndian::LITTLE);
             }
             else
                 pDataStream = pStrm;

@@ -33,14 +33,13 @@ class PGMWriter {
 private:
 
     SvStream&           m_rOStm;            // the output PGM file
-    sal_uInt16          mpOStmOldModus;
 
-    bool            mbStatus;
+    bool                mbStatus;
     sal_uInt32          mnMode;
     BitmapReadAccess*   mpAcc;
     sal_uLong           mnWidth, mnHeight;  // image size in pixeln
 
-    bool            ImplWriteHeader();
+    bool                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -56,7 +55,6 @@ public:
 //=================== Methoden von PGMWriter ==============================
 PGMWriter::PGMWriter(SvStream &rStream)
     : m_rOStm(rStream)
-    , mpOStmOldModus(0)
     , mbStatus(true)
     , mnMode(0)
     , mpAcc(NULL)
@@ -87,8 +85,8 @@ bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
 
-    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
-    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    SvStreamEndian aOStmOldModus = m_rOStm.GetEndian();
+    m_rOStm.SetEndian( SvStreamEndian::BIG );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -102,7 +100,7 @@ bool PGMWriter::WritePGM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     else
         mbStatus = false;
 
-    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetEndian( aOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

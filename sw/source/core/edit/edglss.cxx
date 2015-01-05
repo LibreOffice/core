@@ -290,9 +290,9 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
     {
         SvMemoryStream aStream;
 #ifdef OSL_BIGENDIAN
-        aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        aStream.SetEndian( SvStreamEndian::BIG );
 #else
-        aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        aStream.SetEndian( SvStreamEndian::LITTLE );
 #endif
         WriterRef xWrt;
         SwReaderWriter::GetWriter( OUString(FILTER_TEXT), OUString(), xWrt );

@@ -1560,9 +1560,9 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
         }
 #if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
-        if ( rIStream.GetNumberFormatInt() == NUMBERFORMAT_INT_BIGENDIAN )
+        if ( rIStream.GetEndian() == SvStreamEndian::BIG )
 #else
-        if ( rIStream.GetNumberFormatInt() == NUMBERFORMAT_INT_LITTLEENDIAN )
+        if ( rIStream.GetEndian() == SvStreamEndian::LITTLE )
 #endif
             rIStream.Read( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
         else
@@ -1595,9 +1595,9 @@ SvStream& WritePolygon( SvStream& rOStream, const Polygon& rPoly )
         // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
-        if ( rOStream.GetNumberFormatInt() == NUMBERFORMAT_INT_BIGENDIAN )
+        if ( rOStream.GetEndian() == SvStreamEndian::BIG )
 #else
-        if ( rOStream.GetNumberFormatInt() == NUMBERFORMAT_INT_LITTLEENDIAN )
+        if ( rOStream.GetEndian() == SvStreamEndian::LITTLE )
 #endif
         {
             if ( nPoints )

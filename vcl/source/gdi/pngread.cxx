@@ -67,7 +67,7 @@ class PNGReaderImpl
 {
 private:
     SvStream&           mrPNGStream;
-    sal_uInt16          mnOrigStreamMode;
+    SvStreamEndian      mnOrigStreamMode;
 
     std::vector< vcl::PNGReader::ChunkData >    maChunkSeq;
     std::vector< vcl::PNGReader::ChunkData >::iterator maChunkIter;
@@ -211,8 +211,8 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpScanlineAlpha(0)
 {
     // prepare the PNG data stream
-    mnOrigStreamMode = mrPNGStream.GetNumberFormatInt();
-    mrPNGStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    mnOrigStreamMode = mrPNGStream.GetEndian();
+    mrPNGStream.SetEndian( SvStreamEndian::BIG );
 
     // prepare the chunk reader
     maChunkSeq.reserve( 16 );
@@ -237,7 +237,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
 
 PNGReaderImpl::~PNGReaderImpl()
 {
-    mrPNGStream.SetNumberFormatInt( mnOrigStreamMode );
+    mrPNGStream.SetEndian( mnOrigStreamMode );
 
     if ( mbzCodecInUse )
         mpZCodec.EndCompression();

@@ -560,7 +560,7 @@ int MathType::Parse(SotStorage *pStor)
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
         return 0;
     pS = &xSrc;
-    pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    pS->SetEndian( SvStreamEndian::LITTLE );
 
     EQNOLEFILEHDR aHdr;
     aHdr.Read(pS);
@@ -1934,7 +1934,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
             return 0;
 
         pS = &xSrc;
-        pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        pS->SetEndian( SvStreamEndian::LITTLE );
 
         pS->SeekRel(EQNOLEFILEHDR_SIZE); //Skip 28byte Header and fill it in later
         pS->WriteUChar( sal_uInt8(0x03) );

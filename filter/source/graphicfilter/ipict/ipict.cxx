@@ -149,8 +149,7 @@ private:
                                      // A recording into the GDIMetaFile will take place.
 
     sal_uLong     nOrigPos;          // Initial position in pPict.
-    sal_uInt16    nOrigNumberFormat; // Initial number format von pPict.
-    bool      IsVersion2;        // If it is a version 2 Pictfile.
+    bool          IsVersion2;        // If it is a version 2 Pictfile.
     Rectangle     aBoundingRect;     // Min/Max-Rectangle for the whole drawing.
 
     Point         aPenPosition;
@@ -248,7 +247,6 @@ public:
         : pPict(NULL)
         , pVirDev(NULL)
         , nOrigPos(0)
-        , nOrigNumberFormat(0)
         , IsVersion2(false)
         , eActROP(ROP_OVERPAINT)
         , eActMethod(PDM_UNDEFINED)
@@ -1873,7 +1871,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     pPict               = &rStreamPict;
     nOrigPos            = pPict->Tell();
-    nOrigNumberFormat   = pPict->GetNumberFormatInt();
+    SvStreamEndian nOrigNumberFormat = pPict->GetEndian();
 
     aActForeColor       = Color(COL_BLACK);
     aActBackColor       = Color(COL_WHITE);
@@ -1893,7 +1891,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 
-    pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+    pPict->SetEndian(SvStreamEndian::BIG);
 
     sal_uInt64 const nStartPos=pPict->Tell();
     sal_uInt64 const nRemaining = pPict->remainingSize();
@@ -1956,7 +1954,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     rGDIMetaFile.SetPrefMapMode( MapMode( MAP_INCH, Point(), aHRes, aVRes ) );
     rGDIMetaFile.SetPrefSize( aBoundingRect.GetSize() );
 
-    pPict->SetNumberFormatInt(nOrigNumberFormat);
+    pPict->SetEndian(nOrigNumberFormat);
 
     if (pPict->GetError()) pPict->Seek(nOrigPos);
 }

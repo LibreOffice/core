@@ -167,9 +167,9 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
     }
     SvMemoryStream aStream;
 #ifdef OSL_BIGENDIAN
-    aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    aStream.SetEndian( SvStreamEndian::BIG );
 #else
-    aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    aStream.SetEndian( SvStreamEndian::LITTLE );
 #endif
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here

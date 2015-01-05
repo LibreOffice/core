@@ -193,7 +193,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 {
     sal_uInt8 sBuf[3];
     // store number format
-    sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
+    SvStreamEndian oldNumberFormat = rStream.GetEndian();
     sal_uInt32 nOffset; // in MS documents the pict format is used without the first 512 bytes
     for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
     {
@@ -204,9 +204,9 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
         // size of the pict in version 1 pict ( 2bytes) : ignored
         rStream.SeekRel(2);
         // bounding box (bytes 2 -> 9)
-        rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+        rStream.SetEndian(SvStreamEndian::BIG);
         rStream.ReadInt16( y1 ).ReadInt16( x1 ).ReadInt16( y2 ).ReadInt16( x2 );
-        rStream.SetNumberFormatInt(oldNumberFormat); // reset format
+        rStream.SetEndian(oldNumberFormat); // reset format
 
         if (x1 > x2 || y1 > y2 || // bad bdbox
             (x1 == x2 && y1 == y2) || // 1 pixel picture
@@ -318,7 +318,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         bSomethingTested=true;
         if( sFirstBytes[2] == 0xd3 )
         {
-            rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+            rStream.SetEndian( SvStreamEndian::BIG );
             rStream.Seek( nStreamPos );
             sal_uInt16 nFieldSize;
             sal_uInt8 nMagic;
@@ -331,7 +331,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
                 rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
                 if (nMagic!=0xd3) { bOK=false; break; }
             }
-            rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+            rStream.SetEndian( SvStreamEndian::LITTLE );
             if (bOK && !rStream.GetError()) {
                 rFormatExtension = "MET";
                 return true;

@@ -32,13 +32,12 @@ class PPMWriter {
 
 private:
 
-    SvStream& m_rOStm;          // Die auszugebende PPM-Datei
-    sal_uInt16              mpOStmOldModus;
+    SvStream&           m_rOStm;          // Die auszugebende PPM-Datei
 
     bool                mbStatus;
     sal_Int32           mnMode;
     BitmapReadAccess*   mpAcc;
-    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong           mnWidth, mnHeight;  // Bildausmass in Pixeln
 
     bool                ImplWriteHeader();
     void                ImplWriteBody();
@@ -56,7 +55,6 @@ public:
 //=================== Methods of PPMWriter ==============================
 PPMWriter::PPMWriter(SvStream &rStrm)
     : m_rOStm(rStrm)
-    , mpOStmOldModus(0)
     , mbStatus(true)
     , mnMode(0)
     , mpAcc(NULL)
@@ -89,8 +87,8 @@ bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_24BIT );
 
-    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
-    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    SvStreamEndian aOStmOldModus = m_rOStm.GetEndian();
+    m_rOStm.SetEndian( SvStreamEndian::BIG );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -104,7 +102,7 @@ bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     else
         mbStatus = false;
 
-    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetEndian( aOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

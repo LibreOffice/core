@@ -740,10 +740,10 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
     Bitmap  aBmp;
     sal_uLong   nStmPos = rIStm.Tell();
     sal_uInt32  nAnimMagic1, nAnimMagic2;
-    sal_uInt16  nOldFormat = rIStm.GetNumberFormatInt();
+    SvStreamEndian nOldFormat = rIStm.GetEndian();
     bool    bReadAnimations = false;
 
-    rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rIStm.SetEndian( SvStreamEndian::LITTLE );
     nStmPos = rIStm.Tell();
     rIStm.ReadUInt32( nAnimMagic1 ).ReadUInt32( nAnimMagic2 );
 
@@ -799,7 +799,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
         rAnimation.ResetLoopCount();
     }
 
-    rIStm.SetNumberFormatInt( nOldFormat );
+    rIStm.SetEndian( nOldFormat );
 
     return rIStm;
 }

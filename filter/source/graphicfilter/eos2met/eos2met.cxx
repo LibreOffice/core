@@ -581,7 +581,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     WriteDIB(rBitmap, aTemp, false, true);
 
     // read header of the Windows-BMP file:
-    aTemp.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    aTemp.SetEndian(SvStreamEndian::LITTLE);
     aTemp.Seek(18);
     aTemp.ReadUInt32( nWidth ).ReadUInt32( nHeight );
     aTemp.SeekRel(2);
@@ -2510,7 +2510,7 @@ bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, Filt
     nLastPercent=0;
 
     pMET=&rTargetStream;
-    pMET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    pMET->SetEndian(SvStreamEndian::LITTLE);
 
     aPictureRect = Rectangle( Point(), rMTF.GetPrefSize() );
     aTargetMapMode = aPictureMapMode = rMTF.GetPrefMapMode();

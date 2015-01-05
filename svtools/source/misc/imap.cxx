@@ -945,11 +945,11 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     IMapCompat*             pCompat;
     OUString                aImageName( GetName() );
-    sal_uInt16                  nOldFormat = rOStm.GetNumberFormatInt();
-    sal_uInt16                  nCount = (sal_uInt16) GetIMapObjectCount();
+    SvStreamEndian          nOldFormat = rOStm.GetEndian();
+    sal_uInt16              nCount = (sal_uInt16) GetIMapObjectCount();
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding(); //vomit!
 
-    rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rOStm.SetEndian( SvStreamEndian::LITTLE );
 
     // write MagicCode
     rOStm.WriteCharPtr( IMAPMAGIC );
@@ -967,7 +967,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     ImpWriteImageMap( rOStm, rBaseURL );
 
-    rOStm.SetNumberFormatInt( nOldFormat );
+    rOStm.SetEndian( nOldFormat );
 }
 
 
@@ -979,11 +979,11 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
 void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
 {
-    char        cMagic[6];
-    sal_uInt16      nOldFormat = rIStm.GetNumberFormatInt();
+    char            cMagic[6];
+    SvStreamEndian  nOldFormat = rIStm.GetEndian();
     sal_uInt16      nCount;
 
-    rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rIStm.SetEndian( SvStreamEndian::LITTLE );
     rIStm.Read( cMagic, sizeof( cMagic ) );
 
     if ( !memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
@@ -1012,7 +1012,7 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
     else
         rIStm.SetError( SVSTREAM_GENERALERROR );
 
-    rIStm.SetNumberFormatInt( nOldFormat );
+    rIStm.SetEndian( nOldFormat );
 }
 
 

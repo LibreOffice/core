@@ -166,18 +166,18 @@ public:
 inline bool ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
-    return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN;
+    return rStrm.GetEndian() != SvStreamEndian::BIG;
 #else
-    return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN;
+    return rStrm.GetEndian() != SvStreamEndian::LITTLE;
 #endif
 }
 
 inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 {
 #ifdef OSL_BIGENDIAN
-    rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStrm.SetEndian( SvStreamEndian::BIG );
 #else
-    rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStrm.SetEndian( SvStreamEndian::LITTLE );
 #endif
 }
 
@@ -190,7 +190,11 @@ public:
                 rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
     {
         SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
-        SetEndianSwap( false );
+#ifdef OSL_BIGENDIAN
+        SetEndian(SvStreamEndian::BIG);
+#else
+        SetEndian(SvStreamEndian::LITTLE);
+#endif
     }
 };
 

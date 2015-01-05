@@ -92,7 +92,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     if ( mrPBM.GetError() )
         return false;
 
-    mrPBM.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    mrPBM.SetEndian( SvStreamEndian::LITTLE );
 
     // read header:
 

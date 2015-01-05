@@ -388,7 +388,7 @@ void SvStream::ImpInit()
     eLineDelimiter      = LINEEND_CRLF; // DOS-Format
 #endif
 
-    SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    SetEndian( SvStreamEndian::LITTLE );
 
     m_nBufFilePos       = 0;
     nBufActualPos       = 0;
@@ -450,15 +450,15 @@ void SvStream::SetError( sal_uInt32 nErrorCode )
         nError = nErrorCode;
 }
 
-void SvStream::SetNumberFormatInt( sal_uInt16 nNewFormat )
+void SvStream::SetEndian( SvStreamEndian nNewFormat )
 {
-    nNumberFormatInt = nNewFormat;
+    nEndian = nNewFormat;
     bSwap = false;
 #ifdef OSL_BIGENDIAN
-    if( nNumberFormatInt == NUMBERFORMAT_INT_LITTLEENDIAN )
+    if( nEndian == SvStreamEndian::LITTLE )
         bSwap = true;
 #else
-    if( nNumberFormatInt == NUMBERFORMAT_INT_BIGENDIAN )
+    if( nEndian == SvStreamEndian::BIG )
         bSwap = true;
 #endif
 }
@@ -795,11 +795,11 @@ bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet
 
 bool SvStream::StartWritingUnicodeText()
 {
-    SetEndianSwap( false );     // write native format
     // BOM, Byte Order Mark, U+FEFF, see
     // http://www.unicode.org/faq/utf_bom.html#BOM
     // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
-    WriteUInt16( 0xfeff );
+    sal_uInt16 v = 0xfeff;
+    WRITENUMBER_WITHOUT_SWAP(sal_uInt16, v); // write native format
     return nError == SVSTREAM_OK;
 }
 
@@ -827,18 +827,18 @@ bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
             if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
                     eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
             {
-                SetEndianSwap( !bSwap );
+                SetEndian( nEndian == SvStreamEndian::BIG ? SvStreamEndian::LITTLE : SvStreamEndian::BIG );
                 nBack = 0;
             }
         break;
         case 0xefbb :
-            if (nNumberFormatInt == NUMBERFORMAT_INT_BIGENDIAN &&
+            if (nEndian == SvStreamEndian::BIG &&
                     (eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
                      eReadBomCharSet == RTL_TEXTENCODING_UTF8))
                 bTryUtf8 = true;
         break;
         case 0xbbef :
-            if (nNumberFormatInt == NUMBERFORMAT_INT_LITTLEENDIAN &&
+            if (nEndian == SvStreamEndian::LITTLE &&
                     (eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
                      eReadBomCharSet == RTL_TEXTENCODING_UTF8))
                 bTryUtf8 = true;

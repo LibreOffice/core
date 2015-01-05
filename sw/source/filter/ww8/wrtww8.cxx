@@ -3151,15 +3151,15 @@ void WW8Export::ExportDocument_Impl()
         xDataStrm->SetBufferSize( 32768 );  // for graphics
         xTableStrm->SetBufferSize( 16384 ); // for the Font-/Style-Table, etc.
 
-        xTableStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        xDataStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        xTableStrm->SetEndian( SvStreamEndian::LITTLE );
+        xDataStrm->SetEndian( SvStreamEndian::LITTLE );
     }
 
     GetWriter().SetStream( & *xWwStrm );
     pTableStrm = &xTableStrm;
     pDataStrm = &xDataStrm;
 
-    Strm().SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    Strm().SetEndian( SvStreamEndian::LITTLE );
 
     utl::TempFile aTempMain;
     aTempMain.EnableKillingFile();

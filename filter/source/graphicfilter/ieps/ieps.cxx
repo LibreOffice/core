@@ -545,8 +545,8 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     sal_uInt32  nSizeTIFF = 0;
     sal_uInt32  nPosTIFF = 0;
     sal_uInt32  nOrigPos = nPSStreamPos = rStream.Tell();
-    sal_uInt16  nOldFormat = rStream.GetNumberFormatInt();
-    rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    SvStreamEndian nOldFormat = rStream.GetEndian();
+    rStream.SetEndian( SvStreamEndian::LITTLE );
     rStream.ReadUInt32( nSignature );
     if ( nSignature == 0xc6d3d0c5 )
     {
@@ -755,7 +755,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             delete[] pBuf;
     }
     delete[] pHeader;
-    rStream.SetNumberFormatInt(nOldFormat);
+    rStream.SetEndian(nOldFormat);
     rStream.Seek( nOrigPos );
     return ( bRetValue );
 }

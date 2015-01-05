@@ -181,32 +181,32 @@ protected:
     sfx2::LinkManager* pLinkManager;   // LinkManager
     std::deque<SfxUndoAction*>* pUndoStack;
     std::deque<SfxUndoAction*>* pRedoStack;
-    SdrUndoGroup*   pAktUndoGroup;  // for deeper
+    SdrUndoGroup*       pAktUndoGroup;  // for deeper
     sal_uInt16          nUndoLevel;     // undo nesting
     sal_uInt16          nProgressPercent; // for the ProgressBar-Handler
     sal_uInt16          nLoadVersion;   // version number of the loaded file
-    bool            bMyPool:1;        // to clean up pMyPool from 303a
-    bool            bUIOnlyKomma:1; // see eUIUnit
-    bool            mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
-    bool            bExtColorTable:1; // ne separate ColorTable
-    bool            mbChanged:1;
-    bool            bInfoChanged:1;
-    bool            bPagNumsDirty:1;
-    bool            bMPgNumsDirty:1;
-    bool            bPageNotValid:1;  // TRUE=Doc is only object container. Page is invalid.
-    bool            bSavePortable:1;  // save metafiles portably
-    bool            bNoBitmapCaching:1;   // cache bitmaps for screen output
-    bool            bReadOnly:1;
-    bool            bTransparentTextFrames:1;
-    bool            bSaveCompressed:1;
-    bool            bSwapGraphics:1;
-    bool            bPasteResize:1; // Objects are beingresized due to Paste with different MapMode
-    bool            bSaveOLEPreview:1;      // save preview metafile of OLE objects
-    bool            bSaveNative:1;
-    bool            bStarDrawPreviewMode:1;
-    bool            mbDisableTextEditUsesCommonUndoManager:1;
+    bool                bMyPool:1;        // to clean up pMyPool from 303a
+    bool                bUIOnlyKomma:1; // see eUIUnit
+    bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
+    bool                bExtColorTable:1; // ne separate ColorTable
+    bool                mbChanged:1;
+    bool                bInfoChanged:1;
+    bool                bPagNumsDirty:1;
+    bool                bMPgNumsDirty:1;
+    bool                bPageNotValid:1;  // TRUE=Doc is only object container. Page is invalid.
+    bool                bSavePortable:1;  // save metafiles portably
+    bool                bNoBitmapCaching:1;   // cache bitmaps for screen output
+    bool                bReadOnly:1;
+    bool                bTransparentTextFrames:1;
+    bool                bSaveCompressed:1;
+    bool                bSwapGraphics:1;
+    bool                bPasteResize:1; // Objects are beingresized due to Paste with different MapMode
+    bool                bSaveOLEPreview:1;      // save preview metafile of OLE objects
+    bool                bSaveNative:1;
+    bool                bStarDrawPreviewMode:1;
+    bool                mbDisableTextEditUsesCommonUndoManager:1;
     sal_uInt16          nStreamCompressMode;  // write compressedly?
-    sal_uInt16          nStreamNumberFormat;
+    SvStreamEndian      nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
 

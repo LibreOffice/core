@@ -349,7 +349,6 @@ private:
                                          // While doing this a recording in the GDIMetaFile
                                          // will take place.
     sal_uLong       nOrigPos;            // initial position  in pOS2MET
-    sal_uInt16      nOrigNumberFormat;   // initial number format of pOS2MET
     Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
     Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
     MapMode         aGlobMapMode;        // resolution of the picture
@@ -444,7 +443,6 @@ OS2METReader::OS2METReader()
     , pOS2MET(NULL)
     , pVirDev(NULL)
     , nOrigPos(0)
-    , nOrigNumberFormat(0)
     , aBoundingRect()
     , aCalcBndRect()
     , aGlobMapMode()
@@ -2204,7 +2202,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             // inside this file we need the header and the palette.
             if (p->pBMP==NULL) {
                 p->pBMP=new SvMemoryStream();
-                p->pBMP->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                p->pBMP->SetEndian(SvStreamEndian::LITTLE);
                 if (p->nWidth==0 || p->nHeight==0 || p->nBitsPerPixel==0) {
                     pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                     ErrorCode=3;
@@ -2543,7 +2541,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
         case DatGrfObjMagic: {
             if (pOrdFile==NULL) {
                 pOrdFile = new SvMemoryStream;
-                pOrdFile->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                pOrdFile->SetEndian(SvStreamEndian::LITTLE);
             }
             boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[nFieldSize]);
             pOS2MET->Read(pBuf.get(),nFieldSize);
@@ -2567,7 +2565,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     pOS2MET             = &rStreamOS2MET;
     nOrigPos            = pOS2MET->Tell();
-    nOrigNumberFormat   = pOS2MET->GetNumberFormatInt();
+    SvStreamEndian nOrigNumberFormat = pOS2MET->GetEndian();
 
     bCoord32 = true;
     pPaletteStack=NULL;
@@ -2623,7 +2621,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     pVirDev->EnableOutput(false);
     rGDIMetaFile.Record(pVirDev);
 
-    pOS2MET->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    pOS2MET->SetEndian(SvStreamEndian::LITTLE);
 
     sal_uInt64 const nStartPos = pOS2MET->Tell();
     sal_uInt64 const nRemaining = pOS2MET->remainingSize();
@@ -2736,7 +2734,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
         delete p;
     }
 
-    pOS2MET->SetNumberFormatInt(nOrigNumberFormat);
+    pOS2MET->SetEndian(nOrigNumberFormat);
 
     if (pOS2MET->GetError()) {
         SAL_INFO("filter.os2met","Error code: " << ErrorCode);

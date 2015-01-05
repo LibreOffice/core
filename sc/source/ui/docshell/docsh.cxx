@@ -1814,7 +1814,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
     rtl_TextEncoding eOldCharSet = rStream.GetStreamCharSet();
     rStream.SetStreamCharSet( eCharSet );
-    sal_uInt16 nOldNumberFormatInt = rStream.GetNumberFormatInt();
+    SvStreamEndian nOldNumberFormatInt = rStream.GetEndian();
     OString aStrDelimEncoded;    // only used if not Unicode
     OUString aStrDelimDecoded;     // only used if context encoding
     OString aDelimEncoded;
@@ -2180,7 +2180,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     }
 
     rStream.SetStreamCharSet( eOldCharSet );
-    rStream.SetNumberFormatInt( nOldNumberFormatInt );
+    rStream.SetEndian( nOldNumberFormatInt );
 }
 
 bool ScDocShell::ConvertTo( SfxMedium &rMed )

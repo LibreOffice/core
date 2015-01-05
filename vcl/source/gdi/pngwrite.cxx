@@ -241,8 +241,8 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
 bool PNGWriterImpl::Write( SvStream& rOStm )
 {
    /* png signature is always an array of 8 bytes */
-    sal_uInt16 nOldMode = rOStm.GetNumberFormatInt();
-    rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    SvStreamEndian nOldMode = rOStm.GetEndian();
+    rOStm.SetEndian( SvStreamEndian::BIG );
     rOStm.WriteUInt32( 0x89504e47 );
     rOStm.WriteUInt32( 0x0d0a1a0a );
 
@@ -265,7 +265,7 @@ bool PNGWriterImpl::Write( SvStream& rOStm )
         rOStm.WriteUInt32( nCRC );
         ++aBeg;
     }
-    rOStm.SetNumberFormatInt( nOldMode );
+    rOStm.SetEndian( nOldMode );
     return mbStatus;
 }
 

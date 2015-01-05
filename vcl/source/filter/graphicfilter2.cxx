@@ -60,8 +60,8 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
     bool bRet = false;
     if ( pFileStm && !pFileStm->GetError() )
     {
-        SvStream&   rStm = *pFileStm;
-        sal_uInt16      nOldFormat = rStm.GetNumberFormatInt();
+        SvStream&      rStm = *pFileStm;
+        SvStreamEndian nOldFormat = rStm.GetEndian();
 
         if      ( ImpDetectGIF( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectJPG( rStm, bExtendedInfo ) ) bRet = true;
@@ -89,7 +89,7 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         else if ( ImpDetectEPS( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectPCD( rStm, bExtendedInfo ) ) bRet = true;
 
-        rStm.SetNumberFormatInt( nOldFormat );
+        rStm.SetEndian( nOldFormat );
     }
     return bRet;
 }
@@ -108,7 +108,7 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
     bool    bRet = false;
     sal_Int32 nStmPos = rStm.Tell();
 
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.SetEndian( SvStreamEndian::LITTLE );
     rStm.ReadUInt16( nTemp16 );
 
     // OS/2-BitmapArray
@@ -183,7 +183,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
     sal_uInt8   cByte = 0;
 
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.SetEndian( SvStreamEndian::LITTLE );
     rStm.ReadUInt32( n32 );
 
     if ( n32 == 0x38464947 )
@@ -249,7 +249,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
 
     sal_Int32 nStmPos = rStm.Tell();
 
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nTemp32 );
 
     // compare upper 24 bits
@@ -404,7 +404,7 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
     bool    bRet = false;
 
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.SetEndian( SvStreamEndian::LITTLE );
 
     sal_uInt32  nTemp32 = 0;
     sal_uInt16  nTemp16 = 0;
@@ -438,7 +438,7 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
     sal_uInt8   cByte = 0;
 
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.SetEndian( SvStreamEndian::LITTLE );
     rStm.ReadUChar( cByte );
 
     if ( cByte == 0x0a )
@@ -515,7 +515,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
     bool    bRet = false;
 
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nTemp32 );
 
     if ( nTemp32 == 0x89504e47 )
@@ -618,12 +618,12 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
     {
         if ( cByte1 == 0x49 )
         {
-            rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+            rStm.SetEndian( SvStreamEndian::LITTLE );
             bDetectOk = true;
         }
         else if ( cByte1 == 0x4d )
         {
-            rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+            rStm.SetEndian( SvStreamEndian::BIG );
             bDetectOk = true;
         }
 
@@ -825,7 +825,7 @@ bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, bool )
     sal_uInt32 nMagicNumber = 0;
     bool bRet = false;
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nMagicNumber );
     if ( nMagicNumber == 0x59a66a95 )
     {
@@ -851,7 +851,7 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 
     sal_uInt32  nMagicNumber = 0;
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nMagicNumber );
     if ( nMagicNumber == 0x38425053 )
     {
@@ -907,7 +907,7 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
     memset(nFirstBytes, 0, sizeof (nFirstBytes));
 
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nFirstLong );
     rStm.SeekRel( -4 );
     rStm.Read( &nFirstBytes, 20 );
@@ -1002,7 +1002,7 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
     sal_uInt8   cByte = 0;
 
     sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    rStm.SetEndian( SvStreamEndian::LITTLE );
     rStm.ReadUInt32( n32 );
     if ( n32 == 0x44475653 )
     {

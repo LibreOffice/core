@@ -33,14 +33,13 @@ class PBMWriter {
 private:
 
     SvStream&           m_rOStm;            // the output PBM file
-    sal_uInt16          mpOStmOldModus;
 
-    bool            mbStatus;
+    bool                mbStatus;
     sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
     BitmapReadAccess*   mpAcc;
     sal_uLong           mnWidth, mnHeight;  // size in pixel
 
-    bool            ImplWriteHeader();
+    bool                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -57,7 +56,6 @@ public:
 
 PBMWriter::PBMWriter(SvStream &rPBM)
     : m_rOStm(rPBM)
-    , mpOStmOldModus(0)
     , mbStatus(true)
     , mnMode(0)
     , mpAcc(NULL)
@@ -92,8 +90,8 @@ bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     Bitmap      aBmp = aBmpEx.GetBitmap();
     aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
 
-    mpOStmOldModus = m_rOStm.GetNumberFormatInt();
-    m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    SvStreamEndian aOStmOldModus = m_rOStm.GetEndian();
+    m_rOStm.SetEndian( SvStreamEndian::BIG );
 
     mpAcc = aBmp.AcquireReadAccess();
     if( mpAcc )
@@ -106,7 +104,7 @@ bool PBMWriter::WritePBM( const Graphic& rGraphic, FilterConfigItem* pFilterConf
     else
         mbStatus = false;
 
-    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetEndian( aOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

@@ -1645,9 +1645,9 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                             sData.getLength() * sizeof( sal_Unicode ),
                             STREAM_READ );
 #ifdef OSL_BIGENDIAN
-                pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+                pStream->SetEndian( SvStreamEndian::BIG );
 #else
-                pStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+                pStream->SetEndian( SvStreamEndian::LITTLE );
 #endif
 
                 SwAsciiOptions aAOpt;

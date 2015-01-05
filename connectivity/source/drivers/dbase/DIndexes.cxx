@@ -55,7 +55,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
     SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
     if(pFileStream)
     {
-        pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        pFileStream->SetEndian(SvStreamEndian::LITTLE);
         pFileStream->SetBufferSize(DINDEX_PAGE_SIZE);
         ODbaseIndex::NDXHeader aHeader;
 

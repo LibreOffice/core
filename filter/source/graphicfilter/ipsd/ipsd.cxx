@@ -111,7 +111,7 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
     if (m_rPSD.GetError())
         return false;
 
-    m_rPSD.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    m_rPSD.SetEndian( SvStreamEndian::BIG );
 
     // read header:
 
