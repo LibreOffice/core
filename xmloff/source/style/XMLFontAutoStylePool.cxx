@@ -311,6 +311,10 @@ void XMLFontAutoStylePool::exportXML()
                         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
                         SvXMLElementExport fontFaceUri( GetExport(), XML_NAMESPACE_SVG,
                             XML_FONT_FACE_URI, true, true );
+
+                        GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_STRING, "truetype" );
+                        SvXMLElementExport fontFaceFormat( GetExport(), XML_NAMESPACE_SVG,
+                            XML_FONT_FACE_FORMAT, true, true );
                     }
                 }
             }
