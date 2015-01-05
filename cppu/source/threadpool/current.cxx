@@ -24,6 +24,7 @@
 #include "osl/thread.h"
 #include "osl/mutex.hxx"
 
+#include "uno/current_context.hxx"
 #include "uno/environment.hxx"
 #include "uno/mapping.hxx"
 #include "typelib/typedescription.h"
@@ -182,7 +183,7 @@ IdContainer * getIdContainer()
 }
 
 
-extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
+extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
@@ -230,7 +231,7 @@ extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_setCurrentContext(
     return sal_True;
 }
 
-extern "C" CPPU_DLLPUBLIC sal_Bool SAL_CALL uno_getCurrentContext(
+extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
 {
