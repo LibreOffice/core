@@ -201,11 +201,10 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
     const SwFmtFrmSize &rSize = pFmt->GetFrmSize();
     unsigned long nTblSz = static_cast<unsigned long>(rSize.GetWidth());
 
-    sal_uInt32 nPageSize = 0;
+    long nPageSize = 0;
     bool bRelBoxSize = false;
 
-    rBase.GetTablePageSize
-        ( this, nPageSize, bRelBoxSize );
+    rBase.GetTablePageSize( this, nPageSize, bRelBoxSize );
 
     SwTwips nSz = 0;
     Widths::const_iterator aWidthsEnd = pWidths->end();

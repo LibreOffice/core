@@ -647,7 +647,7 @@ public:
 
     void GetTablePageSize
     ( ww8::WW8TableNodeInfoInner * pTableTextNodeInfoInner,
-      sal_uInt32& rPageSize, bool& rRelBoxSize );
+      long& rPageSize, bool& rRelBoxSize );
 
     /// Exports the definition (image, size) of a single numbering picture bullet.
     virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}

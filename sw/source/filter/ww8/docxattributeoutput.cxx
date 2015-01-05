@@ -2598,8 +2598,8 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
                 pBorderLine->GetBorderLineStyle(), pBorderLine->GetWidth()));
         // The unit is the 8th of point
         sal_Int32 nWidth = sal_Int32( fConverted / 2.5 );
-        sal_uInt16 nMinWidth = 2;
-        sal_uInt16 nMaxWidth = 96;
+        const sal_Int32 nMinWidth = 2;
+        const sal_Int32 nMaxWidth = 96;
 
         if ( nWidth > nMaxWidth )
             nWidth = nMaxWidth;
@@ -2939,7 +2939,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
 void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
-    sal_uInt32 nPageSize = 0;
+    long nPageSize = 0;
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
@@ -2947,14 +2947,13 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
 
     const SwTable* pTable = pTableTextNodeInfoInner->getTable( );
     const SwFrmFmt *pFmt = pTable->GetFrmFmt( );
-    SwTwips nTblSz = pFmt->GetFrmSize( ).GetWidth( );
+    const sal_uInt32 nTblSz = static_cast<sal_uInt32>(pFmt->GetFrmSize( ).GetWidth( ));
 
     const SwHTMLTableLayout *pLayout = pTable->GetHTMLTableLayout();
     if( pLayout && pLayout->IsExportable() )
         m_pTableWrt = new SwWriteTable( pLayout );
     else
-        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (sal_uInt16)nPageSize,
-                (sal_uInt16)nTblSz, false);
+        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), nPageSize, nTblSz, false);
 }
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -3115,7 +3114,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     m_pSerializer->mark( aSeqOrder );
 
-    sal_uInt32 nPageSize = 0;
+    long nPageSize = 0;
     const char* widthType = "dxa";
     bool bRelBoxSize = false;
 

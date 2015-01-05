@@ -844,7 +844,7 @@ void RtfAttributeOutput::TableRowEnd(sal_uInt32 /*nDepth*/)
 
 void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
-    sal_uInt32 nPageSize = 0;
+    long nPageSize = 0;
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans
@@ -852,14 +852,13 @@ void RtfAttributeOutput::InitTableHelper(ww8::WW8TableNodeInfoInner::Pointer_t p
 
     const SwTable* pTable = pTableTextNodeInfoInner->getTable();
     const SwFrmFmt* pFmt = pTable->GetFrmFmt();
-    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
+    const sal_uInt32 nTblSz = static_cast<sal_uInt32>(pFmt->GetFrmSize().GetWidth());
 
     const SwHTMLTableLayout* pLayout = pTable->GetHTMLTableLayout();
     if (pLayout && pLayout->IsExportable())
         m_pTableWrt = new SwWriteTable(pLayout);
     else
-        m_pTableWrt = new SwWriteTable(pTable->GetTabLines(), (sal_uInt16)nPageSize,
-                                       (sal_uInt16)nTblSz, false);
+        m_pTableWrt = new SwWriteTable(pTable->GetTabLines(), nPageSize, nTblSz, false);
 }
 
 void RtfAttributeOutput::StartTable(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/)
