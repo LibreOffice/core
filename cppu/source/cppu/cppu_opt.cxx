@@ -55,7 +55,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
 
 
 extern "C" CPPU_DLLPUBLIC rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
-    uno_Any * pAny, typelib_TypeDescriptionReference * pType )
+    uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C()
 {
     OUStringBuffer buf;
