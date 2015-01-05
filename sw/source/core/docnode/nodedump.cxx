@@ -452,6 +452,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_COL:
                 static_cast<const SwFmtCol*>(pItem)->dumpAsXml(writer);
                 break;
+            case XATTR_FILLSTYLE:
+                static_cast<const XFillStyleItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -466,31 +469,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case XATTR_FILLSTYLE:
-            {
-                pWhich = "fill style";
-                const XFillStyleItem* pFillStyleItem = static_cast<const XFillStyleItem*>(pItem);
-                switch (pFillStyleItem->GetValue())
-                {
-                default:
-                case drawing::FillStyle_NONE:
-                    oValue = "none";
-                    break;
-                case drawing::FillStyle_SOLID:
-                    oValue = "solid";
-                    break;
-                case drawing::FillStyle_GRADIENT:
-                    oValue = "gradient";
-                    break;
-                case drawing::FillStyle_HATCH:
-                    oValue = "hatch";
-                    break;
-                case drawing::FillStyle_BITMAP:
-                    oValue = "bitmap";
-                    break;
-                }
-                break;
-            }
             case XATTR_FILLCOLOR:
                 pWhich = "fill color";
                 break;

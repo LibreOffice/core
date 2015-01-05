@@ -50,6 +50,8 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
     css::drawing::FillStyle GetValue() const { return (css::drawing::FillStyle) SfxEnumItem::GetValue(); }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif

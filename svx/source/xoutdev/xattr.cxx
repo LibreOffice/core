@@ -54,6 +54,7 @@
 #include <vcl/gradient.hxx>
 
 #include <stdio.h>
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 
@@ -2187,6 +2188,19 @@ bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     SetValue( sal::static_int_cast< sal_uInt16 >( eFS ) );
 
     return true;
+}
+
+void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillStyleItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+
+    OUString aPresentation;
+    GetPresentation(SFX_ITEM_PRESENTATION_NAMELESS, SFX_MAPUNIT_100TH_MM, SFX_MAPUNIT_100TH_MM, aPresentation);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
