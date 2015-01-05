@@ -1328,7 +1328,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 
 void Edit::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
     {
         Control::MouseButtonDown( rMEvt );
         return;
@@ -1750,7 +1750,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
     if ( mpUpdateDataTimer && !mbIsSubEdit && mpUpdateDataTimer->IsActive() )
         mpUpdateDataTimer->Start();//do not update while the user is still travelling in the control
 
-    if ( mpSubEdit.get() || !ImplHandleKeyEvent( rKEvt ) )
+    if ( mpSubEdit || !ImplHandleKeyEvent( rKEvt ) )
         Control::KeyInput( rKEvt );
 }
 
@@ -1762,13 +1762,13 @@ void Edit::FillLayoutData() const
 
 void Edit::Paint( const Rectangle& )
 {
-    if ( !mpSubEdit.get() )
+    if ( !mpSubEdit )
         ImplRepaint();
 }
 
 void Edit::Resize()
 {
-    if ( !mpSubEdit.get() && IsReallyVisible() )
+    if ( !mpSubEdit && IsReallyVisible() )
     {
         Control::Resize();
         // Wegen vertikaler Zentrierung...
@@ -1881,7 +1881,7 @@ void Edit::ImplInvalidateOutermostBorder( vcl::Window* pWin )
 
 void Edit::GetFocus()
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->ImplGrabFocus( GetGetFocusFlags() );
     else if ( !mbActivePopup )
     {
@@ -1934,7 +1934,7 @@ void Edit::GetFocus()
 
 vcl::Window* Edit::GetPreferredKeyInputWindow()
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         return mpSubEdit->GetPreferredKeyInputWindow();
     else
         return this;
@@ -1949,7 +1949,7 @@ void Edit::LoseFocus()
         mpUpdateDataTimer->Timeout();
     }
 
-    if ( !mpSubEdit.get() )
+    if ( !mpSubEdit )
     {
         // FIXME: this is currently only on OS X
         // check for other platforms that need similar handling
@@ -2208,11 +2208,11 @@ void Edit::StateChanged( StateChangedType nType )
 {
     if ( nType == StateChangedType::INITSHOW )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             mnXOffset = 0;  // if GrabFocus before while size was still wrong
             ImplAlign();
-            if ( !mpSubEdit.get() )
+            if ( !mpSubEdit )
                 ImplShowCursor( false );
         }
         // update background (eventual SetPaintTransparent)
@@ -2220,7 +2220,7 @@ void Edit::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ENABLE )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             // change text color only
             ImplInvalidateOrRepaint();
@@ -2267,7 +2267,7 @@ void Edit::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::ZOOM )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             ImplInitSettings( true, false, false );
             ImplShowCursor( true );
@@ -2276,7 +2276,7 @@ void Edit::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::CONTROLFONT )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             ImplInitSettings( true, false, false );
             ImplShowCursor();
@@ -2285,7 +2285,7 @@ void Edit::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::CONTROLFOREGROUND )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             ImplInitSettings( false, true, false );
             Invalidate();
@@ -2293,7 +2293,7 @@ void Edit::StateChanged( StateChangedType nType )
     }
     else if ( nType == StateChangedType::CONTROLBACKGROUND )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             ImplInitSettings( false, false, true );
             Invalidate();
@@ -2310,7 +2310,7 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        if ( !mpSubEdit.get() )
+        if ( !mpSubEdit )
         {
             ImplInitSettings( true, true, true );
             ImplShowCursor( true );
@@ -2443,7 +2443,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
 void Edit::SetEchoChar( sal_Unicode c )
 {
     mcEchoChar = c;
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->SetEchoChar( c );
 }
 
@@ -2452,7 +2452,7 @@ void Edit::SetReadOnly( bool bReadOnly )
     if ( mbReadOnly != bool(bReadOnly) )
     {
         mbReadOnly = bReadOnly;
-        if ( mpSubEdit.get() )
+        if ( mpSubEdit )
             mpSubEdit->SetReadOnly( bReadOnly );
 
         StateChanged( StateChangedType::READONLY );
@@ -2464,7 +2464,7 @@ void Edit::SetInsertMode( bool bInsert )
     if ( bInsert != mbInsertMode )
     {
         mbInsertMode = bInsert;
-        if ( mpSubEdit.get() )
+        if ( mpSubEdit )
             mpSubEdit->SetInsertMode( bInsert );
         else
             ImplShowCursor();
@@ -2473,7 +2473,7 @@ void Edit::SetInsertMode( bool bInsert )
 
 bool Edit::IsInsertMode() const
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         return mpSubEdit->IsInsertMode();
     else
         return mbInsertMode;
@@ -2483,7 +2483,7 @@ void Edit::SetMaxTextLen(sal_Int32 nMaxLen)
 {
     mnMaxTextLen = nMaxLen > 0 ? nMaxLen : EDIT_NOLIMIT;
 
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->SetMaxTextLen( mnMaxTextLen );
     else
     {
@@ -2498,7 +2498,7 @@ void Edit::SetSelection( const Selection& rSelection )
     // directly afterwards which would change the selection again
     if ( IsTracking() )
         EndTracking();
-    else if ( mpSubEdit.get() && mpSubEdit->IsTracking() )
+    else if ( mpSubEdit && mpSubEdit->IsTracking() )
         mpSubEdit->EndTracking();
 
     ImplSetSelection( rSelection );
@@ -2506,7 +2506,7 @@ void Edit::SetSelection( const Selection& rSelection )
 
 void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->ImplSetSelection( rSelection );
     else
     {
@@ -2568,7 +2568,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
 
 const Selection& Edit::GetSelection() const
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         return mpSubEdit->GetSelection();
     else
         return maSelection;
@@ -2576,7 +2576,7 @@ const Selection& Edit::GetSelection() const
 
 void Edit::ReplaceSelected( const OUString& rStr )
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->ReplaceSelected( rStr );
     else
         ImplInsertText( rStr );
@@ -2584,7 +2584,7 @@ void Edit::ReplaceSelected( const OUString& rStr )
 
 void Edit::DeleteSelected()
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->DeleteSelected();
     else
     {
@@ -2595,7 +2595,7 @@ void Edit::DeleteSelected()
 
 OUString Edit::GetSelected() const
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         return mpSubEdit->GetSelected();
     else
     {
@@ -2631,7 +2631,7 @@ void Edit::Paste()
 
 void Edit::Undo()
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->Undo();
     else
     {
@@ -2656,7 +2656,7 @@ void Edit::SetText( const OUString& rStr )
 
 void Edit::SetText( const OUString& rStr, const Selection& rSelection )
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->SetText( rStr, rSelection );
     else
         ImplSetText( rStr, &rSelection );
@@ -2664,7 +2664,7 @@ void Edit::SetText( const OUString& rStr, const Selection& rSelection )
 
 OUString Edit::GetText() const
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         return mpSubEdit->GetText();
     else
         return maText.toString();
@@ -2672,7 +2672,7 @@ OUString Edit::GetText() const
 
 void Edit::SetPlaceholderText( const OUString& rStr )
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->SetPlaceholderText( rStr );
     else if ( maPlaceholderText != rStr )
     {
@@ -2684,7 +2684,7 @@ void Edit::SetPlaceholderText( const OUString& rStr )
 
 OUString Edit::GetPlaceholderText() const
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         return mpSubEdit->GetPlaceholderText();
 
     return maPlaceholderText;
@@ -2692,7 +2692,7 @@ OUString Edit::GetPlaceholderText() const
 
 void Edit::SetModifyFlag()
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->mbModified = true;
     else
         mbModified = true;
@@ -2700,7 +2700,7 @@ void Edit::SetModifyFlag()
 
 void Edit::ClearModifyFlag()
 {
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
         mpSubEdit->mbModified = false;
     else
         mbModified = false;
@@ -2710,7 +2710,7 @@ void Edit::SetSubEdit( VclReference<Edit> pEdit )
 {
     mpSubEdit.disposeAndClear();
     mpSubEdit = pEdit;
-    if ( mpSubEdit.get() )
+    if ( mpSubEdit )
     {
         SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
         mpSubEdit->mbIsSubEdit = true;
@@ -2806,7 +2806,7 @@ Size Edit::CalcSize(sal_Int32 nChars) const
 
 sal_Int32 Edit::GetMaxVisChars() const
 {
-    const vcl::Window* pW = mpSubEdit.get() ? mpSubEdit.get() : this;
+    const vcl::Window* pW = mpSubEdit ? mpSubEdit : this;
     sal_Int32 nOutWidth = pW->GetOutputSizePixel().Width();
     sal_Int32 nCharWidth = GetTextWidth( OUString('x') );
     return nCharWidth ? nOutWidth/nCharWidth : 0;
@@ -3038,7 +3038,7 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
 
 OUString Edit::GetSurroundingText() const
 {
-    if (mpSubEdit.get())
+    if (mpSubEdit)
         return mpSubEdit->GetSurroundingText();
     return maText.toString();
 }

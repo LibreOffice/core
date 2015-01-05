@@ -90,7 +90,7 @@ void LifecycleTest::testParentedWidgets()
     VclReference<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
                                                  WB_APP|WB_STDWORK));
     CPPUNIT_ASSERT(xWin.get() != NULL);
-    testWidgets(xWin.get());
+    testWidgets(xWin);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);

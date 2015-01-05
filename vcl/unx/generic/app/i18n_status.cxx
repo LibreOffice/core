@@ -468,7 +468,7 @@ void IIIMPStatusWindow::GetFocus()
 
 IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
 {
-    if( pBtn == m_aStatusBtn.get() )
+    if( pBtn == m_aStatusBtn )
     {
         const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
         unsigned int nIndex = m_aStatusBtn->GetCurItemId()-1;

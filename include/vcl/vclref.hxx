@@ -111,17 +111,8 @@ public:
     inline VclReference(
         const VclReference< derived_type > & rRef,
         typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
-        : m_rInnerRef( static_cast<reference_type*>(rRef.get()) )
+        : m_rInnerRef( static_cast<reference_type*>(rRef) )
     {
-    }
-
-    /** Get the body. Can be used instead of operator->().
-         I.e. handle->someBodyOp() and handle.get()->someBodyOp()
-         are the same.
-     */
-    inline reference_type * SAL_CALL get() const
-    {
-        return m_rInnerRef.get();
     }
 
     /** Probably most common used: handle->someBodyOp().
@@ -129,6 +120,25 @@ public:
     inline reference_type * SAL_CALL operator->() const
     {
         return m_rInnerRef.get();
+    }
+
+    /** Get the body. Can be used instead of operator->().
+         I.e. handle->someBodyOp() and handle.get()->someBodyOp()
+         are the same.
+      */
+    inline reference_type * SAL_CALL get() const
+    {
+        return m_rInnerRef.get();
+    }
+
+    inline SAL_CALL operator reference_type * () const
+    {
+        return m_rInnerRef.get();
+    }
+
+    inline SAL_CALL operator bool () const
+    {
+        return m_rInnerRef.get() != NULL;
     }
 
     inline void disposeAndClear()

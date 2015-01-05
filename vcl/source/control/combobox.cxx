@@ -578,7 +578,7 @@ void ComboBox::Resize()
 void ComboBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    AppendLayoutData( *mpSubEdit.get() );
+    AppendLayoutData( *mpSubEdit );
     mpSubEdit->SetLayoutDataParent( this );
     ImplListBoxWindowPtr rMainWindow = mpImplLB->GetMainWindow();
     if( mpFloatWin )
@@ -692,7 +692,7 @@ bool ComboBox::PreNotify( NotifyEvent& rNEvt )
 bool ComboBox::Notify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( rNEvt.GetWindow() == mpSubEdit.get() )
+    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( rNEvt.GetWindow() == mpSubEdit )
             && !IsReadOnly() )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -730,7 +730,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
 
             case KEY_RETURN:
             {
-                if( ( rNEvt.GetWindow() == mpSubEdit.get() ) && IsInDropDown() )
+                if( ( rNEvt.GetWindow() == mpSubEdit ) && IsInDropDown() )
                 {
                     mpImplLB->ProcessKeyInput( aKeyEvt );
                     nDone = true;
@@ -748,7 +748,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
     }
     else if( (rNEvt.GetType() == MouseNotifyEvent::COMMAND) &&
              (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
-             (rNEvt.GetWindow() == mpSubEdit.get()) )
+             (rNEvt.GetWindow() == mpSubEdit) )
     {
         sal_uInt16 nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
         if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )

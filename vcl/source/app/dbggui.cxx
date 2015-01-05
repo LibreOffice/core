@@ -314,7 +314,7 @@ DbgDialog::DbgDialog() :
 
 IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 {
-    if ( pButton == maOKButton.get() )
+    if ( pButton == maOKButton )
     {
         DbgData aData;
 

@@ -89,8 +89,8 @@ public:
 
     virtual void queue_resize(StateChangedType eReason = StateChangedType::LAYOUT) SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    VclButtonBox* get_action_area() { return mpActionArea.get(); }
-    VclBox* get_content_area() { return mpContentArea.get(); }
+    VclButtonBox* get_action_area() { return mpActionArea; }
+    VclBox* get_content_area() { return mpContentArea; }
 
     virtual bool    Close() SAL_OVERRIDE;
 

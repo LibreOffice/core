@@ -188,7 +188,7 @@ public:
 
     virtual void        SetModifyFlag();
     virtual void        ClearModifyFlag();
-    virtual bool        IsModified() const { return mpSubEdit.get() ? mpSubEdit->mbModified : mbModified; }
+    virtual bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
     virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
@@ -238,7 +238,7 @@ public:
     virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
 
     void                SetSubEdit( VclReference<Edit> pEdit );
-    Edit*               GetSubEdit() const { return mpSubEdit.get(); }
+    Edit*               GetSubEdit() const { return mpSubEdit; }
 
     boost::signals2::signal< void ( Edit* ) > autocompleteSignal;
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }

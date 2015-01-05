@@ -572,8 +572,8 @@ public:
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    ScrollBar& getVertScrollBar() { return *m_pVScroll.get(); }
-    ScrollBar& getHorzScrollBar() { return *m_pHScroll.get(); }
+    ScrollBar& getVertScrollBar() { return *m_pVScroll; }
+    ScrollBar& getHorzScrollBar() { return *m_pHScroll; }
     Size getVisibleChildSize() const;
     //set to true to disable the built-in scrolling callbacks to allow the user
     //to override it
