@@ -260,8 +260,15 @@ class AddonsOptions_Impl : public ConfigItem
     private:
         enum ImageSize
         {
-            IMGSIZE_SMALL,
+            IMGSIZE_SMALL = 0,
             IMGSIZE_BIG
+        };
+
+        struct OneImageEntry
+        {
+            Image    aScaled;   ///< cached scaled image
+            Image    aImage;    ///< original un-scaled image
+            OUString aURL;      ///< URL in case it is not loaded yet
         };
 
         struct ImageEntry
@@ -270,9 +277,7 @@ class AddonsOptions_Impl : public ConfigItem
             // otherwise we use the associated URL to load on demand
 
             // accessed in this order
-            Image    aScaled[2];       // cached scaled images
-            Image    aImage[2];        // original un-scaled images
-            OUString aURL[2];         // URLs in case they are not loaded yet
+            OneImageEntry aSizeEntry[2];
             ImageEntry() {}
             void addImage(ImageSize eSize, const Image &rImage, const OUString &rURL);
         };
@@ -355,8 +360,8 @@ void AddonsOptions_Impl::ImageEntry::addImage(ImageSize eSize,
                                               const Image &rImage,
                                               const OUString &rURL)
 {
-    aImage[(int)eSize] = rImage;
-    aURL[(int)eSize] = rURL;
+    aSizeEntry[(int)eSize].aImage = rImage;
+    aSizeEntry[(int)eSize].aURL = rURL;
 }
 
 //  constructor
@@ -589,35 +594,36 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     ImageManager::iterator pIter = m_aImageManager.find(aURL);
     if ( pIter != m_aImageManager.end() )
     {
-        ImageEntry &rEntry = pIter->second;
+        OneImageEntry& rSizeEntry = pIter->second.aSizeEntry[nIdx];
+        OneImageEntry& rOtherEntry = pIter->second.aSizeEntry[nOtherIdx];
         // actually read the image ...
-        if (!rEntry.aImage[nIdx])
-            rEntry.aImage[nIdx] = ReadImageFromURL(rEntry.aURL[nIdx]);
+        if (!rSizeEntry.aImage)
+            rSizeEntry.aImage = ReadImageFromURL(rSizeEntry.aURL);
 
-        if (!rEntry.aImage[nIdx])
+        if (!rSizeEntry.aImage)
         { // try the other size and scale it
-            aImage = ScaleImage(ReadImageFromURL(rEntry.aURL[nOtherIdx]), bBig);
-            rEntry.aImage[nIdx] = aImage;
-            if (!rEntry.aImage[nIdx])
+            aImage = ScaleImage(ReadImageFromURL(rOtherEntry.aURL), bBig);
+            rSizeEntry.aImage = aImage;
+            if (!rSizeEntry.aImage)
                 SAL_WARN("fwk", "failed to load addons image " << aURL);
         }
 
         // FIXME: bNoScale is not terribly meaningful or useful
 
         if (!aImage && bNoScale)
-            aImage = rEntry.aImage[nIdx];
+            aImage = rSizeEntry.aImage;
 
-        if (!aImage && !!rEntry.aScaled[nIdx])
-            aImage = rEntry.aScaled[nIdx];
+        if (!aImage && !!rSizeEntry.aScaled)
+            aImage = rSizeEntry.aScaled;
 
         else // scale to the correct size for the theme / toolbox
         {
-            aImage = rEntry.aImage[nIdx];
+            aImage = rSizeEntry.aImage;
             if (!aImage) // use and scale the other if one size is missing
-                aImage = rEntry.aImage[nOtherIdx];
+                aImage = rOtherEntry.aImage;
 
             aImage = ScaleImage(aImage, bBig);
-            rEntry.aScaled[nIdx] = aImage; // cache for next time
+            rSizeEntry.aScaled = aImage; // cache for next time
         }
     }
 
