@@ -121,8 +121,7 @@ void SwAccessiblePortionData::Text(sal_Int32 nLength, sal_uInt16 nType, sal_Int3
     aPortionAttrs.push_back( nAttr );
 
     // update buffer + nModelPosition
-    aBuffer.append( OUString(
-        pTxtNode->GetTxt().copy(nModelPosition, nLength)) );
+    aBuffer.append( pTxtNode->GetTxt().copy(nModelPosition, nLength) );
     nModelPosition += nLength;
 
     bLastIsSpecial = false;
@@ -182,16 +181,16 @@ void SwAccessiblePortionData::Special(
             break;
         case POR_NUMBER:
         {
-            sDisplay = OUString( rText ) + " ";
+            sDisplay = rText + " ";
             break;
         }
         // #i111768# - apply patch from kstribley:
         // Include the control characters.
         case POR_CONTROLCHAR:
-            sDisplay = OUString( rText ) + OUString( pTxtNode->GetTxt()[nModelPosition] );
+            sDisplay = rText + OUString( pTxtNode->GetTxt()[nModelPosition] );
             break;
         default:
-            sDisplay = OUString( rText );
+            sDisplay = rText;
             break;
     }
 
