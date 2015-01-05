@@ -22,8 +22,8 @@
 #include <stdio.h>
 
 #include "cppu/macros.hxx"
-
 #include "osl/mutex.hxx"
+#include "uno/data.h"
 
 #include "constr.hxx"
 #include "destr.hxx"
