@@ -195,7 +195,15 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
     std::set<int> listRecords;
     bool handleListTable = false;
-    MorkParser* xMork = xConnection->getMorkParser(oStringTable);
+
+    // Let's try to retrieve the list in Collected Addresses book
+    MorkParser* xMork = xConnection->getMorkParser(OString("CollectedAddressBook"));
+    if (std::find(xMork->lists_.begin(), xMork->lists_.end(), m_aAddressbook) == xMork->lists_.end())
+    {
+        // so the list is in Address book
+        // TODO : manage case where an address book has been created
+        xMork = xConnection->getMorkParser(OString("AddressBook"));
+    }
 
     // check if we are retrieving the default table
     if (oStringTable != "AddressBook" && oStringTable != "CollectedAddressBook")

@@ -36,6 +36,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MORKPARSER_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 #include <string>
 #include <map>
@@ -113,6 +114,9 @@ public:
 
     void dump();
 
+    // All lists
+    std::vector<OUString> lists_;
+
 protected: // Members
 
     void initVars();
@@ -148,6 +152,7 @@ protected: // Data
 
     // All Mork data
     std::string morkData_;
+
 
     unsigned morkPos_;
     int nextAddValueId_;

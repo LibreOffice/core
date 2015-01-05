@@ -169,6 +169,17 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);
         }
     }
+    // check that we can retrieve the history tables:
+    MorkTableMap *Tables_hist = m_pHistory->getTables( defaultScope );
+    if (Tables_hist)
+    {
+        // Iterate all tables
+        for ( tableIter = Tables_hist->begin(); tableIter != Tables_hist->end(); ++tableIter )
+        {
+            if ( 0 == tableIter->first ) continue;
+            SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);
+        }
+    }
 }
 
 // XServiceInfo
