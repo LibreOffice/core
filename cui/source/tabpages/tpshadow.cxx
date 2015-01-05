@@ -210,7 +210,6 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                     }
                 }
 
-                m_pCtlXRectPreview->SetRectangleAttributes(rSet);
                 // aLbShadowColor
                 nPos = m_pLbShadowColor->GetSelectEntryPos();
                 m_pLbShadowColor->Clear();
@@ -224,6 +223,7 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
                     m_pLbShadowColor->SelectEntryPos( nPos );
 
                 ModifyShadowHdl_Impl( this );
+                m_pCtlXRectPreview->SetRectangleAttributes(rSet);
             }
             nPageType = PT_SHADOW;
         }
