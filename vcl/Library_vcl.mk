@@ -46,10 +46,6 @@ $(eval $(call gb_Library_set_include,vcl,\
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
     -DVCLOPENGL_DLLIMPLEMENTATION \
-	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
-	-DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
-	-DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
-	-DVCLPLUG_SVP_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,vclplug_svp))\" \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vcl))

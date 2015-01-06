@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/module.hxx>
+#include <tools/solar.h>
 #include <vcl/abstdlg.hxx>
 
 typedef VclAbstractDialogFactory* (SAL_CALL *FuncPtrCreateDialogFactory)();
@@ -38,7 +39,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
     if (aDialogLibrary.is() ||
-        aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
+        aDialogLibrary.loadRelative(&thisModule, SVLIBRARY("cui"),
                 SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
     {
         fp = ( VclAbstractDialogFactory* (SAL_CALL*)() )

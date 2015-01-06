@@ -1389,7 +1389,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
     {
 #ifndef DISABLE_DYNLOADING
         osl::Module aTkLib;
-        OUString aLibName(TK_DLL_NAME);
+        OUString aLibName(SVLIBRARY("tk"));
         aTkLib.loadRelative(&thisModule, aLibName, SAL_LOADMODULE_DEFAULT);
         if (aTkLib.is())
         {

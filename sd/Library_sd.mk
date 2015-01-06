@@ -49,7 +49,6 @@ $(eval $(call gb_Library_set_include,sd,\
 
 $(eval $(call gb_Library_add_defs,sd,\
 	-DSD_DLLIMPLEMENTATION \
-	-DSDUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,sdui))\" \
 ))
 
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)

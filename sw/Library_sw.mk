@@ -43,8 +43,6 @@ $(eval $(call gb_Library_use_sdk_api,sw))
 
 $(eval $(call gb_Library_add_defs,sw,\
     -DSW_DLLIMPLEMENTATION \
-	-DSWUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,swui))\" \
-	-DDBTOOLS_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,dbtools))\" \
 ))
 
 $(eval $(call gb_Library_use_libraries,sw,\

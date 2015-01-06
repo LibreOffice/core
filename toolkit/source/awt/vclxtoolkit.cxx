@@ -1206,7 +1206,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
          )
     {
 #ifndef DISABLE_DYNLOADING
-        OUString aLibName(SVT_DLL_NAME);
+        OUString aLibName(SVLIBRARY("svt"));
         hSvToolsLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )

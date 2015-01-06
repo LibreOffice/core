@@ -47,7 +47,6 @@ $(eval $(call gb_Library_set_precompiled_header,svxcore,$(SRCDIR)/svx/inc/pch/pr
 $(eval $(call gb_Library_add_defs,svxcore,\
     -DSVX_DLLIMPLEMENTATION \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-    -DDBTOOLS_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,dbtools))\" \
 ))
 
 $(eval $(call gb_Library_use_libraries,svxcore,\
