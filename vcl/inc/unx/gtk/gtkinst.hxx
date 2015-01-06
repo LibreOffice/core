@@ -41,10 +41,7 @@ class GtkYieldMutex : public SalYieldMutex
     std::list<sal_uLong> aYieldStack;
 
 public:
-                        GtkYieldMutex();
-    virtual void        acquire() SAL_OVERRIDE;
-    virtual void        release() SAL_OVERRIDE;
-
+         GtkYieldMutex() {}
     void ThreadsEnter();
     void ThreadsLeave();
 };
