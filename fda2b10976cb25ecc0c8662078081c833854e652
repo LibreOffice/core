@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_a0569a04",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 2901,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-01-06T17:13:21Z",
+      "side": 1,
+      "message": "but this usage here still remains after your change",
+      "revId": "fda2b10976cb25ecc0c8662078081c833854e652",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
