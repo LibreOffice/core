@@ -31,7 +31,9 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
+#include "XMLBase64Export.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -217,6 +219,25 @@ OUString XMLFontAutoStylePool::Find(
     return sName;
 }
 
+namespace
+{
+
+OUString lcl_checkFontFile( const OUString &fileUrl )
+{
+    osl::DirectoryItem aDirItem;
+    if( osl::DirectoryItem::get( fileUrl, aDirItem ) == osl::File::E_None )
+    {
+        osl::FileStatus aStatus( osl_FileStatus_Mask_Type );
+        if( aDirItem.getFileStatus( aStatus ) == osl::File::E_None )
+        {
+            if( !aStatus.isDirectory() )
+                return fileUrl;
+        }
+    }
+    return OUString();
+}
+
+}
 
 void XMLFontAutoStylePool::exportXML()
 {
@@ -272,6 +293,7 @@ void XMLFontAutoStylePool::exportXML()
 
         if( tryToEmbedFonts )
         {
+            const bool bExportFlat( GetExport().getExportFlags() & SvXMLExportFlags::EMBEDDED );
             std::vector< OUString > fileUrls;
             static const FontWeight weight[] = { WEIGHT_NORMAL, WEIGHT_BOLD, WEIGHT_NORMAL, WEIGHT_BOLD };
             static const FontItalic italic[] = { ITALIC_NONE, ITALIC_NONE, ITALIC_NORMAL, ITALIC_NORMAL };
@@ -289,7 +311,7 @@ void XMLFontAutoStylePool::exportXML()
                     continue;
                 if( !fontFilesMap.count( fileUrl ))
                 {
-                    OUString docUrl = embedFontFile( fileUrl );
+                    const OUString docUrl = bExportFlat ? lcl_checkFontFile( fileUrl ) : embedFontFile( fileUrl );
                     if( !docUrl.isEmpty())
                         fontFilesMap[ fileUrl ] = docUrl;
                     else
@@ -307,10 +329,28 @@ void XMLFontAutoStylePool::exportXML()
                 {
                     if( fontFilesMap.count( *it ))
                     {
-                        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, fontFilesMap[ *it ] );
-                        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
+                        if( !bExportFlat )
+                        {
+                            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, fontFilesMap[ *it ] );
+                            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
+                        }
                         SvXMLElementExport fontFaceUri( GetExport(), XML_NAMESPACE_SVG,
                             XML_FONT_FACE_URI, true, true );
+
+                        if( bExportFlat )
+                        {
+                            const uno::Reference< ucb::XSimpleFileAccess > xFileAccess( ucb::SimpleFileAccess::create( GetExport().getComponentContext() ) );
+                            try
+                            {
+                                const uno::Reference< io::XInputStream > xInput( xFileAccess->openFileRead( fontFilesMap[ *it ] ) );
+                                XMLBase64Export aBase64Exp( GetExport() );
+                                aBase64Exp.exportOfficeBinaryDataElement( xInput );
+                            }
+                            catch( const uno::Exception & )
+                            {
+                                // opening the file failed, ignore
+                            }
+                        }
 
                         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_STRING, "truetype" );
                         SvXMLElementExport fontFaceFormat( GetExport(), XML_NAMESPACE_SVG,
