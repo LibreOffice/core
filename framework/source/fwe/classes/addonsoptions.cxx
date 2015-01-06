@@ -499,9 +499,6 @@ static Image ScaleImage( const Image &rImage, bool bBig )
 Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale )
 {
     Image aImage;
-    ImageSize eSize = bBig ? IMGSIZE_BIG : IMGSIZE_SMALL;
-    int nIdx = (int)eSize;
-    int nOtherIdx = nIdx ? 0 : 1;
 
     SAL_INFO("fwk", "Expensive: Addons GetImageFromURL " << aURL <<
              " big " << (bBig?"big":"litte") <<
@@ -510,6 +507,10 @@ Image AddonsOptions_Impl::GetImageFromURL( const OUString& aURL, bool bBig, bool
     ImageManager::iterator pIter = m_aImageManager.find(aURL);
     if ( pIter != m_aImageManager.end() )
     {
+        ImageSize eSize = bBig ? IMGSIZE_BIG : IMGSIZE_SMALL;
+        int nIdx = (int)eSize;
+        int nOtherIdx = nIdx ? 0 : 1;
+
         OneImageEntry& rSizeEntry = pIter->second.aSizeEntry[nIdx];
         OneImageEntry& rOtherEntry = pIter->second.aSizeEntry[nOtherIdx];
         // actually read the image ...
