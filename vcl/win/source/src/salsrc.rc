@@ -20,21 +20,11 @@
 #include <win/salids.hrc>
 
 SAL_RESID_POINTER_NULL                  CURSOR          nullptr.cur
-#ifndef WNT
-SAL_RESID_POINTER_HSIZE                 CURSOR          hsize.cur
-SAL_RESID_POINTER_VSIZE                 CURSOR          vsize.cur
-SAL_RESID_POINTER_NESWSIZE              CURSOR          neswsize.cur
-SAL_RESID_POINTER_NWSESIZE              CURSOR          nwsesize.cur
-#endif
-SAL_RESID_POINTER_CROSS                 CURSOR          cross.cur
-SAL_RESID_POINTER_MOVE                  CURSOR          move.cur
 SAL_RESID_POINTER_HSPLIT                CURSOR          hsplit.cur
 SAL_RESID_POINTER_VSPLIT                CURSOR          vsplit.cur
 SAL_RESID_POINTER_HSIZEBAR              CURSOR          hsizebar.cur
 SAL_RESID_POINTER_VSIZEBAR              CURSOR          vsizebar.cur
 SAL_RESID_POINTER_HAND                  CURSOR          hand.cur
-SAL_RESID_POINTER_REFHAND               CURSOR          refhand.cur
-SAL_RESID_POINTER_PEN                   CURSOR          pen.cur
 SAL_RESID_POINTER_MAGNIFY               CURSOR          magnify.cur
 SAL_RESID_POINTER_FILL                  CURSOR          fill.cur
 SAL_RESID_POINTER_ROTATE                CURSOR          rotate.cur
@@ -57,7 +47,6 @@ SAL_RESID_POINTER_MOVEFILELINK          CURSOR          moveflnk.cur
 SAL_RESID_POINTER_COPYFILELINK          CURSOR          copyflnk.cur
 SAL_RESID_POINTER_MOVEFILES             CURSOR          movef2.cur
 SAL_RESID_POINTER_COPYFILES             CURSOR          copyf2.cur
-SAL_RESID_POINTER_NOTALLOWED            CURSOR          notallow.cur
 SAL_RESID_POINTER_DRAW_LINE             CURSOR          dline.cur
 SAL_RESID_POINTER_DRAW_RECT             CURSOR          drect.cur
 SAL_RESID_POINTER_DRAW_POLYGON          CURSOR          dpolygon.cur
