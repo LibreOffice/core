@@ -153,7 +153,6 @@ gb_CFLAGS := \
 	-wd4706 \
 	-wd4800 \
 	-Zc:wchar_t- \
-	-Zm500 \
 
 gb_CXXFLAGS := \
 	-Gd \
@@ -184,7 +183,6 @@ gb_CXXFLAGS := \
 	-wd4800 \
 	-wd4913 \
 	-Zc:wchar_t- \
-	-Zm500 \
 
 ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
 gb_CXXFLAGS += \
@@ -216,6 +214,14 @@ ifeq ($(CPUNAME),X86_64)
 
 gb_CXXFLAGS += \
 	-wd4267 \
+
+else
+
+gb_CXXFLAGS += \
+	-Zm500 \
+
+gb_CFLAGS += \
+	-Zm500 \
 
 endif
 
