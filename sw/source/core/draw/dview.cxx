@@ -346,8 +346,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     std::list<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
-        OSL_ENSURE( pContact,
-                "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
+        assert(pContact && "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash.");
         pContact->GetAnchoredObjs( aAnchoredObjs );
     }
 
@@ -389,8 +388,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
             SdrObject* pChildObj = (*aObjIter);
             {
                 const SwContact* pContact = ::GetUserCall( pChildObj );
-                OSL_ENSURE( pContact,
-                        "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
+                assert(pContact && "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash.");
                 pContact->GetAnchoredObjs( aAnchoredObjs );
             }
             // move 'repeated' ones to the same order number as the already moved one.
