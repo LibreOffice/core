@@ -31,6 +31,7 @@
 #include <string.h>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
+#include <cmath>
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
