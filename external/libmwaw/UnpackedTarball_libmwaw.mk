@@ -13,4 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libmwaw,$(MWAW_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,1))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
+	external/libmwaw/0001-ClarisWorks-AppleWorks-spreadsheet-do-not-remove-fir.patch \
+	external/libmwaw/0002-ClarisWors-AppleWorks-spreadsheet-Oops-correct-of-a-.patch \
+))
+
 # vim: set noet sw=4 ts=4:
