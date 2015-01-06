@@ -1341,7 +1341,7 @@
 												<xsl:attribute name="smil:end">next</xsl:attribute>
 											</xsl:when>
 											<xsl:when test="演:定时/@演:重复='until next slide' ">
-												<xsl:attribute name="smil:repeatCount ">indefinite</xsl:attribute>
+												<xsl:attribute name="smil:repeatCount">indefinite</xsl:attribute>
 											</xsl:when>
 											<xsl:when test="演:定时/@演:重复 !='none'">
 												<xsl:attribute name="smil:repeatCount"><xsl:value-of select="演:定时/@演:重复"/></xsl:attribute>
@@ -2745,7 +2745,7 @@
 		<xsl:choose>
 			<xsl:when test="@字:字下划线 = 'true'">
 				<xsl:attribute name="style:text-underline">single</xsl:attribute>
-				<xsl:attribute name=" style:text-underline-color">font-color</xsl:attribute>
+				<xsl:attribute name="style:text-underline-color">font-color</xsl:attribute>
 				<xsl:attribute name="fo:score-spaces">false</xsl:attribute>
 			</xsl:when>
 			<xsl:when test="@字:类型 = 'thick'">
