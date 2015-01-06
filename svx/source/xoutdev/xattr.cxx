@@ -2259,6 +2259,14 @@ bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
+void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillColorItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
 
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :

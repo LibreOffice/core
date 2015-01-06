@@ -49,6 +49,8 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif
