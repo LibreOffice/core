@@ -1215,7 +1215,7 @@ class DemoWin : public WorkWindow
         {
             join();
         }
-        virtual void execute()
+        virtual void execute() SAL_OVERRIDE
         {
             osl_waitThread(&maDelay);
 
