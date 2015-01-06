@@ -127,7 +127,7 @@ rtl_TextToUnicodeContext SAL_CALL rtl_createTextToUnicodeContext( rtl_TextToUnic
     else if ( pConverter->mpCreateTextToUnicodeContext )
         return (rtl_TextToUnicodeContext)pConverter->mpCreateTextToUnicodeContext();
     else
-        return (rtl_TextToUnicodeContext)1;
+        return reinterpret_cast<rtl_TextToUnicodeContext>(1);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -205,7 +205,7 @@ rtl_UnicodeToTextContext SAL_CALL rtl_createUnicodeToTextContext( rtl_UnicodeToT
     else if ( pConverter->mpCreateUnicodeToTextContext )
         return (rtl_UnicodeToTextContext)pConverter->mpCreateUnicodeToTextContext();
     else
-        return (rtl_UnicodeToTextContext)1;
+        return reinterpret_cast<rtl_UnicodeToTextContext>(1);
 }
 
 /* ----------------------------------------------------------------------- */

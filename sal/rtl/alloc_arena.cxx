@@ -137,7 +137,7 @@ rtl_arena_segment_populate (
         /* insert onto reserve span list */
         QUEUE_INSERT_TAIL_NAMED(&(arena->m_segment_reserve_span_head), span, s);
         QUEUE_START_NAMED(span, f);
-        span->m_addr = (sal_uIntPtr)(span);
+        span->m_addr = reinterpret_cast<sal_uIntPtr>(span);
         span->m_size = size;
         span->m_type = RTL_ARENA_SEGMENT_TYPE_SPAN;
 
@@ -499,8 +499,9 @@ rtl_arena_segment_create (
                 RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
 
                 span->m_size = size;
-                span->m_addr = (sal_uIntPtr)(arena->m_source_alloc)(
-                    arena->m_source_arena, &(span->m_size));
+                span->m_addr = reinterpret_cast<sal_uIntPtr>(
+                    (arena->m_source_alloc)(
+                        arena->m_source_arena, &(span->m_size)));
 
                 RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
                 if (span->m_addr != 0)
@@ -851,7 +852,7 @@ rtl_arena_deactivate (
         QUEUE_REMOVE_NAMED(segment, s);
 
         /* return span to g_machdep_arena */
-        rtl_machdep_free (gp_machdep_arena, (void*)(segment->m_addr), segment->m_size);
+        rtl_machdep_free (gp_machdep_arena, reinterpret_cast<void*>(segment->m_addr), segment->m_size);
     }
 }
 
@@ -992,7 +993,7 @@ SAL_CALL rtl_arena_alloc (
                 rtl_arena_hash_insert (arena, segment);
 
                 (*pSize) = segment->m_size;
-                addr = (void*)(segment->m_addr);
+                addr = reinterpret_cast<void*>(segment->m_addr);
             }
             RTL_MEMORY_LOCK_RELEASE(&(arena->m_lock));
         }
@@ -1035,7 +1036,7 @@ SAL_CALL rtl_arena_free (
 
             RTL_MEMORY_LOCK_ACQUIRE(&(arena->m_lock));
 
-            segment = rtl_arena_hash_remove (arena, (sal_uIntPtr)(addr), size);
+            segment = rtl_arena_hash_remove (arena, reinterpret_cast<sal_uIntPtr>(addr), size);
             if (segment != 0)
             {
                 rtl_arena_segment_type *next, *prev;
@@ -1057,7 +1058,7 @@ SAL_CALL rtl_arena_free (
 
                     if (arena->m_source_free)
                     {
-                        addr = (void*)(prev->m_addr);
+                        addr = reinterpret_cast<void*>(prev->m_addr);
                         size = prev->m_size;
 
                         /* remove from segment list */

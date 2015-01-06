@@ -2322,18 +2322,18 @@ oslSocketError SAL_CALL osl_getLastSocketError(oslSocket pSocket)
     return ERROR_FROM_NATIVE(pSocket->m_nLastError);
 }
 
-typedef struct _TSocketSetImpl
+struct oslSocketSetImpl
 {
     int     m_MaxHandle;    /* for select(), the largest descriptor in the set */
     fd_set  m_Set;          /* the set of descriptors */
 
-} TSocketSetImpl;
+};
 
 oslSocketSet SAL_CALL osl_createSocketSet()
 {
-    TSocketSetImpl* pSet;
+    oslSocketSetImpl* pSet;
 
-    pSet= (TSocketSetImpl*)malloc(sizeof(TSocketSetImpl));
+    pSet= (oslSocketSetImpl*)malloc(sizeof(oslSocketSetImpl));
 
     OSL_ASSERT(pSet);
 
@@ -2354,23 +2354,19 @@ void SAL_CALL osl_destroySocketSet(oslSocketSet Set)
 
 void SAL_CALL osl_clearSocketSet(oslSocketSet Set)
 {
-    TSocketSetImpl* pSet;
     OSL_ASSERT(Set);
     if ( Set == 0 )
     {
         return;
     }
 
-    pSet= (TSocketSetImpl*)Set;
-    pSet->m_MaxHandle= 0;
+    Set->m_MaxHandle= 0;
 
-    FD_ZERO(&pSet->m_Set);
+    FD_ZERO(&Set->m_Set);
 }
 
 void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket pSocket)
 {
-    TSocketSetImpl* pSet;
-
     OSL_ASSERT(Set);
     OSL_ASSERT(pSocket);
 
@@ -2379,19 +2375,15 @@ void SAL_CALL osl_addToSocketSet(oslSocketSet Set, oslSocket pSocket)
         return;
     }
 
-    pSet= (TSocketSetImpl*)Set;
-
     /* correct max handle */
-    if(pSocket->m_Socket > pSet->m_MaxHandle)
-        pSet->m_MaxHandle= pSocket->m_Socket;
-    FD_SET(pSocket->m_Socket, &pSet->m_Set);
+    if(pSocket->m_Socket > Set->m_MaxHandle)
+        Set->m_MaxHandle= pSocket->m_Socket;
+    FD_SET(pSocket->m_Socket, &Set->m_Set);
 
 }
 
 void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket pSocket)
 {
-    TSocketSetImpl* pSet;
-
     OSL_ASSERT(Set);
     OSL_ASSERT(pSocket);
 
@@ -2400,27 +2392,23 @@ void SAL_CALL osl_removeFromSocketSet(oslSocketSet Set, oslSocket pSocket)
         return;
     }
 
-    pSet= (TSocketSetImpl*)Set;
-
     /* correct max handle */
-    if(pSocket->m_Socket == pSet->m_MaxHandle)
+    if(pSocket->m_Socket == Set->m_MaxHandle)
     {
         /* not optimal, since the next used descriptor might be */
         /* much smaller than m_Socket-1, but it will do */
-        pSet->m_MaxHandle--;
-        if(pSet->m_MaxHandle < 0)
+        Set->m_MaxHandle--;
+        if(Set->m_MaxHandle < 0)
         {
-            pSet->m_MaxHandle= 0;   /* avoid underflow */
+            Set->m_MaxHandle= 0;   /* avoid underflow */
         }
     }
 
-    FD_CLR(pSocket->m_Socket, &pSet->m_Set);
+    FD_CLR(pSocket->m_Socket, &Set->m_Set);
 }
 
 sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket pSocket)
 {
-    TSocketSetImpl* pSet;
-
     OSL_ASSERT(Set);
     OSL_ASSERT(pSocket);
     if ( Set == 0 || pSocket == 0 )
@@ -2428,9 +2416,7 @@ sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket pSocket)
         return sal_False;
     }
 
-    pSet= (TSocketSetImpl*)Set;
-
-    return bool(FD_ISSET(pSocket->m_Socket, &pSet->m_Set));
+    return bool(FD_ISSET(pSocket->m_Socket, &Set->m_Set));
 }
 
 sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
@@ -2440,9 +2426,6 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
 {
     int MaxHandle= 0;
     struct timeval  tv;
-    TSocketSetImpl* pInSet;
-    TSocketSetImpl* pOutSet;
-    TSocketSetImpl* pOOBSet;
 
     if (pTimeout)
     {
@@ -2451,25 +2434,20 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
         tv.tv_usec = pTimeout->Nanosec / 1000L;
     }
 
-    /* map opaque data to impl-types */
-    pInSet=  (TSocketSetImpl*)IncomingSet;
-    pOutSet= (TSocketSetImpl*)OutgoingSet;
-    pOOBSet= (TSocketSetImpl*)OutOfBandSet;
-
     /* get max handle from all sets */
-    if (pInSet)
-        MaxHandle= pInSet->m_MaxHandle;
+    if (IncomingSet)
+        MaxHandle= IncomingSet->m_MaxHandle;
 
-    if (pOutSet && (pOutSet->m_MaxHandle > MaxHandle))
-        MaxHandle= pOutSet->m_MaxHandle;
+    if (OutgoingSet && (OutgoingSet->m_MaxHandle > MaxHandle))
+        MaxHandle= OutgoingSet->m_MaxHandle;
 
-    if (pOOBSet && (pOOBSet->m_MaxHandle > MaxHandle))
-        MaxHandle= pOOBSet->m_MaxHandle;
+    if (OutOfBandSet && (OutOfBandSet->m_MaxHandle > MaxHandle))
+        MaxHandle= OutOfBandSet->m_MaxHandle;
 
     return select(MaxHandle+1,
-                  pInSet  ? PTR_FD_SET(pInSet->m_Set)  : 0,
-                  pOutSet ? PTR_FD_SET(pOutSet->m_Set) : 0,
-                  pOOBSet ? PTR_FD_SET(pOOBSet->m_Set) : 0,
+                  IncomingSet  ? PTR_FD_SET(IncomingSet->m_Set)  : 0,
+                  OutgoingSet ? PTR_FD_SET(OutgoingSet->m_Set) : 0,
+                  OutOfBandSet ? PTR_FD_SET(OutOfBandSet->m_Set) : 0,
                   pTimeout ? &tv : 0);
 }
 

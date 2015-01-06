@@ -229,7 +229,7 @@ rtl_cache_hash_remove (
 /** RTL_CACHE_SLAB()
  */
 #define RTL_CACHE_SLAB(addr, size) \
-    (((rtl_cache_slab_type*)(RTL_MEMORY_P2END((sal_uIntPtr)(addr), (size)))) - 1)
+    ((reinterpret_cast<rtl_cache_slab_type*>(RTL_MEMORY_P2END(reinterpret_cast<sal_uIntPtr>(addr), (size)))) - 1)
 
 /** rtl_cache_slab_constructor()
  */
@@ -288,7 +288,7 @@ rtl_cache_slab_create (
         }
         if (slab != 0)
         {
-            slab->m_data = (sal_uIntPtr)(addr);
+            slab->m_data = reinterpret_cast<sal_uIntPtr>(addr);
 
             /* dynamic freelist initialization */
             slab->m_bp = slab->m_data;
@@ -312,7 +312,7 @@ rtl_cache_slab_destroy (
     rtl_cache_slab_type * slab
 )
 {
-    void *   addr   = (void*)(slab->m_data);
+    void *   addr   = reinterpret_cast<void*>(slab->m_data);
     sal_Size refcnt = slab->m_ntypes; slab->m_ntypes = 0;
 
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
@@ -422,12 +422,12 @@ rtl_cache_slab_alloc (
                 }
 
                 bufctl->m_addr = slab->m_bp;
-                bufctl->m_slab = (sal_uIntPtr)(slab);
+                bufctl->m_slab = reinterpret_cast<sal_uIntPtr>(slab);
             }
             else
             {
                 /* embedded bufctl */
-                bufctl = (rtl_cache_bufctl_type*)(slab->m_bp);
+                bufctl = reinterpret_cast<rtl_cache_bufctl_type*>(slab->m_bp);
             }
             bufctl->m_next = 0;
 
@@ -457,7 +457,7 @@ rtl_cache_slab_alloc (
         cache->m_slab_stats.m_mem_alloc += cache->m_type_size;
 
         if (cache->m_features & RTL_CACHE_FEATURE_HASH)
-            addr = (void*)rtl_cache_hash_insert (cache, bufctl);
+            addr = reinterpret_cast<void*>(rtl_cache_hash_insert (cache, bufctl));
         else
             addr = bufctl;
     }
@@ -484,8 +484,8 @@ rtl_cache_slab_free (
     /* determine slab from addr */
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
     {
-        bufctl = rtl_cache_hash_remove (cache, (sal_uIntPtr)(addr));
-        slab = (bufctl != 0) ? (rtl_cache_slab_type*)(bufctl->m_slab) : 0;
+        bufctl = rtl_cache_hash_remove (cache, reinterpret_cast<sal_uIntPtr>(addr));
+        slab = (bufctl != 0) ? reinterpret_cast<rtl_cache_slab_type*>(bufctl->m_slab) : 0;
     }
     else
     {
@@ -1326,7 +1326,7 @@ rtl_cache_wsupdate_init()
     g_cache_list.m_update_done = 0;
     (void) pthread_cond_init (&(g_cache_list.m_update_cond), NULL);
     if (pthread_create (
-            &(g_cache_list.m_update_thread), NULL, rtl_cache_wsupdate_all, (void*)(10)) != 0)
+            &(g_cache_list.m_update_thread), NULL, rtl_cache_wsupdate_all, reinterpret_cast<void*>(10)) != 0)
     {
         /* failure */
         g_cache_list.m_update_thread = (pthread_t)(0);

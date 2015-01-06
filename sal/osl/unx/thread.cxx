@@ -538,7 +538,7 @@ void SAL_CALL osl_yieldThread()
 
 void SAL_CALL osl_setThreadName(char const * name) {
 #if defined LINUX && ! defined __FreeBSD_kernel__
-    if (prctl(PR_SET_NAME, (unsigned long) name, 0, 0, 0) != 0) {
+    if (prctl(PR_SET_NAME, reinterpret_cast<unsigned long>(name), 0, 0, 0) != 0) {
         int e = errno;
         SAL_WARN("sal.osl", "prctl(PR_SET_NAME) failed with errno " << e);
     }
@@ -1022,7 +1022,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
 
     /* check for thread specific encoding, use default if not set */
     threadEncoding = static_cast<rtl_TextEncoding>(
-        (sal_uIntPtr) pthread_getspecific(g_thread.m_textencoding.m_key));
+        reinterpret_cast<sal_uIntPtr>(pthread_getspecific(g_thread.m_textencoding.m_key)));
     if (0 == threadEncoding)
         threadEncoding = g_thread.m_textencoding.m_default;
 
@@ -1036,7 +1036,7 @@ rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
     /* save encoding in thread local storage */
     pthread_setspecific (
         g_thread.m_textencoding.m_key,
-        (void*) static_cast<sal_uIntPtr>(Encoding));
+        reinterpret_cast<void*>(static_cast<sal_uIntPtr>(Encoding)));
 
     return oldThreadEncoding;
 }

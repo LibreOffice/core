@@ -239,7 +239,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
         rtl_TextToUnicodeContext aContext
             = rtl_createTextToUnicodeContext(aConverter);
         CPPUNIT_ASSERT_MESSAGE("rtl_createTextToUnicodeContext failed", aContext != NULL);
-        if (aContext != (rtl_TextToUnicodeContext) 1) {
+        if (aContext != reinterpret_cast<rtl_TextToUnicodeContext>(1)) {
             sal_Size nInput = 0;
             sal_Size nOutput = 0;
             for (bool bFlush = true; nInput < rTest.m_nTextSize || bFlush;) {
