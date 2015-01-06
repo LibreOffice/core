@@ -239,7 +239,6 @@ public:
     void EnableQuickSelection( const bool& b );
 };
 
-typedef VclReference<ListBox> ListBoxPtr;
 
 // - MultiListBox -
 

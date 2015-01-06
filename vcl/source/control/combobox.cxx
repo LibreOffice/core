@@ -68,7 +68,7 @@ ComboBox::ComboBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ComboBox::~ComboBox()
 {
-    SetSubEdit(VclReference<Edit>());
+    SetSubEdit(VclPtr<Edit>());
 
     ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;

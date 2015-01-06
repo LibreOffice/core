@@ -375,7 +375,7 @@ namespace pcr
     {
     private:
         OMultilineFloatingEdit*             m_pFloatingEdit;
-        VclReference<MultiLineEdit>         m_pImplEdit;
+        VclPtr<MultiLineEdit>               m_pImplEdit;
         PushButton*                         m_pDropdownButton;
         MultiLineOperationMode              m_nOperationMode;
         bool                                m_bDropdown : 1;

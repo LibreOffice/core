@@ -52,8 +52,6 @@ public:
     Image   maImage;
 };
 
-typedef VclReference<DecoToolBox> DecoToolBoxPtr;
-
 
 /** Class that implements the actual window of the menu bar.
 */
@@ -81,9 +79,9 @@ private:
     bool            bIgnoreFirstMove;
     bool            bStayActive;
 
-    DecoToolBoxPtr  aCloseBtn;
-    PushButtonPtr   aFloatBtn;
-    PushButtonPtr   aHideBtn;
+    VclPtr<DecoToolBox>  aCloseBtn;
+    VclPtr<PushButton>   aFloatBtn;
+    VclPtr<PushButton>   aHideBtn;
 
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 

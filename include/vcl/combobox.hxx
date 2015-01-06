@@ -39,7 +39,7 @@ class ImplBtn;
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
-    VclReference<Edit>          mpSubEdit;
+    VclPtr<Edit>                mpSubEdit;
     ImplListBox*                mpImplLB;
     ImplBtn*                    mpBtn;
     ImplListBoxFloatingWindow*  mpFloatWin;
@@ -225,7 +225,6 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
-typedef VclReference<ComboBox> ComboBoxPtr;
 
 #endif  // _COMBOBOX_HXX
 

@@ -17,7 +17,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
-#include <vcl/vclref.hxx>
+#include <vcl/vclptr.hxx>
 #include <boost/multi_array.hpp>
 #include <set>
 
@@ -59,7 +59,6 @@ public:
 private:
     bool m_bLayoutDirty;
 };
-typedef VclReference<VclContainer> VclContainerRef;
 
 class VCL_DLLPUBLIC VclBox : public VclContainer
 {
@@ -111,7 +110,6 @@ protected:
 
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const = 0;
 };
-typedef VclReference<VclBox> VclBoxRef;
 
 class VCL_DLLPUBLIC VclVBox : public VclBox
 {
@@ -159,7 +157,6 @@ protected:
         return rWindow.get_expand() || rWindow.get_vexpand();
     }
 };
-typedef VclReference<VclVBox> VclVBoxRef;
 
 class VCL_DLLPUBLIC VclHBox : public VclBox
 {
@@ -207,7 +204,6 @@ protected:
         return rWindow.get_expand() || rWindow.get_hexpand();
     }
 };
-typedef VclReference<VclHBox> VclHBoxRef;
 
 enum VclButtonBoxStyle
 {
@@ -253,7 +249,6 @@ private:
     Requisition calculatePrimarySecondaryRequisitions() const;
     Size addReqGroups(const VclButtonBox::Requisition &rReq) const;
 };
-typedef VclReference<VclButtonBox> VclButtonBoxRef;
 
 class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
 {
@@ -301,7 +296,6 @@ protected:
         return rWindow.get_expand() || rWindow.get_vexpand();
     }
 };
-typedef VclReference<VclVButtonBox> VclVButtonBoxRef;
 
 class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
 {
@@ -349,7 +343,6 @@ protected:
         return rWindow.get_expand() || rWindow.get_hexpand();
     }
 };
-typedef VclReference<VclHButtonBox> VclHButtonBoxRef;
 
 class VCL_DLLPUBLIC VclGrid : public VclContainer
 {
@@ -443,7 +436,6 @@ public:
     }
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
-typedef VclReference<VclGrid> VclGridRef;
 
 VCL_DLLPUBLIC void setGridAttach(vcl::Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
     sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
@@ -460,7 +452,6 @@ public:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 };
-typedef VclReference<VclBin> VclBinRef;
 
 class VCL_DLLPUBLIC VclFrame : public VclBin
 {
@@ -487,7 +478,6 @@ protected:
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
     virtual OUString getDefaultAccessibleName() const SAL_OVERRIDE;
 };
-typedef VclReference<VclFrame> VclFrameRef;
 
 class VCL_DLLPUBLIC VclAlignment : public VclBin
 {
@@ -518,7 +508,6 @@ private:
     float m_fYAlign;
     float m_fYScale;
 };
-typedef VclReference<VclAlignment> VclAlignmentRef;
 
 class VCL_DLLPUBLIC VclExpander : public VclBin
 {
@@ -559,11 +548,10 @@ protected:
     void dispose() SAL_OVERRIDE { m_pDisclosureButton.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bResizeTopLevel;
-    DisclosureButtonPtr m_pDisclosureButton;
+    VclPtr<DisclosureButton> m_pDisclosureButton;
     Link maExpandedHdl;
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
-typedef VclReference<VclExpander> VclExpanderRef;
 
 class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
@@ -587,11 +575,10 @@ protected:
     void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bUserManagedScrolling;
-    ScrollBarPtr m_pVScroll;
-    ScrollBarPtr m_pHScroll;
+    VclPtr<ScrollBar> m_pVScroll;
+    VclPtr<ScrollBar> m_pHScroll;
     ScrollBarBox m_aScrollBarBox;
 };
-typedef VclReference<VclScrolledWindow> VclScrolledWindowRef;
 
 class VCL_DLLPUBLIC VclViewport : public VclBin
 {
@@ -603,7 +590,6 @@ public:
 protected:
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 };
-typedef VclReference<VclViewport> VclViewportRef;
 
 //Enforces that its children are always the same size as itself.
 //Intercepts any Commands intended for its children.
@@ -648,7 +634,6 @@ public:
 
     virtual void Command(const CommandEvent& rCEvt) SAL_OVERRIDE;
 };
-typedef VclReference<VclEventBox> VclEventBoxRef;
 
 enum VclSizeGroupMode
 {
@@ -700,7 +685,6 @@ public:
     }
     bool set_property(const OString &rKey, const OString &rValue);
 };
-typedef VclReference<VclSizeGroup> VclSizeGroupRef;
 
 enum VclButtonsType
 {
@@ -725,13 +709,13 @@ class VCL_DLLPUBLIC MessageDialog : public Dialog
 private:
     VclButtonsType m_eButtonsType;
     VclMessageType m_eMessageType;
-    VclBoxRef m_pOwnedContentArea;
-    VclButtonBoxRef m_pOwnedActionArea;
-    VclGridRef m_pGrid;
+    VclPtr<VclBox> m_pOwnedContentArea;
+    VclPtr<VclButtonBox> m_pOwnedActionArea;
+    VclPtr<VclGrid> m_pGrid;
     FixedImage* m_pImage;
     VclMultiLineEdit* m_pPrimaryMessage;
     VclMultiLineEdit* m_pSecondaryMessage;
-    std::vector<PushButtonPtr> m_aOwnedButtons;
+    std::vector<VclPtr<PushButton> > m_aOwnedButtons;
     std::map<const vcl::Window*, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
@@ -764,7 +748,6 @@ public:
     static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);
 };
-typedef VclReference<MessageDialog> MessageDialogRef;
 
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 

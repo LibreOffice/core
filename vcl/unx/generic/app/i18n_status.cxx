@@ -77,7 +77,7 @@ namespace vcl {
 
 class XIMStatusWindow : public StatusWindow
 {
-    FixedTextPtr            m_aStatusText;
+    VclPtr<FixedText>       m_aStatusText;
     SalFrame*               m_pLastParent;
     Size                    m_aWindowSize;
     bool                    m_bAnchoredAtRight;
@@ -302,7 +302,7 @@ namespace vcl {
 
 class IIIMPStatusWindow : public StatusWindow
 {
-    MenuButtonPtr           m_aStatusBtn;
+    VclPtr<MenuButton>      m_aStatusBtn;
     PopupMenu               m_aMenu;
     SalFrame*               m_pResetFocus;
     bool                    m_bShow;

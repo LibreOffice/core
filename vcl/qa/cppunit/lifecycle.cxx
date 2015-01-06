@@ -39,21 +39,21 @@ public:
 // A compile time sanity check
 void LifecycleTest::testCast()
 {
-    VclReference<PushButton> xButton(new PushButton(NULL, 0));
-    VclReference<vcl::Window> xWindow(xButton);
+    VclPtr<PushButton> xButton(new PushButton(NULL, 0));
+    VclPtr<vcl::Window> xWindow(xButton);
 
-    VclReference<MetricField> xField(new MetricField(NULL, 0));
-    VclReference<SpinField> xSpin(xField);
-    VclReference<Edit> xEdit(xField);
+    VclPtr<MetricField> xField(new MetricField(NULL, 0));
+    VclPtr<SpinField> xSpin(xField);
+    VclPtr<Edit> xEdit(xField);
 
 // the following line should NOT compile
-//    VclReference<PushButton> xButton2(xWindow);
+//    VclPtr<PushButton> xButton2(xWindow);
 }
 
 void LifecycleTest::testMultiDispose()
 {
-    VclReference<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
-                                                 WB_APP|WB_STDWORK));
+    VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
+                                           WB_APP|WB_STDWORK));
     CPPUNIT_ASSERT(xWin.get() != NULL);
     xWin->dispose();
     xWin->dispose();
@@ -65,19 +65,19 @@ void LifecycleTest::testMultiDispose()
 
 void LifecycleTest::testWidgets(vcl::Window *pParent)
 {
-    { PushButtonPtr   aPtr(new PushButton(pParent));   }
-    { OKButtonPtr     aPtr(new OKButton(pParent));     }
-    { CancelButtonPtr aPtr(new CancelButton(pParent)); }
-    { HelpButtonPtr   aPtr(new HelpButton(pParent));   }
+    { VclPtr<PushButton>   aPtr(new PushButton(pParent));   }
+    { VclPtr<OKButton>     aPtr(new OKButton(pParent));     }
+    { VclPtr<CancelButton> aPtr(new CancelButton(pParent)); }
+    { VclPtr<HelpButton>   aPtr(new HelpButton(pParent));   }
 
     // Some widgets really insist on adoption.
     if (pParent)
     {
-        { CheckBoxPtr     aPtr(new CheckBox(pParent));    }
-//        { EditRef         aPtr(new Edit(pParent));        }
-//        { ComboBoxPtr     aPtr(new ComboBox(pParent)); }
+        { VclPtr<CheckBox>     aPtr(new CheckBox(pParent));    }
+//        { VclPtr<Edit>         aPtr(new Edit(pParent));        }
+//        { VclPtr<ComboBox>     aPtr(new ComboBox(pParent)); }
     }
-//    { RadioButtonPtr  aPtr(new RadioButton(pParent));  }
+//    { VclPtr<RadioButton>  aPtr(new RadioButton(pParent));  }
 }
 
 void LifecycleTest::testIsolatedWidgets()
@@ -87,7 +87,7 @@ void LifecycleTest::testIsolatedWidgets()
 
 void LifecycleTest::testParentedWidgets()
 {
-    VclReference<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
+    VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
                                                  WB_APP|WB_STDWORK));
     CPPUNIT_ASSERT(xWin.get() != NULL);
     testWidgets(xWin);

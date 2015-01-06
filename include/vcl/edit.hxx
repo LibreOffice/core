@@ -28,7 +28,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>
-#include <vcl/vclref.hxx>
+#include <vcl/vclptr.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com {
@@ -69,7 +69,7 @@ enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOM
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
 {
 private:
-    VclReference<Edit>  mpSubEdit;
+    VclPtr<Edit>        mpSubEdit;
     Timer*              mpUpdateDataTimer;
     TextFilter*         mpFilterText;
     DDInfo*             mpDDInfo;
@@ -237,7 +237,7 @@ public:
     virtual const Link& GetModifyHdl() const { return maModifyHdl; }
     virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
 
-    void                SetSubEdit( VclReference<Edit> pEdit );
+    void                SetSubEdit( VclPtr<Edit> pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }
 
     boost::signals2::signal< void ( Edit* ) > autocompleteSignal;
@@ -270,7 +270,6 @@ public:
     // global style settings (needed by sc's inputwin.cxx)
     static Size GetMinimumEditSize();
 };
-typedef VclReference<Edit> EditRef;
 
 #endif // INCLUDED_VCL_EDIT_HXX
 

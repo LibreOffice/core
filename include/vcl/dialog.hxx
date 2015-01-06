@@ -24,7 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/vclref.hxx>
+#include <vcl/vclptr.hxx>
 
 // parameter to pass to the dialog constructor if really no parent is wanted
 // whereas NULL chooses the default dialog parent
@@ -48,8 +48,8 @@ private:
     bool            mbInClose;
     bool            mbModalMode;
 
-    VclReference<VclButtonBox> mpActionArea;
-    VclReference<VclBox>       mpContentArea;
+    VclPtr<VclButtonBox> mpActionArea;
+    VclPtr<VclBox>       mpContentArea;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -75,8 +75,8 @@ protected:
 
 protected:
     friend class VclBuilder;
-    void set_action_area(const VclReference<VclButtonBox> &xBox);
-    void set_content_area(const VclReference<VclBox> &xBox);
+    void set_action_area(const VclPtr<VclButtonBox> &xBox);
+    void set_content_area(const VclPtr<VclBox> &xBox);
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
@@ -122,7 +122,6 @@ public:
 
     void            GrabFocusToFirstControl();
 };
-typedef VclReference<Dialog> DialogRef;
 
 // - ModelessDialog -
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
@@ -133,7 +132,6 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
 };
-typedef VclReference<ModelessDialog> ModelessDialogRef;
 
 // - ModalDialog -
 class VCL_DLLPUBLIC ModalDialog : public Dialog
@@ -153,7 +151,6 @@ private:
     SAL_DLLPRIVATE         ModalDialog (const ModalDialog &) SAL_DELETED_FUNCTION;
     SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) SAL_DELETED_FUNCTION;
 };
-typedef VclReference<ModalDialog> ModalDialogRef;
 
 #endif // INCLUDED_VCL_DIALOG_HXX
 

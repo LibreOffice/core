@@ -320,7 +320,7 @@ Control* FontPropertyBox::getControl()
 class DropdownMenuBox : public Edit
 {
 public:
-    DropdownMenuBox( vcl::Window* pParent, const EditRef &pSubControl, PopupMenu* pMenu );
+    DropdownMenuBox( vcl::Window* pParent, const VclPtr<Edit> &pSubControl, PopupMenu* pMenu );
     virtual ~DropdownMenuBox();
 
     void Resize() SAL_OVERRIDE;
@@ -329,12 +329,12 @@ public:
     void SetMenuSelectHdl( const Link& rLink ) { mpDropdownButton->SetSelectHdl( rLink ); }
 
 private:
-    EditRef     mpSubControl;
-    MenuButton* mpDropdownButton;
-    PopupMenu*  mpMenu;
+    VclPtr<Edit> mpSubControl;
+    MenuButton*  mpDropdownButton;
+    PopupMenu*   mpMenu;
 };
 
-DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, const EditRef &pSubControl, PopupMenu* pMenu )
+DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, const VclPtr<Edit> &pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
@@ -350,7 +350,7 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, const EditRef &pSubContr
 
 DropdownMenuBox::~DropdownMenuBox()
 {
-    SetSubEdit(EditRef());
+    SetSubEdit(VclPtr<Edit>());
     delete mpDropdownButton;
     delete mpMenu;
 }
@@ -406,7 +406,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    VclReference<MetricField> mpMetric;
+    VclPtr<MetricField> mpMetric;
 };
 
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
@@ -486,7 +486,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    VclReference<MetricField> mpMetric;
+    VclPtr<MetricField> mpMetric;
     Link maModifyHdl;
 };
 
@@ -590,7 +590,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    VclReference<MetricField> mpMetric;
+    VclPtr<MetricField> mpMetric;
     Link maModifyHdl;
 };
 
@@ -715,7 +715,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    VclReference<MetricField> mpMetric;
+    VclPtr<MetricField> mpMetric;
     Link maModifyHdl;
     int mnDirection;
 };
@@ -877,7 +877,7 @@ public:
 private:
     DropdownMenuBox* mpControl;
     PopupMenu* mpMenu;
-    EditRef mpEdit;
+    VclPtr<Edit> mpEdit;
     Link maModifyHdl;
 
     float mfFontWeight;

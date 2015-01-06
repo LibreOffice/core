@@ -2159,7 +2159,7 @@ short MessageDialog::Execute()
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
 
-        PushButtonPtr pBtn;
+        VclPtr<PushButton> pBtn;
         switch (m_eButtonsType)
         {
             case VCL_BUTTONS_NONE:

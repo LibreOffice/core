@@ -509,12 +509,12 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle)
     ImplInit( pParent, nStyle );
 }
 
-void Dialog::set_action_area(const VclButtonBoxRef &xBox)
+void Dialog::set_action_area(const VclPtr<VclButtonBox> &xBox)
 {
     mpActionArea = xBox;
 }
 
-void Dialog::set_content_area(const VclBoxRef &xBox)
+void Dialog::set_content_area(const VclPtr<VclBox> &xBox)
 {
     mpContentArea = xBox;
 }

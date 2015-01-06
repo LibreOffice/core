@@ -207,9 +207,9 @@ NULL
 class DbgInfoDialog : public ModalDialog
 {
 private:
-    ListBoxPtr      maListBox;
-    OKButtonPtr     maOKButton;
-    bool            mbHelpText;
+    VclPtr<ListBox>   maListBox;
+    VclPtr<OKButton>  maOKButton;
+    bool              mbHelpText;
 
 public:
                     DbgInfoDialog( vcl::Window* pParent, bool bHelpText = false );
@@ -222,14 +222,14 @@ private:
 class DbgDialog : public ModalDialog
 {
 private:
-    CheckBoxPtr     maRes;
-    CheckBoxPtr     maDialog;
-    CheckBoxPtr     maBoldAppFont;
-    GroupBoxPtr     maBox3;
+    VclPtr<CheckBox>     maRes;
+    VclPtr<CheckBox>     maDialog;
+    VclPtr<CheckBox>     maBoldAppFont;
+    VclPtr<GroupBox>     maBox3;
 
-    OKButtonPtr     maOKButton;
-    CancelButtonPtr maCancelButton;
-    HelpButtonPtr   maHelpButton;
+    VclPtr<OKButton>     maOKButton;
+    VclPtr<CancelButton> maCancelButton;
+    VclPtr<HelpButton>   maHelpButton;
 
 public:
                     DbgDialog();

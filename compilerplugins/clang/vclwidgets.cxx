@@ -72,7 +72,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
 
     report(
         DiagnosticsEngine::Warning,
-        "vcl::Window subclass allocated as a class member, should be allocated via VclReference.",
+        "vcl::Window subclass allocated as a class member, should be allocated via VclPtr.",
         fieldDecl->getLocation())
       << fieldDecl->getSourceRange();
     return true;

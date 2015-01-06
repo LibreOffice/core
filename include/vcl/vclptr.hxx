@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_REFERENCE_HXX
-#define INCLUDED_VCL_REFERENCE_HXX
+#ifndef INCLUDED_VCL_PTR_HXX
+#define INCLUDED_VCL_PTR_HXX
 
 #include <rtl/ref.hxx>
 
@@ -73,7 +73,7 @@ public:
  * @param reference_type must be a subclass of vcl::Window
  */
 template <class reference_type>
-class VclReference
+class VclPtr
 {
 
     ::rtl::Reference<reference_type> m_rInnerRef;
@@ -81,21 +81,21 @@ class VclReference
 public:
     /** Constructor...
      */
-    inline VclReference()
+    inline VclPtr()
         : m_rInnerRef()
     {}
 
 
     /** Constructor...
      */
-    inline VclReference (reference_type * pBody)
+    inline VclPtr (reference_type * pBody)
         : m_rInnerRef(pBody)
     {}
 
 
     /** Copy constructor...
      */
-    inline VclReference (const VclReference<reference_type> & handle)
+    inline VclPtr (const VclPtr<reference_type> & handle)
         : m_rInnerRef (handle.m_rInnerRef)
     {}
 
@@ -108,8 +108,8 @@ public:
         @param rRef another reference
     */
     template< class derived_type >
-    inline VclReference(
-        const VclReference< derived_type > & rRef,
+    inline VclPtr(
+        const VclPtr< derived_type > & rRef,
         typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
         : m_rInnerRef( static_cast<reference_type*>(rRef) )
     {
@@ -150,8 +150,8 @@ public:
             aTmp->dispose();
     }
 
-}; // class VclReference
+}; // class VclPtr
 
-#endif // INCLUDED_VCL_REFERENCE_HXX
+#endif // INCLUDED_VCL_PTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

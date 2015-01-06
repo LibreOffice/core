@@ -35,7 +35,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
 };
-typedef VclReference<MultiLineEdit> MultiLineEditRef;
 
 
 #endif // INCLUDED_SVTOOLS_SVMEDIT_HXX

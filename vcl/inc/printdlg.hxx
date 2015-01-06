@@ -53,11 +53,11 @@ namespace vcl
             Size                maPreviewSize;
             VirtualDevice       maPageVDev;
             Bitmap              maPreviewBitmap;
-            OUString       maReplacementString;
-            OUString       maToolTipString;
+            OUString            maReplacementString;
+            OUString            maToolTipString;
             bool                mbGreyscale;
-            FixedLinePtr        maHorzDim;
-            FixedLinePtr        maVertDim;
+            VclPtr<FixedLine>   maHorzDim;
+            VclPtr<FixedLine>   maVertDim;
 
             void preparePreviewBitmap();
 

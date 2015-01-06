@@ -92,10 +92,10 @@ SAL_IMPLEMENT_MAIN()
 
 class MyWin : public WorkWindow
 {
-    PushButtonPtr   m_aListButton;
-    ListBoxPtr      m_aSvpBitmaps;
-    ImageControlPtr m_aImage;
-    PushButtonPtr   m_aQuitButton;
+    VclPtr<PushButton>   m_aListButton;
+    VclPtr<ListBox>      m_aSvpBitmaps;
+    VclPtr<ImageControl> m_aImage;
+    VclPtr<PushButton>   m_aQuitButton;
 public:
                  MyWin( vcl::Window* pParent, WinBits nWinStyle );
 

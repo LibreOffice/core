@@ -83,8 +83,6 @@ public:
     vcl::Window* get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
-typedef VclReference<FixedText> FixedTextPtr;
-
 class VCL_DLLPUBLIC SelectableFixedText : public Edit
 {
 public:
@@ -126,8 +124,6 @@ public:
 
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
-
-typedef VclReference<FixedLine> FixedLinePtr;
 
 // - FixedBitmap -
 class VCL_DLLPUBLIC FixedBitmap : public Control

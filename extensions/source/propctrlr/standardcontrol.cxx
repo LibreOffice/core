@@ -1029,7 +1029,7 @@ namespace pcr
     {
         SetCompoundControl( true );
 
-        m_pImplEdit = MultiLineEditRef( new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) ) );
+        m_pImplEdit = VclPtr<MultiLineEdit>( new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) ) );
         SetSubEdit( m_pImplEdit.get() );
         m_pImplEdit->Show();
 
@@ -1064,7 +1064,7 @@ namespace pcr
             boost::scoped_ptr<vcl::Window> aTemp(m_pFloatingEdit);
             m_pFloatingEdit = NULL;
         }
-        SetSubEdit(EditRef());
+        SetSubEdit(VclPtr<Edit>());
         {
             boost::scoped_ptr<vcl::Window> aTemp(m_pDropdownButton);
             m_pDropdownButton = NULL;

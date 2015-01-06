@@ -130,7 +130,6 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
-typedef VclReference<VclMultiLineEdit> VclMultiLineEditRef;
 
 #endif // INCLUDED_VCL_VCLMEDIT_HXX
 

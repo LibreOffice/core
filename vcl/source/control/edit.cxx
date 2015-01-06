@@ -285,7 +285,7 @@ void Edit::dispose()
 
 void Edit::ImplInitEditData()
 {
-    mpSubEdit               = EditRef();
+    mpSubEdit               = VclPtr<Edit>();
     mpUpdateDataTimer       = NULL;
     mpFilterText            = NULL;
     mnXOffset               = 0;
@@ -2706,7 +2706,7 @@ void Edit::ClearModifyFlag()
         mbModified = false;
 }
 
-void Edit::SetSubEdit( VclReference<Edit> pEdit )
+void Edit::SetSubEdit( VclPtr<Edit> pEdit )
 {
     mpSubEdit.disposeAndClear();
     mpSubEdit = pEdit;
