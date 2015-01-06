@@ -103,7 +103,13 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         }
     } else {
         if (filename.startswith(SRCDIR "/include/tools/solar.h")
-           || filename.startswith(SRCDIR "/include/cppuhelper/")) {
+           || filename.startswith(SRCDIR "/include/cppuhelper/")
+           || ((StringRef(
+                    compiler.getSourceManager().getFileEntryForID(
+                        compiler.getSourceManager().getMainFileID())
+                    ->getName())
+                == SRCDIR "/jurt/source/pipe/staticsalhack.cxx")
+               && filename.startswith(SRCDIR "/sal/"))) {
             return true;
         }
     }
