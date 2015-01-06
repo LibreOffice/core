@@ -97,8 +97,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         return true;
     }
     if (!compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        && (filename == SRCDIR "/include/tools/solar.h"
-            || filename.startswith(SRCDIR "/include/cppuhelper/")))
+        && filename.startswith(SRCDIR "/include/cppuhelper/"))
     {
         return true;
     }
