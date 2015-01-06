@@ -15,6 +15,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
+#include <osl/time.h>
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
 #include <salhelper/thread.hxx>
@@ -1200,12 +1201,14 @@ class DemoWin : public WorkWindow
     bool testThreads;
 
     class RenderThread : public salhelper::Thread {
-        DemoWin &mrWin;
+        DemoWin  &mrWin;
+        TimeValue maDelay;
     public:
-        RenderThread(DemoWin &rWin)
+        RenderThread(DemoWin &rWin, sal_uInt32 nDelaySecs)
             : Thread("vcldemo render thread")
             , mrWin(rWin)
         {
+            maDelay.Seconds = nDelaySecs;
             launch();
         }
         virtual ~RenderThread()
@@ -1214,6 +1217,8 @@ class DemoWin : public WorkWindow
         }
         virtual void execute()
         {
+            osl_waitThread(&maDelay);
+
             SolarMutexGuard aGuard;
             fprintf (stderr, "render from a different thread\n");
             mrWin.Paint(Rectangle());
@@ -1242,7 +1247,10 @@ public:
         {
             if (testThreads)
             { // render this window asynchronously in a new thread
-                mxThread = new RenderThread(*this);
+                sal_uInt32 nDelaySecs = 0;
+                if (rMEvt.GetButtons() & MOUSE_RIGHT)
+                    nDelaySecs = 5;
+                mxThread = new RenderThread(*this, nDelaySecs);
             }
             else
             { // spawn another window
@@ -1388,6 +1396,12 @@ public:
                     bWidgets = true;
                 else if (aArg == "--threads")
                     bThreads = true;
+                else if (aArg.startsWith("--"))
+                {
+                    fprintf(stderr,"Unknown argument '%s'\n",
+                            rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8).getStr());
+                    return showHelp(aRenderer);
+                }
             }
 
             DemoWin aMainWin(aRenderer, bThreads);
