@@ -76,10 +76,18 @@ SalSystem* ImplGetSalSystem()
     return pSVData->mpSalSystem;
 }
 
-ImplSVData::ImplSVData()
+ImplSVData::ImplSVData() :
+    mpSalData(nullptr), mpDefInst(nullptr), mpApp(nullptr), mpDefaultWin(nullptr), mbDeInit(false),
+    mnThreadCount(0), mpFirstConfigData(nullptr), mpFirstTimerData(nullptr), mpSalTimer(nullptr),
+    mpImeStatus(nullptr), mpSalSystem(nullptr), mpResMgr(nullptr), mnTimerPeriod(0), mnTimerUpdate(0),
+    mbNotAllTimerCalled(false), mbNoCallTimer(false), maAppData(),
+    maGDIData(ImplSVGDIData()), maWinData(ImplSVWinData()), maCtrlData(ImplSVCtrlData()),
+    maHelpData(ImplSVHelpData()), maNWFData(ImplSVNWFData()), mpUnoWrapper(nullptr),
+    mpIntroWindow(nullptr), mpDockingManager(nullptr), mpBlendFrameCache(nullptr), mbIsTestTool(false),
+    mnMainThreadId(0), mxDisplayConnection(0), mxAccessBridge(), mpSettingsConfigItem(nullptr),
+    mpDeinitDeleteList(nullptr), mpPaperNames(nullptr), maDeInitHook(Link())
 {
     // init global instance data
-    memset( this, 0, sizeof( ImplSVData ) );
     maHelpData.mbAutoHelpId = true;
     maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 }
