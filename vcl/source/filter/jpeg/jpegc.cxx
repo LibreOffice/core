@@ -69,6 +69,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     long                            nAlignedWidth;
     JSAMPLE*                        aRangeLimit;
     boost::scoped_array<unsigned char> pScanLineBuffer;
+    long                            nScanLineBufferComponents;
 
     if ( setjmp( jerr.setjmp_buffer ) )
     {
@@ -149,7 +150,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     nAlignedWidth = aCreateBitmapParam.nAlignedWidth;
     aRangeLimit = cinfo.sample_range_limit;
 
-    long nScanLineBufferComponents = 0;
+    nScanLineBufferComponents = 0;
     if ( cinfo.out_color_space == JCS_CMYK )
     {
         nScanLineBufferComponents = cinfo.output_width * 4;
