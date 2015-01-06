@@ -308,7 +308,7 @@ struct ImplSVData
     WorkWindow*             mpDefaultWin;                   // Default-Window
     bool                    mbDeInit;                       // Is VCL deinitializing
     sal_uLong               mnThreadCount;                  // is VCL MultiThread enabled
-    ImplConfigData*         mpFirstConfigData;              // Zeiger auf ersten Config-Block
+    ImplConfigData*         mpFirstConfigData;              // pointer to the first config block
     ImplTimerData*          mpFirstTimerData;               // list of all running timers
     SalTimer*               mpSalTimer;                     // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus;                    // interface to ime status window
@@ -316,7 +316,7 @@ struct ImplSVData
     ResMgr*                 mpResMgr;                       // SV-Resource-Manager
     sal_uLong               mnTimerPeriod;                  // current timer period
     sal_uLong               mnTimerUpdate;                  // TimerCallbackProcs on stack
-    bool                    mbNotAllTimerCalled;            // true: Es muessen noch Timer abgearbeitet werden
+    bool                    mbNotAllTimerCalled;            // true: Timer must still be processed
     bool                    mbNoCallTimer;                  // true: No Timeout calls
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
