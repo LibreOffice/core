@@ -1,0 +1,22 @@
+--- Objects/listobject.c
++++ Objects/listobject.c
+@@ -2036,7 +2036,7 @@
+     if (keys != NULL) {
+         for (i = 0; i < saved_ob_size; i++)
+             Py_DECREF(keys[i]);
+-        if (keys != &ms.temparray[saved_ob_size+1])
++        if (keys != ((char *) ms.temparray) + (saved_ob_size+1) * sizeof (PyObject *))
+             PyMem_FREE(keys);
+     }
+ 
+--- Objects/longobject.c
++++ Objects/longobject.c
+@@ -36,7 +36,7 @@
+ static PyObject *
+ get_small_int(sdigit ival)
+ {
+-    PyObject *v = (PyObject*)(small_ints + ival + NSMALLNEGINTS);
++    PyObject *v = (PyObject*)(small_ints + (ival + NSMALLNEGINTS));
+     Py_INCREF(v);
+ #ifdef COUNT_ALLOCS
+     if (ival >= 0)
