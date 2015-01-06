@@ -3157,6 +3157,13 @@ void SwXTextDocument::initializeForTiledRendering()
     pView->SetViewLayout(nColumns, bBookMode, true);
 }
 
+void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    pViewShell->registerLibreOfficeKitCallback(pCallback, pData);
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

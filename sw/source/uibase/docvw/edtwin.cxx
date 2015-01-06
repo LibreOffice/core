@@ -6235,4 +6235,19 @@ void SwEditWin::SwitchView()
 #endif
 }
 
+void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
+{
+    OString sRectangle;
+    if (!pRegion)
+        sRectangle = "EMPTY";
+    else
+    {
+        std::stringstream ss;
+        Rectangle aRectangle = pRegion->GetBoundRect();
+        ss << aRectangle.getWidth() << ", " << aRectangle.getHeight() << ", " << aRectangle.getX() << ", " << aRectangle.getY();
+        sRectangle = ss.str().c_str();
+    }
+    m_rView.GetWrtShell().libreOfficeKitCallback(0, sRectangle.getStr());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

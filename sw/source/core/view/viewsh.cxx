@@ -117,6 +117,18 @@ void SwViewShell::ToggleHeaderFooterEdit()
     GetWin()->Invalidate();
 }
 
+void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    mpLibreOfficeKitCallback = pCallback;
+    mpLibreOfficeKitData = pData;
+}
+
+void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload)
+{
+    if (mpLibreOfficeKitCallback)
+        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
+}
+
 static void
 lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
 {

@@ -30,6 +30,7 @@
 #include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
+#include <vcl/ITiledRenderable.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -193,6 +194,9 @@ protected:
     sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.
     sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
     bool      mbSelectAll; ///< Special select all mode: whole document selected, even if doc starts with table.
+
+    LibreOfficeKitCallback mpLibreOfficeKitCallback;
+    void* mpLibreOfficeKitData;
 
 public:
     TYPEINFO();
@@ -572,6 +576,12 @@ public:
     bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) mbShowHeaderSeparator = bShow; else mbShowFooterSeparator = bShow; }
     bool IsSelectAll() { return mbSelectAll; }
+
+    /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API for Writer.
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    /// Invokes the registered callback, if there are any.
+    void libreOfficeKitCallback(int nType, const char* pPayload);
+
     SwViewShell* GetNext()
         { return GetNextInRing(); }
     const SwViewShell* GetNext() const

@@ -296,6 +296,12 @@ public:
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
     virtual void SwitchView();
+    /**
+     * Notification about some region of the output device got invalidated.
+     *
+     * @param pRegion If 0, that means the whole area, otherwise the area in logic coordinates.
+     */
+    void LogicInvalidate(const vcl::Region* pRegion) SAL_OVERRIDE;
 };
 
 #endif

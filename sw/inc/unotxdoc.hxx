@@ -442,6 +442,14 @@ public:
                             long nTileHeight ) SAL_OVERRIDE;
     virtual Size getDocumentSize() SAL_OVERRIDE;
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
+    /**
+     * Registers a callback that will be invoked whenever the tiled renderer
+     * wants to notify the client about an event.
+     *
+     * @param pCallBack is the callback function
+     * @param pData is private data of the client that will be sent back when the callback is invoked
+     */
+    virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
