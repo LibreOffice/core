@@ -2401,7 +2401,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocRMZ:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPMT, nResultSize));
                 break;
-            case ocZins:
+            case ocRate:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIntrate, nResultSize));
                 break;
             case ocZGZ:

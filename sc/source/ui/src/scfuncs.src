@@ -1389,7 +1389,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function ZINS #*=-
-    Resource SC_OPCODE_ZINS
+    Resource SC_OPCODE_RATE
     {
         String 1 // Description
         {

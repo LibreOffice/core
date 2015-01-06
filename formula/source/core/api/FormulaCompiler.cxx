@@ -105,7 +105,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocKumZinsZ:
         case ocKumKapZ:
             return NUMBERFORMAT_CURRENCY;
-        case ocZins:
+        case ocRate:
         case ocIRR:
         case ocMIRR:
         case ocZGZ:
