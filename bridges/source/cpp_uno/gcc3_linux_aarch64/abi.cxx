@@ -27,6 +27,7 @@
 #include <cxxabi.h>
 #include <dlfcn.h>
 
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <rtl/strbuf.hxx>
@@ -39,8 +40,8 @@
 #include <uno/mapping.h>
 
 #include <abi.hxx>
+
 #include <osl/mutex.hxx>
-#include <unordered_map>
 
 namespace {
 
@@ -81,7 +82,7 @@ public:
     std::type_info * getRtti(typelib_TypeDescription const & type);
 
 private:
-    typedef std::unordered_map<OUString, std::type_info *, OUStringHash> Map;
+    typedef boost::unordered_map<OUString, std::type_info *, OUStringHash> Map;
 
     void * app_;
 

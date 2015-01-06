@@ -19,6 +19,7 @@
 
 
 #pragma warning( disable : 4237 )
+#include <boost/unordered_map.hpp>
 #include <sal/config.h>
 #include <malloc.h>
 #include <typeinfo.h>
@@ -30,7 +31,7 @@
 #include <sal/log.hxx>
 
 #include "com/sun/star/uno/Any.hxx"
-#include <unordered_map>
+
 #include "msci.hxx"
 
 
@@ -81,7 +82,7 @@ static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 //#### RTTI simulation #############################################################################
 
 
-typedef std::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
+typedef boost::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
 class RTTInfos
 {

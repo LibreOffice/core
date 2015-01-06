@@ -35,8 +35,8 @@
 #include "typelib/typedescription.hxx"
 
 #include <boost/noncopyable.hpp>
+#include <boost/unordered_map.hpp>
 #include <new>
-#include <unordered_map>
 #include <vector>
 
 #if defined SAL_UNX
@@ -153,7 +153,7 @@ private:
     sal_Int32 calculate(
         typelib_InterfaceTypeDescription * type, sal_Int32 offset);
 
-    typedef std::unordered_map< OUString, sal_Int32, OUStringHash > Map;
+    typedef boost::unordered_map< OUString, sal_Int32, OUStringHash > Map;
 
     Map m_map;
 };

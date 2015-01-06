@@ -28,6 +28,7 @@
 #include <dlfcn.h>
 
 #include "boost/static_assert.hpp"
+#include "boost/unordered_map.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/genfunc.hxx"
 #include <sal/log.hxx>
@@ -36,7 +37,7 @@
 #include "rtl/ustrbuf.hxx"
 #include "typelib/typedescription.h"
 #include "uno/any2.h"
-#include <unordered_map>
+
 #include "share.hxx"
 
 using namespace ::osl;
@@ -143,7 +144,7 @@ static OUString toUNOname( char const * p )
 
 class RTTI
 {
-    typedef std::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;

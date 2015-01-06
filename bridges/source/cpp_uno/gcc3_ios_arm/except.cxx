@@ -22,6 +22,8 @@
 #include <dlfcn.h>
 
 #include <boost/static_assert.hpp>
+#include <boost/unordered_map.hpp>
+
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
@@ -33,7 +35,7 @@
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
-#include <unordered_map>
+
 #include "share.hxx"
 
 using namespace ::osl;
@@ -128,7 +130,7 @@ static OUString toUNOname( char const * p )
 
 class RTTI
 {
-    typedef std::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, std::type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
