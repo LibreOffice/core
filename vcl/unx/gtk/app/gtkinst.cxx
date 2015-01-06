@@ -288,20 +288,6 @@ SalPrinter* GtkInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 #endif
 }
 
-GtkYieldMutex::GtkYieldMutex()
-{
-}
-
-void GtkYieldMutex::acquire()
-{
-    SalYieldMutex::acquire();
-}
-
-void GtkYieldMutex::release()
-{
-    SalYieldMutex::release();
-}
-
 /*
  * These methods always occur in pairs
  * A ThreadsEnter is followed by a ThreadsLeave
