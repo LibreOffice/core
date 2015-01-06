@@ -6247,7 +6247,7 @@ void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
         ss << aRectangle.getWidth() << ", " << aRectangle.getHeight() << ", " << aRectangle.getX() << ", " << aRectangle.getY();
         sRectangle = ss.str().c_str();
     }
-    m_rView.GetWrtShell().libreOfficeKitCallback(0, sRectangle.getStr());
+    m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

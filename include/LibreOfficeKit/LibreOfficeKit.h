@@ -51,6 +51,19 @@ typedef enum
 }
 LibreOfficeKitPartMode;
 
+typedef enum
+{
+    /**
+     * Any tiles which are over the rectangle described in the payload are no
+     * longer valid.
+     *
+     * Rectangle format: "width,height,x,y", where all numbers are document
+     * coordinates, in twips.
+     */
+    LOK_CALLBACK_INVALIDATE_TILES
+}
+LibreOfficeKitCallbackType;
+
 typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
 #endif // LOK_USE_UNSTABLE_API
 

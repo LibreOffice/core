@@ -153,10 +153,16 @@ static void lok_docview_callback(int nType, const char* pPayload, void* pData)
 {
     LOKDocView* pDocView = pData;
 
-    // TODO for now just always render the document.
-    (void)nType;
-    (void)pPayload;
-    renderDocument( pDocView );
+    switch (nType)
+    {
+    case LOK_CALLBACK_INVALIDATE_TILES:
+        // TODO for now just always render the document.
+        (void)pPayload;
+        renderDocument( pDocView );
+        break;
+    default:
+        break;
+    }
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, char* pPath )
