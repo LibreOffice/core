@@ -211,7 +211,7 @@
                     <property name="vexpand">True</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="svtlo-SvTreeListBox" id="menulist">
+                      <object class="svtlo-SvTreeListBox" id="menulist:border">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
