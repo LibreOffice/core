@@ -12,6 +12,7 @@
 #include <windows.h>
 #include <setupapi.h>
 #include <cstdint>
+#include <algorithm>
 #include <rtl/ustrbuf.hxx>
 
 OUString* WinOpenGLDeviceInfo::mpDeviceVendors[wgl::DeviceVendorMax];
