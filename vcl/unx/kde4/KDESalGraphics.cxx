@@ -337,7 +337,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QStyleOptionMenuItem option;
             option.checkType = ( part == PART_MENU_ITEM_CHECK_MARK )
                 ? QStyleOptionMenuItem::NonExclusive : QStyleOptionMenuItem::Exclusive;
-            option.checked = ( nControlState & ControlState::PRESSED );
+            option.checked = (nControlState & ControlState::PRESSED) ? true : false;
             // widgetRect is now the rectangle for the checkbox/radiobutton itself, but Qt
             // paints the whole menu item, so translate position (and it'll be clipped);
             // it is also necessary to fill the background transparently first, as this
