@@ -119,7 +119,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
         uno_any_destruct( uno_exc, 0 );
 
         JLocalAutoRef jo_exc( jni, java_exc.l );
-        jint res = jni->Throw( (jthrowable) jo_exc.get() );
+        jint res = jni->Throw( static_cast<jthrowable>(jo_exc.get()) );
         if (0 != res)
         {
             // call toString()
@@ -129,7 +129,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
             jni.ensure_no_exception();
             throw BridgeRuntimeError(
                 "throwing java exception failed: "
-                + jstring_to_oustring( jni, (jstring) jo_descr.get() )
+                + jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) )
                 + jni.get_stack_trace() );
         }
     }
@@ -421,7 +421,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                     jni.get_stack_trace() );
             }
             OUString type_name(
-                jstring_to_oustring( jni, (jstring) jo_type_name.get() ) );
+                jstring_to_oustring( jni, static_cast<jstring>(jo_type_name.get()) ) );
             JNI_type_info const * info =
                 jni_info->get_type_info( jni, type_name );
             if (typelib_TypeClass_INTERFACE != info->m_td.get()->eTypeClass)

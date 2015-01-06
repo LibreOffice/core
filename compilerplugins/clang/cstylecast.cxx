@@ -96,15 +96,11 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if ( filename.endswith(".h") ) {
         return true;
     }
-    if ( compat::isInMainFile(compiler.getSourceManager(), spellingLocation) ) {
-        if (filename.startswith(SRCDIR "/bridges/")) { // I'm not messing with this code - far too dangerous
-            return true;
-        }
-    } else {
-        if (filename == SRCDIR "/include/tools/solar.h"
-           || filename.startswith(SRCDIR "/include/cppuhelper/")) {
-            return true;
-        }
+    if (!compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
+        && (filename == SRCDIR "/include/tools/solar.h"
+            || filename.startswith(SRCDIR "/include/cppuhelper/")))
+    {
+        return true;
     }
     report(
         DiagnosticsEngine::Warning,

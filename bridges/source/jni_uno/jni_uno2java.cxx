@@ -78,7 +78,7 @@ void Bridge::handle_java_exc(
             jo_class.get(), getJniInfo()->m_method_Class_getName, 0 ) );
     jni.ensure_no_exception();
     OUString exc_name(
-        jstring_to_oustring( jni, (jstring) jo_class_name.get() ) );
+        jstring_to_oustring( jni, static_cast<jstring>(jo_class_name.get()) ) );
 
     ::com::sun::star::uno::TypeDescription td( exc_name.pData );
     if (!td.is() || (typelib_TypeClass_EXCEPTION != td.get()->eTypeClass))
@@ -90,7 +90,7 @@ void Bridge::handle_java_exc(
         jni.ensure_no_exception();
         throw BridgeRuntimeError(
             "non-UNO exception occurred: "
-            + jstring_to_oustring( jni, (jstring) jo_descr.get() )
+            + jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) )
             + jni.get_stack_trace( jo_exc.get() ) );
     }
 
@@ -221,20 +221,20 @@ void Bridge::call_java(
         jni, jni->CallObjectMethodA(
             jo_method.get(), getJniInfo()->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
+    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
     trace_buf.append( " on " );
     jo_descr.reset(
         jni->CallObjectMethodA(
             javaI, getJniInfo()->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
+    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
     trace_buf.append( " (" );
     JLocalAutoRef jo_class( jni, jni->GetObjectClass( javaI ) );
     jo_descr.reset(
         jni->CallObjectMethodA(
             jo_class.get(), getJniInfo()->m_method_Object_toString, 0 ) );
     jni.ensure_no_exception();
-    trace_buf.append( jstring_to_oustring( jni, (jstring) jo_descr.get() ) );
+    trace_buf.append( jstring_to_oustring( jni, static_cast<jstring>(jo_descr.get()) ) );
     trace_buf.append( ")" );
     SAL_INFO("bridges", trace_buf.makeStringAndClear());
 #endif
@@ -441,7 +441,7 @@ inline UNO_proxy::UNO_proxy(
     jni.ensure_no_exception();
 
     m_javaI = jni->NewGlobalRef( jo_iface );
-    m_jo_oid = (jstring) jni->NewGlobalRef( jo_oid );
+    m_jo_oid = static_cast<jstring>(jni->NewGlobalRef( jo_oid ));
     bridge->acquire();
     m_bridge = bridge;
 
@@ -485,7 +485,7 @@ uno_Interface * Bridge::map_to_uno(
     jobject javaI, JNI_interface_type_info const * info ) const
 {
     JLocalAutoRef jo_oid( jni, compute_oid( jni, javaI ) );
-    OUString oid( jstring_to_oustring( jni, (jstring) jo_oid.get() ) );
+    OUString oid( jstring_to_oustring( jni, static_cast<jstring>(jo_oid.get()) ) );
 
     uno_Interface * pUnoI = 0;
     (*m_uno_env->getRegisteredInterface)(
@@ -497,7 +497,7 @@ uno_Interface * Bridge::map_to_uno(
         // refcount initially 1
         pUnoI = new UNO_proxy(
             jni, const_cast< Bridge * >( this ),
-            javaI, (jstring) jo_oid.get(), oid, info );
+            javaI, static_cast<jstring>(jo_oid.get()), oid, info );
 
         (*m_uno_env->registerProxyInterface)(
             m_uno_env, (void **)&pUnoI,

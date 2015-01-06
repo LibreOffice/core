@@ -132,7 +132,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                             std::type_info * base_rtti = getRTTI(
                                 ctd.pBaseTypeDescription->aBase);
                             rtti = new __cxxabiv1::__si_class_type_info(
-                                strdup( rttiName ), (__cxxabiv1::__class_type_info *)base_rtti );
+                                strdup( rttiName ), static_cast<__cxxabiv1::__class_type_info *>(base_rtti) );
                         }
                         else
                         {

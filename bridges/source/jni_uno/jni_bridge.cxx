@@ -298,7 +298,7 @@ void JNI_context::java_exc_occurred() const
     JLocalAutoRef jo_Object( *this, jo_class );
     // method Object.toString()
     jmethodID method_Object_toString = m_env->GetMethodID(
-        (jclass) jo_Object.get(), "toString", "()Ljava/lang/String;" );
+        static_cast<jclass>(jo_Object.get()), "toString", "()Ljava/lang/String;" );
     if (JNI_FALSE != m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
@@ -319,12 +319,12 @@ void JNI_context::java_exc_occurred() const
             get_stack_trace() );
     }
 
-    jsize len = m_env->GetStringLength( (jstring) jo_descr.get() );
+    jsize len = m_env->GetStringLength( static_cast<jstring>(jo_descr.get()) );
     std::unique_ptr< rtl_mem > ustr_mem(
         rtl_mem::allocate(
             sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
     rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
-    m_env->GetStringRegion( (jstring) jo_descr.get(), 0, len, ustr->buffer );
+    m_env->GetStringRegion( static_cast<jstring>(jo_descr.get()), 0, len, ustr->buffer );
     if (m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
@@ -383,7 +383,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
     {
         // static method JNI_proxy.get_stack_trace()
         jmethodID method = m_env->GetStaticMethodID(
-            (jclass) jo_JNI_proxy.get(), "get_stack_trace",
+            static_cast<jclass>(jo_JNI_proxy.get()), "get_stack_trace",
             "(Ljava/lang/Throwable;)Ljava/lang/String;" );
         if (assert_no_exception() && (0 != method))
         {
@@ -391,17 +391,17 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
             arg.l = jo_exc;
             JLocalAutoRef jo_stack_trace(
                 *this, m_env->CallStaticObjectMethodA(
-                    (jclass) jo_JNI_proxy.get(), method, &arg ) );
+                    static_cast<jclass>(jo_JNI_proxy.get()), method, &arg ) );
             if (assert_no_exception())
             {
                 jsize len =
-                    m_env->GetStringLength( (jstring) jo_stack_trace.get() );
+                    m_env->GetStringLength( static_cast<jstring>(jo_stack_trace.get()) );
                 std::unique_ptr< rtl_mem > ustr_mem(
                     rtl_mem::allocate(
                         sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
                 rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
                 m_env->GetStringRegion(
-                    (jstring) jo_stack_trace.get(), 0, len, ustr->buffer );
+                    static_cast<jstring>(jo_stack_trace.get()), 0, len, ustr->buffer );
                 if (assert_no_exception())
                 {
                     ustr->refCount = 1;

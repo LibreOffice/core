@@ -68,7 +68,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     // Get pointer to method
     sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
     pMethod += 8 * nVtableIndex;
-    data.pMethod = *((sal_uInt64 *)pMethod);
+    data.pMethod = *reinterpret_cast<sal_uInt64 *>(pMethod);
 
     // Load parameters to stack, if necessary
     sal_uInt64* pCallStack = NULL;
