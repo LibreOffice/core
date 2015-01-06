@@ -127,6 +127,17 @@
                    length(len), next(subNode) {}
          virtual UBool operator==(const Node &other) const;
          virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+--- source/common/unifiedcache.h
++++ source/common/unifiedcache.h
+@@ -139,7 +139,7 @@
+            : CacheKey<T>(other), fLoc(other.fLoc) { }
+    virtual ~LocaleCacheKey() { }
+    virtual int32_t hashCode() const {
+-       return 37 *CacheKey<T>::hashCode() + fLoc.hashCode();
++       return 37U *CacheKey<T>::hashCode() + fLoc.hashCode();
+    }
+    virtual UBool operator == (const CacheKeyBase &other) const {
+        // reflexive
 --- source/common/uresbund.cpp
 +++ source/common/uresbund.cpp
 @@ -53,7 +53,7 @@
