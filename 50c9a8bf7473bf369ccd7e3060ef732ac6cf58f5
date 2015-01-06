@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_7846fec0",
+        "filename": "reportdesign/source/ui/inspection/GeometryHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-01-06T09:23:18Z",
+      "side": 0,
+      "message": "Hm, but this way the xNumericControl\u0027s range for the property becomes completely unbound, does it not? I suppose it would be better to set min/max values like for PROPERTY_ID_POSITIONX, but use page height and top and bottom margins to specify the max value.",
+      "revId": "50c9a8bf7473bf369ccd7e3060ef732ac6cf58f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
