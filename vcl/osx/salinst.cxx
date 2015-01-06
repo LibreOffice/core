@@ -31,6 +31,7 @@
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
 #include "vcl/svmain.hxx"
+#include "vcl/opengl/OpenGLContext.hxx"
 
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"
@@ -269,7 +270,10 @@ void SalYieldMutex::release()
     if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
+        {
+            OpenGLContext::resetAllContexts();
             mnThreadId = 0;
+        }
         mnCount--;
     }
     m_mutex.release();

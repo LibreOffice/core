@@ -28,6 +28,7 @@
 
 #include <vcl/apptypes.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 
 #include <opengl/salbmp.hxx>
@@ -148,6 +149,8 @@ void SalYieldMutex::release()
         {
             if ( mnCount == 1 )
             {
+                OpenGLContext::resetAllContexts();
+
                 // If we don't call these message, the Output from the
                 // Java clients doesn't come in the right order
                 GdiFlush();
