@@ -97,7 +97,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         return true;
     }
     if ( compat::isInMainFile(compiler.getSourceManager(), spellingLocation) ) {
-        if (filename.startswith(SRCDIR "/sal") // sal has tons of weird stuff going on that I don't understand enough to fix
+        if (filename.startswith(SRCDIR "/sal/") // sal has tons of weird stuff going on that I don't understand enough to fix
            || filename.startswith(SRCDIR "/bridges")) { // I'm not messing with this code - far too dangerous
             return true;
         }
