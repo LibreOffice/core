@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,harfbuzz))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,harfbuzz,$(HARFBUZZ_TARBALL),,harfbuzz))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
+    external/harfbuzz/ubsan.patch \
+))
+
 # vim: set noet sw=4 ts=4:
