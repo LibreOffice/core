@@ -16,6 +16,24 @@
       "revId": "50c9a8bf7473bf369ccd7e3060ef732ac6cf58f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_f85e8e75",
+        "filename": "reportdesign/source/ui/inspection/GeometryHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-01-06T13:09:38Z",
+      "side": 0,
+      "message": "Yes, it becomes unbounded.\n\nNo, limiting it to page text area height (page height minus margins) is not a good idea. Having a position greater than page height is a perfectly valid position, the control will then \"spill over\" to the next page. Imagine e.g. and a4 page and a big vertical stack of controls, each control \"only\" 1cm high, but you have 50 of such controls. The 45th control will have \"44cm\" for PositionY, which is higher than the page, but it will simply be about 17cm down on the second page (assuming the top and bottom margin add up to about 3cm).",
+      "parentUuid": "fa32b979_7846fec0",
+      "revId": "50c9a8bf7473bf369ccd7e3060ef732ac6cf58f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
