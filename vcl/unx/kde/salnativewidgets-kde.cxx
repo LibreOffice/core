@@ -516,7 +516,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     pWidget->move( 0, 0 );
 
     // Enable/disable the widget
-    pWidget->setEnabled( nState & ControlState::ENABLED );
+    pWidget->setEnabled( bool(nState & ControlState::ENABLED) );
 
     // Create pixmap to paint to
     KDEX11Pixmap xPixmap( pWidget->width(), pWidget->height() );
@@ -1413,7 +1413,7 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
-        pWidgetPainter->pushButton( rControlRegion, (nState & ControlState::DEFAULT) ),
+        pWidgetPainter->pushButton( rControlRegion, bool(nState & ControlState::DEFAULT) ),
         nState, aValue, this );
     }
     else if ( (nType == CTRL_RADIOBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
@@ -1542,7 +1542,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     {
     // Metrics of the push button
     case CTRL_PUSHBUTTON:
-        pWidget = pWidgetPainter->pushButton( rControlRegion, ( nState & ControlState::DEFAULT ) );
+        pWidget = pWidgetPainter->pushButton( rControlRegion, bool( nState & ControlState::DEFAULT ) );
 
         switch ( nPart )
         {
