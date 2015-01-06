@@ -25,12 +25,13 @@ $(eval $(call gb_Executable_set_include,vcldemo,\
 
 $(eval $(call gb_Executable_use_libraries,vcldemo,\
 	basegfx \
-    tl \
-    sal \
-    vcl \
+    comphelper \
     cppu \
     cppuhelper \
-    comphelper \
+    tl \
+    sal \
+	salhelper \
+    vcl \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,vcldemo,\

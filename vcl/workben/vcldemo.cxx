@@ -16,6 +16,7 @@
 
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
+#include <salhelper/thread.hxx>
 
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
@@ -1196,16 +1197,42 @@ class DemoWin : public WorkWindow
 {
     DemoRenderer &mrRenderer;
     bool underTesting;
+    bool testThreads;
+
+    class RenderThread : public salhelper::Thread {
+        DemoWin &mrWin;
+    public:
+        RenderThread(DemoWin &rWin)
+            : Thread("vcldemo render thread")
+            , mrWin(rWin)
+        {
+            launch();
+        }
+        virtual ~RenderThread()
+        {
+            join();
+        }
+        virtual void execute()
+        {
+            SolarMutexGuard aGuard;
+            fprintf (stderr, "render from a different thread\n");
+            mrWin.Paint(Rectangle());
+        }
+    };
+    rtl::Reference<RenderThread> mxThread;
+
 public:
-    DemoWin(DemoRenderer &rRenderer) :
+    DemoWin(DemoRenderer &rRenderer, bool bThreads) :
         WorkWindow(NULL, WB_APP | WB_STDWORK),
-        mrRenderer(rRenderer)
+        mrRenderer(rRenderer),
+        testThreads(bThreads)
     {
         mrRenderer.addInvalidate(this);
         underTesting = false;
     }
     virtual ~DemoWin()
     {
+        mxThread.clear();
         mrRenderer.removeInvalidate(this);
     }
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE
@@ -1213,9 +1240,16 @@ public:
         mrRenderer.SetSizePixel(GetSizePixel());
         if (!mrRenderer.MouseButtonDown(rMEvt))
         {
-            DemoWin *pNewWin = new DemoWin(mrRenderer);
-            pNewWin->SetText("Another interactive VCL demo window");
-            pNewWin->Show();
+            if (testThreads)
+            { // render this window asynchronously in a new thread
+                mxThread = new RenderThread(*this);
+            }
+            else
+            { // spawn another window
+                DemoWin *pNewWin = new DemoWin(mrRenderer, testThreads);
+                pNewWin->SetText("Another interactive VCL demo window");
+                pNewWin->Show();
+            }
         }
     }
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE
@@ -1314,7 +1348,8 @@ class DemoApp : public Application
         fprintf(stderr,"         %s\n",
                 rtl::OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
         fprintf(stderr,"  --test <iterCount> - create benchmark data\n");
-        fprintf(stderr, "  --widgets         - launch the widget test.\n");
+        fprintf(stderr,"  --widgets          - launch the widget test.\n");
+        fprintf(stderr,"  --threads          - render from multiple threads.\n");
         fprintf(stderr, "\n");
         return 0;
     }
@@ -1326,7 +1361,7 @@ public:
     {
         try
         {
-            bool bWidgets = false;
+            bool bWidgets = false, bThreads = false;
             DemoRenderer aRenderer;
 
             for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
@@ -1351,9 +1386,11 @@ public:
                 }
                 else if (aArg == "--widgets")
                     bWidgets = true;
+                else if (aArg == "--threads")
+                    bThreads = true;
             }
 
-            DemoWin aMainWin(aRenderer);
+            DemoWin aMainWin(aRenderer, bThreads);
             boost::scoped_ptr<DemoWidgets> aWidgets;
 
             aMainWin.SetText("Interactive VCL demo #1");
