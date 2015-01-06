@@ -23,6 +23,11 @@
 
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_STORAGEFILEACCESS_H
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_STORAGEFILEACCESS_H
+
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,7 +36,7 @@ extern "C" {
  * Method:    isStreamElement
  * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement
+SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement
   (JNIEnv *, jobject, jstring, jstring);
 
 /*
@@ -39,7 +44,7 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
  * Method:    removeElement
  * Signature: (Ljava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
   (JNIEnv *, jobject, jstring, jstring);
 
 /*
@@ -47,7 +52,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
  * Method:    renameElement
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
+SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
   (JNIEnv *, jobject, jstring, jstring, jstring);
 
 #ifdef __cplusplus

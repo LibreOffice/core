@@ -51,7 +51,7 @@ Any Transport::mapAny( Any const & any )
 }
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_1jni_1transport(
+extern "C" SAL_JNI_EXPORT jobject JNICALL Java_test_java_1uno_anytest_TestJni_create_1jni_1transport(
     JNIEnv * jni_env, jclass, jobject loader )
     SAL_THROW_EXTERN_C()
 {
