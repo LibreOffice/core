@@ -84,6 +84,15 @@ static void internRelease (rtl_uString *pThis);
 
 #include "strtmpl.cxx"
 
+#undef IMPL_RTL_EMPTYSTRING
+#undef IMPL_RTL_IS_USTRING
+#undef IMPL_RTL_STRCODE
+#undef IMPL_RTL_STRINGDATA
+#undef IMPL_RTL_STRINGNAME
+#undef IMPL_RTL_STRNAME
+#undef IMPL_RTL_USTRCODE
+#undef RTL_LOG_STRING_BITS
+
 sal_Int32 rtl_ustr_indexOfAscii_WithLength(
     sal_Unicode const * str, sal_Int32 len,
     char const * subStr, sal_Int32 subLen) SAL_THROW_EXTERN_C()

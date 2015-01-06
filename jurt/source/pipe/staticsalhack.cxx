@@ -14,13 +14,6 @@
 #undef SAL_LOG_WARN
 
 #include <sal/rtl/string.cxx>
-#undef IMPL_RTL_EMPTYSTRING
-#undef IMPL_RTL_STRCODE
-#undef IMPL_RTL_STRINGDATA
-#undef IMPL_RTL_STRINGNAME
-#undef IMPL_RTL_STRNAME
-#undef IMPL_RTL_USTRCODE
-#undef RTL_LOG_STRING_BITS
 #include <sal/rtl/ustring.cxx>
 
 #include <sal/osl/unx/conditn.cxx>

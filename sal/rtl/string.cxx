@@ -76,6 +76,15 @@ static rtl_String const aImplEmpty_rtl_String =
 
 #include "strtmpl.cxx"
 
+#undef IMPL_RTL_EMPTYSTRING
+#undef IMPL_RTL_IS_USTRING
+#undef IMPL_RTL_STRCODE
+#undef IMPL_RTL_STRINGDATA
+#undef IMPL_RTL_STRINGNAME
+#undef IMPL_RTL_STRNAME
+#undef IMPL_RTL_USTRCODE
+#undef RTL_LOG_STRING_BITS
+
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
