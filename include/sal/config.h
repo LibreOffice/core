@@ -86,6 +86,12 @@
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 
+#if defined __clang__
+#if __has_warning("-Wpotentially-evaluated-expression")
+#pragma GCC diagnostic ignored "-Wpotentially-evaluated-expression"
+#endif
+#endif
+
 #endif // INCLUDED_SAL_CONFIG_H
 
 
