@@ -24,7 +24,7 @@ Summary of new features in RtfExport
 
 Miklos Vajna
 
-<vmiklos@frugalware.org>
+<vmiklos@vmiklos.hu>
 ---------------------------------------------------------------------
 
 Table of Contents
