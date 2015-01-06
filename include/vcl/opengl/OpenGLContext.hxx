@@ -199,8 +199,14 @@ public:
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
 
     bool isCurrent();
-    void clearCurrent();
+    static void clearCurrent();
+    /// reset all contexts dis-associating them with their underlying
+    /// resources before a potential thread switch.
+    static void resetAllContexts();
+
+    /// make this GL context current - so it is implicit in subsequent GL calls
     void makeCurrent();
+    /// reset the GL context so this context is not implicit in subsequent GL calls.
     void resetCurrent();
     void swapBuffers();
     void sync();

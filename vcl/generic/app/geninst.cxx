@@ -21,8 +21,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "osl/module.hxx"
-#include "tools/solarmutex.hxx"
+#include <osl/module.hxx>
+#include <tools/solarmutex.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include "generic/geninst.h"
 
@@ -53,7 +54,10 @@ void SalYieldMutex::release()
     if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
+        {
+            OpenGLContext::resetAllContexts();
             mnThreadId = 0;
+        }
         mnCount--;
     }
     m_mutex.release();

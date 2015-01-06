@@ -82,6 +82,9 @@ OpenGLContext::OpenGLContext():
     else
         pSVData->maGDIData.mpFirstContext = this;
     pSVData->maGDIData.mpLastContext = this;
+
+    // FIXME: better hope we call 'makeCurrent' soon to preserve
+    // the invariant that the last item is the current context.
 }
 
 OpenGLContext::~OpenGLContext()
@@ -1289,6 +1292,22 @@ void OpenGLContext::clearCurrent()
         pCurrentCtx->ReleaseFramebuffers();
 }
 
+void OpenGLContext::resetAllContexts()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // release all framebuffers from the old context so we can re-attach the
+    // texture in the new context
+    for (OpenGLContext* l = pSVData->maGDIData.mpLastContext; l;
+         l = l->mpPrevContext)
+    {
+        l->ReleaseFramebuffers();
+        if (l->isCurrent())
+            l->resetCurrent();
+        assert (!l->mpNextContext || l->mpNextContext->mpPrevContext == l);
+    }
+}
+
 void OpenGLContext::makeCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1318,7 +1337,7 @@ void OpenGLContext::makeCurrent()
     }
 #endif
 
-    // move the context at the end of the contexts list
+    // move the context to the end of the contexts list
     static int nSwitch = 0;
     SAL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
     if( mpNextContext )
