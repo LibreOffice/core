@@ -3140,7 +3140,10 @@ Size SwXTextDocument::getDocumentSize()
 {
     SwDoc* pDoc = pDocShell->GetDoc();
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    return pViewShell->GetDocSize();
+    Size aDocSize = pViewShell->GetDocSize();
+
+    return Size(aDocSize.Width()  + 2L * DOCUMENTBORDER,
+                aDocSize.Height() + 2L * DOCUMENTBORDER);
 }
 
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
