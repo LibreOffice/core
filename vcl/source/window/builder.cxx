@@ -2017,7 +2017,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                     else
                     {
                         // We want to sort labels before contents of frames
-                        // for key board traversal, especially if there
+                        // for keyboard traversal, especially if there
                         // are multiple widgets using the same mnemonic
                         if (sType.equals("label"))
                         {
