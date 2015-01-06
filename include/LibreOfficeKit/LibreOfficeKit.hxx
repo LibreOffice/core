@@ -93,6 +93,17 @@ public:
         mpDoc->pClass->initializeForRendering(mpDoc);
     }
 
+    /**
+     * Registers a callback. LOK will invoke this function when it wants to
+     * inform the client about events.
+     *
+     * @param pCallback the callback to invoke
+     * @param pData the user data, will be passed to the callback on invocation
+     */
+    inline void registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+    {
+        mpDoc->pClass->registerCallback(mpDoc, pCallback, pData);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 

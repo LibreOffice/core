@@ -199,6 +199,9 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
                                 long* pHeight);
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis);
 
+static void doc_registerCallback(LibreOfficeKitDocument* pThis,
+                                LibreOfficeKitCallback pCallback,
+                                void* pData);
 
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
@@ -225,6 +228,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->paintTile = doc_paintTile;
             m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
             m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
+            m_pDocumentClass->registerCallback = doc_registerCallback;
 
             gDocumentClass = m_pDocumentClass;
         }
@@ -618,6 +622,20 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis)
     {
         pDoc->initializeForTiledRendering();
     }
+}
+
+static void doc_registerCallback(LibreOfficeKitDocument* pThis,
+                                LibreOfficeKitCallback pCallback,
+                                void* pData)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->registerCallback(pCallback, pData);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

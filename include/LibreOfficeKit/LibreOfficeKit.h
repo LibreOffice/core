@@ -50,6 +50,8 @@ typedef enum
     LOK_PARTMODE_EMBEDDEDOBJ
 }
 LibreOfficeKitPartMode;
+
+typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
 #endif // LOK_USE_UNSTABLE_API
 
 struct _LibreOfficeKit
@@ -117,6 +119,9 @@ struct _LibreOfficeKitDocumentClass
   // Initialize document for rendering.
   void (*initializeForRendering) (LibreOfficeKitDocument* pThis);
 
+  void (*registerCallback)   (LibreOfficeKitDocument* pThis,
+                              LibreOfficeKitCallback pCallback,
+                              void* pData);
 #endif // LOK_USE_UNSTABLE_API
 };
 
