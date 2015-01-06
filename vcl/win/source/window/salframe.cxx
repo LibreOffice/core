@@ -112,6 +112,9 @@ using namespace ::com::sun::star::beans;
 #ifndef WM_MOUSEHWHEEL
 # define WM_MOUSEHWHEEL 0x020E
 #endif
+#ifndef IDC_PEN
+# define IDC_PEN MAKEINTRESOURCE(32631)
+#endif
 
 const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
 
@@ -2062,8 +2065,8 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, IDC_WAIT, 0 },                             // POINTER_WAIT
     { 0, IDC_IBEAM, 0 },                            // POINTER_TEXT
     { 0, IDC_HELP, 0 },                             // POINTER_HELP
-    { 0, 0, SAL_RESID_POINTER_CROSS },              // POINTER_CROSS
-    { 0, 0, SAL_RESID_POINTER_MOVE },               // POINTER_MOVE
+    { 0, IDC_CROSS, 0 },                            // POINTER_CROSS
+    { 0, IDC_SIZEALL, 0 },                          // POINTER_MOVE
     { 0, IDC_SIZENS, 0 },                           // POINTER_NSIZE
     { 0, IDC_SIZENS, 0 },                           // POINTER_SSIZE
     { 0, IDC_SIZEWE, 0 },                           // POINTER_WSIZE
@@ -2084,9 +2087,9 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_VSPLIT },             // POINTER_VSPLIT
     { 0, 0, SAL_RESID_POINTER_HSIZEBAR },           // POINTER_HSIZEBAR
     { 0, 0, SAL_RESID_POINTER_VSIZEBAR },           // POINTER_VSIZEBAR
-    { 0, 0, SAL_RESID_POINTER_HAND },               // POINTER_HAND
-    { 0, 0, SAL_RESID_POINTER_REFHAND },            // POINTER_REFHAND
-    { 0, 0, SAL_RESID_POINTER_PEN },                // POINTER_PEN
+    { 0, IDC_HAND, 0 },                             // POINTER_HAND
+    { 0, IDC_HAND, 0 },                             // POINTER_REFHAND
+    { 0, IDC_PEN, 0 },                              // POINTER_PEN
     { 0, 0, SAL_RESID_POINTER_MAGNIFY },            // POINTER_MAGNIFY
     { 0, 0, SAL_RESID_POINTER_FILL },               // POINTER_FILL
     { 0, 0, SAL_RESID_POINTER_ROTATE },             // POINTER_ROTATE
@@ -2109,7 +2112,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_COPYFILELINK },       // POINTER_COPYFILELINK
     { 0, 0, SAL_RESID_POINTER_MOVEFILES },          // POINTER_MOVEFILES
     { 0, 0, SAL_RESID_POINTER_COPYFILES },          // POINTER_COPYFILES
-    { 0, 0, SAL_RESID_POINTER_NOTALLOWED },         // POINTER_NOTALLOWED
+    { 0, IDC_NO, 0 },                               // POINTER_NOTALLOWED
     { 0, 0, SAL_RESID_POINTER_DRAW_LINE },          // POINTER_DRAW_LINE
     { 0, 0, SAL_RESID_POINTER_DRAW_RECT },          // POINTER_DRAW_RECT
     { 0, 0, SAL_RESID_POINTER_DRAW_POLYGON },       // POINTER_DRAW_POLYGON
