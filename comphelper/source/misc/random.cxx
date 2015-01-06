@@ -13,6 +13,7 @@
 #include <comphelper/random.hxx>
 #include <rtl/instance.hxx>
 #include <assert.h>
+#include <time.h>
 #include <random>
 
 // this is nothing but a simple wrapper around
