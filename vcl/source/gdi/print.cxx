@@ -1813,6 +1813,16 @@ bool Printer::UsePolyPolygonForComplexGradient()
     return true;
 }
 
+void Printer::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly )
+{
+    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+    Push( PushFlags::CLIPREGION );
+    IntersectClipRegion(vcl::Region(rPolyPoly));
+    DrawGradient( aBoundRect, rGradient );
+    Pop();
+}
+
 void Printer::InitFont() const
 {
     DBG_TESTSOLARMUTEX();
