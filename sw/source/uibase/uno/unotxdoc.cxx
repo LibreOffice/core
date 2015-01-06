@@ -3146,6 +3146,17 @@ Size SwXTextDocument::getDocumentSize()
                 aDocSize.Height() + 2L * DOCUMENTBORDER);
 }
 
+void SwXTextDocument::initializeForTiledRendering()
+{
+    bool      bBookMode = false;
+    sal_Int16 nColumns = 1;
+
+    SwView* pView = pDocShell->GetView();
+    if (!pView)
+        return;
+    pView->SetViewLayout(nColumns, bBookMode, true);
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

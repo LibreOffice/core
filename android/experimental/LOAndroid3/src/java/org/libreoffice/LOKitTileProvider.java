@@ -66,6 +66,8 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     public void postLoad() {
+        mDocument.initializeForRendering();
+
         int parts = mDocument.getParts();
         Log.i(LOGTAG, "Document parts: " + parts);
 

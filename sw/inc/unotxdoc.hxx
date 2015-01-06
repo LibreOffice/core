@@ -441,6 +441,7 @@ public:
                             long nTileWidth,
                             long nTileHeight ) SAL_OVERRIDE;
     virtual Size getDocumentSize() SAL_OVERRIDE;
+    virtual void initializeForTiledRendering() SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
