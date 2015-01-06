@@ -20,7 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEACCESS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HSTORAGEACCESS_HXX
 
-#include "hsqldb/HStorageAccess.h"
+#include <sal/config.h>
+
+#include <jni.h>
 
 namespace connectivity { namespace hsqldb
 {
