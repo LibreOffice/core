@@ -96,7 +96,7 @@ public:
 
     MorkTableMap *getTables( int tableScope );
 
-    /// Rerturns all rows under specified scope
+    /// Returns all rows under specified scope
 
     MorkRowMap *getRows( int rowScope, RowScopeMap *table );
 
