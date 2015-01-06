@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	$(if $(filter SOLARIS,$(OS)),external/openssl/opensslsol.patch) \
 	$(if $(filter IOS,$(OS)),external/openssl/opensslios.patch) \
 	$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),external/openssl/opensslosxppc.patch) \
+    external/openssl/ubsan.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,10 @@
+--- crypto/engine/eng_table.c
++++ crypto/engine/eng_table.c
+@@ -346,6 +346,6 @@
+ 	ENGINE_PILE_DOALL dall;
+ 	dall.cb = cb;
+ 	dall.arg = arg;
+-	lh_ENGINE_PILE_doall_arg(&table->piles, LHASH_DOALL_ARG_FN(int_cb),
++	lh_ENGINE_PILE_doall_arg(table ? &table->piles : NULL, LHASH_DOALL_ARG_FN(int_cb),
+ 				 ENGINE_PILE_DOALL, &dall);
+ 	}
