@@ -911,12 +911,12 @@ void SwFEShell::SelectionToHell()
     ChangeOpaque( getIDocumentDrawModelAccess()->GetHellId() );
 }
 
-sal_uInt16 SwFEShell::IsObjSelected() const
+size_t SwFEShell::IsObjSelected() const
 {
     if ( IsFrmSelected() || !Imp()->HasDrawView() )
         return 0;
-    else
-        return sal_uInt16( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() );
+
+    return Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount();
 }
 
 bool SwFEShell::IsFrmSelected() const
@@ -2372,8 +2372,8 @@ bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
 
 bool SwFEShell::IsAlignPossible() const
 {
-    sal_uInt16 nCnt;
-    if ( 0 < (nCnt = IsObjSelected()) )
+    const size_t nCnt = IsObjSelected();
+    if ( 0 < nCnt )
     {
         bool bRet = true;
         if ( nCnt == 1 )

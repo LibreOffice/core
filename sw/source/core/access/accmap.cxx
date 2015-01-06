@@ -282,7 +282,7 @@ SwAccessibleObjShape_Impl
     SwAccessibleObjShape_Impl *pShapes = 0;
     SwAccessibleObjShape_Impl *pSelShape = 0;
 
-    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
     rSize = maMap.size();
 
     if( rSize > 0 )
@@ -299,7 +299,7 @@ SwAccessibleObjShape_Impl
         {
             const SdrObject *pObj = (*aIter).first;
             uno::Reference < XAccessible > xAcc( (*aIter).second );
-            if( nSelShapes && pFESh &&pFESh->IsObjSelected( *pObj ) )
+            if( nSelShapes && pFESh && pFESh->IsObjSelected( *pObj ) )
             {
                 // selected objects are inserted from the back
                 --pSelShape;
@@ -1132,7 +1132,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             static_cast< const SwFEShell * >( pVSh ) : 0;
     SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( false /* ??? */ ) : NULL;
 
-    //sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    //const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     {
         osl::MutexGuard aGuard( maMutex );
@@ -1441,7 +1441,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
                             static_cast< const SwFEShell * >( pVSh ) : 0;
-    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,
     //return
@@ -1609,7 +1609,7 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
                             static_cast< const SwFEShell * >( pVSh ) : 0;
-    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     if( nSelShapes != 1 )
         return;

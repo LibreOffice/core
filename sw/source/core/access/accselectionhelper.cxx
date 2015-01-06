@@ -233,7 +233,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         }
         else
         {
-            sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
+            const size_t nSelObjs = pFEShell->IsObjSelected();
             if( nSelObjs > 0 )
             {
                 ::std::list< SwAccessibleChild > aChildren;
@@ -243,7 +243,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                     aChildren.begin();
                 ::std::list< SwAccessibleChild >::const_iterator aEndIter =
                     aChildren.end();
-                while( aIter != aEndIter && nCount < nSelObjs )
+                while( aIter != aEndIter && static_cast<size_t>(nCount) < nSelObjs )
                 {
                     const SwAccessibleChild& rChild = *aIter;
                     if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
@@ -321,8 +321,8 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     }
     else
     {
-        sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
-        if( 0 == nSelObjs || nSelectedChildIndex >= nSelObjs )
+        const size_t nSelObjs = pFEShell->IsObjSelected();
+        if( 0 == nSelObjs || static_cast<size_t>(nSelectedChildIndex) >= nSelObjs )
             throwIndexOutOfBoundsException();
 
         ::std::list< SwAccessibleChild > aChildren;

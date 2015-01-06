@@ -462,7 +462,7 @@ public:
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
     void SetDragMode( sal_uInt16 eSdrDragMode );
 
-    sal_uInt16 IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
+    size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
     bool IsObjSelected( const SdrObject& rObj ) const;
     bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
     const SdrMarkList* GetMarkList() const{ return _GetMarkList(); };
