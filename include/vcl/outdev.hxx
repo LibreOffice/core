@@ -1712,6 +1712,14 @@ public:
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( long nWidth ) const;
     SAL_DLLPRIVATE DeviceCoordinate LogicHeightToDeviceCoordinate( long nHeight ) const;
 
+protected:
+    /**
+     * Notification about some region of the output device got invalidated.
+     *
+     * @param pRegion If 0, that means the whole area, otherwise the area in logic coordinates.
+     */
+    virtual void LogicInvalidate(const vcl::Region* /*pRegion*/) { }
+
 private:
 
     /** Convert a logical X coordinate to a device pixel's X coordinate.

@@ -860,6 +860,7 @@ void Window::Invalidate( sal_uInt16 nFlags )
         return;
 
     ImplInvalidate( NULL, nFlags );
+    LogicInvalidate(0);
 }
 
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
@@ -874,6 +875,8 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
     {
         vcl::Region aRegion( aRect );
         ImplInvalidate( &aRegion, nFlags );
+        vcl::Region aLogicRegion(rRect);
+        LogicInvalidate(&aLogicRegion);
     }
 }
 
@@ -884,12 +887,19 @@ void Window::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
         return;
 
     if ( rRegion.IsNull() )
+    {
         ImplInvalidate( NULL, nFlags );
+        LogicInvalidate(0);
+    }
     else
     {
         vcl::Region aRegion = ImplPixelToDevicePixel( LogicToPixel( rRegion ) );
         if ( !aRegion.IsEmpty() )
+        {
             ImplInvalidate( &aRegion, nFlags );
+            vcl::Region aLogicRegion(rRegion);
+            LogicInvalidate(&aLogicRegion);
+        }
     }
 }
 
@@ -900,6 +910,7 @@ void Window::Validate( sal_uInt16 nFlags )
         return;
 
     ImplValidate( NULL, nFlags );
+    LogicInvalidate(0);
 }
 
 bool Window::HasPaintEvent() const
