@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,xml2,\
 	external/libxml2/libxml2-vc10.patch \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
 	external/libxml2/libxml2-icu.patch.0 \
+	external/libxml2/ubsan.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
