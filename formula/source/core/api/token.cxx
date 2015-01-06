@@ -1264,7 +1264,7 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
                         bRet |= AddDefaultArg( pNewArr, 2, 0.0 );   // pmt
                         bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // [fp]v
                         break;
-                    case ocZins:    // RATE
+                    case ocRate:    // RATE
                         bRet |= AddDefaultArg( pNewArr, 1, 0.0 );   // pmt
                         bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // fv
                         bRet |= AddDefaultArg( pNewArr, 4, 0.0 );   // type

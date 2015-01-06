@@ -260,7 +260,7 @@ enum OpCode : sal_uInt16
         ocZGZ               = SC_OPCODE_ZGZ,
         ocZW                = SC_OPCODE_ZW,
         ocZZR               = SC_OPCODE_ZZR,
-        ocZins              = SC_OPCODE_ZINS,
+        ocRate              = SC_OPCODE_RATE,
         ocZinsZ             = SC_OPCODE_ZINS_Z,
         ocKapz              = SC_OPCODE_KAPZ,
         ocKumZinsZ          = SC_OPCODE_KUM_ZINS_Z,

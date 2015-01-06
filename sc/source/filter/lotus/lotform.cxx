@@ -125,7 +125,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
                 IncToken( eParam[ nAnz - 2 ] );
         }
             break;
-        case ocZins:
+        case ocRate:
         {
             // new quantity = 4!
             OSL_ENSURE( nAnz == 3,
@@ -1042,7 +1042,7 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocExact,            //  113 Exact()
         ocNoName,           //  114 Call()
         ocIndirect,         //  115 @@()
-        ocZins,             //  116 Rate()
+        ocRate,             //  116 Rate()
         ocNoName,           //  117 Term()
         ocNoName,           //  118 Cterm()
         ocLIA,              //  119 Sln()
@@ -1571,7 +1571,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocExact,            //  113 Exact()
         ocNoName,           //  114 Call()
         ocIndirect,         //  115 @@()
-        ocZins,             //  116 Rate()
+        ocRate,             //  116 Rate()
         ocNoName,           //  117 Term()
         ocNoName,           //  118 Cterm()
         ocLIA,              //  119 Sln()

@@ -1646,7 +1646,7 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
 }
 
 // In Calc UI it is the function RATE(Nper;Pmt;Pv;Fv;Type;Guess)
-void ScInterpreter::ScZins()
+void ScInterpreter::ScRate()
 {
     double fPv, fPayment, fNper;
     // defaults for missing arguments, see ODFF spec

@@ -138,7 +138,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocZW,                 57,     3,  5,  V, { VR }, 0, 0 },
     { ocZZR,                58,     3,  5,  V, { VR }, 0, 0 },
     { ocRMZ,                59,     3,  5,  V, { VR }, 0, 0 },
-    { ocZins,               60,     3,  6,  V, { VR }, 0, 0 },
+    { ocRate,               60,     3,  6,  V, { VR }, 0, 0 },
     { ocMIRR,               61,     3,  3,  V, { RA, VR }, 0, 0 },
     { ocIRR,                62,     1,  2,  V, { RA, VR }, 0, 0 },
     { ocRandom,             63,     0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE, 0 },
