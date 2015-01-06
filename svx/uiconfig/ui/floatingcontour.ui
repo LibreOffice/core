@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">99</property>
     <property name="value">10</property>
@@ -307,6 +307,7 @@
               <object class="GtkSpinButton" id="spinbutton:0%">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Color Tolerance</property>
                 <property name="adjustment">adjustment1</property>
               </object>
               <packing>
