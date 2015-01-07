@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/module.hxx>
+#include <osl/thread.h>
 
 #include <uno/environment.hxx>
 #include <uno/lbnames.h>
