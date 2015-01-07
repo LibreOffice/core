@@ -302,7 +302,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
         // transform the line width if used
         if( fLineWidth != 0.0 )
         {
-            aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, 0.0 );
+            aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
         }
 
         // transform the polygon
