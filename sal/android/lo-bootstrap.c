@@ -247,7 +247,7 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
 
     the_java_vm = vm;
 
-    return JNI_VERSION_1_2;
+    return JNI_VERSION_1_6;
 }
 
 // public static native boolean setup(String dataDir,
