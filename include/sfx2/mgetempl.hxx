@@ -47,6 +47,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
 
     FixedText* m_pBaseFt;
     ListBox* m_pBaseLb;
+    PushButton* m_pEditLinkStyleBtn;
 
     FixedText* m_pFilterFt;
     ListBox* m_pFilterLb;
@@ -71,6 +72,7 @@ friend class SfxStyleDialog;
     DECL_LINK( GetFocusHdl, Edit * );
     DECL_LINK( LoseFocusHdl, Edit * );
     DECL_LINK( EditStyleHdl_Impl, void * );
+    DECL_LINK( EditLinkStyleHdl_Impl, void * );
 
     void    UpdateName_Impl(ListBox *, const OUString &rNew);
     void    SetDescriptionText_Impl();
