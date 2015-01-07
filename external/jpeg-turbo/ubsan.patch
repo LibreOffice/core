@@ -1,0 +1,31 @@
+--- jdhuff.c
++++ jdhuff.c
+@@ -489,7 +489,7 @@
+ #define AVOID_TABLES
+ #ifdef AVOID_TABLES
+ 
+-#define HUFF_EXTEND(x,s)  ((x) + ((((x) - (1<<((s)-1))) >> 31) & (((-1)<<(s)) + 1)))
++#define HUFF_EXTEND(x,s)  ((x) + ((((x) - (1<<((s)-1))) >> 31) & (((unsigned)-1<<(s)) + 1)))
+ 
+ #else
+ 
+--- jdphuff.c
++++ jdphuff.c
+@@ -201,7 +201,7 @@
+ #define AVOID_TABLES
+ #ifdef AVOID_TABLES
+ 
+-#define HUFF_EXTEND(x,s)  ((x) < (1<<((s)-1)) ? (x) + (((-1)<<(s)) + 1) : (x))
++#define HUFF_EXTEND(x,s)  ((x) < (1<<((s)-1)) ? (x) + (((unsigned)-1<<(s)) + 1) : (x))
+ 
+ #else
+ 
+@@ -334,7 +334,7 @@
+       s += state.last_dc_val[ci];
+       state.last_dc_val[ci] = s;
+       /* Scale and output the coefficient (assumes jpeg_natural_order[0]=0) */
+-      (*block)[0] = (JCOEF) (s << Al);
++      (*block)[0] = (JCOEF) ((unsigned)s << Al);
+     }
+ 
+     /* Completed MCU, so update state */
