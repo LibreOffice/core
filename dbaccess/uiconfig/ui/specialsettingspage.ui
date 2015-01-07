@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="SpecialSettingsPage">
@@ -16,9 +16,9 @@
         <child>
           <object class="GtkCheckButton" id="usesql92">
             <property name="label" translatable="yes">Use SQL92 naming constraints</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -26,14 +26,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="append">
             <property name="label" translatable="yes">Append the table alias name on SELECT statements</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -41,14 +43,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="useas">
             <property name="label" translatable="yes">Use keyword AS before table alias names</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -56,14 +60,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="useoj">
             <property name="label" translatable="yes">Use Outer Join syntax '{oj }'</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -71,14 +77,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="ignoreprivs">
             <property name="label" translatable="yes">Ignore the privileges from the database driver</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -86,14 +94,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="replaceparams">
             <property name="label" translatable="yes">Replace named parameters with '?'</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -101,14 +111,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="displayver">
             <property name="label" translatable="yes">Display version columns (when available)</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -116,14 +128,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="usecatalogname">
             <property name="label" translatable="yes">Use catalog name in SELECT statements</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -131,14 +145,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="useschemaname">
             <property name="label" translatable="yes">Use schema name in SELECT statements</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -146,14 +162,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="createindex">
             <property name="label" translatable="yes">Create index with ASC or DESC statement</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -161,14 +179,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="eol">
             <property name="label" translatable="yes">End text lines with CR+LF</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -176,14 +196,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">10</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="ignorecurrency">
             <property name="label" translatable="yes">Ignore currency field information</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -191,14 +213,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">11</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="inputchecks">
             <property name="label" translatable="yes">Form data input checks for required fields</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -206,14 +230,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">12</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="useodbcliterals">
             <property name="label" translatable="yes">Use ODBC conformant date/time literals</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -221,14 +247,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">13</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="primarykeys">
             <property name="label" translatable="yes">Supports primary keys</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -236,14 +264,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">14</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="resulttype">
             <property name="label" translatable="yes">Respect the result set type from the database driver</property>
-            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
+            <property name="no_show_all">True</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -251,6 +281,8 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">15</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -271,6 +303,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -287,6 +321,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -301,6 +337,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -311,12 +349,16 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">16</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
       </object>
