@@ -328,7 +328,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
         sal_Size _nStart = rStrm.Tell();
 
         // Small preliminary estimate of the size ...
-        sal_uInt16 nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
+        sal_uInt16 nFac = ( rStrm.GetCompressMode() != SvStreamCompressFlags::NONE ) ? 3 : 1;
         const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
         sal_uLong nBytes = aBmp.GetSizeBytes();
         if ( nBytes < sal_uLong(0xFF00*nFac) )

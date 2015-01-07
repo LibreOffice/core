@@ -205,7 +205,6 @@ protected:
     bool                bSaveNative:1;
     bool                bStarDrawPreviewMode:1;
     bool                mbDisableTextEditUsesCommonUndoManager:1;
-    sal_uInt16          nStreamCompressMode;  // write compressedly?
     SvStreamEndian      nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;

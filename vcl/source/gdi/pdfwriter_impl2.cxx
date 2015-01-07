@@ -162,7 +162,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 sal_uInt32 nZippedFileSize;     // sj: we will calculate the filesize of a zipped bitmap
                 {                               // to determine if jpeg compression is useful
                     SvMemoryStream aTemp;
-                    aTemp.SetCompressMode( aTemp.GetCompressMode() | COMPRESSMODE_ZBITMAP );
+                    aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
                     aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
                     WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
                     aTemp.Seek( STREAM_SEEK_TO_END );

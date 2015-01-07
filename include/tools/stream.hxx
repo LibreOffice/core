@@ -79,9 +79,15 @@ namespace o3tl
 
 enum class SvStreamEndian { BIG, LITTLE };
 
-#define COMPRESSMODE_NONE               (sal_uInt16)0x0000
-#define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
-#define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
+enum class SvStreamCompressFlags {
+    NONE     = 0x0000,
+    ZBITMAP  = 0x0001,
+    NATIVE   = 0x0010,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvStreamCompressFlags> : is_typed_flags<SvStreamCompressFlags, 0x0011> {};
+}
 
 class SvStream;
 
@@ -222,7 +228,7 @@ private:
     bool            bIsEof;
     sal_uInt32      nError;
     SvStreamEndian  nEndian;
-    sal_uInt16      nCompressMode;
+    SvStreamCompressFlags nCompressMode;
     LineEnd         eLineDelimiter;
     rtl_TextEncoding eStreamCharSet;
 
@@ -278,9 +284,9 @@ public:
     /// returns status of endian swap flag
     bool            IsEndianSwap() const { return bSwap; }
 
-    void            SetCompressMode( sal_uInt16 nNewMode )
+    void            SetCompressMode( SvStreamCompressFlags nNewMode )
                         { nCompressMode = nNewMode; }
-    sal_uInt16      GetCompressMode() const { return nCompressMode; }
+    SvStreamCompressFlags GetCompressMode() const { return nCompressMode; }
 
     void SetCryptMaskKey(const OString& rCryptMaskKey);
     const OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }

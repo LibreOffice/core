@@ -154,7 +154,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     bPasteResize=false;
     bNoBitmapCaching=false;
     bReadOnly=false;
-    nStreamCompressMode=COMPRESSMODE_NONE;
     nStreamNumberFormat=SvStreamEndian::BIG;
     nDefaultTabulator=0;
     mpNumberFormatter = NULL;

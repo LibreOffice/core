@@ -178,10 +178,10 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
 
     if( bIsThumbBmp )
     {
-        const sal_uInt16    nOldCompressMode = rOut.GetCompressMode();
-        const sal_uIntPtr       nOldVersion = rOut.GetVersion();
+        const SvStreamCompressFlags nOldCompressMode = rOut.GetCompressMode();
+        const sal_uIntPtr           nOldVersion = rOut.GetVersion();
 
-        rOut.SetCompressMode( COMPRESSMODE_ZBITMAP );
+        rOut.SetCompressMode( SvStreamCompressFlags::ZBITMAP );
         rOut.SetVersion( SOFFICE_FILEFORMAT_50 );
 
         WriteDIBBitmapEx(aThumbBmp, rOut);
