@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Wed Jan 29 13:37:30 2014 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkFrame" id="SpecialSettingsPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -26,9 +26,9 @@
             <child>
               <object class="GtkCheckButton" id="usesql92">
                 <property name="label" translatable="yes">Use SQL92 naming constraints</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -43,9 +43,9 @@
             <child>
               <object class="GtkCheckButton" id="append">
                 <property name="label" translatable="yes">Append the table alias name on SELECT statements</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -60,9 +60,9 @@
             <child>
               <object class="GtkCheckButton" id="useas">
                 <property name="label" translatable="yes">Use keyword AS before table alias names</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -77,9 +77,9 @@
             <child>
               <object class="GtkCheckButton" id="useoj">
                 <property name="label" translatable="yes">Use Outer Join syntax '{oj }'</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -94,9 +94,9 @@
             <child>
               <object class="GtkCheckButton" id="ignoreprivs">
                 <property name="label" translatable="yes">Ignore the privileges from the database driver</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -111,9 +111,9 @@
             <child>
               <object class="GtkCheckButton" id="replaceparams">
                 <property name="label" translatable="yes">Replace named parameters with '?'</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -128,9 +128,9 @@
             <child>
               <object class="GtkCheckButton" id="displayver">
                 <property name="label" translatable="yes">Display version columns (when available)</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -145,9 +145,9 @@
             <child>
               <object class="GtkCheckButton" id="usecatalogname">
                 <property name="label" translatable="yes">Use catalog name in SELECT statements</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -162,9 +162,9 @@
             <child>
               <object class="GtkCheckButton" id="useschemaname">
                 <property name="label" translatable="yes">Use schema name in SELECT statements</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -179,9 +179,9 @@
             <child>
               <object class="GtkCheckButton" id="createindex">
                 <property name="label" translatable="yes">Create index with ASC or DESC statement</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -196,9 +196,9 @@
             <child>
               <object class="GtkCheckButton" id="eol">
                 <property name="label" translatable="yes">End text lines with CR+LF</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -213,9 +213,9 @@
             <child>
               <object class="GtkCheckButton" id="ignorecurrency">
                 <property name="label" translatable="yes">Ignore currency field information</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -230,9 +230,9 @@
             <child>
               <object class="GtkCheckButton" id="inputchecks">
                 <property name="label" translatable="yes">Form data input checks for required fields</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -247,9 +247,9 @@
             <child>
               <object class="GtkCheckButton" id="useodbcliterals">
                 <property name="label" translatable="yes">Use ODBC conformant date/time literals</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -264,9 +264,9 @@
             <child>
               <object class="GtkCheckButton" id="primarykeys">
                 <property name="label" translatable="yes">Supports primary keys</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
@@ -281,9 +281,9 @@
             <child>
               <object class="GtkCheckButton" id="resulttype">
                 <property name="label" translatable="yes">Respect the result set type from the database driver</property>
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="no_show_all">True</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
