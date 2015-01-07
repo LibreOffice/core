@@ -168,6 +168,7 @@ class GbuildParser:
     def parse(self, gbuildstate):
         state = GbuildParserState()
         for line in gbuildstate:
+            line = line.rstrip('\r\n')
             if line.startswith('#'):
                 state = self._parse_hash(line, state)
             else:
