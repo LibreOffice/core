@@ -699,7 +699,6 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 SwPaM* pCaret = pCrsrShell->GetCrsr();
                 if (!pCurrTxtFrm->IsEmpty() && pCaret)
                 {
-                    sal_uInt16 nActPos = 0;
                     if (pCurrTxtFrm->IsTxtFrm())
                     {
                         const SwPosition* pPoint = NULL;
@@ -711,7 +710,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                         }
                         else
                             pPoint = pCaret->GetPoint();
-                        nActPos = pPoint->nContent.GetIndex();
+                        const sal_Int32 nActPos = pPoint->nContent.GetIndex();
                         nLineNum += pCurrTxtFrm->GetLineCount( nActPos );
                     }
                     else//graphic, form, shape, etc.
@@ -720,7 +719,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                         Point aPt = pCrsrShell->_GetCrsr()->GetPtPos();
                         if( pCrsrShell->GetLayout()->GetCrsrOfst( pPoint, aPt/*,* &eTmpState*/ ) )
                         {
-                            nActPos = pPoint->nContent.GetIndex();
+                            const sal_Int32 nActPos = pPoint->nContent.GetIndex();
                             nLineNum += pCurrTxtFrm->GetLineCount( nActPos );
                         }
                     }
@@ -740,7 +739,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sAttrName = "column-number:";
         sValue += sAttrName;
 
-        sal_uInt16 nCurrCol = 1;
+        int nCurrCol = 1;
         if(pCurrCol!=NULL)
         {
             //SwLayoutFrm* pParent = pCurrCol->GetUpper();
@@ -758,7 +757,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                 while(pCol&&(pCol!=pCurrPageCol))
                 {
                     pCol = pCol->GetNext();
-                    nCurrCol +=1;
+                    ++nCurrCol;
                 }
             }
         }
