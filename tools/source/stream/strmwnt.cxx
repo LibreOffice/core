@@ -275,7 +275,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     SvStream::ClearBuffer();
 
     eStreamMode = nMode;
-    eStreamMode &= ~STREAM_TRUNC; // don't truncate on reopen
+    eStreamMode &= ~StreamMode::TRUNC; // don't truncate on reopen
 
     aFilename = aParsedFilename;
     OString aFileNameA(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
@@ -286,25 +286,25 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     DWORD   nAccessMode     = 0L;
     UINT    nOldErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX );
 
-    if( nMode & STREAM_SHARE_DENYREAD)
+    if( nMode & StreamMode::SHARE_DENYREAD)
         nShareMode &= ~FILE_SHARE_READ;
 
-    if( nMode & STREAM_SHARE_DENYWRITE)
+    if( nMode & StreamMode::SHARE_DENYWRITE)
         nShareMode &= ~FILE_SHARE_WRITE;
 
-    if( nMode & STREAM_SHARE_DENYALL)
+    if( nMode & StreamMode::SHARE_DENYALL)
         nShareMode = 0;
 
     if( (nMode & StreamMode::READ) )
         nAccessMode |= GENERIC_READ;
-    if( (nMode & STREAM_WRITE) )
+    if( (nMode & StreamMode::WRITE) )
         nAccessMode |= GENERIC_WRITE;
 
     if( nAccessMode == GENERIC_READ )       // ReadOnly ?
-        nMode |= STREAM_NOCREATE;   // Don't create if readonly
+        nMode |= StreamMode::NOCREATE;   // Don't create if readonly
 
     // Assignment based on true/false table above
-    if( !(nMode & STREAM_NOCREATE) )
+    if( !(nMode & StreamMode::NOCREATE) )
     {
         if( nMode & StreamMode::TRUNC )
             nOpenAction = CREATE_ALWAYS;
@@ -347,7 +347,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
         sal_Size nErr = ::GetSvError( GetLastError() );
         if(nErr==SVSTREAM_ACCESS_DENIED || nErr==SVSTREAM_SHARING_VIOLATION)
         {
-            nMode &= (~STREAM_WRITE);
+            nMode &= (~StreamMode::WRITE);
             nAccessMode = GENERIC_READ;
             // OV, 28.1.97: Win32 sets file to length 0
             // if Openaction is CREATE_ALWAYS
