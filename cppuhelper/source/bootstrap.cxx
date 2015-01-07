@@ -160,8 +160,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             args[ 1 ].pData,
             args[ 2 ].pData,
             args[ 3 ].pData,
-            args[ 4 ].pData,
-            args[ 5 ].pData
+            args[ 4 ].pData
         };
         ::osl::Security sec;
 
