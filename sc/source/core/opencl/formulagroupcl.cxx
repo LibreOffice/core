@@ -2442,7 +2442,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpPhi, nResultSize));
                 break;
-            case ocZinsZ:
+            case ocIpmt:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpIPMT, nResultSize));
                 break;

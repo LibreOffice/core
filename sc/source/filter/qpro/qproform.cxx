@@ -137,7 +137,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
 
         if( eOc == ocZGZ )
             aPool << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
-        if( eOc == ocZinsZ )
+        if( eOc == ocIpmt )
             aPool << eParam[ 3 ] << ocSep << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
         else
         {
@@ -503,7 +503,7 @@ static const struct
     { ocZW, FT_FuncFix3 },  // QPro Fval   // 0x80
     { ocZZR, FT_FuncFix5 },
     { ocRate, FT_FuncFix5 },
-    { ocZinsZ, FT_FuncFix4 },
+    { ocIpmt, FT_FuncFix4 },
     { ocKapz, FT_FuncFix6 },
     { ocSumProduct, FT_FuncFix2 },
     { ocNoName, FT_NotImpl },

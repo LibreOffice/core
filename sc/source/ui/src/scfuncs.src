@@ -1453,7 +1453,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function ZINSZ #*=-
-    Resource SC_OPCODE_ZINS_Z
+    Resource SC_OPCODE_IPMT
     {
         String 1 // Description
         {

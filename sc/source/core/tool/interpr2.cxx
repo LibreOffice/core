@@ -1732,7 +1732,7 @@ double ScInterpreter::ScGetCompoundInterest(double fInterest, double fZr, double
     return fCompoundInterest * fInterest;
 }
 
-void ScInterpreter::ScZinsZ()
+void ScInterpreter::ScIpmt()
 {
     double nInterest, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;

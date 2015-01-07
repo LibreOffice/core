@@ -197,7 +197,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocMatDet,             163,    1,  1,  V, { VA }, 0, 0 },
     { ocMatInv,             164,    1,  1,  A, { VA }, 0, 0 },
     { ocMatMult,            165,    2,  2,  A, { VA }, 0, 0 },
-    { ocZinsZ,              167,    4,  6,  V, { VR }, 0, 0 },
+    { ocIpmt,               167,    4,  6,  V, { VR }, 0, 0 },
     { ocKapz,               168,    4,  6,  V, { VR }, 0, 0 },
     { ocCount2,             169,    0,  MX, V, { RX }, 0, 0 },
     { ocProduct,            183,    0,  MX, V, { RX }, 0, 0 },

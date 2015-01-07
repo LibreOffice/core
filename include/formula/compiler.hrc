@@ -257,7 +257,7 @@
 #define SC_OPCODE_ZW                257
 #define SC_OPCODE_ZZR               258
 #define SC_OPCODE_RATE              259
-#define SC_OPCODE_ZINS_Z            260
+#define SC_OPCODE_IPMT              260
 #define SC_OPCODE_KAPZ              261
 #define SC_OPCODE_KUM_ZINS_Z        262
 #define SC_OPCODE_KUM_KAP_Z         263
