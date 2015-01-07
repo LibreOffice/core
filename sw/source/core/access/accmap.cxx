@@ -200,7 +200,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
 
 void SwDrawModellListener_Impl::Dispose()
 {
-    mpDrawModel = 0;
+    mpDrawModel = nullptr;
 }
 
 struct SwShapeFunc
@@ -254,8 +254,8 @@ public:
     const ::accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
 
     SwAccessibleObjShape_Impl *Copy( size_t& rSize,
-        const SwFEShell *pFESh = 0,
-        SwAccessibleObjShape_Impl  **pSelShape = 0 ) const;
+        const SwFEShell *pFESh = nullptr,
+        SwAccessibleObjShape_Impl  **pSelShape = nullptr ) const;
 
     iterator begin() { return maMap.begin(); }
     iterator end() { return maMap.end(); }
@@ -279,8 +279,8 @@ SwAccessibleObjShape_Impl
             size_t& rSize, const SwFEShell *pFESh,
             SwAccessibleObjShape_Impl **pSelStart ) const
 {
-    SwAccessibleObjShape_Impl *pShapes = 0;
-    SwAccessibleObjShape_Impl *pSelShape = 0;
+    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    SwAccessibleObjShape_Impl *pSelShape = nullptr;
 
     size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
     rSize = maMap.size();
@@ -353,7 +353,7 @@ public:
     const SwFrm* mpParentFrm;   // The object that fires the event
     bool IsNoXaccParentFrm() const
     {
-        return CHILD_POS_CHANGED == meType && mpParentFrm != 0;
+        return CHILD_POS_CHANGED == meType && mpParentFrm != nullptr;
     }
 
 public:
@@ -364,7 +364,7 @@ public:
           maFrmOrObj( rFrmOrObj ),
           meType( eT ),
           mnStates( 0 ),
-          mpParentFrm( 0 )
+          mpParentFrm( nullptr )
     {}
 
     SwAccessibleEvent_Impl( EventType eT,
@@ -372,7 +372,7 @@ public:
         : maFrmOrObj( rFrmOrObj ),
           meType( eT ),
           mnStates( 0 ),
-          mpParentFrm( 0 )
+          mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::DISPOSE == meType,
                 "wrong event constructor, DISPOSE only" );
@@ -381,7 +381,7 @@ public:
     SwAccessibleEvent_Impl( EventType eT )
         : meType( eT ),
           mnStates( 0 ),
-          mpParentFrm( 0 )
+          mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::SHAPE_SELECTION == meType,
                 "wrong event constructor, SHAPE_SELECTION only" );
@@ -396,7 +396,7 @@ public:
           maFrmOrObj( rFrmOrObj ),
           meType( eT ),
           mnStates( 0 ),
-          mpParentFrm( 0 )
+          mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
                 SwAccessibleEvent_Impl::POS_CHANGED == meType,
@@ -411,7 +411,7 @@ public:
           maFrmOrObj( rFrmOrObj ),
           meType( eT ),
           mnStates( _nStates ),
-          mpParentFrm( 0 )
+          mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
                 "wrong event constructor, CARET_OR_STATES only" );
@@ -709,7 +709,7 @@ public:
 };
 
 SwAccPreviewData::SwAccPreviewData() :
-    mpSelPage( 0 )
+    mpSelPage( nullptr )
 {
 }
 
@@ -809,7 +809,7 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
 void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
 {
     if( mpSelPage == pPageFrm )
-        mpSelPage = 0;
+        mpSelPage = nullptr;
 }
 
 // adjust logic page rectangle to its visible part
@@ -882,7 +882,7 @@ static bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
 void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
 {
     ::rtl::Reference < SwAccessibleContext > xAccImpl( rEvent.GetContext() );
-    if (!xAccImpl.is() && rEvent.mpParentFrm != 0 )
+    if (!xAccImpl.is() && rEvent.mpParentFrm != nullptr)
     {
         SwAccessibleContextMap_Impl::iterator aIter =
             mpFrmMap->find( rEvent.mpParentFrm );
@@ -1123,14 +1123,14 @@ void SwAccessibleMap::InvalidateShapeSelection()
 //3.find the paragraph objects and set the selected state.
 void SwAccessibleMap::InvalidateShapeInParaSelection()
 {
-    SwAccessibleObjShape_Impl *pShapes = 0;
-    SwAccessibleObjShape_Impl *pSelShape = 0;
+    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
-                            static_cast< const SwFEShell * >( pVSh ) : 0;
-    SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( false /* ??? */ ) : NULL;
+                            static_cast< const SwFEShell * >( pVSh ) : nullptr;
+    SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( false /* ??? */ ) : nullptr;
 
     //const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
@@ -1167,7 +1167,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 bool bMarked = false;
                 SwAccessibleChild pFrm( (*aIter).first );
 
-                const SwFrmFmt *pFrmFmt = (*aIter).first ? ::FindFrmFmt( (*aIter).first ) : 0;
+                const SwFrmFmt *pFrmFmt = (*aIter).first ? ::FindFrmFmt( (*aIter).first ) : nullptr;
                 if( !pFrmFmt ) { ++aIter; continue; }
                 const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
                 const SwPosition *pPos = pAnchor.GetCntntAnchor();
@@ -1434,13 +1434,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 //Marge with DoInvalidateShapeFocus
 void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=false*/)
 {
-    SwAccessibleObjShape_Impl *pShapes = 0;
-    SwAccessibleObjShape_Impl *pSelShape = 0;
+    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
-                            static_cast< const SwFEShell * >( pVSh ) : 0;
+                            static_cast< const SwFEShell * >( pVSh ) : nullptr;
     const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,
@@ -1608,14 +1608,14 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 {
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
-                            static_cast< const SwFEShell * >( pVSh ) : 0;
+                            static_cast< const SwFEShell * >( pVSh ) : nullptr;
     const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
     if( nSelShapes != 1 )
         return;
 
-    SwAccessibleObjShape_Impl *pShapes = 0;
-    SwAccessibleObjShape_Impl *pSelShape = 0;
+    SwAccessibleObjShape_Impl *pShapes = nullptr;
+    SwAccessibleObjShape_Impl *pSelShape = nullptr;
     size_t nShapes = 0;
 
     {
@@ -1650,14 +1650,14 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 */
 
 SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
-    mpFrmMap( 0  ),
-    mpShapeMap( 0  ),
-    mpShapes( 0  ),
-    mpEvents( 0  ),
-    mpEventMap( 0  ),
-    mpSelectedParas( 0 ),
+    mpFrmMap( nullptr  ),
+    mpShapeMap( nullptr  ),
+    mpShapes( nullptr  ),
+    mpEvents( nullptr  ),
+    mpEventMap( nullptr  ),
+    mpSelectedParas( nullptr ),
     mpVSh( pSh ),
-        mpPreview( 0 ),
+        mpPreview( nullptr ),
     mnPara( 1 ),
     mbShapeSelected( false ),
     mpSeletedFrmMap(NULL)
@@ -1740,13 +1740,13 @@ SwAccessibleMap::~SwAccessibleMap()
         }
 #endif
         delete mpFrmMap;
-        mpFrmMap = 0;
+        mpFrmMap = nullptr;
         delete mpShapeMap;
-        mpShapeMap = 0;
+        mpShapeMap = nullptr;
         delete mpShapes;
-        mpShapes = 0;
+        mpShapes = nullptr;
         delete mpSelectedParas;
-        mpSelectedParas = 0;
+        mpSelectedParas = nullptr;
     }
 
     delete mpPreview;
@@ -1774,9 +1774,9 @@ SwAccessibleMap::~SwAccessibleMap()
         }
 #endif
         delete mpEventMap;
-        mpEventMap = 0;
+        mpEventMap = nullptr;
         delete mpEvents;
-        mpEvents = 0;
+        mpEvents = nullptr;
     }
     mpVSh->GetLayout()->RemoveAccessibleShell();
     delete mpSeletedFrmMap;
@@ -1885,7 +1885,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
 
             if( !xAcc.is() && bCreate )
             {
-                SwAccessibleContext *pAcc = 0;
+                SwAccessibleContext *pAcc = nullptr;
                 switch( pFrm->GetType() )
                 {
                 case FRM_TXT:
@@ -2029,7 +2029,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
 
             if( !xAcc.is() && bCreate )
             {
-                ::accessibility::AccessibleShape *pAcc = 0;
+                ::accessibility::AccessibleShape *pAcc = nullptr;
                 uno::Reference < drawing::XShape > xShape(
                     const_cast< SdrObject * >( pObj )->getUnoShape(),
                     uno::UNO_QUERY );
@@ -2217,7 +2217,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
             if( mpFrmMap->empty() )
             {
                 delete mpFrmMap;
-                mpFrmMap = 0;
+                mpFrmMap = nullptr;
             }
         }
     }
@@ -2243,7 +2243,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
             if( mpShapeMap && mpShapeMap->empty() )
             {
                 delete mpShapeMap;
-                mpShapeMap = 0;
+                mpShapeMap = nullptr;
             }
         }
     }
@@ -2611,7 +2611,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             else if( pFESh->IsObjSelected() > 0 )
             {
                 bShapeSelected = true;
-                aFrmOrObj = static_cast<const SwFrm *>( 0 );
+                aFrmOrObj = static_cast<const SwFrm *>( nullptr );
             }
         }
     }
@@ -2644,11 +2644,11 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                 const SwTabFrm* pTabFrm = aFrmOrObj.GetSwFrm()->FindTabFrm();
                 if (pTabFrm)
                 {
-                    InvalidatePosOrSize(pTabFrm,0,0,rcEmpty);
+                    InvalidatePosOrSize(pTabFrm, nullptr, nullptr, rcEmpty);
                 }
                 else
                 {
-                    InvalidatePosOrSize(aFrmOrObj.GetSwFrm(),0,0,rcEmpty);
+                    InvalidatePosOrSize(aFrmOrObj.GetSwFrm(), nullptr, nullptr, rcEmpty);
                 }
 
                 aIter =
@@ -3102,10 +3102,10 @@ void SwAccessibleMap::FireEvents()
                             boost::bind(&SwAccessibleMap::FireEvent, this, _1));
 
             delete mpEventMap;
-            mpEventMap = 0;
+            mpEventMap = nullptr;
 
             delete mpEvents;
-            mpEvents = 0;
+            mpEvents = nullptr;
         }
     }
     {
@@ -3113,7 +3113,7 @@ void SwAccessibleMap::FireEvents()
         if( mpShapes )
         {
             delete mpShapes;
-            mpShapes = 0;
+            mpShapes = nullptr;
         }
     }
 
@@ -3209,7 +3209,7 @@ bool SwAccessibleMap::ReplaceChild (
         const ::accessibility::AccessibleShapeTreeInfo& /*_rShapeTreeInfo*/
     )   throw (uno::RuntimeException)
 {
-    const SdrObject *pObj = 0;
+    const SdrObject *pObj = nullptr;
     {
         osl::MutexGuard aGuard( maMutex );
         if( mpShapeMap )
@@ -3237,8 +3237,8 @@ bool SwAccessibleMap::ReplaceChild (
                                                             // holds it.
     // Also get keep parent.
     uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
-    pCurrentChild = 0;  // will be released by dispose
-    Dispose( 0, pObj, 0 );
+    pCurrentChild = nullptr;  // will be released by dispose
+    Dispose( nullptr, pObj, nullptr );
 
     {
         osl::MutexGuard aGuard( maMutex );
@@ -3274,7 +3274,7 @@ bool SwAccessibleMap::ReplaceChild (
     }
 
     SwRect aEmptyRect;
-    InvalidatePosOrSize( 0, pObj, 0, aEmptyRect );
+    InvalidatePosOrSize( nullptr, pObj, nullptr, aEmptyRect );
 
     return true;
 }
@@ -3416,11 +3416,11 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
     // no accessible contexts, no selection
     if ( !mpFrmMap )
     {
-        return 0L;
+        return nullptr;
     }
 
     // get cursor as an instance of its base class <SwPaM>
-    SwPaM* pCrsr( 0L );
+    SwPaM* pCrsr( nullptr );
     {
         SwCrsrShell* pCrsrShell = dynamic_cast<SwCrsrShell*>(GetShell());
         if ( pCrsrShell )
@@ -3438,10 +3438,10 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
     // no cursor, no selection
     if ( !pCrsr )
     {
-        return 0L;
+        return nullptr;
     }
 
-    SwAccessibleSelectedParas_Impl* pRetSelectedParas( 0L );
+    SwAccessibleSelectedParas_Impl* pRetSelectedParas( nullptr );
 
     // loop on all cursors
     SwPaM* pRingStart = pCrsr;
