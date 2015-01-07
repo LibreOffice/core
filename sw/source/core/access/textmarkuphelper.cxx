@@ -183,8 +183,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         const sal_uInt16 nTextMarkupCount = pTextMarkupList->Count();
         for ( sal_uInt16 nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )
         {
-            const SwWrongArea* pTextMarkup =
-                    pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIdx) );
+            const SwWrongArea* pTextMarkup = pTextMarkupList->GetElement( nTextMarkupIdx );
             OSL_ENSURE( pTextMarkup,
                     "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
             if ( pTextMarkup &&
