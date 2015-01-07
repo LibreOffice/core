@@ -33,16 +33,29 @@ public:
 
     bool VisitFieldDecl(const FieldDecl * decl);
 
-    bool mbFoundWindow;
+    bool VisitParmVarDecl(ParmVarDecl const * decl);
+
+    bool VisitVarDecl( const VarDecl* var );
+
 };
 
-bool forallBasesCallback(const CXXBaseSpecifier *Specifier, CXXBasePath &, void *UserData) {
-    VCLWidgets* ro = (VCLWidgets*) UserData;
-    QualType qt = Specifier->getType();
-    std::string name = qt.getUnqualifiedType().getCanonicalType().getAsString();
-    if (name == "class Window") {
-          ro->mbFoundWindow = true;
-          return true;
+bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
+    if (BaseDefinition->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+        return false;
+    }
+    return true;
+}
+
+bool isDerivedFromWindow(const CXXRecordDecl *decl) {
+    if (!decl->hasDefinition())
+        return false;
+    if (decl->getQualifiedNameAsString().compare("vcl::Window") == 0)
+        return true;
+    if (// not sure what hasAnyDependentBases() does,
+        // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
+        !decl->hasAnyDependentBases() &&
+        !decl->forallBases(BaseCheckNotWindowSubclass, nullptr, true)) {
+        return true;
     }
     return false;
 }
@@ -63,10 +76,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
     // check if this field is derived from Window
-    mbFoundWindow = false;
-    CXXBasePaths paths;
-    recordDecl->lookupInBases(forallBasesCallback, this, paths);
-    if (!mbFoundWindow) {
+    if (!isDerivedFromWindow(recordDecl)) {
         return true;
     }
 
@@ -78,6 +88,59 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     return true;
 }
 
+bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl) {
+    if (ignoreLocation(pvDecl)) {
+        return true;
+    }
+    if (!pvDecl->getType()->isPointerType())
+        return true;
+    QualType pointeeType = pvDecl->getType()->getPointeeType();
+    const RecordType *recordType = pointeeType->getAs<RecordType>();
+    if (recordType == nullptr)
+        return true;
+    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    if (recordDecl == nullptr)
+        return true;
+
+    // check if this parameter is derived from Window
+    if (isDerivedFromWindow(recordDecl)) {
+        report(
+            DiagnosticsEngine::Remark,
+            "vcl::Window subclass passed as a pointer parameter, should be wrapped in VclPtr.",
+            pvDecl->getLocation())
+          << pvDecl->getSourceRange();
+    }
+    return true;
+}
+
+bool VCLWidgets::VisitVarDecl( const VarDecl* varDecl )
+{
+    if (ignoreLocation(varDecl)) {
+        return true;
+    }
+    if (!varDecl->isLocalVarDecl())
+        return true;
+    if (!varDecl->getType()->isPointerType())
+        return true;
+    QualType pointeeType = varDecl->getType()->getPointeeType();
+    const RecordType *recordType = pointeeType->getAs<RecordType>();
+    if (recordType == nullptr)
+        return true;
+    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    if (recordDecl == nullptr)
+        return true;
+
+    // check if this variables type is derived from Window
+    if (isDerivedFromWindow(recordDecl)) {
+        report(
+            DiagnosticsEngine::Remark,
+            "vcl::Window subclass declared as a pointer var, should be wrapped in VclPtr.",
+            varDecl->getLocation())
+          << varDecl->getSourceRange();
+    }
+
+    return true;
+}
 
 loplugin::Plugin::Registration< VCLWidgets > X("vclwidgets");
 
