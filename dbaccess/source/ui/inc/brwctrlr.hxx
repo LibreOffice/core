@@ -43,7 +43,7 @@
 #include <svtools/transfer.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svtools/cliplistener.hxx>
 
 struct FmFoundRecordInformation;
@@ -57,7 +57,7 @@ namespace dbtools
 namespace dbaui
 {
 
-    typedef ::cppu::ImplInheritanceHelper9  <   OGenericUnoController
+    typedef ::cppu::ImplInheritanceHelper  <   OGenericUnoController
                                             ,   ::com::sun::star::sdb::XSQLErrorListener
                                             ,   ::com::sun::star::form::XDatabaseParameterListener
                                             ,   ::com::sun::star::form::XConfirmDeleteListener

@@ -24,6 +24,7 @@
 
 #include <cstddef>
 #include <exception>
+#include <utility>
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -89,6 +90,11 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper:
             class_data, detail::ImplClassData<WeakImplHelper, Ifc...>>
     {};
 
+protected:
+    WeakImplHelper() {}
+
+    virtual ~WeakImplHelper() {}
+
 public:
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -101,6 +107,43 @@ public:
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { return WeakImplHelper_getTypes(cd::get()); }
+
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return css::uno::Sequence<sal_Int8>(); }
+};
+
+template<typename BaseClass, typename... Ifc>
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplInheritanceHelper:
+    public BaseClass, public Ifc...
+{
+    struct cd:
+        rtl::StaticAggregate<
+            class_data, detail::ImplClassData<ImplInheritanceHelper, Ifc...>>
+    {};
+
+protected:
+    template<typename... Arg> ImplInheritanceHelper(Arg &&... arg):
+        BaseClass(std::forward<Arg>(arg)...)
+    {}
+
+    virtual ~ImplInheritanceHelper() {}
+
+public:
+    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        css::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
+        return ret.hasValue() ? ret : BaseClass::queryInterface(aType);
+    }
+
+    void SAL_CALL acquire() throw () SAL_OVERRIDE { BaseClass::acquire(); }
+
+    void SAL_CALL release() throw () SAL_OVERRIDE { BaseClass::release(); }
+
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return ImplInhHelper_getTypes(cd::get(), BaseClass::getTypes()); }
 
     css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
