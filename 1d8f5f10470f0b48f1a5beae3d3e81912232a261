@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_0063c6b2",
+        "filename": "connectivity/source/drivers/mork/MQueryHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-01-07T03:06:33Z",
+      "side": 1,
+      "message": "I\u0027m not very happy about this hardcoded priority between CollectedAddressBook and AddressBook.\n\nHow about instead we remember (when we discovered it in getTableStrings) from which address book the table/view came from, and use that knowledge here?\n\nEssentially, I understand that m_aAddressBook is a misnomer: It is not the address book name, but the table name. I would thus rename it to m_aTableName. *Then* introduce a *new* m_aAddressBook which contains the (name of the) address book that this table comes from. Maybe the next test (\"aAddressBook\") could then become something like:\n\n if (m_aTableName !\u003d m_aAddressBook)\n\n\nAlso, what happens when CollectedAddressBook and AddressBook each contain a list with the same name? Is that supported by Thunderbird (if not, we don\u0027t have a problem)?",
+      "revId": "1d8f5f10470f0b48f1a5beae3d3e81912232a261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
