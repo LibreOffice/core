@@ -16,6 +16,24 @@
       "revId": "1d8f5f10470f0b48f1a5beae3d3e81912232a261",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_c05cfeef",
+        "filename": "connectivity/source/drivers/mork/MQueryHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-01-07T03:37:20Z",
+      "side": 1,
+      "message": "I eat my own words... The remembering thing is exactly what is happening (in xMork-\u003elists_), only the other way round from what I would have expected. I expected a \"table name to address book name\" mapping, you essentially have a \"address book to list of table names\" mapping. That\u0027s a valid way to proceed.\n\nAs remaining nitpicks/optimisation/cleanups, I still suggest:\n\n * lookup the right address book source *once*, e.g. when \"setAddressBook\" is called, instead of each time executeQuery is called.\n\n * rename (for example) m_aAddressBook to m_aTableName and setAddressBook to setTableName\n\nMy tests also show that Thunderbird does not allow two lists in two different address books to have the same name, so no problem about priority (no ambiguity / name clash possible).\n\nHowever, it allows lists named \"AddressBook\" and \"CollectedAddressBook\". We thus potentially have a name clash problem there.\n\nIdea 1: prefix lists (view) names that have the same name as an address book with \"v\" or \"list_\"? That\u0027s a bit hacky, but would work.\n\nIdea 2: Add schema support to the mork driver, put address books in schema \"ab\" or \"book\" or some such, and lists in schema \"list\". I very much prefer this idea; much cleaner! You feel like working on that?\n\nHowever, the above name clash problem is not new to this commit, so no reason to block this commit.\n\nAlso, the above suggestions for cleanup/optimisation are also not a reason to block this commit (you can still do them afterwards), so I\u0027m accepting this commit. Thank you for the patch and your work!",
+      "parentUuid": "ba3cc151_0063c6b2",
+      "revId": "1d8f5f10470f0b48f1a5beae3d3e81912232a261",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
