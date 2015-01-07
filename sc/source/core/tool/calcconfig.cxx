@@ -37,7 +37,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     // Crazy.
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
-    mnOpenCLMinimumFormulaGroupSize = 1000;
+    mnOpenCLMinimumFormulaGroupSize = 100;
 
     // Keep in order of opcode value, is that clearest? (Random order,
     // at least, would make no sense at all.)

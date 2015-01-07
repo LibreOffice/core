@@ -1363,7 +1363,7 @@
           <info>
             <desc>An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</desc>
           </info>
-          <value>1000</value>
+          <value>100</value>
         </prop>
         <prop oor:name="OpenCLSubsetOpCodes" oor:type="xs:string" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
