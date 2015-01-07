@@ -84,7 +84,7 @@ public:
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
-    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
+    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bLine, bool blockAA = false );
     void DrawRegionBand( const RegionBand& rRegion );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
