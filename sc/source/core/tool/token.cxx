@@ -1214,8 +1214,8 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocStdNormDist:
             case ocNormInv:
             case ocSNormInv:
-            case ocVariationen:
-            case ocVariationen2:
+            case ocPermut:
+            case ocPermutationA:
             case ocPhi:
             case ocIpmt:
             case ocConfidence:
@@ -1256,7 +1256,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocExpDist:
             case ocAverageIfs:
             case ocCountIfs:
-            case ocKombin2:
+            case ocCombinA:
             case ocEven:
             case ocLog:
             case ocMod:
@@ -1274,7 +1274,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocBinomDist:
             case ocVarP:
             case ocCeil:
-            case ocKombin:
+            case ocCombin:
             case ocDevSq:
             case ocStDev:
             case ocSlope:

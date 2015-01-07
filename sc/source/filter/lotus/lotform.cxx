@@ -2042,7 +2042,7 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
     else if (rTest == "PRODUCT")
             eId=ocProduct;
     else if (rTest == "PERMUT")
-            eId=ocVariationen;
+            eId=ocPermut;
     else if (rTest == "GAMMALN")
             eId=ocGammaLn;
     else if (rTest =="POISSON")

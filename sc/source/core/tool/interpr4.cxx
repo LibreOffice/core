@@ -4110,10 +4110,10 @@ StackVar ScInterpreter::Interpret()
                 case ocBinomDist_MS     : ScBinomDist();                break;
                 case ocPoissonDist      :
                 case ocPoissonDist_MS   : ScPoissonDist();              break;
-                case ocKombin           : ScKombin();                   break;
-                case ocKombin2          : ScKombin2();                  break;
-                case ocVariationen      : ScVariationen();              break;
-                case ocVariationen2     : ScVariationen2();             break;
+                case ocCombin           : ScCombin();                   break;
+                case ocCombinA          : ScCombinA();                  break;
+                case ocPermut           : ScPermut();                   break;
+                case ocPermutationA     : ScPermutationA();             break;
                 case ocHypGeomDist      : ScHypGeomDist();              break;
                 case ocHypGeomDist_MS   : ScHypGeomDist_MS();           break;
                 case ocLogNormDist      : ScLogNormDist( 1 );           break;

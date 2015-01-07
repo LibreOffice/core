@@ -206,10 +206,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_BINOM_DIST_MS { Text = "COM.MICROSOFT.BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
     String SC_OPCODE_POISSON_DIST_MS { Text = "COM.MICROSOFT.POISSON.DIST" ; };
-    String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
-    String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
-    String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
-    String SC_OPCODE_VARIATIONEN_2 { Text = "PERMUTATIONA" ; };
+    String SC_OPCODE_COMBIN { Text = "COMBIN" ; };
+    String SC_OPCODE_COMBIN_A { Text = "COMBINA" ; };
+    String SC_OPCODE_PERMUT { Text = "PERMUT" ; };
+    String SC_OPCODE_PERMUTATION_A { Text = "PERMUTATIONA" ; };
     String SC_OPCODE_BW { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
@@ -613,10 +613,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_BINOM_DIST_MS { Text = "_xlfn.BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
     String SC_OPCODE_POISSON_DIST_MS { Text = "_xlfn.POISSON.DIST" ; };
-    String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
-    String SC_OPCODE_KOMBIN_2 { Text = "_xlfn.COMBINA" ; };
-    String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
-    String SC_OPCODE_VARIATIONEN_2 { Text = "_xlfn.PERMUTATIONA" ; };
+    String SC_OPCODE_COMBIN { Text = "COMBIN" ; };
+    String SC_OPCODE_COMBIN_A { Text = "_xlfn.COMBINA" ; };
+    String SC_OPCODE_PERMUT { Text = "PERMUT" ; };
+    String SC_OPCODE_PERMUTATION_A { Text = "_xlfn.PERMUTATIONA" ; };
     String SC_OPCODE_BW { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
@@ -1022,10 +1022,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_BINOM_DIST_MS { Text = "BINOM.DIST" ; };
     String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
     String SC_OPCODE_POISSON_DIST_MS { Text = "POISSON.DIST" ; };
-    String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
-    String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
-    String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
-    String SC_OPCODE_VARIATIONEN_2 { Text = "PERMUTATIONA" ; };
+    String SC_OPCODE_COMBIN { Text = "COMBIN" ; };
+    String SC_OPCODE_COMBIN_A { Text = "COMBINA" ; };
+    String SC_OPCODE_PERMUT { Text = "PERMUT" ; };
+    String SC_OPCODE_PERMUTATION_A { Text = "PERMUTATIONA" ; };
     String SC_OPCODE_BW { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
@@ -1907,19 +1907,19 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "POISSON.DIST" ;
     };
-    String SC_OPCODE_KOMBIN
+    String SC_OPCODE_COMBIN
     {
         Text [ en-US ] = "COMBIN" ;
     };
-    String SC_OPCODE_KOMBIN_2
+    String SC_OPCODE_COMBIN_A
     {
         Text [ en-US ] = "COMBINA" ;
     };
-    String SC_OPCODE_VARIATIONEN
+    String SC_OPCODE_PERMUT
     {
         Text [ en-US ] = "PERMUT" ;
     };
-    String SC_OPCODE_VARIATIONEN_2
+    String SC_OPCODE_PERMUTATION_A
     {
         Text [ en-US ] = "PERMUTATIONA" ;
     };

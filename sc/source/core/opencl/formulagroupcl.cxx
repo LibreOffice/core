@@ -2430,13 +2430,13 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpNormsinv, nResultSize));
                 break;
-            case ocVariationen:
+            case ocPermut:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVariationen, nResultSize));
+                        ft->Children[i], new OpPermut, nResultSize));
                 break;
-            case ocVariationen2:
+            case ocPermutationA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpVariationen2, nResultSize));
+                        ft->Children[i], new OpPermutationA, nResultSize));
                 break;
             case ocPhi:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2603,9 +2603,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpCountIfs, nResultSize));
                 break;
-            case ocKombin2:
+            case ocCombinA:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpCombina, nResultSize));
+                        ft->Children[i], new OpCombinA, nResultSize));
                 break;
             case ocEven:
                 mvSubArguments.push_back(SoPHelper(ts,
@@ -2675,9 +2675,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpCeil, nResultSize));
                 break;
-            case ocKombin:
+            case ocCombin:
                 mvSubArguments.push_back(SoPHelper(ts,
-                        ft->Children[i], new OpKombin, nResultSize));
+                        ft->Children[i], new OpCombin, nResultSize));
                 break;
             case ocDevSq:
                 mvSubArguments.push_back(SoPHelper(ts,
