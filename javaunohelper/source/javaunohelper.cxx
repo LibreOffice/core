@@ -54,16 +54,16 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
 {
     bool bRet = false;
 
-    const jchar* pJLibName = pJEnv->GetStringChars( jLibName, NULL );
-    OUString aLibName( pJLibName );
-    pJEnv->ReleaseStringChars( jLibName, pJLibName);
+    const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
+    OUString aLibName(pJLibName);
+    pJEnv->ReleaseStringChars(jLibName, pJLibName);
 
 #ifdef DISABLE_DYNLOADING
     (void) jSMgr;
     (void) jRegKey;
     (void) loader;
 
-    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
+    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
 #else
     osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (lib.is())
@@ -140,6 +140,8 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     jobject jSMgr, jobject jRegKey, jobject loader )
 {
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
+    OUString aLibName(pJLibName);
+    pJEnv->ReleaseStringChars(jLibName, pJLibName);
 
 #ifdef DISABLE_DYNLOADING
     (void) jImplName;
@@ -147,11 +149,8 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     (void) jRegKey;
     (void) loader;
 
-    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
+    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
 #endif
-
-    OUString aLibName( pJLibName );
-    pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
     aLibName += OUString( SAL_DLLEXTENSION );
 
