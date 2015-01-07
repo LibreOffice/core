@@ -97,6 +97,7 @@ namespace dbaui
             {
                 get((*setting->ppControl), setting->sControlId);
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
+                (*setting->ppControl)->Show();
 
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
