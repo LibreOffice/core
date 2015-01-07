@@ -200,12 +200,12 @@ OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 nLen = -1);
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 #define SAL_FRAME_WNDEXTRA          sizeof( DWORD )
-#define SAL_FRAME_THIS              0
+#define SAL_FRAME_THIS              GWLP_USERDATA
 #define SAL_FRAME_CLASSNAMEW        L"SALFRAME"
 #define SAL_SUBFRAME_CLASSNAMEW     L"SALSUBFRAME"
 #define SAL_TMPSUBFRAME_CLASSNAMEW  L"SALTMPSUBFRAME"
 #define SAL_OBJECT_WNDEXTRA         sizeof( DWORD )
-#define SAL_OBJECT_THIS             0
+#define SAL_OBJECT_THIS             GWLP_USERDATA
 #define SAL_OBJECT_CLASSNAMEA       "SALOBJECT"
 #define SAL_OBJECT_CHILDCLASSNAMEA  "SALOBJECTCHILD"
 #define SAL_COM_CLASSNAMEW          L"SALCOMWND"
