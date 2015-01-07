@@ -83,7 +83,7 @@ namespace {
 
 struct PluginMutex: public ::rtl::Static<osl::Mutex, PluginMutex> {};
 
-#if defined UNX
+#if defined(UNX) && !defined(ANDROID)
 OString getPluginJarPath(
     const OUString & sVendor,
     const OUString& sLocation,
