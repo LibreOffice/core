@@ -196,7 +196,7 @@ SwHash* Find( const OUString& rStr, SwHash** ppTable,
     ii %= nTblSize;
 
     if( pPos )
-        *pPos = (sal_uInt16)ii;
+        *pPos = static_cast<sal_uInt16>(ii);
 
     for( SwHash* pEntry = *(ppTable+ii); pEntry; pEntry = pEntry->pNext )
     {
@@ -430,11 +430,11 @@ OUString SwCalc::GetStrResult( double nValue, bool )
         default             :   return RESOURCE->aCalc_Default;
         }
 
-    sal_uInt16  nDec = 15;
+    const sal_Int32 nDecPlaces = 15;
     OUString aRetStr( ::rtl::math::doubleToUString(
                         nValue,
                         rtl_math_StringFormat_Automatic,
-                        nDec,
+                        nDecPlaces,
                         pLclData->getNumDecimalSep()[0],
                         true ));
     return aRetStr;
@@ -443,10 +443,10 @@ OUString SwCalc::GetStrResult( double nValue, bool )
 SwCalcExp* SwCalc::VarInsert( const OUString &rStr )
 {
     OUString aStr = pCharClass->lowercase( rStr );
-    return VarLook( aStr, 1 );
+    return VarLook( aStr, true );
 }
 
-SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
+SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
 {
     aErrExpr.nValue.SetVoidValue(false);
 
@@ -515,7 +515,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
     // At this point the "real" case variable has to be used
     OUString const sTmpName( ::ReplacePoint(rStr) );
 
-    if( !ins )
+    if( !bIns )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
         SwDBManager *pMgr = rDoc.GetDBManager();
@@ -1171,15 +1171,14 @@ SwSbxValue SwCalc::Term()
                     return left;
                 }
                 fVal = left.GetDouble();
-                sal_uInt16 i;
                 if( nDec >= 0)
                 {
-                    for (i = 0; i < (sal_uInt16) nDec; ++i )
+                    for (sal_Int32 i = 0; i < nDec; ++i )
                         fFac *= 10.0;
                 }
                 else
                 {
-                    for (i = 0; i < (sal_uInt16) -nDec; ++i )
+                    for (sal_Int32 i = 0; i < -nDec; ++i )
                         fFac /= 10.0;
                 }
 

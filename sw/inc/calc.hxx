@@ -193,7 +193,7 @@ public:
     OUString    GetStrResult( double, bool bRound = true );
 
     SwCalcExp*  VarInsert( const OUString& r );
-    SwCalcExp*  VarLook( const OUString &rStr, sal_uInt16 ins = 0 );
+    SwCalcExp*  VarLook( const OUString &rStr, bool bIns = false );
     void        VarChange( const OUString& rStr, const SwSbxValue& rValue );
     void        VarChange( const OUString& rStr, double );
     SwHash**    GetVarTable()                       { return VarTable; }
