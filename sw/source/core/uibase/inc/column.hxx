@@ -153,7 +153,7 @@ class SwColumnPage : public SfxTabPage
     void Apply(Button *);
     void Timeout();
 
-    void            Update();
+    void            Update(MetricField *pInteractiveField);
     void            UpdateCols();
     void            Init();
     void            ResetColWidth();
