@@ -79,8 +79,7 @@ using namespace ::sw::access;
 
 struct SwFrmFunc
 {
-    bool operator()( const SwFrm * p1,
-                         const SwFrm * p2) const
+    bool operator()( const SwFrm * p1, const SwFrm * p2) const
     {
         return p1 < p2;
     }
@@ -205,8 +204,7 @@ void SwDrawModellListener_Impl::Dispose()
 
 struct SwShapeFunc
 {
-    bool operator()( const SdrObject * p1,
-                         const SdrObject * p2) const
+    bool operator()( const SdrObject * p1, const SdrObject * p2) const
     {
         return p1 < p2;
     }
@@ -287,8 +285,7 @@ SwAccessibleObjShape_Impl
 
     if( rSize > 0 )
     {
-        pShapes =
-            new SwAccessibleObjShape_Impl[rSize];
+        pShapes = new SwAccessibleObjShape_Impl[rSize];
 
         const_iterator aIter = maMap.cbegin();
         const_iterator aEndIter = maMap.cend();
@@ -417,15 +414,13 @@ public:
                 "wrong event constructor, CARET_OR_STATES only" );
     }
 
-    SwAccessibleEvent_Impl( EventType eT,
-                                const SwFrm *pParentFrm,
-                const SwAccessibleChild& rFrmOrObj,
-                                const SwRect& rR ) :
+    SwAccessibleEvent_Impl( EventType eT, const SwFrm *pParentFrm,
+                const SwAccessibleChild& rFrmOrObj, const SwRect& rR ) :
         maOldBox( rR ),
-                maFrmOrObj( rFrmOrObj ),
-                meType( eT ),
+        maFrmOrObj( rFrmOrObj ),
+        meType( eT ),
         mnStates( 0 ),
-                mpParentFrm( pParentFrm )
+        mpParentFrm( pParentFrm )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType,
             "wrong event constructor, CHILD_POS_CHANGED only" );
@@ -1168,7 +1163,11 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 SwAccessibleChild pFrm( (*aIter).first );
 
                 const SwFrmFmt *pFrmFmt = (*aIter).first ? ::FindFrmFmt( (*aIter).first ) : nullptr;
-                if( !pFrmFmt ) { ++aIter; continue; }
+                if( !pFrmFmt )
+                {
+                    ++aIter;
+                    continue;
+                }
                 const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
                 const SwPosition *pPos = pAnchor.GetCntntAnchor();
 
@@ -1178,10 +1177,15 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     if(xAcc.is())
                         (static_cast < ::accessibility::AccessibleShape* >(xAcc.get()))->ResetState( AccessibleStateType::SELECTED );
 
-                    ++aIter; continue;
+                    ++aIter;
+                    continue;
                 }
 
-                if( !pPos ) { ++aIter; continue; }
+                if( !pPos )
+                {
+                    ++aIter;
+                    continue;
+                }
                 if( pPos->nNode.GetNode().GetTxtNode() )
                 {
                     int pIndex = pPos->nContent.GetIndex();
@@ -1650,14 +1654,14 @@ void SwAccessibleMap::DoInvalidateShapeFocus()
 */
 
 SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
-    mpFrmMap( nullptr  ),
-    mpShapeMap( nullptr  ),
-    mpShapes( nullptr  ),
-    mpEvents( nullptr  ),
-    mpEventMap( nullptr  ),
+    mpFrmMap( nullptr ),
+    mpShapeMap( nullptr ),
+    mpShapes( nullptr ),
+    mpEvents( nullptr ),
+    mpEventMap( nullptr ),
     mpSelectedParas( nullptr ),
     mpVSh( pSh ),
-        mpPreview( nullptr ),
+    mpPreview( nullptr ),
     mnPara( 1 ),
     mbShapeSelected( false ),
     mpSeletedFrmMap(NULL)
@@ -1683,9 +1687,8 @@ SwAccessibleMap::~SwAccessibleMap()
 
     if(xAcc.is())
     {
-    SwAccessibleDocument *pAcc =
-        static_cast< SwAccessibleDocument * >( xAcc.get() );
-    pAcc->Dispose( true );
+        SwAccessibleDocument *pAcc = static_cast< SwAccessibleDocument * >( xAcc.get() );
+        pAcc->Dispose( true );
     }
     if( mpFrmMap )
     {
@@ -2229,8 +2232,7 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 
     if( mpShapeMap )
     {
-        SwAccessibleShapeMap_Impl::iterator aIter =
-            mpShapeMap->find( pObj );
+        SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
         if( aIter != mpShapeMap->end() )
         {
             uno::Reference < XAccessible > xAcc( (*aIter).second );
@@ -2282,8 +2284,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                 if( aIter != mpFrmMap->end() )
                 {
                     uno::Reference < XAccessible > xAcc( (*aIter).second );
-                    xAccImpl =
-                        static_cast< SwAccessibleContext *>( xAcc.get() );
+                    xAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
                 }
             }
             if( !xAccImpl.is() && mpFrmMap )
@@ -2305,8 +2306,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
                     }
                 }
             }
-            if( !xParentAccImpl.is() && !aFrmOrObj.GetSwFrm() &&
-                mpShapeMap )
+            if( !xParentAccImpl.is() && !aFrmOrObj.GetSwFrm() && mpShapeMap )
             {
                 SwAccessibleShapeMap_Impl::iterator aIter =
                     mpShapeMap->find( aFrmOrObj.GetDrawObject() );
@@ -2651,8 +2651,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                     InvalidatePosOrSize(aFrmOrObj.GetSwFrm(), nullptr, nullptr, rcEmpty);
                 }
 
-                aIter =
-                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                aIter = mpFrmMap->find( aFrmOrObj.GetSwFrm() );
                 if( aIter != mpFrmMap->end() )
                 {
                     xAcc = (*aIter).second;
@@ -2826,8 +2825,7 @@ void SwAccessibleMap::InvalidateFocus()
 
     if( xAcc.is() )
     {
-        SwAccessibleContext *pAccImpl =
-            static_cast< SwAccessibleContext *>( xAcc.get() );
+        SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
         pAccImpl->InvalidateFocus();
     }
     else
@@ -2856,8 +2854,7 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
         aFrmOrObj = GetShell()->GetLayout();
 
     uno::Reference< XAccessible > xAcc( GetContext( aFrmOrObj.GetSwFrm(), true ) );
-    SwAccessibleContext *pAccImpl =
-        static_cast< SwAccessibleContext *>( xAcc.get() );
+    SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
     if( GetShell()->ActionPend() )
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
@@ -3072,8 +3069,7 @@ void SwAccessibleMap::InvalidatePreviewSelection( sal_uInt16 nSelPage )
         const SwPageFrm *pSelPage = mpPreview->GetSelPage();
         if( pSelPage && mpFrmMap )
         {
-            SwAccessibleContextMap_Impl::iterator aIter =
-                mpFrmMap->find( pSelPage );
+            SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->find( pSelPage );
             if( aIter != mpFrmMap->end() )
                 xAcc = (*aIter).second;
         }
