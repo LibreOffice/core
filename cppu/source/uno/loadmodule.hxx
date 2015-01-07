@@ -21,7 +21,7 @@
 #define INCLUDED_CPPU_SOURCE_UNO_LOADMODULE_HXX
 
 #include "sal/config.h"
-#include "osl/module.h"
+#include <osl/module.hxx>
 
 namespace rtl { class OUString; }
 
@@ -35,10 +35,9 @@ namespace cppu { namespace detail {
     the nucleus of a module name (without any "lib...so", ".dll", etc.
     decoration, and without a path).
 
-    @return
-    the handle returned by osl_loadModule.
+    @return false if the module could not be loaded, otherwise true
 */
-::oslModule loadModule(::rtl::OUString const & name);
+bool loadModule(osl::Module & rModule, ::rtl::OUString const & name);
 
 #endif
 

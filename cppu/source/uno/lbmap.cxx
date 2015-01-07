@@ -337,7 +337,7 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 
 #else
 
-static inline oslModule loadModule( const OUString & rBridgeName )
+static inline bool loadModule(osl::Module & rModule, const OUString & rBridgeName)
 {
     bool bNeg;
     {
@@ -347,16 +347,16 @@ static inline oslModule loadModule( const OUString & rBridgeName )
     bNeg = (iFind != rData.aNegativeLibs.end());
     }
 
-    if (! bNeg)
+    if (!bNeg)
     {
-        oslModule hModule = cppu::detail::loadModule( rBridgeName );
+        bool bModule = cppu::detail::loadModule(rModule, rBridgeName);
 
-        if (hModule)
-            return hModule;
+        if (bModule)
+            return true;
 
         setNegativeBridge( rBridgeName ); // no load again
     }
-    return 0;
+    return false;
 }
 
 #endif
@@ -406,22 +406,22 @@ static Mapping loadExternalMapping(
         }
 #else
         // find proper lib
-        oslModule hModule = 0;
+        osl::Module aModule;
+        bool bModule;
         OUString aName;
 
         if ( EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO )
-            hModule = loadModule( aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
-        if (! hModule)
-            hModule = loadModule( aName = getBridgeName( rFrom, rTo, rAddPurpose ) );
-        if (! hModule)
-            hModule = loadModule( aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
+            bModule = loadModule( aModule, aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
+        if (!bModule)
+            bModule = loadModule( aModule, aName = getBridgeName( rFrom, rTo, rAddPurpose ) );
+        if (!bModule)
+            bModule = loadModule( aModule, aName = getBridgeName( rTo, rFrom, rAddPurpose ) );
 
-        if (hModule)
+        if (bModule)
         {
             OUString aSymbolName( UNO_EXT_GETMAPPING );
             uno_ext_getMappingFunc fpGetMapFunc =
-                (uno_ext_getMappingFunc)::osl_getFunctionSymbol(
-                    hModule, aSymbolName.pData );
+                (uno_ext_getMappingFunc)aModule.getSymbol( aSymbolName );
 
             if (fpGetMapFunc)
             {
@@ -430,10 +430,11 @@ static Mapping loadExternalMapping(
                 OSL_ASSERT( aExt.is() );
                 if (aExt.is())
                 {
+                    aModule.release();
                     return aExt;
                 }
             }
-            ::osl_unloadModule( hModule );
+            aModule.unload();
             setNegativeBridge( aName );
         }
 #endif

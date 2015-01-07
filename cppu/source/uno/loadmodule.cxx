@@ -31,16 +31,16 @@ namespace cppu { namespace detail {
 
 #ifndef DISABLE_DYNLOADING
 
-::oslModule loadModule(rtl::OUString const & name) {
+bool loadModule(osl::Module& rModule, rtl::OUString const & name) {
     rtl::OUStringBuffer b;
 #if defined SAL_DLLPREFIX
     b.append(SAL_DLLPREFIX);
 #endif
     b.append(name);
     b.append(SAL_DLLEXTENSION);
-    return ::osl_loadModuleRelative(
+    return rModule.loadRelative(
         reinterpret_cast< oslGenericFunction >(&loadModule),
-        b.makeStringAndClear().pData,
+        b.makeStringAndClear(),
         SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY);
 }
 
