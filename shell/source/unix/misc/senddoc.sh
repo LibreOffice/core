@@ -77,6 +77,13 @@ if [ "$1" = "--mailclient" ]; then
     shift
 fi
 
+if [ "$MAILER" = "" ]; then
+    client=`gconftool-2 --get /desktop/gnome/url-handlers/mailto/command | cut -d ' ' -f 1` || ""
+    if [ "$client" = "thunderbird" ]; then
+        MAILER=$client
+    fi
+fi
+
 # autodetect mail client from executable name
 case `basename "$MAILER" | sed 's/-.*$//'` in
 
