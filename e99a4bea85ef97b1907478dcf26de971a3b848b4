@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_3fd8671d",
+        "filename": "xmloff/source/forms/propertyexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-07T17:14:28Z",
+      "side": 1,
+      "message": "there is a small problem here: convertNumber takes a sal_Int32 so this is going wrong for large numbers",
+      "revId": "e99a4bea85ef97b1907478dcf26de971a3b848b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
