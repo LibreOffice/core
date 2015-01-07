@@ -74,9 +74,6 @@ private:
     VclMultiLineEdit* mpEditField;
     PushButton* mpTestButton;
 
-    ListBox* mpLbOptionEdit;
-
-    FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
     FixedText* mpFtComputeUnits;
     FixedText* mpFtMemory;
