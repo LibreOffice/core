@@ -167,7 +167,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
     }
     while ( true );
 
-    for( sal_uInt16 i = aReplaced.size(); i; )
+    for( std::vector<sal_Int32>::size_type i = aReplaced.size(); i; )
     {
         const sal_Int32 nTmp = aReplaced[ --i ];
         if (nTmp == buf.getLength() - 1)

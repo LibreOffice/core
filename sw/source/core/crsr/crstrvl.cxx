@@ -264,7 +264,7 @@ bool SwCrsrShell::GotoNextTOXBase( const OUString* pName )
 
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     SwCntntNode* pFnd = 0;
-    for( sal_uInt16 n = rFmts.size(); n; )
+    for( SwSectionFmts::size_type n = rFmts.size(); n; )
     {
         const SwSection* pSect = rFmts[ --n ]->GetSection();
         if (TOX_CONTENT_SECTION == pSect->GetType())
@@ -315,7 +315,7 @@ bool SwCrsrShell::GotoPrevTOXBase( const OUString* pName )
 
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     SwCntntNode* pFnd = 0;
-    for( sal_uInt16 n = rFmts.size(); n; )
+    for( SwSectionFmts::size_type n = rFmts.size(); n; )
     {
         const SwSection* pSect = rFmts[ --n ]->GetSection();
         if (TOX_CONTENT_SECTION == pSect->GetType())
@@ -2196,7 +2196,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
     {
         const SwTxtNode* pTxtNd;
         const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
-        for( sal_uInt16 n = pFmts->size(); 1 < n; )
+        for( SwCharFmts::size_type n = pFmts->size(); 1 < n; )
         {
             SwIterator<SwTxtINetFmt,SwCharFmt> aIter(*(*pFmts)[--n]);
 
@@ -2232,7 +2232,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
     // then check all the Flys with a URL or imapge map
     {
         const SwFrmFmts* pFmts = GetDoc()->GetSpzFrmFmts();
-        for( sal_uInt16 n = 0, nEnd = pFmts->size(); n < nEnd; ++n )
+        for( SwFrmFmts::size_type n = 0, nEnd = pFmts->size(); n < nEnd; ++n )
         {
             SwFlyFrmFmt* pFmt = static_cast<SwFlyFrmFmt*>((*pFmts)[ n ]);
             const SwFmtURL& rURLItem = pFmt->GetURL();
