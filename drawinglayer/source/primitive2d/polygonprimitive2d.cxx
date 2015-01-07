@@ -29,7 +29,7 @@
 #include <comphelper/random.hxx>
 
 using namespace com::sun::star;
-
+using namespace std;
 
 
 namespace drawinglayer
@@ -217,7 +217,7 @@ namespace drawinglayer
     {
         double getRandomColorRange()
         {
-            return comphelper::rng::uniform_real_distribution(0.0, std::nextafter(1.0, DBL_MAX));
+            return comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX));
         }
     }
 
