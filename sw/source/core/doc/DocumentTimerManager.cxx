@@ -72,9 +72,11 @@ void DocumentTimerManager::UnblockIdling()
         maIdle.Start();
 }
 
-void DocumentTimerManager::StartBackgroundJobs() {
+void DocumentTimerManager::StartBackgroundJobs()
+{
     // Trigger DoIdleJobs(), asynchronously.
-    maIdle.Start();
+    if (!maIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
+        maIdle.Start();
 }
 
 IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
