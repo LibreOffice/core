@@ -71,6 +71,17 @@
  }
  
  UBool
+--- source/common/ucmndata.c
++++ source/common/ucmndata.c
+@@ -75,7 +75,7 @@
+ typedef struct  {
+     uint32_t          count;
+     uint32_t          reserved;
+-    PointerTOCEntry   entry[2];   /* Actual size is from count. */
++    PointerTOCEntry   entry[1];   /* Actual size is from count. */
+ }  PointerTOC;
+ 
+ 
 --- source/common/ucmndata.h
 +++ source/common/ucmndata.h
 @@ -50,7 +50,7 @@
