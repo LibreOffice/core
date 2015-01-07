@@ -2856,7 +2856,7 @@ SvStream& GDIMetaFile::Read( SvStream& rIStm )
 SvStream& GDIMetaFile::Write( SvStream& rOStm )
 {
     VersionCompat*   pCompat;
-    const sal_uInt32 nStmCompressMode = rOStm.GetCompressMode();
+    const SvStreamCompressFlags nStmCompressMode = rOStm.GetCompressMode();
     SvStreamEndian   nOldFormat = rOStm.GetEndian();
 
     rOStm.SetEndian( SvStreamEndian::LITTLE );
@@ -2864,7 +2864,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 
     pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
 
-    rOStm.WriteUInt32( nStmCompressMode );
+    rOStm.WriteUInt32( static_cast<sal_uInt32>(nStmCompressMode) );
     WriteMapMode( rOStm, aPrefMapMode );
     WritePair( rOStm, aPrefSize );
     rOStm.WriteUInt32( GetActionSize() );

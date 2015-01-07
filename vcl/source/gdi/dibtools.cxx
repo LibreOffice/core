@@ -1259,7 +1259,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
         }
     }
 
-    if((rOStm.GetCompressMode() & COMPRESSMODE_ZBITMAP) && (rOStm.GetVersion() >= SOFFICE_FILEFORMAT_40))
+    if((rOStm.GetCompressMode() & SvStreamCompressFlags::ZBITMAP) && (rOStm.GetVersion() >= SOFFICE_FILEFORMAT_40))
     {
         aHeader.nCompression = ZCOMPRESS;
     }

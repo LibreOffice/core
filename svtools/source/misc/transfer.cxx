@@ -801,7 +801,7 @@ bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& 
         SvMemoryStream aMemStm( 65535, 65535 );
 
         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-        aMemStm.SetCompressMode( COMPRESSMODE_NATIVE );
+        aMemStm.SetCompressMode( SvStreamCompressFlags::NATIVE );
         WriteGraphic( aMemStm, rGraphic );
         maAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }

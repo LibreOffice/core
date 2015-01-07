@@ -378,7 +378,7 @@ void SvStream::SetSize(sal_uInt64 const nSize)
 void SvStream::ImpInit()
 {
     m_nActPos           = 0;
-    nCompressMode       = COMPRESSMODE_NONE;
+    nCompressMode       = SvStreamCompressFlags::NONE;
     eStreamCharSet      = osl_getThreadTextEncoding();
     nCryptMask          = 0;
     bIsEof              = false;

@@ -1172,7 +1172,7 @@ bool ImpGraphic::ImplSwapOut()
             if( pOStm )
             {
                 pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
+                pOStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
                 if( ( bRet = ImplSwapOut( pOStm.get() ) ) )
                 {
@@ -1271,7 +1271,7 @@ bool ImpGraphic::ImplSwapIn()
             if( pIStm )
             {
                 pIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                pIStm->SetCompressMode( COMPRESSMODE_NATIVE );
+                pIStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
                 bRet = ImplSwapIn( pIStm.get() );
                 pIStm.reset();
@@ -1580,7 +1580,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
         if( !rImpGraphic.ImplIsSwapOut() )
         {
             if( ( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 ) &&
-                ( rOStm.GetCompressMode() & COMPRESSMODE_NATIVE ) &&
+                ( rOStm.GetCompressMode() & SvStreamCompressFlags::NATIVE ) &&
                 rImpGraphic.mpGfxLink && rImpGraphic.mpGfxLink->IsNative() )
             {
                 VersionCompat* pCompat;

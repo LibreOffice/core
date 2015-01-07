@@ -134,7 +134,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
-                    pStm->SetCompressMode( COMPRESSMODE_ZBITMAP );
+                    pStm->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm );
                     bRet = ( pStm->GetError() == 0 );
                 }
@@ -554,7 +554,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
                     pStream->SetVersion( SOFFICE_FILEFORMAT_8 );
-                    pStream->SetCompressMode( COMPRESSMODE_ZBITMAP );
+                    pStream->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
 
                     // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                     GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
