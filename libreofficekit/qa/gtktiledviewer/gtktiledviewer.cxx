@@ -124,6 +124,11 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
     }
 }
 
+/// Receives a key press event.
+static void docViewKeyPress(GtkWidget* /*pWidget*/, GdkEvent* /*pEvent*/, gpointer /*pData*/)
+{
+}
+
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 void populatePartSelector()
@@ -277,6 +282,10 @@ int main( int argc, char* argv[] )
     // Docview
     pDocView = lok_docview_new( pOffice );
     pDocViewQuad = 0;
+
+    // Input handling.
+    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(docViewKeyPress), NULL);
+
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 
     gtk_widget_show_all( pWindow );
