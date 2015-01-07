@@ -40,6 +40,8 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/dibtools.hxx>
 
+#include <libxml/xmlwriter.h>
+
 using namespace ::com::sun::star;
 
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
@@ -548,6 +550,16 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
     }
 
     return NULL;
+}
+
+void XFillBitmapItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBitmapItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+
+    NameOrIndex::dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,6 +68,8 @@ public:
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XFillBitmapItem* checkForUniqueItem( SdrModel* pModel ) const;
+
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 #endif

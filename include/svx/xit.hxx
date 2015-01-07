@@ -69,6 +69,8 @@ public:
         If returned string equals NameOrIndex->GetName(), the name was already unique.
     */
     static OUString CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, const XPropertyListRef &pDefaults );
+
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif
