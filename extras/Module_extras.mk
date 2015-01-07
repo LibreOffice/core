@@ -32,6 +32,10 @@ $(eval $(call gb_Module_add_targets,extras,\
 	$(if $(filter WNT,$(OS)),Package_newfiles) \
 	Package_palettes \
 	Package_tpllayoutimpr \
+	Package_tplofficorr \
+	Package_tploffimisc \
+	Package_tplpresnt \
+	Package_tplpersonal \
 	Package_tplwizagenda \
 	Package_tplwizbitmap \
 	Package_tplwizdesktop \
