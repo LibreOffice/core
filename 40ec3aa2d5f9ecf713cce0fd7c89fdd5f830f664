@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_ff8c3f37",
+        "filename": "sc/source/ui/view/viewfun5.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-01-07T15:40:58Z",
+      "side": 1,
+      "message": "This change from \"-\u003e\" to \".\" leads to a compilation error on my machine:\n\n error: request for member ‘GetTabNo’ in ‘((ScViewFunc*)this)-\u003eScViewFunc::\u003canonymous\u003e.ScTabView::GetViewData()’, which is of pointer type ‘ScViewData*’ (maybe you meant to use ‘-\u003e’ ?)\n             ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );",
+      "revId": "40ec3aa2d5f9ecf713cce0fd7c89fdd5f830f664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
