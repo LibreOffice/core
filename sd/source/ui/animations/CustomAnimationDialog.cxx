@@ -412,13 +412,13 @@ private:
 CharHeightPropertyBox::CharHeightPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link& rModifyHdl )
 : PropertySubControl( nControlType )
 {
-    mpMetric = new MetricField( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( new MetricField( pParent, WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 1000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSIZE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, CharHeightPropertyBox, implMenuSelectHdl ));
     mpControl->SetModifyHdl( rModifyHdl );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
@@ -494,7 +494,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric = new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 100 );
@@ -507,7 +507,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
         mpMenu->InsertItem( i, aStr );
     }
 
-    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, TransparencyPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX );
 
@@ -598,14 +598,14 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric = new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_CUSTOM );
     mpMetric->SetCustomUnitText( OUString( sal_Unicode(0xb0)) ); // degree sign
     mpMetric->SetMin( -10000 );
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_ROTATION_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, RotationPropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX );
 
@@ -724,13 +724,13 @@ ScalePropertyBox::ScalePropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpMetric = new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER);
+    mpMetric.set( new MetricField( pParent ,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER) );
     mpMetric->SetUnit( FUNIT_PERCENT );
     mpMetric->SetMin( 0 );
     mpMetric->SetMax( 10000 );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_SCALE_POPUP ) );
-    mpControl = new DropdownMenuBox( pParent, mpMetric.get(), mpMenu );
+    mpControl = new DropdownMenuBox( pParent, mpMetric, mpMenu );
     mpControl->SetMenuSelectHdl( LINK( this, ScalePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX );
 
@@ -889,7 +889,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
 : PropertySubControl( nControlType )
 , maModifyHdl( rModifyHdl )
 {
-    mpEdit = new Edit( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY);
+    mpEdit.set( new Edit( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
     mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
 
     mpMenu = new PopupMenu(SdResId( RID_CUSTOMANIMATION_FONTSTYLE_POPUP ) );

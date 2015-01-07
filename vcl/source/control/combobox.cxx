@@ -80,7 +80,7 @@ ComboBox::~ComboBox()
 
 void ComboBox::ImplInitComboBoxData()
 {
-    mpSubEdit           = NULL;
+    mpSubEdit.disposeAndClear();
     mpBtn               = NULL;
     mpImplLB            = NULL;
     mpFloatWin          = NULL;
@@ -164,7 +164,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         }
     }
 
-    mpSubEdit = new Edit( this, nEditStyle );
+    mpSubEdit.set( new Edit( this, nEditStyle ) );
     mpSubEdit->EnableRTL( false );
     SetSubEdit( mpSubEdit );
     mpSubEdit->SetPosPixel( Point() );

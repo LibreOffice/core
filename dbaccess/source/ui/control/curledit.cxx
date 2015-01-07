@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConnectionURLEdit(vcl:
 
 OConnectionURLEdit::~OConnectionURLEdit()
 {
-    SetSubEdit(NULL);
+    SetSubEdit(VclPtr<Edit>());
     delete m_pForcedPrefix;
 }
 
@@ -83,7 +83,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 {
     // create new sub controls, if necessary
     if (!GetSubEdit())
-        SetSubEdit(EditRef(new Edit(this, 0)));
+        SetSubEdit(VclPtr<Edit>(new Edit(this, 0)));
     if ( !m_pForcedPrefix )
     {
         m_pForcedPrefix = new FixedText(this, WB_VCENTER);

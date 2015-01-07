@@ -1030,7 +1030,7 @@ namespace pcr
         SetCompoundControl( true );
 
         m_pImplEdit = VclPtr<MultiLineEdit>( new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) ) );
-        SetSubEdit( m_pImplEdit.get() );
+        SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
         if ( _nStyle & WB_DROPDOWN )

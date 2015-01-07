@@ -88,7 +88,7 @@ public:
 
     /** Constructor...
      */
-    inline VclPtr (reference_type * pBody)
+    explicit inline VclPtr (reference_type * pBody)
         : m_rInnerRef(pBody)
     {}
 
@@ -129,6 +129,11 @@ public:
     inline reference_type * SAL_CALL get() const
     {
         return m_rInnerRef.get();
+    }
+
+    inline void SAL_CALL set(reference_type *pBody)
+    {
+        m_rInnerRef.set(pBody);
     }
 
     inline SAL_CALL operator reference_type * () const

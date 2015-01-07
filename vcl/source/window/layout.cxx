@@ -1939,10 +1939,10 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
 void MessageDialog::create_owned_areas()
 {
     set_border_width(12);
-    m_pOwnedContentArea = new VclVBox(this, false, 24);
+    m_pOwnedContentArea.set(new VclVBox(this, false, 24));
     set_content_area(m_pOwnedContentArea);
     m_pOwnedContentArea->Show();
-    m_pOwnedActionArea = new VclHButtonBox(m_pOwnedContentArea);
+    m_pOwnedActionArea.set( new VclHButtonBox(m_pOwnedContentArea) );
     set_action_area(m_pOwnedActionArea);
     m_pOwnedActionArea->Show();
 }
@@ -2105,7 +2105,7 @@ short MessageDialog::Execute()
         VclContainer *pContainer = get_content_area();
         assert(pContainer);
 
-        m_pGrid = new VclGrid(pContainer);
+        m_pGrid.set( new VclGrid(pContainer) );
         m_pGrid->reorderWithinParent(0);
         m_pGrid->set_column_spacing(12);
         m_pGrid->set_row_spacing(GetTextHeight());
@@ -2165,32 +2165,33 @@ short MessageDialog::Execute()
             case VCL_BUTTONS_NONE:
                 break;
             case VCL_BUTTONS_OK:
-                pBtn = new OKButton(pButtonBox);
+                pBtn.set( new OKButton(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
                 break;
             case VCL_BUTTONS_CLOSE:
-                pBtn = new CloseButton(pButtonBox);
+                pBtn.set( new CloseButton(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CLOSE;
                 break;
             case VCL_BUTTONS_CANCEL:
-                pBtn = new CancelButton(pButtonBox);
+                pBtn.set( new CancelButton(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_CANCEL;
                 break;
             case VCL_BUTTONS_YES_NO:
                 pBtn = new PushButton(pButtonBox);
-                pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes)                pBtn->Show();
+                pBtn->SetText(Button::GetStandardText(StandardButtonType::Yes));
+                pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_YES;
 
-                pBtn = new PushButton(pButtonBox);
+                pBtn.set( new PushButton(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->SetText(Button::GetStandardText(StandardButtonType::No));
                 pBtn->Show();
@@ -2198,12 +2199,12 @@ short MessageDialog::Execute()
                 m_aResponses[pBtn] = RET_NO;
                 break;
             case VCL_BUTTONS_OK_CANCEL:
-                pBtn = new OKButton(pButtonBox);
+                pBtn.set( new OKButton(pButtonBox) );
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_OK;
 
-                pBtn = new CancelButton(pButtonBox);
+                pBtn.set( new CancelButton(pButtonBox) );
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);

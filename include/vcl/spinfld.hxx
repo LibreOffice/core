@@ -32,7 +32,7 @@
 class VCL_DLLPUBLIC SpinField : public Edit
 {
 protected:
-    Edit*           mpEdit;
+    VclPtr<Edit>    mpEdit;
     AutoTimer       maRepeatTimer;
     Rectangle       maUpperRect;
     Rectangle       maLowerRect;
@@ -68,6 +68,8 @@ protected:
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
     Rectangle *     ImplFindPartRect( const Point& rPt );
+
+    virtual void    dispose() SAL_OVERRIDE;
 
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
