@@ -96,11 +96,6 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if ( filename.endswith(".h") ) {
         return true;
     }
-    if (!compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        && filename.startswith(SRCDIR "/include/cppuhelper/"))
-    {
-        return true;
-    }
     report(
         DiagnosticsEngine::Warning,
         "c-style cast, type=%0, from=%1%2, to=%3%4, recommendedFix=%5",
