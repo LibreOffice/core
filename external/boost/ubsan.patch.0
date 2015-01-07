@@ -1,0 +1,11 @@
+--- boost/algorithm/string/find_iterator.hpp
++++ boost/algorithm/string/find_iterator.hpp
+@@ -240,7 +240,7 @@
+                 m_Match(Other.m_Match),
+                 m_Next(Other.m_Next),
+                 m_End(Other.m_End),
+-                m_bEof(Other.m_bEof)
++                m_bEof(Other.eof())
+             {}
+ 
+             //! Constructor

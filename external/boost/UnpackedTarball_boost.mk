@@ -107,6 +107,8 @@ boost_patches += boost.signal2.Wshadow.warnings.patch
 boost_patches += boost.boost_static_assert_unused_attribute.patch.0
 boost_patches += w4702.patch.0
 
+boost_patches += ubsan.patch.0
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
