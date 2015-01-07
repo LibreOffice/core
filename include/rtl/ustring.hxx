@@ -1309,7 +1309,7 @@ public:
 
       @return   a hash code value for this object.
 
-      @see rtl::OUStringHash for convenient use of boost::unordered_map
+      @see rtl::OUStringHash for convenient use of std::unordered_map
     */
     sal_Int32 hashCode() const
     {
@@ -2488,7 +2488,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
 /** A helper to use OUStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
-    hash function arguments to boost::unordered_map and similar constructs.
+    hash function arguments to std::unordered_map and similar constructs.
  */
 struct OUStringHash
 {
