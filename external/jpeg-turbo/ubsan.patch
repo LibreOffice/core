@@ -38,3 +38,12 @@
  	} else {
  	  if (r == 15) {	/* ZRL */
  	    k += 15;		/* skip 15 zeroes in band */
+@@ -494,7 +494,7 @@
+   phuff_entropy_ptr entropy = (phuff_entropy_ptr) cinfo->entropy;
+   int Se = cinfo->Se;
+   int p1 = 1 << cinfo->Al;	/* 1 in the bit position being coded */
+-  int m1 = (-1) << cinfo->Al;	/* -1 in the bit position being coded */
++  int m1 = (unsigned)-1 << cinfo->Al;	/* -1 in the bit position being coded */
+   register int s, k, r;
+   unsigned int EOBRUN;
+   JBLOCKROW block;
