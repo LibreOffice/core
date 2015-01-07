@@ -261,7 +261,7 @@ void SwSelPaintRects::Show()
         // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
-        for(sal_uInt16 a(0); a < size(); a++)
+        for(size_type a = 0; a < size(); ++a)
         {
             const SwRect aNextRect((*this)[a]);
             const Rectangle aPntRect(aNextRect.SVRect());
@@ -419,7 +419,7 @@ void SwSelPaintRects::HighlightInputFld()
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
-    sal_uInt16 nSz = size();
+    size_type nSz = size();
     if( !nSz )
         return;
 
@@ -598,7 +598,7 @@ short SwShellCrsr::MaxReplaceArived()
                                  "modules/swriter/ui/asksearchdialog.ui").Execute();
         }
 
-        for( sal_uInt16 n = 0; n < aArr.size(); ++n )
+        for( std::vector<sal_uInt16>::size_type n = 0; n < aArr.size(); ++n )
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();

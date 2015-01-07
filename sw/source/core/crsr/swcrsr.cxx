@@ -297,7 +297,7 @@ bool SwCursor::IsSelOvr( int eFlags )
             }
 
             const SwSectionFmts& rFmts = pDoc->GetSections();
-            for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+            for( SwSectionFmts::size_type n = 0; n < rFmts.size(); ++n )
             {
                 const SwSectionFmt* pFmt = rFmts[n];
                 const SvxProtectItem& rProtect = pFmt->GetProtect();

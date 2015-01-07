@@ -665,7 +665,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             if( nSttIdx + 3 < nEndIdx )
             {
                 const SwSectionFmts& rFmts = GetDoc()->GetSections();
-                for( sal_uInt16 n = rFmts.size(); n;  )
+                for( SwSectionFmts::size_type n = rFmts.size(); n;  )
                 {
                     const SwSectionFmt* pFmt = rFmts[ --n ];
                     if( pFmt->GetProtect().IsCntntProtected() )

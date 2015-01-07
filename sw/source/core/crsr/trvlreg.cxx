@@ -233,7 +233,7 @@ bool SwCursor::GotoRegion( const OUString& rName )
 {
     bool bRet = false;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = rFmts.size(); n; )
+    for( SwSectionFmts::size_type n = rFmts.size(); n; )
     {
         const SwSectionFmt* pFmt = rFmts[ --n ];
         const SwNodeIndex* pIdx = 0;
