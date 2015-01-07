@@ -69,6 +69,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     get(m_pEditStyleBtn, "editstyle");
     get(m_pBaseFt, "linkedwithft");
     get(m_pBaseLb, "linkedwith");
+    get(m_pEditLinkStyleBtn, "editlinkstyle");
     m_pBaseLb->SetStyle(m_pBaseLb->GetStyle() | WB_SORT);
     m_pBaseLb->setMaxWidthChars(nMaxWidth);
     get(m_pFilterFt, "categoryft");
@@ -229,6 +230,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     if(SfxItemState::SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
         m_pAutoCB->Show();
     m_pEditStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditStyleHdl_Impl ) );
+    m_pEditLinkStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditLinkStyleHdl_Impl ) );
 }
 
 
@@ -326,6 +328,15 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl )
     return 0;
 
 }
+
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl )
+{
+    OUString aTemplName(m_pBaseLb->GetSelectEntry());
+    if ( !( aTemplName == "- None -" ) )
+        Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 );
+    return 0;
+}
+
 
 // Internal: Perform functions through the Dispatcher
 bool SfxManageStyleSheetPage::Execute_Impl(
