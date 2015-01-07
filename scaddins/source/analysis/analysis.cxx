@@ -38,6 +38,7 @@
 #define MY_IMPLNAME                 "com.sun.star.sheet.addin.AnalysisImpl"
 
 using namespace                 ::com::sun::star;
+using namespace std;
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
@@ -702,7 +703,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw(
     if( fMin > fMax )
         throw lang::IllegalArgumentException();
 
-    double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, std::nextafter(fMax+1, -DBL_MAX)));
+    double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, nextafter(fMax+1, -DBL_MAX)));
     RETURN_FINITE( fRet );
 }
 
