@@ -732,7 +732,8 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
 #ifdef DBG_UTIL
         assert( mProgramIsSolidLineColor );
 #endif
-        UseSolidAA( mnLineColor );
+        bool bUseLineColor = bLine || mnLineColor != SALCOLOR_NONE;
+        UseSolidAA( bUseLineColor ? mnLineColor : mnFillColor );
         for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
         {
             const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
