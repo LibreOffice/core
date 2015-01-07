@@ -1359,6 +1359,40 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SaveGraphic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Save Images...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:OriginalSize" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Original Size</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ChangePicture" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Change Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:CompressGraphic" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Co~mpress Image...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+            <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EditStyle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">E~dit Style...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ClickChangeRotation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rotation Mode after Clicking Object</value>
@@ -1796,6 +1830,14 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:UnderlineDouble" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Double Underline </value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>9</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertAnnotation" oor:op="replace">
