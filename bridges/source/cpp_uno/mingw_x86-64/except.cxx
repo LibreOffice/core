@@ -26,8 +26,6 @@
 #define _GLIBCXX_CDTOR_CALLABI
 #endif
 
-#include <boost/unordered_map.hpp>
-
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -37,7 +35,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
-
+#include <unordered_map>
 #include "share.hxx"
 
 
@@ -93,7 +91,7 @@ static OUString toUNOname( char const * p )
 
 class RTTI
 {
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef std::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
