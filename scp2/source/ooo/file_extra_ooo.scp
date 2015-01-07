@@ -171,6 +171,34 @@ File gid_File_Extra_Tpllayoutimpr
     Name = "extras_tpllayoutimpr.filelist";
 End
 
+File gid_File_Extra_Tplofficorr
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplofficorr.filelist";
+End
+
+File gid_File_Extra_Tploffimisc
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tploffimisc.filelist";
+End
+
+File gid_File_Extra_Tplpresnt
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplpresnt.filelist";
+End
+
+File gid_File_Extra_Tplpersonal
+    Dir = FILELIST_DIR;
+    TXT_FILE_BODY;
+    Styles = (FILELIST);
+    Name = "extras_tplpersonal.filelist";
+End
+
 File gid_File_Extra_Tplwizbitmap
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
