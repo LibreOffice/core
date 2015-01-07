@@ -410,10 +410,6 @@ public:
     bool IsSharedTop() const;
     SCROW GetSharedTopRow() const;
     SCROW GetSharedLength() const;
-
-    // An estimate of the number of cells referenced by the formula
-    sal_Int32 GetWeight() const;
-
     ScTokenArray* GetSharedCode();
     const ScTokenArray* GetSharedCode() const;
 
