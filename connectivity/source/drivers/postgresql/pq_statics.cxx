@@ -605,7 +605,7 @@ Statics & getStatics()
             // LEM TODO see if a refresh is needed; obtain automatically from pg_catalog.pg_type?
             BaseTypeDef baseTypeDefs[] =
             {
-                { "bool" , com::sun::star::sdbc::DataType::BIT },
+                { "bool" , com::sun::star::sdbc::DataType::BOOLEAN },
                 { "bytea", com::sun::star::sdbc::DataType::VARBINARY },
                 { "char" , com::sun::star::sdbc::DataType::CHAR },
 
@@ -688,11 +688,11 @@ Statics & getStatics()
                     { "LITERAL_SUFFIX", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 4
                     { "CREATE_PARAMS", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 5
                     { "NULLABLE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::INTEGER, 0,50,false,false,false,false, true },  // 6
-                    { "CASE_SENSITIVE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 7
+                    { "CASE_SENSITIVE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BOOLEAN, 0,50,false,false,false,false, false },  // 7
                     { "SEARCHABLE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false, true },  // 8
-                    { "UNSIGNED_ATTRIBUTE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 9
-                    { "FIXED_PREC_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 10
-                    { "AUTO_INCREMENT", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BIT, 0,50,false,false,false,false, false },  // 11
+                    { "UNSIGNED_ATTRIBUTE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BOOLEAN, 0,50,false,false,false,false, false },  // 9
+                    { "FIXED_PREC_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BOOLEAN, 0,50,false,false,false,false, false },  // 10
+                    { "AUTO_INCREMENT", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::BOOLEAN, 0,50,false,false,false,false, false },  // 11
                     { "LOCAL_TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,false,false,false,false, false },  // 12
                     { "MINIMUM_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false,  true},  // 13
                     { "MAXIMUM_SCALE", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::SMALLINT, 0,50,false,false,false,false, true },  // 14
