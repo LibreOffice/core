@@ -830,7 +830,7 @@ void SwColumnPage::Init()
     }
 
     UpdateCols();
-    Update();
+    Update(NULL);
 
         // set maximum number of columns
         // values below 1 are not allowed
@@ -964,7 +964,7 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
         SetLabels( nFirstVis );
         UpdateCols();
         ResetColWidth();
-        Update();
+        Update(NULL);
     }
 
     return 0;
@@ -1041,7 +1041,7 @@ IMPL_LINK( SwColumnPage, GapModify, MetricField*, pMetricFld )
         }
 
     }
-    Update();
+    Update(pMetricFld);
     return 0;
 }
 
@@ -1072,7 +1072,7 @@ IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
     }
     pColMgr->SetAutoWidth(pBox->IsChecked(), sal_uInt16(nDist));
     UpdateCols();
-    Update();
+    Update(NULL);
     return 0;
 }
 
@@ -1085,7 +1085,7 @@ IMPL_LINK_NOARG(SwColumnPage, Up)
     {
         --nFirstVis;
         SetLabels( nFirstVis );
-        Update();
+        Update(NULL);
     }
     return 0;
 }
@@ -1099,7 +1099,7 @@ IMPL_LINK_NOARG(SwColumnPage, Down)
     {
         ++nFirstVis;
         SetLabels( nFirstVis );
-        Update();
+        Update(NULL);
     }
     return 0;
 }
@@ -1111,7 +1111,8 @@ IMPL_LINK_NOARG(SwColumnPage, Down)
 ------------------------------------------------------------------------*/
 void SwColumnPage::Timeout()
 {
-    if(pModifiedField)
+    PercentField *pField = pModifiedField;
+    if (pModifiedField)
     {
             // find the changed column
         sal_uInt16 nChanged = nFirstVis;
@@ -1147,24 +1148,49 @@ void SwColumnPage::Timeout()
         nColWidth[nChanged] = nNewWidth;
         pModifiedField = 0;
     }
-    Update();
+
+    Update(pField ? pField->get() : NULL);
 }
 
 /*------------------------------------------------------------------------
  Description:   Update the view
 ------------------------------------------------------------------------*/
-void SwColumnPage::Update()
+void SwColumnPage::Update(MetricField *pInteractiveField)
 {
     m_pBalanceColsCB->Enable(nCols > 1);
     if(nCols >= 2)
     {
-        aEd1.SetPrcntValue(aEd1.NormalizePercent(nColWidth[nFirstVis]), FUNIT_TWIP);
-        aDistEd1.SetPrcntValue(aDistEd1.NormalizePercent(nColDist[nFirstVis]), FUNIT_TWIP);
-        aEd2.SetPrcntValue(aEd2.NormalizePercent(nColWidth[nFirstVis + 1]), FUNIT_TWIP);
+        sal_Int64 nCurrentValue, nNewValue;
+
+        nCurrentValue = aEd1.NormalizePercent(aEd1.DenormalizePercent(aEd1.GetValue(FUNIT_TWIP)));
+        nNewValue = aEd1.NormalizePercent(nColWidth[nFirstVis]);
+
+        //fdo#87612 if we're interacting with this widget and the value will be the same
+        //then leave it alone (i.e. don't change equivalent values of e.g. .8 -> 0.8)
+        if (nNewValue != nCurrentValue || pInteractiveField != aEd1.get())
+            aEd1.SetPrcntValue(nNewValue, FUNIT_TWIP);
+
+        nCurrentValue = aDistEd1.NormalizePercent(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
+        nNewValue = aDistEd1.NormalizePercent(nColDist[nFirstVis]);
+        if (nNewValue != nCurrentValue || pInteractiveField != aDistEd1.get())
+            aDistEd1.SetPrcntValue(nNewValue, FUNIT_TWIP);
+
+        nCurrentValue = aEd2.NormalizePercent(aEd2.DenormalizePercent(aEd2.GetValue(FUNIT_TWIP)));
+        nNewValue = aEd2.NormalizePercent(nColWidth[nFirstVis+1]);
+        if (nNewValue != nCurrentValue || pInteractiveField != aEd2.get())
+            aEd2.SetPrcntValue(nNewValue, FUNIT_TWIP);
+
         if(nCols >= 3)
         {
-            aDistEd2.SetPrcntValue(aDistEd2.NormalizePercent(nColDist[nFirstVis + 1]), FUNIT_TWIP);
-            aEd3.SetPrcntValue(aEd3.NormalizePercent(nColWidth[nFirstVis + 2]), FUNIT_TWIP);
+            nCurrentValue = aDistEd2.NormalizePercent(aDistEd2.DenormalizePercent(aDistEd2.GetValue(FUNIT_TWIP)));
+            nNewValue = aDistEd2.NormalizePercent(nColDist[nFirstVis+1]);
+            if (nNewValue != nCurrentValue || pInteractiveField != aDistEd2.get())
+                aDistEd2.SetPrcntValue(nNewValue, FUNIT_TWIP);
+
+            nCurrentValue = aEd3.NormalizePercent(aEd3.DenormalizePercent(aEd3.GetValue(FUNIT_TWIP)));
+            nNewValue = aEd3.NormalizePercent(nColWidth[nFirstVis+2]);
+            if (nNewValue != nCurrentValue || pInteractiveField != aEd3.get())
+                aEd3.SetPrcntValue(nNewValue, FUNIT_TWIP);
         }
         else
         {
@@ -1257,7 +1283,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         aDistEd1.SetMetricFieldMin(0);
         aDistEd2.SetMetricFieldMin(0);
     }
-    Update();
+    Update(NULL);
 }
 
 int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
