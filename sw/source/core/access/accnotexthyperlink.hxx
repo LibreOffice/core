@@ -36,7 +36,6 @@ class SwAccessibleNoTextHyperlink :
 
     ::rtl::Reference< SwAccessibleNoTextFrame > xFrame;
     const SwFrm *mpFrm;
-    sal_uInt16 mnIndex;
 
     SwFrmFmt *GetFmt()
     {
@@ -44,7 +43,7 @@ class SwAccessibleNoTextHyperlink :
     }
 public:
 
-    SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm* aFrm, sal_uInt16 nIndex = 0xFFFF );
+    SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm* aFrm );
 
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount()

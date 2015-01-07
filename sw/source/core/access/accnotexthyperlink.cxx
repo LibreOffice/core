@@ -37,10 +37,9 @@ using namespace css::lang;
 using namespace css::uno;
 using namespace css::accessibility;
 
-SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm *aFrm, sal_uInt16 nIndex) :
+SwAccessibleNoTextHyperlink::SwAccessibleNoTextHyperlink( SwAccessibleNoTextFrame *p, const SwFrm *aFrm ) :
     xFrame( p ),
-    mpFrm( aFrm ),
-    mnIndex(nIndex)
+    mpFrm( aFrm )
 {
 }
 
