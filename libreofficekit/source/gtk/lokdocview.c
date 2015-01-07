@@ -52,7 +52,7 @@ SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
 
 static void lok_docview_class_init( LOKDocViewClass* pClass )
 {
-    pClass->lok_docview = NULL;
+    (void)pClass;
 }
 
 static void lok_docview_init( LOKDocView* pDocView )

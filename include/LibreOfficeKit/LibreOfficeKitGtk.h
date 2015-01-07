@@ -46,8 +46,6 @@ struct _LOKDocView
 struct _LOKDocViewClass
 {
   GtkScrolledWindowClass parent_class;
-
-  void (*lok_docview) (LOKDocView* pDocView);
 };
 
 guint           lok_docview_get_type        (void);
