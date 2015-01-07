@@ -2887,7 +2887,6 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
 KeyIndicatorState WinSalFrame::GetIndicatorState()
 {
     KeyIndicatorState aState = KeyIndicatorState::NONE;
-    aState.mnState = 0;
     if (::GetKeyState(VK_CAPITAL))
         aState |= KeyIndicatorState::CAPSLOCK;
 
