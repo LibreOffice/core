@@ -412,7 +412,7 @@ public:
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "SqrtPi"; }
 };
 
-class OpCombina: public Normal
+class OpCombinA: public Normal
 {
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
@@ -429,12 +429,12 @@ public:
 
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Log"; }
 };
-class OpKombin: public Normal{
+class OpCombin: public Normal{
 public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
         const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual std::string GetBottom(void) SAL_OVERRIDE { return "0.0"; }
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "ScKombin"; }
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "ScCombin"; }
 };
 class OpAverageIf: public CheckVariables
 {

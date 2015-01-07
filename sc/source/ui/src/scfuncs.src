@@ -3369,7 +3369,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function KOMBINATIONEN #*=-
-    Resource SC_OPCODE_KOMBIN
+    Resource SC_OPCODE_COMBIN
     {
         String 1 // Description
         {
@@ -3401,7 +3401,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function KOMBINATIONEN2 #*=-
-    Resource SC_OPCODE_KOMBIN_2
+    Resource SC_OPCODE_COMBIN_A
     {
         String 1 // Description
         {
@@ -9001,7 +9001,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function VARIATIONEN #*=-
-    Resource SC_OPCODE_VARIATIONEN
+    Resource SC_OPCODE_PERMUT
     {
         String 1 // Description
         {
@@ -9033,7 +9033,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function VARIATIONEN2 #*=-
-    Resource SC_OPCODE_VARIATIONEN_2
+    Resource SC_OPCODE_PERMUTATION_A
     {
         String 1 // Description
         {

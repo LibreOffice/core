@@ -1172,7 +1172,7 @@ void ScInterpreter::ScFact()
         PushDouble(Fakultaet(nVal));
 }
 
-void ScInterpreter::ScKombin()
+void ScInterpreter::ScCombin()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -1185,7 +1185,7 @@ void ScInterpreter::ScKombin()
     }
 }
 
-void ScInterpreter::ScKombin2()
+void ScInterpreter::ScCombinA()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -1198,7 +1198,7 @@ void ScInterpreter::ScKombin2()
     }
 }
 
-void ScInterpreter::ScVariationen()
+void ScInterpreter::ScPermut()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -1218,7 +1218,7 @@ void ScInterpreter::ScVariationen()
     }
 }
 
-void ScInterpreter::ScVariationen2()
+void ScInterpreter::ScPermutationA()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {

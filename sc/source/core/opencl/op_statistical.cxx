@@ -4962,7 +4962,7 @@ void OpNormsdist::GenSlidingWindowFunction(
     ss << "}\n";
 }
 
-void OpVariationen::GenSlidingWindowFunction(
+void OpPermut::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {
@@ -5035,7 +5035,7 @@ void OpVariationen::GenSlidingWindowFunction(
     ss << "      return tmp;\n";
     ss << "}\n";
 }
-void OpVariationen2::GenSlidingWindowFunction(
+void OpPermutationA::GenSlidingWindowFunction(
     std::stringstream &ss,const std::string &sSymName,
     SubArguments &vSubArguments)
 {

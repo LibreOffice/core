@@ -277,17 +277,17 @@ public:
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Covar"; }
 };
 
-class OpVariationen:public Normal{
+class OpPermut:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpVariationen"; }
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPermut"; }
 };
-class OpVariationen2:public Normal{
+class OpPermutationA:public Normal{
     public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
-    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpVariationen2";}
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "OpPermutationA";}
 };
 
 class OpConfidence: public Normal

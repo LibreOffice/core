@@ -321,14 +321,14 @@ void OpCoth::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "}";
 }
 
-void OpCombina::BinInlineFun(std::set<std::string>& decls,
+void OpCombinA::BinInlineFun(std::set<std::string>& decls,
     std::set<std::string>& funs)
 {
     decls.insert(bikDecl);
     funs.insert(bik);
 }
 
-void OpCombina::GenSlidingWindowFunction(std::stringstream &ss,
+void OpCombinA::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;
@@ -2739,7 +2739,7 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "*significance;\n";
     ss << "}";
 }
-void OpKombin::GenSlidingWindowFunction(std::stringstream &ss,
+void OpCombin::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
 {
     ss << "\ndouble " << sSymName;

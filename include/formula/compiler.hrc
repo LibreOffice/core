@@ -237,10 +237,10 @@
 #define SC_OPCODE_EXP_DIST          237
 #define SC_OPCODE_BINOM_DIST        238
 #define SC_OPCODE_POISSON_DIST      239
-#define SC_OPCODE_KOMBIN            240
-#define SC_OPCODE_KOMBIN_2          241
-#define SC_OPCODE_VARIATIONEN       242
-#define SC_OPCODE_VARIATIONEN_2     243
+#define SC_OPCODE_COMBIN            240
+#define SC_OPCODE_COMBIN_A          241
+#define SC_OPCODE_PERMUT            242
+#define SC_OPCODE_PERMUTATION_A     243
 #define SC_OPCODE_BW                244
 #define SC_OPCODE_DIA               245
 #define SC_OPCODE_GDA               246
