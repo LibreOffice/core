@@ -305,7 +305,7 @@ namespace drawinglayer
 
             if(bDoSaveForVisualControl)
             {
-                SvFileStream aNew( "c:\\content.bmp", STREAM_WRITE|STREAM_TRUNC);
+                SvFileStream aNew( "c:\\content.bmp", StreamMode::WRITE|StreamMode::TRUNC);
                 WriteDIB(aContent, aNew, false, true);
             }
 
@@ -316,7 +316,7 @@ namespace drawinglayer
 
                 if(bDoSaveForVisualControl)
                 {
-                    SvFileStream aNew( "c:\\transparence.bmp", STREAM_WRITE|STREAM_TRUNC);
+                    SvFileStream aNew( "c:\\transparence.bmp", StreamMode::WRITE|StreamMode::TRUNC);
                     WriteDIB(aAlphaMask.GetBitmap(), aNew, false, true);
                 }
 
@@ -329,7 +329,7 @@ namespace drawinglayer
 
                 if(bDoSaveForVisualControl)
                 {
-                    SvFileStream aNew( "c:\\mask.bmp", STREAM_WRITE|STREAM_TRUNC);
+                    SvFileStream aNew( "c:\\mask.bmp", StreamMode::WRITE|StreamMode::TRUNC);
                     WriteDIB(aMask, aNew, false, true);
                 }
 

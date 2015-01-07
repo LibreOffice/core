@@ -118,13 +118,13 @@ bool lockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* pStream )
             StreamMode nLockMode = i->m_pStream->GetStreamMode();
             StreamMode nNewMode = pStream->GetStreamMode();
 
-            if( nLockMode & STREAM_SHARE_DENYALL )
+            if( nLockMode & StreamMode::SHARE_DENYALL )
                 bDenyByOptions = true;
-            else if( ( nLockMode & STREAM_SHARE_DENYWRITE ) &&
-                     ( nNewMode & STREAM_WRITE ) )
+            else if( ( nLockMode & StreamMode::SHARE_DENYWRITE ) &&
+                     ( nNewMode & StreamMode::WRITE ) )
                 bDenyByOptions = true;
-            else if( ( nLockMode & STREAM_SHARE_DENYREAD ) &&
-                     ( nNewMode & STREAM_READ ) )
+            else if( ( nLockMode &StreamMode::SHARE_DENYREAD ) &&
+                     ( nNewMode & StreamMode::READ ) )
                 bDenyByOptions = true;
 
             if( bDenyByOptions )
@@ -392,7 +392,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     if ( ! IsOpen() )
         return false;
 
-    if ( eStreamMode & STREAM_SHARE_DENYALL )
+    if ( eStreamMode & StreamMode::SHARE_DENYALL )
         {
         if (bIsWritable)
             nLockMode = F_WRLCK;
@@ -400,7 +400,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
             nLockMode = F_RDLCK;
         }
 
-    if ( eStreamMode & STREAM_SHARE_DENYREAD )
+    if ( eStreamMode & StreamMode::SHARE_DENYREAD )
         {
         if (bIsWritable)
             nLockMode = F_WRLCK;
@@ -411,7 +411,7 @@ bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         }
         }
 
-    if ( eStreamMode & STREAM_SHARE_DENYWRITE )
+    if ( eStreamMode & StreamMode::SHARE_DENYWRITE )
         {
         if (bIsWritable)
             nLockMode = F_WRLCK;
@@ -462,7 +462,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
     Close();
     errno = 0;
     eStreamMode = nOpenMode;
-    eStreamMode &= ~STREAM_TRUNC; // don't truncat on reopen
+    eStreamMode &= ~StreamMode::TRUNC; // don't truncat on reopen
 
     aFilename = rFilename;
 
@@ -490,25 +490,25 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
         return;
     }
 
-    if ( !( nOpenMode & STREAM_WRITE ) )
+    if ( !( nOpenMode & StreamMode::WRITE ) )
         uFlags = osl_File_OpenFlag_Read;
-    else if ( !( nOpenMode & STREAM_READ ) )
+    else if ( !( nOpenMode & StreamMode::READ ) )
         uFlags = osl_File_OpenFlag_Write;
     else
         uFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
 
     // Fix (MDA, 18.01.95): Don't open with O_CREAT upon RD_ONLY
     // Important for Read-Only-Filesystems (e.g,  CDROM)
-    if ( (!( nOpenMode & STREAM_NOCREATE )) && ( uFlags != osl_File_OpenFlag_Read ) )
+    if ( (!( nOpenMode & StreamMode::NOCREATE )) && ( uFlags != osl_File_OpenFlag_Read ) )
         uFlags |= osl_File_OpenFlag_Create;
-    if ( nOpenMode & STREAM_TRUNC )
+    if ( nOpenMode & StreamMode::TRUNC )
         uFlags |= osl_File_OpenFlag_Trunc;
 
     uFlags |= osl_File_OpenFlag_NoExcl | osl_File_OpenFlag_NoLock;
 
-    if ( nOpenMode & STREAM_WRITE)
+    if ( nOpenMode & StreamMode::WRITE)
     {
-        if ( nOpenMode & STREAM_COPY_ON_SYMLINK )
+        if ( nOpenMode & StreamMode::COPY_ON_SYMLINK )
         {
             if ( bStatValid && aStatus.getFileType() == osl::FileStatus::Link &&
                  aStatus.getLinkTargetURL().getLength() > 0 )

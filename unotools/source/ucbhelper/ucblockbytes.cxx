@@ -1558,7 +1558,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     UcbLockBytesRef xLockBytes = new UcbLockBytes( pHandler );
     xLockBytes->SetSynchronMode( !pHandler );
     Reference< XActiveDataControl > xSink;
-    if ( eOpenMode & STREAM_WRITE )
+    if ( eOpenMode & StreamMode::WRITE )
         xSink = (XActiveDataControl*) new UcbStreamer_Impl( xLockBytes );
     else
         xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );

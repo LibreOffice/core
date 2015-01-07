@@ -163,10 +163,10 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
                 nDefaultFilter == rGraphicFilter.GetExportFormatNumber( xFilterManager->getCurrentFilter()))
             {
                 // try to save the original graphic
-                SfxMedium aIn( rGraphicName, STREAM_READ | STREAM_NOCREATE );
+                SfxMedium aIn( rGraphicName, StreamMode::READ | StreamMode::NOCREATE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
                 {
-                    SfxMedium aOut( sPath, STREAM_WRITE | STREAM_SHARE_DENYNONE);
+                    SfxMedium aOut( sPath, StreamMode::WRITE | StreamMode::SHARE_DENYNONE);
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
                         aOut.GetOutStream()->WriteStream( *aIn.GetInStream() );

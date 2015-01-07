@@ -286,7 +286,7 @@ void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
         aOpenWinDir += OUString::createFromAscii( lang );
         aOpenWinDir += "/OWfontpath";
 
-        SvFileStream aStream( aOpenWinDir, STREAM_READ );
+        SvFileStream aStream( aOpenWinDir, StreamMode::READ );
 
         // TODO: replace environment variables
         while( aStream.IsOpen() && ! aStream.IsEof() )

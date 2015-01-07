@@ -93,7 +93,7 @@ MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle )
 
 void MyWorkWindow::LoadGraphic( const OUString& sImageFile )
 {
-    SvFileStream aFileStream( sImageFile, STREAM_READ );
+    SvFileStream aFileStream( sImageFile, StreamMode::READ );
     GraphicFilter aGraphicFilter(false);
     if (aGraphicFilter.ImportGraphic(maGraphic, sImageFile, aFileStream) != 0)
     {

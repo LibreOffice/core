@@ -34,12 +34,12 @@
 
 static long nTmpCount = 0;
 
-// The internal open mode is STREAM_READ | STREAM_TRUNC, which is silly
+// The internal open mode is StreamMode::READ | STREAM_TRUNC, which is silly
 // by itself. It inhibits the checking of sharing modes and is used
 // during CopyTo() and MoveTo() for opening a stream in read mode
 // although it may be open in DENYALL mode
 
-#define INTERNAL_MODE ( STREAM_READ | STREAM_TRUNC )
+#define INTERNAL_MODE ( StreamMode::READ | StreamMode::TRUNC )
 
 ///////////////////////// class StorageBase
 
@@ -50,7 +50,7 @@ TYPEINIT1( BaseStorage, StorageBase );
 StorageBase::StorageBase()
     : m_bAutoCommit( false )
 {
-    m_nMode  = STREAM_READ;
+    m_nMode  = StreamMode::READ;
     m_nError = SVSTREAM_OK;
 }
 
@@ -127,7 +127,7 @@ bool OLEStorageBase::Validate_Impl( bool bWrite ) const
         && pIo->pTOC
         && pEntry
         && !pEntry->bInvalid
-        &&  ( !bWrite || !pEntry->bDirect || ( nStreamMode & STREAM_WRITE ) ) )
+        &&  ( !bWrite || !pEntry->bDirect || ( nStreamMode & StreamMode::WRITE ) ) )
             return true;
     return false;
 }
@@ -136,14 +136,14 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
 {
     if( m == INTERNAL_MODE )
         return true;
-    sal_uInt16 nCurMode = ( p && p->nRefCnt ) ? p->nMode : 0xFFFF;
-    if( ( m & 3 ) == STREAM_READ )
+    StreamMode nCurMode = ( p && p->nRefCnt ) ? p->nMode : StreamMode::SHARE_DENYALL;
+    if( ( m & STREAM_READWRITE ) == StreamMode::READ )
     {
         // only SHARE_DENYWRITE or SHARE_DENYALL allowed
-        if( ( ( m & STREAM_SHARE_DENYWRITE )
-           && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
-         || ( ( m & STREAM_SHARE_DENYALL )
-           && ( nCurMode & STREAM_SHARE_DENYALL ) ) )
+        if( ( ( m & StreamMode::SHARE_DENYWRITE )
+           && ( nCurMode & StreamMode::SHARE_DENYWRITE ) )
+         || ( ( m & StreamMode::SHARE_DENYALL )
+           && ( nCurMode & StreamMode::SHARE_DENYALL ) ) )
             return true;
     }
     else
@@ -151,8 +151,8 @@ bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
         // only SHARE_DENYALL allowed
         // storages open in r/o mode are OK, since only
         // the commit may fail
-        if( ( m & STREAM_SHARE_DENYALL )
-         && ( nCurMode & STREAM_SHARE_DENYALL ) )
+        if( ( m & StreamMode::SHARE_DENYALL )
+         && ( nCurMode & StreamMode::SHARE_DENYALL ) )
             return true;
     }
     return false;
@@ -176,7 +176,7 @@ StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
         }
     }
     else
-        m &= ~STREAM_READWRITE;
+        m &= ~StreamMode(STREAM_READWRITE);
     m_nMode = m;
 }
 
@@ -185,7 +185,7 @@ StorageStream::~StorageStream()
     // Do an auto-commit if the entry is open in direct mode
     if( m_bAutoCommit )
         Commit();
-    if( pEntry && pEntry->nRefCnt && pEntry->bDirect && (m_nMode & STREAM_WRITE) )
+    if( pEntry && pEntry->nRefCnt && pEntry->bDirect && (m_nMode & StreamMode::WRITE) )
         pEntry->Commit();
 }
 
@@ -260,7 +260,7 @@ bool StorageStream::Commit()
 {
     if( !Validate() )
         return false;
-    if( !( m_nMode & STREAM_WRITE ) )
+    if( !( m_nMode & StreamMode::WRITE ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
         return false;
@@ -378,7 +378,7 @@ Storage::Storage( const OUString& rFile, StreamMode m, bool bDirect )
     m_nMode = m;
     if( pIo->Open( aName, m ) )
     {
-        Init( ( m & ( STREAM_TRUNC | STREAM_NOCREATE ) ) == STREAM_TRUNC );
+        Init( ( m & ( StreamMode::TRUNC | StreamMode::NOCREATE ) ) == StreamMode::TRUNC );
         if( pEntry )
         {
             pEntry->bDirect = bDirect;
@@ -399,9 +399,9 @@ Storage::Storage( SvStream& r, bool bDirect )
     : OLEStorageBase( new StgIo, NULL, m_nMode )
     , bIsRoot( false )
 {
-    m_nMode = STREAM_READ;
+    m_nMode = StreamMode::READ;
     if( r.IsWritable() )
-        m_nMode = STREAM_READ | STREAM_WRITE;
+        m_nMode = StreamMode::READ | StreamMode::WRITE;
     if( r.GetError() == SVSTREAM_OK )
     {
         pIo->SetStrm( &r, false );
@@ -427,7 +427,7 @@ Storage::Storage( SvStream& r, bool bDirect )
 Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
        : OLEStorageBase( new StgIo, NULL, m_nMode ), bIsRoot( false )
 {
-    m_nMode = STREAM_READ;
+    m_nMode = StreamMode::READ;
 
     if ( rStrm.GetError() != SVSTREAM_OK )
     {
@@ -446,7 +446,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
     }
 
     if( pStream->IsWritable() )
-        m_nMode = STREAM_READ | STREAM_WRITE;
+        m_nMode = StreamMode::READ | StreamMode::WRITE;
 
     pIo->SetStrm( &rStrm );
 
@@ -509,7 +509,7 @@ Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
     if( q )
         q->aEntry.GetName( aName );
     else
-        m &= ~STREAM_READWRITE;
+        m &= ~StreamMode(STREAM_READWRITE);
     m_nMode   = m;
     if( q && q->nRefCnt == 1 )
         q->nMode = m;
@@ -523,7 +523,7 @@ Storage::~Storage()
     if( pEntry )
     {
         // Do an auto-commit if the entry is open in direct mode
-        if( pEntry->nRefCnt && pEntry->bDirect && (m_nMode & STREAM_WRITE) )
+        if( pEntry->nRefCnt && pEntry->bDirect && (m_nMode & StreamMode::WRITE) )
             Commit();
         if( pEntry->nRefCnt == 1 )
             pEntry->Invalidate();
@@ -588,7 +588,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
     if( !p )
     {
-        if( !( m & STREAM_NOCREATE ) )
+        if( !( m & StreamMode::NOCREATE ) )
         {
             bool bTemp = false;
             // create a new storage
@@ -603,7 +603,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
                 p->bTemp = bTemp;
         }
         if( !p )
-            pIo->SetError( ( m & STREAM_WRITE )
+            pIo->SetError( ( m & StreamMode::WRITE )
                              ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
     }
     else if( !ValidateMode( m, p ) )
@@ -619,14 +619,14 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
         p->bDirect = bDirect;
 
     // Dont check direct conflict if opening readonly
-    if( p && (m & STREAM_WRITE ))
+    if( p && (m & StreamMode::WRITE ))
     {
         if( p->bDirect != bDirect )
             SetError( SVSTREAM_ACCESS_DENIED );
     }
     Storage* pStg = new Storage( pIo, p, m );
     pIo->MoveError( *pStg );
-    if( m & STREAM_WRITE ) pStg->m_bAutoCommit = true;
+    if( m & StreamMode::WRITE ) pStg->m_bAutoCommit = true;
     return pStg;
 }
 
@@ -647,7 +647,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
     bool bTemp = false;
     if( !p )
     {
-        if( !( m & STREAM_NOCREATE ) )
+        if( !( m & StreamMode::NOCREATE ) )
         {
             // create a new stream
             // make a name if the stream is temporary (has no name)
@@ -660,7 +660,7 @@ BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, boo
             p = pIo->pTOC->Create( *pEntry, aNewName, STG_STREAM );
         }
         if( !p )
-            pIo->SetError( ( m & STREAM_WRITE )
+            pIo->SetError( ( m & StreamMode::WRITE )
                            ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
     }
     else if( !ValidateMode( m, p ) )
@@ -728,7 +728,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
         {
             // copy the entire storage
             BaseStorage* p1 = OpenStorage( rElem, INTERNAL_MODE );
-            BaseStorage* p2 = pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
+            BaseStorage* p2 = pDest->OpenOLEStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pEntry->bDirect );
 
             if ( p2 )
             {
@@ -757,7 +757,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
         {
             // stream copy
             BaseStorageStream* p1 = OpenStream( rElem, INTERNAL_MODE );
-            BaseStorageStream* p2 = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
+            BaseStorageStream* p2 = pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pEntry->bDirect );
 
             if ( p2 )
             {
@@ -900,7 +900,7 @@ bool Storage::Commit()
     bool bRes = true;
     if( !Validate() )
         return false;
-    if( !( m_nMode & STREAM_WRITE ) )
+    if( !( m_nMode & StreamMode::WRITE ) )
     {
         SetError( SVSTREAM_ACCESS_DENIED );
         return false;

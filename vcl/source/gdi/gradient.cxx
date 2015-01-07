@@ -287,7 +287,7 @@ bool Gradient::operator==( const Gradient& rGradient ) const
 
 SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
 
     rIStm.ReadUInt16( nTmp16 ); rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
@@ -301,7 +301,7 @@ SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
 
 SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rOStm.WriteUInt16( rImpl_Gradient.meStyle );
     WriteColor( rOStm, rImpl_Gradient.maStartColor );

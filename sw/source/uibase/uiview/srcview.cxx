@@ -280,7 +280,7 @@ SwDocShell*     SwSrcView::GetDocShell()
 
 void SwSrcView::SaveContent(const OUString& rTmpFile)
 {
-    SfxMedium aMedium( rTmpFile,    STREAM_WRITE);
+    SfxMedium aMedium( rTmpFile, StreamMode::WRITE);
     SvStream* pOutStream = aMedium.GetOutStream();
     pOutStream->SetStreamCharSet( lcl_GetStreamCharSet(eLoadEncoding) );
     aEditWin.Write(*pOutStream);
@@ -326,7 +326,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
                 SfxMedium aMedium( xFP->getFiles().getConstArray()[0],
-                                    STREAM_WRITE | STREAM_SHARE_DENYNONE );
+                                    StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
                 SvStream* pOutStream = aMedium.GetOutStream();
                 pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
                 aEditWin.Write( *pOutStream );

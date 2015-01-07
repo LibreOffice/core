@@ -658,7 +658,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
     try {
         vcl::PNGWriter aWriter( rBitmapEx );
-        SvFileStream sOutput( aName, STREAM_WRITE );
+        SvFileStream sOutput( aName, StreamMode::WRITE );
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {

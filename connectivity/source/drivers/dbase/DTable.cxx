@@ -494,13 +494,13 @@ void ODbaseTable::construct()
         "ODbaseTable::ODbaseTable: invalid extension!");
         // getEntry is expected to ensure the correct file name
 
-    m_pFileStream = createStream_simpleError( sFileName, STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+    m_pFileStream = createStream_simpleError( sFileName, STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
     m_bWriteable = ( m_pFileStream != NULL );
 
     if ( !m_pFileStream )
     {
         m_bWriteable = false;
-        m_pFileStream = createStream_simpleError( sFileName, STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
+        m_pFileStream = createStream_simpleError( sFileName, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
     }
 
     if(m_pFileStream)
@@ -519,11 +519,11 @@ void ODbaseTable::construct()
             // If the memo file isn't found, the data will be displayed anyhow.
             // However, updates can't be done
             // but the operation is executed
-            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
             if ( !m_pMemoStream )
             {
                 m_bWriteableMemo = false;
-                m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
+                m_pMemoStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
             }
             if (m_pMemoStream)
                 ReadMemoHeader();
@@ -1060,7 +1060,7 @@ bool ODbaseTable::CreateImpl()
         if (aContent.isDocument())
         {
             // Only if the file exists with length > 0 raise an error
-            SvStream* pFileStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE),STREAM_READ);
+            SvStream* pFileStream = createStream_simpleError( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ);
 
             if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
             {
@@ -1174,7 +1174,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     bCreateMemo = false;
     Date aDate( Date::SYSTEM );                     // current date
 
-    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
+    m_pFileStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
 
     if (!m_pFileStream)
         return false;
@@ -1420,7 +1420,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
 bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
     // filehandling macro for table creation
-    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+    m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | StreamMode::SHARE_DENYWRITE);
 
     if (!m_pMemoStream)
         return false;

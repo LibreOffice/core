@@ -579,7 +579,7 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
     if( GetOLEStorageName( nOLEId, sStorageName, xSrcStg, xDstStg ))
     {
         SvStorageRef xSrc = xSrcStg->OpenSotStorage( sStorageName,
-            STREAM_READWRITE| STREAM_SHARE_DENYALL );
+            STREAM_READWRITE| StreamMode::SHARE_DENYALL );
         OSL_ENSURE(rReader.pFormImpl, "No Form Implementation!");
         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
         if ( (!(rReader.bIsHeader || rReader.bIsFooter)) &&
@@ -5378,7 +5378,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(SvStorageStreamRef &rTableStream,
             pTableStream->SetEndian( SvStreamEndian::LITTLE );
 
             rDataStream = pStg->OpenSotStream(OUString(SL::aData),
-                STREAM_STD_READ | STREAM_NOCREATE );
+                STREAM_STD_READ | StreamMode::NOCREATE );
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
             {
@@ -5403,7 +5403,7 @@ namespace
     {
         utl::TempFile *pT = new utl::TempFile;
         pT->EnableKillingFile();
-        rSt.Open(pT->GetFileName(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
+        rSt.Open(pT->GetFileName(), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE);
         return pT;
     }
 
@@ -6029,7 +6029,7 @@ sal_uLong WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuff
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg, "Where is my Storage?" );
-    rRef = pStg->OpenSotStream( OUString("WordDocument"), STREAM_READ | STREAM_SHARE_DENYALL);
+    rRef = pStg->OpenSotStream( OUString("WordDocument"), StreamMode::READ | StreamMode::SHARE_DENYALL);
 
     if( rRef.Is() )
     {

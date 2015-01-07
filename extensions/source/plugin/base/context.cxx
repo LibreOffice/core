@@ -203,7 +203,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         OUString aFileName( (char*)buf.getConstArray(), strlen((char*)buf.getConstArray()), m_aEncoding );
         INetURLObject aFilePath( aFileName );
         aFileName = aFilePath.PathToFileName();
-        SvFileStream aStream( aFileName, STREAM_READ );
+        SvFileStream aStream( aFileName, StreamMode::READ );
         if( aStream.IsOpen() )
         {
             sal_Int64 const nBytes = aStream.remainingSize();

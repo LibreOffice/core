@@ -13,7 +13,7 @@
 
 htmlDocPtr HtmlTestTools::parseHtml(utl::TempFile& aTempFile)
 {
-    SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     htmlDocPtr doc = parseHtmlStream(&aFileStream);
     xmlFree(doc->name);
     doc->name = reinterpret_cast<char *>(

@@ -68,7 +68,7 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     if (rTempStreamName.isEmpty())
         pStream.reset(new SvMemoryStream());
     else
-        pStream.reset(new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | STREAM_TRUNC));
+        pStream.reset(new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | StreamMode::TRUNC));
 
     XmlWriter aWriter(pStream.get());
     aWriter.startDocument();

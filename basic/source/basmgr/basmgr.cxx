@@ -100,8 +100,8 @@ static const char szCryptingKey[] = "CryptedBasic";
 
 TYPEINIT1( BasicManager, SfxBroadcaster );
 
-StreamMode eStreamReadMode = STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL;
-StreamMode eStorageReadMode = STREAM_READ | STREAM_SHARE_DENYWRITE;
+const StreamMode eStreamReadMode = StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL;
+const StreamMode eStorageReadMode = StreamMode::READ | StreamMode::SHARE_DENYWRITE;
 
 
 // BasicManager impl data
@@ -1536,7 +1536,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
         {
             try
             {
-                SotStorageRef xStorage = new SotStorage(false, LinkTargetURL, STREAM_READ | STREAM_SHARE_DENYWRITE);
+                SotStorageRef xStorage = new SotStorage(false, LinkTargetURL, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
                 if (!xStorage->GetError())
                 {
                     pLib = AddLib(*xStorage, rLibName, true);
@@ -2049,7 +2049,7 @@ uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
 SbxObject* implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
 {
     sal_Int8* pData = const_cast< uno::Sequence< sal_Int8 >& >(aData).getArray();
-    SvMemoryStream aMemStream( pData, aData.getLength(), STREAM_READ );
+    SvMemoryStream aMemStream( pData, aData.getLength(), StreamMode::READ );
     SbxBase* pBase = SbxBase::Load( aMemStream );
     return dynamic_cast<SbxObject*>(pBase);
 }

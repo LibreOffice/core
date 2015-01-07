@@ -99,7 +99,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     void* pBitmapBytes = (void*)CFDataGetBytePtr( pCFData );
 
     // convert the image into the return-value type which is a graphic::XGraphic
-    SvMemoryStream aMemStm( pBitmapBytes, nBitmapLen, STREAM_READ | STREAM_WRITE );
+    SvMemoryStream aMemStm( pBitmapBytes, nBitmapLen, StreamMode::READ | StreamMode::WRITE );
     Graphic aGraphic;
     if( GraphicConverter::Import( aMemStm, aGraphic, CVT_TIF ) == ERRCODE_NONE )
         xRet = aGraphic.GetXGraphic();

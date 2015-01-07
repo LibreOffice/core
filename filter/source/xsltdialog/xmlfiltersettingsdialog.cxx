@@ -485,9 +485,9 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 {
                     aDestURL += aSourceURL.GetName();
 
-                    SvFileStream aInputStream(pFilterEntry->maImportTemplate, STREAM_READ );
+                    SvFileStream aInputStream(pFilterEntry->maImportTemplate, StreamMode::READ );
                     Reference< XInputStream > xIS( new utl::OInputStreamWrapper( aInputStream ) );
-                    SvFileStream aOutputStream(aDestURL, STREAM_WRITE );
+                    SvFileStream aOutputStream(aDestURL, StreamMode::WRITE );
                     Reference< XOutputStream > xOS(  new utl::OOutputStreamWrapper( aOutputStream ) );
 
                     if( copyStreams( xIS, xOS ) )

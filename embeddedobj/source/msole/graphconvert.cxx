@@ -50,7 +50,7 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
     if ( pBuf )
     {
         // First, in case the buffer is already in the requested format, then avoid a conversion.
-        SvMemoryStream aMemoryStream(pBuf, nBufSize, STREAM_READ);
+        SvMemoryStream aMemoryStream(pBuf, nBufSize, StreamMode::READ);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         sal_uInt16 nRetFormat = 0;
         if (rFilter.CanImportGraphic(OUString(), aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == GRFILTER_OK &&

@@ -36,7 +36,7 @@ XmlTestTools::~XmlTestTools()
 
 xmlDocPtr XmlTestTools::parseXml(utl::TempFile& aTempFile)
 {
-    SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     return parseXmlStream(&aFileStream);
 }
 

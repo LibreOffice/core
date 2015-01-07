@@ -508,7 +508,7 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate->RemoveAllFmtLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( true );
-                        SfxMedium aMedium( aFileName, sal_False );
+                        SfxMedium aMedium( aFileName, StreamMode::NONE );
                         SwReader aRdr( aMedium, OUString(), pTemplate );
                         aRdr.Read( *ReadXML );
                         ReadXML->SetOrganizerMode( false );

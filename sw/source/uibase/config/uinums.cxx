@@ -58,7 +58,7 @@ void SwChapterNumRules::Save()
     aURL.setFinalSlash();
     aURL.Append(CHAPTER_FILENAME);
 
-    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::WRITE );
     SvStream* pStream = aMedium.GetOutStream();
     bool bRet = (pStream && pStream->GetError() == 0);
     if (bRet)

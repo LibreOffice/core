@@ -746,7 +746,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                         sal_uInt32 nSize = aSequence.getLength();
                         if( nSize )
                         {
-                            SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                            SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
                             aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                             SfxItemSet* pItemSet;
 

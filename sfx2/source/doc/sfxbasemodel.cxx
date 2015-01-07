@@ -1989,7 +1989,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     utl::TempFile aTmp;
                     aTmp.EnableKillingFile( true );
                     storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
-                    SvStream* pStream = aTmp.GetStream( STREAM_READ );
+                    SvStream* pStream = aTmp.GetStream( StreamMode::READ );
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
                     Sequence< sal_Int8 > aSeq( nLen );
                     pStream->Seek( STREAM_SEEK_TO_BEGIN );

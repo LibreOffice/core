@@ -358,7 +358,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
         delete pS;
     }
 
-    pMemStream = new SvMemoryStream(pBuf, nLen, STREAM_READ);
+    pMemStream = new SvMemoryStream(pBuf, nLen, StreamMode::READ);
     assert(pMemStream != NULL);
 
     pStream = pMemStream;

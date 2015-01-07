@@ -607,7 +607,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
 
         if (aFileName != maDropFileName)
         {
-            SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE));
+            SfxMedium aMed(aFileName, (StreamMode::READ | StreamMode::SHARE_DENYNONE));
             SfxFilterMatcher aMatch( OUString("simpress") );
             aMed.UseInteractionHandler( true );
             nErr = aMatch.GuessFilter(aMed, &pFilter);
@@ -618,7 +618,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
             // The medium may be opened with READ/WRITE. Therefore, we first
             // check if it contains a Storage.
             SfxMedium* pMedium = new SfxMedium( aFileName,
-                                                STREAM_READ | STREAM_NOCREATE);
+                                                StreamMode::READ | StreamMode::NOCREATE);
 
             if (pMedium->IsStorage())
             {

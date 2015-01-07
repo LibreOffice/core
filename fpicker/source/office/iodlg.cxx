@@ -2659,7 +2659,7 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
         Bitmap          aBmp;
         SvMemoryStream  aData( aBmpSequence.getArray(),
                                aBmpSequence.getLength(),
-                               STREAM_READ );
+                               StreamMode::READ );
         ReadDIB(aBmp, aData, true);
 
         _pPrevBmp->SetBitmap( aBmp );

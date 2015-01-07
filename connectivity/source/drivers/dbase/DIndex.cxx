@@ -150,9 +150,9 @@ bool ODbaseIndex::openIndexFile()
         OUString sFile = getCompletePath();
         if(UCBContentHelper::Exists(sFile))
         {
-            m_pFileStream = OFileTable::createStream_simpleError(sFile, STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            m_pFileStream = OFileTable::createStream_simpleError(sFile, STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
             if (!m_pFileStream)
-                m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
+                m_pFileStream = OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
             if(m_pFileStream)
             {
                 m_pFileStream->SetEndian(SvStreamEndian::LITTLE);
@@ -487,7 +487,7 @@ bool ODbaseIndex::CreateImpl()
         ::dbtools::throwFunctionSequenceException(*this);
 
     // create the index file
-    m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+    m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC);
     if (!m_pFileStream)
     {
         const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(

@@ -311,7 +311,7 @@ class OslStream : public SvStream
     osl::File maFile;
 
 public:
-                        OslStream( const OUString& rName, short nStrmMode );
+                        OslStream( const OUString& rName, StreamMode nStrmMode );
                        virtual ~OslStream();
     virtual sal_Size GetData( void* pData, sal_Size nSize ) SAL_OVERRIDE;
     virtual sal_Size PutData( const void* pData, sal_Size nSize ) SAL_OVERRIDE;
@@ -320,20 +320,20 @@ public:
     virtual void        SetSize( sal_uInt64 nSize) SAL_OVERRIDE;
 };
 
-OslStream::OslStream( const OUString& rName, short nStrmMode )
+OslStream::OslStream( const OUString& rName, StreamMode nStrmMode )
     : maFile( rName )
 {
     sal_uInt32 nFlags;
 
-    if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
+    if( (nStrmMode & (StreamMode::READ | StreamMode::WRITE)) == (StreamMode::READ | StreamMode::WRITE) )
     {
         nFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
     }
-    else if( nStrmMode & STREAM_WRITE )
+    else if( nStrmMode & StreamMode::WRITE )
     {
         nFlags = osl_File_OpenFlag_Write;
     }
-    else //if( nStrmMode & STREAM_READ )
+    else //if( nStrmMode & StreamMode::READ )
     {
         nFlags = osl_File_OpenFlag_Read;
     }
@@ -562,16 +562,16 @@ void    UCBStream::SetSize( sal_uInt64 nSize )
 
 
 SbError SbiStream::Open
-( short nCh, const OString& rName, short nStrmMode, short nFlags, short nL )
+( short nCh, const OString& rName, StreamMode nStrmMode, short nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
     nChan   = nCh;
     nLine   = 0;
     nExpandOnWriteTo = 0;
-    if( ( nStrmMode & ( STREAM_READ|STREAM_WRITE ) ) == STREAM_READ )
+    if( ( nStrmMode & ( StreamMode::READ|StreamMode::WRITE ) ) == StreamMode::READ )
     {
-        nStrmMode |= STREAM_NOCREATE;
+        nStrmMode |= StreamMode::NOCREATE;
     }
     OUString aStr(OStringToOUString(rName, osl_getThreadTextEncoding()));
     OUString aNameStr = getFullPath( aStr );
@@ -583,23 +583,23 @@ SbError SbiStream::Open
         {
 
         // #??? For write access delete file if it already exists (not for appending)
-        if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
+        if( (nStrmMode & StreamMode::WRITE) && !IsAppend() && !IsBinary() &&
             xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
         {
             xSFI->kill( aNameStr );
         }
 
-        if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
+        if( (nStrmMode & (StreamMode::READ | StreamMode::WRITE)) == (StreamMode::READ | StreamMode::WRITE) )
         {
             Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
             pStrm = new UCBStream( xIS );
         }
-        else if( nStrmMode & STREAM_WRITE )
+        else if( nStrmMode & StreamMode::WRITE )
         {
             Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
             pStrm = new UCBStream( xIS );
         }
-        else //if( nStrmMode & STREAM_READ )
+        else //if( nStrmMode & StreamMode::READ )
         {
             Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
             pStrm = new UCBStream( xIS );
@@ -787,7 +787,7 @@ SbError SbiIoSystem::GetError()
     return n;
 }
 
-void SbiIoSystem::Open(short nCh, const OString& rName, short nMode, short nFlags, short nLen)
+void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, short nFlags, short nLen)
 {
     nError = 0;
     if( nCh >= CHANNELS || !nCh )

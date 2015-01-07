@@ -244,7 +244,7 @@ bool SvxXMLXTableExportComponent::save(
                 xSubStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rURL, eCreate );
             else
             {
-                pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC );
+                pMedium = new SfxMedium( rURL, StreamMode::WRITE | StreamMode::TRUNC );
 
                 SvStream* pStream = pMedium->GetOutStream();
                 if( !pStream )

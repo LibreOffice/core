@@ -75,7 +75,7 @@ bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 
 SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt32      nTmp32;
     sal_uInt16          nTmp16;
 
@@ -101,7 +101,7 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 
 SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
 {
-    VersionCompat       aCompat( rOStm, STREAM_WRITE, 2 );
+    VersionCompat       aCompat( rOStm, StreamMode::WRITE, 2 );
     const sal_uInt32    nTmp32 = 0;
 
     rOStm.WriteUInt32( nTmp32 ).WriteUInt32( nTmp32 );

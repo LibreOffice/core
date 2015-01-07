@@ -242,7 +242,7 @@ namespace frm
                     {
                         OUString sFileName = aFP.GetPath();
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(
-                            sFileName, ( bLoad ? STREAM_READ : STREAM_WRITE | STREAM_TRUNC ) | STREAM_SHARE_DENYALL
+                            sFileName, ( bLoad ? StreamMode::READ : StreamMode::WRITE | StreamMode::TRUNC ) | StreamMode::SHARE_DENYALL
                         );
                         if ( pStream )
                         {

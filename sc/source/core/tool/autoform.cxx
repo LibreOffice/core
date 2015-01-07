@@ -1011,7 +1011,7 @@ bool ScAutoFormat::Load()
     aURL.setFinalSlash();
     aURL.Append( OUString( sAutoTblFmtName ) );
 
-    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::READ );
     SvStream* pStream = aMedium.GetInStream();
     bool bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
@@ -1072,7 +1072,7 @@ bool ScAutoFormat::Save()
     aURL.setFinalSlash();
     aURL.Append(sAutoTblFmtName);
 
-    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), StreamMode::WRITE );
     SvStream* pStream = aMedium.GetOutStream();
     bool bRet = (pStream && pStream->GetError() == 0);
     if (bRet)

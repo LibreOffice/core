@@ -93,7 +93,7 @@ static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
 
     BitmapEx aBitmapEx( aBitmap );
     vcl::PNGWriter aWriter( aBitmapEx );
-    SvFileStream sOutput( rPath, STREAM_WRITE );
+    SvFileStream sOutput( rPath, StreamMode::WRITE );
     aWriter.Write( sOutput );
     sOutput.Close();
 }

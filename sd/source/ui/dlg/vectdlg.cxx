@@ -306,7 +306,7 @@ void SdVectorizeDlg::LoadSettings()
 
     if( xIStm.Is() )
     {
-        SdIOCompat aCompat( *xIStm, STREAM_READ );
+        SdIOCompat aCompat( *xIStm, StreamMode::READ );
         xIStm->ReadUInt16( nLayers ).ReadUInt16( nReduce ).ReadUInt16( nFillHoles ).ReadCharAsBool( bFillHoles );
     }
     else
@@ -333,7 +333,7 @@ void SdVectorizeDlg::SaveSettings() const
 
     if( xOStm.Is() )
     {
-        SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
+        SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
         xOStm->WriteUInt16( m_pNmLayers->GetValue() ).WriteUInt16( m_pMtReduce->GetValue() );
         xOStm->WriteUInt16( m_pMtFillHoles->GetValue() ).WriteUChar( m_pCbFillHoles->IsChecked() );
     }

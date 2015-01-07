@@ -179,7 +179,7 @@ void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFile
     BitmapEx aBitmap = ConvertBGRABufferToBitmapEx(pBuffer.get(), nWidth, nHeight);
     try {
         vcl::PNGWriter aWriter( aBitmap );
-        SvFileStream sOutput( rFileName, STREAM_WRITE );
+        SvFileStream sOutput( rFileName, StreamMode::WRITE );
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {

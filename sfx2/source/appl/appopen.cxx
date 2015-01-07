@@ -291,7 +291,7 @@ sal_uInt32 CheckPasswd_Impl
 sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, bool bCopy, SfxItemSet* pSet )
 {
     const SfxFilter* pFilter = NULL;
-    SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ) );
+    SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
 
     if ( !aMedium.GetStorage( false ).is() )
         aMedium.GetInStream();

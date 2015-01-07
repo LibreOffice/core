@@ -263,7 +263,7 @@ bool Section::GetDictionary( Dictionary& rDict )
     if ( iter != maEntries.end() )
     {
         sal_uInt32 nDictCount, nId, nSize, nPos;
-        SvMemoryStream aStream( (sal_Int8*)iter->mpBuf, iter->mnSize, STREAM_READ );
+        SvMemoryStream aStream( (sal_Int8*)iter->mpBuf, iter->mnSize, StreamMode::READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
         aStream.ReadUInt32( nDictCount );
         for ( sal_uInt32 i = 0; i < nDictCount; i++ )

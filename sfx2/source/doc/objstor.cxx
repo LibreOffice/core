@@ -2011,7 +2011,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         }
         else
         {
-            if( pMedium->GetOpenMode() & STREAM_WRITE )
+            if( pMedium->GetOpenMode() & StreamMode::WRITE )
                 pMedium->GetInStream();
             xStorage = GetStorage();
         }
@@ -2040,7 +2040,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     {
         if( pMedium )
         {
-            if( pFilter && !IsPackageStorageFormat_Impl( *pMedium ) && (pMedium->GetOpenMode() & STREAM_WRITE ))
+            if( pFilter && !IsPackageStorageFormat_Impl( *pMedium ) && (pMedium->GetOpenMode() & StreamMode::WRITE ))
             {
                 pMedium->ReOpen();
                 bOk = SaveCompletedChildren( false );
@@ -2590,7 +2590,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
             pFilter = SfxFilterMatcher( OUString::createFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
 
         SfxMedium *pMed = new SfxMedium(
-            pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, pFilter );
+            pSalvageItem->GetValue(), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, pFilter );
 
         SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
         if ( pPasswordItem )
@@ -2801,7 +2801,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
     pParams = pMergedParams;
 
     // create a medium for the target URL
-    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, 0, pParams );
+    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, 0, pParams );
 
     // set filter; if no filter is given, take the default filter of the factory
     if ( !aFilterName.isEmpty() )

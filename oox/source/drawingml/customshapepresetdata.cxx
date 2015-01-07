@@ -717,7 +717,7 @@ void CustomShapeProperties::initializePresetDataMap()
 {
     OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-cs-presets");
     rtl::Bootstrap::expandMacros(aPath);
-    SvFileStream aStream(aPath, STREAM_READ);
+    SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)
         SAL_WARN("oox", "failed to open oox-drawingml-cs-presets");
     OString aLine;

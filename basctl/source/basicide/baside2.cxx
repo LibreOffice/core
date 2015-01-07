@@ -426,7 +426,7 @@ bool ModulWindow::LoadBasic()
     {
         Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
-        SfxMedium aMedium( aCurPath, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
+        SfxMedium aMedium( aCurPath, StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE );
         SvStream* pStream = aMedium.GetInStream();
         if ( pStream )
         {
@@ -477,7 +477,7 @@ bool ModulWindow::SaveBasicSource()
     {
         Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
-        SfxMedium aMedium( aCurPath, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
+        SfxMedium aMedium( aCurPath, StreamMode::WRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
         SvStream* pStream = aMedium.GetOutStream();
         if ( pStream )
         {

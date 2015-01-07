@@ -1281,7 +1281,7 @@ sal_uInt16 GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::CanImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE ));
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
     if ( pStream )
     {
         nRetValue = CanImportGraphic( aMainUrl, *pStream, nFormat, pDeterminedFormat );
@@ -1311,7 +1311,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE ));
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
     if ( pStream )
     {
         nRetValue = ImportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pDeterminedFormat, nImportFlags );
@@ -1463,7 +1463,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                         if ( nChunkSize > 11 )
                         {
                             const std::vector< sal_uInt8 >& rData = aIter->aData;
-                            SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, STREAM_READ );
+                            SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, StreamMode::READ );
                             ImportGIF( aIStrm, rGraphic );
                             eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
                             break;
@@ -1804,7 +1804,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
     bool bAlreadyExists = DirEntryExists( rPath );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
-    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC ));
+    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::WRITE | StreamMode::TRUNC ));
     if ( pStream )
     {
         nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pFilterData );
@@ -2257,7 +2257,7 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     SvStream* pStream = NULL;
     if ( INET_PROT_FILE != aURL.GetProtocol() )
     {
-        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
+        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ );
     }
 
     int nRes = GRFILTER_OK;

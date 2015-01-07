@@ -2072,7 +2072,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
         const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
         if ( !pFilter )
         {
-            pMed = new SfxMedium(rFileName, STREAM_READ, 0, 0 );
+            pMed = new SfxMedium(rFileName, StreamMode::READ, 0, 0 );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( true );
             ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SFX_FILTER_VERSION_NONE);
@@ -2082,7 +2082,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
                 pMed->SetFilter( pFilter );
         }
         else
-            pMed = new SfxMedium(rFileName, STREAM_READ, pFilter, 0);
+            pMed = new SfxMedium(rFileName, StreamMode::READ, pFilter, 0);
     }
     else
     {

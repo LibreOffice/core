@@ -1757,7 +1757,7 @@ bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32
     rInput.Read( pBuf.get(), nInputSize );
     ZCodec aZCodec( 0x8000, 0x8000 );
     aZCodec.BeginCompression();
-    SvMemoryStream aSource( pBuf.get(), nInputSize, STREAM_READ );
+    SvMemoryStream aSource( pBuf.get(), nInputSize, StreamMode::READ );
     aZCodec.Decompress( aSource, rOutput );
     const bool bSuccess(0L != aZCodec.EndCompression());
     rInput.Seek( nOldPos );
@@ -1819,13 +1819,13 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
             if ( aTmpFile.IsValid() )
             {
-                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_TRUNC | STREAM_WRITE ));
+                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::TRUNC | StreamMode::WRITE ));
                 if ( pDest )
                     bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
             }
             if ( bSuccess )
             {
-                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), STREAM_READ ));
+                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::READ ));
                 Storage* pObjStor = pDest ? new Storage( *pDest, true ) : NULL;
                 if ( pObjStor )
                 {
@@ -1843,7 +1843,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                             bool bGetItAsOle = ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
                             if ( !bGetItAsOle )
                             {   // maybe there is a contentsstream in here
-                                xSrcTst = xObjStor->OpenSotStream( "Contents", STREAM_READWRITE | STREAM_NOCREATE );
+                                xSrcTst = xObjStor->OpenSotStream( "Contents", STREAM_READWRITE | StreamMode::NOCREATE );
                                 bGetItAsOle = ( xSrcTst.Is() && sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
                             }
                             if ( bGetItAsOle )
@@ -1999,7 +1999,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                             {
                                 // is this a visual basic storage ?
                                 SotStorageRef xSubStorage = xSource->OpenSotStorage( "VBA",
-                                    STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
+                                    STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                                 if( xSubStorage.Is() && ( SVSTREAM_OK == xSubStorage->GetError() ) )
                                 {
                                     SotStorageRef xMacros = xDest->OpenSotStorage( "MACROS" );

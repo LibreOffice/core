@@ -104,7 +104,7 @@ ImplFontAttrCache::ImplFontAttrCache( const OUString& rFileNameURL, const OUStri
 
     // open the cache file
     osl::FileBase::getSystemPathFromFileURL( rFileNameURL, aCacheFileName );
-    SvFileStream aCacheFile( aCacheFileName, STREAM_READ );
+    SvFileStream aCacheFile( aCacheFileName, StreamMode::READ );
     if( !aCacheFile.IsOpen() )
         return;
 

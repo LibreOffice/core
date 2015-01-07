@@ -4476,7 +4476,7 @@ RTLFUNC(LoadPicture)
     }
 
     OUString aFileURL = getFullPath( rPar.Get(1)->GetOUString() );
-    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_READ ));
+    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aFileURL, StreamMode::READ ));
     if( pStream )
     {
         Bitmap aBmp;
@@ -4504,7 +4504,7 @@ RTLFUNC(SavePicture)
     SbxBase* pObj = static_cast<SbxObject*>(rPar.Get(1)->GetObject());
     if( pObj->IsA( TYPE( SbStdPicture ) ) )
     {
-        SvFileStream aOStream( rPar.Get(2)->GetOUString(), STREAM_WRITE | STREAM_TRUNC );
+        SvFileStream aOStream( rPar.Get(2)->GetOUString(), StreamMode::WRITE | StreamMode::TRUNC );
         Graphic aGraphic = static_cast<SbStdPicture*>(pObj)->GetGraphic();
         WriteGraphic( aOStream, aGraphic );
     }
@@ -4716,7 +4716,7 @@ RTLFUNC(DumpAllObjects)
             p = p->GetParent();
         }
         SvFileStream aStrm( rPar.Get( 1 )->GetOUString(),
-                            STREAM_WRITE | STREAM_TRUNC );
+                            StreamMode::WRITE | StreamMode::TRUNC );
         p->Dump( aStrm, rPar.Get( 2 )->GetBool() );
         aStrm.Close();
         if( aStrm.GetError() != SVSTREAM_OK )

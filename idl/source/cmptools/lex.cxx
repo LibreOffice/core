@@ -96,7 +96,7 @@ void SvTokenStream::InitCtor()
 }
 
 SvTokenStream::SvTokenStream( const OUString & rFileName )
-    : pInStream( new SvFileStream( rFileName, STREAM_STD_READ | STREAM_NOCREATE ) )
+    : pInStream( new SvFileStream( rFileName, STREAM_STD_READ | StreamMode::NOCREATE ) )
     , rInStream( *pInStream )
     , aFileName( rFileName )
 {

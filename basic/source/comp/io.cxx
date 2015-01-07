@@ -173,20 +173,20 @@ void SbiParser::Open()
     SbiExpression aFileName( this );
     SbiToken eTok;
     TestToken( FOR );
-    short nMode = 0;
+    StreamMode nMode = StreamMode::NONE;
     short nFlags = 0;
     switch( Next() )
     {
         case INPUT:
-            nMode = STREAM_READ;  nFlags |= SBSTRM_INPUT; break;
+            nMode = StreamMode::READ;  nFlags |= SBSTRM_INPUT; break;
         case OUTPUT:
-            nMode = STREAM_WRITE | STREAM_TRUNC; nFlags |= SBSTRM_OUTPUT; break;
+            nMode = StreamMode::WRITE | StreamMode::TRUNC; nFlags |= SBSTRM_OUTPUT; break;
         case APPEND:
-            nMode = STREAM_WRITE; nFlags |= SBSTRM_APPEND; break;
+            nMode = StreamMode::WRITE; nFlags |= SBSTRM_APPEND; break;
         case RANDOM:
-            nMode = STREAM_READ | STREAM_WRITE; nFlags |= SBSTRM_RANDOM; break;
+            nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SBSTRM_RANDOM; break;
         case BINARY:
-            nMode = STREAM_READ | STREAM_WRITE; nFlags |= SBSTRM_BINARY; break;
+            nMode = StreamMode::READ | StreamMode::WRITE; nFlags |= SBSTRM_BINARY; break;
         default:
             Error( SbERR_SYNTAX );
     }
@@ -194,20 +194,20 @@ void SbiParser::Open()
     {
         Next();
         eTok = Next();
-        // influence only STREAM_READ,STREAM_WRITE-Flags in nMode
-        nMode &= ~(STREAM_READ | STREAM_WRITE);     // delete
+        // influence only READ,WRITE-Flags in nMode
+        nMode &= ~StreamMode(StreamMode::READ | StreamMode::WRITE);     // delete
         if( eTok == READ )
         {
             if( Peek() == WRITE )
             {
                 Next();
-                nMode |= (STREAM_READ | STREAM_WRITE);
+                nMode |= (StreamMode::READ | StreamMode::WRITE);
             }
             else
-                nMode |= STREAM_READ;
+                nMode |= StreamMode::READ;
         }
         else if( eTok == WRITE )
-            nMode |= STREAM_WRITE;
+            nMode |= StreamMode::WRITE;
         else
             Error( SbERR_SYNTAX );
     }
@@ -218,7 +218,7 @@ void SbiParser::Open()
 #define tmpSHARED
 #endif
         case SHARED:
-            Next(); nMode |= STREAM_SHARE_DENYNONE; break;
+            Next(); nMode |= StreamMode::SHARE_DENYNONE; break;
 #ifdef tmpSHARED
 #define SHARED
 #undef tmpSHARED
@@ -228,11 +228,11 @@ void SbiParser::Open()
             eTok = Next();
             if( eTok == READ )
             {
-                if( Peek() == WRITE ) Next(), nMode |= STREAM_SHARE_DENYALL;
-                else nMode |= STREAM_SHARE_DENYREAD;
+                if( Peek() == WRITE ) Next(), nMode |= StreamMode::SHARE_DENYALL;
+                else nMode |= StreamMode::SHARE_DENYREAD;
             }
             else if( eTok == WRITE )
-                nMode |= STREAM_SHARE_DENYWRITE;
+                nMode |= StreamMode::SHARE_DENYWRITE;
             else
                 Error( SbERR_SYNTAX );
             break;
@@ -262,7 +262,7 @@ void SbiParser::Open()
     if( pChan )
         pChan->Gen();
     aFileName.Gen();
-    aGen.Gen( _OPEN, nMode, nFlags );
+    aGen.Gen( _OPEN, static_cast<sal_uInt32>(nMode), nFlags );
     bInStatement = false;
 }
 

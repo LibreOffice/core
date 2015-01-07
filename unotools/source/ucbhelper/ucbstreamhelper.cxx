@@ -49,9 +49,9 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );
     UcbLockBytesRef xLockBytes;
-    if ( eOpenMode & STREAM_WRITE )
+    if ( eOpenMode & StreamMode::WRITE )
     {
-        bool bTruncate = ( eOpenMode & STREAM_TRUNC ) != 0;
+        bool bTruncate = bool( eOpenMode & StreamMode::TRUNC );
         if ( bTruncate )
         {
             try

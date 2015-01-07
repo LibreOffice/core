@@ -1411,7 +1411,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
                 {
                     memcpy( pBuffer, pSourceData, nSize );
 
-                    SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, STREAM_READ );
+                    SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, StreamMode::READ );
                     pStream->ObjectOwnsMemory( true );
                     xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
                 }
@@ -1420,7 +1420,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
 
         if (!xStream.is() && !aFileName.isEmpty())
         {
-            SvFileStream* pStream = new SvFileStream( aFileName, STREAM_READ );
+            SvFileStream* pStream = new SvFileStream( aFileName, StreamMode::READ );
             if( pStream )
                 xStream.set( new utl::OInputStreamWrapper( pStream ) );
         }

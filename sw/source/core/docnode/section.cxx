@@ -1400,7 +1400,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         }
 
         SvMemoryStream aStrm( (void*)aSeq.getConstArray(), aSeq.getLength(),
-                                STREAM_READ );
+                                StreamMode::READ );
         aStrm.Seek( 0 );
 
         // TODO/MBA: it's impossible to set a BaseURL here!

@@ -1291,7 +1291,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     const sal_uInt8* pData = pA->GetData();
                     if ( pData )
                     {
-                        SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                        SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), StreamMode::READ );
                         bool        bSkipSequence = false;
                         OString sSeqEnd;
 

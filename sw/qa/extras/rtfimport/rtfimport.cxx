@@ -98,7 +98,7 @@ protected:
         xImporter->setTargetDocument(mxComponent);
         uno::Sequence<beans::PropertyValue> aDescriptor(xTextRange.is() ? 3 : 2);
         aDescriptor[0].Name = "InputStream";
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename, STREAM_WRITE);
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + aFilename, StreamMode::WRITE);
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
         aDescriptor[0].Value <<= xStream;
         aDescriptor[1].Name = "InsertMode";

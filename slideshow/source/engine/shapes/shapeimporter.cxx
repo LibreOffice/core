@@ -121,7 +121,7 @@ bool importShapeGraphic(
         boost::scoped_ptr<SvStream> pGraphicStream(
             utl::UcbStreamHelper::CreateStream(
                 aTmp.GetMainURL( INetURLObject::NO_DECODE ),
-                STREAM_READ ) );
+                StreamMode::READ ) );
         if( !pGraphicStream )
         {
             OSL_FAIL( "ShapeImporter::importShape(): "

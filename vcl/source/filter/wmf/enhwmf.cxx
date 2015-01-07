@@ -413,7 +413,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
         // debug code - write the stream to debug file /tmp/emf-stream.emf
         int pos = pWMF->Tell();
         pWMF->Seek(0);
-        SvFileStream file( OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+        SvFileStream file( OUString( "/tmp/emf-stream.emf" ), StreamMode::WRITE | StreamMode::TRUNC );
 
         pWMF->WriteStream(file);
         file.Flush();
@@ -1189,7 +1189,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         if ( nSize <= ( nEndPos - nStartPos ) )
                         {
                             char* pBuf = new char[ nSize ];
-                            SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                            SvMemoryStream aTmp( pBuf, nSize, StreamMode::READ | StreamMode::WRITE );
                             aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( 'B' )
                                 .WriteUChar( 'M' )
@@ -1253,7 +1253,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         if ( nSize <= ( nEndPos - nStartPos ) )
                         {
                             char* pBuf = new char[ nSize ];
-                            SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                            SvMemoryStream aTmp( pBuf, nSize, StreamMode::READ | StreamMode::WRITE );
                             aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( 'B' )
                                 .WriteUChar( 'M' )
@@ -1323,7 +1323,7 @@ bool EnhWMFReader::ReadEnhWMF()
                         if ( nSize <= ( nEndPos - nStartPos ) )
                         {
                             char* pBuf = new char[ nSize ];
-                            SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                            SvMemoryStream aTmp( pBuf, nSize, StreamMode::READ | StreamMode::WRITE );
                             aTmp.ObjectOwnsMemory( true );
                             aTmp.WriteUChar( 'B' )
                                .WriteUChar( 'M' )
@@ -1563,7 +1563,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             {
                                 char*   pBuf = new char[ nSize ];
 
-                                SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                                SvMemoryStream aTmp( pBuf, nSize, StreamMode::READ | StreamMode::WRITE );
                                 aTmp.ObjectOwnsMemory( true );
                                 aTmp.WriteUChar( 'B' )
                                     .WriteUChar( 'M' )

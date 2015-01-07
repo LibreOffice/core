@@ -303,7 +303,7 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
 {
     Close();
 
-    mpFileStream = new SvFileStream( i_rFile, STREAM_READ );
+    mpFileStream = new SvFileStream( i_rFile, StreamMode::READ );
     maFileName = mpFileStream->GetFileName();
 
     if( ! mpFileStream->IsOpen() )

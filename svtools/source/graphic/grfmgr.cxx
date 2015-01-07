@@ -232,7 +232,7 @@ void GraphicObject::ImplAutoSwapIn()
 
                             if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
                             {
-                                boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ ));
+                                boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::READ ));
 
                                 if( pIStm )
                                 {
@@ -1103,7 +1103,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
 
 SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     Graphic         aGraphic;
     GraphicAttr     aAttr;
     bool            bLink;
@@ -1130,7 +1130,7 @@ SvStream& ReadGraphicObject( SvStream& rIStm, GraphicObject& rGraphicObj )
 
 SvStream& WriteGraphicObject( SvStream& rOStm, const GraphicObject& rGraphicObj )
 {
-    VersionCompat   aCompat( rOStm, STREAM_WRITE, 1 );
+    VersionCompat   aCompat( rOStm, StreamMode::WRITE, 1 );
     const bool      bLink =  rGraphicObj.HasLink();
 
     WriteGraphic( rOStm, rGraphicObj.GetGraphic() );
@@ -1159,7 +1159,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
         Graphic     aGraphic;
         if ( !aURL.isEmpty() )
         {
-            boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ ));
+            boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aURL, StreamMode::READ ));
             if( pStream )
                 GraphicConverter::Import( *pStream, aGraphic );
         }

@@ -51,7 +51,7 @@ class SbiStream
 public:
     SbiStream();
    ~SbiStream();
-    SbError Open( short, const OString&, short, short, short );
+    SbError Open( short, const OString&, StreamMode, short, short );
     SbError Close();
     SbError Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     SbError Read( char& );
@@ -89,7 +89,7 @@ public:
     void  SetChannel( short n  )       { nChan = n;   }
     short GetChannel() const           { return nChan;}
     void  ResetChannel()               { nChan = 0;   }
-    void  Open( short, const OString&, short, short, short );
+    void  Open( short, const OString&, StreamMode, short, short );
     void  Close();
     void  Read(OString&, short = 0);
     char  Read();

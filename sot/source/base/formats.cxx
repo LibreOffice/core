@@ -1426,7 +1426,7 @@ static sal_uInt16 GetTransferableAction_Impl(
                             if( aAny.hasValue() )
                             {
                                 Sequence< sal_Int8 >    aSeq; aAny >>= aSeq;
-                                SvMemoryStream          aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
+                                SvMemoryStream          aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), StreamMode::READ );
                                 FileList                aFileList;
 
                                 ReadFileList( aMemStm, aFileList );

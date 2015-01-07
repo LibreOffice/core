@@ -52,7 +52,7 @@ bool PcdFilterTest::load(const OUString &,
     const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
-    SvFileStream aFileStream(rURL, STREAM_READ);
+    SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
     return GraphicImport(aFileStream, aGraphic, NULL);
 }

@@ -201,7 +201,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 // #i75610# if the sequence is empty, do nothing (don't create any printer)
                 if ( nSize != 0 )
                 {
-                    SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                    SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                     SfxItemSet* pSet = new SfxItemSet( *rDoc.GetPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,

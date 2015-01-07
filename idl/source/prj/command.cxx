@@ -133,7 +133,7 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
     {
         OUString aFileName ( rCommand.aInFileList[ n ] );
         pDataBase->AddDepFile(aFileName);
-        SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
+        SvFileStream aStm( aFileName, STREAM_STD_READ | StreamMode::NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
         {
             SvTokenStream aTokStm( aStm, aFileName );
@@ -159,7 +159,7 @@ static bool ResponseFile( StringList * pList, int argc, char ** argv )
     {
         if( '@' == **(argv +i) )
         { // when @, then response file
-            SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
+            SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | StreamMode::NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
                 return false;
 

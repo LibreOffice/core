@@ -4051,8 +4051,8 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
     if(m_pEntriesBB->IsModified() || bCreateMode)
     {
         SfxMedium aMed( sAutoMarkURL,
-                        bCreateMode ? STREAM_WRITE
-                                    : STREAM_WRITE| STREAM_TRUNC );
+                        bCreateMode ? StreamMode::WRITE
+                                    : StreamMode::WRITE| StreamMode::TRUNC );
         SvStream* pStrm = aMed.GetOutStream();
         pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
         if( !pStrm->GetError() )

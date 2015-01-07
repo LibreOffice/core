@@ -87,7 +87,7 @@ void ImplWallpaper::ImplReleaseCachedBitmap()
 
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
 
     delete rImplWallpaper.mpRect;
@@ -140,7 +140,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 
 SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
-    VersionCompat   aCompat( rOStm, STREAM_WRITE, 3 );
+    VersionCompat   aCompat( rOStm, StreamMode::WRITE, 3 );
     bool            bRect = ( rImplWallpaper.mpRect != NULL );
     bool            bGrad = ( rImplWallpaper.mpGradient != NULL );
     bool            bBmp = ( rImplWallpaper.mpBitmap != NULL );

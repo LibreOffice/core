@@ -726,7 +726,7 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     if( !rName.isEmpty() )
     {
         const SfxFilter* pFilter = 0;
-        boost::scoped_ptr<SfxMedium> pMed(new SfxMedium( rName, STREAM_READ, 0, 0 ));
+        boost::scoped_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, 0, 0 ));
         SfxFilterMatcher aMatcher( OUString("swriter") );
         pMed->UseInteractionHandler( true );
         if (!aMatcher.GuessFilter(*pMed, &pFilter, SFX_FILTER_VERSION_NONE))

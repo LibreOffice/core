@@ -301,7 +301,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
             // check if file exists, warn before we overwrite it
             {
                 com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
+                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ, xHandler );
 
                 bool bOk = pIStm && ( pIStm->GetError() == 0);
 

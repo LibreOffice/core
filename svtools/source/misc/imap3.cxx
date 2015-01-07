@@ -28,17 +28,17 @@
 |*
 \******************************************************************************/
 
-IMapCompat::IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode )
+IMapCompat::IMapCompat( SvStream& rStm, const StreamMode nStreamMode )
     : pRWStm(&rStm)
     , nCompatPos(0)
     , nTotalSize(0)
     , nStmMode(nStreamMode)
 {
-    DBG_ASSERT( nStreamMode == STREAM_READ || nStreamMode == STREAM_WRITE, "Wrong Mode!" );
+    DBG_ASSERT( nStreamMode == StreamMode::READ || nStreamMode == StreamMode::WRITE, "Wrong Mode!" );
 
     if ( !pRWStm->GetError() )
     {
-        if ( nStmMode == STREAM_WRITE )
+        if ( nStmMode == StreamMode::WRITE )
         {
             nCompatPos = pRWStm->Tell();
             pRWStm->SeekRel( 4 );
@@ -65,7 +65,7 @@ IMapCompat::~IMapCompat()
 {
     if ( !pRWStm->GetError() )
     {
-        if ( nStmMode == STREAM_WRITE )
+        if ( nStmMode == StreamMode::WRITE )
         {
             const sal_uLong nEndPos = pRWStm->Tell();
 

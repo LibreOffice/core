@@ -97,7 +97,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     NSData *pBitmap = [pImage TIFFRepresentation];
     long nSize = [pBitmap length];
     const void* pBitmapData = [pBitmap bytes];
-    SvMemoryStream  aMemStm( (char *)pBitmapData, nSize, STREAM_READ | STREAM_WRITE );
+    SvMemoryStream  aMemStm( (char *)pBitmapData, nSize, StreamMode::READ | StreamMode::WRITE );
     Graphic aGraphic;
     if ( GraphicConverter::Import( aMemStm, aGraphic, CVT_TIF ) == ERRCODE_NONE )
     {

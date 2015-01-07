@@ -678,7 +678,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                boost::scoped_ptr<SvStream> pSrcStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ ));
+                boost::scoped_ptr<SvStream> pSrcStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
                 if( pSrcStm )
                 {
                     xStream->SetBufferSize( 0xff00 );
@@ -1643,7 +1643,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             {
                 pStream = new SvMemoryStream( (void*)sData.getStr(),
                             sData.getLength() * sizeof( sal_Unicode ),
-                            STREAM_READ );
+                            StreamMode::READ );
 #ifdef OSL_BIGENDIAN
                 pStream->SetEndian( SvStreamEndian::BIG );
 #else

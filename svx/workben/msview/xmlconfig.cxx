@@ -304,7 +304,7 @@ void load_config( const OUString& rPath )
     try
     {
         // create stream
-        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
+        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ );
         Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, sal_True ) );
 
         // prepare ParserInputSrouce

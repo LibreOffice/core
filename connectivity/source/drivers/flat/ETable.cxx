@@ -432,10 +432,10 @@ void OFlatTable::construct()
 
     OUString aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    m_pFileStream = createStream_simpleError( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+    m_pFileStream = createStream_simpleError( aFileName, STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
 
     if(!m_pFileStream)
-        m_pFileStream = createStream_simpleError( aFileName,STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE);
+        m_pFileStream = createStream_simpleError( aFileName, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYNONE);
 
     if(m_pFileStream)
     {

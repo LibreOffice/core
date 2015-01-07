@@ -183,7 +183,7 @@ Bitmap PngCompression::Decompress (
     const PngReplacement* pData (dynamic_cast<const PngReplacement*>(&rBitmapData));
     if (pData != NULL)
     {
-        SvMemoryStream aStream (pData->mpData, pData->mnDataSize, STREAM_READ);
+        SvMemoryStream aStream (pData->mpData, pData->mnDataSize, StreamMode::READ);
         ::vcl::PNGReader aReader (aStream);
         aResult = aReader.Read().GetBitmap();
     }

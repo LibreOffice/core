@@ -33,7 +33,7 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     OUString aDstStgName( GetMSBasicStorageName() );
     SotStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
-                                STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL ) );
+                                STREAM_READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ) );
     if( xVBAStg.Is() && !xVBAStg->GetError() )
     {
         xVBAStg = 0;
@@ -45,7 +45,7 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
                 nRet = ERRCODE_SVX_MODIFIED_VBASIC_STORAGE;
 #endif
             SotStorageRef xSrc = SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName, STREAM_STD_READ );
-            SotStorageRef xDst = xRoot->OpenSotStorage( rStorageName, STREAM_READWRITE | STREAM_TRUNC );
+            SotStorageRef xDst = xRoot->OpenSotStorage( rStorageName, STREAM_READWRITE | StreamMode::TRUNC );
             xSrc->CopyTo( xDst );
             xDst->Commit();
             ErrCode nError = xDst->GetError();
@@ -65,7 +65,7 @@ sal_uLong SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS
 {
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     SvStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
-                    STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL ));
+                    StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ));
     return ( xVBAStg.Is() && !xVBAStg->GetError() )
                     ? ERRCODE_SVX_VBASIC_STORAGE_EXIST
                     : ERRCODE_NONE;

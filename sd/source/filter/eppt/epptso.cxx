@@ -2514,7 +2514,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     {
                         SvStorageStreamRef xCompObj = xTemp->OpenSotStream(
                             OUString( "\1CompObj" ),
-                                STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
+                                StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
                         sal_uInt32 const nStreamLen = xCompObj->remainingSize();
                         sal_Int16   nVersion, nByteOrder;
                         sal_Int32   nWinVersion, nVal, nStringLen;

@@ -363,7 +363,7 @@ sal_uLong StgIo::ValidateFATs()
 
         StgIo aIo;
         if( aIo.Open( pFileStrm->GetFileName(),
-                      STREAM_READ  | STREAM_SHARE_DENYNONE) &&
+                      StreamMode::READ | StreamMode::SHARE_DENYNONE) &&
             aIo.Load() )
         {
             pV = new Validator( aIo );

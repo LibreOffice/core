@@ -52,7 +52,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
     }
 
     sdbcx::ObjectType xRet;
-    SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
+    SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile, StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYWRITE);
     if(pFileStream)
     {
         pFileStream->SetEndian(SvStreamEndian::LITTLE);

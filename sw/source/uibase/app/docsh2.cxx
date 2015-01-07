@@ -1359,7 +1359,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
 
     SubInitNew();
 
-    SfxMedium aMed( rStreamName, STREAM_READ );
+    SfxMedium aMed( rStreamName, StreamMode::READ );
     // #i48748# - use class <SwReloadFromHtmlReader>, because
     // the base URL has to be set to the filename of the document <rMedname>
     // and not to the base URL of the temporary file <aMed> in order to get
@@ -1554,7 +1554,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
 
     // 2. Open the file ourselves
     SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
-                             INetURLObject::NO_DECODE ), STREAM_READ );
+                             INetURLObject::NO_DECODE ), StreamMode::READ );
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
         pMed->Download(); // Touch the medium (download it)
 

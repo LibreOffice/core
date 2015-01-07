@@ -185,7 +185,7 @@ void RecentDocsView::Reload()
                     Sequence<sal_Int8> aDecoded;
                     sax::Converter::decodeBase64(aDecoded, aBase64);
 
-                    SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), STREAM_READ);
+                    SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
                     vcl::PNGReader aReader(aStream);
                     aThumbnail = aReader.Read();
                 }

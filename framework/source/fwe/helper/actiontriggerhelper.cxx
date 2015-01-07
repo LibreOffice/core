@@ -179,7 +179,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                                     Sequence< sal_Int8 > aDIBSeq;
                                     {
                                         aDIBSeq = xBitmap->getDIB();
-                                        SvMemoryStream aMem( (void *)aDIBSeq.getConstArray(), aDIBSeq.getLength(), STREAM_READ );
+                                        SvMemoryStream aMem( (void *)aDIBSeq.getConstArray(), aDIBSeq.getLength(), StreamMode::READ );
                                         ReadDIB(aBitmap, aMem, true);
                                     }
 
@@ -187,7 +187,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, Reference< XIndexC
                                     if ( aDIBSeq.getLength() > 0 )
                                     {
                                         Bitmap aMaskBitmap;
-                                        SvMemoryStream aMem( (void *)aDIBSeq.getConstArray(), aDIBSeq.getLength(), STREAM_READ );
+                                        SvMemoryStream aMem( (void *)aDIBSeq.getConstArray(), aDIBSeq.getLength(), StreamMode::READ );
                                         ReadDIB(aMaskBitmap, aMem, true);
                                         aImage = Image( aBitmap, aMaskBitmap );
                                     }

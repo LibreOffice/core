@@ -922,7 +922,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
         if (xController.is())
             xDoc = uno::Reference< XComponent >(xController->getModel(), UNO_QUERY);
 
-        SvFileStream aStream(rFileURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
+        SvFileStream aStream(rFileURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE | STREAM_TRUNC);
         uno::Reference< XOutputStream > xOStm(new utl::OOutputStreamWrapper(aStream));
 
         uno::Reference< XExporter > xExport(xFilter, UNO_QUERY);

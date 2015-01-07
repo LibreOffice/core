@@ -562,7 +562,7 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
             {
                 osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
                 this->AddDepFile(aFullName);
-                SvFileStream aStm( aFullName, STREAM_STD_READ | STREAM_NOCREATE );
+                SvFileStream aStm( aFullName, STREAM_STD_READ | StreamMode::NOCREATE );
                 SvTokenStream aTokStm( aStm, aFullName );
                 bOk = ReadSvIdl( aTokStm, true, rPath );
             }

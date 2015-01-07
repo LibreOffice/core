@@ -65,7 +65,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
             // the stream after the wallpaper data in its dtor. We must use
             // this trick here as no VCL must be used here ( No Wallpaper
             // object allowed ).
-            VersionCompat aCompat( rStream, STREAM_READ );
+            VersionCompat aCompat( rStream, StreamMode::READ );
         }
 
         // Read SfxWallpaperItem's string member _aURL.

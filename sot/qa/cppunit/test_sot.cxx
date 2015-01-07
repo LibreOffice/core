@@ -106,7 +106,7 @@ namespace
         const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int)
     {
-        SvFileStream aStream(rURL, STREAM_READ);
+        SvFileStream aStream(rURL, StreamMode::READ);
         SotStorageRef xObjStor = new SotStorage(aStream);
         if (!xObjStor.Is() || xObjStor->GetError())
             return false;
@@ -125,7 +125,7 @@ namespace
     void SotTest::testSize()
     {
         OUString aURL(getURLFromSrc("/sot/qa/cppunit/data/pass/fdo84229-1.compound"));
-        SvFileStream aStream(aURL, STREAM_READ);
+        SvFileStream aStream(aURL, StreamMode::READ);
         SotStorageRef xObjStor = new SotStorage(aStream);
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
                                xObjStor.Is() && !xObjStor->GetError());

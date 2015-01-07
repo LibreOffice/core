@@ -76,7 +76,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
             {
                 UCBStorage* pUCBStorage = new UCBStorage( aContent,
                                                           aFolderUrl,
-                                                          STREAM_READ,
+                                                          StreamMode::READ,
                                                           false,
                                                           true );
                 SotStorageRef aStorage = new SotStorage( pUCBStorage );

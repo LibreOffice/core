@@ -257,7 +257,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( OUString("d:\\ashape.dbg"), aURLStr ) )
     {
-        boost::scoped_ptr<SvStream> pOut(::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE ));
+        boost::scoped_ptr<SvStream> pOut(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::WRITE ));
 
         if( pOut )
         {
@@ -6360,7 +6360,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
 
             SAL_INFO("filter.ms", "dumping " << aURLStr);
 
-            boost::scoped_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, STREAM_TRUNC | STREAM_WRITE));
+            boost::scoped_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, StreamMode::TRUNC | STREAM_WRITE));
 
             if( pDbgOut )
             {
@@ -6653,7 +6653,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
 {
     bool bMtfRead = false;
     SotStorageStreamRef xOle10Stm = rDest->OpenSotStream( OUString("\1Ole10Native"),
-                                                    STREAM_WRITE| STREAM_SHARE_DENYALL );
+                                                    StreamMode::WRITE| StreamMode::SHARE_DENYALL );
     if( xOle10Stm->GetError() )
         return false;
 
@@ -7033,7 +7033,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
         {
             SvStorageRef xObjStg = rSrcStorage->OpenSotStorage( rStorageName,
-                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+                                STREAM_READWRITE| StreamMode::SHARE_DENYALL );
             if( xObjStg.Is()  )
             {
                 {
@@ -7060,7 +7060,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         SvStorageStreamRef xObjInfoSrc = xObjStg->OpenSotStream(
-                            OUString( "\3ObjInfo" ), STREAM_STD_READ | STREAM_NOCREATE );
+                            OUString( "\3ObjInfo" ), STREAM_STD_READ | StreamMode::NOCREATE );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;
@@ -7095,7 +7095,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
             if ( xObjStor.Is() )
             {
-                SotStorageRef xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, STREAM_READ );
+                SotStorageRef xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, StreamMode::READ );
                 xSrcStor->CopyTo( xObjStor );
 
                 if( !xObjStor->GetError() )

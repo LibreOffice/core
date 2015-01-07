@@ -631,7 +631,7 @@ bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sa
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+                SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ );
                 if( pSrcStm )
                 {
                     rxOStm->SetBufferSize( 0xff00 );

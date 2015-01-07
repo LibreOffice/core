@@ -389,7 +389,7 @@ bool QueueInfo::operator==( const QueueInfo& rInfo ) const
 
 SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
 {
-    VersionCompat aCompat( rOStream, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
 
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maPrinterName, RTL_TEXTENCODING_UTF8);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStream, rInfo.maDriver, RTL_TEXTENCODING_UTF8);
@@ -403,7 +403,7 @@ SvStream& WriteQueueInfo( SvStream& rOStream, const QueueInfo& rInfo )
 
 SvStream& ReadQueueInfo( SvStream& rIStream, QueueInfo& rInfo )
 {
-    VersionCompat aCompat( rIStream, STREAM_READ );
+    VersionCompat aCompat( rIStream, StreamMode::READ );
 
     rInfo.maPrinterName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
     rInfo.maDriver = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);

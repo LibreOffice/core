@@ -958,7 +958,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     if( GRAPHIC_FORMAT_50 == nId )
     {
         // read new style header
-        VersionCompat* pCompat = new VersionCompat( rIStm, STREAM_READ );
+        VersionCompat* pCompat = new VersionCompat( rIStm, StreamMode::READ );
 
         rIStm.ReadInt32( nType );
         rIStm.ReadInt32( nLen );
@@ -1094,7 +1094,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
 
             // write new style header
-            VersionCompat* pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
+            VersionCompat* pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
 
             rOStm.WriteInt32( meType );
 
@@ -1164,7 +1164,7 @@ bool ImpGraphic::ImplSwapOut()
             boost::scoped_ptr<SvStream> pOStm;
             try
             {
-                pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
+                pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
@@ -1262,7 +1262,7 @@ bool ImpGraphic::ImplSwapIn()
             boost::scoped_ptr<SvStream> pIStm;
             try
             {
-                pIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
+                pIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
@@ -1449,7 +1449,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 VersionCompat*  pCompat;
 
                 // read compat info
-                pCompat = new VersionCompat( rIStm, STREAM_READ );
+                pCompat = new VersionCompat( rIStm, StreamMode::READ );
                 delete pCompat;
 
                 ReadGfxLink( rIStm, aLink );
@@ -1589,7 +1589,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                 rOStm.WriteUInt32( NATIVE_FORMAT_50 );
 
                 // write compat info
-                pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
+                pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
                 delete pCompat;
 
                 rImpGraphic.mpGfxLink->SetPrefMapMode( rImpGraphic.ImplGetPrefMapMode() );

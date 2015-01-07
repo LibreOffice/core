@@ -524,7 +524,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
     if( rValue.hasValue() && ( rValue >>= aSeq ) )
     {
         SvMemoryStream aMemStm( (void*)aSeq.getConstArray(), aSeq.getLength(),
-                                STREAM_READ );
+                                StreamMode::READ );
         aMemStm.Seek( 0 );
 
         switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )

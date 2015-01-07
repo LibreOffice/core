@@ -653,7 +653,7 @@ void BmapType::Draw(OutputDevice& rOut)
         (sal_Int32)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
     INetURLObject   aFNam( aStr );
 
-    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
     if ( pInp )
     {
         nSgfTyp=CheckSgfTyp( *pInp,nVersion);

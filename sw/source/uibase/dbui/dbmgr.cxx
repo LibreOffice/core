@@ -1209,7 +1209,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     {
                                         {
                                             //read in the temporary file and use it as mail body
-                                            SfxMedium aMedium( sFileURL, STREAM_READ);
+                                            SfxMedium aMedium( sFileURL, StreamMode::READ);
                                             SvStream* pInStream = aMedium.GetInStream();
                                             OSL_ENSURE(pInStream, "no output file created?");
                                             if(pInStream)

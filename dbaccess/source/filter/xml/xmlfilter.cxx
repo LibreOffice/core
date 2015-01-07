@@ -444,7 +444,7 @@ bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
         SfxMediumRef pMedium = new SfxMedium(
-                sFileName, ( STREAM_READ | STREAM_NOCREATE ) );
+                sFileName, ( StreamMode::READ | StreamMode::NOCREATE ) );
         uno::Reference< embed::XStorage > xStorage;
         try
         {

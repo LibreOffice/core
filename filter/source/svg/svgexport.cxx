@@ -544,7 +544,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             OUString aFileName;
 
             pValue[ i ].Value >>= aFileName;
-            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC ));
+            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC ));
 
             if( pOStm )
                 xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
@@ -2070,7 +2070,7 @@ bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& r
 
     xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
     xExporter->filter( aDescriptor );
-    aMtf.Read( *aFile.GetStream( STREAM_READ ) );
+    aMtf.Read( *aFile.GetStream( StreamMode::READ ) );
 
     (*mpObjects)[ rxDrawPage ] = ObjectRepresentation( rxDrawPage, aMtf );
 

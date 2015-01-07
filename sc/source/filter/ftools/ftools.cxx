@@ -195,7 +195,7 @@ SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const
     OSL_ENSURE( !xStrg || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
     SotStorageStreamRef xStrm;
     if( xStrg.Is() )
-        xStrm = xStrg->OpenSotStream( rStrmName, STREAM_STD_WRITE | STREAM_TRUNC );
+        xStrm = xStrg->OpenSotStream( rStrmName, STREAM_STD_WRITE | StreamMode::TRUNC );
     return xStrm;
 }
 

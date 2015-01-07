@@ -523,7 +523,7 @@ public:
                                 {
                                   long nError = m_nError;
                                   ReadContent();
-                                  if ( m_nMode & STREAM_WRITE )
+                                  if ( m_nMode & StreamMode::WRITE )
                                   {
                                     m_nError = nError;
                                     if ( m_pAntiImpl )
@@ -643,7 +643,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     , m_nRepresentMode( nonset )
     , m_nError( 0 )
     , m_nMode( nMode )
-    , m_bSourceRead( !( nMode & STREAM_TRUNC ) )
+    , m_bSourceRead( !( nMode & StreamMode::TRUNC ) )
     , m_bModified( false )
     , m_bCommited( false )
     , m_bDirect( bDirect )
@@ -925,7 +925,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
 
 sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
 {
-    if ( !(m_nMode & STREAM_WRITE) )
+    if ( !(m_nMode & StreamMode::WRITE) )
     {
         SetError( ERRCODE_IO_ACCESSDENIED );
         return 0; // ?mav?
@@ -986,7 +986,7 @@ sal_uInt64 UCBStorageStream_Impl::SeekPos(sal_uInt64 const nPos)
                     DBG_ASSERT( aResult == m_pStream->Tell(), "Error in stream arithmetic!\n" );
                 }
 
-                if( (m_nMode & STREAM_WRITE) && !m_bSourceRead && aResult < nPos )
+                if( (m_nMode & StreamMode::WRITE) && !m_bSourceRead && aResult < nPos )
                 {
                     // it means that all the Source stream was copied already
                     // but the required position still was not reached
@@ -1004,7 +1004,7 @@ sal_uInt64 UCBStorageStream_Impl::SeekPos(sal_uInt64 const nPos)
 
 void  UCBStorageStream_Impl::SetSize(sal_uInt64 const nSize)
 {
-    if ( !(m_nMode & STREAM_WRITE) )
+    if ( !(m_nMode & StreamMode::WRITE) )
     {
         SetError( ERRCODE_IO_ACCESSDENIED );
         return;
@@ -1105,8 +1105,8 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 Free();
 
                 // the temporary file does not exist only for truncated streams
-                DBG_ASSERT( !m_aTempURL.isEmpty() || ( m_nMode & STREAM_TRUNC ), "No temporary file to read from!");
-                if ( m_aTempURL.isEmpty() && !( m_nMode & STREAM_TRUNC ) )
+                DBG_ASSERT( !m_aTempURL.isEmpty() || ( m_nMode & StreamMode::TRUNC ), "No temporary file to read from!");
+                if ( m_aTempURL.isEmpty() && !( m_nMode & StreamMode::TRUNC ) )
                     throw RuntimeException();
 
                 // create wrapper to stream that is only used while reading inside package component
@@ -1177,12 +1177,12 @@ bool UCBStorageStream_Impl::Revert()
         m_rSource = m_pContent->openStream();
         if( m_rSource.is() )
         {
-            if ( m_pAntiImpl && ( m_nMode & STREAM_TRUNC ) )
+            if ( m_pAntiImpl && ( m_nMode & StreamMode::TRUNC ) )
                 // stream is in use and should be truncated
                 m_bSourceRead = false;
             else
             {
-                m_nMode &= ~STREAM_TRUNC;
+                m_nMode &= ~StreamMode::TRUNC;
                 m_bSourceRead = true;
             }
         }
@@ -1238,17 +1238,17 @@ void UCBStorageStream_Impl::Free()
 
 void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
 {
-    bool isWritable = (( m_nMode & STREAM_WRITE ) != 0 );
+    bool isWritable = bool( m_nMode & StreamMode::WRITE );
     if ( isWritable )
     {
         // once stream was writable, never reset to readonly
-        nMode |= STREAM_WRITE;
+        nMode |= StreamMode::WRITE;
     }
 
     m_nMode = nMode;
     Free();
 
-    if ( nMode & STREAM_TRUNC )
+    if ( nMode & StreamMode::TRUNC )
     {
         m_bSourceRead = false; // usually it should be 0 already but just in case...
 
@@ -1280,7 +1280,7 @@ UCBStorageStream::UCBStorageStream( UCBStorageStream_Impl *pImpl )
 
 UCBStorageStream::~UCBStorageStream()
 {
-    if ( pImp->m_nMode & STREAM_WRITE )
+    if ( pImp->m_nMode & StreamMode::WRITE )
         pImp->Flush();
     pImp->m_pAntiImpl = NULL;
     pImp->Free();
@@ -1325,22 +1325,19 @@ bool UCBStorageStream::SetSize( sal_uLong nNewSize )
 
 bool UCBStorageStream::Validate( bool bWrite ) const
 {
-    return ( !bWrite || ( pImp->m_nMode & STREAM_WRITE ) );
+    return ( !bWrite || ( pImp->m_nMode & StreamMode::WRITE ) );
 }
 
 bool UCBStorageStream::ValidateMode( StreamMode m ) const
 {
     // ???
-    if( m == ( STREAM_READ | STREAM_TRUNC ) )  // from stg.cxx
+    if( m == ( StreamMode::READ | StreamMode::TRUNC ) )  // from stg.cxx
         return true;
-    sal_uInt16 nCurMode = 0xFFFF;
-    if( ( m & 3 ) == STREAM_READ )
+    if( ( m & STREAM_READWRITE) == StreamMode::READ )
     {
         // only SHARE_DENYWRITE or SHARE_DENYALL allowed
-        if( ( ( m & STREAM_SHARE_DENYWRITE )
-           && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
-         || ( ( m & STREAM_SHARE_DENYALL )
-           && ( nCurMode & STREAM_SHARE_DENYALL ) ) )
+        if( ( m & StreamMode::SHARE_DENYWRITE )
+         || ( m & StreamMode::SHARE_DENYALL ) )
             return true;
     }
     else
@@ -1348,8 +1345,7 @@ bool UCBStorageStream::ValidateMode( StreamMode m ) const
         // only SHARE_DENYALL allowed
         // storages open in r/o mode are OK, since only
         // the commit may fail
-        if( ( m & STREAM_SHARE_DENYALL )
-         && ( nCurMode & STREAM_SHARE_DENYALL ) )
+        if( m & StreamMode::SHARE_DENYALL )
             return true;
     }
 
@@ -1461,9 +1457,9 @@ UCBStorage::UCBStorage( SvStream& rStrm, bool bDirect )
     OUString aURL = GetLinkedFile( rStrm );
     if ( !aURL.isEmpty() )
     {
-        StreamMode nMode = STREAM_READ;
+        StreamMode nMode = StreamMode::READ;
         if( rStrm.IsWritable() )
-            nMode = STREAM_READ | STREAM_WRITE;
+            nMode = StreamMode::READ | StreamMode::WRITE;
 
         ::ucbhelper::Content aContent( aURL, Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         pImp = new UCBStorage_Impl( aContent, aURL, nMode, this, bDirect, true );
@@ -1599,7 +1595,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
         aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
         m_aURL = aTemp;
 
-        if ( m_nMode & STREAM_WRITE )
+        if ( m_nMode & StreamMode::WRITE )
         {
             // the root storage opens the package, so make sure that there is any
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READWRITE, m_pTempFile != 0 /* bFileExists */ );
@@ -1658,9 +1654,9 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     m_pSource->Seek(0);
 
     // check opening mode
-    m_nMode = STREAM_READ;
+    m_nMode = StreamMode::READ;
     if( rStream.IsWritable() )
-        m_nMode = STREAM_READ | STREAM_WRITE;
+        m_nMode = StreamMode::READ | StreamMode::WRITE;
 }
 
 void UCBStorage_Impl::Init()
@@ -1671,17 +1667,10 @@ void UCBStorage_Impl::Init()
         // if the name was not already set to a temp name
         m_aName = m_aOriginalName = aObj.GetLastName();
 
-    // don't create the content for disk spanned files, avoid too early access to directory and/or manifest
-    if ( !m_pContent && !( m_nMode & STORAGE_DISKSPANNED_MODE ) )
+    if ( !m_pContent )
         CreateContent();
 
-    if ( m_nMode & STORAGE_DISKSPANNED_MODE )
-    {
-        // Hack! Avoid access to the manifest file until mediatype is not available in the first segment of a
-        // disk spanned file
-        m_aContentType = m_aOriginalContentType = "application/vnd.sun.xml.impress";
-    }
-    else if ( m_pContent )
+    if ( m_pContent )
     {
         if ( m_bIsLinked )
         {
@@ -1882,7 +1871,7 @@ void UCBStorage_Impl::ReadContent()
     catch (const CommandAbortedException&)
     {
         // any command wasn't executed successfully - not specified
-        if ( !( m_nMode & STREAM_WRITE ) )
+        if ( !( m_nMode & StreamMode::WRITE ) )
             // if the folder was just inserted and not already committed, this is not an error!
             SetError( ERRCODE_IO_GENERAL );
     }
@@ -2130,7 +2119,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 
     // there is nothing to do if the storage has been opened readonly or if it was opened in transacted mode and no
     // commit command has been sent
-    if ( ( m_nMode & STREAM_WRITE ) && ( m_bCommited || m_bDirect ) )
+    if ( ( m_nMode & StreamMode::WRITE ) && ( m_bCommited || m_bDirect ) )
     {
         try
         {
@@ -2533,7 +2522,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
     {
         // copy the streams data
         // the destination stream must not be open
-        boost::scoped_ptr<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ));
+        boost::scoped_ptr<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
         BaseStorageStream* pStream = NULL;
         bool bDeleteStream = false;
 
@@ -2577,8 +2566,8 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
 
         bool bOpenUCBStorage = pUCBDest && pUCBCopy;
         boost::scoped_ptr<BaseStorage> pOtherStorage(bOpenUCBStorage ?
-                pDest->OpenUCBStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ) :
-                pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pImp->m_bDirect ));
+                pDest->OpenUCBStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ) :
+                pDest->OpenOLEStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
 
         // For UCB storages, the class id and the format id may differ,
         // do passing the class id is not sufficient.
@@ -2695,9 +2684,9 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
     if ( !pElement )
     {
         // element does not exist, check if creation is allowed
-        if( ( nMode & STREAM_NOCREATE ) )
+        if( ( nMode & StreamMode::NOCREATE ) )
         {
-            SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+            SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
             OUString aName( pImp->m_aURL );
             aName += "/";
             aName += rEleName;
@@ -2794,9 +2783,9 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
     if ( !pElement )
     {
         // element does not exist, check if creation is allowed
-        if( ( nMode & STREAM_NOCREATE ) )
+        if( ( nMode & StreamMode::NOCREATE ) )
         {
-            SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+            SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
             OUString aName( pImp->m_aURL );
             aName += "/";
             aName += rEleName;  //  ???
@@ -2827,7 +2816,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             UCBStorageStream* pStream = PTR_CAST( UCBStorageStream, pStr );
             if ( !pStream )
             {
-                SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+                SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
                 return NULL;
             }
 
@@ -2839,7 +2828,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         bool bInited = pElement->m_xStream->Init();
         if (!bInited)
         {
-            SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+            SetError( ( nMode & StreamMode::WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
             return NULL;
         }
 
@@ -2856,8 +2845,8 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         }
         else
         {
-            bool bIsWritable = (( pElement->m_xStorage->m_nMode & STREAM_WRITE ) != 0);
-            if ( !bIsWritable && (( nMode & STREAM_WRITE ) != 0 ))
+            bool bIsWritable = bool( pElement->m_xStorage->m_nMode & StreamMode::WRITE );
+            if ( !bIsWritable && ( nMode & StreamMode::WRITE ) )
             {
                 OUString aName( pImp->m_aURL );
                 aName += "/";
@@ -2875,7 +2864,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
     else if ( !pElement->m_xStream.Is() )
     {
         // storage is opened the first time
-        bool bIsWritable = (( pImp->m_nMode & STREAM_WRITE ) != 0 );
+        bool bIsWritable = bool(pImp->m_nMode & StreamMode::WRITE);
         if ( pImp->m_bIsLinked && pImp->m_bIsRoot && bIsWritable )
         {
             // make sure that the root storage object has been created before substorages will be created
@@ -3050,33 +3039,19 @@ bool UCBStorage::ValidateFAT()
 bool UCBStorage::Validate( bool  bWrite ) const
 {
     // ???
-    return ( !bWrite || ( pImp->m_nMode & STREAM_WRITE ) );
+    return ( !bWrite || ( pImp->m_nMode & StreamMode::WRITE ) );
 }
 
 bool UCBStorage::ValidateMode( StreamMode m ) const
 {
     // ???
-    if( m == ( STREAM_READ | STREAM_TRUNC ) )  // from stg.cxx
+    if( m == ( StreamMode::READ | StreamMode::TRUNC ) )  // from stg.cxx
         return true;
-    sal_uInt16 nCurMode = 0xFFFF;
-    if( ( m & 3 ) == STREAM_READ )
-    {
-        // only SHARE_DENYWRITE or SHARE_DENYALL allowed
-        if( ( ( m & STREAM_SHARE_DENYWRITE )
-           && ( nCurMode & STREAM_SHARE_DENYWRITE ) )
-         || ( ( m & STREAM_SHARE_DENYALL )
-           && ( nCurMode & STREAM_SHARE_DENYALL ) ) )
-            return true;
-    }
-    else
-    {
-        // only SHARE_DENYALL allowed
-        // storages open in r/o mode are OK, since only
-        // the commit may fail
-        if( ( m & STREAM_SHARE_DENYALL )
-         && ( nCurMode & STREAM_SHARE_DENYALL ) )
-            return true;
-    }
+    // only SHARE_DENYALL allowed
+    // storages open in r/o mode are OK, since only
+    // the commit may fail
+    if( m & StreamMode::SHARE_DENYALL )
+        return true;
 
     return true;
 }
@@ -3186,7 +3161,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
     boost::scoped_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aFolderURL ));
 
     // get the stream from the temp file
-    SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | STREAM_TRUNC );
+    SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | StreamMode::TRUNC );
 
     // write header
     pStream->WriteUInt32(  0x04034b50 );

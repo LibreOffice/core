@@ -837,8 +837,8 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                      const OUString& rSrsInPath,
                                      const OUString& rSrsOutPath )
 {
-    SvFileStream                aIStm( rSrsInPath, STREAM_READ );
-    SvFileStream                aOStm( rSrsOutPath, STREAM_WRITE | STREAM_TRUNC );
+    SvFileStream                aIStm( rSrsInPath, StreamMode::READ );
+    SvFileStream                aOStm( rSrsOutPath, StreamMode::WRITE | StreamMode::TRUNC );
     ::std::vector< OString > aMissingImages;
     FILE*                       pSysListFile = rContext.aOutputSysList.isEmpty() ? NULL : fopen( rContext.aOutputSysList.getStr(), "ab" );
 

@@ -205,7 +205,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     OUString input;
     osl::FileBase::getSystemPathFromFileURL(aTempInput.GetURL(), input);
 
-    SvStream* pInputStream = aTempInput.GetStream(STREAM_WRITE);
+    SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);
     sal_uInt64 nCount = pInputStream->Write(pBuf, nBytesRead);
     aTempInput.CloseStream();
 
@@ -258,7 +258,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     if (pErr) osl_closeFile(pErr);
     if (nCount == nBytesRead && bEMFSupported)
     {
-        SvFileStream aFile(output, STREAM_READ);
+        SvFileStream aFile(output, StreamMode::READ);
         if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
             bRet = true;
     }

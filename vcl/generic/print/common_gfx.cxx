@@ -1135,7 +1135,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     bool bSuccess = false;
 
     // first search the BoundingBox of the EPS data
-    SvMemoryStream aStream( pPtr, nSize, STREAM_READ );
+    SvMemoryStream aStream( pPtr, nSize, StreamMode::READ );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     OString aLine;
 

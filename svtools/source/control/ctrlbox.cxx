@@ -988,7 +988,7 @@ void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
         return;
 
     SvFileStream aStream;
-    aStream.Open( aFontMRUEntriesFile, STREAM_WRITE | STREAM_TRUNC );
+    aStream.Open( aFontMRUEntriesFile, StreamMode::WRITE | StreamMode::TRUNC );
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -1007,7 +1007,7 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
     if( aFontMRUEntriesFile.isEmpty() )
         return;
 
-    SvFileStream aStream( aFontMRUEntriesFile, STREAM_READ );
+    SvFileStream aStream( aFontMRUEntriesFile, StreamMode::READ );
     if( ! aStream.IsOpen() )
     {
 #if OSL_DEBUG_LEVEL > 1

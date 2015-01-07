@@ -77,7 +77,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         OUString aOutStr;
         if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aOutStr))
         {
-            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE));
+            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(aOutStr, StreamMode::WRITE));
             std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
             pOut->WriteStream(*pIn);
             return true;
@@ -89,7 +89,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         {
             OUString aInStr;
             utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aInStr);
-            SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, STREAM_READ);
+            SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
             uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
             xInputStream.set(xStream, uno::UNO_QUERY);
         }

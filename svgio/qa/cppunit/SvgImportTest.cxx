@@ -56,7 +56,7 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
     OUString aUrl  = getURLFromSrc(aSource);
     OUString aPath = getPathFromSrc(aSource);
 
-    SvFileStream aFileStream(aUrl, STREAM_READ);
+    SvFileStream aFileStream(aUrl, StreamMode::READ);
     sal_Size nSize = aFileStream.remainingSize();
     boost::scoped_array<sal_Int8> pBuffer(new sal_Int8[nSize + 1]);
     aFileStream.Read(pBuffer.get(), nSize);

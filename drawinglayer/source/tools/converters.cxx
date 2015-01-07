@@ -102,7 +102,7 @@ namespace drawinglayer
 #ifdef DBG_UTIL
                     if(bDoSaveForVisualControl)
                     {
-                        SvFileStream aNew(OUString("c:\\test_content.png"), STREAM_WRITE|STREAM_TRUNC);
+                        SvFileStream aNew(OUString("c:\\test_content.png"), StreamMode::WRITE|StreamMode::TRUNC);
                         ::vcl::PNGWriter aPNGWriter(aContent);
                         aPNGWriter.Write(aNew);
                     }
@@ -132,7 +132,7 @@ namespace drawinglayer
 #ifdef DBG_UTIL
                     if(bDoSaveForVisualControl)
                     {
-                        SvFileStream aNew(OUString("c:\\test_alpha.png"), STREAM_WRITE|STREAM_TRUNC);
+                        SvFileStream aNew(OUString("c:\\test_alpha.png"), StreamMode::WRITE|StreamMode::TRUNC);
                         ::vcl::PNGWriter aPNGWriter(aAlpha);
                         aPNGWriter.Write(aNew);
                     }
@@ -143,7 +143,7 @@ namespace drawinglayer
 #ifdef DBG_UTIL
                     if(bDoSaveForVisualControl)
                     {
-                        SvFileStream aNew(OUString("c:\\test_combined.png"), STREAM_WRITE|STREAM_TRUNC);
+                        SvFileStream aNew(OUString("c:\\test_combined.png"), StreamMode::WRITE|StreamMode::TRUNC);
                         ::vcl::PNGWriter aPNGWriter(aRetval);
                         aPNGWriter.Write(aNew);
                     }

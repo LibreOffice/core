@@ -113,7 +113,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         if( bRet )
         {
-            boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ ));
+            boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
 
             if( pIStm )
             {

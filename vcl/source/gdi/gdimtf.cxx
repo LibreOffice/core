@@ -1196,7 +1196,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                         {
                             if ( pCommentAct->GetDataSize() )
                             {
-                                SvMemoryStream aMemStm( (void*)pCommentAct->GetData(), pCommentAct->GetDataSize(), STREAM_READ );
+                                SvMemoryStream aMemStm( (void*)pCommentAct->GetData(), pCommentAct->GetDataSize(), StreamMode::READ );
                                 SvMemoryStream aDest;
                                 if ( bPathStroke )
                                 {
@@ -2763,7 +2763,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
             sal_uInt32     nStmCompressMode = 0;
             sal_uInt32     nCount = 0;
 
-            pCompat = new VersionCompat( rIStm, STREAM_READ );
+            pCompat = new VersionCompat( rIStm, StreamMode::READ );
 
             rIStm.ReadUInt32( nStmCompressMode );
             ReadMapMode( rIStm, rGDIMetaFile.aPrefMapMode );
@@ -2862,7 +2862,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     rOStm.SetEndian( SvStreamEndian::LITTLE );
     rOStm.Write( "VCLMTF", 6 );
 
-    pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
+    pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
 
     rOStm.WriteUInt32( nStmCompressMode );
     WriteMapMode( rOStm, aPrefMapMode );

@@ -388,7 +388,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
         if( !bUseStorage || !xStorage.is() )
         {
-            SfxMedium aMedium( rPath, rReferer, STREAM_READ | STREAM_NOCREATE );
+            SfxMedium aMedium( rPath, rReferer, StreamMode::READ | StreamMode::NOCREATE );
             aParserInput.sSystemId = aMedium.GetName();
 
             if( aMedium.IsStorage() )

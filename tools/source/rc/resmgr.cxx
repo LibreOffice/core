@@ -448,7 +448,7 @@ InternalResMgr::~InternalResMgr()
         const sal_Char* pLogFile = getenv( "STAR_RESOURCE_LOGGING" );
         if ( pLogFile )
         {
-            SvFileStream aStm( OUString::createFromAscii( pLogFile ), STREAM_WRITE );
+            SvFileStream aStm( OUString::createFromAscii( pLogFile ), StreamMode::WRITE );
             aStm.Seek( STREAM_SEEK_TO_END );
             OStringBuffer aLine("FileName: ");
             aLine.append(OUStringToOString(aFileName,
@@ -477,7 +477,7 @@ bool InternalResMgr::Create()
     ResMgrContainer::get();
     bool bDone = false;
 
-    pStm = new SvFileStream( aFileName, (STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE) );
+    pStm = new SvFileStream( aFileName, StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE );
     if( pStm->GetError() == 0 )
     {
         sal_Int32   lContLen = 0;

@@ -617,7 +617,7 @@ SvStream& WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyP
 
 void PolyPolygon::Read( SvStream& rIStream )
 {
-    VersionCompat aCompat( rIStream, STREAM_READ );
+    VersionCompat aCompat( rIStream, StreamMode::READ );
 
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
@@ -649,7 +649,7 @@ void PolyPolygon::Read( SvStream& rIStream )
 
 void PolyPolygon::Write( SvStream& rOStream ) const
 {
-    VersionCompat aCompat( rOStream, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStream, StreamMode::WRITE, 1 );
 
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 

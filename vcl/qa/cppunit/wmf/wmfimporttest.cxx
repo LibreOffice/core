@@ -56,7 +56,7 @@ public:
 
 void WmfTest::testNonPlaceableWmf()
 {
-    SvFileStream aFileStream(getFullUrl("visio_import_source.wmf"), STREAM_READ);
+    SvFileStream aFileStream(getFullUrl("visio_import_source.wmf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -85,7 +85,7 @@ void WmfTest::testNonPlaceableWmf()
 
 void WmfTest::testSine()
 {
-    SvFileStream aFileStream(getFullUrl("sine_wave.emf"), STREAM_READ);
+    SvFileStream aFileStream(getFullUrl("sine_wave.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -109,7 +109,7 @@ void WmfTest::testSine()
 
 void WmfTest::testEmfProblem()
 {
-    SvFileStream aFileStream(getFullUrl("computer_mail.emf"), STREAM_READ);
+    SvFileStream aFileStream(getFullUrl("computer_mail.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
@@ -128,7 +128,7 @@ void WmfTest::testEmfProblem()
 
 void WmfTest::testWorldTransformFontSize()
 {
-    SvFileStream aFileStream(getFullUrl("image1.emf"), STREAM_READ);
+    SvFileStream aFileStream(getFullUrl("image1.emf"), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 

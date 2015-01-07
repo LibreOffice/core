@@ -126,9 +126,9 @@ public:
 class IMapCompat
 {
     SvStream*       pRWStm;
-    sal_uLong           nCompatPos;
-    sal_uLong           nTotalSize;
-    sal_uInt16          nStmMode;
+    sal_uLong       nCompatPos;
+    sal_uLong       nTotalSize;
+    StreamMode      nStmMode;
 
                     IMapCompat() {}
                     IMapCompat( const IMapCompat& ) {}
@@ -137,7 +137,7 @@ class IMapCompat
 
 public:
 
-                    IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode );
+                    IMapCompat( SvStream& rStm, const StreamMode nStreamMode );
                     ~IMapCompat();
 };
 

@@ -1047,7 +1047,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
         if( INET_PROT_FILE == aURL.GetProtocol() )
         {
             aFileName = INetURLObject::decode(aURL.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
-            pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, STREAM_READ);
+            pStream = ::utl::UcbStreamHelper::CreateStream(aFileName, StreamMode::READ);
             if (!pStream || (pStream->GetError() != ERRCODE_NONE))
             {
                 delete pStream;

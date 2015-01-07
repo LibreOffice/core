@@ -573,7 +573,7 @@ static bool checkWriteability( const OUString& rUniPath )
     bool bRet = false;
     OUString aSysPath;
     FileBase::getSystemPathFromFileURL( rUniPath, aSysPath );
-    SvFileStream aStream( aSysPath, STREAM_READ | STREAM_WRITE );
+    SvFileStream aStream( aSysPath, StreamMode::READ | StreamMode::WRITE );
     if( aStream.IsOpen() && aStream.IsWritable() )
         bRet = true;
     return bRet;

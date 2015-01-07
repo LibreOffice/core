@@ -247,7 +247,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     mpDocSh->SetWaitCursor( true );
 
-    SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE );
+    SfxMedium*          pMedium = new SfxMedium( aFile, StreamMode::READ | StreamMode::NOCREATE );
     const SfxFilter*    pFilter = NULL;
 
     SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );

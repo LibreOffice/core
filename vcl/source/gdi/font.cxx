@@ -657,7 +657,7 @@ void Font::GetFontAttributes( ImplFontAttributes& rAttrs ) const
 
 SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
     bool            bTmp;
     sal_uInt8           nTmp8;
@@ -702,7 +702,7 @@ SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
 
 SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 3 );
     rOStm.WriteUniOrByteString( rImpl_Font.maFamilyName, rOStm.GetStreamCharSet() );
     rOStm.WriteUniOrByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     WritePair( rOStm, rImpl_Font.maSize );

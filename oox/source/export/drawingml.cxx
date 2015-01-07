@@ -2011,7 +2011,7 @@ std::map< OString, std::vector<OString> > lcl_getAdjNames()
 
     OUString aPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/filter/oox-drawingml-adj-names");
     rtl::Bootstrap::expandMacros(aPath);
-    SvFileStream aStream(aPath, STREAM_READ);
+    SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)
         SAL_WARN("oox", "failed to open oox-drawingml-adj-names");
     OString aLine;

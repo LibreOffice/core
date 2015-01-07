@@ -32,9 +32,9 @@
 StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, bool bWr )
 {
     bIsWritable = true;
-    sal_uInt16 nMode = bWr
-                 ? STREAM_WRITE | STREAM_SHARE_DENYALL
-                 : STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE;
+    StreamMode nMode = bWr
+                 ? StreamMode::WRITE | StreamMode::SHARE_DENYALL
+                 : StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE;
     pStrm = rStg.OpenStream( rName, nMode );
 
     // set the error code right here in the stream

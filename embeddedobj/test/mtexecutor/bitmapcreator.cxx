@@ -74,7 +74,7 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstanceWithA
         throw uno::Exception(); // TODO
 
     BitmapEx aBitmap;
-    SvMemoryStream aStream( aOrigBitmap.getArray(), aOrigBitmap.getLength(), STREAM_READ );
+    SvMemoryStream aStream( aOrigBitmap.getArray(), aOrigBitmap.getLength(), StreamMode::READ );
     aStream >> aBitmap;
     if ( aStream.GetError() )
         throw uno::Exception(); // TODO

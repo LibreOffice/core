@@ -22,15 +22,13 @@
 
 #include <tools/stream.hxx>
 
-class SvStream;
-
 class old_SdrDownCompat
 {
 protected:
     SvStream&                   rStream;
-    sal_uInt32                      nSubRecSiz;
-    sal_uInt32                      nSubRecPos;
-    sal_uInt16                      nMode;
+    sal_uInt32                  nSubRecSiz;
+    sal_uInt32                  nSubRecPos;
+    StreamMode                  nMode;
     bool                        bOpen;
 
 protected:
@@ -38,7 +36,7 @@ protected:
     void Write();
 
 public:
-    old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode);
+    old_SdrDownCompat(SvStream& rNewStream, StreamMode nNewMode);
     ~old_SdrDownCompat();
     void  OpenSubRecord();
     void  CloseSubRecord();
@@ -54,9 +52,9 @@ private:
     sal_uInt16 nVersion;
 
 public:
-                // nNewMode: STREAM_READ or STREAM_WRITE
+                // nNewMode: StreamMode::READ or StreamMode::WRITE
                 // nVer:     specify only when writing
-            SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode,
+            SdIOCompat(SvStream& rNewStream, StreamMode nNewMode,
                        sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
     sal_uInt16  GetVersion() const { return nVersion; }

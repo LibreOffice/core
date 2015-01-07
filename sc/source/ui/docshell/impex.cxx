@@ -293,7 +293,7 @@ bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
         {
             rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
             OString aTmp( rText.getStr(), rText.getLength(), eEnc );
-            SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
+            SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), StreamMode::READ );
             aStrm.SetStreamCharSet( eEnc );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
             return ImportStream( aStrm, OUString(), nFmt );

@@ -46,7 +46,7 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
     Graphic newGraphic;
 
     //import the temp file image stream into the newGraphic
-    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(pData->m_aFileName, STREAM_READ));
+    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(pData->m_aFileName, StreamMode::READ));
     if(pStream)
     {
         GraphicConverter::Import(*pStream, newGraphic);

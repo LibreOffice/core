@@ -43,7 +43,7 @@ public:
     DemoMtfWin(OUString& aFileName)
         : WorkWindow(NULL, WB_APP | WB_STDWORK)
     {
-        SvFileStream aFileStream(aFileName, STREAM_READ);
+        SvFileStream aFileStream(aFileName, StreamMode::READ);
 
         if (aFileStream.IsOpen())
         {

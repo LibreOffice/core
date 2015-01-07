@@ -29,7 +29,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 {
     boost::scoped_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
                                 GetStrURL().GetMainURL( INetURLObject::NO_DECODE ),
-                                STREAM_READ ));
+                                StreamMode::READ ));
 
     const LanguageTag &rLangTag = Application::GetSettings().GetUILanguageTag();
 

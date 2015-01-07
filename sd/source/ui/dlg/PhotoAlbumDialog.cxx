@@ -580,7 +580,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
         // remote?
         if ( INET_PROT_FILE != aURLObj.GetProtocol() )
         {
-            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, STREAM_READ );
+            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, StreamMode::READ );
 
             if( pStream )
                 mpGraphicFilter->ImportGraphic( aGraphic, sImgUrl, *pStream, nFilter, NULL, nFilterImportFlags );

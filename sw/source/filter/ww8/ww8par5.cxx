@@ -596,7 +596,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             sOleId += OUString::number( maFieldStack.back().mnObjLocFc );
 
                             SvStorageRef xSrc0 = pStg->OpenSotStorage(OUString(SL::aObjectPool));
-                            SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
+                            SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, StreamMode::READ );
 
                             // Store it now!
                             uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();

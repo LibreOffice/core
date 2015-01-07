@@ -414,7 +414,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 if( nSize > 0 )
                 {
                     SvMemoryStream aStream (aSequence.getArray(), nSize,
-                                            STREAM_READ );
+                                            StreamMode::READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                     static sal_uInt16 const nRange[] =
                     {

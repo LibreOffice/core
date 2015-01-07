@@ -55,8 +55,8 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     maMovieTempFile.EnableKillingFile();
     maFontsTempFile.EnableKillingFile();
 
-    mpMovieStream = maMovieTempFile.GetStream( STREAM_WRITE|STREAM_TRUNC );
-    mpFontsStream = maFontsTempFile.GetStream( STREAM_WRITE|STREAM_TRUNC );
+    mpMovieStream = maMovieTempFile.GetStream( StreamMode::WRITE|StreamMode::TRUNC );
+    mpFontsStream = maFontsTempFile.GetStream( StreamMode::WRITE|StreamMode::TRUNC );
 
     mnFrames = 0;
 

@@ -404,7 +404,7 @@ void SvStream::ImpInit()
     bIoWrite            = false;
     nBufFree            = 0;
 
-    eStreamMode         = 0;
+    eStreamMode         = StreamMode::NONE;
 
     nVersion           = 0;
 
@@ -1678,7 +1678,7 @@ SvStream& endlub( SvStream& rStrm )
 SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
                                 StreamMode eMode )
 {
-    if( eMode & STREAM_WRITE )
+    if( eMode & StreamMode::WRITE )
         bIsWritable = true;
     else
         bIsWritable = false;

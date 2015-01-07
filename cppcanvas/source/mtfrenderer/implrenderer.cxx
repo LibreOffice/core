@@ -1661,7 +1661,7 @@ namespace cppcanvas
                             const sal_uInt8* pData = pAct->GetData();
                             if ( pData )
                             {
-                                SvMemoryStream  aMemStm( (void*)pData, pAct->GetDataSize(), STREAM_READ );
+                                SvMemoryStream  aMemStm( (void*)pData, pAct->GetDataSize(), StreamMode::READ );
 
                                 SvtGraphicFill aFill;
                                 ReadSvtGraphicFill( aMemStm, aFill );
@@ -1788,7 +1788,7 @@ namespace cppcanvas
                         } else if( pAct->GetComment() == "EMF_PLUS_HEADER_INFO" ) {
                             SAL_INFO ("cppcanvas.emf", "EMF+ passed to canvas mtf renderer - header info, size: " << pAct->GetDataSize ());
 
-                            SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
+                            SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), StreamMode::READ);
 
                             rMF.ReadInt32( nFrameLeft ).ReadInt32( nFrameTop ).ReadInt32( nFrameRight ).ReadInt32( nFrameBottom );
                             SAL_INFO ("cppcanvas.emf", "EMF+ picture frame: " << nFrameLeft << "," << nFrameTop << " - " << nFrameRight << "," << nFrameBottom);

@@ -379,7 +379,7 @@ SvStream* TempFile::GetStream( StreamMode eMode )
         if ( !GetURL().isEmpty() )
             pStream = UcbStreamHelper::CreateStream( aURL, eMode, true /* bFileExists */ );
         else
-            pStream = new SvMemoryStream( eMode );
+            pStream = new SvMemoryStream( NULL, 0, eMode );
     }
 
     return pStream;

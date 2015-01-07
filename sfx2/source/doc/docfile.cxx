@@ -488,7 +488,7 @@ SvStream* SfxMedium::GetInStream()
 
         pImp->m_eError = pImp->m_pInStream->GetError();
 
-        if (!pImp->m_eError && (pImp->m_nStorOpenMode & STREAM_WRITE)
+        if (!pImp->m_eError && (pImp->m_nStorOpenMode & StreamMode::WRITE)
                     && ! pImp->m_pInStream->IsWritable() )
         {
             pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
@@ -667,7 +667,7 @@ bool SfxMedium::Commit()
         GetInitFileDate( true );
 
     // remove truncation mode from the flags
-    pImp->m_nStorOpenMode &= (~STREAM_TRUNC);
+    pImp->m_nStorOpenMode &= (~StreamMode::TRUNC);
     return bResult;
 }
 
@@ -2269,7 +2269,7 @@ void SfxMedium::GetMedium_Impl()
             if ( !bFromTempFile )
             {
                 GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
-                if( !(pImp->m_nStorOpenMode & STREAM_WRITE) )
+                if( !(pImp->m_nStorOpenMode & StreamMode::WRITE) )
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                 if (xInteractionHandler.is())
                     GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
@@ -2696,7 +2696,7 @@ void SfxMedium::SetIsRemote_Impl()
     // As files that are written to the remote transmission must also be able
     // to be read.
     if (pImp->m_bRemote)
-        pImp->m_nStorOpenMode |= STREAM_READ;
+        pImp->m_nStorOpenMode |= StreamMode::READ;
 }
 
 
@@ -3180,7 +3180,7 @@ bool SfxMedium::IsReadOnly() const
 
     // b) if filter allow read/write contents .. check open mode of the storage
     if (!bReadOnly)
-        bReadOnly = !( GetOpenMode() & STREAM_WRITE );
+        bReadOnly = !( GetOpenMode() & StreamMode::WRITE );
 
     // c) the API can force the readonly state!
     if (!bReadOnly)
@@ -3250,7 +3250,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
         return;
     }
 
-    if ( !(pImp->m_nStorOpenMode & STREAM_TRUNC) )
+    if ( !(pImp->m_nStorOpenMode & StreamMode::TRUNC) )
     {
         bool bTransferSuccess = false;
 

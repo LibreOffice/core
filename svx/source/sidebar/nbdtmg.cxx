@@ -159,7 +159,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     aFile.Append( filename);
-    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
+    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
     if( pIStm ) {
         sal_uInt32                  nVersion = 0;
         sal_Int32                   nNumIndex = 0;
@@ -198,7 +198,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     aFile.Append( filename);
-    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
+    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
     if( pOStm ) {
         sal_uInt32                      nVersion;
         sal_Int32                       nNumIndex;

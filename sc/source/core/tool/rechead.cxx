@@ -52,7 +52,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
         rStream.ReadUInt32( nSizeTableLen );
         pBuf = new sal_uInt8[nSizeTableLen];
         rStream.Read( pBuf, nSizeTableLen );
-        pMemStream = new SvMemoryStream( (char*)pBuf, nSizeTableLen, STREAM_READ );
+        pMemStream = new SvMemoryStream( (char*)pBuf, nSizeTableLen, StreamMode::READ );
     }
 
     nEndPos = rStream.Tell();

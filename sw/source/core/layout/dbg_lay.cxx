@@ -232,7 +232,7 @@ void SwProtocol::Init()
 {
     nRecord = 0;
     OUString aName("dbg_lay.go");
-    SvFileStream aStream( aName, STREAM_READ );
+    SvFileStream aStream( aName, StreamMode::READ );
     if( aStream.IsOpen() )
     {
         pImpl = new SwImplProtocol();
@@ -266,7 +266,7 @@ bool SwImplProtocol::NewStream()
 {
     OUString aName("dbg_lay.out");
     nLineCount = 0;
-    pStream = new SvFileStream( aName, STREAM_WRITE | STREAM_TRUNC );
+    pStream = new SvFileStream( aName, StreamMode::WRITE | StreamMode::TRUNC );
     if( pStream->GetError() )
     {
         delete pStream;
@@ -391,7 +391,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
 void SwImplProtocol::FileInit()
 {
     OUString aName("dbg_lay.ini");
-    SvFileStream aStream( aName, STREAM_READ );
+    SvFileStream aStream( aName, StreamMode::READ );
     if( aStream.IsOpen() )
     {
         OString aLine;

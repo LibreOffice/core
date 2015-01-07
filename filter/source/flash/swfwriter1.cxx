@@ -1649,7 +1649,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     // the meta actions between the "XPATHFILL_SEQ_BEGIN" and "XPATHFILL_SEQ_END" comment.
 
                     SvtGraphicFill  aFilling;
-                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), StreamMode::READ );
 
                     // read the fill info
                     ReadSvtGraphicFill( aMemStm, aFilling );
@@ -1679,7 +1679,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                     // the meta actions between the "XPATHFILL_SEQ_BEGIN" and "XPATHFILL_SEQ_END" comment.
 
                     SvtGraphicStroke aStroke;
-                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                    SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), StreamMode::READ );
 
                     // read the fill info
                     ReadSvtGraphicStroke( aMemStm, aStroke );

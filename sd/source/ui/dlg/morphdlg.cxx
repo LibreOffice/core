@@ -77,7 +77,7 @@ void MorphDlg::LoadSettings()
 
     if( xIStm.Is() )
     {
-        SdIOCompat aCompat( *xIStm, STREAM_READ );
+        SdIOCompat aCompat( *xIStm, StreamMode::READ );
 
         xIStm->ReadUInt16( nSteps ).ReadCharAsBool( bOrient ).ReadCharAsBool( bAttrib );
     }
@@ -99,7 +99,7 @@ void MorphDlg::SaveSettings() const
 
     if( xOStm.Is() )
     {
-        SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
+        SdIOCompat aCompat( *xOStm, StreamMode::WRITE, 1 );
 
         xOStm->WriteUInt16( m_pMtfSteps->GetValue() )
               .WriteUChar( m_pCbxOrientation->IsChecked() )

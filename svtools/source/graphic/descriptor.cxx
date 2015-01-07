@@ -75,7 +75,7 @@ void GraphicDescriptor::init( const ::Graphic& rGraphic )
 
 void GraphicDescriptor::init( const OUString& rURL )
 {
-    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ ));
+    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ ));
 
     if( pIStm )
         implCreate( *pIStm, &rURL );

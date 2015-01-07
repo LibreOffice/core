@@ -735,7 +735,7 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     SolarMutexGuard g;
     SvMemoryStream in(
         const_cast<sal_Int8 *>(data.getConstArray()), data.getLength(),
-        STREAM_READ);
+        StreamMode::READ);
     Bitmap bm;
     ReadDIB(bm, in, true);
     if (bm.GetBitCount() == 24 && depth <= 8) {

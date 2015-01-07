@@ -187,7 +187,7 @@ class ScImportStringStream : public SvMemoryStream
 public:
     ScImportStringStream( const OUString& rStr )
         : SvMemoryStream( (void*)rStr.getStr(),
-                rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
+                rStr.getLength() * sizeof(sal_Unicode), StreamMode::READ)
     {
         SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
 #ifdef OSL_BIGENDIAN

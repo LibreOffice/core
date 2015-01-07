@@ -136,7 +136,7 @@ enum SbiOpcode {
     // management
     _STMNT,             // begin of a statement (+Line+Col)
     // E/A
-    _OPEN,              // (+SvStreamFlags+Flags)
+    _OPEN,              // (+StreamMode+Flags)
     // objects
     _LOCAL,             // define locals variables (+StringID+Typ)
     _PUBLIC,            // module global variables (+StringID+Typ)

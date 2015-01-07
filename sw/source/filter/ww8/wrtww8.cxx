@@ -2808,7 +2808,7 @@ void WW8Export::WriteFkpPlcUsw()
             */
             // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
             xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
-                STREAM_READWRITE | STREAM_SHARE_DENYALL);
+                STREAM_READWRITE | StreamMode::SHARE_DENYALL);
         }
 
         // dggInfo - escher stream
@@ -3173,11 +3173,11 @@ void WW8Export::ExportDocument_Impl()
     if ( bEncrypt )
     {
         GetWriter().SetStream(
-            aTempMain.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE ) );
+            aTempMain.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ) );
 
-        pTableStrm = aTempTable.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+        pTableStrm = aTempTable.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE );
 
-        pDataStrm = aTempData.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+        pDataStrm = aTempData.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE );
 
         sal_uInt8 aRC4EncryptionHeader[ 52 ] = {0};
         pTableStrm->Write( aRC4EncryptionHeader, 52 );

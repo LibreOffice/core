@@ -1136,7 +1136,7 @@ namespace cppcanvas
 
                     GraphicFilter filter;
                     // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
-                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : dataSize - 16, STREAM_READ);
+                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : dataSize - 16, StreamMode::READ);
 
                     filter.ImportGraphic (graphic, OUString(), mfStream);
 
@@ -1147,7 +1147,7 @@ namespace cppcanvas
                         OUString emfp_debug_filename = "/tmp/emf-embedded-stream" +
                             OUString::number(emfp_debug_stream_number++) + ".emf";
 
-                        SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
+                        SvFileStream file( emfp_debug_filename, StreamMode::WRITE | StreamMode::TRUNC );
 
                         mfStream.WriteStream(file);
                         file.Flush();
@@ -1809,7 +1809,7 @@ namespace cppcanvas
                                            OutDevState& rState, const CanvasSharedPtr& rCanvas )
         {
             sal_uInt32 length = pAct->GetDataSize ();
-            SvMemoryStream rMF ((void*) pAct->GetData (), length, STREAM_READ);
+            SvMemoryStream rMF ((void*) pAct->GetData (), length, StreamMode::READ);
 
             length -= 4;
 

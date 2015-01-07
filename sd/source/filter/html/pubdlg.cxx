@@ -240,7 +240,7 @@ bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
 // Load the design from the stream
 SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 {
-    SdIOCompat aIO(rIn, STREAM_READ);
+    SdIOCompat aIO(rIn, StreamMode::READ);
 
     sal_uInt16 nTemp16;
 
@@ -295,7 +295,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign)
 {
     // The last parameter is the versionnumber of the code
-    SdIOCompat aIO(rOut, STREAM_WRITE, 0);
+    SdIOCompat aIO(rOut, StreamMode::WRITE, 0);
 
     // Name
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aDesignName,
@@ -1455,7 +1455,7 @@ bool SdPublishingDlg::Load()
     // check if file exists, SfxMedium shows an errorbox else
     {
         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ, xHandler );
 
         bool bOk = pIStm && ( pIStm->GetError() == 0);
 
@@ -1466,7 +1466,7 @@ bool SdPublishingDlg::Load()
             return false;
     }
 
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ | StreamMode::NOCREATE );
 
     SvStream* pStream = aMedium.GetInStream();
 
@@ -1479,7 +1479,7 @@ bool SdPublishingDlg::Load()
     if(aCheck != nMagic)
         return false;
 
-    SdIOCompat aIO(*pStream, STREAM_READ);
+    SdIOCompat aIO(*pStream, StreamMode::READ);
 
     sal_uInt16 nDesigns;
     pStream->ReadUInt16( nDesigns );
@@ -1502,7 +1502,7 @@ bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( OUString( "designs.sod" ) );
-    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC );
 
     SvStream* pStream = aMedium.GetOutStream();
 
@@ -1514,7 +1514,7 @@ bool SdPublishingDlg::Save()
 
     // Destroys the SdIOCompat before the Stream is being destributed
     {
-        SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
+        SdIOCompat aIO(*pStream, StreamMode::WRITE, 0);
 
         sal_uInt16 nDesigns = (sal_uInt16) m_aDesignList.size();
         pStream->WriteUInt16( nDesigns );

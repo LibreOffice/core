@@ -190,7 +190,7 @@ bool LineInfo::IsDefault() const
 
 SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16(0);
     sal_Int32       nTmp32(0);
 
@@ -226,7 +226,7 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 
 SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 4 );
 
     // version 1
     rOStm.WriteUInt16( rImplLineInfo.meStyle ).WriteInt32( rImplLineInfo.mnWidth );

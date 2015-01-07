@@ -705,7 +705,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
         Graphic aGraphic;
         GraphicFilter aFilter(false);
 
-        aFilter.ImportGraphic( aGraphic, aFile.GetURL(), *aFile.GetStream( STREAM_READ ) );
+        aFilter.ImportGraphic( aGraphic, aFile.GetURL(), *aFile.GetStream( StreamMode::READ ) );
         BitmapEx rBitmapEx( aGraphic.GetBitmap(), Color(255,255,255) );
 
         Rectangle clipRect;
@@ -733,7 +733,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     }
     else
     {
-        rMtf.Read( *aFile.GetStream( STREAM_READ ) );
+        rMtf.Read( *aFile.GetStream( StreamMode::READ ) );
 
         if(usesClipActions(rMtf))
         {

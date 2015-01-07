@@ -84,7 +84,7 @@ SotStorageStream::SotStorageStream( const OUString & rName, StreamMode nMode,
     : SvStream( MakeLockBytes_Impl( rName, nMode ) )
     , pOwnStm( NULL )
 {
-    if( nMode & STREAM_WRITE )
+    if( nMode & StreamMode::WRITE )
         bIsWritable = true;
     else
         bIsWritable = false;
@@ -96,7 +96,7 @@ SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
 {
     if( pStm )
     {
-        if( STREAM_WRITE & pStm->GetMode() )
+        if( StreamMode::WRITE & pStm->GetMode() )
             bIsWritable = true;
         else
             bIsWritable = false;
@@ -345,7 +345,7 @@ SotStorage::SotStorage()
     // ??? What's this ???
 }
 
-#define ERASEMASK  ( STREAM_TRUNC | STREAM_WRITE | STREAM_SHARE_DENYALL )
+#define ERASEMASK  ( StreamMode::TRUNC | StreamMode::WRITE | StreamMode::SHARE_DENYALL )
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
@@ -420,7 +420,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode, Storage
                     {
                         // detect special disk spanned storages
                         if ( UCBStorage::IsDiskSpannedFile( m_pStorStm ) )
-                            nMode |= STORAGE_DISKSPANNED_MODE;
+                            nStorageMode |= STORAGE_DISKSPANNED_MODE;
 
                         // UCBStorage always works directly on the UCB content, so discard the stream first
                         DELETEZ( m_pStorStm );
@@ -751,7 +751,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
     {
         // volle Ole-Patches einschalten
         // egal was kommt, nur exclusiv gestattet
-        nMode |= STREAM_SHARE_DENYALL;
+        nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorageStream * p = m_pOwnStg->OpenStream( rEleName, nMode,
                             (nStorageMode & STORAGE_TRANSACTED) ? false : true );
@@ -759,7 +759,7 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
 
         if( !nE )
             m_pOwnStg->ResetError(); // kein Fehler setzen
-        if( nMode & STREAM_TRUNC )
+        if( nMode & StreamMode::TRUNC )
             pStm->SetSize( 0 );
     }
     else
@@ -775,7 +775,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
-        nMode |= STREAM_SHARE_DENYALL;
+        nMode |= StreamMode::SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
         BaseStorage * p = m_pOwnStg->OpenStorage(rEleName, nMode, !transacted);
         if( p )
@@ -914,11 +914,11 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
                                         const OUString& rEleName, StreamMode nMode )
 {
     sal_Int32 nEleMode = embed::ElementModes::SEEKABLEREAD;
-    if ( nMode & STREAM_WRITE )
+    if ( nMode & StreamMode::WRITE )
         nEleMode |= embed::ElementModes::WRITE;
-    if ( nMode & STREAM_TRUNC )
+    if ( nMode & StreamMode::TRUNC )
         nEleMode |= embed::ElementModes::TRUNCATE;
-    if ( nMode & STREAM_NOCREATE )
+    if ( nMode & StreamMode::NOCREATE )
         nEleMode |= embed::ElementModes::NOCREATE;
 
     SvStream* pStream = NULL;
@@ -927,7 +927,7 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
         uno::Reference < io::XStream > xStream = xStorage->openStreamElement( rEleName, nEleMode );
 
         // TODO/LATER: should it be done this way?
-        if ( nMode & STREAM_WRITE )
+        if ( nMode & StreamMode::WRITE )
         {
             uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
             xStreamProps->setPropertyValue(

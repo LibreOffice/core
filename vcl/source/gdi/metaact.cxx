@@ -262,7 +262,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
 
         default:
         {
-            VersionCompat aCompat(rIStm, STREAM_READ);
+            VersionCompat aCompat(rIStm, StreamMode::READ);
         }
         break;
     }
@@ -317,14 +317,14 @@ bool MetaPixelAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WritePair( rOStm, maPt );
     maColor.Write( rOStm, true );
 }
 
 void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maPt );
     maColor.Read( rIStm, true );
 }
@@ -371,13 +371,13 @@ bool MetaPointAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WritePair( rOStm, maPt );
 }
 
 void MetaPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maPt );
 }
 
@@ -440,7 +440,7 @@ bool MetaLineAction::Compare( const MetaAction& rMetaAction ) const
 void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );  // Version 1
@@ -449,7 +449,7 @@ void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
 
     // Version 1
     ReadPair( rIStm, maStartPt );
@@ -504,13 +504,13 @@ bool MetaRectAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
 }
 
 void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
 }
 
@@ -565,14 +565,14 @@ bool MetaRoundRectAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
     rOStm.WriteUInt32( mnHorzRound ).WriteUInt32( mnVertRound );
 }
 
 void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect ).ReadUInt32( mnHorzRound ).ReadUInt32( mnVertRound );
 }
 
@@ -618,13 +618,13 @@ bool MetaEllipseAction::Compare( const MetaAction& rMetaAction ) const
 void MetaEllipseAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
 }
 
 void MetaEllipseAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
 }
 
@@ -679,7 +679,7 @@ bool MetaArcAction::Compare( const MetaAction& rMetaAction ) const
 void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );
@@ -687,7 +687,7 @@ void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaArcAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
@@ -744,7 +744,7 @@ bool MetaPieAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );
@@ -752,7 +752,7 @@ void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPieAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
@@ -809,7 +809,7 @@ bool MetaChordAction::Compare( const MetaAction& rMetaAction ) const
 void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
     WritePair( rOStm, maStartPt );
     WritePair( rOStm, maEndPt );
@@ -817,7 +817,7 @@ void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaChordAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
@@ -881,7 +881,7 @@ bool MetaPolyLineAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 3);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 3);
 
     Polygon aSimplePoly;
     maPoly.AdaptiveSubdivide( aSimplePoly );
@@ -897,7 +897,7 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
 
     // Version 1
     ReadPolygon( rIStm, maPoly );
@@ -956,7 +956,7 @@ bool MetaPolygonAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
     Polygon aSimplePoly;                            // Version 1
     maPoly.AdaptiveSubdivide( aSimplePoly );
@@ -970,7 +970,7 @@ void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
 
     ReadPolygon( rIStm, maPoly );       // Version 1
 
@@ -1026,7 +1026,7 @@ bool MetaPolyPolygonAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
     sal_uInt16 nNumberOfComplexPolygons = 0;
     sal_uInt16 i, nPolyCount = maPolyPoly.Count();
@@ -1058,7 +1058,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPolyPolygon( rIStm, maPolyPoly );                // Version 1
 
     if ( aCompat.GetVersion() >= 2 )    // Version 2
@@ -1133,7 +1133,7 @@ bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
     WritePair( rOStm, maPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16(mnIndex);
@@ -1144,7 +1144,7 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt16 nTmpIndex(0);
@@ -1252,7 +1252,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     const sal_Int32 nAryLen = mpDXAry ? mnLen : 0;
 
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
     WritePair( rOStm, maStartPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16(mnIndex);
@@ -1269,7 +1269,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
     delete[] mpDXAry;
 
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maStartPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt16 nTmpIndex(0);
@@ -1385,7 +1385,7 @@ bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
     WritePair( rOStm, maPt );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt32( mnWidth );
@@ -1397,7 +1397,7 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maPt );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm.ReadUInt32( mnWidth );
@@ -1460,7 +1460,7 @@ bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
     WriteRectangle( rOStm, maRect );
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16( mnStyle );
@@ -1470,7 +1470,7 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm  .ReadUInt16( mnStyle );
@@ -1537,7 +1537,7 @@ bool MetaTextLineAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 2);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 2);
 
     WritePair( rOStm, maPos );
     rOStm.WriteInt32( mnWidth );
@@ -1549,7 +1549,7 @@ void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
 
     sal_Int32 nTempWidth(0);
     ReadPair( rIStm, maPos );
@@ -1614,7 +1614,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
     }
@@ -1622,7 +1622,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
 }
@@ -1679,7 +1679,7 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
         WritePair( rOStm, maSz );
@@ -1688,7 +1688,7 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
     ReadPair( rIStm, maSz );
@@ -1751,7 +1751,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maDstPt );
         WritePair( rOStm, maDstSz );
@@ -1762,7 +1762,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maDstPt );
     ReadPair( rIStm, maDstSz );
@@ -1816,7 +1816,7 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         WritePair( rOStm, maPt );
     }
@@ -1824,7 +1824,7 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     ReadPair( rIStm, maPt );
 }
@@ -1881,7 +1881,7 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         WritePair( rOStm, maPt );
         WritePair( rOStm, maSz );
@@ -1890,7 +1890,7 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaBmpExScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     ReadPair( rIStm, maPt );
     ReadPair( rIStm, maSz );
@@ -1953,7 +1953,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
     if( !!maBmpEx.GetBitmap() )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIBBitmapEx(maBmpEx, rOStm);
         WritePair( rOStm, maDstPt );
         WritePair( rOStm, maDstSz );
@@ -1964,7 +1964,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
 
 void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIBBitmapEx(maBmpEx, rIStm);
     ReadPair( rIStm, maDstPt );
     ReadPair( rIStm, maDstSz );
@@ -2022,7 +2022,7 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
     }
@@ -2030,7 +2030,7 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
 }
@@ -2090,7 +2090,7 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         WritePair( rOStm, maPt );
         WritePair( rOStm, maSz );
@@ -2099,7 +2099,7 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
     ReadPair( rIStm, maPt );
     ReadPair( rIStm, maSz );
@@ -2165,7 +2165,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     if( !!maBmp )
     {
         MetaAction::Write(rOStm, pData);
-        VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+        VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
         WriteDIB(maBmp, rOStm, false, true);
         maColor.Write( rOStm, true );
         WritePair( rOStm, maDstPt );
@@ -2177,7 +2177,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadDIB(maBmp, rIStm, true);
     maColor.Read( rIStm, true );
     ReadPair( rIStm, maDstPt );
@@ -2230,14 +2230,14 @@ bool MetaGradientAction::Compare( const MetaAction& rMetaAction ) const
 void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
     WriteGradient( rOStm, maGradient );
 }
 
 void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
     ReadGradient( rIStm, maGradient );
 }
@@ -2291,7 +2291,7 @@ bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
     tools::PolyPolygon aNoCurvePolyPolygon;
@@ -2303,7 +2303,7 @@ void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
     ReadGradient( rIStm, maGradient );
 }
@@ -2353,7 +2353,7 @@ bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     // #i105373# see comment at MetaTransparentAction::Write
     tools::PolyPolygon aNoCurvePolyPolygon;
@@ -2365,7 +2365,7 @@ void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaHatchAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
     ReadHatch( rIStm, maHatch );
 }
@@ -2415,14 +2415,14 @@ bool MetaWallpaperAction::Compare( const MetaAction& rMetaAction ) const
 void MetaWallpaperAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     WriteWallpaper( rOStm, maWallpaper );
 }
 
 void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadWallpaper( rIStm, maWallpaper );
 }
 
@@ -2474,7 +2474,7 @@ bool MetaClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     WriteRegion( rOStm, maRegion );
     rOStm.WriteUChar( mbClip );
@@ -2482,7 +2482,7 @@ void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRegion( rIStm, maRegion );
     rIStm.ReadCharAsBool( mbClip );
 }
@@ -2529,13 +2529,13 @@ bool MetaISectRectClipRegionAction::Compare( const MetaAction& rMetaAction ) con
 void MetaISectRectClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRectangle( rOStm, maRect );
 }
 
 void MetaISectRectClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRectangle( rIStm, maRect );
 }
 
@@ -2582,13 +2582,13 @@ bool MetaISectRegionClipRegionAction::Compare( const MetaAction& rMetaAction ) c
 void MetaISectRegionClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteRegion( rOStm, maRegion );
 }
 
 void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadRegion( rIStm, maRegion );
 }
 
@@ -2634,13 +2634,13 @@ bool MetaMoveClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     rOStm.WriteInt32( mnHorzMove ).WriteInt32( mnVertMove );
 }
 
 void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     sal_Int32 nTmpHM(0), nTmpVM(0);
     rIStm.ReadInt32( nTmpHM ).ReadInt32( nTmpVM );
     mnHorzMove = nTmpHM;
@@ -2685,14 +2685,14 @@ bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2735,14 +2735,14 @@ bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2779,13 +2779,13 @@ bool MetaTextColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
 }
 
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maColor.Read( rIStm, true );
 }
 
@@ -2827,14 +2827,14 @@ bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2877,14 +2877,14 @@ bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2927,14 +2927,14 @@ bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     maColor.Write( rOStm, true );
     rOStm.WriteUChar( mbSet );
 }
 
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maColor.Read( rIStm, true );
     rIStm.ReadCharAsBool( mbSet );
 }
@@ -2972,7 +2972,7 @@ bool MetaTextAlignAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     rOStm.WriteUInt16( maAlign );
 }
 
@@ -2980,7 +2980,7 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     sal_uInt16 nTmp16(0);
 
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
 }
 
@@ -3024,13 +3024,13 @@ bool MetaMapModeAction::Compare( const MetaAction& rMetaAction ) const
 void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteMapMode( rOStm, maMapMode );
 }
 
 void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadMapMode( rIStm, maMapMode );
 }
 
@@ -3084,7 +3084,7 @@ bool MetaFontAction::Compare( const MetaAction& rMetaAction ) const
 void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     WriteFont( rOStm, maFont );
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -3093,7 +3093,7 @@ void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadFont( rIStm, maFont );
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
@@ -3133,13 +3133,13 @@ bool MetaPushAction::Compare( const MetaAction& rMetaAction ) const
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     rOStm.WriteUInt16( static_cast<sal_uInt16>(mnFlags) );
 }
 
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     sal_uInt16 tmp;
     rIStm.ReadUInt16( tmp );
     mnFlags = static_cast<PushFlags>(tmp);
@@ -3167,12 +3167,12 @@ MetaAction* MetaPopAction::Clone()
 void MetaPopAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 }
 
 void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
 }
 
 MetaRasterOpAction::MetaRasterOpAction() :
@@ -3209,7 +3209,7 @@ bool MetaRasterOpAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     rOStm.WriteUInt16( meRasterOp );
 }
 
@@ -3217,7 +3217,7 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     sal_uInt16 nTmp16(0);
 
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
 }
 
@@ -3267,7 +3267,7 @@ bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     // #i105373# The tools::PolyPolygon in this action may be a curve; this
     // was ignored until now what is an error. To make older office
@@ -3287,7 +3287,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPolyPolygon( rIStm, maPolyPoly );
     rIStm.ReadUInt16( mnTransPercent );
 }
@@ -3344,7 +3344,7 @@ bool MetaFloatTransparentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     maMtf.Write( rOStm );
     WritePair( rOStm,  maPoint );
@@ -3354,7 +3354,7 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
 
 void MetaFloatTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadGDIMetaFile( rIStm, maMtf );
     ReadPair( rIStm, maPoint );
     ReadPair( rIStm, maSize );
@@ -3413,7 +3413,7 @@ bool MetaEPSAction::Compare( const MetaAction& rMetaAction ) const
 void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     WriteGfxLink( rOStm, maGfxLink );
     WritePair( rOStm, maPoint );
@@ -3423,7 +3423,7 @@ void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadGfxLink( rIStm, maGfxLink );
     ReadPair( rIStm, maPoint );
     ReadPair( rIStm, maSize );
@@ -3468,7 +3468,7 @@ bool MetaRefPointAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
 
     WritePair( rOStm, maRefPoint );
     rOStm.WriteUChar( mbSet );
@@ -3476,7 +3476,7 @@ void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     ReadPair( rIStm, maRefPoint ).ReadCharAsBool( mbSet );
 }
 
@@ -3548,7 +3548,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
             bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
-                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
+                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
                 if ( bPathStroke )
                 {
@@ -3604,7 +3604,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
             bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
-                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
+                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
                 if ( bPathStroke )
                 {
@@ -3626,7 +3626,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 delete[] mpData;
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             } else if( maComment == "EMF_PLUS_HEADER_INFO" ){
-                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
+                SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
 
                 sal_Int32 nLeft(0), nRight(0), nTop(0), nBottom(0);
@@ -3667,7 +3667,7 @@ bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, maComment);
     rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
@@ -3677,7 +3677,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     maComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadInt32( mnValue ).ReadUInt32( mnDataSize );
 
@@ -3727,13 +3727,13 @@ bool MetaLayoutModeAction::Compare( const MetaAction& rMetaAction ) const
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     rOStm.WriteUInt32( mnLayoutMode );
 }
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     sal_uInt32 tmp;
     rIStm.ReadUInt32( tmp );
     mnLayoutMode = static_cast<ComplexTextLayoutMode>(tmp);
@@ -3772,13 +3772,13 @@ bool MetaTextLanguageAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
-    VersionCompat aCompat(rOStm, STREAM_WRITE, 1);
+    VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
     rOStm.WriteUInt16( meTextLanguage );
 }
 
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    VersionCompat aCompat(rIStm, STREAM_READ);
+    VersionCompat aCompat(rIStm, StreamMode::READ);
     rIStm.ReadUInt16( meTextLanguage );
 }
 

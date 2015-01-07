@@ -92,7 +92,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     rOStm.WriteUChar( bActive );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
 
-    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, STREAM_WRITE ));
+    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, StreamMode::WRITE ));
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                      // V4
@@ -121,7 +121,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 
     // make URL absolute
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
-    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, STREAM_READ ));
+    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, StreamMode::READ ));
 
     ReadIMapObject( rIStm );
 
@@ -959,7 +959,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     rOStm.WriteUInt16( nCount );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
 
-    pCompat = new IMapCompat( rOStm, STREAM_WRITE );
+    pCompat = new IMapCompat( rOStm, StreamMode::WRITE );
 
     // here one can insert in newer versions
 
@@ -1001,7 +1001,7 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
         rIStm.ReadUInt16( nCount );
         read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
 
-        pCompat = new IMapCompat( rIStm, STREAM_READ );
+        pCompat = new IMapCompat( rIStm, StreamMode::READ );
 
         // here one can read in newer versions
 

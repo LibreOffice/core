@@ -200,7 +200,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
     uno::Reference< ::graphic::XGraphic > xRet;
     uno::Sequence< sal_Int8 > aBmpSeq( xBtm->getDIB() );
     uno::Sequence< sal_Int8 > aMaskSeq( xBtm->getMaskDIB() );
-    SvMemoryStream aBmpStream( aBmpSeq.getArray(), aBmpSeq.getLength(), STREAM_READ );
+    SvMemoryStream aBmpStream( aBmpSeq.getArray(), aBmpSeq.getLength(), StreamMode::READ );
     Bitmap aBmp;
     BitmapEx aBmpEx;
 
@@ -208,7 +208,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
     if( aMaskSeq.getLength() )
     {
-        SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), STREAM_READ );
+        SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), StreamMode::READ );
         Bitmap aMask;
 
         ReadDIB(aMask, aMaskStream, true);
@@ -462,7 +462,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
             xRet = implLoadStandardImage( aPath );
 
         if( !xRet.is() )
-            pIStm.reset(::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ ));
+            pIStm.reset(::utl::UcbStreamHelper::CreateStream( aPath, StreamMode::READ ));
     }
     else if( xBtm.is() )
     {
@@ -741,7 +741,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             OUString aURL;
 
             aValue >>= aURL;
-            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aURL, STREAM_WRITE | STREAM_TRUNC ));
+            pOStm.reset(::utl::UcbStreamHelper::CreateStream( aURL, StreamMode::WRITE | StreamMode::TRUNC ));
             aPath = aURL;
         }
         else if (aName == "OutputStream")

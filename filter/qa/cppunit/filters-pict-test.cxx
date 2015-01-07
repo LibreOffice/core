@@ -66,7 +66,7 @@ bool PictFilterTest::load(const OUString &,
     const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
-    SvFileStream aFileStream(rURL, STREAM_READ);
+    SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;
     return GraphicImport(aFileStream, aGraphic, NULL);
 }
@@ -80,7 +80,7 @@ void PictFilterTest::testCVEs()
 
 void PictFilterTest::testDontClipTooMuch()
 {
-    SvFileStream aFileStream(pictURL() + "clipping-problem.pct", STREAM_READ);
+    SvFileStream aFileStream(pictURL() + "clipping-problem.pct", StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     pict::ReadPictFile(aFileStream, aGDIMetaFile);
 

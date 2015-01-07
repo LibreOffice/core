@@ -28,13 +28,14 @@
     ((sal_uInt32)(char)(char4))<<24UL))
 
 class SvStream;
+enum class StreamMode;
 
 class TOOLS_DLLPUBLIC VersionCompat
 {
     SvStream*       mpRWStm;
     sal_uInt32      mnCompatPos;
     sal_uInt32      mnTotalSize;
-    sal_uInt16      mnStmMode;
+    StreamMode   mnStmMode;
     sal_uInt16      mnVersion;
 
                     VersionCompat() {}
@@ -44,7 +45,7 @@ class TOOLS_DLLPUBLIC VersionCompat
 
 public:
 
-                    VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion = 1 );
+                    VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16 nVersion = 1 );
                     ~VersionCompat();
 
     sal_uInt16      GetVersion() const { return mnVersion; }

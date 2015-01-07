@@ -88,7 +88,7 @@ bool PaletteGPL::ReadPaletteHeader(SvFileStream& rFileStream)
 
 void PaletteGPL::LoadPaletteHeader()
 {
-    SvFileStream aFile(maFPath, STREAM_READ);
+    SvFileStream aFile(maFPath, StreamMode::READ);
     mbValidPalette = ReadPaletteHeader( aFile );
 }
 
@@ -98,7 +98,7 @@ void PaletteGPL::LoadPalette()
     mbLoadedPalette = true;
 
     // TODO add error handling!!!
-    SvFileStream aFile(maFPath, STREAM_READ);
+    SvFileStream aFile(maFPath, StreamMode::READ);
     mbValidPalette = ReadPaletteHeader( aFile );
 
     if( !mbValidPalette ) return;

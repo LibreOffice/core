@@ -42,7 +42,7 @@ namespace
     {
         char foo[] = "foo";
         std::istringstream iss(foo, std::istringstream::in);
-        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
+        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         char std_a(78);
         iss >> std_a;
@@ -133,7 +133,7 @@ namespace
     void Test::test_fastostring()
     {
         char foo[] = "foobar";
-        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
+        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aOne = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aOne == "foo");
@@ -153,7 +153,7 @@ namespace
     void Test::test_read_cstring()
     {
         char foo[] = "foobar";
-        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
+        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aOne = read_zeroTerminated_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aOne == "foobar");
@@ -171,7 +171,7 @@ namespace
     void Test::test_read_pstring()
     {
         char foo[] = "\3foobar";
-        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
+        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aFoo = read_uInt8_lenPrefixed_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aFoo == "foo");
@@ -213,7 +213,7 @@ namespace
     void Test::test_readline()
     {
         char foo[] = "foo\nbar\n\n";
-        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
+        SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, StreamMode::READ);
 
         OString aFoo;
         bool bRet;
@@ -272,7 +272,7 @@ namespace
         CPPUNIT_ASSERT(iss.eof() && !iss.bad());
 
         char bar[] = "foo";
-        SvMemoryStream aMemStreamB(bar, SAL_N_ELEMENTS(bar)-1, STREAM_READ);
+        SvMemoryStream aMemStreamB(bar, SAL_N_ELEMENTS(bar)-1, StreamMode::READ);
         bRet = aMemStreamB.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
         CPPUNIT_ASSERT(aFoo == "foo");

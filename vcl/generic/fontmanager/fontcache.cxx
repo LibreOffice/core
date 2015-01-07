@@ -94,7 +94,7 @@ void FontCache::flush()
         return;
 
     SvFileStream aStream;
-    aStream.Open( m_aCacheFile, STREAM_WRITE | STREAM_TRUNC );
+    aStream.Open( m_aCacheFile, StreamMode::WRITE | StreamMode::TRUNC );
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -236,7 +236,7 @@ void FontCache::read()
     PrintFontManager& rManager( PrintFontManager::get() );
     MultiAtomProvider* pAtoms = rManager.m_pAtoms;
 
-    SvFileStream aStream( m_aCacheFile, STREAM_READ );
+    SvFileStream aStream( m_aCacheFile, StreamMode::READ );
     if( ! aStream.IsOpen() )
     {
 #if OSL_DEBUG_LEVEL > 1

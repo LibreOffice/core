@@ -590,7 +590,7 @@ std::unique_ptr<SvMemoryStream> memoryStream(
         new char[length]);
     memcpy(b.get(), data, length);
     std::unique_ptr<SvMemoryStream> s(
-        new SvMemoryStream(b.get(), length, STREAM_READ));
+        new SvMemoryStream(b.get(), length, StreamMode::READ));
     s->ObjectOwnsMemory(true);
     b.release();
     return s;

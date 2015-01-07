@@ -131,7 +131,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
         INetURLObject aURL( aFileURL );
         OUString aName( aURL.getName() );
 
-        SvFileStream* pStream = new SvFileStream(aFileURL, STREAM_READ );
+        SvFileStream* pStream = new SvFileStream(aFileURL, StreamMode::READ );
         Reference< XInputStream > xInput(  new utl::OSeekableInputStreamWrapper( pStream, true ) );
         _addFile( xRootFolder, xFactory, xInput, aName );
     }
@@ -213,7 +213,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                 aExporter.doExport(xOS,rFilters);
             }
 
-            Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( new SvFileStream(aTempFileURL, STREAM_READ ), true ) );
+            Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( new SvFileStream(aTempFileURL, StreamMode::READ ), true ) );
             OUString szTypeDetection( "TypeDetection.xcu" );
             _addFile( xRootFolder, xFactory,  XIS, szTypeDetection );
 

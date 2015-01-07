@@ -130,7 +130,7 @@ SvFileStream* EmbeddedDBPerformanceTest::getWordListStream()
     OUString wlPath;
     createFileURL("wordlist", wlPath);
 
-    SvFileStream *pFile(new SvFileStream(wlPath, STREAM_READ));
+    SvFileStream *pFile(new SvFileStream(wlPath, StreamMode::READ));
 
     if (!pFile)
     {

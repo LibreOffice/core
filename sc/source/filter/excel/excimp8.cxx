@@ -390,7 +390,7 @@ void ImportExcel8::ReadBasic( void )
             rFilterOpt.IsLoadExcelBasicExecutable() )
         {
             // see if we have the XCB stream
-            SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( OUString("XCB"), STREAM_STD_READ | STREAM_NOCREATE  );
+            SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( OUString("XCB"), STREAM_STD_READ | StreamMode::NOCREATE  );
             if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
             {
                 ScCTBWrapper wrapper;

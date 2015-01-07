@@ -1168,7 +1168,7 @@ ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& r
 {
     if( pStrg )
     {
-        SotStorageStreamRef xStrm = pStrg->OpenSotStream( rStrmName, STREAM_TRUNC | STREAM_STD_WRITE );
+        SotStorageStreamRef xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::TRUNC | STREAM_STD_WRITE );
         if( xStrm.Is() )
             Save( *xStrm );
         else

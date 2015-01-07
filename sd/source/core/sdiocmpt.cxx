@@ -21,7 +21,7 @@
 
 #include "sdiocmpt.hxx"
 
-old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode)
+old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, StreamMode nNewMode)
 :   rStream(rNewStream),
     nSubRecSiz(0),
     nSubRecPos(0),
@@ -54,11 +54,11 @@ void old_SdrDownCompat::OpenSubRecord()
 
     nSubRecPos = rStream.Tell();
 
-    if(nMode == STREAM_READ)
+    if(nMode == StreamMode::READ)
     {
         Read();
     }
-    else if(nMode == STREAM_WRITE)
+    else if(nMode == StreamMode::WRITE)
     {
         Write();
     }
@@ -73,7 +73,7 @@ void old_SdrDownCompat::CloseSubRecord()
 
     sal_uInt32 nAktPos(rStream.Tell());
 
-    if(nMode == STREAM_READ)
+    if(nMode == StreamMode::READ)
     {
         sal_uInt32 nReadAnz(nAktPos - nSubRecPos);
         if(nReadAnz != nSubRecSiz)
@@ -81,7 +81,7 @@ void old_SdrDownCompat::CloseSubRecord()
             rStream.Seek(nSubRecPos + nSubRecSiz);
         }
     }
-    else if(nMode == STREAM_WRITE)
+    else if(nMode == StreamMode::WRITE)
     {
         nSubRecSiz = nAktPos - nSubRecPos;
         rStream.Seek(nSubRecPos);
@@ -98,16 +98,16 @@ void old_SdrDownCompat::CloseSubRecord()
 |*
 \************************************************************************/
 
-SdIOCompat::SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode, sal_uInt16 nVer)
+SdIOCompat::SdIOCompat(SvStream& rNewStream, StreamMode nNewMode, sal_uInt16 nVer)
 :   old_SdrDownCompat(rNewStream, nNewMode), nVersion(nVer)
 {
-    if (nNewMode == STREAM_WRITE)
+    if (nNewMode == StreamMode::WRITE)
     {
         DBG_ASSERT(nVer != SDIOCOMPAT_VERSIONDONTKNOW,
                    "can´t write unknown version");
         rNewStream.WriteUInt16( nVersion );
     }
-    else if (nNewMode == STREAM_READ)
+    else if (nNewMode == StreamMode::READ)
     {
         DBG_ASSERT(nVer == SDIOCOMPAT_VERSIONDONTKNOW,
                    "referring to the version while reading is silly!");

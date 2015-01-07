@@ -980,12 +980,12 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
     {
         aTmpFile += aExtension;
     }
-    m_aFileStream.Open( aTmpFile, STREAM_READ | STREAM_WRITE );
+    m_aFileStream.Open( aTmpFile, StreamMode::READ | StreamMode::WRITE );
     if( ! m_aFileStream.IsOpen() )
     {
         // might be that the extension scrambled the whole filename
         osl::FileBase::createTempFile( 0, 0, &aTmpFile );
-        m_aFileStream.Open( aTmpFile, STREAM_READ | STREAM_WRITE );
+        m_aFileStream.Open( aTmpFile, StreamMode::READ | StreamMode::WRITE );
     }
 }
 

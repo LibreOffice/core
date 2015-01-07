@@ -131,7 +131,7 @@ int main ( int argc, char ** argv)
         if( nExit == 0 && !aCommand.aSlotMapFile.isEmpty() )
         {
             aTmpSlotMapFile = tempFileHelper(aCommand.aSlotMapFile);
-            SvFileStream aOutStm( aTmpSlotMapFile, STREAM_READWRITE | STREAM_TRUNC );
+            SvFileStream aOutStm( aTmpSlotMapFile, STREAM_READWRITE | StreamMode::TRUNC );
             if( !pDataBase->WriteSfx( aOutStm ) )
             {
                 nExit = -1;
@@ -143,7 +143,7 @@ int main ( int argc, char ** argv)
         if (nExit == 0 && !aCommand.m_DepFile.isEmpty())
         {
             aTmpDepFile = tempFileHelper(aCommand.m_DepFile);
-            SvFileStream aOutStm( aTmpDepFile, STREAM_READWRITE | STREAM_TRUNC );
+            SvFileStream aOutStm( aTmpDepFile, STREAM_READWRITE | StreamMode::TRUNC );
             pDataBase->WriteDepFile(aOutStm, aCommand.aTargetFile);
             if( aOutStm.GetError() != SVSTREAM_OK )
             {
@@ -196,7 +196,7 @@ int main ( int argc, char ** argv)
             {
                 // stamp file, because idl passed through correctly
                 SvFileStream aOutStm( aCommand.aTargetFile,
-                                STREAM_READWRITE | STREAM_TRUNC );
+                                STREAM_READWRITE | StreamMode::TRUNC );
             }
         }
     }

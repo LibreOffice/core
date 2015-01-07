@@ -648,7 +648,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
     {
         // check if it is a valid draw file
         SfxMedium aMedium( aFile,
-                    STREAM_READ | STREAM_NOCREATE );
+                    StreamMode::READ | StreamMode::NOCREATE );
 
         if( aMedium.IsStorage() )
         {

@@ -295,7 +295,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if( nMode & STREAM_SHARE_DENYALL)
         nShareMode = 0;
 
-    if( (nMode & STREAM_READ) )
+    if( (nMode & StreamMode::READ) )
         nAccessMode |= GENERIC_READ;
     if( (nMode & STREAM_WRITE) )
         nAccessMode |= GENERIC_WRITE;
@@ -306,14 +306,14 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     // Assignment based on true/false table above
     if( !(nMode & STREAM_NOCREATE) )
     {
-        if( nMode & STREAM_TRUNC )
+        if( nMode & StreamMode::TRUNC )
             nOpenAction = CREATE_ALWAYS;
         else
             nOpenAction = OPEN_ALWAYS;
     }
     else
     {
-        if( nMode & STREAM_TRUNC )
+        if( nMode & StreamMode::TRUNC )
             nOpenAction = TRUNCATE_EXISTING;
         else
             nOpenAction = OPEN_EXISTING;

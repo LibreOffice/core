@@ -1462,7 +1462,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             if ( pAry && nAryLen )
             {
                 Graphic         aGraphic;
-                SvMemoryStream  aTemp( (void*)pAry, nAryLen, STREAM_READ );
+                SvMemoryStream  aTemp( (void*)pAry, nAryLen, StreamMode::READ );
                 sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
                 if ( nErrCode == ERRCODE_NONE )
                 {
@@ -1599,7 +1599,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                       nFormat != GFF_EMF) )
                 {
                     boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
-                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
+                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
                     if ( pIn )
                     {
                         Graphic aGraphic;

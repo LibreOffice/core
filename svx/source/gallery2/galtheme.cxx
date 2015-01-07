@@ -95,10 +95,10 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 {
     try
     {
-        aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
+        aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? StreamMode::READ : STREAM_STD_READWRITE );
         // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
         if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
-            aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+            aSvDrawStorageRef = new SvStorage( false, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ );
     }
     catch (const css::ucb::ContentCreationException& e)
     {
@@ -110,7 +110,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 
 bool GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, size_t nPos, GalleryObject* pExistentEntry )
 {
-    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
+    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
     bool        bRet = false;
 
     if( pOStm )
@@ -154,7 +154,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
     if( pEntry )
     {
-        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
 
         if( pIStm )
         {
@@ -206,9 +206,9 @@ void GalleryTheme::ImplWrite()
         if( FileExists( aPathURL ) || CreateDir( aPathURL ) )
         {
 #ifdef UNX
-            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_COPY_ON_SYMLINK | STREAM_TRUNC ));
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::COPY_ON_SYMLINK | StreamMode::TRUNC ));
 #else
-            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
 #endif
 
             if( pOStm )
@@ -257,7 +257,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     // read next possible number
     if( FileExists( aInfoFileURL ) )
     {
-        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
 
         if( pIStm )
         {
@@ -322,7 +322,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPt
     while( bExists );
 
     // write updated number
-    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE ));
+    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
 
     if( pOStm )
     {
@@ -575,7 +575,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 if ( aSvDrawStorageRef.Is() )
                 {
                     const OUString        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
-                    SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, STREAM_READ );
+                    SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, StreamMode::READ );
 
                     if( pIStm && !pIStm->GetError() )
                     {
@@ -616,8 +616,8 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         DBG_ASSERT( aInURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
         DBG_ASSERT( aTmpURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
-        boost::scoped_ptr<SvStream> pTmpStm(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+        boost::scoped_ptr<SvStream> pTmpStm(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
 
         if( pIStm && pTmpStm )
         {
@@ -696,7 +696,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
 
     if( FileExists( rURL ) )
     {
-        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
 
         if( pIStm )
         {
@@ -735,7 +735,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                         if( nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
                             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
                         {
-                            boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( *pIStm, STREAM_READ ));
+                            boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( *pIStm, StreamMode::READ ));
 
                             pIStm->ReadUInt32( nThemeId );
 
@@ -891,7 +891,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         }
 
         const INetURLObject aURL( ImplCreateUniqueURL( SGA_OBJ_BMP, nExportFormat ) );
-        boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
+        boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC ));
 
         if( pOStm )
         {
@@ -941,7 +941,7 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
         if( xStor.Is() )
         {
             const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, STREAM_READ ) );
+            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
             {
@@ -964,7 +964,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
     if( xStor.Is() )
     {
         const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
+        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
         {
@@ -1013,7 +1013,7 @@ bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rxMode
         if( xStor.Is() )
         {
             const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, STREAM_READ ) );
+            SvStorageStreamRef  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
 
             if( xIStm.Is() && !xIStm->GetError() )
             {
@@ -1060,7 +1060,7 @@ bool GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, 
     if( xStor.Is() )
     {
         const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
-        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
+        SvStorageStreamRef  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
 
         if( xOStm.Is() && !xOStm->GetError() )
         {
@@ -1355,7 +1355,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     rOStm.WriteUInt32( COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) ).WriteUInt32( COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) );
 
     const long      nReservePos = rOStm.Tell();
-    boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, STREAM_WRITE, 2 ));
+    boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rOStm, StreamMode::WRITE, 2 ));
 
     rOStm.WriteUInt32( GetId() ).WriteUChar( IsThemeNameFromResource() ); // From version 2 and up
 
@@ -1485,7 +1485,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             nId1 == COMPAT_FORMAT( 'G', 'A', 'L', 'R' ) &&
             nId2 == COMPAT_FORMAT( 'E', 'S', 'R', 'V' ) )
         {
-            boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, STREAM_READ ));
+            boost::scoped_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
             sal_uInt32      nTemp32;
             bool            bThemeNameFromResource = false;
 

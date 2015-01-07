@@ -489,7 +489,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
     }
     else
     {
-        BaseStorageStream* pStream = m_pStorage->OpenStream( aName, STREAM_READ | STREAM_SHARE_DENYALL | STREAM_NOCREATE );
+        BaseStorageStream* pStream = m_pStorage->OpenStream( aName, StreamMode::READ | StreamMode::SHARE_DENYALL | StreamMode::NOCREATE );
         try
         {
             if ( !pStream || pStream->GetError() || m_pStorage->GetError() )

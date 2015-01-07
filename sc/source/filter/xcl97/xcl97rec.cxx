@@ -892,7 +892,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
-                            STREAM_READWRITE| STREAM_SHARE_DENYALL );
+                            STREAM_READWRITE| StreamMode::SHARE_DENYALL );
     if( xOleStg.Is() )
     {
         uno::Reference < embed::XEmbeddedObject > xObj( static_cast<const SdrOle2Obj&>(rOleObj).GetObjRef() );

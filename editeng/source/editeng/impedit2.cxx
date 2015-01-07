@@ -3480,7 +3480,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     uno::Sequence< sal_Int8 > aSeq;
                     aData >>= aSeq;
                     {
-                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
                         aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
                     }
                     bDone = true;
@@ -3502,7 +3502,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                         uno::Sequence< sal_Int8 > aSeq;
                         aData >>= aSeq;
                         {
-                            SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
+                            SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
                             aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
                         }
                         bDone = true;

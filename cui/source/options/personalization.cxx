@@ -371,7 +371,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     gallery += "/gallery/personas/";
     rtl::Bootstrap::expandMacros( gallery );
     OUString aPersonasList = gallery + "personas_list.txt";
-    SvFileStream aStream( aPersonasList, STREAM_READ );
+    SvFileStream aStream( aPersonasList, StreamMode::READ );
     GraphicFilter aFilter;
     Graphic aGraphic;
     sal_Int32 nIndex = 0;

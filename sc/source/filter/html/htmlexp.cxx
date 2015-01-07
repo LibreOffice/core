@@ -1257,7 +1257,7 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
             pFileNameMap.reset( new std::map<OUString, OUString>() );
         }
 
-        SvFileStream aTmp( aFileUrl.PathToFileName(), STREAM_READ );
+        SvFileStream aTmp( aFileUrl.PathToFileName(), StreamMode::READ );
 
         OUString aSrc = rFileNm;
         OUString aDest = aTargetUrl.GetPartBeforeLastName();
@@ -1266,7 +1266,7 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         if( bFileToFile )
         {
             INetURLObject aCpyURL( aDest );
-            SvFileStream aCpy( aCpyURL.PathToFileName(), STREAM_WRITE );
+            SvFileStream aCpy( aCpyURL.PathToFileName(), StreamMode::WRITE );
             aCpy.WriteStream( aTmp );
 
             aCpy.Close();
@@ -1274,10 +1274,10 @@ bool ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         }
         else
         {
-            SfxMedium aMedium( aDest, STREAM_WRITE | STREAM_SHARE_DENYNONE );
+            SfxMedium aMedium( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );
 
             {
-                SvFileStream aCpy( aMedium.GetPhysicalName(), STREAM_WRITE );
+                SvFileStream aCpy( aMedium.GetPhysicalName(), StreamMode::WRITE );
                 aCpy.WriteStream( aTmp );
             }
 

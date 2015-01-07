@@ -251,7 +251,7 @@ bool GfxLink::ExportNative( SvStream& rOStream ) const
 
 SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
 {
-    VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
+    VersionCompat* pCompat = new VersionCompat( rOStream, StreamMode::WRITE, 2 );
 
     // Version 1
     rOStream.WriteUInt16( rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
@@ -282,7 +282,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     sal_uInt16          nType;
     sal_uInt8*          pBuf;
     bool            bMapAndSizeValid( false );
-    VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
+    VersionCompat*  pCompat = new VersionCompat( rIStream, StreamMode::READ );
 
     // Version 1
     rIStream.ReadUInt16( nType ).ReadUInt32( nSize ).ReadUInt32( nUserId );
@@ -322,7 +322,7 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
         maURL = aTempFile.GetURL();
         if( !maURL.isEmpty() )
         {
-            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             if( pOStm )
             {
                 pOStm->Write( pData, mnDataSize );

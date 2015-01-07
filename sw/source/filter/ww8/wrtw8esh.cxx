@@ -3137,14 +3137,14 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     //Open the ObjectPool
     SvStorageRef xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
-        STREAM_SHARE_DENYALL);
+        StreamMode::SHARE_DENYALL);
 
     //Create a destination storage for the microsoft control
     OUStringBuffer sStorageName;
     sal_uInt32 nObjId = GenerateObjectID();
     sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
     SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
-                 STREAM_READWRITE|STREAM_SHARE_DENYALL);
+                 STREAM_READWRITE|StreamMode::SHARE_DENYALL);
 
     if (!xOleStg.Is())
         return false;

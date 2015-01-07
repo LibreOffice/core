@@ -2998,7 +2998,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         mapCurShape.reset();
                     }
 
-                    SvMemoryStream  aMemStm( (void*) pA->GetData(), pA->GetDataSize(), STREAM_READ );
+                    SvMemoryStream  aMemStm( (void*) pA->GetData(), pA->GetDataSize(), StreamMode::READ );
                     SvtGraphicFill  aFill;
 
                     ReadSvtGraphicFill( aMemStm, aFill );
@@ -3074,7 +3074,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                          ( nWriteFlags & SVGWRITER_WRITE_FILL ) && !( nWriteFlags & SVGWRITER_NO_SHAPE_COMMENTS ) &&
                          pA->GetDataSize() )
                 {
-                    SvMemoryStream      aMemStm( (void*) pA->GetData(), pA->GetDataSize(), STREAM_READ );
+                    SvMemoryStream      aMemStm( (void*) pA->GetData(), pA->GetDataSize(), StreamMode::READ );
                     SvtGraphicStroke    aStroke;
                     tools::PolyPolygon         aStartArrow, aEndArrow;
 
@@ -3636,7 +3636,7 @@ SVGWriter::~SVGWriter()
 void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
                                 const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception )
 {
-    SvMemoryStream  aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), STREAM_READ );
+    SvMemoryStream  aMemStm( (char*) rMtfSeq.getConstArray(), rMtfSeq.getLength(), StreamMode::READ );
     GDIMetaFile     aMtf;
 
     ReadGDIMetaFile( aMemStm, aMtf );

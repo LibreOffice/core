@@ -228,7 +228,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 
     SvStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
-        STREAM_SHARE_DENYALL );
+        StreamMode::SHARE_DENYALL );
 
     if( xObjStg.Is()  )
     {
@@ -250,7 +250,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             OUString sStorageName('_');
             sStorageName += OUString::number( nPictureId );
             SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
-                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+                                STREAM_READWRITE| StreamMode::SHARE_DENYALL );
             if( xOleStg.Is() )
             {
                 /*
@@ -342,16 +342,16 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
-    SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
+    SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
     SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
         OUString(SL::aObjectPool), STREAM_READWRITE |
-        STREAM_SHARE_DENYALL );
+        StreamMode::SHARE_DENYALL );
 
     if( xObjStg.Is() && xObjSrc.Is() )
     {
         SotStorageRef xOleDst = xObjStg->OpenSotStorage( rOleId,
-                STREAM_READWRITE | STREAM_SHARE_DENYALL );
+                STREAM_READWRITE | StreamMode::SHARE_DENYALL );
         if ( xOleDst.Is() )
             xObjSrc->CopyTo( xOleDst );
 

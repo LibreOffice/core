@@ -41,7 +41,7 @@ bool GraphicNativeMetadata::read(Graphic& rGraphic)
     boost::scoped_array<sal_uInt8> aBuffer(new sal_uInt8[aDataSize]);
 
     memcpy(aBuffer.get(), aLink.GetData(), aDataSize);
-    SvMemoryStream aMemoryStream(aBuffer.get(), aDataSize, STREAM_READ);
+    SvMemoryStream aMemoryStream(aBuffer.get(), aDataSize, StreamMode::READ);
 
     Exif aExif;
     aExif.read(aMemoryStream);

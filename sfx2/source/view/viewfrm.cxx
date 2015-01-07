@@ -366,7 +366,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 return;
             }
 
-            sal_uInt16 nOpenMode;
+            StreamMode nOpenMode;
             bool bNeedsReload = false;
             if ( !pSh->IsReadOnly() )
             {
@@ -465,15 +465,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 
                     pMed->CloseAndRelease();
-                    pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
+                    pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
                     pMed->SetOpenMode( nOpenMode );
 
                     pMed->CompleteReOpen();
-                    if ( nOpenMode & STREAM_WRITE )
+                    if ( nOpenMode & StreamMode::WRITE )
                         pMed->LockOrigFileOnDemand( false, true );
 
                     // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
-                    pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
+                    pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
 
                     if ( !pMed->GetErrorCode() )
                         bOK = true;

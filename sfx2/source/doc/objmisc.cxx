@@ -1271,7 +1271,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
             else
             {
                 // if a readonly medium has storage then it's stream is already based on temporary file
-                if( !(pMedium->GetOpenMode() & STREAM_WRITE) && !pMedium->HasStorage_Impl() )
+                if( !(pMedium->GetOpenMode() & StreamMode::WRITE) && !pMedium->HasStorage_Impl() )
                     // don't lock file opened read only
                     pMedium->CloseInStream();
             }

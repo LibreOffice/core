@@ -283,12 +283,12 @@ void StgCache::SetDirty( const rtl::Reference< StgPage > &xPage )
 bool StgCache::Open( const OUString& rName, StreamMode nMode )
 {
     // do not open in exclusive mode!
-    if( nMode & STREAM_SHARE_DENYALL )
-        nMode = ( ( nMode & ~STREAM_SHARE_DENYALL ) | STREAM_SHARE_DENYWRITE );
+    if( nMode & StreamMode::SHARE_DENYALL )
+        nMode = ( ( nMode & ~StreamMode::SHARE_DENYALL ) | StreamMode::SHARE_DENYWRITE );
     SvFileStream* pFileStrm = new SvFileStream( rName, nMode );
     // SvStream "Feature" Write Open auch erfolgreich, wenns nicht klappt
     bool bAccessDenied = false;
-    if( ( nMode & STREAM_WRITE ) && !pFileStrm->IsWritable() )
+    if( ( nMode & StreamMode::WRITE ) && !pFileStrm->IsWritable() )
     {
         pFileStrm->Close();
         bAccessDenied = true;

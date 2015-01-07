@@ -217,7 +217,7 @@ namespace svgio
 
                         if(aPass.hasElements())
                         {
-                            SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), STREAM_READ);
+                            SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), StreamMode::READ);
                             Graphic aGraphic;
 
                             if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(

@@ -227,7 +227,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// all opcodes with two operands
     // Verwaltung
     &SbiRuntime::StepSTMNT,         // beginning of a statement (+Line+Col)
     // E/A
-    &SbiRuntime::StepOPEN,          // (+SvStreamFlags+Flags)
+    &SbiRuntime::StepOPEN,          // (+StreamMode+Flags)
     // Objects
     &SbiRuntime::StepLOCAL,     // define local variable (+StringId+Typ)
     &SbiRuntime::StepPUBLIC,        // module global variable (+StringID+Typ)
@@ -4304,7 +4304,7 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
 }
 
-// (+SvStreamFlags+Flags)
+// (+StreamMode+Flags)
 // Stack: block length
 //        channel number
 //        file name
@@ -4317,7 +4317,7 @@ void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     short nBlkLen = pLen->GetInteger();
     short nChan   = pChan->GetInteger();
     OString aName(OUStringToOString(pName->GetOUString(), osl_getThreadTextEncoding()));
-    pIosys->Open( nChan, aName, static_cast<short>( nOp1 ),
+    pIosys->Open( nChan, aName, static_cast<StreamMode>( nOp1 ),
                   static_cast<short>( nOp2 ), nBlkLen );
     Error( pIosys->GetError() );
 }

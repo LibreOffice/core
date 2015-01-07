@@ -1170,7 +1170,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         {
             {
                 //read in the temporary file and use it as mail body
-                SfxMedium aMedium( aName.GetValue(),    STREAM_READ);
+                SfxMedium aMedium( aName.GetValue(),    StreamMode::READ);
                 SvStream* pInStream = aMedium.GetInStream();
                 if(pInStream)
                     pInStream->SetStreamCharSet( eEncoding );

@@ -27,6 +27,7 @@
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <rtl/string.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class StreamData;
 
@@ -40,34 +41,38 @@ inline rtl_TextEncoding GetStoreCharSet( rtl_TextEncoding eEncoding )
 
 // StreamTypes
 
-typedef sal_uInt16 StreamMode;
-
 // read, write, create,... options
-#define STREAM_READ                     0x0001  ///< allow read accesses
-#define STREAM_WRITE                    0x0002  ///< allow write accesses
+enum class StreamMode {
+    NONE                     = 0x0000,
+    READ                     = 0x0001,  ///< allow read accesses
+    WRITE                    = 0x0002,  ///< allow write accesses
 // file i/o
-#define STREAM_NOCREATE                 0x0004  ///< 1 == Dont create file
-#define STREAM_TRUNC                    0x0008  ///< Truncate _existing_ file to zero length
-#define STREAM_COPY_ON_SYMLINK          0x0010  ///< copy-on-write for symlinks (Unix)
-
-#define STREAM_READWRITEBITS            (STREAM_READ | STREAM_WRITE | \
-                                         STREAM_NOCREATE | STREAM_TRUNC)
-
+    NOCREATE                 = 0x0004,  ///< 1 == Dont create file
+    TRUNC                    = 0x0008,  ///< Truncate _existing_ file to zero length
+    COPY_ON_SYMLINK          = 0x0010,  ///< copy-on-write for symlinks (Unix)
 // sharing options
-#define STREAM_SHARE_DENYNONE           0x0100
-#define STREAM_SHARE_DENYREAD           0x0200  // overrides denynone
-#define STREAM_SHARE_DENYWRITE          0x0400  // overrides denynone
-#define STREAM_SHARE_DENYALL            0x0800  // overrides denyread,write,none
+    SHARE_DENYNONE           = 0x0100,
+    SHARE_DENYREAD           = 0x0200,  // overrides denynone
+    SHARE_DENYWRITE          = 0x0400,  // overrides denynone
+    SHARE_DENYALL            = 0x0800,  // overrides denyread,write,none
+};
+namespace o3tl
+{
+    template<> struct typed_flags<StreamMode> : is_typed_flags<StreamMode, 0x003f> {};
+}
 
-#define STREAM_SHAREBITS                (STREAM_SHARE_DENYNONE | STREAM_SHARE_DENYREAD |\
-                                         STREAM_SHARE_DENYWRITE | STREAM_SHARE_DENYALL)
+#define STREAM_READWRITEBITS            (StreamMode::READ | StreamMode::WRITE | \
+                                         StreamMode::NOCREATE | StreamMode::TRUNC)
 
-#define STREAM_READWRITE                (STREAM_READ | STREAM_WRITE)
-#define STREAM_SHARE_DENYREADWRITE      (STREAM_SHARE_DENYREAD | STREAM_SHARE_DENYWRITE)
+#define STREAM_SHAREBITS                (StreamMode::SHARE_DENYNONE | StreamMode::SHARE_DENYREAD |\
+                                         StreamMode::SHARE_DENYWRITE | StreamMode::SHARE_DENYALL)
 
-#define STREAM_STD_READ                 (STREAM_READ | STREAM_SHARE_DENYNONE | STREAM_NOCREATE)
-#define STREAM_STD_WRITE                (STREAM_WRITE | STREAM_SHARE_DENYALL)
-#define STREAM_STD_READWRITE            (STREAM_READWRITE | STREAM_SHARE_DENYALL)
+#define STREAM_READWRITE                (StreamMode::READ | StreamMode::WRITE)
+#define STREAM_SHARE_DENYREADWRITE      (StreamMode::SHARE_DENYREAD | StreamMode::SHARE_DENYWRITE)
+
+#define STREAM_STD_READ                 (StreamMode::READ | StreamMode::SHARE_DENYNONE | StreamMode::NOCREATE)
+#define STREAM_STD_WRITE                (StreamMode::WRITE | StreamMode::SHARE_DENYALL)
+#define STREAM_STD_READWRITE            (STREAM_READWRITE | StreamMode::SHARE_DENYALL)
 
 #define STREAM_SEEK_TO_BEGIN            0L
 #define STREAM_SEEK_TO_END              SAL_MAX_UINT64
@@ -236,7 +241,7 @@ private:
 
 protected:
     sal_uInt64      m_nBufFilePos; ///< File position of pBuf[0]
-    sal_uInt16      eStreamMode;
+    StreamMode   eStreamMode;
     bool            bIsWritable;
 
     virtual sal_Size GetData( void* pData, sal_Size nSize );

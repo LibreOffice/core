@@ -1711,7 +1711,7 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
     SwViewShell *pOldVSh = CallEndAction();
 
     // Ein Medium anlegen
-    SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
+    SfxMedium aDLMedium( rURL, StreamMode::READ | StreamMode::SHARE_DENYWRITE );
 
     SvStream* pStream = aDLMedium.GetInStream();
     if( pStream )

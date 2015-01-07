@@ -1906,7 +1906,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                             sal_uInt8* pBuf = new sal_uInt8[ nSoundDataLen ];
 
                             rStCtrl.Read( pBuf, nSoundDataLen );
-                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
+                            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC );
 
                             if( pOStm )
                             {

@@ -875,7 +875,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         tools::PolyPolygon aPath;
 
                         {   // read SvtGraphicFill
-                            SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
+                            SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),StreamMode::READ);
                             ReadSvtGraphicFill( aMemStm, aFilling );
                         }
 
@@ -916,7 +916,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         Polygon aPath;
 
                         {   // read SvtGraphicFill
-                            SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),STREAM_READ);
+                            SvMemoryStream aMemStm((void*)pA->GetData(), pA->GetDataSize(),StreamMode::READ);
                             ReadSvtGraphicStroke( aMemStm, aStroke );
                         }
 

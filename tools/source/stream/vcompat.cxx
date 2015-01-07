@@ -20,7 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
-VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion ) :
+VersionCompat::VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16 nVersion ) :
             mpRWStm     ( &rStm ),
             mnCompatPos ( 0 ),
             mnTotalSize ( 0 ),
@@ -29,7 +29,7 @@ VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16
 {
     if( !mpRWStm->GetError() )
     {
-        if( STREAM_WRITE == mnStmMode )
+        if( StreamMode::WRITE == mnStmMode )
         {
             mpRWStm->WriteUInt16( mnVersion );
             mnTotalSize = ( mnCompatPos = mpRWStm->Tell() ) + 4UL;
@@ -46,7 +46,7 @@ VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16
 
 VersionCompat::~VersionCompat()
 {
-    if( STREAM_WRITE == mnStmMode )
+    if( StreamMode::WRITE == mnStmMode )
     {
         const sal_uInt32 nEndPos = mpRWStm->Tell();
 

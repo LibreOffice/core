@@ -46,7 +46,7 @@ OGLPlayer::~OGLPlayer()
 
 static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
 {
-    SvFileStream aStream( rURL, STREAM_READ );
+    SvFileStream aStream( rURL, StreamMode::READ );
     if( !aStream.IsOpen() )
         return false;
 

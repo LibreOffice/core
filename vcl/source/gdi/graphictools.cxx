@@ -116,7 +116,7 @@ void SvtGraphicStroke::scale( double fXScale, double fYScale )
 
 SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rClass.maPath.Write( rOStm );
     rClass.maStartArrow.Write( rOStm );
@@ -139,7 +139,7 @@ SvStream& WriteSvtGraphicStroke( SvStream& rOStm, const SvtGraphicStroke& rClass
 
 SvStream& ReadSvtGraphicStroke( SvStream& rIStm, SvtGraphicStroke& rClass )
 {
-    VersionCompat aCompat( rIStm, STREAM_READ );
+    VersionCompat aCompat( rIStm, StreamMode::READ );
 
     rClass.maPath.Read( rIStm );
     rClass.maStartArrow.Read( rIStm );
@@ -241,7 +241,7 @@ void SvtGraphicFill::setPath( const tools::PolyPolygon& rPath )
 
 SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rClass.maPath.Write( rOStm );
     WriteColor( rOStm, rClass.maFillColor );
@@ -270,7 +270,7 @@ SvStream& WriteSvtGraphicFill( SvStream& rOStm, const SvtGraphicFill& rClass )
 
 SvStream& ReadSvtGraphicFill( SvStream& rIStm, SvtGraphicFill& rClass )
 {
-    VersionCompat aCompat( rIStm, STREAM_READ );
+    VersionCompat aCompat( rIStm, StreamMode::READ );
 
     rClass.maPath.Read( rIStm );
     ReadColor( rIStm, rClass.maFillColor );

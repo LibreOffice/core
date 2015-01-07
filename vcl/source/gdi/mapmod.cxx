@@ -68,7 +68,7 @@ MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 
 SvStream& ReadImplMapMode(SvStream& rIStm, MapMode::ImplMapMode& rImplMapMode)
 {
-    VersionCompat   aCompat( rIStm, STREAM_READ );
+    VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16          nTmp16;
 
     rIStm.ReadUInt16( nTmp16 ); rImplMapMode.meUnit = (MapUnit) nTmp16;
@@ -82,7 +82,7 @@ SvStream& ReadImplMapMode(SvStream& rIStm, MapMode::ImplMapMode& rImplMapMode)
 
 SvStream& WriteImplMapMode(SvStream& rOStm, const MapMode::ImplMapMode& rImplMapMode)
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
+    VersionCompat aCompat( rOStm, StreamMode::WRITE, 1 );
 
     rOStm.WriteUInt16( rImplMapMode.meUnit );
     WritePair( rOStm, rImplMapMode.maOrigin );

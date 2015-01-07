@@ -1487,7 +1487,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell
                     {
                         xTemp->Seek( STREAM_SEEK_TO_BEGIN );
                         xTemp->Read( pTemp, nLen );
-                        pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
+                        pBas = new SvMemoryStream( pTemp, nLen, StreamMode::READ );
                         pBas->ObjectOwnsMemory( true );
                         return true;
                     }

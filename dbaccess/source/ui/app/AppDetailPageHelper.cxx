@@ -1070,7 +1070,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                     {
                         SvMemoryStream  aData( aBmpSequence.getArray(),
                                             aBmpSequence.getLength(),
-                                            STREAM_READ );
+                                            StreamMode::READ );
 
                         GraphicConverter::Import(aData,aGraphic);
                     }

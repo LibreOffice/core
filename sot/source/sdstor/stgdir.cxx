@@ -73,7 +73,7 @@ void StgDirEntry::InitMembers()
     nPos        =
     nEntry      =
     nRefCnt     = 0;
-    nMode       = STREAM_READ;
+    nMode       = StreamMode::READ;
     bDirect     = true;
     bInvalid    =
     bCreated    =
@@ -307,7 +307,7 @@ sal_Int32 StgDirEntry::GetSize()
 bool StgDirEntry::SetSize( sal_Int32 nNewSize )
 {
     if (
-         !( nMode & STREAM_WRITE ) ||
+         !( nMode & StreamMode::WRITE ) ||
          (!bDirect && !pTmpStrm && !Strm2Tmp())
        )
     {
@@ -418,9 +418,9 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
         // try to enlarge, the readonly streams should not allow this
         if( nNew > nSize )
         {
-            if ( !( nMode & STREAM_WRITE ) || !SetSize( nNew ) )
+            if ( !( nMode & StreamMode::WRITE ) || !SetSize( nNew ) )
             {
-                SAL_WARN_IF(!(nMode & STREAM_WRITE), "sot",
+                SAL_WARN_IF(!(nMode & StreamMode::WRITE), "sot",
                     "Trying to resize readonly stream by seeking, could be a wrong offset: " << nNew);
                 return nPos;
             }
@@ -461,7 +461,7 @@ sal_Int32 StgDirEntry::Read( void* p, sal_Int32 nLen )
 
 sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
 {
-    if( nLen <= 0 || !( nMode & STREAM_WRITE ) )
+    if( nLen <= 0 || !( nMode & StreamMode::WRITE ) )
         return 0;
 
     // Was this stream committed internally and reopened in direct mode?
@@ -524,7 +524,7 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
 
 bool StgDirEntry::Commit()
 {
-    // OSL_ENSURE( nMode & STREAM_WRITE, "Trying to commit readonly stream!" );
+    // OSL_ENSURE( nMode & StreamMode::WRITE, "Trying to commit readonly stream!" );
 
     aSave = aEntry;
     bool bRes = true;
