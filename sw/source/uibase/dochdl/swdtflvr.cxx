@@ -743,7 +743,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
 #if defined(DEBUGPASTE)
         SvFileStream aPasteDebug(OUString(
-            "PASTEBUFFER.debug"), STREAM_WRITE|STREAM_TRUNC);
+            "PASTEBUFFER.debug"), StreamMode::WRITE|StreamMode::TRUNC);
         SwWriter aDbgWrt( aPasteDebug, *pDoc );
         aDbgWrt.Write( xWrt );
 #endif

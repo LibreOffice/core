@@ -48,7 +48,7 @@ void VclOutdevTest::testVirtualDevice()
     OUString rFileName("/tmp/foo-unx.png");
     try {
         vcl::PNGWriter aWriter( aBmp );
-        SvFileStream sOutput( rFileName, STREAM_WRITE );
+        SvFileStream sOutput( rFileName, StreamMode::WRITE );
         aWriter.Write( sOutput );
         sOutput.Close();
     } catch (...) {

@@ -6360,7 +6360,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
 
             SAL_INFO("filter.ms", "dumping " << aURLStr);
 
-            boost::scoped_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, StreamMode::TRUNC | STREAM_WRITE));
+            boost::scoped_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, StreamMode::TRUNC | StreamMode::WRITE));
 
             if( pDbgOut )
             {
@@ -6914,7 +6914,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
         OUString aTmpName("/tmp/embedded_stream_");
         aTmpName += OUString::number(nOleCount++);
         aTmpName += ".bin";
-        SvFileStream aTmpStream(aTmpName,STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
+        SvFileStream aTmpStream(aTmpName,StreamMode::READ|StreamMode::WRITE|StreamMode::TRUNC);
         xMemStream->Seek(0);
         *xMemStream >> aTmpStream;
         aTmpStream.Close();

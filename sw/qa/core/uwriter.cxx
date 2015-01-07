@@ -945,7 +945,7 @@ void SwDocTest::testGraphicAnchorDeletion()
 
 #ifdef DEBUG_AS_HTML
     {
-        SvFileStream aPasteDebug(OUString("cppunitDEBUG.html"), STREAM_WRITE|STREAM_TRUNC);
+        SvFileStream aPasteDebug(OUString("cppunitDEBUG.html"), StreamMode::WRITE|StreamMode::TRUNC);
         WriterRef xWrt;
         GetHTMLWriter( String(), String(), xWrt );
         SwWriter aDbgWrt( aPasteDebug, *m_pDoc );

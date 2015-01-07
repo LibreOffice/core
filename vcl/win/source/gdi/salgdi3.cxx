@@ -150,7 +150,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
 {
     if ( bModified )
     {
-        SvFileStream aCacheFile( aCacheFileName, STREAM_WRITE|STREAM_TRUNC );
+        SvFileStream aCacheFile( aCacheFileName, StreamMode::WRITE|StreamMode::TRUNC );
         if ( aCacheFile.IsWritable() )
         {
             sal_uInt32 nCacheMagic = ImplFontAttrCache::MAGIC;

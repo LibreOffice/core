@@ -34,7 +34,7 @@
 
 static long nTmpCount = 0;
 
-// The internal open mode is StreamMode::READ | STREAM_TRUNC, which is silly
+// The internal open mode is StreamMode::READ | StreamMode::TRUNC, which is silly
 // by itself. It inhibits the checking of sharing modes and is used
 // during CopyTo() and MoveTo() for opening a stream in read mode
 // although it may be open in DENYALL mode
