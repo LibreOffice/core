@@ -95,7 +95,7 @@ SwCache::SwCache( const sal_uInt16 nInitSize
     , m_nDecreaseMax( 0 )
 #endif
 {
-    m_aCacheObjects.reserve( (sal_uInt8)nInitSize );
+    m_aCacheObjects.reserve( nInitSize );
 }
 
 SwCache::~SwCache()
@@ -304,7 +304,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         // Shrink if possible.To do so we need enough free positions.
         // Unpleasent side effect: positions will be moved and the owner of
         // these might not find them afterwards
-        for ( sal_uInt16 i = 0; i < m_aCacheObjects.size(); ++i )
+        for ( size_t i = 0; i < m_aCacheObjects.size(); ++i )
         {
             SwCacheObj *pTmpObj = m_aCacheObjects[i];
             if ( !pTmpObj )
