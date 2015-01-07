@@ -115,9 +115,9 @@ extern "C"
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-static sal_uInt16 categorizeEvent(const GdkEvent *pEvent)
+static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
 {
-    sal_uInt16 nType = 0;
+    VclInputFlags nType = VclInputFlags::NONE;
     switch( pEvent->type )
     {
     case GDK_MOTION_NOTIFY:
@@ -425,8 +425,8 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
     while ((pEvent = gdk_event_get()))
     {
         aEvents.push(pEvent);
-        sal_uInt16 nEventType = categorizeEvent(pEvent);
-        if ( (nEventType & nType) || ( ! nEventType && (nType & VclInputFlags::OTHER) ) )
+        VclInputFlags nEventType = categorizeEvent(pEvent);
+        if ( (nEventType & nType) || ( nEventType == VclInputFlags::NONE && (nType & VclInputFlags::OTHER) ) )
         {
             bRet = true;
             break;
