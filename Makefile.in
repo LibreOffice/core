@@ -118,6 +118,7 @@ gbuild_TARGETS := AllLangHelp \
 	ExtensionPackageSet \
 	ExternalPackage \
 	ExternalProject \
+	Gallery \
 	GeneratedPackage \
 	InstallModule \
 	InstallScript \
