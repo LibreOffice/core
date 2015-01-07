@@ -21,7 +21,6 @@
 #include <vector>
 
 #include <osl/diagnose.h>
-#include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
@@ -217,10 +216,8 @@ void acc_Policy::checkPermission(
 /** current context overriding dynamic ac restriction
 */
 class acc_CurrentContext
-    : public ImplHelper1< XCurrentContext >
+    : public WeakImplHelper1< XCurrentContext >
 {
-    oslInterlockedCount m_refcount;
-
     Reference< XCurrentContext > m_xDelegate;
     Any m_restriction;
 
@@ -228,13 +225,6 @@ public:
     inline acc_CurrentContext(
         Reference< XCurrentContext > const & xDelegate,
         Reference< security::XAccessControlContext > const & xRestriction );
-    virtual ~acc_CurrentContext();
-
-    // XInterface impl
-    virtual void SAL_CALL acquire()
-        throw () SAL_OVERRIDE;
-    virtual void SAL_CALL release()
-        throw () SAL_OVERRIDE;
 
     // XCurrentContext impl
     virtual Any SAL_CALL getValueByName( OUString const & name )
@@ -244,32 +234,13 @@ public:
 inline acc_CurrentContext::acc_CurrentContext(
     Reference< XCurrentContext > const & xDelegate,
     Reference< security::XAccessControlContext > const & xRestriction )
-    : m_refcount( 0 )
-    , m_xDelegate( xDelegate )
+    : m_xDelegate( xDelegate )
 {
     if (xRestriction.is())
     {
         m_restriction = makeAny( xRestriction );
     }
     // return empty any otherwise on getValueByName(), not null interface
-}
-
-acc_CurrentContext::~acc_CurrentContext()
-{}
-
-void acc_CurrentContext::acquire()
-    throw ()
-{
-    osl_atomic_increment( &m_refcount );
-}
-
-void acc_CurrentContext::release()
-    throw ()
-{
-    if (! osl_atomic_decrement( &m_refcount ))
-    {
-        delete this;
-    }
 }
 
 Any acc_CurrentContext::getValueByName( OUString const & name )
