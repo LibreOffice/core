@@ -22,6 +22,9 @@
 
 /* LibreOfficeKit */
 
+namespace
+{
+
 jfieldID getHandleField(JNIEnv* pEnv, jobject aObject)
 {
     jclass clazz = pEnv->GetObjectClass(aObject);
@@ -46,6 +49,8 @@ const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
     return pClone;
 }
 
+} // anonymous namespace
+
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getError(JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
@@ -68,6 +73,55 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAn
     _exit(0);
 }
 
+namespace
+{
+
+struct CallbackData
+{
+    jmethodID aJavaCallbackMethod;
+    jclass aClass;
+    jobject aObject;
+};
+
+static CallbackData gCallbackData;
+
+/**
+ * Handle retrieved callback
+ */
+void messageCallback(int nType, const char* pPayload, void* pData)
+{
+    CallbackData* pCallbackData = (CallbackData*) pData;
+
+    JavaVM* pJavaVM = lo_get_javavm();
+    JNIEnv* pEnv;
+    bool bIsAttached = false;
+
+    int status = pJavaVM->GetEnv((void **) &pEnv, JNI_VERSION_1_6);
+
+    if(status < 0)
+    {
+        status = pJavaVM->AttachCurrentThread(&pEnv, NULL);
+        if(status < 0)
+        {
+            return;
+        }
+        bIsAttached = true;
+    }
+
+    jvalue aParameter[2];
+    aParameter[0].i = nType;
+    aParameter[1].l = pEnv->NewStringUTF(pPayload);
+
+    pEnv->CallVoidMethodA(pCallbackData->aObject, pCallbackData->aJavaCallbackMethod, aParameter);
+
+    if (bIsAttached)
+    {
+        pJavaVM->DetachCurrentThread();
+    }
+}
+
+} // anonymous namespace
+
 extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_documentLoadNative(JNIEnv* pEnv, jobject aObject, jstring documentPath)
 {
     const char* aCloneDocumentPath = copyJavaString(pEnv, documentPath);
@@ -80,6 +134,21 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
 }
 
 /* Document */
+
+/** Implementation of org.libreoffice.kit.Document.bindMessageCallback method */
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_bindMessageCallback
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    gCallbackData.aObject = (jobject) pEnv->NewGlobalRef(aObject);
+    jclass aClass = pEnv->GetObjectClass(aObject);
+    gCallbackData.aClass = (jclass) pEnv->NewGlobalRef(aClass);
+
+    gCallbackData.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrieved", "(ILjava/lang/String;)V");
+
+    pDocument->pClass->registerCallback(pDocument, messageCallback, (void*) &gCallbackData);
+}
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_destroy
     (JNIEnv* pEnv, jobject aObject)

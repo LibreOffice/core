@@ -9,6 +9,8 @@
 
 package org.libreoffice.kit;
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 
 public class Document {
@@ -28,7 +30,21 @@ public class Document {
 
     public Document(ByteBuffer handle) {
         this.handle = handle;
+        bindMessageCallback();
     }
+
+    /**
+     * Callback triggered through JNI to indicate that a new singal
+     * from LibreOfficeKit was retrieved.
+     */
+    private void messageRetrieved(int signalNumber, String payload) {
+        Log.i("Document", "Signal retrieved: " + signalNumber + " " + payload);
+    }
+
+    /**
+     * Bind the signal callback in LOK.
+     */
+    private native void bindMessageCallback();
 
     public native void destroy();
 
