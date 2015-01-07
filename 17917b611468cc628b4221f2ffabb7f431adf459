@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_6020924a",
+        "filename": "scripting/source/provider/ProviderCache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-07T08:47:16Z",
+      "side": 1,
+      "message": "how does the proof look like that m_hProviderDetailsCache can never be empty here?\n\nif the assert is sound, the following if is redundant and should be removed",
+      "revId": "17917b611468cc628b4221f2ffabb7f431adf459",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
