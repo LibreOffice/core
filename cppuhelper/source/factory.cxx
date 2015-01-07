@@ -23,7 +23,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -873,7 +873,7 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::s
     return retVal;
 }
 
-class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleServiceFactory,
+class OFactoryProxyHelper : public WeakImplHelper< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
 {
     Reference<XSingleServiceFactory >   xFactory;
