@@ -29,3 +29,12 @@
      }
  
      /* Completed MCU, so update state */
+@@ -402,7 +402,7 @@
+ 	  r = GET_BITS(s);
+ 	  s = HUFF_EXTEND(r, s);
+ 	  /* Scale and output coefficient in natural (dezigzagged) order */
+-	  (*block)[jpeg_natural_order[k]] = (JCOEF) (s << Al);
++	  (*block)[jpeg_natural_order[k]] = (JCOEF) ((unsigned)s << Al);
+ 	} else {
+ 	  if (r == 15) {	/* ZRL */
+ 	    k += 15;		/* skip 15 zeroes in band */
