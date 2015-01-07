@@ -76,9 +76,9 @@ struct _LibreOfficeKitClass
 {
   size_t  nSize;
 
-  void                    (*destroy)       (LibreOfficeKit *pThis);
-  LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit *pThis, const char *pURL);
-  char*                   (*getError)      (LibreOfficeKit *pThis);
+  void                    (*destroy)       (LibreOfficeKit* pThis);
+  LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit* pThis, const char* pURL);
+  char*                   (*getError)      (LibreOfficeKit* pThis);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
@@ -94,16 +94,20 @@ struct _LibreOfficeKitDocumentClass
 
   void (*destroy)   (LibreOfficeKitDocument* pThis);
   int (*saveAs)     (LibreOfficeKitDocument* pThis,
-                     const char *pUrl,
-                     const char *pFormat,
-                     const char *pFilterOptions);
+                     const char* pUrl,
+                     const char* pFormat,
+                     const char* pFilterOptions);
 #ifdef LOK_USE_UNSTABLE_API
   LibreOfficeKitDocumentType (*getDocumentType) (LibreOfficeKitDocument* pThis);
 
-  // Part refers to either indivual sheets in a Spreadsheet, or slides
-  // in a Slideshow, and has no relevance for writer documents.
+  /** Get number of part that the document contains.
+   * Part refers to either indivual sheets in a Spreadsheet,
+   * or slides in a Slideshow, and has no relevance for
+   * writer documents.
+   */
   int (*getParts) (LibreOfficeKitDocument* pThis);
 
+  /** Get current part of the document */
   int (*getPart)          (LibreOfficeKitDocument* pThis);
   void (*setPart)         (LibreOfficeKitDocument* pThis,
                            int nPart);
@@ -124,12 +128,16 @@ struct _LibreOfficeKitDocumentClass
                            const int nTileWidth,
                            const int nTileHeight);
 
-  // Get the document sizes in twips.
+  /** Get the document sizes in twips. */
   void (*getDocumentSize) (LibreOfficeKitDocument* pThis,
                            long* pWidth,
                            long* pHeight);
 
-  // Initialize document for rendering.
+  /** Initialize document for rendering.
+   * Sets the rendering and document parameters to default values
+   * that are needed to render the document correctly using
+   * tiled rendering.
+   */
   void (*initializeForRendering) (LibreOfficeKitDocument* pThis);
 
   void (*registerCallback)   (LibreOfficeKitDocument* pThis,
