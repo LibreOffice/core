@@ -1791,9 +1791,11 @@ void SwDoc::UnblockIdling()
         maIdleTimer.Start();
 }
 
-void SwDoc::StartBackgroundJobs() {
+void SwDoc::StartBackgroundJobs()
+{
     // Trigger DoIdleJobs(), asynchronously.
-    maIdleTimer.Start();
+    if (!maIdleTimer.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
+        maIdleTimer.Start();
 }
 
 IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
