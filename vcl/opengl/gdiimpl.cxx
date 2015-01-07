@@ -198,7 +198,7 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
         if( rClip.getRegionBand() )
             DrawRegionBand( *rClip.getRegionBand() );
         else
-            DrawPolyPolygon( rClip.GetAsB2DPolyPolygon(), true );
+            DrawPolyPolygon( rClip.GetAsB2DPolyPolygon(), false, true );
     }
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
@@ -695,11 +695,11 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     else
     {
         const ::basegfx::B2DPolyPolygon aPolyPolygon( aPolygon );
-        DrawPolyPolygon( aPolyPolygon );
+        DrawPolyPolygon( aPolyPolygon, false );
     }
 }
 
-void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
+void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bLine, bool blockAA )
 {
     ::std::vector< GLfloat > aVertices;
     GLfloat nWidth = GetWidth();
@@ -745,7 +745,7 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
                 DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
             }
         }
-        UseSolid( mnLineColor );
+        UseSolid( bLine ? mnLineColor : mnFillColor );
     }
 
     CHECK_GL_ERROR();
@@ -1133,7 +1133,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rP
         for( sal_uInt32 i = 0; i < rPolyPolygon.count(); i++ )
         {
             const ::basegfx::B2DPolyPolygon aOnePoly( rPolyPolygon.getB2DPolygon( i ) );
-            DrawPolyPolygon( aOnePoly );
+            DrawPolyPolygon( aOnePoly, false );
         }
     }
 
@@ -1216,7 +1216,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         for( sal_uInt32 i = 0; i < aAreaPolyPoly.count(); i++ )
         {
             const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( i ) );
-            DrawPolyPolygon( aOnePoly );
+            DrawPolyPolygon( aOnePoly, true );
         }
     }
     PostDraw();
