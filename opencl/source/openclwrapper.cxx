@@ -89,8 +89,10 @@ OString maCacheFolder = getCacheFolder();
 void setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
-    envInfo->mpkCmdQueue = gpuEnv.mpCmdQueue;
     envInfo->mpkProgram = gpuEnv.mpArryPrograms[0];
+
+    assert(gpuEnv.mnCmdQueuePos < OPENCL_CMDQUEUE_SIZE);
+    envInfo->mpkCmdQueue = gpuEnv.mpCmdQueue[gpuEnv.mnCmdQueuePos];
 }
 
 namespace {
@@ -259,7 +261,7 @@ struct OpenCLEnv
     cl_platform_id mpOclPlatformID;
     cl_context mpOclContext;
     cl_device_id mpOclDevsID;
-    cl_command_queue mpOclCmdQueue;
+    cl_command_queue mpOclCmdQueue[OPENCL_CMDQUEUE_SIZE];
 };
 
 bool initOpenCLAttr( OpenCLEnv * env )
@@ -270,9 +272,13 @@ bool initOpenCLAttr( OpenCLEnv * env )
     gpuEnv.mpContext = env->mpOclContext;
     gpuEnv.mpPlatformID = env->mpOclPlatformID;
     gpuEnv.mpDevID = env->mpOclDevsID;
-    gpuEnv.mpCmdQueue = env->mpOclCmdQueue;
 
     gpuEnv.mnIsUserCreated = 1;
+
+    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+        gpuEnv.mpCmdQueue[i] = env->mpOclCmdQueue[i];
+
+    gpuEnv.mnCmdQueuePos = 0; // default to 0.
 
     return false;
 }
@@ -284,11 +290,16 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
         return;
     }
 
-    if ( gpuEnv.mpCmdQueue )
+    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
     {
-        clReleaseCommandQueue( gpuEnv.mpCmdQueue );
-        gpuEnv.mpCmdQueue = NULL;
+        if (gpuEnv.mpCmdQueue[i])
+        {
+            clReleaseCommandQueue(gpuEnv.mpCmdQueue[i]);
+            gpuEnv.mpCmdQueue[i] = NULL;
+        }
     }
+    gpuEnv.mnCmdQueuePos = 0;
+
     if ( gpuEnv.mpContext )
     {
         clReleaseContext( gpuEnv.mpContext );
@@ -761,25 +772,41 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         return false;
     }
 
-    cl_command_queue command_queue = clCreateCommandQueue(
+    cl_command_queue command_queue[OPENCL_CMDQUEUE_SIZE];
+    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+    {
+        command_queue[i] = clCreateCommandQueue(
             context, pDeviceId, CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, &nState);
 
-    if(command_queue == NULL || nState != CL_SUCCESS)
-    {
-        if(command_queue != NULL)
-            clReleaseCommandQueue(command_queue);
+        if (command_queue[i] == NULL || nState != CL_SUCCESS)
+        {
+            // Release all command queues created so far.
+            for (int j = 0; j <= i; ++j)
+            {
+                if (command_queue[j])
+                {
+                    clReleaseCommandQueue(command_queue[j]);
+                    command_queue[j] = NULL;
+                }
+            }
 
-        clReleaseContext(context);
-        SAL_WARN("opencl", "failed to set/switch opencl device");
-        return false;
+            clReleaseContext(context);
+            SAL_WARN("opencl", "failed to set/switch opencl device");
+            return false;
+        }
     }
+
+    setOpenCLCmdQueuePosition(0); // Call this just to avoid the method being deleted from unused function deleter.
 
     releaseOpenCLEnv(&gpuEnv);
     OpenCLEnv env;
     env.mpOclPlatformID = platformId;
     env.mpOclContext = context;
     env.mpOclDevsID = pDeviceId;
-    env.mpOclCmdQueue = command_queue;
+
+    for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
+        env.mpOclCmdQueue[i] = command_queue[i];
+
     initOpenCLAttr(&env);
 
     // why do we need this at all?
@@ -802,6 +829,15 @@ void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
 
     cl_device_id id = gpuEnv.mpDevID;
     findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
+}
+
+void setOpenCLCmdQueuePosition( int nPos )
+{
+    if (nPos < 0 || nPos >= OPENCL_CMDQUEUE_SIZE)
+        // Out of range. Ignore this.
+        return;
+
+    gpuEnv.mnCmdQueuePos = nPos;
 }
 
 }

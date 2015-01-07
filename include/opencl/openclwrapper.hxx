@@ -33,6 +33,7 @@ if( status != CL_SUCCESS )    \
 }
 
 #define MAX_CLFILE_NUM 50
+#define OPENCL_CMDQUEUE_SIZE 1 // number of command queues per OpenCL device.
 
 #include <cstdio>
 
@@ -53,9 +54,10 @@ struct GPUEnv
     cl_context mpContext;
     cl_device_id *mpArryDevsID;
     cl_device_id mpDevID;
-    cl_command_queue mpCmdQueue;
+    cl_command_queue mpCmdQueue[OPENCL_CMDQUEUE_SIZE];
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file
     int mnIsUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
+    int mnCmdQueuePos;
     bool mnKhrFp64Flag;
     bool mnAmdFp64Flag;
 };
@@ -78,6 +80,12 @@ OPENCL_DLLPUBLIC bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSe
                                          bool bForceEvaluation);
 
 OPENCL_DLLPUBLIC void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
+
+/**
+ * Set the current command queue position in case of multiple command queues
+ * for a given device.
+ */
+OPENCL_DLLPUBLIC void setOpenCLCmdQueuePosition( int nPos );
 
 }
 
