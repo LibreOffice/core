@@ -1737,7 +1737,12 @@ void SwFlyFrm::MakeContentPos( const SwBorderAttrs &rAttrs )
         const SdrTextVertAdjust nAdjust = GetFmt()->GetTextVertAdjust().GetValue();
         if( nAdjust != SDRTEXTVERTADJUST_TOP )
         {
-            SwTwips nDiff = (Prt().*fnRect->fnGetHeight)() - CalcContentHeight(&rAttrs, nMinHeight, nUL);
+            const SwTwips nContentHeight = CalcContentHeight(&rAttrs, nMinHeight, nUL);
+            SwTwips nDiff = 0;
+
+            if( nContentHeight != 0)
+                nDiff = (Prt().*fnRect->fnGetHeight)() - nContentHeight;
+
             if( nDiff > 0 )
             {
                 if( nAdjust == SDRTEXTVERTADJUST_CENTER )
