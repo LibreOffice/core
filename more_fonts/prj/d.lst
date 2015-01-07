@@ -1,8 +1,8 @@
 mkdir: %COMMON_DEST%\pck%_EXT%
 ..\fonts\fc_local.conf	%COMMON_DEST%\pck%_EXT%\fc_local.conf
 # TODO: replace explicit versions by wildcard when the build system learns to handle them
-..\%__SRC%\misc\build\dejavu-fonts-ttf-2.33\ttf\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
-..\%__SRC%\misc\build\dejavu-fonts-ttf-2.33\LICENSE		%COMMON_DEST%\pck%_EXT%\LICENSE_dejavu
+..\%__SRC%\misc\build\dejavu-fonts-ttf-2.34\ttf\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
+..\%__SRC%\misc\build\dejavu-fonts-ttf-2.34\LICENSE		%COMMON_DEST%\pck%_EXT%\LICENSE_dejavu
 ..\%__SRC%\misc\build\croscorefonts-1.21.0\*.ttf	%COMMON_DEST%\pck%_EXT%\*.ttf
 ..\%__SRC%\misc\build\croscorefonts-1.21.0\LICENSE		%COMMON_DEST%\pck%_EXT%\LICENSE_croscorefonts
 ..\%__SRC%\misc\build\gentiumbasic-fonts-1.10\*.ttf		%COMMON_DEST%\pck%_EXT%\*.ttf
