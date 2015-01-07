@@ -404,14 +404,14 @@ bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor, double fTransparency )
         return UseSolid( nColor );
     if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
         return false;
-    mpProgram->SetColorf( "start_color", nColor, 0.0f );
-    mpProgram->SetColorf( "end_color", nColor, fTransparency );
+    mpProgram->SetColorf( "start_color", nColor, fTransparency );
+    mpProgram->SetColorf( "end_color", nColor, 1.0f );
     return true;
 }
 
 bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor )
 {
-    return UseSolidAA( nColor, 1.0 );
+    return UseSolidAA( nColor, 0.0 );
 }
 
 bool OpenGLSalGraphicsImpl::UseInvert()
