@@ -49,6 +49,17 @@
      table->fNumStates = fDStates->size();
      table->fFlags     = 0;
      if (fRB->fLookAheadHardBreak) {
+--- source/common/ubidiimp.h
++++ source/common/ubidiimp.h
+@@ -198,7 +198,7 @@
+ /* in a Run, logicalStart will get this bit set if the run level is odd */
+ #define INDEX_ODD_BIT (1UL<<31)
+ 
+-#define MAKE_INDEX_ODD_PAIR(index, level) ((index)|((int32_t)(level)<<31))
++#define MAKE_INDEX_ODD_PAIR(index, level) ((index)|((uint32_t)(level)<<31))
+ #define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((int32_t)(level)<<31))
+ #define REMOVE_ODD_BIT(x)                 ((x)&=~INDEX_ODD_BIT)
+ 
 --- source/common/ucharstriebuilder.cpp
 +++ source/common/ucharstriebuilder.cpp
 @@ -285,7 +285,7 @@
