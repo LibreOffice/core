@@ -825,7 +825,7 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap6;
     delete[] SwAttrPool::pVersionMap7;
 
-    for ( sal_uInt16 i = 0; i < pGlobalOLEExcludeList->size(); ++i )
+    for ( size_t i = 0; i < pGlobalOLEExcludeList->size(); ++i )
         delete (*pGlobalOLEExcludeList)[i];
     delete pGlobalOLEExcludeList;
 }
