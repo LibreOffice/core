@@ -100,7 +100,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocLIA:
         case ocRMZ:
         case ocZW:
-        case ocZinsZ:
+        case ocIpmt:
         case ocKapz:
         case ocKumZinsZ:
         case ocKumKapZ:
