@@ -224,10 +224,7 @@ public:
         {
             throw Unhandled();
         }
-        // marshaling
-        // Obtain cl context
-        ::opencl::KernelEnv kEnv;
-        ::opencl::setKernelEnv(&kEnv);
+
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
         if (CL_SUCCESS != err)
