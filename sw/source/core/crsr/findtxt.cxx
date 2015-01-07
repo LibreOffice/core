@@ -505,8 +505,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         }
         else
         {
-            nStart = (sal_uInt16)nProxyStart;
-            nEnd = (sal_uInt16)nProxyEnd;
+            nStart = nProxyStart;
+            nEnd = nProxyEnd;
         }
         nStart = nEnd;
     }
