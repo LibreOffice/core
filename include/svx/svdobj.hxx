@@ -105,44 +105,46 @@ namespace svx
 
 // Defines
 
-enum SdrObjKind {OBJ_NONE       = 0,  // abstract object (SdrObject)
-                 OBJ_GRUP       = 1,  // object group
-                 OBJ_LINE       = 2,  // line
-                 OBJ_RECT       = 3,  // rectangle (round corners optional)
-                 OBJ_CIRC       = 4,  // circle, ellipse
-                 OBJ_SECT       = 5,  // circle section
-                 OBJ_CARC       = 6,  // circle arc
-                 OBJ_CCUT       = 7,  // circle cut
-                 OBJ_POLY       = 8,  // polygon, PolyPolygon
-                 OBJ_PLIN       = 9,  // PolyLine
-                 OBJ_PATHLINE   =10,  // open Bezier-curve
-                 OBJ_PATHFILL   =11,  // closed Bezier-curve
-                 OBJ_FREELINE   =12,  // open free-hand line
-                 OBJ_FREEFILL   =13,  // closed free-hand line
-                 OBJ_SPLNLINE   =14,  // Natuerlicher kubischer Spline          (ni)
-                 OBJ_SPLNFILL   =15,  // Periodischer kubischer Spline          (ni)
-                 OBJ_TEXT       =16,  // text object
-                 OBJ_TEXTEXT    =17,  // Texterweiterungsrahmen                 (ni)
-                 OBJ_wegFITTEXT,      // FitToSize-Text (alle Zeilen gleich)
-                 OBJ_wegFITALLTEXT,   // FitToSize-Text (Zeilenweise)           (ni)
-                 OBJ_TITLETEXT  =20,  // Titeltext. Spezial-Textobjekt fuer StarDraw
-                 OBJ_OUTLINETEXT=21,  // OutlineText. Spezial-Textobjekt fuer StarDraw
-                 OBJ_GRAF       =22,  // Fremdgrafik - (StarView Graphic)
-                 OBJ_OLE2       =23,  // OLE object
-                 OBJ_EDGE       =24,  // Verbindungsobjekt fuer Konnektoren
-                 OBJ_CAPTION    =25,  // Legendenobjekt
-                 OBJ_PATHPOLY   =26,  // Polygon/PolyPolygon dargestellt durch SdrPathObj
-                 OBJ_PATHPLIN   =27,  // Polyline dargestellt durch SdrPathObj
-                 OBJ_PAGE       =28,  // object that represents a SdrPage
-                 OBJ_MEASURE    =29,  // measurement object
-                 OBJ_DUMMY      =30,  // dummy object for saving holes (to recover surrogates later)
-                 OBJ_FRAME      =31,  // continiously activated aktives OLE (PlugIn-Frame or similar)
-                 OBJ_UNO        =32,  // Universal Network Object packed into SvDraw object
-                 OBJ_CUSTOMSHAPE=33,  // custom shape
-                 OBJ_MEDIA      =34,  // media shape
-                 OBJ_TABLE      =35,  // table
-                 OBJ_OPENGL     =36,  // opengl graphic
-                 OBJ_MAXI};
+enum SdrObjKind {
+    OBJ_NONE       = 0,  /// abstract object (SdrObject)
+    OBJ_GRUP       = 1,  /// object group
+    OBJ_LINE       = 2,  /// line
+    OBJ_RECT       = 3,  /// rectangle (round corners optional)
+    OBJ_CIRC       = 4,  /// circle, ellipse
+    OBJ_SECT       = 5,  /// circle section
+    OBJ_CARC       = 6,  /// circle arc
+    OBJ_CCUT       = 7,  /// circle cut
+    OBJ_POLY       = 8,  /// polygon, PolyPolygon
+    OBJ_PLIN       = 9,  /// PolyLine
+    OBJ_PATHLINE   =10,  /// open Bezier-curve
+    OBJ_PATHFILL   =11,  /// closed Bezier-curve
+    OBJ_FREELINE   =12,  /// open free-hand line
+    OBJ_FREEFILL   =13,  /// closed free-hand line
+    OBJ_SPLNLINE   =14,  /// natural cubic Spline                  (ni)
+    OBJ_SPLNFILL   =15,  /// periodic cubic Spline                 (ni)
+    OBJ_TEXT       =16,  /// text object
+    OBJ_TEXTEXT    =17,  /// text extension frame                  (ni)
+    OBJ_wegFITTEXT,      /// FitToSize-Text (all lines equal)
+    OBJ_wegFITALLTEXT,   /// FitToSize-Text (by line)              (ni)
+    OBJ_TITLETEXT  =20,  /// TitleText, special text object for StarDraw
+    OBJ_OUTLINETEXT=21,  /// OutlineText, special text object for StarDraw
+    OBJ_GRAF       =22,  /// foreign graphic (StarView Graphic)
+    OBJ_OLE2       =23,  /// OLE object
+    OBJ_EDGE       =24,  /// connector object
+    OBJ_CAPTION    =25,  /// caption object
+    OBJ_PATHPOLY   =26,  /// Polygon/PolyPolygon represented by SdrPathObj
+    OBJ_PATHPLIN   =27,  /// Polyline represented by SdrPathObj
+    OBJ_PAGE       =28,  /// object that represents a SdrPage
+    OBJ_MEASURE    =29,  /// measurement object
+    OBJ_DUMMY      =30,  /// dummy object for saving holes (to recover surrogates later)
+    OBJ_FRAME      =31,  /// continuously activated OLE (PlugIn-Frame or similar)
+    OBJ_UNO        =32,  /// Universal Network Object packed into SvDraw object
+    OBJ_CUSTOMSHAPE=33,  /// custom shape
+    OBJ_MEDIA      =34,  /// media shape
+    OBJ_TABLE      =35,  /// table
+    OBJ_OPENGL     =36,  /// opengl graphic
+    OBJ_MAXI
+};
 
 enum SdrUserCallType {SDRUSERCALL_MOVEONLY,         // only moved, size unchanged
                       SDRUSERCALL_RESIZE,           // size and maybe position changed
@@ -402,10 +404,10 @@ protected:
     virtual SdrObjPlusData* NewPlusData() const;
 
 protected:
-    // Diese 3 Methoden muss ein abgeleitetes Objekt ueberladen, wenn es eigene
-    // geometrische Daten besitzt, die fuer den Undo-Fall gesichert werden
-    // sollen. NewGeoData() erzeugt lediglich eine leere Instanz auf eine von
-    // SdrObjGeoData abgeleitete Klasse.
+    /// A derived class must override these 3 methods if it has own geometric
+    /// data that must be saved for Undo.
+    /// NewGeoData() creates an empty instance of a class derived from
+    /// SdrObjGeoData.
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
@@ -480,15 +482,15 @@ public:
     virtual SdrObjList* GetSubList() const;
     SdrObject* GetUpGroup() const;
 
-    // Ueber die Objekt-Ordnungsnummer kann man feststellen, ob ein Objekt vor
-    // oder hinter einem anderen liegt. Objekte mit kleinen Ordnungsnummern werden
-    // zuerst gezeichnet, Objekte mit grossen Ordnungsnummern zuletzt.
-    // Wird die Reihenfolge der Objekte in der Liste veraendert, so wird ein
-    // Dirty-Flag gesetzt (an der Page). Beim naechsten SdrObject::GetOrdNum()
-    // werden die Ordnungsnummer aller Objekte der Liste neu bestimmt.
+    /// The order number (aka ZOrder, aka z-index) determines whether a
+    /// SdrObject is located above or below another.  Objects are painted from
+    /// lowest to highest order number.  If the order of SdrObjects in the
+    /// SdrObjList is changed, the bObjOrdNumsDirty flag is set on the SdrPage
+    /// and the next GetOrdNum() call recalculates the order number of all
+    /// SdrObjects in the SdrObjList.
     sal_uInt32 GetOrdNum() const;
 
-    // Warning: this method should only be used if you really knows what you're doing
+    // Warning: this method should only be used if you really know what you're doing
     sal_uInt32 GetOrdNumDirect() const { return nOrdNum;}
 
     // setting the order number should only happen from the model or from the page
@@ -556,41 +558,41 @@ public:
     virtual OUString TakeObjNameSingul() const;
     virtual OUString TakeObjNamePlural() const;
 
-    // Das Xor-Polygon wird von der View zu Draggen des Objektes benoetigt.
-    // Alle Polygone innerhalb des tools::PolyPolygon werden als PolyLine interpretiert.
-    // Moechte man ein geschlossenes Polygon, so muss man es explizit schliessen.
+    /// The Xor-Polygon is required by the View to drag the object.
+    /// All polygons within the PolyPolygon are interpreted as PolyLine.
+    /// To get a closed Polygon, close it explicitly.
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const;
 
-    // Die Kontur fuer TextToContour
+    /// contour for TextToContour
     virtual basegfx::B2DPolyPolygon TakeContour() const;
 
-    // Ueber GetHdlCount gibt ein Objekt die Anzahl seiner Handles preis.
-    // Im Normalfall werden dies 8 sein, bei einer Strecke 2. Bei Polygonobjekten
-    // (Polygon,Spline,Bezier) kann die Handleanzahl wesentlich groesser werden.
-    // Polygonobjekten wird ausserdem die Moeglichkeit eingeraeumt einen Punkt
-    // eines selektierten Objekts zu selektieren. Das Handle dieses Punktes wird
-    // dann durch einen Satz neuer Handles ausgetauscht (PlusHdl). Bei einem
-    // Polygon wird das wohl ein einfacher Selektionshandle sein, bei einer
-    // Bezierkurve dagegen koennen das schon bis zu 3 Handles werden (inkl Gewichte).
-    // GetHdl() und GetPlusHdl() muessen Handleinstanzen mit new erzeugen!
-    // Ein Objekt, das bei HasSpacialDrag() true liefert muss diese Methoden
-    // zur Verfuegung stellen (inkl. FillHdlList).
+    /// Via GetHdlCount the number of Handles can be retrieved.
+    /// Normally 8, if it's a line 2.
+    /// For Polygon objects (Polygon/Spline/Bezier) the number may be much
+    /// larger.  Polygon objects are also allowed to select a point of a
+    /// selected object.  The handle of that point will then be replaced by
+    /// a new set of handles (PlusHdl).  For a Polygon this would be a simple
+    /// selection Handle, for a Bezier curve this may be up to 3 Handles
+    /// (including Weights).
+    /// GetHdl() and GetPlusHdl() must create Handle instances with new!
+    /// An object that returns true from HasSpacialDrag() must provide these
+    /// methods (incl. FillHdlList()).
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
     virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;
 
-    // Die Standardtransformationen (Move,Resize,Rotate,Mirror,Shear) werden von der
-    // View uebernommen (TakeXorPoly(),...).
-    // Objektspeziefisches draggen wie z.B. Eckenradius bei Rechtecken,
-    // Stuetzstellen bei Splines, Gewichte bei Bezierkurven und Pointer von
-    // Labelobjekten muss vom Objekt selbst gehandled werden. Um das Model
-    // Statusfrei zu halten werden die Statusdaten an der View gehalten und dem
-    // Objekt dann uebergeben. EndDrag liefrt im Normalfall true fuer Erfolg.
-    // false kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
-    // veraendert hat, wobei dir evtl. Tatsache das die Maus nicht bewegt wurde
-    // bereits von der View abgefangen wird.
+    /// The standard transformations (Move,Resize,Rotate,Mirror,Shear) are
+    /// taken over by the View (TakeXorPoly(),...).
+    /// Object type specific dragging like corner radius of Rectangle,
+    /// control points of Splines, weights of Bezier curves, pointer of
+    /// Label objects must be handled by the object itself.
+    /// To keep the Model free of state, the state is kept in the View
+    /// and then passed to the object. EndDrag usually returns true for success,
+    /// false may be returned if the dragging did not modify the object,
+    /// where the View already handles the case that the pointer was not
+    /// moved at all.
     virtual bool hasSpecialDrag() const;
     virtual bool beginSpecialDrag(SdrDragStat& rDrag) const;
     virtual bool applySpecialDrag(SdrDragStat& rDrag);
@@ -607,36 +609,36 @@ public:
     virtual bool supportsFullDrag() const;
     virtual SdrObject* getFullDragClone() const;
 
-    // Jedes Objekt muss in der Lage sein sich selbst interaktiv zu erzeugen.
-    // Beim MausDown wird zunaechst ein neues Objekt erzeugt und dann seine
-    // BegCreate()-Methode gerufen. Bei jedem MausMode wird dann MovCreate
-    // gerufen. BrkCreate() bedeutet, dass der User die interaktive Objekt-
-    // erzeugung abgebrochen hat. EndCreate() wird gerufen beim MouseUp-Event.
-    // Liefert EndCreate() ein true, so ist die Objekterzeugung abgeschlossen;
-    // das Objekt wird in die entsprechende Liste eingefuegt. Andernfalls
-    // (EndCreate()==false) gehe ich davon aus, dass weitere Punkte zur
-    // Objekterzeugung notwendig sind (Polygon,...). Der Parameter eCmd
-    // enthaelt die Anzahl der Mausklicks (so die App diese durchreicht).
-    // BckCreate() -> Letztes EndCreate() rueckgaengig machen (z.B. letzten
-    // Polygonpunkt wieder loeschen).
-    // ReturnCode: true=Weiter gehts, false=Create dadurch abgebrochen.
+    /// Every object must be able to create itself interactively.
+    /// On MouseDown first an object is created, and its BegCreate() method
+    /// is called.  On every MouseMove, MovCreate() is called.  BrkCreate()
+    /// is called if the user cancels the interactive object creation.
+    /// EndCreate() is called on the MouseUp event.  If EndCreate() returns
+    /// true, the creation is finished; the object is inserted into the
+    /// corresponding list.  Otherwise it is assumed that further points
+    /// are necessary to create the object (Polygon, ...).  The parameter
+    /// eCmd contains the number of mouse clicks (if the application
+    /// provides it).
+    /// BckCreate() will undo the previous EndCreate(), e.g. to delete the
+    /// last point of the Polygon.  If BckCreate() returns false, creation
+    /// is cancelled.
     virtual bool BegCreate(SdrDragStat& rStat);
     virtual bool MovCreate(SdrDragStat& rStat); // if true, Xor needs to be repainted
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     virtual bool BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
 
-    // damit holt man sich den Pointer, der das Createn dieses Objekts symbolisiert
+    /// get the cursor/pointer that signals creating this object
     virtual Pointer GetCreatePointer() const;
 
-    // Polygon das waehrend des Erzeugens aufgezogen wird
+    /// Polygon dragged by the user when creating the object
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 
-    // Die Methoden Move, Resize, Rotate, Mirror, Shear, SetSnapRect und
-    // SetLogicRect rufen jeweils die entsprechenden Nbc-Methoden, versenden einen
-    // Repaint-Broadcast und setzen den Modified-Status am Model. Abgeleitete
-    // Objekte sollten i.d.R. nur die Nbc-Methoden ueberladen.
-    // Nbc bedeutet: 'NoBroadcast'.
+    /// The methods Move, Resize, Rotate, Mirror, Shear, SetSnapRect and
+    /// SetLogicRect call the corresponding Nbc-methods, send a Repaint
+    /// broadcast and set the Modified state on the Model.
+    /// Derived classes should usually only override the Nbc methods.
+    /// Nbc means "no broadcast".
     virtual void NbcMove  (const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs);
@@ -649,9 +651,8 @@ public:
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
     virtual void Shear (const Point& rRef, long nAngle, double tn, bool bVShear);
 
-    // Die relative Position eines Zeichenobjektes ist die Entfernung der
-    // linken oberen Eche des logisch umschliessenden Rechtecks (SnapRect)
-    // zum Anker.
+    /// The relative position of a SdrObject is the distance of the upper
+    /// left corner of the logic bounding rectangle (SnapRect) to the anchor.
     virtual void NbcSetRelativePos(const Point& rPnt);
     virtual void SetRelativePos(const Point& rPnt);
     virtual Point GetRelativePos() const;
@@ -660,10 +661,10 @@ public:
     virtual void SetAnchorPos(const Point& rPnt);
     virtual const Point& GetAnchorPos() const;
 
-    // Snap wird nicht auf dem BoundRect ausgefuehrt, sondern nach Moeglichkeit auf
-    // logischen Koordinaten (also ohne Beruecksichtigung von Strichstaerke, ... ).
-    // SetSnapRect() versucht das Objekt so hinzusizen, dass es in das uebergebene
-    // Rect passt (ohne Strichstaerke, ...)
+    /// Snap is not done on the BoundRect but if possible on logic coordinates
+    /// (i.e. without considering stroke width, ...)
+    /// SetSnapRect() tries to size the Object so that it fits into the
+    /// passed Rect (without stroke width, ...)
     virtual void RecalcSnapRect();
     virtual const Rectangle& GetSnapRect() const;
     virtual void SetSnapRect(const Rectangle& rRect);
@@ -685,8 +686,7 @@ public:
     virtual long GetRotateAngle() const;
     virtual long GetShearAngle(bool bVertical = false) const;
 
-    // Zum Fangen von/auf ausgezeichneten Punkten eines Obj (Polygonpunkte,
-    // Kreismittelpunkt, ...)
+    /// snap to special points of an Object (polygon points, center of circle)
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
 

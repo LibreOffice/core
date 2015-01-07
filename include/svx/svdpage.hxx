@@ -54,12 +54,14 @@ class Color;
 class SfxStyleSheet;
 class SvxUnoDrawPagesAccess;
 
-enum SdrInsertReasonKind {SDRREASON_UNKNOWN,    // unbekannt
-                          SDRREASON_STREAMING,  // einlesen eines Doks
-                          SDRREASON_UNDO,       // kommt aus dem Undo
-                          SDRREASON_COPY,       // irgendjemand kopiert...
-                          SDRREASON_VIEWCREATE, // vom Anwender interaktiv erzeugt
-                          SDRREASON_VIEWCALL};  // Durch SdrView::Group(), ...
+enum SdrInsertReasonKind {
+    SDRREASON_UNKNOWN,
+    SDRREASON_STREAMING,  /// importing document
+    SDRREASON_UNDO,       /// from Undo
+    SDRREASON_COPY,       /// something copied...
+    SDRREASON_VIEWCREATE, /// created by User interactively
+    SDRREASON_VIEWCALL    /// via SdrView::Group(), ...
+};
 
 class SdrInsertReason {
     const SdrObject* pRefObj;
@@ -88,10 +90,10 @@ private:
 protected:
 friend class SdrObjListIter;
 friend class SdrEditView;
-    SdrObjList* pUpList;   // Vaterliste
-    SdrModel*   pModel;    // Diese Liste gehoert zu diesem Model (Layer,ItemPool,Storage).
-    SdrPage*    pPage;     // Page, in die Liste haengt. Kann auch this sein.
-    SdrObject*  pOwnerObj; // OwnerObject, falls Liste eines GruppenObjekts.
+    SdrObjList* pUpList;   /// parent list
+    SdrModel*   pModel;    /// model to which the list belongs (Layer,ItemPool,Storage)
+    SdrPage*    pPage;     /// Page containing the list, may be "this".
+    SdrObject*  pOwnerObj; /// OwnerObject, if it's list of a Group object.
     Rectangle   aOutRect;
     Rectangle   aSnapRect;
     SdrObjListKind eListKind;
@@ -113,12 +115,12 @@ public:
 
     virtual SdrObjList* Clone() const;
 
-    // !!! Diese Methode nur fuer Leute, die ganz genau wissen was sie tun !!!
+    // !!! This method is only for people who know exactly what they do !!!
 
     // #110094# This should not be needed (!)
     void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=true; }
     void CopyObjects(const SdrObjList& rSrcList);
-    // alles Aufraeumen (ohne Undo)
+    /// clean up everything (without Undo)
     void    Clear();
     SdrObjListKind GetListKind() const                  { return eListKind; }
     void           SetListKind(SdrObjListKind eNewKind) { eListKind=eNewKind; }
@@ -130,7 +132,7 @@ public:
     virtual void     SetPage(SdrPage* pNewPage);
     virtual SdrModel* GetModel() const;
     virtual void      SetModel(SdrModel* pNewModel);
-    // Neuberechnung der Objekt-Ordnungsnummern
+    /// recalculate order numbers / ZIndex
     void     RecalcObjOrdNums();
     bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE
@@ -139,15 +141,15 @@ public:
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE
                               , const SdrInsertReason* pReason=NULL
                                                                      );
-    // aus Liste entfernen ohne delete
+    /// remove from list without delete
     virtual SdrObject* NbcRemoveObject(size_t nObjNum);
     virtual SdrObject* RemoveObject(size_t nObjNum);
-    // Vorhandenes Objekt durch ein anderes ersetzen.
-    // Wie Remove&Insert jedoch performanter, da die Ordnungsnummern
-    // nicht Dirty gesetzt werden muessen.
+    /// Replace existing object by different one.
+    /// Same as Remove(old)+Insert(new) but faster because the order numbers
+    /// do not have to be set dirty.
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum);
-    // Die Z-Order eines Objekts veraendern
+    /// Modify ZOrder of an SdrObject
     virtual SdrObject* NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
@@ -156,23 +158,23 @@ public:
     const Rectangle& GetAllObjSnapRect() const;
     const Rectangle& GetAllObjBoundRect() const;
 
-    // Alle Textobjekte neu formatieren, z.B. bei Druckerwechsel
+    /// reformat all text objects, e.g. when changing printer
     void NbcReformatAllTextObjects();
     void ReformatAllTextObjects();
 
     /** #103122# reformats all edge objects that are connected to other objects */
     void ReformatAllEdgeObjects();
 
-    // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
+    /// convert attributes of the style to hard formatting
     void BurnInStyleSheetAttributes();
 
     size_t GetObjCount() const;
     SdrObject* GetObj(size_t nNum) const;
 
-    // Gelinkte Seite oder gelinktes Gruppenobjekt
+    /// linked page or linked group object
     virtual bool IsReadOnly() const;
 
-    // Zaehlt alle Objekte inkl. Objekte in Objektgruppen, ...
+    /// count all objects including objects in Groups
     size_t CountAllObjects() const;
 
     /** Makes the object list flat, i.e. the object list content are
@@ -302,22 +304,13 @@ private:
         const sal_uInt32 nObjectPosition);
 };
 
-/*
-Eine Sdraw-Seite enthaelt genau eine Objektliste sowie eine Beschreibung
-der physikalischen Seitendimensionen (Groesse/Raender). Letzteres wird
-lediglich zum Fangen von Objekten beim Draggen benoetigt.
-An der Seite lassen sich (ueber SdrObjList) Objekte einfuegen und loeschen,
-nach vorn und nach hinten stellen. Ausserdem kann die Ordnungszahl eines
-Objektes abgefragt sowie direkt gesetzt werden.
-*/
-
 // Used for all methods which return a page number
 #define SDRPAGE_NOTFOUND 0xFFFF
 
 
 // class SdrPageGridFrame
 
-// Fuer das Fangraster/Punkgitter im Writer
+/// for the snap-to-grid in Writer
 class SdrPageGridFrame
 {
     Rectangle aPaper;
@@ -407,8 +400,15 @@ public:
 };
 
 
-// class SdrPage
-
+/**
+  A SdrPage contains exactly one SdrObjList and a description of the physical
+  page dimensions (size / margins).  The latter is required to "catch" objects
+  during drag-and-drop.
+  The SdrPage allows (via SdrObjList) inserting and removing SdrObjects,
+  as well as moving them into the foreground or background.
+  Also it's possible to request and directly set the order number (ZOrder)
+  of SdrObjects.
+*/
 class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
 {
     SdrPage& operator=(const SdrPage& rSrcPage) SAL_DELETED_FUNCTION;
@@ -541,15 +541,15 @@ protected:
     void TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage);
 public:
 
-    // Aenderungen an den Layern setzen nicht das Modified-Flag !
+    /// changing the layers does not set the modified-flag!
     const         SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
                   SdrLayerAdmin& GetLayerAdmin()                        { return *pLayerAdmin; }
 
     virtual OUString GetLayoutName() const;
 
-    // fuer's Raster im Writer, auch fuer AlignObjects wenn 1 Objekt markiert ist
-    // wenn pRect!=NULL, dann die Seiten, die von diesem Rect intersected werden
-    // ansonsten die sichtbaren Seiten.
+    /// for snap-to-grid in Writer, also for AlignObjects if 1 object is marked
+    /// if pRect != null, then the pages that are intersected by this Rect,
+    /// otherwise the visible pages
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const;
     bool IsObjectsNotPersistent() const          { return mbObjectsNotPersistent; }
     void SetObjectsNotPersistent(bool b)     { mbObjectsNotPersistent = b; }
