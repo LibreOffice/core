@@ -25,7 +25,9 @@
 # fallback server is used.
 
 # The primary fallback site.
-OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
+# OOO_EXTRAS=http://ooo-extras.apache-extras.org.codespot.com/files/
+
+OOO_EXTRAS=http://sourceforge.net/projects/oooextras.mirror/files/
 
 # Must not fallback to svn
 # SVN_TRUNK=http://svn.apache.org/repos/asf/!svn/bc/1336449/incubator/ooo/trunk/ext_sources/
@@ -232,10 +234,10 @@ if (SYSTEM_CURL != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS == YES)
-    MD5 = f872f4ac066433d8ff92f5e316b36ff9
-    name = dejavu-fonts-ttf-2.33.zip
-    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.33/dejavu-fonts-ttf-2.33.zip/download
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+    MD5 = 161462de16e2ca79873bc2b0d2e6c74c
+    name = dejavu-fonts-ttf-2.34.tar.bz2
+    URL1 = http://sourceforge.net/projects/dejavu/files/dejavu/2.34/dejavu-fonts-ttf-2.34.tar.bz2/download
+    # URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = fdb27bfe2dbe2e7b57ae194d9bf36bab
