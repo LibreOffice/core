@@ -1762,6 +1762,7 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pPLCFx_PCD;
     delete pPieceIter;
     delete pPiecePLCF;
+    delete pAtnBook;
     delete pBook;
     delete pFldEdnPLCF;
     delete pFldFtnPLCF;
