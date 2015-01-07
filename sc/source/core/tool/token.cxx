@@ -1417,33 +1417,6 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, boo
     return bIs;
 }
 
-sal_Int32 ScTokenArray::GetWeight() const
-{
-    sal_Int32 result(0);
-
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
-    {
-        switch ((*p)->GetType())
-        {
-        case svDoubleRef :
-        case svExternalDoubleRef:
-            {
-                const ScComplexRefData& rRef = *(*p)->GetDoubleRef();
-                result += ( (rRef.Ref2.Row() - rRef.Ref1.Row() + 1) * (rRef.Ref2.Col() - rRef.Ref1.Col() + 1) );
-            }
-            break;
-        default:
-            break;
-        }
-    }
-    // Just print out the this pointer. It turns out to be quite complicated to get
-    // a symbolic printout of the ScTokenArray here.
-    SAL_INFO("sc.token", "GetWeight(" << this << "): " << result);
-    return result;
-}
-
 namespace {
 
 // we want to compare for similar not identical formulae
