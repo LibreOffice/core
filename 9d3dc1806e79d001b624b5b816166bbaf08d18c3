@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba3cc151_20036aba",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-07T08:06:50Z",
+      "side": 1,
+      "message": "mpSalData etc.: nitpick, use \"nullptr\" rather than \"0\" in new code",
+      "revId": "9d3dc1806e79d001b624b5b816166bbaf08d18c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_4000eeaa",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-07T08:06:50Z",
+      "side": 1,
+      "message": "mbNotAllTimerCalled: use \"false\" instead of \"0\" for bool values\n\nmaAppData etc.: this is wrong; for one, ImplSVAppData has a defaulted default ctor, so will only default-initialize its members; for another, no need to bother the copy ctor",
+      "revId": "9d3dc1806e79d001b624b5b816166bbaf08d18c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba3cc151_e02b4232",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-07T08:06:50Z",
+      "side": 1,
+      "message": "mxAccessBridge etc.: more idiomatic to use empty parentheses \"()\", or to not even mention mxAccessBridge in the mem-initializer-list (where the former\u0027s value-initialization is the same as the latter\u0027s default-initialization)",
+      "revId": "9d3dc1806e79d001b624b5b816166bbaf08d18c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
