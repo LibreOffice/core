@@ -423,7 +423,7 @@ void splitSQL( const OString & sql, OStringVector &vec )
         }
         else if( singleQuote )
         {
-            if( '\'' == c && '\'' == sql[i+1] )
+            if( '\'' == c && (i+1) < length && '\'' == sql[i+1] )
             {
                 // two subsequent single quotes within a quoted string
                 // mean a single quote within the string
