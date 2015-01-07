@@ -113,6 +113,23 @@ public:
     { return css::uno::Sequence<sal_Int8>(); }
 };
 
+/** Implementation helper implementing interfaces
+    com::sun::star::uno::XInterface and com::sun::star::lang::XTypeProvider
+    inherting from a BaseClass.
+
+    All acquire() and release() calls are delegated to the BaseClass.  Upon
+    queryInterface(), if a demanded interface is not supported by this class
+    directly, the request is delegated to the BaseClass.
+
+    @attention
+    The BaseClass has to be complete in the sense that
+    com::sun::star::uno::XInterface and com::sun::star::lang::XTypeProvider are
+    implemented properly.
+
+    @derive
+    Inherit from this class giving your additional interface(s) to be
+    implemented as template argument(s).
+*/
 template<typename BaseClass, typename... Ifc>
 class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplInheritanceHelper:
     public BaseClass, public Ifc...
