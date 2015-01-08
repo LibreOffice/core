@@ -1219,17 +1219,19 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     //bool bDrawnOk = true;
     if( bIsHairline )
     {
-        // hairlines can benefit from a simplified tesselation
-        // e.g. for hairlines the linejoin style can be ignored
-        /*basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
-
-        // draw tesselation result
-        const int nTrapCount = aB2DTrapVector.size();
-        if( nTrapCount > 0 )
-            bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
-
-        return bDrawnOk;*/
+        // hairlines can be drawn in a simpler way (the linejoin and linecap styles can be ignored)
+        PreDraw();
+        if( UseSolidAA( mnLineColor, fTransparency ))
+        {
+            for( sal_uInt32 j = 0; j < rPolygon.count() - 1; j++ )
+            {
+                const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
+                const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 )) );
+                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+            }
+        }
+        PostDraw();
+        return true;
     }
 
     // get the area polygon for the line polygon
