@@ -686,7 +686,7 @@ double ScGetCompoundInterest(double fZins, double fZr, double fZzr, double fBw,
                          double fZw, double fF, double& fRmz);
 void ScIpmt();
 void ScPpmt();
-void ScKumZinsZ();
+void ScCumIpmt();
 void ScKumKapZ();
 void ScEffektiv();
 void ScNominal();

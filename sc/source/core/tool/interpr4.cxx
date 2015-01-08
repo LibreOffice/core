@@ -4046,7 +4046,7 @@ StackVar ScInterpreter::Interpret()
                 case ocErfc_MS          : ScErfc();                     break;
                 case ocIpmt             : ScIpmt();                     break;
                 case ocPpmt             : ScPpmt();                     break;
-                case ocKumZinsZ         : ScKumZinsZ();                 break;
+                case ocCumIpmt         : ScCumIpmt();                 break;
                 case ocKumKapZ          : ScKumKapZ();                  break;
                 case ocEffektiv         : ScEffektiv();                 break;
                 case ocNominal          : ScNominal();                  break;
