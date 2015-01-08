@@ -109,7 +109,11 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
     const bool bIsGraphic(0 != dynamic_cast< SdrGrafObj* >(pPickObj));
 
-    if(pPickObj && !bIsGraphic && pPickObj->IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(pPickObj))
+    if(pPickObj
+        && !bIsGraphic
+        && !(pPickObj->IsEmptyPresObj() )
+        && pPickObj->IsClosedObj()
+        && !dynamic_cast< SdrOle2Obj* >(pPickObj))
     {
         // fill style change (fill object with graphic), independent of mnAction
         // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
