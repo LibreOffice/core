@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_82103c50",
+        "filename": "include/svtools/grfmgr.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-01-08T10:36:17Z",
+      "side": 1,
+      "message": "\u003e what\u0027s the problem this patch tries to solve? a compiler warning?\n\nWorth. Unit tests breakage, because the comparison against GRFMGR_AUTOSWAPSTREAM_TEMP was failing, even though it was previously assigned to this value.\n\n\u003e on other 64-bit platforms, the resulting SvStream* values will be 0x00000000FFFFFFF* (whether or not that\u0027s a good idea)\n\nWe should clean up this mess in the first place.\n\n\u003e so it looks odd that on Windows 64-bit only they should be 0xFFFFFFFFFFFFFFF* instead\n\nI managed only to get it work, after turning to signed, so that GRFMGR_AUTOSWAPSTREAM_TEMP \u003d\u003d -2.",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 34
+      },
+      "revId": "03cc404a08f3e57c97b2368530ddf40baaaff851",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
