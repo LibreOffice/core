@@ -1439,7 +1439,7 @@ RTLFUNC(Replace)
                 if( nPos != STRING_NOTFOUND )
                 {
                     aExpStr.Replace( nPos, nFindStrLen, aReplaceStr );
-                    nPos = nPos - nFindStrLen + nReplaceStrLen + 1;
+                    nPos = nPos + nReplaceStrLen;
                     nCounts++;
                 }
                 else
@@ -1448,7 +1448,7 @@ RTLFUNC(Replace)
                 }
             }
         }
-        rPar.Get(0)->PutString( aExpStr.Copy( static_cast<sal_uInt16>(lStartPos - 1) )  );
+        rPar.Get(0)->PutString( aExpStr.Copy() );
     }
 }
 
