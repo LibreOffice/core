@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XStream.hpp>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <svl/cintitem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -215,6 +216,18 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     const OUString sOrigName = BookmarkToWriter(*pName);
     pReffedStck->NewAttr( aStart,
                           SwFltBookmark( sOrigName, aVal, pB->GetHandle(), IsTOCBookmarkName( sOrigName ) ));
+    return 0;
+}
+
+long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
+{
+    if (WW8PLCFx_AtnBook* pAtnBook = pPlcxMan->GetAtnBook())
+    {
+        if (pAtnBook->getIsEnd())
+            pReffedStck->SetAttr(*pPaM->GetPoint(), RES_FLTR_ANNOTATIONMARK, true, pAtnBook->getHandle());
+        else
+            pReffedStck->NewAttr(*pPaM->GetPoint(), CntUInt16Item(RES_FLTR_ANNOTATIONMARK, pAtnBook->getHandle()));
+    }
     return 0;
 }
 

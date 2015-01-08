@@ -364,7 +364,7 @@ public:
 enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 
 //Its hardcoded that eFTN be the first one: A very poor hack, needs to be fixed
-enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260 };
+enum eExtSprm { eFTN = 256, eEDN = 257, eFLD = 258, eBKN = 259, eAND = 260, eATNBKN = 261 };
 
 /*
     pure virtual:
@@ -769,6 +769,37 @@ public:
     OUString GetUniqueBookmarkName(const OUString &rSuggestedName);
 };
 
+/// Handles the import of PlcfAtnBkf and PlcfAtnBkl: start / end position of annotation marks.
+class WW8PLCFx_AtnBook : public WW8PLCFx
+{
+private:
+    /// Start and end positions.
+    WW8PLCFspecial* m_pBook[2];
+    /// Number of annotation marks
+    sal_Int32 nIMax;
+    bool m_bIsEnd;
+
+    //No copying
+    WW8PLCFx_AtnBook(const WW8PLCFx_AtnBook&);
+    WW8PLCFx_AtnBook& operator=(const WW8PLCFx_AtnBook&);
+
+public:
+    WW8PLCFx_AtnBook(SvStream* pTblSt,const WW8Fib& rFib);
+    virtual ~WW8PLCFx_AtnBook();
+    virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
+    virtual void SetIdx( sal_uLong nI ) SAL_OVERRIDE;
+    virtual sal_uLong GetIdx2() const SAL_OVERRIDE;
+    virtual void SetIdx2( sal_uLong nIdx ) SAL_OVERRIDE;
+    virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
+    virtual WW8_FC Where() SAL_OVERRIDE;
+    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) SAL_OVERRIDE;
+    virtual void advance() SAL_OVERRIDE;
+
+    /// Handle is the unique ID of an annotation mark.
+    sal_uInt16 getHandle() const;
+    bool getIsEnd() const;
+};
+
 /*
     hiermit arbeiten wir draussen:
 */
@@ -857,7 +888,7 @@ struct WW8PLCFxSaveAll;
 class WW8PLCFMan
 {
 public:
-    enum WW8PLCFManLimits {MAN_ANZ_PLCF = 10};
+    enum WW8PLCFManLimits {MAN_ANZ_PLCF = 11};
 
 private:
     wwSprmParser maSprmParser;
@@ -874,7 +905,7 @@ private:
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFtn, *pEdn, *pBkm, *pPcd,
-        *pPcdA, *pAnd;
+        *pPcdA, *pAnd, *pAtnBkm;
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables, *pSubdocs;
     sal_uInt8* pExtendedAtrds;
 
@@ -911,6 +942,7 @@ public:
     WW8PLCFx_SubDoc* GetFtn() const { return (WW8PLCFx_SubDoc*)pFtn->pPLCFx; }
     WW8PLCFx_SubDoc* GetAtn() const { return (WW8PLCFx_SubDoc*)pAnd->pPLCFx; }
     WW8PLCFx_Book* GetBook() const { return (WW8PLCFx_Book*)pBkm->pPLCFx; }
+    WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(pAtnBkm->pPLCFx); }
     long GetCpOfs() const { return pChp->nCpOfs; }  // for Header/Footer...
 
     /* fragt, ob *aktueller Absatz* einen Sprm diesen Typs hat */
@@ -989,6 +1021,7 @@ private:
     WW8PLCFspecial*   pSubdocs;         // subdoc references in master document
     sal_uInt8*        pExtendedAtrds;   // Extended ATRDs
     WW8PLCFx_Book*    pBook;            // Bookmarks
+    WW8PLCFx_AtnBook* pAtnBook;         // Annotationmarks
 
     WW8PLCFpcd*         pPiecePLCF; // fuer FastSave ( Basis-PLCF ohne Iterator )
     WW8PLCFpcd_Iter*    pPieceIter; // fuer FastSave ( Iterator dazu )

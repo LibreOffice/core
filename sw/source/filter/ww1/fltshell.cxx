@@ -30,6 +30,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <svl/cintitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>
@@ -342,12 +343,16 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             }
             else if (nAttrId == rEntry.pAttr->Which())
             {
-                if( nAttrId != RES_FLTR_BOOKMARK )
+                if( nAttrId != RES_FLTR_BOOKMARK && nAttrId != RES_FLTR_ANNOTATIONMARK )
                 {
                     // query handle
                     bF = true;
                 }
-                else if (nHand == ((SwFltBookmark*)(rEntry.pAttr))->GetHandle())
+                else if (nAttrId == RES_FLTR_BOOKMARK && nHand == static_cast<SwFltBookmark*>(rEntry.pAttr)->GetHandle())
+                {
+                    bF = true;
+                }
+                else if (nAttrId == RES_FLTR_ANNOTATIONMARK && nHand == static_cast<CntUInt16Item*>(rEntry.pAttr)->GetValue())
                 {
                     bF = true;
                 }
@@ -580,6 +585,12 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     : IDocumentMarkAccess::BOOKMARK;
                 pDoc->getIDocumentMarkAccess()->makeMark( aRegion, rName, eBookmarkType );
             }
+        }
+        break;
+    case RES_FLTR_ANNOTATIONMARK:
+        {
+            MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true);
+            pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
         }
         break;
     case RES_FLTR_TOX:

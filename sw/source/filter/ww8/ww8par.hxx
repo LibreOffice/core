@@ -1631,11 +1631,6 @@ private:
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
     const OUString* GetAnnotationAuthor(sal_uInt16 nIdx);
-    int GetAnnotationIndex(sal_uInt32 nTag);
-    /// Return the end index based on the start one.
-    sal_uInt16 GetAnnotationEndIndex(sal_uInt16 nStart);
-    WW8_CP GetAnnotationStart(int nIndex);
-    WW8_CP GetAnnotationEnd(int nIndex);
 
     // Schnittstellen fuer die Toggle-Attribute
     void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
@@ -1697,6 +1692,7 @@ public:     // eigentlich private, geht aber leider nur public
     sal_uInt16 End_Field();
     long Read_Book(WW8PLCFManResult*);
     long Read_And(WW8PLCFManResult* pRes);
+    long Read_AtnBook(WW8PLCFManResult*);
 
     // Attribute
 
