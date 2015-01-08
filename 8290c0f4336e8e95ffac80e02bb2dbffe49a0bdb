@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_5f252bc0",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-08T07:46:40Z",
+      "side": 1,
+      "message": "the (defaulted) default ImplSVAppData ctor still only default-initializes its members (i.e., leaves all of its members uninitialized)\n\nmaGDIData, ..., maNWFData were meant to be covered by \"etc.\"",
+      "revId": "8290c0f4336e8e95ffac80e02bb2dbffe49a0bdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_7f226fbb",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-08T07:46:40Z",
+      "side": 1,
+      "message": "maDeInitHook was meant to be covered by \"etc.\" too---here, the default ctor inits the instance fine, but there\u0027s no need for a copy ctor call really",
+      "revId": "8290c0f4336e8e95ffac80e02bb2dbffe49a0bdb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
