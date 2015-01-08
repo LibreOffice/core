@@ -1612,7 +1612,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
     , m_bUserManagedScrolling(false)
     , m_pVScroll(new ScrollBar(this, WB_HIDE | WB_VERT))
     , m_pHScroll(new ScrollBar(this, WB_HIDE | WB_HORZ))
-    , m_aScrollBarBox(this, WB_HIDE)
+    , m_aScrollBarBox(new ScrollBarBox(this, WB_HIDE))
 {
     SetType(WINDOW_SCROLLWINDOW);
 
@@ -1764,12 +1764,12 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     if (m_pVScroll->IsVisible() && m_pHScroll->IsVisible())
     {
         Point aBoxPos(aInnerSize.Width(), aInnerSize.Height());
-        m_aScrollBarBox.SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
-        m_aScrollBarBox.Show();
+        m_aScrollBarBox->SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
+        m_aScrollBarBox->Show();
     }
     else
     {
-        m_aScrollBarBox.Hide();
+        m_aScrollBarBox->Hide();
     }
 
     if (pChild && pChild->IsVisible())
@@ -1835,7 +1835,7 @@ const vcl::Window *VclEventBox::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    assert(pWindowImpl->mpFirstChild == &m_aEventBoxHelper);
+    assert(pWindowImpl->mpFirstChild == m_aEventBoxHelper.get());
 
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }

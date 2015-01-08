@@ -577,7 +577,7 @@ private:
     bool m_bUserManagedScrolling;
     VclPtr<ScrollBar> m_pVScroll;
     VclPtr<ScrollBar> m_pHScroll;
-    ScrollBarBox m_aScrollBarBox;
+    VclPtr<ScrollBarBox> m_aScrollBarBox;
 };
 
 class VCL_DLLPUBLIC VclViewport : public VclBin
@@ -619,13 +619,13 @@ private:
         }
     };
 
-    EventBoxHelper m_aEventBoxHelper;
+    VclPtr<EventBoxHelper> m_aEventBoxHelper;
 public:
     VclEventBox(vcl::Window* pParent)
         : VclBin(pParent)
-        , m_aEventBoxHelper(this)
+        , m_aEventBoxHelper(new EventBoxHelper(this))
     {
-        m_aEventBoxHelper.Show();
+        m_aEventBoxHelper->Show();
     }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
