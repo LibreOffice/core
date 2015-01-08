@@ -135,6 +135,17 @@ public:
     {
         return mpThis->pClass->getError(mpThis);
     }
+
+    /**
+     * Posts a keyboard event to the focused frame.
+     *
+     * @param nType Event type, like press or release.
+     * @param nCode Code of the key.
+     */
+    inline void postKeyEvent(int nType, int nCode)
+    {
+        mpThis->pClass->postKeyEvent(mpThis, nType, nCode);
+    }
 };
 
 inline Office* lok_cpp_init(const char* pInstallPath)

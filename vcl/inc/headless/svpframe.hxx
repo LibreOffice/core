@@ -58,7 +58,7 @@ class SvpSalFrame : public SalFrame
 
     std::list< SvpSalGraphics* >        m_aGraphics;
 
-    static SvpSalFrame*       s_pFocusFrame;
+    SAL_DLLPUBLIC_EXPORT static SvpSalFrame*       s_pFocusFrame;
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
@@ -137,7 +137,7 @@ public:
     virtual void                SetApplicationID(const OUString &rApplicationID) SAL_OVERRIDE { (void) rApplicationID; }
     bool                        IsVisible() { return m_bVisible; }
 
-    static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
+    SAL_DLLPUBLIC_EXPORT static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }
 
 };
 

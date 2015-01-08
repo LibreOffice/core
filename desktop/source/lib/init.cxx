@@ -54,6 +54,7 @@
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 // And let's also grab the SvpSalInstance and SvpSalVirtualDevice
 #include <headless/svpinst.hxx>
+#include <headless/svpframe.hxx>
 #include <headless/svpvd.hxx>
 
 #include <basebmp/bitmapdevice.hxx>
@@ -251,6 +252,8 @@ static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
+static void                    lo_postKeyEvent  (LibreOfficeKit* pThis, int nType, int nCode);
+
 
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
@@ -268,6 +271,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->destroy = lo_destroy;
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
+            m_pOfficeClass->postKeyEvent = lo_postKeyEvent;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -645,6 +649,20 @@ static char* lo_getError (LibreOfficeKit *pThis)
     char* pMemory = (char*) malloc(aString.getLength() + 1);
     strcpy(pMemory, aString.getStr());
     return pMemory;
+}
+
+static void lo_postKeyEvent(LibreOfficeKit* /*pThis*/, int nType, int nCode)
+{
+#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
+    if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
+    {
+        KeyEvent aEvent(nCode, nCode, 0);
+        if (nType == 0)
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
+        else
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
+    }
+#endif
 }
 
 static void force_c_locale(void)
