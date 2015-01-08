@@ -32,6 +32,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <libxml/xmlwriter.h>
+
 TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
@@ -433,6 +435,14 @@ bool XFillTransparenceItem::GetPresentation
         default:
             return false;
     }
+}
+
+void XFillTransparenceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillTransparenceItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
