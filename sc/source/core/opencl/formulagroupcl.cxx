@@ -606,55 +606,7 @@ public:
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
-        // original for loop
-#ifndef UNROLLING_FACTOR
-        needBody = true;
-        // No need to generate a for-loop for degenerated cases
-        if (nCurWindowSize == 1)
-        {
-            ss << "if (gid0 <" << mpDVR->GetArrayLength();
-            ss << ")\n\t{\tint i = 0;\n\t\t";
-            return nCurWindowSize;
-        }
 
-        ss << "for (int i = ";
-        if (!bIsStartFixed && bIsEndFixed)
-        {
-#ifdef  ISNAN
-            ss << "gid0; i < " << mpDVR->GetArrayLength();
-            ss << " && i < " << nCurWindowSize  << "; i++){\n\t\t";
-#else
-            ss << "gid0; i < " << nCurWindowSize << "; i++)\n\t\t";
-#endif
-        }
-        else if (bIsStartFixed && !bIsEndFixed)
-        {
-#ifdef  ISNAN
-            ss << "0; i < " << mpDVR->GetArrayLength();
-            ss << " && i < gid0+" << nCurWindowSize << "; i++){\n\t\t";
-#else
-            ss << "0; i < gid0+" << nCurWindowSize << "; i++)\n\t\t";
-#endif
-        }
-        else if (!bIsStartFixed && !bIsEndFixed)
-        {
-#ifdef  ISNAN
-            ss << "0; i + gid0 < " << mpDVR->GetArrayLength();
-            ss << " &&  i < " << nCurWindowSize << "; i++){\n\t\t";
-#else
-            ss << "0; i < " << nCurWindowSize << "; i++)\n\t\t";
-#endif
-        }
-        else
-        {
-            unsigned limit =
-                std::min(mpDVR->GetArrayLength(), nCurWindowSize);
-            ss << "0; i < " << limit << "; i++){\n\t\t";
-        }
-        return nCurWindowSize;
-#endif
-
-#ifdef UNROLLING_FACTOR
         {
             if (!mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
             {
@@ -757,7 +709,6 @@ public:
                 return nCurWindowSize;
             }
         }
-#endif
     }
     ~DynamicKernelSlidingArgument()
     {
@@ -1472,76 +1423,7 @@ public:
         ss << ") {\n";
         ss << "    double tmp = 0.0;\n";
         ss << "    int gid0 = get_global_id(0);\n";
-#ifndef UNROLLING_FACTOR
-        ss << "    int i ;\n";
-        ss << "    for (i = 0; i < " << nCurWindowSize << "; i++)\n";
-        ss << "    {\n";
-        for (unsigned i = 0; i < vSubArguments.size(); i++)
-        {
-            tmpCur = vSubArguments[i]->GetFormulaToken();
-            if (ocPush == tmpCur->GetOpCode())
-            {
-                pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
-                if (!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                {
-                    ss << "        int currentCount";
-                    ss << i;
-                    ss << " =i+gid0+1;\n";
-                }
-                else
-                {
-                    ss << "        int currentCount";
-                    ss << i;
-                    ss << " =i+1;\n";
-                }
-            }
-        }
-        ss << "        tmp += fsum(";
-        for (unsigned i = 0; i < vSubArguments.size(); i++)
-        {
-            if (i)
-                ss << "*";
-#ifdef  ISNAN
-            if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
-            {
-                ss << "(";
-                ss << "(currentCount";
-                ss << i;
-                ss << ">";
-                if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                        formula::svSingleVectorRef)
-                {
-                    const formula::SingleVectorRefToken* pSVR =
-                        static_cast<const formula::SingleVectorRefToken*>
-                        (vSubArguments[i]->GetFormulaToken());
-                    ss << pSVR->GetArrayLength();
-                }
-                else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                        formula::svDoubleVectorRef)
-                {
-                    const formula::DoubleVectorRefToken* pSVR =
-                        static_cast<const formula::DoubleVectorRefToken*>
-                        (vSubArguments[i]->GetFormulaToken());
-                    ss << pSVR->GetArrayLength();
-                }
-                ss << ")||isNan(" << vSubArguments[i]
-                    ->GenSlidingWindowDeclRef(true);
-                ss << ")?0:";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-                ss << ")";
-            }
-            else
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-#else
-            ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-#endif
-        }
-        ss << ", 0.0);\n\t}\n\t";
-        ss << "return tmp;\n";
-        ss << "}";
-#endif
 
-#ifdef UNROLLING_FACTOR
         ss << "\tint i;\n\t";
         ss << "int currentCount0;\n";
         for (unsigned i = 0; i < vSubArguments.size() - 1; i++)
@@ -1705,8 +1587,6 @@ public:
         }
         ss << "return tmp;\n";
         ss << "}";
-#endif
-
     }
     virtual bool takeString() const SAL_OVERRIDE { return false; }
     virtual bool takeNumeric() const SAL_OVERRIDE { return true; }
