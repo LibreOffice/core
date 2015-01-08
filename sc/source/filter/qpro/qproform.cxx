@@ -504,7 +504,7 @@ static const struct
     { ocZZR, FT_FuncFix5 },
     { ocRate, FT_FuncFix5 },
     { ocIpmt, FT_FuncFix4 },
-    { ocKapz, FT_FuncFix6 },
+    { ocPpmt, FT_FuncFix6 },
     { ocSumProduct, FT_FuncFix2 },
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NotImpl },

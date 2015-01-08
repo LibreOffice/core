@@ -1257,7 +1257,7 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
                     case ocRMZ:     // PMT
                         return AddDefaultArg( pNewArr, 3, 0.0 );
                     case ocIpmt:
-                    case ocKapz:    // PPMT
+                    case ocPpmt:
                         return AddDefaultArg( pNewArr, 4, 0.0 );
                     case ocBW:      // PV
                     case ocZW:      // FV

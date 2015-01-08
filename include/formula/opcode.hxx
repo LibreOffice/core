@@ -262,7 +262,7 @@ enum OpCode : sal_uInt16
         ocZZR               = SC_OPCODE_ZZR,
         ocRate              = SC_OPCODE_RATE,
         ocIpmt              = SC_OPCODE_IPMT,
-        ocKapz              = SC_OPCODE_KAPZ,
+        ocPpmt              = SC_OPCODE_PPMT,
         ocKumZinsZ          = SC_OPCODE_KUM_ZINS_Z,
         ocKumKapZ           = SC_OPCODE_KUM_KAP_Z,
         ocEffektiv          = SC_OPCODE_EFFEKTIV,

@@ -1517,7 +1517,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function KAPZ #*=-
-    Resource SC_OPCODE_KAPZ
+    Resource SC_OPCODE_PPMT
     {
         String 1 // Description
         {

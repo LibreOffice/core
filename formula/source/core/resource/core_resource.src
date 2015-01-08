@@ -229,7 +229,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_RATE { Text = "RATE" ; };
     String SC_OPCODE_IPMT { Text = "IPMT" ; };
-    String SC_OPCODE_KAPZ { Text = "PPMT" ; };
+    String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_KUM_ZINS_Z { Text = "CUMIPMT" ; };
     String SC_OPCODE_KUM_KAP_Z { Text = "CUMPRINC" ; };
     String SC_OPCODE_EFFEKTIV { Text = "EFFECT" ; };
@@ -636,7 +636,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_RATE { Text = "RATE" ; };
     String SC_OPCODE_IPMT { Text = "IPMT" ; };
-    String SC_OPCODE_KAPZ { Text = "PPMT" ; };
+    String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_KUM_ZINS_Z { Text = "CUMIPMT" ; };
     String SC_OPCODE_KUM_KAP_Z { Text = "CUMPRINC" ; };
     String SC_OPCODE_EFFEKTIV { Text = "EFFECTIVE" ; };
@@ -1045,7 +1045,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_RATE { Text = "RATE" ; };
     String SC_OPCODE_IPMT { Text = "IPMT" ; };
-    String SC_OPCODE_KAPZ { Text = "PPMT" ; };
+    String SC_OPCODE_PPMT { Text = "PPMT" ; };
     String SC_OPCODE_KUM_ZINS_Z { Text = "CUMIPMT" ; };
     String SC_OPCODE_KUM_KAP_Z { Text = "CUMPRINC" ; };
     String SC_OPCODE_EFFEKTIV { Text = "EFFECTIVE" ; };
@@ -1999,7 +1999,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "IPMT" ;
     };
-    String SC_OPCODE_KAPZ
+    String SC_OPCODE_PPMT
     {
         Text [ en-US ] = "PPMT" ;
     };
