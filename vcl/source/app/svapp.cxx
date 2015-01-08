@@ -1352,12 +1352,12 @@ bool Application::IsDialogCancelEnabled()
     return ImplGetSVData()->maAppData.meDialogCancel != DIALOG_CANCEL_OFF;
 }
 
-void Application::SetSystemWindowMode( sal_uInt16 nMode )
+void Application::SetSystemWindowMode( SystemWindowFlags nMode )
 {
     ImplGetSVData()->maAppData.mnSysWinMode = nMode;
 }
 
-sal_uInt16 Application::GetSystemWindowMode()
+SystemWindowFlags Application::GetSystemWindowMode()
 {
     return ImplGetSVData()->maAppData.mnSysWinMode;
 }

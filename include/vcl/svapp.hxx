@@ -39,6 +39,7 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/metric.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class BitmapEx;
 class Link;
@@ -84,12 +85,18 @@ namespace awt {
 VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
 
-#define SYSTEMWINDOW_MODE_NOAUTOMODE    ((sal_uInt16)0x0001)
-#define SYSTEMWINDOW_MODE_DIALOG        ((sal_uInt16)0x0002)
+enum class SystemWindowFlags {
+    NOAUTOMODE    = 0x0001,
+    DIALOG        = 0x0002
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SystemWindowFlags> : is_typed_flags<SystemWindowFlags, 0x03> {};
+}
 
 typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 
-/** An application can be notified of a number of different events:
+    /** An application can be notified of a number of different events:
     - TYPE_ACCEPT       - listen for connection to the application (a connection
                           string is passed via the event)
     - TYPE_UNACCEPT     - stops listening for a connection to the app (determined by
@@ -1287,20 +1294,20 @@ public:
 
     /** Make a dialog box a system window or not.
 
-     @param     nMode           Can be either: SYSTEMWINDOW_MODE_NOAUTOMODE (0x0001) or
-                                SYSTEMWINDOW_MODE_DIALOG (0x0002)
+     @param     nMode           Can be either: SystemWindowFlags::NOAUTOMODE (0x0001) or
+                                SystemWindowFlags::DIALOG (0x0002)
 
      @see GetSystemWindowMode
     */
-    static void                 SetSystemWindowMode( sal_uInt16 nMode );
+    static void                 SetSystemWindowMode( SystemWindowFlags nMode );
 
     /** Get the system window mode of dialogs.
 
-     @returns SYSTEMWINDOW_MODE_NOAUTOMODE (0x0001) or SYSTEMWINDOW_MODE_DIALOG (0x0002)
+     @returns SystemWindowFlags::NOAUTOMODE (0x0001) or SystemWindowFlags::DIALOG (0x0002)
 
      @see SetSystemWindowMode
     */
-    static sal_uInt16           GetSystemWindowMode();
+    static SystemWindowFlags    GetSystemWindowMode();
 
 
     /** Set a dialog scaling factor. Used for localization.

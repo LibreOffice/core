@@ -130,8 +130,8 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
             ImplSVData* pSVData = ImplGetSVData();
             if ( pSVData->mpApp )
             {
-                sal_uInt16 nOldMode = Application::GetSystemWindowMode();
-                Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
+                SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
+                Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
                 pSVData->mpApp->Exception( nVCLException );
                 Application::SetSystemWindowMode( nOldMode );
             }

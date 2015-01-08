@@ -129,7 +129,7 @@ struct ImplSVAppData
     sal_uInt16              mnModalMode;                    // ModalMode Count
     sal_uInt16              mnModalDialog;                  // ModalDialog Count
     sal_uInt16              mnAccessCount;                  // AccessHdl Count
-    sal_uInt16              mnSysWinMode;                   // Mode, when SystemWindows should be created
+    SystemWindowFlags       mnSysWinMode;                   // Mode, when SystemWindows should be created
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
     bool                    mbInAppMain;                    // is Application::Main() on stack
     bool                    mbInAppExecute;                 // is Application::Execute() on stack

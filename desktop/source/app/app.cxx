@@ -1207,8 +1207,8 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     // protect against recursive calls
     static bool bInException = false;
 
-    sal_uInt16 nOldMode = Application::GetSystemWindowMode();
-    Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
+    SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
+    Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
     Application::SetDefDialogParent( NULL );
 
     if ( bInException )
@@ -1576,7 +1576,7 @@ int Desktop::Main()
         SetSplashScreenProgress(75);
 
         // use system window dialogs
-        Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
+        Application::SetSystemWindowMode( SystemWindowFlags::DIALOG );
 
         SetSplashScreenProgress(80);
 

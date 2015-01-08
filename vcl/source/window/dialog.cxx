@@ -359,7 +359,7 @@ void Dialog::ImplInitDialogData()
 
 void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    sal_uInt16 nSysWinMode = Application::GetSystemWindowMode();
+    SystemWindowFlags nSysWinMode = Application::GetSystemWindowMode();
 
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
@@ -401,8 +401,8 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle )
         pParent = NULL;
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
-         (pParent->mpWindowImpl->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||
-         (nSysWinMode & SYSTEMWINDOW_MODE_DIALOG) )
+         (pParent->mpWindowImpl->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SystemWindowFlags::NOAUTOMODE)) ||
+         (nSysWinMode & SystemWindowFlags::DIALOG) )
     {
         // create window with a small border ?
         if ( (nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER )

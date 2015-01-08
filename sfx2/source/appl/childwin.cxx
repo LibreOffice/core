@@ -209,7 +209,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
 {
     SfxChildWindow *pChild=0;
     SfxChildWinFactory* pFact=0;
-    sal_uInt16 nOldMode = Application::GetSystemWindowMode();
+    SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
 
     // First search for ChildWindow in SDT; Overlay windows are realized
     // by using ChildWindowContext
@@ -227,7 +227,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
                     if ( pBindings )
                         pBindings->ENTERREGISTRATIONS();
                     SfxChildWinInfo aInfo = rFactInfo;
-                    Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
+                    Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
                     pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                     Application::SetSystemWindowMode( nOldMode );
                     if ( pBindings )
@@ -258,7 +258,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
                         if ( pBindings )
                             pBindings->ENTERREGISTRATIONS();
                         SfxChildWinInfo aInfo = rFactInfo;
-                        Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
+                        Application::SetSystemWindowMode( SystemWindowFlags::NOAUTOMODE );
                         pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                         Application::SetSystemWindowMode( nOldMode );
                         if ( pBindings )
