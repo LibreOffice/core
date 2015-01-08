@@ -69,16 +69,6 @@ typedef enum {
     osl_Process_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslProcessError;
 
-typedef enum {
-    osl_Process_TypeNone,       /* no descriptor */
-    osl_Process_TypeSocket,     /* socket */
-    osl_Process_TypeFile,       /* file   */
-    osl_Process_TypePipe,       /* pipe   */
-    osl_Process_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} oslDescriptorType;
-
-typedef sal_Int32 oslDescriptorFlag;
-
 #ifdef SAL_W32
 #   pragma pack(push, 8)
 #endif
