@@ -860,7 +860,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
     }
 }
 
-// #80365# overload this method to read and use the hint value from the
+// #80365# override this method to read and use the hint value from the
 // written meta information. If no info is found, guess 10 draw objects
 //void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 void SdXMLImport::SetStatistics(

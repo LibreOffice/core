@@ -47,7 +47,7 @@ namespace comphelper
         virtual void    SAL_CALL release() throw() SAL_OVERRIDE { baseclass::release(); }
 
     /** used for declaring UNO3-Defaults, i.e. acquire/release if you want to forward all queryInterfaces to the base class,
-        (e.g. if you overload queryAggregation)
+        (e.g. if you override queryAggregation)
     */
     #define DECLARE_UNO3_AGG_DEFAULTS(classname, baseclass) \
         virtual void            SAL_CALL acquire() throw() SAL_OVERRIDE { baseclass::acquire(); } \

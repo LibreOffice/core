@@ -816,7 +816,7 @@ public:
                             getCellRangeByName( const OUString& aRange,  const ScAddress::Details& rDetails )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet overloaded due to Range-Properties
+                            // XPropertySet override due to Range-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -982,7 +982,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
                             getTextFieldMasters() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XPropertySet overloaded due to cell properties
+                            // XPropertySet override due to cell properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1247,7 +1247,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XPropertySet overloaded due to sheet properties
+                            // XPropertySet override due to sheet properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1309,7 +1309,7 @@ public:
     virtual void SAL_CALL   setName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XPropertySet overloaded due to column properties
+                            // XPropertySet override due to column properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1350,7 +1350,7 @@ public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
     virtual                 ~ScTableRowObj();
 
-                            // XPropertySet overloaded due to row properties
+                            // XPropertySet override due to row properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

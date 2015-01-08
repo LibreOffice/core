@@ -44,7 +44,7 @@ const SdrOle2Obj& ViewObjectContactOfSdrOle2Obj::getSdrOle2Object() const
 drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
     const DisplayInfo& /*rDisplayInfo*/) const
 {
-    // this method is overloaded to do some things the old SdrOle2Obj::DoPaintObject did.
+    // override this method to do some things the old SdrOle2Obj::DoPaintObject did.
     // In the future, some of these may be solved different, but ATM try to stay compatible
     // with the old behaviour
     drawinglayer::primitive2d::Primitive2DSequence xRetval;

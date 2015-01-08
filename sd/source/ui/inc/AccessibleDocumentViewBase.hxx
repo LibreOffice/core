@@ -132,9 +132,9 @@ public:
     //=====  IAccessibleViewForwarderListener  ================================
 
     /** A view forwarder change is signalled for instance when any of the
-        window events is received.  Thus, instead of overloading the four
+        window events is received.  Thus, instead of overriding the four
         windowResized... methods it will be sufficient in most cases just to
-        overload this method.
+        override this method.
      */
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder) SAL_OVERRIDE;

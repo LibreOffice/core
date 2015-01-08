@@ -573,7 +573,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
 }
 
 // Users that do not need to open these Streams / Storages,
-// have to overload this method
+// have to override this method
 bool Reader::SetStrmStgPtr()
 {
     OSL_ENSURE( pMedium, "Where is the Media??" );

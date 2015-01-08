@@ -4233,7 +4233,8 @@ const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode 
         DBG_ASSERT( nPara < EE_PARA_NOT_FOUND, "node not found in array" );
         if (nPara < EE_PARA_NOT_FOUND)
         {
-            // the called function may be overloaded by an OutlinerEditEng object to provide
+            // the called function may be overridden by an OutlinerEditEng
+            // object to provide
             // access to the SvxNumberFormat of the Outliner.
             // The EditEngine implementation will just return 0.
             pRes = pEditEngine->GetNumberFormat( nPara );

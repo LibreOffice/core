@@ -31,7 +31,7 @@ public:
     X11SalSystem() {}
     virtual ~X11SalSystem();
 
-    // overload pure virtual methods
+    // override pure virtual methods
     virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
     virtual bool         IsUnifiedDisplay() SAL_OVERRIDE;
     virtual unsigned int GetDisplayBuiltInScreen() SAL_OVERRIDE;

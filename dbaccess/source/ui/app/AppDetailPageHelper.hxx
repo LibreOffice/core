@@ -68,7 +68,7 @@ namespace dbaui
     public:
         OPreviewWindow(vcl::Window* _pParent);
 
-        // window overloads
+        // Window overrides
         virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
 
         void setGraphic(const Graphic& _rGraphic ) { m_aGraphicObj.SetGraphic(_rGraphic); }
@@ -170,7 +170,7 @@ namespace dbaui
         OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
 
-        // window overloads
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 

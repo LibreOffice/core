@@ -139,7 +139,7 @@ protected:
     ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
     ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> mxCanvas;
 
-    /** Overload this method, not getCanvas(), when you want to provide a
+    /** Override this method, not getCanvas(), when you want to provide a
         different canvas.
     */
     virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>

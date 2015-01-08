@@ -113,7 +113,7 @@ namespace drawinglayer
             /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
-            /// Overloaded to allow for reduced line mode to decide if to buffer decomposition or not
+            /// Overridden to allow for reduced line mode to decide if to buffer decomposition or not
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID

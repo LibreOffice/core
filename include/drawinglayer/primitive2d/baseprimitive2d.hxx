@@ -149,8 +149,8 @@ namespace drawinglayer
 
             /** the ==operator is mainly needed to allow testing newly-created primitives against their last
                 incarnation which buffers/holds the made decompositions. The default implementation
-                uses getPrimitive2DID()-calls to test if it's the same ID at last. Overloaded implementation are then
-                based on this implementation
+                uses getPrimitive2DID()-calls to test if it's the same ID at last.
+                Overridden implementations are then based on this implementation
              */
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
             bool operator!=( const BasePrimitive2D& rPrimitive ) const { return !operator==(rPrimitive); }
@@ -247,7 +247,7 @@ namespace drawinglayer
             /** The getDecomposition default implementation will on demand use create2DDecomposition() if
                 maBuffered2DDecomposition is empty. It will set maBuffered2DDecomposition to this obtained decomposition
                 to buffer it. If the decomposition is also ViewInformation2D-dependent, this method needs to be
-                overloaded and the ViewInformation2D for the last decomposition need to be remembered, too, and
+                overridden and the ViewInformation2D for the last decomposition need to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;

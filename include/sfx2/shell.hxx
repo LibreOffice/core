@@ -176,7 +176,7 @@ public:
     virtual                     ~SfxShell();
 
     /**
-        With this virtual method, which is automatically overloaded by each subclass
+        With this virtual method, which is automatically overridden by each subclass
         with its own slots through the macro <SFX_DECL_INTERFACE>, one can access
         each of the <SfxInterface> instance beloning to the subclass.
 
@@ -223,7 +223,7 @@ public:
         If the slot does not have a Status, a SfxVoidItem is returned.
 
         The status is set directly in this Set when pStateSet != 0 , so that
-        overloaded Slots of the <SfxShell> Subclasses and also in the Status
+        overridden Slots of the <SfxShell> Subclasses and also in the Status
         method of the base implementation can be called.
 
         [Example]

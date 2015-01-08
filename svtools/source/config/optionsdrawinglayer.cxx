@@ -166,7 +166,7 @@ public:
     virtual ~SvtOptionsDrawinglayer_Impl();
 
 
-//  overloaded methods of baseclass
+//  override methods of baseclass
 
 
     virtual void Commit() SAL_OVERRIDE;

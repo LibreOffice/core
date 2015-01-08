@@ -27,7 +27,7 @@ namespace comphelper {
 
 /** this class provides a basic helper for classes supporting the XServiceInfo Interface.
  *
- *  you can overload the <code>getSupprotedServiceNames</code> to implement a XServiceInfo.
+ *  you can override the <code>getSupprotedServiceNames</code> to implement a XServiceInfo.
  *  you can use the static helper methods to combine your services with that of parent
  *  or aggregatet classes.
  */

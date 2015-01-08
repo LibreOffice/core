@@ -105,7 +105,7 @@ public:
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
 
-    // overload WorkWindow::DataChanged
+    // override WorkWindow::DataChanged
     virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
 };
 
@@ -314,9 +314,9 @@ public:
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
     void layout();
 
-    // overload Window focus handler
+    // override Window focus handler
     virtual void        GetFocus() SAL_OVERRIDE;
-    // overload WorkWindow::DataChanged
+    // override WorkWindow::DataChanged
     virtual void DataChanged( const DataChangedEvent& rEvt ) SAL_OVERRIDE;
 };
 

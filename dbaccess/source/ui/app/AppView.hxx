@@ -56,7 +56,7 @@ namespace dbaui
         OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
         virtual ~OAppBorderWindow();
 
-        // window overloads
+        // Window overrides
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
 
@@ -110,7 +110,7 @@ namespace dbaui
         /// automatically creates mnemonics for the texts in our task pane
         void    setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
 
-        // window overloads
+        // Window overrides
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 

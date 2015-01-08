@@ -90,8 +90,8 @@ namespace drawinglayer
 
             /** the ==operator is mainly needed to allow testing newly-created high level primitives against their last
                 incarnation which buffers/holds the decompositionsThe default implementation
-                uses getPrimitive3DID()-calls to test if it's the same ID at last. Overloaded implementation are then
-                based on this implementation.
+                uses getPrimitive3DID()-calls to test if it's the same ID at last.
+                Overridden implementation are then based on this implementation.
              */
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
             bool operator!=( const BasePrimitive3D& rPrimitive ) const { return !operator==(rPrimitive); }
@@ -168,7 +168,7 @@ namespace drawinglayer
             /** The getDecomposition default implementation will on demand use create3DDecomposition() if
                 maBuffered3DDecomposition is empty. It will set maBuffered3DDecomposition to this obtained decomposition
                 to buffer it. If the decomposition is also ViewInformation-dependent, this method needs to be
-                overloaded and the ViewInformation for the last decomposition needs to be remembered, too, and
+                overridden and the ViewInformation for the last decomposition needs to be remembered, too, and
                 be used in the next call to decide if the buffered decomposition may be reused or not.
              */
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;

@@ -71,7 +71,7 @@ namespace rptui
         /** late ctor
         */
         void initialize();
-        // WINDOW overloads
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
 
         inline ODesignView*         getReportView() const { return m_pView; }

@@ -149,7 +149,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     pFile->SetPrefSize( aTmpSize );
     DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
-                "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
+        "size of first page is 0, override GetFirstPageSize or set vis-area!" );
 
     pFile->Record( &aDevice );
 
@@ -324,11 +324,10 @@ void SfxObjectShell::LoadStyles
 
 /*  [Description]
 
-    This method is called by the SFx if template styles are to be loaded.
-    Existing styles are in this case overwritten. The document has then to be
-    newly formatted. Therefore, the application of this method is usually
-    overloaded and its implementation is calling the implementation in
-    the base class.
+    This method is called by the SFx if styles are to be loaded from a template.
+    Existing styles are in this case overwritten. The document must then be
+    re-formatted. Therefore, applications usually override this method
+    and call the implementation in the base class.
 */
 
 {

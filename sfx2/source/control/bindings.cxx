@@ -772,14 +772,14 @@ void SfxBindings::Invalidate
 
 void SfxBindings::InvalidateShell
 (
-    const SfxShell&  rSh,  /* <SfxShell>, which Slot-Ids should be
+    const SfxShell&  rSh,  /* <SfxShell> whose Slot-Ids should be
                               invalidated */
     bool             bDeep /* true
-                              also inherited slot IDs of SfxShell are invalidert
+                              also the SfxShell's inherited slot IDs are invalidated
 
                               false
-                              the inherited and not overloaded Slot-Ids were
-                              invalidiert */
+                              the inherited and not overridden Slot-Ids are
+                              invalidated */
                              // for now always bDeep
 )
 {

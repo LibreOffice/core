@@ -47,7 +47,7 @@ public:
     virtual void MakeVisible( const Rectangle& rRect, vcl::Window& rWin ) SAL_OVERRIDE;
 
 protected:
-    // overloaded to handle HitTest for some objects special
+    /// override to handle HitTest for some objects specially
     using SdrView::CheckSingleSdrObjectHit;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const SAL_OVERRIDE;
 };

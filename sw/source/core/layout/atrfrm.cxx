@@ -3093,7 +3093,7 @@ OUString SwFlyFrmFmt::GetObjDescription() const
 
 /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
 
-    OD 22.08.2002 - overloading virtual method and its default implementation,
+    OD 22.08.2002 - overriding virtual method and its default implementation,
     because format of fly frame provides transparent backgrounds.
     Method determines, if background of fly frame is transparent.
 

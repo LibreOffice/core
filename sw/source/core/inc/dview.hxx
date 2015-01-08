@@ -71,7 +71,7 @@ protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl() SAL_OVERRIDE;
 
-    // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
+    // override to allow extra handling when picking SwVirtFlyDrawObj's
     using FmFormView::CheckSingleSdrObjectHit;
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const SAL_OVERRIDE;
 
@@ -87,7 +87,7 @@ public:
     virtual void         MarkListHasChanged() SAL_OVERRIDE;
 
     // #i7672#
-    // Overload to resue edit background color in active text edit view (OutlinerView)
+    // Override to resue edit background color in active text edit view (OutlinerView)
     virtual void ModelHasChanged() SAL_OVERRIDE;
 
     virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,

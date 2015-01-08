@@ -1687,7 +1687,7 @@ SdrObject* SdPage::NbcRemoveObject(size_t nObjNum)
     return FmFormPage::NbcRemoveObject(nObjNum);
 }
 
-// Also overload ReplaceObject methods to realize when
+// Also override ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
 SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
@@ -1695,7 +1695,7 @@ SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
     return FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
 }
 
-// Also overload ReplaceObject methods to realize when
+// Also override ReplaceObject methods to realize when
 // objects are removed with this mechanism instead of RemoveObject
 SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {

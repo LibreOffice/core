@@ -206,7 +206,7 @@ OUString ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-bool ScColBar::IsLayoutRTL() const        // overloaded only for columns
+bool ScColBar::IsLayoutRTL() const        // override only for columns
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
@@ -360,14 +360,14 @@ OUString ScRowBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_HEIGHT) );
 }
 
-SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const   // overloaded only for rows
+SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo ) const // override only for rows
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-bool ScRowBar::IsMirrored() const         // overloaded only for rows
+bool ScRowBar::IsMirrored() const // override only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }

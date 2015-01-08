@@ -623,7 +623,7 @@ void ShowWindow::AddWindowToPaintView()
         GetChild( nChild )->Show( true );
 }
 
-// Overload the sd::Window's CreateAccessible to create a different accessible object
+// Override the sd::Window's CreateAccessible to create a different accessible object
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
     ShowWindow::CreateAccessible (void)

@@ -260,7 +260,7 @@ public:
     SC_DLLPUBLIC static ScDataPilotDescriptorBase* getImplementation( const com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XDataPilotDescriptor> xObj );
 
-                            // XTypeProvider (overloaded in ScDataPilotTableObj)
+                            // XTypeProvider (override in ScDataPilotTableObj)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
@@ -362,7 +362,7 @@ public:
                                                 ::com::sun::star::util::XModifyListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-                            // XTypeProvider (overloaded)
+                            // XTypeProvider (override)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()

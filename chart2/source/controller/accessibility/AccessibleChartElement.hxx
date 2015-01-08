@@ -53,7 +53,7 @@ namespace chart
      <li>define the getAccessibleName() method of XAccessibleContext</li>
      <li>set the ChartModel using SetChartModel() for the first node before
          creating any children</li>
-     <li>overload UpdateChildren()</li>
+     <li>override UpdateChildren()</li>
     </ul>
  */
 
@@ -100,7 +100,7 @@ public:
 
     // the following interface is implemented in AccessibleBase, however it is
     // also a (non-virtual) base class of XAccessibleExtendedComponent Thus
-    // these methods have to be overloaded and forward to AccessibleBase
+    // these methods have to be overridden and forward to AccessibleBase
 
     // ________ XAccessibleComponent ________
     virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

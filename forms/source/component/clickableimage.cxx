@@ -588,7 +588,7 @@ namespace frm
     Any SAL_CALL OClickableImageBaseModel::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
     {
         // order matters:
-        // we definitely want to "overload" the XImageProducer interface of our aggregate,
+        // we definitely want to "override" the XImageProducer interface of our aggregate,
         // thus check OClickableImageBaseModel_Base (which provides this) first
         Any aReturn = OClickableImageBaseModel_Base::queryInterface( _rType );
 

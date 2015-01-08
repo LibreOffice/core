@@ -103,7 +103,7 @@ public:
     void FillPageSet (void);
 
     /** Make the selector empty.  This method clear the value set from any
-        entries. Overload this method to add functionality, especially to
+        entries. Override this method to add functionality, especially to
         destroy objects set as data items at the value set.
     */
     void ClearPageSet (void);

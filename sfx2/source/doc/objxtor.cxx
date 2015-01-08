@@ -845,9 +845,9 @@ void SfxObjectShell::InitBasicManager_Impl()
 
     [Note]
 
-    This method has to be called  through the overloading of
-    <SvPersist::Load()> (With the PStore from the parameters of load ())
-    and from the overloading of <SvPersist::InitNew()> (with PStore = 0).
+    This method has to be called by implementations of <SvPersist::Load()>
+    (with its pStor parameter) and by implementations of <SvPersist::InitNew()>
+    (with pStor = 0).
 */
 
 {

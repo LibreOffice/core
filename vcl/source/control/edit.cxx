@@ -2634,7 +2634,7 @@ void Edit::Undo()
 void Edit::SetText( const OUString& rStr )
 {
     if ( mpSubEdit )
-        mpSubEdit->SetText( rStr );     // not directly ImplSetText if SetText overloaded
+        mpSubEdit->SetText( rStr ); // not directly ImplSetText if SetText overridden
     else
     {
         Selection aNewSel( 0, 0 );  // prevent scrolling

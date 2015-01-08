@@ -283,7 +283,7 @@ void Writer::SetupFilterOptions(SfxMedium& /*rMedium*/)
 sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileName )
 {
     SetupFilterOptions(rMedium);
-    // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
+    // This method must be overridden in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
     return Write( rPam, *rMedium.GetOutStream(), pFileName );
 }

@@ -82,7 +82,7 @@ protected:
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
 
-        Overload this method to take influence in modification of properties.
+        Override this method to take influence in modification of properties.
 
         If the conversion changed , </sal_True> is returned and the converted value
         is in <code>rConvertedValue</code>.  The former value is contained in

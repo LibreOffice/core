@@ -167,7 +167,7 @@ class AddonsOptions_Impl : public ConfigItem
          AddonsOptions_Impl();
         virtual ~AddonsOptions_Impl();
 
-        //  overloaded methods of baseclass
+        //  overridden methods of baseclass
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

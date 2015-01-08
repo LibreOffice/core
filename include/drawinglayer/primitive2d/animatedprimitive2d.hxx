@@ -88,8 +88,9 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitive2DIDBlock()
 
-            /** The getDecomposition is overloaded here since the decompose is dependent of the point in time,
-                so the default implementation is nut useful here, it needs to be handled locally
+            /** Override getDecomposition() here since the decompose
+                depends on the point in time, so the default implementation is
+                not useful here, it needs to be handled locally
              */
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };

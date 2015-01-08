@@ -910,7 +910,7 @@ void ScRefHandler::ViewShellChanged()
 
 void ScRefHandler::AddRefEntry()
 {
-    //  needs to be overloaded for multi-references
+    // override this for multi-references
 }
 
 bool ScRefHandler::IsTableLocked() const

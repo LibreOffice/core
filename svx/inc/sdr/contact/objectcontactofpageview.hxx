@@ -123,10 +123,10 @@ namespace sdr
             // high contrast display mode
             virtual bool isDrawModeHighContrast() const SAL_OVERRIDE;
 
-            // overloaded access to SdrPageView
+            // override access to SdrPageView
             virtual SdrPageView* TryToGetSdrPageView() const SAL_OVERRIDE;
 
-            // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+            // access to OutputDevice. May return 0L like the default implementations do. Override as needed.
             virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
 
             /** sets all UNO controls which are associated with this ObjectContact to

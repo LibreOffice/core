@@ -97,7 +97,7 @@ protected:
     virtual SdrPage* GetImplPage() const = 0;
     virtual void SetObjectItemHelper(const SfxPoolItem& rItem);
 
-    /** called by instances of derived classes to implement their overloading of getUnoShape
+    /** called by instances of derived classes to implement their overriding of getUnoShape
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             getUnoShapeOf( SdrObject& _rSdrObject );

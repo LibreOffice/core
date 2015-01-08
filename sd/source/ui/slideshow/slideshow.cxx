@@ -69,7 +69,7 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::drawing::framework;
 
 namespace {
-    /** This local version of the work window overloads DataChanged() so that it
+    /** This local version of the work window overrides DataChanged() so that it
         can restart the slide show when a display is added or removed.
     */
     class FullScreenWorkWindow : public WorkWindow

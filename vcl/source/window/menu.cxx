@@ -2847,7 +2847,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
     ImplDelData aDelData;
     pW->ImplAddDel( &aDelData );
 
-    bInCallback = true; // set it here, if Activate overloaded
+    bInCallback = true; // set it here, if Activate overridden
     Activate();
     bInCallback = false;
 

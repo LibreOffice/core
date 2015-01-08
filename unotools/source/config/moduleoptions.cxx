@@ -287,7 +287,7 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
          SvtModuleOptions_Impl();
         virtual ~SvtModuleOptions_Impl();
 
-        //  overloaded methods of baseclass
+        //  override methods of baseclass
 
         virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
         virtual void Commit(                                                             ) SAL_OVERRIDE;

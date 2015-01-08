@@ -65,7 +65,7 @@ namespace drawinglayer
             /// data read access
             double getDiscreteUnit() const { return mfDiscreteUnit; }
 
-            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            /// Override standard getDecomposition to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
@@ -104,7 +104,7 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DRange& getViewport() const { return maViewport; }
 
-            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            /// Override standard getDecomposition to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
@@ -143,7 +143,7 @@ namespace drawinglayer
             /// data read access
             const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
 
-            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            /// Override standard getDecomposition to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d
@@ -186,7 +186,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getViewTransformation() const { return maViewTransformation; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
 
-            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            /// Override standard getDecomposition to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d

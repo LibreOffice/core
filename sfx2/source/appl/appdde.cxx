@@ -312,7 +312,7 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
 
 /*  Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-commands directed to their SfxApplication subclass.
 
     The base implementation understands the API functionality of the
@@ -342,7 +342,7 @@ long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-commands directed to the their SfxApplication subclass.
 
     The base implementation does nothing and returns 0.
@@ -368,7 +368,7 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-data-requests directed to their SfxApplication subclass.
 
     The base implementation provides no data and returns false.
@@ -384,7 +384,7 @@ bool SfxObjectShell::DdeGetData( const OUString&,              // the Item to be
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-data directed to their SfxApplication subclass.
 
     The base implementation is not receiving any data and returns false.
@@ -398,7 +398,7 @@ bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to establish
+    This method can be overridden by application developers, to establish
     a DDE-hotlink to their SfxApplication subclass.
 
     The base implementation is not generate a link and returns 0.
@@ -427,7 +427,7 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-commands directed to the their SfxApplication subclass.
 
     The base implementation understands the API functionality of the
@@ -445,7 +445,7 @@ long SfxViewFrame::DdeExecute( const OUString&   rCmd ) // Expressed in our BASI
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-data-requests directed to their SfxApplication subclass.
 
     The base implementation provides no data and returns false.
@@ -459,7 +459,7 @@ bool SfxViewFrame::DdeGetData( const OUString&,            // the Item to be add
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to receive
+    This method can be overridden by application developers, to receive
     DDE-data directed to their SfxApplication subclass.
 
     The base implementation is not receiving any data and returns false.
@@ -473,7 +473,7 @@ bool SfxViewFrame::DdeSetData( const OUString&,                  // the Item to 
 
 /*  [Description]
 
-    This method can be overloaded by application developers, to establish
+    This method can be overridden by application developers, to establish
     a DDE-hotlink to their SfxApplication subclass.
 
     The base implementation is not generate a link and returns 0.

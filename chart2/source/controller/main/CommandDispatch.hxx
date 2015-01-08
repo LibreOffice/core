@@ -59,7 +59,7 @@ protected:
     /** sends a status event for a specific command to all registered listeners
         or only the one given when set.
 
-        This method should be overloaded.  The implementation should call
+        This method should be overridden.  The implementation should call
         fireStatusEventForURL and pass the xSingleListener argument to this
         method unchanged.
 

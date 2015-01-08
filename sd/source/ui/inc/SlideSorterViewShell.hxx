@@ -188,7 +188,7 @@ protected:
 
     virtual SvBorder GetBorder (bool bOuterResize);
 
-    /** This method is overloaded to handle a missing tool bar correctly.
+    /** Override this method to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
     virtual ::svl::IUndoManager* ImpGetUndoManager (void) const SAL_OVERRIDE;

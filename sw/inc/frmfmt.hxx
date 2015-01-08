@@ -197,7 +197,7 @@ public:
 
     /** SwFlyFrmFmt::IsBackgroundTransparent
 
-        Overloading virtual method and its default implementation,
+        Override virtual method and its default implementation,
         because format of fly frame provides transparent backgrounds.
         Method determines, if background of fly frame is transparent.
 

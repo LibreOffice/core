@@ -71,7 +71,7 @@ public:
     X11SalObject();
     virtual ~X11SalObject();
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
      virtual void                   ResetClipRegion() SAL_OVERRIDE;
     virtual sal_uInt16                  GetClipRegionType() SAL_OVERRIDE;
     virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) SAL_OVERRIDE;

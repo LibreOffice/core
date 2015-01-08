@@ -143,7 +143,7 @@ namespace rptui
         void operator =(OViewsWindow&);
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        // windows overload
+        // Window overrides
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
@@ -154,7 +154,7 @@ namespace rptui
             OReportWindow* _pReportWindow);
         virtual ~OViewsWindow();
 
-        // windows overload
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
 
         void resize(const OSectionWindow& _rSectionWindow);

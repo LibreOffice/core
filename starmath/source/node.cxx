@@ -436,7 +436,7 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 
 void SmNode::GetAccessibleText( OUStringBuffer &/*rText*/ ) const
 {
-    SAL_WARN("starmath", "SmNode: GetAccessibleText not overloaded");
+    SAL_WARN("starmath", "SmNode: GetAccessibleText not overridden");
 }
 
 const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const

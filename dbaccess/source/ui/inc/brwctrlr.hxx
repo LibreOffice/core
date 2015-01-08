@@ -233,7 +233,7 @@ namespace dbaui
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  CreateForm();
             // our default implementation simply instantiates a stardiv.one.form.component.Form service
-            // (probably this needs not to be overloaded, but you may return anything you want as long as it
+            // (probably this needs not to be overridden, but you may return anything you want as long as it
             // supports the ::com::sun::star::form::DatabaseForm service. For instance you may want to create an adapter here which
             // is synchronized with a foreign ::com::sun::star::form::DatabaseForm you got elsewhere)
         virtual bool InitializeForm(

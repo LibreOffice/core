@@ -1378,7 +1378,7 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
 
 // #i97878#
 // TRGetBaseGeometry/TRSetBaseGeometry needs to be based on two positions,
-// same as line geometry in SdrPathObj. Thus needs to be overloaded and
+// same as line geometry in SdrPathObj. Thus needs to be overridden and
 // implemented since currently it is derived from SdrTextObj which uses
 // a functionality based on SnapRect which is not useful here
 

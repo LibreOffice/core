@@ -188,7 +188,7 @@ namespace svt
         // URLs should always be UTF8 encoded and escaped
         OString sID( OUStringToOString( sHelpID, RTL_TEXTENCODING_UTF8 ) );
         if ( _bFileView )
-            // the file view "overloaded" the SetHelpId
+            // the file view "overrides" the SetHelpId
             static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
         else
             _pControl->SetHelpId( sID );
@@ -199,7 +199,7 @@ namespace svt
     {
         OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
-            // the file view "overloaded" the SetHelpId
+            // the file view "overrides" the SetHelpId
             aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
         OUString sHelpURL;

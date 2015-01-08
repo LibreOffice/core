@@ -524,7 +524,7 @@ protected:
     void    UpdateDispatches(); // will connect if not already connected and just update else
 
     /** If a derived class wants to listen at some column properties, it doesn't have
-        to overload all methods affecting columns (setColumns, elementInserted, elementRemoved ...)
+        to override all methods affecting columns (setColumns, elementInserted, elementRemoved ...)
         Instead it may use addColumnListeners and removeColumnListeners which are called in all
         the cases.
     */

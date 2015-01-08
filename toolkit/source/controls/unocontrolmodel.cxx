@@ -1024,7 +1024,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 // ::com::sun::star::lang::XServiceInfo
 OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    OSL_FAIL( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overridden!" );
     return OUString();
 
 }

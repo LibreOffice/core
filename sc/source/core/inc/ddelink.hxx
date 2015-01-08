@@ -58,11 +58,11 @@ public:
 
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
 
-                    // overloaded by SvBaseLink:
+                    // SvBaseLink override:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
-                    // overloaded by SvtBroadcaster:
+                    // SvtBroadcaster override:
     virtual void    ListenersGone() SAL_OVERRIDE;
 
                     // for interpreter:

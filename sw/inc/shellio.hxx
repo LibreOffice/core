@@ -263,7 +263,7 @@ private:
     virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
 
     // Everyone who does not need the streams / storages open
-    // has to overload the method (W4W!!).
+    // has to override the method (W4W!!).
     virtual bool SetStrmStgPtr();
 };
 

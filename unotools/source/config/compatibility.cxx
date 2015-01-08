@@ -219,7 +219,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
         void SetDefault( const OUString & sName, bool bValue );
 
-        //  overloaded methods of baseclass
+        //  override methods of baseclass
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

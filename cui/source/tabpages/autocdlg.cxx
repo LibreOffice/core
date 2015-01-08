@@ -800,7 +800,7 @@ SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry
 
 void OfaACorrCheckListBox::HBarClick()
 {
-    // sorting is stopped by this overload
+    // sorting is stopped by this override
 }
 
 void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )

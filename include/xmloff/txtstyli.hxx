@@ -96,7 +96,7 @@ public:
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
     virtual void SetDefaults() SAL_OVERRIDE;
 
-    // overload FillPropertySet, so we can get at the combined characters
+    // override FillPropertySet, so we can get at the combined characters
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;

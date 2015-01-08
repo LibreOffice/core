@@ -75,7 +75,7 @@ void SfxPreviewWin_Impl::ImpPaint(
 
     Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1,1 );
     DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
-                "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
+        "size of first page is 0, override GetFirstPageSize or set vis-area!" );
 #define FRAME 4
     long nWidth = pWindow->GetOutputSize().Width() - 2*FRAME;
     long nHeight = pWindow->GetOutputSize().Height() - 2*FRAME;

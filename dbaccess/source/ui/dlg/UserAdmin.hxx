@@ -67,7 +67,7 @@ public:
     virtual ~OUserAdmin();
     OUString GetUser();
 
-    // must be overloaded by subclasses, but it isn't pure virtual
+    // subclasses must override this, but it isn't pure virtual
     virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
     // <method>OGenericAdministrationPage::fillControls</method>

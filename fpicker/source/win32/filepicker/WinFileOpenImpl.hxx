@@ -164,7 +164,7 @@ protected:
     virtual void SAL_CALL onFolderChanged();
     virtual void SAL_CALL onTypeChanged( sal_uInt32 nFilterIndex );
 
-    // call base class method first when overloading
+    // call base class method first when overriding
     virtual void SAL_CALL onInitDialog( HWND hwndDlg );
 
     virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );

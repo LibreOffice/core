@@ -36,7 +36,7 @@ namespace drawinglayer
     /** SdrPrimitive3D class
 
         Base class for the more complicated geometric primitives, so
-        derive from buffered primitive to allow overloading of
+        derive from buffered primitive to allow overriding of
         create3DDecomposition there.
      */
     namespace primitive3d

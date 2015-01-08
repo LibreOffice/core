@@ -80,7 +80,7 @@ public:
     virtual             ~SwEscherExGlobal();
 
 private:
-    /** Overloaded to create a new memory stream for picture data. */
+    /** Override to create a new memory stream for picture data. */
     virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
 
 private:

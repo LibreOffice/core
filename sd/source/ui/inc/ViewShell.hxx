@@ -289,7 +289,7 @@ public:
     virtual void VisAreaChanged(const Rectangle& rRect);
 
     /** Create an accessible object representing the specified window.
-        Overload this method to provide view mode specific objects.  The
+        Override this method to provide view mode specific objects.  The
         default implementation returns an empty reference.
         @param pWindow
             Make the document displayed in this window accessible.

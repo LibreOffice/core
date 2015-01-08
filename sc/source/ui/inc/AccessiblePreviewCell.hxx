@@ -60,7 +60,7 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    // overloaded to calculate this on demand
+    // override to calculate this on demand
     virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int32 i )

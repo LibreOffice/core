@@ -54,7 +54,8 @@ namespace dbaui
         */
         virtual void setImageList(sal_Int16 _eSymbolsSize) = 0;
 
-        /** only the member will be set, derived classes can overload this function and do what need to be done.
+        /** only the member will be set, derived classes can override
+            this function and do what need to be done.
             @param  _pTB
                 The new ToolBox.
             @attention

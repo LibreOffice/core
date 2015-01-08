@@ -129,13 +129,13 @@ public:
     */
     virtual TaskPaneShellManager* GetShellManager (void);
 
-    /** You will rarely need to overload this method.  To supply your own
-        accessible object you should overload CreateAccessible() instead.
+    /** You will rarely need to override this method.  To supply your own
+        accessible object you should override CreateAccessible() instead.
     */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetAccessibleObject (void);
 
-    /** Overload this method in order to supply a class specific accessible
+    /** Override this method in order to supply a class specific accessible
         object.
         The default implementation will return a new instance of
         AccessibleTreeNode.

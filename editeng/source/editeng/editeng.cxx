@@ -1941,7 +1941,7 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 
 const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 nPara ) const
 {
-    // derived objects may overload this function to give access to
+    // derived objects may override this function to give access to
     // bullet information (see Outliner)
     (void) nPara;
     return 0;

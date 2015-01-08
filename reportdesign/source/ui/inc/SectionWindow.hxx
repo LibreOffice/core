@@ -87,7 +87,7 @@ namespace rptui
 
 
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-        // windows overload
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
 
     protected:

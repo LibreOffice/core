@@ -188,10 +188,10 @@ public:
     // get Primitive2DParameters for this view
     const drawinglayer::geometry::ViewInformation2D& getViewInformation2D() const { return maViewInformation2D; }
 
-    // access to SdrPageView. May return 0L like the default implementations do. Needs to be overloaded as needed.
+    /// access to SdrPageView. May return 0L like the default implementations do. Override as needed.
     virtual SdrPageView* TryToGetSdrPageView() const;
 
-    // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+    /// access to OutputDevice. May return 0L like the default implementations do. Override as needed.
     virtual OutputDevice* TryToGetOutputDevice() const;
 
     // reset ViewPort at internal ViewInformation2D. This is needed when the OC is used

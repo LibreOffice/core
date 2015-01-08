@@ -30,7 +30,7 @@ public:
     X11SalTimer( SalXLib *pXLib ) : mpXLib( pXLib ) {}
     virtual ~X11SalTimer();
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
     void  Start( sal_uIntPtr nMS ) SAL_OVERRIDE;
     void  Stop() SAL_OVERRIDE;
 };

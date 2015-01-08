@@ -42,7 +42,7 @@ namespace chart
     createDiagramByDataSource
 
     This does the following steps using some virtual helper-methods, that may be
-    overloaded by derived classes:
+    overridden by derived classes:
 
     * creates an XDiagram via service-factory.
 
@@ -124,7 +124,7 @@ protected:
     virtual OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // Methods to overload for automatic creation
+    // Methods to override for automatic creation
 
     /// returns 2 by default.  Supported are 2 and 3
     virtual sal_Int32 getDimension() const;

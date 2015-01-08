@@ -59,7 +59,7 @@ namespace drawinglayer {
     should be encircled can be specified. Optional a NoSelection or name
     field could be shown. By default image and color items are supported.
     Items could be drawn by oneself if InsertItem() is only called with
-    an ID. To achieve this the UserDraw handler needs to be overloaded. The
+    an ID. To achieve this the UserDraw handler needs to be overridden. The
     description text could be specified afterwards in case of UserDraw
     and any other items.
 
@@ -130,13 +130,13 @@ namespace drawinglayer {
     --------------------------------------------------------------------------
 
     If Drag and Drop will be called from the ValueSet the Command-Handler has to
-    be overloaded. From this StartDrag needs to be called. If this method returns
+    be overridden. From this StartDrag needs to be called. If this method returns
     sal_True the drag-process could be initiated by  ExecuteDrag(), otherwise no
     processing will take place. This method makes sure that ValueSet stops its
     processing and as appropriate selects the entry. Therefore the calling of
     Select-Handler within this function must be expected.
 
-    For dropping QueryDrop() and Drop() need to be overloaded and ShowDropPos()
+    For dropping QueryDrop() and Drop() need to be overridden and ShowDropPos()
     and HideDropPos() should be called within these methods.
     To show the insertion point ShowDropPos() has to be called within the
     QueryDrop-Handler. ShowDropPos() also scrolls the ValueSet if the passed

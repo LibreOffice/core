@@ -129,7 +129,7 @@ public:
     virtual const ScDPFilteredCache&   GetCacheTable() const = 0;
     virtual void ReloadCacheTable() = 0;
 
-                                    // overloaded in ScDPGroupTableData:
+                                    // override in ScDPGroupTableData:
     virtual bool                    IsBaseForGroup(long nDim) const;
     virtual long                    GetGroupBase(long nGroupDim) const;
     virtual bool                    IsNumOrDateGroup(long nDim) const;

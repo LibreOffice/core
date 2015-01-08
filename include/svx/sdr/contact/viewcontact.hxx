@@ -110,7 +110,7 @@ public:
 
     // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
     // and GetViewContact default pops up an assert since it's an error if
-    // GetObjectCount has a result != 0 and it's not overloaded.
+    // GetObjectCount has a result != 0 and it's not overridden.
     virtual sal_uInt32 GetObjectCount() const;
     virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
     virtual ViewContact* GetParentContact() const;
@@ -123,7 +123,7 @@ public:
     virtual void ActionChanged();
 
     // access to SdrObject and/or SdrPage. May return 0L like the default
-    // implementations do. Needs to be overloaded as needed.
+    // implementations do. Override as needed.
     virtual SdrObject* TryToGetSdrObject() const;
     virtual SdrPage* TryToGetSdrPage() const;
 

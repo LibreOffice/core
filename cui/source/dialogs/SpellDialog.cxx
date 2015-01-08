@@ -985,7 +985,7 @@ bool SpellDialog::Notify( NotifyEvent& rNEvt )
     *   FIXME: LoseFocus and GetFocus are signals from vcl that
     *   a window actually got/lost the focus, it never should be
     *   forwarded from another window, that is simply wrong.
-    *   FIXME: overloading the virtual methods GetFocus and LoseFocus
+    *   FIXME: overriding the virtual methods GetFocus and LoseFocus
     *   in SpellDialogChildWindow by making them pure is at least questionable.
     *   The only sensible thing would be to call the new Method differently,
     *   e.g. DialogGot/LostFocus or so.

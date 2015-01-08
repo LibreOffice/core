@@ -404,7 +404,7 @@ public:
     void SetVirtualObjectBundling(bool bOn) { bBundleVirtObj=bOn; }
     bool IsVirtualObjectBundling() const { return bBundleVirtObj; }
 
-    // overloaded from SdrMarkView, for internal use
+    // override SdrMarkView, for internal use
     virtual void MarkListHasChanged() SAL_OVERRIDE;
     virtual void ModelHasChanged() SAL_OVERRIDE;
 };

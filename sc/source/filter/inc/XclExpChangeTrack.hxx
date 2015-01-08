@@ -377,9 +377,9 @@ protected:
     virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
     inline sal_Size             GetHeaderByteCount() const  { return 12; }
 
-                                // overload to save action data without header, called by SaveCont()
+                                // override to save action data without header, called by SaveCont()
     virtual void                SaveActionData( XclExpStream& rStrm ) const = 0;
-                                // overload to get action size without header, called by GetLen()
+                                // override to get action size without header, called by GetLen()
     virtual sal_Size            GetActionByteCount() const = 0;
 
                                 // do something before writing the record
@@ -403,7 +403,7 @@ public:
     inline bool                 ForceInfoRecord() const         { return bForceInfo; }
 
                                 // set own index & return new index
-                                // could be overloaded to use more indexes per action
+                                // could override to use more indexes per action
     virtual void                SetIndex( sal_uInt32& rIndex );
 
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;

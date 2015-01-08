@@ -161,7 +161,7 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 /**
  * This virtual method allows to get a textual representation of the value
- * for the SfxPoolItem subclasses. It should be overloaded by all UI-relevant
+ * for the SfxPoolItem subclasses. It should be overridden by all UI-relevant
  * SfxPoolItem subclasses.
  *
  * Because the unit of measure of the value in the SfxItemPool is only

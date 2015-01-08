@@ -70,7 +70,7 @@ public:
     static void             AnnounceFonts( PhysicalFontCollection*,
                                            const psp::FastPrintFontInfo& );
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
     virtual SalGraphicsImpl*GetImpl() const SAL_OVERRIDE { return NULL; };
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
     virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;

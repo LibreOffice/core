@@ -66,7 +66,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
         const OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException, std::exception)
 {
-    SAL_WARN( "connectivity.drivers","Should be overloaded!");
+    SAL_WARN("connectivity.drivers", "ODatabaseMetaData::getColumns() should be overridden!");
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumns );
 }
 

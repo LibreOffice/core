@@ -109,7 +109,7 @@ class SvtSecurityOptions_Impl : public ConfigItem
          SvtSecurityOptions_Impl();
         virtual ~SvtSecurityOptions_Impl();
 
-        //  overloaded methods of baseclass
+        //  override methods of baseclass
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager

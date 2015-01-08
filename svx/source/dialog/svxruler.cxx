@@ -2541,7 +2541,7 @@ void SvxRuler::EvalModifier()
 
 void SvxRuler::Click()
 {
-    /* Overloaded handler SV; sets Tab per dispatcher call */
+    /* Override handler SV; sets Tab per dispatcher call */
     Ruler::Click();
     if( bActive )
     {
@@ -2595,7 +2595,7 @@ bool SvxRuler::CalcLimits ( long& nMax1,    // minimum value to be set
 {
     /*
        Default implementation of the virtual function; the application can be
-       overloaded to implement customized limits. The values are based on the page.
+       overridden to implement customized limits. The values are based on the page.
     */
     nMax1 = LONG_MIN;
     nMax2 = LONG_MAX;
@@ -3346,7 +3346,7 @@ void SvxRuler::EndDrag()
 
 void SvxRuler::ExtraDown()
 {
-    /* Overloaded SV method, sets the new type for the Default tab. */
+    /* Override SV method, sets the new type for the Default tab. */
 
     // Switch Tab Type
     if(mpTabStopItem.get() &&

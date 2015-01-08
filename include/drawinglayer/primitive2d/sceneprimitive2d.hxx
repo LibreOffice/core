@@ -146,7 +146,7 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitive2DIDBlock()
 
-            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            /// get local decomposition. Override since this decomposition is view-dependent
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
         };
     } // end of namespace primitive2d

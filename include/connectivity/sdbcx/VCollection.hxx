@@ -128,7 +128,7 @@ namespace connectivity
             // called when XDrop was called
             virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName);
 
-            /** returns the name for the object. The default implementation ask for the property NAME. If this doesn't satisfy, it has to be overloaded.
+            /** returns the name for the object. The default implementation ask for the property NAME. If this doesn't satisfy, it has to be overridden.
                 @param  _xObject    The object where the name should be extracted.
                 @return The name of the object.
             */

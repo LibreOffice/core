@@ -492,7 +492,7 @@ public:
     virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    // to be overloaded if access to bullet information needs to be provided
+    // override this if access to bullet information needs to be provided
     virtual const SvxNumberFormat * GetNumberFormat( sal_Int32 nPara ) const;
 
     virtual Rectangle GetBulletArea( sal_Int32 nPara );

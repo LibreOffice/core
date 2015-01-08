@@ -57,8 +57,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport
 
 protected:
 
-    // This method may be overloaded to add attributes to the <list-style>
-    // element.
+    /// Override this to add attributes to the <list-style> element.
     SAL_DLLPRIVATE virtual void AddListStyleAttributes();
 
     SAL_DLLPRIVATE bool exportStyle( const ::com::sun::star::uno::Reference<

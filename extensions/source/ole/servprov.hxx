@@ -65,7 +65,7 @@ public:
     class declaration ProviderOleWrapper_Impl
 
     Provides an UNO service provider as OLE class factory. Handle the
-    OLE registration by overloading the abstract methods from
+    OLE registration by overriding the abstract methods from
     IClassFactoryWrapper.
 
     Acts as a COM class factory. When IClassFactory::CreateInstance is being called
@@ -109,7 +109,7 @@ protected:
     class declaration OneInstanceOleWrapper_Impl
 
     Provides an single UNO object as OLE object. Handle the
-    OLE registration by overloading the abstract methods from
+    OLE registration by overriding the abstract methods from
     IClassFactoryWrapper.
 
       Acts as a COM class factory. When IClassFactory::CreateInstance is being called

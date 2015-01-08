@@ -91,7 +91,7 @@ class SvtMenuOptions_Impl : public ConfigItem
         void RemoveListenerLink( const Link& rLink );
 
 
-        //  overloaded methods of baseclass
+        //  override methods of baseclass
 
 
         /*-****************************************************************************************************

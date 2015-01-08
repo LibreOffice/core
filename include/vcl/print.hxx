@@ -514,17 +514,17 @@ public:
     */
     OUString makeEnabled( const OUString& rPropName );
 
-    virtual int  getPageCount() const = 0; // must be overloaded by the app
+    virtual int getPageCount() const = 0; /// App must override this
     /* get the page parameters, namely the jobsetup that should be active for the page
        (describing among others the physical page size) and the "page size". In writer
        case this would probably be the same as the JobSetup since writer sets the page size
        draw/impress for example print their page on the paper set on the printer,
        possibly adjusting the page size to fit. That means the page size can be different from
        the paper size.
+       App must override this, return page size in 1/100th mm
     */
-    // must be overloaded by the app, return page size in 1/100th mm
     virtual css::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const = 0;
-    virtual void printPage( int i_nPage ) const = 0; // must be overloaded by the app
+    virtual void printPage(int i_nPage) const = 0; /// App must override this
     virtual void jobStarted(); // will be called after a possible dialog has been shown and the real printjob starts
     virtual void jobFinished( com::sun::star::view::PrintableState );
 

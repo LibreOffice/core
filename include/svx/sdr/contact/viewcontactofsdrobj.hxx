@@ -65,7 +65,7 @@ public:
     // React on changes of the object of this ViewContact
     virtual void ActionChanged() SAL_OVERRIDE;
 
-    // overload for acessing the SdrObject
+    /// override for accessing the SdrObject
     virtual SdrObject* TryToGetSdrObject() const SAL_OVERRIDE;
 
 

@@ -601,7 +601,7 @@ OUString E3dScene::TakeObjNamePlural() const
     return ImpGetResStr(STR_ObjNamePluralScene3d);
 }
 
-// The NbcRotate routine overloads the one of the SdrObject. The idea is
+// The NbcRotate routine overrides the one of the SdrObject. The idea is
 // to be able to rotate the scene relative to the position of the scene
 // and then the objects in the scene
 

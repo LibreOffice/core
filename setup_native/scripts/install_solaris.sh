@@ -273,7 +273,7 @@ then
 fi
 
 #
-# the tail of the script contains a shared object for overloading the getuid()
+# the tail of the script contains a shared object for overriding the getuid()
 # and a few other calls
 #
 

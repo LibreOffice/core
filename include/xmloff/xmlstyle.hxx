@@ -230,7 +230,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    // This method must be overloaded to insert styles into the document.
+    // Override this method to insert styles into the document.
     virtual void EndElement() SAL_OVERRIDE;
 
     // This allows to add an SvXMLStyleContext to this context from extern

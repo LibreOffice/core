@@ -92,7 +92,7 @@ namespace drawinglayer
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
-            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            /// Override standard getDecomposition to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
 
             /// provide unique ID

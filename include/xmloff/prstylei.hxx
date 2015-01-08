@@ -89,9 +89,9 @@ protected:
     SvXMLStylesContext *GetStyles() { return static_cast<SvXMLStylesContext *>(&mxStyles); }
     ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
-    // This methos my be overloaded to create a new style. Its called by
+    // Override this method to create a new style. It's called by
     // CreateInsert to create a style if a style with the requested family and
-    // name couldn't be found. The st
+    // name couldn't be found.
     virtual ::com::sun::star::uno::Reference <
         ::com::sun::star::style::XStyle > Create();
 

@@ -303,7 +303,8 @@ private:
     void    addObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
     void    removeObjectListener(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewObject);
 
-    /** approve that the object given may be inserted into the container. Should be overloaded by derived classes,
+    /** approve that the object given may be inserted into the container.
+        Should be overridden by derived classes,
         the default implementation just checks the object to be non-void.
 
         @throws IllegalArgumentException

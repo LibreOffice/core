@@ -499,8 +499,8 @@ protected:
 
         The default implementation simply asks m_xAggregateSet for its properties.
 
-        You usually only need to overload this method if you want to filter the aggregate
-        properties.
+        You usually only need to override this method if you want to filter the
+        aggregate properties.
     */
     virtual void describeAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps

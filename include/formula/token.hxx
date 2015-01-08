@@ -133,17 +133,17 @@ public:
 
     /**
         Dummy methods to avoid switches and casts where possible,
-        the real token classes have to overload the appropriate method[s].
-        The only methods valid anytime if not overloaded are:
+        the real token classes have to override the appropriate method[s].
+        The only methods valid anytime if not overridden are:
 
         - GetByte() since this represents the count of parameters to a function
           which of course is 0 on non-functions. FormulaByteToken and ScExternal do
-          overload it.
+          override it.
 
         - HasForceArray() since also this is only used for operators and
           functions and is 0 for other tokens.
 
-        Any other non-overloaded method pops up an assertion.
+        Any other non-overridden method pops up an assertion.
      */
 
     virtual sal_uInt8           GetByte() const;

@@ -81,7 +81,6 @@ public:
     // pdf export? Default is false
     virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
 
-    // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
     virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
 };
 
@@ -109,7 +108,6 @@ public:
     void SetStartPage(const SdrPage* pPage);
     const SdrPage* GetStartPage() const { return mxStartPage.get(); }
 
-    // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
     virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
 };
 

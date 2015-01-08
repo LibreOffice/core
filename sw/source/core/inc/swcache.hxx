@@ -215,7 +215,8 @@ public:
 
     virtual bool IsAvailable() const;
 
-    /// Shorthand for those who know, that they did not overload isAvailable()
+    /// Shorthand for those who know that they did not override isAvailable()
+    /// FIXME: wtf?
     bool IsAvail() const { return pObj != 0; }
 };
 

@@ -311,7 +311,7 @@ public:
     /** SwFmt::IsBackgroundTransparent
 
         Virtual method to determine, if background of format is transparent.
-        Default implementation returns false. Thus, subclasses have to overload
+        Default implementation returns false. Thus, subclasses have to override
         method, if the specific subclass can have a transparent background.
 
         @author OD
@@ -323,7 +323,7 @@ public:
     /** SwFmt::IsShadowTransparent
 
         Virtual method to determine, if shadow of format is transparent.
-        Default implementation returns false. Thus, subclasses have to overload
+        Default implementation returns false. Thus, subclasses have to override
         method, if the specific subclass can have a transparent shadow.
 
         @author OD

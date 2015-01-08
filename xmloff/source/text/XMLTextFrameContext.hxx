@@ -58,7 +58,7 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
         ::com::sun::star::beans::XPropertySet >& rPropSet );
 
 protected:
-    /// helper to get the created xShape instance, needs to be overloaded
+    /// helper to get the created xShape instance, needs to be overridden
     virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const SAL_OVERRIDE;
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const SAL_OVERRIDE;
 

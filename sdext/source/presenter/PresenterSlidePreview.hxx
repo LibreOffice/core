@@ -53,7 +53,7 @@ namespace {
     slide.
     This implementation shows a preview of the slide given to the
     setCurrentSlide.  For showing the next slide the PresenterViewFactory
-    uses a derived class that overloads the setCurrentSlide() method.
+    uses a derived class that overrides the setCurrentSlide() method.
 */
 class PresenterSlidePreview
     : private ::boost::noncopyable,

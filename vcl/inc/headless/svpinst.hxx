@@ -49,7 +49,7 @@ public:
     SvpSalTimer( SvpSalInstance* pInstance ) : m_pInstance( pInstance ) {}
     virtual ~SvpSalTimer();
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
     virtual void Start( sal_uLong nMS ) SAL_OVERRIDE;
     virtual void Stop() SAL_OVERRIDE;
 };

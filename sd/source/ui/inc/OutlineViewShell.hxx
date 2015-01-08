@@ -90,6 +90,7 @@ public:
 
     void ExecCtrl(SfxRequest &rReq);
     void GetCtrlState(SfxItemSet &rSet);
+    // FIXME non-virtual override???
     void GetMenuState(SfxItemSet &rSet);
     void GetAttrState(SfxItemSet &rSet);
     void GetState (SfxItemSet& rSet);

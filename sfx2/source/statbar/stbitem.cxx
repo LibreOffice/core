@@ -440,7 +440,7 @@ void SfxStatusBarControl::StateChanged
     The base implementation includes items of type SfxStringItem
     where the text is entered in the status row field and
     SfxVoidItem, where the field is emptied. The base implementation
-    should not be called in overloaded methods.
+    should not be called in overriding methods.
 */
 
 {

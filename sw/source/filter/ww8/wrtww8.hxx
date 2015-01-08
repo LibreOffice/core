@@ -1431,8 +1431,7 @@ public:
 };
 
 /** The class MSWordAttrIter is a helper class to build the Fkp.chpx.
-    This class may be overloaded for output the SwTxtAttrs and the
-    EditEngineTxtAttrs.
+    This is a base class to output the SwTxtAttrs and the EditEngineTxtAttrs.
 */
 class MSWordAttrIter
 {

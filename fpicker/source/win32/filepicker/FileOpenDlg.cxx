@@ -34,7 +34,7 @@ namespace /* private */
     // a lot of files in a large directory we may reach this
     // limit and don't want to get out of memory;
     // another much more elegant way would be to subclass the
-    // FileOpen dialog and overload the BM_CLICK event of the
+    // FileOpen dialog and override the BM_CLICK event of the
     // OK button so that we determine the size of the text
     // currently in the edit field and resize our buffer
     // appropriately - in the future we will do this
@@ -523,8 +523,7 @@ void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 
     OSL_ASSERT(GetParent(hwndChild) == hwndDlg);
 
-    // calling virtual function which the
-    // client can overload
+    // calling virtual function which the client can override
     onInitDialog(hwndDlg);
 }
 

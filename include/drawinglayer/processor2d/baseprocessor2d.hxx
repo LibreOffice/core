@@ -62,7 +62,7 @@ namespace drawinglayer
             derived from that primitive. This is the preparation to handle unknown implementations
             of the com::sun::star::graphic::XPrimitive2D interface in the future.
 
-            So, to implement a basic processor, it is necessary to overload and implement the
+            So, to implement a basic processor, it is necessary to override and implement the
             processBasePrimitive2D(..) method. A minimal renderer has to support the
             Basic Primitives (see baseprimitive2d.hxx) and the Grouping Primitives (see
             groupprimitive2d.hxx). These are (currently):

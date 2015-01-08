@@ -531,7 +531,7 @@ namespace drawinglayer
             used to support the old XOR paint-'trick'.
 
             It does not need an own identifier since a renderer who wants to interpret
-            it itself may do so. It just overloads the decomposition of the C++
+            it itself may do so. It just overrides the decomposition of the C++
             implementation class to do an alternative decomposition.
          */
         class NonOverlappingFillGradientPrimitive2D : public FillGradientPrimitive2D

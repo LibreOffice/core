@@ -204,7 +204,7 @@ public:
     // React on changes of the object of this ViewContact
     virtual void ActionChanged() SAL_OVERRIDE;
 
-    // overload for acessing the SdrPage
+    // override for acessing the SdrPage
     virtual SdrPage* TryToGetSdrPage() const SAL_OVERRIDE;
 
 protected:

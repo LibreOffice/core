@@ -297,7 +297,7 @@ public:
 
     // Whether the model is being streamed in at the moment
     bool IsLoading() const                  { return false /*BFS01 bLoading */; }
-    // Needs to be overladed to enable the Swap/LoadOnDemand of graphics.
+    // Override this to enable the Swap/LoadOnDemand of graphics.
     // If rbDeleteAfterUse is set to sal_True the SvStream instance from
     // the caller will be disposed after use.
     // If this method returns NULL, a temporary file will be allocated for
@@ -464,8 +464,7 @@ public:
     // - not be loaded immediately when loading a document,
     //   but only once they are needed (e.g. displayed).
     // - be pruned from memory if they are not needed.
-    // For that to work, the virtual method
-    // GetDocumentStream() needs to be overloaded.
+    // For that to work, override the virtual method GetDocumentStream().
     // Default=FALSE. Flag is not persistent.
     bool            IsSwapGraphics() const { return bSwapGraphics; }
     void            SetSwapGraphics(bool bJa = true);
@@ -493,8 +492,8 @@ public:
     // Can the model be changed at all?
     // Is only evaluated by the possibility methods of the View.
     // Direct manipulations on the model, ... do not respect this flag.
-    // Should be overloaded and return the appriopriate ReadOnly status
-    // of the files, i.e. sal_True or sal_False. (Method is called multiple
+    // Override this and return the appropriate ReadOnly status
+    // of the files, i.e. true or false. (Method is called multiple
     // times, so use one flag only!)
     virtual bool IsReadOnly() const;
     virtual void     SetReadOnly(bool bYes);

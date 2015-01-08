@@ -55,7 +55,7 @@ public:
     virtual void CheckPortionInfo( SdrOutliner& rOutliner );
     virtual void ReformatText();
 
-    // default uses GetObjectItemSet, but may be overloaded to
+    // default uses GetObjectItemSet, but may be overridden to
     // return a text-specific ItemSet
     virtual const SfxItemSet& GetItemSet() const;
 

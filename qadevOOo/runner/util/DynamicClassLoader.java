@@ -25,7 +25,7 @@ public class DynamicClassLoader {
     /**
     * This method returns a class created by its name
     * created by call to <code>Class.forName()</code>.<p>
-    * This method must be overloaded if another loading
+    * This method must be overridden if another loading
     * policy is required for Component and Interface
     * testing classes.
     * @param className The name of the class to create.

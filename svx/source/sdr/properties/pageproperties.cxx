@@ -31,7 +31,7 @@ namespace sdr
         // create a new itemset
         SfxItemSet* PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            // overloaded to legally return a valid ItemSet
+            // override to legally return a valid ItemSet
             return new SfxItemSet(rPool);
         }
 
@@ -54,7 +54,7 @@ namespace sdr
             return *(new PageProperties(*this, rObj));
         }
 
-        // get itemset. Overloaded here to allow creating the empty itemset
+        // get itemset. Override here to allow creating the empty itemset
         // without asserting
         const SfxItemSet& PageProperties::GetObjectItemSet() const
         {
@@ -75,7 +75,7 @@ namespace sdr
 
         SfxStyleSheet* PageProperties::GetStyleSheet() const
         {
-            // overloaded to legally return a 0L pointer here
+            // override to legally return a 0L pointer here
             return 0L;
         }
 

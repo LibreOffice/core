@@ -56,7 +56,7 @@ namespace dbaui
 
     public:
         OCreationList( OTasksWindow& _rParent );
-        // window overloads
+        // Window overrides
         virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -125,7 +125,7 @@ namespace dbaui
         OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetailView);
         virtual ~OTasksWindow();
 
-        // window overloads
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
 
         OApplicationDetailView* getDetailView() const { return m_pDetailView; }
@@ -160,7 +160,7 @@ namespace dbaui
     public:
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
-        // window overloads
+        // Window overrides
         virtual void GetFocus() SAL_OVERRIDE;
 
         /** creates the tables page

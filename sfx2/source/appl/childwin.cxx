@@ -211,7 +211,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     SfxChildWinFactory* pFact=0;
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
 
-    // First search for ChildWindow in SDT; "Overloading has to be realized
+    // First search for ChildWindow in SDT; Overlay windows are realized
     // by using ChildWindowContext
     SfxApplication *pApp = SfxGetpApp();
     {

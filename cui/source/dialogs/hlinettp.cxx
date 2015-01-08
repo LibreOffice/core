@@ -69,7 +69,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     m_pBtBrowse->Enable( true );
 
 
-    // overload handlers
+    // set handlers
     Link aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     m_pRbtLinktypInternet->SetClickHdl( aLink );
     m_pRbtLinktypFTP->SetClickHdl     ( aLink );

@@ -542,8 +542,8 @@ void SfxDockingWindow::ToggleFloatingMode()
     the SfxDockingWindow and ensures the correct alignment on the parent window.
     Through PrepareToggleFloatMode and Initialize it is ensured that
     pImp-> GetLastAlignment() always delivers an allowed alignment. If this
-    method is overloaded from a derived class, then first the
-    SfxDockingWindow:: ToggleFloatingMode() must be called.
+    method is overridden by a derived class, then first the
+    SfxDockingWindow::ToggleFloatingMode() must be called.
 */
 {
     if ( !pImp->bConstructed || !pMgr )
@@ -625,7 +625,7 @@ void SfxDockingWindow::StartDocking()
 /*  [Description]
 
     This virtual method of the DockingWindow class takes the inner and outer
-    docking rectangle from the parent window. If this method is overloaded by a
+    docking rectangle from the parent window. If this method is overridden by
     a derived class, then SfxDockingWindow:StartDocking() has to be called at
     the end.
 */
@@ -759,7 +759,7 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
 /*  [Description]
 
     Virtual method of the DockingWindow class ensures the correct alignment on
-    the parent window. If this method is overloaded by a derived class, then
+    the parent window. If this method is overridden by a derived class, then
     SfxDockingWindow::EndDocking() must be called first.
 */
 {

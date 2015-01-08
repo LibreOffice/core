@@ -1337,7 +1337,7 @@ SfxPopupWindow* SfxPopupWindow::Clone() const
 
 /*  [Description]
 
-    This method must be overloaded to show this Popup also in the
+    This method must be overridden to show this Popup also in the
     Presentation-mode. It is called when a Show() would be meaningless
     since the parent is no presentation window.
     When create a new window the bew Top-Window will be used automatically,

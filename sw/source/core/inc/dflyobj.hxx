@@ -83,7 +83,7 @@ public:
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly);
     virtual ~SwVirtFlyDrawObj();
 
-    // overloaded method of base class SdrVirtObj
+    // override method of base class SdrVirtObj
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const SAL_OVERRIDE;
 
     // we treat the size calculation completely on ourself here

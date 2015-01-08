@@ -53,7 +53,7 @@ namespace sdr
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
-            // get itemset. Overloaded here to allow creating the empty itemset
+            // get itemset. Override here to allow creating the empty itemset
             // without asserting
             virtual const SfxItemSet& GetObjectItemSet() const SAL_OVERRIDE;
 

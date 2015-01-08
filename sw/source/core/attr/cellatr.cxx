@@ -75,7 +75,7 @@ SfxPoolItem* SwTblBoxFormula::Clone( SfxItemPool* ) const
     E.g. TextFeld -> TextNode, or
      BoxAttribute -> BoxStartNode
 
-    Caution: Has to be overloaded when inheriting.
+    Caution: Must override when inheriting.
 */
 const SwNode* SwTblBoxFormula::GetNodeOfFormula() const
 {

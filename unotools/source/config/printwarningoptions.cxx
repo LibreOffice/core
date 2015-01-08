@@ -57,7 +57,7 @@ public:
      SvtPrintWarningOptions_Impl();
     virtual ~SvtPrintWarningOptions_Impl();
 
-//  overloaded methods of baseclass
+//  override methods of baseclass
 
     virtual void Commit() SAL_OVERRIDE;
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;

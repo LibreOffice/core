@@ -933,7 +933,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         GetDoc()->SetChanged(true);
     }
 
-    // the status has to be set here because of overloading
+    // the status has to be set here because of overriding
     if( !GetDocSh()->IsModified() )
     {
         rSet.DisableItem( SID_SAVEDOC );

@@ -352,8 +352,8 @@ bool SdrUnoObj::hasSpecialDrag() const
 
 bool SdrUnoObj::supportsFullDrag() const
 {
-    // overloaded to have the possibility to enable/disable in debug and
-    // to ckeck some things out. Current solution is working, so default is
+    // override to have the possibility to enable/disable in debug and
+    // to check some things out. Current solution is working, so default is
     // enabled
     static bool bDoSupportFullDrag(true);
 

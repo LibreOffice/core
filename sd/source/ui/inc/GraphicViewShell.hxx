@@ -64,8 +64,7 @@ public:
 
     virtual ~GraphicViewShell (void);
 
-    /** This method is overloaded in order to have the layer mode always
-        active.
+    /** Override this method in order to have the layer mode always active.
     */
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive) SAL_OVERRIDE;
 

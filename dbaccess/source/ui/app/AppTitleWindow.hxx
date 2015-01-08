@@ -37,7 +37,7 @@ namespace dbaui
         OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
         virtual ~OTitleWindow();
 
-        // window overloads
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 

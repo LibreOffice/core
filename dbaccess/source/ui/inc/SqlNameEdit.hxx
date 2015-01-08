@@ -67,7 +67,7 @@ namespace dbaui
         {
         }
 
-        // Window overload
+        // Window overrides
         //  virtual bool PreNotify( NotifyEvent& rNEvt );
         // Edit
         virtual void Modify() SAL_OVERRIDE;
@@ -88,7 +88,7 @@ namespace dbaui
         {
         }
 
-        // Window overload
+        // Window overrides
         // Edit
         virtual void Modify() SAL_OVERRIDE;
     };

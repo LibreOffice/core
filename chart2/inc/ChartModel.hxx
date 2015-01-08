@@ -408,7 +408,7 @@ public:
         const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // lang::XTypeProvider (overloaded method of WeakImplHelper)
+    // lang::XTypeProvider (override method of WeakImplHelper)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
         getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

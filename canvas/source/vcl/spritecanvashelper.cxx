@@ -644,10 +644,7 @@ namespace vclcanvas
             sal_Int32 nCount(0);
 
             mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
-            OUString text(
-                OUString::number(
-                    // disambiguate overload...
-                    nCount ) );
+            OUString text( OUString::number(nCount) );
 
             // pad with leading space
             while( text.getLength() < 3 )

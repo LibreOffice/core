@@ -766,7 +766,7 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
 /** SwFmt::IsBackgroundTransparent
 
     Virtual method to determine, if background of format is transparent.
-    Default implementation returns false. Thus, subclasses have to overload
+    Default implementation returns false. Thus, subclasses have to override
     method, if the specific subclass can have a transparent background.
 
     @return false, default implementation
@@ -779,7 +779,7 @@ bool SwFmt::IsBackgroundTransparent() const
 /** SwFmt::IsShadowTransparent
 
     Virtual method to determine, if shadow of format is transparent.
-    Default implementation returns false. Thus, subclasses have to overload
+    Default implementation returns false. Thus, subclasses have to override
     method, if the specific subclass can have a transparent shadow.
 
     @return false, default implementation

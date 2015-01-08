@@ -76,7 +76,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     , m_nTabId(0)
     , m_nAsianTypoId(0)
 {
-    // fill Listbox and overload Select-Handler
+    // fill Listbox and set Select-Handler
 
     m_nLineId = AddTabPage("line", RID_SVXPAGE_LINE);
     m_nAreaId = AddTabPage("area", RID_SVXPAGE_AREA);

@@ -179,7 +179,7 @@ public:
     virtual ~ViewRedirector();
 
     // all default implementations just call the same methods at the original. To do something
-    // different, overload the method and at least do what the method does.
+    // different, override the method and at least do what the method does.
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo) SAL_OVERRIDE;

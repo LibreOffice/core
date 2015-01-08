@@ -295,7 +295,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 }
 
 // Abbreviated version: The parent-string will be searched
-// The whole thing recursive, because Call() might be overloaded
+// The whole thing recursive, because Call() might be overridden
 // Qualified names are allowed
 
 bool SbxObject::Call( const OUString& rName, SbxArray* pParam )

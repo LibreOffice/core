@@ -144,7 +144,7 @@ public:
 
     SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
     virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE;
     virtual long            GetGraphicsWidth() const SAL_OVERRIDE;

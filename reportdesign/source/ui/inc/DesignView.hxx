@@ -100,7 +100,7 @@ namespace rptui
                     OReportController& _rController);
         virtual ~ODesignView();
 
-        // window overloads
+        // Window overrides
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;

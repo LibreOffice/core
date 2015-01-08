@@ -845,7 +845,7 @@ protected:
     virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) SAL_OVERRIDE;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
-    /** Overloaded to do additional processing on the SdrObject. */
+    /** Override to do additional processing on the SdrObject. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const SAL_OVERRIDE;
 
 private:

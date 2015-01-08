@@ -799,7 +799,7 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
     return bRet;
 }
 
-// Draw()-Overload for OLE2 (Sfx)
+// Draw()-Override for OLE2 (Sfx)
 void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
                                sal_uInt16 nAspect )
 {

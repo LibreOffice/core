@@ -431,7 +431,7 @@ public:
     Point GetGridOffset() const;
 
     // Will be always called, if the list of marked objects might be changed.
-    // If you overload this method (as programmer), be sure that you call the
+    // If you override this method, be sure that you call the
     // methods of the base class!
     virtual void MarkListHasChanged();
 

@@ -99,7 +99,7 @@ namespace sdr
             bool                                            mbIsHittable : 1;
 
             // Flag to hold info if this objects supports animation. Default is
-            // false. If true, the Trigger() method should be overloaded
+            // false. If true, the Trigger() method should be overridden
             // to implement the animation effect and to re-initiate the event.
             bool                                            mbAllowsAnimation : 1;
 
@@ -126,7 +126,7 @@ namespace sdr
             OverlayManager* getOverlayManager() const { return mpOverlayManager; }
 
             // the access method for Primitive2DSequence. Will use createPrimitive2DSequence and
-            // setPrimitive2DSequence if needed. Overloading may be used to allow disposal of last
+            // setPrimitive2DSequence if needed. Overriding may be used to allow disposal of last
             // created primitives to react on changed circumstances and to re-create primitives
             virtual drawinglayer::primitive2d::Primitive2DSequence getOverlayObjectPrimitive2DSequence() const;
 

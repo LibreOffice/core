@@ -33,7 +33,7 @@ class SdrDragView;
 class SdrDragMovHdl : public SdrDragMethod
 {
 protected:
-    // define nothing, overload to do so
+    // define nothing, override to do so
     virtual void createSdrDragEntries() SAL_OVERRIDE;
 
 public:

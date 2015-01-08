@@ -32,7 +32,7 @@ private:
     bool                                        mbSupportsMultipleContents;
 
 protected:
-    /// helper to get the created xShape instance, needs to be overloaded
+    /// helper to get the created xShape instance, override this
     virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const = 0;
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const = 0;
 

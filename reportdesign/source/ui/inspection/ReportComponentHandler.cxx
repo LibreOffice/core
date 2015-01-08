@@ -84,7 +84,7 @@ uno::Reference< uno::XInterface > SAL_CALL ReportComponentHandler::create( const
 {
     return *(new ReportComponentHandler( _rxContext ));
 }
-// overload WeakComponentImplHelperBase::disposing()
+// override WeakComponentImplHelperBase::disposing()
 // This function is called upon disposing the component,
 // if your component needs special work when it becomes
 // disposed, do it here.

@@ -1247,7 +1247,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
     This method is called by SFx if Styles have to be reloaded from a
     document-template. Existing Styles should be overwritten by that.
     That's why the document has to be reformatted. Therefore applications
-    will usually overload this method and call the baseclass' implementation
+    will usually override this method and call the baseclass' implementation
     in their implementation.
 */
     // When the source is our document, we do the checking ourselves

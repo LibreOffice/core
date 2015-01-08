@@ -88,7 +88,7 @@ public:
     SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo );
     virtual ~SbUnoStructRefObject();
 
-    // Find overloaded to support e. g. NameAccess
+    // override Find to support e. g. NameAccess
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     // Force creation of all properties for debugging
@@ -128,7 +128,7 @@ public:
     // #76470 do introspection on demand
     void doIntrospection( void );
 
-    // Find overloaded to support e. g. NameAccess
+    // override Find to support e. g. NameAccess
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     // Force creation of all properties for debugging

@@ -579,7 +579,7 @@ void ViewContactOfSdrPage::ActionChanged()
     maViewContactOfHelplinesFront.ActionChanged();
 }
 
-// overload for acessing the SdrPage
+// override for acessing the SdrPage
 SdrPage* ViewContactOfSdrPage::TryToGetSdrPage() const
 {
     return &GetSdrPage();

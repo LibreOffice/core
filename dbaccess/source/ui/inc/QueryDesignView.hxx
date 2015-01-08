@@ -96,7 +96,7 @@ namespace dbaui
         /// late construction
         virtual void Construct() SAL_OVERRIDE;
         virtual void initialize() SAL_OVERRIDE;
-        // window overloads
+        // Window overrides
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 

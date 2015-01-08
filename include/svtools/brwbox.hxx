@@ -345,7 +345,7 @@ protected:
 
     // software plug for database access
     // RowCount is counted automatically
-    // (with the help of RowInserted and RowRemoved), so overloading of
+    // (with the help of RowInserted and RowRemoved), so overriding of
     // the method is needless
 public:
     virtual long    GetRowCount() const SAL_OVERRIDE;
@@ -428,7 +428,7 @@ public:
                                BrowserMode nMode = 0 );
                     virtual ~BrowseBox();
 
-    // inherited overloaded handler
+    // override inherited handler
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;

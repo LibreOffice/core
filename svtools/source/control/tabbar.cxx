@@ -238,7 +238,7 @@ void ImplTabSizer::Paint( const Rectangle& )
 
 
 
-// Is not named Impl. as it may be called or overloaded
+// Is not named Impl. as it may be both instantiated and derived from
 
 
 // - TabBarEdit -

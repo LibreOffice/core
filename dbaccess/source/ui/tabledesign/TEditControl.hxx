@@ -163,7 +163,7 @@ namespace dbaui
         bool IsReadOnly() { return bReadOnly;}
         OFieldDescription* GetFieldDescr( long nRow );
 
-        // window overloads
+        // Window overrides
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
         // IClipboardTest

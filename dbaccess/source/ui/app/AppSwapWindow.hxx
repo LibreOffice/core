@@ -43,7 +43,7 @@ namespace dbaui
     public:
         OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow );
         virtual ~OApplicationSwapWindow();
-        // window overloads
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
 
         bool isCutAllowed() SAL_OVERRIDE      { return false; }

@@ -106,7 +106,7 @@ public:
     // #i33136#
     /** Decide if the object to be created should be created
         orthogonal. Default implementation uses nSlotID
-        to decide. May be overloaded to use other criteria
+        to decide. May be overridden to use other criteria
         for this decision
 
         @returns true if the to be created object should be orthogonal.

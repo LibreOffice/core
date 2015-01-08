@@ -144,7 +144,7 @@ protected:
     */
     void             RemoveState( sal_Int16 aState ) throw (::com::sun::star::uno::RuntimeException);
 
-    /** has to be overloaded by derived classes that support child elements.
+    /** has to be overridden by derived classes that support child elements.
         With this method a rescan is initiated that should result in a correct
         list of children.
 

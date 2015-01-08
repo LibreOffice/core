@@ -66,7 +66,7 @@ namespace sdr
             SdrObject& GetSdrObject();
 
             // Test changeability for a single item. If a implementation wants to prevent
-            // changing an item this method may be overloaded.
+            // changing an item it should override this method.
             virtual bool AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) const = 0;
 
             // Do the internal ItemChange. If only nWhich is given, the item needs to be cleared.
@@ -99,8 +99,8 @@ namespace sdr
             // merging of ItemSets is done for e.g. Group objects.
             virtual const SfxItemSet& GetObjectItemSet() const = 0;
 
-            // get merged ItemSet. Normappl, this maps directly to GetObjectItemSet(), but may
-            // be overloaded e.g for group objects to return a merged ItemSet of the object.
+            // get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
+            // be overridden e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state
             // SfxItemState::DONTCARE which means there were several such items with different
             // values.
@@ -145,12 +145,12 @@ namespace sdr
             // Get the installed StyleSheet.
             virtual SfxStyleSheet* GetStyleSheet() const = 0;
 
-            // Scale the local ItemSet as far as it contains metric items. This needs to be
-            // overloaded to do it for hierarchical objects like e.g. groups.
+            // Scale the local ItemSet as far as it contains metric items.
+            // Override this to do it for hierarchical objects like e.g. groups.
             virtual void Scale(const Fraction& rScale);
 
-            // Move local items to a new ItemPool. This needs to be
-            // overloaded to do it for hierarchical objects like e.g. groups.
+            // Move local items to a new ItemPool.
+            // Override this to do it for hierarchical objects like e.g. groups.
             virtual void MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
 
             // Set new model.

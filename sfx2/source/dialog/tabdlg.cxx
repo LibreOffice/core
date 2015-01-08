@@ -228,7 +228,7 @@ void SfxTabPage::FillUserData()
 /*  [Description]
 
     Virtual method is called by the base class in the destructor to save
-    specific information of the TabPage in the ini-file. When overloading a
+    specific information of the TabPage in the ini-file. When overriding a
     string must be compiled, which is then flushed with the <SetUserData()>.
 */
 

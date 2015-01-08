@@ -153,7 +153,7 @@ public class PropChgHelper implements
     public void propertyChange( PropertyChangeEvent aEvt )
             throws com.sun.star.uno.RuntimeException
     {
-        // will be overloaded in derived classes
+        // will be overridden in derived classes
     }
 
 

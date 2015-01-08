@@ -100,7 +100,7 @@ protected:
     SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual void        BrkCreate( SdrDragStat& rStat ) SAL_OVERRIDE;
 
-    // #i70852# overload Layer interface to force to FormColtrol layer
+    // #i70852# override Layer interface to force to FormControl layer
     SAL_DLLPRIVATE virtual SdrLayerID GetLayer() const SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
 

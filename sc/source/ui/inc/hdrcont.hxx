@@ -67,7 +67,7 @@ private:
     void            DrawShadedRect( long nStart, long nEnd, const Color& rBaseColor );
 
 protected:
-                    // Overloaded by Window
+                    // Window overrides
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 

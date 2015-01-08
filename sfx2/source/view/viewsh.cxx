@@ -905,8 +905,8 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 /*  [Description]
 
     Virtual Method used to perform a Verb on a selected Object.
-    Since this Object is just known by the derived classes, DoVerb
-    must be overloaded.
+    Since this Object is only known by the derived classes, they must override
+    DoVerb.
 */
 
 {
@@ -1089,7 +1089,7 @@ void SfxViewShell::OuterResizePixel
 
 /*  [Description]
 
-    This Method has to be overloaded to be able to react to the size-change of
+    Override this Method to be able to react to the size-change of
     the View. Thus the View is defined as the Edit window and also the
     attached Tools are defined (for example the ruler).
 
@@ -1139,7 +1139,7 @@ void SfxViewShell::InnerResizePixel
 
 /*  [Description]
 
-    This Method has to be overloaded to be able to react to the size-change of
+    Override this Method to be able to react to the size-change of
     the Edit window.
 
     The Edit window must not be changed either in size or position.
@@ -1318,7 +1318,7 @@ SfxViewShell::~SfxViewShell()
 
 void SfxViewShell::Initialize()
 {
-    // overloaded by the application.
+    // override by the application.
 }
 
 bool SfxViewShell::PrepareClose
@@ -1406,7 +1406,7 @@ OUString SfxViewShell::GetSelectionText
 
 /*  [Description]
 
-    This Method can be overloaded by the programmers to return a text that
+    Override this Method to return a text that
     is included in the current selection. This is for example used when
     sending emails.
 
@@ -1694,9 +1694,8 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 
 /*  [Description]
 
-    This Method has to be overloaded by the subclasses so that SFx from
-    the Cursor can be switched on and off. This happes for example with
-    with the running <SfxProgress>.
+    Subclasses must override this Method so that SFx can switch the
+    Cursor on and off, for example while a <SfxProgress> is running.
 */
 
 {

@@ -53,7 +53,7 @@ namespace rptui
 
         // SfxListener
         virtual void    Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;
-        // window overloads
+        // Window overrides
         virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void    Resize() SAL_OVERRIDE;

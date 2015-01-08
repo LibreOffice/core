@@ -268,7 +268,7 @@ protected:
     }
 
     /**
-     * Function overloaded by unit test. See DECLARE_SW_*_TEST macros
+     * Function overridden by unit test. See DECLARE_SW_*_TEST macros
      */
     virtual void verify()
     {

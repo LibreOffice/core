@@ -77,7 +77,7 @@ public:
     virtual void    MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    Paint(const Rectangle& rRect) SAL_OVERRIDE;
-    //Overload the sd::Window's CreateAccessible to create a different accessible object
+    /// Override the sd::Window's CreateAccessible to create a different accessible object
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void) SAL_OVERRIDE;

@@ -23,7 +23,7 @@
 #include <basic/sbmod.hxx>
 
 // basic module for JavaScript sources
-// All the basic-specific methods must be overloaded virtually and must
+// All the basic-specific methods must be overridden virtually and must
 // be deactivated. The differentiation of normal modules is done by RTTI.
 
 class SbJScriptModule : public SbModule

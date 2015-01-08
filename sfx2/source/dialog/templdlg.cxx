@@ -2370,7 +2370,7 @@ void SfxTemplateDialog_Impl::LoadedFamilies()
 
 
 
-// Overloaded Resize-Handler ( StarView )
+// Override Resize-Handler ( StarView )
 // The size of the Listboxen is adjusted
 void SfxTemplateDialog_Impl::Resize()
 {

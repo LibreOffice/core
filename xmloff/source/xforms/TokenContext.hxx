@@ -76,7 +76,7 @@ public:
 
     /** Create a warning for all non-namespace character
      * content. Classes that wish to deal with character content have
-     * to overload this method anyway, and will thus get rid of the
+     * to override this method anyway, and will thus get rid of the
      * warnings. */
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 

@@ -281,7 +281,7 @@ uno::Reference< uno::XInterface > SAL_CALL GeometryHandler::create( const uno::R
 {
     return *(new GeometryHandler( _rxContext ));
 }
-// overload WeakComponentImplHelperBase::disposing()
+// override WeakComponentImplHelperBase::disposing()
 // This function is called upon disposing the component,
 // if your component needs special work when it becomes
 // disposed, do it here.

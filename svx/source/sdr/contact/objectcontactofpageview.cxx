@@ -163,7 +163,7 @@ namespace sdr
 
             // #114359# save old and set clip region
             OutputDevice* pOutDev = TryToGetOutputDevice();
-            OSL_ENSURE(0 != pOutDev, "ObjectContactOfPageView without OutDev, someone has overloaded TryToGetOutputDevice wrong (!)");
+            OSL_ENSURE(0 != pOutDev, "ObjectContactOfPageView without OutDev, someone has overridden TryToGetOutputDevice wrong (!)");
             bool bClipRegionPushed(false);
             const vcl::Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 

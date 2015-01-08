@@ -3837,7 +3837,7 @@ void DisclosureButton::ImplDrawCheckBoxState()
     /* HACK: DisclosureButton is currently assuming, that the disclosure sign
        will fit into the rectangle occupied by a normal checkbox on all themes.
        If this does not hold true for some theme, ImplGetCheckImageSize
-       would have to be overloaded for DisclosureButton; also GetNativeControlRegion
+       would have to be overridden for DisclosureButton; also GetNativeControlRegion
        for CTRL_LISTNODE would have to be implemented and taken into account
     */
 

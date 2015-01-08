@@ -266,7 +266,7 @@ public:
             bool bDefaultStyle = false );
     virtual ~ScCellTextStyleContext();
 
-    // overload FillPropertySet to store style information
+    // override FillPropertySet to store style information
     virtual void FillPropertySet(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet ) SAL_OVERRIDE;

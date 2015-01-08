@@ -62,9 +62,9 @@ public:
     void                        SetNumberFormatter(SvNumberFormatter* pNew);
     SvNumberFormatter*          GetNumberFormatter() const;
 
-                                // overload to adapt attributes in the document
+                                // override to adapt attributes in the document
     virtual void                NumberFormatDeleted(sal_uInt32 nKey);
-                                // overload to possibly format something anew
+                                // override to possibly format something anew
     virtual void                SettingsChanged();
 
                                 // XNumberFormatsSupplier

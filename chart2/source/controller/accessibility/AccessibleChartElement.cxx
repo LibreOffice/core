@@ -152,7 +152,7 @@ OUString SAL_CALL AccessibleChartElement::getImplementationName()
     return OUString( "AccessibleChartElement" );
 }
 
-// ________ AccessibleChartElement::XAccessibleContext (overloaded) ________
+// ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -160,7 +160,7 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleName()
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
 }
 
-// ________ AccessibleChartElement::XAccessibleContext (overloaded) ________
+// ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

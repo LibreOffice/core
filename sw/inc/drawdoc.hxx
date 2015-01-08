@@ -43,7 +43,7 @@ public:
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const SAL_OVERRIDE;
 
 protected:
-    /// overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
+    /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
 };
 

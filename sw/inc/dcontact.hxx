@@ -272,7 +272,7 @@ class SwDrawVirtObj : public SdrVirtObj
 
         virtual void NbcSetAnchorPos(const Point& rPnt) SAL_OVERRIDE;
 
-        /// All overloaded methods which need to use the offset
+        /// All overridden methods which need to use the offset
         virtual void RecalcBoundRect() SAL_OVERRIDE;
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const SAL_OVERRIDE;

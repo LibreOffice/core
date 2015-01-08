@@ -686,7 +686,7 @@ void FmFormObj::BrkCreate( SdrDragStat& rStat )
 }
 
 
-// #i70852# overload Layer interface to force to FormColtrol layer
+// #i70852# override Layer interface to force to FormControl layer
 
 SdrLayerID FmFormObj::GetLayer() const
 {

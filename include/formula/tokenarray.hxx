@@ -226,7 +226,7 @@ public:
     virtual FormulaToken* AddOpCode(OpCode e);
 
     /** Adds the single token to array.
-        Derived classes must overload it when they want to support derived classes from FormulaToken.
+        Derived classes must override it when they want to support derived classes from FormulaToken.
         @return true        when an error occurs
     */
     virtual bool AddFormulaToken(

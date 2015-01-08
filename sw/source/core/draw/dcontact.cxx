@@ -753,7 +753,7 @@ SdrObject* SwDrawContact::GetMaster()
 }
 
 /**
- * @note Overloading <SwContact::SetMaster(..)> in order to assert, if the
+ * @note Override <SwContact::SetMaster(..)> in order to assert, if the
  *       'master' drawing object is replaced. The latter is correctly handled,
  *       if handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus,
  *       assert only, if a debug level is given.
@@ -2525,7 +2525,7 @@ bool SwDrawVirtObj::HasTextEdit() const
     return rRefObj.HasTextEdit();
 }
 
-// overloaded 'layer' methods for 'virtual' drawing object to assure,
+// override 'layer' methods for 'virtual' drawing object to assure
 // that layer of 'virtual' object is the layer of the referenced object.
 SdrLayerID SwDrawVirtObj::GetLayer() const
 {

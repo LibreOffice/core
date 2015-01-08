@@ -86,27 +86,27 @@ namespace sdr
 
         void BaseProperties::Scale(const Fraction& /*rScale*/)
         {
-            // default implementation does nothing; overload where
+            // default implementation does nothing; override where
             // an ItemSet is implemented.
         }
 
         void BaseProperties::MoveToItemPool(SfxItemPool* /*pSrcPool*/, SfxItemPool* /*pDestPool*/, SdrModel* /*pNewModel*/)
         {
             // Move properties to a new ItemPool. Default implementation does nothing.
-            // Overload where an ItemSet is implemented.
+            // Override where an ItemSet is implemented.
         }
 
         void BaseProperties::SetModel(SdrModel* /*pOldModel*/, SdrModel* /*pNewModel*/)
         {
             // Set new model. Default implementation does nothing.
-            // Overload where an ItemSet is implemented.
+            // Override where an ItemSet is implemented.
         }
 
         void BaseProperties::ForceStyleToHardAttributes()
         {
             // force all attributes which come from styles to hard attributes
             // to be able to live without the style. Default implementation does nothing.
-            // Overload where an ItemSet is implemented.
+            // Override where an ItemSet is implemented.
         }
 
         void BaseProperties::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClearAllItems)

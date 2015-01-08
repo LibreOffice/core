@@ -1420,7 +1420,7 @@ sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException, std::exception)
 // XServiceInfo
 OUString UnoControl::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
-    OSL_FAIL( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overridden!" );
     return OUString();
 }
 

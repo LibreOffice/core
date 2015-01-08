@@ -279,7 +279,7 @@ protected:
     void            ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow);
     void            EnableSelectionAsDropTarget( bool bEnable = true,
                                                  bool bWithChildren = true );
-    // Standard impl returns 0; must be overloaded by derived classes which support D'n'D
+    // Standard impl returns 0; derived classes which support D'n'D must override
     using Window::GetDropTarget;
     virtual SvTreeListEntry* GetDropTarget( const Point& );
 

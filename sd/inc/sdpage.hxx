@@ -207,7 +207,7 @@ public:
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) SAL_OVERRIDE;
     virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
 
-    /** Also overload ReplaceObject methods to realize when
+    /** Also override ReplaceObject methods to realize when
     objects are removed with this mechanism instead of RemoveObject*/
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum) SAL_OVERRIDE;
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum) SAL_OVERRIDE;

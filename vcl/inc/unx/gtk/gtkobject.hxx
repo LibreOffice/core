@@ -43,7 +43,7 @@ public:
     GtkSalObject( GtkSalFrame* pParent, bool bShow = true );
     virtual ~GtkSalObject();
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
      virtual void                   ResetClipRegion() SAL_OVERRIDE;
     virtual sal_uInt16              GetClipRegionType() SAL_OVERRIDE;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;

@@ -43,7 +43,7 @@ public class NativeView extends java.awt.Canvas
      * ctor
      * Does nothing really.
      * We can use our JNI mechanism for an already visible
-     * canvas only. So we overload the method for showing ( "setVisible()" )
+     * canvas only. So we override the method for showing ( "setVisible()" )
      * and make our intialization there. BUt we try to show an empty clean
      * window till there.
      */
@@ -57,7 +57,7 @@ public class NativeView extends java.awt.Canvas
 
 
     /**
-     * Overload this method to make necessary initializations here.
+     * Override this method to make necessary initializations here.
      * ( e.g. get the window handle and necessary system information )
      *
      * Why here?
@@ -96,7 +96,7 @@ public class NativeView extends java.awt.Canvas
 
 
     /**
-     * overload paint routine to show provide against
+     * override paint routine to show provide against
      * repaint errors if no office view is really plugged
      * into this canvas.
      * If handle is present - we shouldn't paint anything further.

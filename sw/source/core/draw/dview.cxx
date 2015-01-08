@@ -192,7 +192,7 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTo
 
     if(pRetval)
     {
-        // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
+        // override to allow extra handling when picking SwVirtFlyDrawObj's
         pRetval = impLocalHitCorrection(pRetval, rPnt, nTol, GetMarkedObjectList());
     }
 

@@ -44,7 +44,7 @@ namespace dbaui
     public:
         OTableBorderWindow(vcl::Window* pParent);
         virtual ~OTableBorderWindow();
-        // window overloads
+        // Window overrides
         virtual void Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
@@ -78,7 +78,7 @@ namespace dbaui
                             OTableController& _rController);
         virtual ~OTableDesignView();
 
-        // window overloads
+        // Window overrides
         virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void            GetFocus() SAL_OVERRIDE;
 

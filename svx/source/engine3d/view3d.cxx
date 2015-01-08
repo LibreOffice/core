@@ -230,7 +230,7 @@ E3dView::E3dView(SdrModel* pModel, OutputDevice* pOut) :
     InitView ();
 }
 
-// DrawMarkedObj overloaded, since possibly only a single 3D object is to be
+// DrawMarkedObj override, since possibly only a single 3D object is to be
 // drawn
 
 void E3dView::DrawMarkedObj(OutputDevice& rOut) const
@@ -317,7 +317,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
     }
 }
 
-// Get overloaded model, since in some 3D objects an additional scene
+// override get model, since in some 3D objects an additional scene
 // must be pushed in
 
 SdrModel* E3dView::GetMarkedObjModel() const

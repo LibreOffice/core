@@ -567,7 +567,7 @@ void OCollection::disposeElements()
 
 Reference< XPropertySet > OCollection::createDescriptor()
 {
-    OSL_FAIL("Need to be overloaded when used!");
+    OSL_FAIL("createDescriptor() needs to be overridden when used!");
     throw SQLException();
 }
 

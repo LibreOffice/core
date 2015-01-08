@@ -45,7 +45,7 @@ public:
             ScInsertTableDlg( vcl::Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
             virtual ~ScInsertTableDlg();
 
-    virtual short   Execute() SAL_OVERRIDE;      // overloaded to set parent dialog
+    virtual short   Execute() SAL_OVERRIDE; // override to set parent dialog
 
     bool        GetTablesFromFile() const { return m_pBtnFromFile->IsChecked(); }
     bool        GetTablesAsLink() const { return m_pBtnLink->IsChecked(); }

@@ -191,33 +191,31 @@ protected:
     // get a new namespave map (used in starmath to have a default namespace)
     void ResetNamespaceMap();
 
-    // This method can be overloaded to export the content of <office:meta>.
-    // There is a default implementation.
+    /// Override this method to export the content of <office:meta>.
+    /// There is a default implementation.
     virtual void _ExportMeta();
 
-    // This method can be overloaded to export the content of <office:scripts>.
-    // There is a default implementation.
+    /// Override this method to export the content of <office:scripts>.
+    /// There is a default implementation.
     virtual void _ExportScripts();
 
-    // This method can be overloaded to export the font declarations
-    // The default implementation will export the contents of the
-    // XMLFontAutoStylePool if it has been created.
+    /// Override this method to export the font declarations
+    /// The default implementation will export the contents of the
+    /// XMLFontAutoStylePool if it has been created.
     virtual void _ExportFontDecls();
 
-    // This method should be overloaded to export the content of <style:styles>.
-    // If bUsed is set, used styles should be exported only.
-    // Overloaded Methods must call this method !
+    /// Override this method to export the content of <style:styles>.
+    /// If bUsed is set, used styles should be exported only.
+    /// Overriding Methods must call this method !
     virtual void _ExportStyles( bool bUsed );
 
-    // This method must be overloaded to export the contents of
-    // <style:auto-styles>
+    /// Override this method to export the contents of <style:auto-styles>.
     virtual void _ExportAutoStyles() = 0;
 
-    // This method must be overloaded to export the contents of
-    // <style:master-styles>
+    /// Override this method to export the contents of <style:master-styles>.
     virtual void _ExportMasterStyles() = 0;
 
-    // This method must be overloaded to export the content of <office:body>.
+    /// Override this method to export the content of <office:body>.
     virtual void _ExportContent() = 0;
 
     OUString GetSourceShellID() const;

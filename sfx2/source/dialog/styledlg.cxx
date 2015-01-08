@@ -104,7 +104,7 @@ short SfxStyleDialog::Ok()
 
 /*  [Description]
 
-    Overloaded, so that always RET_OK is returned.
+    Override so that always RET_OK is returned.
 */
 
 {

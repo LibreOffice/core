@@ -62,7 +62,7 @@ public:
                             ScDocOptionsObj( const ScDocOptions& rOpt );
     virtual                 ~ScDocOptionsObj();
 
-    // get/setPropertyValue overloaded to used stored options instead of document
+    // get/setPropertyValue override to used stored options instead of document
 
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )

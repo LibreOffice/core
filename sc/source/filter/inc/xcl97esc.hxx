@@ -37,7 +37,7 @@ public:
     explicit            XclEscherExGlobal( const XclExpRoot& rRoot );
 
 private:
-    /** Overloaded to create a new temporary file and return its stream. */
+    /** Override to create a new temporary file and return its stream. */
     virtual SvStream*   ImplQueryPictureStream() SAL_OVERRIDE;
 
 private:

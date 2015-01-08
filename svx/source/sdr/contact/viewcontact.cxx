@@ -186,7 +186,7 @@ bool ViewContact::isAnimatedInAnyViewObjectContact() const
 
 // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
 // and GetViewContact default pops up an assert since it's an error if
-// GetObjectCount has a result != 0 and it's not overloaded.
+// GetObjectCount has a result != 0 and it's not overridden.
 sal_uInt32 ViewContact::GetObjectCount() const
 {
     // no sub-objects
@@ -196,7 +196,7 @@ sal_uInt32 ViewContact::GetObjectCount() const
 ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
 {
     // This is the default implementation; call would be an error
-    OSL_FAIL("ViewContact::GetViewContact: This call needs to be overloaded when GetObjectCount() can return results != 0 (!)");
+    OSL_FAIL("ViewContact::GetViewContact: This call needs to be overridden when GetObjectCount() can return results != 0 (!)");
     return (ViewContact&)(*this);
 }
 
@@ -240,7 +240,7 @@ void ViewContact::ActionChanged()
 }
 
 // access to SdrObject and/or SdrPage. May return 0L like the default
-// implementations do. Needs to be overloaded as needed.
+// implementations do. Override as needed.
 SdrObject* ViewContact::TryToGetSdrObject() const
 {
     return 0L;

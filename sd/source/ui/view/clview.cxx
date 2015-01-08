@@ -47,7 +47,7 @@ ClientView::~ClientView()
 
 /**
  * If View should not Invalidate() the windows, this method has
- * to be overloaded and properly handled.
+ * to be overridden and properly handled.
  */
 
 void ClientView::InvalidateOneWin(vcl::Window& rWin)
@@ -58,7 +58,7 @@ void ClientView::InvalidateOneWin(vcl::Window& rWin)
 
 /**
  * If View should not Invalidate() the windows, this method has
- * to be overloaded and properly handled.
+ * to be overridden and properly handled.
  */
 
 void ClientView::InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect)

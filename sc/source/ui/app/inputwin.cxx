@@ -1671,7 +1671,7 @@ void ScTextWnd::LoseFocus()
 
 OUString ScTextWnd::GetText() const
 {
-    //  Overload to get the text via the testtool
+    //  Override to get the text via the testtool
     if ( pEditEngine )
         return pEditEngine->GetText();
     else

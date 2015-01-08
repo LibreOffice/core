@@ -668,7 +668,7 @@ OString generateClassDefinition(std::ostream& o,
 //       << "\n        css::uno::Reference< css::uno::XComponentContext > const & "
 //       << "context);\n\n";
 
-    // overload queryInterface
+    // override queryInterface
     if (propertyhelper.getLength() > 1) {
         o << "    // css::uno::XInterface:\n"
             "    virtual css::uno::Any SAL_CALL queryInterface("
@@ -720,7 +720,7 @@ OString generateClassDefinition(std::ostream& o,
     }
 
     if (supportxcomponent) {
-        o << "    // overload WeakComponentImplHelperBase::disposing()\n"
+        o << "    // override WeakComponentImplHelperBase::disposing()\n"
             "    // This function is called upon disposing the component,\n"
             "    // if your component needs special work when it becomes\n"
             "    // disposed, do it here.\n"
@@ -835,7 +835,7 @@ OString generateClassDefinition(std::ostream& o,
 //     generateServiceHelper(o, options.implname, classname, services);
 
     if (supportxcomponent) {
-        o << "// overload WeakComponentImplHelperBase::disposing()\n"
+        o << "// override WeakComponentImplHelperBase::disposing()\n"
             "// This function is called upon disposing the component,\n"
             "// if your component needs special work when it becomes\n"
             "// disposed, do it here.\n"

@@ -108,7 +108,7 @@ SvxGradientTabPage::SvxGradientTabPage
     rXFSet.Put( aXGradientItem );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
 
-    // overload the handler
+    // set handler
     m_pLbGradients->SetSelectHdl(
         LINK( this, SvxGradientTabPage, ChangeGradientHdl_Impl ) );
     m_pBtnAdd->SetClickHdl( LINK( this, SvxGradientTabPage, ClickAddHdl_Impl ) );

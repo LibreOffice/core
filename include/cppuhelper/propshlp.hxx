@@ -348,7 +348,7 @@ protected:
    This abstract class maps the methods of the interfaces XMultiPropertySet, XFastPropertySet
    and XPropertySet to the methods getInfoHelper, convertFastPropertyValue,
    setFastPropertyValue_NoBroadcast and getFastPropertyValue. You must derive from
-   this class and overload the methods.
+   this class and override the methods.
    It provides a standard implementation of the XPropertySetInfo.
    The XPropertiesChangeListener are inserted in the rBHelper.aLC structure.
    The XPropertyChangeListener and XVetoableChangeListener with no names are inserted

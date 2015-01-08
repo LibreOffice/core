@@ -92,7 +92,7 @@ protected:
     // find the node in which the formula is located
     //  TextFeld    -> TextNode,
     //  BoxAttribut -> BoxStartNode
-    // !!! has to be overloaded by every derivation !!!
+    // !!! every derived class must override this !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
     SwTableFormula( const OUString& rFormula );

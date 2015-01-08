@@ -473,7 +473,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         }
         else
             bStayActive = false;
-        pMenu->bInCallback = true;  // set here if Activate overloaded
+        pMenu->bInCallback = true;  // set here if Activate overridden
         pMenu->Activate();
         pMenu->bInCallback = false;
         bJustActivated = true;

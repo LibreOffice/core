@@ -145,7 +145,7 @@ private:
     OUString getAccessibleDescription() => VCL Window::GetAccessibleDescription
     OUString getAccessibleName() => VCL Window::GetAccessibleText() => Most windows return Window::GetText()
     Reference< XAccessibleRelationSet > getAccessibleRelationSet()
-    Reference< XAccessibleStateSet > getAccessibleStateSet() => overload FillAccessibleStateSet( ... )
+    Reference< XAccessibleStateSet > getAccessibleStateSet() => override FillAccessibleStateSet( ... )
 
 ---------------------------------------------------------- */
 

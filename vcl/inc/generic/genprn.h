@@ -37,7 +37,7 @@ public:
     PspSalInfoPrinter();
     virtual ~PspSalInfoPrinter();
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
     virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
     virtual bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) SAL_OVERRIDE;
@@ -72,7 +72,7 @@ public:
     PspSalPrinter( SalInfoPrinter *pPrinter );
     virtual ~PspSalPrinter();
 
-    // overload all pure virtual methods
+    // override all pure virtual methods
     virtual bool                    StartJob( const OUString* pFileName,
                                               const OUString& rJobName,
                                               const OUString& rAppName,

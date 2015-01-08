@@ -35,7 +35,7 @@
  * Returns the <SfxItemPool> that is being saved.
  * This should only be used in very exceptional cases e.g.
  * when guaranteeing file format compatibility:
- * When overloading a <SfxPoolItem::Store()> getting additional data from the Pool
+ * When overriding a <SfxPoolItem::Store()> getting additional data from the Pool
  */
 const SfxItemPool* SfxItemPool::GetStoringPool()
 {

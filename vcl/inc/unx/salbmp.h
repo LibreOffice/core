@@ -111,7 +111,7 @@ public:
                                 X11SalBitmap();
     virtual                     ~X11SalBitmap();
 
-    // overload pure virtual methods
+    // override pure virtual methods
     virtual bool                Create(
                                     const Size& rSize,
                                     sal_uInt16 nBitCount,

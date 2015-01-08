@@ -311,7 +311,7 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-// RasterConversionLineEntry3D for Raterconversion of 3D PolyPolygons
+// RasterConversionLineEntry3D for Rasterconversion of 3D PolyPolygons
 
 namespace basegfx
 {
@@ -408,8 +408,8 @@ namespace basegfx
 } // end of namespace basegfx
 
 
-// the basic RaterConverter itself. Only one method needs to be overloaded. The
-// class itself is strictly virtual
+// the basic RasterConverter itself. Only one method needs to be overridden. The
+// class itself is pure virtual
 
 namespace basegfx
 {
