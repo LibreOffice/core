@@ -79,7 +79,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
             "vclplug_" + rModuleBase + "lo" SAL_DLLEXTENSION );
     // vclplug_svp is in libmerged
     if (rModuleBase == "svp")
-        aModule = SVLIBRARY("vclplug_svp");
+        aModule = VCLPLUG_SVP_DLL_NAME;
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
@@ -141,7 +141,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 
 static DesktopType get_desktop_environment()
 {
-    OUString aModule(SVLIBRARY("desktop_detector"));
+    OUString aModule(DESKTOP_DETECTOR_DLL_NAME);
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
         SAL_LOADMODULE_DEFAULT );
