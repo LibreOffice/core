@@ -1102,17 +1102,18 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
             const long nWidth(rAcc.Width());
             const long nHeight(rAcc.Height());
             boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nAlignedWidth ]);
-            sal_uInt8* pTmp(0);
-            sal_uInt8 cTmp(0);
-
             switch( nBitCount )
             {
                 case( 1 ):
                 {
+                    //valgrind, zero out the trailing unused alignment bytes
+                    size_t nUnusedBytes = nAlignedWidth - ((nWidth+7) / 8);
+                    memset(pBuf.get() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
+
                     for( long nY = nHeight - 1; nY >= 0L; nY-- )
                     {
-                        pTmp = pBuf.get();
-                        cTmp = 0;
+                        sal_uInt8* pTmp = pBuf.get();
+                        sal_uInt8 cTmp = 0;
 
                         for( long nX = 0L, nShift = 8L; nX < nWidth; nX++ )
                         {
@@ -1134,10 +1135,14 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
                 case( 4 ):
                 {
+                    //valgrind, zero out the trailing unused alignment bytes
+                    size_t nUnusedBytes = nAlignedWidth - ((nWidth+1) / 2);
+                    memset(pBuf.get() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
+
                     for( long nY = nHeight - 1; nY >= 0L; nY-- )
                     {
-                        pTmp = pBuf.get();
-                        cTmp = 0;
+                        sal_uInt8* pTmp = pBuf.get();
+                        sal_uInt8 cTmp = 0;
 
                         for( long nX = 0L, nShift = 2L; nX < nWidth; nX++ )
                         {
@@ -1160,7 +1165,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
                 {
                     for( long nY = nHeight - 1; nY >= 0L; nY-- )
                     {
-                        pTmp = pBuf.get();
+                        sal_uInt8* pTmp = pBuf.get();
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                             *pTmp++ = rAcc.GetPixelIndex( nY, nX );
@@ -1180,7 +1185,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
                     for( long nY = nHeight - 1; nY >= 0L; nY-- )
                     {
-                        pTmp = pBuf.get();
+                        sal_uInt8* pTmp = pBuf.get();
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
