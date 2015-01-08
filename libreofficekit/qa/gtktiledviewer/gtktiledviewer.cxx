@@ -125,8 +125,14 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
 }
 
 /// Receives a key press or release event.
-static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/)
+static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
 {
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+
+    if (pEvent->type == GDK_KEY_RELEASE)
+        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, 1, gdk_keyval_to_unicode(pEvent->keyval));
+    else
+        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, 0, gdk_keyval_to_unicode(pEvent->keyval));
 }
 
 // GtkComboBox requires gtk 2.24 or later
