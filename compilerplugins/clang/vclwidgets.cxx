@@ -37,6 +37,7 @@ public:
 
     bool VisitVarDecl( const VarDecl* var );
 
+    bool VisitFunctionDecl( const FunctionDecl* var );
 };
 
 bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
@@ -60,6 +61,21 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
     return false;
 }
 
+bool isPointerToWindowSubclass(const QualType& pType) {
+    if (!pType->isPointerType())
+        return false;
+    QualType pointeeType = pType->getPointeeType();
+    const RecordType *recordType = pointeeType->getAs<RecordType>();
+    if (recordType == nullptr) {
+        return false;
+    }
+    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    if (recordDecl == nullptr) {
+        return false;
+    }
+    return isDerivedFromWindow(recordDecl);
+}
+
 bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
         return true;
@@ -67,6 +83,15 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (fieldDecl->isBitField()) {
         return true;
     }
+    if (isPointerToWindowSubclass(fieldDecl->getType())) {
+        report(
+            DiagnosticsEngine::Remark,
+            "vcl::Window subclass declared as a pointer field, should be wrapped in VclPtr.",
+            fieldDecl->getLocation())
+          << fieldDecl->getSourceRange();
+        return true;
+    }
+
     const RecordType *recordType = fieldDecl->getType()->getAs<RecordType>();
     if (recordType == nullptr) {
         return true;
@@ -92,18 +117,8 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl) {
     if (ignoreLocation(pvDecl)) {
         return true;
     }
-    if (!pvDecl->getType()->isPointerType())
-        return true;
-    QualType pointeeType = pvDecl->getType()->getPointeeType();
-    const RecordType *recordType = pointeeType->getAs<RecordType>();
-    if (recordType == nullptr)
-        return true;
-    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
-    if (recordDecl == nullptr)
-        return true;
-
     // check if this parameter is derived from Window
-    if (isDerivedFromWindow(recordDecl)) {
+    if (isPointerToWindowSubclass(pvDecl->getType())) {
         report(
             DiagnosticsEngine::Remark,
             "vcl::Window subclass passed as a pointer parameter, should be wrapped in VclPtr.",
@@ -120,18 +135,9 @@ bool VCLWidgets::VisitVarDecl( const VarDecl* varDecl )
     }
     if (!varDecl->isLocalVarDecl())
         return true;
-    if (!varDecl->getType()->isPointerType())
-        return true;
-    QualType pointeeType = varDecl->getType()->getPointeeType();
-    const RecordType *recordType = pointeeType->getAs<RecordType>();
-    if (recordType == nullptr)
-        return true;
-    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
-    if (recordDecl == nullptr)
-        return true;
 
     // check if this variables type is derived from Window
-    if (isDerivedFromWindow(recordDecl)) {
+    if (isPointerToWindowSubclass(varDecl->getType())) {
         report(
             DiagnosticsEngine::Remark,
             "vcl::Window subclass declared as a pointer var, should be wrapped in VclPtr.",
@@ -141,6 +147,24 @@ bool VCLWidgets::VisitVarDecl( const VarDecl* varDecl )
 
     return true;
 }
+
+bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
+{
+    if (ignoreLocation(functionDecl)) {
+        return true;
+    }
+    QualType t1 { compat::getReturnType(*functionDecl) };
+    // check if this variables type is derived from Window
+    if (isPointerToWindowSubclass(t1)) {
+        report(
+            DiagnosticsEngine::Remark,
+            "vcl::Window subclass declared as a return type from a method/function, should be wrapped in VclPtr.",
+            functionDecl->getLocation())
+          << functionDecl->getSourceRange();
+    }
+    return true;
+}
+
 
 loplugin::Plugin::Registration< VCLWidgets > X("vclwidgets");
 
