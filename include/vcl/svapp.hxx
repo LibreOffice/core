@@ -89,12 +89,6 @@ VCL_DLLPUBLIC sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
 
 typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 
-// ATTENTION: ENUM duplicate in daemon.cxx under Unix!
-
-#ifdef UNX
-enum Service { SERVICE_OLE, SERVICE_APPEVENT, SERVICE_IPC };
-#endif
-
 /** An application can be notified of a number of different events:
     - TYPE_ACCEPT       - listen for connection to the application (a connection
                           string is passed via the event)
