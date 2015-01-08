@@ -1487,7 +1487,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                     if( ! xShape.is())
                         continue;
 
-                    rShapeExport->exportShape( xShape, nShapeId );
+                    rShapeExport->exportShape( xShape );
                 }
                 // this would be the easier way if it worked:
                 //mrExport.GetShapeExport()->exportShapes( mxAdditionalShapes );
@@ -1536,7 +1536,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                     if( ! xShape.is())
                         continue;
 
-                    rShapeExport->collectShapeAutoStyles( xShape, nShapeId );
+                    rShapeExport->collectShapeAutoStyles( xShape );
                 }
             }
         }

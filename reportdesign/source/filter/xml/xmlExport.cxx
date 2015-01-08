@@ -674,7 +674,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
             rtl::Reference< XMLShapeExport > xShapeExport = GetShapeExport();
             xShapeExport->seekShapes(_xProp.get());
             SolarMutexGuard aGuard;
-            xShapeExport->collectShapeAutoStyles(xShape.get(), i);
+            xShapeExport->collectShapeAutoStyles(xShape.get());
         }
         else
         {
@@ -1501,7 +1501,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             }
 
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
-            xShapeExport->exportShape(xShape.get(), i, SEF_DEFAULT|XMLShapeExportFlags::NO_WS,&aRefPoint);
+            xShapeExport->exportShape(xShape.get(), SEF_DEFAULT|XMLShapeExportFlags::NO_WS,&aRefPoint);
         }
     }
 }

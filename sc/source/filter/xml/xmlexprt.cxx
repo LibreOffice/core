@@ -3470,7 +3470,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                             pAttrList->AddAttribute(
                                                 GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken( XML_NOTIFY_ON_UPDATE_OF_RANGES ) ), sRanges );
                                         }
-                                        GetShapeExport()->exportShape( xShape, -1, XMLShapeExportFlags::NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList );
+                                        GetShapeExport()->exportShape( xShape, XMLShapeExportFlags::NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList );
                                     }
                                 }
                             }
@@ -3504,7 +3504,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                     pAttrList->AddAttribute(
                                         GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
                                 }
-                                GetShapeExport()->exportShape(xShape, -1, XMLShapeExportFlags::NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
+                                GetShapeExport()->exportShape(xShape, XMLShapeExportFlags::NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
                             }
                         }
                     }
@@ -3546,7 +3546,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             // re-add pre-loaded attributes
             AddAttributeList( xSaveAttribs );
         }
-        GetShapeExport()->exportShape(xShape, -1, SEF_DEFAULT, pPoint);
+        GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
     }
     IncrementProgressBar(false);
 }
@@ -3716,7 +3716,7 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
         SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);
         Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
 
-        GetShapeExport()->exportShape(xShape, -1, SEF_DEFAULT|XMLShapeExportFlags::ANNOTATION, NULL);
+        GetShapeExport()->exportShape(xShape, SEF_DEFAULT|XMLShapeExportFlags::ANNOTATION, NULL);
 
         pCurrentCell = NULL;
 
