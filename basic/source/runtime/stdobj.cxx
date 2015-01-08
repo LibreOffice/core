@@ -802,7 +802,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
             {
                 eCT = SbxCLASS_METHOD;
             }
-            pVar = Make( aName_, eCT, p->eType );
+            pVar = Make( aName_, eCT, p->eType, ( p->nArgs & _FUNCTION ) == _FUNCTION );
             pVar->SetUserData( nIndex + 1 );
             pVar->SetFlags( nAccess );
         }

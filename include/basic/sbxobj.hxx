@@ -68,7 +68,7 @@ public:
     SbxVariable* Execute( const OUString& );
     // Manage elements
     virtual bool GetAll( SbxClassType ) { return true; }
-    SbxVariable* Make( const OUString&, SbxClassType, SbxDataType );
+    SbxVariable* Make( const OUString&, SbxClassType, SbxDataType, bool bIsRuntimeFunction = false );
     virtual SbxObject* MakeObject( const OUString&, const OUString& );
     virtual void Insert( SbxVariable* );
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and

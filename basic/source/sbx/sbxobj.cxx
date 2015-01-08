@@ -377,7 +377,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 // If a new object will be established, this object will be indexed,
 // if an object of this name exists already.
 
-SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataType dt )
+SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataType dt, bool bIsRuntimeFunction )
 {
     // Is the object already available?
     SbxArray* pArray = NULL;
@@ -410,7 +410,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         pVar = new SbxProperty( rName, dt );
         break;
     case SbxCLASS_METHOD:
-        pVar = new SbxMethod( rName, dt );
+        pVar = new SbxMethod( rName, dt, bIsRuntimeFunction );
         break;
     case SbxCLASS_OBJECT:
         pVar = CreateObject( rName );
@@ -964,14 +964,19 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     --nLevel;
 }
 
-SbxMethod::SbxMethod( const OUString& r, SbxDataType t )
-    : SbxVariable( t )
+SbxMethod::SbxMethod( const OUString& r, SbxDataType t, bool bIsRuntimeFunction )
+    : SbxVariable(t)
+    , mbIsRuntimeFunction(bIsRuntimeFunction)
+    , mbRuntimeFunctionReturnType(t)
 {
-    SetName( r );
+    SetName(r);
 }
 
 SbxMethod::SbxMethod( const SbxMethod& r )
-    : SvRefBase( r ), SbxVariable( r )
+    : SvRefBase(r)
+    , SbxVariable(r)
+    , mbIsRuntimeFunction(r.IsRuntimeFunction())
+    , mbRuntimeFunctionReturnType(r.GetRuntimeFunctionReturnType())
 {
 }
 
