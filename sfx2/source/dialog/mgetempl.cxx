@@ -83,6 +83,11 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     // this Page needs ExchangeSupport
     SetExchangeSupport();
 
+    if ( aFollow == aName )
+        m_pEditStyleBtn->Disable();
+    else
+        m_pEditStyleBtn->Enable();
+
     ResMgr* pResMgr = SfxGetpApp()->GetModule_Impl()->GetResMgr();
     OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
@@ -229,6 +234,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     // It is a style with auto update? (SW only)
     if(SfxItemState::SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
         m_pAutoCB->Show();
+    m_pFollowLb->SetSelectHdl( LINK( this, SfxManageStyleSheetPage, EditStyleSelectHdl_Impl ) );
     m_pEditStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditStyleHdl_Impl ) );
     m_pEditLinkStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditLinkStyleHdl_Impl ) );
 }
@@ -315,6 +321,17 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
             OSL_FAIL( "non supported field unit" );
     }
     m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
+}
+
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleSelectHdl_Impl )
+{
+    OUString aTemplName(m_pFollowLb->GetSelectEntry());
+    OUString aEditTemplName(m_pNameRo->GetText());
+    if (!( aTemplName == aEditTemplName))
+        m_pEditStyleBtn->Enable();
+    else
+        m_pEditStyleBtn->Disable();
+    return 0;
 }
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl )
