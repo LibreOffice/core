@@ -81,8 +81,6 @@ const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
-#undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
-
 using namespace formula;
 
 namespace sc { namespace opencl {
@@ -3656,12 +3654,8 @@ DynamicKernel* DynamicKernel::create( ScTokenArray& rCode, int nResultSize )
     catch (const UnhandledToken& ut)
     {
         SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
-#ifdef NO_FALLBACK_TO_SWINTERP
-        assert(false);
-#else
         delete pDynamicKernel;
         return NULL;
-#endif
     }
     catch (...)
     {
