@@ -56,6 +56,14 @@ inline bool isExternCContext(clang::DeclContext const & ctxt) {
 #endif
 }
 
+inline bool isInExternCContext(clang::FunctionDecl const & decl) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
+    return decl.isInExternCContext();
+#else
+    return isExternalCContext(*decl.getCanonicalDecl()->getDeclContext());
+#endif
+}
+
 #if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
 typedef clang::LinkageInfo LinkageInfo;
 #else

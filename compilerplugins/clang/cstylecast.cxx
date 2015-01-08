@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
 #include <string>
 #include "plugin.hxx"
 #include "compat.hxx"
@@ -16,6 +17,10 @@
 //
 
 namespace {
+
+bool hasCLanguageLinkageType(FunctionDecl const * decl) {
+    return decl->isExternC() || compat::isInExternCContext(*decl);
+}
 
 QualType resolvePointers(QualType type) {
     while (type->isPointerType()) {
@@ -28,7 +33,9 @@ class CStyleCast:
     public RecursiveASTVisitor<CStyleCast>, public loplugin::Plugin
 {
 public:
-    explicit CStyleCast(InstantiationData const & data): Plugin(data) {}
+    explicit CStyleCast(InstantiationData const & data):
+        Plugin(data), externCFunction(false)
+    {}
 
     virtual void run() override {
         if (compiler.getLangOpts().CPlusPlus) {
@@ -36,7 +43,12 @@ public:
         }
     }
 
+    bool TraverseFunctionDecl(FunctionDecl * decl);
+
     bool VisitCStyleCastExpr(const CStyleCastExpr * expr);
+
+private:
+    bool externCFunction;
 };
 
 static const char * recommendedFix(clang::CastKind ck) {
@@ -46,6 +58,20 @@ static const char * recommendedFix(clang::CastKind ck) {
         case CK_BaseToDerived: return "static_cast";
         default: return "???";
     }
+}
+
+bool CStyleCast::TraverseFunctionDecl(FunctionDecl * decl) {
+    bool ext = hasCLanguageLinkageType(decl)
+        && decl->isThisDeclarationADefinition();
+    if (ext) {
+        assert(!externCFunction);
+        externCFunction = true;
+    }
+    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(decl);
+    if (ext) {
+        externCFunction = false;
+    }
+    return ret;
 }
 
 bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
@@ -89,12 +115,14 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_Dependent ) {
         return true;
     }
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
-                              expr->getLocStart());
-    StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
-    // ignore C code
-    if ( filename.endswith(".h") ) {
-        return true;
+    if (externCFunction || expr->getLocStart().isMacroID()) {
+        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
+            expr->getLocStart());
+        StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
+        // ignore C code
+        if ( filename.endswith(".h") ) {
+            return true;
+        }
     }
     report(
         DiagnosticsEngine::Warning,
