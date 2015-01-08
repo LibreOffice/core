@@ -429,7 +429,7 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
             {}
             pOle2Obj->SetLogicRect( aRect );
         }
-        else
+        else if (!aRect.IsEmpty()) //HACK: can aRect legally be empty?
         {
             awt::Size aSz;
             Size aSize = aRect.GetSize();
