@@ -1756,7 +1756,7 @@ void ScInterpreter::ScIpmt()
     }
 }
 
-void ScInterpreter::ScKapz()
+void ScInterpreter::ScPpmt()
 {
     double nInterest, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
