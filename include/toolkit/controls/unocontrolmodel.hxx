@@ -164,7 +164,7 @@ public:
     using cppu::OPropertySetHelper::getFastPropertyValue;
     void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
-    // setValue-Methoden ueberladen, um die Einzelproperties des FontDescriptors abzufangen
+    // override setValue methods to handle properties of FontDescriptor
     // ::com::sun::star::beans::XPropertySet
     void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // ::com::sun::star::beans::XFastPropertySet

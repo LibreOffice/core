@@ -246,16 +246,15 @@ protected:
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 
-    // Diese Methode wird aufgerufen, wenn ein Selektor geparst wurde
-    // Wenn bFirst gesetzt ist, wird der Inhalt von aItemSet in alle
-    // zuletzt angelegten Styles kopiert.
-    // Diese Methode sollte in abgleiteten Parsern nicht mehr
-    // ueberladen werden!
+    /// Will be called when a Selector is parsed.  If bFirst is true,
+    /// the content of the aItemSet will be copied into all recently
+    /// created Styles.
+    /// Derived classes should not override this method!
     virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst ) SAL_OVERRIDE;
 
-    // Diese Methode wird fuer jede geparste Property aufgerufen
-    // sie fuegt das Item in den ItemSet 'pItemSet' ein
-    // Sie sollte in abgeleiteten Parsern nicht mehr ueberladen werden!
+    /// Will be called for every parsed Property.  Adds the item to the
+    /// pItemSet.
+    /// Derived classes should not override this method!
     virtual bool DeclarationParsed( const OUString& rProperty,
                                     const CSS1Expression *pExpr ) SAL_OVERRIDE;
 

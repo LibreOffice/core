@@ -3669,11 +3669,9 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
     bool bWasNotifiable = m_bNotifiable;
     m_bNotifiable = false;
 
-    // Bug 24616/24617:
-    //      Modify ueberladen, damit beim Loeschen von Vorlagen diese
-    //      wieder richtig verwaltet werden (Outline-Numerierung!!)
-    //  Bug25481:
-    //      bei Nodes im Undo nie _ChgTxtCollUpdateNum rufen.
+    // Override Modify so that deleting styles works properly (outline
+    // numbering!).
+    // Never call _ChgTxtCollUpdateNum for Nodes in Undo.
     if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
         GetRegisteredIn() == static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt &&
         GetNodes().IsDocNodes() )

@@ -588,21 +588,7 @@ void ScFunctionDockWin::SetDescription()
     }
  }
 
-/*************************************************************************
-#*  Member:     Resizing
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionDockWin
-#*
-#*  Funktion:   Ueberladene Funktion um die Groesse der
-#*              einzelnen Controls einzustellen.
-#*
-#*  Input:      neue Groesse
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
+/// override to set new size of the controls
 void ScFunctionDockWin::Resizing( Size& rNewSize )
 {
     if((sal_uLong)rNewSize.Width()<nMinWidth) rNewSize.Width()=nMinWidth;
@@ -717,21 +703,7 @@ void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 {
 }
 
-/*************************************************************************
-#*  Member:     Resize
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScFunctionDockWin
-#*
-#*  Funktion:   Ueberladene Funktion um die Groesse der
-#*              einzelnen Controls einzustellen.
-#*
-#*  Input:      neue Groesse
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
+/// override to set new size of the controls
 void ScFunctionDockWin::Resize()
 {
     if ( !IsFloatingMode() ||

@@ -163,7 +163,6 @@ interface TableEditView
     SID_ATTR_ZOOM       [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_ATTR_ZOOMSLIDER [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_INSERT_FILE [ ExecMethod = Execute; StateMethod = GetState; ]
-     // Save / SaveAs ueberladen, um die Eingabe abzuschliessen
 
     FID_SCALE           [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_FUNCTION_BOX    [ ExecMethod = Execute; StateMethod = GetState; ]

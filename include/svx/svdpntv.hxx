@@ -436,9 +436,8 @@ public:
     void InvalidateAllWin();
     void InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix=false);
 
-    // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
-    // man diese beiden folgenden Methoden ueberladen und entsprechend anders
-    // reagieren.
+    /// If the View should not call Invalidate() on the windows, override
+    /// the following 2 methods and do something else.
     virtual void InvalidateOneWin(vcl::Window& rWin);
     virtual void InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect);
 

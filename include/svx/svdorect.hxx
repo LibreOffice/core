@@ -57,8 +57,8 @@ protected:
     XPolygon ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const;
     void SetXPolyDirty();
 
-    // RecalcXPoly sollte ueberladen werden. Dabei muss dann eine XPolygon
-    // Instanz generiert (new) und an mpXPoly zugewiesen werden.
+    /// Subclasses should override RecalcXPoly() by creating an XPolygon
+    /// instance with new and assigning it to mpXPoly.
     virtual void RecalcXPoly();
     const XPolygon& GetXPoly() const;
     virtual void           RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
