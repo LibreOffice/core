@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_1fe563a7",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-08T00:51:05Z",
+      "side": 1,
+      "message": "A leftover?",
+      "revId": "3eda06dc97f0e3b6c99c5999884860417df8c607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_1faa431a",
+        "filename": "sc/source/core/tool/interpr5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-08T00:51:05Z",
+      "side": 1,
+      "message": "Why not simply\n\n pMat-\u003eSubAddOp(_bSub, fVal, aString, *pResMat);\n\ninstead of the almost identical paths?",
+      "revId": "3eda06dc97f0e3b6c99c5999884860417df8c607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
