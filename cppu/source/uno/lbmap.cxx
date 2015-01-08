@@ -407,7 +407,7 @@ static Mapping loadExternalMapping(
 #else
         // find proper lib
         osl::Module aModule;
-        bool bModule;
+        bool bModule(false);
         OUString aName;
 
         if ( EnvDcp::getTypeName(rFrom.getTypeName()) == UNO_LB_UNO )
