@@ -34,7 +34,7 @@ sal_Int32 DocumentOutlineNodesManager::getOutlineNodesCount() const
 
 int DocumentOutlineNodesManager::getOutlineLevel( const sal_Int32 nIdx ) const
 {
-    return m_rDoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
+    return m_rDoc.GetNodes().GetOutLineNds()[ nIdx ]->
                                 GetTxtNode()->GetAttrOutlineLevel()-1;
 }
 
@@ -43,14 +43,14 @@ OUString DocumentOutlineNodesManager::getOutlineText( const sal_Int32 nIdx,
                               const bool bWithSpacesForLevel,
                               const bool bWithFtn ) const
 {
-    return m_rDoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
+    return m_rDoc.GetNodes().GetOutLineNds()[ nIdx ]->
                 GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
                                             bWithNumber, bWithSpacesForLevel, bWithFtn );
 }
 
 SwTxtNode* DocumentOutlineNodesManager::getOutlineNode( const sal_Int32 nIdx ) const
 {
-    return m_rDoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->GetTxtNode();
+    return m_rDoc.GetNodes().GetOutLineNds()[ nIdx ]->GetTxtNode();
 }
 
 void DocumentOutlineNodesManager::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const
@@ -58,8 +58,8 @@ void DocumentOutlineNodesManager::getOutlineNodes( IDocumentOutlineNodes::tSorte
     orOutlineNodeList.clear();
     orOutlineNodeList.reserve( getOutlineNodesCount() );
 
-    const sal_uInt16 nOutlCount( static_cast<sal_uInt16>(getOutlineNodesCount()) );
-    for ( sal_uInt16 i = 0; i < nOutlCount; ++i )
+    const sal_Int32 nOutlCount = getOutlineNodesCount();
+    for ( sal_Int32 i = 0; i < nOutlCount; ++i )
     {
         orOutlineNodeList.push_back(
             m_rDoc.GetNodes().GetOutLineNds()[i]->GetTxtNode() );

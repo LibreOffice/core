@@ -63,7 +63,7 @@ namespace
 
     ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
     {
-        for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
+        for( ::sfx2::SvBaseLinks::size_type n = 0; n < rLinks.size(); ++n )
         {
             ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
             if( pLnk &&

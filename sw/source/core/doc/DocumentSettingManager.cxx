@@ -209,7 +209,7 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
                 mbOldNumbering = value;
 
                 const SwNumRuleTbl& rNmTbl = m_rDoc.GetNumRuleTbl();
-                for( sal_uInt16 n = 0; n < rNmTbl.size(); ++n )
+                for( SwNumRuleTbl::size_type n = 0; n < rNmTbl.size(); ++n )
                     rNmTbl[n]->SetInvalidRule(true);
 
                 m_rDoc.UpdateNumRule();
