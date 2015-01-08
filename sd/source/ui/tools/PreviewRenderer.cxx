@@ -171,9 +171,9 @@ Image PreviewRenderer::RenderSubstitution (
         // visible.
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MAP_100TH_MM);
-        const double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
-        aMapMode.SetScaleX(nFinalScale);
-        aMapMode.SetScaleY(nFinalScale);
+        Fraction aFinalScale(25 * rPreviewPixelSize.Width(), 28000);
+        aMapMode.SetScaleX(aFinalScale);
+        aMapMode.SetScaleY(aFinalScale);
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(
             Point(nFrameWidth,nFrameWidth),aMapMode));
