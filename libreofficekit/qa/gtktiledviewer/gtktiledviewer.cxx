@@ -124,8 +124,8 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
     }
 }
 
-/// Receives a key press event.
-static void docViewKeyPress(GtkWidget* /*pWidget*/, GdkEvent* /*pEvent*/, gpointer /*pData*/)
+/// Receives a key press or release event.
+static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/)
 {
 }
 
@@ -284,7 +284,8 @@ int main( int argc, char* argv[] )
     pDocViewQuad = 0;
 
     // Input handling.
-    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(docViewKeyPress), NULL);
+    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), NULL);
+    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), NULL);
 
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 
