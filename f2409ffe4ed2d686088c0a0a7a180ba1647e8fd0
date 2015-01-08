@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_02ee6c22",
+        "filename": "sc/source/filter/oox/sheetdatacontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-08T13:41:59Z",
+      "side": 1,
+      "message": "error: ‘mxFormulaParser’ was not declared in this scope\n\nShould be mrFormulaParser instead.",
+      "revId": "f2409ffe4ed2d686088c0a0a7a180ba1647e8fd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
