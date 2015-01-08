@@ -73,10 +73,8 @@ const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#define MD5_KERNEL 1
-#ifdef MD5_KERNEL
+
 #include <rtl/digest.h>
-#endif
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
@@ -3405,7 +3403,6 @@ void DynamicKernel::CodeGen()
 
 std::string DynamicKernel::GetMD5()
 {
-#ifdef MD5_KERNEL
     if (mKernelHash.empty())
     {
         std::stringstream md5s;
@@ -3422,9 +3419,6 @@ std::string DynamicKernel::GetMD5()
         mKernelHash = md5s.str();
     }
     return mKernelHash;
-#else
-    return "";
-#endif
 }
 
 /// Build code
