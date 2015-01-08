@@ -2706,7 +2706,7 @@ void Edit::ClearModifyFlag()
         mbModified = false;
 }
 
-void Edit::SetSubEdit( VclPtr<Edit> pEdit )
+void Edit::SetSubEdit( const VclPtr<Edit>& pEdit )
 {
     mpSubEdit.disposeAndClear();
     mpSubEdit = pEdit;
