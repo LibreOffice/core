@@ -1784,7 +1784,6 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMembersElemTokenMap()
         static const SvXMLTokenMapEntry aDataPilotMembersElemTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER,       XML_TOK_DATA_PILOT_MEMBERS_ELEM_DATA_PILOT_MEMBER   },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUP_MEMBER,       XML_TOK_DATA_PILOT_MEMBERS_ELEM_DATA_PILOT_MEMBER   },
             XML_TOKEN_MAP_END
         };
 
