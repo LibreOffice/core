@@ -31,6 +31,8 @@ public:
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
+    bool VisitCXXRecordDecl(const CXXRecordDecl * decl);
+
     bool VisitFieldDecl(const FieldDecl * decl);
 
     bool VisitParmVarDecl(ParmVarDecl const * decl);
@@ -75,6 +77,44 @@ bool isPointerToWindowSubclass(const QualType& pType) {
     }
     return isDerivedFromWindow(recordDecl);
 }
+
+bool VCLWidgets::VisitCXXRecordDecl(const CXXRecordDecl * recordDecl) {
+    if (ignoreLocation(recordDecl)) {
+        return true;
+    }
+    if (!recordDecl->isCompleteDefinition())
+        return true;
+    // check if this field is derived from Window
+    if (!isDerivedFromWindow(recordDecl)) {
+        return true;
+    }
+    bool foundVclPtr = false;
+    for(auto fieldDecl : recordDecl->fields()) {
+        if (fieldDecl->getType().getAsString().find("VclPtr")==0) {
+           foundVclPtr = true;
+           break;
+        }
+    }
+    if (!foundVclPtr) {
+        return true;
+    }
+    bool foundDispose = false;
+    for(auto methodDecl : recordDecl->methods()) {
+        if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
+           foundDispose = true;
+           break;
+        }
+    }
+    if (!foundDispose) {
+        report(
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass with VclPtr members should declare a dispose() method.",
+            recordDecl->getLocation())
+          << recordDecl->getSourceRange();
+    }
+    return true;
+}
+
 
 bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {

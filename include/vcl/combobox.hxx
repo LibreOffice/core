@@ -91,6 +91,7 @@ protected:
     bool            IsDropDownBox() const { return mpFloatWin ? true : false; }
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
+    virtual void    dispose() SAL_OVERRIDE;
 public:
     explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        ComboBox( vcl::Window* pParent, const ResId& );

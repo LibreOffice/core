@@ -62,6 +62,7 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    virtual        void    dispose() SAL_OVERRIDE;
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }

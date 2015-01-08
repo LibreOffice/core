@@ -542,6 +542,13 @@ Dialog::~Dialog()
     mpDialogImpl = NULL;
 }
 
+void Dialog::dispose()
+{
+    mpActionArea.disposeAndClear();
+    mpContentArea.disposeAndClear();
+    SystemWindow::dispose();
+}
+
 IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
 {
     Close();

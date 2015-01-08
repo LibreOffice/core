@@ -78,6 +78,12 @@ ComboBox::~ComboBox()
     delete mpBtn;
 }
 
+void ComboBox::dispose()
+{
+    mpSubEdit.disposeAndClear();
+    Edit::dispose();
+}
+
 void ComboBox::ImplInitComboBoxData()
 {
     mpSubEdit.disposeAndClear();

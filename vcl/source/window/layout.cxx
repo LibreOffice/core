@@ -1878,6 +1878,12 @@ void VclEventBox::Command(const CommandEvent&)
     //discard events by default to block them reaching children
 }
 
+void VclEventBox::dispose()
+{
+    m_aEventBoxHelper.disposeAndClear();
+    VclBin::dispose();
+}
+
 void VclSizeGroup::trigger_queue_resize()
 {
     //sufficient to trigger one widget to trigger all of them
