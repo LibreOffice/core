@@ -52,7 +52,10 @@ namespace unotools
         {
             const sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
 
-            if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
+            if (!nInnerSequenceCount)
+                break;
+
+            if (pInnerSequenceFlags->getLength() != nInnerSequenceCount)
                 throw lang::IllegalArgumentException();
 
             // prepare new polygon
