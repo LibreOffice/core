@@ -376,7 +376,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
 // Falls ein neues Objekt eingerichtet wird, wird es, falls es bereits
 // eines mit diesem Namen gibt, indiziert.
 
-SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataType dt )
+SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataType dt, bool bIsRuntimeFunction )
 {
     // Ist das Objekt bereits vorhanden?
     SbxArray* pArray = NULL;
@@ -422,7 +422,7 @@ SbxVariable* SbxObject::Make( const XubString& rName, SbxClassType ct, SbxDataTy
             pVar = new SbxProperty( rName, dt );
             break;
         case SbxCLASS_METHOD:
-            pVar = new SbxMethod( rName, dt );
+            pVar = new SbxMethod( rName, dt, bIsRuntimeFunction );
             break;
         case SbxCLASS_OBJECT:
             pVar = CreateObject( rName );

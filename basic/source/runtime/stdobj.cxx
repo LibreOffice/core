@@ -715,7 +715,7 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
                 eCT = SbxCLASS_PROPERTY;
             else if( nType & _METHOD )
                 eCT = SbxCLASS_METHOD;
-            pVar = Make( aName_, eCT, p->eType );
+            pVar = Make( aName_, eCT, p->eType, ( p->nArgs & _FUNCTION ) == _FUNCTION );
             pVar->SetUserData( nIndex + 1 );
             pVar->SetFlags( nAccess );
         }

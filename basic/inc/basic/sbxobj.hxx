@@ -80,7 +80,7 @@ public:
     SbxVariable* Execute( const String& );
     // Manage elements
     virtual sal_Bool GetAll( SbxClassType ) { return sal_True; }
-    SbxVariable* Make( const String&, SbxClassType, SbxDataType );
+    SbxVariable* Make( const String&, SbxClassType, SbxDataType, bool bIsRuntimeFunction = false );
     virtual SbxObject* MakeObject( const String&, const String& );
     virtual void Insert( SbxVariable* );
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and

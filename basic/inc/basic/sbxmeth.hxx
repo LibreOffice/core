@@ -31,17 +31,22 @@ class SbxMethodImpl;
 class SbxMethod : public SbxVariable
 {
     SbxMethodImpl* mpSbxMethodImpl; // Impl data
+    bool           mbIsRuntimeFunction;
+    SbxDataType    mbRuntimeFunctionReturnType;
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
     TYPEINFO();
-    SbxMethod( const String& r, SbxDataType t )
-    : SbxVariable( t ) { SetName( r ); }
-    SbxMethod( const SbxMethod& r ) : SvRefBase( r ), SbxVariable( r ) {}
+    SbxMethod( const String& r, SbxDataType t, bool bIsRuntimeFunction=false )
+    : SbxVariable( t ), mbIsRuntimeFunction( bIsRuntimeFunction ), mbRuntimeFunctionReturnType( t ) { SetName( r ); }
+    SbxMethod( const SbxMethod& r )
+    : SvRefBase( r ), SbxVariable( r ), mbIsRuntimeFunction( r.IsRuntimeFunction() ) {}
     SbxMethod& operator=( const SbxMethod& r )
     { SbxVariable::operator=( r ); return *this; }
     sal_Bool Run( SbxValues* pValues = NULL );
     virtual SbxClassType GetClass() const;
+    bool IsRuntimeFunction() const { return mbIsRuntimeFunction; }
+    SbxDataType GetRuntimeFunctionReturnType() const{ return mbRuntimeFunctionReturnType; }
 };
 
 #ifndef __SBX_SBXMETHODREF_HXX
