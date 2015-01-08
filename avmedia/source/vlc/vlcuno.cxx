@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #include "vlccommon.hxx"
 #include "vlcmanager.hxx"
 
@@ -28,6 +32,12 @@ using namespace ::com::sun::star;
 static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno::Reference< lang::XMultiServiceFactory >& rxFact )
 {
     SAL_INFO("avmedia", "create VLC Media player !\n");
+
+    // Experimental for now - code is neither elegant nor well tested.
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+        return NULL;
+
     static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager( rxFact ) );
     return manager;
 }
@@ -36,6 +46,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( 
 {
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void*                                   pRet = 0;
+
+    // Experimental for now - code is neither elegant nor well tested.
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+        return NULL;
 
     SAL_INFO("avmedia", "Create VLC Media component: '" << pImplName << "'\n");
     if( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )

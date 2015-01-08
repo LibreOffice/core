@@ -1198,7 +1198,7 @@ AC_ARG_ENABLE(gstreamer-0-10,
 
 AC_ARG_ENABLE(vlc,
     AS_HELP_STRING([--enable-vlc],
-        [Enable building with the VLC avmedia backend.]),
+        [Enable building with the (experimental) VLC avmedia backend.]),
 ,enable_vlc=no)
 
 AC_ARG_ENABLE(neon,
