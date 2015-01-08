@@ -1851,7 +1851,7 @@ void OpRadians::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
-    ss << "    tmp = tmp0 * 3.141592657 * pow(180.0,-1);\n";
+    ss << "    tmp = tmp0 * 3.14159265358979 * pow(180.0,-1);\n";
     ss << "    return tmp;\n";
     ss << "}";
 }
