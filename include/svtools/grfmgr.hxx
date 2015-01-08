@@ -32,7 +32,7 @@
 
 // AutoSwap defines
 
-#define GRFMGR_AUTOSWAPSTREAM_LINK      (reinterpret_cast<SvStream*>(0x00000000UL))
+#define GRFMGR_AUTOSWAPSTREAM_LINK nullptr
 #define GRFMGR_AUTOSWAPSTREAM_LOADED reinterpret_cast<SvStream*>(sal_IntPtr(-3))
 #define GRFMGR_AUTOSWAPSTREAM_TEMP   reinterpret_cast<SvStream*>(sal_IntPtr(-2))
 #define GRFMGR_AUTOSWAPSTREAM_NONE   reinterpret_cast<SvStream*>(sal_IntPtr(-1))
