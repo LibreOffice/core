@@ -2087,7 +2087,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_VSPLIT },             // POINTER_VSPLIT
     { 0, 0, SAL_RESID_POINTER_HSIZEBAR },           // POINTER_HSIZEBAR
     { 0, 0, SAL_RESID_POINTER_VSIZEBAR },           // POINTER_VSIZEBAR
-    { 0, 0, SAL_RESID_POINTER_HAND },               // POINTER_HAND
+    { 0, IDC_HAND, 0 },                             // POINTER_HAND
     { 0, IDC_HAND, 0 },                             // POINTER_REFHAND
     { 0, IDC_PEN, 0 },                              // POINTER_PEN
     { 0, 0, SAL_RESID_POINTER_MAGNIFY },            // POINTER_MAGNIFY

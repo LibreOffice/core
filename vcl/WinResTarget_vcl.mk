@@ -55,7 +55,6 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/source/src/tblsels.cur \
     vcl/win/source/src/asne.cur \
     vcl/win/source/src/crook.cur \
-    vcl/win/source/src/hand.cur \
     vcl/win/source/src/movept.cur \
     vcl/win/source/src/tblselse.cur \
     vcl/win/source/src/asns.cur \

@@ -24,7 +24,6 @@ SAL_RESID_POINTER_HSPLIT                CURSOR          hsplit.cur
 SAL_RESID_POINTER_VSPLIT                CURSOR          vsplit.cur
 SAL_RESID_POINTER_HSIZEBAR              CURSOR          hsizebar.cur
 SAL_RESID_POINTER_VSIZEBAR              CURSOR          vsizebar.cur
-SAL_RESID_POINTER_HAND                  CURSOR          hand.cur
 SAL_RESID_POINTER_MAGNIFY               CURSOR          magnify.cur
 SAL_RESID_POINTER_FILL                  CURSOR          fill.cur
 SAL_RESID_POINTER_ROTATE                CURSOR          rotate.cur

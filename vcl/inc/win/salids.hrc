@@ -26,7 +26,6 @@
 #define SAL_RESID_POINTER_VSPLIT                    10009
 #define SAL_RESID_POINTER_HSIZEBAR                  10010
 #define SAL_RESID_POINTER_VSIZEBAR                  10011
-#define SAL_RESID_POINTER_HAND                      10012
 #define SAL_RESID_POINTER_MAGNIFY                   10015
 #define SAL_RESID_POINTER_FILL                      10016
 #define SAL_RESID_POINTER_ROTATE                    10017
