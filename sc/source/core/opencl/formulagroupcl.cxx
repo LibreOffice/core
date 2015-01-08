@@ -31,8 +31,6 @@
 #include "op_addin.hxx"
 
 /// CONFIGURATIONS
-// Comment out this to turn off FMIN and FMAX intrinsics
-#define USE_FMIN_FMAX 1
 #define REDUCE_THRESHOLD 201  // set to 4 for correctness testing. priority 1
 #define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 
@@ -48,13 +46,6 @@ static const char* publicFunc =
  "double fsub(double a, double b) { return a-b; }\n"
  "double fdiv(double a, double b) { return a/b; }\n"
  "double strequal(unsigned a, unsigned b) { return (a==b)?1.0:0; }\n"
-#ifdef USE_FMIN_FMAX
- "double mcw_fmin(double a, double b) { return fmin(a, b); }\n"
- "double mcw_fmax(double a, double b) { return fmax(a, b); }\n"
-#else
- "double mcw_fmin(double a, double b) { return a>b?b:a; }\n"
- "double mcw_fmax(double a, double b) { return a>b?a:b; }\n"
-#endif
  ;
 
 #ifdef WIN32
@@ -1882,7 +1873,7 @@ public:
     virtual std::string GetBottom() SAL_OVERRIDE { return "MAXFLOAT"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
-        return "mcw_fmin(" + lhs + "," + rhs + ")";
+        return "fmin(" + lhs + "," + rhs + ")";
     }
     virtual std::string BinFuncName() const SAL_OVERRIDE { return "min"; }
 };
@@ -1895,7 +1886,7 @@ public:
     virtual std::string GetBottom() SAL_OVERRIDE { return "-MAXFLOAT"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
-        return "mcw_fmax(" + lhs + "," + rhs + ")";
+        return "fmax(" + lhs + "," + rhs + ")";
     }
     virtual std::string BinFuncName() const SAL_OVERRIDE { return "max"; }
 };
