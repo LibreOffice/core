@@ -1405,7 +1405,7 @@ RTLFUNC(Replace)
                 if( nPos >= 0 )
                 {
                     aExpStr = aExpStr.replaceAt( nPos, nFindStrLen, aReplaceStr );
-                    nPos = nPos + nReplaceStrLen;
+                    nPos = nPos - nFindStrLen + nReplaceStrLen + 1;
                     nCounts++;
                 }
                 else
@@ -1414,7 +1414,7 @@ RTLFUNC(Replace)
                 }
             }
         }
-        rPar.Get(0)->PutString( aExpStr  );
+        rPar.Get(0)->PutString( aExpStr.copy( lStartPos - 1 )  );
     }
 }
 
