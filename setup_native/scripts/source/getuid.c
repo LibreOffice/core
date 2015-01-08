@@ -137,11 +137,9 @@ int __lxstat64(int n, const char *path, struct stat64 *buf)
         p_lstat = (int (*)(int n, const char *path, struct stat64 *buf))
             dlsym (RTLD_NEXT, "__lxstat64");
     ret = (*p_lstat)(n, path, buf);
-    if (buf != NULL)
-    {
-        buf->st_uid = 0;
-        buf->st_gid = 0;
-    }
+    assert(buf != NULL);
+    buf->st_uid = 0;
+    buf->st_gid = 0;
     return ret;
 }
 #endif
