@@ -150,13 +150,6 @@ static void lcl_OpenURL( const OUString& _sURL )
     }
 }
 
-static const sal_uInt16 pRanges[] =
-{
-    SID_ATTR_SPELL,
-    SID_ATTR_SPELL,
-    0
-};
-
 bool KillFile_Impl( const OUString& rURL )
 {
     bool bRet = true;
@@ -1132,17 +1125,6 @@ SvxLinguTabPage::~SvxLinguTabPage()
     if (pLinguData)
         delete pLinguData;
 }
-
-
-
-// don't throw away overloaded
-const sal_uInt16* SvxLinguTabPage::GetRanges()
-{
-    //TL???
-    return pRanges;
-}
-
-
 
 SfxTabPage* SvxLinguTabPage::Create( vcl::Window* pParent,
                                      const SfxItemSet* rAttrSet )
