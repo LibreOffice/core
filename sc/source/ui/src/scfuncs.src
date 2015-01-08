@@ -1645,7 +1645,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function KUMZINSZ #*=-
-    Resource SC_OPCODE_KUM_ZINS_Z
+    Resource SC_OPCODE_CUM_IPMT
     {
         String 1 // Description
         {

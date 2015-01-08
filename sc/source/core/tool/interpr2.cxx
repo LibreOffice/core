@@ -1781,7 +1781,7 @@ void ScInterpreter::ScPpmt()
     }
 }
 
-void ScInterpreter::ScKumZinsZ()
+void ScInterpreter::ScCumIpmt()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )

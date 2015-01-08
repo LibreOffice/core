@@ -259,7 +259,7 @@
 #define SC_OPCODE_RATE              259
 #define SC_OPCODE_IPMT              260
 #define SC_OPCODE_PPMT              261
-#define SC_OPCODE_KUM_ZINS_Z        262
+#define SC_OPCODE_CUM_IPMT          262
 #define SC_OPCODE_KUM_KAP_Z         263
 #define SC_OPCODE_EFFEKTIV          264
 #define SC_OPCODE_NOMINAL           265
