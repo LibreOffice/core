@@ -24,50 +24,50 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 
-typedef long (*PSTUB)( void*, void* );
+typedef sal_IntPtr (*PSTUB)( void*, void* );
 
 #define DECL_LINK( Method, ArgType ) \
-    long Method( ArgType ); \
-    static long LinkStub##Method( void* pThis, void* )
+    sal_IntPtr Method( ArgType ); \
+    static sal_IntPtr LinkStub##Method( void* pThis, void* )
 
 #define DECL_STATIC_LINK( Class, Method, ArgType ) \
-    static long LinkStub##Method( void* pThis, void* ); \
-    static long Method( Class*, ArgType )
+    static sal_IntPtr LinkStub##Method( void* pThis, void* ); \
+    static sal_IntPtr Method( Class*, ArgType )
 
 #define DECL_DLLPRIVATE_LINK(Method, ArgType) \
-    SAL_DLLPRIVATE long Method(ArgType); \
-    SAL_DLLPRIVATE static long LinkStub##Method(void * pThis, void *)
+    SAL_DLLPRIVATE sal_IntPtr Method(ArgType); \
+    SAL_DLLPRIVATE static sal_IntPtr LinkStub##Method(void * pThis, void *)
 
 #define DECL_DLLPRIVATE_STATIC_LINK(Class, Method, ArgType) \
-    SAL_DLLPRIVATE static long LinkStub##Method( void* pThis, void* ); \
-    SAL_DLLPRIVATE static long Method(Class *, ArgType)
+    SAL_DLLPRIVATE static sal_IntPtr LinkStub##Method( void* pThis, void* ); \
+    SAL_DLLPRIVATE static sal_IntPtr Method(Class *, ArgType)
 
 #define IMPL_STUB(Class, Method, ArgType) \
-    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
         return static_cast<Class*>(pThis)->Method( (ArgType)pCaller ); \
     }
 
 #define IMPL_STATIC_LINK( Class, Method, ArgType, ArgName ) \
-    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
         return Method( static_cast<Class*>(pThis), (ArgType)pCaller ); \
     } \
-    long Class::Method( Class* pThis, ArgType ArgName )
+    sal_IntPtr Class::Method( Class* pThis, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE( Class, Method, ArgType, ArgName ) \
-    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
         return Method( static_cast<Class*>(pThis), (ArgType)pCaller ); \
     } \
-    long Class::Method( SAL_UNUSED_PARAMETER Class*, ArgType ArgName )
+    sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER Class*, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE_NOARG( Class, Method ) \
-    long Class::LinkStub##Method( void* pThis, void* pCaller) \
+    sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
         return Method( static_cast<Class*>(pThis), pCaller ); \
     } \
-    long Class::Method( SAL_UNUSED_PARAMETER Class*, SAL_UNUSED_PARAMETER void* )
+    sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER Class*, SAL_UNUSED_PARAMETER void* )
 
 #define LINK( Inst, Class, Member ) \
     Link( static_cast<Class*>(Inst), (PSTUB)&Class::LinkStub##Member )
@@ -76,26 +76,26 @@ typedef long (*PSTUB)( void*, void* );
 
 #define IMPL_LINK( Class, Method, ArgType, ArgName ) \
     IMPL_STUB( Class, Method, ArgType ) \
-    long Class::Method( ArgType ArgName )
+    sal_IntPtr Class::Method( ArgType ArgName )
 
 #define IMPL_LINK_NOARG( Class, Method ) \
     IMPL_STUB( Class, Method, void* ) \
-    long Class::Method( SAL_UNUSED_PARAMETER void* )
+    sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER void* )
 
 #define IMPL_LINK_INLINE_START( Class, Method, ArgType, ArgName ) \
-    inline long Class::Method( ArgType ArgName )
+    inline sal_IntPtr Class::Method( ArgType ArgName )
 
 #define IMPL_LINK_INLINE_END( Class, Method, ArgType, ArgName ) \
     IMPL_STUB( Class, Method, ArgType )
 
 #define IMPL_LINK_NOARG_INLINE_START( Class, Method ) \
-    inline long Class::Method( SAL_UNUSED_PARAMETER void* )
+    inline sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER void* )
 
 #define IMPL_LINK_NOARG_INLINE_END( Class, Method ) \
     IMPL_STUB( Class, Method, void* )
 
 #define IMPL_LINK_INLINE( Class, Method, ArgType, ArgName, Body ) \
-    long Class::Method( ArgType ArgName ) \
+    sal_IntPtr Class::Method( ArgType ArgName ) \
     Body \
     IMPL_STUB( Class, Method, ArgType )
 
