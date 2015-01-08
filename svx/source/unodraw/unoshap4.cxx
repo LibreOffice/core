@@ -432,7 +432,7 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
         else
         {
             awt::Size aSz;
-            Size aSize = pOle2Obj->GetLogicRect().GetSize();
+            Size aSize = aRect.GetSize();
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
             xObj->setVisualAreaSize(  pOle2Obj->GetAspect(), aSz );
