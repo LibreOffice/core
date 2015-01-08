@@ -60,7 +60,7 @@ inline bool isInExternCContext(clang::FunctionDecl const & decl) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
     return decl.isInExternCContext();
 #else
-    return isExternalCContext(*decl.getCanonicalDecl()->getDeclContext());
+    return isExternCContext(*decl.getCanonicalDecl()->getDeclContext());
 #endif
 }
 
