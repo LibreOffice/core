@@ -433,13 +433,6 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessLocale(
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_setProcessLocale(
         rtl_Locale * pLocale );
 
-
-SAL_DLLPUBLIC sal_Bool SAL_CALL osl_sendResourcePipe(
-        oslPipe Pipe, oslSocket Socket );
-
-SAL_DLLPUBLIC oslSocket SAL_CALL osl_receiveResourcePipe(
-        oslPipe Pipe );
-
 #ifdef __cplusplus
 }
 #endif

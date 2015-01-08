@@ -110,23 +110,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
 /******************************************************************************
  *
- *                  New io resource transfer functions
- *
- *****************************************************************************/
-
-sal_Bool osl_sendResourcePipe(oslPipe /*pPipe*/, oslSocket /*pSocket*/)
-{
-    return osl_Process_E_InvalidError;
-}
-
-oslSocket osl_receiveResourcePipe(oslPipe /*pPipe*/)
-{
-    oslSocket pSocket = 0;
-    return pSocket;
-}
-
-/******************************************************************************
- *
  *                  Functions for starting a process
  *
  *****************************************************************************/

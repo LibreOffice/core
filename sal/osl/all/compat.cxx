@@ -12,6 +12,8 @@
 #include <cstdlib>
 
 #include "osl/module.h"
+#include "osl/pipe.h"
+#include "osl/socket.h"
 #include "osl/time.h"
 #include "sal/types.h"
 
@@ -49,12 +51,21 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_releaseSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL osl_reportError(
     sal_uInt32, char const *)
+{
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe, oslSocket)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
