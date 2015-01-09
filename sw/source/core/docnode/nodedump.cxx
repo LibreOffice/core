@@ -56,6 +56,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xfltrit.hxx>
+#include <svx/xflbmtit.hxx>
 #include <tools/datetimeutils.hxx>
 
 #include <libxml/encoding.h>
@@ -467,6 +468,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case XATTR_FILLTRANSPARENCE:
                 static_cast<const XFillTransparenceItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case XATTR_FILLBMP_TILE:
+                static_cast<const XFillBmpTileItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -481,9 +485,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case XATTR_FILLBMP_TILE:
-                pWhich = "fill bitmap tile";
-                break;
             case XATTR_FILLBMP_POS:
                 pWhich = "fill bitmap position";
                 break;
