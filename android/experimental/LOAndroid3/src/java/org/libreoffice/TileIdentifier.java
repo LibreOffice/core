@@ -42,4 +42,9 @@ public class TileIdentifier {
         result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return String.format("TileIdentifier (%d, %d) z=%f s=(%d, %d)", x, y, zoom, size.width, size.height);
+    }
 }
