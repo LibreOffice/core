@@ -26,7 +26,6 @@
 #include <o3tl/underlying_type.hxx>
 
 #include <limits.h>
-#include <type_traits>
 #include <unordered_set>
 
 namespace svl {
