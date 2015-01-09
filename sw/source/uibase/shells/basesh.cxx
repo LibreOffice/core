@@ -1340,24 +1340,24 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
             case FN_CONVERT_TABLE_TO_TEXT:
             {
-                sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
-                if( (eFrmType & FRMTYPE_FOOTNOTE) ||
+                FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
+                if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
                     !rSh.GetTableFmt() )
                     rSet.DisableItem( nWhich );
             }
             break;
             case FN_CONVERT_TEXT_TO_TABLE:
             {
-                sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
-                if( (eFrmType & FRMTYPE_FOOTNOTE) ||
+                FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
+                if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
                     !rSh.IsTextToTableAvailable()  )
                     rSet.DisableItem( nWhich );
             }
             break;
             case FN_CONVERT_TEXT_TABLE:
             {
-                sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
-                if( (eFrmType & FRMTYPE_FOOTNOTE) ||
+                FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
+                if( (eFrmType & FrmTypeFlags::FOOTNOTE) ||
                     (!rSh.GetTableFmt() && !rSh.IsTextToTableAvailable() ) )
                     rSet.DisableItem( nWhich );
             }
@@ -2534,7 +2534,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     const SfxItemSet* pArgs = _rRequest.GetArgs();
     SwWrtShell& rSh = GetShell();
 
-    if ( !( rSh.GetFrmType( 0, true ) & FRMTYPE_FOOTNOTE ) )
+    if ( !( rSh.GetFrmType( 0, true ) & FrmTypeFlags::FOOTNOTE ) )
     {
         SwView &rTempView = GetView(); // Because GetView() does not work after the shell exchange
         bool bHTMLMode = 0 != (::GetHtmlMode(rTempView.GetDocShell())&HTMLMODE_ON);
@@ -2724,13 +2724,13 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
                     rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
                 }
-                const sal_uInt16 nType = rSh.GetFrmType(0,true);
-                if ( nType & FRMTYPE_HEADER )
+                const FrmTypeFlags nType = rSh.GetFrmType(0,true);
+                if ( nType & FrmTypeFlags::HEADER )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_HEADER ) );
                     nHeaderPos = nPos++;
                 }
-                if ( nType & FRMTYPE_FOOTER )
+                if ( nType & FrmTypeFlags::FOOTER )
                 {
                     rLst.push_back( SW_RESSTR( STR_SWBG_FOOTER ) );
                     nFooterPos = nPos;

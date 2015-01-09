@@ -246,7 +246,7 @@ void SwView::StartTextConversion(
         m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
 
     const bool  bStart = bSelection || m_pWrtShell->IsStartOfDoc();
-    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,true) & FRMTYPE_BODY);
+    const bool  bOther = !bSelection && !(m_pWrtShell->GetFrmType(0,true) & FrmTypeFlags::BODY);
 
     {
         const uno::Reference< uno::XComponentContext > xContext(
@@ -455,7 +455,7 @@ void SwView::HyphenateDocument()
         bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
         bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
         bool bStop = false;
-        if( !bOther && !(m_pWrtShell->GetFrmType(0,true) & FRMTYPE_BODY) && !bSelection )
+        if( !bOther && !(m_pWrtShell->GetFrmType(0,true) & FrmTypeFlags::BODY) && !bSelection )
         // turned on no special area
         {
             // I want also in special areas hyphenation

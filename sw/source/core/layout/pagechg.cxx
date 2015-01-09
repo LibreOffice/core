@@ -439,7 +439,7 @@ void SwPageFrm::PreparePage( bool bFtn )
     // Thus, first calling <::RegistFlys(..)>, then call <::lcl_FormatLay(..)>
     ::RegistFlys( this, this );
 
-        if ( Lower() )
+    if ( Lower() )
     {
                 ::lcl_FormatLay( this );
     }
@@ -461,7 +461,7 @@ void SwPageFrm::PreparePage( bool bFtn )
         SwLayoutFrm *pLow = static_cast<SwLayoutFrm*>(Lower());
         while ( pLow )
         {
-            if ( pLow->GetType() & (FRMTYPE_HEADER|FRMTYPE_FOOTER) )
+            if ( pLow->GetType() & (FRM_HEADER|FRM_FOOTER) )
             {
                 SwCntntFrm *pCntnt = pLow->ContainsCntnt();
                 while ( pCntnt && pLow->IsAnLower( pCntnt ) )

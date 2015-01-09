@@ -623,8 +623,8 @@ long SwView::PageUpCrsr( bool bSelect )
 {
     if ( !bSelect )
     {
-        const sal_uInt16 eType = m_pWrtShell->GetFrmType(0,true);
-        if ( eType & FRMTYPE_FOOTNOTE )
+        const FrmTypeFlags eType = m_pWrtShell->GetFrmType(0,true);
+        if ( eType & FrmTypeFlags::FOOTNOTE )
         {
             m_pWrtShell->MoveCrsr();
             m_pWrtShell->GotoFtnAnchor();

@@ -1237,8 +1237,8 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if (nId == m_nTextFlowId)
     {
         static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
-        const sal_uInt16 eType = pShell->GetFrmType(0,true);
-        if( !(FRMTYPE_BODY & eType) )
+        const FrmTypeFlags eType = pShell->GetFrmType(0,true);
+        if( !(FrmTypeFlags::BODY & eType) )
             static_cast<SwTextFlowPage&>(rPage).DisablePageBreak();
     }
 }

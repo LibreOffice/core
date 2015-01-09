@@ -45,7 +45,7 @@ class ShellMoveCrsr
 public:
     inline ShellMoveCrsr( SwWrtShell* pWrtSh, bool bSel )
     {
-        bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrmType(0,false) & FRMTYPE_FLY_ANY);
+        bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrmType(0,false) & FrmTypeFlags::FLY_ANY);
         ( pSh = pWrtSh )->MoveCrsr( bSel );
         pWrtSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_HYPERLINK_GETLINK);
     }
@@ -237,15 +237,15 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
         else
             SttSelect();
     }
-    const sal_uInt16 nFrmType = GetFrmType(0,false);
-    if ( FRMTYPE_FLY_ANY & nFrmType )
+    const FrmTypeFlags nFrmType = GetFrmType(0,false);
+    if ( FrmTypeFlags::FLY_ANY & nFrmType )
     {
         if( MoveSection( fnSectionCurr, fnSectionStart ) )
             return true;
-        else if ( FRMTYPE_FLY_FREE & nFrmType || bDontMoveRegion )
+        else if ( FrmTypeFlags::FLY_FREE & nFrmType || bDontMoveRegion )
             return false;
     }
-    if(( FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FOOTNOTE ) & nFrmType )
+    if(( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FOOTNOTE ) & nFrmType )
     {
         if ( MoveSection( fnSectionCurr, fnSectionStart ) )
             return true;
@@ -270,15 +270,15 @@ bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
     }
     else
     {
-        const sal_uInt16 nFrmType = GetFrmType(0,false);
-        if ( FRMTYPE_FLY_ANY & nFrmType )
+        const FrmTypeFlags nFrmType = GetFrmType(0,false);
+        if ( FrmTypeFlags::FLY_ANY & nFrmType )
         {
             if ( MoveSection( fnSectionCurr, fnSectionEnd ) )
                 return true;
-            else if ( FRMTYPE_FLY_FREE & nFrmType )
+            else if ( FrmTypeFlags::FLY_FREE & nFrmType )
                 return false;
         }
-        if(( FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FOOTNOTE ) & nFrmType )
+        if(( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FOOTNOTE ) & nFrmType )
         {
             if ( MoveSection( fnSectionCurr, fnSectionEnd) )
                 return true;

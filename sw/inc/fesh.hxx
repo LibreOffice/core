@@ -31,6 +31,7 @@
 #include <svx/svdtypes.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
 
@@ -58,25 +59,31 @@ namespace svx
 }
 
 // return values for GetFrmType() und GetSelFrmType().
-//! values can be combined via logival or
-#define FRMTYPE_NONE            (sal_uInt16)     0
-#define FRMTYPE_PAGE            (sal_uInt16)     1
-#define FRMTYPE_HEADER          (sal_uInt16)     2
-#define FRMTYPE_FOOTER          (sal_uInt16)     4
-#define FRMTYPE_BODY            (sal_uInt16)     8
-#define FRMTYPE_COLUMN          (sal_uInt16)    16
-#define FRMTYPE_TABLE           (sal_uInt16)    32
-#define FRMTYPE_FLY_FREE        (sal_uInt16)    64
-#define FRMTYPE_FLY_ATCNT       (sal_uInt16)   128
-#define FRMTYPE_FLY_INCNT       (sal_uInt16)   256
-#define FRMTYPE_FOOTNOTE        (sal_uInt16)   512
-#define FRMTYPE_FTNPAGE         (sal_uInt16)  1024
-#define FRMTYPE_FLY_ANY         (sal_uInt16)  2048
-#define FRMTYPE_DRAWOBJ         (sal_uInt16)  4096
-#define FRMTYPE_COLSECT         (sal_uInt16)  8192
-#define FRMTYPE_COLSECTOUTTAB   (sal_uInt16) 16384
+//! values can be combined via logical or
+enum class FrmTypeFlags {
+    NONE            =     0,
+    PAGE            =     1,
+    HEADER          =     2,
+    FOOTER          =     4,
+    BODY            =     8,
+    COLUMN          =    16,
+    TABLE           =    32,
+    FLY_FREE        =    64,
+    FLY_ATCNT       =   128,
+    FLY_INCNT       =   256,
+    FOOTNOTE        =   512,
+    FTNPAGE         =  1024,
+    FLY_ANY         =  2048,
+    DRAWOBJ         =  4096,
+    COLSECT         =  8192,
+    COLSECTOUTTAB   = 16384
+};
+namespace o3tl
+{
+    template<> struct typed_flags<FrmTypeFlags> : is_typed_flags<FrmTypeFlags, 0x4fff> {};
+}
 
-//! values can be combined via logival or
+//! values can be combined via logical or
 #define GOTOOBJ_DRAW_CONTROL    (sal_uInt16)  1
 #define GOTOOBJ_DRAW_SIMPLE     (sal_uInt16)  2
 #define GOTOOBJ_DRAW_ANY        (sal_uInt16)  3
@@ -86,7 +93,7 @@ namespace svx
 #define GOTOOBJ_FLY_ANY         (sal_uInt16) 28
 #define GOTOOBJ_GOTO_ANY        (sal_uInt16) 31
 
-//! values can be combined via logival or
+//! values can be combined via logical or
 #define FLYPROTECT_CONTENT      (sal_uInt16)  1
 #define FLYPROTECT_SIZE         (sal_uInt16)  2
 #define FLYPROTECT_POS          (sal_uInt16)  4
@@ -276,8 +283,8 @@ public:
      pPt: Cursr or DocPos respectively; bStopAtFly: Stop at flys or continue over anchor.
      Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
      in order to force more conscious use especially of bStopAtFly. */
-    sal_uInt16 GetFrmType( const Point *pPt, bool bStopAtFly ) const;
-    sal_uInt16 GetSelFrmType() const;               //Selektion (Drawing)
+    FrmTypeFlags GetFrmType( const Point *pPt, bool bStopAtFly ) const;
+    FrmTypeFlags GetSelFrmType() const;               //Selektion (Drawing)
 
     /** check whether selected frame contains a control;
      * companion method to GetSelFrmType, used for preventing

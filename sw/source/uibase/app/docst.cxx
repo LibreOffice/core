@@ -169,15 +169,15 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
-                        const int nSelection = pShell->GetFrmType(0,true);
+                        const FrmTypeFlags nSelection = pShell->GetFrmType(0,true);
                         if(pShell->GetCurTOX())
                             nMask = SWSTYLEBIT_IDX  ;
-                        else if(nSelection & FRMTYPE_HEADER     ||
-                                nSelection & FRMTYPE_FOOTER     ||
-                                nSelection & FRMTYPE_TABLE      ||
-                                nSelection & FRMTYPE_FLY_ANY    ||
-                                nSelection & FRMTYPE_FOOTNOTE   ||
-                                nSelection & FRMTYPE_FTNPAGE)
+                        else if(nSelection & FrmTypeFlags::HEADER     ||
+                                nSelection & FrmTypeFlags::FOOTER     ||
+                                nSelection & FrmTypeFlags::TABLE      ||
+                                nSelection & FrmTypeFlags::FLY_ANY    ||
+                                nSelection & FrmTypeFlags::FOOTNOTE   ||
+                                nSelection & FrmTypeFlags::FTNPAGE)
                             nMask = SWSTYLEBIT_EXTRA;
                         else
                             nMask = SWSTYLEBIT_TEXT;

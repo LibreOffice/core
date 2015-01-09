@@ -712,7 +712,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
         bProtect |= bParentCntProt;
 
-        const sal_uInt16 eFrmType = rSh.GetFrmType(0,true);
+        const FrmTypeFlags eFrmType = rSh.GetFrmType(0,true);
         SwFlyFrmAttrMgr aMgr( false, &rSh, FRMMGR_TYPE_NONE );
 
         SfxWhichIter aIter( rSet );
@@ -747,7 +747,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_HORZ_CENTER:
                 case FN_FRAME_ALIGN_HORZ_RIGHT:
                 case FN_FRAME_ALIGN_HORZ_LEFT:
-                    if ( (eFrmType & FRMTYPE_FLY_INCNT) ||
+                    if ( (eFrmType & FrmTypeFlags::FLY_INCNT) ||
                          bProtect ||
                          ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
                           bHtmlMode ))
@@ -759,7 +759,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_CHAR_TOP:
                 case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
                 case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
-                    if ( !(eFrmType & FRMTYPE_FLY_INCNT) || bProtect
+                    if ( !(eFrmType & FrmTypeFlags::FLY_INCNT) || bProtect
                          || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
                         rSet.DisableItem( nWhich );
                 break;
@@ -771,12 +771,12 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || (bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT))
+                    if ( bProtect || (bHtmlMode && eFrmType & FrmTypeFlags::FLY_ATCNT))
                         rSet.DisableItem( nWhich );
                     else
                     {
                         sal_uInt16 nId = 0;
-                        if (eFrmType & FRMTYPE_FLY_INCNT)
+                        if (eFrmType & FrmTypeFlags::FLY_INCNT)
                         {
                             switch (nWhich)
                             {

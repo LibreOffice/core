@@ -535,14 +535,14 @@ const SdrMarkList* SwFEShell::_GetMarkList() const
     return pMarkList;
 }
 
-sal_uInt16 SwFEShell::GetSelFrmType() const
+FrmTypeFlags SwFEShell::GetSelFrmType() const
 {
-    sal_uInt16 eType;
+    FrmTypeFlags eType;
 
     // get marked frame list, and check if anything is selected
     const SdrMarkList* pMarkList = _GetMarkList();
     if( pMarkList == NULL  ||  pMarkList->GetMarkCount() == 0 )
-        eType = FRMTYPE_NONE;
+        eType = FrmTypeFlags::NONE;
     else
     {
         // obtain marked item as fly frame; if no fly frame, it must
@@ -551,17 +551,17 @@ sal_uInt16 SwFEShell::GetSelFrmType() const
         if ( pFly != NULL )
         {
             if( pFly->IsFlyLayFrm() )
-                eType = FRMTYPE_FLY_FREE;
+                eType = FrmTypeFlags::FLY_FREE;
             else if( pFly->IsFlyAtCntFrm() )
-                eType = FRMTYPE_FLY_ATCNT;
+                eType = FrmTypeFlags::FLY_ATCNT;
             else
             {
                 OSL_ENSURE( pFly->IsFlyInCntFrm(), "New frametype?" );
-                eType = FRMTYPE_FLY_INCNT;
+                eType = FrmTypeFlags::FLY_INCNT;
             }
         }
         else
-            eType = FRMTYPE_DRAWOBJ;
+            eType = FrmTypeFlags::DRAWOBJ;
     }
 
     return eType;

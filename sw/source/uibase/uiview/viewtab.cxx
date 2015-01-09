@@ -223,8 +223,8 @@ void ResizeFrameCols(SwFmtCol& rCol,
 void SwView::ExecTabWin( SfxRequest& rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
-    const sal_uInt16 nFrmType   = rSh.IsObjSelected() ?
-                                    FRMTYPE_DRAWOBJ :
+    const FrmTypeFlags nFrmType   = rSh.IsObjSelected() ?
+                                    FrmTypeFlags::DRAWOBJ :
                                         rSh.GetFrmType(0,true);
     const bool bFrmSelection = rSh.IsFrmSelected();
     const bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
@@ -249,7 +249,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     bool bUnlockView = false;
     rSh.StartAllAction();
-    bool bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
+    bool bSect = bool(nFrmType & FrmTypeFlags::COLSECT);
 
     switch  (nSlot)
     {
@@ -259,7 +259,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SvxLongLRSpaceItem aLongLR( static_cast<const SvxLongLRSpaceItem&>(pReqArgs->
                                                         Get( SID_ATTR_LONG_LRSPACE )) );
             SvxLRSpaceItem aLR(RES_LR_SPACE);
-            if ( !bSect && (bFrmSelection || nFrmType & FRMTYPE_FLY_ANY) )
+            if ( !bSect && (bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY) )
             {
                 SwFrmFmt* pFmt = static_cast<SwFrmFmt*>(rSh.GetFlyFrmFmt());
                 const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
@@ -309,7 +309,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aSize.SetWidth( nPageWidth -
                             (aLongLR.GetLeft() + aLongLR.GetRight()));
 
-                if( nFrmType & FRMTYPE_COLUMN )
+                if( nFrmType & FrmTypeFlags::COLUMN )
                 {
                     SwFmtCol aCol(pFmt->GetCol());
 
@@ -331,7 +331,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.Pop();
                 rSh.EndAction();
             }
-            else if ( nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER ))
+            else if ( nFrmType & ( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER ))
             {
                 // Subtract out page margins
                 long nOld = rDesc.GetMaster().GetLRSpace().GetLeft();
@@ -342,12 +342,12 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 aLR.SetLeft(aLongLR.GetLeft());
                 aLR.SetRight(aLongLR.GetRight());
 
-                if ( nFrmType & FRMTYPE_HEADER && pHeaderFmt )
+                if ( nFrmType & FrmTypeFlags::HEADER && pHeaderFmt )
                     pHeaderFmt->SetFmtAttr( aLR );
-                else if( nFrmType & FRMTYPE_FOOTER && pFooterFmt )
+                else if( nFrmType & FrmTypeFlags::FOOTER && pFooterFmt )
                     pFooterFmt->SetFmtAttr( aLR );
             }
-            else if( nFrmType == FRMTYPE_DRAWOBJ)
+            else if( nFrmType == FrmTypeFlags::DRAWOBJ)
             {
                 SwRect aRect( rSh.GetObjRect() );
                 aRect.Left( aLongLR.GetLeft() + rPageRect.Left() );
@@ -418,7 +418,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             SvxLongULSpaceItem aLongULSpace( static_cast<const SvxLongULSpaceItem&>(pReqArgs->
                                                             Get( SID_ATTR_LONG_ULSPACE )));
 
-            if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
+            if( bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY )
             {
                 SwFrmFmt* pFmt = static_cast<SwFrmFmt*>(rSh.GetFlyFrmFmt());
                 const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
@@ -460,7 +460,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 aSet.Put( aSize );
                 rSh.SetFlyFrmAttr( aSet );
             }
-            else if( nFrmType == FRMTYPE_DRAWOBJ )
+            else if( nFrmType == FrmTypeFlags::DRAWOBJ )
             {
                 SwRect aRect( rSh.GetObjRect() );
                 aRect.Top( aLongULSpace.GetUpper() + rPageRect.Top() );
@@ -498,10 +498,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             else
             {   SwPageDesc aDesc( rDesc );
 
-                if ( nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER ))
+                if ( nFrmType & ( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER ))
                 {
 
-                    const bool bHead = nFrmType & FRMTYPE_HEADER;
+                    const bool bHead = bool(nFrmType & FrmTypeFlags::HEADER);
                     SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
                     if ( bHead )
                         aUL.SetUpper( (sal_uInt16)aLongULSpace.GetUpper() );
@@ -856,7 +856,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
             else
             {
-                if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY || bSect)
+                if ( bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY || bSect)
                 {
                     SwSectionFmt *pSectFmt = 0;
                     SfxItemSet aSet( GetPool(), RES_COL, RES_COL );
@@ -996,8 +996,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     SwWrtShell &rSh         = GetWrtShell();
 
     const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &m_aTabColFromDocPos : 0;
-    const sal_uInt16 nFrmType   = rSh.IsObjSelected()
-                ? FRMTYPE_DRAWOBJ
+    const FrmTypeFlags nFrmType   = rSh.IsObjSelected()
+                ? FrmTypeFlags::DRAWOBJ
                 : rSh.GetFrmType( pPt, true );
 
     const bool  bFrmSelection = rSh.IsFrmSelected();
@@ -1092,10 +1092,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 aLongLR.SetLeft(rPagePrtRect.Left());
                 aLongLR.SetRight(nPageWidth - rPagePrtRect.Right());
             }
-            if ( ( nFrmType & FRMTYPE_HEADER || nFrmType & FRMTYPE_FOOTER ) &&
-                 !(nFrmType & FRMTYPE_COLSECT) )
+            if ( ( nFrmType & FrmTypeFlags::HEADER || nFrmType & FrmTypeFlags::FOOTER ) &&
+                 !(nFrmType & FrmTypeFlags::COLSECT) )
             {
-                SwFrmFmt *pFmt = (SwFrmFmt*) (nFrmType & FRMTYPE_HEADER ?
+                SwFrmFmt *pFmt = (SwFrmFmt*) (nFrmType & FrmTypeFlags::HEADER ?
                                 rDesc.GetMaster().GetHeader().GetHeaderFmt() :
                                 rDesc.GetMaster().GetFooter().GetFooterFmt());
                 if( pFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
@@ -1111,16 +1111,16 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             else
             {
                 SwRect aRect;
-                if( !bFrmSelection && ((nFrmType & FRMTYPE_COLSECT) || rSh.IsDirectlyInSection()) )
+                if( !bFrmSelection && ((nFrmType & FrmTypeFlags::COLSECT) || rSh.IsDirectlyInSection()) )
                 {
                     aRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, pPt);
                     const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
                     aRect.Pos() += aTmpRect.Pos();
                 }
 
-                else if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
+                else if ( bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY )
                     aRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
-                else if( nFrmType & FRMTYPE_DRAWOBJ)
+                else if( nFrmType & FrmTypeFlags::DRAWOBJ)
                     aRect = rSh.GetObjRect();
 
                 if( aRect.Width() )
@@ -1163,21 +1163,21 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                         (long)aUL.GetLower(),
                                         SID_ATTR_LONG_ULSPACE);
 
-            if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
+            if ( bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY )
             {
                 // Convert document coordinates into page coordinates.
                 const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
                 aLongUL.SetUpper(rRect.Top() - rPageRect.Top());
                 aLongUL.SetLower(rPageRect.Bottom() - rRect.Bottom());
             }
-            else if ( nFrmType & FRMTYPE_HEADER || nFrmType & FRMTYPE_FOOTER )
+            else if ( nFrmType & FrmTypeFlags::HEADER || nFrmType & FrmTypeFlags::FOOTER )
             {
                 SwRect aRect( rSh.GetAnyCurRect( RECT_HEADERFOOTER, pPt));
                 aRect.Pos() -= rSh.GetAnyCurRect( RECT_PAGE, pPt ).Pos();
                 aLongUL.SetUpper( aRect.Top() );
                 aLongUL.SetLower( nPageHeight - aRect.Bottom() );
             }
-            else if( nFrmType & FRMTYPE_DRAWOBJ)
+            else if( nFrmType & FrmTypeFlags::DRAWOBJ)
             {
                 const SwRect &rRect = rSh.GetObjRect();
                 aLongUL.SetUpper((rRect.Top() - rPageRect.Top()));
@@ -1251,7 +1251,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( nSelType & nsSelectionType::SEL_GRF ||
                  nSelType & nsSelectionType::SEL_FRM ||
                  nSelType & nsSelectionType::SEL_OLE ||
-                 nFrmType == FRMTYPE_DRAWOBJ ||
+                 nFrmType == FrmTypeFlags::DRAWOBJ ||
                  (!bVerticalWriting && (SID_ATTR_PARA_LRSPACE_VERTICAL == nWhich)) ||
                  ( bVerticalWriting && (SID_ATTR_PARA_LRSPACE == nWhich))
                 )
@@ -1319,12 +1319,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( nSelType & nsSelectionType::SEL_GRF ||
                     nSelType & nsSelectionType::SEL_FRM ||
                     nSelType & nsSelectionType::SEL_OLE ||
-                    nFrmType == FRMTYPE_DRAWOBJ )
+                    nFrmType == FrmTypeFlags::DRAWOBJ )
                 rSet.DisableItem(SID_RULER_BORDER_DISTANCE);
             else
             {
                 SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
-                if(nFrmType & FRMTYPE_FLY_ANY)
+                if(nFrmType & FrmTypeFlags::FLY_ANY)
                 {
                     if( IsTabColFromDoc() )
                     {
@@ -1359,7 +1359,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else if ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
-                    !(nFrmType & FRMTYPE_COLSECT ) ) )
+                    !(nFrmType & FrmTypeFlags::COLSECT ) ) )
                 {
                     SfxItemSet aCoreSet2( GetPool(),
                                             RES_BOX, RES_BOX,
@@ -1392,7 +1392,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aDistLR.SetRight(rBox.GetDistance(BOX_LINE_RIGHT));
 
                     const SvxBoxItem* pBox = 0;
-                    if(nFrmType & FRMTYPE_HEADER)
+                    if(nFrmType & FrmTypeFlags::HEADER)
                     {
                         rMaster.GetHeader();
                         const SwFmtHeader& rHeaderFmt = rMaster.GetHeader();
@@ -1400,7 +1400,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         if( pHeaderFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
                             pBox = & (const SvxBoxItem&)pHeaderFmt->GetBox();
                     }
-                    else if(nFrmType & FRMTYPE_FOOTER )
+                    else if(nFrmType & FrmTypeFlags::FOOTER )
                     {
                         const SwFmtFooter& rFooterFmt = rMaster.GetFooter();
                         SwFrmFmt *pFooterFmt = (SwFrmFmt*)rFooterFmt.GetFooterFmt();
@@ -1434,7 +1434,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( nSelType & nsSelectionType::SEL_GRF ||
                     nSelType & nsSelectionType::SEL_FRM ||
                     nSelType & nsSelectionType::SEL_OLE ||
-                    nFrmType == FRMTYPE_DRAWOBJ)
+                    nFrmType == FrmTypeFlags::DRAWOBJ)
                 rSet.DisableItem(nWhich);
             else
             {
@@ -1456,7 +1456,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             }
             bool bHasTable = ( IsTabColFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
-                    !(nFrmType & FRMTYPE_COLSECT ) ) );
+                    !(nFrmType & FrmTypeFlags::COLSECT ) ) );
 
             bool bTableVertical = bHasTable && rSh.IsTableVertical();
 
@@ -1538,7 +1538,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 rSet.Put(aColItem, nWhich);
             }
-            else if ( bFrmSelection || nFrmType & ( FRMTYPE_COLUMN | FRMTYPE_COLSECT ) )
+            else if ( bFrmSelection || nFrmType & ( FrmTypeFlags::COLUMN | FrmTypeFlags::COLSECT ) )
             {
                 // Out of frame or page?
                 sal_uInt16 nNum = 0;
@@ -1552,10 +1552,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     nNum = rSh.GetCurColNum();
 
                 if(
-                    // For that matter FRMTYPE_COLSECT should not be included
+                    // For that matter FrmTypeFlags::COLSECT should not be included
                     // if the border is selected!
                     !bFrmSelection &&
-                     nFrmType & FRMTYPE_COLSECT )
+                     nFrmType & FrmTypeFlags::COLSECT )
                 {
                     const SwSection *pSect = rSh.GetAnySection(false, pPt);
                     OSL_ENSURE( pSect, "Which section?");
@@ -1593,7 +1593,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         rSet.Put(aColItem, nWhich);
                     }
                 }
-                else if( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
+                else if( bFrmSelection || nFrmType & FrmTypeFlags::FLY_ANY )
                 {
                     // Columns in frame
                     if ( nNum  )
@@ -1709,7 +1709,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
             else if ( IsTabRowFromDoc() ||
                     ( rSh.GetTableFmt() && !bFrmSelection &&
-                    !(nFrmType & FRMTYPE_COLSECT ) ) )
+                    !(nFrmType & FrmTypeFlags::COLSECT ) ) )
             {
                 SwTabCols aTabCols;
                 if ( ( m_bSetTabRowFromDoc = IsTabRowFromDoc() ) )
@@ -1790,10 +1790,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_LR_MIN_MAX:
         {
             Rectangle aRectangle;
-            if( ( nFrmType & FRMTYPE_COLSECT ) && !IsTabColFromDoc() &&
-                ( nFrmType & ( FRMTYPE_TABLE|FRMTYPE_COLUMN ) ) )
+            if( ( nFrmType & FrmTypeFlags::COLSECT ) && !IsTabColFromDoc() &&
+                ( nFrmType & ( FrmTypeFlags::TABLE|FrmTypeFlags::COLUMN ) ) )
             {
-                if( nFrmType & FRMTYPE_TABLE )
+                if( nFrmType & FrmTypeFlags::TABLE )
                 {
                     const size_t nNum = rSh.GetCurTabColNum();
                     SwTabCols aTabCols;
@@ -1879,18 +1879,18 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 }
             }
-            else if ( ((nFrmType & FRMTYPE_TABLE) || IsTabColFromDoc()) &&
+            else if ( ((nFrmType & FrmTypeFlags::TABLE) || IsTabColFromDoc()) &&
                  !bFrmSelection )
             {
                 bool bColumn;
                 if ( IsTabColFromDoc() )
                     bColumn = rSh.GetCurMouseColNum( m_aTabColFromDocPos ) != 0;
                 else
-                    bColumn = (nFrmType & (FRMTYPE_COLUMN|FRMTYPE_FLY_ANY|FRMTYPE_COLSECTOUTTAB)) != 0;
+                    bColumn = bool(nFrmType & (FrmTypeFlags::COLUMN|FrmTypeFlags::FLY_ANY|FrmTypeFlags::COLSECTOUTTAB));
 
                 if ( !bColumn )
                 {
-                    if( nFrmType & FRMTYPE_FLY_ANY && IsTabColFromDoc() )
+                    if( nFrmType & FrmTypeFlags::FLY_ANY && IsTabColFromDoc() )
                     {
                         SwRect aRect( rSh.GetAnyCurRect(
                                             RECT_FLY_PRT_EMBEDDED, pPt ) );
@@ -1913,11 +1913,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else
                 {   // Here only for table in multi-column pages and borders.
-                    bool bSectOutTbl = (nFrmType & FRMTYPE_TABLE) != 0;
-                    bool bFrame = (nFrmType & FRMTYPE_FLY_ANY);
-                    bool bColSct =  (nFrmType & ( bSectOutTbl
-                                                    ? FRMTYPE_COLSECTOUTTAB
-                                                    : FRMTYPE_COLSECT )
+                    bool bSectOutTbl = bool(nFrmType & FrmTypeFlags::TABLE);
+                    bool bFrame = bool(nFrmType & FrmTypeFlags::FLY_ANY);
+                    bool bColSct = bool(nFrmType & ( bSectOutTbl
+                                                    ? FrmTypeFlags::COLSECTOUTTAB
+                                                    : FrmTypeFlags::COLSECT )
                                                 );
                     //So you can also drag with the mouse, without being in the table.
                     CurRectType eRecType = RECT_PAGE_PRT;
@@ -1995,7 +1995,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                 }
             }
-            else if ( nFrmType & ( FRMTYPE_HEADER  | FRMTYPE_FOOTER ))
+            else if ( nFrmType & ( FrmTypeFlags::HEADER  | FrmTypeFlags::FOOTER ))
             {
                 aRectangle.Left()  = aPageLRSpace.GetLeft();
                 aRectangle.Right() = aPageLRSpace.GetRight();
@@ -2023,7 +2023,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             else
             {
                 SvxProtectItem aProtect(SID_RULER_PROTECT);
-                if(bBrowse && !(nFrmType & (FRMTYPE_DRAWOBJ|FRMTYPE_COLUMN)) && !rSh.GetTableFmt())
+                if(bBrowse && !(nFrmType & (FrmTypeFlags::DRAWOBJ|FrmTypeFlags::COLUMN)) && !rSh.GetTableFmt())
                 {
                     aProtect.SetSizeProtect(true);
                     aProtect.SetPosProtect(true);

@@ -226,7 +226,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                     m_pSpellState->m_bStartedInSelection = true;
                 }
                 // determine if the selection is outside of the body text
-                bOtherText = !(pWrtShell->GetFrmType(0,true) & FRMTYPE_BODY);
+                bOtherText = !(pWrtShell->GetFrmType(0,true) & FrmTypeFlags::BODY);
                 m_pSpellState->m_SpellStartPosition = bOtherText ? SPELL_START_OTHER : SPELL_START_BODY;
                 if(bOtherText)
                 {
@@ -323,7 +323,7 @@ The code below would only be part of the solution.
                 if (!m_pSpellState->m_bStartedInSelection)
                 {
                     // find out which text has been spelled body or other
-                    bOtherText = !(pWrtShell->GetFrmType(0,true) & FRMTYPE_BODY);
+                    bOtherText = !(pWrtShell->GetFrmType(0,true) & FrmTypeFlags::BODY);
                     if(bOtherText && m_pSpellState->m_bStartedInOther && m_pSpellState->pOtherCursor)
                     {
                         m_pSpellState->m_bStartedInOther = false;

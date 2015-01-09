@@ -367,7 +367,6 @@ protected:
     bool mbCompletePaint : 1;
     bool mbRetouche      : 1; // frame is responsible for retouching
 
-protected:
     bool mbInfInvalid    : 1;  // InfoFlags are invalid
     bool mbInfBody       : 1;  // Frm is in document body
     bool mbInfTab        : 1;  // Frm is in a table
@@ -511,7 +510,7 @@ public:
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;
 
-// FIXME: EasyHack (refactoring): rename method name in all files
+    // FIXME: EasyHack (refactoring): rename method name in all files
     // retouch, not in the area of the given Rect!
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 

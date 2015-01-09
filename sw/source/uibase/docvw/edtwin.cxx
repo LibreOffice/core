@@ -1332,7 +1332,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     else if ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
             rSh.IsHeaderFooterEdit( ) )
     {
-        bool bHeader = FRMTYPE_HEADER & rSh.GetFrmType(0,false);
+        bool bHeader = bool(FrmTypeFlags::HEADER & rSh.GetFrmType(0,false));
         if ( bHeader )
             rSh.SttPg();
         else
@@ -3215,7 +3215,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                                 // if the frame was deselected in the macro
                                 // the cursor just has to be displayed again
-                                if( FRMTYPE_NONE == rSh.GetSelFrmType() )
+                                if( FrmTypeFlags::NONE == rSh.GetSelFrmType() )
                                     rSh.ShowCrsr();
                                 else
                                 {
@@ -4421,7 +4421,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         rSh.BreakDrag();
                         Point aEndPt, aSttPt;
-                        if ( rSh.GetSelFrmType() & FRMTYPE_FLY_ATCNT )
+                        if ( rSh.GetSelFrmType() & FrmTypeFlags::FLY_ATCNT )
                         {
                             aEndPt = aRect.TopLeft();
                             aSttPt = rSh.GetDrawView()->GetAllMarkedRect().TopLeft();
@@ -5630,7 +5630,7 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 bRet = true;
                 // in case the frame was deselected in the macro
                 // just the cursor has to be displayed again.
-                if( FRMTYPE_NONE == rSh.GetSelFrmType() )
+                if( FrmTypeFlags::NONE == rSh.GetSelFrmType() )
                     rSh.ShowCrsr();
                 else
                 {

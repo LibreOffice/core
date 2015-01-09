@@ -1087,18 +1087,18 @@ void SwXTextViewCursor::gotoRange(
                                     SwXParagraph::getUnoTunnelId()));
         }
 
-        const sal_uInt16 nFrmType = rSh.GetFrmType(0,true);
+        const FrmTypeFlags nFrmType = rSh.GetFrmType(0,true);
 
         SwStartNodeType eSearchNodeType = SwNormalStartNode;
-        if(nFrmType & FRMTYPE_FLY_ANY)
+        if(nFrmType & FrmTypeFlags::FLY_ANY)
             eSearchNodeType = SwFlyStartNode;
-        else if(nFrmType &FRMTYPE_HEADER)
+        else if(nFrmType &FrmTypeFlags::HEADER)
             eSearchNodeType = SwHeaderStartNode;
-        else if(nFrmType & FRMTYPE_FOOTER)
+        else if(nFrmType & FrmTypeFlags::FOOTER)
             eSearchNodeType = SwFooterStartNode;
-        else if(nFrmType & FRMTYPE_TABLE)
+        else if(nFrmType & FrmTypeFlags::TABLE)
             eSearchNodeType = SwTableBoxStartNode;
-        else if(nFrmType & FRMTYPE_FOOTNOTE)
+        else if(nFrmType & FrmTypeFlags::FOOTNOTE)
             eSearchNodeType = SwFootnoteStartNode;
 
         const SwStartNode* pOwnStartNode = aOwnPaM.GetNode().

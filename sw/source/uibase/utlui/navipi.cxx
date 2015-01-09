@@ -244,8 +244,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         case FN_SELECT_FOOTER:
         {
             rSh.MoveCrsr();
-            const sal_uInt16 eType = rSh.GetFrmType(0,false);
-            if (eType & FRMTYPE_FOOTER)
+            const FrmTypeFlags eType = rSh.GetFrmType(0,false);
+            if (eType & FrmTypeFlags::FOOTER)
             {
                 if (rSh.EndPg())
                     nFuncId = FN_END_OF_PAGE;
@@ -258,8 +258,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         case FN_SELECT_HEADER:
         {
             rSh.MoveCrsr();
-            const sal_uInt16 eType = rSh.GetFrmType(0,false);
-            if (eType & FRMTYPE_HEADER)
+            const FrmTypeFlags eType = rSh.GetFrmType(0,false);
+            if (eType & FrmTypeFlags::HEADER)
             {
                 if (rSh.SttPg())
                     nFuncId = FN_START_OF_PAGE;
@@ -272,9 +272,9 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         case FN_SELECT_FOOTNOTE:
         {
             rSh.MoveCrsr();
-            const sal_uInt16 eFrmType = rSh.GetFrmType(0,false);
+            const FrmTypeFlags eFrmType = rSh.GetFrmType(0,false);
                 // Jump from the footnote to the anchor.
-            if (eFrmType & FRMTYPE_FOOTNOTE)
+            if (eFrmType & FrmTypeFlags::FOOTNOTE)
             {
                 if (rSh.GotoFtnAnchor())
                     nFuncId = FN_FOOTNOTE_TO_ANCHOR;

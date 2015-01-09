@@ -208,9 +208,9 @@ bool SwFEShell::IsDirectlyInSection() const
     return pFrm && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm();
 }
 
-sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
+FrmTypeFlags SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
 {
-    sal_uInt16 nReturn = FRMTYPE_NONE;
+    FrmTypeFlags nReturn = FrmTypeFlags::NONE;
     const SwFrm *pFrm;
     if ( pPt )
     {
@@ -232,39 +232,39 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
                                     // from a section with footnotes at the end.
                                     if( pFrm->GetNext() || pFrm->GetPrev() )
                                         // Sectioncolumns
-                                        nReturn |= ( nReturn & FRMTYPE_TABLE ) ?
-                                            FRMTYPE_COLSECTOUTTAB : FRMTYPE_COLSECT;
+                                        nReturn |= ( nReturn & FrmTypeFlags::TABLE ) ?
+                                            FrmTypeFlags::COLSECTOUTTAB : FrmTypeFlags::COLSECT;
                                 }
                                 else // only pages and frame columns
-                                    nReturn |= FRMTYPE_COLUMN;
+                                    nReturn |= FrmTypeFlags::COLUMN;
                                 break;
-            case FRM_PAGE:      nReturn |= FRMTYPE_PAGE;
+            case FRM_PAGE:      nReturn |= FrmTypeFlags::PAGE;
                                 if( static_cast<const SwPageFrm*>(pFrm)->IsFtnPage() )
-                                    nReturn |= FRMTYPE_FTNPAGE;
+                                    nReturn |= FrmTypeFlags::FTNPAGE;
                                 break;
-            case FRM_HEADER:    nReturn |= FRMTYPE_HEADER;      break;
-            case FRM_FOOTER:    nReturn |= FRMTYPE_FOOTER;      break;
+            case FRM_HEADER:    nReturn |= FrmTypeFlags::HEADER;      break;
+            case FRM_FOOTER:    nReturn |= FrmTypeFlags::FOOTER;      break;
             case FRM_BODY:      if( pFrm->GetUpper()->IsPageFrm() ) // not for ColumnFrms
-                                    nReturn |= FRMTYPE_BODY;
+                                    nReturn |= FrmTypeFlags::BODY;
                                 break;
-            case FRM_FTN:       nReturn |= FRMTYPE_FOOTNOTE;    break;
+            case FRM_FTN:       nReturn |= FrmTypeFlags::FOOTNOTE;    break;
             case FRM_FLY:       if( static_cast<const SwFlyFrm*>(pFrm)->IsFlyLayFrm() )
-                                    nReturn |= FRMTYPE_FLY_FREE;
+                                    nReturn |= FrmTypeFlags::FLY_FREE;
                                 else if ( static_cast<const SwFlyFrm*>(pFrm)->IsFlyAtCntFrm() )
-                                    nReturn |= FRMTYPE_FLY_ATCNT;
+                                    nReturn |= FrmTypeFlags::FLY_ATCNT;
                                 else
                                 {
                                     OSL_ENSURE( static_cast<const SwFlyFrm*>(pFrm)->IsFlyInCntFrm(),
                                             "New frametype?" );
-                                    nReturn |= FRMTYPE_FLY_INCNT;
+                                    nReturn |= FrmTypeFlags::FLY_INCNT;
                                 }
-                                nReturn |= FRMTYPE_FLY_ANY;
+                                nReturn |= FrmTypeFlags::FLY_ANY;
                                 if( bStopAtFly )
                                     return nReturn;
                                 break;
             case FRM_TAB:
             case FRM_ROW:
-            case FRM_CELL:      nReturn |= FRMTYPE_TABLE;       break;
+            case FRM_CELL:      nReturn |= FrmTypeFlags::TABLE;       break;
             default:            /* do nothing */                break;
         }
         if ( pFrm->IsFlyFrm() )

@@ -68,7 +68,7 @@ void SwView::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
-    sal_uInt16 eFrmType = FRMTYPE_NONE;
+    FrmTypeFlags eFrmType = FrmTypeFlags::NONE;
     bool bGetFrmType = false;
     bool bWeb = 0 != PTR_CAST(SwWebView, this);
 
@@ -101,7 +101,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         eFrmType = m_pWrtShell->GetFrmType(0, true);
                         bGetFrmType = true;
                     }
-                    if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
+                    if (! ( ((eFrmType & FrmTypeFlags::FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
                         m_nSelectionType & nsSelectionType::SEL_TBL ||
                         m_nSelectionType & nsSelectionType::SEL_DRW) )
                     {
@@ -130,9 +130,9 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_CHANGE_PAGENUM:
             {
-                sal_uInt16 nType = m_pWrtShell->GetFrmType(0,true);
-                if( ( FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER |
-                      FRMTYPE_FOOTNOTE | FRMTYPE_DRAWOBJ ) & nType )
+                FrmTypeFlags nType = m_pWrtShell->GetFrmType(0,true);
+                if( ( FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER |
+                      FrmTypeFlags::FOOTNOTE | FrmTypeFlags::DRAWOBJ ) & nType )
                     rSet.DisableItem(nWhich);
                 else
                     rSet.Put(SfxUInt16Item(nWhich, m_pWrtShell->GetPageOffset()));

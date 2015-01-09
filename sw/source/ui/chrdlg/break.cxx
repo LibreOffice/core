@@ -183,7 +183,7 @@ void SwBreakDlg::CheckEnable()
         bEnable = false;
     }
     else if(rSh.GetFrmType(0,true)
-        & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
+        & (FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER  | FrmTypeFlags::FOOTNOTE))
     {
         m_pPageBtn->Enable(false);
         if(m_pPageBtn->IsChecked())

@@ -267,12 +267,12 @@ void SwIndexMarkPane::InitControls()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const sal_uInt16 nFrmType = pSh->GetFrmType(0,true);
+            const FrmTypeFlags nFrmType = pSh->GetFrmType(0,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
             m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
-                0 == (nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FLY_ANY )));
+                !(nFrmType & ( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
 
@@ -355,12 +355,12 @@ void    SwIndexMarkPane::Activate()
 
             //to include all equal entries may only be allowed in the body and even there
             //only when a simple selection exists
-            const sal_uInt16 nFrmType = pSh->GetFrmType(0,true);
+            const FrmTypeFlags nFrmType = pSh->GetFrmType(0,true);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
             m_pSearchCaseWordOnlyCB->Show();
             m_pApplyToAllCB->Enable(!aOrgStr.isEmpty() &&
-                0 == (nFrmType & ( FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FLY_ANY )));
+                !(nFrmType & ( FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FLY_ANY )));
             SearchTypeHdl(m_pApplyToAllCB);
         }
         ModifyHdl(m_pTypeDCB);

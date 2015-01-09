@@ -1253,7 +1253,7 @@ bool SwFldMgr::InsertFld(
 
     case TYP_FORMELFLD:
         {
-            if(pCurShell->GetFrmType(0,false) & FRMTYPE_TABLE)
+            if(pCurShell->GetFrmType(0,false) & FrmTypeFlags::TABLE)
             {
                 pCurShell->StartAllAction();
 

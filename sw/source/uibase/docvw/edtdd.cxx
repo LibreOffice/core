@@ -396,9 +396,9 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             //Drawing objects in Headers/Footers are not allowed
 
             SwWrtShell *pSrcSh = pMod->pDragDrop->GetShell();
-            if( (pSrcSh->GetSelFrmType() == FRMTYPE_DRAWOBJ) &&
+            if( (pSrcSh->GetSelFrmType() == FrmTypeFlags::DRAWOBJ) &&
                 pSrcSh->IsSelContainsControl() &&
-                 (rSh.GetFrmType( &aDocPt, false ) & (FRMTYPE_HEADER|FRMTYPE_FOOTER)) )
+                 (rSh.GetFrmType( &aDocPt, false ) & (FrmTypeFlags::HEADER|FrmTypeFlags::FOOTER)) )
             {
                 bCleanup = true;
             }

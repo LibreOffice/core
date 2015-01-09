@@ -1103,7 +1103,7 @@ void SwView::WriteUserData( OUString &rUserData, bool bBrowse )
     rUserData += OUString::number(
             (sal_uInt16)m_pWrtShell->GetViewOptions()->GetZoomType());//eZoom;
     rUserData += ";";
-    rUserData += FRMTYPE_NONE == m_pWrtShell->GetSelFrmType() ? OUString("0") : OUString("1");
+    rUserData += FrmTypeFlags::NONE == m_pWrtShell->GetSelFrmType() ? OUString("0") : OUString("1");
 }
 
 // Set CursorPos
@@ -1261,7 +1261,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         bool bViewLayoutBookMode = pVOpt->IsViewLayoutBookMode();
         sal_Int16 nViewLayoutColumns = pVOpt->GetViewLayoutColumns();
 
-        bool bSelectedFrame = ( m_pWrtShell->GetSelFrmType() != FRMTYPE_NONE ),
+        bool bSelectedFrame = ( m_pWrtShell->GetSelFrmType() != FrmTypeFlags::NONE ),
                  bGotVisibleLeft = false,
                  bGotVisibleTop = false, bGotVisibleRight = false,
                  bGotVisibleBottom = false, bGotZoomType = false,
@@ -1516,7 +1516,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = "IsSelectedFrame";
-    pValue->Value <<= FRMTYPE_NONE != m_pWrtShell->GetSelFrmType();
+    pValue->Value <<= FrmTypeFlags::NONE != m_pWrtShell->GetSelFrmType();
     nIndex++;
 
     assert(nIndex == NUM_VIEW_SETTINGS);

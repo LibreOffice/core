@@ -1474,9 +1474,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_FOOTNOTE_DLG:
             {
-                const sal_uInt16 nNoType =
-                    FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER | FRMTYPE_FOOTNOTE;
-                if ( (rSh.GetFrmType(0,true) & nNoType) )
+                const FrmTypeFlags nNoType =
+                    FrmTypeFlags::FLY_ANY | FrmTypeFlags::HEADER | FrmTypeFlags::FOOTER | FrmTypeFlags::FOOTNOTE;
+                if ( rSh.GetFrmType(0,true) & nNoType )
                     rSet.DisableItem(nWhich);
 
                 if ( rSh.CrsrInsideInputFld() )
@@ -1499,7 +1499,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_TABLE:
             if ( rSh.CrsrInsideInputFld()
                  || rSh.GetTableFmt()
-                 || (rSh.GetFrmType(0,true) & FRMTYPE_FOOTNOTE) )
+                 || (rSh.GetFrmType(0,true) & FrmTypeFlags::FOOTNOTE) )
             {
                 rSet.DisableItem( nWhich );
             }
