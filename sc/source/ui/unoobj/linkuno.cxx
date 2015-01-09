@@ -1708,7 +1708,8 @@ Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDocLink(
         throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocName);
+    OUString aDocUrl( ScGlobal::GetAbsDocName( aDocName, mpDocShell));
+    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocUrl);
     Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
     return aDocLink;
 }
@@ -1717,10 +1718,11 @@ Any SAL_CALL ScExternalDocLinksObj::getByName(const OUString &aName)
         throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (!mpRefMgr->hasExternalFile(aName))
+    OUString aDocUrl( ScGlobal::GetAbsDocName( aName, mpDocShell));
+    if (!mpRefMgr->hasExternalFile(aDocUrl))
         throw container::NoSuchElementException();
 
-    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aName);
+    sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocUrl);
     Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
 
     Any aAny;
