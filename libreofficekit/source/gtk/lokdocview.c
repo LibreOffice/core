@@ -149,7 +149,16 @@ void renderDocument( LOKDocView* pDocView )
     gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas ), pDocView->pPixBuf );
 }
 
-static void lok_docview_callback(int nType, const char* pPayload, void* pData)
+/// Invoked on the main thread if lok_docview_callback_worker() requests so.
+static gboolean lok_docview_callback(gpointer pData)
+{
+    LOKDocView* pDocView = pData;
+    renderDocument(pDocView);
+    return G_SOURCE_REMOVE;
+}
+
+/// Our LOK callback, runs on the LO thread.
+static void lok_docview_callback_worker(int nType, const char* pPayload, void* pData)
 {
     LOKDocView* pDocView = pData;
 
@@ -158,7 +167,7 @@ static void lok_docview_callback(int nType, const char* pPayload, void* pData)
     case LOK_CALLBACK_INVALIDATE_TILES:
         // TODO for now just always render the document.
         (void)pPayload;
-        renderDocument( pDocView );
+        gdk_threads_add_idle(lok_docview_callback, pDocView);
         break;
     default:
         break;
@@ -185,7 +194,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     else
     {
         renderDocument( pDocView );
-        pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback, pDocView);
+        pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
     }
 
     return TRUE;
