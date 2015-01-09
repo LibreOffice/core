@@ -242,7 +242,7 @@
 #define SC_OPCODE_PERMUT            242
 #define SC_OPCODE_PERMUTATION_A     243
 #define SC_OPCODE_PV                244
-#define SC_OPCODE_DIA               245
+#define SC_OPCODE_SYD               245
 #define SC_OPCODE_GDA               246
 #define SC_OPCODE_GDA_2             247
 #define SC_OPCODE_VBD               248

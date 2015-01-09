@@ -1182,7 +1182,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocGauss:
             case ocGeoMean:
             case ocHarMean:
-            case ocDIA:
+            case ocSYD:
             case ocCorrel:
             case ocNegBinomVert:
             case ocPearson:

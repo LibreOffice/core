@@ -4022,7 +4022,7 @@ StackVar ScInterpreter::Interpret()
                 case ocStDevP_MS        : ScStDevP( false );            break;
                 case ocStDevPA          : ScStDevP( true );             break;
                 case ocPV               : ScPV();                       break;
-                case ocDIA              : ScDIA();                      break;
+                case ocSYD              : ScSYD();                      break;
                 case ocGDA              : ScGDA();                      break;
                 case ocGDA2             : ScGDA2();                     break;
                 case ocVBD              : ScVDB();                      break;
