@@ -1423,7 +1423,7 @@ void ScInterpreter::ScVDB()
     }
 }
 
-void ScInterpreter::ScLaufz()
+void ScInterpreter::ScDuration()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {

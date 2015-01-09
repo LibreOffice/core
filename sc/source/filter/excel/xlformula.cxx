@@ -554,7 +554,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
     EXC_FUNCENTRY_A_VR(         ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
     EXC_FUNCENTRY_V_VR(         ocNumberValue,   1,  3,  0,  "NUMBERVALUE" ),
-    EXC_FUNCENTRY_V_VR(         ocLaufz,         3,  3,  0,  "PDURATION" ),
+    EXC_FUNCENTRY_V_VR(         ocDuration,      3,  3,  0,  "PDURATION" ),
     EXC_FUNCENTRY_V_VR(         ocPermutationA,  2,  2,  0,  "PERMUTATIONA" ),
     EXC_FUNCENTRY_V_VR(         ocPhi,           1,  1,  0,  "PHI" ),
     EXC_FUNCENTRY_V_VR(         ocZGZ,           3,  3,  0,  "RRI" ),
