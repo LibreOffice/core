@@ -67,9 +67,9 @@ public class _XMultiLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            String[] LayerIds = new String[2];
-            LayerIds[0] = "1 /org/openoffice/Office/Jobs.xcu";
-            LayerIds[1] = "2 /org/openoffice/Office/Linguistic.xcu";
+            String[] LayerIds = new String[] {
+                "1 /org/openoffice/Office/Jobs.xcu",
+                "2 /org/openoffice/Office/Linguistic.xcu" };
 
             XLayer[] Layers = oObj.getLayers(LayerIds, "");
             res = Layers.length == 2;
@@ -93,12 +93,10 @@ public class _XMultiLayerStratum extends MultiMethodTest {
         boolean res = true;
 
         try {
-            String[] LayerIds = new String[2];
-            LayerIds[0] = "1 /org/openoffice/Office/Jobs.xcu";
-            LayerIds[1] = "2 /org/openoffice/Office/Linguistic.xcu";
-            String[] Times = new String[2];
-            Times[0] = "";
-            Times[1] = "";
+            String[] LayerIds = new String[] {
+                "1 /org/openoffice/Office/Jobs.xcu",
+                "2 /org/openoffice/Office/Linguistic.xcu" };
+            String[] Times = new String[] { "", "" };
 
             XLayer[] Layers = oObj.getMultipleLayers(LayerIds, Times);
             res = Layers.length == 2;

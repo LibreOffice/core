@@ -496,10 +496,9 @@ public class TypeDetection extends ComplexTestCase {
              *
              */
             log.println("### checkStreamLoader() ###");
-            String[] urls = new String[2];
-
-            urls[0] = helper.getClassURLString("TypeDetection.props");
-            urls[1] = helper.getClassURLString("files.csv");
+            String[] urls = new String[] {
+               helper.getClassURLString("TypeDetection.props"),
+               helper.getClassURLString("files.csv") };
 
             for (int j=0; j<urls.length; j++){
                 String fileURL  = urls[j];

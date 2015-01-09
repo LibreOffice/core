@@ -245,9 +245,9 @@ XComponent xDoc = DesktopTools.loadDoc(xMSF, FileToLoad,
     }
 
     private String[] getLeftAndRight(int counter, XSpreadsheet xSpreadsheet) {
-        String[] re = new String[2];
-        re[0] = getCell(0, counter, xSpreadsheet).getFormula().trim();
-        re[1] = getCell(1, counter, xSpreadsheet).getFormula().trim();
+        String[] re = new String[] {
+            getCell(0, counter, xSpreadsheet).getFormula().trim(),
+            getCell(1, counter, xSpreadsheet).getFormula().trim() };
 
         return re;
     }

@@ -355,9 +355,9 @@ public class AggregateComponent extends ControlScroller
                             short[] iselfunction = (short[]) AnyConverter.toArray(currowproperties[0].Value);
                             if ((iselfield.length > 0) && (iselfunction.length > 0))
                             {
-                                String[] curaggregatename = new String[2];
-                                curaggregatename[0] = CurDBMetaData.NumericFieldNames[iselfield[0]];
-                                curaggregatename[1] = this.sFunctionOperators[iselfunction[0]];
+                                String[] curaggregatename = new String[] {
+                                    CurDBMetaData.NumericFieldNames[iselfield[0]],
+                                    this.sFunctionOperators[iselfunction[0]] };
                                 aggregatevector.add(curaggregatename);
                             }
                         }

@@ -612,10 +612,8 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         {
             // if there are problems, don't show anything is a little bit hard.
             LayoutFiles = new String[2][];
-            String[] a = new String[1];
-            String[] b = new String[1];
-            a[0] = "DefaultLayoutOfHeaders";
-            b[0] = "default";
+            String[] a = new String[] { "DefaultLayoutOfHeaders" };
+            String[] b = new String[] { "default" };
             LayoutFiles[1] = a;
             LayoutFiles[0] = b;
         }

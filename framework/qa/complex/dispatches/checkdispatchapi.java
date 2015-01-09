@@ -251,8 +251,7 @@ public class checkdispatchapi
 
     public void checkInterception()
     {
-        String[] lDisabledURLs = new String[1];
-        lDisabledURLs[0] = ".uno:Open";
+        String[] lDisabledURLs = new String[] { ".uno:Open" };
 
         System.out.println("create and initialize interceptor ...");
         Interceptor aInterceptor = new Interceptor();

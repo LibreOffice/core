@@ -401,10 +401,7 @@ public class ConfigExamples
             UnoRuntime.queryInterface(XMultiPropertySet.class, xSubdivision);
 
         // variables for multi-element access
-        String[] aElementNames = new String[2];
-
-        aElementNames[0] = "XAxis";
-        aElementNames[1] = "YAxis";
+        String[] aElementNames = new String[] { "XAxis", "YAxis" };
 
         Object[] aElementValues = xSubdivProperties.getPropertyValues(aElementNames);
 
@@ -869,9 +866,7 @@ public class ConfigExamples
         aSettings[0] = new com.sun.star.beans.NamedValue("HeaderLine",Boolean.TRUE);
         aSettings[1] = new com.sun.star.beans.NamedValue("FieldDelimiter",";");
 
-        String [] aTableFilter = new String[2];
-        aTableFilter[0] = "table.txt";
-        aTableFilter[1] = "othertable.txt";
+        String [] aTableFilter = new String[] { "table.txt", "othertable.txt" };
 
         storeDataSource(sSampleDataSourceName,sSampleDataSourceURL,"",false,0,aSettings,aTableFilter);
     }

@@ -653,10 +653,8 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         catch (com.sun.star.wizards.common.NoValidPathException e)
         {
             ContentFiles = new String[2][];
-            String[] a = new String[1];
-            String[] b = new String[1];
-            a[0] = "DefaultLayoutOfData";
-            b[0] = "default";
+            String[] a = new String[] { "DefaultLayoutOfData" };
+            String[] b = new String[] { "default" };
             ContentFiles[1] = a;
             ContentFiles[0] = b;
         }
@@ -674,10 +672,8 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         catch (com.sun.star.wizards.common.NoValidPathException e)
         {
             LayoutFiles = new String[2][];
-            String[] a = new String[1];
-            String[] b = new String[1];
-            a[0] = "DefaultLayoutOfHeaders";
-            b[0] = "default";
+            String[] a = new String[] { "DefaultLayoutOfHeaders" };
+            String[] b = new String[] { "default" };
             LayoutFiles[1] = a;
             LayoutFiles[0] = b;
         }

@@ -270,13 +270,13 @@ public class Bootstrap {
                 Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
 
             // create call with arguments
-            String[] cmdArray = new String[6];
-            cmdArray[0] = fOffice.getPath();
-            cmdArray[1] = "--nologo";
-            cmdArray[2] = "--nodefault";
-            cmdArray[3] = "--norestore";
-            cmdArray[4] = "--nolockcheck";
-            cmdArray[5] = "--accept=pipe,name=" + sPipeName + ";urp;";
+            String[] cmdArray = new String[] {
+                fOffice.getPath(),
+                "--nologo",
+                "--nodefault",
+                "--norestore",
+                "--nolockcheck",
+                "--accept=pipe,name=" + sPipeName + ";urp;" };
 
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );

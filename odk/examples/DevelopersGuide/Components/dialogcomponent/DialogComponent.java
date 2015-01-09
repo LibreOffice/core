@@ -190,10 +190,10 @@ public class DialogComponent {
         }
 
         public String[] getSupportedMethodNames() {
-            String[] retValue= new String[3];
-            retValue[0]= aHandlerMethod1;
-            retValue[1]= aHandlerMethod2;
-            retValue[2]= aHandlerMethod3;
+            String[] retValue= new String[] {
+                aHandlerMethod1,
+                aHandlerMethod2,
+                aHandlerMethod3 };
             return retValue;
         }
 

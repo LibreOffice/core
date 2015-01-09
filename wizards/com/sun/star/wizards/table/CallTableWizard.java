@@ -110,9 +110,7 @@ public class CallTableWizard
          */
         public java.lang.String[] getSupportedServiceNames()
         {
-            String[] stringSupportedServiceNames = new String[1];
-
-            stringSupportedServiceNames[0] = __serviceName;
+            String[] stringSupportedServiceNames = new String[] { __serviceName };
 
             return (stringSupportedServiceNames);
         }

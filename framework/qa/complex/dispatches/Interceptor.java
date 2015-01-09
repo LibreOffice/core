@@ -259,8 +259,7 @@ public class Interceptor implements XDispatch,
     {
         if (m_lURLs4InterceptionInfo == null)
         {
-            m_lURLs4InterceptionInfo    = new String[1];
-            m_lURLs4InterceptionInfo[0] = "*";
+            m_lURLs4InterceptionInfo    = new String[] { "*" };
         }
 
         return m_lURLs4InterceptionInfo;
@@ -276,8 +275,7 @@ public class Interceptor implements XDispatch,
     {
         if (m_lURLs4Blocking == null)
         {
-            m_lURLs4Blocking    = new String[1];
-            m_lURLs4Blocking[0] = "*";
+            m_lURLs4Blocking    = new String[] { "*" };
         }
 
         return m_lURLs4Blocking;

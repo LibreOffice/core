@@ -291,9 +291,7 @@ final class InstallationFinder {
         String path = null;
 
         // start the which process
-        String[] cmdArray = new String[2];
-        cmdArray[0] = WHICH;
-        cmdArray[1] = SOFFICE;
+        String[] cmdArray = new String[] { WHICH, SOFFICE };
         Process proc = null;
         Runtime rt = Runtime.getRuntime();
         try {
