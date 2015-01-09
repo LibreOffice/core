@@ -1655,7 +1655,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
     bool bRel = true;
     OUString sId = rStrm.addRelation( pExternalLink->getOutputStream(),
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/externalLinkPath",
-            XclExpHyperlink::BuildFileName( nLevel, bRel, maUrl, GetRoot()),
+            XclExpHyperlink::BuildFileName( nLevel, bRel, maUrl, GetRoot(), true),
             true );
 
     pExternalLink->startElement( XML_externalLink,
