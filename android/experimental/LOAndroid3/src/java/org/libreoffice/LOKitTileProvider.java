@@ -189,7 +189,6 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     @Override
     public CairoImage createTile(float x, float y, IntSize tileSize, float zoom) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(tileSize.width * tileSize.height * 4);
-        Bitmap bitmap = Bitmap.createBitmap(tileSize.width, tileSize.height, Bitmap.Config.ARGB_8888);
 
         if (mDocument != null) {
             float twipX = pixelToTwip(x, mDPI) / zoom;
@@ -207,9 +206,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
             Log.e(LOGTAG, "Document is null!!");
         }
 
-        bitmap.copyPixelsFromBuffer(buffer);
-
-        CairoImage image = new BufferedCairoImage(bitmap);
+        CairoImage image = new BufferedCairoImage(buffer, tileSize.width, tileSize.height, CairoImage.FORMAT_ARGB32);
 
         return image;
     }
