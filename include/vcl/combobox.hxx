@@ -32,10 +32,6 @@ class ImplListBoxFloatingWindow;
 class ImplListBox;
 class ImplBtn;
 
-
-// - ComboBox -
-
-
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
@@ -91,11 +87,12 @@ protected:
     bool            IsDropDownBox() const { return mpFloatWin ? true : false; }
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
-    virtual void    dispose() SAL_OVERRIDE;
+
 public:
     explicit        ComboBox( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        ComboBox( vcl::Window* pParent, const ResId& );
     virtual         ~ComboBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;

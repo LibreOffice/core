@@ -1091,12 +1091,16 @@ WinBits Window::GetExtendedStyle() const
 
 void Window::SetType( WindowType nType )
 {
-    mpWindowImpl->mnType = nType;
+    if (mpWindowImpl)
+        mpWindowImpl->mnType = nType;
 }
 
 WindowType Window::GetType() const
 {
-    return mpWindowImpl->mnType;
+    if (mpWindowImpl)
+        return mpWindowImpl->mnType;
+    else
+        return WINDOW_PARENT;
 }
 
 Dialog* Window::GetParentDialog() const

@@ -365,6 +365,7 @@ SpinField::~SpinField()
 void SpinField::dispose()
 {
     mpEdit.disposeAndClear();
+
     Edit::dispose();
 }
 

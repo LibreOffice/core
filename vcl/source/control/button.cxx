@@ -95,7 +95,15 @@ Button::Button( WindowType nType ) :
 
 Button::~Button()
 {
+    dispose();
+}
+
+void Button::dispose()
+{
     delete mpButtonData;
+    mpButtonData = NULL;
+
+    Control::dispose();
 }
 
 void Button::SetCommandHandler(const OUString& aCommand)
@@ -1172,10 +1180,6 @@ PushButton::PushButton( vcl::Window* pParent, const ResId& rResId ) :
 
     if ( !(nStyle & WB_HIDE) )
         Show();
-}
-
-PushButton::~PushButton()
-{
 }
 
 void PushButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -2306,11 +2310,18 @@ void RadioButton::ImplLoadRes( const ResId& rResId )
 
 RadioButton::~RadioButton()
 {
+    dispose();
+}
+
+void RadioButton::dispose()
+{
     if (m_xGroup)
     {
         m_xGroup->erase(std::remove(m_xGroup->begin(), m_xGroup->end(), this),
-            m_xGroup->end());
+                        m_xGroup->end());
+        m_xGroup.reset();
     }
+    Button::dispose();
 }
 
 void RadioButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -3754,10 +3765,6 @@ ImageButton::ImageButton( vcl::Window* pParent, const ResId& rResId ) :
     ImplInitStyle();
 }
 
-ImageButton::~ImageButton()
-{
-}
-
 void ImageButton::ImplInitStyle()
 {
     WinBits nStyle = GetStyle();
@@ -3776,18 +3783,10 @@ ImageRadioButton::ImageRadioButton( vcl::Window* pParent, WinBits nStyle ) :
 {
 }
 
-ImageRadioButton::~ImageRadioButton()
-{
-}
-
 TriStateBox::TriStateBox( vcl::Window* pParent, WinBits nStyle ) :
     CheckBox( pParent, nStyle )
 {
     EnableTriState( true );
-}
-
-TriStateBox::~TriStateBox()
-{
 }
 
 DisclosureButton::DisclosureButton( vcl::Window* pParent, WinBits nStyle ) :

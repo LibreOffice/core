@@ -26,9 +26,6 @@
 #include <vcl/timer.hxx>
 
 
-// - SpinField -
-
-
 class VCL_DLLPUBLIC SpinField : public Edit
 {
 protected:
@@ -69,12 +66,11 @@ protected:
     virtual void    FillLayoutData() const SAL_OVERRIDE;
     Rectangle *     ImplFindPartRect( const Point& rPt );
 
-    virtual void    dispose() SAL_OVERRIDE;
-
 public:
     explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        SpinField( vcl::Window* pParent, const ResId& );
     virtual         ~SpinField();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual bool    ShowDropDown( bool bShow );
 

@@ -937,11 +937,19 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
 
 VclMultiLineEdit::~VclMultiLineEdit()
 {
+    dispose();
+}
+
+void VclMultiLineEdit::dispose()
+{
     {
         std::unique_ptr< ImpVclMEdit > xDelete(pImpVclMEdit);
         pImpVclMEdit = NULL;
     }
     delete pUpdateDataTimer;
+    pUpdateDataTimer = NULL;
+
+    Edit::dispose();
 }
 
 WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )

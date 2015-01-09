@@ -68,19 +68,22 @@ ComboBox::ComboBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ComboBox::~ComboBox()
 {
-    SetSubEdit(VclPtr<Edit>());
+    dispose();
+}
+
+void ComboBox::dispose()
+{
+    mpSubEdit.disposeAndClear();
 
     ImplListBox *pImplLB = mpImplLB;
     mpImplLB = NULL;
     delete pImplLB;
 
     delete mpFloatWin;
+    mpFloatWin = NULL;
     delete mpBtn;
-}
+    mpBtn = NULL;
 
-void ComboBox::dispose()
-{
-    mpSubEdit.disposeAndClear();
     Edit::dispose();
 }
 

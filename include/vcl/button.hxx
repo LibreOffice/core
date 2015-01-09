@@ -64,6 +64,7 @@ protected:
 
 public:
     virtual            ~Button();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Click();
 
@@ -153,7 +154,6 @@ protected:
 public:
     explicit        PushButton( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        PushButton( vcl::Window* pParent, const ResId& );
-    virtual         ~PushButton();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
@@ -335,6 +335,7 @@ public:
     explicit        RadioButton( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        RadioButton( vcl::Window* pParent, const ResId& );
     virtual         ~RadioButton();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
@@ -517,9 +518,8 @@ private:
                             ImageButton & operator= ( const ImageButton & ) SAL_DELETED_FUNCTION;
 
 public:
-                    ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
-                    ImageButton( vcl::Window* pParent, const ResId& rResId );
-                    virtual ~ImageButton();
+                 ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
+                 ImageButton( vcl::Window* pParent, const ResId& rResId );
 };
 
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
@@ -529,7 +529,6 @@ class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
 
 public:
     explicit        ImageRadioButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~ImageRadioButton();
 };
 
 class VCL_DLLPUBLIC TriStateBox : public CheckBox
@@ -539,7 +538,6 @@ class VCL_DLLPUBLIC TriStateBox : public CheckBox
 
 public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~TriStateBox();
 };
 
 class VCL_DLLPUBLIC DisclosureButton : public CheckBox
