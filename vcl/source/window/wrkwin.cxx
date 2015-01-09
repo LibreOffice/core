@@ -119,6 +119,12 @@ WorkWindow::~WorkWindow()
         pSVData->maWinData.mpAppWin = NULL;
         Application::Quit();
     }
+    dispose();
+}
+
+void WorkWindow::dispose()
+{
+    SystemWindow::dispose();
 }
 
 void WorkWindow::ShowFullScreenMode( bool bFullScreenMode )

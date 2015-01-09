@@ -59,11 +59,19 @@ ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
 
 ButtonDialog::~ButtonDialog()
 {
+    dispose();
+}
+
+void ButtonDialog::dispose()
+{
     for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
         if ( it->mpPushButton && it->mbOwnButton )
             delete it->mpPushButton;
     }
+    maItemList.clear();
+
+    Dialog::dispose();
 }
 
 PushButton* ButtonDialog::ImplCreatePushButton( sal_uInt16 nBtnFlags )

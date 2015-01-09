@@ -1846,7 +1846,15 @@ ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
 
 ImplBorderWindow::~ImplBorderWindow()
 {
+    dispose();
+}
+
+void ImplBorderWindow::dispose()
+{
     delete mpBorderView;
+    mpBorderView = NULL;
+
+    vcl::Window::dispose();
 }
 
 void ImplBorderWindow::MouseMove( const MouseEvent& rMEvt )

@@ -48,7 +48,8 @@ protected:
 public:
                         MessBox( vcl::Window* pParent, WinBits nStyle,
                                  const OUString& rTitle, const OUString& rMessage );
-                        virtual ~MessBox();
+    virtual             ~MessBox();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 

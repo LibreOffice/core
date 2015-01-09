@@ -151,9 +151,21 @@ MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
 
 MessBox::~MessBox()
 {
+    dispose();
+}
+
+void MessBox::dispose()
+{
     delete mpVCLMultiLineEdit;
+    mpVCLMultiLineEdit = NULL;
+
     delete mpFixedImage;
+    mpFixedImage = NULL;
+
     delete mpCheckBox;
+    mpCheckBox = NULL;
+
+    ButtonDialog::dispose();
 }
 
 void MessBox::ImplPosControls()

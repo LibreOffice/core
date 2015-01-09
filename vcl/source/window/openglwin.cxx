@@ -41,8 +41,16 @@ OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
 
 OpenGLWindow::~OpenGLWindow()
 {
+    dispose();
+}
+
+void OpenGLWindow::dispose()
+{
     if(mpRenderer)
         mpRenderer->contextDestroyed();
+    mpRenderer = NULL;
+
+    Window::dispose();
 }
 
 OpenGLContext& OpenGLWindow::getContext()

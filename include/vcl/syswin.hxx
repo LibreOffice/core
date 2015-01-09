@@ -172,7 +172,9 @@ protected:
 
     SAL_DLLPRIVATE void DoInitialLayout();
 public:
-                    virtual ~SystemWindow();
+    virtual         ~SystemWindow();
+    virtual void    dispose() SAL_OVERRIDE;
+
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

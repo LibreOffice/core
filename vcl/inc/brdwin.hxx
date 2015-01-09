@@ -83,14 +83,14 @@ class ImplBorderWindow : public vcl::Window
 
 private:
     ImplBorderWindowView*   mpBorderView;
-    vcl::Window*                 mpMenuBarWindow;
+    vcl::Window*            mpMenuBarWindow;
     long                    mnMinWidth;
     long                    mnMinHeight;
     long                    mnMaxWidth;
     long                    mnMaxHeight;
     long                    mnRollHeight;
     long                    mnOrgMenuHeight;
-    sal_uInt16                  mnTitleType;
+    sal_uInt16              mnTitleType;
     WindowBorderStyle       mnBorderStyle;
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
@@ -121,7 +121,8 @@ public:
                                               sal_uInt16 nTypeStyle = 0 );
                             ImplBorderWindow( vcl::Window* pParent, WinBits nStyle = 0,
                                               sal_uInt16 nTypeStyle = 0 );
-                            virtual ~ImplBorderWindow();
+    virtual                 ~ImplBorderWindow();
+    virtual void            dispose() SAL_OVERRIDE;
 
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

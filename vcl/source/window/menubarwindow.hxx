@@ -105,11 +105,11 @@ private:
     void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void            LoseFocus() SAL_OVERRIDE;
     void            GetFocus() SAL_OVERRIDE;
-    virtual void    dispose() SAL_OVERRIDE;
 
 public:
                     MenuBarWindow( vcl::Window* pParent );
-                    virtual ~MenuBarWindow();
+    virtual         ~MenuBarWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    ShowButtons(bool bClose, bool bFloat, bool bHide) SAL_OVERRIDE;
 

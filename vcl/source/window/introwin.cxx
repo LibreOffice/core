@@ -40,6 +40,12 @@ IntroWindow::IntroWindow( ) :
 
 IntroWindow::~IntroWindow()
 {
+    dispose();
+}
+
+void IntroWindow::dispose()
+{
+    // FIXME: really we should have a dispose & a ref-ptr there [!] ...
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->mpIntroWindow == this )
         pSVData->mpIntroWindow = NULL;

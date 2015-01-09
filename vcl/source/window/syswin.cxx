@@ -106,12 +106,20 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 
 SystemWindow::~SystemWindow()
 {
+    dispose();
+}
+
+void SystemWindow::dispose()
+{
     maLayoutIdle.Stop();
     delete mpImplData;
     mpImplData = NULL;
+
     // Hack to make sure code called from base ~Window does not interpret this
     // as a SystemWindow (which it no longer is by then):
     mpWindowImpl->mbSysWin = false;
+
+    Window::dispose();
 }
 
 bool SystemWindow::Notify( NotifyEvent& rNEvt )

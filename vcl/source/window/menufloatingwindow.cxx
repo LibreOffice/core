@@ -104,7 +104,14 @@ void MenuFloatingWindow::doShutdown()
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
+    dispose();
+}
+
+void MenuFloatingWindow::dispose()
+{
     doShutdown();
+
+    FloatingWindow::dispose();
 }
 
 void MenuFloatingWindow::Resize()

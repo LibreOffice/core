@@ -185,18 +185,30 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
 
 FloatingWindow::~FloatingWindow()
 {
-    if( mbPopupModeCanceled )
-        // indicates that ESC key was pressed
-        // will be handled in Window::ImplGrabFocus()
-        SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
+    dispose();
+}
 
-    if ( IsInPopupMode() )
-        EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL | FLOATWIN_POPUPMODEEND_DONTCALLHDL );
+void FloatingWindow::dispose()
+{
+    if (mpImplData)
+    {
+        if( mbPopupModeCanceled )
+            // indicates that ESC key was pressed
+            // will be handled in Window::ImplGrabFocus()
+            SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
 
-    if ( mnPostId )
-        Application::RemoveUserEvent( mnPostId );
+        if ( IsInPopupMode() )
+            EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL | FLOATWIN_POPUPMODEEND_DONTCALLHDL );
+
+        if ( mnPostId )
+            Application::RemoveUserEvent( mnPostId );
+        mnPostId = 0;
+    }
 
     delete mpImplData;
+    mpImplData = NULL;
+
+    SystemWindow::dispose();
 }
 
 Point FloatingWindow::CalcFloatingPosition( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )

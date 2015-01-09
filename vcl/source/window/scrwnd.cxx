@@ -84,8 +84,16 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
 
 ImplWheelWindow::~ImplWheelWindow()
 {
+    dispose();
+}
+
+void ImplWheelWindow::dispose()
+{
     ImplStop();
     delete mpTimer;
+    mpTimer = NULL;
+
+    FloatingWindow::dispose();
 }
 
 void ImplWheelWindow::ImplStop()

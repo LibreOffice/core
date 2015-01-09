@@ -122,6 +122,7 @@ public:
     explicit        FloatingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual         ~FloatingWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;

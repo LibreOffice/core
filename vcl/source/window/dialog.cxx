@@ -538,6 +538,8 @@ void Dialog::settingOptimalLayoutSize(Window *pBox)
 
 Dialog::~Dialog()
 {
+    dispose();
+
     delete mpDialogImpl;
     mpDialogImpl = NULL;
 }
