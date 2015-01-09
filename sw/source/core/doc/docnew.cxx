@@ -797,7 +797,7 @@ void SwDoc::ReadLayoutCache( SvStream& rStream )
 
 void SwDoc::WriteLayoutCache( SvStream& rStream )
 {
-    mpLayoutCache->Write( rStream, *this );
+    SwLayoutCache::Write( rStream, *this );
 }
 
 IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )

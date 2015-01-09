@@ -47,7 +47,7 @@ public:
     ~SwLayoutCache();
 
     void Read( SvStream &rStream );
-    void Write( SvStream &rStream, const SwDoc& rDoc );
+    static void Write( SvStream &rStream, const SwDoc& rDoc );
 
     void ClearImpl();
     bool IsLocked() const { return nLockCount > 0; }
