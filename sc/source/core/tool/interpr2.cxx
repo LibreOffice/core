@@ -1862,7 +1862,7 @@ void ScInterpreter::ScCumPrinc()
     }
 }
 
-void ScInterpreter::ScEffektiv()
+void ScInterpreter::ScEffective()
 {
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )

@@ -688,7 +688,7 @@ void ScIpmt();
 void ScPpmt();
 void ScCumIpmt();
 void ScCumPrinc();
-void ScEffektiv();
+void ScEffective();
 void ScNominal();
 void ScMod();
 void ScIntercept();
