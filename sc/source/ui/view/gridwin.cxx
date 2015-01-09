@@ -5740,12 +5740,17 @@ void ScGridWindow::UpdateCursorOverlay()
     SCCOL nX = pViewData->GetCurX();
     SCROW nY = pViewData->GetCurY();
 
-    if (!maVisibleRange.isInside(nX, nY))
+    ScDocument* pDoc = pViewData->GetDocument();
+    const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr(nX, nY, nTab, ATTR_MERGE);
+
+    // fdo#87382 Also display the cell cursor for the visible part of merged
+    // cells if the cell position is part of merged cells.
+    if (!(maVisibleRange.isInside(nX, nY) ||
+                maVisibleRange.isInside(nX + pMerge->GetColMerge(), nY + pMerge->GetRowMerge())))
         return;
 
     //  don't show the cursor in overlapped cells
 
-    ScDocument* pDoc = pViewData->GetDocument();
     const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
     const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>( pPattern->GetItem(ATTR_MERGE_FLAG) );
     bool bOverlapped = rMergeFlag.IsOverlapped();
