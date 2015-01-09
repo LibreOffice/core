@@ -670,7 +670,7 @@ double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
                 double fPeriode,double fFactor);
 void ScVDB();
 void ScDuration();
-void ScLIA();
+void ScSLN();
 double ScGetRmz(double fZins, double fZzr, double fBw,
                        double fZw, double fF);
 void ScRMZ();

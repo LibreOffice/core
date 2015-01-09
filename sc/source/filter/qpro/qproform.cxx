@@ -491,7 +491,7 @@ static const struct
     { ocZGZ, FT_FuncFix3 }, // Interest
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NotImpl },
-    { ocLIA, FT_FuncFix3 },
+    { ocSLN, FT_FuncFix3 },
     { ocSYD, FT_FuncFix4 },
     { ocDDB, FT_FuncFix4 },
     { ocStDevP, FT_FuncVar },
