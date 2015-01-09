@@ -250,7 +250,7 @@ enum OpCode : sal_uInt16
         ocGDA               = SC_OPCODE_GDA,
         ocDB                = SC_OPCODE_DB,
         ocVBD               = SC_OPCODE_VBD,
-        ocLaufz             = SC_OPCODE_LAUFZ,
+        ocDuration          = SC_OPCODE_DURATION,
         ocLIA               = SC_OPCODE_LIA,
         ocRMZ               = SC_OPCODE_RMZ,
         ocColumns           = SC_OPCODE_COLUMNS,
