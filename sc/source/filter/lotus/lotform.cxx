@@ -188,11 +188,11 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
         sal_Int16 nLast = nAnz - 1;
 
-        if( eOc == ocRMZ )
-        {   // special case ocRMZ, ignore (negate?) last parameter!
+        if( eOc == ocPMT )
+        {   // special case ocPMT, ignore (negate?) last parameter!
             // zusaetzlich: 1. -> 3., 3. -> 2., 2. -> 1.
             OSL_ENSURE( nAnz == 3,
-                "+LotusToSc::DoFunc(): ocRMZ needs 3 parameters!" );
+                "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
             aPool << eParam[ 1 ] << ocSep << eParam[ 0 ] << ocSep
                 << ocNegSub << eParam[ 2 ];
         }
@@ -982,7 +982,7 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocRandom,           //   53 Random number
         ocGetDate,          //   54 Date
         ocGetActDate,       //   55 Today
-        ocRMZ,              //   56 Payment
+        ocPMT,              //   56 Payment
         ocPV,               //   57 Present Value
         ocZW,               //   58 Future Value
         ocIf,               //   59 If ... then ... else ...
@@ -1511,7 +1511,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocRandom,           //   53 Random number
         ocGetDate,          //   54 Date
         ocGetActDate,       //   55 Today
-        ocRMZ,              //   56 Payment
+        ocPMT,              //   56 Payment
         ocPV,               //   57 Present Value
         ocZW,               //   58 Future Value
         ocIf,               //   59 If... then... else...

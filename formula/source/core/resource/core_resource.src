@@ -217,7 +217,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_VBD { Text = "VDB" ; };
     String SC_OPCODE_DURATION { Text = "PDURATION" ; };
     String SC_OPCODE_SLN { Text = "SLN" ; };
-    String SC_OPCODE_RMZ { Text = "PMT" ; };
+    String SC_OPCODE_PMT { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
     String SC_OPCODE_ROWS { Text = "ROWS" ; };
     String SC_OPCODE_TABLES { Text = "SHEETS" ; };
@@ -624,7 +624,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_VBD { Text = "VDB" ; };
     String SC_OPCODE_DURATION { Text = "_xlfn.PDURATION" ; };
     String SC_OPCODE_SLN { Text = "SLN" ; };
-    String SC_OPCODE_RMZ { Text = "PMT" ; };
+    String SC_OPCODE_PMT { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
     String SC_OPCODE_ROWS { Text = "ROWS" ; };
     String SC_OPCODE_TABLES { Text = "_xlfn.SHEETS" ; };
@@ -1033,7 +1033,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_VBD { Text = "VDB" ; };
     String SC_OPCODE_DURATION { Text = "DURATION" ; };
     String SC_OPCODE_SLN { Text = "SLN" ; };
-    String SC_OPCODE_RMZ { Text = "PMT" ; };
+    String SC_OPCODE_PMT { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
     String SC_OPCODE_ROWS { Text = "ROWS" ; };
     String SC_OPCODE_TABLES { Text = "SHEETS" ; };
@@ -1951,7 +1951,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "SLN" ;
     };
-    String SC_OPCODE_RMZ
+    String SC_OPCODE_PMT
     {
         Text [ en-US ] = "PMT" ;
     };

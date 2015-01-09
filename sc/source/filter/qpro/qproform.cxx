@@ -499,7 +499,7 @@ static const struct
     { ocDBStdDevP, FT_FuncVar },
     { ocDBVarP, FT_FuncVar },
     { ocPV, FT_FuncFix3 },  // QPro Pval
-    { ocRMZ, FT_FuncFix5 }, // QPro Paymt
+    { ocPMT, FT_FuncFix5 }, // QPro Paymt
     { ocZW, FT_FuncFix3 },  // QPro Fval   // 0x80
     { ocZZR, FT_FuncFix5 },
     { ocRate, FT_FuncFix5 },
