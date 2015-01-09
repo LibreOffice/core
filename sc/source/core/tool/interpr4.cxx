@@ -4035,7 +4035,7 @@ StackVar ScInterpreter::Interpret()
                 case ocColumn           : ScColumn();                   break;
                 case ocRow              : ScRow();                      break;
                 case ocTable            : ScTable();                    break;
-                case ocZGZ              : ScZGZ();                      break;
+                case ocRRI              : ScRRI();                      break;
                 case ocZW               : ScZW();                       break;
                 case ocZZR              : ScZZR();                      break;
                 case ocRate             : ScRate();                     break;

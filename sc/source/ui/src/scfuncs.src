@@ -2236,8 +2236,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The future value of the investment." ;
         };
     };
-     // -=*# Resource for function ZGZ #*=-
-    Resource SC_OPCODE_ZGZ
+     // -=*# Resource for function RRI #*=-
+    Resource SC_OPCODE_RRI
     {
         String 1 // Description
         {

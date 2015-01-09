@@ -1172,7 +1172,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocMIRR:
             case ocPMT:
             case ocRate:
-            case ocZGZ:
+            case ocRRI:
             case ocPpmt:
             case ocFisher:
             case ocFisherInv:
