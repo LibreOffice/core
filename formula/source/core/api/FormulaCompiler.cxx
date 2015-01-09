@@ -99,7 +99,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocVBD:
         case ocSLN:
         case ocPMT:
-        case ocZW:
+        case ocFV:
         case ocIpmt:
         case ocPpmt:
         case ocCumIpmt:
