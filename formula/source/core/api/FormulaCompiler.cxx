@@ -103,7 +103,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocIpmt:
         case ocPpmt:
         case ocCumIpmt:
-        case ocKumKapZ:
+        case ocCumPrinc:
             return NUMBERFORMAT_CURRENCY;
         case ocRate:
         case ocIRR:
