@@ -135,7 +135,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocRKP,                51,     1,  2,  A, { RA, RA, C, C }, 0, 0 },
     { ocGrowth,             52,     1,  3,  A, { RA, RA, RA, C }, 0, 0 },
     { ocPV,                 56,     3,  5,  V, { VR }, 0, 0 },
-    { ocZW,                 57,     3,  5,  V, { VR }, 0, 0 },
+    { ocFV,                 57,     3,  5,  V, { VR }, 0, 0 },
     { ocZZR,                58,     3,  5,  V, { VR }, 0, 0 },
     { ocPMT,                59,     3,  5,  V, { VR }, 0, 0 },
     { ocRate,               60,     3,  6,  V, { VR }, 0, 0 },

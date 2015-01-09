@@ -4036,7 +4036,7 @@ StackVar ScInterpreter::Interpret()
                 case ocRow              : ScRow();                      break;
                 case ocTable            : ScTable();                    break;
                 case ocRRI              : ScRRI();                      break;
-                case ocZW               : ScZW();                       break;
+                case ocFV               : ScFV();                       break;
                 case ocZZR              : ScZZR();                      break;
                 case ocRate             : ScRate();                     break;
                 case ocFilterXML        : ScFilterXML();                break;
