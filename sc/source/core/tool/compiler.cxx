@@ -4160,8 +4160,7 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
         {
             vector<OUString> aTabNames;
             pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-            if (aTabNames.empty())
-                return;
+            assert(!aTabNames.empty()); // something is seriously wrong, but continue
 
             pConv->makeExternalRefStr(
                 rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
