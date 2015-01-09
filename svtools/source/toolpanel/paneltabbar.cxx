@@ -1297,7 +1297,7 @@ namespace svt
     {
         Control::DataChanged( i_rDataChanedEvent );
 
-        if  (   ( i_rDataChanedEvent.GetType() == DATACHANGED_SETTINGS )
+        if  (   ( i_rDataChanedEvent.GetType() == DataChangedEventType::SETTINGS )
             &&  ( ( i_rDataChanedEvent.GetFlags() & SETTINGS_STYLE ) != 0 )
             )
         {

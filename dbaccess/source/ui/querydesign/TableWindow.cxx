@@ -296,7 +296,7 @@ bool OTableWindow::Init()
 
 void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS)
     {
         // In the worst-case the colours have changed so
         // adapt myself to the new colours

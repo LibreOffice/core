@@ -194,8 +194,8 @@ namespace svt
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         FixedText::DataChanged( rDCEvt );
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+        if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
+            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             const Color& rGBColor = GetControlBackground();

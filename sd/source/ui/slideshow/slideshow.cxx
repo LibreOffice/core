@@ -89,7 +89,7 @@ namespace {
 
         virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE
         {
-            if (rEvent.GetType() == DATACHANGED_DISPLAY)
+            if (rEvent.GetType() == DataChangedEventType::DISPLAY)
                 Restart(false);
         }
 

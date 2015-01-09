@@ -92,7 +92,7 @@ void GalleryPreview::InitSettings()
 
 void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitSettings();
     else
         Window::DataChanged( rDCEvt );
@@ -303,7 +303,7 @@ void GalleryIconView::InitSettings()
 
 void GalleryIconView::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitSettings();
     else
         ValueSet::DataChanged( rDCEvt );
@@ -445,7 +445,7 @@ void GalleryListView::InitSettings()
 
 void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitSettings();
     else
         BrowseBox::DataChanged( rDCEvt );

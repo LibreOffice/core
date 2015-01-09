@@ -1351,7 +1351,7 @@ void DialogWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
 
 void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if( (rDCEvt.GetType()==DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         InitSettings( true, true, true );
         Invalidate();

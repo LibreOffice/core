@@ -3689,7 +3689,7 @@ void Window::EnableNativeWidget( bool bEnable )
 
         // send datachanged event to allow for internal changes required for NWF
         // like clipmode, transparency, etc.
-        DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, mxSettings.get(), SETTINGS_STYLE );
+        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, mxSettings.get(), SETTINGS_STYLE );
         DataChanged( aDCEvt );
 
         // sometimes the borderwindow is queried, so keep it in sync

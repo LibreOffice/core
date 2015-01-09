@@ -209,7 +209,7 @@ void ProgressBar::StateChanged( StateChangedType nType )
 
 void ProgressBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         ImplInitSettings( true, true, true );

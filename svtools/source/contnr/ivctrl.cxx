@@ -366,9 +366,9 @@ void SvtIconChoiceCtrl::StateChanged( StateChangedType nType )
 
 void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ((rDCEvt.GetType() == DATACHANGED_SETTINGS) ||
-         (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
-         (rDCEvt.GetType() == DATACHANGED_FONTS) ) &&
+    if ( ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) ||
+         (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+         (rDCEvt.GetType() == DataChangedEventType::FONTS) ) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         _pImp->InitSettings();

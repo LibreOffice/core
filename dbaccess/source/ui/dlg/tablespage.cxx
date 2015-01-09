@@ -121,8 +121,8 @@ namespace dbaui
     {
         OGenericAdministrationPage::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+        if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
+            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             // Check if we need to get new images for normal/high contrast mode

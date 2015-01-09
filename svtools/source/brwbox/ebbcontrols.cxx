@@ -269,7 +269,7 @@ namespace svt
 
     void CheckBoxControl::DataChanged( const DataChangedEvent& _rEvent )
     {
-        if ( _rEvent.GetType() == DATACHANGED_SETTINGS )
+        if ( _rEvent.GetType() == DataChangedEventType::SETTINGS )
             pBox->SetSettings( GetSettings() );
     }
 

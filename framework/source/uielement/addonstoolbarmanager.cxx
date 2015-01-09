@@ -467,8 +467,8 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 
 IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
 {
-    if ((( pDataChangedEvent->GetType() == DATACHANGED_SETTINGS )   ||
-        (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
+    if ((( pDataChangedEvent->GetType() == DataChangedEventType::SETTINGS )   ||
+        (  pDataChangedEvent->GetType() == DataChangedEventType::DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
         CheckAndUpdateImages();

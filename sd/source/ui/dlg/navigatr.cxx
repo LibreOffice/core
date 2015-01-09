@@ -826,7 +826,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 
 void SdNavigatorWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
             ApplyImageList();
 
     Window::DataChanged( rDCEvt );

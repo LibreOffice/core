@@ -1813,7 +1813,7 @@ void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SvxTabPage::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         FillListboxes();
     }

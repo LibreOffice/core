@@ -135,7 +135,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     pSh->LockView( true );
     switch( rDCEvt.GetType() )
     {
-    case DATACHANGED_SETTINGS:
+    case DataChangedEventType::SETTINGS:
         // rearrange ScrollBars, respectively trigger resize, because
         // the ScrollBar size can have change. For that, in the reset
         // handler, the size of the ScrollBars also has to be queried
@@ -149,14 +149,15 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         }
         break;
 
-    case DATACHANGED_PRINTER:
-    case DATACHANGED_DISPLAY:
-    case DATACHANGED_FONTS:
-    case DATACHANGED_FONTSUBSTITUTION:
+    case DataChangedEventType::PRINTER:
+    case DataChangedEventType::DISPLAY:
+    case DataChangedEventType::FONTS:
+    case DataChangedEventType::FONTSUBSTITUTION:
         pSh->LockPaint();
         bUnlockPaint = true;
         GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         break;
+    default: break;
     }
     pSh->LockView( bViewWasLocked );
     if( bUnlockPaint )

@@ -3771,7 +3771,7 @@ void SvTreeListBox::ShowFocusRect( const SvTreeListEntry* pEntry )
 
 void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if( (rDCEvt.GetType()==DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         nEntryHeight = 0;   // _together_ with true of 1. par (bFont) of InitSettings() a zero-height
                             //  forces complete recalc of heights!

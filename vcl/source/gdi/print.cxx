@@ -1798,7 +1798,7 @@ void Printer::updatePrinters()
             Application* pApp = GetpApp();
             if( pApp )
             {
-                DataChangedEvent aDCEvt( DATACHANGED_PRINTER );
+                DataChangedEvent aDCEvt( DataChangedEventType::PRINTER );
                 Application::NotifyAllWindows( aDCEvt );
             }
         }

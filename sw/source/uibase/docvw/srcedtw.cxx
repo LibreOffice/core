@@ -299,7 +299,7 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
     switch ( rDCEvt.GetType() )
     {
-    case DATACHANGED_SETTINGS:
+    case DataChangedEventType::SETTINGS:
         // newly rearrange ScrollBars or trigger Resize, because
         // ScrollBar size could have changed. For this, in the
         // Resize handler the size of ScrollBars has to be queried
@@ -307,6 +307,7 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
             Resize();
         break;
+    default: break;
     }
 }
 
@@ -368,7 +369,7 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
 
     switch( rDCEvt.GetType() )
     {
-    case DATACHANGED_SETTINGS:
+    case DataChangedEventType::SETTINGS:
         // query settings
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
@@ -379,6 +380,7 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
             pTextView->GetTextEngine()->SetFont( aFont );
         }
         break;
+    default: break;
     }
 }
 

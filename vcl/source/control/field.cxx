@@ -798,7 +798,7 @@ void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
@@ -935,7 +935,7 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
@@ -1681,7 +1681,7 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
@@ -1782,7 +1782,7 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
@@ -2012,7 +2012,7 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
@@ -2094,7 +2094,7 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
         OUString sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
         OUString sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();

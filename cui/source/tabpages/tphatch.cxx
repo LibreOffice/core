@@ -821,7 +821,7 @@ void SvxHatchTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
 
 void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         m_pCtlPreview->SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
     SvxTabPage::DataChanged( rDCEvt );

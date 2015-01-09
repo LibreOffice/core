@@ -1458,7 +1458,7 @@ void ModulWindowLayout::Paint (Rectangle const&)
 void ModulWindowLayout::DataChanged (DataChangedEvent const& rDCEvt)
 {
     Layout::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE))
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE))
         aSyntaxColors.SettingsChanged();
 }
 

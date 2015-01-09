@@ -192,7 +192,7 @@ void SmToolBoxWindow::ApplyImageLists( sal_uInt16 nCategoryRID )
 
 void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 {
-    if ( (rEvt.GetType() == DATACHANGED_SETTINGS) && (rEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rEvt.GetType() == DataChangedEventType::SETTINGS) && (rEvt.GetFlags() & SETTINGS_STYLE) )
         ApplyImageLists( nActiveCategoryRID );
 
     SfxFloatingWindow::DataChanged( rEvt );

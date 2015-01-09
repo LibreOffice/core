@@ -479,30 +479,32 @@ inline const CommandEvent* NotifyEvent::GetCommandEvent() const
 // - DataChangedEvent -
 
 
-#define DATACHANGED_SETTINGS            ((sal_uInt16)1)
-#define DATACHANGED_DISPLAY             ((sal_uInt16)2)
-#define DATACHANGED_DATETIME            ((sal_uInt16)3)
-#define DATACHANGED_FONTS               ((sal_uInt16)4)
-#define DATACHANGED_PRINTER             ((sal_uInt16)5)
-#define DATACHANGED_FONTSUBSTITUTION    ((sal_uInt16)6)
-#define DATACHANGED_USER                ((sal_uInt16)10000)
+enum class DataChangedEventType {
+    NONE               = 0,
+    SETTINGS           = 1,
+    DISPLAY            = 2,
+    FONTS              = 4,
+    PRINTER            = 5,
+    FONTSUBSTITUTION   = 6,
+    USER               = 10000
+};
 
 class VCL_DLLPUBLIC DataChangedEvent
 {
 private:
     void*                   mpData;
-    sal_uLong                   mnFlags;
-    sal_uInt16                  mnType;
+    sal_uLong               mnFlags;
+    DataChangedEventType    mnType;
 
 public:
     explicit                DataChangedEvent();
-    explicit                DataChangedEvent( sal_uInt16 nType,
+    explicit                DataChangedEvent( DataChangedEventType nType,
                                               const void* pData = NULL,
                                               sal_uLong nFlags = 0 );
 
-    sal_uInt16                  GetType() const { return mnType; }
+    DataChangedEventType    GetType() const { return mnType; }
     void*                   GetData() const { return mpData; }
-    sal_uLong                   GetFlags() const { return mnFlags; }
+    sal_uLong               GetFlags() const { return mnFlags; }
 
     const AllSettings*      GetOldSettings() const;
 };
@@ -511,10 +513,10 @@ inline DataChangedEvent::DataChangedEvent()
 {
     mpData  = NULL;
     mnFlags = 0;
-    mnType  = 0;
+    mnType  = DataChangedEventType::NONE;
 }
 
-inline DataChangedEvent::DataChangedEvent( sal_uInt16 nType,
+inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
                                            const void* pData,
                                            sal_uLong nChangeFlags )
 {
@@ -525,7 +527,7 @@ inline DataChangedEvent::DataChangedEvent( sal_uInt16 nType,
 
 inline const AllSettings* DataChangedEvent::GetOldSettings() const
 {
-    if ( mnType == DATACHANGED_SETTINGS )
+    if ( mnType == DataChangedEventType::SETTINGS )
         return (const AllSettings*)mpData;
     else
         return NULL;

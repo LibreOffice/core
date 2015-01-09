@@ -65,7 +65,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwEnvPreview(vcl::Wind
 void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-    if ( DATACHANGED_SETTINGS == rDCEvt.GetType() )
+    if ( DataChangedEventType::SETTINGS == rDCEvt.GetType() )
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
 }
 

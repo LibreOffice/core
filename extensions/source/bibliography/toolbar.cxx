@@ -519,7 +519,7 @@ void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
 
 void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
             ApplyImageList();
     ToolBox::DataChanged( rDCEvt );

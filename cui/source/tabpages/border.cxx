@@ -1187,7 +1187,7 @@ IMPL_LINK( SvxBorderTabPage, SyncHdl_Impl, CheckBox*, pBox)
 
 void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         FillValueSets();
 
     SfxTabPage::DataChanged( rDCEvt );

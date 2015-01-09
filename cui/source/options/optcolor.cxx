@@ -803,7 +803,7 @@ bool ColorConfigWindow_Impl::IsGroupVisible (Group eGroup) const
 void ColorConfigWindow_Impl::DataChanged (DataChangedEvent const& rDCEvt)
 {
     Window::DataChanged( rDCEvt );
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         StyleSettings const& rStyleSettings = GetSettings().GetStyleSettings();
@@ -972,7 +972,7 @@ void ColorConfigCtrl_Impl::Command( const CommandEvent& rCEvt )
 void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

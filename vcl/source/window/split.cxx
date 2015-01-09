@@ -668,7 +668,7 @@ bool Splitter::Notify( NotifyEvent& rNEvt )
 void Splitter::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-    if( rDCEvt.GetType() == DATACHANGED_SETTINGS )
+    if( rDCEvt.GetType() == DataChangedEventType::SETTINGS )
     {
         const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
         if(!pOldSettings)

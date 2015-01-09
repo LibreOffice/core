@@ -1532,10 +1532,10 @@ void ValueSet::DataChanged( const DataChangedEvent& rDataChangedEvent )
 {
     Control::DataChanged( rDataChangedEvent );
 
-    if ( rDataChangedEvent.GetType() == DATACHANGED_FONTS ||
-         rDataChangedEvent.GetType() == DATACHANGED_DISPLAY ||
-         rDataChangedEvent.GetType() == DATACHANGED_FONTSUBSTITUTION ||
-         (rDataChangedEvent.GetType() == DATACHANGED_SETTINGS &&
+    if ( rDataChangedEvent.GetType() == DataChangedEventType::FONTS ||
+         rDataChangedEvent.GetType() == DataChangedEventType::DISPLAY ||
+         rDataChangedEvent.GetType() == DataChangedEventType::FONTSUBSTITUTION ||
+         (rDataChangedEvent.GetType() == DataChangedEventType::SETTINGS &&
           rDataChangedEvent.GetFlags() & SETTINGS_STYLE) )
     {
         mbFormat = true;

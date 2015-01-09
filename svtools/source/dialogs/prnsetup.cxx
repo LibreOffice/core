@@ -323,7 +323,7 @@ bool PrinterSetupDialog::Notify( NotifyEvent& rNEvt )
 
 void PrinterSetupDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DATACHANGED_PRINTER )
+    if ( rDCEvt.GetType() == DataChangedEventType::PRINTER )
     {
         mpTempPrinter = ImplPrnDlgUpdatePrinter( mpPrinter, mpTempPrinter );
         Printer* pPrn;

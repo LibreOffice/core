@@ -583,7 +583,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
 void OJoinTableView::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS)
     {
         // consider the worst case: the colors changed, so adjust me
         InitColors();

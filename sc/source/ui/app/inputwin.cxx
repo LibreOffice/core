@@ -779,7 +779,7 @@ void ScInputWindow::StateChanged( StateChangedType nType )
 
 void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         //  update item images
         ScModule*        pScMod  = SC_MOD();
@@ -1109,7 +1109,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
             else
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();
-            DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
+            DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, NULL,  SETTINGS_STYLE );
 
             // this basically will trigger the reposititioning of the
             // items in the toolbar from ImplFormat ( which is controlled by
@@ -2032,7 +2032,7 @@ void ScTextWnd::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextDat
 
 void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         ImplInitSettings();

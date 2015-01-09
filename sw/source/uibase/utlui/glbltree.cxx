@@ -1246,7 +1246,7 @@ void SwLBoxString::Paint(
 
 void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));

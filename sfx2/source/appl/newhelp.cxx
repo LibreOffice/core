@@ -1647,8 +1647,8 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
-           ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
+    if ( ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) ||
+           ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) ) &&
          ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
@@ -2468,8 +2468,8 @@ void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
-           ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
+    if ( ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) ||
+           ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) ) &&
          ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );

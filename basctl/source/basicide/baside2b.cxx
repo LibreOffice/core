@@ -1024,7 +1024,7 @@ void EditorWindow::CreateEditEngine()
 void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
@@ -1542,7 +1542,7 @@ bool BreakPointWindow::SyncYOffset()
 void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
@@ -2065,7 +2065,7 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFaceColor());

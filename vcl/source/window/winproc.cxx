@@ -2105,35 +2105,35 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
     }
     else
     {
-        sal_uInt16 nType;
+        DataChangedEventType nType;
         switch ( nEvent )
         {
             case SALEVENT_VOLUMECHANGED:
-                nType = 0;
+                nType = DataChangedEventType::NONE;
                 break;
             case SALEVENT_PRINTERCHANGED:
                 ImplDeletePrnQueueList();
-                nType = DATACHANGED_PRINTER;
+                nType = DataChangedEventType::PRINTER;
                 break;
             case SALEVENT_DISPLAYCHANGED:
-                nType = DATACHANGED_DISPLAY;
+                nType = DataChangedEventType::DISPLAY;
                 break;
             case SALEVENT_FONTCHANGED:
                 OutputDevice::ImplUpdateAllFontData( true );
-                nType = DATACHANGED_FONTS;
+                nType = DataChangedEventType::FONTS;
                 break;
             case SALEVENT_DATETIMECHANGED:
-                nType = DATACHANGED_DATETIME;
+                nType = DataChangedEventType::NONE;
                 break;
             case SALEVENT_KEYBOARDCHANGED:
-                nType = 0;
+                nType = DataChangedEventType::NONE;
                 break;
             default:
-                nType = 0;
+                nType = DataChangedEventType::NONE;
                 break;
         }
 
-        if ( nType )
+        if ( nType != DataChangedEventType::NONE )
         {
             DataChangedEvent aDCEvt( nType );
             Application::NotifyAllWindows( aDCEvt );

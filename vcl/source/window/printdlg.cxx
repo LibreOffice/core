@@ -89,7 +89,7 @@ const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
     // react on settings changed
-    if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
+    if( i_rDCEvt.GetType() == DataChangedEventType::SETTINGS )
     {
         maPageVDev.SetBackground( Color( COL_WHITE ) );
     }
@@ -1190,7 +1190,7 @@ void PrintDialog::setupOptionalUI()
 void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
     // react on settings changed
-    if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
+    if( i_rDCEvt.GetType() == DataChangedEventType::SETTINGS )
         checkControlDependencies();
     ModalDialog::DataChanged( i_rDCEvt );
 }

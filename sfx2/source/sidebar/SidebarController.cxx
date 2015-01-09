@@ -284,7 +284,7 @@ void SAL_CALL SidebarController::requestLayout (void)
 
 void SidebarController::BroadcastPropertyChange (void)
 {
-    DataChangedEvent aEvent (DATACHANGED_USER);
+    DataChangedEvent aEvent (DataChangedEventType::USER);
     mpParentWindow->NotifyAllChildren(aEvent);
     mpParentWindow->Invalidate(INVALIDATE_CHILDREN);
 }

@@ -802,8 +802,8 @@ namespace svt
     {
         BrowseBox::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
-            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+        if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
+            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             ImplInitSettings( true, true, true );

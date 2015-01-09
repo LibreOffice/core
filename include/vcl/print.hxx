@@ -376,7 +376,7 @@ public:
 
     /** checks the printer list and updates it necessary
     *
-    *   sends a DataChanged event of type DATACHANGED_PRINTER
+    *   sends a DataChanged event of type DataChangedEventType::PRINTER
     *   if the printer list changed
     */
     static void                 updatePrinters();

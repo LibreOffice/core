@@ -2352,7 +2352,7 @@ void SvtFileDialog::implUpdateImages( )
 
 void SvtFileDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 {
-    if ( DATACHANGED_SETTINGS == _rDCEvt.GetType() )
+    if ( DataChangedEventType::SETTINGS == _rDCEvt.GetType() )
         implUpdateImages( );
 
     ModalDialog::DataChanged( _rDCEvt );

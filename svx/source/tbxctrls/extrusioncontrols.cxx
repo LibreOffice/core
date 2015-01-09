@@ -108,7 +108,7 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ToolbarMenu::DataChanged( rDCEvt );
 
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         for( sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
         {
@@ -656,7 +656,7 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ToolbarMenu::DataChanged( rDCEvt );
 
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         implSetDirection( mnDirection, mbDirectionEnabled );
         setEntryImage( 0, maImgBright );

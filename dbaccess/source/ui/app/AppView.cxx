@@ -137,10 +137,10 @@ void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
-        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
-        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
+        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings();
@@ -229,10 +229,10 @@ void OApplicationView::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ODataView::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
-        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
-        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
+        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings();

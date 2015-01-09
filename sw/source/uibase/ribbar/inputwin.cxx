@@ -161,7 +161,7 @@ void SwInputWindow::CleanupUglyHackWithUndo()
 
 void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         // update item images
         SwModule *pMod  = SW_MOD();

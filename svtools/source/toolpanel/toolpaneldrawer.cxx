@@ -257,7 +257,7 @@ namespace svt
 
         switch ( i_rEvent.GetType() )
         {
-            case DATACHANGED_SETTINGS:
+            case DataChangedEventType::SETTINGS:
                 if ( ( i_rEvent.GetFlags() & SETTINGS_STYLE ) == 0 )
                     break;
                 SetSettings( Application::GetSettings() );
@@ -265,8 +265,8 @@ namespace svt
 
                 // fall through.
 
-            case DATACHANGED_FONTS:
-            case DATACHANGED_FONTSUBSTITUTION:
+            case DataChangedEventType::FONTS:
+            case DataChangedEventType::FONTSUBSTITUTION:
             {
                 const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
 
@@ -288,6 +288,7 @@ namespace svt
                 Invalidate();
             }
             break;
+            default: break;
         }
     }
 

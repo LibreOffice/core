@@ -272,7 +272,7 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         SetOptimalSize();

@@ -898,7 +898,7 @@ void SvxLineDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxTabPage::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         sal_Int32 nOldSelect = m_pLbLineStyles->GetSelectEntryPos();
         m_pLbLineStyles->Clear();

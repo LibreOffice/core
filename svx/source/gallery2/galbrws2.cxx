@@ -507,7 +507,7 @@ void GalleryBrowser2::InitSettings()
 
 void GalleryBrowser2::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitSettings();
     else
         Control::DataChanged( rDCEvt );

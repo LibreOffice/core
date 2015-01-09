@@ -156,7 +156,7 @@ void OTableWindowTitle::MouseButtonDown( const MouseEvent& rEvt )
 
 void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS)
     {
         // assume worst-case: colours have changed, therefore I have to adept
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();

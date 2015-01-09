@@ -552,10 +552,10 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SolarMutexClearableGuard aGuard;
 
-    if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS         ) ||
-         ( rDCEvt.GetType() == DATACHANGED_FONTS            ) ||
-         ( rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION ) ||
-         ( rDCEvt.GetType() == DATACHANGED_DISPLAY          ))  &&
+    if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS         ) ||
+         ( rDCEvt.GetType() == DataChangedEventType::FONTS            ) ||
+         ( rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION ) ||
+         ( rDCEvt.GetType() == DataChangedEventType::DISPLAY          ))  &&
          ( rDCEvt.GetFlags() & SETTINGS_STYLE               ))
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;

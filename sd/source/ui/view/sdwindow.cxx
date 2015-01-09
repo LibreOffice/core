@@ -719,14 +719,14 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
        Omit FONTS and FONTSUBSTITUTION if no text output is available or if the
        document does not allow text.  */
 
-    if ( (rDCEvt.GetType() == DATACHANGED_PRINTER) ||
-         (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
-         (rDCEvt.GetType() == DATACHANGED_FONTS) ||
-         (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
-         ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::PRINTER) ||
+         (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
+         (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+         (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+         ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         {
             // When the screen zoom factor has changed then reset the zoom
@@ -793,20 +793,20 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             }
         }
 
-        if ( (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
-             ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        if ( (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
+             ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
               (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
         {
             /* Virtual devices, which also depends on the resolution or the
                system control, should be updated. Otherwise, we should update
-               the virtual devices at least at DATACHANGED_DISPLAY since some
+               the virtual devices at least at DataChangedEventType::DISPLAY since some
                systems allow to change the resolution and color depth during
                runtime. Or the virtual devices have to be updated when the color
                palette has changed since a different color matching can be used
                when outputting. */
         }
 
-        if ( rDCEvt.GetType() == DATACHANGED_FONTS )
+        if ( rDCEvt.GetType() == DataChangedEventType::FONTS )
         {
             /* If the document provides font choose boxes, we have to update
                them. I don't know how this looks like (also not really me, I
@@ -815,8 +815,8 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                Before we handle it here, discuss it with PB and me. */
         }
 
-        if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
-             (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) )
+        if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+             (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) )
         {
             /* Do reformating since the fonts of the document may no longer
                exist, or exist now, or are replaced with others. */
@@ -828,7 +828,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             }
         }
 
-        if ( rDCEvt.GetType() == DATACHANGED_PRINTER )
+        if ( rDCEvt.GetType() == DataChangedEventType::PRINTER )
         {
             /* I don't know how the handling should look like. Maybe we delete a
                printer and look what we have to do. Maybe I have to add

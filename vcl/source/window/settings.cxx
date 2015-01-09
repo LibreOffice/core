@@ -64,7 +64,7 @@ void Window::SetSettings( const AllSettings& rSettings, bool bChild )
 
     if ( nChangeFlags )
     {
-        DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
+        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
     }
 
@@ -130,7 +130,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
 
     if ( nChangeFlags )
     {
-        DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
+        DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
         // notify data change handler
         ImplCallEventListeners( VCLEVENT_WINDOW_DATACHANGED, &aDCEvt);

@@ -74,7 +74,7 @@ namespace toolkit
         if ( !i_pEvent || ( i_pEvent->GetId() != VCLEVENT_WINDOW_DATACHANGED ) )
             return 0L;
         const DataChangedEvent* pDataChangedEvent = static_cast< const DataChangedEvent* >( i_pEvent->GetData() );
-        if ( !pDataChangedEvent || ( pDataChangedEvent->GetType() != DATACHANGED_SETTINGS ) )
+        if ( !pDataChangedEvent || ( pDataChangedEvent->GetType() != DataChangedEventType::SETTINGS ) )
             return 0L;
         if ( ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE ) == 0 )
             return 0L;

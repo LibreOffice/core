@@ -93,10 +93,10 @@ void OApplicationSwapWindow::ImplInitSettings( bool bFont, bool bForeground, boo
 void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
-        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
-        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
-        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
+        (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
+        (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings( true, true, true );

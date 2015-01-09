@@ -570,7 +570,7 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
 
     switch( rDCEvt.GetType() )
     {
-    case DATACHANGED_SETTINGS:
+    case DataChangedEventType::SETTINGS:
         // Rearrange the scrollbars or trigger resize, because the
         // size of the scrollbars may have be changed. Also the
         // size of the scrollbars has to be retrieved from the settings
@@ -581,14 +581,15 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
         lcl_InvalidateZoomSlots(mrView.GetViewFrame()->GetBindings());
         break;
 
-    case DATACHANGED_PRINTER:
-    case DATACHANGED_DISPLAY:
-    case DATACHANGED_FONTS:
-    case DATACHANGED_FONTSUBSTITUTION:
+    case DataChangedEventType::PRINTER:
+    case DataChangedEventType::DISPLAY:
+    case DataChangedEventType::FONTS:
+    case DataChangedEventType::FONTSUBSTITUTION:
         mrView.GetDocShell()->UpdateFontList(); // Font change
         if ( mpViewShell->GetWin() )
             mpViewShell->GetWin()->Invalidate();
         break;
+    default: break;
     }
 }
 

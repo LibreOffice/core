@@ -70,7 +70,7 @@ void InsertErrorBarsDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ModalDialog::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         m_apErrorBarResources->FillValueSets();
 }
 

@@ -103,8 +103,8 @@ public:
             if (nEvent == VCLEVENT_APPLICATION_DATACHANGED )
             {
                 DataChangedEvent* pData = reinterpret_cast<DataChangedEvent*>(_pEvt->GetData());
-                if ( pData && ((( pData->GetType() == DATACHANGED_SETTINGS  )   ||
-                                ( pData->GetType() == DATACHANGED_DISPLAY   ))  &&
+                if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
+                                ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
                                ( pData->GetFlags() & SETTINGS_STYLE     )))
                 {
                     OEnvLock aLock(*this);

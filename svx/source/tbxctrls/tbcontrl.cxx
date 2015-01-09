@@ -521,7 +521,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
@@ -988,15 +988,15 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 
 void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
         SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
-    else if ( ( rDCEvt.GetType() == DATACHANGED_FONTS ) ||
-              ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) )
+    else if ( ( rDCEvt.GetType() == DataChangedEventType::FONTS ) ||
+              ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) )
     {
         // The old font list in shell has likely been destroyed at this point, so we need to get
         // the new one before doing anything further.
@@ -1520,7 +1520,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxPopupWindow::DataChanged( rDCEvt );
 
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
@@ -1830,7 +1830,7 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxPopupWindow::DataChanged( rDCEvt );
 #if 0
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         CreateBitmaps();
         Invalidate();

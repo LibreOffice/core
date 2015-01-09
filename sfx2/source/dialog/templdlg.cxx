@@ -292,7 +292,7 @@ SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
 
 void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
 {
-    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&
+    if ( ( DataChangedEventType::SETTINGS == _rDCEvt.GetType() ) &&
          ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
     {
         pImpl->updateFamilyImages();

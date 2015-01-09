@@ -949,7 +949,7 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ListBox::DataChanged( rDCEvt );
 
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         UpdateEntries( m_nWidth );
 }
 

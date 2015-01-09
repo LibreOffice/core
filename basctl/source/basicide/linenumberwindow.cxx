@@ -78,7 +78,7 @@ void LineNumberWindow::Paint( const Rectangle& )
 void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
         && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());

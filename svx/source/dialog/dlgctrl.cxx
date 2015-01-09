@@ -374,7 +374,7 @@ void SvxRectCtl::StateChanged( StateChangedType nType )
 
 void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitSettings( true, true );
     else
         Window::DataChanged( rDCEvt );
@@ -1914,7 +1914,7 @@ void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
 {
     SetDrawMode(GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
 
-    if((DATACHANGED_SETTINGS == rDCEvt.GetType()) && (rDCEvt.GetFlags() & SETTINGS_STYLE))
+    if((DataChangedEventType::SETTINGS == rDCEvt.GetType()) && (rDCEvt.GetFlags() & SETTINGS_STYLE))
     {
         InitSettings(true, true);
     }

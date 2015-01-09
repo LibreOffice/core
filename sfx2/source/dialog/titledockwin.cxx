@@ -287,12 +287,12 @@ namespace sfx2
 
         switch ( i_rDataChangedEvent.GetType() )
         {
-            case DATACHANGED_SETTINGS:
+            case DataChangedEventType::SETTINGS:
                 if ( ( i_rDataChangedEvent.GetFlags() & SETTINGS_STYLE ) == 0)
                     break;
                 // else fall through.
-            case DATACHANGED_FONTS:
-            case DATACHANGED_FONTSUBSTITUTION:
+            case DataChangedEventType::FONTS:
+            case DataChangedEventType::FONTSUBSTITUTION:
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -315,6 +315,7 @@ namespace sfx2
                 Invalidate();
             }
             break;
+            default: break;
         }
     }
 
