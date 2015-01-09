@@ -226,7 +226,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ROW { Text = "ROW" ; };
     String SC_OPCODE_TABLE { Text = "SHEET" ; };
     String SC_OPCODE_RRI { Text = "RRI" ; };
-    String SC_OPCODE_ZW { Text = "FV" ; };
+    String SC_OPCODE_FV { Text = "FV" ; };
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_RATE { Text = "RATE" ; };
     String SC_OPCODE_IPMT { Text = "IPMT" ; };
@@ -634,7 +634,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_ROW { Text = "ROW" ; };
     String SC_OPCODE_TABLE { Text = "_xlfn.SHEET" ; };
     String SC_OPCODE_RRI { Text = "_xlfn.RRI" ; };
-    String SC_OPCODE_ZW { Text = "FV" ; };
+    String SC_OPCODE_FV { Text = "FV" ; };
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_RATE { Text = "RATE" ; };
     String SC_OPCODE_IPMT { Text = "IPMT" ; };
@@ -1044,7 +1044,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROW { Text = "ROW" ; };
     String SC_OPCODE_TABLE { Text = "SHEET" ; };
     String SC_OPCODE_RRI { Text = "ZGZ" ; };
-    String SC_OPCODE_ZW { Text = "FV" ; };
+    String SC_OPCODE_FV { Text = "FV" ; };
     String SC_OPCODE_ZZR { Text = "NPER" ; };
     String SC_OPCODE_RATE { Text = "RATE" ; };
     String SC_OPCODE_IPMT { Text = "IPMT" ; };
@@ -1990,7 +1990,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "RRI" ;
     };
-    String SC_OPCODE_ZW
+    String SC_OPCODE_FV
     {
         Text [ en-US ] = "FV" ;
     };

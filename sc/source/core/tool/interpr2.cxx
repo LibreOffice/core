@@ -1510,7 +1510,7 @@ double ScInterpreter::ScGetZw(double fInterest, double fZzr, double fRmz,
     return -fZw;
 }
 
-void ScInterpreter::ScZW()
+void ScInterpreter::ScFV()
 {
     double nInterest, nZzr, nRmz, nBw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
