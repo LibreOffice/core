@@ -1550,6 +1550,12 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        if (dynamic_cast<const SfxSimpleHint*>(&rHint) &&
+            SFX_HINT_DYING == static_cast<const SfxSimpleHint&>(rHint).GetId())
+        {   // if the document dies, must reset to avoid crash in dtor!
+            ForgetCurrentAttrs();
+            pDocShell = nullptr;
+        }
         return;
     }
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
