@@ -27,10 +27,15 @@ public class Document {
     public static final int DOCTYPE_OTHER = 4;
 
     private final ByteBuffer handle;
+    private MessageCallback messageCallback = null;
 
     public Document(ByteBuffer handle) {
         this.handle = handle;
         bindMessageCallback();
+    }
+
+    public void setMessageCallback(MessageCallback messageCallback) {
+        this.messageCallback = messageCallback;
     }
 
     /**
@@ -38,7 +43,9 @@ public class Document {
      * from LibreOfficeKit was retrieved.
      */
     private void messageRetrieved(int signalNumber, String payload) {
-        Log.i("Document", "Signal retrieved: " + signalNumber + " " + payload);
+        if (messageCallback != null) {
+            messageCallback.messageRetrieved(signalNumber, payload);
+        }
     }
 
     /**
@@ -77,5 +84,9 @@ public class Document {
     }
 
     public native void initializeForRendering();
+
+    public interface MessageCallback {
+        void messageRetrieved(int signalNumber, String payload);
+    }
 
 }
