@@ -1373,13 +1373,13 @@ bool EnhWMFReader::ReadEnhWMF()
                              .ReadUChar( aLogFont.lfQuality )
                              .ReadUChar( aLogFont.lfPitchAndFamily );
 
-                        sal_Unicode lfFaceName[ LF_FACESIZE ];
-
-                        for ( int i = 0; i < LF_FACESIZE; i++ )
+                        sal_Unicode lfFaceName[LF_FACESIZE+1];
+                        lfFaceName[LF_FACESIZE] = 0;
+                        for (int i = 0; i < LF_FACESIZE; ++i)
                         {
-                            sal_uInt16 nChar;
-                            pWMF->ReadUInt16( nChar );
-                            lfFaceName[ i ] = nChar;
+                            sal_uInt16 nChar(0);
+                            pWMF->ReadUInt16(nChar);
+                            lfFaceName[i] = nChar;
                         }
                         aLogFont.alfFaceName = OUString( lfFaceName );
 
