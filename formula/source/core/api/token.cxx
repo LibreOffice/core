@@ -1260,7 +1260,7 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
                     case ocPpmt:
                         return AddDefaultArg( pNewArr, 4, 0.0 );
                     case ocPV:
-                    case ocZW:      // FV
+                    case ocFV:
                         bRet |= AddDefaultArg( pNewArr, 2, 0.0 );   // pmt
                         bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // [fp]v
                         break;

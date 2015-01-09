@@ -984,7 +984,7 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocGetActDate,       //   55 Today
         ocPMT,              //   56 Payment
         ocPV,               //   57 Present Value
-        ocZW,               //   58 Future Value
+        ocFV,               //   58 Future Value
         ocIf,               //   59 If ... then ... else ...
         ocGetDay,           //   60 Day of month
         ocGetMonth,         //   61 Month
@@ -1513,7 +1513,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocGetActDate,       //   55 Today
         ocPMT,              //   56 Payment
         ocPV,               //   57 Present Value
-        ocZW,               //   58 Future Value
+        ocFV,               //   58 Future Value
         ocIf,               //   59 If... then... else...
         ocGetDay,           //   60 Day of Month
         ocGetMonth,         //   61 Month
