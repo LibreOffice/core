@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_targets,xmloff,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,xmloff,\
-	$(if $(and $(filter $(COM),MSC),$(MERGELIBS)),, \
+	$(if $(MERGELIBS),, \
 		CppunitTest_xmloff_uxmloff) \
 ))
 
