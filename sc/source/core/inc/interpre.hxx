@@ -680,7 +680,7 @@ void ScRRI();
 double ScGetZw(double fZins, double fZzr, double fRmz,
                       double fBw, double fF);
 void ScFV();
-void ScZZR();
+void ScNper();
 bool RateIteration(double fNper, double fPayment, double fPv,
                                 double fFv, double fPayType, double& fGuess);
 void ScRate();

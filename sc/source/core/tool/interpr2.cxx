@@ -1527,7 +1527,7 @@ void ScInterpreter::ScFV()
     PushDouble(ScGetZw(nInterest, nZzr, nRmz, nBw, nFlag));
 }
 
-void ScInterpreter::ScZZR()
+void ScInterpreter::ScNper()
 {
     double nInterest, nRmz, nBw, nZw = 0, nFlag = 0;
     sal_uInt8 nParamCount = GetByte();

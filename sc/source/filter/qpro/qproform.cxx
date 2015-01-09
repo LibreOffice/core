@@ -501,7 +501,7 @@ static const struct
     { ocPV, FT_FuncFix3 },  // QPro Pval
     { ocPMT, FT_FuncFix5 }, // QPro Paymt
     { ocFV, FT_FuncFix3 },  // QPro Fval   // 0x80
-    { ocZZR, FT_FuncFix5 },
+    { ocNper, FT_FuncFix5 },
     { ocRate, FT_FuncFix5 },
     { ocIpmt, FT_FuncFix4 },
     { ocPpmt, FT_FuncFix6 },
