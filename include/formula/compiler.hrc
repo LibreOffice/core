@@ -256,7 +256,7 @@
 #define SC_OPCODE_ROW               255
 #define SC_OPCODE_RRI               256
 #define SC_OPCODE_FV                257
-#define SC_OPCODE_ZZR               258
+#define SC_OPCODE_NPER              258
 #define SC_OPCODE_RATE              259
 #define SC_OPCODE_IPMT              260
 #define SC_OPCODE_PPMT              261
