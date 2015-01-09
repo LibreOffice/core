@@ -2310,7 +2310,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocGreater:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGreater, nResultSize));
                 break;
-            case ocDIA:
+            case ocSYD:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSYD, nResultSize));
                 break;
             case ocCorrel:
