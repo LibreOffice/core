@@ -257,7 +257,7 @@ enum OpCode : sal_uInt16
         ocRows              = SC_OPCODE_ROWS,
         ocColumn            = SC_OPCODE_COLUMN,
         ocRow               = SC_OPCODE_ROW,
-        ocZGZ               = SC_OPCODE_ZGZ,
+        ocRRI               = SC_OPCODE_RRI,
         ocZW                = SC_OPCODE_ZW,
         ocZZR               = SC_OPCODE_ZZR,
         ocRate              = SC_OPCODE_RATE,

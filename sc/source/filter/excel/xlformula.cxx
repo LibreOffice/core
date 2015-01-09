@@ -557,7 +557,7 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocDuration,      3,  3,  0,  "PDURATION" ),
     EXC_FUNCENTRY_V_VR(         ocPermutationA,  2,  2,  0,  "PERMUTATIONA" ),
     EXC_FUNCENTRY_V_VR(         ocPhi,           1,  1,  0,  "PHI" ),
-    EXC_FUNCENTRY_V_VR(         ocZGZ,           3,  3,  0,  "RRI" ),
+    EXC_FUNCENTRY_V_VR(         ocRRI,           3,  3,  0,  "RRI" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocSecant,        1,  1,  0,  "SEC" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocSecantHyp,     1,  1,  0,  "SECH" ),
     EXC_FUNCENTRY_V_RO(         ocTable,         0,  1,  0,  "SHEET" ),

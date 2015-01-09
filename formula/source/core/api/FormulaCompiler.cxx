@@ -108,7 +108,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocRate:
         case ocIRR:
         case ocMIRR:
-        case ocZGZ:
+        case ocRRI:
         case ocEffective:
         case ocNominal:
         case ocPercentSign:
@@ -917,7 +917,7 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r, bool bOverrideKno
             OpCode eOp = OpCode(i);
             switch (eOp)
             {
-                case ocZGZ:
+                case ocRRI:
                     aSymbol = "RRI";
                     break;
                 case ocTableOp:
