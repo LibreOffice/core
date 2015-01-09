@@ -2334,7 +2334,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocISPMT:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpISPMT, nResultSize));
                 break;
-            case ocLaufz:
+            case ocDuration:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpDuration, nResultSize));
                 break;

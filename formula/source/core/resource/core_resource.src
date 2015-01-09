@@ -215,7 +215,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_DDB { Text = "DDB" ; };
     String SC_OPCODE_DB { Text = "DB" ; };
     String SC_OPCODE_VBD { Text = "VDB" ; };
-    String SC_OPCODE_LAUFZ { Text = "PDURATION" ; };
+    String SC_OPCODE_DURATION { Text = "PDURATION" ; };
     String SC_OPCODE_LIA { Text = "SLN" ; };
     String SC_OPCODE_RMZ { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
@@ -622,7 +622,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_DDB { Text = "DDB" ; };
     String SC_OPCODE_DB { Text = "DB" ; };
     String SC_OPCODE_VBD { Text = "VDB" ; };
-    String SC_OPCODE_LAUFZ { Text = "_xlfn.PDURATION" ; };
+    String SC_OPCODE_DURATION { Text = "_xlfn.PDURATION" ; };
     String SC_OPCODE_LIA { Text = "SLN" ; };
     String SC_OPCODE_RMZ { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
@@ -1031,7 +1031,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_DDB { Text = "DDB" ; };
     String SC_OPCODE_DB { Text = "DB" ; };
     String SC_OPCODE_VBD { Text = "VDB" ; };
-    String SC_OPCODE_LAUFZ { Text = "DURATION" ; };
+    String SC_OPCODE_DURATION { Text = "DURATION" ; };
     String SC_OPCODE_LIA { Text = "SLN" ; };
     String SC_OPCODE_RMZ { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
@@ -1943,7 +1943,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "VDB" ;
     };
-    String SC_OPCODE_LAUFZ
+    String SC_OPCODE_DURATION
     {
         Text [ en-US ] = "DURATION" ;
     };
