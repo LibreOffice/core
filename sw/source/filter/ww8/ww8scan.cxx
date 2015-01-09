@@ -358,11 +358,12 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {108, { 0, L_VAR} }, // "sprmCMajority50" chp.fBold, chp.fItalic, ...
         {109, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps percentage to grow hps
         {110, { 2, L_FIX} }, // "sprmCCondHyhen" chp.ysri ysri
-        {111, { 2, L_FIX} }, // rtl bold
-        {112, { 2, L_FIX} }, // rtl italic
-        {113, { 0, L_VAR} }, // rtl property ?
-        {115, { 0, L_VAR} }, // rtl property ?
-        {116, { 0, L_VAR} }, // unknown
+        {111, { 2, L_FIX} }, // ww7 font
+        {112, { 2, L_FIX} }, // ww7 CJK font
+        {113, { 2, L_FIX} }, // ww7 rtl font
+        {114, { 2, L_FIX} }, // ww7 lid
+        {115, { 2, L_FIX} }, // ww7 rtl colour ?
+        {116, { 2, L_FIX} }, // ww7 fontsize
         {117, { 1, L_FIX} }, // "sprmCFSpec" chp.fSpec  1 or 0 bit
         {118, { 1, L_FIX} }, // "sprmCFObj" chp.fObj 1 or 0 bit
         {119, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl brcl (see PIC definition)
