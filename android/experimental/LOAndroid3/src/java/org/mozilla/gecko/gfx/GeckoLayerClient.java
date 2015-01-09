@@ -488,4 +488,9 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mLowResLayer.clearAndReset();
         mRootLayer.clearAndReset();
     }
+
+    public void invalidateTiles(RectF rect) {
+        mLowResLayer.invalidateTiles(rect);
+        mRootLayer.invalidateTiles(rect);
+    }
 }

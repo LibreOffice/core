@@ -211,4 +211,15 @@ public abstract class ComposedTileLayer extends Layer {
     public boolean isStillValid(TileIdentifier tileId) {
         return RectF.intersects(currentViewport, tileId.getRect()) || currentViewport.contains(tileId.getRect());
     }
+
+    public void invalidateTiles(RectF rect) {
+        Log.i(LOGTAG, "invalidate: " + rect);
+        for (SubTile tile : tiles) {
+            if (RectF.intersects(rect, tile.id.getRect()) || rect.contains(tile.id.getRect())) {
+                tile.markForRemoval();
+                LOKitShell.sendEvent(LOEventFactory.tileRequest(this, tile.id, true));
+                Log.i(LOGTAG, "invalidate tile: " + tile.id);
+            }
+        }
+    }
 }

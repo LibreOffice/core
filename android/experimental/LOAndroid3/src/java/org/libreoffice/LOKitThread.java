@@ -13,7 +13,7 @@ import org.mozilla.gecko.gfx.SubTile;
 
 import java.util.concurrent.PriorityBlockingQueue;
 
-public class LOKitThread extends Thread {
+public class LOKitThread extends Thread implements TileProvider.TileInvalidationCallback {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
     private PriorityBlockingQueue<LOEvent> mEventQueue = new PriorityBlockingQueue<LOEvent>();
@@ -89,6 +89,7 @@ public class LOKitThread extends Thread {
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             LOKitShell.showProgressSpinner();
+            mTileProvider.registerInvalidationCallback(this);
             refresh();
             LOKitShell.hideProgressSpinner();
         }
@@ -145,6 +146,12 @@ public class LOKitThread extends Thread {
 
     public void clearQueue() {
         mEventQueue.clear();
+    }
+
+    @Override
+    public void invalidate(RectF rect) {
+        mLayerClient = mApplication.getLayerClient();
+        mLayerClient.invalidateTiles(rect);
     }
 }
 
