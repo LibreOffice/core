@@ -3351,30 +3351,6 @@ vs_versions_to_check()
     fi
 }
 
-find_msvs()
-{
-    # Find Visual Studio 2013
-    # Args: $1 (optional) : versions to check, in the order of preference
-    # Return value: $vstest
-
-    unset vstest
-
-    vs_versions_to_check "$1"
-
-    for ver in $vsversions; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/ProductDir
-        if test -n "$regvalue"; then
-            vstest=$regvalue
-            break
-        fi
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VS/ProductDir
-        if test -n "$regvalue"; then
-            vstest=$regvalue
-            break
-        fi
-    done
-}
-
 find_msvc()
 {
     # Find Visual C++ 2013
@@ -3538,6 +3514,21 @@ if test "$_os" = "WINNT"; then
                 CC="$CC -arch:SSE"
             fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
+
+			dnl ===================================================================
+			dnl If parallelism is enabled, VS2013 needs /FS to serialize PDB access.
+			dnl See http://msdn.microsoft.com/en-us/library/dn502518.aspx
+			dnl ===================================================================
+			# plain --with-parallelism is just the default
+			if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
+				if test "$with_parallelism" != "no" && test $with_parallelism -gt 1; then
+					echo "parallelism enabled, adding -FS to cl to serialize pdb access..."
+					CC="$CC -FS"
+				fi
+			else
+					echo "parallelism enabled, adding -FS to cl to serialize pdb access..."
+					CC="$CC -FS"
+			fi
 
             PathFormat "$COMPATH"
             COMPATH="$formatted_path"
