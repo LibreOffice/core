@@ -287,15 +287,15 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                     String[] coordinates = payload.split(",");
 
                     if (coordinates.length == 4) {
-                        int left = Integer.decode(coordinates[0].trim());
-                        int top = Integer.decode(coordinates[1].trim());
-                        int right = Integer.decode(coordinates[2].trim());
-                        int bottom = Integer.decode(coordinates[3].trim());
+                        int width = Integer.decode(coordinates[0].trim());
+                        int height = Integer.decode(coordinates[1].trim());
+                        int x = Integer.decode(coordinates[2].trim());
+                        int y = Integer.decode(coordinates[3].trim());
                         RectF rect = new RectF(
-                                twipToPixel(left, mDPI),
-                                twipToPixel(top, mDPI),
-                                twipToPixel(right, mDPI),
-                                twipToPixel(bottom, mDPI)
+                                twipToPixel(x, mDPI),
+                                twipToPixel(y, mDPI),
+                                twipToPixel(x + width, mDPI),
+                                twipToPixel(y + height, mDPI)
                         );
                         Log.i(LOGTAG, "Invalidate R: " + rect +" - " + getPageWidth() + " " + getPageHeight());
                         tileInvalidationCallback.invalidate(rect);
