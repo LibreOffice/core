@@ -248,7 +248,7 @@ enum OpCode : sal_uInt16
         ocPV                = SC_OPCODE_PV,
         ocSYD               = SC_OPCODE_SYD,
         ocGDA               = SC_OPCODE_GDA,
-        ocGDA2              = SC_OPCODE_GDA_2,
+        ocDB                = SC_OPCODE_DB,
         ocVBD               = SC_OPCODE_VBD,
         ocLaufz             = SC_OPCODE_LAUFZ,
         ocLIA               = SC_OPCODE_LIA,

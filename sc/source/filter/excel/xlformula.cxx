@@ -256,7 +256,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocAsc,                214,    1,  1,  V, { VR }, 0, 0 },
     { ocJis,                215,    1,  1,  V, { VR }, 0, 0 },
     { ocRank,               216,    2,  3,  V, { VR, RO, VR }, 0, 0 },
-    { ocGDA2,               247,    4,  5,  V, { VR }, 0, 0 },
+    { ocDB,                 247,    4,  5,  V, { VR }, 0, 0 },
     { ocFrequency,          252,    2,  2,  A, { RA }, 0, 0 },
     { ocErrorType,          261,    1,  1,  V, { VR }, 0, 0 },
     { ocAveDev,             269,    1,  MX, V, { RX }, 0, 0 },

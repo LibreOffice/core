@@ -1220,7 +1220,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocIpmt:
             case ocConfidence:
             case ocIntercept:
-            case ocGDA2:
+            case ocDB:
             case ocLogInv:
             case ocArcCot:
             case ocCosHyp:
