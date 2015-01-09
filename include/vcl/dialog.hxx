@@ -76,8 +76,8 @@ protected:
 
 protected:
     friend class VclBuilder;
-    void set_action_area(const VclPtr<VclButtonBox> &xBox);
-    void set_content_area(const VclPtr<VclBox> &xBox);
+    void set_action_area(VclButtonBox* pBox);
+    void set_content_area(VclBox* pBox);
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );

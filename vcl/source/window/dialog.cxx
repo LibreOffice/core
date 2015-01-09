@@ -509,14 +509,14 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle)
     ImplInit( pParent, nStyle );
 }
 
-void Dialog::set_action_area(const VclPtr<VclButtonBox> &xBox)
+void Dialog::set_action_area(VclButtonBox* pBox)
 {
-    mpActionArea = xBox;
+    mpActionArea.set(pBox);
 }
 
-void Dialog::set_content_area(const VclPtr<VclBox> &xBox)
+void Dialog::set_content_area(VclBox* pBox)
 {
-    mpContentArea = xBox;
+    mpContentArea.set(pBox);
 }
 
 void Dialog::settingOptimalLayoutSize(Window *pBox)

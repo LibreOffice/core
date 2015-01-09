@@ -237,7 +237,7 @@ public:
     virtual const Link& GetModifyHdl() const { return maModifyHdl; }
     virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
 
-    void                SetSubEdit( const VclPtr<Edit>& pEdit );
+    void                SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }
 
     boost::signals2::signal< void ( Edit* ) > autocompleteSignal;

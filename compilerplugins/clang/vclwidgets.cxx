@@ -37,8 +37,6 @@ public:
 
     bool VisitParmVarDecl(ParmVarDecl const * decl);
 
-    bool VisitVarDecl( const VarDecl* var );
-
     bool VisitFunctionDecl( const FunctionDecl* var );
 };
 
@@ -90,7 +88,7 @@ bool VCLWidgets::VisitCXXRecordDecl(const CXXRecordDecl * recordDecl) {
     }
     bool foundVclPtr = false;
     for(auto fieldDecl : recordDecl->fields()) {
-        if (fieldDecl->getType().getAsString().find("VclPtr")==0) {
+        if (fieldDecl->getType().getAsString().find("VclPtr") != std::string::npos) {
            foundVclPtr = true;
            break;
         }
@@ -153,38 +151,24 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     return true;
 }
 
-bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl) {
+bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
+{
     if (ignoreLocation(pvDecl)) {
         return true;
     }
-    // check if this parameter is derived from Window
-    if (isPointerToWindowSubclass(pvDecl->getType())) {
+    // ignore the stuff in the VclPtr template class
+    const CXXMethodDecl *pMethodDecl = dyn_cast<CXXMethodDecl>(pvDecl->getDeclContext());
+    if (pMethodDecl
+        && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
+        return true;
+    }
+    if (pvDecl->getType().getAsString().find("VclPtr") != std::string::npos) {
         report(
-            DiagnosticsEngine::Remark,
-            "vcl::Window subclass passed as a pointer parameter, should be wrapped in VclPtr.",
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass passed as a VclPtr parameter, should be passed as a raw pointer.",
             pvDecl->getLocation())
           << pvDecl->getSourceRange();
     }
-    return true;
-}
-
-bool VCLWidgets::VisitVarDecl( const VarDecl* varDecl )
-{
-    if (ignoreLocation(varDecl)) {
-        return true;
-    }
-    if (!varDecl->isLocalVarDecl())
-        return true;
-
-    // check if this variables type is derived from Window
-    if (isPointerToWindowSubclass(varDecl->getType())) {
-        report(
-            DiagnosticsEngine::Remark,
-            "vcl::Window subclass declared as a pointer var, should be wrapped in VclPtr.",
-            varDecl->getLocation())
-          << varDecl->getSourceRange();
-    }
-
     return true;
 }
 
@@ -193,12 +177,17 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (ignoreLocation(functionDecl)) {
         return true;
     }
+    // ignore the stuff in the VclPtr template class
+    const CXXMethodDecl *pMethodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    if (pMethodDecl
+        && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
+        return true;
+    }
     QualType t1 { compat::getReturnType(*functionDecl) };
-    // check if this variables type is derived from Window
-    if (isPointerToWindowSubclass(t1)) {
+    if (t1.getAsString().find("VclPtr") != std::string::npos) {
         report(
-            DiagnosticsEngine::Remark,
-            "vcl::Window subclass declared as a return type from a method/function, should be wrapped in VclPtr.",
+            DiagnosticsEngine::Warning,
+            "VclPtr declared as a return type from a method/function, should be passed as a raw pointer.",
             functionDecl->getLocation())
           << functionDecl->getSourceRange();
     }

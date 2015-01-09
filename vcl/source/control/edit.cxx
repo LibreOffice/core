@@ -2706,10 +2706,10 @@ void Edit::ClearModifyFlag()
         mbModified = false;
 }
 
-void Edit::SetSubEdit( const VclPtr<Edit>& pEdit )
+void Edit::SetSubEdit( Edit* pEdit )
 {
     mpSubEdit.disposeAndClear();
-    mpSubEdit = pEdit;
+    mpSubEdit.set( pEdit );
     if ( mpSubEdit )
     {
         SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
