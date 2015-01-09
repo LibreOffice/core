@@ -40,6 +40,18 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         }
     }
 
+    private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
+        if (composedTileLayer.isStillValid(tile.id)) {
+            mLayerClient.beginDrawing();
+            mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
+            tile.invalidate();
+            Log.i(LOGTAG, "Redrawing tile " + tile.id);
+            mLayerClient.forceRedraw();
+            mLayerClient.endDrawing(mViewportMetrics);
+        }
+    }
+
+
     /** Handle the geometry change + draw. */
     private void redraw() {
         if (mLayerClient == null || mTileProvider == null) {
@@ -130,6 +142,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             case LOEvent.TILE_REQUEST:
                 tileRequest(event.mComposedTileLayer, event.mTileId, event.mForceRedraw);
                 break;
+            case LOEvent.TILE_RERENDER:
+                tileRerender(event.mComposedTileLayer, event.mTile);
+                break;
             case LOEvent.THUMBNAIL:
                 createThumbnail(event.mTask);
         }
@@ -150,6 +165,8 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     @Override
     public void invalidate(RectF rect) {
+        Log.i(LOGTAG, "Invalidate request: " + rect);
+
         mLayerClient = mApplication.getLayerClient();
         mLayerClient.invalidateTiles(rect);
     }

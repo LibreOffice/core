@@ -215,6 +215,22 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     }
 
     @Override
+    public void rerenderTile(CairoImage image, float x, float y, IntSize tileSize, float zoom) {
+        if (mDocument != null && image.getBuffer() != null) {
+            float twipX = pixelToTwip(x, mDPI) / zoom;
+            float twipY = pixelToTwip(y, mDPI) / zoom;
+            float twipWidth = mTileWidth / zoom;
+            float twipHeight = mTileHeight / zoom;
+
+            mDocument.paintTile(image.getBuffer(), tileSize.width, tileSize.height, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
+        } else {
+            if (mDocument == null) {
+                Log.e(LOGTAG, "Document is null!!");
+            }
+        }
+    }
+
+    @Override
     public Bitmap thumbnail(int size) {
         int widthPixel = getPageWidth();
         int heightPixel = getPageHeight();

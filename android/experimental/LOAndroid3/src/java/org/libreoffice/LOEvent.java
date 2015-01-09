@@ -2,9 +2,9 @@ package org.libreoffice;
 
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
+import org.mozilla.gecko.gfx.SubTile;
 
 public class LOEvent implements Comparable<LOEvent> {
-
     public static final int SIZE_CHANGED = 1;
     public static final int TILE_SIZE = 2;
     public static final int CHANGE_PART = 3;
@@ -13,6 +13,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int REDRAW = 6;
     public static final int TILE_REQUEST = 7;
     public static final int THUMBNAIL = 8;
+    public static final int TILE_RERENDER = 9;
 
     public final int mType;
     public int mPriority = 0;
@@ -24,6 +25,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public TileIdentifier mTileId;
     public ComposedTileLayer mComposedTileLayer;
     public boolean mForceRedraw;
+    public SubTile mTile;
 
     public LOEvent(int type) {
         mType = type;
@@ -64,6 +66,13 @@ public class LOEvent implements Comparable<LOEvent> {
         mTask = task;
     }
 
+    public LOEvent(int type, ComposedTileLayer composedTileLayer, SubTile tile) {
+        mType = type;
+        mTypeString = "Tile Rerender";
+        mComposedTileLayer = composedTileLayer;
+        mTile = tile;
+    }
+
     public String getTypeString() {
         if (mTypeString == null) {
             return "Event type: " + mType;
@@ -75,4 +84,5 @@ public class LOEvent implements Comparable<LOEvent> {
     public int compareTo(LOEvent another) {
         return mPriority - another.mPriority;
     }
+
 }

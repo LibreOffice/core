@@ -65,6 +65,10 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void rerenderTile(CairoImage image, float x, float y, IntSize tileSize, float zoom) {
+    }
+
+    @Override
     public Bitmap thumbnail(int size) {
         return mLayerClient.getView().getDrawable("dummy_page");
     }

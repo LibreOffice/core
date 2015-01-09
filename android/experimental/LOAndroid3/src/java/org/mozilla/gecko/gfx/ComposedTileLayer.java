@@ -213,12 +213,11 @@ public abstract class ComposedTileLayer extends Layer {
     }
 
     public void invalidateTiles(RectF rect) {
-        Log.i(LOGTAG, "invalidate: " + rect);
+        RectF zoomedRect = RectUtils.inverseScale(rect, currentZoom);
+
         for (SubTile tile : tiles) {
-            if (RectF.intersects(rect, tile.id.getRect()) || rect.contains(tile.id.getRect())) {
-                tile.markForRemoval();
-                LOKitShell.sendEvent(LOEventFactory.tileRequest(this, tile.id, true));
-                Log.i(LOGTAG, "invalidate tile: " + tile.id);
+            if (RectF.intersects(rect, tile.id.getRect())) {
+                LOKitShell.sendEvent(LOEventFactory.tileRerender(this, tile));
             }
         }
     }

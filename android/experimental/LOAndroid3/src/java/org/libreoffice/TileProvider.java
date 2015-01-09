@@ -16,6 +16,8 @@ public interface TileProvider {
 
     CairoImage createTile(float x, float y, IntSize tileSize, float zoom);
 
+    void rerenderTile(CairoImage image, float x, float y, IntSize tileSize, float zoom);
+
     void changePart(int partIndex);
 
     int getCurrentPartNumber();
