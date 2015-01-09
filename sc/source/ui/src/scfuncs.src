@@ -1164,8 +1164,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "An integer between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).";
         };
     };
-     // -=*# Resource for function BW #*=-
-    Resource SC_OPCODE_BW
+     // -=*# Resource for function PV #*=-
+    Resource SC_OPCODE_PV
     {
         String 1 // Description
         {
