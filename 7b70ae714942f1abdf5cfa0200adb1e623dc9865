@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_82cefc58",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3523,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-09T17:13:38Z",
+      "side": 1,
+      "message": "it is not a good idea to check with_parallelism in configure: the developer can override it via the environment variable PARALLELISM, and in that case the values determined here could be wrong.",
+      "revId": "7b70ae714942f1abdf5cfa0200adb1e623dc9865",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
