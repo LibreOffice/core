@@ -1173,7 +1173,7 @@ double ScInterpreter::ScGetBw(double fInterest, double fZzr, double fRmz,
     return -fBw;
 }
 
-void ScInterpreter::ScBW()
+void ScInterpreter::ScPV()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     double nRmz, nZzr, nInterest, nZw = 0, nFlag = 0;

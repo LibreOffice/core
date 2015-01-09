@@ -92,7 +92,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocGetTime:
             return NUMBERFORMAT_TIME;
         case ocNPV:
-        case ocBW:
+        case ocPV:
         case ocDIA:
         case ocGDA:
         case ocGDA2:

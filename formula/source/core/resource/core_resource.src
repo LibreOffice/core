@@ -210,7 +210,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_COMBIN_A { Text = "COMBINA" ; };
     String SC_OPCODE_PERMUT { Text = "PERMUT" ; };
     String SC_OPCODE_PERMUTATION_A { Text = "PERMUTATIONA" ; };
-    String SC_OPCODE_BW { Text = "PV" ; };
+    String SC_OPCODE_PV { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
     String SC_OPCODE_GDA_2 { Text = "DB" ; };
@@ -617,7 +617,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_COMBIN_A { Text = "_xlfn.COMBINA" ; };
     String SC_OPCODE_PERMUT { Text = "PERMUT" ; };
     String SC_OPCODE_PERMUTATION_A { Text = "_xlfn.PERMUTATIONA" ; };
-    String SC_OPCODE_BW { Text = "PV" ; };
+    String SC_OPCODE_PV { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
     String SC_OPCODE_GDA_2 { Text = "DB" ; };
@@ -1026,7 +1026,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_COMBIN_A { Text = "COMBINA" ; };
     String SC_OPCODE_PERMUT { Text = "PERMUT" ; };
     String SC_OPCODE_PERMUTATION_A { Text = "PERMUTATIONA" ; };
-    String SC_OPCODE_BW { Text = "PV" ; };
+    String SC_OPCODE_PV { Text = "PV" ; };
     String SC_OPCODE_DIA { Text = "SYD" ; };
     String SC_OPCODE_GDA { Text = "DDB" ; };
     String SC_OPCODE_GDA_2 { Text = "DB" ; };
@@ -1923,7 +1923,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "PERMUTATIONA" ;
     };
-    String SC_OPCODE_BW
+    String SC_OPCODE_PV
     {
         Text [ en-US ] = "PV" ;
     };
