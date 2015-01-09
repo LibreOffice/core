@@ -244,7 +244,7 @@
 #define SC_OPCODE_PV                244
 #define SC_OPCODE_SYD               245
 #define SC_OPCODE_GDA               246
-#define SC_OPCODE_GDA_2             247
+#define SC_OPCODE_DB                247
 #define SC_OPCODE_VBD               248
 #define SC_OPCODE_LAUFZ             249
 #define SC_OPCODE_LIA               250

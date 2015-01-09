@@ -1254,7 +1254,7 @@ void ScInterpreter::ScGDA()
     }
 }
 
-void ScInterpreter::ScGDA2()
+void ScInterpreter::ScDB()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
