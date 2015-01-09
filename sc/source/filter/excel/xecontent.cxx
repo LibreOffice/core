@@ -353,7 +353,9 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     {
         sal_uInt16 nLevel;
         bool bRel;
-        OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
+        /* TODO: should we differentiate between BIFF and OOXML and write IURI
+         * encoded for OOXML? */
+        OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot, false ) );
 
         if( eProtocol == INET_PROT_SMB )
         {
@@ -444,9 +446,10 @@ XclExpHyperlink::~XclExpHyperlink()
 }
 
 OUString XclExpHyperlink::BuildFileName(
-        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot )
+        sal_uInt16& rnLevel, bool& rbRel, const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded )
 {
-    OUString aDosName( INetURLObject( rUrl ).getFSysPath( INetURLObject::FSYS_DOS ) );
+    INetURLObject aURLObject( rUrl );
+    OUString aDosName( bEncoded ? aURLObject.GetURLPath() : aURLObject.getFSysPath( INetURLObject::FSYS_DOS ) );
     rnLevel = 0;
     rbRel = rRoot.IsRelUrl();
 
@@ -455,7 +458,8 @@ OUString XclExpHyperlink::BuildFileName(
         // try to convert to relative file name
         OUString aTmpName( aDosName );
         aDosName = INetURLObject::GetRelURL( rRoot.GetBasePath(), rUrl,
-            INetURLObject::WAS_ENCODED, INetURLObject::DECODE_WITH_CHARSET );
+            INetURLObject::WAS_ENCODED,
+            (bEncoded ? INetURLObject::DECODE_TO_IURI : INetURLObject::DECODE_WITH_CHARSET));
 
         if (aDosName.startsWith(INET_FILE_SCHEME))
         {
