@@ -1047,7 +1047,7 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocNoName,           //  118 Cterm()
         ocLIA,              //  119 Sln()
         ocSYD,              //  120 Syd(), Soy()
-        ocGDA,              //  121 Ddb()
+        ocDDB,              //  121 Ddb()
         ocNoName,           //  122
         ocNoName,           //  123
         ocNoName,           //  124
@@ -1576,7 +1576,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  118 Cterm()
         ocLIA,              //  119 Sln()
         ocSYD,              //  120 Syd(), Soy()
-        ocGDA,              //  121 Ddb()
+        ocDDB,              //  121 Ddb()
         ocNoName,           //  122 Splfunc
         ocNoName,           //  123 Sheets
         ocNoName,           //  124 Info
