@@ -109,7 +109,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocIRR:
         case ocMIRR:
         case ocZGZ:
-        case ocEffektiv:
+        case ocEffective:
         case ocNominal:
         case ocPercentSign:
             return NUMBERFORMAT_PERCENT;

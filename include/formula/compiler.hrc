@@ -261,7 +261,7 @@
 #define SC_OPCODE_PPMT              261
 #define SC_OPCODE_CUM_IPMT          262
 #define SC_OPCODE_CUM_PRINC         263
-#define SC_OPCODE_EFFEKTIV          264
+#define SC_OPCODE_EFFECTIVE         264
 #define SC_OPCODE_NOMINAL           265
 #define SC_OPCODE_SUB_TOTAL         266
 #define SC_OPCODE_DB_SUM            267     /* database functions */
