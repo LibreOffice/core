@@ -25,11 +25,11 @@
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/basebmpdllapi.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
+#include <memory>
 #include <vector>
 
 namespace basegfx
@@ -656,7 +656,7 @@ private:
 
     BitmapDeviceSharedPtr getGenericRenderer() const;
 
-    boost::scoped_ptr< ImplBitmapDevice > mpImpl;
+    std::unique_ptr< ImplBitmapDevice > mpImpl;
 };
 
 /** Function to create a BitmapDevice for given scanline format

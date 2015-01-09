@@ -19,10 +19,10 @@
 
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCMANAGER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_VLCMANAGER_HXX
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include "vlccommon.hxx"
 #include "wrapper/Wrapper.hxx"
+#include <memory>
 
 namespace avmedia {
 namespace vlc {
@@ -30,7 +30,7 @@ namespace vlc {
 class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
                                                     ::com::sun::star::lang::XServiceInfo >
 {
-    boost::scoped_ptr<wrapper::Instance> mInstance;
+    std::unique_ptr<wrapper::Instance> mInstance;
     wrapper::EventHandler mEventHandler;
 public:
     Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );

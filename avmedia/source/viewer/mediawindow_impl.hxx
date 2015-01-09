@@ -173,7 +173,7 @@ namespace avmedia
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxEventsIf;
             MediaEventListenersImpl*                                                mpEvents;
             bool                                                                    mbEventTransparent;
-            boost::scoped_ptr<MediaChildWindow>                                     mpChildWindow;
+            std::unique_ptr<MediaChildWindow>                                       mpChildWindow;
             MediaWindowControl*                                                     mpMediaWindowControl;
             BitmapEx*                                                               mpEmptyBmpEx;
             BitmapEx*                                                               mpAudioBmpEx;

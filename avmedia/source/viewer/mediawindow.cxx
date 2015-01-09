@@ -20,7 +20,6 @@
 #include <stdio.h>
 
 #include <avmedia/mediawindow.hxx>
-#include <boost/scoped_ptr.hpp>
 #include "mediawindow_impl.hxx"
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
@@ -34,6 +33,7 @@
 #include "com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
+#include <memory>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0
 
@@ -404,7 +404,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
 {
     uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer, &sMimeType ) );
     uno::Reference< graphic::XGraphic > xRet;
-    boost::scoped_ptr< Graphic > apGraphic;
+    std::unique_ptr< Graphic > xGraphic;
 
     if( xPlayer.is() )
     {
@@ -428,19 +428,19 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
             if( !aPrefSize.Width && !aPrefSize.Height )
             {
                 const BitmapEx aBmpEx( getAudioLogo() );
-                apGraphic.reset( new Graphic( aBmpEx ) );
+                xGraphic.reset( new Graphic( aBmpEx ) );
             }
         }
     }
 
-    if( !xRet.is() && !apGraphic.get() )
+    if( !xRet.is() && !xGraphic.get() )
     {
         const BitmapEx aBmpEx( getEmptyLogo() );
-        apGraphic.reset( new Graphic( aBmpEx ) );
+        xGraphic.reset( new Graphic( aBmpEx ) );
     }
 
-    if( apGraphic.get() )
-        xRet = apGraphic->GetXGraphic();
+    if( xGraphic.get() )
+        xRet = xGraphic->GetXGraphic();
 
     return xRet;
 }

@@ -20,14 +20,13 @@
 #ifndef INCLUDED_AVMEDIA_MEDIAITEM_HXX
 #define INCLUDED_AVMEDIA_MEDIAITEM_HXX
 
-#include <boost/scoped_ptr.hpp>
-
 #include <tools/rtti.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <avmedia/avmediadllapi.h>
+#include <memory>
 
 #define AVMEDIA_SETMASK_NONE        ((sal_uInt32)(0x00000000))
 #define AVMEDIA_SETMASK_STATE       ((sal_uInt32)(0x00000001))
@@ -120,7 +119,7 @@ public:
 private:
 
     struct Impl;
-    ::boost::scoped_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_pImpl;
 };
 
 typedef ::avmedia::MediaItem avmedia_MediaItem;

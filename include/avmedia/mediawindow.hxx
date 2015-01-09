@@ -20,8 +20,8 @@
 #ifndef INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 #define INCLUDED_AVMEDIA_MEDIAWINDOW_HXX
 
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <tools/gen.hxx>
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -117,7 +117,7 @@ namespace avmedia
         AVMEDIA_DLLPRIVATE MediaWindow& operator =( const MediaWindow& );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxIFace;
-        boost::scoped_ptr<priv::MediaWindowImpl> mpImpl;
+        std::unique_ptr<priv::MediaWindowImpl> mpImpl;
     };
 }
 
