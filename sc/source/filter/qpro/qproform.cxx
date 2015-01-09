@@ -492,7 +492,7 @@ static const struct
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NotImpl },
     { ocLIA, FT_FuncFix3 },
-    { ocDIA, FT_FuncFix4 },
+    { ocSYD, FT_FuncFix4 },
     { ocGDA, FT_FuncFix4 },
     { ocStDevP, FT_FuncVar },
     { ocVarP, FT_FuncVar },

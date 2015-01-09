@@ -1708,8 +1708,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
-     // -=*# Resource for function DIA #*=-
-    Resource SC_OPCODE_DIA
+     // -=*# Resource for function SYD #*=-
+    Resource SC_OPCODE_SYD
     {
         String 1 // Description
         {

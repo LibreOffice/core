@@ -1190,7 +1190,7 @@ void ScInterpreter::ScPV()
     PushDouble(ScGetBw(nInterest, nZzr, nRmz, nZw, nFlag));
 }
 
-void ScInterpreter::ScDIA()
+void ScInterpreter::ScSYD()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 4 ) )
