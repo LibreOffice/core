@@ -546,11 +546,8 @@ protected:
 /// Handling a Double Vector that is used as a sliding window input
 /// to either a sliding window average or sum-of-products
 /// Generate a sequential loop for reductions
-class OpSum; // Forward Declaration
-class OpAverage; // Forward Declaration
-class OpMin; // Forward Declaration
-class OpMax; // Forward Declaration
-class OpCount; // Forward Declaration
+class OpAverage;
+class OpCount;
 
 template<class Base>
 class DynamicKernelSlidingArgument : public Base
