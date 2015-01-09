@@ -222,6 +222,26 @@ ScOrcusSheetProperties::~ScOrcusSheetProperties()
 {
 }
 
+namespace {
+
+double translateToInternal(double nVal, orcus::length_unit_t unit)
+{
+    switch(unit)
+    {
+        case orcus::length_unit_inch:
+        case orcus::length_unit_twip:
+        case orcus::length_unit_point:
+        case orcus::length_unit_centimeter:
+        case orcus::length_unit_unknown:
+        default:
+            break;
+    }
+    return 0;
+}
+
+
+}
+
 void ScOrcusSheetProperties::set_column_width(os::col_t col, double width, orcus::length_unit_t /*unit*/)
 {
     mrDoc.getDoc().SetColWidthOnly(col, mnTab, width);
