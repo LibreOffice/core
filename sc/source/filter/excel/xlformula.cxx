@@ -189,7 +189,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocN,                  131,    1,  1,  V, { RO }, 0, 0 },
     { ocGetDateValue,       140,    1,  1,  V, { VR }, 0, 0 },
     { ocGetTimeValue,       141,    1,  1,  V, { VR }, 0, 0 },
-    { ocLIA,                142,    3,  3,  V, { VR }, 0, 0 },
+    { ocSLN,                142,    3,  3,  V, { VR }, 0, 0 },
     { ocSYD,                143,    4,  4,  V, { VR }, 0, 0 },
     { ocDDB,                144,    4,  5,  V, { VR }, 0, 0 },
     { ocIndirect,           148,    1,  2,  R, { VR }, EXC_FUNCFLAG_VOLATILE, 0 },

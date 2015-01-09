@@ -4027,7 +4027,7 @@ StackVar ScInterpreter::Interpret()
                 case ocDB               : ScDB();                       break;
                 case ocVBD              : ScVDB();                      break;
                 case ocDuration         : ScDuration();                 break;
-                case ocLIA              : ScLIA();                      break;
+                case ocSLN              : ScSLN();                      break;
                 case ocRMZ              : ScRMZ();                      break;
                 case ocColumns          : ScColumns();                  break;
                 case ocRows             : ScRows();                     break;

@@ -247,7 +247,7 @@
 #define SC_OPCODE_DB                247
 #define SC_OPCODE_VBD               248
 #define SC_OPCODE_DURATION          249
-#define SC_OPCODE_LIA               250
+#define SC_OPCODE_SLN               250
 #define SC_OPCODE_RMZ               251
 #define SC_OPCODE_COLUMNS           252
 #define SC_OPCODE_ROWS              253
