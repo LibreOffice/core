@@ -664,7 +664,7 @@ void ScPV();
 void ScSYD();
 double ScGetGDA(double fWert, double fRest, double fDauer,
                        double fPeriode, double fFactor);
-void ScGDA();
+void ScDDB();
 void ScDB();
 double ScInterVDB(double fWert,double fRest,double fDauer,double fDauer1,
                 double fPeriode,double fFactor);

@@ -2374,7 +2374,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i],new OpMedian));
                 break;*/
-            case ocGDA:
+            case ocDDB:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpDDB, nResultSize));
                 break;

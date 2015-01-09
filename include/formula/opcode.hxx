@@ -247,7 +247,7 @@ enum OpCode : sal_uInt16
         ocPermutationA      = SC_OPCODE_PERMUTATION_A,
         ocPV                = SC_OPCODE_PV,
         ocSYD               = SC_OPCODE_SYD,
-        ocGDA               = SC_OPCODE_GDA,
+        ocDDB               = SC_OPCODE_DDB,
         ocDB                = SC_OPCODE_DB,
         ocVBD               = SC_OPCODE_VBD,
         ocDuration          = SC_OPCODE_DURATION,

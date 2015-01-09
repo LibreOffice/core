@@ -1796,8 +1796,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
         };
     };
-     // -=*# Resource for function GDA #*=-
-    Resource SC_OPCODE_GDA
+     // -=*# Resource for function DDB #*=-
+    Resource SC_OPCODE_DDB
     {
         String 1 // Description
         {

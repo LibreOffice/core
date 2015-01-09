@@ -1201,7 +1201,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocStandard:
             case ocWeibull:
             case ocMedian:
-            case ocGDA:
+            case ocDDB:
             case ocZW:
             case ocVBD:
             case ocKurt:
