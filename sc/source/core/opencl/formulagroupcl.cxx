@@ -2283,7 +2283,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocGamma:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGamma, nResultSize));
                 break;
-            case ocLIA:
+            case ocSLN:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSLN, nResultSize));
                 break;
             case ocGammaLn:

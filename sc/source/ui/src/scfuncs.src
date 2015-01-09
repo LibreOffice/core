@@ -1756,8 +1756,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Period. The depreciation period which must have the same time unit as average useful life." ;
         };
     };
-     // -=*# Resource for function LIA #*=-
-    Resource SC_OPCODE_LIA
+     // -=*# Resource for function SLN #*=-
+    Resource SC_OPCODE_SLN
     {
         String 1 // Description
         {

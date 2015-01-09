@@ -1434,7 +1434,7 @@ void ScInterpreter::ScDuration()
     }
 }
 
-void ScInterpreter::ScLIA()
+void ScInterpreter::ScSLN()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 3 ) )
