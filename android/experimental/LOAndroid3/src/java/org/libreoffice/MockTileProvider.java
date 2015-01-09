@@ -79,6 +79,10 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
+    }
+
+    @Override
     public void changePart(int partIndex) {
     }
 

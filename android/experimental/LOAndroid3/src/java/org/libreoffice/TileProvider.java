@@ -2,6 +2,7 @@ package org.libreoffice;
 
 
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
@@ -24,4 +25,10 @@ public interface TileProvider {
     void close();
 
     boolean isTextDocument();
+
+    void registerInvalidationCallback(TileProvider.TileInvalidationCallback tileInvalidationCallback);
+
+    public interface TileInvalidationCallback {
+        void invalidate(RectF rect);
+    }
 }

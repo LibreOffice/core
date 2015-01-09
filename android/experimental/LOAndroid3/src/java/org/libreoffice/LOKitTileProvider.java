@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.graphics.Bitmap;
+import android.graphics.RectF;
 import android.util.Log;
 
 import org.libreoffice.kit.Document;
@@ -13,16 +14,17 @@ import org.mozilla.gecko.gfx.IntSize;
 
 import java.nio.ByteBuffer;
 
-public class LOKitTileProvider implements TileProvider {
+public class LOKitTileProvider implements TileProvider, Document.MessageCallback {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
     private static int TILE_SIZE = 256;
-    private Office mOffice;
-    private Document mDocument;
     private final GeckoLayerClient mLayerClient;
     private final float mTileWidth;
     private final float mTileHeight;
     private final String mInputFile;
+    private Office mOffice;
+    private Document mDocument;
     private boolean mIsReady = false;
+    private TileInvalidationCallback tileInvalidationCallback = null;
 
     private float mDPI;
     private float mWidthTwip;
@@ -67,6 +69,7 @@ public class LOKitTileProvider implements TileProvider {
 
     public void postLoad() {
         mDocument.initializeForRendering();
+        mDocument.setMessageCallback(this);
 
         int parts = mDocument.getParts();
         Log.i(LOGTAG, "Document parts: " + parts);
@@ -254,6 +257,12 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     @Override
+    public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
+        this.tileInvalidationCallback = tileInvalidationCallback;
+    }
+
+
+    @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();
@@ -268,6 +277,31 @@ public class LOKitTileProvider implements TileProvider {
     @Override
     public int getCurrentPartNumber() {
         return mDocument.getPart();
+    }
+
+    @Override
+    public void messageRetrieved(int signalNumber, String payload) {
+        switch (signalNumber) {
+            case 0:
+                if (!payload.equals("EMPTY")) {
+                    String[] coordinates = payload.split(",");
+
+                    if (coordinates.length == 4) {
+                        int left = Integer.decode(coordinates[0].trim());
+                        int top = Integer.decode(coordinates[1].trim());
+                        int right = Integer.decode(coordinates[2].trim());
+                        int bottom = Integer.decode(coordinates[3].trim());
+                        RectF rect = new RectF(
+                                twipToPixel(left, mDPI),
+                                twipToPixel(top, mDPI),
+                                twipToPixel(right, mDPI),
+                                twipToPixel(bottom, mDPI)
+                        );
+                        Log.i(LOGTAG, "Invalidate R: " + rect +" - " + getPageWidth() + " " + getPageHeight());
+                        tileInvalidationCallback.invalidate(rect);
+                    }
+                }
+        }
     }
 }
 
