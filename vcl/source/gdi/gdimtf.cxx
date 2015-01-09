@@ -507,7 +507,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
                 // delay intialization of XGraphic, to only expose
                 // XGraphic-generating services to arbitrary binary data
                 uno::Sequence< sal_Int8 > aSeq(
-                    (sal_Int8*)&pData, pEndData-pData );
+                    (sal_Int8*)pData, pEndData-pData );
                 uno::Sequence<uno::Any> aGraphicsArgs(1);
                 aGraphicsArgs[0] = makeAny(aSeq);
                 xInit->initialize(aGraphicsArgs);
