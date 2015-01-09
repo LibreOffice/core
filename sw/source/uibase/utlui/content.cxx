@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
@@ -50,6 +51,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <unotools.hxx>
+#include <unotxvw.hxx>
 #include <crsskip.hxx>
 #include <cmdid.h>
 #include <helpid.h>
@@ -2220,7 +2222,8 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     {
         if(!lcl_FindShell(pActiveShell))
         {
-            EndListening(*pActiveShell->GetView().GetDocShell());
+            if (pActiveShell)
+                EndListening(*pActiveShell->GetView().GetDocShell());
             pActiveShell = pSh;
             bIsActive = true;
             bIsConstant = false;
@@ -2231,7 +2234,8 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     // the screen filled new.
     if(bIsActive && bClear)
     {
-        StartListening(*pActiveShell->GetView().GetDocShell());
+        if (pActiveShell)
+            StartListening(*pActiveShell->GetView().GetDocShell());
         FindActiveTypeAndRemoveUserData();
         for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
         {
@@ -2267,6 +2271,17 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     if (pHint && SFX_HINT_DOCCHANGED == pHint->GetId())
     {
         m_bActiveDocModified = true;
+        return;
+    }
+
+    SfxViewEventHint const*const pVEHint(
+            dynamic_cast<SfxViewEventHint const*>(&rHint));
+    if (pActiveShell
+        && pVEHint && pVEHint->GetEventName() == "OnViewClosed"
+        && dynamic_cast<SwXTextView *>(pVEHint->GetController().get())
+            ->GetView() == &pActiveShell->GetView())
+    {
+        SetActiveShell(0); // our view is dying, clear our pointers to it
     }
     else
     {
