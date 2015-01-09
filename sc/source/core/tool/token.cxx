@@ -1194,7 +1194,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocLaufz:
             case ocSinHyp:
             case ocAbs:
-            case ocBW:
+            case ocPV:
             case ocSin:
             case ocTan:
             case ocTanHyp:

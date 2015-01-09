@@ -660,7 +660,7 @@ void ScISPMT();
 
 double ScGetBw(double fZins, double fZzr, double fRmz,
                       double fZw, double fF);
-void ScBW();
+void ScPV();
 void ScDIA();
 double ScGetGDA(double fWert, double fRest, double fDauer,
                        double fPeriode, double fFactor);
