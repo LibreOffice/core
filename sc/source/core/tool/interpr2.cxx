@@ -1231,7 +1231,7 @@ double ScInterpreter::ScGetGDA(double fValue, double fRest, double fTimeLength,
     return fGda;
 }
 
-void ScInterpreter::ScGDA()
+void ScInterpreter::ScDDB()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
