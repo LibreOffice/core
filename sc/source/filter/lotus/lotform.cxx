@@ -137,7 +137,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             eParam[ 2 ] = n0Token;      //    -> 2. as Default
         }
             break;
-        case ocZZR:
+        case ocNper:
         {
             OSL_ENSURE( nAnz == 3,
                 "*LotusToSc::DoFunc(): TERM() or CTERM() need 3 parameters!" );
@@ -2052,9 +2052,9 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
     else if (rTest == "CRITBINOMIAL")
             eId=ocKritBinom;
     else if (rTest == "TERM")
-            eId=ocZZR;
+            eId=ocNper;
     else if (rTest == "CTERM")
-            eId=ocZZR;
+            eId=ocNper;
     else if (rTest == "SUMIF")
             eId=ocSumIf;
     else if (rTest == "COUNTIF")
