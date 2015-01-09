@@ -540,7 +540,7 @@ bool PPTWriterBase::GetStyleSheets()
             ? (sal_uInt16)( *(sal_Int32*)mAny.getValue() / 4.40972 )
             : 1250;
 
-        maStyleSheetList.push_back( new PPTExStyleSheet( nDefaultTab, *dynamic_cast<PPTExBulletProvider*>(this) ) );
+        maStyleSheetList.push_back( new PPTExStyleSheet( nDefaultTab, dynamic_cast<PPTExBulletProvider*>(this) ) );
         SetCurrentStyleSheet( nPageNum );
         if ( GetPageByIndex( nPageNum, MASTER ) )
             aXNamed = Reference< XNamed >

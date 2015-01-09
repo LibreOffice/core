@@ -129,8 +129,8 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     }
 }
 
-PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv ) :
-    rBuProv     ( rProv ),
+PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider* pProv ) :
+    pBuProv     ( pProv ),
     mnInstance  ( nInstance )
 {
     bool bHasBullet = false;
@@ -226,7 +226,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
 void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel )
 {
-    ParagraphObj aParagraphObj( rXPropSet, rBuProv );
+    ParagraphObj aParagraphObj( rXPropSet, pBuProv );
     aParagraphObj.CalculateGraphicBulletSize( rCharLevel.mnFontHeight );
     PPTExParaLevel& rLev = maParaLevel[ nLevel ];
 
@@ -292,7 +292,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
             {
                 PPTExParaLevel& rLevel = maParaLevel[ i ];
                 if ( i )
-                    aParagraphObj.ImplGetNumberingLevel( rBuProv, i, false );
+                    aParagraphObj.ImplGetNumberingLevel( pBuProv, i, false );
                 rLevel.mnTextOfs = aParagraphObj.nTextOfs;
                 rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLevel.mnBulletChar = aParagraphObj.cBulletId;
@@ -321,7 +321,7 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
             maParaLevel[ 2 ].mbExtendedBulletsUsed || maParaLevel[ 3 ].mbExtendedBulletsUsed ||
                 maParaLevel[ 4 ].mbExtendedBulletsUsed )
     {
-        SvStream& rOut = rBuProv.aBuExMasterStream;
+        SvStream& rOut = pBuProv->aBuExMasterStream;
         if ( !nLev )
         {
             rOut.WriteUInt32( ( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
@@ -384,11 +384,11 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
     }
 }
 
-PPTExStyleSheet::PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider& rBuProv )
+PPTExStyleSheet::PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider* pBuProv )
 {
     for ( int nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
     {
-        mpParaSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? NULL : new PPTExParaSheet( nInstance, nDefaultTab, rBuProv );
+        mpParaSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? NULL : new PPTExParaSheet( nInstance, nDefaultTab, pBuProv );
         mpCharSheet[ nInstance ] = ( nInstance == EPP_TEXTTYPE_notUsed ) ? NULL : new PPTExCharSheet( nInstance );
     }
 }

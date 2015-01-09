@@ -186,8 +186,8 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bGetPropStateValue = false );
-        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue = false );
+        void            ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bGetPropStateValue = false );
+        void            ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue = false );
 
     public :
 
@@ -222,7 +222,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
                                 PPTExBulletProvider& rBuProv );
                         ParagraphObj( const ParagraphObj& rParargraphObj );
                         ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
-                                        PPTExBulletProvider& rBuProv );
+                                      PPTExBulletProvider* pBuProv );
 
     bool empty() const { return mvPortions.empty(); }
 

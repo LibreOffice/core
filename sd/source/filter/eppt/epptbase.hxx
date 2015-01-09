@@ -289,12 +289,12 @@ struct PPTExParaLevel
 
 struct PPTExParaSheet
 {
-                PPTExBulletProvider& rBuProv;
+                PPTExBulletProvider* pBuProv;
 
                 sal_uInt32  mnInstance;
 
                 PPTExParaLevel  maParaLevel[ 5 ];
-                PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv );
+                PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider* pProv );
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
@@ -310,7 +310,7 @@ class PPTExStyleSheet
                 PPTExCharSheet*     mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
                 PPTExParaSheet*     mpParaSheet[ PPTEX_STYLESHEETENTRYS ];
 
-                PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider& rBuProv );
+                PPTExStyleSheet( sal_uInt16 nDefaultTab, PPTExBulletProvider* pBuProv );
                 ~PPTExStyleSheet();
 
                 PPTExParaSheet& GetParaSheet( int nInstance ) { return *mpParaSheet[ nInstance ]; };

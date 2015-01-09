@@ -647,7 +647,7 @@ PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 }
 
 ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-    PPTExBulletProvider& rProv)
+    PPTExBulletProvider* pProv)
     : PropStateValue()
     , SOParagraph()
     , mvPortions()
@@ -673,7 +673,7 @@ ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::s
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( rProv, false );
+    ImplGetParagraphValues( pProv, false );
 }
 
 ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
@@ -743,7 +743,7 @@ ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::t
                 }
             }
         }
-        ImplGetParagraphValues( rProv, true );
+        ImplGetParagraphValues( &rProv, true );
     }
 }
 
@@ -789,7 +789,7 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
     }
 }
 
-void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, bool bIsBullet, bool bGetPropStateValue )
+void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nNumberingDepth, bool bIsBullet, bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, OUString( "ParaLeftMargin" ) ) )
@@ -914,7 +914,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 OString aUniqueId( OUStringToOString(aGraphicURL.copy(nIndex), RTL_TEXTENCODING_UTF8) );
                                 if ( !aUniqueId.isEmpty() )
                                 {
-                                    nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
+                                    nBulletId = pBuProv->GetId( aUniqueId, aBuGraSize );
                                     if ( nBulletId != 0xffff )
                                         bExtendedBulletsUsed = true;
                                 }
@@ -1103,7 +1103,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
         nBulletOfs = 0;
 }
 
-void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bGetPropStateValue )
+void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, "NumberingLevel", true ) )
@@ -1129,7 +1129,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, bool bG
         nDepth = 0;
         mbIsBullet = false;
     }
-    ImplGetNumberingLevel( rBuProv, nDepth, mbIsBullet, bGetPropStateValue );
+    ImplGetNumberingLevel( pBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
     if ( ImplGetPropertyValue( OUString( "ParaTabStops" ), bGetPropStateValue ) )
         maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
