@@ -1205,7 +1205,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocFV:
             case ocVBD:
             case ocKurt:
-            case ocZZR:
+            case ocNper:
             case ocNormDist:
             case ocArcCos:
             case ocSqrt:
