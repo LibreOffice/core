@@ -23,6 +23,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mFilename;
     public TileIdentifier mTileId;
     public ComposedTileLayer mComposedTileLayer;
+    public boolean mForceRedraw;
 
     public LOEvent(int type) {
         mType = type;
@@ -33,11 +34,12 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
-    public LOEvent(int type, ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
+    public LOEvent(int type, ComposedTileLayer composedTileLayer, TileIdentifier tileId, boolean forceRedraw) {
         mType = type;
         mTypeString = "Tile Request";
         mComposedTileLayer = composedTileLayer;
         mTileId = tileId;
+        mForceRedraw = forceRedraw;
     }
 
     public LOEvent(int type, String filename) {

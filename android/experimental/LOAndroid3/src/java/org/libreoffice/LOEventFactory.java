@@ -29,8 +29,8 @@ public class LOEventFactory {
         return new LOEvent(LOEvent.REDRAW);
     }
 
-    public static LOEvent tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileRequest) {
-        return new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileRequest);
+    public static LOEvent tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileRequest, boolean forceRedraw) {
+        return new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileRequest, forceRedraw);
     }
 
     public static LOEvent thumbnail(ThumbnailCreator.ThumbnailCreationTask task) {

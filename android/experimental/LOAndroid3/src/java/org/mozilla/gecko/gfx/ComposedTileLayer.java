@@ -165,7 +165,7 @@ public abstract class ComposedTileLayer extends Layer {
                     }
                 }
                 if (!contains) {
-                    LOEvent event = LOEventFactory.tileRequest(this, new TileIdentifier((int) x, (int) y, zoom, tileSize));
+                    LOEvent event = LOEventFactory.tileRequest(this, new TileIdentifier((int) x, (int) y, zoom, tileSize), false);
                     event.mPriority = getTilePriority();
                     LOKitShell.sendEvent(event);
                 }
