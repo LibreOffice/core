@@ -1580,8 +1580,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
-     // -=*# Resource for function KUMKAPITAL #*=-
-    Resource SC_OPCODE_KUM_KAP_Z
+     // -=*# Resource for function CUMPRINC #*=-
+    Resource SC_OPCODE_CUM_PRINC
     {
         String 1 // Description
         {
