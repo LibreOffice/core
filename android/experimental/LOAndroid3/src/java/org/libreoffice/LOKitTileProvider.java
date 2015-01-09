@@ -189,25 +189,8 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     @Override
     public CairoImage createTile(float x, float y, IntSize tileSize, float zoom) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(tileSize.width * tileSize.height * 4);
-
-        if (mDocument != null) {
-            float twipX = pixelToTwip(x, mDPI) / zoom;
-            float twipY = pixelToTwip(y, mDPI) / zoom;
-            float twipWidth = mTileWidth / zoom;
-            float twipHeight = mTileHeight / zoom;
-            long start = System.currentTimeMillis() - objectCreationTime;
-
-            //Log.i(LOGTAG, "paintTile >> @" + start + " (" + tileSize.width + " " + tileSize.height + " " + (int) twipX + " " + (int) twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
-            mDocument.paintTile(buffer, tileSize.width, tileSize.height, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
-
-            long stop = System.currentTimeMillis() - objectCreationTime;
-            //Log.i(LOGTAG, "paintTile << @" + stop + " elapsed: " + (stop - start));
-        } else {
-            Log.e(LOGTAG, "Document is null!!");
-        }
-
         CairoImage image = new BufferedCairoImage(buffer, tileSize.width, tileSize.height, CairoImage.FORMAT_ARGB32);
-
+        rerenderTile(image, x, y, tileSize, zoom);
         return image;
     }
 
@@ -218,8 +201,13 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
             float twipY = pixelToTwip(y, mDPI) / zoom;
             float twipWidth = mTileWidth / zoom;
             float twipHeight = mTileHeight / zoom;
+            long start = System.currentTimeMillis() - objectCreationTime;
 
+            //Log.i(LOGTAG, "paintTile >> @" + start + " (" + tileSize.width + " " + tileSize.height + " " + (int) twipX + " " + (int) twipY + " " + (int) twipWidth + " " + (int) twipHeight + ")");
             mDocument.paintTile(image.getBuffer(), tileSize.width, tileSize.height, (int) twipX, (int) twipY, (int) twipWidth, (int) twipHeight);
+
+            long stop = System.currentTimeMillis() - objectCreationTime;
+            //Log.i(LOGTAG, "paintTile << @" + stop + " elapsed: " + (stop - start));
         } else {
             if (mDocument == null) {
                 Log.e(LOGTAG, "Document is null!!");
