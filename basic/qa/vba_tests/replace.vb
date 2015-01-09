@@ -37,7 +37,7 @@ Function verify_testReplace() as String
     retStr = Replace(srcStr, destStr, repStr, compare:=vbTextCompare)
     TestLog_ASSERT retStr = "aefefdef", "text compare:" & retStr
     retStr = Replace(srcStr, destStr, repStr, 3, -1, vbBinaryCompare)
-    TestLog_ASSERT retStr = "cefdBc", "start = 3:" & retStr
+    TestLog_ASSERT retStr = "abcefdBc", "start = 3:" & retStr
     retStr = Replace(srcStr, destStr, repStr, 1, 2, vbBinaryCompare)
     TestLog_ASSERT retStr = "aefefdBc", "count = 2: " & retStr
     retStr = Replace(srcStr, destStr, repStr, 1, 0, vbBinaryCompare)
