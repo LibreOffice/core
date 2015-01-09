@@ -49,6 +49,14 @@ public final class RectUtils {
                          y + (rect.height() * scale));
     }
 
+    public static RectF inverseScale(RectF rect, float scale) {
+        float x = rect.left / scale;
+        float y = rect.top / scale;
+        return new RectF(x, y,
+                x + (rect.width() / scale),
+                y + (rect.height() / scale));
+    }
+
     /** Returns the nearest integer rect of the given rect. */
     public static Rect round(RectF rect) {
         Rect r = new Rect();
