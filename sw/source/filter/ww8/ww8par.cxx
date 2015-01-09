@@ -5002,7 +5002,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
         aInfo.ePos = FTNPOS_PAGE;
         aInfo.eNum = eNumA[pWDop->rncFtn];
-        aInfo.aFmt.SetNumberingType( static_cast< sal_uInt16 >(eNumTA[pWDop->nfcFtnRef]) );
+        sal_uInt16 nfcFtnRef = pWDop->nfcFtnRef & 0xF;
+        aInfo.aFmt.SetNumberingType( static_cast< sal_uInt16 >(eNumTA[nfcFtnRef]) );
         if( pWDop->nFtn )
             aInfo.nFtnOffset = pWDop->nFtn - 1;
         rDoc.SetFtnInfo( aInfo );
@@ -5011,8 +5012,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     {
         SwEndNoteInfo aInfo;
         aInfo = rDoc.GetEndNoteInfo(); // Same as for Ftn
-
-        aInfo.aFmt.SetNumberingType( static_cast< sal_uInt16 >(eNumTA[pWDop->nfcEdnRef]) );
+        sal_uInt16 nfcEdnRef = pWDop->nfcEdnRef & 0xF;
+        aInfo.aFmt.SetNumberingType( static_cast< sal_uInt16 >(eNumTA[nfcEdnRef]) );
         if( pWDop->nEdn )
             aInfo.nFtnOffset = pWDop->nEdn - 1;
         rDoc.SetEndNoteInfo( aInfo );
