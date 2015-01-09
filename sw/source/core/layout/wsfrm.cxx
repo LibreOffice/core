@@ -63,7 +63,7 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mpNext( 0 ),
     mpPrev( 0 ),
     mpDrawObjs( 0 ),
-    mnType(0),
+    mnFrmType(0),
     mbInfBody( false ),
     mbInfTab ( false ),
     mbInfFly ( false ),

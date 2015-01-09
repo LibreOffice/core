@@ -50,7 +50,7 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib )
     , bOwnFtnNum(false)
     , bFtnLock(false)
 {
-    mnType = FRMC_SECTION;
+    mnFrmType = FRM_SECTION;
 
     CalcFtnAtEndFlag();
     CalcEndAtEndFlag();
@@ -66,7 +66,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, bool bMaster ) :
     bOwnFtnNum( false ),
     bFtnLock( false )
 {
-    mnType = FRMC_SECTION;
+    mnFrmType = FRM_SECTION;
 
     PROTOCOL( this, PROT_SECTION, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )
 

@@ -44,7 +44,7 @@ public:
 class SwHeaderFrm: public SwHeadFootFrm
 {
 public:
-    SwHeaderFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRMC_HEADER) {};
+    SwHeaderFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_HEADER) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrm)
 };
@@ -53,7 +53,7 @@ public:
 class SwFooterFrm: public SwHeadFootFrm
 {
 public:
-    SwFooterFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRMC_FOOTER) {};
+    SwFooterFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRM_FOOTER) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrm)
 };

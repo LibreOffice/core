@@ -373,7 +373,7 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     , bIsSwapped( false )
     , mbFollowFormatAllowed( true ) // OD 14.03.2003 #i11760#
 {
-    mnType = FRMC_TXT;
+    mnFrmType = FRM_TXT;
 }
 
 SwTxtFrm::~SwTxtFrm()

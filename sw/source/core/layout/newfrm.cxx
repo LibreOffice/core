@@ -469,7 +469,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     nPhyPageNums( 0 ),
     nAccessibleShells( 0 )
 {
-    mnType = FRMC_ROOT;
+    mnFrmType = FRM_ROOT;
     setRootFrm( this );
 }
 

@@ -152,7 +152,7 @@ SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
 /// Initialization: Currently add the Frame to the Cache
 void SwNoTxtFrm::InitCtor()
 {
-    mnType = FRMC_NOTXT;
+    mnFrmType = FRM_NOTXT;
 }
 
 SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )

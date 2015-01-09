@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
 {
-    mnType = FRMC_BODY;
+    mnFrmType = FRM_BODY;
 }
 
 void SwBodyFrm::Format( const SwBorderAttrs * )
@@ -170,7 +170,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
         bHasGrid = false;
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
-    mnType = FRMC_PAGE;
+    mnFrmType = FRM_PAGE;
     bInvalidLayout = bInvalidCntnt = bInvalidSpelling = bInvalidSmartTags = bInvalidAutoCmplWrds = bInvalidWordCount = true;
     bInvalidFlyLayout = bInvalidFlyCntnt = bInvalidFlyInCnt = bFtnPage = bEndNotePage = false;
 

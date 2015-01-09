@@ -77,7 +77,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib )
     , m_bInRecalcLowerRow(false)
 {
     mbFixSize = false;     //Don't fall for import filter again.
-    mnType = FRMC_TAB;
+    mnFrmType = FRM_TAB;
 
     //Create the lines and insert them.
     const SwTableLines &rLines = rTab.GetTabLines();
@@ -115,7 +115,7 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab )
     , m_bInRecalcLowerRow(false)
 {
     mbFixSize = false;     //Don't fall for import filter again.
-    mnType = FRMC_TAB;
+    mnFrmType = FRM_TAB;
 
     SetFollow( rTab.GetFollow() );
     rTab.SetFollow( this );
@@ -3506,7 +3506,7 @@ SwRowFrm::SwRowFrm(const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent)
     , m_bIsRepeatedHeadline( false )
     , m_bIsRowSpanLine( false )
 {
-    mnType = FRMC_ROW;
+    mnFrmType = FRM_ROW;
 
     //Create the boxes and insert them.
     const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
@@ -4384,7 +4384,7 @@ SwCellFrm::SwCellFrm(const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent)
     : SwLayoutFrm( rBox.GetFrmFmt(), pSib )
     , m_pTabBox( &rBox )
 {
-    mnType = FRMC_CELL;
+    mnFrmType = FRM_CELL;
 
     if ( !bInsertContent )
         return;

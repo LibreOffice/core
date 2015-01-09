@@ -96,7 +96,7 @@ static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
 SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
     : SwLayoutFrm( pFmt, pSib )
 {
-    mnType = nTypeIn;
+    mnFrmType = nTypeIn;
     SetDerivedVert( false );
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();

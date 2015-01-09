@@ -35,7 +35,7 @@
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
 {
-    mnType = FRMC_COLUMN;
+    mnFrmType = FRM_COLUMN;
     SwBodyFrm* pColBody = new SwBodyFrm( pFmt->GetDoc()->GetDfltFrmFmt(), pSib );
     pColBody->InsertBehind( this, 0 ); // ColumnFrms now with BodyFrm
     SetMaxFtnHeight( LONG_MAX );

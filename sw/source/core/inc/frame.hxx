@@ -89,25 +89,6 @@ typedef struct _xmlTextWriter *xmlTextWriterPtr;
 #define FRM_FTNBOSS     0x0006
 #define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY|FRM_TAB|FRM_CELL|FRM_PAGE)
 
-// The type of the frame is internal represented by the 4-bit value mnType,
-// which can expanded to the types above by shifting a bit (0x1 << mnType)
-// Here are the corresponding defines for the compressed representation:
-#define FRMC_ROOT        0
-#define FRMC_PAGE        1
-#define FRMC_COLUMN      2
-#define FRMC_HEADER      3
-#define FRMC_FOOTER      4
-#define FRMC_FTNCONT     5
-#define FRMC_FTN         6
-#define FRMC_BODY        7
-#define FRMC_FLY         8
-#define FRMC_SECTION     9
-#define FRMC_TAB         11
-#define FRMC_ROW         12
-#define FRMC_CELL        13
-#define FRMC_TXT         14
-#define FRMC_NOTXT       15
-
 #define FRM_NEIGHBOUR   0x2004
 #define FRM_NOTE_VERT   0x7a60
 #define FRM_HEADFOOT    0x0018
@@ -344,6 +325,8 @@ protected:
     SwRect  maFrm;   // absolute position in document and size of the Frm
     SwRect  maPrt;   // position relatively to Frm and size of PrtArea
 
+    sal_uInt16 mnFrmType;  //Who am I?
+
     bool mbReverse     : 1; // Next line above/at the right side instead
                                  // under/at the left side of the previous line
     bool mbInvalidR2L  : 1;
@@ -354,7 +337,6 @@ protected:
     bool mbVertical    : 1;
 
     bool mbVertLR      : 1;
-    sal_uInt16 mnType    : 4;  //Who am I?
 
     bool mbValidPos      : 1;
     bool mbValidPrtArea  : 1;
@@ -443,7 +425,7 @@ public:
 
     TYPEINFO_OVERRIDE(); // already in base class
 
-    sal_uInt16 GetType() const { return 0x1 << mnType; }
+    sal_uInt16 GetType() const { return mnFrmType; }
 
     static SwCache &GetCache()                { return *mpCache; }
     static SwCache *GetCachePtr()             { return mpCache;  }
@@ -1102,15 +1084,15 @@ inline bool SwFrm::IsLayoutFrm() const
 }
 inline bool SwFrm::IsRootFrm() const
 {
-    return mnType == FRMC_ROOT;
+    return mnFrmType == FRM_ROOT;
 }
 inline bool SwFrm::IsPageFrm() const
 {
-    return mnType == FRMC_PAGE;
+    return mnFrmType == FRM_PAGE;
 }
 inline bool SwFrm::IsColumnFrm() const
 {
-    return mnType == FRMC_COLUMN;
+    return mnFrmType == FRM_COLUMN;
 }
 inline bool SwFrm::IsFtnBossFrm() const
 {
@@ -1118,43 +1100,43 @@ inline bool SwFrm::IsFtnBossFrm() const
 }
 inline bool SwFrm::IsHeaderFrm() const
 {
-    return mnType == FRMC_HEADER;
+    return mnFrmType == FRM_HEADER;
 }
 inline bool SwFrm::IsFooterFrm() const
 {
-    return mnType == FRMC_FOOTER;
+    return mnFrmType == FRM_FOOTER;
 }
 inline bool SwFrm::IsFtnContFrm() const
 {
-    return mnType == FRMC_FTNCONT;
+    return mnFrmType == FRM_FTNCONT;
 }
 inline bool SwFrm::IsFtnFrm() const
 {
-    return mnType == FRMC_FTN;
+    return mnFrmType == FRM_FTN;
 }
 inline bool SwFrm::IsBodyFrm() const
 {
-    return mnType == FRMC_BODY;
+    return mnFrmType == FRM_BODY;
 }
 inline bool SwFrm::IsFlyFrm() const
 {
-    return mnType == FRMC_FLY;
+    return mnFrmType == FRM_FLY;
 }
 inline bool SwFrm::IsSctFrm() const
 {
-    return mnType == FRMC_SECTION;
+    return mnFrmType == FRM_SECTION;
 }
 inline bool SwFrm::IsTabFrm() const
 {
-    return mnType == FRMC_TAB;
+    return mnFrmType == FRM_TAB;
 }
 inline bool SwFrm::IsRowFrm() const
 {
-    return mnType == FRMC_ROW;
+    return mnFrmType == FRM_ROW;
 }
 inline bool SwFrm::IsCellFrm() const
 {
-    return mnType == FRMC_CELL;
+    return mnFrmType == FRM_CELL;
 }
 inline bool SwFrm::IsCntntFrm() const
 {
@@ -1162,11 +1144,11 @@ inline bool SwFrm::IsCntntFrm() const
 }
 inline bool SwFrm::IsTxtFrm() const
 {
-    return mnType == FRMC_TXT;
+    return mnFrmType == FRM_TXT;
 }
 inline bool SwFrm::IsNoTxtFrm() const
 {
-    return mnType == FRMC_NOTXT;
+    return mnFrmType == FRM_NOTXT;
 }
 inline bool SwFrm::IsFlowFrm() const
 {

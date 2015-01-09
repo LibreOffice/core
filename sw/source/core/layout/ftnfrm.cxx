@@ -145,7 +145,7 @@ static sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
 SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
 {
-    mnType = FRMC_FTNCONT;
+    mnFrmType = FRM_FTNCONT;
 }
 
 
@@ -427,7 +427,7 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwCntntFrm *pCnt, SwTxtFtn *pAt
     // #i49383#
     mbUnlockPosOfLowerObjs( true )
 {
-    mnType = FRMC_FTN;
+    mnFrmType = FRM_FTN;
 }
 
 void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )

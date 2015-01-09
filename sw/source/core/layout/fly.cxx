@@ -81,7 +81,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     bLockDeleteContent( false ),
     m_bValidContentPos( false )
 {
-    mnType = FRMC_FLY;
+    mnFrmType = FRM_FLY;
 
     bInvalid = bNotifyBack = true;
     bLocked  = bMinHeight =

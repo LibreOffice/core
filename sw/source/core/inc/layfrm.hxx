@@ -214,12 +214,12 @@ inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
  */
 inline bool SwFrm::IsColBodyFrm() const
 {
-    return mnType == FRMC_BODY && GetUpper()->IsColumnFrm();
+    return mnFrmType == FRM_BODY && GetUpper()->IsColumnFrm();
 }
 
 inline bool SwFrm::IsPageBodyFrm() const
 {
-    return mnType == FRMC_BODY && GetUpper()->IsPageFrm();
+    return mnFrmType == FRM_BODY && GetUpper()->IsPageFrm();
 }
 
 inline SwFrm* SwLayoutFrm::GetLastLower()
