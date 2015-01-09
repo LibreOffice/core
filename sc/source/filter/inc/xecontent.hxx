@@ -113,10 +113,11 @@ public:
 
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
-        @param rbRel  (out-param) true = path is relative. */
+        @param rbRel  (out-param) true = path is relative.
+        @param bEncoded if true return an IURI encoded name, not a DOS name. */
     static OUString     BuildFileName(
                             sal_uInt16& rnLevel, bool& rbRel,
-                            const OUString& rUrl, const XclExpRoot& rRoot );
+                            const OUString& rUrl, const XclExpRoot& rRoot, bool bEncoded );
 private:
 
     /** Writes the body of the HLINK record. */
