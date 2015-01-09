@@ -22,6 +22,11 @@
 #include <vcl/settings.hxx>
 
 using namespace std;
+using namespace drawinglayer::geometry;
+using namespace drawinglayer::processor2d;
+using namespace drawinglayer::primitive2d;
+using namespace drawinglayer::attribute;
+using namespace drawinglayer::geometry;
 
 namespace
 {
@@ -39,14 +44,13 @@ namespace
 
     void SfxCloseButton::Paint( const Rectangle& )
     {
-        const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-        drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-            drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                        *this, aNewViewInfos );
+        const ViewInformation2D aNewViewInfos;
+        const unique_ptr<BaseProcessor2D> pProcessor(
+            createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos));
 
         const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
 
-        drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+        Primitive2DSequence aSeq( 2 );
 
         basegfx::BColor aLightColor( 1.0, 1.0, 191.0 / 255.0 );
         basegfx::BColor aDarkColor( 217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0 );
@@ -66,12 +70,11 @@ namespace
         aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Bottom( ) ) );
         aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Bottom( ) ) );
         aPolygon.setClosed( true );
-        drawinglayer::primitive2d::PolyPolygonColorPrimitive2D* pBack =
-            new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+        PolyPolygonColorPrimitive2D* pBack = new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon( aPolygon ), aLightColor );
         aSeq[0] = pBack;
 
-        drawinglayer::attribute::LineAttribute aLineAttribute( aDarkColor, 2.0 );
+        LineAttribute aLineAttribute(aDarkColor, 2.0);
 
         // Cross
         basegfx::B2DPolyPolygon aCross;
@@ -84,14 +87,12 @@ namespace
         aLine2.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom( ) ) );
         aCross.append( aLine2 );
 
-        drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D * pCross =
-                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D (
-                    aCross, aLineAttribute, drawinglayer::attribute::StrokeAttribute( ) );
+        PolyPolygonStrokePrimitive2D * pCross =
+            new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
 
         aSeq[1] = pCross;
 
-        pProcessor->process( aSeq );
-        delete pProcessor;
+        pProcessor->process(aSeq);
     }
 }
 
@@ -137,14 +138,13 @@ SfxInfoBarWindow::~SfxInfoBarWindow( )
 
 void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
 {
-    const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                    *this, aNewViewInfos );
+    const ViewInformation2D aNewViewInfos;
+    const unique_ptr<BaseProcessor2D> pProcessor(
+        createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos));
 
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
 
-    drawinglayer::primitive2d::Primitive2DSequence aSeq( 2 );
+    Primitive2DSequence aSeq( 2 );
 
     basegfx::BColor aLightColor( 1.0, 1.0, 191.0 / 255.0 );
     basegfx::BColor aDarkColor( 217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0 );
@@ -166,26 +166,23 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
     aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Bottom( ) ) );
     aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Bottom( ) ) );
     aPolygon.setClosed( true );
-    drawinglayer::primitive2d::PolyPolygonColorPrimitive2D* pBack =
-        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                basegfx::B2DPolyPolygon( aPolygon ), aLightColor );
+    PolyPolygonColorPrimitive2D* pBack =
+        new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aLightColor);
     aSeq[0] = pBack;
 
-    drawinglayer::attribute::LineAttribute aLineAttribute( aDarkColor, 1.0 );
+    LineAttribute aLineAttribute(aDarkColor, 1.0);
 
     // Bottom dark line
     basegfx::B2DPolygon aPolygonBottom;
     aPolygonBottom.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom( ) ) );
     aPolygonBottom.append( basegfx::B2DPoint( aRect.Right(), aRect.Bottom( ) ) );
 
-    drawinglayer::primitive2d::PolygonStrokePrimitive2D * pLineBottom =
-            new drawinglayer::primitive2d::PolygonStrokePrimitive2D (
-                aPolygonBottom, aLineAttribute );
+    PolygonStrokePrimitive2D * pLineBottom =
+            new PolygonStrokePrimitive2D (aPolygonBottom, aLineAttribute);
 
     aSeq[1] = pLineBottom;
 
     pProcessor->process( aSeq );
-    delete pProcessor;
 
     Window::Paint( rPaintRect );
 }
