@@ -47,6 +47,8 @@ public:
 
     bool VisitCStyleCastExpr(const CStyleCastExpr * expr);
 
+    bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
+
 private:
     bool externCFunction;
 };
@@ -133,6 +135,32 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
       << incompTo << expr->getType()
       << recommendedFix(expr->getCastKind())
       << expr->getSourceRange();
+    return true;
+}
+
+bool CStyleCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
+    if (ignoreLocation(expr) || expr->getCastKind() != CK_BitCast) {
+        return true;
+    }
+    QualType t = expr->getType();
+    if (!(t->isPointerType()
+          && t->getAs<PointerType>()->getPointeeType()->isVoidType()
+          && expr->getSubExpr()->getType()->isPointerType()))
+    {
+        return true;
+    }
+    Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
+    while (isa<CXXConstCastExpr>(e)) {
+        e = dyn_cast<CXXConstCastExpr>(e)->getSubExpr()->IgnoreParenImpCasts();
+    }
+    if (isa<CXXReinterpretCastExpr>(e)) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("redundant reinterpret_cast, result is implicitly cast to void"
+             " pointer"),
+            e->getExprLoc())
+            << e->getSourceRange();
+    }
     return true;
 }
 

@@ -465,7 +465,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
             static_cast< sal_Sequence * >(buf)->elements + i * ctd.get()->nSize,
             const_cast< void * >(as[i].getValue(ctd)), ctd.get(), 0);
     }
-    return BinaryAny(type, reinterpret_cast< sal_Sequence ** >(&buf));
+    return BinaryAny(type, &buf);
 }
 
 void Unmarshal::readMemberValues(
