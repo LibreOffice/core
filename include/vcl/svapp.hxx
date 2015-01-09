@@ -1550,7 +1550,7 @@ class VCL_DLLPUBLIC SolarMutexGuard
     }
 };
 
-class VCL_DLLPUBLIC SolarMutexClearableGuard
+class VCL_DLLPUBLIC SolarMutexClearableGuard SAL_FINAL
 {
     SolarMutexClearableGuard( const SolarMutexClearableGuard& );
     const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& );
@@ -1566,7 +1566,7 @@ public:
         }
 
     /** Releases mutex. */
-    virtual ~SolarMutexClearableGuard()
+    ~SolarMutexClearableGuard()
         {
             if( !m_bCleared )
             {
@@ -1587,7 +1587,7 @@ protected:
     comphelper::SolarMutex& m_solarMutex;
 };
 
-class VCL_DLLPUBLIC SolarMutexResettableGuard
+class VCL_DLLPUBLIC SolarMutexResettableGuard SAL_FINAL
 {
     SolarMutexResettableGuard( const SolarMutexResettableGuard& );
     const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& );
@@ -1603,7 +1603,7 @@ public:
         }
 
     /** Releases mutex. */
-    virtual ~SolarMutexResettableGuard()
+    ~SolarMutexResettableGuard()
         {
             if( !m_bCleared )
             {
