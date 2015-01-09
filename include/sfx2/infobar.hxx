@@ -17,6 +17,8 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 /** SfxChildWindow for positioning the InfoBar in the view.
   */
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
@@ -41,10 +43,12 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 class SfxInfoBarWindow : public vcl::Window
 {
     private:
-        OUString               m_sId;
-        FixedText*                  m_pMessage;
-        Button*                     m_pCloseBtn;
-        std::vector< PushButton* >  m_aActionBtns;
+        OUString m_sId;
+
+        std::unique_ptr<FixedText> m_pMessage;
+        std::unique_ptr<Button>    m_pCloseBtn;
+
+        boost::ptr_vector<PushButton> m_aActionBtns;
 
     public:
         SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
@@ -63,8 +67,8 @@ class SfxInfoBarWindow : public vcl::Window
 class SfxInfoBarContainerWindow : public vcl::Window
 {
     private:
-        SfxInfoBarContainerChild*        m_pChildWin;
-        std::vector< SfxInfoBarWindow* > m_pInfoBars;
+        SfxInfoBarContainerChild*           m_pChildWin;
+        boost::ptr_vector<SfxInfoBarWindow> m_pInfoBars;
 
     public:
         SfxInfoBarContainerWindow( SfxInfoBarContainerChild* pChildWin );

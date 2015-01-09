@@ -96,21 +96,19 @@ namespace
 }
 
 SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
-       const OUString& sMessage, vector< PushButton* > aButtons ) :
+       const OUString& sMessage, vector<PushButton*> aButtons ) :
     Window( pParent, 0 ),
     m_sId( sId ),
-    m_pMessage( NULL ),
-    m_pCloseBtn( NULL ),
-    m_aActionBtns( aButtons )
+    m_pMessage(new FixedText(this, 0)),
+    m_pCloseBtn(new SfxCloseButton(this)),
+    m_aActionBtns()
 {
     long nWidth = pParent->GetSizePixel().getWidth();
     SetPosSizePixel( Point( 0, 0 ), Size( nWidth, 40 ) );
-    m_pMessage = new FixedText( this, 0 );
     m_pMessage->SetText( sMessage );
     m_pMessage->SetBackground( Wallpaper( Color(  255, 255, 191 ) ) );
     m_pMessage->Show( );
 
-    m_pCloseBtn = new SfxCloseButton( this );
     m_pCloseBtn->SetPosSizePixel( Point( nWidth - 25, 15 ), Size( 10, 10 ) );
     m_pCloseBtn->SetClickHdl( LINK( this, SfxInfoBarWindow, CloseHandler ) );
     m_pCloseBtn->Show( );
@@ -118,8 +116,8 @@ SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
     // Reparent the buttons and place them on the right of the bar
     long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
     long nBtnGap = 5;
-    for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
-            it != m_aActionBtns.end( ); ++it )
+    vector<PushButton*>::iterator it;
+    for (it = aButtons.begin(); it != aButtons.end(); ++it)
     {
         PushButton* pBtn = *it;
         pBtn->SetParent( this );
@@ -128,23 +126,14 @@ SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
         pBtn->SetPosSizePixel( Point( nX, 5 ), Size( nBtnWidth, 30 ) );
         nX -= nBtnGap;
         pBtn->Show( );
+        m_aActionBtns.push_back(pBtn);
     }
 
     m_pMessage->SetPosSizePixel( Point( 10, 10 ), Size( nX - 20, 20 ) );
 }
 
 SfxInfoBarWindow::~SfxInfoBarWindow( )
-{
-    delete m_pMessage;
-    delete m_pCloseBtn;
-
-    for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
-            it != m_aActionBtns.end( ); ++it )
-    {
-        delete *it;
-    }
-    m_aActionBtns.clear( );
-}
+{}
 
 void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
 {
@@ -209,13 +198,12 @@ void SfxInfoBarWindow::Resize( )
     // Reparent the buttons and place them on the right of the bar
     long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
     long nBtnGap = 5;
-    for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
-            it != m_aActionBtns.end( ); ++it )
+    boost::ptr_vector<PushButton>::iterator it;
+    for (it = m_aActionBtns.begin(); it != m_aActionBtns.end(); ++it)
     {
-        PushButton* pBtn = *it;
-        long nBtnWidth = pBtn->GetSizePixel( ).getWidth();
+        long nBtnWidth = it->GetSizePixel( ).getWidth();
         nX -= nBtnWidth;
-        pBtn->SetPosSizePixel( Point( nX, 5 ), Size( nBtnWidth, 30 ) );
+        it->SetPosSizePixel( Point( nX, 5 ), Size( nBtnWidth, 30 ) );
         nX -= nBtnGap;
     }
 
@@ -231,18 +219,12 @@ IMPL_LINK_NOARG( SfxInfoBarWindow, CloseHandler )
 SfxInfoBarContainerWindow::SfxInfoBarContainerWindow( SfxInfoBarContainerChild* pChildWin ) :
     Window( pChildWin->GetParent( ), 0 ),
     m_pChildWin( pChildWin ),
-    m_pInfoBars( )
+    m_pInfoBars()
 {
 }
 
 SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow( )
 {
-    for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( );
-            it != m_pInfoBars.end( ); ++it )
-    {
-        delete *it;
-    }
-    m_pInfoBars.clear( );
 }
 
 void SfxInfoBarContainerWindow::appendInfoBar( const OUString& sId, const OUString& sMessage, vector< PushButton* > aButtons )
@@ -261,36 +243,32 @@ void SfxInfoBarContainerWindow::appendInfoBar( const OUString& sId, const OUStri
 
 SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar( const OUString& sId )
 {
-    SfxInfoBarWindow* pRet = NULL;
-    for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( );
-            it != m_pInfoBars.end( ) && pRet == NULL; ++it )
+    boost::ptr_vector<SfxInfoBarWindow>::iterator it;
+    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        SfxInfoBarWindow* pBar = *it;
-        if ( pBar->getId( ) == sId )
-            pRet = pBar;
+        if (it->getId() == sId)
+            return &(*it);
     }
-    return pRet;
+    return NULL;
 }
 
 void SfxInfoBarContainerWindow::removeInfoBar( SfxInfoBarWindow* pInfoBar )
 {
-    for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( );
-            it != m_pInfoBars.end( ); ++it )
+    boost::ptr_vector<SfxInfoBarWindow>::iterator it;
+    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        if ( pInfoBar == *it )
+        if (pInfoBar == &(*it))
         {
-            m_pInfoBars.erase( it );
+            m_pInfoBars.erase(it);
             break;
         }
     }
-    delete pInfoBar;
 
     long nY = 0;
-    for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( ); it != m_pInfoBars.end( ); ++it )
+    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        SfxInfoBarWindow* pBar = *it;
-        pBar->SetPosPixel( Point( 0, nY ) );
-        nY += pBar->GetSizePixel( ).getHeight( );
+        it->SetPosPixel( Point( 0, nY ) );
+        nY += it->GetSizePixel( ).getHeight( );
     }
 
     Size aSize = GetSizePixel( );
@@ -304,14 +282,14 @@ void SfxInfoBarContainerWindow::Resize( )
 {
     // Only need to change the width of the infobars
     long nWidth = GetSizePixel( ).getWidth( );
-    for ( vector< SfxInfoBarWindow * >::iterator it = m_pInfoBars.begin( );
-            it != m_pInfoBars.end( ); ++it )
+
+    boost::ptr_vector<SfxInfoBarWindow>::iterator it;
+    for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        SfxInfoBarWindow* pInfoBar = *it;
-        Size aSize = pInfoBar->GetSizePixel( );
+        Size aSize = it->GetSizePixel( );
         aSize.setWidth( nWidth );
-        pInfoBar->SetSizePixel( aSize );
-        pInfoBar->Resize( );
+        it->SetSizePixel( aSize );
+        it->Resize( );
     }
 }
 
