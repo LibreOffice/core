@@ -673,7 +673,7 @@ void ScDuration();
 void ScSLN();
 double ScGetRmz(double fZins, double fZzr, double fBw,
                        double fZw, double fF);
-void ScRMZ();
+void ScPMT();
 void ScZGZ();
 double ScGetZw(double fZins, double fZzr, double fRmz,
                       double fBw, double fF);
