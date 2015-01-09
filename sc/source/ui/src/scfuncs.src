@@ -1852,8 +1852,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Factor. The factor for balance decline. F = 2 means a double declining balance factor" ;
         };
     };
-     // -=*# Resource for function GDA2 #*=-
-    Resource SC_OPCODE_GDA_2
+     // -=*# Resource for function DB #*=-
+    Resource SC_OPCODE_DB
     {
         String 1 // Description
         {

@@ -95,7 +95,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocPV:
         case ocSYD:
         case ocGDA:
-        case ocGDA2:
+        case ocDB:
         case ocVBD:
         case ocLIA:
         case ocRMZ:
