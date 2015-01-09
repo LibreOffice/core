@@ -132,6 +132,10 @@ void SwpHintsArray::DeleteAtPos( const size_t nPos )
 
 bool SwpHintsArray::Contains( const SwTxtAttr *pHt ) const
 {
+#ifdef DBG_UTIL
+    Check(true);
+#endif
+
     // DO NOT use find() here!
     // if called from SwTxtNode::InsertItem, pHt has already been deleted,
     // so it cannot be dereferenced

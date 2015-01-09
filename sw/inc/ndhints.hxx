@@ -103,13 +103,25 @@ public:
     SwTxtAttr * Cut( const size_t nPosInStart );
 
     inline const SwTxtAttr * GetStart( const size_t nPos ) const
-        { return m_HintStarts[nPos]; }
+    {
+        assert(nPos < m_HintStarts.size());
+        return m_HintStarts[nPos];
+    }
     inline const SwTxtAttr * GetEnd( const size_t nPos ) const
-        { return m_HintEnds  [nPos]; }
+    {
+        assert(nPos < m_HintEnds.size());
+        return m_HintEnds[nPos];
+    }
     inline       SwTxtAttr * GetStart( const size_t nPos )
-        { return m_HintStarts[nPos]; }
+    {
+        assert(nPos < m_HintStarts.size());
+        return m_HintStarts[nPos];
+    }
     inline       SwTxtAttr * GetEnd( const size_t nPos )
-        { return m_HintEnds  [nPos]; }
+    {
+        assert(nPos < m_HintStarts.size());
+        return m_HintEnds[nPos];
+    }
 
     inline size_t GetEndCount()   const { return m_HintEnds.size(); }
     inline size_t GetStartCount() const { return m_HintStarts.size(); }
@@ -122,8 +134,8 @@ public:
     inline       SwTxtAttr * GetTextHint( const size_t nIdx )
         { return GetStart(nIdx); }
     inline const SwTxtAttr * operator[]( const size_t nIdx ) const
-        { return m_HintStarts[nIdx]; }
-    inline size_t Count() const { return m_HintStarts.size(); }
+        { return GetStart(nIdx); }
+    inline size_t Count() const { return GetStartCount(); }
 
 #ifdef DBG_UTIL
     bool Check(bool) const;
