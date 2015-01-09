@@ -1481,7 +1481,7 @@ void ScInterpreter::ScPMT()
     PushDouble(ScGetRmz(nInterest, nZzr, nBw, nZw, nFlag));
 }
 
-void ScInterpreter::ScZGZ()
+void ScInterpreter::ScRRI()
 {
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 3 ) )

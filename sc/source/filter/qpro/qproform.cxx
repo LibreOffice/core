@@ -135,7 +135,7 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
     {
         sal_Int16 nLast = nArgs- 1;
 
-        if( eOc == ocZGZ )
+        if( eOc == ocRRI )
             aPool << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
         if( eOc == ocIpmt )
             aPool << eParam[ 3 ] << ocSep << eParam[ 2 ] << ocSep << eParam[ 1 ] << ocSep << eParam[ 0 ];
@@ -488,7 +488,7 @@ static const struct
     { ocExact, FT_FuncFix2 },
     { ocNoName, FT_NotImpl }, // Call()
     { ocIndirect, FT_FuncFix1 },
-    { ocZGZ, FT_FuncFix3 }, // Interest
+    { ocRRI, FT_FuncFix3 }, // Interest
     { ocNoName, FT_NotImpl },
     { ocNoName, FT_NotImpl },
     { ocSLN, FT_FuncFix3 },

@@ -586,7 +586,7 @@ void ScParameterClassification::GenerateDocumentation()
             aStr.append(')');
             switch ( eOp )
             {
-                case ocZGZ:
+                case ocRRI:
                     aStr.append("   // RRI in English resource, but ZGZ in English-only section");
                 break;
                 case ocMultiArea:
