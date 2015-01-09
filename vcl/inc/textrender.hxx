@@ -42,40 +42,45 @@ class TextRenderImpl
 public:
     virtual ~TextRenderImpl() {}
 
-    virtual void            SetTextColor( SalColor nSalColor ) = 0;
-    virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
-    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) = 0;
-    virtual const FontCharMapPtr GetFontCharMap() const = 0;
-    virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
-    virtual void            GetDevFontList( PhysicalFontCollection* ) = 0;
-    virtual void ClearDevFontCache() = 0;
-    virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) = 0;
-    virtual bool            CreateFontSubset( const OUString& rToFile,
-                                              const PhysicalFontFace*,
-                                              sal_GlyphId* pGlyphIDs,
-                                              sal_uInt8* pEncoding,
-                                              sal_Int32* pWidths,
-                                              int nGlyphs,
-                                              FontSubsetInfo& rInfo
-                                              ) = 0;
-    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded ) = 0;
-    virtual const void* GetEmbedFontData( const PhysicalFontFace*,
-                                          const sal_Ucs* pUnicodes,
-                                          sal_Int32* pWidths,
-                                          FontSubsetInfo& rInfo,
-                                          long* pDataLen ) = 0;
-    virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
-    virtual void            GetGlyphWidths( const PhysicalFontFace*,
-                                            bool bVertical,
-                                            Int32Vector& rWidths,
-                                            Ucs2UIntMap& rUnicodeEnc ) = 0;
-    virtual bool            GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
-    virtual bool            GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& ) = 0;
-    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
-    virtual void            DrawServerFontLayout( const ServerFontLayout& ) = 0;
-    virtual SystemFontData  GetSysFontData( int nFallbackLevel ) const = 0;
+    virtual void                    SetTextColor( SalColor nSalColor ) = 0;
+    virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                    GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) = 0;
+    virtual const FontCharMapPtr    GetFontCharMap() const = 0;
+    virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
+    virtual void                    GetDevFontList( PhysicalFontCollection* ) = 0;
+    virtual void                    ClearDevFontCache() = 0;
+    virtual bool                    AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) = 0;
+    virtual bool                    CreateFontSubset(
+                                        const OUString& rToFile,
+                                        const PhysicalFontFace*,
+                                        sal_GlyphId* pGlyphIDs,
+                                        sal_uInt8* pEncoding,
+                                        sal_Int32* pWidths,
+                                        int nGlyphs,
+                                        FontSubsetInfo& rInfo) = 0;
+
+    virtual const Ucs2SIntMap*      GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded ) = 0;
+    virtual const void*             GetEmbedFontData(
+                                        const PhysicalFontFace*,
+                                        const sal_Ucs* pUnicodes,
+                                        sal_Int32* pWidths,
+                                        FontSubsetInfo& rInfo,
+                                        long* pDataLen ) = 0;
+
+    virtual void                    FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
+    virtual void                    GetGlyphWidths(
+                                        const PhysicalFontFace*,
+                                        bool bVertical,
+                                        Int32Vector& rWidths,
+                                        Ucs2UIntMap& rUnicodeEnc ) = 0;
+
+    virtual bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
+    virtual bool                    GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& ) = 0;
+    virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
+    virtual void                    DrawServerFontLayout( const ServerFontLayout& ) = 0;
+    virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const = 0;
 };
 
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set tabstop=4 shiftwidth=4 softtabstop=4 expandtab: */
