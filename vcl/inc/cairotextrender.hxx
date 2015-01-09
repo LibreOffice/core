@@ -73,7 +73,7 @@ class CairoTextRender : public TextRenderImpl
     bool            mbPrinter;
     ServerFont*     mpServerFont[ MAX_FALLBACK ];
 
-    SalColor        nTextColor_;
+    SalColor        mnTextColor;
     CairoFontsCache m_aCairoFontsCache;
 
     bool            bDisableGraphite_;

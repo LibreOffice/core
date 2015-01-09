@@ -42,7 +42,7 @@
 
 CairoTextRender::CairoTextRender(bool bPrinter):
     mbPrinter(bPrinter),
-    nTextColor_(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
+    mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
         mpServerFont[i] = NULL;
@@ -229,9 +229,9 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     clipRegion(cr);
 
     cairo_set_source_rgb(cr,
-        SALCOLOR_RED(nTextColor_)/255.0,
-        SALCOLOR_GREEN(nTextColor_)/255.0,
-        SALCOLOR_BLUE(nTextColor_)/255.0);
+        SALCOLOR_RED(mnTextColor)/255.0,
+        SALCOLOR_GREEN(mnTextColor)/255.0,
+        SALCOLOR_BLUE(mnTextColor)/255.0);
 
     ServerFont& rFont = rLayout.GetServerFont();
 
@@ -380,9 +380,9 @@ sal_uInt16 CairoTextRender::SetFont( FontSelectPattern *pEntry, int nFallbackLev
 void
 CairoTextRender::SetTextColor( SalColor nSalColor )
 {
-    if( nTextColor_ != nSalColor )
+    if( mnTextColor != nSalColor )
     {
-        nTextColor_ = nSalColor;
+        mnTextColor = nSalColor;
     }
 }
 
