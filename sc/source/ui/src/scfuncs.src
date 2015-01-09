@@ -1980,8 +1980,8 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Do not alter. Type = 1 denotes switch to linear depreciation, type = 0 do not switch." ;
         };
     };
-     // -=*# Resource for function EFFEKTIV #*=-
-    Resource SC_OPCODE_EFFEKTIV
+     // -=*# Resource for function EFFECTIVE #*=-
+    Resource SC_OPCODE_EFFECTIVE
     {
         String 1 // Description
         {

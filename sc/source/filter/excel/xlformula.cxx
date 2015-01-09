@@ -333,7 +333,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocIsOdd,              255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getIsodd" ) },
     { ocGCD,                255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getGcd" ) },
     { ocLCM,                255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getLcm" ) },
-    { ocEffektiv,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getEffect" ) },
+    { ocEffective,          255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getEffect" ) },
     { ocCumPrinc,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getCumprinc" ) },
     { ocCumIpmt,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getCumipmt" ) },
     { ocNominal,            255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_EXPORTONLY | EXC_FUNCFLAG_ADDINEQUIV, EXC_FUNCNAME_ADDIN( "Analysis.getNominal" ) }
