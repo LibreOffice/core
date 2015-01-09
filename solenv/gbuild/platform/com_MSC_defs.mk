@@ -265,11 +265,6 @@ gb_DEBUG_CFLAGS+=-FS
 endif
 
 # this does not use CFLAGS so it is not overridable
-ifneq ($(ENABLE_CRASHDUMP),)
-gb_CFLAGS+=-Zi
-gb_CXXFLAGS+=-Zi
-endif
-
 ifeq ($(gb_SYMBOL),$(true))
 gb_CFLAGS+=$(gb_DEBUG_CFLAGS)
 gb_CXXFLAGS+=$(gb_DEBUG_CFLAGS)

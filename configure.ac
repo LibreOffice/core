@@ -4527,6 +4527,10 @@ dnl Check for syslog header
 dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
 
+# placeholder for future crash reporter feature
+ENABLE_CRASHDUMP=""
+AC_SUBST(ENABLE_CRASHDUMP)
+
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
