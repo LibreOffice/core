@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_221a9018",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-01-09T11:57:28Z",
+      "side": 1,
+      "message": "This ^^^ ...",
+      "revId": "41ee6203bf3b98a391cfdb27a663bab14f20f50e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_a2dc6047",
+        "filename": "sd/source/ui/view/DocumentRenderer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-01-09T11:57:28Z",
+      "side": 1,
+      "message": "... is almost identical to this ^^^\n\nI\u0027d really prefer to have some boolean member variable in DocumentRenderer:Implementation (bUsesPrinterPageSize ?), or better yet, a method in PrintOptions class that would unite all those cases where printer-preferred page size should take precedence over document/system-defined page size.\n\nIt would in the long run make the code easier to read, less error-prone and next time something needs to be changed (another regression pops up, ehehe) in this area, it will have to be changed only on one place",
+      "revId": "41ee6203bf3b98a391cfdb27a663bab14f20f50e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
