@@ -2262,7 +2262,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocMIRR:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMIRR, nResultSize));
                 break;
-            case ocRMZ:
+            case ocPMT:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPMT, nResultSize));
                 break;
             case ocRate:

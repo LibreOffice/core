@@ -1464,7 +1464,7 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
     return -fPayment;
 }
 
-void ScInterpreter::ScRMZ()
+void ScInterpreter::ScPMT()
 {
     double nInterest, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
