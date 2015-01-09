@@ -1759,7 +1759,6 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
                     if ( !ImplCallPreNotify( aNEvt ) )
                         pFocusWin->LoseFocus();
                     pFocusWin->ImplCallDeactivateListeners( NULL );
-                    GetpApp()->FocusChanged();
                 }
                 // XXX
             }
@@ -2137,7 +2136,6 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
         if ( nType )
         {
             DataChangedEvent aDCEvt( nType );
-            pApp->DataChanged( aDCEvt );
             Application::NotifyAllWindows( aDCEvt );
         }
     }

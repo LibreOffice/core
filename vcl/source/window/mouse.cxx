@@ -393,7 +393,6 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
             }
         }
 
-        GetpApp()->FocusChanged();
         ImplNewInputContext();
     }
 }

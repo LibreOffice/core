@@ -430,7 +430,6 @@ Window::~Window()
         {
             pSVData->maWinData.mpFocusWin = NULL;
             pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
-            GetpApp()->FocusChanged();
         }
         else
         {
@@ -456,7 +455,6 @@ Window::~Window()
             {
                 pSVData->maWinData.mpFocusWin = NULL;
                 pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
-                GetpApp()->FocusChanged();
             }
         }
     }

@@ -222,14 +222,6 @@ bool Application::QueryExit()
         return true;
 }
 
-void Application::FocusChanged()
-{
-}
-
-void Application::DataChanged( const DataChangedEvent& )
-{
-}
-
 void Application::Init()
 {
 }
@@ -523,7 +515,6 @@ void Application::SetSettings( const AllSettings& rSettings )
         if ( nChangeFlags )
         {
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
-            GetpApp()->DataChanged( aDCEvt );
 
             // notify data change handler
             ImplCallEventListeners( VCLEVENT_APPLICATION_DATACHANGED, NULL, &aDCEvt);

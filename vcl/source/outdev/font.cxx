@@ -648,9 +648,7 @@ void OutputDevice::EndFontSubstitution()
     {
         ImplUpdateAllFontData( false );
 
-        Application* pApp = GetpApp();
         DataChangedEvent aDCEvt( DATACHANGED_FONTSUBSTITUTION );
-        pApp->DataChanged( aDCEvt );
         Application::NotifyAllWindows( aDCEvt );
         pSVData->maGDIData.mbFontSubChanged = false;
     }

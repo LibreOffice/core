@@ -355,22 +355,6 @@ public:
     */
     ///@{
 
-    /** Notify that the application is no longer the "focused" (or current)
-        application - needed for Windowing systems where an end user can switch
-        from one application to another.
-
-     @see DataChanged
-    */
-    virtual void                FocusChanged();
-
-    /** Notify the application that data has changed via an event.
-
-     @param rDCEvt      Const reference to a DataChangedEvent object
-
-     @see FocusChanged, NotifyAllWindows
-    */
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
-
     /** Notify all windows that the application has changed data.
 
      @param rDCEvt     Reference to a DataChangedEvent object
