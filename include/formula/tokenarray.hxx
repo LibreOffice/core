@@ -24,7 +24,7 @@
 #include <formula/token.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
 #include <limits.h>
-
+#include <type_traits>
 #include <unordered_set>
 
 namespace svl {
