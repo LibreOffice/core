@@ -6369,9 +6369,7 @@ RTFSprms RTFFrame::getSprms()
     }
 
     RTFSprms frameprSprms;
-    auto pFrameprValue = std::make_shared<RTFValue>(sprms);
-    frameprSprms.set(NS_ooxml::LN_CT_PPrBase_framePr, pFrameprValue);
-
+    frameprSprms.set(NS_ooxml::LN_CT_PPrBase_framePr, std::make_shared<RTFValue>(sprms));
     return frameprSprms;
 }
 
