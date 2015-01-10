@@ -71,12 +71,6 @@ namespace basegfx
         void lcl_skipDouble(sal_Int32&              io_rPos,
                             const OUString&  rStr);
 
-        inline void lcl_putNumberChar( OUStringBuffer& rStr,
-                                double                 fValue )
-        {
-            rStr.append( fValue );
-        }
-
         void lcl_putNumberCharWithSpace( OUStringBuffer& rStr,
                                             double              fValue,
                                             double              fOldValue,
