@@ -199,6 +199,7 @@ public:
     const sc::CellTextAttr* GetCellTextAttr( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow ) const;
 
     void        Delete( SCROW nRow );
+    void        DeleteContent( SCROW nRow, bool bBroadcast = true );
     void        FreeAll();
     void        FreeNotes();
     void Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
