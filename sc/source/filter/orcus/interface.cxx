@@ -229,22 +229,33 @@ double translateToInternal(double nVal, orcus::length_unit_t unit)
     switch(unit)
     {
         case orcus::length_unit_inch:
+            return nVal * 72.0 * 20.0;
+            break;
         case orcus::length_unit_twip:
+            return nVal;
+            break;
         case orcus::length_unit_point:
+            return nVal * 20.0;
+            break;
         case orcus::length_unit_centimeter:
+            return nVal * 20.0 * 72.0 / 2.54;
+            break;
         case orcus::length_unit_unknown:
+            SAL_WARN("sc,orcus", "unknown unit");
+            break;
         default:
             break;
     }
-    return 0;
+    return nVal;
 }
 
 
 }
 
-void ScOrcusSheetProperties::set_column_width(os::col_t col, double width, orcus::length_unit_t /*unit*/)
+void ScOrcusSheetProperties::set_column_width(os::col_t col, double width, orcus::length_unit_t unit)
 {
-    mrDoc.getDoc().SetColWidthOnly(col, mnTab, width);
+    double nNewWidth = translateToInternal(width, unit);
+    mrDoc.getDoc().SetColWidthOnly(col, mnTab, nNewWidth);
 }
 
 void ScOrcusSheetProperties::set_column_hidden(os::col_t col, bool hidden)
@@ -253,9 +264,10 @@ void ScOrcusSheetProperties::set_column_hidden(os::col_t col, bool hidden)
         mrDoc.getDoc().SetColHidden(col, col, mnTab, hidden);
 }
 
-void ScOrcusSheetProperties::set_row_height(os::row_t row, double height, orcus::length_unit_t /*unit*/)
+void ScOrcusSheetProperties::set_row_height(os::row_t row, double height, orcus::length_unit_t unit)
 {
-    mrDoc.getDoc().SetRowHeightOnly(row, row,mnTab, height);
+    double nNewHeight = translateToInternal(height, unit);
+    mrDoc.getDoc().SetRowHeightOnly(row, row,mnTab, nNewHeight);
 }
 
 void ScOrcusSheetProperties::set_row_hidden(os::row_t row, bool hidden)
