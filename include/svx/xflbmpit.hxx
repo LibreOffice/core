@@ -41,6 +41,7 @@ public:
 
     SVX_DLLPRIVATE virtual sal_uInt16           GetValueCount() const SAL_OVERRIDE;
     SVX_DLLPRIVATE RECT_POINT               GetValue() const { return (RECT_POINT) SfxEnumItem::GetValue(); }
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 

@@ -588,6 +588,14 @@ sal_uInt16 XFillBmpPosItem::GetValueCount() const
     return 9;
 }
 
+void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("xFillBmpPosItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 // class XFillBmpTileSizeXItem
 
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeXItem, SfxMetricItem );
