@@ -93,7 +93,7 @@ public:
 protected:
 
     /// Handler for click, in case we want the button to handle uno commands (.uno:Something).
-    static long         dispatchCommandHandler(void *, void *pCaller);
+    static sal_IntPtr   dispatchCommandHandler(void *, void *pCaller);
 };
 
 

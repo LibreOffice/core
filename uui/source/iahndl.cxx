@@ -146,7 +146,7 @@ UUIInteractionHelper::~UUIInteractionHelper()
 {
 }
 
-long
+sal_IntPtr
 UUIInteractionHelper::handlerequest(
     void* pHandleData, void* pInteractionHelper)
 {
@@ -191,7 +191,7 @@ UUIInteractionHelper::handleRequest(
     }
 }
 
-long
+sal_IntPtr
 UUIInteractionHelper::getstringfromrequest(
     void* pHandleData,void* pInteractionHelper)
 {
