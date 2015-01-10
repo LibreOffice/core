@@ -127,6 +127,8 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
+
 /**
  *  AnimationWindow - FloatingWindow
  */

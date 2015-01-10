@@ -132,7 +132,7 @@ private:
 
     ::Window*       pWin;
     ::std::vector< ::std::pair<BitmapEx*, Time*> > m_FrameList;
-    static const size_t EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
+    static size_t EMPTY_FRAMELIST;
     size_t          m_nCurrentFrame;
     SdDrawDocument* pMyDoc;
 
