@@ -420,6 +420,7 @@ public:
     void testFormulaToValue2();
 
     void testColumnFindEditCells();
+    void testSetStringAndNote();
 
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
@@ -621,6 +622,7 @@ public:
     CPPUNIT_TEST(testFormulaToValue);
     CPPUNIT_TEST(testFormulaToValue2);
     CPPUNIT_TEST(testColumnFindEditCells);
+    CPPUNIT_TEST(testSetStringAndNote);
     CPPUNIT_TEST_SUITE_END();
 
 private:

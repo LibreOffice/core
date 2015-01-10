@@ -6241,6 +6241,23 @@ void Test::testMixData()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSetStringAndNote()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    //note on A1
+    ScAddress aAdrA1 (0, 0, 0);
+    ScPostIt* pNote = m_pDoc->GetOrCreateNote(aAdrA1);
+    pNote->SetText(aAdrA1, "Hello world in A1");
+
+    m_pDoc->SetString(0, 0, 0, "");
+
+    pNote = m_pDoc->GetNote(aAdrA1);
+    CPPUNIT_ASSERT(pNote);
+
+    m_pDoc->DeleteTab(0);
+}
+
 ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)
 {
     TypeId aType(TYPE(ScDocShell));
