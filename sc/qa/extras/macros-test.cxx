@@ -69,7 +69,6 @@ void ScMacrosTest::testMSP()
     const OUString aFileNameBase("MasterScriptProviderProblem.ods");
     OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
-    std::cout << "MasterScriptProviderProblem (fdo#67547) test" << std::endl;
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load MasterScriptProviderProblem.ods", xComponent.is());
@@ -92,7 +91,7 @@ void ScMacrosTest::testMSP()
     OUString sResult;
     aRet >>= sResult;
 
-    std::cout << "Result is " << sResult << std::endl;
+    SAL_INFO("sc.qa", "Result is " << sResult );
     CPPUNIT_ASSERT_MESSAGE("TestMSP ( for fdo#67547) failed", sResult == "OK" );
     xDocSh->DoClose();
 }
@@ -102,7 +101,6 @@ void ScMacrosTest::testStarBasic()
     const OUString aFileNameBase("StarBasic.ods");
     OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
-    std::cout << "StarBasic test" << std::endl;
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
@@ -124,7 +122,6 @@ void ScMacrosTest::testStarBasic()
         aParams, aRet, aOutParamIndex, aOutParam);
     double aValue;
     rDoc.GetValue(0,0,0,aValue);
-    std::cout << "returned value = " << aValue << std::endl;
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
     xDocSh->DoClose();
 }
@@ -259,15 +256,15 @@ void ScMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        std::cout << "about to invoke vba test in " << OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+        SAL_INFO("sc.qa", "about to invoke vba test in " << aFileName);
 
         SfxObjectShell::CallXScript(
             xComponent, testInfo[i].sMacroUrl, aParams, aRet, aOutParamIndex,
             aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
-        std::cout << "value of Ret " << OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
-        CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
+        SAL_INFO("sc.qa", "value of Ret " << aStringRes);
+        CPPUNIT_ASSERT_MESSAGE( "script reported failure", aStringRes == "OK" );
         pFoundShell->DoClose();
         if ( bWorkbooksHandling )
         {
