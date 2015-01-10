@@ -948,7 +948,7 @@ void ScTable::SortReorderByRow(
                         pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
                     }
 
-                    sc::CellStoreType::iterator itBlk = rCellStore.push_back(pNew);
+                    rCellStore.push_back(pNew);
                 }
                 break;
                 default:
