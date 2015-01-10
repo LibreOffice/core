@@ -104,13 +104,13 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
 //IMPL_LINK( ScrollableWrapper, ScrollBarHdl, ScrollBar*, pSB )
 
 template< class T>
-long ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, void* pCaller)
+sal_IntPtr ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, void* pCaller)
 {
     return ((ScrollableWrapper<T>*)pThis )->ScrollBarHdl( (ScrollBar*)pCaller );
 }
 
 template< class T>
-long ScrollableWrapper<T>::ScrollBarHdl( ScrollBar* pSB )
+sal_IntPtr ScrollableWrapper<T>::ScrollBarHdl( ScrollBar* pSB )
 {
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     if( pSB == &maVScrollBar )

@@ -131,7 +131,7 @@ private:
         bool & bHasErrorString,
         OUString & rErrorString);
 
-    static long
+    static sal_IntPtr
     handlerequest(void* pHandleData, void* pInteractionHandler);
 
     com::sun::star::beans::Optional< OUString >
@@ -139,7 +139,7 @@ private:
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest);
 
-    static long
+    static sal_IntPtr
     getstringfromrequest(void* pHandleData, void* pInteractionHandler);
 
     vcl::Window *

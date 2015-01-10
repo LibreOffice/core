@@ -669,7 +669,7 @@ struct ImplDelayedDispatch
     ~ImplDelayedDispatch() {}
 };
 
-static long implDispatchDelayed( void*, void* pArg )
+static sal_IntPtr implDispatchDelayed( void*, void* pArg )
 {
     struct ImplDelayedDispatch* pDispatch = reinterpret_cast<ImplDelayedDispatch*>(pArg);
     try

@@ -404,7 +404,7 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
     return aSet.GetItemState(nId) != SfxItemState::DISABLED;
 }
 
-long ShellCall_Impl( void* pObj, void* pArg )
+sal_IntPtr ShellCall_Impl( void* pObj, void* pArg )
 {
     ((SfxShell* )pObj)->ExecuteSlot( *(SfxRequest*)pArg, (SfxInterface*)0L );
     return 0;
@@ -665,7 +665,7 @@ bool SfxShell::HasUIFeature( sal_uInt32 )
     return false;
 }
 
-long DispatcherUpdate_Impl( void*, void* pArg )
+sal_IntPtr DispatcherUpdate_Impl( void*, void* pArg )
 {
     ((SfxDispatcher*) pArg)->Update_Impl( true );
     ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(false);

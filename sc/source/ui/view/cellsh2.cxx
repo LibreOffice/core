@@ -187,7 +187,7 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
 //after end execute from !IsModalInputMode, it is safer to delay deleting
 namespace
 {
-    long DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
+    sal_IntPtr DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
     {
         delete reinterpret_cast<SfxAbstractTabDialog*>( pAbstractDialog );
         return 0;

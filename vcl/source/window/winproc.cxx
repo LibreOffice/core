@@ -253,7 +253,7 @@ struct ContextMenuEvent
     Point           aChildPos;
 };
 
-static long ContextMenuEventLink( void* pCEvent, void* )
+static sal_IntPtr ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = (ContextMenuEvent*)pCEvent;
 
@@ -1833,7 +1833,7 @@ struct DelayedCloseEvent
     ImplDelData     aDelData;
 };
 
-static long DelayedCloseEventLink( void* pCEvent, void* )
+static sal_IntPtr DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = (DelayedCloseEvent*)pCEvent;
 

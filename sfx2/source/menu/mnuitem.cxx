@@ -299,7 +299,7 @@ PopupMenu* SfxMenuControl::GetPopup () const
         return 0;
 }
 
-long Select_Impl( void* pHdl, void* pVoid );
+sal_IntPtr Select_Impl( void* pHdl, void* pVoid );
 
 SFX_IMPL_MENU_CONTROL( SfxAppMenuControl_Impl, SfxStringItem );
 
@@ -416,7 +416,7 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
     pUnoCtrl->release();
 }
 
-long Select_Impl( void* /*pHdl*/, void* pVoid )
+sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
 {
     Menu* pMenu = (Menu*)pVoid;
     OUString aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );

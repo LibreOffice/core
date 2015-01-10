@@ -90,7 +90,7 @@ class AbstractSpellDialog : public VclAbstractDialog
     virtual SfxBindings& GetBindings() = 0;
 };
 
-typedef long (*PLinkStub)( void*, void* );
+typedef sal_IntPtr (*PLinkStub)( void*, void* );
 
 class AbstractSearchProgress :public VclAbstractRefreshableDialog
 {
