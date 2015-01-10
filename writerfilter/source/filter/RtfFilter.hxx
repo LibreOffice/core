@@ -26,10 +26,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 /// Common RTF filter, calls RtfImportFilter and RtfExportFilter via UNO.
-class RtfFilter : public cppu::WeakImplHelper5
+class RtfFilter : public cppu::WeakImplHelper
     <
     css::document::XFilter,
     css::document::XImporter,

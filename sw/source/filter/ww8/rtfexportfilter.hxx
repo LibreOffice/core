@@ -23,7 +23,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <shellio.hxx>
 
 /// Dummy Writer implementation to be able to use the string format methods of the base class
@@ -34,7 +34,7 @@ protected:
 };
 
 /// The physical access to the RTF document (for writing).
-class RtfExportFilter : public cppu::WeakImplHelper2
+class RtfExportFilter : public cppu::WeakImplHelper
     <
     css::document::XFilter,
     css::document::XExporter
