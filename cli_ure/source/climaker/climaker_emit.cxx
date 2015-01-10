@@ -1402,11 +1402,72 @@ Assembly ^ TypeEmitter::type_resolve(
         emit_ldarg( code, member_pos +1 );
         param_types[ member_pos ] = all_param_types[ member_pos ];
     }
+
+    ConstructorInfo^ constructorInfoObj = nullptr;
+
+    /*
+    * TODO(davido): File a bug against MS
+    * "unoidl.com.sun.star.ucb.OpenCommandArgument3" has two ctors
+    * default and one with 5 params.
+    * Even though the types of ctors are all correct,
+    * trying to retrieve it with GetConstructor(Type[])
+    * http://msdn.microsoft.com/de-de/library/h93ya84h(v=vs.110).aspx
+    * is failing, with very weird error message: http://paste.openstack.org/show/156210/
+    * Workaround:
+    * Special case this type and, fetch all ctors, iterate over them
+    * and peek one with the right number of parameter.
+    */
+    if (cts_name->Equals("unoidl.com.sun.star.ucb.OpenCommandArgument3"))
+    {
+        if (nullptr == base_type_entry)
+        {
+            if (g_verbose)
+            {
+                ::System::Console::WriteLine("> süecial casing ctor retrieval for {0}",
+                    "unoidl.com.sun.star.ucb.OpenCommandArgument3");
+            }
+            array< ConstructorInfo^>^ p = entry->m_base_type->GetConstructors();
+            if (g_verbose)
+            {
+                ::System::Console::WriteLine("> number of ctors {0}",
+                    p->Length);
+            }
+
+            for (int i = 0; i < p->Length; i++)
+            {
+                if (g_verbose)
+                {
+                    ::System::Console::WriteLine("> ctor number {0} is {1}",
+                        i, p[i]->ToString());
+                }
+
+                array< ParameterInfo^>^ pars = p[i]->GetParameters();
+                if (g_verbose)
+                {
+                    for (int j = 0; j < pars->Length; j++)
+                    {
+                        ::System::Console::WriteLine("param type {0}", pars[j]);
+                    }
+                }
+                if (pars->Length == param_types->Length) {
+                    constructorInfoObj = p[i];
+                }
+            }
+        }
+    }
+
+    // Retrieve constructor
+    if (nullptr == constructorInfoObj)
+    {
+        constructorInfoObj =
+            nullptr == base_type_entry
+            ? entry->m_base_type->GetConstructor(param_types)
+            : base_type_entry->m_ctor;
+    }
+    // Call ctor
     code->Emit(
         Emit::OpCodes::Call,
-        nullptr == base_type_entry
-        ? entry->m_base_type->GetConstructor( param_types )
-        : base_type_entry->m_ctor );
+        constructorInfoObj);
     // initialize members
     for ( member_pos = 0; member_pos < members_length; ++member_pos )
     {
