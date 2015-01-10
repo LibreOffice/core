@@ -108,7 +108,7 @@ void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
-void ScColumn::Delete( SCROW nRow )
+void ScColumn::DeleteContent( SCROW nRow, bool bBroadcast )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
@@ -122,6 +122,17 @@ void ScColumn::Delete( SCROW nRow )
         sc::SharedFormulaUtil::unshareFormulaCell(aPos, *p);
     }
     maCells.set_empty(nRow, nRow);
+
+    if (bBroadcast)
+    {
+        Broadcast(nRow);
+        CellStorageModified();
+    }
+}
+
+void ScColumn::Delete( SCROW nRow )
+{
+    DeleteContent(nRow, false);
     maCellTextAttrs.set_empty(nRow, nRow);
     maCellNotes.set_empty(nRow, nRow);
 
