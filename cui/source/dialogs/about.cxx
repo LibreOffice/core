@@ -252,6 +252,12 @@ OUString AboutDialog::GetVersionString()
 {
     OUString sVersion = m_aVersionTextStr;
 
+#ifdef _WIN64
+
+    sVersion += " (x64)";
+
+#endif
+
     OUString sBuildId = GetBuildId();
 
     OUString pLocaleStr = GetLocaleString();
