@@ -112,13 +112,12 @@ void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
     nListPos |= ( pSource->nListPos & 0x7fffffff);
     nAbsPos     = pSource->nAbsPos;
 
-    SvLBoxItem* pNewItem;
     maItems.clear();
     ItemsType::iterator it = pSource->maItems.begin(), itEnd = pSource->maItems.end();
     for (; it != itEnd; ++it)
     {
         SvLBoxItem* pItem = &(*it);
-        pNewItem = pItem->Create();
+        SvLBoxItem* pNewItem = pItem->Create();
         pNewItem->Clone(pItem);
         maItems.push_back(pNewItem);
     }

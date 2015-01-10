@@ -776,12 +776,13 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
 
 void HeaderBar::ImplDrag( const Point& rMousePos )
 {
-    bool        bNewOutDrag;
     sal_uInt16  nPos = GetItemPos( mnCurItemId );
 
     mnDragPos = rMousePos.X()-mnMouseOff;
     if ( mbItemMode )
     {
+        bool bNewOutDrag;
+
         Rectangle aItemRect = ImplGetItemRect( nPos );
         if ( aItemRect.IsInside( rMousePos ) )
             bNewOutDrag = false;

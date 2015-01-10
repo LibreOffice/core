@@ -314,13 +314,12 @@ namespace svt
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
         if ( _nIndex < (ItemIndex)rItems.size() )
         {
-            RoadmapItem* pItem = NULL;
             for (   HL_Vector::const_iterator i = rItems.begin() + _nIndex;
                     i != rItems.end();
                     ++i, ++_nIndex
                 )
             {
-                pItem = *i;
+                RoadmapItem* pItem = *i;
 
                 pItem->SetIndex( _nIndex );
                 pItem->SetPosition( GetPreviousHyperLabel( _nIndex ) );
@@ -463,12 +462,10 @@ namespace svt
 
     RoadmapTypes::ItemId ORoadmap::GetNextAvailableItemId( ItemIndex _nNewIndex )
     {
-        RoadmapItem* pItem = NULL;
-
         ItemIndex searchIndex = ++_nNewIndex;
         while ( searchIndex < m_pImpl->getItemCount() )
         {
-            pItem = GetByIndex( searchIndex );
+            RoadmapItem* pItem = GetByIndex( searchIndex );
             if ( pItem->IsEnabled() )
                 return pItem->GetID( );
 
@@ -480,11 +477,10 @@ namespace svt
 
     RoadmapTypes::ItemId ORoadmap::GetPreviousAvailableItemId( ItemIndex _nNewIndex )
     {
-        RoadmapItem* pItem = NULL;
         ItemIndex searchIndex = --_nNewIndex;
         while ( searchIndex > -1 )
         {
-            pItem = GetByIndex( searchIndex );
+            RoadmapItem* pItem = GetByIndex( searchIndex );
             if ( pItem->IsEnabled() )
                 return pItem->GetID( );
 

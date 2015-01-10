@@ -371,7 +371,6 @@ void Ruler::ImplInvertLines( bool bErase )
          mbActive && !mbDrag && !mbFormat &&
          !(mnUpdateFlags & RULER_UPDATE_LINES) )
     {
-        long n;
         long nNullWinOff = mpData->nNullVirOff + mnVirOff;
         long nRulX1      = mpData->nRulVirOff  + mnVirOff;
         long nRulX2      = nRulX1 + mpData->nRulWidth;
@@ -387,7 +386,7 @@ void Ruler::ImplInvertLines( bool bErase )
         // Draw lines
         for ( sal_uInt32 i = 0; i < mpData->pLines.size(); i++ )
         {
-            n = mpData->pLines[i].nPos + nNullWinOff;
+            const long n = mpData->pLines[i].nPos + nNullWinOff;
             if ( (n >= nRulX1) && (n < nRulX2) )
             {
                 if ( mnWinStyle & WB_HORZ )
@@ -437,14 +436,11 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
     long nTickLength2 = nTickLength3 * 0.66;
     long nTickLength1 = nTickLength2 * 0.66;
 
-    long n = 0;
     double nTick4 = aImplRulerUnitTab[mnUnitIndex].nTick4;
-    double nTick3 = 0;
     double nTick2 = 0;
     double nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1;
     double nTickUnit = 0;
     long nTickWidth;
-    long nTickLength;
     bool bNoTicks = false;
 
     double nAcceptanceDelta = 0.0001;
@@ -544,7 +540,9 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 
     if ( !bNoTicks )
     {
+        long n = 0;
         double nTick = 0.0;
+        double nTick3 = 0;
 
         if ( ( mnUnitIndex != RULER_UNIT_CHAR ) && ( mnUnitIndex != RULER_UNIT_LINE ) )
         {
@@ -617,7 +615,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
                 // Tick/Tick2 - Output (Strokes)
                 else
                 {
-                    nTickLength = nTickLength1;
+                    long nTickLength = nTickLength1;
 
                     aStep = (nTick / nTick2);
                     aRest = std::abs(aStep - std::floor(aStep));
@@ -1443,7 +1441,6 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     long        nX;
     long        nY;
     long        n1;
-    long        n2;
 
     if ( !mbActive )
         return false;
@@ -1596,7 +1593,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     for ( i = mpData->pBorders.size(); i; i-- )
     {
         n1 = mpData->pBorders[i-1].nPos;
-        n2 = n1 + mpData->pBorders[i-1].nWidth;
+        long n2 = n1 + mpData->pBorders[i-1].nWidth;
 
         // borders have at least 3 pixel padding
         if ( !mpData->pBorders[i-1].nWidth )

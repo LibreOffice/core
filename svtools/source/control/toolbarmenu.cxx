@@ -987,11 +987,11 @@ void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
 
 void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool /*bMBDown*/ )
 {
-    long nY = 0;
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= 0 ) && ( nMouseY < aOutSz.Height() ) )
     {
+        long nY = 0;
         bool bHighlighted = false;
 
         const int nEntryCount = mpImpl->maEntryVector.size();

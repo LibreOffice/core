@@ -537,10 +537,11 @@ bool IMapPolygonObject::IsEqual( const IMapPolygonObject& rEqObj )
         const Polygon&   rEqPoly = rEqObj.aPoly;
         const sal_uInt16 nCount = aPoly.GetSize();
         const sal_uInt16 nEqCount = rEqPoly.GetSize();
-        bool             bDifferent = false;
 
         if ( nCount == nEqCount )
         {
+            bool bDifferent = false;
+
             for ( sal_uInt16 i = 0; i < nCount; i++ )
             {
                 if ( aPoly[ i ] != rEqPoly[ i ] )
@@ -865,12 +866,11 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 
 void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    IMapObject* pObj;
     size_t      nCount = maList.size();
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        pObj = maList[ i ];
+        IMapObject* pObj = maList[ i ];
         pObj->Write( rOStm, rBaseURL );
     }
 }

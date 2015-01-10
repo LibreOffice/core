@@ -157,12 +157,11 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseU
 
 void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 {
-    IMapObject* pObj;
     size_t      nCount = maList.size();
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        pObj = maList[ i ];
+        IMapObject* pObj = maList[ i ];
 
         switch( pObj->GetType() )
         {
@@ -186,12 +185,11 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 
 void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
 {
-    IMapObject* pObj;
     size_t      nCount = maList.size();
 
     for ( size_t i = 0; i < nCount; i++ )
     {
-        pObj = maList[ i ];
+        IMapObject* pObj = maList[ i ];
 
         switch( pObj->GetType() )
         {

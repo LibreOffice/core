@@ -506,10 +506,8 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
     else if ( maNextRect.IsInside( rPos ) )
         return CALENDAR_HITTEST_NEXT;
 
-    long        nX;
     long        nY;
     long        nOffX;
-    long        nYMonth;
     sal_uInt16      nDay;
     DayOfWeek   eStartDay = ImplGetWeekStart();
 
@@ -520,8 +518,8 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
         if ( rPos.Y() < nY )
             return 0;
 
-        nX = 0;
-        nYMonth = nY+mnMonthHeight;
+        long nX = 0;
+        long nYMonth = nY+mnMonthHeight;
         for ( long j = 0; j < mnMonthPerLine; j++ )
         {
             if ( (rPos.X() < nX) && (rPos.Y() < nYMonth) )
@@ -802,7 +800,6 @@ void Calendar::ImplDraw( bool bPaint )
     Size        aOutSize = GetOutputSizePixel();
     long        i;
     long        j;
-    long        nX;
     long        nY;
     long        nDeltaX;
     long        nDeltaY;
@@ -868,7 +865,7 @@ void Calendar::ImplDraw( bool bPaint )
             DrawLine( aSepPos1, aSepPos2 );
         }
 
-        nX = 0;
+        long nX = 0;
         for ( j = 0; j < mnMonthPerLine; j++ )
         {
             nMonth  = aDate.GetMonth();
