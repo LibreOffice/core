@@ -30,65 +30,53 @@
 
 /// Common RTF filter, calls RtfImportFilter and RtfExportFilter via UNO.
 class RtfFilter : public cppu::WeakImplHelper5
-<
-    com::sun::star::document::XFilter,
-    com::sun::star::document::XImporter,
-    com::sun::star::document::XExporter,
-    com::sun::star::lang::XInitialization,
-    com::sun::star::lang::XServiceInfo
->
+    <
+    css::document::XFilter,
+    css::document::XImporter,
+    css::document::XExporter,
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
+    >
 {
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xSrcDoc, m_xDstDoc;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
+    css::uno::Reference<css::lang::XComponent> m_xSrcDoc, m_xDstDoc;
     OUString m_sFilterName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xHandler;
+    css::uno::Reference<css::xml::sax::XDocumentHandler> m_xHandler;
 
 
 public:
-   RtfFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-   virtual ~RtfFilter();
+    RtfFilter(const css::uno::Reference<css::uno::XComponentContext>& xContext);
+    virtual ~RtfFilter();
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL cancel(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc)
+    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
 
-OUString RtfFilter_getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException );
+OUString RtfFilter_getImplementationName() throw (css::uno::RuntimeException);
+css::uno::Sequence<OUString> SAL_CALL RtfFilter_getSupportedServiceNames() throw (css::uno::RuntimeException);
+css::uno::Reference<css::uno::XInterface> SAL_CALL RtfFilter_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xContext) throw(css::uno::Exception);
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL RtfFilter_getSupportedServiceNames(  )
-    throw ( ::com::sun::star::uno::RuntimeException );
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL RtfFilter_createInstance(
-                                                                        const ::com::sun::star::uno::Reference<
-                                                                        ::com::sun::star::uno::XComponentContext > &xContext)
-    throw( ::com::sun::star::uno::Exception );
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
