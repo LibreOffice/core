@@ -679,9 +679,9 @@ namespace basegfx
                     aResult.append(' ');
                 }
 
-                ::basegfx::internal::lcl_putNumberChar(aResult, aPoint.getX());
+                aResult.append(aPoint.getX());
                 aResult.append(',');
-                ::basegfx::internal::lcl_putNumberChar(aResult, aPoint.getY());
+                aResult.append(aPoint.getY());
             }
 
             return aResult.makeStringAndClear();

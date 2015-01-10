@@ -176,7 +176,7 @@ namespace basegfx
                 }
             }
 
-            lcl_putNumberChar(rStr, fValue);
+            rStr.append(fValue);
         }
 
     } // namespace internal
