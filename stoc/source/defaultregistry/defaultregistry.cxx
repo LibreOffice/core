@@ -822,7 +822,6 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     }
 
     Sequence< Reference<XRegistryKey> > retSeq(local + def - len);
-    bool                            insert = true;
     OUString                            name;
     sal_Int32                           lastIndex;
 
@@ -838,7 +837,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     sal_uInt32 k = local;
     for (i=0; i < def; i++)
     {
-        insert = true;
+        bool insert = true;
 
         for (j=0 ; j < local; j++)
         {
@@ -902,7 +901,6 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
     }
 
     Sequence<OUString>  retSeq(local + def - len);
-    bool            insert = true;
 
     for (i=0; i < local; i++)
     {
@@ -912,7 +910,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
     sal_uInt32 k = local;
     for (i=0; i < def; i++)
     {
-        insert = true;
+        bool insert = true;
 
         for (j=0 ; j < local; j++)
         {

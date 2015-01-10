@@ -904,11 +904,12 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
         if ( nSelId )
         {
             sal_uInt16  nPos = GetPagePos( nSelId );
-            bool        bSelectTab = false;
             pItem = (*mpItemList)[ nPos ];
 
             if ( pItem->mbEnable )
             {
+                bool bSelectTab = false;
+
                 if ( (rMEvt.GetMode() & MouseEventModifiers::MULTISELECT) && (mnWinStyle & WB_MULTISELECT) )
                 {
                     if ( nSelId != mnCurPageId )
@@ -1672,7 +1673,6 @@ void TabBar::ImplPrePaint()
     if (!nItemCount)
         return;
 
-    ImplTabBarItem* pItem;
 
     // tabbar should be formatted
     ImplFormat();
@@ -1684,7 +1684,7 @@ void TabBar::ImplPrePaint()
 
         if ( mnCurPageId && (mnFirstPos == 0) && !mbDropPos )
         {
-            pItem = (*mpItemList)[ GetPagePos( mnCurPageId ) ];
+            ImplTabBarItem* pItem = (*mpItemList)[ GetPagePos( mnCurPageId ) ];
             if ( pItem->maRect.IsEmpty() )
             {
                 // set mbDropPos (or misuse) to prevent Invalidate()
@@ -1823,10 +1823,9 @@ Color TabBar::GetTabBgColor( sal_uInt16 nPageId ) const
 void TabBar::SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor )
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
-    ImplTabBarItem* pItem;
     if ( nPos != PAGE_NOT_FOUND )
     {
-        pItem = (*mpItemList)[ nPos ];
+        ImplTabBarItem* pItem = (*mpItemList)[ nPos ];
         if ( aTabBgColor != Color( COL_AUTO )  )
         {
             pItem->maTabBgColor = aTabBgColor;

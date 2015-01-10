@@ -505,13 +505,12 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
         linkName + spool().colon_old );
     if (xOldKey.is())
     {
-        bool hasNoImplementations = false;
-
         if (xOldKey->getValueType() == RegistryValueType_ASCIILIST)
         {
             Sequence<OUString> implEntries = xOldKey->getAsciiListValue();
             sal_Int32 length = implEntries.getLength();
             sal_Int32 equals = 0;
+            bool hasNoImplementations = false;
 
             for (sal_Int32 i = 0; i < length; i++)
             {

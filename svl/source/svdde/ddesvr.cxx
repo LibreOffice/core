@@ -372,11 +372,10 @@ found:
 
 DdeService* DdeInternal::FindService( HSZ hService )
 {
-    DdeService*  s;
     DdeServices& rSvc = DdeService::GetServices();
     for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
     {
-        s = *aI;
+        DdeService*  s = *aI;
         if ( *s->pName == hService )
             return s;
     }
@@ -932,12 +931,11 @@ OUString DdeService::Topics()
 OUString DdeService::Formats()
 {
     OUString    s;
-    long        f;
     short       n = 0;
 
     for (size_t i = 0; i < aFormats.size(); ++i, ++n)
     {
-        f = aFormats[ i ];
+        long f = aFormats[ i ];
         if ( n )
             s += "\t";
 

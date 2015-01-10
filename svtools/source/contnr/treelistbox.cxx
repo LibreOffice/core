@@ -1502,11 +1502,10 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
     sal_uInt16 nCount = pEntry->ItemCount();
     sal_uInt16 nCur = 0;
     sal_uInt16 nHeaderCur = 0;
-    SvLBoxItem* pItem;
     while( nCur < nCount )
     {
         // MT: SV_ITEM_ID_EXTENDRLBOXSTRING / GetExtendText() was in use in IA2 cws, but only used in sc: ScSolverOptionsString. Needed?
-        pItem = pEntry->GetItem( nCur );
+        SvLBoxItem* pItem = pEntry->GetItem( nCur );
         if ( (pItem->GetType() == SV_ITEM_ID_LBOXSTRING ) &&
              !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
         {
@@ -1775,13 +1774,12 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
     const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp,
     SvLBoxButtonKind eButtonKind)
 {
-    SvLBoxButton* pButton;
     SvLBoxString* pString;
     SvLBoxContextBmp* pContextBmp;
 
     if( nTreeFlags & TREEFLAG_CHKBTN )
     {
-        pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
+        SvLBoxButton* pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
         pEntry->AddItem( pButton );
     }
 
@@ -2319,14 +2317,14 @@ short SvTreeListBox::GetHeightOffset(const vcl::Font& /* rFont */, Size& aSizeLo
 
 void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
 {
-    short nHeight, nHeightMax=0;
+    short nHeightMax=0;
     sal_uInt16 nCount = pEntry->ItemCount();
     sal_uInt16 nCur = 0;
     SvViewDataEntry* pViewData = GetViewDataEntry( pEntry );
     while( nCur < nCount )
     {
         SvLBoxItem* pItem = pEntry->GetItem( nCur );
-        nHeight = (short)(pItem->GetSize( pViewData, nCur ).Height());
+        short nHeight = (short)(pItem->GetSize( pViewData, nCur ).Height());
         if( nHeight > nHeightMax )
             nHeightMax = nHeight;
         nCur++;

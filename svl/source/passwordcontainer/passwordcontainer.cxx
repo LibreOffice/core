@@ -50,14 +50,13 @@ using namespace com::sun::star::ucb;
 static OUString createIndex( vector< OUString > lines )
 {
     OString aResult;
-    const sal_Char* pLine;
 
     for( unsigned int i = 0; i < lines.size(); i++ )
     {
         if( i )
             aResult += OString( "__" );
         OString line = OUStringToOString( lines[i], RTL_TEXTENCODING_UTF8 );
-        pLine = line.getStr();
+        const sal_Char* pLine = line.getStr();
 
         while( *pLine )
         {
@@ -852,7 +851,6 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
     if( m_aMasterPasswd.isEmpty() && aHandler.is() )
     {
         OUString aEncodedMP;
-        bool bAskAgain = false;
         bool bDefaultPassword = false;
 
         if( !m_pStorageFile->getEncodedMP( aEncodedMP ) )
@@ -865,6 +863,7 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
 
         if ( !bDefaultPassword )
         {
+            bool bAskAgain = false;
             do {
                 bAskAgain = false;
 
