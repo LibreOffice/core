@@ -123,7 +123,7 @@ static void commitToColumn( const ScCellValue& rCell, ScColumn& rColumn, SCROW n
         }
         break;
         default:
-            rColumn.Delete(nRow);
+            rColumn.DeleteContent(nRow);
     }
 }
 
@@ -463,7 +463,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType
             rColumn.SetFormulaCell(nRow, mpFormula, eListenType);
         break;
         default:
-            rColumn.Delete(nRow);
+            rColumn.DeleteContent(nRow);
     }
 
     meType = CELLTYPE_NONE;
