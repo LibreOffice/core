@@ -76,7 +76,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 }
 
-void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
+void ServerFontLayout::SetNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
     bool bRightToLeft)
 {
     if (nCharPos < 0)
@@ -446,7 +446,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 // if needed request glyph fallback by updating LayoutArgs
                 if (!nGlyphIndex)
                 {
-                    rLayout.setNeedFallback(rArgs, nCharPos, bRightToLeft);
+                    rLayout.SetNeedFallback(rArgs, nCharPos, bRightToLeft);
                     if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
                         continue;
                 }

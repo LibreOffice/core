@@ -294,7 +294,7 @@ public:
     virtual void            AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void            DrawText( SalGraphics& ) const SAL_OVERRIDE;
 
-    void                    setNeedFallback(
+    void                    SetNeedFallback(
                                 ImplLayoutArgs& rArgs,
                                 sal_Int32 nIndex,
                                 bool bRightToLeft);
