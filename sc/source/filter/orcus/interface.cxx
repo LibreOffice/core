@@ -364,8 +364,9 @@ void ScOrcusSheet::set_date_time(
     cellInserted();
 }
 
-void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t /*xf_index*/)
+void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t xf_index)
 {
+    SAL_INFO("sc.orcus.style", "set format: " << xf_index);
 }
 
 namespace {
@@ -568,6 +569,16 @@ ScOrcusStyles::font::font():
 {
 }
 
+namespace {
+
+std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
+{
+    rStrm << "Red: " << rColor.GetRed() << ", Green: " << rColor.GetGreen() << ", Blue: " << rColor.GetBlue();
+    return rStrm;
+}
+
+}
+
 void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 {
     FontItalic eItalic = mbItalic ? ITALIC_NORMAL : ITALIC_NONE;
@@ -619,7 +630,7 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     size_t nFontId = rXf.mnFontId;
     if (nFontId >= maFonts.size())
     {
-        SAL_WARN("sc.orcus.styles", "invalid font id");
+        SAL_WARN("sc.orcus.style", "invalid font id");
         return;
     }
 
@@ -629,28 +640,28 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
     size_t nFillId = rXf.mnFillId;
     if (nFillId >= maFills.size())
     {
-        SAL_WARN("sc.orcus.styles", "invalid fill id");
+        SAL_WARN("sc.orcus.style", "invalid fill id");
         return;
     }
 
     size_t nBorderId = rXf.mnBorderId;
     if (nBorderId >= maBorders.size())
     {
-        SAL_WARN("sc.orcus.styles", "invalid border id");
+        SAL_WARN("sc.orcus.style", "invalid border id");
         return;
     }
 
     size_t nProtectionId = rXf.mnProtectionId;
     if (nProtectionId >= maProtections.size())
     {
-        SAL_WARN("sc.orcus.styles", "invalid protection id");
+        SAL_WARN("sc.orcus.style", "invalid protection id");
         return;
     }
 
     size_t nNumberFormatId = rXf.mnNumberFormatId;
     if (nNumberFormatId >= maNumberFormats.size())
     {
-        SAL_WARN("sc.orcus.styles", "invalid number format id");
+        SAL_WARN("sc.orcus.style", "invalid number format id");
         return;
     }
 }
@@ -766,7 +777,7 @@ void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t /*di
 
 size_t ScOrcusStyles::commit_border()
 {
-    SAL_INFO("sc.orcus.styles", "commit border");
+    SAL_INFO("sc.orcus.style", "commit border");
     return 0;
 }
 
@@ -783,7 +794,7 @@ void ScOrcusStyles::set_cell_locked(bool b)
 
 size_t ScOrcusStyles::commit_cell_protection()
 {
-    SAL_INFO("sc.orcus.styles", "commit cell protection");
+    SAL_INFO("sc.orcus.style", "commit cell protection");
     maProtections.push_back(maCurrentProtection);
     return maProtections.size() - 1;
 }
@@ -804,7 +815,7 @@ void ScOrcusStyles::set_number_format_code(const char* s, size_t n)
 
 size_t ScOrcusStyles::commit_number_format()
 {
-    SAL_INFO("sc.orcus.styles", "commit number format");
+    SAL_INFO("sc.orcus.style", "commit number format");
     maNumberFormats.push_back(maCurrentNumberFormat);
     return maNumberFormats.size() - 1;
 }
@@ -818,7 +829,7 @@ void ScOrcusStyles::set_cell_style_xf_count(size_t /*n*/)
 
 size_t ScOrcusStyles::commit_cell_style_xf()
 {
-    SAL_INFO("sc.orcus.styles", "commit cell style xf");
+    SAL_INFO("sc.orcus.style", "commit cell style xf");
     maCellStyleXfs.push_back(maCurrentXF);
     return maCellStyleXfs.size() - 1;
 }
@@ -832,7 +843,7 @@ void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
 
 size_t ScOrcusStyles::commit_cell_xf()
 {
-    SAL_INFO("sc.orcus.styles", "commit cell xf");
+    SAL_INFO("sc.orcus.style", "commit cell xf");
     maCellXfs.push_back(maCurrentXF);
     return maCellXfs.size() - 1;
 }
@@ -908,10 +919,10 @@ void ScOrcusStyles::set_cell_style_builtin(size_t index)
 
 size_t ScOrcusStyles::commit_cell_style()
 {
-    SAL_INFO("sc.orcus.styles", "commit cell styles");
+    SAL_INFO("sc.orcus.style", "commit cell style: " << maCurrentCellStyle.maName);
     if (maCurrentCellStyle.mnXFId >= maCellStyleXfs.size())
     {
-        SAL_WARN("sc.orcus.styles", "invalid xf id for commit cell style");
+        SAL_WARN("sc.orcus.style", "invalid xf id for commit cell style");
         return 0;
     }
 
