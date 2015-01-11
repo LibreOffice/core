@@ -94,10 +94,7 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
         pInfo->aComment = rInfo[n].Comment;
         pInfo->aAuthor = rInfo[n].Author;
 
-        Date aDate ( rInfo[n].TimeStamp.Day,   rInfo[n].TimeStamp.Month,   rInfo[n].TimeStamp.Year );
-        tools::Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
-
-        pInfo->aCreationDate = DateTime( aDate, aTime );
+        pInfo->aCreationDate = DateTime( rInfo[n].TimeStamp );
         aTableList.push_back( pInfo );
     }
 }
@@ -111,10 +108,7 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVe
         pInfo->aComment = rInfo[n].Comment;
         pInfo->aAuthor = rInfo[n].Author;
 
-        Date aDate ( rInfo[n].TimeStamp.Day,   rInfo[n].TimeStamp.Month,   rInfo[n].TimeStamp.Year );
-        tools::Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.NanoSeconds );
-
-        pInfo->aCreationDate = DateTime( aDate, aTime );
+        pInfo->aCreationDate = DateTime( rInfo[n].TimeStamp );
         aTableList.push_back( pInfo );
     }
 }

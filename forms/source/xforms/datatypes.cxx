@@ -808,7 +808,7 @@ namespace xforms
         if ( !( aTypedValue >>= aValue ) )
             return false;
 
-        ::tools::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
+        ::tools::Time aToolsTime( aValue );
         // no loss/rounding; IEEE 754 double-precision floating-point
         // has a mantissa of 53 bits; we need at the very most 50 bits:
         // format of aToolsTime.GetTime() is (in decimal) hhmmssnnnnnnnnn
@@ -832,7 +832,7 @@ namespace xforms
     {
         css::util::Time aValue;
         OSL_VERIFY( _rValue >>= aValue );
-        ::tools::Time aToolsTime( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds );
+        ::tools::Time aToolsTime( aValue );
         _rDoubleValue = aToolsTime.GetTime();
     }
 
@@ -853,10 +853,7 @@ namespace xforms
     {
         double lcl_normalizeDateTime( const DateTime& _rValue )
         {
-            ::DateTime aToolsValue(
-                ::Date( _rValue.Day, _rValue.Month, _rValue.Year ),
-                ::tools::Time( _rValue.Hours, _rValue.Minutes, _rValue.Seconds, _rValue.NanoSeconds )
-            );
+            ::DateTime aToolsValue(_rValue);
 
             double fValue = 0;
             // days since 1.1.1900 (which is relatively arbitrary but fixed date)

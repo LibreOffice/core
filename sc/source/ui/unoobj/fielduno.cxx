@@ -944,7 +944,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::
                 else if (rName == SC_UNONAME_DATETIME)
                 {
                     maDateTime = rVal.get<util::DateTime>();
-                    tools::Time aTime(maDateTime.Hours, maDateTime.Minutes, maDateTime.Seconds, maDateTime.NanoSeconds);
+                    tools::Time aTime(maDateTime);
                     p->SetFixTime(aTime);
                 }
                 else if (rName == SC_UNONAME_NUMFMT)

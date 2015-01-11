@@ -330,10 +330,7 @@ void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::D
 
 void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, DateTime& rDateTime)
 {
-    Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-    tools::Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
-    DateTime aTempDateTime (aDate, aTime);
-    rDateTime = aTempDateTime;
+    rDateTime = DateTime(aDateTime);
 }
 
 namespace {

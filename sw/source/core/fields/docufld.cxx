@@ -931,8 +931,8 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         {
             OUString aName( xDocProps->getAuthor() );
             util::DateTime uDT( xDocProps->getCreationDate() );
-            Date aD(uDT.Day, uDT.Month, uDT.Year);
-            tools::Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+            Date aD(uDT);
+            tools::Time aT(uDT);
             DateTime aDate(aD,aT);
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
@@ -940,19 +940,13 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             {
                 aName = xDocProps->getModifiedBy();
                 uDT = xDocProps->getModificationDate();
-                Date bD(uDT.Day, uDT.Month, uDT.Year);
-                tools::Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-                DateTime bDate(bD,bT);
-                aDate = bDate;
+                aDate = DateTime(uDT);
             }
             else if( nSub == DI_PRINT )
             {
                 aName = xDocProps->getPrintedBy();
                 uDT = xDocProps->getPrintDate();
-                Date bD(uDT.Day, uDT.Month, uDT.Year);
-                tools::Time bT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-                DateTime bDate(bD,bT);
-                aDate = bDate;
+                aDate = DateTime(uDT);
             }
             else
                 break;
@@ -1785,14 +1779,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_DATE_TIME:
         {
-                util::DateTime DateTimeValue;
-                DateTimeValue.NanoSeconds = aDateTime.GetNanoSec();
-                DateTimeValue.Seconds = aDateTime.GetSec();
-                DateTimeValue.Minutes = aDateTime.GetMin();
-                DateTimeValue.Hours = aDateTime.GetHour();
-                DateTimeValue.Day = aDateTime.GetDay();
-                DateTimeValue.Month = aDateTime.GetMonth();
-                DateTimeValue.Year = aDateTime.GetYear();
+                util::DateTime DateTimeValue(aDateTime);
                 rAny <<= DateTimeValue;
         }
         break;
@@ -1839,13 +1826,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         util::DateTime aDateTimeValue;
         if(!(rAny >>= aDateTimeValue))
             return false;
-        aDateTime.SetNanoSec(aDateTimeValue.NanoSeconds);
-        aDateTime.SetSec(aDateTimeValue.Seconds);
-        aDateTime.SetMin(aDateTimeValue.Minutes);
-        aDateTime.SetHour(aDateTimeValue.Hours);
-        aDateTime.SetDay(aDateTimeValue.Day);
-        aDateTime.SetMonth(aDateTimeValue.Month);
-        aDateTime.SetYear(aDateTimeValue.Year);
+        aDateTime = DateTime(aDateTimeValue);
     }
     break;
     default:

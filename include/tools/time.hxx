@@ -22,6 +22,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/solar.h>
 #include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 /**
  @WARNING: This class can serve both as wall clock time and time duration, and
@@ -69,6 +70,7 @@ public:
                     Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime );
                     Time( const ::com::sun::star::util::Time& rTime );
+                    Time( const ::com::sun::star::util::DateTime& rDateTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
 

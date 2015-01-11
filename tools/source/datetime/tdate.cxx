@@ -158,6 +158,11 @@ Date::Date( DateInitSystem )
 #endif
 }
 
+Date::Date( const ::com::sun::star::util::DateTime& rDateTime )
+{
+  init( rDateTime.Day, rDateTime.Month, rDateTime.Year );
+}
+
 void Date::SetDay( sal_uInt16 nNewDay )
 {
     sal_uIntPtr  nMonth  = GetMonth();

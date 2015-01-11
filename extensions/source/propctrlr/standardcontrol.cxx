@@ -87,8 +87,7 @@ namespace pcr
         }
         else
         {
-            ::tools::Time aTime( aUNOTime.Hours, aUNOTime.Minutes, aUNOTime.Seconds, aUNOTime.NanoSeconds );
-            getTypedControlWindow()->SetTime( aTime );
+            getTypedControlWindow()->SetTime( ::tools::Time(aUNOTime) );
         }
     }
 

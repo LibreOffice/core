@@ -148,6 +148,11 @@ Time::Time( const ::com::sun::star::util::Time &_rTime )
 {
     init(_rTime.Hours, _rTime.Minutes, _rTime.Seconds, _rTime.NanoSeconds);
 }
+Time::Time( const ::com::sun::star::util::DateTime &_rDateTime )
+{
+    init(_rDateTime.Hours, _rDateTime.Minutes, _rDateTime.Seconds, _rDateTime.NanoSeconds);
+}
+
 void tools::Time::init( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 nNanoSec )
 {
     // normalize time
