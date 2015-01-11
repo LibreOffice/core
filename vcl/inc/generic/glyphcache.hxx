@@ -337,22 +337,23 @@ protected:
 class VCL_DLLPUBLIC RawBitmap
 {
 public:
-                    RawBitmap();
-                    ~RawBitmap();
-    bool            Rotate( int nAngle );
+                            RawBitmap();
+                            ~RawBitmap();
+
+    bool                    Rotate( int nAngle );
 
 public:
     basebmp::RawMemorySharedArray mpBits;
-    sal_uLong           mnAllocated;
+    sal_uLong               mnAllocated;
 
-    sal_uLong           mnWidth;
-    sal_uLong           mnHeight;
+    sal_uLong               mnWidth;
+    sal_uLong               mnHeight;
 
-    sal_uLong           mnScanlineSize;
-    sal_uLong           mnBitCount;
+    sal_uLong               mnScanlineSize;
+    sal_uLong               mnBitCount;
 
-    int             mnXOffset;
-    int             mnYOffset;
+    int                     mnXOffset;
+    int                     mnYOffset;
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GLYPHCACHE_HXX
