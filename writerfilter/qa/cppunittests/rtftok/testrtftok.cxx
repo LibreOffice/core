@@ -57,9 +57,10 @@ bool RtfTest::load(const OUString&,
                    const OUString& rURL, const OUString&,
                    unsigned int, unsigned int, unsigned int)
 {
-    uno::Sequence< beans::PropertyValue > aDescriptor(1);
-    aDescriptor[0].Name = "URL";
-    aDescriptor[0].Value <<= rURL;
+    uno::Sequence< beans::PropertyValue > aDescriptor =
+    {
+        beans::PropertyValue("URL", sal_Int32(0), uno::makeAny(rURL), beans::PropertyState_DIRECT_VALUE)
+    };
     try
     {
         return m_xFilter->filter(aDescriptor);
