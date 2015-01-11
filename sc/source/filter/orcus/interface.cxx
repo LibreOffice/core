@@ -20,6 +20,8 @@
 #include "dbdata.hxx"
 #include "stlpool.hxx"
 #include "scitems.hxx"
+#include "patattr.hxx"
+#include "docpool.hxx"
 
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -284,6 +286,7 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     mrDoc(rDoc),
     mnTab(nTab),
     mrFactory(rFactory),
+    mrStyles(static_cast<ScOrcusStyles&>(*mrFactory.get_styles())),
     maAutoFilter(rDoc.getDoc()),
     maProperties(mnTab, mrDoc),
     mnCellCount(0)
@@ -369,10 +372,13 @@ void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t xf_in
     SAL_INFO("sc.orcus.style", "set format: " << xf_index);
 }
 
-void ScOrcusSheet::set_format_range(os::row_t /*row_start*/, os::col_t /*col_start*/,
-        os::row_t /*row_end*/, os::col_t /*col_end*/, size_t xf_index)
+void ScOrcusSheet::set_format_range(os::row_t row_start, os::col_t col_start,
+        os::row_t row_end, os::col_t col_end, size_t xf_index)
 {
     SAL_INFO("sc.orcus.style", "set format range: " << xf_index);
+    ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
+    mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
+    mrDoc.getDoc().ApplyPatternAreaTab(col_start, row_start, col_end, row_end, mnTab, aPattern);
 }
 
 namespace {
@@ -670,6 +676,20 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         SAL_WARN("sc.orcus.style", "invalid number format id");
         return;
     }
+}
+
+bool ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
+{
+    SAL_INFO("sc.orcus.style", "applyXfToitemSet: " << xfId);
+    if (maCellXfs.size() <= xfId)
+    {
+        SAL_WARN("sc.orcus.style", "invalid xf id");
+        return false;
+    }
+
+    const xf& rXf = maCellXfs[xfId];
+    applyXfToItemSet(rSet, rXf);
+    return true;
 }
 
 void ScOrcusStyles::set_font_count(size_t /*n*/)
