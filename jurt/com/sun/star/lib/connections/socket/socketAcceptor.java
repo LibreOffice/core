@@ -28,9 +28,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 
 /**
  * A component that implements the <code>XAcceptor</code> interface.
@@ -152,7 +150,9 @@ public final class socketAcceptor implements XAcceptor {
                 System.err.println("##### " + getClass().getName()
                                    + ".accept: accepted " + socket);
             }
-            if (tcpNoDelay != null) {
+            // we enable tcpNoDelay for loopback connections because
+            // it can make a significant speed difference on linux boxes.
+            if (tcpNoDelay != null || ((InetSocketAddress)socket.getRemoteSocketAddress()).getAddress().isLoopbackAddress()) {
                 socket.setTcpNoDelay(tcpNoDelay.booleanValue());
             }
             return new SocketConnection(acceptingDescription, socket);
