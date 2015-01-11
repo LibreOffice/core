@@ -50,7 +50,7 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    return mrServerFont.GetLayoutEngine()->layout(*this, rArgs);
+    return mrServerFont.GetLayoutEngine()->Layout(*this, rArgs);
 }
 
 void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
@@ -316,7 +316,7 @@ public:
                             HbLayoutEngine(ServerFont&);
     virtual                 ~HbLayoutEngine();
 
-    virtual bool            layout(ServerFontLayout&, ImplLayoutArgs&) SAL_OVERRIDE;
+    virtual bool            Layout(ServerFontLayout&, ImplLayoutArgs&) SAL_OVERRIDE;
 };
 
 HbLayoutEngine::HbLayoutEngine(ServerFont& rServerFont)
@@ -351,7 +351,7 @@ struct HbScriptRun
 
 typedef std::vector<HbScriptRun> HbScriptRuns;
 
-bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
+bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
     ServerFont& rFont = rLayout.GetServerFont();
     FT_Face aFtFace = rFont.GetFtFace();
