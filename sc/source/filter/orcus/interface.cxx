@@ -659,6 +659,9 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         return;
     }
 
+    const fill& rFill = maFills[nFillId];
+    rFill.applyToItemSet(rSet);
+
     size_t nBorderId = rXf.mnBorderId;
     if (nBorderId >= maBorders.size())
     {
