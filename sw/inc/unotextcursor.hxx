@@ -36,15 +36,9 @@
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XMarkingAccess.hpp>
 
-#include <cppuhelper/implbase13.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <comphelper/uno3.hxx>
-
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
-#include <comphelper/implbase_var.hxx>
-#endif
 
 #include <unobaseclass.hxx>
 #include <TextCursorHelper.hxx>
@@ -53,7 +47,7 @@ class SwDoc;
 struct SwPosition;
 class SwUnoCrsr;
 
-typedef ::comphelper::WeakImplHelper14
+typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::beans::XPropertyState
