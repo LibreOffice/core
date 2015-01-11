@@ -322,16 +322,16 @@ public:
 class GlyphCachePeer
 {
 protected:
-                    GlyphCachePeer() : mnBytesUsed(0) {}
-    virtual         ~GlyphCachePeer() {}
+                            GlyphCachePeer() : mnBytesUsed(0) {}
+    virtual                 ~GlyphCachePeer() {}
 
 public:
-    sal_Int32       GetByteCount() const { return mnBytesUsed; }
-    virtual void    RemovingFont( ServerFont& ) {}
-    virtual void    RemovingGlyph( GlyphData& ) {}
+    sal_Int32               GetByteCount() const { return mnBytesUsed; }
+    virtual void            RemovingFont( ServerFont& ) {}
+    virtual void            RemovingGlyph( GlyphData& ) {}
 
 protected:
-    sal_Int32       mnBytesUsed;
+    sal_Int32               mnBytesUsed;
 };
 
 class VCL_DLLPUBLIC RawBitmap
