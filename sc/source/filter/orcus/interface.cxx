@@ -585,7 +585,7 @@ namespace {
 
 std::ostream& operator<<(std::ostream& rStrm, const Color& rColor)
 {
-    rStrm << "Red: " << rColor.GetRed() << ", Green: " << rColor.GetGreen() << ", Blue: " << rColor.GetBlue();
+    rStrm << "Red: " << (int)rColor.GetRed() << ", Green: " << (int)rColor.GetGreen() << ", Blue: " << (int)rColor.GetBlue();
     return rStrm;
 }
 
