@@ -957,7 +957,22 @@ void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 // This DXArray thing is one of the stupidest ideas I have ever seen (I've been
 // told that it probably a one-to-one mapping of some Windows 3.1 API, which is
-// telling). To justify a text string, Writer calls OutputDevice::GetTextArray()
+// telling).
+
+// Note: That would be the EMRTEXT structure, which is part of the EMF spec (see
+// [MS-EMF] section 2.2.5. Basically the field in question is OutputDx, which is:
+//
+//      "An array of 32-bit unsigned integers that specify the output spacing
+//      between the origins of adjacent character cells in logical units."
+//
+// This obviously makes sense for ASCII text (the EMR_EXTTEXTOUTA record), but it
+// doesn't make sense for Unicode text (the EMR_EXTTEXTOUTW record) because it is
+// mapping character codes to output spacing, which obviously can cause problems
+// with CTL. MANY of our concepts are based around Microsoft data structures, this
+// is obviously one of them and we probably need a rethink about how we go about
+// this.
+
+// To justify a text string, Writer calls OutputDevice::GetTextArray()
 // to get an array that maps input characters (not glyphs) to their absolute
 // position, GetTextArray() in turn calls SalLayout::FillDXArray() to get an
 // array of character widths that it converts to absolute positions.
@@ -972,9 +987,9 @@ void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 // have been applied on top of it, making it a complete mess that nobody
 // understands.
 
-// As you can see by now, this is utterly stupid, why Writer does not just send
-// us directly the advance width transformations it wants to apply to each
-// character instead of this whole mess?
+// As you can see by now, this is utterly stupid, why doesn't Writer just send
+// us the advance width transformations it wants to apply to each character directly
+// instead of this whole mess?
 
 void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
 {
