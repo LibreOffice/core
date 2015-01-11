@@ -132,7 +132,9 @@ namespace stoc_connector
                     delete pConn;
                     throw NoConnectException( sMessage );
                 }
-                if( bTcpNoDelay )
+                // we enable tcpNoDelay for loopback connections because
+                // it can make a significant speed difference on linux boxes.
+                if( bTcpNoDelay || aHost == "localhost" || aHost == "127.0.0.1" )
                 {
                     sal_Int32 nTcpNoDelay = sal_True;
                     pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,

@@ -131,8 +131,10 @@ public final class socketConnector implements XConnector {
             throw new ConnectionSetupException(e);
         }
         Socket socket = null;
+        boolean isLoopbackAddress = false;
         for (int i = 0; i < adr.length; ++i) {
             try {
+                isLoopbackAddress = adr[i].isLoopbackAddress();
                 socket = new Socket(adr[i], desc.getPort());
                 break;
             } catch (IOException e) {
@@ -142,7 +144,9 @@ public final class socketConnector implements XConnector {
         }
         XConnection con;
         try {
-            if (desc.getTcpNoDelay() != null)
+            // we enable tcpNoDelay for loopback connections because
+            // it can make a significant speed difference on linux boxes.
+            if (desc.getTcpNoDelay() != null || isLoopbackAddress)
                 socket.setTcpNoDelay(desc.getTcpNoDelay().booleanValue());
 
             con = new SocketConnection(connectionDescription, socket);
