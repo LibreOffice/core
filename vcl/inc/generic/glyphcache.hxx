@@ -168,41 +168,42 @@ private:
 class VCL_DLLPUBLIC ServerFont
 {
 public:
-    ServerFont( const FontSelectPattern&, FtFontInfo* );
-    virtual ~ServerFont();
+                            ServerFont( const FontSelectPattern&, FtFontInfo* );
+    virtual                 ~ServerFont();
 
-    const OString&      GetFontFileName() const;
-    bool                TestFont() const { return mbFaceOk;}
-    FT_Face             GetFtFace() const;
-    int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
-    void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
+    const OString&          GetFontFileName() const;
+    bool                    TestFont() const { return mbFaceOk;}
+    FT_Face                 GetFtFace() const;
+    int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
+    void                    SetFontOptions( boost::shared_ptr<ImplFontOptions> );
     boost::shared_ptr<ImplFontOptions> GetFontOptions() const;
-    bool                NeedsArtificialBold() const { return mbArtBold; }
-    bool                NeedsArtificialItalic() const { return mbArtItalic; }
+    bool                    NeedsArtificialBold() const { return mbArtBold; }
+    bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
-    const FontSelectPattern&   GetFontSelData() const      { return maFontSelData; }
+    const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    const unsigned char* GetTable( const char* pName, sal_uLong* pLength );
-    int                 GetEmUnits() const { return maFaceFT->units_per_EM;}
-    const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
-    const FontCharMapPtr GetFontCharMap() const;
-    bool                GetFontCapabilities(vcl::FontCapabilities &) const;
+    void                    FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
+    const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
+    int                     GetEmUnits() const { return maFaceFT->units_per_EM;}
+    const FT_Size_Metrics&  GetMetricsFT() const { return maSizeFT->metrics; }
+    const FontCharMapPtr    GetFontCharMap() const;
+    bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    GlyphData&                  GetGlyphData( sal_GlyphId );
-    const GlyphMetric&          GetGlyphMetric( sal_GlyphId aGlyphId )
-                                { return GetGlyphData( aGlyphId ).GetMetric(); }
+    GlyphData&              GetGlyphData( sal_GlyphId );
+    const GlyphMetric&      GetGlyphMetric( sal_GlyphId aGlyphId )
+                            { return GetGlyphData( aGlyphId ).GetMetric(); }
+
 #if ENABLE_GRAPHITE
     virtual GraphiteFaceWrapper* GetGraphiteFace() const;
 #endif
 
-    sal_GlyphId         GetGlyphIndex( sal_UCS4 ) const;
-    sal_GlyphId         GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
-    sal_GlyphId         FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
-    bool                GetGlyphOutline( sal_GlyphId aGlyphId, ::basegfx::B2DPolyPolygon& ) const;
-    bool                GetAntialiasAdvice( void ) const;
-    bool                GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& ) const;
-    bool                GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& ) const;
+    sal_GlyphId             GetGlyphIndex( sal_UCS4 ) const;
+    sal_GlyphId             GetRawGlyphIndex( sal_UCS4, sal_UCS4 = 0 ) const;
+    sal_GlyphId             FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 ) const;
+    bool                    GetGlyphOutline( sal_GlyphId aGlyphId, ::basegfx::B2DPolyPolygon& ) const;
+    bool                    GetAntialiasAdvice( void ) const;
+    bool                    GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& ) const;
+    bool                    GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& ) const;
 
 private:
     friend class GlyphCache;
@@ -211,59 +212,59 @@ private:
     friend class X11SalGraphics;
     friend class CairoTextRender;
 
-    void                        AddRef() const      { ++mnRefCount; }
-    long                        GetRefCount() const { return mnRefCount; }
-    long                        Release() const;
-    sal_uLong                       GetByteCount() const { return mnBytesUsed; }
+    void                    AddRef() const      { ++mnRefCount; }
+    long                    GetRefCount() const { return mnRefCount; }
+    long                    Release() const;
+    sal_uLong               GetByteCount() const { return mnBytesUsed; }
 
-    void                InitGlyphData( sal_GlyphId, GlyphData& ) const;
-    void                GarbageCollect( long );
-    void                        ReleaseFromGarbageCollect();
+    void                    InitGlyphData( sal_GlyphId, GlyphData& ) const;
+    void                    GarbageCollect( long );
+    void                    ReleaseFromGarbageCollect();
 
-    int                 ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
-    bool                ApplyGSUB( const FontSelectPattern& );
+    int                     ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
+    bool                    ApplyGSUB( const FontSelectPattern& );
 
     ServerFontLayoutEngine* GetLayoutEngine();
 
     typedef std::unordered_map<int,GlyphData> GlyphList;
-    mutable GlyphList           maGlyphList;
+    mutable GlyphList       maGlyphList;
 
-    const FontSelectPattern    maFontSelData;
+    const FontSelectPattern maFontSelData;
 
     // used by GlyphCache for cache LRU algorithm
-    mutable long                mnRefCount;
-    mutable sal_uLong               mnBytesUsed;
+    mutable long            mnRefCount;
+    mutable sal_uLong       mnBytesUsed;
 
-    ServerFont*                 mpPrevGCFont;
-    ServerFont*                 mpNextGCFont;
+    ServerFont*             mpPrevGCFont;
+    ServerFont*             mpNextGCFont;
 
     // 16.16 fixed point values used for a rotated font
-    long                        mnCos;
-    long                        mnSin;
+    long                    mnCos;
+    long                    mnSin;
 
-    bool                        mbCollectedZW;
+    bool                    mbCollectedZW;
 
-    int                         mnWidth;
-    int                         mnPrioEmbedded;
-    int                         mnPrioAntiAlias;
-    int                         mnPrioAutoHint;
-    FtFontInfo*                 mpFontInfo;
-    FT_Int                      mnLoadFlags;
-    double                      mfStretch;
-    FT_FaceRec_*                maFaceFT;
-    FT_SizeRec_*                maSizeFT;
+    int                     mnWidth;
+    int                     mnPrioEmbedded;
+    int                     mnPrioAntiAlias;
+    int                     mnPrioAutoHint;
+    FtFontInfo*             mpFontInfo;
+    FT_Int                  mnLoadFlags;
+    double                  mfStretch;
+    FT_FaceRec_*            maFaceFT;
+    FT_SizeRec_*            maSizeFT;
 
     boost::shared_ptr<ImplFontOptions> mpFontOptions;
 
-    bool                        mbFaceOk;
-    bool            mbArtItalic;
-    bool            mbArtBold;
-    bool            mbUseGamma;
+    bool                    mbFaceOk;
+    bool                    mbArtItalic;
+    bool                    mbArtBold;
+    bool                    mbUseGamma;
 
     typedef std::unordered_map<int,int> GlyphSubstitution;
-    GlyphSubstitution           maGlyphSubstitution;
+    GlyphSubstitution       maGlyphSubstitution;
 
-    ServerFontLayoutEngine*     mpLayoutEngine;
+    ServerFontLayoutEngine* mpLayoutEngine;
 };
 
 // a class for cache entries for physical font instances that are based on serverfonts
