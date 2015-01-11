@@ -37,6 +37,7 @@
 #include "format.hxx"
 #include "parse.hxx"
 #include "smmod.hxx"
+#include "smdllapi.hxx"
 
 class SmNode;
 class SfxMenuBarManager;
@@ -84,7 +85,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool);
 
 
 
-class SmDocShell : public SfxObjectShell, public SfxListener
+class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
     friend class SmModel;
