@@ -252,6 +252,11 @@ if (RAT_JAR_HOME==BUILD)
     URL1 = http://archive.apache.org/dist/creadur/apache-rat-0.10/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
+if (SOLAR_JAVA==TRUE && SYSTEM_BSH!=YES)
+    MD5 = ec1941a74d3ef513c4ce57a9092b74e1
+    name = bsh-2.0b5-src.zip
+    URL1 = http://svn.codespot.com/a/apache-extras.org/beanshell/src_releases/$(name)
+
 ###############################################################################
 # Libraries with category B license
 #
@@ -322,11 +327,4 @@ if (ENABLE_CATEGORY_B==YES && SYSTEM_GRAPHITE!=YES && ENABLE_GRAPHITE==TRUE)
     MD5 = d35724900f6a4105550293686688bbb3
     name = silgraphite-2.3.1.tar.gz
     URL1 = http://sourceforge.net/projects/silgraphite/files/silgraphite/2.3.1/silgraphite-2.3.1.tar.gz/download
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if (ENABLE_CATEGORY_B==YES && SOLAR_JAVA==TRUE && SYSTEM_BSH!=YES)
-    MD5 = ea570af93c284aa9e5621cd563f54f4d
-    name = bsh-2.0b1-src.tar.gz
-    # This used to be the original host, but the link is broken.
-    # URL1 = http://www.beanshell.org/bsh-2.0b1-src.zip
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)

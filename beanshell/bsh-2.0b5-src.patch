@@ -62,16 +62,3 @@
 +
 +ALLTAR : ANTBUILD
 +
---- misc/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Dec 19 17:14:28 2003
-+++ misc/build/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Mar 28 15:55:05 2008
-@@ -34,7 +34,9 @@
- package bsh;
- 
- import bsh.org.objectweb.asm.*;
--import java.lang.reflect.*;
-+import java.lang.reflect.Constructor;
-+import java.lang.reflect.InvocationTargetException;
-+import java.lang.reflect.Method;
- import java.util.ArrayList;
- import java.util.List;
- 
