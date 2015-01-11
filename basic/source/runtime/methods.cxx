@@ -1414,7 +1414,7 @@ RTLFUNC(Replace)
                 }
             }
         }
-        rPar.Get(0)->PutString( aExpStr  );
+        rPar.Get(0)->PutString( aExpStr.copy( lStartPos - 1 )  );
     }
 }
 
