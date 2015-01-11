@@ -369,6 +369,12 @@ void ScOrcusSheet::set_format(os::row_t /*row*/, os::col_t /*col*/, size_t xf_in
     SAL_INFO("sc.orcus.style", "set format: " << xf_index);
 }
 
+void ScOrcusSheet::set_format_range(os::row_t /*row_start*/, os::col_t /*col_start*/,
+        os::row_t /*row_end*/, os::col_t /*col_end*/, size_t xf_index)
+{
+    SAL_INFO("sc.orcus.style", "set format range: " << xf_index);
+}
+
 namespace {
 
 formula::FormulaGrammar::Grammar getCalcGrammarFromOrcus( os::formula_grammar_t grammar )
