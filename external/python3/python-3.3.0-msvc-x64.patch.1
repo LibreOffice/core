@@ -208,6 +208,35 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
      </PostBuildEvent>
    </ItemDefinitionGroup>
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+@@ -172,9 +172,9 @@
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+     <CustomBuildStep>
+       <Message>Build PC/pythonnt_rc(_d).h</Message>
+       <Command>cd $(SolutionDir)
+-make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h
++amd64\make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h
+ </Command>
+       <Outputs>$(SolutionDir)..\PC\pythonnt_rc_d.h;%(Outputs)</Outputs>
+     </CustomBuildStep>
+     <Midl>
+@@ -186,14 +186,15 @@
+       <IntrinsicFunctions>false</IntrinsicFunctions>
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <OutputFile>$(SolutionDir)make_versioninfo_d.exe</OutputFile>
++      <OutputFile>$(SolutionDir)amd64\make_versioninfo_d.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+     <PostBuildEvent>
+       <Command>cd $(SolutionDir)
+-make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h
++amd64\make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h
+ </Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
+   <ItemGroup>
 --- python3/PCbuild/pythoncore.vcxproj
 +++ python3/PCbuild/pythoncore.vcxproj
 @@ -195,35 +195,35 @@
@@ -247,3 +276,14 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
        <Message>Killing any running $(PythonExe) instances...</Message>
      </PreBuildEvent>
    </ItemDefinitionGroup>
+@@ -289,9 +289,9 @@
+       <AdditionalIncludeDirectories>..\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+     </ResourceCompile>
+     <PreLinkEvent>
+       <Message>Generate build information...</Message>
+-      <Command>"$(SolutionDir)make_buildinfo.exe" Debug "$(IntDir)"</Command>
++      <Command>"$(SolutionDir)amd64\make_buildinfo.exe" Debug "$(IntDir)"</Command>
+     </PreLinkEvent>
+     <Link>
+       <AdditionalDependencies>$(IntDir)getbuildinfo.o;%(AdditionalDependencies)</AdditionalDependencies>
+       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
