@@ -270,16 +270,18 @@ private:
 // a class for cache entries for physical font instances that are based on serverfonts
 class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
-private:
-    ServerFont*    mpServerFont;
-    boost::shared_ptr<ImplFontOptions> mpFontOptions;
-    bool           mbGotFontOptions;
-
 public:
-                   ImplServerFontEntry( FontSelectPattern& );
-    virtual        ~ImplServerFontEntry();
-    void           SetServerFont(ServerFont* p);
-    void           HandleFontOptions();
+                            ImplServerFontEntry( FontSelectPattern& );
+    virtual                 ~ImplServerFontEntry();
+
+    void                    SetServerFont(ServerFont* p);
+    void                    HandleFontOptions();
+
+private:
+    ServerFont*             mpServerFont;
+    boost::shared_ptr<ImplFontOptions> mpFontOptions;
+    bool                    mbGotFontOptions;
+
 };
 
 class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
