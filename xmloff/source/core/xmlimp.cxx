@@ -439,6 +439,7 @@ SvXMLImport::~SvXMLImport() throw ()
     delete mpNamespaceMap;
     delete mpUnitConv;
     delete mpEventImportHelper;
+    delete mpFastContexts;
     if( mpContexts )
     {
         while( !mpContexts->empty() )
@@ -459,8 +460,7 @@ SvXMLImport::~SvXMLImport() throw ()
     delete mpNumImport;
     delete mpProgressBarHelper;
 
-    if( mpImpl )
-        delete mpImpl;
+    delete mpImpl;
 
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
