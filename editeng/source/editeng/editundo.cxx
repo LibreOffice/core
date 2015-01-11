@@ -187,7 +187,7 @@ void EditUndoDelContent::Redo()
     if (pEE->IsCallParaInsertedOrDeleted())
         pEE->ParagraphDeleted( nNode );
 
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( reinterpret_cast<sal_uLong>(pContentNode), nNode );
+    DeletedNodeInfo* pInf = new DeletedNodeInfo( pContentNode, nNode );
     pEE->AppendDeletedNodeInfo(pInf);
     pEE->UpdateSelections();
 

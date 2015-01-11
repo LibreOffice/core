@@ -2200,7 +2200,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     }
 
     sal_Int32 nParagraphTobeDeleted = aEditDoc.GetPos( pRight );
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( reinterpret_cast<sal_uIntPtr>(pRight), nParagraphTobeDeleted );
+    DeletedNodeInfo* pInf = new DeletedNodeInfo( pRight, nParagraphTobeDeleted );
     aDeletedNodes.push_back(pInf);
 
     GetEditEnginePtr()->ParagraphConnected( aEditDoc.GetPos( pLeft ), aEditDoc.GetPos( pRight ) );
@@ -2440,7 +2440,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 
     OSL_ENSURE( pNode, "Blind Node in ImpRemoveParagraph" );
 
-    DeletedNodeInfo* pInf = new DeletedNodeInfo( reinterpret_cast<sal_uIntPtr>(pNode), nPara );
+    DeletedNodeInfo* pInf = new DeletedNodeInfo( pNode, nPara );
     aDeletedNodes.push_back(pInf);
 
     // The node is managed by the undo and possibly destroyed!
@@ -3299,8 +3299,8 @@ void ImpEditEngine::UpdateSelections()
         for (size_t i = 0, n = aDeletedNodes.size(); i < n; ++i)
         {
             const DeletedNodeInfo& rInf = aDeletedNodes[i];
-            if ( ( reinterpret_cast<sal_uLong>(aCurSel.Min().GetNode()) == rInf.GetInvalidAdress() ) ||
-                 ( reinterpret_cast<sal_uLong>(aCurSel.Max().GetNode()) == rInf.GetInvalidAdress() ) )
+            if ( ( aCurSel.Min().GetNode() == rInf.GetNode() ) ||
+                 ( aCurSel.Max().GetNode() == rInf.GetNode() ) )
             {
                 // Use ParaPortions, as now also hidden paragraphs have to be
                 // taken into account!
