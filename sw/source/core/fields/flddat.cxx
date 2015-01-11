@@ -178,16 +178,7 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     case FIELD_PROP_DATE_TIME:
         {
             DateTime aDateTime(GetDate(), GetTime());
-
-            util::DateTime DateTimeValue;
-            DateTimeValue.NanoSeconds = aDateTime.GetNanoSec();
-            DateTimeValue.Seconds = aDateTime.GetSec();
-            DateTimeValue.Minutes = aDateTime.GetMin();
-            DateTimeValue.Hours = aDateTime.GetHour();
-            DateTimeValue.Day = aDateTime.GetDay();
-            DateTimeValue.Month = aDateTime.GetMonth();
-            DateTimeValue.Year = aDateTime.GetYear();
-            rVal <<= DateTimeValue;
+            rVal <<= aDateTime.GetUNODateTime();
         }
         break;
     default:

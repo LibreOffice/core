@@ -87,8 +87,7 @@ namespace pcr
         }
         else
         {
-            ::tools::Time aTime( aUNOTime.Hours, aUNOTime.Minutes, aUNOTime.Seconds, aUNOTime.NanoSeconds );
-            getTypedControlWindow()->SetTime( aTime );
+            getTypedControlWindow()->SetTime( ::tools::Time(aUNOTime) );
         }
     }
 
@@ -151,8 +150,7 @@ namespace pcr
         if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Date aDate( getTypedControlWindow()->GetDate() );
-            util::Date aUNODate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
-            aPropValue <<= aUNODate;
+            aPropValue <<= aDate.GetUNODate();
         }
         return aPropValue;
     }

@@ -212,7 +212,7 @@ static util::DateTime getTime(sal_Int64 const nTime)
 
 inline tools::Time setTime( util::DateTime& rDate )
 {
-    return tools::Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.NanoSeconds  );
+    return tools::Time( rDate  );
 }
 
 

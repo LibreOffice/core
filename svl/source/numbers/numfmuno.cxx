@@ -1028,8 +1028,7 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
             Date* pDate = pFormatter->GetNullDate();
             if (pDate)
             {
-                util::Date aUnoDate( pDate->GetDay(), pDate->GetMonth(), pDate->GetYear() );
-                aRet <<= aUnoDate;
+                aRet <<= pDate->GetUNODate();
             }
         }
         else if (aPropertyName == PROPERTYNAME_STDDEC)

@@ -350,8 +350,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 {
                     ::Date aDate( rNullDate );
                     aDate += (long)::rtl::math::approxFloor( xCell->getValue() );
-                    ::com::sun::star::util::Date aDateStruct( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
-                    rValue = aDateStruct;
+                    rValue = aDate.GetUNODate();
                 }
                 else
                     rValue.setNull();

@@ -1616,14 +1616,11 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             util::DateTime uDT( 1 == xDocProps->getEditingCycles()
                                 ? xDocProps->getCreationDate()
                                 : xDocProps->getModificationDate() );
-            Date d(uDT.Day, uDT.Month, uDT.Year);
-            tools::Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-            DateTime aDT(d,t);
 
             if( !aTmp.isEmpty() )
             {
                 nAuthor = rDoc.getIDocumentRedlineAccess().InsertRedlineAuthor( aTmp );
-                aTimeStamp = aDT;
+                aTimeStamp = DateTime(uDT);
             }
         }
     }

@@ -228,9 +228,7 @@ void ScShareDocumentDlg::UpdateView()
         uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
         util::DateTime uDT(xDocProps->getModificationDate());
-        Date d(uDT.Day, uDT.Month, uDT.Year);
-        tools::Time t(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-        DateTime aDateTime(d,t);
+        DateTime aDateTime(uDT);
 
         aString += formatTime(aDateTime, *ScGlobal::pLocaleData);
         aString += " ";

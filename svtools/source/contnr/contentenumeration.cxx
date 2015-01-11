@@ -51,8 +51,7 @@ namespace svt
 #define ROW_IS_COMPACTDISC  12
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
-    aToolsDT = ::DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
-                           tools::Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.NanoSeconds ) );
+    aToolsDT = ::DateTime( aUnoDT );
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;

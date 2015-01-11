@@ -1014,8 +1014,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                             {
                                 Date aDate = *(pNumFmt->GetNullDate());     // tools date
                                 aDate += (long)fVal;                        //! approxfloor?
-                                util::Date aUnoDate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
-                                xRowUpdate->updateDate( nCol+1, aUnoDate );
+                                xRowUpdate->updateDate( nCol+1, aDate.GetUNODate() );
                             }
                         }
                         break;

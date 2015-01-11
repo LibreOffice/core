@@ -22,6 +22,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <com/sun/star/util/DateTime.hpp>
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED DateTime : public Date, public tools::Time
 {
@@ -45,6 +46,12 @@ public:
                     DateTime( const tools::Time& rTime ) : Date(0), Time( rTime ) {}
                     DateTime( const Date& rDate, const tools::Time& rTime ) :
                         Date( rDate ), Time( rTime ) {}
+                    DateTime( const css::util::DateTime& rDateTime );
+
+    css::util::DateTime
+                    GetUNODateTime() const
+                        { return css::util::DateTime(GetNanoSec(), GetSec(), GetMin(), GetHour(),
+                              GetDay(), GetMonth(), GetYear(), false); }
 
     bool            IsBetween( const DateTime& rFrom,
                                const DateTime& rTo ) const;

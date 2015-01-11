@@ -1859,10 +1859,7 @@ void SwWW8ImplReader::ImportDop()
     {
         DateTime aLastPrinted(
             msfilter::util::DTTM2DateTime(pWDop->dttmLastPrint));
-       ::util::DateTime uDT(aLastPrinted.GetNanoSec(),
-            aLastPrinted.GetSec(), aLastPrinted.GetMin(),
-            aLastPrinted.GetHour(), aLastPrinted.GetDay(),
-            aLastPrinted.GetMonth(), aLastPrinted.GetYear(), false);
+        ::util::DateTime uDT = aLastPrinted.GetUNODateTime();
         xDocuProps->setPrintDate(uDT);
     }
 

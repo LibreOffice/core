@@ -26,6 +26,7 @@
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
+#include <tools/datetime.hxx>
 
 #include <xmloff/attrlist.hxx>
 
@@ -121,16 +122,9 @@ void XMLSignatureHelper::SetX509Certificate(
         ouX509Cert);
 }
 
-void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const tools::Time& rTime )
+void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::Date& rDate, const tools::Time& rTime )
 {
-    ::com::sun::star::util::DateTime stDateTime;
-    stDateTime.NanoSeconds = rTime.GetNanoSec();
-    stDateTime.Seconds = (::sal_uInt16)rTime.GetSec();
-    stDateTime.Minutes = (::sal_uInt16)rTime.GetMin();
-    stDateTime.Hours = (::sal_uInt16)rTime.GetHour();
-    stDateTime.Day = (::sal_uInt16)rDate.GetDay();
-    stDateTime.Month = (::sal_uInt16)rDate.GetMonth();
-    stDateTime.Year = (::sal_uInt16)rDate.GetYear();
+    css::util::DateTime stDateTime = ::DateTime(rDate, rTime).GetUNODateTime();
     mpXSecController->setDate( nSecurityId, stDateTime );
 }
 
