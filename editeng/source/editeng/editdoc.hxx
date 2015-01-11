@@ -725,18 +725,18 @@ public:
 class DeletedNodeInfo
 {
 private:
-    sal_uIntPtr     nInvalidAdressPtr;
+    ContentNode*    mpInvalidNode;
     sal_Int32       nInvalidParagraph;
 
 public:
-            DeletedNodeInfo( sal_uIntPtr nInvAdr, sal_Int32 nPos )
-            : nInvalidAdressPtr(nInvAdr)
+            DeletedNodeInfo( ContentNode* pNode, sal_Int32 nPos )
+            : mpInvalidNode(pNode)
             , nInvalidParagraph(nPos)
             {
             }
 
-    sal_uIntPtr GetInvalidAdress() const { return nInvalidAdressPtr; }
-    sal_Int32   GetPosition() const { return nInvalidParagraph; }
+    ContentNode* GetNode() const { return mpInvalidNode; }
+    sal_Int32    GetPosition() const { return nInvalidParagraph; }
 };
 
 
