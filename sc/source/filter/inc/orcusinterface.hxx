@@ -30,6 +30,7 @@
 
 class ScDocumentImport;
 class ScOrcusSheet;
+class ScOrcusStyles;
 class ScOrcusFactory;
 class ScRangeData;
 class SfxItemSet;
@@ -125,6 +126,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScDocumentImport& mrDoc;
     SCTAB mnTab;
     ScOrcusFactory& mrFactory;
+    ScOrcusStyles& mrStyles;
     sc::SharedFormulaGroups maFormulaGroups;
     ScOrcusAutoFilter maAutoFilter;
     ScOrcusSheetProperties maProperties;
@@ -273,6 +275,9 @@ private:
 
 public:
     ScOrcusStyles(ScDocument& rDoc);
+
+    bool applyXfToItemSet(SfxItemSet& rSet, size_t xfId);
+
     // font
 
     virtual void set_font_count(size_t n) SAL_OVERRIDE;
