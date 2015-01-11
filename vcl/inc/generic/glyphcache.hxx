@@ -49,6 +49,7 @@ class RawBitmap;
 class ServerFont;
 class ServerFontLayout;
 class ServerFontLayoutEngine;
+
 namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
 
@@ -286,23 +287,28 @@ private:
 
 class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
 {
+public:
+                            ServerFontLayout( ServerFont& );
+
+    virtual bool            LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void            AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
+    virtual void            DrawText( SalGraphics& ) const SAL_OVERRIDE;
+
+    void                    setNeedFallback(
+                                ImplLayoutArgs& rArgs,
+                                sal_Int32 nIndex,
+                                bool bRightToLeft);
+
+    ServerFont&             GetServerFont() const   { return mrServerFont; }
+
 private:
-    ServerFont&     mrServerFont;
+    ServerFont&             mrServerFont;
     com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> mxBreak;
 
     // enforce proper copy semantic
-    SAL_DLLPRIVATE  ServerFontLayout( const ServerFontLayout& );
-    SAL_DLLPRIVATE  ServerFontLayout& operator=( const ServerFontLayout& );
+    SAL_DLLPRIVATE          ServerFontLayout( const ServerFontLayout& );
+    SAL_DLLPRIVATE          ServerFontLayout& operator=( const ServerFontLayout& );
 
-public:
-                    ServerFontLayout( ServerFont& );
-    virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
-    virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
-    virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
-    void            setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nIndex,
-                        bool bRightToLeft);
-
-    ServerFont&     GetServerFont() const   { return mrServerFont; }
 };
 
 class ServerFontLayoutEngine
