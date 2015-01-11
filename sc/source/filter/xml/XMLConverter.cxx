@@ -312,28 +312,8 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 
 void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {
-    util::DateTime aAPIDateTime;
-    ConvertCoreToAPIDateTime(aDateTime, aAPIDateTime);
+    css::util::DateTime aAPIDateTime = aDateTime.GetUNODateTime();
     ::sax::Converter::convertDateTime(sDate, aAPIDateTime, 0);
-}
-
-void ScXMLConverter::ConvertCoreToAPIDateTime(const DateTime& aDateTime, util::DateTime& rDateTime)
-{
-    rDateTime.Year = aDateTime.GetYear();
-    rDateTime.Month = aDateTime.GetMonth();
-    rDateTime.Day = aDateTime.GetDay();
-    rDateTime.Hours = aDateTime.GetHour();
-    rDateTime.Minutes = aDateTime.GetMin();
-    rDateTime.Seconds = aDateTime.GetSec();
-    rDateTime.NanoSeconds = aDateTime.GetNanoSec();
-}
-
-void ScXMLConverter::ConvertAPIToCoreDateTime(const util::DateTime& aDateTime, DateTime& rDateTime)
-{
-    Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-    tools::Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
-    DateTime aTempDateTime (aDate, aTime);
-    rDateTime = aTempDateTime;
 }
 
 namespace {

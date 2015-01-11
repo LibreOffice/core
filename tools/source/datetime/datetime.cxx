@@ -19,6 +19,12 @@
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
 
+DateTime::DateTime( const css::util::DateTime& rDateTime )
+  : Date( rDateTime.Day, rDateTime.Month, rDateTime.Year ),
+    Time( rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, rDateTime.NanoSeconds )
+{
+}
+
 bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 {
     if ( (*this >= rFrom) && (*this <= rTo) )

@@ -433,8 +433,8 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
 
 void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime)
 {
-    Date aDate(aInfo.aDateTime.Day, aInfo.aDateTime.Month, aInfo.aDateTime.Year);
-    tools::Time aTime(aInfo.aDateTime.Hours, aInfo.aDateTime.Minutes, aInfo.aDateTime.Seconds, aInfo.aDateTime.NanoSeconds);
+    Date aDate(aInfo.aDateTime);
+    tools::Time aTime(aInfo.aDateTime);
     aDateTime.SetDate( aDate.GetDate() );
     aDateTime.SetTime( aTime.GetTime() );
 

@@ -175,8 +175,8 @@ OUString CreateSizeText( sal_Int64 nSize )
 OUString ConvertDateTime_Impl( const OUString& rName,
     const util::DateTime& uDT, const LocaleDataWrapper& rWrapper )
 {
-    Date aD(uDT.Day, uDT.Month, uDT.Year);
-    tools::Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
+     Date aD(uDT);
+     tools::Time aT(uDT);
      const OUString pDelim ( ", " );
      OUString aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
@@ -358,9 +358,7 @@ void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
 {
     setAuthor(i_rAuthor);
     DateTime now( DateTime::SYSTEM );
-    setCreationDate( util::DateTime(
-        now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
-        now.GetDay(), now.GetMonth(), now.GetYear(), false) );
+    setCreationDate( now.GetUNODateTime() );
     setModifiedBy(OUString());
     setPrintedBy(OUString());
     setModificationDate(util::DateTime());
@@ -802,9 +800,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
         aName = SvtUserOptions().GetFullName();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     DateTime now( DateTime::SYSTEM );
-    util::DateTime uDT(
-        now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
-        now.GetDay(), now.GetMonth(), now.GetYear(), false);
+    util::DateTime uDT( now.GetUNODateTime() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
     OUString aEmpty;
     m_pChangeValFt->SetText( aEmpty );
@@ -1814,13 +1810,13 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     }
     else if ( rAny >>= aTmpDate )
     {
-        pNewLine->m_aDateField.SetDate( Date( aTmpDate.Day, aTmpDate.Month, aTmpDate.Year ) );
+        pNewLine->m_aDateField.SetDate( Date( aTmpDate ) );
         nType = CUSTOM_TYPE_DATE;
     }
     else if ( rAny >>= aTmpDateTime )
     {
-        pNewLine->m_aDateField.SetDate( Date( aTmpDateTime.Day, aTmpDateTime.Month, aTmpDateTime.Year ) );
-        pNewLine->m_aTimeField.SetTime( tools::Time( aTmpDateTime.Hours, aTmpDateTime.Minutes, aTmpDateTime.Seconds, aTmpDateTime.NanoSeconds ) );
+        pNewLine->m_aDateField.SetDate( Date( aTmpDateTime ) );
+        pNewLine->m_aTimeField.SetTime( tools::Time( aTmpDateTime ) );
         pNewLine->m_aTimeField.m_isUTC = aTmpDateTime.IsUTC;
         nType = CUSTOM_TYPE_DATETIME;
     }
@@ -1834,9 +1830,8 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     else if ( rAny >>= aTmpDateTimeTZ )
     {
         util::DateTime const& rDT(aTmpDateTimeTZ.DateTimeInTZ);
-        pNewLine->m_aDateField.SetDate( Date( rDT.Day, rDT.Month, rDT.Year ) );
-        pNewLine->m_aTimeField.SetTime( tools::Time( rDT.Hours, rDT.Minutes,
-                    rDT.Seconds, rDT.NanoSeconds ) );
+        pNewLine->m_aDateField.SetDate( Date( rDT ) );
+        pNewLine->m_aTimeField.SetTime( tools::Time( rDT ) );
         pNewLine->m_aTimeField.m_isUTC = rDT.IsUTC;
         pNewLine->m_aDateField.m_TZ = aTmpDateTimeTZ.Timezone;
         nType = CUSTOM_TYPE_DATETIME;
@@ -2240,9 +2235,8 @@ CmisDateTime::CmisDateTime( vcl::Window* pParent, const util::DateTime& aDateTim
     get( m_aTimeField, "time");
     m_aDateField->Show( true );
     m_aTimeField->Show( true );
-    m_aDateField->SetDate( Date( aDateTime.Day, aDateTime.Month, aDateTime.Year ) );
-    m_aTimeField->SetTime( tools::Time( aDateTime.Hours, aDateTime.Minutes,
-                           aDateTime.Seconds, aDateTime.NanoSeconds ) );
+    m_aDateField->SetDate( Date( aDateTime ) );
+    m_aTimeField->SetTime( tools::Time( aDateTime ) );
 }
 
 CmisYesNo::CmisYesNo( vcl::Window* pParent, bool bValue )

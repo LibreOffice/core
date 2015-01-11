@@ -120,9 +120,7 @@ OUString getCasePreservingUrl(const INetURLObject& url) {
 }
 
 DateTime convert(css::util::DateTime const & dt) {
-    return DateTime(
-        Date(dt.Day, dt.Month, dt.Year),
-        tools::Time(dt.Hours, dt.Minutes, dt.Seconds, dt.NanoSeconds));
+    return DateTime(dt);
 }
 
 }

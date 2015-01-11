@@ -2355,7 +2355,7 @@ namespace
                     _rField.SetText( sTime );
                 else
                 {
-                    _rField.SetTime( ::tools::Time( aValue.Hours, aValue.Minutes, aValue.Seconds, aValue.NanoSeconds ) );
+                    _rField.SetTime( ::tools::Time( aValue ) );
                     sTime = _rField.GetText();
                 }
             }

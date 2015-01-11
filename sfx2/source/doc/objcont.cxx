@@ -203,10 +203,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
         {
             // update ModificationAuthor, revision and editing time
             ::DateTime now( ::DateTime::SYSTEM );
-            xDocProps->setModificationDate( util::DateTime(
-                now.GetNanoSec(), now.GetSec(), now.GetMin(),
-                now.GetHour(), now.GetDay(), now.GetMonth(),
-                now.GetYear(), false) );
+            xDocProps->setModificationDate( now.GetUNODateTime() );
             xDocProps->setModifiedBy( aUserName );
             UpdateTime_Impl( xDocProps );
         }
@@ -541,10 +538,7 @@ void SfxObjectShell::ResetFromTemplate( const OUString& rTemplateName, const OUS
                 xDocProps->setTemplateName( rTemplateName );
 
                 ::DateTime now( ::DateTime::SYSTEM );
-                xDocProps->setTemplateDate( util::DateTime(
-                    now.GetNanoSec(), now.GetSec(), now.GetMin(),
-                    now.GetHour(), now.GetDay(), now.GetMonth(),
-                    now.GetYear(), false) );
+                xDocProps->setTemplateDate( now.GetUNODateTime() );
 
                 SetQueryLoadTemplate( true );
             }

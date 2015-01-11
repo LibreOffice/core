@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <sal/log.hxx>
 
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
@@ -61,6 +62,7 @@ public:
                         SAL_WARN_IF(_rDate.Year < 0, "tools.datetime", "Negative year in css::util::Date to ::Date conversion");
                         init(_rDate.Day, _rDate.Month, _rDate.Year);
                     }
+                    Date( const ::com::sun::star::util::DateTime& _rDateTime );
 
     void            SetDate( sal_uInt32 nNewDate ) { nDate = nNewDate; }
     sal_uInt32      GetDate() const { return nDate; }

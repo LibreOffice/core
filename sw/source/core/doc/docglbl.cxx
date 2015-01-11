@@ -282,11 +282,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
                     // the GlobalDoc is the template
                     xDocProps->setTemplateName(OUString());
-                    ::util::DateTime uDT(aTmplDate.GetNanoSec(),
-                        aTmplDate.GetSec(), aTmplDate.GetMin(),
-                        aTmplDate.GetHour(), aTmplDate.GetDay(),
-                        aTmplDate.GetMonth(), aTmplDate.GetYear(),
-                        false );
+                    ::util::DateTime uDT = aTmplDate.GetUNODateTime();
                     xDocProps->setTemplateDate(uDT);
                     xDocProps->setTemplateURL(rPath);
                     // Set the new doc's title to the text of the "split para".

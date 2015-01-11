@@ -394,17 +394,11 @@ static void WriteDop( WW8Export& rWrt )
     else
     {
         ::util::DateTime uDT = xDocProps->getCreationDate();
-        Date aD(uDT.Day, uDT.Month, uDT.Year);
-        tools::Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-        rDop.dttmCreated = sw::ms::DateTime2DTTM(DateTime(aD,aT));
+        rDop.dttmCreated = sw::ms::DateTime2DTTM(DateTime(uDT));
         uDT = xDocProps->getModificationDate();
-        Date aD2(uDT.Day, uDT.Month, uDT.Year);
-        tools::Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-        rDop.dttmRevised = sw::ms::DateTime2DTTM(DateTime(aD2,aT2));
+        rDop.dttmRevised = sw::ms::DateTime2DTTM(DateTime(uDT));
         uDT = xDocProps->getPrintDate();
-        Date aD3(uDT.Day, uDT.Month, uDT.Year);
-        tools::Time aT3(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(DateTime(aD3,aT3));
+        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(DateTime(uDT));
     }
 
     // Also, the DocStat fields in headers, footers are not calculated correctly.

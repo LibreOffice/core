@@ -254,7 +254,7 @@ ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     Date aCurDate( Date::SYSTEM );
-    return ::com::sun::star::util::Date(aCurDate.GetDay(),aCurDate.GetMonth(),aCurDate.GetYear());
+    return aCurDate.GetUNODate();;
 }
 
 ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
@@ -263,9 +263,7 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     tools::Time aCurTime( tools::Time::SYSTEM );
-    return ::com::sun::star::util::Time(aCurTime.GetNanoSec(),
-            aCurTime.GetSec(), aCurTime.GetMin(), aCurTime.GetHour(),
-            false);
+    return aCurTime.GetUNOTime();;
 }
 
 ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
@@ -274,10 +272,7 @@ ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     DateTime aCurTime( DateTime::SYSTEM );
-    return ::com::sun::star::util::DateTime(aCurTime.GetNanoSec(),
-            aCurTime.GetSec(), aCurTime.GetMin(), aCurTime.GetHour(),
-            aCurTime.GetDay(), aCurTime.GetMonth(), aCurTime.GetYear(),
-            false);
+    return aCurTime.GetUNODateTime();
 }
 
 

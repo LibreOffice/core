@@ -190,19 +190,6 @@ SwXRedlinePortion::~SwXRedlinePortion()
 {
 }
 
-static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
-{
-    util::DateTime aRetDT;
-    aRetDT.Year = rDT.GetYear();
-    aRetDT.Month= rDT.GetMonth();
-    aRetDT.Day      = rDT.GetDay();
-    aRetDT.Hours    = rDT.GetHour();
-    aRetDT.Minutes = rDT.GetMin();
-    aRetDT.Seconds = rDT.GetSec();
-    aRetDT.NanoSeconds = rDT.GetNanoSec();
-    return aRetDT;
-}
-
 static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
 {
     OUString sRet;
@@ -231,7 +218,7 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
         // here we always need element 1
         pValues[0].Value <<= rRedline.GetAuthorString(1);
         pValues[1].Name = UNO_NAME_REDLINE_DATE_TIME;
-        pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
+        pValues[1].Value <<= pNext->GetTimeStamp().GetUNODateTime();
         pValues[2].Name = UNO_NAME_REDLINE_COMMENT;
         pValues[2].Value <<= pNext->GetComment();
         pValues[3].Name = UNO_NAME_REDLINE_TYPE;
@@ -299,7 +286,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
         aRet <<= rRedline.GetAuthorString();
     else if(rPropertyName == UNO_NAME_REDLINE_DATE_TIME)
     {
-        aRet <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
+        aRet <<= rRedline.GetTimeStamp().GetUNODateTime();
     }
     else if(rPropertyName == UNO_NAME_REDLINE_COMMENT)
         aRet <<= rRedline.GetComment();
@@ -339,7 +326,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_AUTHOR;
     pRet[nPropIdx++].Value <<= rRedline.GetAuthorString();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_DATE_TIME;
-    pRet[nPropIdx++].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
+    pRet[nPropIdx++].Value <<= rRedline.GetTimeStamp().GetUNODateTime();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_COMMENT;
     pRet[nPropIdx++].Value <<= rRedline.GetComment();
     pRet[nPropIdx].Name = UNO_NAME_REDLINE_TYPE;

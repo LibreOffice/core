@@ -2478,9 +2478,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     util::DateTime aDateTime;
                     if (rChangeProps[i].Value >>= aDateTime)
                     {
-                        DateTime aCoreDateTime( DateTime::EMPTY );
-                        ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
-                        pViewSettings->SetTheFirstDateTime(aCoreDateTime);
+                        pViewSettings->SetTheFirstDateTime(::DateTime(aDateTime));
                     }
                 }
                 else if (sName == "ShowChangesByDatetimeSecondDatetime")
@@ -2488,9 +2486,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     util::DateTime aDateTime;
                     if (rChangeProps[i].Value >>= aDateTime)
                     {
-                        DateTime aCoreDateTime( DateTime::EMPTY );
-                        ScXMLConverter::ConvertAPIToCoreDateTime(aDateTime, aCoreDateTime);
-                        pViewSettings->SetTheLastDateTime(aCoreDateTime);
+                        pViewSettings->SetTheLastDateTime(::DateTime(aDateTime));
                     }
                 }
                 else if (sName == "ShowChangesByAuthor")

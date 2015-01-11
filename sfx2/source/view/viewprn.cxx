@@ -314,9 +314,7 @@ void SfxPrinterController::jobStarted()
             : OUString() );
         ::DateTime now( ::DateTime::SYSTEM );
 
-        xDocProps->setPrintDate( util::DateTime(
-            now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
-            now.GetDay(), now.GetMonth(), now.GetYear(), false) );
+        xDocProps->setPrintDate( now.GetUNODateTime() );
 
         SfxGetpApp()->NotifyEvent( SfxEventHint(SFX_EVENT_PRINTDOC, GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ), mpObjectShell ) );
         uno::Sequence < beans::PropertyValue > aOpts;

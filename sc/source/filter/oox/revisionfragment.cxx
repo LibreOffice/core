@@ -300,8 +300,8 @@ void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )
     {
         util::DateTime aDateTime;
         sax::Converter::parseDateTime(aDateTime, 0, aDateTimeStr);
-        Date aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
-        tools::Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
+        Date aDate(aDateTime);
+        tools::Time aTime(aDateTime);
         aMetadata.maDateTime.SetDate(aDate.GetDate());
         aMetadata.maDateTime.SetTime(aTime.GetTime());
     }

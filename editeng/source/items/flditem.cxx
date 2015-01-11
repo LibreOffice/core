@@ -81,7 +81,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     if (nFieldType != text::textfield::Type::TIME)
                     {
                         util::DateTime aDateTime = xPropSet->getPropertyValue(UNO_TC_PROP_DATE_TIME).get<util::DateTime>();
-                        tools::Time aTime(aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.NanoSeconds);
+                        tools::Time aTime(aDateTime);
 
                         bool bIsFixed = false;
                         xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;

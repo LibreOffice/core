@@ -52,9 +52,7 @@ namespace XmlSec
 
     DateTime GetDateTime( const ::com::sun::star::util::DateTime& _rDT )
     {
-        return DateTime(
-            Date( _rDT.Day, _rDT.Month, _rDT.Year ),
-            tools::Time( _rDT.Hours, _rDT.Minutes, _rDT.Seconds, _rDT.NanoSeconds ) );
+        return DateTime(_rDT);
     }
 
     OUString GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT )

@@ -1827,8 +1827,7 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
     bool bModified( false );
     bModified |= setMetaText("meta:initial-creator", the_value);
     ::DateTime now( ::DateTime::SYSTEM );
-    css::util::DateTime uDT(now.GetNanoSec(), now.GetSec(), now.GetMin(),
-        now.GetHour(), now.GetDay(), now.GetMonth(), now.GetYear(), false);
+    css::util::DateTime uDT(now.GetUNODateTime());
     bModified |= setMetaText("meta:creation-date", dateTimeToText(uDT));
     bModified |= setMetaText("dc:creator", OUString());
     bModified |= setMetaText("meta:printed-by", OUString());

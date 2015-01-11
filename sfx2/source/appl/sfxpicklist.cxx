@@ -395,10 +395,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if (xDocProps.is()) {
                     xDocProps->setAuthor( SvtUserOptions().GetFullName() );
                     ::DateTime now( ::DateTime::SYSTEM );
-                    xDocProps->setCreationDate( util::DateTime(
-                        now.GetNanoSec(), now.GetSec(), now.GetMin(),
-                        now.GetHour(), now.GetDay(), now.GetMonth(),
-                        now.GetYear(), false) );
+                    xDocProps->setCreationDate( now.GetUNODateTime() );
                 }
 
                 if ( bAllowModif )

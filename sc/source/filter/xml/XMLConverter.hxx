@@ -96,9 +96,7 @@ public:
                             const bool bIsFormula = true);
 // EXPORT: Core Date Time
     static void         ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate);
-    static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
 
-    static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
 };
 
 enum ScXMLConditionToken
