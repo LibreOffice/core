@@ -380,7 +380,11 @@ namespace io_acceptor {
         }
 
         pConn->completeConnectionString();
-        if( m_bTcpNoDelay )
+        OUString remoteHostname = pConn->m_addr.getHostname();
+        // we enable tcpNoDelay for loopback connections because
+        // it can make a significant speed difference on linux boxes.
+        if( m_bTcpNoDelay || remoteHostname == "localhost" ||
+            remoteHostname.startsWith("127.0.0.") )
         {
             sal_Int32 nTcpNoDelay = sal_True;
             pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , &nTcpNoDelay,
