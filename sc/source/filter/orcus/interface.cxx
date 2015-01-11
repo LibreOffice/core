@@ -606,9 +606,12 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
 void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
 {
     if (maPattern.equalsIgnoreAsciiCase("none"))
+    {
+        SAL_INFO("sc.orcus.style", "no fill style");
         return;
+    }
 
-    rSet.Put(SvxBrushItem(maFgColor, ATTR_BACKGROUND));
+    rSet.Put(SvxBrushItem(maBgColor, ATTR_BACKGROUND));
 }
 
 ScOrcusStyles::protection::protection():
