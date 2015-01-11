@@ -58,7 +58,7 @@ public:
     explicit                    GlyphCache( GlyphCachePeer& );
                                 ~GlyphCache();
 
-    static GlyphCache&      GetInstance();
+    static GlyphCache&          GetInstance();
 
     void                        AddFontFile( const OString& rNormalizedName,
                                              int nFaceNum, sal_IntPtr nFontId,
@@ -89,9 +89,10 @@ private:
     struct IFSD_Equal{  bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
     typedef std::unordered_map<FontSelectPattern,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+
     FontList                    maFontList;
-    sal_uLong                       mnMaxSize;      // max overall cache size in bytes
-    mutable sal_uLong               mnBytesUsed;
+    sal_uLong                   mnMaxSize;      // max overall cache size in bytes
+    mutable sal_uLong           mnBytesUsed;
     mutable long                mnLruIndex;
     mutable int                 mnGlyphCount;
     ServerFont*                 mpCurrentGCFont;
