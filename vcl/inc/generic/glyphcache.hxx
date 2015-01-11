@@ -55,34 +55,36 @@ namespace vcl { struct FontCapabilities; }
 class VCL_DLLPUBLIC GlyphCache
 {
 public:
-    explicit                    GlyphCache( GlyphCachePeer& );
-                                ~GlyphCache();
+    explicit                GlyphCache( GlyphCachePeer& );
+                            ~GlyphCache();
 
-    static GlyphCache&          GetInstance();
+    static GlyphCache&      GetInstance();
 
-    void                        AddFontFile( const OString& rNormalizedName,
-                                             int nFaceNum, sal_IntPtr nFontId,
-                                             const ImplDevFontAttributes&);
-    void                        AnnounceFonts( PhysicalFontCollection* ) const;
+    void                    AddFontFile(
+                                const OString& rNormalizedName,
+                                int nFaceNum, sal_IntPtr nFontId,
+                                const ImplDevFontAttributes&);
 
-    ServerFont*                 CacheFont( const FontSelectPattern& );
-    void                        UncacheFont( ServerFont& );
-    void                        ClearFontCache();
-    void                        InvalidateAllGlyphs();
+    void                    AnnounceFonts( PhysicalFontCollection* ) const;
+
+    ServerFont*             CacheFont( const FontSelectPattern& );
+    void                    UncacheFont( ServerFont& );
+    void                    ClearFontCache();
+    void                    InvalidateAllGlyphs();
 
 protected:
-    GlyphCachePeer&             mrPeer;
+    GlyphCachePeer&         mrPeer;
 
 private:
     friend class ServerFont;
     // used by ServerFont class only
-    void                        AddedGlyph( ServerFont&, GlyphData& );
-    void                        RemovingGlyph( GlyphData& );
-    void                        UsingGlyph( ServerFont&, GlyphData& );
-    void                        GrowNotify();
+    void                    AddedGlyph( ServerFont&, GlyphData& );
+    void                    RemovingGlyph( GlyphData& );
+    void                    UsingGlyph( ServerFont&, GlyphData& );
+    void                    GrowNotify();
 
 private:
-    void                        GarbageCollect();
+    void                    GarbageCollect();
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
@@ -90,20 +92,20 @@ private:
     struct IFSD_Hash{ size_t operator()( const FontSelectPattern& ) const; };
     typedef std::unordered_map<FontSelectPattern,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
 
-    FontList                    maFontList;
-    sal_uLong                   mnMaxSize;      // max overall cache size in bytes
-    mutable sal_uLong           mnBytesUsed;
-    mutable long                mnLruIndex;
-    mutable int                 mnGlyphCount;
-    ServerFont*                 mpCurrentGCFont;
+    FontList                maFontList;
+    sal_uLong               mnMaxSize;      // max overall cache size in bytes
+    mutable sal_uLong       mnBytesUsed;
+    mutable long            mnLruIndex;
+    mutable int             mnGlyphCount;
+    ServerFont*             mpCurrentGCFont;
 
-    class FreetypeManager*      mpFtManager;
+    class FreetypeManager*  mpFtManager;
 };
 
 class GlyphMetric
 {
 public:
-    GlyphMetric() : mnAdvanceWidth(0) {}
+                            GlyphMetric() : mnAdvanceWidth(0) {}
 
     Point                   GetOffset() const   { return maOffset; }
     Point                   GetDelta() const    { return maDelta; }
