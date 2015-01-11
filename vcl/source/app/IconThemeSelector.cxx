@@ -69,6 +69,9 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     else if ( desktopEnvironment.equalsIgnoreAsciiCase("MacOSX") ) {
         r = "sifr";
     }
+    else if ( desktopEnvironment.equalsIgnoreAsciiCase("Windows") ) {
+        r = "galaxy";
+    }
     else {
         r = FALLBACK_ICON_THEME_ID;
     }
