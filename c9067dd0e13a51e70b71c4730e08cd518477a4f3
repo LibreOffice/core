@@ -34,6 +34,24 @@
       "revId": "c9067dd0e13a51e70b71c4730e08cd518477a4f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_053c3692",
+        "filename": "external/python3/python-3.3.0-msvc-x64.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-01-11T21:43:41Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3afb71cf_4a5b5755",
+      "revId": "c9067dd0e13a51e70b71c4730e08cd518477a4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
