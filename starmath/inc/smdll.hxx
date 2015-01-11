@@ -19,9 +19,11 @@
 #ifndef INCLUDED_STARMATH_INC_SMDLL_HXX
 #define INCLUDED_STARMATH_INC_SMDLL_HXX
 
+#include "smdllapi.hxx"
+
 namespace SmGlobals
 {
-    void ensure();
+    SM_DLLPUBLIC void ensure();
 }
 
 #endif
