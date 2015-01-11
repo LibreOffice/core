@@ -39,24 +39,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 #define RULER_OFF           3
-#define RULER_TEXTOFF       5
 #define RULER_RESIZE_OFF    4
 #define RULER_MIN_SIZE      3
 
 #define RULER_VAR_SIZE      8
-
-#define RULER_TAB_HEIGHT2   2
-#define RULER_TAB_WIDTH2    2
-#define RULER_TAB_CWIDTH    8
-#define RULER_TAB_CWIDTH2   4
-#define RULER_TAB_CWIDTH3   4
-#define RULER_TAB_CWIDTH4   2
-#define RULER_TAB_DHEIGHT   4
-#define RULER_TAB_DHEIGHT2  1
-#define RULER_TAB_DWIDTH    5
-#define RULER_TAB_DWIDTH2   3
-#define RULER_TAB_DWIDTH3   3
-#define RULER_TAB_DWIDTH4   1
 
 #define RULER_UPDATE_LINES  0x01
 #define RULER_UPDATE_DRAW   0x02
@@ -207,6 +193,26 @@ static const RulerUnitData aImplRulerUnitTab[RULER_UNIT_COUNT] =
 { MAP_100TH_MM,        551,   551.0,   551.0,    551.0,   1102.0,     551, 3, " li"    }  // LINE
 };
 
+static RulerTabData ruler_tab =
+{
+    0, // DPIScaleFactor to be set
+    7, // ruler_tab_width
+    6, // ruler_tab_height
+    2, // ruler_tab_height2
+    2, // ruler_tab_width2
+    8, // ruler_tab_cwidth
+    4, // ruler_tab_cwidth2
+    4, // ruler_tab_cwidth3
+    2, // ruler_tab_cwidth4
+    4, // ruler_tab_dheight
+    1, // ruler_tab_dheight2
+    5, // ruler_tab_dwidth
+    3, // ruler_tab_dwidth2
+    3, // ruler_tab_dwidth3
+    1, // ruler_tab_dwidth4
+    5  // ruler_tab_textoff
+};
+
 void Ruler::ImplInit( WinBits nWinBits )
 {
     // Default WinBits setzen
@@ -219,7 +225,7 @@ void Ruler::ImplInit( WinBits nWinBits )
         EnableRTL( false );
     }
 
-    // Variablen initialisieren
+    // Initialize variables
     mnWinStyle      = nWinBits;             // Window-Style
     mnBorderOff     = 0;                    // Border-Offset
     mnWinOff        = 0;                    // EditWinOffset
@@ -270,7 +276,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     // Setup the default size
     Rectangle aRect;
     GetTextBoundRect( aRect, OUString( "0123456789" ) );
-    long nDefHeight = aRect.GetHeight() + RULER_OFF * 2 + RULER_TEXTOFF * 2 + mnBorderWidth;
+    long nDefHeight = aRect.GetHeight() + RULER_OFF * 2 + ruler_tab.textoff * 2 + mnBorderWidth;
 
     Size aDefSize;
     if ( nWinBits & WB_HORZ )
@@ -290,7 +296,32 @@ Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
     mpData(NULL),
     mpDragData(new ImplRulerData)
 {
+
+    // Check to see if the ruler constructor has
+    // already been called before otherwise
+    // we end up with over-scaled elements
+    if( ruler_tab.DPIScaleFactor == 0 )
+    {
+        ruler_tab.DPIScaleFactor = pParent->GetDPIScaleFactor();
+        ruler_tab.width    *= ruler_tab.DPIScaleFactor;
+        ruler_tab.height   *= ruler_tab.DPIScaleFactor;
+        ruler_tab.height2  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.width2   *= ruler_tab.DPIScaleFactor;
+        ruler_tab.cwidth   *= ruler_tab.DPIScaleFactor;
+        ruler_tab.cwidth2  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.cwidth3  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.cwidth4  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.dheight  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.dheight2 *= ruler_tab.DPIScaleFactor;
+        ruler_tab.dwidth   *= ruler_tab.DPIScaleFactor;
+        ruler_tab.dwidth2  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.dwidth3  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.dwidth4  *= ruler_tab.DPIScaleFactor;
+        ruler_tab.textoff  *= ruler_tab.DPIScaleFactor;
+    }
+
     ImplInit( nWinStyle );
+
 }
 
 Ruler::~Ruler()
@@ -433,7 +464,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 {
     double nCenter = nTop + ((nBottom - nTop) / 2);
 
-    long nTickLength3 = (nBottom - nTop) * 0.5;
+    long nTickLength3 = (nBottom - nTop) * 0.5 * ruler_tab.DPIScaleFactor;
     long nTickLength2 = nTickLength3 * 0.66;
     long nTickLength1 = nTickLength2 * 0.66;
 
@@ -499,7 +530,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
     const long nTextOff = 4;
 
     // Determine the number divider for ruler drawn numbers - means which numbers
-    // should be shown on the ruler and which should be skipped because the ruller
+    // should be shown on the ruler and which should be skipped because the ruler
     // is not big enough to draw them
     if ( nTickWidth < nTxtWidth + nTextOff )
     {
@@ -601,8 +632,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 
                     if(nMin < nHorizontalLocation && nHorizontalLocation < nMax)
                     {
-                        ImplVDrawLine(nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1);
-                        ImplVDrawLine(nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1);
+                        ImplVDrawLine(nHorizontalLocation, nBottom, nHorizontalLocation,
+                            nBottom - 1 * ruler_tab.DPIScaleFactor);
+                        ImplVDrawLine(nHorizontalLocation, nTop,    nHorizontalLocation,
+                            nTop    + 1 * ruler_tab.DPIScaleFactor);
                     }
 
                     nHorizontalLocation = nStart - n;
@@ -610,8 +643,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 
                     if(nMin < nHorizontalLocation && nHorizontalLocation < nMax)
                     {
-                        ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation, nBottom - 1 );
-                        ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation, nTop    + 1 );
+                        ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation,
+                            nBottom - 1 * ruler_tab.DPIScaleFactor );
+                        ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation,
+                            nTop    + 1 * ruler_tab.DPIScaleFactor );
                     }
                 }
                 // Tick/Tick2 - Output (Strokes)
@@ -839,17 +874,17 @@ static void ImplCenterTabPos( Point& rPos, sal_uInt16 nTabStyle )
 {
     bool bRTL  = 0 != (nTabStyle & RULER_TAB_RTL);
     nTabStyle &= RULER_TAB_STYLE;
-    rPos.Y() += RULER_TAB_HEIGHT/2;
+    rPos.Y() += ruler_tab.height/2;
 
     if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) ||
          ( bRTL && nTabStyle == RULER_TAB_RIGHT) )
     {
-        rPos.X() -= RULER_TAB_WIDTH / 2;
+        rPos.X() -= ruler_tab.width / 2;
     }
     else if ( (!bRTL && nTabStyle == RULER_TAB_RIGHT) ||
               ( bRTL && nTabStyle == RULER_TAB_LEFT) )
     {
-        rPos.X() += RULER_TAB_WIDTH / 2;
+        rPos.X() += ruler_tab.width / 2;
     }
 }
 
@@ -881,6 +916,11 @@ static void ImplDrawRulerTab( OutputDevice* pDevice, const Point& rPos,
     sal_uInt16 nTabStyle = nStyle & RULER_TAB_STYLE;
     bool bRTL = 0 != (nStyle & RULER_TAB_RTL);
 
+    // Scale by the screen DPI scaling factor
+    // However when doing this some of the rectangles
+    // drawn become asymmetric due to the +1 offsets
+    sal_uInt16 DPIOffset  = pDevice->GetDPIScaleFactor() - 1;
+
     Rectangle aRect1;
     Rectangle aRect2;
     Rectangle aRect3;
@@ -889,59 +929,59 @@ static void ImplDrawRulerTab( OutputDevice* pDevice, const Point& rPos,
 
     if ( nTabStyle == RULER_TAB_DEFAULT )
     {
-        aRect1.Left()   = rPos.X() - RULER_TAB_DWIDTH2 + 1;
-        aRect1.Top()    = rPos.Y() - RULER_TAB_DHEIGHT2 + 1;
-        aRect1.Right()  = rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH;
+        aRect1.Left()   = rPos.X() - ruler_tab.dwidth2 + 1;
+        aRect1.Top()    = rPos.Y() - ruler_tab.dheight2 + 1;
+        aRect1.Right()  = rPos.X() - ruler_tab.dwidth2 + ruler_tab.dwidth + DPIOffset;
         aRect1.Bottom() = rPos.Y();
 
-        aRect2.Left()   = rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3;
-        aRect2.Top()    = rPos.Y() - RULER_TAB_DHEIGHT + 1;
-        aRect2.Right()  = rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3 + RULER_TAB_DWIDTH4 - 1;
+        aRect2.Left()   = rPos.X() - ruler_tab.dwidth2 + ruler_tab.dwidth3;
+        aRect2.Top()    = rPos.Y() - ruler_tab.dheight + 1;
+        aRect2.Right()  = rPos.X() - ruler_tab.dwidth2 + ruler_tab.dwidth3 + ruler_tab.dwidth4 - 1;
         aRect2.Bottom() = rPos.Y();
 
     }
     else if ( (!bRTL && nTabStyle == RULER_TAB_LEFT) || ( bRTL && nTabStyle == RULER_TAB_RIGHT))
     {
         aRect1.Left()   = rPos.X();
-        aRect1.Top()    = rPos.Y() - RULER_TAB_HEIGHT2 + 1;
-        aRect1.Right()  = rPos.X() + RULER_TAB_WIDTH - 1;
+        aRect1.Top()    = rPos.Y() - ruler_tab.height2 + 1;
+        aRect1.Right()  = rPos.X() + ruler_tab.width - 1;
         aRect1.Bottom() = rPos.Y();
 
         aRect2.Left()   = rPos.X();
-        aRect2.Top()    = rPos.Y() - RULER_TAB_HEIGHT + 1;
-        aRect2.Right()  = rPos.X() + RULER_TAB_WIDTH2 - 1;
+        aRect2.Top()    = rPos.Y() - ruler_tab.height + 1;
+        aRect2.Right()  = rPos.X() + ruler_tab.width2 - 1;
         aRect2.Bottom() = rPos.Y();
     }
     else if ( (!bRTL && nTabStyle == RULER_TAB_RIGHT) ||( bRTL && nTabStyle == RULER_TAB_LEFT))
     {
-        aRect1.Left()   = rPos.X() - RULER_TAB_WIDTH + 1;
-        aRect1.Top()    = rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Left()   = rPos.X() - ruler_tab.width + 1;
+        aRect1.Top()    = rPos.Y() - ruler_tab.height2 + 1;
         aRect1.Right()  = rPos.X();
         aRect1.Bottom() = rPos.Y();
 
-        aRect2.Left()   = rPos.X() - RULER_TAB_WIDTH2 + 1;
-        aRect2.Top()    = rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Left()   = rPos.X() - ruler_tab.width2 + 1;
+        aRect2.Top()    = rPos.Y() - ruler_tab.height + 1;
         aRect2.Right()  = rPos.X();
         aRect2.Bottom() = rPos.Y();
     }
     else
     {
-        aRect1.Left()   = rPos.X() - RULER_TAB_CWIDTH2 + 1;
-        aRect1.Top()    = rPos.Y() - RULER_TAB_HEIGHT2 + 1;
-        aRect1.Right()  = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+        aRect1.Left()   = rPos.X() - ruler_tab.cwidth2 + 1;
+        aRect1.Top()    = rPos.Y() - ruler_tab.height2 + 1;
+        aRect1.Right()  = rPos.X() - ruler_tab.cwidth2 + ruler_tab.cwidth + DPIOffset;
         aRect1.Bottom() = rPos.Y();
 
-        aRect2.Left()   = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3;
-        aRect2.Top()    = rPos.Y() - RULER_TAB_HEIGHT + 1;
-        aRect2.Right()  = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3 + RULER_TAB_CWIDTH4 - 1;
+        aRect2.Left()   = rPos.X() - ruler_tab.cwidth2 + ruler_tab.cwidth3;
+        aRect2.Top()    = rPos.Y() - ruler_tab.height + 1;
+        aRect2.Right()  = rPos.X() - ruler_tab.cwidth2 + ruler_tab.cwidth3 + ruler_tab.cwidth4 - 1;
         aRect2.Bottom() = rPos.Y();
 
         if ( nTabStyle == RULER_TAB_DECIMAL )
         {
-            aRect3.Left()   = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH - 1;
-            aRect3.Top()    = rPos.Y() - RULER_TAB_HEIGHT + 1 + 1;
-            aRect3.Right()  = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
-            aRect3.Bottom() = rPos.Y() - RULER_TAB_HEIGHT + 1 + 2 ;
+            aRect3.Left()   = rPos.X() - ruler_tab.cwidth2 + ruler_tab.cwidth - 1;
+            aRect3.Top()    = rPos.Y() - ruler_tab.height + 1 + 1 - DPIOffset;
+            aRect3.Right()  = rPos.X() - ruler_tab.cwidth2 + ruler_tab.cwidth + DPIOffset;
+            aRect3.Bottom() = rPos.Y() - ruler_tab.height + 1 + 2;
         }
     }
     if( 0 == (nWinBits & WB_HORZ) )
@@ -1457,7 +1497,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     // so that leftover tabs and indents are taken into account
     long nXExtraOff;
     if ( !mpData->pTabs.empty() || !mpData->pIndents.empty() )
-        nXExtraOff = (mnVirHeight/2) - 4;
+        nXExtraOff = (mnVirHeight / 2) - 4;
     else
         nXExtraOff = 0;
 
@@ -1483,7 +1523,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     if ( !mpData->pTabs.empty() )
     {
         aRect.Bottom()  = nHitBottom;
-        aRect.Top()     = aRect.Bottom() - RULER_TAB_HEIGHT-RULER_OFF;
+        aRect.Top()     = aRect.Bottom() - ruler_tab.height - RULER_OFF;
 
         for ( i = mpData->pTabs.size() - 1; i >= 0; i-- )
         {
@@ -1500,17 +1540,17 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                     if ( nStyle == RULER_TAB_LEFT )
                     {
                         aRect.Left()  = n1;
-                        aRect.Right() = n1 + RULER_TAB_WIDTH - 1;
+                        aRect.Right() = n1 + ruler_tab.width - 1;
                     }
                     else if ( nStyle == RULER_TAB_RIGHT )
                     {
                         aRect.Right() = n1;
-                        aRect.Left()  = n1 - RULER_TAB_WIDTH - 1;
+                        aRect.Left()  = n1 - ruler_tab.width - 1;
                     }
                     else
                     {
-                        aRect.Left()  = n1 - RULER_TAB_CWIDTH2 + 1;
-                        aRect.Right() = n1 - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+                        aRect.Left()  = n1 - ruler_tab.cwidth2 + 1;
+                        aRect.Right() = n1 - ruler_tab.cwidth2 + ruler_tab.cwidth;
                     }
 
                     if ( aRect.IsInside( Point( nX, nY ) ) )
@@ -1527,8 +1567,8 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     // Indents
     if ( !mpData->pIndents.empty() )
     {
-        long nIndentHeight = (mnVirHeight/2) - 1;
-        long nIndentWidth2 = nIndentHeight-3;
+        long nIndentHeight = (mnVirHeight / 2) - 1;
+        long nIndentWidth2 = nIndentHeight - 3;
 
         for ( i = mpData->pIndents.size(); i; i-- )
         {
@@ -1692,17 +1732,17 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                     if ( nStyle == RULER_TAB_LEFT )
                     {
                         aRect.Left()  = n1;
-                        aRect.Right() = n1 + RULER_TAB_WIDTH - 1;
+                        aRect.Right() = n1 + ruler_tab.width - 1;
                     }
                     else if ( nStyle == RULER_TAB_RIGHT )
                     {
                         aRect.Right() = n1;
-                        aRect.Left()  = n1 - RULER_TAB_WIDTH - 1;
+                        aRect.Left()  = n1 - ruler_tab.width - 1;
                     }
                     else
                     {
-                        aRect.Left()  = n1 - RULER_TAB_CWIDTH2 + 1;
-                        aRect.Right() = n1 - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+                        aRect.Left()  = n1 - ruler_tab.cwidth2 + 1;
+                        aRect.Right() = n1 - ruler_tab.cwidth2 + ruler_tab.cwidth;
                     }
 
                     aRect.Left()--;
@@ -2145,7 +2185,7 @@ void Ruler::Resize()
     if ( nNewHeight )
     {
         mbCalc = true;
-        mnVirHeight = nNewHeight - mnBorderWidth - (RULER_OFF*2);
+        mnVirHeight = nNewHeight - mnBorderWidth - ( RULER_OFF * 2 );
     }
     else
     {
@@ -2181,9 +2221,9 @@ void Ruler::Resize()
                     aRect.Top() = mnHeight-RULER_RESIZE_OFF;
                 else
                     aRect.Top() = aWinSize.Height()-RULER_RESIZE_OFF;
-                aRect.Bottom() = aRect.Top()+RULER_RESIZE_OFF;
+                aRect.Bottom() = aRect.Top() + RULER_RESIZE_OFF;
                 aRect.Left()    = RULER_OFF;
-                aRect.Right()   = RULER_OFF+mnVirHeight;
+                aRect.Right()   = RULER_OFF + mnVirHeight;
             }
 
             Invalidate( aRect );
