@@ -2276,10 +2276,10 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 
     SfxViewEventHint const*const pVEHint(
             dynamic_cast<SfxViewEventHint const*>(&rHint));
-    if (pActiveShell
-        && pVEHint && pVEHint->GetEventName() == "OnViewClosed"
-        && dynamic_cast<SwXTextView *>(pVEHint->GetController().get())
-            ->GetView() == &pActiveShell->GetView())
+    SwXTextView* pDyingShell = NULL;
+    if (pActiveShell && pVEHint && pVEHint->GetEventName() == "OnViewClosed")
+        pDyingShell = dynamic_cast<SwXTextView*>(pVEHint->GetController().get());
+    if (pDyingShell && pDyingShell->GetView() == &pActiveShell->GetView())
     {
         SetActiveShell(0); // our view is dying, clear our pointers to it
     }
