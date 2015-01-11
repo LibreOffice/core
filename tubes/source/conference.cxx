@@ -248,7 +248,7 @@ static void channel_closed_cb( TpChannel *channel, gpointer user_data, GObject *
 
 void TeleConference::setChannel( TpAccount *pAccount, TpDBusTubeChannel* pChannel )
 {
-    OSL_ENSURE( !mpChannel, "TeleConference::setChannel: already have channel");
+    SAL_WARN_IF( mpChannel, "tubes", "TeleConference::setChannel: already have channel");
     if (mpChannel)
         g_object_unref( mpChannel);
     if (mpAccount)
@@ -297,7 +297,7 @@ bool TeleConference::offerTube()
 {
     INFO_LOGGER( "TeleConference::offerTube");
 
-    OSL_ENSURE( mpChannel, "TeleConference::offerTube: no channel");
+    SAL_WARN_IF( !mpChannel, "tubes", "TeleConference::offerTube: no channel");
     if (!mpChannel)
         return false;
 
@@ -319,7 +319,7 @@ bool TeleConference::setTube( GDBusConnection* pTube)
 {
     INFO_LOGGER( "TeleConference::setTube");
 
-    OSL_ENSURE( !pImpl->mpTube, "TeleConference::setTube: already tubed");
+    SAL_WARN_IF( pImpl->mpTube, "tubes", "TeleConference::setTube: already tubed");
 
     pImpl->mpTube = pTube;
 
