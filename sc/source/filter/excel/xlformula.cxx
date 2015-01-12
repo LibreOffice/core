@@ -268,7 +268,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocChiInv,             275,    2,  2,  V, { VR }, 0, 0 },
     { ocCombin,             276,    2,  2,  V, { VR }, 0, 0 },
     { ocConfidence,         277,    3,  3,  V, { VR }, 0, 0 },
-    { ocKritBinom,          278,    3,  3,  V, { VR }, 0, 0 },
+    { ocCritBinom,          278,    3,  3,  V, { VR }, 0, 0 },
     { ocEven,               279,    1,  1,  V, { VR }, 0, 0 },
     { ocExpDist,            280,    3,  3,  V, { VR }, 0, 0 },
     { ocFDist,              281,    3,  3,  V, { VR }, 0, 0 },
