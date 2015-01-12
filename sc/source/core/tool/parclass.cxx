@@ -56,7 +56,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocIf,              {{ Array, Reference, Reference                          }, 0 }},
     { ocIfError,         {{ Array, Reference                                     }, 0 }},
     { ocIfNA,            {{ Array, Reference                                     }, 0 }},
-    { ocChose,           {{ Array, Reference                                     }, 1 }},
+    { ocChoose,          {{ Array, Reference                                     }, 1 }},
     // Other specials.
     { ocOpen,            {{ Bounds                                               }, 0 }},
     { ocClose,           {{ Bounds                                               }, 0 }},
@@ -509,7 +509,7 @@ void ScParameterClassification::GenerateDocumentation()
                     break;
                     case ocIfError:
                     case ocIfNA:
-                    case ocChose:
+                    case ocChoose:
                         aToken.SetByte(2);
                     break;
                     case ocPercentSign:

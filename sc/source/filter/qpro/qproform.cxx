@@ -420,7 +420,7 @@ static const struct
     { ocArcCos, FT_FuncFix1 },
     { ocExp, FT_FuncFix1 },
     { ocMod, FT_FuncFix2 },
-    { ocChose, FT_FuncVar },                    // 0x30
+    { ocChoose, FT_FuncVar },                    // 0x30
     { ocIsNA, FT_FuncFix1 },
     { ocIsError, FT_FuncFix1 },
     { ocFalse, FT_FuncFix0 },

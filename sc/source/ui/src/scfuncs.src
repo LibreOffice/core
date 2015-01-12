@@ -9899,7 +9899,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function CHOOSE #*=-
-    Resource SC_OPCODE_CHOSE
+    Resource SC_OPCODE_CHOOSE
     {
         String 1 // Description
         {
