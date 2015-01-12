@@ -156,6 +156,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             pNanBuffer, 0, NULL, NULL);
     }
 
+    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
@@ -214,6 +215,7 @@ public:
         }
 
         // Pass the scalar result back to the rest of the formula kernel
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode);
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -263,6 +265,7 @@ public:
     {
         double tmp = GetDouble();
         // Pass the scalar result back to the rest of the formula kernel
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -303,6 +306,7 @@ public:
     {
         double tmp = 0.0;
         // Pass the scalar result back to the rest of the formula kernel
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": double: " << tmp);
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -662,6 +666,7 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
     {
         cl_int seed = comphelper::rng::uniform_int_distribution(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_int: " << seed);
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_int), (void*)&seed);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -770,6 +775,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
 
+    SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem);
     err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
@@ -1414,19 +1420,23 @@ public:
         // set kernel arg of reduction kernel
         // TODO(Wei Wei): use unique name for kernel
         cl_mem buf = Base::GetCLBuffer();
+        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 0 << ": cl_mem: " << buf);
         err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
             (void*)&buf);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
 
+        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 1 << ": cl_mem: " << mpClmem2);
         err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void*)&mpClmem2);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
 
+        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 2 << ": cl_int: " << nInput);
         err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
 
+        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 3 << ": cl_int: " << nCurWindowSize);
         err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -1434,6 +1444,7 @@ public:
         // set work group size and execute
         size_t global_work_size[] = { 256, (size_t)w };
         size_t local_work_size[] = { 256, 1 };
+        SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
             global_work_size, local_work_size, 0, NULL, NULL);
         if (CL_SUCCESS != err)
@@ -1465,19 +1476,23 @@ public:
                 throw OpenCLError(err, __FILE__, __LINE__);
             // set kernel arg of reduction kernel
             buf = Base::GetCLBuffer();
+            SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 0 << ": cl_mem: " << buf);
             err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
                 (void*)&buf);
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
 
+            SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 1 << ": cl_mem: " << mpClmem2);
             err = clSetKernelArg(redKernel, 1, sizeof(cl_mem), (void*)&mpClmem2);
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
 
+            SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 2 << ": cl_int: " << nInput);
             err = clSetKernelArg(redKernel, 2, sizeof(cl_int), (void*)&nInput);
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
 
+            SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 3 << ": cl_int: " << nCurWindowSize);
             err = clSetKernelArg(redKernel, 3, sizeof(cl_int), (void*)&nCurWindowSize);
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
@@ -1485,6 +1500,7 @@ public:
             // set work group size and execute
             size_t global_work_size1[] = { 256, (size_t)w };
             size_t local_work_size1[] = { 256, 1 };
+            SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
                 global_work_size1, local_work_size1, 0, NULL, NULL);
             if (CL_SUCCESS != err)
@@ -1514,6 +1530,7 @@ public:
                 throw OpenCLError(err, __FILE__, __LINE__);
         }
         // set kernel arg
+        SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
         err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -2139,12 +2156,14 @@ public:
                 // set kernel arg of reduction kernel
                 for (size_t j = 0; j < vclmem.size(); j++)
                 {
+                    SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": " << (vclmem[j] ? "cl_mem" : "double") << ": " << vclmem[j]);
                     err = clSetKernelArg(redKernel, j,
                         vclmem[j] ? sizeof(cl_mem) : sizeof(double),
                         (void*)&vclmem[j]);
                     if (CL_SUCCESS != err)
                         throw OpenCLError(err, __FILE__, __LINE__);
                 }
+                SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << vclmem.size() << ": cl_mem: " << pClmem2);
                 err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void*)&pClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
@@ -2152,6 +2171,7 @@ public:
                 // set work group size and execute
                 size_t global_work_size[] = { 256, (size_t)nVectorWidth };
                 size_t local_work_size[] = { 256, 1 };
+                SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
                     global_work_size, local_work_size, 0, NULL, NULL);
                 if (CL_SUCCESS != err)
@@ -2161,6 +2181,7 @@ public:
                     throw OpenCLError(err, __FILE__, __LINE__);
 
                 // Pass pClmem2 to the "real" kernel
+                SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << pClmem2);
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&pClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
@@ -2206,6 +2227,10 @@ public:
                 // set kernel arg of reduction kernel
                 for (size_t j = 0; j < vclmem.size(); j++)
                 {
+                    if (vclmem[j].mCLMem)
+                        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": cl_mem: " << vclmem[j].mCLMem);
+                    else
+                        SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << j << ": double: " << vclmem[j].mConst);
                     err = clSetKernelArg(redKernel, j,
                         vclmem[j].mCLMem ? sizeof(cl_mem) : sizeof(double),
                         vclmem[j].mCLMem ? (void*)&vclmem[j].mCLMem :
@@ -2213,20 +2238,24 @@ public:
                     if (CL_SUCCESS != err)
                         throw OpenCLError(err, __FILE__, __LINE__);
                 }
+                SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << vclmem.size() << ": cl_mem: " << mpClmem2);
                 err = clSetKernelArg(redKernel, vclmem.size(), sizeof(cl_mem), (void*)&mpClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
 
+                SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << (vclmem.size() + 1) << ": cl_int: " << nInput);
                 err = clSetKernelArg(redKernel, vclmem.size() + 1, sizeof(cl_int), (void*)&nInput);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
 
+                SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << (vclmem.size() + 2) << ": cl_int: " << nCurWindowSize);
                 err = clSetKernelArg(redKernel, vclmem.size() + 2, sizeof(cl_int), (void*)&nCurWindowSize);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
                 // set work group size and execute
                 size_t global_work_size[] = { 256, (size_t)nVectorWidth };
                 size_t local_work_size[] = { 256, 1 };
+                SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
                     global_work_size, local_work_size, 0, NULL, NULL);
                 if (CL_SUCCESS != err)
@@ -2236,6 +2265,7 @@ public:
                     throw OpenCLError(err, __FILE__, __LINE__);
                 clReleaseKernel(redKernel);
                 // Pass mpClmem2 to the "real" kernel
+                SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
@@ -3712,12 +3742,14 @@ void DynamicKernel::Launch( size_t nr )
         nr * sizeof(double), NULL, &err);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
+    SAL_INFO("sc.opencl", "Kernel " << mpKernel << " arg " << 0 << ": cl_mem: " << mpResClmem);
     err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
     // The rest of buffers
     mSyms.Marshal(mpKernel, nr, mpProgram);
     size_t global_work_size[] = { nr };
+    SAL_INFO("sc.opencl", "Enqueing kernel " << mpKernel);
     err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
         global_work_size, NULL, 0, NULL, NULL);
     if (CL_SUCCESS != err)
