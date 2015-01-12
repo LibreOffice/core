@@ -16,6 +16,9 @@ public interface TileProvider {
 
     CairoImage createTile(float x, float y, IntSize tileSize, float zoom);
 
+    /**
+     * Rerender and overwrite tile's image buffer directly
+     */
     void rerenderTile(CairoImage image, float x, float y, IntSize tileSize, float zoom);
 
     void changePart(int partIndex);
@@ -30,7 +33,14 @@ public interface TileProvider {
 
     void registerInvalidationCallback(TileProvider.TileInvalidationCallback tileInvalidationCallback);
 
+    /**
+     * Callback to retrieve invalidation calls
+     */
     public interface TileInvalidationCallback {
+        /**
+         * Invoked when a region is invalidated.
+         * @param rect area in pixels which was invalidated and needs to be redrawn
+         */
         void invalidate(RectF rect);
     }
 }

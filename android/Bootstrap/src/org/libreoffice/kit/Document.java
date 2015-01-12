@@ -85,7 +85,15 @@ public class Document {
 
     public native void initializeForRendering();
 
+    /**
+     * Callback to retrieve messages from LOK
+     */
     public interface MessageCallback {
+        /**
+         * Invoked when a message is retrieved from LOK
+         * @param signalNumber - signal type / number
+         * @param payload - retrieved for the signal
+         */
         void messageRetrieved(int signalNumber, String payload);
     }
 

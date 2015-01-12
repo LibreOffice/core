@@ -12,6 +12,8 @@ package org.libreoffice.kit;
 import java.nio.ByteBuffer;
 
 public class Office {
+    public static final int KEY_PRESS = 0;
+    public static final int KEY_RELEASE = 1;
 
     private ByteBuffer handle;
 
@@ -32,6 +34,11 @@ public class Office {
         return document;
     }
 
+    /**
+     * Post a key event to LibreOffice.
+     * @param type - type of key event
+     * @param code - key event code
+     */
     public native void postKeyEvent(int type, int code);
 
     public native void destroy();
