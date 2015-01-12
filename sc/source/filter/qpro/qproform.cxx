@@ -479,7 +479,7 @@ static const struct
     { ocLeft, FT_FuncFix2 },
     { ocRight, FT_FuncFix2 },
     { ocReplace, FT_FuncFix4 },
-    { ocPropper, FT_FuncFix1 },
+    { ocProper, FT_FuncFix1 },
     { ocCell, FT_FuncFix2 },
     { ocTrim, FT_FuncFix1 },
     { ocClean, FT_FuncFix1 },

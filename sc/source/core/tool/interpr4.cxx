@@ -3962,7 +3962,7 @@ StackVar ScInterpreter::Interpret()
                 case ocCode             : ScCode();                     break;
                 case ocTrim             : ScTrim();                     break;
                 case ocUpper            : ScUpper();                    break;
-                case ocPropper          : ScPropper();                  break;
+                case ocProper           : ScProper();                   break;
                 case ocLower            : ScLower();                    break;
                 case ocLen              : ScLen();                      break;
                 case ocT                : ScT();                        break;
