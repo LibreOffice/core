@@ -1104,8 +1104,23 @@ public:
      */
     SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
-    SC_DLLPUBLIC void           GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                    SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown ) const;
+    /**
+     * Return the smallest area containing at least all contiguous cells
+     * having data. This area is a square containing also empty cells. It may
+     * shrink or extend the area given as input Flags as modifiers:
+     *
+     * @param bIncludeOld when true, ensure that the returned area contains at
+     *                   least the initial area even if the actual data area
+     *                   is smaller than the initial area.
+     *
+     * @param bOnlyDown when true, extend / shrink the data area only in a
+     *                  downward direction i.e. only modify the end row
+     *                  position.
+     */
+    SC_DLLPUBLIC void GetDataArea(
+        SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
+        bool bIncludeOld, bool bOnlyDown ) const;
+
     SC_DLLPUBLIC bool           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
