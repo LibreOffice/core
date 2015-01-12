@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_853cc630",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5746,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-12T13:31:28Z",
+      "side": 1,
+      "message": "Please use our conventions for different bug tracking systems, this should be fdo#87382 instead to properly indicate the bug tracker. But rather than just placing some bug number in the code, a comment what is done would be preferred. I\u0027ll submit an amended patch.",
+      "revId": "2f6cbc6fc8c2d6d80abb753d88a7b43c95d02d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
