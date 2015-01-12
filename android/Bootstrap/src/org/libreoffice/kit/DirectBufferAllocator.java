@@ -50,7 +50,6 @@ public final class DirectBufferAllocator {
 
     private static ByteBuffer freeJNI(ByteBuffer buffer) {
         if (buffer == null) {
-            Log.i(LOGTAG, "ByteBuffer is null");
             return null;
         }
 
@@ -79,7 +78,6 @@ public final class DirectBufferAllocator {
 
     private static ByteBuffer freeVM(ByteBuffer buffer) {
         if (buffer == null) {
-            Log.i(LOGTAG, "ByteBuffer is null");
             return null;
         }
 
