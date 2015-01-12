@@ -2329,13 +2329,11 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
     if( !pWFlyPara->bGrafApo )
     {
 
-        // Innerhalb des GrafApo muessen Textattribute ignoriert werden, da
-        // sie sonst auf den folgenden Zeilen landen.  Der Rahmen wird nur
-        // eingefuegt, wenn er *nicht* nur zum Positionieren einer einzelnen
-        // Grafik dient.  Ist es ein Grafik-Rahmen, dann werden pWFlyPara und
-        // pSFlyPara behalten und die
-        // daraus resultierenden Attribute beim Einfuegen der Grafik auf die
-        // Grafik angewendet.
+        // Within the GrafApo text attributes have to be ignored, because
+        // they would apply to the following lines.  The frame is only inserted
+        // if it is not merely positioning a single image.  If it is an image
+        // frame, pWFlyPara and pSFlyPara are retained and the resulting
+        // attributes applied to the image when inserting the image.
 
         WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, false);
 
@@ -2392,14 +2390,13 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
         if (pSFlyPara->pFlyFmt)
             MoveInsideFly(pSFlyPara->pFlyFmt);
 
-        // 1) ReadText() wird nicht wie beim W4W-Reader rekursiv aufgerufen,
-        //    da die Laenge des Apo zu diesen Zeitpunkt noch nicht feststeht,
-        //    ReadText() diese Angabe aber braucht.
-        // 2) Der CtrlStck wird nicht neu erzeugt.
-        //    die Char-Attribute laufen weiter ( AErger mit SW-Attributen )
-        //    Paraattribute muessten am Ende jeden Absatzes zurueckgesetzt
-        //    sein, d.h. es duerften am Absatzende keine Paraattribute
-        //    auf dem Stack liegen
+        // 1) ReadText() is not called recursively because the length of
+        //    the Apo is unknown at that  time, and ReadText() needs it.
+        // 2) the CtrlStck is not re-created.
+        //    the Char attributes continue (trouble with Sw-attributes)
+        //    Para attributes must be reset at the end of every paragraph,
+        //    i.e. at the end of a paragraph there must not be para attributes
+        //    on the stack
     }
     return true;
 }
@@ -2413,7 +2410,7 @@ void wwSectionManager::JoinNode(const SwPosition &rPos, const SwNode &rNode)
 bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 {
     bool bRet = false;
-    rPam.GetPoint()->nContent = 0;          // an den Anfang der Zeile gehen
+    rPam.GetPoint()->nContent = 0; // go to start of paragraph
 
     SwNodeIndex aPref(rPam.GetPoint()->nNode, -1);
 
@@ -2439,8 +2436,7 @@ void SwWW8ImplReader::StopApo()
         return;
     if (pWFlyPara->bGrafApo)
     {
-        // Grafik-Rahmen, der *nicht* eingefuegt wurde leeren Absatz incl.
-        // Attributen entfernen
+        // image frame that has not been inserted: delete empty paragraph + attr
         JoinNode(*pPaM, true);
 
     }
@@ -2541,10 +2537,8 @@ void SwWW8ImplReader::StopApo()
         }
 
         delete pSFlyPara->pMainTextPos, pSFlyPara->pMainTextPos = 0;
-
-// Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
-// wird in fltshell.cxx beim Setzen des FltAnchor-Attributes
-// pFlyFrm->MakeFrms() gerufen
+// To create the SwFrms when inserting into an existing document, fltshell.cxx
+// will call pFlyFrm->MakeFrms() when setting the FltAnchor attribute
 
     }
 
@@ -2556,7 +2550,7 @@ void SwWW8ImplReader::StopApo()
     DELETEZ( pWFlyPara );
 }
 
-// TestSameApo() beantwortet die Frage, ob es dasselbe APO oder ein neues ist
+// TestSameApo() returns if it's the same Apo or a different one
 bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     const WW8_TablePos *pTabPos)
 {
