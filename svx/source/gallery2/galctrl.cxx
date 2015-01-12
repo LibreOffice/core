@@ -272,7 +272,6 @@ void drawTransparenceBackground(OutputDevice& rOut, const Point& rPos, const Siz
     }
 }
 
-
 GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme ) :
         ValueSet( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_VSCROLL | WB_FLATVALUESET ),
         DropTargetHelper( this ),
