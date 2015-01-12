@@ -12711,6 +12711,10 @@ else
         if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
             LO_PATH=`cygpath -p -m "$PATH"`
         fi
+        if test "$BITNESS_OVERRIDE" = 64; then
+            # needed for msi packaging
+            pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
+        fi
         pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
         pathmunge "$ASM_HOME" "before"
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
