@@ -10,11 +10,13 @@
 package org.libreoffice.ui;
 
 import org.libreoffice.R;
+import org.libreoffice.storage.IFile;
 
 
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
@@ -33,25 +35,26 @@ import android.graphics.Color;
 
 public class GridItemAdapter extends BaseAdapter {
     Context mContext;
-    File[] filePaths;
-    File currentDirectory;
+    List<IFile> filePaths;
+    IFile currentDirectory;
     String TAG = "GridItemAdapter";
 
-    public GridItemAdapter(Context mContext, File[] filePaths) {
+    public GridItemAdapter(Context mContext, List<IFile> filePaths) {
         this.mContext = mContext;
         this.filePaths = filePaths;
-        for(File fn : filePaths){
+        for (IFile fn : filePaths) {
             Log.d(TAG, fn.getName());
         }
     }
 
-    public GridItemAdapter(Context mContext, File currentDirectory) {
+    public GridItemAdapter(Context mContext, IFile currentDirectory) {
         this.mContext = mContext;
         this.currentDirectory = currentDirectory;
         filePaths = currentDirectory.listFiles();
     }
 
-    public GridItemAdapter(Context mContext, File currentDirectory, File[] filteredFiles)
+    public GridItemAdapter(Context mContext, IFile currentDirectory,
+            List<IFile> filteredFiles)
     {
         this.mContext = mContext;
         this.currentDirectory = currentDirectory;
@@ -59,7 +62,7 @@ public class GridItemAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return filePaths.length;
+        return filePaths.size();
     }
 
     public Object getItem(int position) {
@@ -90,11 +93,11 @@ public class GridItemAdapter extends BaseAdapter {
         // set value into textview
         TextView textView = (TextView) gridView
             .findViewById(R.id.grid_item_label);
-        textView.setText(filePaths[position].getName());
+        textView.setText(filePaths.get(position).getName());
         // set image based on selected text
         ImageView imageView = (ImageView) gridView
             .findViewById(R.id.grid_item_image);
-        if( filePaths[position].isDirectory() ) // Is a folder
+        if (filePaths.get(position).isDirectory()) // Is a folder
         {
             // Default view is a generic folder icon.
             imageView.setImageResource(R.drawable.folder);
@@ -102,13 +105,14 @@ public class GridItemAdapter extends BaseAdapter {
             gridView =  inflater.inflate(R.layout.file_explorer_folder_icon, null);
             org.libreoffice.ui.FolderIconView icon =
                 (org.libreoffice.ui.FolderIconView)gridView.findViewById(R.id.folder_icon);
-            icon.setDir( filePaths[position]);
+            // icon.setDir( filePaths[position]);
             textView = (TextView) gridView.findViewById(R.id.grid_item_label);
-            textView.setText(filePaths[position].getName());
+            textView.setText(filePaths.get(position).getName());
             return gridView;
         }
         else
         {
+            /*
             File thumbnailFile = new File( filePaths[position].getParent() , "."
                     + filePaths[position].getName().split("[.]")[0] + ".png");
             BitmapFactory factory = new BitmapFactory();
@@ -118,13 +122,16 @@ public class GridItemAdapter extends BaseAdapter {
             }else{
                 Log.i( "GRID" , thumbnailFile.getAbsolutePath() );
             }
-            switch (FileUtilities.getType(filePaths[position].getName()))
+            */
+            switch (FileUtilities.getType(filePaths.get(position).getName()))
             {
                 case FileUtilities.DOC:
+                    /*
                     if( thumb != null){
                         imageView.setImageBitmap( thumb );
                         break;
                     }
+                    */
                     imageView.setImageResource(R.drawable.writer);
                     break;
                 /*case FileUtilities.CALC:

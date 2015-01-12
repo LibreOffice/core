@@ -12,12 +12,17 @@ package org.libreoffice.ui;
 import org.libreoffice.R;
 import org.libreoffice.LOAbout;
 import org.libreoffice.android.Bootstrap;
+import org.libreoffice.storage.IDocumentProvider;
+import org.libreoffice.storage.IFile;
+import org.libreoffice.storage.local.LocalDocumentsProvider;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 import android.graphics.drawable.BitmapDrawable;
@@ -58,17 +63,22 @@ import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
     private SharedPreferences prefs;
-    private File homeDirectory;
-    private File currentDirectory;
     private int filterMode = FileUtilities.ALL;
     private int viewMode;
     private int sortMode;
 
     FileFilter fileFilter;
-    private File[] filePaths;
+    FilenameFilter filenameFilter;
+    private List<IFile> filePaths;
+    private IDocumentProvider documentProvider = new LocalDocumentsProvider();
+    private IFile homeDirectory;
+    private IFile currentDirectory;
 
     private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
     private static final String FILTER_MODE_KEY = "FILTER_MODE";
@@ -92,7 +102,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         super.onCreate(savedInstanceState);
         Log.d(tag, "onCreate - tweaked - meeks !");
         //Set the "home" - top level - directory.
-        homeDirectory  = Environment.getExternalStorageDirectory();
+        homeDirectory = documentProvider.getRootDirectory();
         currentDirectory = homeDirectory;
         //Load default settings
 
@@ -135,7 +145,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             // code to make a grid view
             setContentView(R.layout.file_grid);
             gv = (GridView)findViewById(R.id.file_explorer_grid_view);
-            filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+            filePaths = currentDirectory.listFiles(FileUtilities.getFileFilter(filterMode));
             gv.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
@@ -149,7 +159,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             setContentView(R.layout.file_list);
             lv = (ListView)findViewById( R.id.file_explorer_list_view);
             lv.setClickable(true);
-            filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
+            filePaths = currentDirectory.listFiles(FileUtilities.getFileFilter(filterMode));
             lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
             actionBar.setSelectedNavigationItem( filterMode + 1 );
             registerForContextMenu(lv);
@@ -181,7 +191,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         }
     }
 
-    public void openDirectory(File dir ){
+    public void openDirectory(IFile dir) {
         currentDirectory = dir;
         if( !currentDirectory.equals( homeDirectory )){
             ActionBar actionBar = getActionBar();
@@ -190,8 +200,8 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled( false );
         }
-        filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-        FileUtilities.sortFiles( filePaths, sortMode );
+        filePaths = currentDirectory.listFiles(FileUtilities.getFileFilter(filterMode));
+        // FileUtilities.sortFiles( filePaths, sortMode );
         /*
            for( int i = 0; i < fileNames.length; i++){
            fileNames[ i ] = filePaths[ i ].getName();
@@ -208,7 +218,8 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         }
     }
 
-    public void open(File file) {
+    public void open(IFile document) {
+        File file = document.getDocument();
         Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
         i.setComponent(new ComponentName(
                     "org.libreoffice",
@@ -217,7 +228,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     }
 
     private void open(int position) {
-        File file = filePaths[position];
+        IFile file = filePaths.get(position);
         if (!file.isDirectory()) {
             open(file);
         } else {
@@ -226,7 +237,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     }
 
     private void share(int position) {
-        File file = filePaths[position];
+        File file = filePaths.get(position).getDocument();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         Uri uri = Uri.fromFile(file);
         String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
@@ -259,7 +270,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         switch (item.getItemId()) {
             case android.R.id.home:
                 if( !currentDirectory.equals( homeDirectory ) ){
-                    openDirectory( currentDirectory.getParentFile() );
+                    openDirectory(currentDirectory.getParent());
                 }
                 break;
             case R.id.menu_view_toggle:
@@ -336,7 +347,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     protected void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
         super.onSaveInstanceState(outState);
-        outState.putString( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
+        outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
         outState.putInt( FILTER_MODE_KEY , filterMode );
         outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewMode );
 
@@ -352,7 +363,12 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         if( savedInstanceState.isEmpty() ){
             return;
         }
-        currentDirectory = new File( savedInstanceState.getString( CURRENT_DIRECTORY_KEY ) );
+        try {
+            currentDirectory = documentProvider.createFromUri(new URI(
+                    savedInstanceState.getString(CURRENT_DIRECTORY_KEY)));
+        } catch (URISyntaxException e) {
+            currentDirectory = documentProvider.getRootDirectory();
+        }
         filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
         viewMode = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
         //openDirectory( currentDirectory );
@@ -374,7 +390,12 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         readPreferences();// intent values take precedence over prefs?
         Intent i = this.getIntent();
         if( i.hasExtra( CURRENT_DIRECTORY_KEY ) ){
-            currentDirectory = new File( i.getStringExtra( CURRENT_DIRECTORY_KEY ) );
+            try {
+                currentDirectory = documentProvider.createFromUri(new URI(
+                        i.getStringExtra(CURRENT_DIRECTORY_KEY)));
+            } catch (URISyntaxException e) {
+                currentDirectory = documentProvider.getRootDirectory();
+            }
             Log.d(tag, CURRENT_DIRECTORY_KEY);
         }
         if( i.hasExtra( FILTER_MODE_KEY ) ){
@@ -423,18 +444,17 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
     class ListItemAdapter implements ListAdapter{
         private Context mContext;
-        private File[] filePaths;
+        private List<IFile> filePaths;
         private final long KB = 1024;
         private final long MB = 1048576;
 
-        public ListItemAdapter(Context mContext, File[] filePaths) {
+        public ListItemAdapter(Context mContext, List<IFile> filePaths) {
             this.mContext = mContext;
             this.filePaths = filePaths;
         }
 
         public int getCount() {
-            // TODO Auto-generated method stub
-            return filePaths.length;
+            return filePaths.size();
         }
 
         public Object getItem(int arg0) {
@@ -487,13 +507,13 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
             // set value into textview
             TextView filename = (TextView) listItem.findViewById(R.id.file_list_item_name);
-            filename.setText( filePaths[ position ].getName() );
+            filename.setText(filePaths.get(position).getName());
             //filename.setClickable(true);
 
             TextView fileSize = (TextView) listItem.findViewById(R.id.file_list_item_size);
             //TODO Give size in KB , MB as appropriate.
             String size = "0B";
-            long length = filePaths[ position ].length();
+            long length = filePaths.get(position).getSize();
             if( length < KB ){
                 size = Long.toString( length ) + "B";
             }
@@ -508,13 +528,13 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
             TextView fileDate = (TextView) listItem.findViewById(R.id.file_list_item_date);
             SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
-            Date date = new Date( filePaths[ position ].lastModified() );
+            Date date = filePaths.get(position).getLastModified();
             //TODO format date
             fileDate.setText( df.format( date ) );
 
             // set image based on selected text
             ImageView imageView = (ImageView) listItem.findViewById(R.id.file_list_item_icon);
-            switch (FileUtilities.getType(filePaths[position].getName()))
+            switch (FileUtilities.getType(filePaths.get(position).getName()))
             {
                 case FileUtilities.DOC:
                     imageView.setImageResource(R.drawable.writer);
@@ -531,7 +551,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
                 default:
                     break;
             }
-            if( filePaths[position].isDirectory() ){
+            if (filePaths.get(position).isDirectory()) {
                 //Eventually have thumbnails of each sub file on a black circle
                 //For now just a folder icon
                 imageView.setImageResource(R.drawable.folder);
