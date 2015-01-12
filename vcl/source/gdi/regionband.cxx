@@ -480,7 +480,7 @@ bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
 
         if ( nDX >= nDY )
         {
-            const long  nDYX = ( nDY - nDX ) << 1;
+            const long  nDYX = ( nDY - nDX ) * 2;
             const long  nDY2 = nDY << 1;
             long        nD = nDY2 - nDX;
 
@@ -496,7 +496,7 @@ bool RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
         }
         else
         {
-            const long  nDYX = ( nDX - nDY ) << 1;
+            const long  nDYX = ( nDX - nDY ) * 2;
             const long  nDY2 = nDX << 1;
             long        nD = nDY2 - nDY;
 
