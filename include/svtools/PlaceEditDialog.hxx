@@ -27,7 +27,6 @@
 class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
 {
 private :
-
     Edit*      m_pEDServerName;
     ListBox*   m_pLBServerType;
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
@@ -55,7 +54,7 @@ public :
      // Returns a place instance with given information
      std::shared_ptr<Place> GetPlace();
 
-    OUString GetServerName() { return m_pEDServerName->GetText(); }
+     OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();
 
 private:

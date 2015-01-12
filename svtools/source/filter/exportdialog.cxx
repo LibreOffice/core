@@ -979,8 +979,14 @@ void ExportDialog::updateControls()
 
 ExportDialog::~ExportDialog()
 {
+    dispose();
+}
+
+void ExportDialog::dispose()
+{
     delete mpFilterOptionsItem;
     delete mpOptionsItem;
+    ModalDialog::dispose();
 }
 
 

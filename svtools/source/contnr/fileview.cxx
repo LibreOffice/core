@@ -192,7 +192,8 @@ protected:
 
 public:
     ViewTabListBox_Impl( vcl::Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
-   virtual ~ViewTabListBox_Impl();
+    virtual ~ViewTabListBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -634,9 +635,15 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
+    dispose();
+}
+
+void ViewTabListBox_Impl::dispose()
+{
     maResetQuickSearch.Stop();
 
     delete mpHeaderBar;
+    SvHeaderTabListBox::dispose();
 }
 
 
@@ -1089,10 +1096,16 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
 SvtFileView::~SvtFileView()
 {
+    dispose();
+}
+
+void SvtFileView::dispose()
+{
     // use temp pointer to prevent access of deleted member (GetFocus())
     SvtFileView_Impl* pTemp = mpImp;
     mpImp = NULL;
     delete pTemp;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtFileView(vcl::Window *pParent,

@@ -90,11 +90,6 @@ namespace svt { namespace uno
     }
 
 
-    WizardShell::~WizardShell()
-    {
-    }
-
-
     short WizardShell::Execute()
     {
         ActivatePage();

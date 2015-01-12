@@ -45,7 +45,6 @@ namespace svt
     {
     public:
         IDLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
-        virtual ~IDLabel( );
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     };
 
@@ -204,6 +203,11 @@ namespace svt
 
     ORoadmap::~ORoadmap( )
     {
+        dispose();
+    }
+
+    void ORoadmap::dispose()
+    {
         HL_Vector aItemsCopy = m_pImpl->getHyperLabels();
         m_pImpl->getHyperLabels().clear();
         for ( HL_Vector::iterator i = aItemsCopy.begin(); i != aItemsCopy.end(); ++i )
@@ -214,6 +218,7 @@ namespace svt
             delete m_pImpl->InCompleteHyperLabel;
         delete m_pImpl;
         m_pImpl = NULL;
+        Control::dispose();
     }
 
 
@@ -847,11 +852,6 @@ namespace svt
         :FixedText( _pParent, _nWinStyle )
     {
 
-    }
-
-
-    IDLabel::~IDLabel( )
-    {
     }
 
 

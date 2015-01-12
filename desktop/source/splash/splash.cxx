@@ -55,6 +55,7 @@ private:
 
     DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
     virtual ~SplashScreen();
+    virtual void dispose() SAL_OVERRIDE;
     void loadConfig();
     void updateStatus();
     void SetScreenBitmap(BitmapEx &rBitmap);
@@ -154,10 +155,15 @@ SplashScreen::SplashScreen()
 
 SplashScreen::~SplashScreen()
 {
+    dispose();
+}
+
+void SplashScreen::dispose()
+{
     Application::RemoveEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
     Hide();
-
+    IntroWindow::dispose();
 }
 
 void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)

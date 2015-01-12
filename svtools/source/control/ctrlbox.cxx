@@ -118,8 +118,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorListBox(vcl::Wind
 
 ColorListBox::~ColorListBox()
 {
+    dispose();
+}
+
+void ColorListBox::dispose()
+{
     ImplDestroyColorEntries();
     delete pColorList;
+    ListBox::dispose();
 }
 
 sal_Int32 ColorListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
@@ -739,6 +745,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineListBox(vcl::Windo
 
 LineListBox::~LineListBox()
 {
+    dispose();
+}
+
+void LineListBox::dispose()
+{
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
         if ( (*pLineList)[ i ] ) {
             delete (*pLineList)[ i ];
@@ -746,6 +757,7 @@ LineListBox::~LineListBox()
     }
     pLineList->clear();
     delete pLineList;
+    ListBox::dispose();
 }
 
 sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
@@ -936,8 +948,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontNameBox(vcl::Windo
 
 FontNameBox::~FontNameBox()
 {
+    dispose();
+}
+
+void FontNameBox::dispose()
+{
     SaveMRUEntries (maFontMRUEntriesFile);
     ImplDestroyFontList();
+    ComboBox::dispose();
 }
 
 void FontNameBox::SaveMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unicode cSep ) const
@@ -1312,10 +1330,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontStyleBox(vcl::Wind
     return pListBox;
 }
 
-FontStyleBox::~FontStyleBox()
-{
-}
-
 void FontStyleBox::Select()
 {
     // keep text over fill operation
@@ -1510,10 +1524,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontSizeBox(vcl::Windo
     if (bDropdown)
         pListBox->EnableAutoSize(true);
     return pListBox;
-}
-
-FontSizeBox::~FontSizeBox()
-{
 }
 
 void FontSizeBox::ImplInit()

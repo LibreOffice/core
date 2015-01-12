@@ -64,6 +64,7 @@ namespace svt { namespace table
     public:
         TableControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~TableControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// sets a new table model
         void        SetModel( PTableModel _pModel );

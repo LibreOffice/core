@@ -88,8 +88,14 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
 
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 {
+    dispose();
+}
+
+void SvtIconChoiceCtrl::dispose()
+{
     _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete _pImp;
+    Control::dispose();
 }
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, const Image& rImage, sal_uLong nPos, const Point* pPos, sal_uInt16 nFlags  )

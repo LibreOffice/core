@@ -96,9 +96,9 @@ private:
     SvTreeListEntry*        pActiveEntry;
     SvLBoxTab*          pActiveTab;
 
-    ScrollBar           aVerSBar;
-    ScrollBar           aHorSBar;
-    ScrollBarBox        aScrBarBox;
+    VclPtr<ScrollBar>    aVerSBar;
+    VclPtr<ScrollBar>    aHorSBar;
+    VclPtr<ScrollBarBox> aScrBarBox;
 
     ::svt::AccessibleFactoryAccess
                         m_aFactoryAccess;
@@ -329,7 +329,7 @@ public:
     void SetUpdateMode( bool bMode );
     bool GetUpdateMode() const { return bUpdateMode; }
     Rectangle           GetClipRegionRect() const;
-    bool HasHorScrollBar() const { return aHorSBar.IsVisible(); }
+    bool HasHorScrollBar() const { return aHorSBar->IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 

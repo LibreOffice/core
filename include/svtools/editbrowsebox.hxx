@@ -281,6 +281,7 @@ namespace svt
     public:
         CheckBoxControl(vcl::Window* pParent, WinBits nWinStyle = 0);
         virtual ~CheckBoxControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;
         virtual bool PreNotify(NotifyEvent& rEvt) SAL_OVERRIDE;
@@ -593,6 +594,7 @@ namespace svt
         EditBrowseBox(vcl::Window* pParent, sal_Int32 nBrowserFlags = EBBF_NONE, WinBits nBits = WB_TABSTOP, BrowserMode nMode = 0 );
         EditBrowseBox(vcl::Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags = EBBF_NONE, BrowserMode nMode = 0 );
         virtual ~EditBrowseBox();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool IsEditing() const {return aController.Is();}
         void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}

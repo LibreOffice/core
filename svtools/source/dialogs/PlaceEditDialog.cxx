@@ -79,10 +79,6 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     }
 }
 
-PlaceEditDialog::~PlaceEditDialog()
-{
-}
-
 OUString PlaceEditDialog::GetServerUrl()
 {
     OUString sUrl;

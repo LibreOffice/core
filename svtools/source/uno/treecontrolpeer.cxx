@@ -86,6 +86,7 @@ class UnoTreeListBoxImpl : public SvTreeListBox
 public:
     UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pParent, WinBits nWinStyle );
     virtual ~UnoTreeListBoxImpl();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt32 insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,sal_uLong nPos=TREELIST_APPEND );
 
@@ -1490,8 +1491,14 @@ UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pPa
 
 UnoTreeListBoxImpl::~UnoTreeListBoxImpl()
 {
+    dispose();
+}
+
+void UnoTreeListBoxImpl::dispose()
+{
     if( mxPeer.is() )
         mxPeer->disposeControl();
+    SvTreeListBox::dispose();
 }
 
 

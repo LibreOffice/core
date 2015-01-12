@@ -906,6 +906,11 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
 SvtURLBox::~SvtURLBox()
 {
+    dispose();
+}
+
+void SvtURLBox::dispose()
+{
     if( pCtx.is() )
     {
         pCtx->Stop();
@@ -913,6 +918,7 @@ SvtURLBox::~SvtURLBox()
     }
 
     delete pImp;
+    ComboBox::dispose();
 }
 
 void SvtURLBox::UpdatePickList( )

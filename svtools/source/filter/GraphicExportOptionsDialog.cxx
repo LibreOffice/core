@@ -43,9 +43,6 @@ GraphicExportOptionsDialog::GraphicExportOptionsDialog(vcl::Window* pWindow, con
     updateResolution();
 }
 
-GraphicExportOptionsDialog::~GraphicExportOptionsDialog()
-{}
-
 void GraphicExportOptionsDialog::initialize()
 {
     mCurrentPage = mRenderer.getCurrentPageWriter();

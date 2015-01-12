@@ -52,6 +52,7 @@ namespace svt
     public:
         PanelTabBar( vcl::Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
         virtual ~PanelTabBar();
+        virtual void dispose() SAL_OVERRIDE;
 
         // attribute access
         TabItemContent  GetTabItemContent() const;

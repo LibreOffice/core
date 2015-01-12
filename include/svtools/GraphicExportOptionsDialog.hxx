@@ -62,7 +62,6 @@ private:
 
 public:
     GraphicExportOptionsDialog( vcl::Window* pWindow, const css::uno::Reference<css::lang::XComponent>& rxSourceDocument );
-    virtual ~GraphicExportOptionsDialog();
 
     css::uno::Sequence<css::beans::PropertyValue> getFilterData();
 };

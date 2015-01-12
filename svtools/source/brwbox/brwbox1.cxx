@@ -101,9 +101,9 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     nControlAreaWidth = USHRT_MAX;
     uRow.nSel = BROWSER_ENDOFSELECTION;
 
-    aHScroll.SetLineSize(1);
-    aHScroll.SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
-    aHScroll.SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
+    aHScroll->SetLineSize(1);
+    aHScroll->SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
+    aHScroll->SetEndScrollHdl( LINK( this, BrowseBox, EndScrollHdl ) );
     pDataWin->Show();
 
     SetMode( nMode );
@@ -119,7 +119,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
-    ,aHScroll( this, WinBits( WB_HSCROLL ) )
+    ,aHScroll( new ScrollBar(this, WinBits( WB_HSCROLL )) )
 {
     ConstructImpl( nMode );
 }
@@ -130,13 +130,18 @@ BrowseBox::BrowseBox( vcl::Window* pParent, const ResId& rId, BrowserMode nMode 
     :Control( pParent, rId )
     ,DragSourceHelper( this )
     ,DropTargetHelper( this )
-    ,aHScroll( this, WinBits(WB_HSCROLL) )
+    ,aHScroll( new ScrollBar(this, WinBits(WB_HSCROLL)) )
 {
     ConstructImpl(nMode);
 }
 
 
 BrowseBox::~BrowseBox()
+{
+    dispose();
+}
+
+void BrowseBox::dispose()
 {
     OSL_TRACE( "BrowseBox: %p~", this );
 
@@ -152,6 +157,7 @@ BrowseBox::~BrowseBox()
     delete getDataWindow()->pCornerWin;
     delete pDataWin;
     delete pVScroll;
+    aHScroll.disposeAndClear();
 
     // free columns-space
     for ( size_t i = 0, n = pCols->size(); i < n; ++i )
@@ -161,6 +167,7 @@ BrowseBox::~BrowseBox()
     delete pColSel;
     if ( bMultiSelection )
         delete uRow.pSel;
+    Control::dispose();
 }
 
 
@@ -917,7 +924,7 @@ long BrowseBox::ScrollColumns( long nCols )
     {
         // update internal value and scrollbar
         ++nFirstCol;
-        aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
+        aHScroll->SetThumbPos( nFirstCol - FrozenColCount() );
 
         if ( !bScrollable )
         {
@@ -963,7 +970,7 @@ long BrowseBox::ScrollColumns( long nCols )
     else if ( nCols == -1 )
     {
         --nFirstCol;
-        aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
+        aHScroll->SetThumbPos( nFirstCol - FrozenColCount() );
 
         if ( !bScrollable )
         {
@@ -1003,7 +1010,7 @@ long BrowseBox::ScrollColumns( long nCols )
         }
 
         nFirstCol = nFirstCol + (sal_uInt16)nCols;
-        aHScroll.SetThumbPos( nFirstCol - FrozenColCount() );
+        aHScroll->SetThumbPos( nFirstCol - FrozenColCount() );
     }
 
     // adjust external headerbar, if necessary
@@ -1141,7 +1148,7 @@ void BrowseBox::Clear()
     // nFirstCol may not be reset, else the scrolling code will become confused.
     // nFirstCol may only be changed when adding or deleting columns
     // nFirstCol = 0; -> wrong!
-    aHScroll.SetThumbPos( 0 );
+    aHScroll->SetThumbPos( 0 );
     pVScroll->SetThumbPos( 0 );
 
     Invalidate();
@@ -2213,9 +2220,9 @@ Rectangle BrowseBox::GetControlArea() const
 {
 
     return Rectangle(
-        Point( 0, GetOutputSizePixel().Height() - aHScroll.GetSizePixel().Height() ),
-        Size( GetOutputSizePixel().Width() - aHScroll.GetSizePixel().Width(),
-             aHScroll.GetSizePixel().Height() ) );
+        Point( 0, GetOutputSizePixel().Height() - aHScroll->GetSizePixel().Height() ),
+        Size( GetOutputSizePixel().Width() - aHScroll->GetSizePixel().Width(),
+             aHScroll->GetSizePixel().Height() ) );
 }
 
 
@@ -2238,7 +2245,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
         getDataWindow()->bNoVScroll = false;
 
     if ( getDataWindow()->bNoHScroll )
-        aHScroll.Hide();
+        aHScroll->Hide();
 
     nControlAreaWidth = USHRT_MAX;
 

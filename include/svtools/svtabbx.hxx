@@ -65,8 +65,9 @@ protected:
 public:
     SvTabListBox( vcl::Window* pParent, WinBits = WB_BORDER );
     virtual ~SvTabListBox();
+    virtual void dispose() SAL_OVERRIDE;
     void            SetTabs(const long* pTabs, MapUnit = MAP_APPFONT);
-    sal_uInt16          TabCount() const { return (sal_uInt16)nTabCount; }
+    sal_uInt16      TabCount() const { return (sal_uInt16)nTabCount; }
     using SvTreeListBox::GetTab;
     long            GetTab( sal_uInt16 nTab ) const;
     void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MAP_APPFONT );
@@ -139,6 +140,7 @@ private:
 public:
     SvHeaderTabListBox( vcl::Window* pParent, WinBits nBits );
     virtual ~SvHeaderTabListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Paint( const Rectangle& ) SAL_OVERRIDE;
 

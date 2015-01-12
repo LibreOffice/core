@@ -32,7 +32,7 @@ namespace svt
 {
 
 
-       class HyperLabelImpl;
+    class HyperLabelImpl;
 
     class HyperLabel : public FixedText
     {
@@ -54,6 +54,7 @@ namespace svt
     public:
         HyperLabel( vcl::Window* _pParent, WinBits _nWinStyle = 0 );
         virtual ~HyperLabel( );
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

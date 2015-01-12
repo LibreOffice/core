@@ -363,6 +363,11 @@ WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUS
 
 WizardDialog::~WizardDialog()
 {
+    dispose();
+}
+
+void WizardDialog::dispose()
+{
     maWizardLayoutIdle.Stop();
 
     // Remove all buttons
@@ -372,6 +377,8 @@ WizardDialog::~WizardDialog()
     // Remove all pages
     while ( mpFirstPage )
         RemovePage( mpFirstPage->mpPage );
+
+    ModalDialog::dispose();
 }
 
 

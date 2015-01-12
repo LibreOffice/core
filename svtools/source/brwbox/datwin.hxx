@@ -137,7 +137,8 @@ public:
 
 public:
                     BrowserDataWin( BrowseBox* pParent );
-                    virtual ~BrowserDataWin();
+    virtual         ~BrowserDataWin();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

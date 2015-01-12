@@ -378,8 +378,8 @@ namespace svt
 
         void    UpdateScrollButtons()
         {
-            m_aScrollBack.Enable( m_nScrollPosition > 0 );
-            m_aScrollForward.Enable( m_nScrollPosition < m_aItems.size() - 1 );
+            m_aScrollBack->Enable( m_nScrollPosition > 0 );
+            m_aScrollForward->Enable( m_nScrollPosition < m_aItems.size() - 1 );
         }
 
         void                        Relayout();
@@ -425,8 +425,8 @@ namespace svt
         ItemDescriptors             m_aItems;
         bool                        m_bItemsDirty;
 
-        PushButton                  m_aScrollBack;
-        PushButton                  m_aScrollForward;
+        VclPtr<PushButton>          m_aScrollBack;
+        VclPtr<PushButton>          m_aScrollForward;
 
         size_t                      m_nScrollPosition;
     };
@@ -506,8 +506,8 @@ namespace svt
         ,m_bMouseButtonDown( false )
         ,m_aItems()
         ,m_bItemsDirty( true )
-        ,m_aScrollBack( &i_rTabBar, WB_BEVELBUTTON )
-        ,m_aScrollForward( &i_rTabBar, WB_BEVELBUTTON )
+        ,m_aScrollBack( new PushButton(&i_rTabBar, WB_BEVELBUTTON) )
+        ,m_aScrollForward( new PushButton(&i_rTabBar, WB_BEVELBUTTON) )
         ,m_nScrollPosition( 0 )
     {
 #ifdef WNT
@@ -527,17 +527,17 @@ namespace svt
 
         m_rPanelDeck.AddListener( *this );
 
-        m_aScrollBack.SetSymbol( IsVertical() ? SymbolType::ARROW_UP : SymbolType::ARROW_LEFT );
-        m_aScrollBack.Show();
-        m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollBack.SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ).toString() );
-        m_aScrollBack.SetAccessibleName( m_aScrollBack.GetAccessibleDescription() );
+        m_aScrollBack->SetSymbol( IsVertical() ? SymbolType::ARROW_UP : SymbolType::ARROW_LEFT );
+        m_aScrollBack->Show();
+        m_aScrollBack->SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+        m_aScrollBack->SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_FWD ).toString() );
+        m_aScrollBack->SetAccessibleName( m_aScrollBack->GetAccessibleDescription() );
 
-        m_aScrollForward.SetSymbol( IsVertical() ? SymbolType::ARROW_DOWN : SymbolType::ARROW_RIGHT );
-        m_aScrollForward.Show();
-        m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
-        m_aScrollForward.SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ).toString() );
-        m_aScrollForward.SetAccessibleName( m_aScrollForward.GetAccessibleDescription() );
+        m_aScrollForward->SetSymbol( IsVertical() ? SymbolType::ARROW_DOWN : SymbolType::ARROW_RIGHT );
+        m_aScrollForward->Show();
+        m_aScrollForward->SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+        m_aScrollForward->SetAccessibleDescription( SvtResId( STR_SVT_TOOL_PANEL_BUTTON_BACK ).toString() );
+        m_aScrollForward->SetAccessibleName( m_aScrollForward->GetAccessibleDescription() );
     }
 
 
@@ -840,24 +840,24 @@ namespace svt
 
         if ( m_aGeometry.getButtonBackRect().IsEmpty() )
         {
-            m_aScrollBack.Hide();
+            m_aScrollBack->Hide();
         }
         else
         {
             const Rectangle aButtonBack( m_aNormalizer.getTransformed( m_aGeometry.getButtonBackRect(), m_eTabAlignment ) );
-            m_aScrollBack.SetPosSizePixel( aButtonBack.TopLeft(), aButtonBack.GetSize() );
-            m_aScrollBack.Show();
+            m_aScrollBack->SetPosSizePixel( aButtonBack.TopLeft(), aButtonBack.GetSize() );
+            m_aScrollBack->Show();
         }
 
         if ( m_aGeometry.getButtonForwardRect().IsEmpty() )
         {
-            m_aScrollForward.Hide();
+            m_aScrollForward->Hide();
         }
         else
         {
             const Rectangle aButtonForward( m_aNormalizer.getTransformed( m_aGeometry.getButtonForwardRect(), m_eTabAlignment ) );
-            m_aScrollForward.SetPosSizePixel( aButtonForward.TopLeft(), aButtonForward.GetSize() );
-            m_aScrollForward.Show();
+            m_aScrollForward->SetPosSizePixel( aButtonForward.TopLeft(), aButtonForward.GetSize() );
+            m_aScrollForward->Show();
         }
 
         UpdateScrollButtons();
@@ -921,13 +921,13 @@ namespace svt
 
     IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
     {
-        if ( i_pButton == &m_aScrollBack )
+        if ( i_pButton == m_aScrollBack.get() )
         {
             OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             --m_nScrollPosition;
             m_rTabBar.Invalidate();
         }
-        else if ( i_pButton == &m_aScrollForward )
+        else if ( i_pButton == m_aScrollForward.get() )
         {
             OSL_ENSURE( m_nScrollPosition < m_aItems.size() - 1, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             ++m_nScrollPosition;
@@ -996,11 +996,15 @@ namespace svt
         DBG_CHECK( *m_pImpl );
     }
 
-
     PanelTabBar::~PanelTabBar()
     {
+        dispose();
     }
 
+    void PanelTabBar::dispose()
+    {
+        Control::dispose();
+    }
 
     TabItemContent PanelTabBar::GetTabItemContent() const
     {
@@ -1314,7 +1318,7 @@ namespace svt
 
     PushButton& PanelTabBar::GetScrollButton( const bool i_bForward )
     {
-        return i_bForward ? m_pImpl->m_aScrollForward : m_pImpl->m_aScrollBack;
+        return i_bForward ? *m_pImpl->m_aScrollForward.get() : *m_pImpl->m_aScrollBack.get();
     }
 
 

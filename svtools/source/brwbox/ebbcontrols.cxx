@@ -249,7 +249,13 @@ namespace svt
 
     CheckBoxControl::~CheckBoxControl()
     {
+        dispose();
+    }
+
+    void CheckBoxControl::dispose()
+    {
         delete pBox;
+        Control::dispose();
     }
 
 

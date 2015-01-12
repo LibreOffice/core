@@ -159,6 +159,7 @@ public:
                                   WinBits nWinStyle = WB_BORDER );
                     ColorListBox( vcl::Window* pParent, const ResId& rResId );
     virtual         ~ColorListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
@@ -303,6 +304,7 @@ public:
 
                     LineListBox( vcl::Window* pParent, WinBits nWinStyle = WB_BORDER );
     virtual         ~LineListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     /** Set the width in Twips */
     void            SetWidth( long nWidth );
@@ -400,6 +402,7 @@ public:
                     FontNameBox( vcl::Window* pParent,
                                  WinBits nWinStyle = WB_SORT );
     virtual         ~FontNameBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
@@ -425,7 +428,6 @@ private:
     using ComboBox::SetText;
 public:
     FontStyleBox( vcl::Window* pParent, WinBits nBits );
-    virtual         ~FontStyleBox();
 
     virtual void    Select() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
@@ -469,7 +471,6 @@ protected:
 
 public:
                     FontSizeBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    virtual         ~FontSizeBox();
 
     void            Reformat() SAL_OVERRIDE;
     void            Modify() SAL_OVERRIDE;

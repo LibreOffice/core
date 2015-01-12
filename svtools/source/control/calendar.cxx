@@ -257,6 +257,11 @@ Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 Calendar::~Calendar()
 {
+    dispose();
+}
+
+void Calendar::dispose()
+{
     delete mpStandardColor;
     delete mpSaturdayColor;
     delete mpSundayColor;
@@ -264,6 +269,7 @@ Calendar::~Calendar()
     delete mpSelectTable;
     delete mpOldSelectTable;
     delete mpRestoreSelectTable;
+    Control::dispose();
 }
 
 
@@ -2190,7 +2196,8 @@ private:
 
 public:
                     ImplCFieldFloatWin( vcl::Window* pParent );
-                    virtual ~ImplCFieldFloatWin();
+    virtual         ~ImplCFieldFloatWin();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetCalendar( Calendar* pCalendar )
                         { mpCalendar = pCalendar; }
@@ -2217,9 +2224,15 @@ ImplCFieldFloatWin::ImplCFieldFloatWin( vcl::Window* pParent ) :
 
 ImplCFieldFloatWin::~ImplCFieldFloatWin()
 {
+    dispose();
+}
+
+void ImplCFieldFloatWin::dispose()
+{
     delete mpTodayBtn;
     delete mpNoneBtn;
     delete mpFixedLine;
+    FloatingWindow::dispose();
 }
 
 
@@ -2381,11 +2394,17 @@ CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
 
 CalendarField::~CalendarField()
 {
+    dispose();
+}
+
+void CalendarField::dispose()
+{
     if ( mpFloatWin )
     {
         delete mpCalendar;
         delete mpFloatWin;
     }
+    DateField::dispose();
 }
 
 

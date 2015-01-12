@@ -326,12 +326,18 @@ Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
 
 Ruler::~Ruler()
 {
+    dispose();
+}
+
+void Ruler::dispose()
+{
     if ( mnUpdateEvtId )
         Application::RemoveUserEvent( mnUpdateEvtId );
     delete mpSaveData;
     delete mpDragData;
     if( pAccContext )
         pAccContext->release();
+    Window::dispose();
 }
 
 void Ruler::ImplVDrawLine( long nX1, long nY1, long nX2, long nY2 )

@@ -100,6 +100,7 @@ namespace svt
         );
 
         virtual ~AddressBookSourceDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         // to be used if the object was constructed for editing a field mapping only
         void        getFieldMapping(

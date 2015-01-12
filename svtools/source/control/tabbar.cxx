@@ -372,7 +372,13 @@ TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 TabBar::~TabBar()
 {
+    dispose();
+}
+
+void TabBar::dispose()
+{
     EndEditMode( true );
+    Window::dispose();
 }
 
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();

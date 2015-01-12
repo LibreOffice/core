@@ -56,11 +56,6 @@ namespace svt
     }
 
 
-    DrawerVisualization::~DrawerVisualization()
-    {
-    }
-
-
     void DrawerVisualization::Paint( const Rectangle& i_rBoundingBox )
     {
         Window::Paint( i_rBoundingBox );
@@ -74,7 +69,7 @@ namespace svt
     ToolPanelDrawer::ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle )
         :Window( &i_rParent, WB_TABSTOP )
         ,m_pPaintDevice( new VirtualDevice( *this ) )
-        ,m_aVisualization( *this )
+        ,m_aVisualization( new DrawerVisualization(*this) )
         ,m_bFocused( false )
         ,m_bExpanded( false )
     {
@@ -88,14 +83,10 @@ namespace svt
         SetAccessibleName( i_rTitle );
         SetAccessibleDescription( i_rTitle );
 
-        m_aVisualization.SetAccessibleName( i_rTitle );
-        m_aVisualization.SetAccessibleDescription( i_rTitle );
+        m_aVisualization->SetAccessibleName( i_rTitle );
+        m_aVisualization->SetAccessibleDescription( i_rTitle );
     }
 
-
-    ToolPanelDrawer::~ToolPanelDrawer()
-    {
-    }
 
 
     long ToolPanelDrawer::GetPreferredHeightPixel() const
@@ -123,7 +114,7 @@ namespace svt
         aFocusBox.Left() += 2;
         impl_paintFocusIndicator( aFocusBox );
 
-        m_aVisualization.DrawOutDev(
+        m_aVisualization->DrawOutDev(
             Point(), GetOutputSizePixel(),
             Point(), GetOutputSizePixel(),
             *m_pPaintDevice
@@ -239,7 +230,7 @@ namespace svt
     void ToolPanelDrawer::Resize()
     {
         Window::Resize();
-        m_aVisualization.SetPosSizePixel( Point(), GetOutputSizePixel() );
+        m_aVisualization->SetPosSizePixel( Point(), GetOutputSizePixel() );
     }
 
 

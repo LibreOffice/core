@@ -60,7 +60,8 @@ private:
 
 public:
                     PrinterSetupDialog( vcl::Window* pWindow );
-                    virtual ~PrinterSetupDialog();
+    virtual         ~PrinterSetupDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
     Printer*        GetPrinter() const { return mpPrinter; }

@@ -64,11 +64,17 @@ namespace svt { namespace table
 
     TableControl::~TableControl()
     {
+        dispose();
+    }
+
+    void TableControl::dispose()
+    {
         CallEventListeners( VCLEVENT_OBJECT_DYING );
 
         m_pImpl->setModel( PTableModel() );
         m_pImpl->disposeAccessible();
         m_pImpl.reset();
+        Control::dispose();
     }
 
 

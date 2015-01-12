@@ -22,6 +22,7 @@
 #include <svtools/svtdllapi.h>
 #include <vcl/scrbar.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/multisel.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/transfer.hxx>
@@ -218,9 +219,9 @@ public:
     static const sal_uInt16 HandleColumnId = 0;
 
 private:
-    vcl::Window*         pDataWin;       // window to display data rows
-    ScrollBar*      pVScroll;       // vertical scrollbar
-    ScrollBar       aHScroll;       // horizontal scrollbar
+    vcl::Window*       pDataWin;       // window to display data rows
+    ScrollBar*         pVScroll;       // vertical scrollbar
+    VclPtr<ScrollBar>  aHScroll;       // horizontal scrollbar
 
     long            nDataRowHeight; // height of a single data-row
     sal_uInt16      nTitleLines;    // number of lines in title row
@@ -425,7 +426,8 @@ public:
                                BrowserMode nMode = 0 );
                     BrowseBox( vcl::Window* pParent, const ResId& rId,
                                BrowserMode nMode = 0 );
-                    virtual ~BrowseBox();
+    virtual         ~BrowseBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     // override inherited handler
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

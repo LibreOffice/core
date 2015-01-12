@@ -127,9 +127,9 @@ private:
     com::sun::star::awt::Size
                         maSize;             // for vector graphics it always contains the logical size in 1/100mm
 
-    bool            mbIsPixelFormat;
-    bool            mbExportSelection;
-    bool            mbPreserveAspectRatio;
+    bool                mbIsPixelFormat;
+    bool                mbExportSelection;
+    bool                mbPreserveAspectRatio;
 
     sal_Int32           mnInitialResolutionUnit;
 
@@ -179,6 +179,7 @@ public:
                                 const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
                                     bool bExportSelection, bool bIsExportVectorFormat );
                         virtual ~ExportDialog();
+                        virtual void dispose() SAL_OVERRIDE;
 };
 
 

@@ -82,6 +82,7 @@ protected:
 public:
     SvtFileView( vcl::Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
     virtual ~SvtFileView();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 

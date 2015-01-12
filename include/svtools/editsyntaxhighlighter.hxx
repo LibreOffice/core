@@ -40,7 +40,6 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
 
     public:
         MultiLineEditSyntaxHighlight( vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER , HighlighterLanguage aLanguage = HIGHLIGHT_SQL);
-        virtual ~MultiLineEditSyntaxHighlight();
 
         virtual void UpdateData() SAL_OVERRIDE;
         virtual void SetText(const OUString& rNewText) SAL_OVERRIDE;

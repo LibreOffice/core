@@ -100,6 +100,7 @@ namespace svt
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
         virtual ~OWizardPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         // IWizardPageController overridables
         virtual void        initializePage() SAL_OVERRIDE;
@@ -175,6 +176,7 @@ namespace svt
         OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags );
         OWizardMachine(vcl::Window* _pParent, sal_uInt32 _nButtonFlags );
         virtual ~OWizardMachine();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// enable (or disable) buttons
         void    enableButtons(sal_uInt32 _nWizardButtonFlags, bool _bEnable);

@@ -284,7 +284,8 @@ protected:
 public:
                     ValueSet( vcl::Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren = false );
                     ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
-                    virtual ~ValueSet();
+    virtual         ~ValueSet();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

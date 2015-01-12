@@ -77,6 +77,7 @@ namespace svt
             sal_uInt32 _nButtonFlags = WZB_NEXT | WZB_PREVIOUS | WZB_FINISH | WZB_CANCEL | WZB_HELP
         );
         virtual ~RoadmapWizard( );
+        virtual void dispose() SAL_OVERRIDE;
 
         void            SetRoadmapHelpId( const OString& _rId );
 
@@ -89,7 +90,7 @@ namespace svt
         virtual bool    canAdvance() const SAL_OVERRIDE;
         virtual void    updateTravelUI() SAL_OVERRIDE;
 
-protected:
+    protected:
         /** declares a valid path in the wizard
 
             The very first path which is declared is automatically activated.

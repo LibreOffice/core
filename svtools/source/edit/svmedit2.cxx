@@ -22,13 +22,7 @@
 #include <vcl/xtextedt.hxx>
 
 ExtMultiLineEdit::ExtMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle ) :
-
     MultiLineEdit( pParent, nWinStyle )
-
-{
-}
-
-ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }
 

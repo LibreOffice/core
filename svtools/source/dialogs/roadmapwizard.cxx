@@ -154,7 +154,13 @@ namespace svt
 
     RoadmapWizard::~RoadmapWizard()
     {
+        dispose();
+    }
+
+    void RoadmapWizard::dispose()
+    {
         delete m_pImpl;
+        OWizardMachine::dispose();
     }
 
 

@@ -43,8 +43,8 @@ namespace toolkit
   template < class T >
     class ScrollableWrapper : public T, public ScrollableInterface
     {
-        ScrollBar          maHScrollBar;
-        ScrollBar          maVScrollBar;
+        VclPtr<ScrollBar>  maHScrollBar;
+        VclPtr<ScrollBar>  maVScrollBar;
         Size               maScrollArea;
         bool               mbHasHoriBar;
         bool               mbHasVertBar;
@@ -59,6 +59,7 @@ namespace toolkit
     public:
         ScrollableWrapper( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
         virtual ~ScrollableWrapper();
+        virtual void dispose() SAL_OVERRIDE;
         virtual void    SetScrollWidth( long nWidth ) SAL_OVERRIDE;
         virtual long    GetScrollWidth() SAL_OVERRIDE { return maScrollArea.Width(); }
         virtual void    SetScrollHeight( long nHeight ) SAL_OVERRIDE;

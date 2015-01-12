@@ -459,6 +459,11 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 
 ToolbarMenu::~ToolbarMenu()
 {
+    dispose();
+}
+
+void ToolbarMenu::dispose()
+{
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
@@ -478,6 +483,7 @@ ToolbarMenu::~ToolbarMenu()
     }
 
     delete mpImpl;
+    DockingWindow::dispose();
 }
 
 

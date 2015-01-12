@@ -245,8 +245,14 @@ PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
+    dispose();
+}
+
+void PrinterSetupDialog::dispose()
+{
     ImplFreePrnDlgListBox(m_pLbName, false);
     delete mpTempPrinter;
+    ModalDialog::dispose();
 }
 
 

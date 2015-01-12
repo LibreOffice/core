@@ -53,7 +53,7 @@ private:
     Link                aHeaderBarDblClickLink;
     Link                aCommandLink;
     CommandEvent        aCEvt;
-    HeaderBar           aHeaderBar;
+    VclPtr<HeaderBar>   aHeaderBar;
     long                nOldPos;
     sal_uInt16          nHeaderItemId;
     bool                bPaintFlag;
@@ -89,6 +89,7 @@ public:
 
     SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
     virtual ~SvSimpleTable();
+    virtual void dispose() SAL_OVERRIDE;
 
     void UpdateViewSize();
 
@@ -126,9 +127,9 @@ public:
     void            SetHeaderBarDblClickHdl( const Link& rLink ) { aHeaderBarDblClickLink = rLink; }
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
-    void            SetHeaderBarHelpId(const OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
+    void            SetHeaderBarHelpId(const OString& rHelpId) { aHeaderBar->SetHelpId(rHelpId); }
 
-    HeaderBar&      GetTheHeaderBar() {return aHeaderBar;}
+    HeaderBar&      GetTheHeaderBar() { return *aHeaderBar.get(); }
 };
 
 

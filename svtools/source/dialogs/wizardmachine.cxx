@@ -49,6 +49,11 @@ namespace svt
 
     OWizardPage::~OWizardPage()
     {
+        dispose();
+    }
+
+    void OWizardPage::dispose()
+    {
         delete m_pImpl;
     }
 
@@ -196,6 +201,11 @@ namespace svt
 
     OWizardMachine::~OWizardMachine()
     {
+        dispose();
+    }
+
+    void OWizardMachine::dispose()
+    {
         delete m_pFinish;
         delete m_pCancel;
         delete m_pNextPage;
@@ -206,6 +216,7 @@ namespace svt
             delete GetPage(i);
 
         delete m_pImpl;
+        WizardDialog::dispose();
     }
 
 

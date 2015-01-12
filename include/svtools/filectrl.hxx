@@ -42,8 +42,8 @@ typedef sal_uInt16 FileControlMode_Internal;
 class SVT_DLLPUBLIC FileControl : public vcl::Window
 {
 private:
-    Edit            maEdit;
-    PushButton      maButton;
+    VclPtr<Edit>       maEdit;
+    VclPtr<PushButton> maButton;
 
     OUString        maButtonText;
     bool            mbOpenDlg;
@@ -65,10 +65,11 @@ protected:
 
 public:
                     FileControl( vcl::Window* pParent, WinBits nStyle, FileControlMode = 0 );
-                    virtual ~FileControl();
+    virtual         ~FileControl();
+    virtual void    dispose() SAL_OVERRIDE;
 
-    Edit&           GetEdit() { return maEdit; }
-    PushButton&     GetButton() { return maButton; }
+    Edit&           GetEdit() { return *maEdit.get(); }
+    PushButton&     GetButton() { return *maButton.get(); }
 
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
 
@@ -77,13 +78,13 @@ public:
 
     void            SetText( const OUString& rStr ) SAL_OVERRIDE;
     OUString        GetText() const SAL_OVERRIDE;
-    OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
+    OUString        GetSelectedText() const         { return maEdit->GetSelected(); }
 
-    void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }
-    Selection       GetSelection() const                        { return maEdit.GetSelection(); }
+    void            SetSelection( const Selection& rSelection ) { maEdit->SetSelection( rSelection ); }
+    Selection       GetSelection() const                        { return maEdit->GetSelection(); }
 
-    void            SetReadOnly( bool bReadOnly = true )    { maEdit.SetReadOnly( bReadOnly ); }
-    bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
+    void            SetReadOnly( bool bReadOnly = true )    { maEdit->SetReadOnly( bReadOnly ); }
+    bool            IsReadOnly() const                      { return maEdit->IsReadOnly(); }
 
 
     //use this to manipulate the dialog bevore executing it:

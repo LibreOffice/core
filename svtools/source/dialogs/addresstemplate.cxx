@@ -733,7 +733,13 @@ void AssignmentPersistentData::ImplCommit()
 
     AddressBookSourceDialog::~AddressBookSourceDialog()
     {
+        dispose();
+    }
+
+    void AddressBookSourceDialog::dispose()
+    {
         delete m_pImpl;
+        ModalDialog::dispose();
     }
 
 

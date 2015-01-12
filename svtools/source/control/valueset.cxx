@@ -125,11 +125,17 @@ ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTran
 
 ValueSet::~ValueSet()
 {
+    dispose();
+}
+
+void ValueSet::dispose()
+{
     Reference<XComponent> xComponent(GetAccessible(false), UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 
     ImplDeleteItems();
+    Control::dispose();
 }
 
 void ValueSet::ImplDeleteItems()

@@ -48,7 +48,6 @@ namespace svt { namespace uno
             const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >& i_rController,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >& i_rPaths
         );
-        virtual ~WizardShell();
 
         // Dialog overridables
         virtual short   Execute() SAL_OVERRIDE;

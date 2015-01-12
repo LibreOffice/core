@@ -110,12 +110,18 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTabListBox(vcl::Wind
 
 SvTabListBox::~SvTabListBox()
 {
+   dispose();
+}
+
+void SvTabListBox::dispose()
+{
     // delete array
     delete [] pTabList;
 #ifdef DBG_UTIL
     pTabList = 0;
     nTabCount = 0;
 #endif
+    SvTreeListBox::dispose();
 }
 
 void SvTabListBox::SetTabs(const long* pTabs, MapUnit eMapUnit)
@@ -520,7 +526,13 @@ SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle 
 
 SvHeaderTabListBox::~SvHeaderTabListBox()
 {
+    dispose();
+}
+
+void SvHeaderTabListBox::dispose()
+{
     delete m_pImpl;
+    SvTabListBox::dispose();
 }
 
 

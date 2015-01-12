@@ -183,6 +183,11 @@ namespace svt
 
     EditBrowseBox::~EditBrowseBox()
     {
+        dispose();
+    }
+
+    void EditBrowseBox::dispose()
+    {
         if (nStartEvent)
             Application::RemoveUserEvent(nStartEvent);
         if (nEndEvent)
@@ -191,7 +196,7 @@ namespace svt
             Application::RemoveUserEvent(nCellModifiedEvent);
 
         delete pCheckBoxPaint;
-
+        BrowseBox::dispose();
     }
 
 

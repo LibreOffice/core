@@ -21,8 +21,8 @@
 #define INCLUDED_SVTOOLS_SCRWIN_HXX
 
 #include <svtools/svtdllapi.h>
-
 #include <vcl/scrbar.hxx>
+#include <vcl/vclptr.hxx>
 
 class DataChangedEvent;
 
@@ -49,9 +49,9 @@ private:
     long            nLinePixH;          // size of a line/column (pixel)
     long            nColumnPixW;
 
-    ScrollBar       aVScroll;           // the scrollbars
-    ScrollBar       aHScroll;
-    ScrollBarBox    aCornerWin;         // window in the bottom right corner
+    VclPtr<ScrollBar>    aVScroll;           // the scrollbars
+    VclPtr<ScrollBar>    aHScroll;
+    VclPtr<ScrollBarBox> aCornerWin;         // window in the bottom right corner
     bool            bScrolling:1,       // user controlled scrolling
                     bHandleDragging:1,  // scroll window while dragging
                     bHCenter:1,
@@ -64,6 +64,8 @@ private:
 public:
                     ScrollableWindow( vcl::Window* pParent, WinBits nBits = 0,
                                       ScrollableWindowFlags = SCRWIN_DEFAULT );
+    virtual         ~ScrollableWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
