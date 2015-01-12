@@ -10907,7 +10907,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function PROPER #*=-
-    Resource SC_OPCODE_PROPPER
+    Resource SC_OPCODE_PROPER
     {
         String 1 // Description
         {

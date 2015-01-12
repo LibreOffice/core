@@ -122,7 +122,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CODE { Text = "CODE" ; };
     String SC_OPCODE_TRIM { Text = "TRIM" ; };
     String SC_OPCODE_UPPER { Text = "UPPER" ; };
-    String SC_OPCODE_PROPPER { Text = "PROPER" ; };
+    String SC_OPCODE_PROPER { Text = "PROPER" ; };
     String SC_OPCODE_LOWER { Text = "LOWER" ; };
     String SC_OPCODE_LEN { Text = "LEN" ; };
     String SC_OPCODE_T { Text = "T" ; };
@@ -529,7 +529,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CODE { Text = "CODE" ; };
     String SC_OPCODE_TRIM { Text = "TRIM" ; };
     String SC_OPCODE_UPPER { Text = "UPPER" ; };
-    String SC_OPCODE_PROPPER { Text = "PROPER" ; };
+    String SC_OPCODE_PROPER { Text = "PROPER" ; };
     String SC_OPCODE_LOWER { Text = "LOWER" ; };
     String SC_OPCODE_LEN { Text = "LEN" ; };
     String SC_OPCODE_T { Text = "T" ; };
@@ -938,7 +938,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CODE { Text = "CODE" ; };
     String SC_OPCODE_TRIM { Text = "TRIM" ; };
     String SC_OPCODE_UPPER { Text = "UPPER" ; };
-    String SC_OPCODE_PROPPER { Text = "PROPER" ; };
+    String SC_OPCODE_PROPER { Text = "PROPER" ; };
     String SC_OPCODE_LOWER { Text = "LOWER" ; };
     String SC_OPCODE_LEN { Text = "LEN" ; };
     String SC_OPCODE_T { Text = "T" ; };
@@ -1567,7 +1567,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "UPPER" ;
     };
-    String SC_OPCODE_PROPPER
+    String SC_OPCODE_PROPER
     {
         Text [ en-US ] = "PROPER" ;
     };
