@@ -36,7 +36,8 @@ class Bitmap;
 bool VCL_DLLPUBLIC ReadDIB( // ReadDIB(rBitmap, rIStm, true);
     Bitmap& rTarget,
     SvStream& rIStm,
-    bool bFileHeader);
+    bool bFileHeader,
+    bool bMSOFormat=false);
 
 bool VCL_DLLPUBLIC ReadDIBBitmapEx(
     BitmapEx& rTarget,
