@@ -3959,8 +3959,6 @@ public:
 
     CLInterpreterResult launchKernel()
     {
-        CLInterpreterResult aRes; // invalid by default.
-
         if (!isValid())
             return CLInterpreterResult();
 
