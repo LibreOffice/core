@@ -382,18 +382,21 @@
                 SEPARATOR ; \
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = SID_TABLE_VERT_NONE ; \
                     HelpId = CMD_SID_TABLE_VERT_NONE ; \
                     Text [ en-US ] = "~Top" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = SID_TABLE_VERT_CENTER ; \
                     HelpId = CMD_SID_TABLE_VERT_CENTER ; \
                     Text [ en-US ] = "C~enter" ; \
                 };\
                 MenuItem\
                 {\
+                    RadioCheck = TRUE ; \
                     Identifier = SID_TABLE_VERT_BOTTOM ; \
                     HelpId = CMD_SID_TABLE_VERT_BOTTOM ; \
                     Text [ en-US ] = "~Bottom" ; \

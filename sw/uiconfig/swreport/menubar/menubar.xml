@@ -311,9 +311,9 @@
           <menu:menuitem menu:id=".uno:CommonAlignRight" menu:style="radio"/>
           <menu:menuitem menu:id=".uno:CommonAlignJustified" menu:style="radio"/>
           <menu:menuseparator/>
-          <menu:menuitem menu:id=".uno:CommonAlignTop"/>
-          <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter"/>
-          <menu:menuitem menu:id=".uno:CommonAlignBottom"/>
+          <menu:menuitem menu:id=".uno:CommonAlignTop" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignVerticalCenter" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:CommonAlignBottom" menu:style="radio"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:ArrangeMenu">
