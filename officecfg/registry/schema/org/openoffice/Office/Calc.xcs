@@ -1361,9 +1361,9 @@
         <prop oor:name="OpenCLMinimumDataSize" oor:type="xs:int">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
-            <desc>An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</desc>
+            <desc>Lower limit on the size of a formula group for OpenCL to be considered.</desc>
           </info>
-          <value>100</value>
+          <value>10000</value>
         </prop>
         <prop oor:name="OpenCLSubsetOpCodes" oor:type="xs:string" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
