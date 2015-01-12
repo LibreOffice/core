@@ -45,6 +45,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSub);
     maOpenCLSubsetOpCodes.insert(ocMul);
     maOpenCLSubsetOpCodes.insert(ocDiv);
+    maOpenCLSubsetOpCodes.insert(ocRandom);
     maOpenCLSubsetOpCodes.insert(ocSin);
     maOpenCLSubsetOpCodes.insert(ocCos);
     maOpenCLSubsetOpCodes.insert(ocTan);
