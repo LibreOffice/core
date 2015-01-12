@@ -657,10 +657,15 @@ static void lo_postKeyEvent(LibreOfficeKit* /*pThis*/, int nType, int nCode)
     if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
     {
         KeyEvent aEvent(nCode, nCode, 0);
-        if (nType == 0)
+        switch (nType)
+        {
+        case LOK_KEYEVENT_KEYINPUT:
             Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
-        else
+            break;
+        case LOK_KEYEVENT_KEYUP:
             Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
+            break;
+        }
     }
 #endif
 }

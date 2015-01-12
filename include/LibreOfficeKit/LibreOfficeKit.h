@@ -64,6 +64,15 @@ typedef enum
 }
 LibreOfficeKitCallbackType;
 
+typedef enum
+{
+    /// A key on the keyboard is pressed.
+    LOK_KEYEVENT_KEYINPUT,
+    /// A key on the keyboard is released.
+    LOK_KEYEVENT_KEYUP
+}
+LibreOfficeKitKeyEventType;
+
 typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
 #endif // LOK_USE_UNSTABLE_API
 
