@@ -350,7 +350,7 @@
 #define SC_OPCODE_TREND             350
 #define SC_OPCODE_GROWTH            351
 #define SC_OPCODE_RGP               352
-#define SC_OPCODE_RKP               353
+#define SC_OPCODE_LOGEST            353
 #define SC_OPCODE_FORECAST          354
 #define SC_OPCODE_CHI_INV           355
 #define SC_OPCODE_GAMMA_DIST        356

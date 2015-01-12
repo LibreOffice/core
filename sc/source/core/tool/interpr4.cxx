@@ -4191,7 +4191,7 @@ StackVar ScInterpreter::Interpret()
                 case ocTrend            : ScTrend();                    break;
                 case ocGrowth           : ScGrowth();                   break;
                 case ocRGP              : ScRGP();                      break;
-                case ocRKP              : ScRKP();                      break;
+                case ocLogest           : ScLogest();                   break;
                 case ocForecast         : ScForecast();                 break;
                 case ocGammaLn          :
                 case ocGammaLn_MS       : ScLogGamma();                 break;
