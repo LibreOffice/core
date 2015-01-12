@@ -158,7 +158,7 @@ enum OpCode : sal_uInt16
         ocCode              = SC_OPCODE_CODE,
         ocTrim              = SC_OPCODE_TRIM,
         ocUpper             = SC_OPCODE_UPPER,
-        ocPropper           = SC_OPCODE_PROPPER,
+        ocProper            = SC_OPCODE_PROPER,
         ocLower             = SC_OPCODE_LOWER,
         ocLen               = SC_OPCODE_LEN,
         ocT                 = SC_OPCODE_T,

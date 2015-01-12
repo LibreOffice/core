@@ -166,7 +166,7 @@
 #define SC_OPCODE_CODE              133
 #define SC_OPCODE_TRIM              134
 #define SC_OPCODE_UPPER             135
-#define SC_OPCODE_PROPPER           136
+#define SC_OPCODE_PROPER            136
 #define SC_OPCODE_LOWER             137
 #define SC_OPCODE_LEN               138
 #define SC_OPCODE_T                 139     /* miscellaneous, part 21 */
