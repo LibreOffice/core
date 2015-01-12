@@ -478,7 +478,7 @@ void ScN();
 void ScCode();
 void ScTrim();
 void ScUpper();
-void ScPropper();
+void ScProper();
 void ScLower();
 void ScLen();
 void ScT();

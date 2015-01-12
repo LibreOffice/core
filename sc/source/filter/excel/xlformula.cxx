@@ -171,7 +171,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocChar,               111,    1,  1,  V, { VR }, 0, 0 },
     { ocLower,              112,    1,  1,  V, { VR }, 0, 0 },
     { ocUpper,              113,    1,  1,  V, { VR }, 0, 0 },
-    { ocPropper,            114,    1,  1,  V, { VR }, 0, 0 },
+    { ocProper,             114,    1,  1,  V, { VR }, 0, 0 },
     { ocLeft,               115,    1,  2,  V, { VR }, 0, 0 },
     { ocRight,              116,    1,  2,  V, { VR }, 0, 0 },
     { ocExact,              117,    2,  2,  V, { VR }, 0, 0 },

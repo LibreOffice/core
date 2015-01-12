@@ -2883,7 +2883,7 @@ void ScInterpreter::ScUpper()
     PushString(aString);
 }
 
-void ScInterpreter::ScPropper()
+void ScInterpreter::ScProper()
 {
 //2do: what to do with I18N-CJK ?!?
     OUStringBuffer aStr(GetString().getString());
