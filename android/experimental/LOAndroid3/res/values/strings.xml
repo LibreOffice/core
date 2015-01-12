@@ -4,6 +4,7 @@
     <string name="app_name">LibreOffice Viewer</string>
 
     <string name="app_about_name"><b>LibreOffice Viewer \'Beta\'</b></string>
+    <string name="app_version">Version: $VERSION\nBuild ID: $BUILDID</string>
     <string name="app_description">LibreOffice Viewer is a document viewer based on LibreOffice.</string>
     <string name="app_credits">http://www.libreoffice.org</string>
 

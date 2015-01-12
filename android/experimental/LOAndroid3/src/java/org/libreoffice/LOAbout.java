@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.content.Intent;
 import android.net.Uri;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,28 @@ public abstract class LOAbout extends Activity {
         TextView textView = (TextView) messageView.findViewById(R.id.about_credits);
         int defaultColor = textView.getTextColors().getDefaultColor();
         textView.setTextColor(defaultColor);
+
+        // Take care of placeholders in the version text view.
+        textView = (TextView)messageView.findViewById(R.id.about_version);
+        try
+        {
+            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            String[] tokens = versionName.split("/");
+            if (tokens.length == 2)
+            {
+                String version = textView.getText().toString();
+                version = version.replace("$VERSION", tokens[0]);
+                version = version.replace("$BUILDID", tokens[1]);
+                textView.setText(version);
+            }
+            else
+                throw new NameNotFoundException();
+        }
+        catch (NameNotFoundException e)
+        {
+            textView.setText("");
+        }
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(R.drawable.lo_icon);

@@ -3,7 +3,7 @@
     package="org.libreoffice"
     @ANDROID_INSTALL_LOCATION@
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="@ANDROID_VERSION@">
 
     <!-- App requires OpenGL ES 2.0 -->
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />

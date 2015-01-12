@@ -180,8 +180,9 @@ copy-stuff:
 	echo '[Version]' > assets/program/versionrc
 	echo 'AllLanguages=en-US' >> assets/program/versionrc
 	echo 'BuildVersion=' >> assets/program/versionrc
-	echo 'buildid=dead-beef' >> assets/program/versionrc
+	echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=4.1' >> assets/program/versionrc
+	sed -i 's|android:versionName=".*"|android:versionName="$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%H)"|' AndroidManifest.xml
 #
 # .res files
 	mkdir -p assets/program/resource

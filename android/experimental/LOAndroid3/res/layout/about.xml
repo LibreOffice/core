@@ -7,6 +7,15 @@
               android:padding="20dip">
 
     <TextView
+        android:id="@+id/about_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true"
+        android:text="@string/app_version"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="18sp"/>
+
+    <TextView
         android:id="@+id/about_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
