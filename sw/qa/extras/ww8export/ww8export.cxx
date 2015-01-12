@@ -355,7 +355,6 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
     // This resulted in a container.NoSuchElementException.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
 }
-#endif
 
 DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
 {
@@ -368,6 +367,7 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
     // After export and import, things got worse, this was "\nA1\nB1\nAfte".
     CPPUNIT_ASSERT_EQUAL(OUString("fore." SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING "Afte"), xField->getAnchor()->getString());
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
