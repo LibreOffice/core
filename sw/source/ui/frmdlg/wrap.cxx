@@ -631,7 +631,7 @@ const sal_uInt16* SwWrapTabPage::GetRanges()
 void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
             ApplyImageList();
 
     SfxTabPage::DataChanged( rDCEvt );

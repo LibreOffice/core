@@ -765,7 +765,7 @@ void DockingWindow::StateChanged( StateChangedType nType )
 void DockingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
         Invalidate();

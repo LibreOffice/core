@@ -533,7 +533,7 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         SetBackground();    // Due to a hack in Window::UpdateSettings the background must be reset
                             // otherwise it will overpaint NWF drawn listboxes

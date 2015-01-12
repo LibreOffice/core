@@ -232,7 +232,7 @@ void SvxLineBox::ReleaseFocus_Impl()
 void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
@@ -409,7 +409,7 @@ bool SvxMetricField::Notify( NotifyEvent& rNEvt )
 void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
     }

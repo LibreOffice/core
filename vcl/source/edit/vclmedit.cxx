@@ -1286,7 +1286,7 @@ void VclMultiLineEdit::StateChanged( StateChangedType nType )
 void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings( true, true, true );
         Resize();

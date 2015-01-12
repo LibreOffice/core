@@ -80,7 +80,7 @@ void ScrollableWindow::Command( const CommandEvent& rCEvt )
 void ScrollableWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         Resize();
         Invalidate();

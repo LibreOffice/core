@@ -4586,7 +4586,7 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     SvTreeListBox::DataChanged( rDCEvt );
 
     if (( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) &&
-        ( rDCEvt.GetFlags() & SETTINGS_STYLE ))
+        ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ))
     {
         BuildCheckBoxButtonImages( m_pButtonData );
         Invalidate();

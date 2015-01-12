@@ -57,12 +57,12 @@ void Window::SetSettings( const AllSettings& rSettings, bool bChild )
 
     AllSettings aOldSettings(*mxSettings);
     OutputDevice::SetSettings( rSettings );
-    sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
+    AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( rSettings );
 
     // recalculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();
 
-    if ( nChangeFlags )
+    if ( bool(nChangeFlags) )
     {
         DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
@@ -91,10 +91,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     }
 
     AllSettings aOldSettings(*mxSettings);
-    sal_uLong nChangeFlags = mxSettings->Update( mxSettings->GetWindowUpdate(), rSettings );
-    nChangeFlags |= SETTINGS_IN_UPDATE_SETTINGS; // Set this flag so the receiver of the data changed
-                                                 // event can distinguish between the changing of global
-                                                 // setting and a local change ( with SetSettings )
+    AllSettingsFlags nChangeFlags = mxSettings->Update( mxSettings->GetWindowUpdate(), rSettings );
 
     // recalculate AppFont-resolution and DPI-resolution
     ImplInitResolutionSettings();
@@ -110,7 +107,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
     mxSettings->SetMouseSettings( aSet );
 
-    if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
+    if( (nChangeFlags & AllSettingsFlags::STYLE) && IsBackground() )
     {
         Wallpaper aWallpaper = GetBackground();
         if( !aWallpaper.IsBitmap() && !aWallpaper.IsGradient() )
@@ -128,7 +125,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
         }
     }
 
-    if ( nChangeFlags )
+    if ( bool(nChangeFlags) )
     {
         DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );

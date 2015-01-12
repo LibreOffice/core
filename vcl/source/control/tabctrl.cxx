@@ -1504,7 +1504,7 @@ void TabControl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         ImplInitSettings( true, true, true );
         Invalidate();

@@ -1006,7 +1006,7 @@ void DbGridControl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     DbGridControl_Base::DataChanged( rDCEvt );
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS ) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitWindow( InitAll );
         Invalidate();

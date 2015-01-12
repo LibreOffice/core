@@ -967,7 +967,7 @@ void ThumbnailView::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         ImplInitSettings( true, true, true );
         Invalidate();

@@ -1649,7 +1649,7 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) ||
            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) ) &&
-         ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+         ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
     {
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
     }
@@ -2470,7 +2470,7 @@ void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) ||
            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY ) ) &&
-         ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+         ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
     {
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
         InitToolBoxImages();

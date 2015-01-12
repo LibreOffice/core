@@ -522,7 +522,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
@@ -989,7 +989,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
@@ -1520,7 +1520,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxPopupWindow::DataChanged( rDCEvt );
 
-    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
     {
         aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
@@ -1830,7 +1830,7 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxPopupWindow::DataChanged( rDCEvt );
 #if 0
-    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
     {
         CreateBitmaps();
         Invalidate();

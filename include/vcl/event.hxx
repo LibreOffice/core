@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/cmdevt.hxx>
+#include <vcl/settings.hxx>
 
 class AllSettings;
 class OutputDevice;
@@ -493,18 +494,18 @@ class VCL_DLLPUBLIC DataChangedEvent
 {
 private:
     void*                   mpData;
-    sal_uLong               mnFlags;
+    AllSettingsFlags        mnFlags;
     DataChangedEventType    mnType;
 
 public:
     explicit                DataChangedEvent();
     explicit                DataChangedEvent( DataChangedEventType nType,
                                               const void* pData = NULL,
-                                              sal_uLong nFlags = 0 );
+                                              AllSettingsFlags nFlags = AllSettingsFlags::NONE );
 
     DataChangedEventType    GetType() const { return mnType; }
     void*                   GetData() const { return mpData; }
-    sal_uLong               GetFlags() const { return mnFlags; }
+    AllSettingsFlags        GetFlags() const { return mnFlags; }
 
     const AllSettings*      GetOldSettings() const;
 };
@@ -512,13 +513,13 @@ public:
 inline DataChangedEvent::DataChangedEvent()
 {
     mpData  = NULL;
-    mnFlags = 0;
+    mnFlags = AllSettingsFlags::NONE;
     mnType  = DataChangedEventType::NONE;
 }
 
 inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
                                            const void* pData,
-                                           sal_uLong nChangeFlags )
+                                           AllSettingsFlags nChangeFlags )
 {
     mpData  = (void*)pData;
     mnFlags = nChangeFlags;

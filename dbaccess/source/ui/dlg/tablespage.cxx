@@ -123,7 +123,7 @@ namespace dbaui
 
         if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
             ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
         {
             // Check if we need to get new images for normal/high contrast mode
             m_pTablesList->notifyHiContrastChanged();

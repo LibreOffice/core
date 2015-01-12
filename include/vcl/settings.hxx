@@ -29,6 +29,7 @@
 #include <vcl/wall.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
@@ -618,21 +619,16 @@ public:
 
 // - AllSettings -
 
-const int SETTINGS_MOUSE = 0x00000001;
-const int SETTINGS_STYLE = 0x00000002;
-const int SETTINGS_MISC = 0x00000004;
-const int SETTINGS_SOUND = 0x00000008;
-const int SETTINGS_HELP = 0x00000010;
-const int SETTINGS_LOCALE = 0x00000020;
-const int SETTINGS_UILOCALE = 0x00000040;
-const int SETTINGS_ALLSETTINGS =   ( SETTINGS_MOUSE |
-                                     SETTINGS_STYLE | SETTINGS_MISC |
-                                     SETTINGS_SOUND |
-                                     SETTINGS_HELP |
-                                     SETTINGS_LOCALE | SETTINGS_UILOCALE );
-const int SETTINGS_IN_UPDATE_SETTINGS = 0x00000800;   // this flag indicates that the data changed event was created
-                                                          // in Windows::UpdateSettings probably because of a global
-                                                          // settings changed
+enum class AllSettingsFlags {
+    NONE     = 0x0000,
+    STYLE    = 0x0002,
+    MISC     = 0x0004,
+    LOCALE   = 0x0020,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<AllSettingsFlags> : is_typed_flags<AllSettingsFlags, 0x026> {};
+}
 
 class VCL_DLLPUBLIC AllSettings
 {
@@ -669,10 +665,10 @@ public:
     const vcl::I18nHelper&                  GetLocaleI18nHelper() const;
     const vcl::I18nHelper&                  GetUILocaleI18nHelper() const;
 
-    sal_uLong                               GetWindowUpdate() const;
+    AllSettingsFlags                        GetWindowUpdate() const;
 
-    sal_uLong                               Update( sal_uLong nFlags, const AllSettings& rSettings );
-    sal_uLong                               GetChangeFlags( const AllSettings& rSettings ) const;
+    AllSettingsFlags                        Update( AllSettingsFlags nFlags, const AllSettings& rSettings );
+    AllSettingsFlags                        GetChangeFlags( const AllSettings& rSettings ) const;
 
     bool                                    operator ==( const AllSettings& rSet ) const;
     bool                                    operator !=( const AllSettings& rSet ) const;

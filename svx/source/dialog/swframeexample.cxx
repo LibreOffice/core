@@ -90,7 +90,7 @@ void SvxSwFrameExample::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if( rDCEvt.GetType() == DataChangedEventType::SETTINGS && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if( rDCEvt.GetType() == DataChangedEventType::SETTINGS && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
         InitColors_Impl();
 }
 

@@ -1794,9 +1794,9 @@ void DateField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & (SETTINGS_LOCALE|SETTINGS_MISC)) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & (AllSettingsFlags::LOCALE|AllSettingsFlags::MISC)) )
     {
-        if ( IsDefaultLocale() && ( rDCEvt.GetFlags() & SETTINGS_LOCALE ) )
+        if ( IsDefaultLocale() && ( rDCEvt.GetFlags() & AllSettingsFlags::LOCALE ) )
             ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
         ReformatAll();
     }
@@ -1861,7 +1861,7 @@ void DateBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::LOCALE) )
     {
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
@@ -2574,7 +2574,7 @@ void TimeField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SpinField::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::LOCALE) )
     {
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );
@@ -2704,7 +2704,7 @@ void TimeBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ComboBox::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::LOCALE) )
     {
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLanguageTag( GetSettings().GetLanguageTag() );

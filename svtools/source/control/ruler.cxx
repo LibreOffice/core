@@ -2242,7 +2242,7 @@ void Ruler::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         mbFormat = true;
         ImplInitSettings( true, true, true );

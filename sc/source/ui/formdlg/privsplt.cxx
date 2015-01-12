@@ -392,7 +392,7 @@ void ScPrivatSplit::StateChanged( StateChangedType nType )
 void ScPrivatSplit::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings( true, true, true );
         Invalidate();

@@ -3527,7 +3527,7 @@ void SwContentLBoxString::Paint(
 void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
 {
   if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         FindActiveTypeAndRemoveUserData();
 

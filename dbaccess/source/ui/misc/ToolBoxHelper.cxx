@@ -83,7 +83,7 @@ namespace dbaui
             DataChangedEvent* pData = reinterpret_cast<DataChangedEvent*>(_pEvt->GetData());
             if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
             ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( pData->GetFlags() & SETTINGS_STYLE        )))
+            ( pData->GetFlags() & AllSettingsFlags::STYLE        )))
                 // check if imagelist changed
                 checkImageList();
         }

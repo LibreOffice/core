@@ -654,7 +654,7 @@ namespace svt
     {
         if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
             ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
@@ -861,7 +861,7 @@ namespace svt
         FixedText::DataChanged( rDCEvt );
         if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
             ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
         {
             const Color& rGBColor = GetControlBackground();
             if (rGBColor == COL_TRANSPARENT)

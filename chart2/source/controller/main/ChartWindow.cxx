@@ -218,7 +218,7 @@ void ChartWindow::DataChanged( const DataChangedEvent& rDCEvt )
     vcl::Window::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         adjustHighContrastMode();
     }

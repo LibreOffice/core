@@ -369,7 +369,7 @@ void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
     if ( ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         _pImp->InitSettings();
         Invalidate(INVALIDATE_NOCHILDREN);

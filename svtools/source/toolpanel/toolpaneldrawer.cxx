@@ -258,7 +258,7 @@ namespace svt
         switch ( i_rEvent.GetType() )
         {
             case DataChangedEventType::SETTINGS:
-                if ( ( i_rEvent.GetFlags() & SETTINGS_STYLE ) == 0 )
+                if ( !( i_rEvent.GetFlags() & AllSettingsFlags::STYLE ) )
                     break;
                 SetSettings( Application::GetSettings() );
                 m_pPaintDevice.reset( new VirtualDevice( *this ) );

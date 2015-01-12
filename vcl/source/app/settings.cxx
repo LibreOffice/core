@@ -240,7 +240,7 @@ struct ImplAllSettingsData
     MiscSettings                            maMiscSettings;
     HelpSettings                            maHelpSettings;
     LanguageTag                             maLocale;
-    sal_uLong                               mnWindowUpdate;
+    AllSettingsFlags                        mnWindowUpdate;
     LanguageTag                             maUILocale;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
@@ -2640,7 +2640,7 @@ ImplAllSettingsData::ImplAllSettingsData()
         maLocale( LANGUAGE_SYSTEM ),
         maUILocale( LANGUAGE_SYSTEM )
 {
-    mnWindowUpdate              = SETTINGS_ALLSETTINGS;
+    mnWindowUpdate              = AllSettingsFlags::STYLE | AllSettingsFlags::MISC | AllSettingsFlags::LOCALE;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
     mpI18nHelper                = NULL;
@@ -2699,87 +2699,56 @@ void AllSettings::CopyData()
 
 }
 
-sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
+AllSettingsFlags AllSettings::Update( AllSettingsFlags nFlags, const AllSettings& rSet )
 {
 
-    sal_uLong nChangeFlags = 0;
+    AllSettingsFlags nChangeFlags = AllSettingsFlags::NONE;
 
-    if ( nFlags & SETTINGS_MOUSE )
-    {
-        if ( mpData->maMouseSettings != rSet.mpData->maMouseSettings )
-        {
-            CopyData();
-            mpData->maMouseSettings = rSet.mpData->maMouseSettings;
-            nChangeFlags |= SETTINGS_MOUSE;
-        }
-    }
-
-    if ( nFlags & SETTINGS_STYLE )
+    if ( nFlags & AllSettingsFlags::STYLE )
     {
         if ( mpData->maStyleSettings != rSet.mpData->maStyleSettings )
         {
             CopyData();
             mpData->maStyleSettings = rSet.mpData->maStyleSettings;
-            nChangeFlags |= SETTINGS_STYLE;
+            nChangeFlags |= AllSettingsFlags::STYLE;
         }
     }
 
-    if ( nFlags & SETTINGS_MISC )
+    if ( nFlags & AllSettingsFlags::MISC )
     {
         if ( mpData->maMiscSettings != rSet.mpData->maMiscSettings )
         {
             CopyData();
             mpData->maMiscSettings = rSet.mpData->maMiscSettings;
-            nChangeFlags |= SETTINGS_MISC;
+            nChangeFlags |= AllSettingsFlags::MISC;
         }
     }
 
-    if ( nFlags & SETTINGS_HELP )
-    {
-        if ( mpData->maHelpSettings != rSet.mpData->maHelpSettings )
-        {
-            CopyData();
-            mpData->maHelpSettings = rSet.mpData->maHelpSettings;
-            nChangeFlags |= SETTINGS_HELP;
-        }
-    }
-
-    if ( nFlags & SETTINGS_LOCALE )
+    if ( nFlags & AllSettingsFlags::LOCALE )
     {
         if ( mpData->maLocale != rSet.mpData->maLocale )
         {
             SetLanguageTag( rSet.mpData->maLocale );
-            nChangeFlags |= SETTINGS_LOCALE;
+            nChangeFlags |= AllSettingsFlags::LOCALE;
         }
-    }
-
-    if ( nFlags & SETTINGS_UILOCALE )
-    {
-        // UILocale can't be changed
     }
 
     return nChangeFlags;
 }
 
-sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
+AllSettingsFlags AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 {
 
-    sal_uLong nChangeFlags = 0;
-
-    if ( mpData->maMouseSettings != rSet.mpData->maMouseSettings )
-        nChangeFlags |= SETTINGS_MOUSE;
+    AllSettingsFlags nChangeFlags = AllSettingsFlags::NONE;
 
     if ( mpData->maStyleSettings != rSet.mpData->maStyleSettings )
-        nChangeFlags |= SETTINGS_STYLE;
+        nChangeFlags |= AllSettingsFlags::STYLE;
 
     if ( mpData->maMiscSettings != rSet.mpData->maMiscSettings )
-        nChangeFlags |= SETTINGS_MISC;
-
-    if ( mpData->maHelpSettings != rSet.mpData->maHelpSettings )
-        nChangeFlags |= SETTINGS_HELP;
+        nChangeFlags |= AllSettingsFlags::MISC;
 
     if ( mpData->maLocale != rSet.mpData->maLocale )
-        nChangeFlags |= SETTINGS_LOCALE;
+        nChangeFlags |= AllSettingsFlags::LOCALE;
 
     return nChangeFlags;
 }
@@ -3076,7 +3045,7 @@ AllSettings::GetHelpSettings() const
     return mpData->maHelpSettings;
 }
 
-sal_uLong
+AllSettingsFlags
 AllSettings::GetWindowUpdate() const
 {
     return mpData->mnWindowUpdate;

@@ -511,8 +511,8 @@ void Application::SetSettings( const AllSettings& rSettings )
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
         *pSVData->maAppData.mpSettings = rSettings;
-        sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
-        if ( nChangeFlags )
+        AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
+        if ( bool(nChangeFlags) )
         {
             DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
 

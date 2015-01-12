@@ -1384,7 +1384,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 void ColumnValueSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         Format();
     }

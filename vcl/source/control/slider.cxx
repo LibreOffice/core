@@ -876,7 +876,7 @@ void Slider::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
         Invalidate();

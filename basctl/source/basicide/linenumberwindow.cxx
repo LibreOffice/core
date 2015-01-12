@@ -79,7 +79,7 @@ void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
 {
     Window::DataChanged(rDCEvt);
     if (rDCEvt.GetType() == DataChangedEventType::SETTINGS
-        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
+        && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
     {
         Color aColor(GetSettings().GetStyleSettings().GetFieldColor());
         const AllSettings* pOldSettings = rDCEvt.GetOldSettings();

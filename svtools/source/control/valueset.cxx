@@ -1536,7 +1536,7 @@ void ValueSet::DataChanged( const DataChangedEvent& rDataChangedEvent )
          rDataChangedEvent.GetType() == DataChangedEventType::DISPLAY ||
          rDataChangedEvent.GetType() == DataChangedEventType::FONTSUBSTITUTION ||
          (rDataChangedEvent.GetType() == DataChangedEventType::SETTINGS &&
-          rDataChangedEvent.GetFlags() & SETTINGS_STYLE) )
+          rDataChangedEvent.GetFlags() & AllSettingsFlags::STYLE) )
     {
         mbFormat = true;
         ImplInitSettings( true, true, true );

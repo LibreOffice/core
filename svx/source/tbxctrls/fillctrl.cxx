@@ -881,7 +881,7 @@ void FillControl::Resize()
 void FillControl::DataChanged(const DataChangedEvent& rDCEvt)
 {
     if((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-        (rDCEvt.GetFlags() & SETTINGS_STYLE))
+        (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
     {
         Size aTypeSize(LogicToPixel(maLogicalFillSize,MAP_APPFONT));
         Size aAttrSize(LogicToPixel(maLogicalAttrSize,MAP_APPFONT));

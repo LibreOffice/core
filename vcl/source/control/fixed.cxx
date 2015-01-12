@@ -329,7 +329,7 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         ImplInitSettings( true, true, true );
         Invalidate();
@@ -693,7 +693,7 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         ImplInitSettings( true, true, true );
         Invalidate();
@@ -832,7 +832,7 @@ void FixedBitmap::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
         Invalidate();
@@ -1020,7 +1020,7 @@ void FixedImage::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
         Invalidate();

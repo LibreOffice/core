@@ -452,7 +452,7 @@ void CommandToolBox::InitImageList()
 
 void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         //  update item images
 
@@ -735,7 +735,7 @@ void ScNavigatorDlg::Paint( const Rectangle& rRect )
 
 void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         //  toolbox images are exchanged in CommandToolBox::DataChanged
         Invalidate();

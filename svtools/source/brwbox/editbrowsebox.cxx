@@ -804,7 +804,7 @@ namespace svt
 
         if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
             ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
         {
             ImplInitSettings( true, true, true );
             Invalidate();

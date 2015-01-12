@@ -288,7 +288,7 @@ namespace sfx2
         switch ( i_rDataChangedEvent.GetType() )
         {
             case DataChangedEventType::SETTINGS:
-                if ( ( i_rDataChangedEvent.GetFlags() & SETTINGS_STYLE ) == 0)
+                if ( !( i_rDataChangedEvent.GetFlags() & AllSettingsFlags::STYLE ) )
                     break;
                 // else fall through.
             case DataChangedEventType::FONTS:

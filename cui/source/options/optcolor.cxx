@@ -804,7 +804,7 @@ void ColorConfigWindow_Impl::DataChanged (DataChangedEvent const& rDCEvt)
 {
     Window::DataChanged( rDCEvt );
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         StyleSettings const& rStyleSettings = GetSettings().GetStyleSettings();
         bool const bHighContrast = rStyleSettings.GetHighContrastMode();
@@ -973,7 +973,7 @@ void ColorConfigCtrl_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));

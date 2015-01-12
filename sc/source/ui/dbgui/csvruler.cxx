@@ -372,7 +372,7 @@ void ScCsvRuler::LoseFocus()
 
 void ScCsvRuler::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         InitColors();
         Repaint();

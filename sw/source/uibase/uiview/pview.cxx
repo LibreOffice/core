@@ -575,7 +575,7 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
         // size of the scrollbars may have be changed. Also the
         // size of the scrollbars has to be retrieved from the settings
         // out of the resize handler.
-        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+        if( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
             mrView.InvalidateBorder();              // Scrollbar widths
         // zoom has to be disabled if Accessibility support is switched on
         lcl_InvalidateZoomSlots(mrView.GetViewFrame()->GetBindings());

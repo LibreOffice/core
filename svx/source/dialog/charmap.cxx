@@ -120,7 +120,7 @@ void SvxShowCharSet::StateChanged( StateChangedType nType )
 void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS )
-      && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+      && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
         InitSettings( true, true );
     else
         Control::DataChanged( rDCEvt );

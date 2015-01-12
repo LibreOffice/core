@@ -304,7 +304,7 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
         // ScrollBar size could have changed. For this, in the
         // Resize handler the size of ScrollBars has to be queried
         // from the settings as well.
-        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+        if( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
             Resize();
         break;
     default: break;
@@ -371,7 +371,7 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
     {
     case DataChangedEventType::SETTINGS:
         // query settings
-        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+        if( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
         {
             const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
             SetBackground( rCol );

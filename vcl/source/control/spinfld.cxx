@@ -835,7 +835,7 @@ void SpinField::DataChanged( const DataChangedEvent& rDCEvt )
     Edit::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         Resize();
         Invalidate();

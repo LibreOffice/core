@@ -196,7 +196,7 @@ namespace svt
         FixedText::DataChanged( rDCEvt );
         if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
             ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
         {
             const Color& rGBColor = GetControlBackground();
             if (rGBColor == COL_TRANSPARENT)

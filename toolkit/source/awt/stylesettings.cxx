@@ -76,7 +76,7 @@ namespace toolkit
         const DataChangedEvent* pDataChangedEvent = static_cast< const DataChangedEvent* >( i_pEvent->GetData() );
         if ( !pDataChangedEvent || ( pDataChangedEvent->GetType() != DataChangedEventType::SETTINGS ) )
             return 0L;
-        if ( ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE ) == 0 )
+        if ( !( pDataChangedEvent->GetFlags() & AllSettingsFlags::STYLE ) )
             return 0L;
 
         EventObject aEvent( *pOwningWindow );

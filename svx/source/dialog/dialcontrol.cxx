@@ -314,7 +314,7 @@ void DialControl::StateChanged( StateChangedType nStateChange )
 
 void DialControl::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         Init( mpImpl->maWinSize, mpImpl->maWinFont );
         InvalidateControl();

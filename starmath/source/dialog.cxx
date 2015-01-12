@@ -399,7 +399,7 @@ void SmFontDialog::InitColor_Impl()
 void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS  &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
             InitColor_Impl();
 
     ModalDialog::DataChanged( rDCEvt );
@@ -1504,7 +1504,7 @@ void SmSymbolDialog::InitColor_Impl()
 void SmSymbolDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS  &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
             InitColor_Impl();
 
     ModalDialog::DataChanged( rDCEvt );
@@ -2069,7 +2069,7 @@ void SmSymDefineDialog::InitColor_Impl()
 void SmSymDefineDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS  &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
             InitColor_Impl();
 
     ModalDialog::DataChanged( rDCEvt );

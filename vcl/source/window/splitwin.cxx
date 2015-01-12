@@ -2623,7 +2623,7 @@ void SplitWindow::StateChanged( StateChangedType nType )
 void SplitWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
         Invalidate();

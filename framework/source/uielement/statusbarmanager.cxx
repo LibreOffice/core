@@ -556,7 +556,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
          ( rDCEvt.GetType() == DataChangedEventType::FONTS            ) ||
          ( rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION ) ||
          ( rDCEvt.GetType() == DataChangedEventType::DISPLAY          ))  &&
-         ( rDCEvt.GetFlags() & SETTINGS_STYLE               ))
+         ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE               ))
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );

@@ -938,7 +938,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         if ( rDCEvt.GetType() == DataChangedEventType::FONTS )
             pDocShell->UpdateFontList();
@@ -948,7 +948,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
         if ( !bInPaint )
         {
             if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS &&
-                  (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+                  (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
             {
                 //  scroll bar size may have changed
                 pViewShell->InvalidateBorder();     // calls OuterResizePixel

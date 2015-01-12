@@ -339,7 +339,7 @@ void BackgroundPreviewImpl::Paint( const Rectangle& )
 void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+         (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         Invalidate();
     }

@@ -724,10 +724,10 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
         if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-             (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+             (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
         {
             // When the screen zoom factor has changed then reset the zoom
             // factor of the frame to always display the whole page.
@@ -795,7 +795,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
 
         if ( (rDCEvt.GetType() == DataChangedEventType::DISPLAY) ||
              ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
-              (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+              (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
         {
             /* Virtual devices, which also depends on the resolution or the
                system control, should be updated. Otherwise, we should update

@@ -498,7 +498,7 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SfxTabPage::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
             FillValueSet();
 }
 

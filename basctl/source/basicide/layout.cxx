@@ -132,7 +132,7 @@ void Layout::Deactivating ()
 void Layout::DataChanged (DataChangedEvent const& rDCEvt)
 {
     Window::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE))
+    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
     {
         bool bInvalidate = false;
         Color aColor = GetSettings().GetStyleSettings().GetWindowColor();

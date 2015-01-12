@@ -1298,7 +1298,7 @@ namespace svt
         Control::DataChanged( i_rDataChanedEvent );
 
         if  (   ( i_rDataChanedEvent.GetType() == DataChangedEventType::SETTINGS )
-            &&  ( ( i_rDataChanedEvent.GetFlags() & SETTINGS_STYLE ) != 0 )
+            &&  ( i_rDataChanedEvent.GetFlags() & AllSettingsFlags::STYLE )
             )
         {
             Invalidate();

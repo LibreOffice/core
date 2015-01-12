@@ -535,7 +535,7 @@ void SvxFontPrevWindow::StateChanged( StateChangedType nType )
 
 void SvxFontPrevWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
         InitSettings( true, true );
     else
         Window::DataChanged( rDCEvt );

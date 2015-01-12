@@ -140,7 +140,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         // the ScrollBar size can have change. For that, in the reset
         // handler, the size of the ScrollBars also has to be queried
         // from the settings.
-        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+        if( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
         {
             pSh->LockPaint();
             bUnlockPaint = true;

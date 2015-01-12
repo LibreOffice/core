@@ -233,7 +233,7 @@ void ScCsvTableBox::Resize()
 
 void ScCsvTableBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
         InitControls();
     ScCsvControl::DataChanged( rDCEvt );
 }
