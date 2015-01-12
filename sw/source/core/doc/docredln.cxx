@@ -452,7 +452,7 @@ void SwRedlineTbl::Remove( sal_uInt16 nP )
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
         0 != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()) )
-        pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+        pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
 }
 
 void SwRedlineTbl::DeleteAndDestroyAll()
@@ -473,7 +473,7 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
         0 != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
-        pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+        pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
 }
 
 /// Find the next or preceding Redline with the same seq.no.
@@ -1627,7 +1627,7 @@ void SwExtraRedlineTbl::DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen )
     SwViewShell* pSh;
     if( pDoc && !pDoc->IsInDtor() &&
         0 != ( pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
-        pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+        pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
     */
 }
 
