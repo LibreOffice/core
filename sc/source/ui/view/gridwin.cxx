@@ -5741,7 +5741,7 @@ void ScGridWindow::UpdateCursorOverlay()
     SCROW nY = pViewData->GetCurY();
 
     ScDocument* pDoc = pViewData->GetDocument();
-    const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr(nX, nY, nTab, ATTR_MERGE);
+    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(pDoc->GetAttr(nX, nY, nTab, ATTR_MERGE));
 
     // fdo#87382 Also display the cell cursor for the visible part of merged
     // cells if the cell position is part of merged cells.
