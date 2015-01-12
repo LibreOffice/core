@@ -2108,6 +2108,12 @@ ScGridWindow* ScViewData::GetActiveWin()
     return pView->GetActiveWin();
 }
 
+const ScGridWindow* ScViewData::GetActiveWin() const
+{
+    OSL_ENSURE( pView, "GetActiveWin() ohne View" );
+    return pView->GetActiveWin();
+}
+
 ScDrawView* ScViewData::GetScDrawView()
 {
     OSL_ENSURE( pView, "GetScDrawView() ohne View" );

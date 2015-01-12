@@ -241,6 +241,7 @@ public:
 
     vcl::Window*         GetDialogParent();          // forwarded from tabvwsh
     ScGridWindow*   GetActiveWin();             // from View
+    const ScGridWindow* GetActiveWin() const;
     ScDrawView*     GetScDrawView();            // from View
     bool            IsMinimized();              // from View
 
