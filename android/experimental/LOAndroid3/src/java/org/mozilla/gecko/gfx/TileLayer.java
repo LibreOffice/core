@@ -73,7 +73,6 @@ public abstract class TileLayer extends Layer {
      * Invalidates the entire buffer so that it will be uploaded again. Only valid inside a
      * transaction.
      */
-
     public void invalidate() {
         if (!inTransaction())
             throw new RuntimeException("invalidate() is only valid inside a transaction");

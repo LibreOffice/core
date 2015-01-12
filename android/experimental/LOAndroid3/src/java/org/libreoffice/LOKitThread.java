@@ -34,20 +34,19 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             composedTileLayer.addTile(tile);
             mLayerClient.endDrawing(mViewportMetrics);
             if (forceRedraw) {
-                Log.i(LOGTAG, "Redrawing tile " + tileId);
-                mLayerClient.forceRedraw();
+                mLayerClient.forceRender();
             }
         }
     }
 
     private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
-        if (composedTileLayer.isStillValid(tile.id)) {
+        if (composedTileLayer.isStillValid(tile.id) && !tile.markedForRemoval) {
+            Log.i(LOGTAG, "Redrawing tile " + tile.id);
             mLayerClient.beginDrawing();
             mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
             tile.invalidate();
-            Log.i(LOGTAG, "Redrawing tile " + tile.id);
-            mLayerClient.forceRedraw();
             mLayerClient.endDrawing(mViewportMetrics);
+            mLayerClient.forceRender();
         }
     }
 

@@ -397,6 +397,14 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         }
     }
 
+    public void forceRender() {
+        post(new Runnable() {
+            public void run() {
+                mView.requestRender();
+            }
+        });
+    }
+
     /** Implementation of PanZoomTarget */
     public boolean post(Runnable action) {
         return mView.post(action);
