@@ -168,7 +168,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocRank_Avg,        {{ Value, Reference, Value                              }, 0 }},
     { ocRank_Eq,         {{ Value, Reference, Value                              }, 0 }},
     { ocRGP,             {{ Reference, Reference, Value, Value                   }, 0 }},
-    { ocRKP,             {{ Reference, Reference, Value, Value                   }, 0 }},
+    { ocLogest,          {{ Reference, Reference, Value, Value                   }, 0 }},
     { ocRow,             {{ Reference                                            }, 0 }},
     { ocRows,            {{ Reference                                            }, 1 }},
     { ocRSQ,             {{ ForceArray, ForceArray                               }, 0 }},
