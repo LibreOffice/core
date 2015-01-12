@@ -96,7 +96,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mZoomConstraints = new ZoomConstraints(false);
-        mCheckerboardColor = Color.WHITE;
 
         mPanZoomController = PanZoomController.Factory.create(this);
     }
@@ -245,15 +244,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
                 }
             });
         }
-    }
-
-    int getCheckerboardColor() {
-        return mCheckerboardColor;
-    }
-
-    public void setCheckerboardColor(int newColor) {
-        mCheckerboardColor = newColor;
-        mView.requestRender();
     }
 
     public void setZoomConstraints(ZoomConstraints constraints) {

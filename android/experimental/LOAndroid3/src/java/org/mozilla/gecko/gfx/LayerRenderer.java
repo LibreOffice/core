@@ -8,6 +8,7 @@ package org.mozilla.gecko.gfx;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -571,7 +572,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 
             /* Update background color. */
-            mBackgroundColor = mView.getLayerClient().getCheckerboardColor();
+            mBackgroundColor = Color.WHITE;
 
             /* Clear to the page background colour. The bits set here need to
              * match up with those used in gfx/layers/opengl/LayerManagerOGL.cpp.
