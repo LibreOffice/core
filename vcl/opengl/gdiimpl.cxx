@@ -48,7 +48,7 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
 #ifdef DBG_UTIL
-    , mProgramIsSolidLineColor(false)
+    , mProgramIsSolidColor(false)
 #endif
 {
 }
@@ -166,7 +166,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
         mpProgram->Clean();
         mpProgram = NULL;
 #ifdef DBG_UTIL
-        mProgramIsSolidLineColor = false;
+        mProgramIsSolidColor = false;
 #endif
     }
 
@@ -198,7 +198,7 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
         if( rClip.getRegionBand() )
             DrawRegionBand( *rClip.getRegionBand() );
         else
-            DrawPolyPolygon( rClip.GetAsB2DPolyPolygon(), false, true );
+            DrawPolyPolygon( rClip.GetAsB2DPolyPolygon(), true );
     }
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
@@ -361,7 +361,7 @@ bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUS
         mpProgram->Clean();
     mpProgram = mpContext->UseProgram( rVertexShader, rFragmentShader );
 #ifdef DBG_UTIL
-    mProgramIsSolidLineColor = false; // UseSolid() will set to true if needed
+    mProgramIsSolidColor = false; // UseSolid() will set to true if needed
 #endif
     return ( mpProgram != NULL );
 }
@@ -374,8 +374,10 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
         return false;
     mpProgram->SetColor( "color", nColor, nTransparency );
 #ifdef DBG_UTIL
-    mProgramIsSolidLineColor = true;
+    mProgramIsSolidColor = true;
 #endif
+    mProgramSolidColor = nColor;
+    mProgramSolidTransparency = nTransparency / 100.0;
     return true;
 }
 
@@ -387,8 +389,10 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, double fTransparency )
         return false;
     mpProgram->SetColorf( "color", nColor, fTransparency );
 #ifdef DBG_UTIL
-    mProgramIsSolidLineColor = true;
+    mProgramIsSolidColor = true;
 #endif
+    mProgramSolidColor = nColor;
+    mProgramSolidTransparency = fTransparency;
     return true;
 }
 
@@ -640,18 +644,22 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
         // may be a problem, if that is a real problem, the polygon areas itself needs to be
         // masked out for this or something.
 #ifdef DBG_UTIL
-        assert( mProgramIsSolidLineColor );
+        assert( mProgramIsSolidColor );
 #endif
-        UseSolidAA( mnLineColor );
-        for( i = 0; i < nPoints; ++i )
+        SalColor lastSolidColor = mProgramSolidColor;
+        double lastSolidTransparency = mProgramSolidTransparency;
+        if( UseSolidAA( lastSolidColor, lastSolidTransparency ))
         {
-            const Point& rPt1 = rPolygon.GetPoint( i );
-            const Point& rPt2 = rPolygon.GetPoint(( i + 1 ) % nPoints );
-            if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
-                continue; //horizontal/vertical, no need for AA
-            DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+            for( i = 0; i < nPoints; ++i )
+            {
+                const Point& rPt1 = rPolygon.GetPoint( i );
+                const Point& rPt2 = rPolygon.GetPoint(( i + 1 ) % nPoints );
+                if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
+                    continue; //horizontal/vertical, no need for AA
+                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+            }
+            UseSolid( lastSolidColor, lastSolidTransparency );
         }
-        UseSolid( mnLineColor );
     }
 }
 
@@ -695,11 +703,11 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     else
     {
         const ::basegfx::B2DPolyPolygon aPolyPolygon( aPolygon );
-        DrawPolyPolygon( aPolyPolygon, false );
+        DrawPolyPolygon( aPolyPolygon );
     }
 }
 
-void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bLine, bool blockAA )
+void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
 {
     ::std::vector< GLfloat > aVertices;
     GLfloat nWidth = GetWidth();
@@ -730,23 +738,26 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
         // may be a problem, if that is a real problem, the polygon areas itself needs to be
         // masked out for this or something.
 #ifdef DBG_UTIL
-        assert( mProgramIsSolidLineColor );
+        assert( mProgramIsSolidColor );
 #endif
-        bool bUseLineColor = bLine || mnLineColor != SALCOLOR_NONE;
-        UseSolidAA( bUseLineColor ? mnLineColor : mnFillColor );
-        for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
+        SalColor lastSolidColor = mProgramSolidColor;
+        double lastSolidTransparency = mProgramSolidTransparency;
+        if( UseSolidAA( lastSolidColor, lastSolidTransparency ))
         {
-            const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
-            for( sal_uInt32 j = 0; j < rPolygon.count(); j++ )
+            for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
             {
-                const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
-                const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 ) % rPolygon.count()) );
-                if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
-                    continue; //horizontal/vertical, no need for AA
-                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+                const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
+                for( sal_uInt32 j = 0; j < rPolygon.count(); j++ )
+                {
+                    const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
+                    const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 ) % rPolygon.count()) );
+                    if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
+                        continue; //horizontal/vertical, no need for AA
+                    DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+                }
             }
+            UseSolid( lastSolidColor, lastSolidTransparency );
         }
-        UseSolid( bLine ? mnLineColor : mnFillColor );
     }
 
     CHECK_GL_ERROR();
@@ -1134,7 +1145,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rP
         for( sal_uInt32 i = 0; i < rPolyPolygon.count(); i++ )
         {
             const ::basegfx::B2DPolyPolygon aOnePoly( rPolyPolygon.getB2DPolygon( i ) );
-            DrawPolyPolygon( aOnePoly, false );
+            DrawPolyPolygon( aOnePoly );
         }
     }
 
@@ -1217,7 +1228,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         for( sal_uInt32 i = 0; i < aAreaPolyPoly.count(); i++ )
         {
             const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( i ) );
-            DrawPolyPolygon( aOnePoly, true );
+            DrawPolyPolygon( aOnePoly );
         }
     }
     PostDraw();
