@@ -472,7 +472,11 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
         glDrawArrays( GL_LINES, 0, 2 );
         return;
     }
+    ImplDrawLineAA( nX1, nY1, nX2, nY2 );
+}
 
+void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge )
+{
     // Draw the line anti-aliased. Based on code with the following notice:
     /* Drawing nearly perfect 2D line segments in OpenGL
      * You can use this code however you want.
@@ -486,39 +490,52 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
     double y1 = nY1;
     double x2 = nX2;
     double y2 = nY2;
-    const int w = 1; // line width
+
+    // A special hack for drawing lines that are in fact AA edges of a shape. Make the line somewhat
+    // wider, but (done further below) draw the entire width as a gradient. This would be wrong for a line
+    // (too wide and seemingly less straight), but it makes the edges look smoother and the width difference
+    // is almost unnoticeable.
+    const double w = edge ? 1.4 : 1.0;
 
     double t;
     double R;
+    double f = w - static_cast<int>(w);
     //determine parameters t,R
-    switch( w )
+    if ( w>=0.0 && w<1.0 )
     {
-        case 0:
-            return;
-        case 1:
-            t=0.05;
-            R=0.768;
-        break;
-        case 2:
-            t=0.38;
-            R=1.08;
-        break;
-        case 3:
-            t=0.96;
-            R=1.08;
-            break;
-        case 4:
-            t=1.44;
-            R=1.08;
-            break;
-        case 5:
-            t=1.9;
-            R=1.08;
-            break;
-        default:
-            t=2.5+(w-6)*0.50;
-            R=1.08;
-            break;
+        t=0.05;
+        R=0.48+0.32*f;
+    }
+    else if ( w>=1.0 && w<2.0 )
+    {
+        t=0.05+f*0.33;
+        R=0.768+0.312*f;
+    }
+    else if ( w>=2.0 && w<3.0 )
+    {
+        t=0.38+f*0.58;
+        R=1.08;
+    }
+    else if ( w>=3.0 && w<4.0 )
+    {
+        t=0.96+f*0.48;
+        R=1.08;
+    }
+    else if ( w>=4.0 && w<5.0 )
+    {
+        t=1.44+f*0.46;
+        R=1.08;
+    }
+    else if ( w>=5.0 && w<6.0 )
+    {
+        t=1.9+f*0.6;
+        R=1.08;
+    }
+    else if ( w>=6.0 )
+    {
+        double ff=w-6.0;
+        t=2.5+ff*0.50;
+        R=1.08;
     }
 
     //determine angle of the line to horizontal
@@ -526,7 +543,7 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
     double Rx=0,Ry=0; //fading edge of a line
     double dx=x2-x1;
     double dy=y2-y1;
-    if ( w < 3)
+    if ( w < 3 )
     {   //approximate to make things even faster
         double m=dy/dx;
         //and calculate tx,ty,Rx,Ry
@@ -568,6 +585,13 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
         Rx=R*dx; Ry=R*dy;
     }
 
+    if( edge )
+    {   // See above.
+        Rx += tx;
+        Ry += ty;
+        tx = ty = 0;
+    }
+
     GLfloat vertices[]=
     {
 #define convertX( x ) GLfloat( (2 * (x)) / GetWidth()  - 1.0f)
@@ -604,6 +628,14 @@ void OpenGLSalGraphicsImpl::DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPt
         DrawLineAA( pPtAry[ i ].mnX, pPtAry[ i ].mnY, pPtAry[ i + 1 ].mnX, pPtAry[ i + 1 ].mnY );
     if( bClose )
         DrawLineAA( pPtAry[ nPoints - 1 ].mnX, pPtAry[ nPoints - 1 ].mnY, pPtAry[ 0 ].mnX, pPtAry[ 0 ].mnY );
+}
+
+void OpenGLSalGraphicsImpl::DrawEdgeAA( double nX1, double nY1, double nX2, double nY2 )
+{
+    assert( mrParent.getAntiAliasB2DDraw());
+    if( nX1 == nX2 || nY1 == nY2 )
+        return; //horizontal/vertical, no need for AA
+    ImplDrawLineAA( nX1, nY1, nX2, nY2, true );
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -654,9 +686,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
             {
                 const Point& rPt1 = rPolygon.GetPoint( i );
                 const Point& rPt2 = rPolygon.GetPoint(( i + 1 ) % nPoints );
-                if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
-                    continue; //horizontal/vertical, no need for AA
-                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+                DrawEdgeAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
             }
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
@@ -751,9 +781,7 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
                 {
                     const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
                     const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 ) % rPolygon.count()) );
-                    if( rPt1.getX() == rPt2.getX() || rPt1.getY() == rPt2.getY())
-                        continue; //horizontal/vertical, no need for AA
-                    DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+                    DrawEdgeAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
                 }
             }
             UseSolid( lastSolidColor, lastSolidTransparency );
