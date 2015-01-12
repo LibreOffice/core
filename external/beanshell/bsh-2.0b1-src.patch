@@ -1,16 +1,16 @@
 --- misc/BeanShell/build.xml	Fri Dec 19 17:14:27 2003
 +++ misc/build/BeanShell/build.xml	Fri Mar 28 15:55:04 2008
-@@ -17,7 +17,7 @@
- 		up the build dir!  It has to be done manually the first time (or put
- 		in the jar file). There must be a way to fix this...
+@@ -10,7 +10,7 @@
+ 		- Why can't I nest filesets?  This seems like it would be so easy and
+ 		useful...
  -->
 -<project name="beanshell" default="compile" basedir=".">
 +<project name="beanshell" default="jarall" basedir=".">
  
  <!-- Project Configuration -->
  
-@@ -71,6 +71,9 @@
- 		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
+@@ -65,6 +65,9 @@
+ 	<property name="exclude-engine" value="bsh/engine/**"/>
  	-->
  
 +	<property name="exclude-bsf" 
@@ -19,32 +19,19 @@
  	<!-- Uncomment to build without the ASM class generator code.
  	<property name="exclude-classgen" 
  		value="bsh/org/objectweb/asm/**,bsh/ClassGeneratorImpl.java,bsh/ClassGeneratorUtil.java,bsh/DelayedEvalBshMethod.java"/>
-@@ -80,6 +83,9 @@
- 	<property name="exclude-servlet" 
+@@ -75,6 +78,9 @@
  		value="bsh/servlet/*"/>
  	-->
-+
+ 
 +	<property name="exclude-servlet" 
 +		value="bsh/servlet/*"/>
- 
++
  	<!-- Legacy excludes.  Comment this *out* to build these legacy items -->
- 	<property name="legacy-excludes" 
---- misc/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Dec 19 17:14:28 2003
-+++ misc/build/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Mar 28 15:55:05 2008
-@@ -34,7 +34,9 @@
- package bsh;
- 
- import bsh.org.objectweb.asm.*;
--import java.lang.reflect.*;
-+import java.lang.reflect.Constructor;
-+import java.lang.reflect.InvocationTargetException;
-+import java.lang.reflect.Method;
- import java.util.ArrayList;
- import java.util.List;
- 
+ 	<property name="excludes-legacy" 
+ 		value="bsh/JThis.java"/>
 --- misc/BeanShell/src/bsh/classpath/BshClassPath.java	2003-12-19 17:14:28.000000000 +0100
 +++ misc/build/BeanShell/src/bsh/classpath/BshClassPath.java	2014-07-22 21:02:52.000000000 +0200
-@@ -42,6 +42,7 @@
+@@ -36,6 +36,7 @@
  import bsh.StringUtil;
  import bsh.ClassPathException;
  import java.lang.ref.WeakReference;
@@ -52,95 +39,12 @@
  import bsh.NameSource;
  
  /**
-@@ -569,7 +570,7 @@
- 				// Java deals with relative paths for it's bootstrap loader
- 				// but JARClassLoader doesn't.
- 				urls[i] = new File( 
--					new File(paths[i]).getCanonicalPath() ).toURL();
-+					new File(paths[i]).getCanonicalPath() ).toURI().toURL();
- 		} catch ( IOException e ) {
- 			throw new ClassPathException("can't parse class path: "+e);
- 		}
-@@ -641,9 +642,11 @@
- 			{
- 				//String rtjar = System.getProperty("java.home")+"/lib/rt.jar";
- 				String rtjar = getRTJarPath();
--				URL url = new File( rtjar ).toURL();
-+				URL url = new File( rtjar ).toURI().toURL();
+@@ -659,6 +660,8 @@
+ 				URL url = new File( rtjar ).toURI().toURL();
  				bootClassPath = new BshClassPath( 
  					"Boot Class Path", new URL[] { url } );
-+			} catch ( SecurityException e ) {
-+				throw new ClassPathException(" can't access to boot jar: "+e);
++                        } catch ( SecurityException e ) {
++                               throw new ClassPathException(" can't access to boot jar: "+e);
  			} catch ( MalformedURLException e ) {
  				throw new ClassPathException(" can't find boot jar: "+e);
  			}
-@@ -686,7 +689,7 @@
- 	public static void main( String [] args ) throws Exception {
- 		URL [] urls = new URL [ args.length ];
- 		for(int i=0; i< args.length; i++)
--			urls[i] =  new File(args[i]).toURL();
-+			urls[i] =  new File(args[i]).toURI().toURL();
- 		BshClassPath bcp = new BshClassPath( "Test", urls );
- 	}
- 
---- misc/BeanShell/src/bsh/util/AWTConsole.java	2003-12-19 17:14:29.000000000 +0100
-+++ misc/build/BeanShell/src/bsh/util/AWTConsole.java	2014-07-23 07:32:12.000000000 +0200
-@@ -325,7 +325,7 @@
- 		final Frame f = new Frame("Bsh Console");
- 		f.add(console, "Center");
- 		f.pack();
--		f.show();
-+		f.setVisible(true);
- 		f.addWindowListener( new WindowAdapter() {
- 			public void windowClosing( WindowEvent e ) {
- 				f.dispose();
---- misc/BeanShell/src/bsh/util/ClassBrowser.java	2003-12-19 17:14:29.000000000 +0100
-+++ misc/build/BeanShell/src/bsh/util/ClassBrowser.java	2014-07-23 07:32:52.000000000 +0200
-@@ -409,7 +409,7 @@
- 		f.getContentPane().add( "Center", cb );
- 		cb.setFrame( f );
- 		f.pack();
--		f.show();
-+		f.setVisible(true);
- 	}
- 
- 	public void setFrame( JFrame frame ) {
---- misc/BeanShell/src/bsh/util/Util.java	2003-12-19 17:14:29.000000000 +0100
-+++ misc/build/BeanShell/src/bsh/util/Util.java	2014-07-23 07:33:29.000000000 +0200
-@@ -80,7 +80,7 @@
-         try { mt.waitForAll(); } catch ( Exception e ) { }
-         Graphics gr=can.getBufferedGraphics();
-         gr.drawImage(img, 0, 0, can);
--        win.show();
-+        win.setVisible(true);
-         win.toFront();
- 		splashScreen = win;
- 	}
---- misc/BeanShell/src/bsh/Remote.java	2003-12-19 17:14:29.000000000 +0100
-+++ misc/build/BeanShell/src/bsh/Remote.java	2014-07-23 08:52:39.000000000 +0200
-@@ -137,13 +137,14 @@
- 	static String doHttp( String postURL, String text ) 
- 	{
- 		String returnValue = null;
-+
-+		try {
- 		StringBuffer sb = new StringBuffer();
- 		sb.append( "bsh.client=Remote" );
- 		sb.append( "&bsh.script=" );
--		sb.append( URLEncoder.encode( text ) );
-+		  sb.append( URLEncoder.encode(text,"UTF-8") );
- 		String formData = sb.toString(  );
- 
--		try {
- 		  URL url = new URL( postURL );
- 		  HttpURLConnection urlcon =
- 			  (HttpURLConnection) url.openConnection(  );
-@@ -172,6 +173,8 @@
- 
- 		  System.out.println( "Return Value: "+returnValue );
- 
-+		} catch (UnsupportedEncodingException e) {
-+		  System.out.println(e);     // bad character encoding
- 		} catch (MalformedURLException e) {
- 		  System.out.println(e);     // bad postURL
- 		} catch (IOException e2) {
