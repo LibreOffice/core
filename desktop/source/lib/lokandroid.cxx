@@ -51,14 +51,16 @@ const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
 
 } // anonymous namespace
 
-extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getError(JNIEnv* pEnv, jobject aObject)
+extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getError
+    (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
     char* pError = pLibreOfficeKit->pClass->getError(pLibreOfficeKit);
     return pEnv->NewStringUTF(pError);
 }
 
-extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy(JNIEnv* pEnv, jobject aObject)
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy
+    (JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
     pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
@@ -71,6 +73,13 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAn
     // Stopgap fix: _exit() to force the OS to restart the LO activity.
     // Better than to hang.
     _exit(0);
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_postKeyEvent
+    (JNIEnv* pEnv, jobject aObject, jint nType, jint nCode)
+{
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    pLibreOfficeKit->pClass->postKeyEvent(pLibreOfficeKit, nType, nCode);
 }
 
 namespace
@@ -122,7 +131,8 @@ void messageCallback(int nType, const char* pPayload, void* pData)
 
 } // anonymous namespace
 
-extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_documentLoadNative(JNIEnv* pEnv, jobject aObject, jstring documentPath)
+extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_documentLoadNative
+    (JNIEnv* pEnv, jobject aObject, jstring documentPath)
 {
     const char* aCloneDocumentPath = copyJavaString(pEnv, documentPath);
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);

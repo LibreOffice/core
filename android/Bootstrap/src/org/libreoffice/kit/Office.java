@@ -32,6 +32,8 @@ public class Office {
         return document;
     }
 
+    public native void postKeyEvent(int type, int code);
+
     public native void destroy();
     public native void destroyAndExit();
 }
