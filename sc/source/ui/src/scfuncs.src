@@ -78,7 +78,7 @@
 
 Resource RID_SC_FUNCTION_DESCRIPTIONS1
 {
-     // -=*# Resource for function DBANZAHL #*=-
+     // -=*# Resource for function DCOUNT #*=-
     Resource SC_OPCODE_DB_COUNT
     {
         String 1 // Description
@@ -118,7 +118,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBANZAHL2 #*=-
+     // -=*# Resource for function DCOUNTA #*=-
     Resource SC_OPCODE_DB_COUNT_2
     {
         String 1 // Description
@@ -158,7 +158,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBMITTELWERT #*=-
+     // -=*# Resource for function DAVERAGE #*=-
     Resource SC_OPCODE_DB_AVERAGE
     {
         String 1 // Description
@@ -198,7 +198,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBAUSZUG #*=-
+     // -=*# Resource for function DGET #*=-
     Resource SC_OPCODE_DB_GET
     {
         String 1 // Description
@@ -238,7 +238,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBMAX #*=-
+     // -=*# Resource for function DMAX #*=-
     Resource SC_OPCODE_DB_MAX
     {
         String 1 // Description
@@ -278,7 +278,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBMIN #*=-
+     // -=*# Resource for function DMIN #*=-
     Resource SC_OPCODE_DB_MIN
     {
         String 1 // Description
@@ -318,7 +318,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBPRODUKT #*=-
+     // -=*# Resource for function DPRODUCT #*=-
     Resource SC_OPCODE_DB_PRODUCT
     {
         String 1 // Description
@@ -358,7 +358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBSTDABW #*=-
+     // -=*# Resource for function DSTDEV #*=-
     Resource SC_OPCODE_DB_STD_DEV
     {
         String 1 // Description
@@ -398,7 +398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBSTDABWN #*=-
+     // -=*# Resource for function DSTDEVP #*=-
     Resource SC_OPCODE_DB_STD_DEV_P
     {
         String 1 // Description
@@ -438,7 +438,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBSUMME #*=-
+     // -=*# Resource for function DSUM #*=-
     Resource SC_OPCODE_DB_SUM
     {
         String 1 // Description
@@ -478,7 +478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBVARIANZ #*=-
+     // -=*# Resource for function DVAR #*=-
     Resource SC_OPCODE_DB_VAR
     {
         String 1 // Description
@@ -518,7 +518,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DBVARIANZEN #*=-
+     // -=*# Resource for function DVARP #*=-
     Resource SC_OPCODE_DB_VAR_P
     {
         String 1 // Description
@@ -558,7 +558,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
-     // -=*# Resource for function DATUM #*=-
+     // -=*# Resource for function DATE #*=-
     Resource SC_OPCODE_GET_DATE
     {
         String 1 // Description
@@ -598,7 +598,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "An integer between 1 and 31 representing the day of the month." ;
         };
     };
-     // -=*# Resource for function DATWERT #*=-
+     // -=*# Resource for function DATE_VALUE #*=-
     Resource SC_OPCODE_GET_DATE_VALUE
     {
         String 1 // Description
@@ -622,7 +622,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "A text enclosed in quotation marks which returns a date in a %PRODUCTNAME date format." ;
         };
     };
-     // -=*# Resource for function TAG #*=-
+     // -=*# Resource for function DAY #*=-
     Resource SC_OPCODE_GET_DAY
     {
         String 1 // Description
@@ -646,7 +646,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The internal number for the date." ;
         };
     };
-     // -=*# Resource for function TAGE360 #*=-
+     // -=*# Resource for function DAYS360 #*=-
     Resource SC_OPCODE_GET_DIFF_DATE_360
     {
         String 1 // Description
@@ -782,7 +782,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Optional set of one or more dates to be considered as holiday." ;
         };
     };
-     // -=*# Resource for function STUNDE #*=-
+     // -=*# Resource for function HOUR #*=-
     Resource SC_OPCODE_GET_HOUR
     {
         String 1 // Description
@@ -830,7 +830,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Internal time value." ;
         };
     };
-     // -=*# Resource for function MONAT #*=-
+     // -=*# Resource for function MONTH #*=-
     Resource SC_OPCODE_GET_MONTH
     {
         String 1 // Description
@@ -854,7 +854,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The internal number of the date." ;
         };
     };
-     // -=*# Resource for function JETZT #*=-
+     // -=*# Resource for function NOW #*=-
     Resource SC_OPCODE_GET_ACT_TIME
     {
         String 1 // Description
@@ -870,7 +870,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function SEKUNDE #*=-
+     // -=*# Resource for function SECOND #*=-
     Resource SC_OPCODE_GET_SEC
     {
         String 1 // Description
@@ -894,7 +894,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The internal time value." ;
         };
     };
-     // -=*# Resource for function ZEIT #*=-
+     // -=*# Resource for function TIME #*=-
     Resource SC_OPCODE_GET_TIME
     {
         String 1 // Description
@@ -934,7 +934,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The integer for the second." ;
         };
     };
-     // -=*# Resource for function ZEITWERT #*=-
+     // -=*# Resource for function TIMEVALUE #*=-
     Resource SC_OPCODE_GET_TIME_VALUE
     {
         String 1 // Description
@@ -958,7 +958,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "A text enclosed in quotation marks which returns a time in a %PRODUCTNAME time format." ;
         };
     };
-     // -=*# Resource for function HEUTE #*=-
+     // -=*# Resource for function TODAY #*=-
     Resource SC_OPCODE_GET_ACT_DATE
     {
         String 1 // Description
@@ -974,7 +974,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function WOCHENTAG #*=-
+     // -=*# Resource for function WEEKDAY #*=-
     Resource SC_OPCODE_GET_DAY_OF_WEEK
     {
         String 1 // Description
@@ -1006,7 +1006,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Fixes the beginning of the week and the type of calculation to be used." ;
         };
     };
-     // -=*# Resource for function JAHR #*=-
+     // -=*# Resource for function YEAR #*=-
     Resource SC_OPCODE_GET_YEAR
     {
         String 1 // Description
@@ -1030,7 +1030,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Internal number of the date." ;
         };
     };
-     // -=*# Resource for function TAGE #*=-
+     // -=*# Resource for function DAYS #*=-
     Resource SC_OPCODE_GET_DIFF_DATE
     {
         String 1 // Description
@@ -1108,7 +1108,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Interval to be calculated. Can be \"d\", \"m\", \"y\", \"ym\", \"md\" or \"yd\".";
         };
     };
-     // -=*# Resource for function KALENDERWOCHE #*=-
+     // -=*# Resource for function WEEKNUM #*=-
     Resource SC_OPCODE_WEEK
     {
         String 1 // Description
@@ -1140,7 +1140,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)." ;
         };
     };
-     // -=*# Resource for function OSTERSONNTAG #*=-
+     // -=*# Resource for function EASTERSUNDAY #*=-
     Resource SC_OPCODE_EASTERSUNDAY
     {
         String 1 // Description
@@ -1388,7 +1388,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
-     // -=*# Resource for function ZINS #*=-
+     // -=*# Resource for function RATE #*=-
     Resource SC_OPCODE_RATE
     {
         String 1 // Description
@@ -1452,7 +1452,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Guess. The estimate of the interest rate for the iterative calculating method." ;
         };
     };
-     // -=*# Resource for function ZINSZ #*=-
+     // -=*# Resource for function IPMT #*=-
     Resource SC_OPCODE_IPMT
     {
         String 1 // Description
@@ -1516,7 +1516,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
-     // -=*# Resource for function KAPZ #*=-
+     // -=*# Resource for function PPMT #*=-
     Resource SC_OPCODE_PPMT
     {
         String 1 // Description
@@ -1644,7 +1644,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
-     // -=*# Resource for function KUMZINSZ #*=-
+     // -=*# Resource for function CUMIPMT #*=-
     Resource SC_OPCODE_CUM_IPMT
     {
         String 1 // Description
@@ -2044,7 +2044,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Periods. The number of interest payment per year." ;
         };
     };
-     // -=*# Resource for function NBW #*=-
+     // -=*# Resource for function NPV #*=-
     Resource SC_OPCODE_NBW
     {
         String 1 // Description
@@ -2076,7 +2076,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Value 1, value 2,... are 1 to 30 arguments representing payments and income." ;
         };
     };
-     // -=*# Resource for function IKV #*=-
+     // -=*# Resource for function IRR #*=-
     Resource SC_OPCODE_IKV
     {
         String 1 // Description
@@ -2108,7 +2108,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Guess. An estimated value of the rate of return to be used for the iteration calculation." ;
         };
     };
-     // -=*# Resource for function QIKV/MIRR #*=-
+     // -=*# Resource for function MIRR #*=-
     Resource SC_OPCODE_MIRR
     {
         String 1 // Description
@@ -2276,7 +2276,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The future value of the investment." ;
         };
     };
-     // -=*# Resource for function ISTBEZUG #*=-
+     // -=*# Resource for function ISREF #*=-
     Resource SC_OPCODE_IS_REF
     {
         String 1 // Description
@@ -2300,7 +2300,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTFEHL #*=-
+     // -=*# Resource for function ISERR #*=-
     Resource SC_OPCODE_IS_ERR
     {
         String 1 // Description
@@ -2324,7 +2324,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTFEHLER #*=-
+     // -=*# Resource for function ISERROR #*=-
     Resource SC_OPCODE_IS_ERROR
     {
         String 1 // Description
@@ -2348,7 +2348,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTLEER #*=-
+     // -=*# Resource for function ISBLANK #*=-
     Resource SC_OPCODE_IS_EMPTY
     {
         String 1 // Description
@@ -2372,7 +2372,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTLOG #*=-
+     // -=*# Resource for function ISLOGICAL #*=-
     Resource SC_OPCODE_IS_LOGICAL
     {
         String 1 // Description
@@ -2396,7 +2396,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTNV #*=-
+     // -=*# Resource for function ISNA #*=-
     Resource SC_OPCODE_IS_NV
     {
         String 1 // Description
@@ -2420,7 +2420,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTKTEXT #*=-
+     // -=*# Resource for function ISNONTEXT #*=-
     Resource SC_OPCODE_IS_NON_STRING
     {
         String 1 // Description
@@ -2444,7 +2444,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTTEXT #*=-
+     // -=*# Resource for function ISTEXT #*=-
     Resource SC_OPCODE_IS_STRING
     {
         String 1 // Description
@@ -2468,7 +2468,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTZAHL #*=-
+     // -=*# Resource for function ISNUMBER #*=-
     Resource SC_OPCODE_IS_VALUE
     {
         String 1 // Description
@@ -2492,7 +2492,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTFORMEL #*=-
+     // -=*# Resource for function ISFORMULA #*=-
     Resource SC_OPCODE_IS_FORMULA
     {
         String 1 // Description
@@ -2516,7 +2516,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The cell to be checked." ;
         };
     };
-     // -=*# Resource for function FORMEL #*=-
+     // -=*# Resource for function FORMULA #*=-
     Resource SC_OPCODE_FORMULA
     {
         String 1 // Description
@@ -2564,7 +2564,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be interpreted as a number." ;
         };
     };
-     // -=*# Resource for function NV #*=-
+     // -=*# Resource for function NA #*=-
     Resource SC_OPCODE_NO_VALUE
     {
         String 1 // Description
@@ -2580,7 +2580,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function TYP #*=-
+     // -=*# Resource for function TYPE #*=-
     Resource SC_OPCODE_TYPE
     {
         String 1 // Description
@@ -2604,7 +2604,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value for which the data type is to be determined." ;
         };
     };
-     // -=*# Resource for function CELL/ZELLE #*=-
+     // -=*# Resource for function CELL #*=-
     Resource SC_OPCODE_CELL
     {
         String 1 // Description
@@ -2636,7 +2636,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The position of the cell you want to examine.";
         };
     };
-     // -=*# Resource for function AKTUELL #*=-
+     // -=*# Resource for function CURRENT #*=-
     Resource SC_OPCODE_CURRENT
     {
         String 1 // Description
@@ -2652,7 +2652,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function FALSCH #*=-
+     // -=*# Resource for function FALSE #*=-
     Resource SC_OPCODE_FALSE
     {
         String 1 // Description
@@ -2668,7 +2668,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function NICHT #*=-
+     // -=*# Resource for function NOT #*=-
     Resource SC_OPCODE_NOT
     {
         String 1 // Description
@@ -2692,7 +2692,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "An expression that can be either TRUE or FALSE." ;
         };
     };
-     // -=*# Resource for function WAHR #*=-
+     // -=*# Resource for function TRUE #*=-
     Resource SC_OPCODE_TRUE
     {
         String 1 // Description
@@ -2708,7 +2708,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function WENN #*=-
+     // -=*# Resource for function IF #*=-
     Resource SC_OPCODE_IF
     {
         String 1 // Description
@@ -2812,7 +2812,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The alternative to be returned, should value be a #N/A error." ;
       };
     };
-     // -=*# Resource for function ODER #*=-
+     // -=*# Resource for function OR #*=-
     Resource SC_OPCODE_OR
     {
         String 1 // Description
@@ -2836,7 +2836,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Logical value 1, logical value 2,... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ;
         };
     };
-     // -=*# Resource for function XOR (EXKLUSIV ODER) #*=-
+     // -=*# Resource for function XOR #*=-
     Resource SC_OPCODE_XOR
     {
         String 1 // Description
@@ -2860,7 +2860,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Logical value 1, logical value 2, ... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ;
         };
     };
-     // -=*# Resource for function UND #*=-
+     // -=*# Resource for function AND #*=-
     Resource SC_OPCODE_AND
     {
         String 1 // Description
@@ -2908,7 +2908,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number whose absolute value is to be returned." ;
         };
     };
-     // -=*# Resource for function POTENZ #*=-
+     // -=*# Resource for function POWER #*=-
     Resource SC_OPCODE_POWER
     {
         String 1 // Description
@@ -2940,7 +2940,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The exponent b of the power a^b." ;
         };
     };
-     // -=*# Resource for function ANZAHLLEEREZELLEN #*=-
+     // -=*# Resource for function COUNTBLANK #*=-
     Resource SC_OPCODE_COUNT_EMPTY_CELLS
     {
         String 1 // Description
@@ -2980,7 +2980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function SUMME #*=-
+     // -=*# Resource for function SUM #*=-
     Resource SC_OPCODE_SUM
     {
         String 1 // Description
@@ -3004,7 +3004,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 arguments whose total is to be calculated." ;
         };
     };
-     // -=*# Resource for function QUADRATESUMME #*=-
+     // -=*# Resource for function SUMSQ #*=-
     Resource SC_OPCODE_SUM_SQ
     {
         String 1 // Description
@@ -3028,7 +3028,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Number 1, number 2,... are 1 to 30 arguments for which the sum of the squares is to be calculated." ;
         };
     };
-     // -=*# Resource for function PRODUKT #*=-
+     // -=*# Resource for function PRODUCT #*=-
     Resource SC_OPCODE_PRODUCT
     {
         String 1 // Description
@@ -3052,7 +3052,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 arguments to be multiplied and a result returned." ;
         };
     };
-     // -=*# Resource for function SUMMEWENN #*=-
+     // -=*# Resource for function SUMIF #*=-
     Resource SC_OPCODE_SUM_IF
     {
         String 1 // Description
@@ -3248,7 +3248,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
 
-     // -=*# Resource for function ZÄHLENWENN #*=-
+     // -=*# Resource for function COUNTIF #*=-
     Resource SC_OPCODE_COUNT_IF
     {
         String 1 // Description
@@ -3280,7 +3280,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The criteria to be applied to the range." ;
         };
     };
-     // -=*# Resource for function WURZEL #*=-
+     // -=*# Resource for function SQRT #*=-
     Resource SC_OPCODE_SQRT
     {
         String 1 // Description
@@ -3304,7 +3304,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "A positive value for which the square root is to be calculated." ;
         };
     };
-     // -=*# Resource for function ZUFALLSZAHL #*=-
+     // -=*# Resource for function RAND #*=-
     Resource SC_OPCODE_RANDOM
     {
         String 1 // Description
@@ -3320,7 +3320,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             0;
         };
     };
-     // -=*# Resource for function ISTGERADE #*=-
+     // -=*# Resource for function ISEVEN #*=-
     Resource SC_OPCODE_IS_EVEN
     {
         String 1 // Description
@@ -3344,7 +3344,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function ISTUNGERADE #*=-
+     // -=*# Resource for function ISODD #*=-
     Resource SC_OPCODE_IS_ODD
     {
         String 1 // Description
@@ -3368,7 +3368,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The value to be tested." ;
         };
     };
-     // -=*# Resource for function KOMBINATIONEN #*=-
+     // -=*# Resource for function COMBIN #*=-
     Resource SC_OPCODE_COMBIN
     {
         String 1 // Description
@@ -3400,7 +3400,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number of elements selected." ;
         };
     };
-     // -=*# Resource for function KOMBINATIONEN2 #*=-
+     // -=*# Resource for function COMBINA #*=-
     Resource SC_OPCODE_COMBIN_A
     {
         String 1 // Description
@@ -4099,7 +4099,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "A value greater than 0 for which the logarithm is to be calculated." ;
         };
     };
-     // -=*# Resource for function FAKULTÄT #*=-
+     // -=*# Resource for function FACT #*=-
     Resource SC_OPCODE_FACT
     {
         String 1 // Description
@@ -4123,7 +4123,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number for which the factorial is to be calculated." ;
         };
     };
-     // -=*# Resource for function REST #*=-
+     // -=*# Resource for function MOD #*=-
     Resource SC_OPCODE_MOD
     {
         String 1 // Description
@@ -4155,7 +4155,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number by which the dividend is divided." ;
         };
     };
-     // -=*# Resource for function VORZEICHEN #*=-
+     // -=*# Resource for function SIGN #*=-
     Resource SC_OPCODE_PLUS_MINUS
     {
         String 1 // Description
@@ -4179,7 +4179,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number for which the algebraic sign is to be determined." ;
         };
     };
-     // -=*# Resource for function TEILERGEBNIS #*=-
+     // -=*# Resource for function SUBTOTAL #*=-
     Resource SC_OPCODE_SUB_TOTAL
     {
         String 1 // Description
@@ -4259,7 +4259,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The cells of the range which are to be taken into account or mandatory 2nd argument for certain functions." ;
         };
     };
-     // -=*# Resource for function GANZZAHL #*=-
+     // -=*# Resource for function INT #*=-
     Resource SC_OPCODE_INT
     {
         String 1 // Description
@@ -4283,7 +4283,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number to be rounded down." ;
         };
     };
-     // -=*# Resource for function KÜRZEN #*=-
+     // -=*# Resource for function TRUNC #*=-
     Resource SC_OPCODE_TRUNC
     {
         String 1 // Description
@@ -4315,7 +4315,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number of places after the decimal point that are not to be truncated." ;
         };
     };
-     // -=*# Resource for function RUNDEN #*=-
+     // -=*# Resource for function ROUND #*=-
     Resource SC_OPCODE_ROUND
     {
         String 1 // Description
@@ -4347,7 +4347,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number of places to which a number is to be rounded." ;
         };
     };
-     // -=*# Resource for function AUFRUNDEN #*=-
+     // -=*# Resource for function ROUNDUP #*=-
     Resource SC_OPCODE_ROUND_UP
     {
         String 1 // Description
@@ -4379,7 +4379,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number of places to which a number is to be rounded." ;
         };
     };
-     // -=*# Resource for function ABRUNDEN #*=-
+     // -=*# Resource for function ROUNDDOWN #*=-
     Resource SC_OPCODE_ROUND_DOWN
     {
         String 1 // Description
@@ -4411,7 +4411,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number of places down to which a number is to be rounded." ;
         };
     };
-     // -=*# Resource for function GERADE #*=-
+     // -=*# Resource for function EVEN #*=-
     Resource SC_OPCODE_EVEN
     {
         String 1 // Description
@@ -4435,7 +4435,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number to be rounded up." ;
         };
     };
-     // -=*# Resource for function UNGERADE #*=-
+     // -=*# Resource for function ODD #*=-
     Resource SC_OPCODE_ODD
     {
         String 1 // Description
@@ -4459,7 +4459,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number to be rounded up." ;
         };
     };
-     // -=*# Resource for function OBERGRENZE #*=-
+     // -=*# Resource for function CEILING #*=-
     Resource SC_OPCODE_CEIL
     {
         String 1 // Description
@@ -4563,7 +4563,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number to whose multiple the value is rounded." ;
         };
     };
-     // -=*# Resource for function UNTERGRENZE #*=-
+     // -=*# Resource for function FLOOR #*=-
     Resource SC_OPCODE_FLOOR
     {
         String 1 // Description
@@ -4635,7 +4635,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number to whose multiple the value is to be rounded down." ;
         };
     };
-     // -=*# Resource for function GGT #*=-
+     // -=*# Resource for function GCD #*=-
     Resource SC_OPCODE_GGT
     {
         String 1 // Description
@@ -4659,7 +4659,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Integer 1; integer 2,... are integers for which the greatest common divisor is to be calculated." ;
         };
     };
-     // -=*# Resource for function KGV #*=-
+     // -=*# Resource for function LCM #*=-
     Resource SC_OPCODE_KGV
     {
         String 1 // Description
@@ -4683,7 +4683,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Integer 1; integer 2,... are integers whose smallest common multiple is to be calculated." ;
         };
     };
-     // -=*# Resource for function MTRANS #*=-
+     // -=*# Resource for function TRANSPOSE #*=-
     Resource SC_OPCODE_MAT_TRANS
     {
         String 1 // Description
@@ -4739,7 +4739,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The second array having the same number of rows as the first array has columns." ;
         };
     };
-     // -=*# Resource for function MDET #*=-
+     // -=*# Resource for function MDETERM #*=-
     Resource SC_OPCODE_MAT_DET
     {
         String 1 // Description
@@ -4763,7 +4763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The array for which the determinant is to be determined." ;
         };
     };
-     // -=*# Resource for function MINV #*=-
+     // -=*# Resource for function MINVERSE #*=-
     Resource SC_OPCODE_MAT_INV
     {
         String 1 // Description
@@ -4787,7 +4787,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The array to be inverted." ;
         };
     };
-     // -=*# Resource for function EINHEITSMATRIX #*=-
+     // -=*# Resource for function MUNIT #*=-
     Resource SC_OPCODE_MATRIX_UNIT
     {
         String 1 // Description
@@ -4811,7 +4811,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The size of the unitary array." ;
         };
     };
-     // -=*# Resource for function SUMMENPRODUKT #*=-
+     // -=*# Resource for function SUMPRODUCT #*=-
     Resource SC_OPCODE_SUM_PRODUCT
     {
         String 1 // Description
@@ -4835,7 +4835,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Array 1, array 2, ... are up to 30 arrays whose arguments are to be multiplied." ;
         };
     };
-     // -=*# Resource for function SUMMEX2MY2 #*=-
+     // -=*# Resource for function SUMX2MY2 #*=-
     Resource SC_OPCODE_SUM_X2MY2
     {
         String 1 // Description
@@ -4867,7 +4867,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Second array where the square of the arguments is to be subtracted." ;
         };
     };
-     // -=*# Resource for function SUMMEX2PY2 #*=-
+     // -=*# Resource for function SUMX2PY2 #*=-
     Resource SC_OPCODE_SUM_X2DY2
     {
         String 1 // Description
@@ -4899,7 +4899,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Second array where the square of the arguments is to be totalled." ;
         };
     };
-     // -=*# Resource for function SUMMEXMY2 #*=-
+     // -=*# Resource for function SUMXMY2 #*=-
     Resource SC_OPCODE_SUM_XMY2
     {
         String 1 // Description
@@ -4935,7 +4935,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
 
 Resource RID_SC_FUNCTION_DESCRIPTIONS2
 {
-     // -=*# Resource for function HÄUFIGKEIT #*=-
+     // -=*# Resource for function FREQUENCY #*=-
     Resource SC_OPCODE_FREQUENCY
     {
         String 1 // Description
@@ -4967,7 +4967,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The array for forming classes." ;
         };
     };
-     // -=*# Resource for function RGP #*=-
+     // -=*# Resource for function LINEST #*=-
     Resource SC_OPCODE_RGP
     {
         String 1 // Description
@@ -5015,7 +5015,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well." ;
         };
     };
-     // -=*# Resource for function RKP #*=-
+     // -=*# Resource for function LOGEST #*=-
     Resource SC_OPCODE_RKP
     {
         String 1 // Description
@@ -5111,7 +5111,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "If type = 0 the linears will be calculated through the zero point, or else moved linears." ;
         };
     };
-     // -=*# Resource for function VARIATION #*=-
+     // -=*# Resource for function GROWTH #*=-
     Resource SC_OPCODE_GROWTH
     {
         String 1 // Description
@@ -5159,7 +5159,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "If type = 0 then the functions will be calculated in the form of y=m^x, or also functions y=b*m^x." ;
         };
     };
-     // -=*# Resource for function ANZAHL #*=-
+     // -=*# Resource for function COUNT #*=-
     Resource SC_OPCODE_COUNT
     {
         String 1 // Description
@@ -5183,7 +5183,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1, value 2, ... are 1 to 30 arguments containing different data types but where only numbers are counted." ;
         };
     };
-     // -=*# Resource for function ANZAHL2 #*=-
+     // -=*# Resource for function COUNTA #*=-
     Resource SC_OPCODE_COUNT_2
     {
         String 1 // Description
@@ -5303,7 +5303,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1; value 2;... are 1 to 30 arguments whose smallest number is to be determined.";
         };
     };
-     // -=*# Resource for function VARIANZ #*=-
+     // -=*# Resource for function VAR #*=-
     Resource SC_OPCODE_VAR
     {
         String 1 // Description
@@ -5351,7 +5351,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
         };
     };
-     // -=*# Resource for function VARIANZ #*=-
+     // -=*# Resource for function VARA #*=-
     Resource SC_OPCODE_VAR_A
     {
         String 1 // Description
@@ -5375,7 +5375,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
-     // -=*# Resource for function VARIANZEN #*=-
+     // -=*# Resource for function VARP #*=-
     Resource SC_OPCODE_VAR_P
     {
         String 1 // Description
@@ -5423,7 +5423,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which represent a population." ;
         };
     };
-     // -=*# Resource for function VARIANZENA #*=-
+     // -=*# Resource for function VARPA #*=-
     Resource SC_OPCODE_VAR_P_A
     {
         String 1 // Description
@@ -5447,7 +5447,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1; value 2;... are 1 to 30 arguments representing a population.";
         };
     };
-     // -=*# Resource for function STABW #*=-
+     // -=*# Resource for function STDEV #*=-
     Resource SC_OPCODE_ST_DEV
     {
         String 1 // Description
@@ -5495,7 +5495,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
         };
     };
-     // -=*# Resource for function STABWA #*=-
+     // -=*# Resource for function STDEVA #*=-
     Resource SC_OPCODE_ST_DEV_A
     {
         String 1 // Description
@@ -5519,7 +5519,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
-     // -=*# Resource for function STABWN #*=-
+     // -=*# Resource for function STDEVP #*=-
     Resource SC_OPCODE_ST_DEV_P
     {
         String 1 // Description
@@ -5567,7 +5567,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a population." ;
         };
     };
-     // -=*# Resource for function STABWNA #*=-
+     // -=*# Resource for function STDEVPA #*=-
     Resource SC_OPCODE_ST_DEV_P_A
     {
         String 1 // Description
@@ -5591,7 +5591,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1; value 2;... are 1 to 30 arguments corresponding to a population.";
         };
     };
-     // -=*# Resource for function MITTELWERT #*=-
+     // -=*# Resource for function AVERAGE #*=-
     Resource SC_OPCODE_AVERAGE
     {
         String 1 // Description
@@ -5615,7 +5615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2;...are 1 to 30 numeric arguments representing a population sample." ;
         };
     };
-     // -=*# Resource for function MITTELWERTA #*=-
+     // -=*# Resource for function AVERAGEA #*=-
     Resource SC_OPCODE_AVERAGE_A
     {
         String 1 // Description
@@ -5639,7 +5639,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
-     // -=*# Resource for function SUMQUADABW #*=-
+     // -=*# Resource for function DEVSQ #*=-
     Resource SC_OPCODE_DEV_SQ
     {
         String 1 // Description
@@ -5663,7 +5663,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
-     // -=*# Resource for function MITTELABW #*=-
+     // -=*# Resource for function AVEDEV #*=-
     Resource SC_OPCODE_AVE_DEV
     {
         String 1 // Description
@@ -5687,7 +5687,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2;...are 1 to 30 numerical arguments representing a sample." ;
         };
     };
-     // -=*# Resource for function SCHIEFE #*=-
+     // -=*# Resource for function SKEW #*=-
     Resource SC_OPCODE_SCHIEFE
     {
         String 1 // Description
@@ -5759,7 +5759,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments, representing a sample of the distribution." ;
         };
     };
-     // -=*# Resource for function GEOMITTEL #*=-
+     // -=*# Resource for function GEOMEAN #*=-
     Resource SC_OPCODE_GEO_MEAN
     {
         String 1 // Description
@@ -5783,7 +5783,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
-     // -=*# Resource for function HARMITTEL #*=-
+     // -=*# Resource for function HARMEAN #*=-
     Resource SC_OPCODE_HAR_MEAN
     {
         String 1 // Description
@@ -5807,7 +5807,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
-     // -=*# Resource for function MODALWERT #*=-
+     // -=*# Resource for function MODE #*=-
     Resource SC_OPCODE_MODAL_VALUE
     {
         String 1 // Description
@@ -5831,7 +5831,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
-     // -=*# Resource for function MOD.SNGL #*=-
+     // -=*# Resource for function MODE.SNGL #*=-
     Resource SC_OPCODE_MODAL_VALUE_MS
     {
         String 1 // Description
@@ -5855,7 +5855,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
-     // -=*# Resource for function MOD.MULTI #*=-
+     // -=*# Resource for function MODE.MULT #*=-
     Resource SC_OPCODE_MODAL_VALUE_MULTI
     {
         String 1 // Description
@@ -5903,7 +5903,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ;
         };
     };
-     // -=*# Resource for function QUANTIL #*=-
+     // -=*# Resource for function PERCENTIL #*=-
     Resource SC_OPCODE_PERCENTILE
     {
         String 1 // Description
@@ -6095,7 +6095,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50%, 3 = 75%, 4 = MAX)." ;
         };
     };
-     // -=*# Resource for function KGRÖSSTE #*=-
+     // -=*# Resource for function LARGE #*=-
     Resource SC_OPCODE_LARGE
     {
         String 1 // Description
@@ -6127,7 +6127,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The ranking of the value." ;
         };
     };
-     // -=*# Resource for function KKLEINSTE #*=-
+     // -=*# Resource for function SMALL #*=-
     Resource SC_OPCODE_SMALL
     {
         String 1 // Description
@@ -6159,7 +6159,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The ranking of the value." ;
         };
     };
-     // -=*# Resource for function QUANTILSRANG #*=-
+     // -=*# Resource for function PERCENTRANK #*=-
     Resource SC_OPCODE_PERCENT_RANK
     {
         String 1 // Description
@@ -6279,7 +6279,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of significant digits for the returned percentage: if omitted, a value of 3 is used." ;
         };
     };
-     // -=*# Resource for function RANG #*=-
+     // -=*# Resource for function RANK #*=-
     Resource SC_OPCODE_RANK
     {
         String 1 // Description
@@ -6399,7 +6399,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Sequence order: 0 or omitted means descending, any other value than 0 means ascending." ;
         };
     };
-     // -=*# Resource for function GESTUTZTMITTEL #*=-
+     // -=*# Resource for function TRIMMEAN #*=-
     Resource SC_OPCODE_TRIM_MEAN
     {
         String 1 // Description
@@ -6431,7 +6431,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The percentage of marginal data that is not to be taken into account." ;
         };
     };
-     // -=*# Resource for function WAHRSCHBEREICH #*=-
+     // -=*# Resource for function PROB #*=-
     Resource SC_OPCODE_PROB
     {
         String 1 // Description
@@ -6623,7 +6623,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The value that is to be transformed back." ;
         };
     };
-     // -=*# Resource for function BINOMVERT #*=-
+     // -=*# Resource for function BINOMDIST #*=-
     Resource SC_OPCODE_BINOM_DIST
     {
         String 1 // Description
@@ -6719,7 +6719,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Cumulated. C=0 calculates the individual probability, C=1 the cumulated probability." ;
         };
     };
-     // -=*# Resource for function NEGBINOMVERT #*=-
+     // -=*# Resource for function NEGBINOMDIST #*=-
     Resource SC_OPCODE_NEG_BINOM_VERT
     {
         String 1 // Description
@@ -6807,7 +6807,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
         };
     };
-     // -=*# Resource for function KRITBINOM #*=-
+     // -=*# Resource for function CRITBINOM #*=-
     Resource SC_OPCODE_KRIT_BINOM
     {
         String 1 // Description
@@ -6967,7 +6967,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
-     // -=*# Resource for function NORMVERT #*=-
+     // -=*# Resource for function NORMDIST #*=-
     Resource SC_OPCODE_NORM_DIST
     {
         String 1 // Description
@@ -7143,7 +7143,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Standard deviation. The standard deviation of the normal distribution." ;
         };
     };
-     // -=*# Resource for function STANDNORMVERT #*=-
+     // -=*# Resource for function NORMSDIST #*=-
     Resource SC_OPCODE_STD_NORM_DIST
     {
         String 1 // Description
@@ -7199,7 +7199,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE calculates the cumulative distribution function." ;
         };
     };
-     // -=*# Resource for function STANDNORMINV #*=-
+     // -=*# Resource for function NORMSINV #*=-
     Resource SC_OPCODE_S_NORM_INV
     {
         String 1 // Description
@@ -7247,7 +7247,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The probability value for which the inverse standard normal distribution is to be calculated." ;
         };
     };
-     // -=*# Resource for function LOGNORMVERT #*=-
+     // -=*# Resource for function LOGNORMDIST #*=-
     Resource SC_OPCODE_LOG_NORM_DIST
     {
         String 1 // Description
@@ -7423,7 +7423,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Standard deviation. The standard deviation of the log normal distribution." ;
         };
     };
-     // -=*# Resource for function EXPONVERT #*=-
+     // -=*# Resource for function EXPONDIST #*=-
     Resource SC_OPCODE_EXP_DIST
     {
         String 1 // Description
@@ -7503,7 +7503,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
         };
     };
-     // -=*# Resource for function GAMMAVERT #*=-
+     // -=*# Resource for function GAMMADIST #*=-
     Resource SC_OPCODE_GAMMA_DIST
     {
         String 1 // Description
@@ -7753,7 +7753,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
 
-     // -=*# Resource for function BETAVERT #*=-
+     // -=*# Resource for function BETADIST #*=-
     Resource SC_OPCODE_BETA_DIST
     {
         String 1 // Description
@@ -8089,7 +8089,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
         };
     };
-     // -=*# Resource for function HYPGEOMVERT #*=-
+     // -=*# Resource for function HYPGEOMDIST #*=-
     Resource SC_OPCODE_HYP_GEOM_DIST
     {
         String 1 // Description
@@ -8193,7 +8193,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Cumulated. TRUE calculates the cumulative distribution function, FALSE the probability mass function." ;
         };
     };
-     // -=*# Resource for function TVERT #*=-
+     // -=*# Resource for function TDIST #*=-
     Resource SC_OPCODE_T_DIST
     {
         String 1 // Description
@@ -8433,7 +8433,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The degrees of freedom of the T distribution." ;
         };
     };
-     // -=*# Resource for function FVERT #*=-
+     // -=*# Resource for function FDIST #*=-
     Resource SC_OPCODE_F_DIST
     {
         String 1 // Description
@@ -8960,7 +8960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
 
-     // -=*# Resource for function STANDARDISIERUNG #*=-
+     // -=*# Resource for function STANDARDIZE #*=-
     Resource SC_OPCODE_STANDARD
     {
         String 1 // Description
@@ -9000,7 +9000,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The standard deviation used for scaling." ;
         };
     };
-     // -=*# Resource for function VARIATIONEN #*=-
+     // -=*# Resource for function PERMUT #*=-
     Resource SC_OPCODE_PERMUT
     {
         String 1 // Description
@@ -9032,7 +9032,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The selection number taken from the elements." ;
         };
     };
-     // -=*# Resource for function VARIATIONEN2 #*=-
+     // -=*# Resource for function PERMUTATIONA #*=-
     Resource SC_OPCODE_PERMUTATION_A
     {
         String 1 // Description
@@ -9064,7 +9064,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The selection number taken from the elements." ;
         };
     };
-     // -=*# Resource for function KONFIDENZ #*=-
+     // -=*# Resource for function CONFIDENCE #*=-
     Resource SC_OPCODE_CONFIDENCE
     {
         String 1 // Description
@@ -9184,7 +9184,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The size of the population." ;
         };
     };
-     // -=*# Resource for function GTEST #*=-
+     // -=*# Resource for function ZTEST #*=-
     Resource SC_OPCODE_Z_TEST
     {
         String 1 // Description
@@ -9296,7 +9296,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The expected data array." ;
         };
     };
-     // -=*# Resource for function CHISQ.TEST.RT #*=-
+     // -=*# Resource for function CHISQ.TEST #*=-
     Resource SC_OPCODE_CHI_TEST_MS
     {
         String 1 // Description
@@ -9488,7 +9488,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The type of the T test." ;
         };
     };
-     // -=*# Resource for function BESTIMMTHEITSMASS #*=-
+     // -=*# Resource for function RSQ #*=-
     Resource SC_OPCODE_RSQ
     {
         String 1 // Description
@@ -9520,7 +9520,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The X data array." ;
         };
     };
-     // -=*# Resource for function ACHSENABSCHNITT #*=-
+     // -=*# Resource for function INTERCEPT #*=-
     Resource SC_OPCODE_INTERCEPT
     {
         String 1 // Description
@@ -9552,7 +9552,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The X data array." ;
         };
     };
-     // -=*# Resource for function STEIGUNG #*=-
+     // -=*# Resource for function SLOPE #*=-
     Resource SC_OPCODE_SLOPE
     {
         String 1 // Description
@@ -9584,7 +9584,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The X data array." ;
         };
     };
-     // -=*# Resource for function STFEHLERYX #*=-
+     // -=*# Resource for function STEYX #*=-
     Resource SC_OPCODE_STEYX
     {
         String 1 // Description
@@ -9648,7 +9648,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The second record array." ;
         };
     };
-     // -=*# Resource for function KORREL #*=-
+     // -=*# Resource for function CORREL #*=-
     Resource SC_OPCODE_CORREL
     {
         String 1 // Description
@@ -9680,7 +9680,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The second record array." ;
         };
     };
-     // -=*# Resource for function KOVAR #*=-
+     // -=*# Resource for function COVAR #*=-
     Resource SC_OPCODE_COVAR
     {
         String 1 // Description
@@ -9776,7 +9776,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The second record array." ;
         };
     };
-     // -=*# Resource for function SCHÄTZER #*=-
+     // -=*# Resource for function FORECAST #*=-
     Resource SC_OPCODE_FORECAST
     {
         String 1 // Description
@@ -9816,7 +9816,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The X data array." ;
         };
     };
-     // -=*# Resource for function ADRESSE #*=-
+     // -=*# Resource for function ADDRESS #*=-
     Resource SC_OPCODE_ADDRESS
     {
         String 1 // Description
@@ -9874,7 +9874,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ x-comment ] = "previously to OOo3.0 this was String resource RID_SC_FUNCTION_DESCRIPTIONS2.SC_OPCODE_ADDRESS 9" ;
         };
     };
-     // -=*# Resource for function BEREICHE #*=-
+     // -=*# Resource for function AREAS #*=-
     Resource SC_OPCODE_AREAS
     {
         String 1 // Description
@@ -9898,7 +9898,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The reference to a (multiple) range." ;
         };
     };
-     // -=*# Resource for function WAHL #*=-
+     // -=*# Resource for function CHOOSE #*=-
     Resource SC_OPCODE_CHOSE
     {
         String 1 // Description
@@ -9930,7 +9930,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Value 1, value 2,... The list of arguments from which a value is chosen." ;
         };
     };
-     // -=*# Resource for function SPALTE #*=-
+     // -=*# Resource for function COLUMNS #*=-
     Resource SC_OPCODE_COLUMN
     {
         String 1 // Description
@@ -9954,7 +9954,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The reference to a cell or a range." ;
         };
     };
-     // -=*# Resource for function ZEILE #*=-
+     // -=*# Resource for function ROW #*=-
     Resource SC_OPCODE_ROW
     {
         String 1 // Description
@@ -9978,7 +9978,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The reference to a cell or a range." ;
         };
     };
-     // -=*# Resource for function TABELLE #*=-
+     // -=*# Resource for function SHEET #*=-
     Resource SC_OPCODE_TABLE
     {
         String 1 // Description
@@ -10002,7 +10002,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The reference to a cell or a range or the character string of a sheet name." ;
         };
     };
-     // -=*# Resource for function SPALTEN #*=-
+     // -=*# Resource for function COLUMNS #*=-
     Resource SC_OPCODE_COLUMNS
     {
         String 1 // Description
@@ -10026,7 +10026,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The array (reference) for which the number of columns is to be determined." ;
         };
     };
-     // -=*# Resource for function ZEILEN #*=-
+     // -=*# Resource for function ROWS #*=-
     Resource SC_OPCODE_ROWS
     {
         String 1 // Description
@@ -10050,7 +10050,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The array (reference) for which the number of rows is to be determined." ;
         };
     };
-     // -=*# Resource for function TABELLEN #*=-
+     // -=*# Resource for function SHEETS #*=-
     Resource SC_OPCODE_TABLES
     {
         String 1 // Description
@@ -10074,7 +10074,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The reference to a cell or a range." ;
         };
     };
-     // -=*# Resource for function WVERWEIS #*=-
+     // -=*# Resource for function HLOOKUP #*=-
     Resource SC_OPCODE_H_LOOKUP
     {
         String 1 // Description
@@ -10122,7 +10122,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "If the value is TRUE or not given, the search row of the array must be sorted in ascending order." ;
         };
     };
-     // -=*# Resource for function SVERWEIS #*=-
+     // -=*# Resource for function VLOOKUP #*=-
     Resource SC_OPCODE_V_LOOKUP
     {
         String 1 // Description
@@ -10218,7 +10218,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The index of the subrange if referring to a multiple range." ;
         };
     };
-     // -=*# Resource for function INDIREKT #*=-
+     // -=*# Resource for function INDIRECT #*=-
     Resource SC_OPCODE_INDIRECT
     {
         String 1 // Description
@@ -10250,7 +10250,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The reference style: 0 or FALSE means R1C1 style, any other value or omitted means A1 style." ;
         };
     };
-     // -=*# Resource for function VERWEIS #*=-
+     // -=*# Resource for function LOOKUP #*=-
     Resource SC_OPCODE_LOOKUP
     {
         String 1 // Description
@@ -10290,7 +10290,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The vector (row or range) from which the value is to be determined." ;
         };
     };
-     // -=*# Resource for function VERGLEICH #*=-
+     // -=*# Resource for function MATCH #*=-
     Resource SC_OPCODE_MATCH
     {
         String 1 // Description
@@ -10330,7 +10330,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Type can take the value 1, 0 or -1 and determines the criteria are to be used for comparison purposes." ;
         };
     };
-     // -=*# Resource for function VERSCHIEBUNG #*=-
+     // -=*# Resource for function OFFSET #*=-
     Resource SC_OPCODE_OFFSET
     {
         String 1 // Description
@@ -10386,7 +10386,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of columns in the moved reference." ;
         };
     };
-     // -=*# Resource for function FEHLERTYP #*=-
+     // -=*# Resource for function ERRORTYPE #*=-
     Resource SC_OPCODE_ERROR_TYPE
     {
         String 1 // Description
@@ -10434,7 +10434,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The error value whose identifying number you want to find. Can be the actual error value or a reference to a cell that you want to test." ;
         };
     };
-     // -=*# Resource for function VORLAGE #*=-
+     // -=*# Resource for function STYLE #*=-
     Resource SC_OPCODE_STYLE
     {
         String 1 // Description
@@ -10690,7 +10690,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "This is the text for which the code of the first character is to be found." ;
         };
     };
-     // -=*# Resource for function DM #*=-
+     // -=*# Resource for function DOLLAR #*=-
     Resource SC_OPCODE_CURRENCY
     {
         String 1 // Description
@@ -10722,7 +10722,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Decimal places. Denotes the number of digits to the right of the decimal point." ;
         };
     };
-     // -=*# Resource for function ZEICHEN #*=-
+     // -=*# Resource for function CHAR #*=-
     Resource SC_OPCODE_CHAR
     {
         String 1 // Description
@@ -10746,7 +10746,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The code value for the character." ;
         };
     };
-     // -=*# Resource for function SÄUBERN #*=-
+     // -=*# Resource for function CLEAN #*=-
     Resource SC_OPCODE_CLEAN
     {
         String 1 // Description
@@ -10770,7 +10770,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text from which nonprintable characters are to be removed." ;
         };
     };
-     // -=*# Resource for function VERKETTEN #*=-
+     // -=*# Resource for function CONCATENATE #*=-
     Resource SC_OPCODE_CONCAT
     {
         String 1 // Description
@@ -10794,7 +10794,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Text for the concatenation." ;
         };
     };
-     // -=*# Resource for function IDENTISCH #*=-
+     // -=*# Resource for function EXACT #*=-
     Resource SC_OPCODE_EXACT
     {
         String 1 // Description
@@ -10826,7 +10826,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The second text for comparing texts." ;
         };
     };
-     // -=*# Resource for function FINDEN #*=-
+     // -=*# Resource for function FIND #*=-
     Resource SC_OPCODE_FIND
     {
         String 1 // Description
@@ -10866,7 +10866,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The position in the text from which the search starts." ;
         };
     };
-     // -=*# Resource for function SUCHEN #*=-
+     // -=*# Resource for function SEARCH #*=-
     Resource SC_OPCODE_SEARCH
     {
         String 1 // Description
@@ -10906,7 +10906,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The position in the text where the search is started." ;
         };
     };
-     // -=*# Resource for function GLÄTTEN #*=-
+     // -=*# Resource for function TRIM #*=-
     Resource SC_OPCODE_TRIM
     {
         String 1 // Description
@@ -10930,7 +10930,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text in which extra spaces between words are to be deleted." ;
         };
     };
-     // -=*# Resource for function GROSS2 #*=-
+     // -=*# Resource for function PROPER #*=-
     Resource SC_OPCODE_PROPPER
     {
         String 1 // Description
@@ -10954,7 +10954,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text in which the beginning of words are to be replaced by capital letters." ;
         };
     };
-     // -=*# Resource for function GROSS #*=-
+     // -=*# Resource for function UPPER #*=-
     Resource SC_OPCODE_UPPER
     {
         String 1 // Description
@@ -10978,7 +10978,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text in which lower case letters are to be converted to capitals." ;
         };
     };
-     // -=*# Resource for function KLEIN #*=-
+     // -=*# Resource for function LOWER #*=-
     Resource SC_OPCODE_LOWER
     {
         String 1 // Description
@@ -11002,7 +11002,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text in which capitals are converted to lower case letters." ;
         };
     };
-     // -=*# Resource for function WERT #*=-
+     // -=*# Resource for function VALUE #*=-
     Resource SC_OPCODE_VALUE
     {
         String 1 // Description
@@ -11082,7 +11082,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The value to be checked and returned if it is text." ;
         };
     };
-     // -=*# Resource for function ERSETZEN #*=-
+     // -=*# Resource for function REPLACE #*=-
     Resource SC_OPCODE_REPLACE
     {
         String 1 // Description
@@ -11130,7 +11130,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text to be inserted." ;
         };
     };
-     // -=*# Resource for function FEST #*=-
+     // -=*# Resource for function FIXED #*=-
     Resource SC_OPCODE_FIXED
     {
         String 1 // Description
@@ -11170,7 +11170,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Thousands separator. If 0 or omitted the locale group separator is used else the separator is suppressed." ;
         };
     };
-     // -=*# Resource for function LÄNGE #*=-
+     // -=*# Resource for function LEN #*=-
     Resource SC_OPCODE_LEN
     {
         String 1 // Description
@@ -11194,7 +11194,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The text in which the length is to be determined." ;
         };
     };
-     // -=*# Resource for function LINKS #*=-
+     // -=*# Resource for function LEFT #*=-
     Resource SC_OPCODE_LEFT
     {
         String 1 // Description
@@ -11226,7 +11226,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of characters for the start text." ;
         };
     };
-     // -=*# Resource for function RECHTS #*=-
+     // -=*# Resource for function RIGHT #*=-
     Resource SC_OPCODE_RIGHT
     {
         String 1 // Description
@@ -11258,7 +11258,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of characters for the end text." ;
         };
     };
-     // -=*# Resource for function TEIL #*=-
+     // -=*# Resource for function MID #*=-
     Resource SC_OPCODE_MID
     {
         String 1 // Description
@@ -11298,7 +11298,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of characters for the text." ;
         };
     };
-     // -=*# Resource for function WIEDERHOLEN #*=-
+     // -=*# Resource for function REPT #*=-
     Resource SC_OPCODE_REPT
     {
         String 1 // Description
@@ -11330,7 +11330,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number of times the text is to be repeated." ;
         };
     };
-     // -=*# Resource for function WECHSELN #*=-
+     // -=*# Resource for function SUBSTITUTE #*=-
     Resource SC_OPCODE_SUBSTITUTE
     {
         String 1 // Description
@@ -11378,7 +11378,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Which occurrence of the old text is to be replaced." ;
         };
     };
-     // -=*# Resource for function BASIS #*=-
+     // -=*# Resource for function BASE #*=-
     Resource SC_OPCODE_BASE
     {
         String 1 // Description
@@ -11418,7 +11418,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "If the text is shorter than the specified length, zeros are added to the left of the string." ;
         };
     };
-     // -=*# Resource for function DEZIMAL #*=-
+     // -=*# Resource for function DECIMAL #*=-
     Resource SC_OPCODE_DECIMAL
     {
         String 1 // Description
@@ -11490,7 +11490,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "Unit into which something is converted, case-sensitive.";
         };
     };
-     // -=*# Resource for function ROEMISCH #*=-
+     // -=*# Resource for function ROMAN #*=-
     Resource SC_OPCODE_ROMAN
     {
         String 1 // Description
@@ -11522,7 +11522,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The more this value increases, the more the Roman numeral is simplified. The value must be in the 0 - 4 range.";
         };
     };
-     // -=*# Resource for function ARABISCH #*=-
+     // -=*# Resource for function ARABIC #*=-
     Resource SC_OPCODE_ARABIC
     {
         String 1 // Description
