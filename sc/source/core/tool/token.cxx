@@ -1261,7 +1261,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocLog:
             case ocMod:
             case ocTrunc:
-            case ocSchiefe:
+            case ocSkew:
             case ocArcTan2:
             case ocBitOr:
             case ocBitLshift:

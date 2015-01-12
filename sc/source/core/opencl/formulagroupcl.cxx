@@ -2951,7 +2951,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpTrunc, nResultSize));
                 break;
-            case ocSchiefe:
+            case ocSkew:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpSkew, nResultSize));
                 break;

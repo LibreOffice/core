@@ -313,7 +313,7 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocHarMean,            320,    1,  MX, V, { RX }, 0, 0 },
     { ocSumSQ,              321,    0,  MX, V, { RX }, 0, 0 },
     { ocKurt,               322,    1,  MX, V, { RX }, 0, 0 },
-    { ocSchiefe,            323,    1,  MX, V, { RX }, 0, 0 },
+    { ocSkew,               323,    1,  MX, V, { RX }, 0, 0 },
     { ocZTest,              324,    2,  3,  V, { RX, VR }, 0, 0 },
     { ocLarge,              325,    2,  2,  V, { RX, VR }, 0, 0 },
     { ocSmall,              326,    2,  2,  V, { RX, VR }, 0, 0 },
