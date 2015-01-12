@@ -2162,9 +2162,16 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
         createAllObjectProperties( pObj );
         SbxArray* pProps = pObj->GetProperties();
         sal_uInt16 nPropCount = pProps->Count();
+        if ( nPropCount >= 3 &&
+             pProps->Get( nPropCount -1 )->GetName().equalsIgnoreAsciiCase( "Dbg_Methods" ) &&
+             pProps->Get( nPropCount -2 )->GetName().equalsIgnoreAsciiCase( "Dbg_Properties" ) &&
+             pProps->Get( nPropCount -3 )->GetName().equalsIgnoreAsciiCase( "Dbg_SupportedInterfaces" ) )
+        {
+            nPropCount -= 3;
+        }
         pItem->maMemberList.reserve(nPropCount);
 
-        for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
+        for( sal_uInt16 i = 0 ; i < nPropCount ; ++i )
         {
             SbxVariable* pVar = pProps->Get( i );
 
