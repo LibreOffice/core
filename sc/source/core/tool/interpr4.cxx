@@ -4144,7 +4144,7 @@ StackVar ScInterpreter::Interpret()
                 case ocWeibull          :
                 case ocWeibull_MS       : ScWeibull();                  break;
                 case ocBinomInv         :
-                case ocKritBinom        : ScCritBinom();                break;
+                case ocCritBinom        : ScCritBinom();                break;
                 case ocNegBinomVert     : ScNegBinomDist();             break;
                 case ocNegBinomDist_MS  : ScNegBinomDist_MS();          break;
                 case ocNoName           : ScNoName();                   break;

@@ -352,7 +352,7 @@ enum OpCode : sal_uInt16
         ocWeibull_MS        = SC_OPCODE_WEIBULL_MS,
         ocNegBinomVert      = SC_OPCODE_NEG_BINOM_VERT,
         ocNegBinomDist_MS   = SC_OPCODE_NEG_BINOM_DIST_MS,
-        ocKritBinom         = SC_OPCODE_KRIT_BINOM,
+        ocCritBinom         = SC_OPCODE_CRIT_BINOM,
         ocKurt              = SC_OPCODE_KURT,
         ocHarMean           = SC_OPCODE_HAR_MEAN,
         ocGeoMean           = SC_OPCODE_GEO_MEAN,

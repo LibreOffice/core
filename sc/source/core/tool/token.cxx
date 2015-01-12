@@ -1224,7 +1224,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocLogInv:
             case ocArcCot:
             case ocCosHyp:
-            case ocKritBinom:
+            case ocCritBinom:
             case ocArcCotHyp:
             case ocArcSin:
             case ocArcSinHyp:
