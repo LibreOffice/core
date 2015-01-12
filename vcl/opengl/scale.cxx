@@ -252,7 +252,9 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_u
     if( nScaleFlag == BMP_SCALE_FAST ||
         nScaleFlag == BMP_SCALE_BILINEAR ||
         nScaleFlag == BMP_SCALE_SUPER ||
-        nScaleFlag == BMP_SCALE_LANCZOS )
+        nScaleFlag == BMP_SCALE_LANCZOS ||
+        nScaleFlag == BMP_SCALE_DEFAULT ||
+        nScaleFlag == BMP_SCALE_BESTQUALITY )
     {
         makeCurrent();
         if( mpContext == NULL )
