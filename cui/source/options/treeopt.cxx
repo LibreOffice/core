@@ -512,6 +512,7 @@ void OfaTreeOptionsDialog::InitWidgets()
     Size aSize(pTabBox->LogicToPixel(Size(278, 259), MAP_APPFONT));
     pTabBox->set_width_request(aSize.Width());
     pTabBox->set_height_request(aSize.Height() - get_action_area()->get_preferred_size().Height());
+    pTreeLB->set_width_request(pTreeLB->approximate_char_width() * 25);
     pTreeLB->set_height_request(pTabBox->get_height_request());
 }
 
