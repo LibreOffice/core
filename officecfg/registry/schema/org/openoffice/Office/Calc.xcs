@@ -1364,9 +1364,9 @@
             <desc>The list of operator and function opcodes for which to use OpenCL. If a
 	    formula contains only these operators and functions, it
 	    might be calculated using OpenCL.</desc>
-          <!-- numeric values correspond to RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSINV;ROUND;POWER;SUBPRODUCT;PROUDCT;NORMDIST;MIN;MAX;SUM;AVERAGE;SUMIFS -->
+          <!-- numeric values correspond to +;-;*;/;RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSINV;ROUND;POWER;SUMPRODUCT;MIN;MAX;SUM;PRODUCT;AVERAGE;COUNT;NORMDIST;SUMIFS -->
           </info>
-          <value>40;41;42;43;82;83;84;88;102;103;104;149;204;209;213;222;223;224;225;226;227;236;403</value>
+          <value>40;41;42;43;66;82;83;84;88;102;103;104;149;204;209;213;222;223;224;225;226;227;236;403</value>
         </prop>
         <prop oor:name="OpenCLAutoSelect" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
