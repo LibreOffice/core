@@ -14,6 +14,8 @@ $(eval $(call gb_Executable_set_include,gtktiledviewer,\
     -I$(SRCDIR)/desktop/inc \
 ))
 
+$(eval $(call gb_Executable_use_sdk_api,gtktiledviewer))
+
 $(eval $(call gb_Executable_use_externals,gtktiledviewer,\
     gtk \
 ))

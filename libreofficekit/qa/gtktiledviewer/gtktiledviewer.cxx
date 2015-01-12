@@ -12,11 +12,14 @@
 #include <string.h>
 
 #include <gdk/gdk.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include "../lokdocview_quad/lokdocview_quad.h"
+
+#include <com/sun/star/awt/Key.hpp>
 
 static int help()
 {
@@ -129,10 +132,26 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
 {
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
 
+    int nCode = 0;
+    switch (pEvent->keyval)
+    {
+    case GDK_BackSpace:
+        nCode = com::sun::star::awt::Key::BACKSPACE;
+        break;
+    case GDK_Return:
+        nCode = com::sun::star::awt::Key::RETURN;
+        break;
+    default:
+        if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
+            nCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
+        else
+            nCode = gdk_keyval_to_unicode(pEvent->keyval);
+    }
+
     if (pEvent->type == GDK_KEY_RELEASE)
-        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYUP, gdk_keyval_to_unicode(pEvent->keyval));
+        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYUP, nCode);
     else
-        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYINPUT, gdk_keyval_to_unicode(pEvent->keyval));
+        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYINPUT, nCode);
 }
 
 // GtkComboBox requires gtk 2.24 or later
