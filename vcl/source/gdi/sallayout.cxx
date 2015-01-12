@@ -1005,7 +1005,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     // retarget unresolved pLogCluster[n] to a glyph inside the cluster
     // TODO: better do it while the deleted-glyph markers are still there
     for( n = 0; n < nCharCount; ++n )
-        if( (p = pLogCluster[0]) >= 0 )
+        if( (p = pLogCluster[n]) >= 0 )
             break;
     if( n >= nCharCount )
         return;
