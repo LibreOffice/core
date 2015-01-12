@@ -5688,7 +5688,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function SKEW #*=-
-    Resource SC_OPCODE_SCHIEFE
+    Resource SC_OPCODE_SKEW
     {
         String 1 // Description
         {

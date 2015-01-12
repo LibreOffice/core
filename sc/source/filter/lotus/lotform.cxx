@@ -2032,7 +2032,7 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
     else if (rTest == "COV")
             eId=ocCovar;
     else if (rTest == "SKEWNESS")
-            eId=ocSchiefe;
+            eId=ocSkew;
     else if (rTest == "CHITEST")
             eId=ocChiTest;
     else if (rTest == "FTEST")

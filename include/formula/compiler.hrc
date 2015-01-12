@@ -323,7 +323,7 @@
 #define SC_OPCODE_GEO_MEAN          322
 #define SC_OPCODE_STANDARD          323
 #define SC_OPCODE_AVE_DEV           324
-#define SC_OPCODE_SCHIEFE           325
+#define SC_OPCODE_SKEW              325
 #define SC_OPCODE_DEV_SQ            326
 #define SC_OPCODE_MEDIAN            327
 #define SC_OPCODE_MODAL_VALUE       328

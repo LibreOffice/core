@@ -4133,7 +4133,7 @@ StackVar ScInterpreter::Interpret()
                 case ocAveDev           : ScAveDev();                   break;
                 case ocDevSq            : ScDevSq();                    break;
                 case ocKurt             : ScKurt();                     break;
-                case ocSchiefe          : ScSkew();                     break;
+                case ocSkew             : ScSkew();                     break;
                 case ocSkewp            : ScSkewp();                    break;
                 case ocModalValue       : ScModalValue();               break;
                 case ocModalValue_MS    : ScModalValue();               break;
