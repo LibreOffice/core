@@ -317,7 +317,7 @@
 #define SC_OPCODE_CHI_DIST          316
 #define SC_OPCODE_WEIBULL           317
 #define SC_OPCODE_NEG_BINOM_VERT    318
-#define SC_OPCODE_KRIT_BINOM        319
+#define SC_OPCODE_CRIT_BINOM        319
 #define SC_OPCODE_KURT              320
 #define SC_OPCODE_HAR_MEAN          321
 #define SC_OPCODE_GEO_MEAN          322
