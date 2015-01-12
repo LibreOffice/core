@@ -312,7 +312,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GEO_MEAN { Text = "GEOMEAN" ; };
     String SC_OPCODE_STANDARD { Text = "STANDARDIZE" ; };
     String SC_OPCODE_AVE_DEV { Text = "AVEDEV" ; };
-    String SC_OPCODE_SCHIEFE { Text = "SKEW" ; };
+    String SC_OPCODE_SKEW { Text = "SKEW" ; };
     String SC_OPCODE_SKEWP   { Text = "SKEWP" ; };
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
@@ -719,7 +719,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_GEO_MEAN { Text = "GEOMEAN" ; };
     String SC_OPCODE_STANDARD { Text = "STANDARDIZE" ; };
     String SC_OPCODE_AVE_DEV { Text = "AVEDEV" ; };
-    String SC_OPCODE_SCHIEFE { Text = "SKEW" ; };
+    String SC_OPCODE_SKEW { Text = "SKEW" ; };
     String SC_OPCODE_SKEWP   { Text = "_xlfn.SKEW.P" ; };
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
@@ -1128,7 +1128,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GEO_MEAN { Text = "GEOMEAN" ; };
     String SC_OPCODE_STANDARD { Text = "STANDARDIZE" ; };
     String SC_OPCODE_AVE_DEV { Text = "AVEDEV" ; };
-    String SC_OPCODE_SCHIEFE { Text = "SKEW" ; };
+    String SC_OPCODE_SKEW { Text = "SKEW" ; };
     String SC_OPCODE_SKEWP   { Text = "SKEWP" ; };
     String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
     String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
@@ -2332,7 +2332,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "AVEDEV" ;
     };
-    String SC_OPCODE_SCHIEFE
+    String SC_OPCODE_SKEW
     {
         Text [ en-US ] = "SKEW" ;
     };
