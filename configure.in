@@ -919,8 +919,7 @@ AC_ARG_ENABLE(category-b,
 [  --enable-category-b     Activate components under a category B license 
                           (see http://www.apache.org/legal/3party.html#category-b):
                           MPL (seamonkey, hunspell, hyphen, nss, saxon, rhino),
-                          CPL (silgraphite), CPL/EPL (CoinMP), SPL (beanshell),
-                          OFL (fonts).
+                          CPL (silgraphite), CPL/EPL (CoinMP), OFL (fonts).
                           Flags for individual libraries override this one.
 ],,)
 AC_ARG_WITH(arm-target,
@@ -1389,7 +1388,7 @@ dnl Build options
 dnl ===================================================================
 
 # Disable or enable category-B librariets: nss, hunspell, hyphen, saxon,
-# rhino, silgraphite, beanshell.
+# rhino, silgraphite.
 
 # Note that further below they may be enabled or disabled again by
 # more specific options.
@@ -1403,7 +1402,6 @@ AC_MSG_CHECKING([whether to enable category B components])
 #   hyphen (hyphen)
 #   saxon (saxon)
 #   rhino (rhino)
-#   beanshell (beanshell)
 #   graphite (silgraphite)
 if test "$enable_category_b" = "yes"; then
    ENABLE_CATEGORY_B=YES
@@ -1411,7 +1409,6 @@ if test "$enable_category_b" = "yes"; then
    enable_hyphen="yes"
    enable_saxon="yes"
    enable_javascript="yes"
-   enable_beanshell="yes"
    enable_graphite="yes"
    enable_coinmp="yes"
    enable_category_b_fonts="yes"
@@ -1424,12 +1421,11 @@ else
    enable_hyphen="no"
    enable_saxon="no"
    enable_javascript="no"
-   enable_beanshell="no"
    enable_graphite="no"
    enable_coinmp="no"
    enable_category_b_fonts="no"
 
-   AC_MSG_RESULT([no: disabled modules nss, hunspell, hyphen, saxon, rhino, beanshell, graphite, coinmp])
+   AC_MSG_RESULT([no: disabled modules nss, hunspell, hyphen, saxon, rhino, graphite, coinmp])
 fi
 AC_SUBST(ENABLE_CATEGORY_B)
 
