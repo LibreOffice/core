@@ -30,19 +30,14 @@ struct find_unique;
 template<typename Value, typename Compare = std::less<Value>,
      template<typename, typename> class Find = find_unique >
 class sorted_vector
-    : private std::vector<Value>
 {
 private:
     typedef Find<Value, Compare> Find_t;
-    typedef typename std::vector<Value> base_t;
+    typedef typename std::vector<Value> vector_t;
     typedef typename std::vector<Value>::iterator  iterator;
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
     typedef typename std::vector<Value>::size_type size_type;
-
-    using base_t::clear;
-    using base_t::empty;
-    using base_t::size;
 
     // MODIFIERS
 
@@ -51,7 +46,7 @@ public:
         std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
         if (!ret.second)
         {
-            const_iterator const it = base_t::insert(
+            const_iterator const it = m_vector.insert(
                             begin_nonconst() + (ret.first - begin()), x);
             return std::make_pair(it, true);
         }
@@ -63,7 +58,7 @@ public:
         std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
         if (ret.second)
         {
-            base_t::erase(begin_nonconst() + (ret.first - begin()));
+            m_vector.erase(begin_nonconst() + (ret.first - begin()));
             return 1;
         }
         return 0;
@@ -71,60 +66,75 @@ public:
 
     void erase( size_t index )
     {
-        base_t::erase( begin_nonconst() + index );
+        m_vector.erase(begin_nonconst() + index);
     }
 
     // like C++ 2011: erase with const_iterator (doesn't change sort order)
     void erase(const_iterator const& position)
     {   // C++98 has vector::erase(iterator), so call that
-        base_t::erase(begin_nonconst() + (position - begin()));
+        m_vector.erase(begin_nonconst() + (position - begin()));
     }
 
     void erase(const_iterator const& first, const_iterator const& last)
     {
-        base_t::erase(begin_nonconst() + (first - begin()),
+        m_vector.erase(begin_nonconst() + (first - begin()),
                       begin_nonconst() + (last  - begin()));
+    }
+
+    void clear()
+    {
+        m_vector.clear();
     }
 
     // ACCESSORS
 
+    size_type size() const
+    {
+        return m_vector.size();
+    }
+
+    bool empty() const
+    {
+        return m_vector.empty();
+    }
+
     // Only return a const iterator, so that the vector cannot be directly updated.
     const_iterator begin() const
     {
-        return base_t::begin();
+        return m_vector.begin();
     }
 
     // Only return a const iterator, so that the vector cannot be directly updated.
     const_iterator end() const
     {
-        return base_t::end();
+        return m_vector.end();
     }
 
     const Value& front() const
     {
-        return base_t::front();
+        return m_vector.front();
     }
 
     const Value& back() const
     {
-        return base_t::back();
+        return m_vector.back();
     }
 
     const Value& operator[]( size_t index ) const
     {
-        return base_t::operator[]( index );
+        return m_vector.operator[]( index );
     }
 
     // OPERATIONS
 
     const_iterator lower_bound( const Value& x ) const
     {
-        return std::lower_bound( base_t::begin(), base_t::end(), x, Compare() );
+        return std::lower_bound( m_vector.begin(), m_vector.end(), x, Compare() );
     }
 
     const_iterator upper_bound( const Value& x ) const
     {
-        return std::upper_bound( base_t::begin(), base_t::end(), x, Compare() );
+        return std::upper_bound( m_vector.begin(), m_vector.end(), x, Compare() );
     }
 
     /* Searches the container for an element with a value of x
@@ -145,18 +155,25 @@ public:
        // of another sorted vector
        if ( empty() )
        {
-           base_t::insert(begin_nonconst(), rOther.begin(), rOther.end());
+           m_vector.insert(begin_nonconst(), rOther.begin(), rOther.end());
        }
        else
-           for( const_iterator it = rOther.begin(); it != rOther.end(); ++it )
-               insert( *it );
+       {
+           for (const_iterator it = rOther.begin(); it != rOther.end(); ++it)
+           {
+               insert(*it);
+           }
+       }
     }
 
     /* Clear() elements in the vector, and free them one by one. */
     void DeleteAndDestroyAll()
     {
-        for( const_iterator it = begin(); it != end(); ++it )
+        for (const_iterator it = m_vector.begin(); it != m_vector.end(); ++it)
+        {
             delete *it;
+        }
+
         clear();
     }
 
@@ -172,9 +189,10 @@ public:
 
 private:
 
-    typename base_t::iterator begin_nonconst() { return base_t::begin(); }
-    typename base_t::iterator end_nonconst()   { return base_t::end(); }
+    typename iterator begin_nonconst() { return m_vector.begin(); }
+    typename iterator end_nonconst()   { return m_vector.end(); }
 
+    vector_t m_vector;
 };
 
 
