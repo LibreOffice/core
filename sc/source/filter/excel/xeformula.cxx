@@ -1433,7 +1433,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
         switch( rFuncData.GetOpCode() )
         {
             case ocIf:
-            case ocChose:
+            case ocChoose:
                 AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );
             break;
             default:;
@@ -1451,7 +1451,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
             case ocIf:
                 FinishIfFunction( rFuncData );
             break;
-            case ocChose:
+            case ocChoose:
                 FinishChooseFunction( rFuncData );
             break;
 
@@ -1574,7 +1574,7 @@ void XclExpFmlaCompImpl::PrepareParam( XclExpFuncData& rFuncData )
             }
         break;
 
-        case ocChose:
+        case ocChoose:
             switch( nParamIdx )
             {
                 // do nothing for first parameter

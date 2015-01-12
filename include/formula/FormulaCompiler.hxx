@@ -37,7 +37,7 @@
 
 #include <unordered_map>
 
-#define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChose) */
+#define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChoose) */
 #define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */
 
 
