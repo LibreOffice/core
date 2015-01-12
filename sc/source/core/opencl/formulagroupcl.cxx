@@ -16,6 +16,7 @@
 #include "tokenarray.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
+#include <comphelper/random.hxx>
 #include <formula/vectortoken.hxx>
 #include "scmatrix.hxx"
 
@@ -320,31 +321,331 @@ public:
     }
     virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
-        GenDecl(ss);
+        ss << "int " << mSymName;
     }
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const SAL_OVERRIDE
     {
-        return mSymName + "_Random()";
+        return mSymName + "_Random(" + mSymName + ")";
     }
     virtual void GenSlidingWindowFunction( std::stringstream& ss ) SAL_OVERRIDE
     {
-        ss << "\ndouble " << mSymName;
-        ss << "_Random ()\n{\n";
-        ss << "    int i, gid0=get_global_id(0);;\n";
-        ss << "    double tmp = 0;\n";
-        ss << "    double M = 2147483647;\n";
-        ss << "    double Lamda = 32719;\n";
-        ss << "    double f;\n";
-        ss << "    f = gid0 + 1;\n";
-        ss << "    int k;\n";
-        ss << "    for(i = 1;i <= 100; ++i){\n";
-        ss << "        f = Lamda * f;\n";
-        ss << "        k = (int)(f * pow(M,-1.0));\n";
-        ss << "        f = f - M * k;\n";
-        ss << "    }\n";
-        ss << "    tmp = f * pow(M,-1.0);\n";
-        ss << "    return tmp;\n";
-        ss << "}";
+        // This string is from the pi_opencl_kernel.i file as
+        // generated when building the Random123 examples. Unused
+        // stuff has been removed, and the actual kernel is not the
+        // same as in the totally different use case of that example,
+        // of course. Only the code that calculates the counter-based
+        // random number and what it needs is left.
+        ss << "\
+/*\n\
+Copyright 2010-2011, D. E. Shaw Research.\n\
+All rights reserved.\n\
+\n\
+Redistribution and use in source and binary forms, with or without\n\
+modification, are permitted provided that the following conditions are\n\
+met:\n\
+\n\
+* Redistributions of source code must retain the above copyright\n\
+  notice, this list of conditions, and the following disclaimer.\n\
+\n\
+* Redistributions in binary form must reproduce the above copyright\n\
+  notice, this list of conditions, and the following disclaimer in the\n\
+  documentation and/or other materials provided with the distribution.\n\
+\n\
+* Neither the name of D. E. Shaw Research nor the names of its\n\
+  contributors may be used to endorse or promote products derived from\n\
+  this software without specific prior written permission.\n\
+\n\
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\
+\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n\
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n\
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\n\
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\n\
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT\n\
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n\
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n\
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n\
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n\
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\
+*/\n\
+\n\
+typedef uint uint32_t;\n\
+struct r123array2x32\n\
+{\n\
+  uint32_t v[2];\n\
+};\n\
+enum r123_enum_threefry32x2\n\
+{\n\
+  R_32x2_0_0 = 13,\n\
+  R_32x2_1_0 = 15,\n\
+  R_32x2_2_0 = 26,\n\
+  R_32x2_3_0 = 6,\n\
+  R_32x2_4_0 = 17,\n\
+  R_32x2_5_0 = 29,\n\
+  R_32x2_6_0 = 16,\n\
+  R_32x2_7_0 = 24\n\
+};\n\
+inline uint32_t RotL_32 (uint32_t x, unsigned int N)\n\
+  __attribute__ ((always_inline));\n\
+inline uint32_t\n\
+RotL_32 (uint32_t x, unsigned int N)\n\
+{\n\
+  return (x << (N & 31)) | (x >> ((32 - N) & 31));\n\
+}\n\
+\n\
+typedef struct r123array2x32 threefry2x32_ctr_t;\n\
+typedef struct r123array2x32 threefry2x32_key_t;\n\
+typedef struct r123array2x32 threefry2x32_ukey_t;\n\
+inline threefry2x32_key_t\n\
+threefry2x32keyinit (threefry2x32_ukey_t uk)\n\
+{\n\
+  return uk;\n\
+}\n\
+\n\
+inline threefry2x32_ctr_t threefry2x32_R (unsigned int Nrounds,\n\
+                      threefry2x32_ctr_t in,\n\
+                      threefry2x32_key_t k)\n\
+  __attribute__ ((always_inline));\n\
+inline threefry2x32_ctr_t\n\
+threefry2x32_R (unsigned int Nrounds, threefry2x32_ctr_t in,\n\
+        threefry2x32_key_t k)\n\
+{\n\
+  threefry2x32_ctr_t X;\n\
+  uint32_t ks[2 + 1];\n\
+  int i;\n\
+  ks[2] = 0x1BD11BDA;\n\
+  for (i = 0; i < 2; i++) {\n\
+    ks[i] = k.v[i];\n\
+    X.v[i] = in.v[i];\n\
+    ks[2] ^= k.v[i];\n\
+  }\n\
+  X.v[0] += ks[0];\n\
+  X.v[1] += ks[1];\n\
+  if (Nrounds > 0) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_0_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 1) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_1_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 2) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_2_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 3) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_3_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 3) {\n\
+    X.v[0] += ks[1];\n\
+    X.v[1] += ks[2];\n\
+    X.v[1] += 1;\n\
+  }\n\
+  if (Nrounds > 4) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_4_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 5) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_5_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 6) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_6_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 7) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_7_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 7) {\n\
+    X.v[0] += ks[2];\n\
+    X.v[1] += ks[0];\n\
+    X.v[1] += 2;\n\
+  }\n\
+  if (Nrounds > 8) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_0_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 9) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_1_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 10) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_2_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 11) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_3_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 11) {\n\
+    X.v[0] += ks[0];\n\
+    X.v[1] += ks[1];\n\
+    X.v[1] += 3;\n\
+  }\n\
+  if (Nrounds > 12) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_4_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 13) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_5_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 14) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_6_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 15) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_7_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 15) {\n\
+    X.v[0] += ks[1];\n\
+    X.v[1] += ks[2];\n\
+    X.v[1] += 4;\n\
+  }\n\
+  if (Nrounds > 16) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_0_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 17) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_1_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 18) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_2_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 19) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_3_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 19) {\n\
+    X.v[0] += ks[2];\n\
+    X.v[1] += ks[0];\n\
+    X.v[1] += 5;\n\
+  }\n\
+  if (Nrounds > 20) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_4_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 21) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_5_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 22) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_6_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 23) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_7_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 23) {\n\
+    X.v[0] += ks[0];\n\
+    X.v[1] += ks[1];\n\
+    X.v[1] += 6;\n\
+  }\n\
+  if (Nrounds > 24) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_0_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 25) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_1_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 26) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_2_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 27) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_3_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 27) {\n\
+    X.v[0] += ks[1];\n\
+    X.v[1] += ks[2];\n\
+    X.v[1] += 7;\n\
+  }\n\
+  if (Nrounds > 28) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_4_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 29) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_5_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 30) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_6_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 31) {\n\
+    X.v[0] += X.v[1];\n\
+    X.v[1] = RotL_32 (X.v[1], R_32x2_7_0);\n\
+    X.v[1] ^= X.v[0];\n\
+  }\n\
+  if (Nrounds > 31) {\n\
+    X.v[0] += ks[2];\n\
+    X.v[1] += ks[0];\n\
+    X.v[1] += 8;\n\
+  }\n\
+  return X;\n\
+}\n\
+\n\
+enum r123_enum_threefry2x32\n\
+{ threefry2x32_rounds = 20 };\n\
+inline threefry2x32_ctr_t threefry2x32 (threefry2x32_ctr_t in,\n\
+                    threefry2x32_key_t k)\n\
+  __attribute__ ((always_inline));\n\
+inline threefry2x32_ctr_t\n\
+threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
+{\n\
+  return threefry2x32_R (threefry2x32_rounds, in, k);\n\
+}\n\
+\n\
+";
+        ss << "double " << mSymName << "_Random (int seed)\n\
+{\n\
+  unsigned tid = get_global_id(0);\n\
+  threefry2x32_key_t k = { {tid, 0xdecafbad} };\n\
+  threefry2x32_ctr_t c = { {seed, 0xf00dcafe} };\n\
+  c = threefry2x32_R(threefry2x32_rounds, c, k);\n\
+  const double factor = 1./(" << SAL_MAX_UINT32 << ".0 + 1.0);\n\
+  const double halffactor = 0.5*factor;\n\
+  return c.v[0] * factor + halffactor;\n\
+}\n\
+";
     }
     virtual size_t GetWindowSize() const SAL_OVERRIDE
     {
@@ -353,9 +654,9 @@ public:
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) SAL_OVERRIDE
     {
-        double tmp = 0.0;
+        cl_int seed = comphelper::rng::uniform_int_distribution(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
-        cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
+        cl_int err = clSetKernelArg(k, argno, sizeof(cl_int), (void*)&seed);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
