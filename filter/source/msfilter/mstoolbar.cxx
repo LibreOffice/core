@@ -713,7 +713,7 @@ bool TBCBitMap::Read( SvStream& rS)
     nOffSet = rS.Tell();
     rS >> cbDIB;
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
-    return ReadDIB(mBitMap, rS, false);
+    return ReadDIB(mBitMap, rS, false, true);
 }
 
 void TBCBitMap::Print( FILE* fp )
