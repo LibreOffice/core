@@ -5741,17 +5741,28 @@ void ScGridWindow::UpdateCursorOverlay()
     SCROW nY = pViewData->GetCurY();
 
     ScDocument* pDoc = pViewData->GetDocument();
-    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(pDoc->GetAttr(nX, nY, nTab, ATTR_MERGE));
+    const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
 
-    // fdo#87382 Also display the cell cursor for the visible part of merged
-    // cells if the cell position is part of merged cells.
-    if (!(maVisibleRange.isInside(nX, nY) ||
-                maVisibleRange.isInside(nX + pMerge->GetColMerge(), nY + pMerge->GetRowMerge())))
-        return;
+    if (!maVisibleRange.isInside(nX, nY))
+    {
+        if (maVisibleRange.mnCol2 < nX || maVisibleRange.mnRow2 < nY)
+            return;     // no further check needed, nothing visible
+
+        // fdo#87382 Also display the cell cursor for the visible part of
+        // merged cells if the view position is part of merged cells.
+        const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
+        if (rMerge.GetColMerge() <= 1 && rMerge.GetRowMerge() <= 1)
+            return;     // not merged and invisible
+
+        SCCOL nX2 = nX + rMerge.GetColMerge() - 1;
+        SCROW nY2 = nY + rMerge.GetRowMerge() - 1;
+        // Check if the middle or tail of the merged range is visible.
+        if (!(maVisibleRange.mnCol1 <= nX2 && maVisibleRange.mnRow1 <= nY2))
+            return;     // no visible part
+    }
 
     //  don't show the cursor in overlapped cells
 
-    const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
     const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>( pPattern->GetItem(ATTR_MERGE_FLAG) );
     bool bOverlapped = rMergeFlag.IsOverlapped();
 
