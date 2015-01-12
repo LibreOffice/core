@@ -70,6 +70,11 @@ ListBox::ListBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ListBox::~ListBox()
 {
+    dispose();
+}
+
+void ListBox::dispose()
+{
     CallEventListeners( VCLEVENT_OBJECT_DYING );
 
     // When destroying the FloatWin TH does a GrabFocus to the Parent:
@@ -81,6 +86,7 @@ ListBox::~ListBox()
     delete mpFloatWin;
     delete mpImplWin;
     delete mpBtn;
+    Control::dispose();
 }
 
 void ListBox::ImplInitListBoxData()

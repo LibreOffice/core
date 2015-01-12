@@ -57,7 +57,6 @@ private:
 
 public:
     explicit        SpinButton( vcl::Window* pParent, WinBits nStyle = 0 );
-    virtual         ~SpinButton();
 
     void            Up();
     void            Down();

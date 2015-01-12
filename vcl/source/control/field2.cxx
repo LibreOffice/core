@@ -820,10 +820,6 @@ PatternField::PatternField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-PatternField::~PatternField()
-{
-}
-
 bool PatternField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -868,10 +864,6 @@ PatternBox::PatternBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-PatternBox::~PatternBox()
-{
 }
 
 bool PatternBox::PreNotify( NotifyEvent& rNEvt )
@@ -1738,10 +1730,6 @@ DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
     ResetLastDate();
 }
 
-DateField::~DateField()
-{
-}
-
 bool DateField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && IsStrictFormat() &&
@@ -1839,10 +1827,6 @@ DateBox::DateBox( vcl::Window* pParent, WinBits nWinStyle ) :
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
-}
-
-DateBox::~DateBox()
-{
 }
 
 bool DateBox::PreNotify( NotifyEvent& rNEvt )
@@ -2532,10 +2516,6 @@ TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-TimeField::~TimeField()
-{
-}
-
 bool TimeField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -2671,10 +2651,6 @@ TimeBox::TimeBox( vcl::Window* pParent, WinBits nWinStyle ) :
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
     Reformat();
-}
-
-TimeBox::~TimeBox()
-{
 }
 
 bool TimeBox::PreNotify( NotifyEvent& rNEvt )

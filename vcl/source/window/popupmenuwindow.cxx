@@ -46,7 +46,13 @@ PopupMenuFloatingWindow::PopupMenuFloatingWindow( vcl::Window* pParent, WinBits 
 
 PopupMenuFloatingWindow::~PopupMenuFloatingWindow()
 {
+    dispose();
+}
+
+void PopupMenuFloatingWindow::dispose()
+{
     delete mpImplData;
+    FloatingWindow::dispose();
 }
 
 sal_uInt16 PopupMenuFloatingWindow::GetMenuStackLevel() const

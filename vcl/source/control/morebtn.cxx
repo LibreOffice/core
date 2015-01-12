@@ -80,8 +80,14 @@ MoreButton::MoreButton( vcl::Window* pParent, WinBits nStyle ) :
 
 MoreButton::~MoreButton()
 {
+    dispose();
+}
+
+void MoreButton::dispose()
+{
     delete mpMBData->mpItemList;
     delete mpMBData;
+    PushButton::dispose();
 }
 
 void MoreButton::Click()

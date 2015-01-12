@@ -83,6 +83,7 @@ public:
     explicit            ListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     explicit            ListBox( vcl::Window* pParent, const ResId& );
     virtual             ~ListBox();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;

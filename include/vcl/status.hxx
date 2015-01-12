@@ -85,9 +85,9 @@ private:
     long                mnCalcHeight;
     long                mnTextY;
     long                mnItemY;
-    sal_uInt16              mnCurItemId;
-    sal_uInt16              mnPercent;
-    sal_uInt16              mnPercentCount;
+    sal_uInt16          mnCurItemId;
+    sal_uInt16          mnPercent;
+    sal_uInt16          mnPercentCount;
     bool                mbVisibleItems;
     bool                mbFormat;
     bool                mbProgressMode;
@@ -113,7 +113,8 @@ private:
 public:
                         StatusBar( vcl::Window* pParent,
                                    WinBits nWinStyle = WB_BORDER | WB_RIGHT );
-                        virtual ~StatusBar();
+    virtual             ~StatusBar();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                AdjustItemWidthsForHiDPI(bool bAdjustHiDPI);
 

@@ -59,7 +59,13 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style, const ImageSet
 
 Throbber::~Throbber()
 {
+    dispose();
+}
+
+void Throbber::dispose()
+{
     maWaitTimer.Stop();
+    ImageControl::dispose();
 }
 
 namespace

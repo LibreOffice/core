@@ -63,7 +63,6 @@ namespace vcl
 
         public:
             PrintPreviewWindow( vcl::Window* pParent );
-            virtual ~PrintPreviewWindow();
 
             virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
             virtual void Command( const CommandEvent& ) SAL_OVERRIDE;
@@ -88,7 +87,6 @@ namespace vcl
             void ImplInitSettings();
         public:
             ShowNupOrderWindow( vcl::Window* pParent );
-            virtual ~ShowNupOrderWindow();
 
             virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
@@ -260,6 +258,7 @@ namespace vcl
     public:
         PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool isPrintToFile();
         bool isCollate();

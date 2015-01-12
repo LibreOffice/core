@@ -26,10 +26,6 @@ FixedHyperlink::FixedHyperlink(vcl::Window* pParent, WinBits nWinStyle)
     Initialize();
 }
 
-FixedHyperlink::~FixedHyperlink()
-{
-}
-
 void FixedHyperlink::Initialize()
 {
     // saves the old pointer

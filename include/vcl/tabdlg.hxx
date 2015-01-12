@@ -41,7 +41,8 @@ public:
                         TabDialog( vcl::Window* pParent,
                                    WinBits nStyle = WB_STDTABDIALOG );
                         TabDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
-                        virtual ~TabDialog();
+    virtual             ~TabDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 

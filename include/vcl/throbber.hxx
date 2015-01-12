@@ -48,6 +48,7 @@ public:
 public:
     Throbber(vcl::Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet = IMAGES_AUTO);
     virtual ~Throbber();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Properties
     void            setStepTime( sal_Int32 nStepTime )  { mnStepTime = nStepTime; }

@@ -842,10 +842,6 @@ void NumericField::ImplLoadRes( const ResId& rResId )
         mnSpinSize = ReadLongRes();
 }
 
-NumericField::~NumericField()
-{
-}
-
 bool NumericField::PreNotify( NotifyEvent& rNEvt )
 {
         if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -977,10 +973,6 @@ Size NumericBox::CalcMinimumSize() const
     }
 
     return aRet;
-}
-
-NumericBox::~NumericBox()
-{
 }
 
 bool NumericBox::PreNotify( NotifyEvent& rNEvt )
@@ -1679,10 +1671,6 @@ void MetricField::ImplLoadRes( const ResId& rResId )
     Reformat();
 }
 
-MetricField::~MetricField()
-{
-}
-
 void MetricField::SetUnit( FieldUnit nNewUnit )
 {
     sal_Int64 nRawMax = GetMax( nNewUnit );
@@ -1824,10 +1812,6 @@ Size MetricBox::CalcMinimumSize() const
     }
 
     return aRet;
-}
-
-MetricBox::~MetricBox()
-{
 }
 
 bool MetricBox::PreNotify( NotifyEvent& rNEvt )
@@ -2056,10 +2040,6 @@ CurrencyField::CurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
-CurrencyField::~CurrencyField()
-{
-}
-
 bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -2136,10 +2116,6 @@ CurrencyBox::CurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-CurrencyBox::~CurrencyBox()
-{
 }
 
 bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )

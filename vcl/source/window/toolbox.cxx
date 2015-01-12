@@ -1570,6 +1570,11 @@ ToolBox::ToolBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ToolBox::~ToolBox()
 {
+    dispose();
+}
+
+void ToolBox::dispose()
+{
     // custom menu event still running?
     if( mpData->mnEventId )
         Application::RemoveUserEvent( mpData->mnEventId );
@@ -1601,6 +1606,7 @@ ToolBox::~ToolBox()
             pSVData->maCtrlData.mpTBDragMgr = NULL;
         }
     }
+    DockingWindow::dispose();
 }
 
 ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const

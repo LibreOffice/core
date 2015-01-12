@@ -290,11 +290,17 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 
 HelpTextWindow::~HelpTextWindow()
 {
+    dispose();
+}
+
+void HelpTextWindow::dispose()
+{
     maShowTimer.Stop();
     maHideTimer.Stop();
 
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
+    FloatingWindow::dispose();
 }
 
 void HelpTextWindow::SetHelpText( const OUString& rHelpText )

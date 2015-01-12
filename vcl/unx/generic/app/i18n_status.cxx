@@ -52,7 +52,6 @@ class StatusWindow : public WorkWindow
 protected:
     StatusWindow( WinBits nWinBits );
 public:
-    virtual ~StatusWindow();
 
     virtual void setPosition( SalFrame* );
     virtual void setText( const OUString & ) = 0;
@@ -66,8 +65,6 @@ StatusWindow::StatusWindow( WinBits nWinBits ) :
         WorkWindow( NULL, nWinBits )
 {
 }
-
-StatusWindow::~StatusWindow() {}
 
 void StatusWindow::setPosition( SalFrame* )
 {

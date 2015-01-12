@@ -1385,8 +1385,13 @@ public:
     }
     virtual ~DemoWin()
     {
+        dispose();
+    }
+    virtual void dispose() SAL_OVERRIDE
+    {
         mxThread.clear();
         mrRenderer.removeInvalidate(this);
+        WorkWindow::dispose();
     }
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE
     {
@@ -1477,14 +1482,6 @@ public:
 
         Show();
     }
-
-    virtual ~DemoWidgets()
-    {
-        delete mpButton;
-        delete mpToolbox;
-        delete mpBox;
-    }
-
     virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {
         Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());

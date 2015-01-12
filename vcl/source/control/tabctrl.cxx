@@ -192,6 +192,11 @@ TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
 
 TabControl::~TabControl()
 {
+    dispose();
+}
+
+void TabControl::dispose()
+{
     Window *pParent = GetParent();
     if (pParent && pParent->IsDialog())
         GetParent()->RemoveChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
@@ -205,6 +210,7 @@ TabControl::~TabControl()
             delete mpTabCtrlData->mpListBox;
         delete mpTabCtrlData;
     }
+    Control::dispose();
 }
 
 ImplTabItem* TabControl::ImplGetItem( sal_uInt16 nId ) const

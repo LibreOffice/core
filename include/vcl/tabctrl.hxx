@@ -42,13 +42,13 @@ private:
     long                mnLastHeight;
     long                mnBtnSize;
     long                mnMaxPageWidth;
-    sal_uInt16              mnActPageId;
-    sal_uInt16              mnCurPageId;
+    sal_uInt16          mnActPageId;
+    sal_uInt16          mnCurPageId;
     bool                mbFormat;
     bool                mbRestoreHelpId;
     bool                mbRestoreUnqId;
     bool                mbSmallInvalidate;
-    bool                    mbLayoutDirty;
+    bool                mbLayoutDirty;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
@@ -83,6 +83,7 @@ public:
                         TabControl( vcl::Window* pParent,
                                     WinBits nStyle = WB_STDTABCONTROL );
                         virtual ~TabControl();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

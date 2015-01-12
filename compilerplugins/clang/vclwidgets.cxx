@@ -82,18 +82,11 @@ bool VCLWidgets::VisitCXXRecordDecl(const CXXRecordDecl * recordDecl) {
     }
     if (!recordDecl->isCompleteDefinition())
         return true;
-    // check if this field is derived from Window
+    // check if this class is derived from Window
     if (!isDerivedFromWindow(recordDecl)) {
         return true;
     }
-    bool foundVclPtr = false;
-    for(auto fieldDecl : recordDecl->fields()) {
-        if (fieldDecl->getType().getAsString().find("VclPtr") != std::string::npos) {
-           foundVclPtr = true;
-           break;
-        }
-    }
-    if (!foundVclPtr) {
+    if (!recordDecl->hasUserDeclaredDestructor()) {
         return true;
     }
     bool foundDispose = false;
@@ -106,7 +99,7 @@ bool VCLWidgets::VisitCXXRecordDecl(const CXXRecordDecl * recordDecl) {
     if (!foundDispose) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass with VclPtr members should declare a dispose() method.",
+            "vcl::Window subclass with destructor should declare a dispose() method.",
             recordDecl->getLocation())
           << recordDecl->getSourceRange();
     }

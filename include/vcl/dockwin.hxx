@@ -299,6 +299,7 @@ public:
     DockingWindow(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
         const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    StartDocking();
     virtual bool    Docking( const Point& rPos, Rectangle& rRect );

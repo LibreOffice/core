@@ -57,6 +57,7 @@ protected:
 public:
     explicit        MenuButton( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual         ~MenuButton();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

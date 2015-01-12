@@ -64,6 +64,7 @@ class RTSDialog : public TabDialog
 public:
     RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent = NULL);
     virtual ~RTSDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
 };
@@ -86,7 +87,6 @@ class RTSPaperPage : public TabPage
     DECL_LINK( SelectHdl, ListBox* );
 public:
     RTSPaperPage( RTSDialog* );
-    virtual ~RTSPaperPage();
 
     void update();
 
@@ -112,7 +112,6 @@ class RTSDevicePage : public TabPage
     DECL_LINK( ModifyHdl, Edit* );
 public:
     RTSDevicePage( RTSDialog* );
-    virtual ~RTSDevicePage();
 
     sal_uLong getLevel();
     sal_uLong getPDFDevice();

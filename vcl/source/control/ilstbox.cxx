@@ -536,7 +536,13 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
 
 ImplListBoxWindow::~ImplListBoxWindow()
 {
+    dispose();
+}
+
+void ImplListBoxWindow::dispose()
+{
     delete mpEntryList;
+    Control::dispose();
 }
 
 void ImplListBoxWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )

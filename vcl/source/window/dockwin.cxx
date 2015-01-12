@@ -73,6 +73,7 @@ public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
     virtual ~ImplDockFloatWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    Move() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -111,8 +112,14 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
 
 ImplDockFloatWin::~ImplDockFloatWin()
 {
+    dispose();
+}
+
+void ImplDockFloatWin::dispose()
+{
     if( mnLastUserEvent )
         Application::RemoveUserEvent( mnLastUserEvent );
+    FloatingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
@@ -460,6 +467,11 @@ DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
 
 DockingWindow::~DockingWindow()
 {
+    dispose();
+}
+
+void DockingWindow::dispose()
+{
     if ( IsFloatingMode() )
     {
         Show( false, SHOW_NOFOCUSCHANGE );
@@ -467,6 +479,7 @@ DockingWindow::~DockingWindow()
     }
     delete mpImplData;
     mpImplData = NULL;
+    Window::dispose();
 }
 
 void DockingWindow::Tracking( const TrackingEvent& rTEvt )

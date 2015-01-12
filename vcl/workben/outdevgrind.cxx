@@ -72,7 +72,6 @@ class TestWindow : public Dialog
             Show();
         }
 
-        virtual ~TestWindow() {}
         virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 

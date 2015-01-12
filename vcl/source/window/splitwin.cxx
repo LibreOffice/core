@@ -1347,9 +1347,15 @@ SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
 
 SplitWindow::~SplitWindow()
 {
+    dispose();
+}
+
+void SplitWindow::dispose()
+{
     // delete Sets
     ImplDeleteSet( mpMainSet );
     mpMainSet = NULL; //NULL for base-class callbacks during dtoring
+    DockingWindow::dispose();
 }
 
 void SplitWindow::ImplSetWindowSize( long nDelta )

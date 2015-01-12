@@ -468,10 +468,6 @@ LongCurrencyField::LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle ) 
     Reformat();
 }
 
-LongCurrencyField::~LongCurrencyField()
-{
-}
-
 bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -544,10 +540,6 @@ LongCurrencyBox::LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
-}
-
-LongCurrencyBox::~LongCurrencyBox()
-{
 }
 
 bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )

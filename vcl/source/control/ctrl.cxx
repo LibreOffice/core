@@ -67,7 +67,13 @@ Control::Control( vcl::Window* pParent, const ResId& rResId ) :
 
 Control::~Control()
 {
+   dispose();
+}
+
+void Control::dispose()
+{
     delete mpControlData, mpControlData = NULL;
+    Window::dispose();
 }
 
 void Control::EnableRTL( bool bEnable )

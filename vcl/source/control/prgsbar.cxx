@@ -56,10 +56,6 @@ ProgressBar::ProgressBar( vcl::Window* pParent, WinBits nWinStyle ) :
     ImplInit();
 }
 
-ProgressBar::~ProgressBar()
-{
-}
-
 void ProgressBar::ImplInitSettings( bool bFont,
                                     bool bForeground, bool bBackground )
 {

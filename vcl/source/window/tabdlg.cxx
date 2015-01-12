@@ -221,7 +221,13 @@ TabDialog::TabDialog( vcl::Window* pParent, const OUString& rID, const OUString&
 
 TabDialog::~TabDialog()
 {
+    dispose();
+}
+
+void TabDialog::dispose()
+{
     delete mpFixedLine;
+    Dialog::dispose();
 }
 
 void TabDialog::StateChanged( StateChangedType nType )

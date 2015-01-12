@@ -66,11 +66,6 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         */
         FixedHyperlink( vcl::Window* pParent, WinBits nWinStyle = 0 );
 
-        /** dtor
-
-        */
-        virtual ~FixedHyperlink();
-
         /** overwrites Window::GetFocus().
 
             Changes the color of the text and shows a focus rectangle.

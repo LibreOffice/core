@@ -37,6 +37,7 @@ private:
 public:
     explicit        DockingAreaWindow( vcl::Window* pParent );
     virtual         ~DockingAreaWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetAlign( WindowAlign eNewAlign );
     WindowAlign     GetAlign() const;

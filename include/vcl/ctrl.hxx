@@ -127,6 +127,7 @@ public:
     explicit        Control( vcl::Window* pParent, WinBits nWinStyle = 0 );
     explicit        Control( vcl::Window* pParent, const ResId& );
     virtual         ~Control();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
 

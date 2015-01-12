@@ -30,6 +30,7 @@ private:
 public:
     PopupMenuFloatingWindow( vcl::Window* pParent, WinBits nStyle = (WB_SYSTEMFLOATWIN|WB_SYSTEMWINDOW|WB_NOBORDER) );
     virtual ~PopupMenuFloatingWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16      GetMenuStackLevel() const;
     void            SetMenuStackLevel( sal_uInt16 nLevel );

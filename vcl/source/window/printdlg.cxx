@@ -80,10 +80,6 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     maVertDim->SetText( OUString( "2.0in" ) );
 }
 
-PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
-{
-}
-
 const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
 
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
@@ -308,10 +304,6 @@ PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
     , mnColumns( 1 )
 {
     ImplInitSettings();
-}
-
-PrintDialog::ShowNupOrderWindow::~ShowNupOrderWindow()
-{
 }
 
 void PrintDialog::ShowNupOrderWindow::ImplInitSettings()
@@ -718,6 +710,11 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 }
 
 PrintDialog::~PrintDialog()
+{
+    dispose();
+}
+
+void PrintDialog::dispose()
 {
     delete mpCustomOptionsUIBuilder;
 }

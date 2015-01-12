@@ -151,6 +151,11 @@ StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
 
 StatusBar::~StatusBar()
 {
+    dispose();
+}
+
+void StatusBar::dispose()
+{
     // delete all items
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         delete (*mpItemList)[ i ];
@@ -160,6 +165,7 @@ StatusBar::~StatusBar()
     // delete VirtualDevice
     delete mpImplData->mpVirDev;
     delete mpImplData;
+    Window::dispose();
 }
 
 void StatusBar::AdjustItemWidthsForHiDPI(bool bAdjustHiDPI)
