@@ -555,8 +555,7 @@ struct RulerTab
     sal_uInt16  nStyle;
 };
 
-#define RULER_TAB_WIDTH         7
-#define RULER_TAB_HEIGHT        6
+
 
 // - RulerLine -
 
@@ -598,6 +597,27 @@ struct RulerUnitData
     long            n100THMM;           // 100mm Unit divider
     sal_uInt16      nUnitDigits;        // Number of digits
     sal_Char        aUnitStr[8];        // Unit string
+};
+
+// Data for drawing ruler tabstops
+struct RulerTabData
+{
+    sal_uInt16  DPIScaleFactor;
+    sal_uInt16  width;
+    sal_uInt16  height;
+    sal_uInt16  height2;
+    sal_uInt16  width2;
+    sal_uInt16  cwidth;
+    sal_uInt16  cwidth2;
+    sal_uInt16  cwidth3;
+    sal_uInt16  cwidth4;
+    sal_uInt16  dheight;
+    sal_uInt16  dheight2;
+    sal_uInt16  dwidth;
+    sal_uInt16  dwidth2;
+    sal_uInt16  dwidth3;
+    sal_uInt16  dwidth4;
+    sal_uInt16  textoff;
 };
 
 // - Ruler -
