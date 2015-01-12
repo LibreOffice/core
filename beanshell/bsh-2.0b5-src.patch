@@ -1,16 +1,16 @@
---- misc/BeanShell/build.xml	Fri Dec 19 17:14:27 2003
-+++ misc/build/BeanShell/build.xml	Fri Mar 28 15:55:04 2008
-@@ -17,7 +17,7 @@
- 		up the build dir!  It has to be done manually the first time (or put
- 		in the jar file). There must be a way to fix this...
+--- misc/BeanShell-2.0b5/build.xml	Fri Dec 19 17:14:27 2003
++++ misc/build/BeanShell-2.0b5/build.xml	Fri Mar 28 15:55:04 2008
+@@ -10,7 +10,7 @@
+ 		- Why can't I nest filesets?  This seems like it would be so easy and
+ 		useful...
  -->
 -<project name="beanshell" default="compile" basedir=".">
 +<project name="beanshell" default="jarall" basedir=".">
  
  <!-- Project Configuration -->
  
-@@ -71,6 +71,9 @@
- 		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
+@@ -65,6 +65,9 @@
+ 	<property name="exclude-engine" value="bsh/engine/**"/>
  	-->
  
 +	<property name="exclude-bsf" 
@@ -19,18 +19,18 @@
  	<!-- Uncomment to build without the ASM class generator code.
  	<property name="exclude-classgen" 
  		value="bsh/org/objectweb/asm/**,bsh/ClassGeneratorImpl.java,bsh/ClassGeneratorUtil.java,bsh/DelayedEvalBshMethod.java"/>
-@@ -80,6 +83,9 @@
- 	<property name="exclude-servlet" 
+@@ -75,6 +78,9 @@
  		value="bsh/servlet/*"/>
  	-->
-+
+ 
 +	<property name="exclude-servlet" 
 +		value="bsh/servlet/*"/>
- 
++
  	<!-- Legacy excludes.  Comment this *out* to build these legacy items -->
- 	<property name="legacy-excludes" 
---- misc/BeanShell/makefile.mk	Fri Mar 28 15:56:40 2008
-+++ misc/build/BeanShell/makefile.mk	Fri Mar 28 15:56:06 2008
+ 	<property name="excludes-legacy" 
+ 		value="bsh/JThis.java"/>
+--- misc/BeanShell-2.0b5/makefile.mk	Fri Mar 28 15:56:40 2008
++++ misc/build/BeanShell-2.0b5/makefile.mk	Fri Mar 28 15:56:06 2008
 @@ -1 +1,29 @@
 -dummy
 +#**************************************************************
@@ -62,16 +62,3 @@
 +
 +ALLTAR : ANTBUILD
 +
---- misc/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Dec 19 17:14:28 2003
-+++ misc/build/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Mar 28 15:55:05 2008
-@@ -34,7 +34,9 @@
- package bsh;
- 
- import bsh.org.objectweb.asm.*;
--import java.lang.reflect.*;
-+import java.lang.reflect.Constructor;
-+import java.lang.reflect.InvocationTargetException;
-+import java.lang.reflect.Method;
- import java.util.ArrayList;
- import java.util.List;
- 

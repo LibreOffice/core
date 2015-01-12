@@ -1,1 +1,1 @@
-..\%__SRC%\misc\build\BeanShell\dist\bsh-2.0b1.jar %_DEST%\bin%_EXT%\bsh.jar
+..\%__SRC%\misc\build\BeanShell-2.0b5\dist\bsh-2.0b5.jar %_DEST%\bin%_EXT%\bsh.jar
