@@ -18,6 +18,67 @@
 #define G_SOURCE_REMOVE FALSE
 #endif
 
+/* Before glib 2.12. */
+#ifndef HAVE_GDK_THREADS_ADD_API
+typedef struct
+{
+  GSourceFunc func;
+  gpointer data;
+  GDestroyNotify destroy;
+} GdkThreadsDispatch;
+
+static gboolean
+gdk_threads_dispatch                    (gpointer data)
+{
+        GdkThreadsDispatch *dispatch = data;
+        gboolean ret = FALSE;
+
+        gdk_threads_enter ();
+        ret = dispatch->func (dispatch->data);
+        gdk_threads_leave ();
+
+        return ret;
+}
+
+static void
+gdk_threads_dispatch_free               (gpointer data)
+{
+        GdkThreadsDispatch *dispatch = data;
+
+        if (dispatch->destroy && dispatch->data)
+                dispatch->destroy (dispatch->data);
+
+        g_slice_free (GdkThreadsDispatch, data);
+}
+
+guint
+gdk_threads_add_idle_full               (gint           priority,
+                                 GSourceFunc    function,
+                                 gpointer       data,
+                                 GDestroyNotify notify)
+{
+        GdkThreadsDispatch *dispatch;
+
+        g_return_val_if_fail (function != NULL, 0);
+
+        dispatch = g_slice_new (GdkThreadsDispatch);
+        dispatch->func = function;
+        dispatch->data = data;
+        dispatch->destroy = notify;
+
+        return g_idle_add_full (priority, gdk_threads_dispatch, dispatch,
+                                gdk_threads_dispatch_free);
+}
+
+guint
+gdk_threads_add_idle                    (GSourceFunc function,
+                                 gpointer    data)
+{
+        return gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE,
+                                          function, data, NULL);
+}
+#endif /* HAVE_GDK_THREADS_ADD_API */
+
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
 
