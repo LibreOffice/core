@@ -26,6 +26,19 @@ $(eval $(call gb_Library_add_defs,basebmp,\
 	-DBASEBMP_DLLIMPLEMENTATION \
 ))
 
+# TODO(davido): This is failing only in release mode with:
+#
+# Compilation of bitmapdevice.cxx is failing in release mode:
+# 
+# Fatal Error C1128: number of sections exceeded object file
+# format limit : compile with /bigobj
+#
+ifeq ($(CPUNAME),X86_64)
+$(eval $(call gb_Library_add_cxxflags,basebmp, \
+    -bigobj \
+))
+endif
+
 $(eval $(call gb_Library_add_exception_objects,basebmp,\
 	basebmp/source/bitmapdevice \
 	basebmp/source/debug \
