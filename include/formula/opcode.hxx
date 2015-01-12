@@ -357,7 +357,7 @@ enum OpCode : sal_uInt16
         ocGeoMean           = SC_OPCODE_GEO_MEAN,
         ocStandard          = SC_OPCODE_STANDARD,
         ocAveDev            = SC_OPCODE_AVE_DEV,
-        ocSchiefe           = SC_OPCODE_SCHIEFE,
+        ocSkew              = SC_OPCODE_SKEW,
         ocSkewp             = SC_OPCODE_SKEWP,
         ocDevSq             = SC_OPCODE_DEV_SQ,
         ocMedian            = SC_OPCODE_MEDIAN,
