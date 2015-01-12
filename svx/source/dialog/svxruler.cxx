@@ -157,6 +157,26 @@ struct SvxRuler_Impl {
 
 };
 
+static RulerTabData ruler_tab_svx =
+{
+    0, // DPIScaleFactor to be set
+    7, // ruler_tab_width
+    6, // ruler_tab_height
+    0, // ruler_tab_height2
+    0, // ruler_tab_width2
+    0, // ruler_tab_cwidth
+    0, // ruler_tab_cwidth2
+    0, // ruler_tab_cwidth3
+    0, // ruler_tab_cwidth4
+    0, // ruler_tab_dheight
+    0, // ruler_tab_dheight2
+    0, // ruler_tab_dwidth
+    0, // ruler_tab_dwidth2
+    0, // ruler_tab_dwidth3
+    0, // ruler_tab_dwidth4
+    0  // ruler_tab_textoff
+};
+
 void SvxRuler_Impl::SetPercSize(sal_uInt16 nSize)
 {
     if(nSize > nPercSize)
@@ -312,6 +332,11 @@ SvxRuler::SvxRuler(
         SetExtraType(RULER_EXTRA_NULLOFFSET, 0);
 
     rBindings.LeaveRegistrations();
+
+    ruler_tab_svx.DPIScaleFactor = pParent->GetDPIScaleFactor();
+    ruler_tab_svx.height *= ruler_tab_svx.DPIScaleFactor;
+    ruler_tab_svx.width  *= ruler_tab_svx.DPIScaleFactor;
+
 }
 
 SvxRuler::~SvxRuler()
@@ -3421,7 +3446,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             PopupMenu aMenu;
             aMenu.SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
             VirtualDevice aDev;
-            const Size aSz(RULER_TAB_WIDTH + 2, RULER_TAB_HEIGHT + 2);
+            const Size aSz(ruler_tab_svx.width + 2, ruler_tab_svx.height + 2);
             aDev.SetOutputSize(aSz);
             aDev.SetBackground(Wallpaper(Color(COL_WHITE)));
             Color aFillColor(aDev.GetSettings().GetStyleSettings().GetShadowColor());
