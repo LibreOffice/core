@@ -5016,7 +5016,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function LOGEST #*=-
-    Resource SC_OPCODE_RKP
+    Resource SC_OPCODE_LOGEST
     {
         String 1 // Description
         {

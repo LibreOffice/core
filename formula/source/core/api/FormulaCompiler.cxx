@@ -848,7 +848,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocDde :
         case ocGrowth :
         case ocTrend :
-        case ocRKP :
+        case ocLogest :
         case ocRGP :
         case ocFrequency :
         case ocMatTrans :

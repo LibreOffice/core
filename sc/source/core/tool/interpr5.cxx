@@ -2344,7 +2344,7 @@ void ScInterpreter::ScRGP()
 }
 
 // LOGEST
-void ScInterpreter::ScRKP()
+void ScInterpreter::ScLogest()
 {
     CalculateRGPRKP(true);
 }
