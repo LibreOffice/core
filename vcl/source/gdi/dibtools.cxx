@@ -166,7 +166,7 @@ namespace
     }
 }
 
-bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown)
+bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown, bool bMSOFormat)
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER or BITMAPV5HEADER
     const sal_Size aStartPos(rIStm.Tell());
@@ -181,6 +181,29 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         rIStm.ReadInt16( nTmp16 ); rHeader.nHeight = nTmp16;
         rIStm.ReadUInt16( rHeader.nPlanes );
         rIStm.ReadUInt16( rHeader.nBitCount );
+    }
+    else if ( bMSOFormat && rHeader.nSize == DIBINFOHEADERSIZE )
+    {
+        sal_Int16 nTmp16(0);
+        rIStm.ReadInt16(nTmp16);
+        rHeader.nWidth = nTmp16;
+        rIStm.ReadInt16(nTmp16);
+        rHeader.nHeight = nTmp16;
+        sal_uInt8 nTmp8(0);
+        rIStm.ReadUChar(nTmp8);
+        rHeader.nPlanes = nTmp8;
+        rIStm.ReadUChar(nTmp8);
+        rHeader.nBitCount = nTmp8;
+        rIStm.ReadInt16(nTmp16);
+        rHeader.nSizeImage = nTmp16;
+        rIStm.ReadInt16(nTmp16);
+        rHeader.nCompression = nTmp16;
+        if ( !rHeader.nSizeImage ) // uncompressed?
+            rHeader.nSizeImage = ((rHeader.nWidth * rHeader.nBitCount + 31) & ~31) / 8 * rHeader.nHeight;
+        rIStm.ReadInt32( rHeader.nXPelsPerMeter );
+        rIStm.ReadInt32( rHeader.nYPelsPerMeter );
+        rIStm.ReadUInt32( rHeader.nColsUsed );
+        rIStm.ReadUInt32( rHeader.nColsImportant );
     }
     else
     {
@@ -679,14 +702,14 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     return( rIStm.GetError() == 0UL );
 }
 
-bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLong nOffset )
+bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLong nOffset, bool bMSOFormat = false )
 {
     DIBV5Header aHeader;
     const sal_uLong nStmPos = rIStm.Tell();
     bool bRet(false);
     bool bTopDown(false);
 
-    if(ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
+    if(ImplReadDIBInfoHeader(rIStm, aHeader, bTopDown, bMSOFormat) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount)
     {
         // In case ImplReadDIB() didn't call ImplReadDIBFileHeader() before
         // this method, nOffset is 0, that's OK.
@@ -1412,7 +1435,8 @@ bool ImplReadDIB(
     Bitmap& rTarget, Bitmap*
     pTargetAlpha,
     SvStream& rIStm,
-    bool bFileHeader)
+    bool bFileHeader,
+    bool bMSOFormat=false)
 {
     const sal_uInt16 nOldFormat(rIStm.GetNumberFormatInt());
     const sal_uLong nOldPos(rIStm.Tell());
@@ -1430,7 +1454,7 @@ bool ImplReadDIB(
     }
     else
     {
-        bRet = ImplReadDIBBody(rIStm, rTarget, 0, nOffset);
+        bRet = ImplReadDIBBody(rIStm, rTarget, 0, nOffset, bMSOFormat);
     }
 
     if(!bRet)
@@ -1518,9 +1542,10 @@ bool ImplWriteDIB(
 bool ReadDIB(
     Bitmap& rTarget,
     SvStream& rIStm,
-    bool bFileHeader)
+    bool bFileHeader,
+    bool bMSOFormat)
 {
-    return ImplReadDIB(rTarget, 0, rIStm, bFileHeader);
+    return ImplReadDIB(rTarget, 0, rIStm, bFileHeader, bMSOFormat);
 }
 
 bool ReadDIBBitmapEx(
