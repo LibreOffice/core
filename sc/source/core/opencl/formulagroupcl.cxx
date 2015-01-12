@@ -2798,7 +2798,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpCosh, nResultSize));
                 break;
-            case ocKritBinom:
+            case ocCritBinom:
                 mvSubArguments.push_back(SoPHelper(ts,
                         ft->Children[i], new OpCritBinom, nResultSize));
                 break;

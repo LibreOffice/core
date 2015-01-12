@@ -2050,7 +2050,7 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
     else if (rTest == "NORMAL")
             eId=ocNormDist;
     else if (rTest == "CRITBINOMIAL")
-            eId=ocKritBinom;
+            eId=ocCritBinom;
     else if (rTest == "TERM")
             eId=ocNper;
     else if (rTest == "CTERM")

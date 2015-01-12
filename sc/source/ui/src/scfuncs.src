@@ -6808,7 +6808,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function CRITBINOM #*=-
-    Resource SC_OPCODE_KRIT_BINOM
+    Resource SC_OPCODE_CRIT_BINOM
     {
         String 1 // Description
         {
