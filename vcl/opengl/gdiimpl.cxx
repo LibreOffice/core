@@ -497,8 +497,8 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
     // is almost unnoticeable.
     const double w = edge ? 1.4 : 1.0;
 
-    double t;
-    double R;
+    double t(0.0);
+    double R(0.0);
     double f = w - static_cast<int>(w);
     //determine parameters t,R
     if ( w>=0.0 && w<1.0 )
