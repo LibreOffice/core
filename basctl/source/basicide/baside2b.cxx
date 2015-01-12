@@ -1829,9 +1829,16 @@ void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
         createAllObjectProperties( pObj );
          SbxArray* pProps = pObj->GetProperties();
         sal_uInt16 nPropCount = pProps->Count();
+        if ( nPropCount >= 3 &&
+             pProps->Get( nPropCount -1 )->GetName().EqualsIgnoreCaseAscii( "Dbg_Methods" ) &&
+             pProps->Get( nPropCount -2 )->GetName().EqualsIgnoreCaseAscii( "Dbg_Properties" ) &&
+             pProps->Get( nPropCount -3 )->GetName().EqualsIgnoreCaseAscii( "Dbg_SupportedInterfaces" ) )
+         {
+            nPropCount -= 3;
+         }
         pItem->maMemberList.allocList( nPropCount );
 
-        for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )
+        for( sal_uInt16 i = 0 ; i < nPropCount ; ++i )
         {
             SbxVariable* pVar = pProps->Get( i );
 
