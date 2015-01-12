@@ -440,7 +440,7 @@ namespace slideshow
 
         bool ViewMediaShape::implInitializePlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams,
-                                                                 const OUString& )
+                                                                 const OUString& rMimeType )
         {
             OSL_TRACE( "ViewMediaShape::implInitializePlayerWindow" );
             if( !mpMediaWindow.get() && !rBounds.isEmpty() )
