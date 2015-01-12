@@ -34,6 +34,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -546,11 +547,12 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     SfxMedium* pSrcMed = new SfxMedium(rURL, bReadWrite ? STREAM_STD_READWRITE : STREAM_STD_READ );
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
+    SfxItemSet* pSet = pSrcMed->GetItemSet();
     if (pPassword)
     {
-        SfxItemSet* pSet = pSrcMed->GetItemSet();
         pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
     }
+    pSet->Put(SfxUInt16Item(SID_MACROEXECMODE,::com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
     SAL_INFO( "sc.qa", "about to load " << rURL );
     if (!xDocShRef->DoLoad(pSrcMed))
     {

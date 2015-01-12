@@ -481,6 +481,13 @@ void ScFiltersTest::testFunctionsODS()
     testFile(aCSVFileName, rDoc3, 0, PureString);
 
     xDocSh->DoClose();
+
+    // crashes at exit while unloading StarBasic code
+    // xDocSh = loadDoc("user-defined-function.", ODS);
+    // xDocSh->DoHardRecalc(true);
+    // ScDocument& rDocUserDef = xDocSh->GetDocument();
+    // createCSVPath("user-defined-function.", aCSVFileName);
+    // testFile(aCSVFileName, rDocUserDef, 0);
 }
 
 void ScFiltersTest::testFunctionsExcel2010()
