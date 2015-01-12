@@ -479,6 +479,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case XATTR_FILLBMP_STRETCH:
                 static_cast<const XFillBmpStretchItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_PROTECT:
+                static_cast<const SvxProtectItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -493,9 +496,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_PROTECT:
-                pWhich = "protect";
-                break;
             case RES_EDIT_IN_READONLY:
                 pWhich = "edit in read-only";
                 break;

@@ -66,6 +66,7 @@ public:
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline SvxProtectItem::SvxProtectItem( const sal_uInt16 nId )
