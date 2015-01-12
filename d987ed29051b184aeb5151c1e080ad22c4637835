@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_c5872ed6",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5744,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-12T13:54:19Z",
+      "side": 1,
+      "message": "Btw, please don\u0027t use C-style casts anymore, the proper cast here is static_cast\u003cconst ScMergeAttr*\u003e(...)\n\nI\u0027ll fix that in a follow-up commit.",
+      "revId": "d987ed29051b184aeb5151c1e080ad22c4637835",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
