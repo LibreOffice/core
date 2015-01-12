@@ -2473,8 +2473,7 @@ void SwWW8ImplReader::StopApo()
         Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
 
         SwTxtNode* pNd = aPref.GetNode().GetTxtNode();
-        if (pNd && &pPaM->GetPoint()->nNode.GetNode()
-                        != &pSFlyPara->pMainTextPos->nNode.GetNode())
+        if (pNd && pSFlyPara->pFlyFmt)
         {
             /*
             #i582#
