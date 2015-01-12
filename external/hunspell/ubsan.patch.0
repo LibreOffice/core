@@ -1,0 +1,11 @@
+--- src/hunspell/hashmgr.cxx
++++ src/hunspell/hashmgr.cxx
+@@ -479,7 +479,7 @@
+ 
+ int HashMgr::hash(const char * word) const
+ {
+-    long  hv = 0;
++    unsigned long  hv = 0;
+     for (int i=0; i < 4  &&  *word != 0; i++)
+         hv = (hv << 8) | (*word++);
+     while (*word != 0) {
