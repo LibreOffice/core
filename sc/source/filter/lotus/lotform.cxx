@@ -105,7 +105,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             aPool << ocOpen;
         }
             break;
-        case ocChose:
+        case ocChoose:
         {// 1. Parameter ++
             if (nAnz >= 1)
                 IncToken( eParam[ nAnz - 1 ] );
@@ -974,7 +974,7 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocArcCos,           //   45 Arcus-Cosinus
         ocExp,              //   46 Exponential function
         ocMod,              //   47 Modulo
-        ocChose,            //   48 Selection
+        ocChoose,           //   48 Selection
         ocIsNA,             //   49 Is not available?
         ocIsError,          //   50 Is Error?
         ocFalse,            //   51 FALSE
@@ -1503,7 +1503,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocArcCos,           //   45 Arcus-Cosinus
         ocExp,              //   46 Exponentialfunction
         ocMod,              //   47 Modulo
-        ocChose,            //   48 Selection
+        ocChoose,            //   48 Selection
         ocIsNA,             //   49 Is not available?
         ocIsError,          //   50 Is Error?
         ocFalse,            //   51 FALSE

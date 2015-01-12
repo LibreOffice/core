@@ -3812,7 +3812,7 @@ StackVar ScInterpreter::Interpret()
             PushWithoutError( (FormulaToken&) *pCur );
         }
         else if (pTokenMatrixMap &&
-                 !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose) &&
+                 !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose) &&
                 ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
                  pTokenMatrixMap->end()) &&
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
@@ -3833,7 +3833,7 @@ StackVar ScInterpreter::Interpret()
             nFuncFmtType = NUMBERFORMAT_NUMBER;
             nFuncFmtIndex = 0;
 
-            if ( eOp == ocIf || eOp == ocChose || eOp == ocIfError || eOp == ocIfNA )
+            if ( eOp == ocIf || eOp == ocChoose || eOp == ocIfError || eOp == ocIfNA )
                 nStackBase = sp;        // don't mess around with the jumps
             else
             {
@@ -3862,7 +3862,7 @@ StackVar ScInterpreter::Interpret()
                 case ocIf               : ScIfJump();                   break;
                 case ocIfError          : ScIfError( false );           break;
                 case ocIfNA             : ScIfError( true );            break;
-                case ocChose            : ScChoseJump();                break;
+                case ocChoose           : ScChooseJump();                break;
                 case ocAdd              : ScAdd();                      break;
                 case ocSub              : ScSub();                      break;
                 case ocMul              : ScMul();                      break;

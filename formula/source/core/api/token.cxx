@@ -81,7 +81,7 @@ bool FormulaToken::IsFunction() const
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
            (GetByte() != 0                                                  // x parameters
         || (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
-        || (ocIf == eOp || ocIfError == eOp || ocIfNA == eOp || ocChose == eOp ) // @ jump commands
+        || (ocIf == eOp || ocIfError == eOp || ocIfNA == eOp || ocChoose == eOp ) // @ jump commands
         || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     // one parameter
         || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     // x parameters (cByte==0 in
                                                                             // FuncAutoPilot)
@@ -96,10 +96,10 @@ bool FormulaToken::IsFunction() const
 sal_uInt8 FormulaToken::GetParamCount() const
 {
     if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
-         eOp != ocIf && eOp != ocIfError && eOp != ocIfNA && eOp != ocChose &&
+         eOp != ocIf && eOp != ocIfError && eOp != ocIfNA && eOp != ocChoose &&
          eOp != ocPercentSign )
         return 0;       // parameters and specials
-                        // ocIf, ocIfError, ocIfNA and ocChose not for FAP, have cByte then
+                        // ocIf, ocIfError, ocIfNA and ocChoose not for FAP, have cByte then
 //2do: bool parameter whether FAP or not?
     else if ( GetByte() )
         return GetByte();   // all functions, also ocExternal and ocMacro
@@ -112,7 +112,7 @@ sal_uInt8 FormulaToken::GetParamCount() const
         return 0;           // no parameter
     else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)
         return 1;           // one parameter
-    else if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose )
+    else if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose )
         return 1;           // only the condition counts as parameter
     else
         return 0;           // all the rest, no Parameter, or
@@ -967,7 +967,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
             }
             if ( eOp == ocPush || lcl_IsReference( eOp, t->GetType() )  )
                 pStack[sp++] = t;
-            else if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose )
+            else if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose )
             {   // ignore Jumps, pop previous Result (Condition)
                 if ( sp )
                     --sp;
@@ -1441,12 +1441,12 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
         case ocIf:
         case ocIfError:
         case ocIfNA:
-        case ocChose:
+        case ocChoose:
             {
                 short nJump[FORMULA_MAXJUMPCOUNT + 1];
                 if ( eOp == ocIf )
                     nJump[ 0 ] = 3;
-                else if ( eOp == ocChose )
+                else if ( eOp == ocChoose )
                     nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                 else
                     nJump[ 0 ] = 2;

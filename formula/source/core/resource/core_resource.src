@@ -27,7 +27,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_IF { Text = "IF" ; };
     String SC_OPCODE_IF_ERROR { Text = "IFERROR" ; };
     String SC_OPCODE_IF_NA { Text = "IFNA" ; };
-    String SC_OPCODE_CHOSE { Text = "CHOOSE" ; };
+    String SC_OPCODE_CHOOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
@@ -435,7 +435,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_IF { Text = "IF" ; };
     String SC_OPCODE_IF_ERROR { Text = "IFERROR" ; };
     String SC_OPCODE_IF_NA { Text = "_xlfn.IFNA" ; };
-    String SC_OPCODE_CHOSE { Text = "CHOOSE" ; };
+    String SC_OPCODE_CHOOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
@@ -845,7 +845,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_IF { Text = "IF" ; };
     String SC_OPCODE_IF_ERROR { Text = "IFERROR" ; };
     String SC_OPCODE_IF_NA { Text = "IFNA" ; };
-    String SC_OPCODE_CHOSE { Text = "CHOOSE" ; };
+    String SC_OPCODE_CHOOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
@@ -1261,7 +1261,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "IFNA" ;
     };
-    String SC_OPCODE_CHOSE
+    String SC_OPCODE_CHOOSE
     {
         Text [ en-US ] = "CHOOSE" ;
     };

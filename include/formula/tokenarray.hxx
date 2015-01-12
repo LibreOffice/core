@@ -321,7 +321,7 @@ public:
         @param nStop
             Stop before reaching code at position nStop. If not specified the
             default is to either run the entire code, or to stop if an ocSep or
-            ocClose is encountered, which are only present in ocIf or ocChose
+            ocClose is encountered, which are only present in ocIf or ocChoose
             jumps.
       */
     void Jump( short nStart, short nNext, short nStop = SHRT_MAX );

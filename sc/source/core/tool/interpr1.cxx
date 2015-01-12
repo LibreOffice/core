@@ -396,7 +396,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
     }
 }
 
-void ScInterpreter::ScChoseJump()
+void ScInterpreter::ScChooseJump()
 {
     // We have to set a jump, if there was none chosen because of an error set
     // it to endpoint.

@@ -32,7 +32,7 @@
 #define SC_OPCODE_IF                  6     /* jump commands */
 #define SC_OPCODE_IF_ERROR            7
 #define SC_OPCODE_IF_NA               8
-#define SC_OPCODE_CHOSE               9
+#define SC_OPCODE_CHOOSE              9
 #define SC_OPCODE_OPEN               10     /* parentheses and separators */
 #define SC_OPCODE_CLOSE              11
 #define SC_OPCODE_SEP                12

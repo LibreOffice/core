@@ -396,7 +396,7 @@ bool LookupQueryWithCache( ScAddress & o_rResultPos,
 
 void ScIfJump();
 void ScIfError( bool bNAonly );
-void ScChoseJump();
+void ScChooseJump();
 
 // Be sure to only call this if pStack[sp-nStackLevel] really contains a
 // ScJumpMatrixToken, no further checks are applied!
