@@ -132,7 +132,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocText,               48,     2,  2,  V, { VR }, 0, 0 },
     { ocRGP,                49,     1,  2,  A, { RA, RA, C, C }, 0, 0 },
     { ocTrend,              50,     1,  3,  A, { RA, RA, RA, C }, 0, 0 },
-    { ocRKP,                51,     1,  2,  A, { RA, RA, C, C }, 0, 0 },
+    { ocLogest,             51,     1,  2,  A, { RA, RA, C, C }, 0, 0 },
     { ocGrowth,             52,     1,  3,  A, { RA, RA, RA, C }, 0, 0 },
     { ocPV,                 56,     3,  5,  V, { VR }, 0, 0 },
     { ocFV,                 57,     3,  5,  V, { VR }, 0, 0 },
@@ -226,7 +226,7 @@ static const XclFunctionInfo saFuncTable_3[] =
 {
     { ocRGP,                49,     1,  4,  A, { RA, RA, VV }, 0, 0 },          // BIFF2: 1-2, BIFF3: 1-4
     { ocTrend,              50,     1,  4,  A, { RA, RA, RA, VV }, 0, 0 },      // BIFF2: 1-3, BIFF3: 1-4
-    { ocRKP,                51,     1,  4,  A, { RA, RA, VV }, 0, 0 },          // BIFF2: 1-2, BIFF3: 1-4
+    { ocLogest,             51,     1,  4,  A, { RA, RA, VV }, 0, 0 },          // BIFF2: 1-2, BIFF3: 1-4
     { ocGrowth,             52,     1,  4,  A, { RA, RA, RA, VV }, 0, 0 },      // BIFF2: 1-3, BIFF3: 1-4
     { ocTrunc,              197,    1,  2,  V, { VR }, 0, 0 },                  // BIFF2: 1,   BIFF3: 1-2
     { ocAddress,            219,    2,  5,  V, { VR }, 0, 0 },

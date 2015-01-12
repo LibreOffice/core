@@ -406,7 +406,7 @@ enum OpCode : sal_uInt16
         ocTrend             = SC_OPCODE_TREND,
         ocGrowth            = SC_OPCODE_GROWTH,
         ocRGP               = SC_OPCODE_RGP,
-        ocRKP               = SC_OPCODE_RKP,
+        ocLogest            = SC_OPCODE_LOGEST,
         ocForecast          = SC_OPCODE_FORECAST,
         ocChiInv            = SC_OPCODE_CHI_INV,
         ocChiInv_MS         = SC_OPCODE_CHI_INV_MS,
