@@ -163,7 +163,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocArcTan2,            97,     2,  2,  V, { VR }, 0, 0 },
     { ocArcSin,             98,     1,  1,  V, { VR }, 0, 0 },
     { ocArcCos,             99,     1,  1,  V, { VR }, 0, 0 },
-    { ocChose,              100,    2,  MX, R, { VO, RO }, 0, 0 },
+    { ocChoose,             100,    2,  MX, R, { VO, RO }, 0, 0 },
     { ocHLookup,            101,    3,  3,  V, { VV, RO, RO, C }, 0, 0 },
     { ocVLookup,            102,    3,  3,  V, { VV, RO, RO, C }, 0, 0 },
     { ocIsRef,              105,    1,  1,  V, { RX }, 0, 0 },

@@ -36,7 +36,7 @@ enum OpCode : sal_uInt16
         ocIf                = SC_OPCODE_IF,
         ocIfError           = SC_OPCODE_IF_ERROR,
         ocIfNA              = SC_OPCODE_IF_NA,
-        ocChose             = SC_OPCODE_CHOSE,
+        ocChoose            = SC_OPCODE_CHOOSE,
     // Parentheses and separators
         ocOpen              = SC_OPCODE_OPEN,
         ocClose             = SC_OPCODE_CLOSE,

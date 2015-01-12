@@ -465,7 +465,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 SC_OPCODE_IF,
                 SC_OPCODE_IF_ERROR,
                 SC_OPCODE_IF_NA,
-                SC_OPCODE_CHOSE,
+                SC_OPCODE_CHOOSE,
                 SC_OPCODE_AND,
                 SC_OPCODE_OR,
                 SC_OPCODE_NOT,
@@ -814,7 +814,7 @@ bool FormulaCompiler::IsOpCodeJumpCommand( OpCode eOp )
         case ocIf:
         case ocIfError:
         case ocIfNA:
-        case ocChose:
+        case ocChoose:
             return true;
         default:
             ;
@@ -1318,7 +1318,7 @@ void FormulaCompiler::Factor()
                 case ocIf:
                     pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
                     break;
-                case ocChose:
+                case ocChoose:
                     pFacToken->GetJump()[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
                     break;
                 case ocIfError:
@@ -1348,7 +1348,7 @@ void FormulaCompiler::Factor()
                 case ocIf:
                     nJumpMax = 3;
                     break;
-                case ocChose:
+                case ocChoose:
                     nJumpMax = FORMULA_MAXJUMPCOUNT;
                     break;
                 case ocIfError:
@@ -1385,7 +1385,7 @@ void FormulaCompiler::Factor()
                     case ocIf:
                         bLimitOk = (nJumpCount <= 3);
                         break;
-                    case ocChose:
+                    case ocChoose:
                         bLimitOk = (nJumpCount < FORMULA_MAXJUMPCOUNT); /* TODO: check, really <, not <=? */
                         break;
                     case ocIfError:
