@@ -405,7 +405,7 @@ enum OpCode : sal_uInt16
         ocIntercept         = SC_OPCODE_INTERCEPT,
         ocTrend             = SC_OPCODE_TREND,
         ocGrowth            = SC_OPCODE_GROWTH,
-        ocRGP               = SC_OPCODE_RGP,
+        ocLinest            = SC_OPCODE_LINEST,
         ocLogest            = SC_OPCODE_LOGEST,
         ocForecast          = SC_OPCODE_FORECAST,
         ocChiInv            = SC_OPCODE_CHI_INV,

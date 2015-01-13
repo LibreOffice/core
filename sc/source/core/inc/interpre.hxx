@@ -730,7 +730,7 @@ void CalculateRGPRKP(bool _bRKP);
 void CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2);
 void CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR);
 bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
-void ScRGP();
+void ScLinest();
 void ScLogest();
 void ScForecast();
 void ScNoName();
