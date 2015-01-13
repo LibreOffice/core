@@ -69,7 +69,8 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
     public void postLoad() {
         mDocument.initializeForRendering();
-        mDocument.setMessageCallback(this);
+        // FIXME see gtktiledviewer, this has to be registered when we enter edit mode, not right after loading.
+        // mDocument.setMessageCallback(this);
 
         int parts = mDocument.getParts();
         Log.i(LOGTAG, "Document parts: " + parts);
