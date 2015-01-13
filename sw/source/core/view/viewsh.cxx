@@ -1085,12 +1085,14 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                             if (pObj->IsFormatPossible())
                             {
                                 const Rectangle &rBound = pObj->GetObjRect().SVRect();
-                                // OD 03.03.2003 #107927# - use correct datatype
-                                const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
-                                if ( nL < nMinLeft )
-                                    nMinLeft = nL;
-                                if( rBound.Right() + nOfst > nMaxRight )
-                                    nMaxRight = rBound.Right() + nOfst;
+                                if (rBound.Left() != FAR_AWAY) {
+                                    // OD 03.03.2003 #107927# - use correct datatype
+                                    const SwTwips nL = std::max( 0L, rBound.Left() - nOfst );
+                                    if ( nL < nMinLeft )
+                                        nMinLeft = nL;
+                                    if( rBound.Right() + nOfst > nMaxRight )
+                                        nMaxRight = rBound.Right() + nOfst;
+                                }
                             }
                         }
                     }
