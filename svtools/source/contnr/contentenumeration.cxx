@@ -50,9 +50,6 @@ namespace svt
 #define ROW_IS_FLOPPY       11
 #define ROW_IS_COMPACTDISC  12
 
-#define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
-    aToolsDT = ::DateTime( aUnoDT );
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Exception;
@@ -260,7 +257,7 @@ namespace svt
 
                             if ( bContainsDate )
                             {
-                                CONVERT_DATETIME( aDT, pData->maModDate );
+                                pData->maModDate = ::DateTime( aDT );
                             }
 
                             if ( pData->mbIsFolder )
