@@ -12,6 +12,7 @@ package org.libreoffice.ui;
 import org.libreoffice.R;
 import org.libreoffice.LOAbout;
 import org.libreoffice.android.Bootstrap;
+import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
@@ -40,6 +41,7 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -76,7 +78,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     FileFilter fileFilter;
     FilenameFilter filenameFilter;
     private List<IFile> filePaths;
-    private IDocumentProvider documentProvider = new LocalDocumentsProvider();
+    private IDocumentProvider documentProvider;
     private IFile homeDirectory;
     private IFile currentDirectory;
 
@@ -89,6 +91,8 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     public static final int GRID_VIEW = 0;
     public static final int LIST_VIEW = 1;
 
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
     GridView gv;
     ListView lv;
 
@@ -102,6 +106,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         super.onCreate(savedInstanceState);
         Log.d(tag, "onCreate - tweaked - meeks !");
         //Set the "home" - top level - directory.
+        documentProvider = DocumentProviderFactory.getDefaultProvider();
         homeDirectory = documentProvider.getRootDirectory();
         currentDirectory = homeDirectory;
         //Load default settings
@@ -164,6 +169,26 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             actionBar.setSelectedNavigationItem( filterMode + 1 );
             registerForContextMenu(lv);
         }
+
+        // setup the drawer
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        drawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.item_in_drawer, DocumentProviderFactory.getNames()));
+        // Set the list's click listener
+        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view,
+                    int position, long id) {
+                documentProvider = DocumentProviderFactory.getProvider(position);
+                homeDirectory = documentProvider.getRootDirectory();
+                currentDirectory = homeDirectory;
+                createUI();
+            }
+        });
 
     }
 
