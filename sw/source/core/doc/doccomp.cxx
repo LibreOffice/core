@@ -38,6 +38,7 @@
 #include <section.hxx>
 #include <tox.hxx>
 #include <docsh.hxx>
+#include <fmtcntnt.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -65,10 +66,12 @@ public:
 
 class CompareData
 {
+protected:
+    SwDoc& rDoc;
+private:
     size_t* pIndex;
     bool* pChangedFlag;
 
-    SwDoc& rDoc;
     SwPaM *pInsRing, *pDelRing;
 
     sal_uLong PrevIdx( const SwNode* pNd );
@@ -80,14 +83,15 @@ class CompareData
     // Truncate beginning and end and add all others to the LinesArray
     void CheckRanges( CompareData& );
 
+    virtual const SwNode& GetEndOfContent() = 0;
+
 public:
     CompareData( SwDoc& rD )
-        : pIndex( 0 ), pChangedFlag( 0 )
-        , rDoc( rD ), pInsRing(0), pDelRing(0)
+        : rDoc( rD ), pIndex( 0 ), pChangedFlag( 0 ), pInsRing(0), pDelRing(0)
         , nSttLineNum( 0 )
     {
     }
-    ~CompareData();
+    virtual ~CompareData();
 
     // Are there differences?
     bool HasDiffs( const CompareData& rData ) const;
@@ -126,6 +130,36 @@ public:
         { aLines.push_back( pLine ); }
 
     void SetRedlinesToDoc( bool bUseDocInfo );
+};
+
+class CompareMainText : public CompareData
+{
+public:
+    CompareMainText(SwDoc &rD)
+        : CompareData(rD)
+    {
+    }
+
+    virtual const SwNode& GetEndOfContent() SAL_OVERRIDE
+    {
+        return rDoc.GetNodes().GetEndOfContent();
+    }
+};
+
+class CompareFrmFmtText : public CompareData
+{
+    const SwNodeIndex &m_rIndex;
+public:
+    CompareFrmFmtText(SwDoc &rD, const SwNodeIndex &rIndex)
+        : CompareData(rD)
+        , m_rIndex(rIndex)
+    {
+    }
+
+    virtual const SwNode& GetEndOfContent() SAL_OVERRIDE
+    {
+        return *m_rIndex.GetNode().EndOfSectionNode();
+    }
 };
 
 class Hash
@@ -1416,8 +1450,8 @@ void CompareData::CheckRanges( CompareData& rData )
     const SwNodes& rSrcNds = rData.rDoc.GetNodes();
     const SwNodes& rDstNds = rDoc.GetNodes();
 
-    const SwNode& rSrcEndNd = rSrcNds.GetEndOfContent();
-    const SwNode& rDstEndNd = rDstNds.GetEndOfContent();
+    const SwNode& rSrcEndNd = rData.GetEndOfContent();
+    const SwNode& rDstEndNd = GetEndOfContent();
 
     sal_uLong nSrcSttIdx = NextIdx( rSrcEndNd.StartOfSectionNode() );
     sal_uLong nSrcEndIdx = rSrcEndNd.GetIndex();
@@ -1508,7 +1542,7 @@ void CompareData::ShowDelete(
     }
     else
     {
-        pLineNd = &rDoc.GetNodes().GetEndOfContent();
+        pLineNd = &GetEndOfContent();
         nOffset = 0;
     }
 
@@ -1637,7 +1671,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             }
             // #i101009#
             // prevent redlines that end on structural end node
-            if (& rDoc.GetNodes().GetEndOfContent() ==
+            if (& GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
             {
                 pTmp->GetPoint()->nNode--;
@@ -1669,7 +1703,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             }
             // #i101009#
             // prevent redlines that end on structural end node
-            if (& rDoc.GetNodes().GetEndOfContent() ==
+            if (& GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
             {
                 pTmp->GetPoint()->nNode--;
@@ -1724,6 +1758,48 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     }
 }
 
+typedef std::shared_ptr<CompareData> CompareDataPtr;
+typedef std::pair<CompareDataPtr, CompareDataPtr> CompareDataPtrPair;
+typedef std::vector<CompareDataPtrPair> Comparators;
+
+namespace
+{
+    Comparators buildComparators(SwDoc &rSrcDoc, SwDoc &rDestDoc)
+    {
+        Comparators aComparisons;
+        //compare main text
+        aComparisons.push_back(CompareDataPtrPair(CompareDataPtr(new CompareMainText(rSrcDoc)),
+                                                  CompareDataPtr(new CompareMainText(rDestDoc))));
+
+        //if we have the same number of frames then try to compare within them
+        const SwFrmFmts *pSrcFrmFmts = rSrcDoc.GetSpzFrmFmts();
+        const SwFrmFmts *pDestFrmFmts = rDestDoc.GetSpzFrmFmts();
+        if (pSrcFrmFmts->size() == pDestFrmFmts->size())
+        {
+            for (size_t i = 0; i < pSrcFrmFmts->size(); ++i)
+            {
+                const SwFrmFmt& rSrcFmt = *(*pSrcFrmFmts)[i];
+                const SwFrmFmt& rDestFmt = *(*pDestFrmFmts)[i];
+                const SwNodeIndex* pSrcIdx = rSrcFmt.GetCntnt().GetCntntIdx();
+                const SwNodeIndex* pDestIdx = rDestFmt.GetCntnt().GetCntntIdx();
+                if (!pSrcIdx && !pDestIdx)
+                    continue;
+                if (!pSrcIdx || !pDestIdx)
+                    break;
+                const SwNode* pSrcNode = pSrcIdx->GetNode().EndOfSectionNode();
+                const SwNode* pDestNode = pDestIdx->GetNode().EndOfSectionNode();
+                if (!pSrcNode && !pDestNode)
+                    continue;
+                if (!pSrcNode || !pDestNode)
+                    break;
+                aComparisons.push_back(CompareDataPtrPair(CompareDataPtr(new CompareFrmFmtText(rSrcDoc, *pSrcIdx)),
+                                                          CompareDataPtr(new CompareFrmFmtText(rDestDoc, *pDestIdx))));
+            }
+        }
+        return aComparisons;
+    }
+}
+
 // Returns (the difference count?) if something is different
 long SwDoc::CompareDoc( const SwDoc& rDoc )
 {
@@ -1764,19 +1840,26 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
     getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT));
 
-    CompareData aD0( rSrcDoc );
-    CompareData aD1( *this );
+    Comparators aComparisons(buildComparators(rSrcDoc, *this));
 
-    aD1.CompareLines( aD0 );
-
-    nRet = aD1.ShowDiffs( aD0 );
+    for (auto a : aComparisons)
+    {
+        CompareData& rD0 = *a.first.get();
+        CompareData& rD1 = *a.second.get();
+        rD1.CompareLines( rD0 );
+        nRet |= rD1.ShowDiffs( rD0 );
+    }
 
     if( nRet )
     {
         getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
                        nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
-        aD1.SetRedlinesToDoc( !bDocWasModified );
+        for (auto a : aComparisons)
+        {
+            CompareData& rD1 = *a.second.get();
+            rD1.SetRedlinesToDoc( !bDocWasModified );
+        }
         getIDocumentState().SetModified();
     }
 
@@ -1979,11 +2062,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
     getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
 
-    CompareData aD0( rSrcDoc );
-    CompareData aD1( *this );
-
+    CompareMainText aD0(rSrcDoc);
+    CompareMainText aD1(*this);
     aD1.CompareLines( aD0 );
-
     if( !aD1.HasDiffs( aD0 ) )
     {
         // we want to get all redlines from the SourceDoc
