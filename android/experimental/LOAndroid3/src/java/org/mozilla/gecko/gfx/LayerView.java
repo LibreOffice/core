@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import org.libreoffice.LibreOfficeMainActivity;
@@ -347,6 +348,15 @@ public class LayerView extends FrameLayout {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
             setViewportSize(new IntSize(right - left, bottom - top));
+        }
+    }
+
+    public void showSoftKeyboard() {
+        View view = mSurfaceView != null ? mSurfaceView : mTextureView;
+
+        if (view.requestFocus()) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 
