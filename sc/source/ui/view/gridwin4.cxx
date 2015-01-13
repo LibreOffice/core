@@ -877,13 +877,33 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
-    (void) rDevice;
-    (void) nOutputWidth;
-    (void) nOutputHeight;
-    (void) nTilePosX;
-    (void) nTilePosY;
-    (void) nTileWidth;
-    (void) nTileHeight;
+    // Output size is in pixels while tile position and size are in logical units (twips).
+
+    // Assumption: always paint the whole sheet i.e. "visible" range is always
+    // from (0,0) to last data position.
+
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScAddress aLastPos = pDoc->GetLastDataPos(nTab);
+
+    SCCOL nCol1 = 0, nCol2 = aLastPos.Col();
+    SCROW nRow1 = 0, nRow2 = aLastPos.Row();
+
+    double fPPTX = pViewData->GetPPTX();
+    double fPPTY = pViewData->GetPPTY();
+
+    ScTableInfo aTabInfo;
+    pDoc->FillInfo(aTabInfo, nCol1, nRow1, nCol2, nRow2, nTab, fPPTX, fPPTY, false, false, NULL);
+
+    ScOutputData aOutData(
+        &rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, 0, 0, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
+    aOutData.DrawGrid(true, false);
+
+    aOutData.DrawShadow();
+    aOutData.DrawFrame();
+
+    aOutData.DrawStrings(true);
+    aOutData.DrawEdit(true);
 }
 
 void ScGridWindow::CheckNeedsRepaint()
