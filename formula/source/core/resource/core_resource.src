@@ -159,7 +159,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_TRUNC { Text = "TRUNC" ; };
     String SC_OPCODE_LOG { Text = "LOG" ; };
     String SC_OPCODE_POWER { Text = "POWER" ; };
-    String SC_OPCODE_GGT { Text = "GCD" ; };
+    String SC_OPCODE_GCD { Text = "GCD" ; };
     String SC_OPCODE_LCM { Text = "LCM" ; };
     String SC_OPCODE_MOD { Text = "MOD" ; };
     String SC_OPCODE_SUM_PRODUCT { Text = "SUMPRODUCT" ; };
@@ -567,7 +567,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_TRUNC { Text = "TRUNC" ; };
     String SC_OPCODE_LOG { Text = "LOG" ; };
     String SC_OPCODE_POWER { Text = "POWER" ; };
-    String SC_OPCODE_GGT { Text = "GCD" ; };
+    String SC_OPCODE_GCD { Text = "GCD" ; };
     String SC_OPCODE_LCM { Text = "LCM" ; };
     String SC_OPCODE_MOD { Text = "MOD" ; };
     String SC_OPCODE_SUM_PRODUCT { Text = "SUMPRODUCT" ; };
@@ -977,7 +977,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_TRUNC { Text = "TRUNC" ; };
     String SC_OPCODE_LOG { Text = "LOG" ; };
     String SC_OPCODE_POWER { Text = "POWER" ; };
-    String SC_OPCODE_GGT { Text = "GCD" ; };
+    String SC_OPCODE_GCD { Text = "GCD" ; };
     String SC_OPCODE_LCM { Text = "LCM" ; };
     String SC_OPCODE_MOD { Text = "MOD" ; };
     String SC_OPCODE_SUM_PRODUCT { Text = "SUMPRODUCT" ; };
@@ -1722,7 +1722,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "POWER" ;
     };
-    String SC_OPCODE_GGT
+    String SC_OPCODE_GCD
     {
         Text [ en-US ] = "GCD" ;
     };
