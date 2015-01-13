@@ -28,17 +28,17 @@ TARGET=ttf_croscore
 
 .INCLUDE :	settings.mk
 
-.IF "$(WITH_CATB_FONTS)" != "YES"
+.IF "$(WITH_CATA_FONTS)" != "YES"
 
 @all:
-    @echo "category B licensed CrossCore font is disabled."
+    @echo "category A licensed CrossCore font is disabled."
 
 .ELSE
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=croscorefonts-1.21.0
-TARFILE_MD5=61f59e4110781cbe66b46449eadac231
+TARFILE_NAME=croscorefonts-1.23.0
+TARFILE_MD5=cfa8bec07bf5b6856dd20f0cb28b3929
 
 PATCH_FILES=
 

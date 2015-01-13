@@ -67,9 +67,9 @@ STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuSerifCondense
 
 // Google ChromeOS fonts
 
-// Arimo
-#ifdef WITH_CATB_FONTS
+#ifdef WITH_CATA_FONTS
 
+// Arimo
 STD_FONT_FILE( gid_File_Fnt_Arimo_Regular, Arimo-Regular.ttf, Arimo Regular) 
 STD_FONT_FILE( gid_File_Fnt_Arimo_Bold, Arimo-Bold.ttf, Arimo Bold) 
 STD_FONT_FILE( gid_File_Fnt_Arimo_Italic, Arimo-Italic.ttf, Arimo Italic) 
