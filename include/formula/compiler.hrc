@@ -226,7 +226,7 @@
 #define SC_OPCODE_AVERAGE           226
 #define SC_OPCODE_COUNT             227
 #define SC_OPCODE_COUNT_2           228
-#define SC_OPCODE_NBW               229
+#define SC_OPCODE_NPV               229
 #define SC_OPCODE_IRR               230
 #define SC_OPCODE_VAR               231
 #define SC_OPCODE_VAR_P             232

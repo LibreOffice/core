@@ -219,7 +219,7 @@ enum OpCode : sal_uInt16
         ocAverage           = SC_OPCODE_AVERAGE,
         ocCount             = SC_OPCODE_COUNT,
         ocCount2            = SC_OPCODE_COUNT_2,
-        ocNPV               = SC_OPCODE_NBW,
+        ocNPV               = SC_OPCODE_NPV,
         ocIRR               = SC_OPCODE_IRR,
         ocMIRR              = SC_OPCODE_MIRR,
         ocISPMT             = SC_OPCODE_ISPMT,
