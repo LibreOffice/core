@@ -52,6 +52,10 @@ public class ProviderBrowseNode extends PropertySet implements
     private final String name;
     protected ParcelContainer container;
     private final XComponentContext m_xCtx;
+    // these are properties, they are accessed by reflection
+    public boolean deletable = true;
+    public boolean creatable = true;
+    public boolean editable = false;
 
     public ProviderBrowseNode(ScriptProvider provider, ParcelContainer container,
                               XComponentContext xCtx) {
@@ -68,10 +72,15 @@ public class ProviderBrowseNode extends PropertySet implements
         XMultiComponentFactory xFac = m_xCtx.getServiceManager();
 
         try {
-            UnoRuntime.queryInterface(XSimpleFileAccess.class,
+            XSimpleFileAccess xSFA = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                                          xFac.createInstanceWithContext(
                                              "com.sun.star.ucb.SimpleFileAccess",
                                              xCtx));
+            if (  container.isUnoPkg() || xSFA.isReadOnly( container.getParcelContainerDir() ) )
+            {
+                deletable = false;
+                creatable = false;
+            }
         }
         // TODO propage errors
         catch (com.sun.star.uno.Exception e) {

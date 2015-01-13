@@ -55,6 +55,11 @@ public class ParcelBrowseNode extends PropertySet implements
     private Collection<XBrowseNode> browsenodes;
     private final ParcelContainer container;
     private Parcel parcel;
+    // these four are properties, they are accessed via reflection
+    public boolean deletable = true;
+    public boolean editable  = false;
+    public boolean creatable = false;
+    public boolean renamable = true;
 
     public ParcelBrowseNode(ScriptProvider provider, ParcelContainer container,
                             String parcelName) {
@@ -75,15 +80,28 @@ public class ParcelBrowseNode extends PropertySet implements
         registerProperty("Editable", new Type(boolean.class), (short)0, "editable");
         registerProperty("Creatable", new Type(boolean.class), (short)0, "creatable");
         registerProperty("Renamable", new Type(boolean.class), (short)0, "renamable");
+        if (provider.hasScriptEditor())
+        {
+            this.creatable = true;
+        }
 
+        String parcelDirUrl = parcel.getPathToParcel();
         XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
         XMultiComponentFactory xFac = xCtx.getServiceManager();
 
         try {
-            UnoRuntime.queryInterface(XSimpleFileAccess.class,
+            XSimpleFileAccess xSFA = UnoRuntime.queryInterface(XSimpleFileAccess.class,
                                       xFac.createInstanceWithContext(
                                           "com.sun.star.ucb.SimpleFileAccess",
                                           xCtx));
+            if ( xSFA != null && ( xSFA.isReadOnly( parcelDirUrl ) ||
+                 container.isUnoPkg() ) )
+            {
+                deletable = false;
+                editable  = false;
+                creatable = false;
+                renamable = false;
+            }
         } catch (com.sun.star.uno.Exception e) {
             // TODO propagate potential errors
             LogUtils.DEBUG("Caught exception creating ParcelBrowseNode " + e);

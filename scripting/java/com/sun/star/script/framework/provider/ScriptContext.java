@@ -44,12 +44,15 @@ public class ScriptContext extends PropertySet implements XScriptContext {
 
     private final static String DOC_URI = "SCRIPTING_DOC_URI";
 
-    private final XModel m_xModel;
+    public final XModel m_xModel;
     private final XScriptInvocationContext m_xInvocationContext;
 
     private final XDesktop m_xDeskTop;
 
     private final XComponentContext m_xComponentContext;
+
+    // property, accessed via reflection
+    public String m_sDocURI = null;
 
     private ScriptContext(XComponentContext xmComponentContext, XDesktop xDesktop,
                           XModel xModel, XScriptInvocationContext xInvocContext) {

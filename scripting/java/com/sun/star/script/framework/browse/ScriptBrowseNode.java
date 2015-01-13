@@ -58,25 +58,32 @@ public class ScriptBrowseNode extends PropertySet implements
     private Parcel parent;
     private String name;
 
-    private boolean editable;
-    private boolean deletable = false;
-    private boolean renamable = false;
+    // these are properties, accessed by reflection
+    public String uri;
+    public String description;
+    public boolean editable;
+    public boolean deletable = false;
+    public boolean renamable = false;
 
     public ScriptBrowseNode(ScriptProvider provider, Parcel parent, String name) {
 
         this.provider = provider;
         this.name = name;
         this.parent = parent;
+        ScriptMetaData data = null;
         XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
         XMultiComponentFactory xFac = xCtx.getServiceManager();
 
         try {
+            data = (ScriptMetaData)parent.getByName( name );
             XSimpleFileAccess xSFA = UnoRuntime.queryInterface(
                                          XSimpleFileAccess.class,
                                          xFac.createInstanceWithContext(
                                              "com.sun.star.ucb.SimpleFileAccess",
                                              xCtx));
 
+            uri = data.getShortFormScriptURL();
+            description = data.getDescription();
             if (provider.hasScriptEditor()) {
                 this.editable = true;
 
@@ -147,7 +154,9 @@ public class ScriptBrowseNode extends PropertySet implements
             LogUtils.DEBUG("** caught exception getting script data for " + name +
                            " ->" + e.toString());
         }
+        uri = data.getShortFormScriptURL();
     }
+
     // implementation of XInvocation interface
     public XIntrospectionAccess getIntrospection() {
         return null;
@@ -250,6 +259,7 @@ public class ScriptBrowseNode extends PropertySet implements
                 LogUtils.DEBUG("Now remove old script");
                 parent.removeByName(name);
 
+                uri = data.getShortFormScriptURL();
                 name = languageName;
                 result = new Any(new Type(XBrowseNode.class), this);
             } catch (NoSuchElementException nse) {
