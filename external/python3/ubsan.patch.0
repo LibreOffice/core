@@ -1,3 +1,25 @@
+--- Modules/_ctypes/libffi/src/x86/ffi64.c
++++ Modules/_ctypes/libffi/src/x86/ffi64.c
+@@ -545,11 +545,15 @@
+   tramp = (volatile unsigned short *) &closure->tramp[0];
+ 
+   tramp[0] = 0xbb49;		/* mov <code>, %r11	*/
+-  *((unsigned long long * volatile) &tramp[1])
+-    = (unsigned long) ffi_closure_unix64;
++  tramp[1] = (unsigned long) ffi_closure_unix64;
++  tramp[2] = ((unsigned long) ffi_closure_unix64) >> 16;
++  tramp[3] = ((unsigned long) ffi_closure_unix64) >> 32;
++  tramp[4] = ((unsigned long) ffi_closure_unix64) >> 48;
+   tramp[5] = 0xba49;		/* mov <data>, %r10	*/
+-  *((unsigned long long * volatile) &tramp[6])
+-    = (unsigned long) codeloc;
++  tramp[6] = (unsigned long) codeloc;
++  tramp[7] = ((unsigned long) codeloc) >> 16;
++  tramp[8] = ((unsigned long) codeloc) >> 32;
++  tramp[9] = ((unsigned long) codeloc) >> 48;
+ 
+   /* Set the carry bit iff the function uses any sse registers.
+      This is clc or stc, together with the first byte of the jmp.  */
 --- Objects/listobject.c
 +++ Objects/listobject.c
 @@ -2036,7 +2036,7 @@
