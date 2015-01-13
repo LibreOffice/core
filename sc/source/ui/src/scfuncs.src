@@ -2045,7 +2045,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function NPV #*=-
-    Resource SC_OPCODE_NBW
+    Resource SC_OPCODE_NPV
     {
         String 1 // Description
         {

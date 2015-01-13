@@ -182,7 +182,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_AVERAGE_A { Text = "AVERAGEA" ; };
     String SC_OPCODE_COUNT { Text = "COUNT" ; };
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
-    String SC_OPCODE_NBW { Text = "NPV" ; };
+    String SC_OPCODE_NPV { Text = "NPV" ; };
     String SC_OPCODE_IRR { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
@@ -590,7 +590,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_AVERAGE_A { Text = "AVERAGEA" ; };
     String SC_OPCODE_COUNT { Text = "COUNT" ; };
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
-    String SC_OPCODE_NBW { Text = "NPV" ; };
+    String SC_OPCODE_NPV { Text = "NPV" ; };
     String SC_OPCODE_IRR { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
@@ -1000,7 +1000,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_AVERAGE_A { Text = "AVERAGEA" ; };
     String SC_OPCODE_COUNT { Text = "COUNT" ; };
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
-    String SC_OPCODE_NBW { Text = "NPV" ; };
+    String SC_OPCODE_NPV { Text = "NPV" ; };
     String SC_OPCODE_IRR { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
@@ -1814,7 +1814,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "COUNTA" ;
     };
-    String SC_OPCODE_NBW
+    String SC_OPCODE_NPV
     {
         Text [ en-US ] = "NPV" ;
     };
