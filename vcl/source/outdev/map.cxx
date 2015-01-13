@@ -17,7 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
 #include <limits.h>
+
 #include <o3tl/numeric.hxx>
 #include <tools/bigint.hxx>
 
@@ -382,7 +386,9 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
     }
     else
 #else
-    assert(n < std::numeric_limits<long>::max() / nMapNum); //detect overflows
+    assert(nMapNum > 0);
+    assert(nDPI > 0);
+    assert(std::abs(n) < std::numeric_limits<long>::max() / nMapNum / nDPI); //detect overflows
 #endif
     {
        sal_Int64 n64 = n;
