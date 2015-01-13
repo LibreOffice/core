@@ -2112,6 +2112,9 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
             {
                 _rNewObj.DrawObj()->SetLayer(aControlLayerID);
             }
+            //The layer is part of the key used to sort the obj, so update
+            //its position if the layer changed.
+            mpDrawObjs->Update(_rNewObj);
         }
     }
 
