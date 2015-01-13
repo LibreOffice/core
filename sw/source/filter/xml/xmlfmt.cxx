@@ -716,9 +716,17 @@ protected:
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& XAttrList ) SAL_OVERRIDE;
+
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) SAL_OVERRIDE;
+
     // HACK
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
         sal_uInt16 nFamily ) const SAL_OVERRIDE;
@@ -737,11 +745,16 @@ public:
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             bool bAuto );
+    SwXMLStylesContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
@@ -782,6 +795,13 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -813,11 +833,26 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         bool bAuto ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList, bAuto )
+{
+}
+
+SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
+    SwXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    bool bAuto )
+:   SvXMLStylesContext( rImport, Element, xAttrList, bAuto )
 {
 }
 
@@ -897,6 +932,12 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 }
 
 void SwXMLStylesContext_Impl::EndElement()
+{
+    GetSwImport().InsertStyles( IsAutomaticStyle() );
+}
+
+void SAL_CALL SwXMLStylesContext_Impl::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     GetSwImport().InsertStyles( IsAutomaticStyle() );
 }
