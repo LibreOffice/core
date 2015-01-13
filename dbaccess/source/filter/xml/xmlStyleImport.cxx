@@ -155,6 +155,20 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
 
 }
 
+OTableStylesContext::OTableStylesContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const bool bTempAutoStyles )
+:   SvXMLStylesContext( rImport, Element, xAttrList ),
+    sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
+    sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+    sCellStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
+    m_nNumberFormatIndex(-1),
+    m_nMasterPageNameIndex(-1),
+    bAutoStyles(bTempAutoStyles)
+{
+}
+
 OTableStylesContext::~OTableStylesContext()
 {
 
@@ -167,6 +181,16 @@ void OTableStylesContext::EndElement()
         GetImport().GetTextImport()->SetAutoStyles( this );
     else
         GetImport().GetStyles()->CopyStylesToDoc(true);
+}
+
+void SAL_CALL OTableStylesContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLStylesContext::endFastElement( Element );
+    if (bAutoStyles)
+        GetImport().GetTextImport()->SetAutoStyles( this );
+    else
+        GetImport().GetStyles()->CopyStylesToDoc( true );
 }
 
 rtl::Reference < SvXMLImportPropertyMapper >
@@ -227,6 +251,13 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
     }
 
     return pStyle;
+}
+
+SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
 }
 
 Reference < XNameContainer >
