@@ -35,7 +35,7 @@
 #define LF_PATH_READONLY        0x0020  // "path" readonly
 #define LF_USERNAME_READONLY    0x0040  // "name" readonly
 #define LF_NO_ACCOUNT           0x0080  // hide "account"
-#define LF_NO_USESYSCREDS       0x0100  // hide "use system cedentials"
+#define LF_NO_USESYSCREDS       0x0100  // hide "use system credentials"
 
 
 
