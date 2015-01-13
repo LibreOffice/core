@@ -182,7 +182,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_COUNT { Text = "COUNT" ; };
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
     String SC_OPCODE_NBW { Text = "NPV" ; };
-    String SC_OPCODE_IKV { Text = "IRR" ; };
+    String SC_OPCODE_IRR { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
     String SC_OPCODE_VAR { Text = "VAR" ; };
@@ -589,7 +589,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_COUNT { Text = "COUNT" ; };
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
     String SC_OPCODE_NBW { Text = "NPV" ; };
-    String SC_OPCODE_IKV { Text = "IRR" ; };
+    String SC_OPCODE_IRR { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
     String SC_OPCODE_VAR { Text = "VAR" ; };
@@ -998,7 +998,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_COUNT { Text = "COUNT" ; };
     String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
     String SC_OPCODE_NBW { Text = "NPV" ; };
-    String SC_OPCODE_IKV { Text = "IRR" ; };
+    String SC_OPCODE_IRR { Text = "IRR" ; };
     String SC_OPCODE_MIRR { Text = "MIRR" ; };
     String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
     String SC_OPCODE_VAR { Text = "VAR" ; };
@@ -1811,7 +1811,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "NPV" ;
     };
-    String SC_OPCODE_IKV
+    String SC_OPCODE_IRR
     {
         Text [ en-US ] = "IRR" ;
     };
