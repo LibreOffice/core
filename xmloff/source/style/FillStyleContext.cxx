@@ -295,11 +295,45 @@ XMLDashStyleContext::XMLDashStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx
     aDashStyle.importXML( xAttrList, maAny, maStrName );
 }
 
+XMLDashStyleContext::XMLDashStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport, Element, xAttrList)
+{
+    // start import
+    XMLDashStyleImport aDashStyle( GetImport() );
+
+    // something missing
+}
+
 XMLDashStyleContext::~XMLDashStyleContext()
 {
 }
 
 void XMLDashStyleContext::EndElement()
+{
+    uno::Reference< container::XNameContainer > xDashes( GetImport().GetDashHelper() );
+
+    try
+    {
+        if(xDashes.is())
+        {
+            if( xDashes->hasByName( maStrName ) )
+            {
+                xDashes->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xDashes->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
+void SAL_CALL XMLDashStyleContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference< container::XNameContainer > xDashes( GetImport().GetDashHelper() );
 
