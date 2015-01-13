@@ -918,8 +918,13 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    SwXMLMasterStylesContext_Impl(
+        SwXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList );
     virtual ~SwXMLMasterStylesContext_Impl();
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(uno::RuntimeException, xml::sax::SAXException, std::exception);
 };
 
 TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
@@ -929,6 +934,13 @@ SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
         const OUString& rLName ,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
+{
+}
+
+SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
+    SwXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   XMLTextMasterStylesContext( rImport, Element, xAttrList )
 {
 }
 
@@ -951,6 +963,13 @@ bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) cons
 }
 
 void SwXMLMasterStylesContext_Impl::EndElement()
+{
+    FinishStyles( !GetSwImport().IsInsertMode() );
+    GetSwImport().FinishStyles();
+}
+
+void SAL_CALL SwXMLMasterStylesContext_Impl::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     FinishStyles( !GetSwImport().IsInsertMode() );
     GetSwImport().FinishStyles();
