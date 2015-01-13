@@ -252,11 +252,45 @@ XMLMarkerStyleContext::XMLMarkerStyleContext( SvXMLImport& rImport, sal_uInt16 n
     aMarkerStyle.importXML( xAttrList, maAny, maStrName );
 }
 
+XMLMarkerStyleContext::XMLMarkerStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList )
+{
+    // start import
+    XMLMarkerStyleImport aMarkerStyle( GetImport() );
+
+    // something missing
+}
+
 XMLMarkerStyleContext::~XMLMarkerStyleContext()
 {
 }
 
 void XMLMarkerStyleContext::EndElement()
+{
+    uno::Reference< container::XNameContainer > xMarker( GetImport().GetMarkerHelper() );
+
+    try
+    {
+        if(xMarker.is())
+        {
+            if( xMarker->hasByName( maStrName ) )
+            {
+                xMarker->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xMarker->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
+void SAL_CALL XMLMarkerStyleContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference< container::XNameContainer > xMarker( GetImport().GetMarkerHelper() );
 
