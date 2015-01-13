@@ -84,13 +84,7 @@
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
-#include <comphelper/implbase_var.hxx>
-#endif
-
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
 class SfxMedium;
@@ -129,7 +123,7 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper32  <   css::container::XChild
+typedef ::cppu::WeakImplHelper  <   css::container::XChild
                                         ,   css::document::XDocumentPropertiesSupplier
                                         ,   css::document::XCmisDocument
                                         ,   css::rdf::XDocumentMetadataAccess
