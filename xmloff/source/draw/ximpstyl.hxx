@@ -53,6 +53,9 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+    SdXMLPageMasterStyleContext(
+        SdXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~SdXMLPageMasterStyleContext();
 
     sal_Int32 GetBorderBottom() const { return mnBorderBottom; }

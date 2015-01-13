@@ -302,6 +302,20 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
 TYPEINIT1( SdXMLPageMasterStyleContext, SvXMLStyleContext );
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
+    SdXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERSTYLECONEXT_ID ),
+    mnBorderBottom( 0L ),
+    mnBorderLeft( 0L ),
+    mnBorderRight( 0L ),
+    mnBorderTop( 0L ),
+    mnWidth( 0L ),
+    mnHeight( 0L ),
+    meOrientation(GetSdImport().IsDraw() ? view::PaperOrientation_PORTRAIT : view::PaperOrientation_LANDSCAPE)
+{
+}
+
+SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLName,
