@@ -200,7 +200,7 @@ enum OpCode : sal_uInt16
         ocTrunc             = SC_OPCODE_TRUNC,
         ocLog               = SC_OPCODE_LOG,
         ocPower             = SC_OPCODE_POWER,
-        ocGCD               = SC_OPCODE_GGT,
+        ocGCD               = SC_OPCODE_GCD,
         ocLCM               = SC_OPCODE_LCM,
         ocMod               = SC_OPCODE_MOD,
         ocSumProduct        = SC_OPCODE_SUM_PRODUCT,
