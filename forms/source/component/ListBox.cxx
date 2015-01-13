@@ -79,6 +79,8 @@ namespace frm
 
     using ::connectivity::ORowSetValue;
 
+    const ::connectivity::ORowSetValue OListBoxModel::s_aEmptyValue;
+    const ::connectivity::ORowSetValue OListBoxModel::s_aEmptyStringValue = OUString();
 
     //= helper
 
@@ -1007,12 +1009,12 @@ namespace frm
 
     void OListBoxModel::onDisconnectedDbColumn()
     {
+        clearBoundValues();
+        m_nNULLPos = -1;
+        m_nBoundColumnType = DataType::SQLNULL;
+
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
-            clearBoundValues();
-            m_nNULLPos = -1;
-            m_nBoundColumnType = DataType::SQLNULL;
-
             if ( !hasExternalListSource() )
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
 
@@ -1037,13 +1039,25 @@ namespace frm
 
     void OListBoxModel::convertBoundValues(const sal_Int32 nFieldType) const
     {
+        assert(s_aEmptyValue.isNull());
+        m_nNULLPos = -1;
         m_aConvertedBoundValues.resize(m_aBoundValues.size());
         ValueList::const_iterator src = m_aBoundValues.begin();
         const ValueList::const_iterator end = m_aBoundValues.end();
         ValueList::iterator dst = m_aConvertedBoundValues.begin();
         for (; src != end; ++src, ++dst )
         {
-            *dst = *src;
+            if(m_nNULLPos == -1 &&
+               !isRequired()    &&
+               (*src == s_aEmptyStringValue || *src == s_aEmptyValue || src->isNull()) )
+            {
+                m_nNULLPos = src - m_aBoundValues.begin();
+                dst->setNull();
+            }
+            else
+            {
+                *dst = *src;
+            }
             dst->setTypeKind(nFieldType);
         }
         m_nConvertedBoundValuesType = nFieldType;
@@ -1090,21 +1104,19 @@ namespace frm
 
     ORowSetValue OListBoxModel::getFirstSelectedValue() const
     {
-        static const ORowSetValue s_aEmptyVaue;
-
         DBG_ASSERT( m_xAggregateFastSet.is(), "OListBoxModel::getFirstSelectedValue: invalid aggregate!" );
         if ( !m_xAggregateFastSet.is() )
-            return s_aEmptyVaue;
+            return s_aEmptyValue;
 
         Sequence< sal_Int16 > aSelectedIndices;
         OSL_VERIFY( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= aSelectedIndices );
         if ( !aSelectedIndices.getLength() )
             // nothing selected at all
-            return s_aEmptyVaue;
+            return s_aEmptyValue;
 
         if ( ( m_nNULLPos != -1 ) && ( aSelectedIndices[0] == m_nNULLPos ) )
             // the dedicated "NULL" entry is selected
-            return s_aEmptyVaue;
+            return s_aEmptyValue;
 
         ValueList aValues( impl_getValues() );
 
@@ -1112,7 +1124,7 @@ namespace frm
         if ( selectedValue >= aValues.size() )
         {
             SAL_WARN( "forms.component", "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
-            return s_aEmptyVaue;
+            return s_aEmptyValue;
         }
 
         return aValues[ selectedValue ];

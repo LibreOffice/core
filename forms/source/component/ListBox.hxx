@@ -114,7 +114,7 @@ class OListBoxModel :public OBoundControlModel
     ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
-    sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
+    mutable sal_Int16                           m_nNULLPos;             // position of the NULL value in our list
     sal_Int32                                   m_nBoundColumnType;
 
 private:
@@ -145,6 +145,9 @@ public:
                 throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
 protected:
+    static const ::connectivity::ORowSetValue s_aEmptyValue;
+    static const ::connectivity::ORowSetValue s_aEmptyStringValue;
+
     // XMultiPropertySet
     virtual void SAL_CALL   setPropertyValues(const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
