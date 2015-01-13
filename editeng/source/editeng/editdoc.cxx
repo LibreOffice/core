@@ -1322,6 +1322,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
 //              if ( pAttrib->GetStart() == nIndex )
                 pAttrib->Expand( nNew );
+                bResort = true;
                 if ( pAttrib->GetStart() == 0 )
                     bExpandedEmptyAtIndexNull = true;
             }
@@ -1455,7 +1456,10 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
                 // Special case: Attribute covers the area exactly
                 // => keep as empty Attribute.
                 if ( !pAttrib->IsFeature() && ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
+                {
                     pAttrib->GetEnd() = nIndex; // empty
+                    bResort = true;
+                }
                 else
                     bDelAttr = true;
             }
