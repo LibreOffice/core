@@ -2077,7 +2077,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function IRR #*=-
-    Resource SC_OPCODE_IKV
+    Resource SC_OPCODE_IRR
     {
         String 1 // Description
         {
