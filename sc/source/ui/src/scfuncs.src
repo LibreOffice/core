@@ -4968,7 +4968,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function LINEST #*=-
-    Resource SC_OPCODE_RGP
+    Resource SC_OPCODE_LINEST
     {
         String 1 // Description
         {

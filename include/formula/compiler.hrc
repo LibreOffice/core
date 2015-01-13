@@ -349,7 +349,7 @@
 #define SC_OPCODE_INTERCEPT         349
 #define SC_OPCODE_TREND             350
 #define SC_OPCODE_GROWTH            351
-#define SC_OPCODE_RGP               352
+#define SC_OPCODE_LINEST            352
 #define SC_OPCODE_LOGEST            353
 #define SC_OPCODE_FORECAST          354
 #define SC_OPCODE_CHI_INV           355
