@@ -79,6 +79,7 @@ private:
 
     vector< CompareLine* > aLines;
     sal_uLong nSttLineNum;
+    bool m_bRecordDiff;
 
     // Truncate beginning and end and add all others to the LinesArray
     void CheckRanges( CompareData& );
@@ -86,9 +87,9 @@ private:
     virtual const SwNode& GetEndOfContent() = 0;
 
 public:
-    CompareData( SwDoc& rD )
+    CompareData(SwDoc& rD, bool bRecordDiff)
         : rDoc( rD ), pIndex( 0 ), pChangedFlag( 0 ), pInsRing(0), pDelRing(0)
-        , nSttLineNum( 0 )
+        , nSttLineNum( 0 ), m_bRecordDiff(bRecordDiff)
     {
     }
     virtual ~CompareData();
@@ -135,8 +136,8 @@ public:
 class CompareMainText : public CompareData
 {
 public:
-    CompareMainText(SwDoc &rD)
-        : CompareData(rD)
+    CompareMainText(SwDoc &rD, bool bRecordDiff=true)
+        : CompareData(rD, bRecordDiff)
     {
     }
 
@@ -150,8 +151,8 @@ class CompareFrmFmtText : public CompareData
 {
     const SwNodeIndex &m_rIndex;
 public:
-    CompareFrmFmtText(SwDoc &rD, const SwNodeIndex &rIndex)
-        : CompareData(rD)
+    CompareFrmFmtText(SwDoc &rD, const SwNodeIndex &rIndex, bool bRecordDiff=true)
+        : CompareData(rD, bRecordDiff)
         , m_rIndex(rIndex)
     {
     }
@@ -447,9 +448,12 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
             while( nStt1 < nLen1 && rData.GetChanged( nStt1 )) ++nStt1;
             while( nStt2 < nLen2 && GetChanged( nStt2 )) ++nStt2;
 
-            // Check if there are changed lines (only slightly different) and
-            // compare them in detail.
-            CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
+            if (m_bRecordDiff)
+            {
+                // Check if there are changed lines (only slightly different) and
+                // compare them in detail.
+                CheckForChangesInLine( rData, nSav1, nStt1, nSav2, nStt2 );
+            }
 
             ++nCnt;
         }
@@ -2062,8 +2066,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
     getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_DELETE );
 
-    CompareMainText aD0(rSrcDoc);
-    CompareMainText aD1(*this);
+    CompareMainText aD0(rSrcDoc, false);
+    CompareMainText aD1(*this, false);
     aD1.CompareLines( aD0 );
     if( !aD1.HasDiffs( aD0 ) )
     {
