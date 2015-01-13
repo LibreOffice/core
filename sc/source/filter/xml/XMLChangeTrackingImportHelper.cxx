@@ -433,10 +433,7 @@ void ScXMLChangeTrackingImportHelper::EndChangeAction()
 
 void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, OUString& rUser, DateTime& aDateTime)
 {
-    Date aDate(aInfo.aDateTime);
-    tools::Time aTime(aInfo.aDateTime);
-    aDateTime.SetDate( aDate.GetDate() );
-    aDateTime.SetTime( aTime.GetTime() );
+    aDateTime = DateTime( aInfo.aDateTime);
 
     // old files didn't store nanoseconds, enable again
     if ( aInfo.aDateTime.NanoSeconds )
