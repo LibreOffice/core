@@ -9,3 +9,27 @@
      for (int i=0; i < 4  &&  *word != 0; i++)
          hv = (hv << 8) | (*word++);
      while (*word != 0) {
+--- src/hunspell/csutil.cxx
++++ src/hunspell/csutil.cxx
+@@ -147,7 +147,7 @@
+         case 0xd0: {    // 2-byte UTF-8 codes
+             if ((*(u8+1) & 0xc0) == 0x80) {
+                 u2->h = (*u8 & 0x1f) >> 2;
+-                u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
++                u2->l = (*reinterpret_cast<unsigned char const *>(u8) << 6) + (*(u8+1) & 0x3f);
+                 u8++;
+             } else {
+                 HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - (signed char *)src), src);
+@@ -158,10 +158,10 @@
+         }
+         case 0xe0: {    // 3-byte UTF-8 codes
+             if ((*(u8+1) & 0xc0) == 0x80) {
+-                u2->h = ((*u8 & 0x0f) << 4) + ((*(u8+1) & 0x3f) >> 2);
++                u2->h = ((*reinterpret_cast<unsigned char const *>(u8) & 0x0f) << 4) + ((*(u8+1) & 0x3f) >> 2);
+                 u8++;
+                 if ((*(u8+1) & 0xc0) == 0x80) {
+-                    u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
++                    u2->l = (*reinterpret_cast<unsigned char const *>(u8) << 6) + (*(u8+1) & 0x3f);
+                     u8++;
+                 } else {
+                     HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - (signed char *)src), src);
