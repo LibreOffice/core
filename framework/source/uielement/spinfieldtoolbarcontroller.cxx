@@ -59,6 +59,7 @@ class SpinfieldControl : public SpinField
     public:
         SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinfieldListener* pSpinFieldListener );
         virtual ~SpinfieldControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Up() SAL_OVERRIDE;
         virtual void Down() SAL_OVERRIDE;
@@ -84,7 +85,13 @@ SpinfieldControl::SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinf
 
 SpinfieldControl::~SpinfieldControl()
 {
+    dispose();
+}
+
+void SpinfieldControl::dispose()
+{
     m_pSpinFieldListener = 0;
+    SpinField::dispose();
 }
 
 void SpinfieldControl::Up()

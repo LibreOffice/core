@@ -53,6 +53,7 @@ class EditControl : public Edit
     public:
         EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* pEditListener );
         virtual ~EditControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Modify() SAL_OVERRIDE;
         virtual void KeyInput( const ::KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -72,7 +73,13 @@ EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* p
 
 EditControl::~EditControl()
 {
+    dispose();
+}
+
+void EditControl::dispose()
+{
     m_pEditListener = 0;
+    Edit::dispose();
 }
 
 void EditControl::Modify()

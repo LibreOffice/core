@@ -68,6 +68,7 @@ public:
         const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~FwkTabPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;
@@ -95,8 +96,8 @@ typedef std::vector< TabEntry* > TabEntryList;
 class FwkTabWindow : public vcl::Window
 {
 private:
-    FwkTabControl   m_aTabCtrl;
-    TabEntryList    m_TabList;
+    VclPtr<FwkTabControl>  m_aTabCtrl;
+    TabEntryList           m_TabList;
 
     css::uno::Reference< css::awt::XContainerWindowProvider >   m_xWinProvider;
 
@@ -110,6 +111,7 @@ private:
 public:
     FwkTabWindow( vcl::Window* pParent );
     virtual ~FwkTabWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            AddEventListener( const Link& rEventListener );
     void            RemoveEventListener( const Link& rEventListener );

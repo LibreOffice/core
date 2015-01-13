@@ -54,6 +54,7 @@ class ListBoxControl : public ListBox
     public:
         ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxListener* pListBoxListener );
         virtual ~ListBoxControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Select() SAL_OVERRIDE;
         virtual void DoubleClick() SAL_OVERRIDE;
@@ -73,7 +74,13 @@ ListBoxControl::ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxLi
 
 ListBoxControl::~ListBoxControl()
 {
+    dispose();
+}
+
+void ListBoxControl::dispose()
+{
     m_pListBoxListener = 0;
+    ListBox::dispose();
 }
 
 void ListBoxControl::Select()

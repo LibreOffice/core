@@ -34,10 +34,6 @@ FrameworkStatusBar::FrameworkStatusBar(
     SetOutputSizePixel( CalcWindowSizePixel() );
 }
 
-FrameworkStatusBar::~FrameworkStatusBar()
-{
-}
-
 void FrameworkStatusBar::SetStatusBarManager( StatusBarManager* pStatusBarManager )
 {
     SolarMutexGuard aSolarMutexGuard;

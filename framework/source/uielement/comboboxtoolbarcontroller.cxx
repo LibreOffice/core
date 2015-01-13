@@ -55,6 +55,7 @@ class ComboBoxControl : public ComboBox
     public:
         ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBoxListener* pComboBoxListener );
         virtual ~ComboBoxControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Select() SAL_OVERRIDE;
         virtual void DoubleClick() SAL_OVERRIDE;
@@ -76,7 +77,13 @@ ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBo
 
 ComboBoxControl::~ComboBoxControl()
 {
+    dispose();
+}
+
+void ComboBoxControl::dispose()
+{
     m_pComboBoxListener = 0;
+    ComboBox::dispose();
 }
 
 void ComboBoxControl::Select()
