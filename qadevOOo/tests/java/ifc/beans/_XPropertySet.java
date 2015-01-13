@@ -281,7 +281,7 @@ public class _XPropertySet extends MultiMethodTest {
                 try {
                     log.println("try to change value of property '" + propertyName + "'" );
                     gValue = oObj.getPropertyValue(propertyName);
-                    sValue = ValueChanger.changePValue(gValue);
+                    sValue = ValueChanger.changePValue(gValue, propertyName);
                     oObj.setPropertyValue(propertyName, sValue);
                     sValue = oObj.getPropertyValue(propertyName);
                 } catch (com.sun.star.beans.PropertyVetoException e) {

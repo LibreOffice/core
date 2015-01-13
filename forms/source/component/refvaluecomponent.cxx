@@ -103,8 +103,15 @@ namespace frm
 
         case PROPERTY_ID_DEFAULT_STATE:
         {
-            sal_Int16 nDefaultChecked( (sal_Int16)TRISTATE_FALSE );
-            OSL_VERIFY( _rValue >>= nDefaultChecked );
+            sal_Int16 nDefaultChecked;
+            if (!(_rValue >>= nDefaultChecked) || nDefaultChecked < 0
+                || nDefaultChecked > 2)
+            {
+                throw css::lang::IllegalArgumentException(
+                    ("DefaultState property value must be a SHORT in the range"
+                     " 0--2"),
+                    css::uno::Reference<css::uno::XInterface>(), -1);
+            }
             m_eDefaultChecked = (ToggleState)nDefaultChecked;
             resetNoBroadcast();
         }

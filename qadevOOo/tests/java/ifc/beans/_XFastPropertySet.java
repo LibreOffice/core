@@ -53,10 +53,24 @@ import com.sun.star.uno.UnoRuntime;
 * @see com.sun.star.beans.XFastPropertySet
 */
 public class _XFastPropertySet extends MultiMethodTest {
+    private static final class Prop {
+        public final int handle;
+        public final String name;
+
+        public Prop() {
+            handle = -1;
+            name = null;
+        }
+
+        public Prop(int handle, String name) {
+            this.handle = handle;
+            this.name = name;
+        }
+    };
 
     public XFastPropertySet oObj = null;
-    private final List<Integer> handles = new ArrayList<Integer>();
-    private int handle = -1;
+    private final List<Prop> props = new ArrayList<Prop>();
+    private Prop prop;
     private Set<String> exclude = null ;
 
     /**
@@ -91,26 +105,26 @@ public class _XFastPropertySet extends MultiMethodTest {
         Object gValue = null;
         Object sValue = null;
 
-        if ( handle == -1) {
+        if ( prop.handle == -1) {
             log.println("*** No changeable properties found ***");
             tRes.tested("setFastPropertyValue()", false) ;
         } else {
             try {
-                gValue = oObj.getFastPropertyValue(handle);
-                sValue = ValueChanger.changePValue(gValue);
-                oObj.setFastPropertyValue(handle, sValue);
-                sValue = oObj.getFastPropertyValue(handle);
+                gValue = oObj.getFastPropertyValue(prop.handle);
+                sValue = ValueChanger.changePValue(gValue, prop.name);
+                oObj.setFastPropertyValue(prop.handle, sValue);
+                sValue = oObj.getFastPropertyValue(prop.handle);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occurred while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + prop.handle);
                 e.printStackTrace(log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occurred while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + prop.handle);
                 e.printStackTrace(log);
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occurred while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + prop.handle);
                 e.printStackTrace(log);
             }  catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occurred while trying to change property with handle = " + handle);
+                log.println("Exception occurred while trying to change property with handle = " + prop.handle);
                 e.printStackTrace(log);
             }
 
@@ -137,16 +151,16 @@ public class _XFastPropertySet extends MultiMethodTest {
         getPropsToTest(propertySetInfo);
 
         try {
-            oObj.getFastPropertyValue(handle);
+            oObj.getFastPropertyValue(prop.handle);
             tRes.tested("getFastPropertyValue()",true);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
             log.println("Exception occurred while trying to get property '"
-                + handle +"'");
+                + prop.handle +"'");
             e.printStackTrace(log);
             tRes.tested("getFastPropertyValue()",false);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception occurred while trying to get property '"
-                + handle +"'");
+                + prop.handle +"'");
             e.printStackTrace(log);
             tRes.tested("getFastPropertyValue()",false);
         }
@@ -170,24 +184,24 @@ public class _XFastPropertySet extends MultiMethodTest {
                 ((property.Attributes & PropertyAttribute.MAYBEVOID) == 0);
             boolean canChange = false;
             if ( isWritable && isNotNull )
-                canChange = isChangeable(handle);
+                canChange = isChangeable(handle, name);
             if ( isWritable && isNotNull && canChange)
-                handles.add(Integer.valueOf(handle));
+                props.add(new Prop(handle, name));
         } // endfor
 
         Random rnd = new Random();
-        int nr = rnd.nextInt(handles.size());
-        handle = handles.get(nr).intValue();
+        int nr = rnd.nextInt(props.size());
+        prop = props.get(nr);
     }
 
-    private boolean isChangeable(int handle) {
+    private boolean isChangeable(int handle, String name) {
         boolean hasChanged = false;
         try {
             Object getProp = oObj.getFastPropertyValue(handle);
             Object setValue = null;
 
             if (getProp != null)
-                setValue = ValueChanger.changePValue(getProp);
+                setValue = ValueChanger.changePValue(getProp, name);
             else
                 log.println("Property with handle = " + handle
                     + " is null but 'MAYBEVOID' isn't set");

@@ -32,7 +32,7 @@ import com.sun.star.uno.AnyConverter;
 public class ValueChanger {
 
     // Method to change a Value, thought for properties
-    public static Object changePValue(Object oldValue) {
+    public static Object changePValue(Object oldValue, String name) {
 
         Object newValue = null;
 
@@ -57,8 +57,15 @@ public class ValueChanger {
             long oldlong = ((Long) oldValue).longValue();
             newValue = Long.valueOf(oldlong + 15);
         } else if (oldValue instanceof Short) {
-            short oldshort = ((Short) oldValue).shortValue();
-            newValue = Short.valueOf((short) (oldshort + 1));
+            short n = ((Short) oldValue).shortValue();
+            // css.form.component.{CheckBox,RadioButton} DefaultState properties
+            // must have values in the range 0--2:
+            if ("DefaultState".equals(name) && n == 2) {
+                --n;
+            } else {
+                ++n;
+            }
+            newValue = Short.valueOf(n);
         } else if (oldValue instanceof Byte) {
             byte oldbyte = ((Byte) oldValue).byteValue();
             newValue = Byte.valueOf((byte) (oldbyte + 1));
@@ -999,6 +1006,10 @@ public class ValueChanger {
         return newValue;
 
     } // end of Change PValue
+
+    public static Object changePValue(Object oldValue) {
+        return changePValue(oldValue, null);
+    }
 
     /**
      * Checks if the passed value is the API structure. The value assumed to be
