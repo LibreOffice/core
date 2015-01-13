@@ -106,6 +106,7 @@ SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
 {
     long nWidth = pParent->GetSizePixel().getWidth();
     SetPosSizePixel( Point( 0, 0 ), Size( nWidth, 40 ) );
+
     m_pMessage->SetText( sMessage );
     m_pMessage->SetBackground( Wallpaper( Color(  255, 255, 191 ) ) );
     m_pMessage->Show( );
@@ -115,22 +116,16 @@ SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
     m_pCloseBtn->Show( );
 
     // Reparent the buttons and place them on the right of the bar
-    long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
-    long nBtnGap = 5;
     vector<PushButton*>::iterator it;
     for (it = aButtons.begin(); it != aButtons.end(); ++it)
     {
-        PushButton* pBtn = *it;
-        pBtn->SetParent( this );
-        long nBtnWidth = pBtn->GetSizePixel( ).getWidth();
-        nX -= nBtnWidth;
-        pBtn->SetPosSizePixel( Point( nX, 5 ), Size( nBtnWidth, 30 ) );
-        nX -= nBtnGap;
-        pBtn->Show( );
-        m_aActionBtns.push_back(pBtn);
+        PushButton* pButton = *it;
+        pButton->SetParent(this);
+        pButton->Show();
+        m_aActionBtns.push_back(pButton);
     }
 
-    m_pMessage->SetPosSizePixel( Point( 10, 10 ), Size( nX - 20, 20 ) );
+    Resize();
 }
 
 SfxInfoBarWindow::~SfxInfoBarWindow( )
@@ -166,6 +161,7 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
     aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Bottom( ) ) );
     aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Bottom( ) ) );
     aPolygon.setClosed( true );
+
     PolyPolygonColorPrimitive2D* pBack =
         new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aLightColor);
     aSeq[0] = pBack;
@@ -187,7 +183,7 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
     Window::Paint( rPaintRect );
 }
 
-void SfxInfoBarWindow::Resize( )
+void SfxInfoBarWindow::Resize()
 {
     long nWidth = GetSizePixel().getWidth();
     m_pCloseBtn->SetPosSizePixel( Point( nWidth - 25, 15 ), Size( 10, 10 ) );
