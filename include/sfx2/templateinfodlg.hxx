@@ -27,7 +27,8 @@ public:
 
     SfxTemplateInfoDlg (vcl::Window *pParent = NULL);
 
-    virtual ~SfxTemplateInfoDlg ();
+    virtual ~SfxTemplateInfoDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void loadDocument (const OUString &rURL);
 

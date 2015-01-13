@@ -58,10 +58,6 @@ PanelTitleBar::PanelTitleBar (
 #endif
 }
 
-PanelTitleBar::~PanelTitleBar (void)
-{
-}
-
 void PanelTitleBar::SetMoreOptionsCommand (
     const ::rtl::OUString& rsCommandName,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
@@ -69,27 +65,27 @@ void PanelTitleBar::SetMoreOptionsCommand (
     if ( ! rsCommandName.equals(msMoreOptionsCommand))
     {
         if (msMoreOptionsCommand.getLength() > 0)
-            maToolBox.RemoveItem(maToolBox.GetItemPos(mnMenuItemIndex));
+            maToolBox->RemoveItem(maToolBox->GetItemPos(mnMenuItemIndex));
 
         msMoreOptionsCommand = rsCommandName;
         mxFrame = rxFrame;
 
         if (msMoreOptionsCommand.getLength() > 0)
         {
-            maToolBox.InsertItem(
+            maToolBox->InsertItem(
                 mnMenuItemIndex,
                 Theme::GetImage(Theme::Image_PanelMenu));
             Reference<frame::XToolbarController> xController (
                 ControllerFactory::CreateToolBoxController(
-                    &maToolBox,
+                    maToolBox.get(),
                     mnMenuItemIndex,
                     msMoreOptionsCommand,
                     rxFrame,
-                    VCLUnoHelper::GetInterface(&maToolBox),
+                    VCLUnoHelper::GetInterface(maToolBox.get()),
                     0));
-            maToolBox.SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);
-            maToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
-            maToolBox.SetQuickHelpText(
+            maToolBox->SetController(mnMenuItemIndex, xController, msMoreOptionsCommand);
+            maToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
+            maToolBox->SetQuickHelpText(
                 mnMenuItemIndex,
                 SFX2_RESSTR(SFX_STR_SIDEBAR_MORE_OPTIONS));
         }
@@ -198,7 +194,7 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
-    maToolBox.SetItemImage(
+    maToolBox->SetItemImage(
         mnMenuItemIndex,
         Theme::GetImage(Theme::Image_PanelMenu));
     TitleBar::DataChanged(rEvent);

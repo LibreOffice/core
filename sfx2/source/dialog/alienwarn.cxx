@@ -51,11 +51,17 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUStrin
 
 SfxAlienWarningDialog::~SfxAlienWarningDialog()
 {
+    dispose();
+}
+
+void SfxAlienWarningDialog::dispose()
+{
     // save value of "warning off" checkbox, if necessary
     SvtSaveOptions aSaveOpt;
     bool bChecked = m_pWarningOnBox->IsChecked();
     if ( aSaveOpt.IsWarnAlienFormat() != bChecked )
         aSaveOpt.SetWarnAlienFormat( bChecked );
+    MessageDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

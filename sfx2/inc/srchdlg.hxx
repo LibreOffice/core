@@ -59,6 +59,7 @@ private:
 public:
     SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );
     virtual ~SearchDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }
     void         SetCloseHdl( const Link& rLink ) { m_aCloseHdl = rLink; }
@@ -70,11 +71,11 @@ public:
     bool         IsWrapAround() const { return ( m_pWrapAroundBox->IsChecked() ); }
     bool         IsSearchBackwards() const { return ( m_pBackwardsBox->IsChecked() ); }
 
-    void                SetFocusOnEdit();
+    void            SetFocusOnEdit();
 
     virtual bool    Close() SAL_OVERRIDE;
-    virtual void        Move() SAL_OVERRIDE;
-    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void    Move() SAL_OVERRIDE;
+    virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 };
 
 

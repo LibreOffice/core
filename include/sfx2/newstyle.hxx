@@ -36,7 +36,7 @@ private:
     ComboBox* m_pColBox;
     OKButton* m_pOKBtn;
 
-    MessageDialog aQueryOverwriteBox;
+    VclPtr<MessageDialog> aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
 
     DECL_DLLPRIVATE_LINK( OKHdl, Control * );
@@ -45,6 +45,7 @@ private:
 public:
     SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& );
     virtual ~SfxNewStyleDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString                GetName() const { return comphelper::string::stripStart(m_pColBox->GetText(), ' '); }
 };

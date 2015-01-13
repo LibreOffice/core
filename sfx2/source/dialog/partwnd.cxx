@@ -140,12 +140,6 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 
 
 
-SfxPartDockWnd_Impl::~SfxPartDockWnd_Impl()
-{
-}
-
-
-
 void SfxPartDockWnd_Impl::Resize()
 
 /*  [Description]

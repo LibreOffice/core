@@ -68,6 +68,7 @@ public:
         const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider);
     virtual ~TabBar (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void DataChanged (const DataChangedEvent& rDataChangedEvent) SAL_OVERRIDE;

@@ -59,10 +59,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateRemoteView(vcl
     return new TemplateRemoteView(pParent, WB_VSCROLL, false);
 }
 
-TemplateRemoteView::~TemplateRemoteView ()
-{
-}
-
 void TemplateRemoteView::showRootRegion()
 {
     //TODO:
@@ -86,7 +82,7 @@ bool TemplateRemoteView::loadRepository (TemplateRepository* pItem, bool bRefres
 
     mnCurRegionId = pItem->mnId;
     maCurRegionName = pItem->maTitle;
-    maFTName.SetText(maCurRegionName);
+    maFTName->SetText(maCurRegionName);
 
     OUString aURL = pItem->getURL();
 

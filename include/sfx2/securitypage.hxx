@@ -34,7 +34,6 @@ class SfxSecurityPage : public SfxTabPage
 
 protected:
     SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& );
-    virtual ~SfxSecurityPage();
 
     virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;

@@ -200,6 +200,11 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 {
+    dispose();
+}
+
+void SfxRecordingFloat_Impl::dispose()
+{
     try
     {
         if ( xStopRecTbxCtrl.is() )
@@ -211,6 +216,7 @@ SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
     catch ( uno::Exception& )
     {
     }
+    SfxFloatingWindow::dispose();
 }
 
 bool SfxRecordingFloat_Impl::Close()

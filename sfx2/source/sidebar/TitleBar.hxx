@@ -35,6 +35,7 @@ public:
         vcl::Window* pParentWindow,
         const sidebar::Paint& rInitialBackgroundPaint);
     virtual ~TitleBar (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetTitle (const ::rtl::OUString& rsTitle);
     void SetIcon (const Image& rIcon);
@@ -48,11 +49,11 @@ public:
         long nHeight,
         sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
 
-    ToolBox& GetToolBox (void) { return maToolBox;}
-    const ToolBox& GetToolBox (void) const { return maToolBox;}
+    ToolBox& GetToolBox (void) { return *maToolBox.get();}
+    const ToolBox& GetToolBox (void) const { return *maToolBox.get();}
 
 protected:
-    SidebarToolBox maToolBox;
+    VclPtr<SidebarToolBox> maToolBox;
     ::rtl::OUString msTitle;
 
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) = 0;

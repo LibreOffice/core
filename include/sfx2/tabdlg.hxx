@@ -129,6 +129,7 @@ public:
                  const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = 0, bool bEditFmt = false);
     virtual ~SfxTabDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16          AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
                                     CreateTabPage pCreateFunc,      // != 0
@@ -249,6 +250,7 @@ protected:
 
 public:
     virtual             ~SfxTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 

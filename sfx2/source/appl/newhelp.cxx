@@ -303,6 +303,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeContentListBox(vcl::Wi
 
 ContentListBox_Impl::~ContentListBox_Impl()
 {
+    dispose();
+}
+
+void ContentListBox_Impl::dispose()
+{
     sal_uInt16 nPos = 0;
     SvTreeListEntry* pEntry = GetEntry( nPos++ );
     while ( pEntry )
@@ -311,6 +316,7 @@ ContentListBox_Impl::~ContentListBox_Impl()
         delete static_cast<ContentEntry_Impl*>(pEntry->GetUserData());
         pEntry = GetEntry( nPos++ );
     }
+    SvTreeListBox::dispose();
 }
 
 void ContentListBox_Impl::InitRoot()
@@ -545,7 +551,13 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
 {
+    dispose();
+}
+
+void IndexTabPage_Impl::dispose()
+{
     ClearIndex();
+    HelpTabPage_Impl::dispose();
 }
 
 
@@ -946,6 +958,11 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
 
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
+   dispose();
+}
+
+void SearchTabPage_Impl::dispose()
+{
     SvtViewOptions aViewOpt( E_TABPAGE, CONFIGNAME_SEARCHPAGE );
     sal_Int32 nChecked = m_pFullWordsCB->IsChecked() ? 1 : 0;
     OUString aUserData = OUString::number( nChecked );
@@ -967,6 +984,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     aUserData = comphelper::string::stripEnd(aUserData, ';');
     Any aUserItem = makeAny( OUString( aUserData ) );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
+    HelpTabPage_Impl::dispose();
 }
 
 
@@ -1141,6 +1159,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBookmarksBox(vcl::Wind
 
 BookmarksBox_Impl::~BookmarksBox_Impl()
 {
+    dispose();
+}
+
+void BookmarksBox_Impl::dispose()
+{
     // save bookmarks to configuration
     SvtHistoryOptions aHistOpt;
     aHistOpt.Clear( eHELPBOOKMARKS );
@@ -1153,6 +1176,7 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
         aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, sEmpty, aTitle, sEmpty, sEmpty);
         delete pURL;
     }
+    ListBox::dispose();
 }
 
 
@@ -1416,6 +1440,11 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
 
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
+    dispose();
+}
+
+void SfxHelpIndexWindow_Impl::dispose()
+{
     sfx2::RemoveFromTaskPaneList( this );
 
     DELETEZ( pCPage );
@@ -1428,6 +1457,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
     aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
+    vcl::Window::dispose();
 }
 
 
@@ -1805,10 +1835,6 @@ TextWin_Impl::TextWin_Impl( vcl::Window* p ) : DockingWindow( p, 0 )
 {
 }
 
-TextWin_Impl::~TextWin_Impl()
-{
-}
-
 bool TextWin_Impl::Notify( NotifyEvent& rNEvt )
 {
     if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
@@ -1830,8 +1856,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL ),
 
-    aToolBox            ( this, 0 ),
-    aOnStartupCB        ( this, SfxResId( RID_HELP_ONSTARTUP_BOX ) ),
+    aToolBox            ( new ToolBox(this, 0) ),
+    aOnStartupCB        ( new CheckBox(this, SfxResId( RID_HELP_ONSTARTUP_BOX )) ),
     aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
     aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
     aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ).toString() ),
@@ -1847,36 +1873,36 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     bIsFullWordSearch   ( false )
 
 {
-    sfx2::AddToTaskPaneList( &aToolBox );
+    sfx2::AddToTaskPaneList( aToolBox.get() );
 
     xFrame = Frame::create( ::comphelper::getProcessComponentContext() );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( "OFFICE_HELP" );
     lcl_disableLayoutOfFrame(xFrame);
 
-    aToolBox.SetHelpId( HID_HELP_TOOLBOX );
+    aToolBox->SetHelpId( HID_HELP_TOOLBOX );
 
-    aToolBox.InsertItem( TBI_INDEX, aIndexOffText );
-    aToolBox.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
-    aToolBox.InsertSeparator();
-    aToolBox.InsertItem( TBI_BACKWARD, SfxResId( STR_HELP_BUTTON_PREV ).toString() );
-    aToolBox.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
-    aToolBox.InsertItem( TBI_FORWARD, SfxResId( STR_HELP_BUTTON_NEXT ).toString() );
-    aToolBox.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
-    aToolBox.InsertItem( TBI_START, SfxResId( STR_HELP_BUTTON_START ).toString() );
-    aToolBox.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
-    aToolBox.InsertSeparator();
-    aToolBox.InsertItem( TBI_PRINT, SfxResId( STR_HELP_BUTTON_PRINT ).toString() );
-    aToolBox.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
-    aToolBox.InsertItem( TBI_BOOKMARKS, SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ).toString() );
-    aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
-    aToolBox.InsertItem( TBI_SEARCHDIALOG, SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ).toString() );
-    aToolBox.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
+    aToolBox->InsertItem( TBI_INDEX, aIndexOffText );
+    aToolBox->SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
+    aToolBox->InsertSeparator();
+    aToolBox->InsertItem( TBI_BACKWARD, SfxResId( STR_HELP_BUTTON_PREV ).toString() );
+    aToolBox->SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
+    aToolBox->InsertItem( TBI_FORWARD, SfxResId( STR_HELP_BUTTON_NEXT ).toString() );
+    aToolBox->SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
+    aToolBox->InsertItem( TBI_START, SfxResId( STR_HELP_BUTTON_START ).toString() );
+    aToolBox->SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
+    aToolBox->InsertSeparator();
+    aToolBox->InsertItem( TBI_PRINT, SfxResId( STR_HELP_BUTTON_PRINT ).toString() );
+    aToolBox->SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
+    aToolBox->InsertItem( TBI_BOOKMARKS, SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ).toString() );
+    aToolBox->SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+    aToolBox->InsertItem( TBI_SEARCHDIALOG, SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ).toString() );
+    aToolBox->SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
 
     InitToolBoxImages();
-    aToolBox.Show();
+    aToolBox->Show();
     InitOnStartupBox( false );
-    aOnStartupCB.SetClickHdl( LINK( this, SfxHelpTextWindow_Impl, CheckHdl ) );
+    aOnStartupCB->SetClickHdl( LINK( this, SfxHelpTextWindow_Impl, CheckHdl ) );
 
     aSelectIdle.SetIdleHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
     aSelectIdle.SetPriority( SchedulerPriority::LOWEST );
@@ -1887,19 +1913,27 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     SvtMiscOptions().AddListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
 
-    if ( !aOnStartupCB.GetHelpId().getLength() )
-        aOnStartupCB.SetHelpId( HID_HELP_ONSTARTUP_BOX );
+    if ( !aOnStartupCB->GetHelpId().getLength() )
+        aOnStartupCB->SetHelpId( HID_HELP_ONSTARTUP_BOX );
 }
 
 
 
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
-    sfx2::RemoveFromTaskPaneList( &aToolBox );
+    dispose();
+}
+
+void SfxHelpTextWindow_Impl::dispose()
+{
+    sfx2::RemoveFromTaskPaneList( aToolBox.get() );
 
     bIsInClose = true;
     SvtMiscOptions().RemoveListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
     delete pSrchDlg;
+    aToolBox.disposeAndClear();
+    aOnStartupCB.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 
@@ -1928,39 +1962,39 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
     aIndexOnImage  = Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_INDEX_ON  : IMG_HELP_TOOLBOX_INDEX_ON  ) );
     aIndexOffImage = Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) );
 
-    aToolBox.SetItemImage( TBI_INDEX, bIsIndexOn ? aIndexOffImage : aIndexOnImage );
+    aToolBox->SetItemImage( TBI_INDEX, bIsIndexOn ? aIndexOffImage : aIndexOnImage );
 
-    aToolBox.SetItemImage( TBI_BACKWARD,
+    aToolBox->SetItemImage( TBI_BACKWARD,
                            Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_PREV : IMG_HELP_TOOLBOX_PREV ) )
     );
 
-    aToolBox.SetItemImage( TBI_FORWARD,
+    aToolBox->SetItemImage( TBI_FORWARD,
                            Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_NEXT : IMG_HELP_TOOLBOX_NEXT ) )
     );
 
-    aToolBox.SetItemImage( TBI_START,
+    aToolBox->SetItemImage( TBI_START,
                            Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_START : IMG_HELP_TOOLBOX_START ) )
     );
 
-    aToolBox.SetItemImage( TBI_PRINT,
+    aToolBox->SetItemImage( TBI_PRINT,
                            Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_PRINT : IMG_HELP_TOOLBOX_PRINT ) )
     );
 
-    aToolBox.SetItemImage( TBI_BOOKMARKS,
+    aToolBox->SetItemImage( TBI_BOOKMARKS,
                            Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) )
     );
 
-    aToolBox.SetItemImage( TBI_SEARCHDIALOG,
+    aToolBox->SetItemImage( TBI_SEARCHDIALOG,
                            Image( SfxResId( bLarge ? IMG_HELP_TOOLBOX_L_SEARCHDIALOG : IMG_HELP_TOOLBOX_SEARCHDIALOG ) )
     );
 
-    Size aSize = aToolBox.CalcWindowSizePixel();
+    Size aSize = aToolBox->CalcWindowSizePixel();
     aSize.Height() += TOOLBOX_OFFSET;
-    aToolBox.SetPosSizePixel( Point( 0, TOOLBOX_OFFSET ), aSize );
+    aToolBox->SetPosSizePixel( Point( 0, TOOLBOX_OFFSET ), aSize );
 
     SvtMiscOptions aMiscOptions;
-    if ( aMiscOptions.GetToolboxStyle() != aToolBox.GetOutStyle() )
-        aToolBox.SetOutStyle( aMiscOptions.GetToolboxStyle() );
+    if ( aMiscOptions.GetToolboxStyle() != aToolBox->GetOutStyle() )
+        aToolBox->SetOutStyle( aMiscOptions.GetToolboxStyle() );
 }
 
 
@@ -1998,7 +2032,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     }
 
     if ( bHideBox )
-        aOnStartupCB.Hide();
+        aOnStartupCB->Hide();
     else
     {
         // detect module name
@@ -2025,20 +2059,20 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
             // set module name in checkbox text
             OUString sText( aOnStartupText );
             sText = sText.replaceFirst( "%MODULENAME", sModuleName );
-            aOnStartupCB.SetText( sText );
+            aOnStartupCB->SetText( sText );
             // and show it
-            aOnStartupCB.Show();
+            aOnStartupCB->Show();
             // set check state
-            aOnStartupCB.Check( bHelpAtStartup );
-            aOnStartupCB.SaveValue();
+            aOnStartupCB->Check( bHelpAtStartup );
+            aOnStartupCB->SaveValue();
 
             // calculate and set optimal width of the onstartup checkbox
             OUString sCBText( "XXX" );
-            sCBText += aOnStartupCB.GetText();
-            long nTextWidth = aOnStartupCB.GetTextWidth( sCBText );
-            Size aSize = aOnStartupCB.GetSizePixel();
+            sCBText += aOnStartupCB->GetText();
+            long nTextWidth = aOnStartupCB->GetTextWidth( sCBText );
+            Size aSize = aOnStartupCB->GetSizePixel();
             aSize.Width() = nTextWidth;
-            aOnStartupCB.SetSizePixel( aSize );
+            aOnStartupCB->SetSizePixel( aSize );
             SetOnStartupBoxPosition();
         }
 
@@ -2046,12 +2080,12 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
         {
             // set position of the checkbox
             Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
-            Size aTBSize = aToolBox.GetSizePixel();
-            Size aCBSize = aOnStartupCB.GetSizePixel();
-            Point aPnt = aToolBox.GetPosPixel();
+            Size aTBSize = aToolBox->GetSizePixel();
+            Size aCBSize = aOnStartupCB->GetSizePixel();
+            Point aPnt = aToolBox->GetPosPixel();
             aPnt.X() += aTBSize.Width() + a3Size.Width();
             aPnt.Y() += ( ( aTBSize.Height() - aCBSize.Height() ) / 2 );
-            aOnStartupCB.SetPosPixel( aPnt );
+            aOnStartupCB->SetPosPixel( aPnt );
             nMinPos = aPnt.X();
         }
     }
@@ -2061,10 +2095,10 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 
 void SfxHelpTextWindow_Impl::SetOnStartupBoxPosition()
 {
-    long nX = std::max( GetOutputSizePixel().Width() - aOnStartupCB.GetSizePixel().Width(), nMinPos );
-    Point aPos = aOnStartupCB.GetPosPixel();
+    long nX = std::max( GetOutputSizePixel().Width() - aOnStartupCB->GetSizePixel().Width(), nMinPos );
+    Point aPos = aOnStartupCB->GetPosPixel();
     aPos.X() = nX;
-    aOnStartupCB.SetPosPixel( aPos );
+    aOnStartupCB->SetPosPixel( aPos );
 }
 
 
@@ -2181,7 +2215,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
     (void)pOptions; // unused variable
     InitToolBoxImages();
     Resize();
-    aToolBox.Invalidate();
+    aToolBox->Invalidate();
     return 0;
 }
 
@@ -2308,7 +2342,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
 void SfxHelpTextWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
-    long nToolBoxHeight = aToolBox.GetSizePixel().Height() + TOOLBOX_OFFSET;
+    long nToolBoxHeight = aToolBox->GetSizePixel().Height() + TOOLBOX_OFFSET;
     aSize.Height() -= nToolBoxHeight;
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
     SetOnStartupBoxPosition();
@@ -2325,7 +2359,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
         vcl::Window* pCmdWin = rNEvt.GetWindow();
 
-        if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
+        if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != aToolBox.get() )
         {
             Point aPos;
             if ( pCmdEvt->IsMouseEvent() )
@@ -2430,9 +2464,9 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             pHelpWin->CloseWindow();
             nDone = true;
         }
-        else if ( KEY_TAB == nKey && aOnStartupCB.HasChildPathFocus() )
+        else if ( KEY_TAB == nKey && aOnStartupCB->HasChildPathFocus() )
         {
-            aToolBox.GrabFocus();
+            aToolBox->GrabFocus();
             nDone = true;
         }
     }
@@ -2484,13 +2518,13 @@ void SfxHelpTextWindow_Impl::ToggleIndex( bool bOn )
     bIsIndexOn = bOn;
     if ( bIsIndexOn )
     {
-        aToolBox.SetItemImage( TBI_INDEX, aIndexOffImage );
-        aToolBox.SetItemText( TBI_INDEX, aIndexOffText );
+        aToolBox->SetItemImage( TBI_INDEX, aIndexOffImage );
+        aToolBox->SetItemText( TBI_INDEX, aIndexOffText );
     }
     else
     {
-        aToolBox.SetItemImage( TBI_INDEX, aIndexOnImage );
-        aToolBox.SetItemText( TBI_INDEX, aIndexOnText );
+        aToolBox->SetItemImage( TBI_INDEX, aIndexOnImage );
+        aToolBox->SetItemText( TBI_INDEX, aIndexOnText );
     }
 }
 
@@ -2993,6 +3027,11 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
+    dispose();
+}
+
+void SfxHelpWindow_Impl::dispose()
+{
     SaveConfig();
     vcl::Window* pDel = pIndexWin;
     pIndexWin = NULL;
@@ -3000,6 +3039,7 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 
     pTextWin->CloseFrame();
     delete pTextWin;
+    SplitWindow::dispose();
 }
 
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )

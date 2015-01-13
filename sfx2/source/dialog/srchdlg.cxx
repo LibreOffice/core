@@ -62,8 +62,14 @@ SearchDialog::SearchDialog(vcl::Window* pWindow, const OUString& rConfigName)
 
 SearchDialog::~SearchDialog()
 {
+    dispose();
+}
+
+void SearchDialog::dispose()
+{
     SaveConfig();
     m_aCloseHdl.Call( NULL );
+    ModelessDialog::dispose();
 }
 
 void SearchDialog::LoadConfig()

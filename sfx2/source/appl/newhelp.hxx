@@ -60,7 +60,7 @@ private:
 public:
     ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle);
     virtual ~ContentListBox_Impl();
-
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -141,6 +141,7 @@ private:
 public:
     IndexTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     virtual ~IndexTabPage_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
@@ -217,6 +218,7 @@ private:
 public:
     SearchTabPage_Impl( vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
     virtual ~SearchTabPage_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
@@ -242,6 +244,7 @@ private:
 public:
     BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle);
     virtual ~BookmarksBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
@@ -312,6 +315,7 @@ private:
 public:
     SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
     virtual ~SfxHelpIndexWindow_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
@@ -392,7 +396,6 @@ class TextWin_Impl : public DockingWindow
 {
 public:
                             TextWin_Impl( vcl::Window* pParent );
-    virtual                 ~TextWin_Impl();
 
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
@@ -405,8 +408,8 @@ class SfxHelpWindow_Impl;
 class SfxHelpTextWindow_Impl : public vcl::Window
 {
 private:
-    ToolBox                 aToolBox;
-    CheckBox                aOnStartupCB;
+    VclPtr<ToolBox>         aToolBox;
+    VclPtr<CheckBox>        aOnStartupCB;
     Idle                    aSelectIdle;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
@@ -426,12 +429,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             xConfiguration;
     long                    nMinPos;
-    bool                bIsDebug;
-    bool                bIsIndexOn;
-    bool                bIsInClose;
-    bool                bIsFullWordSearch;
+    bool                    bIsDebug;
+    bool                    bIsIndexOn;
+    bool                    bIsInClose;
+    bool                    bIsFullWordSearch;
 
-    bool                HasSelection() const;
+    bool                    HasSelection() const;
     void                    InitToolBoxImages();
     void                    InitOnStartupBox( bool bOnlyText );
     void                    SetOnStartupBoxPosition();
@@ -451,6 +454,7 @@ private:
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
     virtual ~SfxHelpTextWindow_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void            Resize() SAL_OVERRIDE;
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -460,11 +464,11 @@ public:
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                             getFrame() const { return xFrame; }
 
-    inline void             SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
+    inline void             SetSelectHdl( const Link& rLink ) { aToolBox->SetSelectHdl( rLink ); }
     void                    ToggleIndex( bool bOn );
     void                    SelectSearchText( const OUString& rSearchText, bool _bIsFullWordSearch );
     void                    SetPageStyleHeaderOff() const;
-    inline ToolBox&         GetToolBox() { return aToolBox; }
+    inline ToolBox&         GetToolBox() { return *aToolBox.get(); }
      void                   CloseFrame();
     void                    DoSearch();
 };
@@ -519,6 +523,7 @@ public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,
                         vcl::Window* pParent, WinBits nBits );
     virtual ~SfxHelpWindow_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

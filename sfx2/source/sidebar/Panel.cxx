@@ -69,9 +69,15 @@ Panel::Panel (
 #endif
 }
 
-Panel::~Panel (void)
+Panel::~Panel()
+{
+    dispose();
+}
+
+void Panel::dispose()
 {
     Dispose();
+    vcl::Window::dispose();
 }
 
 void Panel::Dispose (void)

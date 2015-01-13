@@ -18,8 +18,6 @@ public:
 
     TemplateSearchView ( vcl::Window* pParent, WinBits nWinStyle = WB_TABSTOP | WB_VSCROLL);
 
-    virtual ~TemplateSearchView();
-
     void setOpenTemplateHdl (const Link &rLink);
 
     void AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,

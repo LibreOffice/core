@@ -47,6 +47,7 @@ public:
         const ::boost::function<void(void)>& rDeckLayoutTrigger,
         const ::boost::function<Context(void)>& rContextAccess);
     virtual ~Panel (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     void Dispose (void);
 

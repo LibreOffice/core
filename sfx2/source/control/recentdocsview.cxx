@@ -62,10 +62,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRecentDocsView(vcl::Wi
     return new RecentDocsView(pParent);
 }
 
-RecentDocsView::~RecentDocsView()
-{
-}
-
 bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &rExt)
 {
     bool bRet = false;

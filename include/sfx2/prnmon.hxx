@@ -45,6 +45,7 @@ public:
                                                    SfxViewShell *pViewShell,
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();
+    virtual void            dispose() SAL_OVERRIDE;
 
     bool                    Construct();
     virtual short           Execute() SAL_OVERRIDE;

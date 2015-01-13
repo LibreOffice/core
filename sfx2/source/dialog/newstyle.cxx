@@ -41,7 +41,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
             return 0;
         }
 
-        if ( RET_YES == aQueryOverwriteBox.Execute() )
+        if ( RET_YES == aQueryOverwriteBox->Execute() )
             EndDialog( RET_OK );
     }
     else
@@ -59,8 +59,8 @@ IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 
 SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
     : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
-    , aQueryOverwriteBox(this, SfxResId(STR_QUERY_OVERWRITE),
-                         VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)
+    , aQueryOverwriteBox(new MessageDialog(this, SfxResId(STR_QUERY_OVERWRITE),
+                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO))
     , rPool(rInPool)
 {
     get(m_pColBox, "stylename");
@@ -82,6 +82,13 @@ SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rIn
 
 SfxNewStyleDlg::~SfxNewStyleDlg()
 {
+    dispose();
+}
+
+void SfxNewStyleDlg::dispose()
+{
+    aQueryOverwriteBox.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

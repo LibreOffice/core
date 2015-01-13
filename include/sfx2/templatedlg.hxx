@@ -50,7 +50,8 @@ public:
 
     SfxTemplateManagerDlg(vcl::Window *parent = NULL);
 
-    virtual ~SfxTemplateManagerDlg ();
+    virtual ~SfxTemplateManagerDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void setSaveMode();
 

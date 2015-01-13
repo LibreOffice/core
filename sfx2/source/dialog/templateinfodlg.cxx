@@ -54,7 +54,13 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (vcl::Window *pParent)
 
 SfxTemplateInfoDlg::~SfxTemplateInfoDlg()
 {
+    dispose();
+}
+
+void SfxTemplateInfoDlg::dispose()
+{
     m_xFrame->dispose();
+    ModalDialog::dispose();
 }
 
 void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)

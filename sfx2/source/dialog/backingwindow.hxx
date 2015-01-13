@@ -125,6 +125,7 @@ class BackingWindow
 public:
     BackingWindow( vcl::Window* pParent );
     virtual ~BackingWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        Resize() SAL_OVERRIDE;

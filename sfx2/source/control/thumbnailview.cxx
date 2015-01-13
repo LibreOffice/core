@@ -66,6 +66,11 @@ ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDis
 
 ThumbnailView::~ThumbnailView()
 {
+    dispose();
+}
+
+void ThumbnailView::dispose()
+{
     com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
             xComponent(GetAccessible(false),
                        com::sun::star::uno::UNO_QUERY);
@@ -78,6 +83,7 @@ ThumbnailView::~ThumbnailView()
     delete mpProcessor;
 
     ImplDeleteItems();
+    Control::dispose();
 }
 
 void ThumbnailView::MouseMove(const MouseEvent& rMEvt)

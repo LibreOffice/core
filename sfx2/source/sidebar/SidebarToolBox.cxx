@@ -55,7 +55,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarToolBox(vcl::Wi
     return new SidebarToolBox(pParent);
 }
 
-SidebarToolBox::~SidebarToolBox (void)
+SidebarToolBox::~SidebarToolBox()
+{
+    dispose();
+}
+
+void SidebarToolBox::dispose()
 {
     ControllerContainer aControllers;
     aControllers.swap(maControllers);
@@ -77,6 +82,7 @@ SidebarToolBox::~SidebarToolBox (void)
         SetActivateHdl(Link());
         SetDeactivateHdl(Link());
     }
+    ToolBox::dispose();
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,

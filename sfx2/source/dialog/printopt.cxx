@@ -85,10 +85,6 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( vcl::Window* pParent
     m_pReduceBitmapsResolutionRB->SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
 }
 
-SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
-{
-}
-
 SfxTabPage* SfxCommonPrintOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return( new SfxCommonPrintOptionsTabPage( pParent, *rAttrSet ) );

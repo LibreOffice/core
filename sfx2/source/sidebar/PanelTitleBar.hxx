@@ -36,7 +36,6 @@ public:
         const ::rtl::OUString& rsTitle,
         vcl::Window* pParentWindow,
         Panel* pPanel );
-    virtual ~PanelTitleBar (void);
 
     void SetMoreOptionsCommand (
         const ::rtl::OUString& rsCommandName,

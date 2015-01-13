@@ -163,15 +163,15 @@ SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const 
 }
 
 SfxModalDialog::~SfxModalDialog()
+{
+    dispose();
+}
 
-/*  [Description]
-
-    Destructor; writes the Dialog position in the ini-file.
-*/
-
+void SfxModalDialog::dispose()
 {
     SetDialogData_Impl();
     delete pOutputSet;
+    ModalDialog::dispose();
 }
 
 void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
@@ -355,16 +355,16 @@ bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 
 
 SfxModelessDialog::~SfxModelessDialog()
+{
+    dispose();
+}
 
-/*  [Description]
-
-    Destructor
-*/
-
+void SfxModelessDialog::dispose()
 {
     if ( pImp->pMgr->GetFrame().is() && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
     delete pImp;
+    ModelessDialog::dispose();
 }
 
 
@@ -505,16 +505,16 @@ bool SfxFloatingWindow::Close()
 
 
 SfxFloatingWindow::~SfxFloatingWindow()
+{
+    dispose();
+}
 
-/*  [Description]
-
-    Destructor
-*/
-
+void SfxFloatingWindow::dispose()
 {
     if ( pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( NULL );
     delete pImp;
+    FloatingWindow::dispose();
 }
 
 
@@ -702,9 +702,15 @@ SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window* pParent, const SfxItemSet* p
 
 SfxSingleTabDialog::~SfxSingleTabDialog()
 {
+    dispose();
+}
+
+void SfxSingleTabDialog::dispose()
+{
     delete pImpl->m_pSfxPage;
     delete pImpl->m_pLine;
     delete pImpl;
+    SfxModalDialog::dispose();
 }
 
 void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,

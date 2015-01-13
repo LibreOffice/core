@@ -229,9 +229,15 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
+    dispose();
+}
+
+void SfxPrintOptionsDialog::dispose()
+{
     delete pDlgImpl;
     delete pPage;
     delete pOptions;
+    ModalDialog::dispose();
 }
 
 

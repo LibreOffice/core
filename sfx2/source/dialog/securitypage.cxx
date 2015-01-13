@@ -433,10 +433,6 @@ SfxSecurityPage::SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& rItemS
 }
 
 
-SfxSecurityPage::~SfxSecurityPage()
-{
-}
-
 
 bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )
 {

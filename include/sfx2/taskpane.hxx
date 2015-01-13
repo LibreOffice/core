@@ -93,7 +93,6 @@ namespace sfx2
             vcl::Window& i_rParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocumentFrame
         );
-        virtual ~ModuleTaskPane();
 
         /** determines whether a given module has any registered tool panels
         */
@@ -163,6 +162,8 @@ namespace sfx2
     public:
         TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper,
             vcl::Window* i_pParent, WinBits i_nBits );
+        virtual ~TaskPaneDockingWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // ITaskPaneToolPanelAccess
         virtual void    ActivateToolPanel( const OUString& i_rPanelURL ) SAL_OVERRIDE;
@@ -175,8 +176,8 @@ namespace sfx2
         virtual void onLayoutDone() SAL_OVERRIDE;
 
     private:
-        ModuleTaskPane      m_aTaskPane;
-        TaskPaneController  m_aPaneController;
+        VclPtr<ModuleTaskPane>  m_aTaskPane;
+        TaskPaneController      m_aPaneController;
     };
 
 

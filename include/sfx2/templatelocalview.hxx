@@ -32,6 +32,7 @@ public:
     TemplateLocalView ( vcl::Window* pParent );
 
     virtual ~TemplateLocalView ();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Fill view with template folders thumbnails
     virtual void Populate () SAL_OVERRIDE;

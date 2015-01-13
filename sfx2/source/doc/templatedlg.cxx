@@ -296,7 +296,12 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpLocalView->Show();
 }
 
-SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
+SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
+{
+    dispose();
+}
+
+void SfxTemplateManagerDlg::dispose()
 {
     writeSettings();
 
@@ -316,6 +321,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 
     mpSearchView->setItemStateHdl(Link());
     mpSearchView->setOpenTemplateHdl(Link());
+    ModalDialog::dispose();
 }
 
 void SfxTemplateManagerDlg::setSaveMode()

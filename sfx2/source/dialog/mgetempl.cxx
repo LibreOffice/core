@@ -249,19 +249,18 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
 
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
+{
+    dispose();
+}
 
-/*  [Description]
-
-    Destructor, release of the data
-*/
-
+void SfxManageStyleSheetPage::dispose()
 {
     m_pNameRw->SetGetFocusHdl( Link() );
     m_pNameRw->SetLoseFocusHdl( Link() );
     delete pFamilies;
     pItem = 0;
     pStyle = 0;
-
+    SfxTabPage::dispose();
 }
 
 

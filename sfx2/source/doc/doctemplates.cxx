@@ -138,7 +138,8 @@ class WaitWindow_Impl : public WorkWindow
 
     public:
                      WaitWindow_Impl();
-                    virtual ~WaitWindow_Impl();
+    virtual          ~WaitWindow_Impl();
+    virtual void     dispose() SAL_OVERRIDE;
     virtual void     Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
@@ -2449,7 +2450,13 @@ WaitWindow_Impl::WaitWindow_Impl()
 
 WaitWindow_Impl::~WaitWindow_Impl()
 {
+    dispose();
+}
+
+void  WaitWindow_Impl::dispose()
+{
     Hide();
+    WorkWindow::dispose();
 }
 
 

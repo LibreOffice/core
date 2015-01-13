@@ -39,6 +39,7 @@ public:
         vcl::Window* pParent,
         WinBits nBits);
     virtual ~SidebarDockingWindow (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Close (void) SAL_OVERRIDE;
 

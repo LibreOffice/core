@@ -66,6 +66,7 @@ class SfxVersionDialog : public SfxModalDialog
 public:
                                 SfxVersionDialog ( SfxViewFrame* pFrame, bool );
     virtual                     ~SfxVersionDialog ();
+    virtual void                dispose() SAL_OVERRIDE;
     bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
@@ -104,6 +105,7 @@ class SfxCmisVersionsDialog : public SfxModalDialog
 public:
                                 SfxCmisVersionsDialog ( SfxViewFrame* pFrame, bool );
     virtual                     ~SfxCmisVersionsDialog ();
+    virtual void                dispose() SAL_OVERRIDE;
 };
 
 #endif

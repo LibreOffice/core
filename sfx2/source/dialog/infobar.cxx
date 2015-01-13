@@ -136,14 +136,30 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     Resize();
 }
 
-SfxInfoBarWindow::~SfxInfoBarWindow()
-{}
-
 void SfxInfoBarWindow::addButton(PushButton* pButton) {
     pButton->SetParent(this);
     pButton->Show();
     m_aActionBtns.push_back(pButton);
     Resize();
+}
+
+SfxInfoBarWindow::~SfxInfoBarWindow()
+{
+    dispose();
+}
+
+void SfxInfoBarWindow::dispose()
+{
+    delete m_pMessage;
+    delete m_pCloseBtn;
+
+    for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
+            it != m_aActionBtns.end( ); ++it )
+    {
+        delete *it;
+    }
+    m_aActionBtns.clear( );
+    vcl::Window::dispose();
 }
 
 void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
@@ -233,6 +249,18 @@ SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* p
 
 SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow()
 {
+    dispose();
+}
+
+void SfxInfoBarContainerWindow::dispose()
+{
+    for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( );
+            it != m_pInfoBars.end( ); ++it )
+    {
+        delete *it;
+    }
+    m_pInfoBars.clear( );
+    Window::dispose();
 }
 
 SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage)

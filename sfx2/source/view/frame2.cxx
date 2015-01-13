@@ -69,7 +69,6 @@ public:
     SfxFrame*           pFrame;
 
     SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow );
-    virtual ~SfxFrameWindow_Impl( );
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
@@ -83,10 +82,6 @@ public:
 SfxFrameWindow_Impl::SfxFrameWindow_Impl( SfxFrame* pF, vcl::Window& i_rContainerWindow )
         : Window( &i_rContainerWindow, WB_BORDER | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_3DLOOK )
         , pFrame( pF )
-{
-}
-
-SfxFrameWindow_Impl::~SfxFrameWindow_Impl( )
 {
 }
 

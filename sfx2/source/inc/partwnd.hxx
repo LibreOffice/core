@@ -69,7 +69,6 @@ public:
                                   vcl::Window* pParent,
                                   WinBits nBits );
 
-                            virtual ~SfxPartDockWnd_Impl();
     bool                    QueryClose();
     virtual void            FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();

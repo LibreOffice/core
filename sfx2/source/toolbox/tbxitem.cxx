@@ -1204,6 +1204,11 @@ SfxPopupWindow::SfxPopupWindow(
 
 SfxPopupWindow::~SfxPopupWindow()
 {
+    dispose();
+}
+
+void SfxPopupWindow::dispose()
+{
     if ( m_xStatusListener.is() )
     {
         m_xStatusListener->dispose();
@@ -1213,6 +1218,7 @@ SfxPopupWindow::~SfxPopupWindow()
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->RemoveWindow( this );
+    FloatingWindow::dispose();
 }
 
 

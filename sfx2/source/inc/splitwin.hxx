@@ -79,6 +79,7 @@ public:
                             WinBits nBits = WB_BORDER | WB_SIZEABLE | WB_3DLOOK );
 
                         virtual ~SfxSplitWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                ReleaseWindow_Impl(SfxDockingWindow *pWin, bool bSaveConfig=true);
 

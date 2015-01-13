@@ -151,6 +151,7 @@ public:
                                             vcl::Window* pParentWindow,
                                             WinBits nBits );
                             virtual ~SfxPopupWindow();
+    virtual void            dispose() SAL_OVERRIDE;
 
     virtual SfxPopupWindow* Clone() const;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;

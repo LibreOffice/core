@@ -47,6 +47,7 @@ public:
         vcl::Window* pParentWindow,
         const ::boost::function<void(void)>& rCloserAction);
     virtual ~Deck (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     void Dispose (void);
 
@@ -77,7 +78,6 @@ public:
     {
     public:
         ScrollContainerWindow (vcl::Window* pParentWindow);
-        virtual ~ScrollContainerWindow (void);
         virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
         void SetSeparators (const ::std::vector<sal_Int32>& rSeparators);
     private:

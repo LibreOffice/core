@@ -171,12 +171,14 @@ SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString&
 }
 
 SfxTabPage::~SfxTabPage()
-/*  [Description]
+{
+    dispose();
+}
 
-    Destructor
-*/
+void SfxTabPage::dispose()
 {
     delete pImpl;
+    TabPage::dispose();
 }
 
 bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
@@ -363,6 +365,11 @@ SfxTabDialog::SfxTabDialog
 
 SfxTabDialog::~SfxTabDialog()
 {
+    dispose();
+}
+
+void SfxTabDialog::dispose()
+{
     SavePosAndId();
 
     for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
@@ -412,6 +419,7 @@ SfxTabDialog::~SfxTabDialog()
         delete m_pCancelBtn;
     if (m_bOwnsOKBtn)
         delete m_pOKBtn;
+    TabDialog::dispose();
 }
 
 void SfxTabDialog::Init_Impl(bool bFmtFlag)

@@ -42,10 +42,6 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-TabItem::~TabItem (void)
-{
-}
-
 void TabItem::Paint (const Rectangle& rUpdateArea)
 {
     switch(mePaintType)
