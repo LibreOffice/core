@@ -139,7 +139,7 @@ const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const r
         pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
     if ( !pFilter )
     {
-        SAL_INFO( "desktop.app", "no export filter for " << rUrl << "found, using the default filter for " << rFactory );
+        std::cerr << "Error:  no export filter for " << rUrl << " found, now using the default filter for " << rFactory << "\n";
         pFilter = SfxFilter::GetDefaultFilterFromFactory( rFactory );
     }
 
@@ -565,7 +565,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             }
                             catch (const Exception& rException)
                             {
-                                std::cerr << "Error: Please reverify input parameters...";
+                                std::cerr << "Error: Please verify input parameters...";
                                 if (!rException.Message.isEmpty())
                                     std::cerr << " (" << rException.Message << ")";
                                 std::cerr << std::endl;
@@ -663,7 +663,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 }
                 else
                 {
-                    // place error message here ...
+                    std::cerr << ("Error: source file could not be loaded\n");
                 }
 
                 // remove the document
