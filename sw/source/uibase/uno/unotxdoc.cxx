@@ -3148,6 +3148,7 @@ Size SwXTextDocument::getDocumentSize()
 
 void SwXTextDocument::initializeForTiledRendering()
 {
+    SolarMutexGuard aGuard;
     bool      bBookMode = false;
     sal_Int16 nColumns = 1;
 
