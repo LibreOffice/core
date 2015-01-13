@@ -159,6 +159,20 @@ SvXMLStyleContext::SvXMLStyleContext(
 {
 }
 
+SvXMLStyleContext::SvXMLStyleContext( SvXMLImport& rImp, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >&,
+    sal_uInt16 nFam, bool bDefault ) :
+    SvXMLImportContext( rImp ),
+    mbHidden( false ),
+    mnHelpId( UCHAR_MAX ),
+    mnFamily( nFam ),
+    mbValid( true ),
+    mbNew( true ),
+    mbDefaultStyle( bDefault )
+{
+}
+
+
 SvXMLStyleContext::~SvXMLStyleContext()
 {
 }
@@ -168,6 +182,13 @@ SvXMLImportContext *SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
                                                            const uno::Reference< xml::sax::XAttributeList > & )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLStyleContext::createFastChildContext(
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return new SvXMLImportContext( GetImport() );
 }
 
 void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -182,6 +203,12 @@ void SvXMLStyleContext::StartElement( const uno::Reference< xml::sax::XAttribute
 
         SetAttribute( nPrefix, aLocalName, rValue );
     }
+}
+
+void SAL_CALL SvXMLStyleContext::startFastElement( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
 }
 
 void SvXMLStyleContext::SetDefaults()
