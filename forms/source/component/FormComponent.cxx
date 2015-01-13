@@ -1984,7 +1984,6 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                     m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
                     // we're optimistic: in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability...
                 }
-
                 else
                 {
                     SAL_WARN("forms.component", "OBoundControlModel::connectToField: property " PROPERTY_VALUE " not supported!");
