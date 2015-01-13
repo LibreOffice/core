@@ -2338,7 +2338,7 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
 }
 
 // LINEST
-void ScInterpreter::ScRGP()
+void ScInterpreter::ScLinest()
 {
     CalculateRGPRKP(false);
 }
