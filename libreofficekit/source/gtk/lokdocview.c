@@ -183,7 +183,7 @@ static void lok_docview_callback_worker(int nType, const char* pPayload, void* p
 #if GTK_CHECK_VERSION(2,12,0)
         gdk_threads_add_idle(lok_docview_callback, pDocView);
 #else
-        g_add_idle(lok_docview_callback, pDocView);
+        g_idle_add(lok_docview_callback, pDocView);
 #endif
         break;
     default:
