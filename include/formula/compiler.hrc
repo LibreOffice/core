@@ -208,7 +208,7 @@
 #define SC_OPCODE_LOG               208
 #define SC_OPCODE_POWER             209
 #define SC_OPCODE_GGT               210
-#define SC_OPCODE_KGV               211
+#define SC_OPCODE_LCM               211
 #define SC_OPCODE_MOD               212
 #define SC_OPCODE_SUM_PRODUCT       213
 #define SC_OPCODE_SUM_SQ            214
