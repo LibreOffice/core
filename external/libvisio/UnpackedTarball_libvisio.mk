@@ -11,8 +11,11 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libvisio))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libvisio,$(VISIO_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libvisio,0))
+
 $(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
        external/libvisio/vsd-msvc-max.patch.1 \
+       external/libvisio/ubsan.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
