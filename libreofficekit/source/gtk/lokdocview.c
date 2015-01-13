@@ -71,6 +71,9 @@ static void lok_docview_init( LOKDocView* pDocView )
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
                                            pDocView->pEventBox );
 
+    // Allow reacting to button press events.
+    gtk_widget_set_events(pDocView->pEventBox, GDK_BUTTON_PRESS_MASK);
+
     pDocView->pCanvas = gtk_image_new();
     gtk_container_add( GTK_CONTAINER( pDocView->pEventBox ), pDocView->pCanvas );
 
@@ -84,6 +87,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->pDocument = 0;
 
     pDocView->fZoom = 1;
+    pDocView->m_bEdit = FALSE;
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -212,7 +216,6 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     {
         pDocView->pDocument->pClass->initializeForRendering(pDocView->pDocument);
         renderDocument( pDocView );
-        pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
     }
 
     return TRUE;
@@ -261,4 +264,13 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_partmode( LOKDocView* pDocView,
     pDocView->pDocument->pClass->setPartMode( pDocView->pDocument, ePartMode );
     renderDocument( pDocView );
 }
+
+SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
+                                                gboolean bEdit )
+{
+    if (!pDocView->m_bEdit && bEdit)
+        pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
+    pDocView->m_bEdit = bEdit;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

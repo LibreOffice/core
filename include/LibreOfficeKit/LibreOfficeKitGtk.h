@@ -41,6 +41,8 @@ struct _LOKDocView
 
     LibreOfficeKit* pOffice;
     LibreOfficeKitDocument* pDocument;
+    /// View or edit mode.
+    gboolean m_bEdit;
 };
 
 struct _LOKDocViewClass
@@ -64,6 +66,9 @@ char*           lok_docview_get_part_name   (LOKDocView* pDocView,
                                              int nPart);
 void            lok_docview_set_partmode    (LOKDocView* pDocView,
                                              LibreOfficeKitPartMode ePartMode);
+/// Sets if the viewer is actually an editor or not.
+void            lok_docview_set_edit        (LOKDocView* pDocView,
+                                             gboolean bEdit);
 #ifdef __cplusplus
 }
 #endif
