@@ -200,16 +200,27 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const;
 
@@ -222,6 +233,10 @@ public:
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         bool bAutomatic = false );
 
+    SvXMLStylesContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        bool bAutomatic = false );
+
     virtual ~SvXMLStylesContext();
 
     // Create child element.
@@ -230,8 +245,15 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+
     // Override this method to insert styles into the document.
     virtual void EndElement() SAL_OVERRIDE;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     // This allows to add an SvXMLStyleContext to this context from extern
     void AddStyle(SvXMLStyleContext& rNew);

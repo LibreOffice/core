@@ -23,6 +23,8 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -34,6 +36,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <xmloff/families.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -498,6 +501,12 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
     return pStyle;
 }
 
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -532,9 +541,23 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 /*nFamily*/, sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
         const uno::Reference< xml::sax::XAttributeList > & )
+{
+    return 0;
+}
+
+SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     return 0;
 }
@@ -786,6 +809,17 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
 {
 }
 
+SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport,
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    bool bAuto ) :
+    SvXMLImportContext( rImport ),
+    msParaStyleServiceName( "com.sun.star.style.ParagraphStyle" ),
+    msTextStyleServiceName( "com.sun.star.style.CharacterStyle" ),
+    mpImpl( new SvXMLStylesContext_Impl( bAuto ) ),
+    mpStyleStylesElemTokenMap( 0 )
+{
+}
+
 SvXMLStylesContext::~SvXMLStylesContext()
 {
     delete mpStyleStylesElemTokenMap;
@@ -815,7 +849,34 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLStylesContext::createFastChildContext(
+    sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext *pContext = 0;
+
+    SvXMLStyleContext *pStyle =
+        CreateStyleChildContext( Element, xAttrList );
+    if( pStyle )
+    {
+        if( !pStyle->IsTransient() )
+            mpImpl->AddStyle( pStyle );
+        pContext = pStyle;
+    }
+    else
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    return pContext;
+}
+
 void SvXMLStylesContext::EndElement()
+{
+}
+
+void SAL_CALL SvXMLStylesContext::endFastElement( sal_Int32 /*Element*/ )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 }
 
