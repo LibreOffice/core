@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FLYFRMS_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FLYFRMS_HXX
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
+
 #include "flyfrm.hxx"
 
 // #i28701#
@@ -119,14 +123,14 @@ public:
 };
 
 // Flys that are bound to LayoutFrms and not to Cntnt
-class SwFlyLayFrm : public SwFlyFreeFrm
+class SwFlyLayFrm : public SwFlyFreeFrm, private boost::noncopyable
 {
 public:
     // #i28701#
     TYPEINFO_OVERRIDE();
 
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm*, SwFrm *pAnchor );
-    SwFlyLayFrm( SwFlyLayFrm& );
+
 protected:
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 };
