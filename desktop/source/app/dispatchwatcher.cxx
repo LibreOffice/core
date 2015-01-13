@@ -565,7 +565,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             }
                             catch (const Exception& rException)
                             {
-                                std::cerr << "Error: Please reverify input parameters...";
+                                std::cerr << "Error: Please verify input parameters...";
                                 if (!rException.Message.isEmpty())
                                     std::cerr << " (" << rException.Message << ")";
                                 std::cerr << std::endl;
@@ -663,7 +663,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 }
                 else
                 {
-                    // place error message here ...
+                    std::cerr << ("Error: source file could not be loaded\n");
                 }
 
                 // remove the document
