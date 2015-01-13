@@ -221,7 +221,7 @@ enum OpCode : sal_uInt16
         ocCount             = SC_OPCODE_COUNT,
         ocCount2            = SC_OPCODE_COUNT_2,
         ocNPV               = SC_OPCODE_NBW,
-        ocIRR               = SC_OPCODE_IKV,
+        ocIRR               = SC_OPCODE_IRR,
         ocMIRR              = SC_OPCODE_MIRR,
         ocISPMT             = SC_OPCODE_ISPMT,
         ocVar               = SC_OPCODE_VAR,
