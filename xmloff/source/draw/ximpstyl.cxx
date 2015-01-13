@@ -489,6 +489,14 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     }
 }
 
+SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
+    SdXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext(rImport, Element, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
+    mnTypeId( 20 ) //AUTOLAYOUT_NONE
+{
+}
+
 SdXMLPresentationPageLayoutContext::~SdXMLPresentationPageLayoutContext()
 {
 }
@@ -516,6 +524,19 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
         pContext = SvXMLStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SdXMLPresentationPageLayoutContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
+}
+
+void SAL_CALL SdXMLPresentationPageLayoutContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
 }
 
 void SdXMLPresentationPageLayoutContext::EndElement()
