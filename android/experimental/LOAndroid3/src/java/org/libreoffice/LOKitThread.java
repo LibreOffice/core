@@ -41,7 +41,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
         if (composedTileLayer.isStillValid(tile.id) && !tile.markedForRemoval) {
-            Log.i(LOGTAG, "Redrawing tile " + tile.id);
             mLayerClient.beginDrawing();
             mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
             tile.invalidate();
@@ -49,7 +48,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             mLayerClient.forceRender();
         }
     }
-
 
     /** Handle the geometry change + draw. */
     private void redraw() {
