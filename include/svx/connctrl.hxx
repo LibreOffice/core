@@ -46,6 +46,7 @@ private:
 public:
     SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxXConnectionPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;

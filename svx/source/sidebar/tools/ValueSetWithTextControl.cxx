@@ -42,11 +42,6 @@ ValueSetWithTextControl::ValueSetWithTextControl(
 }
 
 
-ValueSetWithTextControl::~ValueSetWithTextControl(void)
-{
-}
-
-
 void ValueSetWithTextControl::AddItem(
     const Image& rItemImage,
     const Image* pSelectedItemImage,

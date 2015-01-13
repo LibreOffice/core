@@ -139,6 +139,7 @@ public:
 
     SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* pParent);
     virtual ~SvxBmpMask();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                SetColor( const Color& rColor );
     void                PipetteClicked();

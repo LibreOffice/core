@@ -30,13 +30,6 @@ PopupContainer::PopupContainer (vcl::Window* pParent)
 
 
 
-PopupContainer::~PopupContainer (void)
-{
-}
-
-
-
-
 bool PopupContainer::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == MouseNotifyEvent::LOSEFOCUS)

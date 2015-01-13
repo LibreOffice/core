@@ -43,11 +43,17 @@ SvxLinkWarningDialog::SvxLinkWarningDialog( vcl::Window* pParent, const OUString
 
 SvxLinkWarningDialog::~SvxLinkWarningDialog()
 {
+    dispose();
+}
+
+void SvxLinkWarningDialog::dispose()
+{
     // save value of "warning off" checkbox, if necessary
     SvtMiscOptions aMiscOpt;
     bool bChecked = m_pWarningOnBox->IsChecked();
     if ( aMiscOpt.ShowLinkWarningDialog() != bChecked )
         aMiscOpt.SetShowLinkWarningDialog( bChecked );
+    MessageDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

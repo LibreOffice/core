@@ -32,7 +32,6 @@ class SvxFmAbsRecWin : public NumericField
         // for invalidating our content whe losing the focus
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
-    virtual ~SvxFmAbsRecWin();
 
     virtual void KeyInput( const KeyEvent& rKeyEvt ) SAL_OVERRIDE;
     virtual void LoseFocus() SAL_OVERRIDE;

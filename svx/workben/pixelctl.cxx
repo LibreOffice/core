@@ -79,11 +79,12 @@ SAL_IMPLEMENT_MAIN()
 
 class MyWin : public WorkWindow
 {
-    SvxPixelCtl maPixelCtl;
+    VclPtr<SvxPixelCtl> maPixelCtl;
 
 public:
                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
-
+    virtual      ~MyWin() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE;
     void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -106,11 +107,17 @@ void Main()
 
 MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
-    maPixelCtl( this )
+    maPixelCtl( new SvxPixelCtl(this) )
 {
-    maPixelCtl.SetPosSizePixel( Point( 10, 10 ), Size( 200, 200 ) );
-    maPixelCtl.Show();
+    maPixelCtl->SetPosSizePixel( Point( 10, 10 ), Size( 200, 200 ) );
+    maPixelCtl->Show();
 
+}
+
+void MyWin::dispose()
+{
+    maPixelCtl.disposeAndClear();
+    WorkWindow::dispose();
 }
 
 bool MyWin::Close()

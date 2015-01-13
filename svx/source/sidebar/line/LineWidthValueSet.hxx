@@ -29,7 +29,8 @@ class LineWidthValueSet
 {
 public:
     LineWidthValueSet (vcl::Window* pParent, const ResId& rResId);
-    virtual ~LineWidthValueSet (void);
+    virtual ~LineWidthValueSet();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetUnit(OUString* str);
     void SetSelItem(sal_uInt16 nSel);

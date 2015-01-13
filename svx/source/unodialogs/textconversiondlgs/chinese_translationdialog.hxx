@@ -39,6 +39,7 @@ class ChineseTranslationDialog : public ModalDialog
 public:
     ChineseTranslationDialog( vcl::Window* pParent );
     virtual ~ChineseTranslationDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void getSettings( bool& rbDirectionToSimplified
                     , bool& rbTranslateCommonTerms ) const;

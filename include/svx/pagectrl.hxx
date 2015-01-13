@@ -89,6 +89,7 @@ protected:
 public:
     SvxPageWindow( vcl::Window* pParent );
     virtual ~SvxPageWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     //UUUU
     void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes) { maHeaderFillAttributes = rFillAttributes; }

@@ -71,12 +71,6 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame,
 
 
 
-SvxLineBox::~SvxLineBox()
-{
-}
-
-
-
 IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
 {
     if ( GetEntryCount() == 0 )
@@ -282,12 +276,6 @@ SvxMetricField::SvxMetricField(
 
 
 
-SvxMetricField::~SvxMetricField()
-{
-}
-
-
-
 void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
     if ( pItem )
@@ -436,12 +424,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFillTypeBox(vcl::Wi
 
 
 
-SvxFillTypeBox::~SvxFillTypeBox()
-{
-}
-
-
-
 bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
     MouseNotifyEvent nType = rNEvt.GetType();
@@ -519,12 +501,6 @@ SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent, WinBits nBits ) :
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFillAttrBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxFillAttrBox(pParent);
-}
-
-
-
-SvxFillAttrBox::~SvxFillAttrBox()
-{
 }
 
 

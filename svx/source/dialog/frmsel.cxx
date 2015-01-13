@@ -269,6 +269,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
 }
 
 FrameSelectorImpl::~FrameSelectorImpl()
+
 {
     if( mpAccess )
         mpAccess->Invalidate();
@@ -792,10 +793,6 @@ FrameSelector::FrameSelector(vcl::Window* pParent)
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFrameSelector(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new FrameSelector(pParent);
-}
-
-FrameSelector::~FrameSelector()
-{
 }
 
 void FrameSelector::Initialize( FrameSelFlags nFlags )

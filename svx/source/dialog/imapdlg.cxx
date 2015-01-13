@@ -217,9 +217,15 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
 
 SvxIMapDlg::~SvxIMapDlg()
 {
+    dispose();
+}
+
+void SvxIMapDlg::dispose()
+{
     // Delete URL-List
     delete pIMapWnd;
     delete pOwnData;
+    SfxModelessDialog::dispose();
 }
 
 bool SvxIMapDlg::Close()

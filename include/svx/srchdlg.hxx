@@ -120,6 +120,7 @@ friend class SvxJSearchOptionsDialog;
 public:
     SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     virtual ~SvxSearchDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool    Close() SAL_OVERRIDE;
 

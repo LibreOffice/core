@@ -121,6 +121,7 @@ public:
     SvxStyleBox_Impl( vcl::Window* pParent, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
                         const Reference< XFrame >& _xFrame,const OUString& rClearFormatKey, const OUString& rMoreKey, bool bInSpecialMode );
     virtual ~SvxStyleBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetFamily( SfxStyleFamily eNewFamily );
     inline bool IsVisible() { return bVisible; }
@@ -197,6 +198,7 @@ public:
         , WinBits nStyle = WB_SORT
         );
     virtual ~SvxFontNameBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            FillList();
     void            Update( const SvxFontItem* pFontItem );
@@ -235,9 +237,9 @@ class SvxFrameWindow_Impl : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    SvxFrmValueSet_Impl  aFrameSet;
-    ImageList       aImgList;
-    bool        bParagraphMode;
+    VclPtr<SvxFrmValueSet_Impl> aFrameSet;
+    ImageList                   aImgList;
+    bool                        bParagraphMode;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -250,6 +252,8 @@ protected:
 public:
     SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~SvxFrameWindow_Impl();
+    virtual void dispose() SAL_OVERRIDE;
+
     void            StartSelection();
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
@@ -261,7 +265,7 @@ public:
 class SvxLineWindow_Impl : public SfxPopupWindow
 {
 private:
-    LineListBox         m_aLineStyleLb;
+    VclPtr<LineListBox> m_aLineStyleLb;
     bool                m_bIsWriter;
 
     DECL_LINK( SelectHdl, void * );
@@ -274,7 +278,8 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
-
+    virtual ~SvxLineWindow_Impl() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE { m_aLineStyleLb.disposeAndClear(); }
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
 
@@ -327,8 +332,14 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
 {
+    dispose();
+}
+
+void SvxStyleBox_Impl::dispose()
+{
     for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
         delete m_pButtons[i];
+    ComboBox::dispose();
 }
 
 void SvxStyleBox_Impl::ReleaseFocus()
@@ -870,7 +881,13 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference<
 
 SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
 {
+    dispose();
+}
+
+void SvxFontNameBox_Impl::dispose()
+{
     GetSubEdit()->RemoveEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
+    FontNameBox::dispose();
 }
 
 void SvxFontNameBox_Impl::FillList()
@@ -1222,10 +1239,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     }
 }
 
-SvxColorWindow_Impl::~SvxColorWindow_Impl()
-{
-}
-
 void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     mpColorSet->KeyInput(rKEvt);
@@ -1443,7 +1456,7 @@ Color BorderColorStatus::GetColor()
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
+    aFrameSet   ( new SvxFrmValueSet_Impl(this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
     bParagraphMode(false)
 {
     BindListener();
@@ -1473,27 +1486,34 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
     sal_uInt16 i = 0;
 
     for ( i=1; i<9; i++ )
-        aFrameSet.InsertItem( i, aImgList.GetImage(i) );
+        aFrameSet->InsertItem( i, aImgList.GetImage(i) );
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         for ( i = 9; i < 13; i++ )
-            aFrameSet.InsertItem( i, aImgList.GetImage(i) );
+            aFrameSet->InsertItem( i, aImgList.GetImage(i) );
 
-    aFrameSet.SetColCount( 4 );
-    aFrameSet.SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
+    aFrameSet->SetColCount( 4 );
+    aFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
 
-    lcl_CalcSizeValueSet( *this, aFrameSet, Size( 20 * pParentWindow->GetDPIScaleFactor(), 20 * pParentWindow->GetDPIScaleFactor() ));
+    lcl_CalcSizeValueSet( *this, *aFrameSet.get(), Size( 20 * pParentWindow->GetDPIScaleFactor(), 20 * pParentWindow->GetDPIScaleFactor() ));
 
     SetHelpId( HID_POPUP_FRAME );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
-    aFrameSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME) );
-    aFrameSet.Show();
+    aFrameSet->SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME) );
+    aFrameSet->Show();
 }
 
 SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 {
+    dispose();
+}
+
+void SvxFrameWindow_Impl::dispose()
+{
     UnbindListener();
+    aFrameSet.disposeAndClear();
+    SfxPopupWindow::dispose();
 }
 
 SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
@@ -1504,12 +1524,12 @@ SfxPopupWindow* SvxFrameWindow_Impl::Clone() const
 
 vcl::Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
 {
-    return &aFrameSet;
+    return aFrameSet.get();
 }
 
 void SvxFrameWindow_Impl::GetFocus()
 {
-    aFrameSet.GrabFocus();
+    aFrameSet->GrabFocus();
 }
 
 void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1520,10 +1540,10 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     {
         aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
-        sal_uInt16  nNumOfItems = aFrameSet.GetItemCount();
+        sal_uInt16  nNumOfItems = aFrameSet->GetItemCount();
 
         for( sal_uInt16 i = 1 ; i <= nNumOfItems ; ++i )
-            aFrameSet.SetItemImage( i, aImgList.GetImage( i ) );
+            aFrameSet->SetItemImage( i, aImgList.GetImage( i ) );
     }
 }
 
@@ -1548,8 +1568,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
                         *pRight = 0,
                         *pTop = 0,
                         *pBottom = 0;
-    sal_uInt16              nSel = aFrameSet.GetSelectItemId();
-    sal_uInt16              nModifier = aFrameSet.GetModifier();
+    sal_uInt16              nSel = aFrameSet->GetSelectItemId();
+    sal_uInt16              nModifier = aFrameSet->GetModifier();
     sal_uInt8               nValidFlags = 0;
 
     theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(),
@@ -1643,7 +1663,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    aFrameSet.SetNoSelection();
+    aFrameSet->SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( ".uno:SetBorderStyle" ),
@@ -1654,7 +1674,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 void SvxFrameWindow_Impl::Resize()
 {
     const Size aSize(this->GetOutputSizePixel());
-    aFrameSet.SetPosSizePixel(Point(2,2), Size(aSize.Width() - 4, aSize.Height() - 4));
+    aFrameSet->SetPosSizePixel(Point(2,2), Size(aSize.Width() - 4, aSize.Height() - 4));
 }
 
 void SvxFrameWindow_Impl::StateChanged(
@@ -1668,27 +1688,27 @@ void SvxFrameWindow_Impl::StateChanged(
         {
             bParagraphMode = pItem->GetValue();
             //initial calls mustn't insert or remove elements
-            if(aFrameSet.GetItemCount())
+            if(aFrameSet->GetItemCount())
             {
-                bool bTableMode = ( aFrameSet.GetItemCount() == 12 );
+                bool bTableMode = ( aFrameSet->GetItemCount() == 12 );
                 bool bResize    = false;
 
                 if ( bTableMode && bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
-                        aFrameSet.RemoveItem(i);
+                        aFrameSet->RemoveItem(i);
                     bResize = true;
                 }
                 else if ( !bTableMode && !bParagraphMode )
                 {
                     for ( sal_uInt16 i = 9; i < 13; i++ )
-                        aFrameSet.InsertItem( i, aImgList.GetImage(i) );
+                        aFrameSet->InsertItem( i, aImgList.GetImage(i) );
                     bResize = true;
                 }
 
                 if ( bResize )
                 {
-                    lcl_CalcSizeValueSet( *this, aFrameSet,Size( 20, 20 ));
+                    lcl_CalcSizeValueSet( *this, *aFrameSet.get(), Size( 20, 20 ));
                 }
             }
         }
@@ -1698,7 +1718,7 @@ void SvxFrameWindow_Impl::StateChanged(
 
 void SvxFrameWindow_Impl::StartSelection()
 {
-    aFrameSet.StartSelection();
+    aFrameSet->StartSelection();
 }
 
 bool SvxFrameWindow_Impl::Close()
@@ -1714,7 +1734,7 @@ static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
 
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION | WB_AUTOSIZE ) ),
-    m_aLineStyleLb( this )
+    m_aLineStyleLb( new LineListBox(this) )
 {
     try
     {
@@ -1725,46 +1745,46 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     {
     }
 
-    m_aLineStyleLb.setPosSizePixel( 2, 2, 110, 140 );
+    m_aLineStyleLb->setPosSizePixel( 2, 2, 110, 140 );
     SetOutputSizePixel( Size( 114, 144 ) );
 
-    m_aLineStyleLb.SetSourceUnit( FUNIT_TWIP );
-    m_aLineStyleLb.SetNone( SVX_RESSTR(RID_SVXSTR_NONE) );
+    m_aLineStyleLb->SetSourceUnit( FUNIT_TWIP );
+    m_aLineStyleLb->SetNone( SVX_RESSTR(RID_SVXSTR_NONE) );
 
     using namespace table::BorderLineStyle;
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
 
     // Double lines
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 20 );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 20 );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_SMALLGAP ), THINTHICK_SMALLGAP, 20 );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_MEDIUMGAP ), THINTHICK_MEDIUMGAP );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( THINTHICK_LARGEGAP ), THINTHICK_LARGEGAP );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_SMALLGAP ), THICKTHIN_SMALLGAP, 20 );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_MEDIUMGAP ), THICKTHIN_MEDIUMGAP );
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( THICKTHIN_LARGEGAP ), THICKTHIN_LARGEGAP );
 
     // Engraved / Embossed
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 15,
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( EMBOSSED ), EMBOSSED, 15,
             &SvxBorderLine::threeDLightColor, &SvxBorderLine::threeDDarkColor,
             &lcl_mediumColor );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 15,
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( ENGRAVED ), ENGRAVED, 15,
             &SvxBorderLine::threeDDarkColor, &SvxBorderLine::threeDLightColor,
             &lcl_mediumColor );
 
     // Inset / Outset
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 10,
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( OUTSET ), OUTSET, 10,
            &SvxBorderLine::lightColor, &SvxBorderLine::darkColor );
-    m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
+    m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( INSET ), INSET, 10,
            &SvxBorderLine::darkColor, &SvxBorderLine::lightColor );
-    m_aLineStyleLb.SetWidth( 20 ); // 1pt by default
+    m_aLineStyleLb->SetWidth( 20 ); // 1pt by default
 
-    m_aLineStyleLb.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
+    m_aLineStyleLb->SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
 
     SetHelpId( HID_POPUP_LINE );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
-    m_aLineStyleLb.Show();
+    m_aLineStyleLb->Show();
 }
 
 SfxPopupWindow* SvxLineWindow_Impl::Clone() const
@@ -1775,9 +1795,9 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
-    SvxBorderStyle  nStyle = SvxBorderStyle( m_aLineStyleLb.GetSelectEntryStyle() );
+    SvxBorderStyle  nStyle = SvxBorderStyle( m_aLineStyleLb->GetSelectEntryStyle() );
 
-    if ( m_aLineStyleLb.GetSelectEntryPos( ) > 0 )
+    if ( m_aLineStyleLb->GetSelectEntryPos( ) > 0 )
     {
         SvxBorderLine aTmp;
         aTmp.SetBorderLineStyle( nStyle );
@@ -1804,7 +1824,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 
 void SvxLineWindow_Impl::Resize()
 {
-    m_aLineStyleLb.Resize();
+    m_aLineStyleLb->Resize();
 }
 
 bool SvxLineWindow_Impl::Close()
@@ -1814,12 +1834,12 @@ bool SvxLineWindow_Impl::Close()
 
 vcl::Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 {
-    return &m_aLineStyleLb;
+    return m_aLineStyleLb.get();
 }
 
 void SvxLineWindow_Impl::GetFocus()
 {
-    m_aLineStyleLb.GrabFocus();
+    m_aLineStyleLb->GrabFocus();
 }
 
 void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )

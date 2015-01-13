@@ -101,6 +101,7 @@ private:
 public:
     FillControl(vcl::Window* pParent, WinBits nStyle = 0);
     virtual ~FillControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize() SAL_OVERRIDE;
 };

@@ -67,7 +67,6 @@ public:
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
                          vcl::Window* pParentWindow);
-    virtual ~SvxColorWindow_Impl();
     void                StartSelection();
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

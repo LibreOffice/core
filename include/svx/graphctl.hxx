@@ -80,8 +80,9 @@ protected:
 
 public:
 
-   GraphCtrl( vcl::Window* pParent, WinBits nStyle );
-   virtual ~GraphCtrl();
+    GraphCtrl( vcl::Window* pParent, WinBits nStyle );
+    virtual ~GraphCtrl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                SetWinStyle( WinBits nWinBits );
     WinBits             GetWinStyle() const { return nWinStyle; }

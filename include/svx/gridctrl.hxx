@@ -151,20 +151,20 @@ public:
         friend class NavigationBar::AbsolutePos;
 
         //  zusaetzliche Controls
-        FixedText       m_aRecordText;
-        AbsolutePos     m_aAbsolute;            // absolute positioning
-        FixedText       m_aRecordOf;
-        FixedText       m_aRecordCount;
+        VclPtr<FixedText>    m_aRecordText;
+        VclPtr<AbsolutePos>  m_aAbsolute;            // absolute positioning
+        VclPtr<FixedText>    m_aRecordOf;
+        VclPtr<FixedText>    m_aRecordCount;
 
-        ImageButton     m_aFirstBtn;            // ImageButton for 'go to the first record'
-        ImageButton     m_aPrevBtn;         // ImageButton for 'go to the previous record'
-        ImageButton     m_aNextBtn;         // ImageButton for 'go to the next record'
-        ImageButton     m_aLastBtn;         // ImageButton for 'go to the last record'
-        ImageButton     m_aNewBtn;          // ImageButton for 'go to a new record'
-        sal_uInt16      m_nDefaultWidth;
-        sal_Int32       m_nCurrentPos;
+        VclPtr<ImageButton>  m_aFirstBtn;            // ImageButton for 'go to the first record'
+        VclPtr<ImageButton>  m_aPrevBtn;         // ImageButton for 'go to the previous record'
+        VclPtr<ImageButton>  m_aNextBtn;         // ImageButton for 'go to the next record'
+        VclPtr<ImageButton>  m_aLastBtn;         // ImageButton for 'go to the last record'
+        VclPtr<ImageButton>  m_aNewBtn;          // ImageButton for 'go to a new record'
+        sal_uInt16           m_nDefaultWidth;
+        sal_Int32            m_nCurrentPos;
 
-        bool            m_bPositioning;     // protect PositionDataSource against recursion
+        bool                 m_bPositioning;     // protect PositionDataSource against recursion
 
     public:
         //  StatusIds for Controls of the Bar
@@ -183,6 +183,8 @@ public:
         };
 
         NavigationBar(vcl::Window* pParent, WinBits nStyle = 0);
+        virtual ~NavigationBar();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Status methods for Controls
         void InvalidateAll(sal_Int32 nCurrentPos = -1, bool bAll = false);
@@ -225,7 +227,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
 
     DbGridColumns   m_aColumns;         // Column description
-    NavigationBar   m_aBar;
+    VclPtr<NavigationBar>   m_aBar;
     DbGridRowRef    m_xDataRow;         // Row which can be modified
                                         // comes from the data cursor
     DbGridRowRef    m_xSeekRow,         // Row to which the iterator can set
@@ -370,6 +372,7 @@ public:
         WinBits nBits = WB_BORDER);
 
     virtual ~DbGridControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Init() SAL_OVERRIDE;
     virtual void InitColumnsByFields(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xFields) = 0;
@@ -431,7 +434,7 @@ public:
     bool HasNavigationBar() const {return m_bNavigationBar;}
 
     sal_uInt16 GetOptions() const {return m_nOptions;}
-    NavigationBar& GetNavigationBar() {return m_aBar;}
+    NavigationBar& GetNavigationBar() {return *m_aBar.get();}
     sal_uInt16 SetOptions(sal_uInt16 nOpt);
         // The new options are interpreted with respect to the current data source. If it is unable
         // to update, to insert or to restore, the according options are ignored. If the grid isn't

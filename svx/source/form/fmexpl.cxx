@@ -514,7 +514,13 @@ namespace svxform
 
     NavigatorFrame::~NavigatorFrame()
     {
+        dispose();
+    }
+
+    void NavigatorFrame::dispose()
+    {
         delete m_pNavigatorTree;
+        SfxDockingWindow::dispose();
     }
 
 

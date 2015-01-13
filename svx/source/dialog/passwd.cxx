@@ -99,11 +99,4 @@ SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPassw
 
 
 
-SvxPasswordDialog::~SvxPasswordDialog()
-{
-}
-
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

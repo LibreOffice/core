@@ -68,12 +68,6 @@ GraphicPropertyPanel::GraphicPropertyPanel(
 
 
 
-GraphicPropertyPanel::~GraphicPropertyPanel()
-{
-}
-
-
-
 void GraphicPropertyPanel::Initialize()
 {
     mpMtrBrightness->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyBrightnessHdl ) );

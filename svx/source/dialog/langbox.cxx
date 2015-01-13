@@ -499,11 +499,6 @@ SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits, bool bCheck
     ImplLanguageBoxBaseInit();
 }
 
-SvxLanguageBox::~SvxLanguageBox()
-{
-}
-
-
 SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits, bool bCheck )
     : ComboBox( pParent, nBits )
     , SvxLanguageBoxBase( bCheck )
@@ -519,11 +514,6 @@ SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits, b
 
     SetModifyHdl( LINK( this, SvxLanguageComboBox, EditModifyHdl ) );
 }
-
-SvxLanguageComboBox::~SvxLanguageComboBox()
-{
-}
-
 
 sal_Int32 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_Int32 nPos, bool bChecked )
 {

@@ -28,10 +28,10 @@ namespace svx { namespace sidebar {
 
 EmptyPanel::EmptyPanel (vcl::Window* pParent)
     : Control(pParent, SVX_RES(RID_SIDEBAR_EMPTY_PANEL)),
-      maMessageControl(this, SVX_RES(FT_MESSAGE))
+      maMessageControl(new FixedText(this, SVX_RES(FT_MESSAGE)))
 {
-    maMessageControl.setPosSizePixel(5,5, 250,15);
-    maMessageControl.SetStyle(WB_WORDBREAK);// | WB_NOMNEMONICS);
+    maMessageControl->setPosSizePixel(5,5, 250,15);
+    maMessageControl->SetStyle(WB_WORDBREAK);// | WB_NOMNEMONICS);
     //maMessageControl.GetStyle()
     //        & ~(WB_NOMULTILINE | WB_PATHELLIPSIS)
     //        | WB_WORDBREAK | WB_NOMNEMONICS);
@@ -39,24 +39,28 @@ EmptyPanel::EmptyPanel (vcl::Window* pParent)
 
     SetBackground(Wallpaper());
 
-    maMessageControl.Show();
+    maMessageControl->Show();
     Show();
 }
 
 
 
 
-EmptyPanel::~EmptyPanel (void)
+EmptyPanel::~EmptyPanel()
 {
+    dispose();
 }
 
-
+void EmptyPanel::dispose()
+{
+    Control::dispose();
+}
 
 
 void EmptyPanel::Resize (void)
 {
     const Size aSize (GetSizePixel());
-    maMessageControl.SetSizePixel(aSize);
+    maMessageControl->SetSizePixel(aSize);
 }
 
 

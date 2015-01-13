@@ -98,7 +98,6 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 
 public:
     FontWorkGalleryDialog( SdrView* pView, vcl::Window* pParent, sal_uInt16 nSID );
-    virtual ~FontWorkGalleryDialog();
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
     void SetSdrObjectRef( SdrObject**, SdrModel* pModel );

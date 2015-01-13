@@ -95,12 +95,6 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
 }
 
 
-FontWorkGalleryDialog::~FontWorkGalleryDialog()
-{
-}
-
-
-
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
     // Ueber die Gallery werden die Favoriten eingelesen

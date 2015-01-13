@@ -142,7 +142,13 @@ namespace svxform
 
     DataTreeListBox::~DataTreeListBox()
     {
+        dispose();
+    }
+
+    void DataTreeListBox::dispose()
+    {
         DeleteAndClear();
+        SvTreeListBox::dispose();
     }
 
     sal_Int8 DataTreeListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
@@ -366,10 +372,6 @@ namespace svxform
         m_pItemList->SetStyle( m_pItemList->GetStyle() | nBits  );
         m_pItemList->Show();
         ItemSelectHdl( m_pItemList );
-    }
-
-    XFormsPage::~XFormsPage()
-    {
     }
 
     IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
@@ -1405,6 +1407,11 @@ namespace svxform
 
     DataNavigatorWindow::~DataNavigatorWindow()
     {
+        dispose();
+    }
+
+    void DataNavigatorWindow::dispose()
+    {
         SvtViewOptions aViewOpt( E_TABDIALOG, CFGNAME_DATANAVIGATOR );
         aViewOpt.SetPageID( static_cast< sal_Int32 >( m_pTabCtrl->GetCurPageId() ) );
         Any aAny;
@@ -1423,6 +1430,7 @@ namespace svxform
         m_xFrame->removeFrameActionListener( xListener );
         RemoveBroadcaster();
         m_xDataListener.clear();
+        vcl::Window::dispose();
     }
 
 
@@ -2131,24 +2139,30 @@ namespace svxform
                           WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) ),
         SfxControllerItem( SID_FM_DATANAVIGATOR_CONTROL, *_pBindings ),
 
-        m_aDataWin( this, _pBindings )
+        m_aDataWin( new DataNavigatorWindow(this, _pBindings) )
 
     {
 
         SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
 
-        Size aSize = m_aDataWin.GetOutputSizePixel();
+        Size aSize = m_aDataWin->GetOutputSizePixel();
         Size aLogSize = PixelToLogic( aSize, MAP_APPFONT );
         SfxDockingWindow::SetFloatingSize( aLogSize );
 
-        m_aDataWin.Show();
+        m_aDataWin->Show();
     }
 
 
     DataNavigator::~DataNavigator()
     {
+        dispose();
     }
 
+    void DataNavigator::dispose()
+    {
+        m_aDataWin.disposeAndClear();
+        SfxDockingWindow::dispose();
+    }
 
     void DataNavigator::StateChanged( sal_uInt16 , SfxItemState , const SfxPoolItem*  )
     {
@@ -2203,7 +2217,7 @@ namespace svxform
         Point aExplPos = LogicToPixel( Point(1,1), MAP_APPFONT );
         Size aExplSize = LogicToPixel( aLogExplSize, MAP_APPFONT );
 
-        m_aDataWin.SetPosSizePixel( aExplPos, aExplSize );
+        m_aDataWin->SetPosSizePixel( aExplPos, aExplSize );
     }
 
 
@@ -2269,6 +2283,11 @@ namespace svxform
 
     AddDataItemDialog::~AddDataItemDialog()
     {
+        dispose();
+    }
+
+    void AddDataItemDialog::dispose()
+    {
         if ( m_xTempBinding.is() )
         {
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
@@ -2291,6 +2310,7 @@ namespace svxform
             // remove binding, if it does not convey 'useful' information
             m_xUIHelper->removeBindingIfUseless( m_xBinding );
         }
+        ModalDialog::dispose();
     }
 
 
@@ -2872,7 +2892,13 @@ namespace svxform
 
     NamespaceItemDialog::~NamespaceItemDialog()
     {
+        dispose();
+    }
+
+    void NamespaceItemDialog::dispose()
+    {
         delete m_pNamespacesList;
+        ModalDialog::dispose();
     }
 
 
@@ -3063,9 +3089,15 @@ namespace svxform
 
     AddSubmissionDialog::~AddSubmissionDialog()
     {
+        dispose();
+    }
+
+    void AddSubmissionDialog::dispose()
+    {
         // #i38991# if we have added a binding, we need to remove it as well.
         if( m_xCreatedBinding.is() && m_xUIHelper.is() )
             m_xUIHelper->removeBindingIfUseless( m_xCreatedBinding );
+        ModalDialog::dispose();
     }
 
 

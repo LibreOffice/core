@@ -129,6 +129,7 @@ namespace svxform
     public:
         DataTreeListBox( vcl::Window* pParent, WinBits nBits );
         virtual ~DataTreeListBox();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual PopupMenu*      CreateContextMenu( void ) SAL_OVERRIDE;
         virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) SAL_OVERRIDE;
@@ -288,7 +289,6 @@ namespace svxform
 
     public:
         XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup );
-        virtual ~XFormsPage();
 
         virtual void                Resize() SAL_OVERRIDE;
 
@@ -372,6 +372,7 @@ namespace svxform
     public:
         DataNavigatorWindow( vcl::Window* pParent, SfxBindings* pBindings );
         virtual ~DataNavigatorWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         void                        SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
@@ -388,11 +389,11 @@ namespace svxform
     class DataNavigator : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        DataNavigatorWindow         m_aDataWin;
+        VclPtr<DataNavigatorWindow> m_aDataWin;
 
     protected:
         virtual void                Resize() SAL_OVERRIDE;
-        virtual bool            Close() SAL_OVERRIDE;
+        virtual bool                Close() SAL_OVERRIDE;
         virtual void                GetFocus() SAL_OVERRIDE;
         virtual Size                CalcDockingSize( SfxChildAlignment ) SAL_OVERRIDE;
         virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
@@ -400,6 +401,7 @@ namespace svxform
     public:
         DataNavigator( SfxBindings* pBindings, SfxChildWindow* pMgr, vcl::Window* pParent );
         virtual ~DataNavigator();
+        virtual void dispose() SAL_OVERRIDE;
 
         using Window::Update;
         using                       SfxDockingWindow::StateChanged;
@@ -470,6 +472,7 @@ namespace svxform
         AddDataItemDialog(
             vcl::Window* pParent, ItemNode* _pNode, const XFormsUIHelper1_ref& _rUIHelper );
         virtual ~AddDataItemDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         void                InitText( DataItemType _eType );
     };
@@ -533,6 +536,7 @@ namespace svxform
     public:
         NamespaceItemDialog( AddConditionDialog* pParent, XNameContainer_ref& _rContainer );
         virtual ~NamespaceItemDialog();
+        virtual void dispose() SAL_OVERRIDE;
     };
 
 
@@ -593,6 +597,7 @@ namespace svxform
         AddSubmissionDialog( vcl::Window* pParent, ItemNode* _pNode,
             const XFormsUIHelper1_ref& _rUIHelper );
         virtual ~AddSubmissionDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         inline const XSubmission_ref& GetNewSubmission() const { return m_xNewSubmission; }
     };

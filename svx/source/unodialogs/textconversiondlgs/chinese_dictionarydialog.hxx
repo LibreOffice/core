@@ -113,6 +113,7 @@ class ChineseDictionaryDialog : public ModalDialog
 public:
     ChineseDictionaryDialog( vcl::Window* pParent );
     virtual ~ChineseDictionaryDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     //this method should be called once before calling execute
     void setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );

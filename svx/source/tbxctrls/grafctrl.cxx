@@ -98,9 +98,7 @@ protected:
     virtual void    Modify() SAL_OVERRIDE;
 
 public:
-
                     ImplGrafMetricField( vcl::Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
-                    virtual ~ImplGrafMetricField();
 
     void            Update( const SfxPoolItem* pItem );
 };
@@ -141,10 +139,6 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
 
     maIdle.SetPriority( SchedulerPriority::LOW );
     maIdle.SetIdleHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
-}
-
-ImplGrafMetricField::~ImplGrafMetricField()
-{
 }
 
 void ImplGrafMetricField::Modify()
@@ -243,8 +237,8 @@ class ImplGrafControl : public Control
 {
     using Window::Update;
 private:
-    FixedImage              maImage;
-    ImplGrafMetricField     maField;
+    VclPtr<FixedImage>          maImage;
+    VclPtr<ImplGrafMetricField> maField;
 
 protected:
 
@@ -254,9 +248,10 @@ public:
 
                             ImplGrafControl( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
                             virtual ~ImplGrafControl();
+    virtual void            dispose() SAL_OVERRIDE;
 
-    void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
-    void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField.SetText( rStr ); }
+    void                    Update( const SfxPoolItem* pItem ) { maField->Update( pItem ); }
+    void                    SetText( const OUString& rStr ) SAL_OVERRIDE { maField->SetText( rStr ); }
 };
 
 ImplGrafControl::ImplGrafControl(
@@ -264,20 +259,20 @@ ImplGrafControl::ImplGrafControl(
     const OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
-    , maImage( this )
-    , maField( this, rCmd, rFrame )
+    , maImage( new FixedImage(this) )
+    , maField( new ImplGrafMetricField(this, rCmd, rFrame) )
 {
     ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
 
     Size    aImgSize( aImage.GetSizePixel() );
-    Size    aFldSize( maField.GetSizePixel() );
+    Size    aFldSize( maField->GetSizePixel() );
     long    nFldY, nImgY;
 
-    maImage.SetImage( aImage );
-    maImage.SetSizePixel( aImgSize );
+    maImage->SetImage( aImage );
+    maImage->SetSizePixel( aImgSize );
     // we want to see the backbround of the toolbox, not of the FixedImage or Control
-    maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
+    maImage->SetBackground( Wallpaper( COL_TRANSPARENT ) );
     SetBackground( Wallpaper( COL_TRANSPARENT ) );
 
     if( aImgSize.Height() > aFldSize.Height() )
@@ -286,26 +281,32 @@ ImplGrafControl::ImplGrafControl(
         nFldY = 0, nImgY = ( aFldSize.Height() - aImgSize.Height() ) >> 1;
 
     long nOffset = SYMBOL_TO_FIELD_OFFSET / 2;
-    maImage.SetPosPixel( Point( nOffset, nImgY ) );
-    maField.SetPosPixel( Point( aImgSize.Width() + SYMBOL_TO_FIELD_OFFSET, nFldY ) );
+    maImage->SetPosPixel( Point( nOffset, nImgY ) );
+    maField->SetPosPixel( Point( aImgSize.Width() + SYMBOL_TO_FIELD_OFFSET, nFldY ) );
     SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET + nOffset,
                   std::max( aImgSize.Height(), aFldSize.Height() ) ) );
 
     SetBackground( Wallpaper() ); // transparent background
 
-    maImage.Show();
+    maImage->Show();
 
-    maField.SetHelpId( OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
-    maField.Show();
+    maField->SetHelpId( OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
+    maField->Show();
 }
 
 ImplGrafControl::~ImplGrafControl()
 {
+   dispose();
+}
+
+void ImplGrafControl::dispose()
+{
+    Control::dispose();
 }
 
 void ImplGrafControl::GetFocus()
 {
-    maField.GrabFocus();
+    maField->GrabFocus();
 }
 
 class ImplGrafModeControl : public ListBox
@@ -321,9 +322,7 @@ private:
     void            ImplReleaseFocus();
 
 public:
-
                     ImplGrafModeControl( vcl::Window* pParent, const Reference< XFrame >& rFrame );
-                    virtual ~ImplGrafModeControl();
 
     void            Update( const SfxPoolItem* pItem );
 };
@@ -341,10 +340,6 @@ ImplGrafModeControl::ImplGrafModeControl( vcl::Window* pParent, const Reference<
     InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_WATERMARK ) );
 
     Show();
-}
-
-ImplGrafModeControl::~ImplGrafModeControl()
-{
 }
 
 void ImplGrafModeControl::Select()

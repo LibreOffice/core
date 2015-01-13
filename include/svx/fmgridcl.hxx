@@ -43,6 +43,7 @@ protected:
 public:
     FmGridHeader( BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG );
     virtual ~FmGridHeader();
+    virtual void dispose() SAL_OVERRIDE;
 
 public:
     struct AccessControl { friend class FmGridControl; private: AccessControl() { } };

@@ -102,7 +102,6 @@ private:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const ::sfx2::sidebar::EnumContext& rContext);
-    virtual ~TextPropertyPanel (void);
 
 
     PopupControl* CreateCharacterSpacingControl (PopupContainer* pParent);

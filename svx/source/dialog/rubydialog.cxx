@@ -263,9 +263,15 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
 
 SvxRubyDialog::~SvxRubyDialog()
 {
+    dispose();
+}
+
+void SvxRubyDialog::dispose()
+{
     ClearCharStyleList();
     EventObject aEvent;
     xImpl->disposing(aEvent);
+    SfxModelessDialog::dispose();
 }
 
 void SvxRubyDialog::ClearCharStyleList()

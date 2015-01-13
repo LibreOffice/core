@@ -134,7 +134,13 @@ FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
 
 FmGridHeader::~FmGridHeader()
 {
+    dispose();
+}
+
+void FmGridHeader::dispose()
+{
     delete m_pImpl;
+    FmGridHeader::dispose();
 }
 
 sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const

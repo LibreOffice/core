@@ -139,10 +139,6 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle
     EnableAutocomplete(true, true);
 }
 
-FindTextFieldControl::~FindTextFieldControl()
-{
-}
-
 void FindTextFieldControl::Remember_Impl(const OUString& rStr)
 {
     sal_uInt16 nCount = GetEntryCount();

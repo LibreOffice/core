@@ -143,7 +143,7 @@ class SvxRubyDialog : public SfxModelessDialog
     void                AssertOneEntry();
 
     void                Update();
-    virtual bool    Close() SAL_OVERRIDE;
+    virtual bool        Close() SAL_OVERRIDE;
 
     long                GetLastPos() const {return nLastPos;}
     void                SetLastPos(long nSet) {nLastPos = nSet;}
@@ -163,6 +163,7 @@ public:
                         SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
                                     vcl::Window* pParent);
     virtual             ~SvxRubyDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        Activate() SAL_OVERRIDE;
     virtual void        Deactivate() SAL_OVERRIDE;

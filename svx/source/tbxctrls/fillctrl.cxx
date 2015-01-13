@@ -562,8 +562,14 @@ FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
 
 FillControl::~FillControl()
 {
+    dispose();
+}
+
+void FillControl::dispose()
+{
     delete mpLbFillType;
     delete mpLbFillAttr;
+    vcl::Window::dispose();
 }
 
 void FillControl::InitializeFillStyleAccordingToGivenFillType(drawing::FillStyle aFillStyle)

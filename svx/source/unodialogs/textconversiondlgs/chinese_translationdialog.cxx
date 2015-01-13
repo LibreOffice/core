@@ -63,12 +63,18 @@ ChineseTranslationDialog::ChineseTranslationDialog( vcl::Window* pParent )
 
 ChineseTranslationDialog::~ChineseTranslationDialog()
 {
+    dispose();
+}
+
+void ChineseTranslationDialog::dispose()
+{
     if(m_pDictionaryDialog)
     {
         if(m_pDictionaryDialog->IsInExecute())
             m_pDictionaryDialog->EndDialog();
         delete m_pDictionaryDialog;
     }
+    ModalDialog::dispose();
 }
 
 void ChineseTranslationDialog::getSettings( bool& rbDirectionToSimplified

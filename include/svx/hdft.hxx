@@ -52,6 +52,7 @@ public:
     virtual void    Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     virtual         ~SvxHFPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void DisableDeleteQueryBox() { mbDisableQueryBox = true; }
     void EnableBackgroundSelector(bool bNew) { mbEnableBackgroundSelector = bNew; }

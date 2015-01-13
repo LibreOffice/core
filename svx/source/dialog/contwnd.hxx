@@ -50,7 +50,6 @@ protected:
 public:
 
     ContourWindow(vcl::Window* pParent, WinBits nBits);
-    virtual ~ContourWindow();
 
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     const tools::PolyPolygon&  GetPolyPolygon();

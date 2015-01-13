@@ -105,10 +105,6 @@ void CompressGraphicsDialog::Initialize()
     Update();
 }
 
-CompressGraphicsDialog::~CompressGraphicsDialog()
-{
-}
-
 void CompressGraphicsDialog::Update()
 {
     GfxLinkType aLinkType = m_aGraphic.GetLink().GetType();

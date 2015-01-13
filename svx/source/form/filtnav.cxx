@@ -1150,8 +1150,14 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
 
 FmFilterNavigator::~FmFilterNavigator()
 {
+    dispose();
+}
+
+void FmFilterNavigator::dispose()
+{
     EndListening( *m_pModel );
     delete m_pModel;
+    SvTreeListBox::dispose();
 }
 
 
@@ -1861,7 +1867,13 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
 
 FmFilterNavigatorWin::~FmFilterNavigatorWin()
 {
+    dispose();
+}
+
+void FmFilterNavigatorWin::dispose()
+{
     delete m_pNavigator;
+    SfxDockingWindow::dispose();
 }
 
 

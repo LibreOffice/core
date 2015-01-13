@@ -49,6 +49,7 @@ public:
                         SvxFontPrevWindow( vcl::Window* pParent, const ResId& rId );
                         SvxFontPrevWindow(vcl::Window* pParent, WinBits nStyle);
     virtual             ~SvxFontPrevWindow();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

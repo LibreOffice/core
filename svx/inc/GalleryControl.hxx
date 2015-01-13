@@ -43,7 +43,6 @@ public:
     GalleryControl (
         SfxBindings* pBindings,
         vcl::Window* pParentWindow);
-    virtual ~GalleryControl (void);
 
     bool GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow);
 

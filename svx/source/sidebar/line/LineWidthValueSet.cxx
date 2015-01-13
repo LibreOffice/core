@@ -39,10 +39,16 @@ LineWidthValueSet::LineWidthValueSet (
 
 
 
-LineWidthValueSet::~LineWidthValueSet (void)
+LineWidthValueSet::~LineWidthValueSet()
+{
+    dispose();
+}
+
+void LineWidthValueSet::dispose()
 {
     delete pVDev;
     delete[] strUnit;
+    ValueSet::dispose();
 }
 
 

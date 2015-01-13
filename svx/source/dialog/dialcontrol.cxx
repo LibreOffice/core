@@ -267,10 +267,6 @@ DialControl::DialControl( vcl::Window* pParent, WinBits nBits ) :
     Init( GetOutputSizePixel() );
 }
 
-DialControl::~DialControl()
-{
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDialControl(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new DialControl(pParent, WB_TABSTOP);

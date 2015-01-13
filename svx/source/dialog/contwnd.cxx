@@ -43,10 +43,6 @@ ContourWindow::ContourWindow( vcl::Window* pParent, WinBits nBits ) :
     SetWinStyle( WB_SDRMODE );
 }
 
-ContourWindow::~ContourWindow()
-{
-}
-
 void ContourWindow::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
     SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );

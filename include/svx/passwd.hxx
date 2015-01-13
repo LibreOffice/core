@@ -52,7 +52,6 @@ private:
 
 public:
                     SvxPasswordDialog( vcl::Window* pParent, bool bAllowEmptyPasswords = false, bool bDisableOldPassword = false );
-                    virtual ~SvxPasswordDialog();
 
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
     OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }

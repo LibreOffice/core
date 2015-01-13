@@ -160,7 +160,6 @@ private:
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~PosSizePropertyPanel();
 
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );

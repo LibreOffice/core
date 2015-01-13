@@ -254,6 +254,7 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
 public:
     FmFilterNavigator( vcl::Window* pParent );
     virtual ~FmFilterNavigator();
+    virtual void dispose() SAL_OVERRIDE;
 
     void UpdateContent(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers,
@@ -327,6 +328,7 @@ public:
     FmFilterNavigatorWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
                    vcl::Window* pParent );
     virtual ~FmFilterNavigatorWin();
+    virtual void dispose() SAL_OVERRIDE;
 
     void UpdateContent( FmFormShell* pFormShell );
     void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;

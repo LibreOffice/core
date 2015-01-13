@@ -45,6 +45,7 @@ public:
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
     virtual ~TextCharacterSpacingControl();
+    virtual void dispose() SAL_OVERRIDE;
     void Rearrange(bool bLBAvailable,bool bAvailable, long nKerning);
     //virtual void Paint(const Rectangle& rect);
 
@@ -57,14 +58,14 @@ private:
     svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
     SfxBindings*        mpBindings;
 
-    ValueSetWithTextControl maVSSpacing;
+    VclPtr<ValueSetWithTextControl> maVSSpacing;
 
-    FixedText           maLastCus;
+    VclPtr<FixedText>   maLastCus;
 
-    FixedText           maFTSpacing;
-    ListBox             maLBKerning;
-    FixedText           maFTBy;
-    MetricField         maEditKerning;
+    VclPtr<FixedText>   maFTSpacing;
+    VclPtr<ListBox>     maLBKerning;
+    VclPtr<FixedText>   maFTBy;
+    VclPtr<MetricField> maEditKerning;
 
     Image*              mpImg;
     Image*              mpImgSel;

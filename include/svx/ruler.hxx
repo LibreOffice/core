@@ -254,6 +254,7 @@ public:
     SvxRuler(vcl::Window* pParent, vcl::Window *pEditWin, sal_uInt16 nRulerFlags,
              SfxBindings &rBindings, WinBits nWinStyle = WB_STDRULER);
     virtual ~SvxRuler();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetMinFrameSize(long lSize);
     long GetMinFrameSize() const ;

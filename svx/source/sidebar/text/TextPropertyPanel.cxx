@@ -114,10 +114,6 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
     mlKerning = 0;
 }
 
-TextPropertyPanel::~TextPropertyPanel (void)
-{
-}
-
 void TextPropertyPanel::HandleContextChange (
     const ::sfx2::sidebar::EnumContext& rContext)
 {

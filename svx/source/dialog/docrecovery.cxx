@@ -539,8 +539,14 @@ PluginProgressWindow::PluginProgressWindow(      vcl::Window*                   
 
 PluginProgressWindow::~PluginProgressWindow()
 {
+    dispose();
+}
+
+void PluginProgressWindow::dispose()
+{
     if (m_xProgress.is())
         m_xProgress->dispose();
+    vcl::Window::dispose();
 }
 
 
@@ -808,10 +814,6 @@ RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
 {
 }
 
-RecovDocList::~RecovDocList()
-{
-}
-
 void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
                              const OUString& rText,
                              const Image& rImage1,
@@ -901,7 +903,13 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
 
 RecoveryDialog::~RecoveryDialog()
 {
+    dispose();
+}
+
+void RecoveryDialog::dispose()
+{
     delete m_pFileListLB;
+    Dialog::dispose();
 }
 
 short RecoveryDialog::execute()
@@ -1229,11 +1237,6 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
     m_pSaveDirED->SetText( sPath );
 
     impl_refresh();
-}
-
-
-BrokenRecoveryDialog::~BrokenRecoveryDialog()
-{
 }
 
 

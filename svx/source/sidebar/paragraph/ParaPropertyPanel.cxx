@@ -191,10 +191,6 @@ void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
     (void)rEvent;
 }
 
-ParaPropertyPanel::~ParaPropertyPanel()
-{
-}
-
 void ParaPropertyPanel::ReSize(bool /* bSize */)
 {
     if (mxSidebar.is())

@@ -75,13 +75,19 @@ InsertPropertyPanel::InsertPropertyPanel (
 
 
 
-InsertPropertyPanel::~InsertPropertyPanel (void)
+InsertPropertyPanel::~InsertPropertyPanel()
+{
+    dispose();
+}
+
+void InsertPropertyPanel::dispose()
 {
     // Remove window child listener.
     vcl::Window* pTopWindow = this;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
     pTopWindow->RemoveChildEventListener(LINK(this, InsertPropertyPanel, WindowEventListener));
+    PanelLayout::dispose();
 }
 
 

@@ -106,10 +106,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxRectCtl(vcl::Window
 
 SvxRectCtl::~SvxRectCtl()
 {
+    dispose();
+}
+
+void SvxRectCtl::dispose()
+{
     delete pBitmap;
 
     if( pAccContext )
         pAccContext->release();
+    Control::dispose();
 }
 
 
@@ -841,7 +847,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPixelCtl(vcl::Windo
 
 SvxPixelCtl::~SvxPixelCtl( )
 {
+    dispose();
+}
+
+void SvxPixelCtl::dispose()
+{
     delete []pPixel;
+    Control::dispose();
 }
 
 // Changes the foreground or Background color
@@ -1594,10 +1606,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineLB(vcl::Window *pP
     return pListBox;
 }
 
-LineLB::~LineLB()
-{
-}
-
 void LineLB::setAddStandardFields(bool bNew)
 {
     if(getAddStandardFields() != bNew)
@@ -1694,10 +1702,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineEndLB(vcl::Window 
     LineEndLB *pListBox = new LineEndLB(pParent, nWinBits);
     pListBox->EnableAutoSize(true);
     return pListBox;
-}
-
-LineEndLB::~LineEndLB(void)
-{
 }
 
 void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
@@ -1833,8 +1837,14 @@ SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
 
 SvxPreviewBase::~SvxPreviewBase()
 {
+    dispose();
+}
+
+void SvxPreviewBase::dispose()
+{
     delete mpModel;
     delete mpBufferDevice;
+    Control::dispose();
 }
 
 void SvxPreviewBase::LocalPrePaint()
@@ -1988,12 +1998,18 @@ Size SvxXLinePreview::GetOptimalSize() const
 
 SvxXLinePreview::~SvxXLinePreview()
 {
+    dispose();
+}
+
+void SvxXLinePreview::dispose()
+{
     SdrObject *pFoo = mpLineObjA;
     SdrObject::Free( pFoo );
     pFoo = mpLineObjB;
     SdrObject::Free( pFoo );
     pFoo = mpLineObjC;
     SdrObject::Free( pFoo );
+    SvxPreviewBase::dispose();
 }
 
 
@@ -2094,7 +2110,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXRectPreview(vcl::W
 
 SvxXRectPreview::~SvxXRectPreview()
 {
+    dispose();
+}
+
+void SvxXRectPreview::dispose()
+{
     SdrObject::Free(mpRectangleObject);
+    SvxPreviewBase::dispose();
 }
 
 void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
@@ -2149,8 +2171,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXShadowPreview (vcl
 
 SvxXShadowPreview::~SvxXShadowPreview()
 {
+    dispose();
+}
+
+void SvxXShadowPreview::dispose()
+{
     SdrObject::Free(mpRectangleObject);
     SdrObject::Free(mpRectangleShadow);
+    SvxPreviewBase::dispose();
 }
 
 void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)

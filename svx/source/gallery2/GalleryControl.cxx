@@ -65,10 +65,6 @@ GalleryControl::GalleryControl (
     InitSettings();
 }
 
-GalleryControl::~GalleryControl (void)
-{
-}
-
 void GalleryControl::InitSettings (void)
 {
     SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );
@@ -181,19 +177,19 @@ bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* )
             if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else if( mpBrowser2->GetViewWindow()->HasFocus() )
-                mpBrowser2->maViewBox.GrabFocus();
-            else if( mpBrowser2->maViewBox.HasFocus() )
-                mpBrowser1->maNewTheme.GrabFocus();
+                mpBrowser2->maViewBox->GrabFocus();
+            else if( mpBrowser2->maViewBox->HasFocus() )
+                mpBrowser1->maNewTheme->GrabFocus();
             else
                 mpBrowser1->mpThemes->GrabFocus();
         }
         else
         {
             if( mpBrowser1->mpThemes->HasChildPathFocus( true ) )
-                mpBrowser1->maNewTheme.GrabFocus();
-            else if( mpBrowser1->maNewTheme.HasFocus() )
-                mpBrowser2->maViewBox.GrabFocus();
-            else if( mpBrowser2->maViewBox.HasFocus() )
+                mpBrowser1->maNewTheme->GrabFocus();
+            else if( mpBrowser1->maNewTheme->HasFocus() )
+                mpBrowser2->maViewBox->GrabFocus();
+            else if( mpBrowser2->maViewBox->HasFocus() )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else
                 mpBrowser1->mpThemes->GrabFocus();

@@ -117,10 +117,6 @@ PosSizePropertyPanel::PosSizePropertyPanel(
 
 
 
-PosSizePropertyPanel::~PosSizePropertyPanel()
-{
-}
-
 namespace
 {
     bool hasText(const SdrView& rSdrView)

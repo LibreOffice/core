@@ -170,13 +170,8 @@ public:
         pBrowse(pBrowse_)
     {}
 
-    virtual ~ImpItemEdit();
     virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
 };
-
-ImpItemEdit::~ImpItemEdit()
-{
-}
 
 void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 {
@@ -217,11 +212,17 @@ _SdrItemBrowserControl::_SdrItemBrowserControl(vcl::Window* pParent, WinBits nBi
 
 _SdrItemBrowserControl::~_SdrItemBrowserControl()
 {
+    dispose();
+}
+
+void _SdrItemBrowserControl::dispose()
+{
     delete pEditControl;
 
     delete pAktChangeEntry;
 
     Clear();
+    BrowseBox::dispose();
 }
 
 void _SdrItemBrowserControl::ImpCtor()
@@ -1046,25 +1047,32 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
 
 _SdrItemBrowserWindow::_SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits):
     FloatingWindow(pParent,nBits),
-    aBrowse(this)
+    aBrowse(new _SdrItemBrowserControl(this))
 {
-    SetOutputSizePixel(aBrowse.GetSizePixel());
+    SetOutputSizePixel(aBrowse->GetSizePixel());
     SetText(OUString("Joe's ItemBrowser"));
-    aBrowse.Show();
+    aBrowse->Show();
 }
 
 _SdrItemBrowserWindow::~_SdrItemBrowserWindow()
 {
+    dispose();
+}
+
+void _SdrItemBrowserWindow::dispose()
+{
+    aBrowse.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 void _SdrItemBrowserWindow::Resize()
 {
-    aBrowse.SetSizePixel(GetOutputSizePixel());
+    aBrowse->SetSizePixel(GetOutputSizePixel());
 }
 
 void _SdrItemBrowserWindow::GetFocus()
 {
-    aBrowse.GrabFocus();
+    aBrowse->GrabFocus();
 }
 
 // - SdrItemBrowser -

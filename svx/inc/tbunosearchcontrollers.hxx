@@ -47,7 +47,6 @@ public:
     FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
         css::uno::Reference< css::frame::XFrame >& xFrame,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    virtual ~FindTextFieldControl();
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 

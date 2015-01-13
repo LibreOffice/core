@@ -542,9 +542,15 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( vcl::Window* pParent )
 
 ChineseDictionaryDialog::~ChineseDictionaryDialog()
 {
+    dispose();
+}
+
+void ChineseDictionaryDialog::dispose()
+{
     m_xContext=0;
     delete m_pCT_DictionaryToSimplified;
     delete m_pCT_DictionaryToTraditional;
+    ModalDialog::dispose();
 }
 
 void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ )

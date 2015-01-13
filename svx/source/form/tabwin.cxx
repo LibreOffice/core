@@ -114,11 +114,6 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
 }
 
 
-FmFieldWinListBox::~FmFieldWinListBox()
-{
-}
-
-
 sal_Int8 FmFieldWinListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
@@ -192,6 +187,11 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Wind
 
 FmFieldWin::~FmFieldWin()
 {
+    dispose();
+}
+
+void FmFieldWin::dispose()
+{
     if (m_pChangeListener)
     {
         m_pChangeListener->dispose();
@@ -200,6 +200,7 @@ FmFieldWin::~FmFieldWin()
     }
     delete pListBox;
     delete pData;
+    SfxFloatingWindow::dispose();
 }
 
 

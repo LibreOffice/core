@@ -92,10 +92,6 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     Initialize();
 }
 
-ParaLineSpacingControl::~ParaLineSpacingControl()
-{
-}
-
 void ParaLineSpacingControl::Initialize()
 {
     const SfxPoolItem* pItem;

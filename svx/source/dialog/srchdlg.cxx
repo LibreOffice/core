@@ -345,6 +345,11 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
 
 SvxSearchDialog::~SvxSearchDialog()
 {
+    dispose();
+}
+
+void SvxSearchDialog::dispose()
+{
     Hide();
 
     rBindings.EnterRegistrations();
@@ -359,6 +364,7 @@ SvxSearchDialog::~SvxSearchDialog()
     delete pImpl;
     delete pSearchList;
     delete pReplaceList;
+    SfxModelessDialog::dispose();
 }
 
 void SvxSearchDialog::Construct_Impl()

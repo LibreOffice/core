@@ -83,6 +83,7 @@ public:
         const SfxChildWinInfo* _pInfo
     );
     virtual ~FmPropBrw();
+    virtual void dispose() SAL_OVERRIDE;
 
     using SfxFloatingWindow::StateChanged;
 

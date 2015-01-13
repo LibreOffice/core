@@ -325,6 +325,11 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
 
 Svx3DWin::~Svx3DWin()
 {
+    dispose();
+}
+
+void Svx3DWin::dispose()
+{
     delete p3DView;
     delete pVDev;
     delete pModel;
@@ -336,6 +341,16 @@ Svx3DWin::~Svx3DWin()
     delete mpRemember2DAttributes;
 
     delete mpImpl;
+
+    aBtnGeo.disposeAndClear();
+    aBtnRepresentation.disposeAndClear();
+    aBtnLight.disposeAndClear();
+    aBtnTexture.disposeAndClear();
+    aBtnMaterial.disposeAndClear();
+    aBtnUpdate.disposeAndClear();
+    aBtnAssign.disposeAndClear();
+
+    SfxDockingWindow::dispose();
 }
 
 
@@ -2270,7 +2285,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         m_pBtnLight->Check( eViewType == VIEWTYPE_LIGHT );
         m_pBtnTexture->Check( eViewType == VIEWTYPE_TEXTURE );
         m_pBtnMaterial->Check( eViewType == VIEWTYPE_MATERIAL );
-    }
+     }
     return 0L;
 }
 

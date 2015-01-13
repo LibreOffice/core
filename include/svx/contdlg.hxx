@@ -75,7 +75,6 @@ public:
 
                         SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
                                       vcl::Window* pParent);
-                        virtual ~SvxContourDlg();
 
     const Graphic&      GetGraphic() const;
     bool                IsGraphicChanged() const;

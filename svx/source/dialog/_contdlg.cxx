@@ -86,10 +86,6 @@ SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
 {
 }
 
-SvxContourDlg::~SvxContourDlg()
-{
-}
-
 tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                                               const Rectangle* pRect,
                                               const sal_uIntPtr nFlags )
@@ -282,9 +278,15 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
 {
+    dispose();
+}
+
+void SvxSuperContourDlg::dispose()
+{
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
     delete m_pContourWnd;
+    SvxContourDlg::dispose();
 }
 
 bool SvxSuperContourDlg::Close()

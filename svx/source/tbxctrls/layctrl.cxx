@@ -45,7 +45,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 class TableWindow : public SfxPopupWindow
 {
 private:
-    PushButton          aTableButton;
+    VclPtr<PushButton>  aTableButton;
     ::Color             aLineColor;
     ::Color             aFillColor;
     ::Color             aHighlightFillColor;
@@ -79,6 +79,7 @@ public:
                                          ToolBox&                   rParentTbx,
                                          const Reference< XFrame >& rFrame );
                             virtual ~TableWindow();
+    virtual void            dispose() SAL_OVERRIDE;
 
     void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -109,7 +110,7 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
 TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText,
                           ToolBox& rParentTbx, const Reference< XFrame >& rFrame )
     : SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) )
-    , aTableButton( this )
+    , aTableButton( new PushButton(this) )
     , nCol( 0 )
     , nLine( 0 )
     , bInitialKeyInput(false)
@@ -143,11 +144,11 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 
     SetText( rText );
 
-    aTableButton.SetPosSizePixel( Point( mnTablePosX, mnTableHeight + 5 ),
+    aTableButton->SetPosSizePixel( Point( mnTablePosX, mnTableHeight + 5 ),
             Size( mnTableWidth - mnTablePosX, 24 ) );
-    aTableButton.SetText( SVX_RESSTR( RID_SVXSTR_MORE ) );
-    aTableButton.SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
-    aTableButton.Show();
+    aTableButton->SetText( SVX_RESSTR( RID_SVXSTR_MORE ) );
+    aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
+    aTableButton->Show();
 
     SetOutputSizePixel( Size( mnTableWidth + 3, mnTableHeight + 33 ) );
 }
@@ -156,9 +157,14 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 
 TableWindow::~TableWindow()
 {
+    dispose();
 }
 
-
+void TableWindow::dispose()
+{
+    aTableButton.disposeAndClear();
+    SfxPopupWindow::dispose();
+}
 
 SfxPopupWindow* TableWindow::Clone() const
 {

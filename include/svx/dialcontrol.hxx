@@ -80,8 +80,6 @@ class SVX_DLLPUBLIC DialControl : public Control
 public:
     explicit            DialControl( vcl::Window* pParent, WinBits nBits );
 
-    virtual             ~DialControl();
-
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

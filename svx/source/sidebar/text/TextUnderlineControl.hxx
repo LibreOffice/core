@@ -41,8 +41,8 @@ public:
 private:
     svx::sidebar::TextPropertyPanel&     mrTextPropertyPanel;
     SfxBindings*        mpBindings;
-    ValueSet            maVSUnderline;
-    PushButton          maPBOptions;
+    VclPtr<ValueSet>    maVSUnderline;
+    VclPtr<PushButton>  maPBOptions;
 
     Image               maIMGSingle;
     Image               maIMGDouble;

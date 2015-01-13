@@ -423,7 +423,13 @@ void SvxNumValueSet::init(sal_uInt16 nType)
 
 SvxNumValueSet::~SvxNumValueSet()
 {
+    dispose();
+}
+
+void SvxNumValueSet::dispose()
+{
     delete pVDev;
+    ValueSet::dispose();
 }
 
 void SvxNumValueSet::SetNumberingSettings(
@@ -487,8 +493,14 @@ void SvxBmpNumValueSet::init()
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
+    dispose();
+}
+
+void SvxBmpNumValueSet::dispose()
+{
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
     aFormatIdle.Stop();
+    SvxNumValueSet::dispose();
 }
 
 void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )

@@ -82,7 +82,7 @@ class SvxLineEndWindow : public SfxPopupWindow
 
 private:
     XLineEndListRef pLineEndList;
-    ValueSet        aLineEndSet;
+    VclPtr<ValueSet> aLineEndSet;
     sal_uInt16      nCols;
     sal_uInt16      nLines;
     sal_uIntPtr     nLineEndWidth;
@@ -118,6 +118,7 @@ public:
                       vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
     virtual ~SvxLineEndWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            StartSelection();
 

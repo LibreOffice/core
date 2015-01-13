@@ -59,11 +59,6 @@ SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pCont
 }
 
 
-SvxFmAbsRecWin::~SvxFmAbsRecWin()
-{
-}
-
-
 void SvxFmAbsRecWin::FirePosition( bool _bForce )
 {
     if ( _bForce || IsValueChangedFromSaved() )

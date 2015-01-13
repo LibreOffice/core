@@ -46,6 +46,7 @@ public:
     SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
     void SetNormalStaticImage(const Image& rNormalStaticImage);
     virtual ~SvxCheckListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            InsertEntry         ( const OUString& rStr,
                                           sal_uLong  nPos = TREELIST_APPEND,

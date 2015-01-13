@@ -485,12 +485,18 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
 
 SvxBmpMask::~SvxBmpMask()
 {
+    dispose();
+}
+
+void SvxBmpMask::dispose()
+{
     delete m_pQSet1;
     delete m_pQSet2;
     delete m_pQSet3;
     delete m_pQSet4;
     delete m_pCtlPipette;
     delete pData;
+    SfxDockingWindow::dispose();
 }
 
 /** is called by a MaskSet when it is selected */

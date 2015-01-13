@@ -114,12 +114,6 @@ AreaPropertyPanel::AreaPropertyPanel(
 
 
 
-AreaPropertyPanel::~AreaPropertyPanel()
-{
-}
-
-
-
 void AreaPropertyPanel::Initialize()
 {
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);

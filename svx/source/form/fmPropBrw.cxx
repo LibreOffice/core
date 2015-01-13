@@ -253,6 +253,11 @@ void FmPropBrw::Resize()
 
 FmPropBrw::~FmPropBrw()
 {
+    dispose();
+}
+
+void FmPropBrw::dispose()
+{
     if (m_xBrowserController.is())
         implDetachController();
     try
@@ -275,6 +280,7 @@ FmPropBrw::~FmPropBrw()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+    SfxFloatingWindow::dispose();
 }
 
 

@@ -306,6 +306,7 @@ class PluginProgressWindow : public vcl::Window
         PluginProgressWindow(      vcl::Window*                                       pParent  ,
                              const css::uno::Reference< css::lang::XComponent >& xProgress);
         virtual ~PluginProgressWindow();
+        virtual void dispose() SAL_OVERRIDE;
 };
 
 class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicator ,
@@ -479,10 +480,6 @@ class RecovDocList : public SvSimpleTable
         RecovDocList(SvSimpleTableContainer& rParent, ResMgr& rResMgr);
 
         /** @short TODO */
-        virtual ~RecovDocList();
-
-
-        /** @short TODO */
         virtual void InitEntry(SvTreeListEntry* pEntry,
                                const OUString& rText,
                                const Image& rImage1,
@@ -530,6 +527,7 @@ class RecoveryDialog : public Dialog
                        RecoveryCore* pCore  );
 
         virtual ~RecoveryDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         // IRecoveryUpdateListener
         virtual void updateItems() SAL_OVERRIDE;
@@ -576,10 +574,6 @@ class BrokenRecoveryDialog : public ModalDialog
         BrokenRecoveryDialog(vcl::Window*       pParent        ,
                              RecoveryCore* pCore          ,
                              bool      bBeforeRecovery);
-
-
-        /** @short TODO */
-        virtual ~BrokenRecoveryDialog();
 
 
         /** @short TODO */

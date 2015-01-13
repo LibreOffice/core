@@ -112,7 +112,13 @@ SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
 
 SvxRedlinTable::~SvxRedlinTable()
 {
+    dispose();
+}
+
+void SvxRedlinTable::dispose()
+{
     delete pCommentSearcher;
+    SvSimpleTable::dispose();
 }
 
 sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRight)
@@ -411,7 +417,13 @@ void SvxTPView::DeactivatePage()
 
 SvxTPView::~SvxTPView()
 {
+    dispose();
+}
+
+void SvxTPView::dispose()
+{
     delete m_pViewData;
+    TabPage::dispose();
 }
 
 void SvxTPView::InsertWriterHeader()
@@ -1066,8 +1078,14 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
 
 SvxAcceptChgCtr::~SvxAcceptChgCtr()
 {
+    dispose();
+}
+
+void SvxAcceptChgCtr::dispose()
+{
     delete pTPView;
     delete pTPFilter;
+    TabControl::dispose();
 }
 
 void SvxAcceptChgCtr::ShowFilterPage()

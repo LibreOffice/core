@@ -38,13 +38,6 @@ PopupControl::PopupControl (
 
 
 
-PopupControl::~PopupControl (void)
-{
-}
-
-
-
-
 void PopupControl::Paint (const Rectangle& rBox)
 {
     Control::Paint(rBox);

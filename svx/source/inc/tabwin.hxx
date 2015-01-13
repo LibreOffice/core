@@ -42,7 +42,6 @@ protected:
 
 public:
     FmFieldWinListBox( FmFieldWin* pParent );
-    virtual ~FmFieldWinListBox();
 
     sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
@@ -88,6 +87,7 @@ public:
                SfxChildWindow *pMgr, vcl::Window* pParent);
 
     virtual ~FmFieldWin();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual bool Close() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
