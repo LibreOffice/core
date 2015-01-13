@@ -99,6 +99,13 @@ namespace
     }
 }
 
+namespace
+{
+
+const long INFO_BAR_BASE_HEIGHT = 40;
+
+} // anonymous namespace
+
 SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
        const OUString& sMessage, vector<PushButton*> aButtons) :
     Window(pParent, 0),
@@ -107,8 +114,9 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     m_pCloseBtn(new SfxCloseButton(this)),
     m_aActionBtns()
 {
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
     long nWidth = pParent->GetSizePixel().getWidth();
-    SetPosSizePixel(Point(0, 0), Size(nWidth, 40));
+    SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * nScaleFactor));
 
     m_pMessage->SetText(sMessage);
     m_pMessage->SetBackground(Wallpaper(Color(255, 255, 191)));
@@ -187,22 +195,28 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 
 void SfxInfoBarWindow::Resize()
 {
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+
     long nWidth = GetSizePixel().getWidth();
-    m_pCloseBtn->SetPosSizePixel(Point(nWidth - 25, 15), Size(10, 10));
+    m_pCloseBtn->SetPosSizePixel(Point(nWidth - 25 * nScaleFactor, 15 * nScaleFactor), Size(10 * nScaleFactor, 10 * nScaleFactor));
 
     // Reparent the buttons and place them on the right of the bar
-    long nX = m_pCloseBtn->GetPosPixel().getX() - 15;
-    long nBtnGap = 5;
+    long nX = m_pCloseBtn->GetPosPixel().getX() - 15 * nScaleFactor;
+    long nButtonGap = 5 * nScaleFactor;
+
     boost::ptr_vector<PushButton>::iterator it;
     for (it = m_aActionBtns.begin(); it != m_aActionBtns.end(); ++it)
     {
-        long nBtnWidth = it->GetSizePixel().getWidth();
-        nX -= nBtnWidth;
-        it->SetPosSizePixel(Point(nX, 5), Size(nBtnWidth, 30));
-        nX -= nBtnGap;
+        long nButtonWidth = it->GetSizePixel().getWidth();
+        nX -= nButtonWidth;
+        it->SetPosSizePixel(Point(nX, 5 * nScaleFactor), Size(nButtonWidth, 30 * nScaleFactor));
+        nX -= nButtonGap;
     }
 
-    m_pMessage->SetPosSizePixel(Point(10, 10), Size(nX - 20, 20));
+    Point aMessagePosition(10 * nScaleFactor, 10 * nScaleFactor);
+    Size aMessageSize(nX - 20 * nScaleFactor, 20 * nScaleFactor);
+
+    m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
 }
 
 IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler)
