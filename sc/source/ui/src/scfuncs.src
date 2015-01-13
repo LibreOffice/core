@@ -4636,7 +4636,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
     };
      // -=*# Resource for function GCD #*=-
-    Resource SC_OPCODE_GGT
+    Resource SC_OPCODE_GCD
     {
         String 1 // Description
         {
