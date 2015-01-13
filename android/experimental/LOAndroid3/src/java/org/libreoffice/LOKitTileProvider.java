@@ -254,7 +254,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
     @Override
     public boolean isTextDocument() {
-        return mDocument.getDocumentType() == Document.DOCTYPE_TEXT;
+        return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_TEXT;
     }
 
     @Override
