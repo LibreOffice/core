@@ -931,9 +931,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         {
             OUString aName( xDocProps->getAuthor() );
             util::DateTime uDT( xDocProps->getCreationDate() );
-            Date aD(uDT);
-            tools::Time aT(uDT);
-            DateTime aDate(aD,aT);
+            DateTime aDate(uDT);
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
             else if( nSub == DI_CHANGE )
