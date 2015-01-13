@@ -78,7 +78,6 @@ private:
     sal_uLong NextIdx( const SwNode* pNd );
 
     vector< CompareLine* > aLines;
-    sal_uLong nSttLineNum;
     bool m_bRecordDiff;
 
     // Truncate beginning and end and add all others to the LinesArray
@@ -89,7 +88,7 @@ private:
 public:
     CompareData(SwDoc& rD, bool bRecordDiff)
         : rDoc( rD ), pIndex( 0 ), pChangedFlag( 0 ), pInsRing(0), pDelRing(0)
-        , nSttLineNum( 0 ), m_bRecordDiff(bRecordDiff)
+        , m_bRecordDiff(bRecordDiff)
     {
     }
     virtual ~CompareData();
