@@ -673,6 +673,13 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -698,12 +705,36 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
         const OUString& rLName ,
         const uno::Reference< XAttributeList > & xAttrList,
         const bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
+    sCellStyleServiceName( OUString( "com.sun.star.style.CellStyle" )),
+    sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+    sRowStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
+    sTableStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
+    nNumberFormatIndex(-1),
+    nConditionalFormatIndex(-1),
+    nCellStyleIndex(-1),
+    nMasterPageNameIndex(-1),
+    bAutoStyles(bTempAutoStyles)
+{
+}
+
+XMLTableStylesContext::XMLTableStylesContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< XFastAttributeList >& xAttrList,
+    const bool bTempAutoStyles )
+:   SvXMLStylesContext( rImport, Element, xAttrList ),
     sCellStyleServiceName( OUString( "com.sun.star.style.CellStyle" )),
     sColumnStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
     sRowStyleServiceName( OUString( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
@@ -723,6 +754,16 @@ XMLTableStylesContext::~XMLTableStylesContext()
 void XMLTableStylesContext::EndElement()
 {
     SvXMLStylesContext::EndElement();
+    if (bAutoStyles)
+        GetImport().GetTextImport()->SetAutoStyles( this );
+    else
+        GetScImport().InsertStyles();
+}
+
+void SAL_CALL XMLTableStylesContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLStylesContext::endFastElement( Element );
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else
