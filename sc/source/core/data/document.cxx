@@ -1045,6 +1045,18 @@ SCROW ScDocument::GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nL
     return pTab->GetLastDataRow(nCol1, nCol2, nLastRow);
 }
 
+ScAddress ScDocument::GetLastDataPos( SCTAB nTab ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return ScAddress(ScAddress::INITIALIZE_INVALID);
+
+    SCCOL nCol;
+    SCROW nRow;
+    pTab->GetLastDataPos(nCol, nRow);
+    return ScAddress(nCol, nRow, nTab);
+}
+
 // connected area
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
@@ -3892,6 +3904,15 @@ sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
         return maTabs[nTab]->GetColWidth( nCol, bHiddenAsZero );
     OSL_FAIL("wrong table number");
     return 0;
+}
+
+sal_uLong ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bHiddenAsZero ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return 0;
+
+    return pTab->GetColWidth(nStartCol, nEndCol, bHiddenAsZero);
 }
 
 sal_uInt16 ScDocument::GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const

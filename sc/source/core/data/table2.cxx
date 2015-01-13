@@ -2837,6 +2837,27 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
         return (sal_uInt16) STD_COL_WIDTH;
 }
 
+sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, bool bHiddenAsZero ) const
+{
+    if (!ValidCol(nStartCol) || !ValidCol(nEndCol) || nStartCol > nEndCol)
+        return 0;
+
+    sal_uLong nW = 0;
+    bool bHidden = false;
+    SCCOL nLastHiddenCol = -1;
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+    {
+        if (bHiddenAsZero && nCol > nLastHiddenCol)
+            bHidden = ColHidden(nCol, NULL, &nLastHiddenCol);
+
+        if (bHidden)
+            continue;
+
+        nW += pColWidth[nCol];
+    }
+    return nW;
+}
+
 sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die eingestellte
 {
     OSL_ENSURE(ValidCol(nCol),"wrong column number");

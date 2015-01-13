@@ -1105,6 +1105,16 @@ public:
     SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
     /**
+     * Return the cell position representing the bottom-right corner of the
+     * smallest range that includes all non-empty cells for specified sheet.
+     *
+     * @param nTab sheet index.
+     *
+     * @return address of the last data position.
+     */
+    ScAddress GetLastDataPos( SCTAB nTab ) const;
+
+    /**
      * Return the smallest area containing at least all contiguous cells
      * having data. This area is a square containing also empty cells. It may
      * shrink or extend the area given as input Flags as modifiers:
@@ -1520,6 +1530,7 @@ public:
     SC_DLLPUBLIC void           SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bManual );
 
     SC_DLLPUBLIC sal_uInt16         GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC sal_uLong GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uLong          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;

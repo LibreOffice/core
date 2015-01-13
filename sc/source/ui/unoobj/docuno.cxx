@@ -488,10 +488,26 @@ int ScModelObj::getPart()
 
 Size ScModelObj::getDocumentSize()
 {
-    // TODO: not sure what we want to do here, maybe just return the size for a certain
-    // default minimum number of cells, e.g. 100x100 and more if more cells have
-    // content?
-    return Size();
+    Size aSize(10, 10); // minimum size
+
+    const ScViewData* pViewData = ScDocShell::GetViewData();
+    if (!pViewData)
+        return aSize;
+
+    SCTAB nTab = pViewData->GetTabNo();
+    const ScDocument& rDoc = pDocShell->GetDocument();
+    ScAddress aPos = rDoc.GetLastDataPos(nTab);
+    if (!aPos.IsValid())
+        return aSize;
+
+    // TWIPS
+    sal_uLong nH = rDoc.GetRowHeight(0, aPos.Row(), nTab, true);
+    sal_uLong nW = rDoc.GetColWidth(0, aPos.Col(), nTab, true);
+
+    aSize.setWidth(nW);
+    aSize.setHeight(nH);
+
+    return aSize;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )

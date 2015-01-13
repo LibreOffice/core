@@ -721,6 +721,7 @@ public:
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual );
 
     sal_uInt16      GetColWidth( SCCOL nCol, bool bHiddenAsZero = true ) const;
+    sal_uLong GetColWidth( SCCOL nStartCol, SCCOL nEndCol, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow = NULL, SCROW* pEndRow = NULL, bool bHiddenAsZero = true ) const;
     sal_uLong       GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
     sal_uLong       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const;
