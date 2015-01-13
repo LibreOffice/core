@@ -115,7 +115,7 @@ void SfxCloseButton::Paint(const Rectangle&)
 } // anonymous namespace
 
 SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
-       const OUString& sMessage, vector<PushButton*> aButtons) :
+       const OUString& sMessage) :
     Window(pParent, 0),
     m_sId(sId),
     m_pMessage(new FixedText(this, 0)),
@@ -133,21 +133,18 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     m_pCloseBtn->SetClickHdl(LINK(this, SfxInfoBarWindow, CloseHandler));
     m_pCloseBtn->Show();
 
-    // Reparent the buttons and place them on the right of the bar
-    vector<PushButton*>::iterator it;
-    for (it = aButtons.begin(); it != aButtons.end(); ++it)
-    {
-        PushButton* pButton = *it;
-        pButton->SetParent(this);
-        pButton->Show();
-        m_aActionBtns.push_back(pButton);
-    }
-
     Resize();
 }
 
 SfxInfoBarWindow::~SfxInfoBarWindow()
 {}
+
+void SfxInfoBarWindow::addButton(PushButton* pButton) {
+    pButton->SetParent(this);
+    pButton->Show();
+    m_aActionBtns.push_back(pButton);
+    Resize();
+}
 
 void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 {
@@ -238,18 +235,19 @@ SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow()
 {
 }
 
-void SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage, vector<PushButton*> aButtons)
+SfxInfoBarWindow* SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId, const OUString& sMessage)
 {
-    Size aSize = GetSizePixel( );
+    Size aSize = GetSizePixel();
 
-    SfxInfoBarWindow* pInfoBar = new SfxInfoBarWindow(this, sId, sMessage, aButtons);
-    pInfoBar->SetPosPixel(Point( 0, aSize.getHeight()));
+    SfxInfoBarWindow* pInfoBar = new SfxInfoBarWindow(this, sId, sMessage);
+    pInfoBar->SetPosPixel(Point(0, aSize.getHeight()));
     pInfoBar->Show();
     m_pInfoBars.push_back(pInfoBar);
 
     long nHeight = pInfoBar->GetSizePixel().getHeight();
     aSize.setHeight(aSize.getHeight() + nHeight);
     SetSizePixel(aSize);
+    return pInfoBar;
 }
 
 SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar(const OUString& sId)

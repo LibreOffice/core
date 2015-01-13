@@ -1379,11 +1379,11 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
                 else
                 {
-                    std::vector< PushButton* > aButtons;
+                    SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT));
+
                     PushButton* pBtn = new PushButton( &GetWindow(), SfxResId(BT_READONLY_EDIT));
                     pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
-                    aButtons.push_back( pBtn );
-                    AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT), aButtons);
+                    pInfoBar->addButton(pBtn);
                 }
 
                 break;
@@ -3357,28 +3357,23 @@ void SfxViewFrame::ActivateToolPanel_Impl( const OUString& i_rPanelURL )
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }
 
-void SfxViewFrame::AppendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons )
+SfxInfoBarWindow* SfxViewFrame::AppendInfoBar( const OUString& sId, const OUString& sMessage )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
     // Make sure the InfoBar container is visible
-    if ( !HasChildWindow( nId ) )
-        ToggleChildWindow( nId );
-    SfxChildWindow* pChild = GetChildWindow( nId );
-    if ( pChild )
+    if (!HasChildWindow(nId))
+        ToggleChildWindow(nId);
+
+    SfxChildWindow* pChild = GetChildWindow(nId);
+    if (pChild)
     {
-        SfxInfoBarContainerWindow* pInfoBars = static_cast<SfxInfoBarContainerWindow*>( pChild->GetWindow() );
-        pInfoBars->appendInfoBar( sId, sMessage, aButtons );
-        ShowChildWindow( nId );
+        SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
+        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage);
+        ShowChildWindow(nId);
+        return pInfoBar;
     }
-    else
-    {
-        SAL_WARN( "sfx.view", "No consumer for InfoBar buttons, so deleting them instead" );
-        for (std::vector< PushButton* >::iterator it = aButtons.begin(); it != aButtons.end(); ++it)
-        {
-            delete *it;
-        }
-    }
+    return NULL;
 }
 
 void SfxViewFrame::RemoveInfoBar( const OUString& sId )
@@ -3386,15 +3381,16 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
     // Make sure the InfoBar container is visible
-    if ( !HasChildWindow( nId ) )
-        ToggleChildWindow( nId );
-    SfxChildWindow* pChild = GetChildWindow( nId );
-    if ( pChild )
+    if (!HasChildWindow(nId))
+        ToggleChildWindow(nId);
+
+    SfxChildWindow* pChild = GetChildWindow(nId);
+    if (pChild)
     {
-        SfxInfoBarContainerWindow* pInfoBars = static_cast<SfxInfoBarContainerWindow*>( pChild->GetWindow() );
-        SfxInfoBarWindow* pInfoBar = pInfoBars->getInfoBar( sId );
-        pInfoBars->removeInfoBar( pInfoBar );
-        ShowChildWindow( nId );
+        SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
+        SfxInfoBarWindow* pInfoBar = pInfoBarContainer->getInfoBar(sId);
+        pInfoBarContainer->removeInfoBar(pInfoBar);
+        ShowChildWindow(nId);
     }
 }
 

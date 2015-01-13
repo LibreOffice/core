@@ -51,14 +51,18 @@ class SfxInfoBarWindow : public vcl::Window
         boost::ptr_vector<PushButton> m_aActionBtns;
 
     public:
-        SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
-                          const OUString& sMessage,
-                          std::vector< PushButton* > aButtons );
+        SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sMessage);
         virtual ~SfxInfoBarWindow( );
 
         virtual const OUString& getId() const { return m_sId; }
         virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
         virtual void Resize( ) SAL_OVERRIDE;
+
+        /** Add button to Infobar.
+         * Infobar takes ownership of the button so the button is
+         * destroyed when the infobar gets destroyed.
+         */
+        void addButton(PushButton* pButton);
 
     private:
         DECL_LINK( CloseHandler, void* );
@@ -71,14 +75,14 @@ class SfxInfoBarContainerWindow : public vcl::Window
         boost::ptr_vector<SfxInfoBarWindow> m_pInfoBars;
 
     public:
-        SfxInfoBarContainerWindow( SfxInfoBarContainerChild* pChildWin );
+        SfxInfoBarContainerWindow(SfxInfoBarContainerChild* pChildWin);
         virtual ~SfxInfoBarContainerWindow( );
 
-        void appendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons );
-        SfxInfoBarWindow* getInfoBar( const OUString& sId );
-        void removeInfoBar( SfxInfoBarWindow* pInfoBar );
+        SfxInfoBarWindow* appendInfoBar(const OUString& sId, const OUString& sMessage);
+        SfxInfoBarWindow* getInfoBar(const OUString& sId);
+        void removeInfoBar(SfxInfoBarWindow* pInfoBar);
 
-        virtual void Resize( ) SAL_OVERRIDE;
+        virtual void Resize() SAL_OVERRIDE;
 };
 
 

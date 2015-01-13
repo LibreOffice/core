@@ -1448,11 +1448,10 @@ void SfxBaseController::ShowInfoBars( )
                 {
                     // Get the Frame and show the InfoBar if not checked out
                     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-                    std::vector< PushButton* > aButtons;
                     PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
                     pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
-                    aButtons.push_back( pBtn );
-                    pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+                    SfxInfoBarWindow* pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ) );
+                    pInfoBar->addButton(pBtn);
                 }
             }
         }
