@@ -562,6 +562,8 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             try
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
+                                if( !FStatHelper::IsDocument( aOutFile ) )
+                                  printf("Error: output file %s was not created\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
                             }
                             catch (const Exception& rException)
                             {
@@ -663,7 +665,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 }
                 else
                 {
-                    // place error message here ...
+                    printf("Error: source file could not be loaded\n");
                 }
 
                 // remove the document
