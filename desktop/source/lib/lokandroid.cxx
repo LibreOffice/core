@@ -138,6 +138,10 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
 
     LibreOfficeKitDocument* pDocument = pLibreOfficeKit->pClass->documentLoad(pLibreOfficeKit, aCloneDocumentPath);
+
+    if (pDocument == NULL)
+        return NULL;
+
     jobject aHandle = pEnv->NewDirectByteBuffer((void*) pDocument, sizeof(LibreOfficeKitDocument));
 
     return aHandle;
