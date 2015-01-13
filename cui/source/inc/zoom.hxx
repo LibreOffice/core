@@ -27,44 +27,44 @@
 class SvxZoomDialog : public SfxModalDialog
 {
 private:
-    RadioButton*        m_pOptimalBtn;
-    RadioButton*        m_pWholePageBtn;
-    RadioButton*        m_pPageWidthBtn;
-    RadioButton*        m_p100Btn;
-    RadioButton*        m_pUserBtn;
-    MetricField*        m_pUserEdit;
+    RadioButton*  m_pOptimalBtn;
+    RadioButton*  m_pWholePageBtn;
+    RadioButton*  m_pPageWidthBtn;
+    RadioButton*  m_p100Btn;
+    RadioButton*  m_pUserBtn;
+    MetricField*  m_pUserEdit;
 
-    VclContainer*       m_pViewFrame;
-    RadioButton*        m_pAutomaticBtn;
-    RadioButton*        m_pSingleBtn;
-    RadioButton*        m_pColumnsBtn;
-    NumericField*       m_pColumnsEdit;
-    CheckBox*           m_pBookModeChk;
+    VclContainer* m_pViewFrame;
+    RadioButton*  m_pAutomaticBtn;
+    RadioButton*  m_pSingleBtn;
+    RadioButton*  m_pColumnsBtn;
+    NumericField* m_pColumnsEdit;
+    CheckBox*     m_pBookModeChk;
 
-    OKButton*           m_pOKBtn;
+    OKButton*     m_pOKBtn;
 
-    const SfxItemSet&   rSet;
-    SfxItemSet*         pOutSet;
-    bool            bModified;
+    const SfxItemSet&           mrSet;
+    std::unique_ptr<SfxItemSet> mpOutSet;
+    bool                        mbModified;
 
-    DECL_LINK( UserHdl, RadioButton* );
-    DECL_LINK(SpinHdl, void *);
-    DECL_LINK( ViewLayoutUserHdl, RadioButton* );
-    DECL_LINK( ViewLayoutSpinHdl, NumericField* );
-    DECL_LINK( ViewLayoutCheckHdl, CheckBox* );
-    DECL_LINK( OKHdl, Button* );
+    DECL_LINK(UserHdl, RadioButton*);
+    DECL_LINK(SpinHdl, void*);
+    DECL_LINK(ViewLayoutUserHdl, RadioButton*);
+    DECL_LINK(ViewLayoutSpinHdl, NumericField*);
+    DECL_LINK(ViewLayoutCheckHdl, CheckBox*);
+    DECL_LINK(OKHdl, Button*);
 
 public:
-    SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet );
+    SvxZoomDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~SvxZoomDialog();
 
-    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
+    const SfxItemSet* GetOutputItemSet() const;
 
-    sal_uInt16              GetFactor() const;
-    void                SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId = 0 );
+    sal_uInt16 GetFactor() const;
+    void       SetFactor(sal_uInt16 nNewFactor, sal_uInt16 nButtonId = 0);
 
-    void                HideButton( sal_uInt16 nBtnId );
-    void                SetLimits( sal_uInt16 nMin, sal_uInt16 nMax );
+    void HideButton(sal_uInt16 nButtonId);
+    void SetLimits(sal_uInt16 nMin, sal_uInt16 nMax);
 };
 
 #endif
