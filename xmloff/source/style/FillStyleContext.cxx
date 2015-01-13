@@ -209,6 +209,17 @@ XMLTransGradientStyleContext::XMLTransGradientStyleContext( SvXMLImport& rImport
     aTransGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
+XMLTransGradientStyleContext::XMLTransGradientStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList )
+{
+    // start import
+    XMLTransGradientStyleImport aTransGradientStyle( GetImport() );
+
+    // something missing
+}
+
 XMLTransGradientStyleContext::~XMLTransGradientStyleContext()
 {
 }
@@ -234,6 +245,30 @@ void XMLTransGradientStyleContext::EndElement()
     catch( container::ElementExistException& )
     {}
 }
+
+void SAL_CALL XMLTransGradientStyleContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    uno::Reference< container::XNameContainer > xTransGradient( GetImport().GetMarkerHelper() );
+
+    try
+    {
+        if(xTransGradient.is())
+        {
+            if( xTransGradient->hasByName( maStrName ) )
+            {
+                xTransGradient->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xTransGradient->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
 
 bool XMLTransGradientStyleContext::IsTransient() const
 {
