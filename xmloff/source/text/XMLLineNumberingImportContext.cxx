@@ -74,6 +74,35 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
 {
 }
 
+XMLLineNumberingImportContext::XMLLineNumberingImportContext(
+    SvXMLImport& rImport,
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList > & xAttrList)
+:   SvXMLStyleContext(rImport, Element, xAttrList, XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG)
+,   sCharStyleName("CharStyleName")
+,   sCountEmptyLines("CountEmptyLines")
+,   sCountLinesInFrames("CountLinesInFrames")
+,   sDistance("Distance")
+,   sInterval("Interval")
+,   sSeparatorText("SeparatorText")
+,   sNumberPosition("NumberPosition")
+,   sNumberingType("NumberingType")
+,   sIsOn("IsOn")
+,   sRestartAtEachPage("RestartAtEachPage")
+,   sSeparatorInterval("SeparatorInterval")
+,   sNumFormat(GetXMLToken(XML_1))
+,   sNumLetterSync(GetXMLToken(XML_FALSE))
+,   nOffset(-1)
+,   nNumberPosition(style::LineNumberPosition::LEFT)
+,   nIncrement(-1)
+,   nSeparatorIncrement(-1)
+,   bNumberLines(true)
+,   bCountEmptyLines(true)
+,   bCountInFloatingFrames(false)
+,   bRestartNumbering(false)
+{
+}
+
 XMLLineNumberingImportContext::~XMLLineNumberingImportContext()
 {
 }
@@ -122,6 +151,12 @@ void XMLLineNumberingImportContext::StartElement(
             (enum LineNumberingToken)aTokenMap.Get(nPrefix, sLocalName),
             xAttrList->getValueByIndex(i));
     }
+}
+
+void SAL_CALL XMLLineNumberingImportContext::startFastElement(
+    sal_Int32 /*Element*/, const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
 }
 
 void XMLLineNumberingImportContext::ProcessAttribute(
@@ -296,6 +331,14 @@ SvXMLImportContext* XMLLineNumberingImportContext::CreateChildContext(
         return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                       xAttrList);
     }
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLLineNumberingImportContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return Reference< xml::sax::XFastContextHandler >();
 }
 
 void XMLLineNumberingImportContext::SetSeparatorText(
