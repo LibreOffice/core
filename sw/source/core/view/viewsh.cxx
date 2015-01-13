@@ -393,7 +393,10 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                         if ( bPaintsFromSystem )
                             PaintDesktop( aRect );
-                        pCurrentLayout->Paint( aRect );
+                        if (!mpLibreOfficeKitCallback)
+                            pCurrentLayout->Paint( aRect );
+                        else
+                            pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
 
                         // #i75172# end DrawingLayer paint
                         DLPostPaint2(true);
