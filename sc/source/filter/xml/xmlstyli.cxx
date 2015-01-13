@@ -980,6 +980,13 @@ ScXMLMasterStylesContext::ScXMLMasterStylesContext(
 {
 }
 
+ScXMLMasterStylesContext::ScXMLMasterStylesContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStylesContext( rImport, Element, xAttrList )
+{
+}
+
 ScXMLMasterStylesContext::~ScXMLMasterStylesContext()
 {
 }
@@ -1003,6 +1010,12 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
     return pContext;
 }
 
+SvXMLStyleContext *ScXMLMasterStylesContext:: CreateStyleChildContext(
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 /* nFamily */,
         sal_uInt16 /* nPrefix */,
@@ -1012,9 +1025,22 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
     return 0;
 }
 
+SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 void ScXMLMasterStylesContext::EndElement()
 {
     FinishStyles(true);
+}
+
+void SAL_CALL ScXMLMasterStylesContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    FinishStyles( true );
 }
 
 TYPEINIT1( ScMasterPageContext, XMLTextMasterPageContext );
