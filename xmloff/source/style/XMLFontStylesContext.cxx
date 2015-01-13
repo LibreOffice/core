@@ -36,6 +36,8 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::com::sun::star;
@@ -46,6 +48,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 
 #define XML_STYLE_FAMILY_FONT 1
@@ -371,6 +374,21 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLStyleContext *pStyle;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_font_face) )
+    {
+        pStyle = 0;
+    }
+    else
+    {
+        pStyle = SvXMLStylesContext::CreateStyleChildContext( Element, xAttrList );
+    }
+    return pStyle;
+}
+
 TYPEINIT1( XMLFontStylesContext, SvXMLStylesContext );
 
 XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
@@ -378,6 +396,20 @@ XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         rtl_TextEncoding eDfltEnc ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
+    pFamilyNameHdl( new XMLFontFamilyNamePropHdl ),
+    pFamilyHdl( new XMLFontFamilyPropHdl ),
+    pPitchHdl( new XMLFontPitchPropHdl ),
+    pEncHdl( new XMLFontEncodingPropHdl ),
+    pFontStyleAttrTokenMap( new SvXMLTokenMap(lcl_getFontStyleAttrTokenMap()) ),
+    eDfltEncoding( eDfltEnc )
+{
+}
+
+XMLFontStylesContext::XMLFontStylesContext(
+        SvXMLImport& rImport, sal_Int32 Element,
+        const Reference< XFastAttributeList >& xAttrList,
+        rtl_TextEncoding eDfltEnc ) :
+    SvXMLStylesContext( rImport, Element, xAttrList ),
     pFamilyNameHdl( new XMLFontFamilyNamePropHdl ),
     pFamilyHdl( new XMLFontFamilyPropHdl ),
     pPitchHdl( new XMLFontPitchPropHdl ),
