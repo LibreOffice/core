@@ -234,7 +234,8 @@ void Timer::ImplTimerCallbackProc( bool idle )
 void Timer::ProcessAllIdleHandlers()
 {
     // process all pending Idle timers
-    while (ImplTimerData* pTimerData =
+    ImplTimerData* pTimerData;
+    while (pTimerData =
                 ImplTimerData::GetFirstIdle())
     {
         pTimerData->Invoke();
