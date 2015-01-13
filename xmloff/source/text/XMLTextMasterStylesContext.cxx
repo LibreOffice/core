@@ -46,6 +46,13 @@ XMLTextMasterStylesContext::XMLTextMasterStylesContext(
 {
 }
 
+XMLTextMasterStylesContext::XMLTextMasterStylesContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+:   SvXMLStylesContext( rImport, Element, xAttrList )
+{
+}
+
 XMLTextMasterStylesContext::~XMLTextMasterStylesContext()
 {
 }
@@ -70,11 +77,24 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
     return pContext;
 }
 
+SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 /*nFamily*/,
         sal_uInt16 /*nPrefix*/,
         const OUString& /*rLocalName*/,
         const Reference< XAttributeList > & /*xAttrList*/ )
+{
+    return 0;
+}
+
+SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
 {
     return 0;
 }
