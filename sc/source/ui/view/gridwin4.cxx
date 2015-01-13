@@ -897,6 +897,17 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     ScOutputData aOutData(
         &rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, 0, 0, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
+
+    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    Color aGridColor = rColorCfg.GetColorValue(svtools::CALCGRID, false).nColor;
+    if (aGridColor.GetColor() == COL_TRANSPARENT)
+    {
+        //  use view options' grid color only if color config has "automatic" color
+        const ScViewOptions& rOpts = pViewData->GetOptions();
+        aGridColor = rOpts.GetGridColor();
+    }
+    aOutData.SetGridColor(aGridColor);
+
     aOutData.DrawGrid(true, false);
 
     aOutData.DrawShadow();
