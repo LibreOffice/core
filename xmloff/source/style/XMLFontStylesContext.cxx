@@ -101,6 +101,21 @@ XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
     aEnc <<= (sal_Int16)rStyles.GetDfltCharset();
 }
 
+XMLFontStyleContextFontFace::XMLFontStyleContextFontFace(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    XMLFontStylesContext& rStyles )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_FONT ),
+    xStyles( &rStyles )
+{
+    OUString sEmpty;
+    aFamilyName <<= sEmpty;
+    aStyleName <<= sEmpty;
+    aFamily <<= static_cast< sal_Int16 >( awt::FontFamily::DONTKNOW );
+    aPitch <<= static_cast< sal_Int16 >( awt::FontPitch::DONTKNOW );
+    aEnc <<= static_cast< sal_Int16 >( rStyles.GetDfltCharset() );
+}
+
 void XMLFontStyleContextFontFace::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
@@ -187,6 +202,14 @@ SvXMLImportContext * XMLFontStyleContextFontFace::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_SRC ))
         return new XMLFontStyleContextFontFaceSrc( GetImport(), nPrefix, rLocalName, *this );
     return SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLFontStyleContextFontFace::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 OUString XMLFontStyleContextFontFace::familyName() const
