@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
-
 #include "flyfrm.hxx"
 
 // #i28701#
@@ -123,7 +121,7 @@ public:
 };
 
 // Flys that are bound to LayoutFrms and not to Cntnt
-class SwFlyLayFrm : public SwFlyFreeFrm, private boost::noncopyable
+class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
     // #i28701#
