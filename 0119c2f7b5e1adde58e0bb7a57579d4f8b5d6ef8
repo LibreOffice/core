@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_c5164e55",
+        "filename": "sw/source/filter/xml/xmltble.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-13T13:56:40Z",
+      "side": 1,
+      "message": "guess this one needs a GetPrefix too?",
+      "revId": "0119c2f7b5e1adde58e0bb7a57579d4f8b5d6ef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_650c2243",
+        "filename": "sw/source/filter/xml/xmltble.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-13T13:56:40Z",
+      "side": 1,
+      "message": "... and this one",
+      "revId": "0119c2f7b5e1adde58e0bb7a57579d4f8b5d6ef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_a511ca5f",
+        "filename": "sw/source/filter/xml/xmltble.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-13T13:56:40Z",
+      "side": 1,
+      "message": "the findTextBoxes called here looks like O(n^2) inside, unnecessarily?",
+      "revId": "0119c2f7b5e1adde58e0bb7a57579d4f8b5d6ef8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
