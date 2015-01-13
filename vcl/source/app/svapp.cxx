@@ -346,8 +346,10 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     {
         while ( pSVData->mbNotAllTimerCalled )
             Timer::ImplTimerCallbackProc();
-        Timer::Timer::ProcessAllIdleHandlers();
     }
+
+    //Process all idles
+    Timer::Timer::ProcessAllIdleHandlers();
 
     pSVData->maAppData.mnDispatchLevel++;
     // do not wait for events if application was already quit; in that
