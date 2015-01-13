@@ -75,8 +75,14 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::W
 
 MediaFloater::~MediaFloater()
 {
+    dispose();
+}
+
+void MediaFloater::dispose()
+{
     delete mpMediaWindow;
     mpMediaWindow = NULL;
+    SfxDockingWindow::dispose();
 }
 
 

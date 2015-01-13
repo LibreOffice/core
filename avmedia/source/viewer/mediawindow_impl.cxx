@@ -56,12 +56,6 @@ MediaWindowControl::MediaWindowControl( vcl::Window* pParent ) :
 
 
 
-MediaWindowControl::~MediaWindowControl()
-{
-}
-
-
-
 void MediaWindowControl::update()
 {
     MediaItem aItem;
@@ -92,12 +86,6 @@ MediaChildWindow::MediaChildWindow( vcl::Window* pParent, SystemWindowData* pDat
 {
 }
 #endif
-
-MediaChildWindow::~MediaChildWindow()
-{
-}
-
-
 
 void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -183,6 +171,11 @@ MediaWindowImpl::MediaWindowImpl( vcl::Window* pParent, MediaWindow* pMediaWindo
 
 MediaWindowImpl::~MediaWindowImpl()
 {
+    dispose();
+}
+
+void MediaWindowImpl::dispose()
+{
     if( mpEvents )
         mpEvents->cleanUp();
 
@@ -210,6 +203,7 @@ MediaWindowImpl::~MediaWindowImpl()
     delete mpEmptyBmpEx;
     delete mpAudioBmpEx;
     delete mpMediaWindowControl;
+    Control::dispose();
 }
 
 uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
