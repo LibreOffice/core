@@ -33,10 +33,12 @@ $(eval $(call gb_Library_add_defs,basebmp,\
 # Fatal Error C1128: number of sections exceeded object file
 # format limit : compile with /bigobj
 #
+ifeq ($(COM),MSC)
 ifeq ($(CPUNAME),X86_64)
 $(eval $(call gb_Library_add_cxxflags,basebmp, \
     -bigobj \
 ))
+endif
 endif
 
 $(eval $(call gb_Library_add_exception_objects,basebmp,\
