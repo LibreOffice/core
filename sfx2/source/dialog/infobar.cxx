@@ -37,6 +37,21 @@ const long INFO_BAR_BASE_HEIGHT = 40;
 const BColor constLightColor(1.0, 1.0, 191.0 / 255.0);
 const BColor constDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
 
+void lclDetermineLightDarkColor(BColor& rLightColor, BColor& rDarkColor)
+{
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if (rSettings.GetHighContrastMode())
+    {
+        rLightColor = rSettings.GetLightColor().getBColor();
+        rDarkColor = rSettings.GetDialogTextColor().getBColor();
+    }
+    else
+    {
+        rLightColor = constLightColor;
+        rDarkColor = constDarkColor;
+    }
+}
+
 class SfxCloseButton : public PushButton
 {
 public:
@@ -58,15 +73,9 @@ void SfxCloseButton::Paint(const Rectangle&)
 
     Primitive2DSequence aSeq(2);
 
-    BColor aLightColor(constLightColor);
-    BColor aDarkColor(constDarkColor);
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    if (rSettings.GetHighContrastMode())
-    {
-        aLightColor = rSettings.GetLightColor().getBColor();
-        aDarkColor = rSettings.GetDialogTextColor().getBColor();
-    }
+    BColor aLightColor;
+    BColor aDarkColor;
+    lclDetermineLightDarkColor(aLightColor, aDarkColor);
 
     // Light background
     B2DPolygon aPolygon;
@@ -150,15 +159,9 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 
     Primitive2DSequence aSeq(2);
 
-    BColor aLightColor(constLightColor);
-    BColor aDarkColor(constDarkColor);
-
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    if (rSettings.GetHighContrastMode())
-    {
-        aLightColor = rSettings.GetLightColor().getBColor();
-        aDarkColor = rSettings.GetDialogTextColor().getBColor();
-    }
+    BColor aLightColor;
+    BColor aDarkColor;
+    lclDetermineLightDarkColor(aLightColor, aDarkColor);
 
     // Update the label background color
     m_pMessage->SetBackground(Wallpaper(Color(aLightColor)));
