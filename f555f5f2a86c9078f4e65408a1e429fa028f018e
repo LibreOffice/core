@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_a8575fc9",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-13T23:38:47Z",
+      "side": 1,
+      "message": "This can\u0027t be, in this section are the defined ODFF names, probably it should be \"COM.MICROSOFT.CEILING.MATH\" instead?",
+      "revId": "f555f5f2a86c9078f4e65408a1e429fa028f018e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_886ffb91",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-13T23:38:47Z",
+      "side": 1,
+      "message": "Duplicated resource.",
+      "revId": "f555f5f2a86c9078f4e65408a1e429fa028f018e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_286caf9b",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-13T23:38:47Z",
+      "side": 1,
+      "message": "Duplicated resource.",
+      "revId": "f555f5f2a86c9078f4e65408a1e429fa028f018e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_4869f38a",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-13T23:38:47Z",
+      "side": 1,
+      "message": "Duplicated resource.",
+      "revId": "f555f5f2a86c9078f4e65408a1e429fa028f018e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_e80487c7",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-13T23:38:47Z",
+      "side": 1,
+      "message": "Duplicated resource.",
+      "revId": "f555f5f2a86c9078f4e65408a1e429fa028f018e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
