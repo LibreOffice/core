@@ -27,22 +27,23 @@ using namespace drawinglayer::processor2d;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::geometry;
+using namespace basegfx;
 
 namespace
 {
     class SfxCloseButton : public PushButton
     {
         public:
-            SfxCloseButton( vcl::Window* pParent ) : PushButton( pParent, 0 )
+            SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
             {
             }
 
-            virtual ~SfxCloseButton( ) { }
+            virtual ~SfxCloseButton() {}
 
-            virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+            virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
     };
 
-    void SfxCloseButton::Paint( const Rectangle& )
+    void SfxCloseButton::Paint(const Rectangle&)
     {
         const ViewInformation2D aNewViewInfos;
         const unique_ptr<BaseProcessor2D> pProcessor(
@@ -52,42 +53,44 @@ namespace
 
         Primitive2DSequence aSeq(2);
 
-        basegfx::BColor aLightColor(1.0, 1.0, 191.0 / 255.0);
-        basegfx::BColor aDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
+        BColor aLightColor(1.0, 1.0, 191.0 / 255.0);
+        BColor aDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
 
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        if ( rSettings.GetHighContrastMode() )
+        if (rSettings.GetHighContrastMode())
         {
-            aLightColor = rSettings.GetLightColor( ).getBColor( );
-            aDarkColor = rSettings.GetDialogTextColor( ).getBColor( );
-
+            aLightColor = rSettings.GetLightColor().getBColor();
+            aDarkColor = rSettings.GetDialogTextColor().getBColor();
         }
 
         // Light background
-        basegfx::B2DPolygon aPolygon;
-        aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Top( ) ) );
-        aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Top( ) ) );
-        aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Bottom( ) ) );
-        aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Bottom( ) ) );
-        aPolygon.setClosed( true );
-        PolyPolygonColorPrimitive2D* pBack = new PolyPolygonColorPrimitive2D(
-                    basegfx::B2DPolyPolygon( aPolygon ), aLightColor );
+        B2DPolygon aPolygon;
+        aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
+        aPolygon.append(B2DPoint(aRect.Right(), aRect.Top()));
+        aPolygon.append(B2DPoint(aRect.Right(), aRect.Bottom()));
+        aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
+        aPolygon.setClosed(true);
+
+        PolyPolygonColorPrimitive2D* pBack =
+            new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aLightColor);
         aSeq[0] = pBack;
 
         LineAttribute aLineAttribute(aDarkColor, 2.0);
 
         // Cross
-        basegfx::B2DPolyPolygon aCross;
-        basegfx::B2DPolygon aLine1;
-        aLine1.append( basegfx::B2DPoint( aRect.Left(), aRect.Top( ) ) );
-        aLine1.append( basegfx::B2DPoint( aRect.Right(), aRect.Bottom( ) ) );
-        aCross.append( aLine1 );
-        basegfx::B2DPolygon aLine2;
-        aLine2.append( basegfx::B2DPoint( aRect.Right(), aRect.Top( ) ) );
-        aLine2.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom( ) ) );
-        aCross.append( aLine2 );
+        B2DPolyPolygon aCross;
 
-        PolyPolygonStrokePrimitive2D * pCross =
+        B2DPolygon aLine1;
+        aLine1.append(B2DPoint(aRect.Left(), aRect.Top()));
+        aLine1.append(B2DPoint(aRect.Right(), aRect.Bottom()));
+        aCross.append(aLine1);
+
+        B2DPolygon aLine2;
+        aLine2.append(B2DPoint(aRect.Right(), aRect.Top()));
+        aLine2.append(B2DPoint(aRect.Left(), aRect.Bottom()));
+        aCross.append(aLine2);
+
+        PolyPolygonStrokePrimitive2D* pCross =
             new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
 
         aSeq[1] = pCross;
@@ -96,8 +99,8 @@ namespace
     }
 }
 
-SfxInfoBarWindow::SfxInfoBarWindow( vcl::Window* pParent, const OUString& sId,
-       const OUString& sMessage, vector<PushButton*> aButtons ) :
+SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
+       const OUString& sMessage, vector<PushButton*> aButtons) :
     Window(pParent, 0),
     m_sId(sId),
     m_pMessage(new FixedText(this, 0)),
@@ -140,8 +143,8 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 
     Primitive2DSequence aSeq(2);
 
-    basegfx::BColor aLightColor(1.0, 1.0, 191.0 / 255.0);
-    basegfx::BColor aDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
+    BColor aLightColor(1.0, 1.0, 191.0 / 255.0);
+    BColor aDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     if (rSettings.GetHighContrastMode())
@@ -154,25 +157,25 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
     m_pMessage->SetBackground(Wallpaper(Color(aLightColor)));
 
     // Light background
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Top( ) ) );
-    aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Top( ) ) );
-    aPolygon.append( basegfx::B2DPoint( aRect.Right( ), aRect.Bottom( ) ) );
-    aPolygon.append( basegfx::B2DPoint( aRect.Left( ), aRect.Bottom( ) ) );
+    B2DPolygon aPolygon;
+    aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
+    aPolygon.append(B2DPoint(aRect.Right(), aRect.Top()));
+    aPolygon.append(B2DPoint(aRect.Right(), aRect.Bottom()));
+    aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
     aPolygon.setClosed(true);
 
     PolyPolygonColorPrimitive2D* pBack =
-        new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), aLightColor);
+        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aLightColor);
     aSeq[0] = pBack;
 
     LineAttribute aLineAttribute(aDarkColor, 1.0);
 
     // Bottom dark line
-    basegfx::B2DPolygon aPolygonBottom;
-    aPolygonBottom.append( basegfx::B2DPoint( aRect.Left(), aRect.Bottom( ) ) );
-    aPolygonBottom.append( basegfx::B2DPoint( aRect.Right(), aRect.Bottom( ) ) );
+    B2DPolygon aPolygonBottom;
+    aPolygonBottom.append(B2DPoint(aRect.Left(), aRect.Bottom()));
+    aPolygonBottom.append(B2DPoint(aRect.Right(), aRect.Bottom()));
 
-    PolygonStrokePrimitive2D * pLineBottom =
+    PolygonStrokePrimitive2D* pLineBottom =
             new PolygonStrokePrimitive2D (aPolygonBottom, aLineAttribute);
 
     aSeq[1] = pLineBottom;
@@ -185,7 +188,7 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 void SfxInfoBarWindow::Resize()
 {
     long nWidth = GetSizePixel().getWidth();
-    m_pCloseBtn->SetPosSizePixel(Point( nWidth - 25, 15), Size(10, 10));
+    m_pCloseBtn->SetPosSizePixel(Point(nWidth - 25, 15), Size(10, 10));
 
     // Reparent the buttons and place them on the right of the bar
     long nX = m_pCloseBtn->GetPosPixel().getX() - 15;
@@ -259,11 +262,11 @@ void SfxInfoBarContainerWindow::removeInfoBar(SfxInfoBarWindow* pInfoBar)
     long nY = 0;
     for (it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)
     {
-        it->SetPosPixel( Point( 0, nY ) );
-        nY += it->GetSizePixel( ).getHeight( );
+        it->SetPosPixel(Point(0, nY));
+        nY += it->GetSizePixel().getHeight();
     }
 
-    Size aSize = GetSizePixel( );
+    Size aSize = GetSizePixel();
     aSize.setHeight(nY);
     SetSizePixel(aSize);
 
