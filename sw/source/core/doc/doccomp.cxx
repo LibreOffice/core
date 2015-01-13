@@ -74,7 +74,6 @@ class CompareData
     sal_uLong PrevIdx( const SwNode* pNd );
     sal_uLong NextIdx( const SwNode* pNd );
 
-protected:
     vector< CompareLine* > aLines;
     sal_uLong nSttLineNum;
 
@@ -1774,7 +1773,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     if( nRet )
     {
-      getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
+        getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
                        nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
         aD1.SetRedlinesToDoc( !bDocWasModified );
