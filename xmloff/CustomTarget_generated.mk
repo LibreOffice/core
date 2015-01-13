@@ -15,8 +15,8 @@ xmloff_MISC := $(call gb_CustomTarget_get_workdir,xmloff/generated)/misc
 xmloff_INC := $(call gb_CustomTarget_get_workdir,xmloff/generated)
 xmloff_GENHEADERPATH := $(xmloff_INC)/xmloff/token
 
-$(eval $(call gb_CustomTarget_token_hash,xmloff,tokenhash.inc,tokenhash.gperf))
-$(eval $(call gb_CustomTarget_generate_tokens,xmloff,tokens,token,tokenhash.gperf))
+$(eval $(call gb_CustomTarget_token_hash,xmloff/generated,tokenhash.inc,tokenhash.gperf))
+$(eval $(call gb_CustomTarget_generate_tokens,xmloff/generated,xmloff,xmloff/source/token,tokens,token,tokenhash.gperf))
 
 $(call gb_CustomTarget_get_target,xmloff/generated) : \
 	$(xmloff_INC)/tokenhash.inc \
