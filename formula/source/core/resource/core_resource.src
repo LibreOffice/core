@@ -359,7 +359,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_INTERCEPT { Text = "INTERCEPT" ; };
     String SC_OPCODE_TREND { Text = "TREND" ; };
     String SC_OPCODE_GROWTH { Text = "GROWTH" ; };
-    String SC_OPCODE_RGP { Text = "LINEST" ; };
+    String SC_OPCODE_LINEST { Text = "LINEST" ; };
     String SC_OPCODE_LOGEST { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
     String SC_OPCODE_CHI_INV { Text = "LEGACY.CHIINV" ; };
@@ -766,7 +766,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_INTERCEPT { Text = "INTERCEPT" ; };
     String SC_OPCODE_TREND { Text = "TREND" ; };
     String SC_OPCODE_GROWTH { Text = "GROWTH" ; };
-    String SC_OPCODE_RGP { Text = "LINEST" ; };
+    String SC_OPCODE_LINEST { Text = "LINEST" ; };
     String SC_OPCODE_LOGEST { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
@@ -1175,7 +1175,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_INTERCEPT { Text = "INTERCEPT" ; };
     String SC_OPCODE_TREND { Text = "TREND" ; };
     String SC_OPCODE_GROWTH { Text = "GROWTH" ; };
-    String SC_OPCODE_RGP { Text = "LINEST" ; };
+    String SC_OPCODE_LINEST { Text = "LINEST" ; };
     String SC_OPCODE_LOGEST { Text = "LOGEST" ; };
     String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
     String SC_OPCODE_CHI_INV { Text = "CHIINV" ; };
@@ -2520,7 +2520,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "GROWTH" ;
     };
-    String SC_OPCODE_RGP
+    String SC_OPCODE_LINEST
     {
         Text [ en-US ] = "LINEST" ;
     };
