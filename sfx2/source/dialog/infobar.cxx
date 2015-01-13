@@ -31,78 +31,77 @@ using namespace basegfx;
 
 namespace
 {
-    class SfxCloseButton : public PushButton
-    {
-        public:
-            SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
-            {
-            }
-
-            virtual ~SfxCloseButton() {}
-
-            virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
-    };
-
-    void SfxCloseButton::Paint(const Rectangle&)
-    {
-        const ViewInformation2D aNewViewInfos;
-        const unique_ptr<BaseProcessor2D> pProcessor(
-            createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos));
-
-        const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
-
-        Primitive2DSequence aSeq(2);
-
-        BColor aLightColor(1.0, 1.0, 191.0 / 255.0);
-        BColor aDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
-
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        if (rSettings.GetHighContrastMode())
-        {
-            aLightColor = rSettings.GetLightColor().getBColor();
-            aDarkColor = rSettings.GetDialogTextColor().getBColor();
-        }
-
-        // Light background
-        B2DPolygon aPolygon;
-        aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
-        aPolygon.append(B2DPoint(aRect.Right(), aRect.Top()));
-        aPolygon.append(B2DPoint(aRect.Right(), aRect.Bottom()));
-        aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
-        aPolygon.setClosed(true);
-
-        PolyPolygonColorPrimitive2D* pBack =
-            new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aLightColor);
-        aSeq[0] = pBack;
-
-        LineAttribute aLineAttribute(aDarkColor, 2.0);
-
-        // Cross
-        B2DPolyPolygon aCross;
-
-        B2DPolygon aLine1;
-        aLine1.append(B2DPoint(aRect.Left(), aRect.Top()));
-        aLine1.append(B2DPoint(aRect.Right(), aRect.Bottom()));
-        aCross.append(aLine1);
-
-        B2DPolygon aLine2;
-        aLine2.append(B2DPoint(aRect.Right(), aRect.Top()));
-        aLine2.append(B2DPoint(aRect.Left(), aRect.Bottom()));
-        aCross.append(aLine2);
-
-        PolyPolygonStrokePrimitive2D* pCross =
-            new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
-
-        aSeq[1] = pCross;
-
-        pProcessor->process(aSeq);
-    }
-}
-
-namespace
-{
 
 const long INFO_BAR_BASE_HEIGHT = 40;
+
+const BColor constLightColor(1.0, 1.0, 191.0 / 255.0);
+const BColor constDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
+
+class SfxCloseButton : public PushButton
+{
+public:
+    SfxCloseButton(vcl::Window* pParent) : PushButton(pParent, 0)
+    {}
+
+    virtual ~SfxCloseButton() {}
+
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE;
+};
+
+void SfxCloseButton::Paint(const Rectangle&)
+{
+    const ViewInformation2D aNewViewInfos;
+    const unique_ptr<BaseProcessor2D> pProcessor(
+        createBaseProcessor2DFromOutputDevice(*this, aNewViewInfos));
+
+    const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
+
+    Primitive2DSequence aSeq(2);
+
+    BColor aLightColor(constLightColor);
+    BColor aDarkColor(constDarkColor);
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if (rSettings.GetHighContrastMode())
+    {
+        aLightColor = rSettings.GetLightColor().getBColor();
+        aDarkColor = rSettings.GetDialogTextColor().getBColor();
+    }
+
+    // Light background
+    B2DPolygon aPolygon;
+    aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
+    aPolygon.append(B2DPoint(aRect.Right(), aRect.Top()));
+    aPolygon.append(B2DPoint(aRect.Right(), aRect.Bottom()));
+    aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
+    aPolygon.setClosed(true);
+
+    PolyPolygonColorPrimitive2D* pBack =
+        new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), aLightColor);
+    aSeq[0] = pBack;
+
+    LineAttribute aLineAttribute(aDarkColor, 2.0);
+
+    // Cross
+    B2DPolyPolygon aCross;
+
+    B2DPolygon aLine1;
+    aLine1.append(B2DPoint(aRect.Left(), aRect.Top()));
+    aLine1.append(B2DPoint(aRect.Right(), aRect.Bottom()));
+    aCross.append(aLine1);
+
+    B2DPolygon aLine2;
+    aLine2.append(B2DPoint(aRect.Right(), aRect.Top()));
+    aLine2.append(B2DPoint(aRect.Left(), aRect.Bottom()));
+    aCross.append(aLine2);
+
+    PolyPolygonStrokePrimitive2D* pCross =
+        new PolyPolygonStrokePrimitive2D(aCross, aLineAttribute, StrokeAttribute());
+
+    aSeq[1] = pCross;
+
+    pProcessor->process(aSeq);
+}
 
 } // anonymous namespace
 
@@ -119,7 +118,7 @@ SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, const OUString& sId,
     SetPosSizePixel(Point(0, 0), Size(nWidth, INFO_BAR_BASE_HEIGHT * nScaleFactor));
 
     m_pMessage->SetText(sMessage);
-    m_pMessage->SetBackground(Wallpaper(Color(255, 255, 191)));
+    m_pMessage->SetBackground(Wallpaper(Color(constLightColor)));
     m_pMessage->Show();
 
     m_pCloseBtn->SetClickHdl(LINK(this, SfxInfoBarWindow, CloseHandler));
@@ -151,8 +150,8 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 
     Primitive2DSequence aSeq(2);
 
-    BColor aLightColor(1.0, 1.0, 191.0 / 255.0);
-    BColor aDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
+    BColor aLightColor(constLightColor);
+    BColor aDarkColor(constDarkColor);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     if (rSettings.GetHighContrastMode())
