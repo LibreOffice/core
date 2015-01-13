@@ -94,8 +94,13 @@ public:
             ORptFilter& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    RptMLMasterStylesContext_Impl(
+        ORptFilter& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList );
     virtual ~RptMLMasterStylesContext_Impl();
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
@@ -108,11 +113,26 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
 {
 }
 
+RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
+    ORptFilter& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   XMLTextMasterStylesContext( rImport, Element, xAttrList ),
+    m_rImport(rImport)
+{
+}
+
 RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
 {
 }
 
 void RptMLMasterStylesContext_Impl::EndElement()
+{
+    FinishStyles( true );
+    m_rImport.FinishStyles();
+}
+
+void SAL_CALL RptMLMasterStylesContext_Impl::endFastElement( sal_Int32 /*Element*/ )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     FinishStyles( true );
     m_rImport.FinishStyles();
