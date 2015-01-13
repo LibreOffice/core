@@ -4185,7 +4185,7 @@ StackVar ScInterpreter::Interpret()
                 case ocCovarianceS      : ScCovarianceS();              break;
                 case ocPearson          : ScPearson();                  break;
                 case ocRSQ              : ScRSQ();                      break;
-                case ocSTEYX            : ScSTEXY();                    break;
+                case ocSTEYX            : ScSTEYX();                    break;
                 case ocSlope            : ScSlope();                    break;
                 case ocIntercept        : ScIntercept();                break;
                 case ocTrend            : ScTrend();                    break;

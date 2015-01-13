@@ -4254,7 +4254,7 @@ void ScInterpreter::ScRSQ()
     }
 }
 
-void ScInterpreter::ScSTEXY()
+void ScInterpreter::ScSTEYX()
 {
     CalculatePearsonCovar( true, true, false );
 }

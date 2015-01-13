@@ -841,7 +841,7 @@ void ScCovarianceP();
 void ScCovarianceS();
 void ScPearson();
 void ScRSQ();
-void ScSTEXY();
+void ScSTEYX();
 void ScSlope();
 void ScTrend();
 void ScInfo();
