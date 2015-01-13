@@ -310,6 +310,7 @@ namespace oglcanvas
         unx::glXWaitGL();
         XSync( reinterpret_cast<unx::Display*>(mpDisplay), false );
         */
+        pChildWindow->Show();
         mpContext->swapBuffers();
 
         // flush texture cache, such that it does not build up
