@@ -206,17 +206,28 @@ protected:
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) SAL_OVERRIDE;
 
+    virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) SAL_OVERRIDE;
+
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         sal_uInt16 nFamily,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList) SAL_OVERRIDE;
 
+    virtual SvXMLStyleContext *CreateStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) SAL_OVERRIDE;
+
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) SAL_OVERRIDE;
 public:
     TYPEINFO_OVERRIDE();
 
@@ -226,10 +237,18 @@ public:
         const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         bool bIsAutoStyle);
+
+    SdXMLStylesContext( SdXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        bool bIsAutoStyle);
     virtual ~SdXMLStylesContext();
 
     virtual sal_uInt16 GetFamily( const OUString& rFamily ) const SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+
     virtual rtl::Reference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const SAL_OVERRIDE;
 
     void SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const;
