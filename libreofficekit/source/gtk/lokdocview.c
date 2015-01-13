@@ -210,6 +210,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     }
     else
     {
+        pDocView->pDocument->pClass->initializeForRendering(pDocView->pDocument);
         renderDocument( pDocView );
         pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
     }
