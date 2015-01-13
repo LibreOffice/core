@@ -166,6 +166,21 @@ OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
 
 }
 
+OReportStylesContext::OReportStylesContext(
+    ORptFilter& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    const bool bTempAutoStyles )
+:   SvXMLStylesContext( rImport, Element, xAttrList ),
+    m_sTableStyleFamilyName( OUString( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
+    m_sColumnStyleFamilyName( OUString( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+    m_sRowStyleFamilyName( OUString( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
+    m_sCellStyleFamilyName( OUString( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
+    m_rImport(rImport),
+    m_nNumberFormatIndex(-1),
+    bAutoStyles(bTempAutoStyles)
+{
+}
+
 
 OReportStylesContext::~OReportStylesContext()
 {
@@ -182,6 +197,15 @@ void OReportStylesContext::EndElement()
         GetImport().GetStyles()->CopyStylesToDoc(true);
 }
 
+void SAL_CALL OReportStylesContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLStylesContext::endFastElement( Element );
+    if (bAutoStyles)
+        GetImport().GetTextImport()->SetAutoStyles( this );
+    else
+        GetImport().GetStyles()->CopyStylesToDoc( true );
+}
 
 rtl::Reference < SvXMLImportPropertyMapper >
     OReportStylesContext::GetImportPropertyMapper(
@@ -263,6 +287,13 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
     return pStyle;
 }
 
+SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
+}
+
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -288,6 +319,13 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
     }
 
     return pStyle;
+}
+
+SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
+    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return 0;
 }
 
 Reference < XNameContainer >

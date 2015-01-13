@@ -114,12 +114,18 @@ namespace rptxml
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        virtual SvXMLStyleContext *CreateStyleStyleChildContext(
+            sal_uInt16 nFamily, sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) SAL_OVERRIDE;
 
         virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
                 sal_uInt16 nFamily, sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+        virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+            sal_uInt16 nFamily, sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) SAL_OVERRIDE;
 
     public:
 
@@ -129,9 +135,14 @@ namespace rptxml
                 const OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 const bool bAutoStyles );
+        OReportStylesContext( ORptFilter& rImport, sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            const bool bAutoStyles );
         virtual ~OReportStylesContext();
 
         virtual void EndElement() SAL_OVERRIDE;
+        virtual void SAL_CALL endFastElement( sal_Int32 Element )
+            throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
         virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                             sal_uInt16 nFamily ) const SAL_OVERRIDE;
