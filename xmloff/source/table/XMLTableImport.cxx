@@ -155,11 +155,23 @@ class XMLTableTemplateContext : public SvXMLStyleContext
 public:
     XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList );
 
+    XMLTableTemplateContext( SvXMLImport& rImport, sal_Int32 Element,
+        const Reference< XFastAttributeList >& xAttrList );
+
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual Reference< XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< XFastAttributeList >& xAttrList )
+        throw(RuntimeException, SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void StartElement( const Reference< XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+        const Reference< XFastAttributeList >& xAttrList )
+        throw(RuntimeException, SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(RuntimeException, SAXException, std::exception) SAL_OVERRIDE;
 
 private:
     XMLTableTemplate maTableTemplate;
@@ -687,6 +699,12 @@ XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport, sal_uInt
 {
 }
 
+XMLTableTemplateContext::XMLTableTemplateContext( SvXMLImport& rImport,
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_TABLE_TEMPLATE_ID, false )
+{
+}
+
 void XMLTableTemplateContext::StartElement( const Reference< XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -702,7 +720,21 @@ void XMLTableTemplateContext::StartElement( const Reference< XAttributeList >& x
     }
 }
 
+void SAL_CALL XMLTableTemplateContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+}
+
 void XMLTableTemplateContext::EndElement()
+{
+    rtl::Reference< XMLTableImport > xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
+    if( xTableImport.is() )
+        xTableImport->addTableTemplate( msTemplateStyleName, maTableTemplate );
+}
+
+void SAL_CALL XMLTableTemplateContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, SAXException, std::exception)
 {
     rtl::Reference< XMLTableImport > xTableImport( GetImport().GetShapeImport()->GetShapeTableImport() );
     if( xTableImport.is() )
@@ -735,6 +767,14 @@ SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( sal_uInt16 nPr
     }
 
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTableTemplateContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
