@@ -8,6 +8,7 @@
  */
 
 #include <sal/types.h>
+#include <math.h>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
@@ -74,13 +75,10 @@ static void lok_docview_init( LOKDocView* pDocView )
     // Allow reacting to button press events.
     gtk_widget_set_events(pDocView->pEventBox, GDK_BUTTON_PRESS_MASK);
 
-    pDocView->pCanvas = gtk_image_new();
-    gtk_container_add( GTK_CONTAINER( pDocView->pEventBox ), pDocView->pCanvas );
-
-    gtk_widget_show( pDocView->pCanvas );
     gtk_widget_show( pDocView->pEventBox );
 
-    pDocView->pPixBuf = 0;
+    pDocView->pTable = 0;
+    pDocView->pCanvas = 0;
 
     // TODO: figure out a clever view of getting paths set up.
     pDocView->pOffice = 0;
@@ -109,41 +107,75 @@ static float twipToPixel(float nInput)
     return nInput / 1440.0f * g_nDPI;
 }
 
+/// Converts from screen pixels to document coordinates
+static float pixelToTwip(float nInput)
+{
+    return (nInput / g_nDPI) * 1440.0f;
+}
+
 void renderDocument( LOKDocView* pDocView )
 {
-    long nDocumentWidthTwips, nDocumentHeightTwips, nBufferWidthPixels, nBufferHeightPixels;
-    unsigned char* pBuffer;
-    int nRowStride;
+    long nDocumentWidthTwips, nDocumentHeightTwips, nDocumentWidthPixels, nDocumentHeightPixels;
+    const int nTileSizePixels = 256;
+    long nRow, nColumn, nRows, nColumns;
 
-    g_assert( pDocView->pDocument );
-
-    if ( pDocView->pPixBuf )
-    {
-        g_object_unref( G_OBJECT( pDocView->pPixBuf ) );
-    }
-
+    // Get document size and find out how many rows / columns we need.
     pDocView->pDocument->pClass->getDocumentSize(pDocView->pDocument, &nDocumentWidthTwips, &nDocumentHeightTwips);
+    nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips) * pDocView->fZoom;
+    nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips) * pDocView->fZoom;
+    nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+    nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
-    // Draw the whole document at once (for now)
+    // Set up our table and the tile pointers.
+    if (pDocView->pTable)
+        gtk_container_remove(GTK_CONTAINER( pDocView->pEventBox ), pDocView->pTable);
+    pDocView->pTable = gtk_table_new(nRows, nColumns, FALSE);
+    gtk_container_add(GTK_CONTAINER(pDocView->pEventBox), pDocView->pTable);
+    gtk_widget_show(pDocView->pTable);
+    if (pDocView->pCanvas)
+        g_free(pDocView->pCanvas);
+    pDocView->pCanvas = g_malloc0(sizeof(GtkWidget*) * nRows * nColumns);
 
-    nBufferWidthPixels = twipToPixel(nDocumentWidthTwips) * pDocView->fZoom;
-    nBufferHeightPixels = twipToPixel(nDocumentHeightTwips) * pDocView->fZoom;
+    // Render the tiles.
+    for (nRow = 0; nRow < nRows; ++nRow)
+    {
+        for (nColumn = 0; nColumn < nColumns; ++nColumn)
+        {
+            int nTileWidthPixels, nTileHeightPixels;
+            GdkPixbuf* pPixBuf;
+            unsigned char* pBuffer;
+            int nRowStride;
 
-    pDocView->pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB,
-                                        TRUE, 8,
-                                        nBufferWidthPixels, nBufferHeightPixels);
+            // The rightmost/bottommost tiles may be smaller.
+            if (nColumn == nColumns - 1)
+                nTileWidthPixels = nDocumentWidthPixels - nColumn * nTileSizePixels;
+            else
+                nTileWidthPixels = nTileSizePixels;
+            if (nRow == nRows - 1)
+                nTileHeightPixels = nDocumentHeightPixels - nRow * nTileSizePixels;
+            else
+                nTileHeightPixels = nTileSizePixels;
 
+            pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB, TRUE, 8, nTileWidthPixels, nTileHeightPixels);
+            pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+            pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
+                                                    // Buffer and its size, this is always the same.
+                                                    pBuffer,
+                                                    nTileWidthPixels, nTileHeightPixels,
+                                                    &nRowStride,
+                                                    // Position of the tile.
+                                                    pixelToTwip(nTileSizePixels) / pDocView->fZoom * nColumn, pixelToTwip(nTileSizePixels) / pDocView->fZoom * nRow,
+                                                    // Size of the tile, depends on the zoom factor and the tile position only.
+                                                    pixelToTwip(nTileWidthPixels) / pDocView->fZoom, pixelToTwip(nTileHeightPixels) / pDocView->fZoom );
+            (void) nRowStride;
 
-    pBuffer = gdk_pixbuf_get_pixels( pDocView->pPixBuf );
-    pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
-                                            pBuffer,
-                                            nBufferWidthPixels, nBufferHeightPixels,
-                                            &nRowStride,
-                                            0, 0, // origin
-                                            nDocumentWidthTwips, nDocumentHeightTwips );
-    (void) nRowStride;
-
-    gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas ), pDocView->pPixBuf );
+            pDocView->pCanvas[nRow * nColumns + nColumn] = gtk_image_new();
+            gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas[nRow * nColumns + nColumn] ), pPixBuf );
+            g_object_unref(G_OBJECT(pPixBuf));
+            gtk_table_attach_defaults(GTK_TABLE(pDocView->pTable), pDocView->pCanvas[nRow * nColumns + nColumn], nColumn, nColumn + 1, nRow, nRow + 1);
+            gtk_widget_show(pDocView->pCanvas[nRow * nColumns + nColumn]);
+        }
+    }
 }
 
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.

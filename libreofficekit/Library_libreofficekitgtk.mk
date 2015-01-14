@@ -21,6 +21,7 @@ $(eval $(call gb_Library_add_cobjects,libreofficekitgtk,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
     -ldl \
+    -lm \
 ))
 endif
 

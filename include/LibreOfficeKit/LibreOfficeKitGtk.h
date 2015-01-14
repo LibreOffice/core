@@ -34,8 +34,8 @@ struct _LOKDocView
     GtkScrolledWindow scrollWindow;
 
     GtkWidget* pEventBox;
-    GtkWidget* pCanvas;
-    GdkPixbuf* pPixBuf;
+    GtkWidget* pTable;
+    GtkWidget** pCanvas;
 
     float fZoom;
 
