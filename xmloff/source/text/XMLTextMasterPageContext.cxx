@@ -169,6 +169,28 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     }
 }
 
+XMLTextMasterPageContext::XMLTextMasterPageContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList > & xAttrList,
+    bool /*bOverwrite*/ )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE ),
+    sIsPhysical( "IsPhysical" ),
+    sFollowStyle( "FollowStyle" ),
+    bInsertHeader( false ),
+    bInsertFooter( false ),
+    bInsertHeaderLeft( false ),
+    bInsertFooterLeft( false ),
+    bInsertHeaderFirst( false ),
+    bInsertFooterFirst( false ),
+    bHeaderInserted( false ),
+    bFooterInserted( false ),
+    bHeaderLeftInserted( false ),
+    bFooterLeftInserted( false ),
+    bHeaderFirstInserted( false ),
+    bFooterFirstInserted( false )
+{
+}
+
 XMLTextMasterPageContext::~XMLTextMasterPageContext()
 {
 }
@@ -231,6 +253,14 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextMasterPageContext::createFastChildContext(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
