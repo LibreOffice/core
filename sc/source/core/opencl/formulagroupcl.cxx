@@ -77,6 +77,42 @@ namespace sc { namespace opencl {
 
 namespace {
 
+std::string StackVarEnumToString(StackVarEnum e)
+{
+    switch (e)
+    {
+#define CASE(x) case sv##x: return #x
+        CASE(Byte);
+        CASE(Double);
+        CASE(String);
+        CASE(SingleRef);
+        CASE(DoubleRef);
+        CASE(Matrix);
+        CASE(Index);
+        CASE(Jump);
+        CASE(External);
+        CASE(FAP);
+        CASE(JumpMatrix);
+        CASE(RefList);
+        CASE(EmptyCell);
+        CASE(MatrixCell);
+        CASE(HybridCell);
+        CASE(HybridValueCell);
+        CASE(ExternalSingleRef);
+        CASE(ExternalDoubleRef);
+        CASE(ExternalName);
+        CASE(SingleVectorRef);
+        CASE(DoubleVectorRef);
+        CASE(Subroutine);
+        CASE(Error);
+        CASE(Missing);
+        CASE(Sep);
+        CASE(Unknown);
+#undef CASE
+    }
+    return std::to_string(static_cast<int>(e));
+}
+
 #ifdef SAL_DETAIL_ENABLE_LOG_INFO
 std::string linenumberify(const std::string s)
 {
@@ -2553,7 +2589,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 }
                 else
                 {
-                    throw UnhandledToken(pChild, "unknown operand for ocPush");
+                    throw UnhandledToken(pChild, ("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str());
                 }
                 break;
             case ocDiv:
