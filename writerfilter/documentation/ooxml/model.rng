@@ -387,6 +387,8 @@ documentation for that file. The schema has two parts:
   - end of the element
   - character data of the element
 
+  The tokenid attribute restricts the action to a particular element.
+
   Example:
 
   <resource name="CT_TxbxContent" resource="Stream">
