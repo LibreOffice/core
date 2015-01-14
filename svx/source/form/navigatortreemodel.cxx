@@ -518,14 +518,13 @@ namespace svxform
                 return;
 
             Reference< XForm >     xSubForm;
-            FmFormData* pSubFormData;
             for (sal_Int32 i=0; i<xForms->getCount(); ++i)
             {
                 DBG_ASSERT( xForms->getByIndex(i).getValueType() == cppu::UnoType<XForm>::get(),
                     "NavigatorTreeModel::FillBranch : the root container should supply only elements of type XForm");
 
                 xForms->getByIndex(i) >>= xSubForm;
-                pSubFormData = new FmFormData( xSubForm, m_aNormalImages, pFormData );
+                FmFormData* pSubFormData = new FmFormData( xSubForm, m_aNormalImages, pFormData );
                 Insert( pSubFormData, CONTAINER_APPEND );
 
 

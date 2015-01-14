@@ -767,12 +767,11 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
     if (pCur && pCur->Is())
     {
         Reference< XIndexAccess >  xColumns(pCur->getColumns(), UNO_QUERY);
-        DataColumn* pColumn;
         for (sal_Int32 i = 0; i < xColumns->getCount(); ++i)
         {
             Reference< XPropertySet > xColSet(
                 xColumns->getByIndex(i), css::uno::UNO_QUERY);
-            pColumn = new DataColumn(xColSet);
+            DataColumn* pColumn = new DataColumn(xColSet);
             m_aVariants.push_back( pColumn );
         }
 

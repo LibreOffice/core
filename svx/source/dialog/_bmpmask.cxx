@@ -701,16 +701,14 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     Color       pDstCols[4];
     sal_uIntPtr     pTols[4];
     sal_uInt16      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
-    bool        pTrans[4];
 
     // If no color is selected, we copy only the Mtf
     if( !nCount )
         aMtf = rMtf;
     else
     {
+        bool        pTrans[4];
         Color       aCol;
-        long        nVal;
-        long        nTol;
         long        nR;
         long        nG;
         long        nB;
@@ -721,7 +719,6 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         boost::scoped_array<long> pMinB(new long[nCount]);
         boost::scoped_array<long> pMaxB(new long[nCount]);
         sal_uInt16      i;
-        bool        bReplace;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );
         aMtf.SetPrefMapMode( rMtf.GetPrefMapMode() );
@@ -729,9 +726,9 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         // Prepare Color comparison array
         for( i = 0; i < nCount; i++ )
         {
-            nTol = ( pTols[i] * 255L ) / 100L;
+            long nTol = ( pTols[i] * 255L ) / 100L;
 
-            nVal = ( (long) pSrcCols[i].GetRed() );
+            long nVal = ( (long) pSrcCols[i].GetRed() );
             pMinR[i] = std::max( nVal - nTol, 0L );
             pMaxR[i] = std::min( nVal + nTol, 255L );
 
@@ -751,7 +748,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         {
             MetaAction* pAction = rMtf.GetAction( nAct );
 
-            bReplace = false;
+            bool bReplace = false;
 
             switch( pAction->GetType() )
             {

@@ -747,7 +747,6 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     bAllowHide = bAllowHide && (xCols->getCount()-nHiddenCols > 1);     // AND there are at least two visible columns
     rMenu.EnableItem(SID_FM_HIDECOL,  bAllowHide);
 
-    bool bChecked = false;
     if (bMarked)
     {
 
@@ -761,7 +760,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
             if (eState >= SfxItemState::DEFAULT && pItem )
             {
-                bChecked = pItem->ISA(SfxBoolItem) && static_cast<SfxBoolItem*>(pItem)->GetValue();
+                bool bChecked = pItem->ISA(SfxBoolItem) && static_cast<SfxBoolItem*>(pItem)->GetValue();
                 rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);
             }
             delete pItem;

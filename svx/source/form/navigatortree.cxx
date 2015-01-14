@@ -532,10 +532,9 @@ namespace svxform
     {
         if( !pEntryData ) return NULL;
         SvTreeListEntry* pCurEntry = First();
-        FmEntryData* pCurEntryData;
         while( pCurEntry )
         {
-            pCurEntryData = (FmEntryData*)pCurEntry->GetUserData();
+            FmEntryData* pCurEntryData = (FmEntryData*)pCurEntry->GetUserData();
             if( pCurEntryData && pCurEntryData->IsEqualWithoutChildren(pEntryData) )
                 return pCurEntry;
 
@@ -633,10 +632,9 @@ namespace svxform
         // insert children
         FmEntryDataList* pChildList = pEntryData->GetChildList();
         size_t nChildCount = pChildList->size();
-        FmEntryData* pChildData;
         for( size_t i = 0; i < nChildCount; i++ )
         {
-            pChildData = pChildList->at( i );
+            FmEntryData* pChildData = pChildList->at( i );
             Insert( pChildData, TREELIST_APPEND );
         }
 
@@ -2109,11 +2107,10 @@ namespace svxform
     void NavigatorTree::CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
     {
         FmEntryDataList* pChildList = pFormData->GetChildList();
-        FmEntryData* pEntryData;
         FmControlData* pControlData;
         for( size_t i = 0; i < pChildList->size(); ++i )
         {
-            pEntryData = pChildList->at( i );
+            FmEntryData* pEntryData = pChildList->at( i );
             if( pEntryData->ISA(FmControlData) )
             {
                 pControlData = static_cast<FmControlData*>(pEntryData);
