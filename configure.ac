@@ -3733,6 +3733,7 @@ fi
 HAVE_GCC_GGDB2=
 HAVE_GCC_FINLINE_LIMIT=
 HAVE_GCC_FNO_INLINE=
+HAVE_GCC_OG=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -ggdb2])
     if test -n "$CLANGVER" -a 0"$CLANGVER" -le 30100; then
@@ -3782,10 +3783,24 @@ if test "$GCC" = "yes"; then
     else
         AC_MSG_RESULT([no])
     fi
+
+    AC_MSG_CHECKING([whether $CC supports -Og])
+    # Note that clang-3.1 reports a real error for this option
+    # so we do not need a special case for clang<=3.1 as above.
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Og"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_OG=TRUE ],[])
+    CFLAGS=$save_CFLAGS
+    if test "$HAVE_GCC_OG" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
 AC_SUBST(HAVE_GCC_GGDB2)
 AC_SUBST(HAVE_GCC_FINLINE_LIMIT)
 AC_SUBST(HAVE_GCC_FNO_INLINE)
+AC_SUBST(HAVE_GCC_OG)
 
 dnl ===================================================================
 dnl  Test the gcc version
