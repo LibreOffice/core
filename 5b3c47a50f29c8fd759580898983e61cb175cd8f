@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_a882ffc6",
+        "filename": "formula/source/core/resource/core_resource.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-14T14:26:06Z",
+      "side": 1,
+      "message": "ERROR.TYPE is defined in OOXML, see 18.17.7.110 of Part1, so should not be prefixed with _xlfn.\n\nI\u0027ll address this in an amended patch.",
+      "revId": "5b3c47a50f29c8fd759580898983e61cb175cd8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_087e8be4",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 8254,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-14T14:26:06Z",
+      "side": 1,
+      "message": "The svDouble case can be removed as this function is never called with bAcceptValue\u003dtrue, actually we don\u0027t even need the parameter.\n\nI\u0027ll submit an amended patch for this.",
+      "revId": "5b3c47a50f29c8fd759580898983e61cb175cd8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
