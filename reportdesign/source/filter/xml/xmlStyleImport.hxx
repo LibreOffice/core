@@ -63,6 +63,9 @@ namespace rptxml
                 const OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
+        OControlStyleContext( ORptFilter& rImport, sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
 
         virtual ~OControlStyleContext();
 
