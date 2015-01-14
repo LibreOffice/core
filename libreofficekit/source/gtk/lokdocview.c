@@ -159,7 +159,7 @@ void renderDocument( LOKDocView* pDocView )
             pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB, TRUE, 8, nTileWidthPixels, nTileHeightPixels);
             pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
             pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
-                                                    // Buffer and its size, this is always the same.
+                                                    // Buffer and its size, depends on the position only.
                                                     pBuffer,
                                                     nTileWidthPixels, nTileHeightPixels,
                                                     &nRowStride,
