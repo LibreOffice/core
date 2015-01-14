@@ -23,6 +23,7 @@
 #include "contwnd.hxx"
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
+#include <vcl/idle.hxx>
 
 #define CONT_RESID(nId)  ResId( nId, DIALOG_MGR() )
 

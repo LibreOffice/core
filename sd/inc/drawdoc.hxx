@@ -24,6 +24,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/print.hxx>
+#include <vcl/idle.hxx>
 #include <svx/fmmodel.hxx>
 #include "pres.hxx"
 #include <svx/pageitem.hxx>

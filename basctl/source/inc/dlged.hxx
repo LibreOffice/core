@@ -29,6 +29,7 @@
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

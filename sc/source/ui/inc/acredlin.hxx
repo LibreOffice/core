@@ -23,6 +23,7 @@
 #include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>
+#include <vcl/idle.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svtabbx.hxx>

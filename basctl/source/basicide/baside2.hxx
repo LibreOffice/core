@@ -35,6 +35,7 @@ class SvxSearchItem;
 #include <vcl/button.hxx>
 #include <basic/sbmod.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/idle.hxx>
 
 #include <sfx2/progress.hxx>
 

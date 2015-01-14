@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/splitwin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include "bibshortcuthandler.hxx"
 
 #include "bibmod.hxx"

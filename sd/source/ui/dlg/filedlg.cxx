@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <vcl/msgbox.hxx>
+#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
@@ -132,7 +133,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
             {
                 mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_QUERY_THROW );
                 mxPlayer->start();
-                maUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+                maUpdateIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOW );
                 maUpdateIdle.Start();
             }
             catch (const css::uno::Exception&)

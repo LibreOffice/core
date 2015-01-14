@@ -30,6 +30,7 @@ namespace com { namespace sun { namespace star { namespace i18n { class XBreakIt
 namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
 
 #include <vcl/window.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/splitwin.hxx>

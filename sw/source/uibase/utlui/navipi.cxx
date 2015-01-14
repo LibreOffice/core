@@ -823,7 +823,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
         aContentTree.GrabFocus();
     UsePage(0);
     aPageChgIdle.SetIdleHdl(LINK(this, SwNavigationPI, ChangePageHdl));
-    aPageChgIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aPageChgIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
 
     aContentTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
     aGlobalTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));

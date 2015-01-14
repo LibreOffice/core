@@ -23,6 +23,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
 #include "svtaccessiblefactory.hxx"

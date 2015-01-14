@@ -31,6 +31,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/idle.hxx>
 #include <svl/slstitm.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/grfmgr.hxx>

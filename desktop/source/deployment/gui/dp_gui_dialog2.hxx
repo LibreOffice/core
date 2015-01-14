@@ -26,6 +26,7 @@
 #include <vcl/fixedhyper.hxx>
 #include <vcl/prgsbar.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #include <svtools/svmedit.hxx>
 

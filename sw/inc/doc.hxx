@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <sal/macros.h>
 #include "swdllapi.h"
 #include <swtypes.hxx>

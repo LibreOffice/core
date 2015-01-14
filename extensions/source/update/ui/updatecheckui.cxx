@@ -40,6 +40,7 @@
 #include <vcl/window.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/layout.hxx>
@@ -212,7 +213,7 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
-    maWaitIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maWaitIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     maWaitIdle.SetIdleHdl( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
 
     maTimeoutTimer.SetTimeout( 10000 );

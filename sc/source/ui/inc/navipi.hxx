@@ -24,6 +24,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/idle.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/lstner.hxx>

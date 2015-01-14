@@ -37,6 +37,7 @@
 
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>

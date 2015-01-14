@@ -46,7 +46,7 @@ void ThreadManager::Init()
 {
     mpThreadListener.reset( new ThreadListener( *this ) );
 
-    maStartNewThreadIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maStartNewThreadIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     maStartNewThreadIdle.SetIdleHdl( LINK( this, ThreadManager, TryToStartNewThread ) );
 }
 

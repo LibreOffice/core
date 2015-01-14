@@ -207,7 +207,7 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle):
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
 
     aIdle.SetIdleHdl(LINK( this, BibToolBar, SendSelHdl));
-    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
 
     SetDropdownClickHdl( LINK( this, BibToolBar, MenuHdl));
 

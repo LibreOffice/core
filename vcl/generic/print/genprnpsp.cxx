@@ -42,6 +42,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/edit.hxx"
 #include "vcl/fixed.hxx"
+#include "vcl/idle.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/print.hxx"
 #include "vcl/pdfwriter.hxx"
@@ -1327,7 +1328,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
     else if( ! pPrinterUpdateIdle )
     {
         pPrinterUpdateIdle = new Idle();
-        pPrinterUpdateIdle->SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        pPrinterUpdateIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
         pPrinterUpdateIdle->SetIdleHdl( STATIC_LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateIdle->Start();
     }

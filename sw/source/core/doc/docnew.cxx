@@ -339,7 +339,7 @@ SwDoc::SwDoc()
     new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    maOLEModifiedIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maOLEModifiedIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     maOLEModifiedIdle.SetIdleHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
 
 #if HAVE_FEATURE_DBCONNECTIVITY

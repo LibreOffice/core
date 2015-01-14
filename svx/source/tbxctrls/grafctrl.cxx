@@ -23,6 +23,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/idle.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
@@ -138,7 +139,7 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
         SetSpinSize( 1 );
     }
 
-    maIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    maIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOW );
     maIdle.SetIdleHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
 }
 

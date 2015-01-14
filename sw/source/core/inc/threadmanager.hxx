@@ -21,6 +21,7 @@
 
 #include <ithreadlistenerowner.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>
 #include <rtl/ref.hxx>
