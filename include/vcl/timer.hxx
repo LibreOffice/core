@@ -35,7 +35,6 @@ protected:
     sal_uLong       mnTimeout;
     bool            mbActive;
     bool            mbAuto;
-    bool            mbIdle;
     Link            maTimeoutHdl;
 
     friend struct ImplTimerData;
@@ -63,12 +62,7 @@ public:
 
     /// @internal
     static void ImplDeInitTimer();
-    /// @internal
-    /// @p idle - allow also idle timers
-    static void ImplTimerCallbackProc( bool idle );
-
-    /// Process all pending idle tasks ahead of time in priority order.
-    static void ProcessAllIdleHandlers();
+    static void ImplTimerCallbackProc();
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
@@ -81,43 +75,6 @@ public:
 
     AutoTimer&      operator=( const AutoTimer& rTimer );
 };
-
-enum IdlePriority {
-    VCL_IDLE_PRIORITY_HIGHEST, // -> 0ms
-    VCL_IDLE_PRIORITY_HIGH,    // -> 1ms
-    VCL_IDLE_PRIORITY_REPAINT, // -> 30ms
-    VCL_IDLE_PRIORITY_RESIZE,  // -> 50ms
-    VCL_IDLE_PRIORITY_MEDIUM,  // -> 50ms
-    VCL_IDLE_PRIORITY_LOW,     // -> 100ms
-    VCL_IDLE_PRIORITY_LOWER,   // -> 200ms
-    VCL_IDLE_PRIORITY_LOWEST   // -> 400ms
-};
-
-
-// To port from Timer -> Idle switch class name,
-// s/Timeout/DoIdle/ etc. and select priority
-class VCL_DLLPUBLIC Idle : public Timer
-{
- public:
-    Idle();
-    Idle( IdlePriority ePriority );
-    virtual ~Idle();
-
-    void SetPriority( IdlePriority ePriority );
-
-    /// Make it possible to associate a callback with this idle handler
-    /// of course, you can also sub-class and override 'DoIdle'
-    void            SetIdleHdl( const Link& rLink ) { SetTimeoutHdl( rLink ); }
-    const Link&     GetIdleHdl() const              { return GetTimeoutHdl(); }
-
-    void            Start() { Timer::Start(); }
-    void            Stop()  { Timer::Stop();  }
-
-    void            DoIdle();
-
-    virtual void    Timeout() SAL_OVERRIDE { DoIdle(); }
-};
-
 #endif // INCLUDED_VCL_TIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

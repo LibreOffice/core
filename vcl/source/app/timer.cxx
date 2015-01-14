@@ -59,27 +59,6 @@ struct ImplTimerData
     {
         return mnUpdateTime + mpTimer->mnTimeout;
     }
-    static ImplTimerData *GetFirstIdle()
-    {
-        ImplSVData*     pSVData = ImplGetSVData();
-        ImplTimerData *pMostUrgent = NULL;
-
-        for ( ImplTimerData *p = pSVData->mpFirstTimerData; p; p = p->mpNext )
-        {
-            if ( !p->mpTimer || p->mbDelete || !p->mpTimer->mbIdle )
-                continue;
-            if (!pMostUrgent)
-                pMostUrgent = p;
-            else
-            {
-                // Find the highest priority one somehow.
-                if ( p->GetDeadline() < pMostUrgent->GetDeadline() )
-                    pMostUrgent = p;
-            }
-        }
-
-        return pMostUrgent;
-    }
 };
 
 void Timer::ImplDeInitTimer()
@@ -151,7 +130,7 @@ void Timer::ImplTimerCallbackProc( bool idle )
         // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
         // call the handler as soon as the time is up.
         if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
-             !pTimerData->mbDelete && !pTimerData->mbInTimeout && !pTimerData->mpTimer->mbIdle)
+             !pTimerData->mbDelete && !pTimerData->mbInTimeout)
         {
             // time has expired
             if ( pTimerData->GetDeadline() <= nTime )
@@ -231,23 +210,11 @@ void Timer::ImplTimerCallbackProc( bool idle )
     pSVData->mbNotAllTimerCalled = false;
 }
 
-void Timer::ProcessAllIdleHandlers()
-{
-    // process all pending Idle timers
-    ImplTimerData* pTimerData;
-    while (pTimerData =
-                ImplTimerData::GetFirstIdle())
-    {
-        pTimerData->Invoke();
-    }
-}
-
 Timer::Timer():
     mpTimerData(NULL),
     mnTimeout(1),
     mbActive(false),
-    mbAuto(false),
-    mbIdle(false)
+    mbAuto(false)
 {
 }
 
@@ -256,7 +223,6 @@ Timer::Timer( const Timer& rTimer ):
     mnTimeout(rTimer.mnTimeout),
     mbActive(false),
     mbAuto(false),
-    mbIdle(false),
     maTimeoutHdl(rTimer.maTimeoutHdl)
 {
     if ( rTimer.IsActive() )
@@ -382,64 +348,4 @@ AutoTimer& AutoTimer::operator=( const AutoTimer& rTimer )
     Timer::operator=( rTimer );
     return *this;
 }
-
-Idle::Idle()
-    : Timer()
-{
-    mbIdle = true;
-    SetPriority(VCL_IDLE_PRIORITY_LOWEST);
-}
-
-Idle::Idle( IdlePriority ePriority )
-    : Timer()
-{
-    mbIdle = true;
-    SetPriority( ePriority );
-}
-
-void Idle::SetPriority( IdlePriority ePriority )
-{
-    sal_uLong nTimeoutMS = 0;
-
-    // Ultimately this will just be a sort key in a work queue.
-    switch (ePriority) {
-    case VCL_IDLE_PRIORITY_HIGHEST:
-        nTimeoutMS = 0;
-        break;
-    case VCL_IDLE_PRIORITY_HIGH:
-        nTimeoutMS = 1;
-        break;
-    case VCL_IDLE_PRIORITY_REPAINT:
-        nTimeoutMS = 30;
-        break;
-    case VCL_IDLE_PRIORITY_RESIZE:
-        nTimeoutMS = 50;
-        break;
-    case VCL_IDLE_PRIORITY_MEDIUM:
-        nTimeoutMS = 50;
-        break;
-    case VCL_IDLE_PRIORITY_LOW:
-        nTimeoutMS = 100;
-        break;
-    case VCL_IDLE_PRIORITY_LOWER:
-        nTimeoutMS = 200;
-        break;
-    case VCL_IDLE_PRIORITY_LOWEST:
-    default:
-        nTimeoutMS = 400;
-        break;
-    }
-    SetTimeout( nTimeoutMS );
-}
-
-void Idle::DoIdle()
-{
-    maTimeoutHdl.Call( this );
-}
-
-
-Idle::~Idle()
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
