@@ -83,4 +83,14 @@ public class LocalFile implements IFile {
     public File getDocument() {
         return file;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object)
+            return true;
+        if (!(object instanceof LocalFile))
+            return false;
+        LocalFile file = (LocalFile) object;
+        return file.getUri().equals(getUri());
+    }
 }
