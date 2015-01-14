@@ -1032,6 +1032,20 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 {
 }
 
+SvxXMLListStyleContext::SvxXMLListStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList, bool bOutl )
+:   SvXMLStyleContext( rImport, Element, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
+,   sIsPhysical( "IsPhysical"  )
+,   sNumberingRules( "NumberingRules"  )
+,   sIsContinuousNumbering( "IsContinuousNumbering"  )
+,   pLevelStyles( 0 )
+,   nLevels( 0 )
+,   bConsecutive( false )
+,   bOutline( bOutl )
+{
+}
+
 SvxXMLListStyleContext::~SvxXMLListStyleContext()
 {
     if( pLevelStyles )
@@ -1079,6 +1093,14 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SvxXMLListStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void SvxXMLListStyleContext::FillUnoNumRule(
