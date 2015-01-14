@@ -679,7 +679,7 @@ void Window::PrePaint()
 
 void Window::Paint( const Rectangle& rRect )
 {
-    ImplCallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
+    CallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
 }
 
 void Window::PostPaint()

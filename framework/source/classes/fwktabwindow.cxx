@@ -56,7 +56,7 @@ FwkTabControl::FwkTabControl(vcl::Window* pParent)
 void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 {
     if ( VCLEVENT_TABPAGE_ACTIVATE == nEvent || VCLEVENT_TABPAGE_DEACTIVATE == nEvent )
-        ImplCallEventListeners( nEvent, reinterpret_cast<void*>(GetCurPageId()) );
+        CallEventListeners( nEvent, reinterpret_cast<void*>(GetCurPageId()) );
     else
     {
         SAL_WARN( "fwk", "FwkTabControl::BroadcastEvent(): illegal event" );

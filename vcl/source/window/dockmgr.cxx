@@ -978,7 +978,7 @@ void ImplDockingWindowWrapper::StartDocking( const Point& rPoint, Rectangle& rRe
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_STARTDOCKING, &data );
+    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_STARTDOCKING, &data );
     mbDocking = true;
 }
 
@@ -986,7 +986,7 @@ bool ImplDockingWindowWrapper::Docking( const Point& rPoint, Rectangle& rRect )
 {
     DockingData data( rPoint, rRect, IsFloatingMode() );
 
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_DOCKING, &data );
+    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_DOCKING, &data );
     rRect = data.maTrackRect;
     return data.mbFloating;
 }
@@ -1022,7 +1022,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
     }
 
     EndDockingData data( aRect, IsFloatingMode(), IsDockingCanceled() );
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_ENDDOCKING, &data );
+    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDDOCKING, &data );
 
     mbDocking = false;
 
@@ -1033,7 +1033,7 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, bool bFloatMo
 bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 {
     bool bFloating = true;
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_PREPARETOGGLEFLOATING, &bFloating );
+    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_PREPARETOGGLEFLOATING, &bFloating );
     return bFloating;
 }
 
@@ -1052,7 +1052,7 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
         static_cast<DockingWindow*>(GetWindow())->ToggleFloatingMode();
 
     // now notify listeners
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
+    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
     mbStartDockingEnabled = false;
@@ -1198,7 +1198,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     mpFloatWin = NULL;
 
     // call handler - which will destroy the window and thus the wrapper as well !
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_ENDPOPUPMODE, &aData );
+    GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDPOPUPMODE, &aData );
 
     return 0;
 }

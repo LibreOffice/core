@@ -70,7 +70,7 @@ ListBox::ListBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ListBox::~ListBox()
 {
-    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+    CallEventListeners( VCLEVENT_OBJECT_DYING );
 
     // When destroying the FloatWin TH does a GrabFocus to the Parent:
     // that means this "ListBox => PreNotify() ..."
@@ -238,19 +238,19 @@ IMPL_LINK_NOARG(ListBox, ImplSelectHdl)
 
 IMPL_LINK( ListBox, ImplFocusHdl, void *, nPos )
 {
-    ImplCallEventListeners( VCLEVENT_LISTBOX_FOCUS , nPos);
+    CallEventListeners( VCLEVENT_LISTBOX_FOCUS , nPos);
     return 1;
 }
 
 IMPL_LINK( ListBox, ImplListItemSelectHdl, void*, EMPTYARG )
 {
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_SELECT );
+    CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
     return 1;
 }
 
 IMPL_LINK_NOARG(ListBox, ImplScrollHdl)
 {
-    ImplCallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
+    CallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
     return 1;
 }
 
@@ -303,11 +303,11 @@ void ListBox::ImplClickButtonHandler( Control* )
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
-        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+        CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( true );
         mpFloatWin->StartFloat( true );
-        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+        CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
 
         ImplClearLayoutData();
         if( mpImplLB )
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)
         mpImplWin->ImplClearLayoutData();
 
     mpBtn->SetPressed( false );
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
+    CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     return 0;
 }
 
@@ -358,11 +358,11 @@ void ListBox::ToggleDropDown()
             mpFloatWin->EndPopupMode();
         else
         {
-            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+            CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpImplWin->GrabFocus();
             mpBtn->SetPressed( true );
             mpFloatWin->StartFloat( true );
-            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+            CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         }
     }
 }
@@ -888,10 +888,10 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( mpFloatWin && !mpFloatWin->IsInPopupMode() &&
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
-                        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+                        CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                         mpBtn->SetPressed( true );
                         mpFloatWin->StartFloat( false );
-                        ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+                        CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                         nDone = true;
                     }
                     else
@@ -993,7 +993,7 @@ void ListBox::SetNoSelection()
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();
     }
-    ImplCallEventListeners(VCLEVENT_LISTBOX_STATEUPDATE);
+    CallEventListeners(VCLEVENT_LISTBOX_STATEUPDATE);
 }
 
 sal_Int32 ListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
@@ -1101,13 +1101,13 @@ void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
         newSelectCount = GetSelectEntryCount();
         if (oldSelectCount == 0 && newSelectCount > 0)
-            ImplCallEventListeners(VCLEVENT_LISTBOX_STATEUPDATE);
+            CallEventListeners(VCLEVENT_LISTBOX_STATEUPDATE);
         //Only when bSelect == true, send both Selection & Focus events
         if (nCurrentPos != nPos && bSelect)
         {
-            ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT, reinterpret_cast<void*>(nPos));
+            CallEventListeners( VCLEVENT_LISTBOX_SELECT, reinterpret_cast<void*>(nPos));
             if (HasFocus())
-                ImplCallEventListeners( VCLEVENT_LISTBOX_FOCUS, reinterpret_cast<void*>(nPos));
+                CallEventListeners( VCLEVENT_LISTBOX_FOCUS, reinterpret_cast<void*>(nPos));
         }
     }
 }

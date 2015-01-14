@@ -71,7 +71,7 @@ void SfxCloseButton::Paint(const Rectangle&)
 
     const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
 
-    Primitive2DSequence aSeq(2);
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(2);
 
     BColor aLightColor;
     BColor aDarkColor;
@@ -154,7 +154,7 @@ void SfxInfoBarWindow::Paint(const Rectangle& rPaintRect)
 
     const Rectangle aRect(Point(0, 0), PixelToLogic(GetSizePixel()));
 
-    Primitive2DSequence aSeq(2);
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(2);
 
     BColor aLightColor;
     BColor aDarkColor;

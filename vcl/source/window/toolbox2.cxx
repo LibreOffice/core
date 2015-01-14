@@ -382,7 +382,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
     }
 
     // request new layout by layoutmanager
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_FORMATCHANGED );
+    CallEventListeners( VCLEVENT_TOOLBOX_FORMATCHANGED );
 }
 
 void ToolBox::ImplUpdateItem( sal_uInt16 nIndex )
@@ -411,33 +411,33 @@ void ToolBox::ImplUpdateItem( sal_uInt16 nIndex )
 
 void ToolBox::Click()
 {
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK );
+    CallEventListeners( VCLEVENT_TOOLBOX_CLICK );
     maClickHdl.Call( this );
 }
 
 void ToolBox::DoubleClick()
 {
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_DOUBLECLICK );
+    CallEventListeners( VCLEVENT_TOOLBOX_DOUBLECLICK );
     maDoubleClickHdl.Call( this );
 }
 
 void ToolBox::Activate()
 {
     mnActivateCount++;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ACTIVATE );
+    CallEventListeners( VCLEVENT_TOOLBOX_ACTIVATE );
     maActivateHdl.Call( this );
 }
 
 void ToolBox::Deactivate()
 {
     mnActivateCount--;
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_DEACTIVATE );
+    CallEventListeners( VCLEVENT_TOOLBOX_DEACTIVATE );
     maDeactivateHdl.Call( this );
 }
 
 void ToolBox::Highlight()
 {
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
+    CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
     maHighlightHdl.Call( this );
 }
 
@@ -446,7 +446,7 @@ void ToolBox::Select()
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
 
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_SELECT );
+    CallEventListeners( VCLEVENT_TOOLBOX_SELECT );
     maSelectHdl.Call( this );
 
     if ( aDelData.IsDead() )
@@ -554,7 +554,7 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
@@ -573,7 +573,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >(nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >(nNewPos ) );
 }
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
@@ -593,7 +593,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
@@ -611,7 +611,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
@@ -659,7 +659,7 @@ void ToolBox::InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::InsertSpace( sal_uInt16 nPos )
@@ -675,7 +675,7 @@ void ToolBox::InsertSpace( sal_uInt16 nPos )
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
@@ -693,7 +693,7 @@ void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::InsertBreak( sal_uInt16 nPos )
@@ -709,7 +709,7 @@ void ToolBox::InsertBreak( sal_uInt16 nPos )
 
     // Notify
     sal_uInt16 nNewPos = sal::static_int_cast<sal_uInt16>(( nPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nPos);
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
+    CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
 void ToolBox::RemoveItem( sal_uInt16 nPos )
@@ -740,7 +740,7 @@ void ToolBox::RemoveItem( sal_uInt16 nPos )
         mpData->ImplClearLayoutData();
 
         // Notify
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, reinterpret_cast< void* >( nPos ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_ITEMREMOVED, reinterpret_cast< void* >( nPos ) );
     }
 }
 
@@ -768,7 +768,7 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
 
         // Notify
         sal_uInt16 nNewPos2 = sal::static_int_cast<sal_uInt16>(( nNewPos == TOOLBOX_APPEND ) ? ( mpData->m_aItems.size() - 1 ) : nNewPos);
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos2 ) );
     }
 }
 
@@ -784,7 +784,7 @@ void ToolBox::Clear()
     ImplInvalidate( true, true );
 
     // Notify
-    ImplCallEventListeners( VCLEVENT_TOOLBOX_ALLITEMSCHANGED );
+    CallEventListeners( VCLEVENT_TOOLBOX_ALLITEMSCHANGED );
 }
 
 void ToolBox::SetButtonType( ButtonType eNewType )
@@ -1284,10 +1284,10 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             pItem->maText = ImplConvertMenuString( rText );
 
         // Notify button changed event to prepare accessibility bridge
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
 
         // Notify
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMTEXTCHANGED, reinterpret_cast< void* >( nPos ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_ITEMTEXTCHANGED, reinterpret_cast< void* >( nPos ) );
     }
 }
 
@@ -1312,7 +1312,7 @@ void ToolBox::SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow )
         if ( pNewWindow )
             pNewWindow->Hide();
         ImplInvalidate( true );
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED, reinterpret_cast< void* >( nPos ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED, reinterpret_cast< void* >( nPos ) );
     }
 }
 
@@ -1459,11 +1459,11 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
             ImplUpdateItem( nPos );
 
             // Notify button changed event to prepare accessibility bridge
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
+            CallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
 
             // Notify
             //Solution:Call accessible listener to notify state_changed event
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMUPDATED, reinterpret_cast< void* >(nPos) );
+            CallEventListeners( VCLEVENT_TOOLBOX_ITEMUPDATED, reinterpret_cast< void* >(nPos) );
         }
     }
 }
@@ -1501,9 +1501,9 @@ void ToolBox::EnableItem( sal_uInt16 nItemId, bool bEnable )
             ImplUpdateInputEnable();
 
             // Notify button changed event to prepare accessibility bridge
-            ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
+            CallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
 
-            ImplCallEventListeners( bEnable ? VCLEVENT_TOOLBOX_ITEMENABLED : VCLEVENT_TOOLBOX_ITEMDISABLED, reinterpret_cast< void* >( nPos ) );
+            CallEventListeners( bEnable ? VCLEVENT_TOOLBOX_ITEMENABLED : VCLEVENT_TOOLBOX_ITEMDISABLED, reinterpret_cast< void* >( nPos ) );
         }
     }
 }

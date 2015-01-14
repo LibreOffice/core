@@ -240,7 +240,7 @@ bool ComboBox::IsAutocompleteEnabled() const
 
 void ComboBox::ImplClickButtonHandler( ImplBtn* )
 {
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+    CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     mpSubEdit->GrabFocus();
     if ( !mpImplLB->GetEntryList()->GetMRUCount() )
         ImplUpdateFloatSelection();
@@ -249,7 +249,7 @@ void ComboBox::ImplClickButtonHandler( ImplBtn* )
     mpBtn->SetPressed( true );
     SetSelection( Selection( 0, SELECTION_MAX ) );
     mpFloatWin->StartFloat( true );
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+    CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
 
     ImplClearLayoutData();
     if( mpImplLB )
@@ -275,7 +275,7 @@ IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
         mpImplLB->GetMainWindow().ImplClearLayoutData();
 
     mpBtn->SetPressed( false );
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
+    CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
     return 0;
 }
 
@@ -427,7 +427,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 
 IMPL_LINK( ComboBox, ImplListItemSelectHdl,  void*, EMPTYARG )
 {
-    ImplCallEventListeners( VCLEVENT_DROPDOWN_SELECT );
+    CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
     return 1;
 }
 
@@ -469,11 +469,11 @@ void ComboBox::ToggleDropDown()
                 ImplUpdateFloatSelection();
             else
                 mpImplLB->SelectEntry( 0 , true );
-            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+            CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpBtn->SetPressed( true );
             SetSelection( Selection( 0, SELECTION_MAX ) );
             mpFloatWin->StartFloat( true );
-            ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+            CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
         }
     }
 }
@@ -708,13 +708,13 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
                 ImplUpdateFloatSelection();
                 if( ( nKeyCode == KEY_DOWN ) && mpFloatWin && !mpFloatWin->IsInPopupMode() && aKeyEvt.GetKeyCode().IsMod2() )
                 {
-                    ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
+                    CallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                     mpBtn->SetPressed( true );
                     if ( mpImplLB->GetEntryList()->GetMRUCount() )
                         mpImplLB->SelectEntry( 0 , true );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                     mpFloatWin->StartFloat( false );
-                    ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );
+                    CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
                     nDone = true;
                 }
                 else if( ( nKeyCode == KEY_UP ) && mpFloatWin && mpFloatWin->IsInPopupMode() && aKeyEvt.GetKeyCode().IsMod2() )
@@ -775,7 +775,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
 
 void ComboBox::SetText( const OUString& rStr )
 {
-    ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
+    CallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
 
     Edit::SetText( rStr );
     ImplUpdateFloatSelection();
@@ -783,7 +783,7 @@ void ComboBox::SetText( const OUString& rStr )
 
 void ComboBox::SetText( const OUString& rStr, const Selection& rNewSelection )
 {
-    ImplCallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
+    CallEventListeners( VCLEVENT_COMBOBOX_SETTEXT );
 
     Edit::SetText( rStr, rNewSelection );
     ImplUpdateFloatSelection();

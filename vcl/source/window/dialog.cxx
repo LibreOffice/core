@@ -666,7 +666,7 @@ bool Dialog::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
-    ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
+    CallEventListeners( VCLEVENT_WINDOW_CLOSE );
     if ( aDelData.IsDead() )
         return false;
     ImplRemoveDel( &aDelData );

@@ -316,7 +316,7 @@ bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& r
     ImplDelData aCheckDelete;
     ImplAddDel( &aCheckDelete );
 
-    ImplCallEventListeners( nEvent );
+    CallEventListeners( nEvent );
     if ( !aCheckDelete.IsDead() )
     {
         rHandler.Call( pCaller );

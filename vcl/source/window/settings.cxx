@@ -130,7 +130,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
         DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
         DataChanged( aDCEvt );
         // notify data change handler
-        ImplCallEventListeners( VCLEVENT_WINDOW_DATACHANGED, &aDCEvt);
+        CallEventListeners( VCLEVENT_WINDOW_DATACHANGED, &aDCEvt);
     }
 
     if ( bChild || mpWindowImpl->mbChildNotify )

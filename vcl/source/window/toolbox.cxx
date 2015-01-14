@@ -3592,7 +3592,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 ImplDrawItem( mnCurPos );
-                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( mnCurPos ) );
+                CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( mnCurPos ) );
             }
 
             mnCurPos = nNewPos;
@@ -3689,7 +3689,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                     ImplHideFocus();
                                     sal_uInt16 nPos = GetItemPos( mnHighItemId );
                                     ImplDrawItem( nPos );
-                                    ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
+                                    CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
                                 }
                                 if ( mpData->mbMenubuttonSelected )
                                 {
@@ -3699,7 +3699,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                                 mnHighItemId = it->mnId;
                                 ImplDrawItem( nTempPos, 2 );
                                 ImplShowFocus();
-                                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
+                                CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
                             }
                         }
                     }
@@ -3727,7 +3727,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                 {
                     ImplDrawItem( nClearPos, (nClearPos == mnCurPos) ? 1 : 0 );
                     if( nClearPos != mnCurPos )
-                        ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
+                        CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nClearPos ) );
                 }
                 ImplHideFocus();
                 mnHighItemId = 0;
@@ -5301,7 +5301,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
         // set mnHighItemId to 0 already to prevent this hen/egg problem
         mnHighItemId = 0;
         ImplDrawItem( nPos, 0 );
-        ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
+        CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
     }
 
     if( !bNoGrabFocus && pItem != pOldItem && pOldItem && pOldItem->mpWindow )
@@ -5344,7 +5344,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
             if( pItem->mpWindow )
                 pItem->mpWindow->GrabFocus();
             if( pItem != pOldItem )
-                ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
+                CallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
         }
     }
     else

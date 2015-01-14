@@ -663,7 +663,6 @@ protected:
 
             void                        SetCompoundControl( bool bCompound );
 
-            void                        ImplCallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void                        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
             void                        FireVclEvent( VclSimpleEvent* pEvent );
 

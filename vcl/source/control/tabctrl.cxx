@@ -1664,7 +1664,7 @@ void TabControl::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     if( mpTabCtrlData->mpListBox ) // reposition/resize listbox
         Resize();
 
-    ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, reinterpret_cast<void*>(nPageId) );
+    CallEventListeners( VCLEVENT_TABPAGE_INSERTED, reinterpret_cast<void*>(nPageId) );
 }
 
 void TabControl::RemovePage( sal_uInt16 nPageId )
@@ -1709,7 +1709,7 @@ void TabControl::RemovePage( sal_uInt16 nPageId )
 
         ImplFreeLayoutData();
 
-        ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, reinterpret_cast<void*>(nPageId) );
+        CallEventListeners( VCLEVENT_TABPAGE_REMOVED, reinterpret_cast<void*>(nPageId) );
     }
 }
 
@@ -1727,7 +1727,7 @@ void TabControl::Clear()
     if ( IsUpdateMode() )
         Invalidate();
 
-    ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVEDALL );
+    CallEventListeners( VCLEVENT_TABPAGE_REMOVEDALL );
 }
 
 void TabControl::EnablePage( sal_uInt16 i_nPageId, bool i_bEnable )
@@ -1859,7 +1859,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
     {
         ImplFreeLayoutData();
 
-        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, reinterpret_cast<void*>(mnCurPageId) );
+        CallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, reinterpret_cast<void*>(mnCurPageId) );
         if ( DeactivatePage() )
         {
             mnActPageId = nPageId;
@@ -1870,7 +1870,7 @@ void TabControl::SelectTabPage( sal_uInt16 nPageId )
             SetCurPageId( nPageId );
             if( mpTabCtrlData->mpListBox )
                 mpTabCtrlData->mpListBox->SelectEntryPos( GetPagePos( nPageId ) );
-            ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, reinterpret_cast<void*>(nPageId) );
+            CallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, reinterpret_cast<void*>(nPageId) );
         }
     }
 }
@@ -1930,7 +1930,7 @@ void TabControl::SetPageText( sal_uInt16 nPageId, const OUString& rText )
         if ( IsUpdateMode() )
             Invalidate();
         ImplFreeLayoutData();
-        ImplCallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, reinterpret_cast<void*>(nPageId) );
+        CallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, reinterpret_cast<void*>(nPageId) );
     }
 }
 

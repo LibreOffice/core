@@ -328,7 +328,7 @@ void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, s
     GetModel()->InvalidateEntry( pEntry );
 
     TabListBoxEventData* pData = new TabListBoxEventData( pEntry, nTextColumn, sOldText );
-    ImplCallEventListeners( VCLEVENT_TABLECELL_NAMECHANGED, pData );
+    CallEventListeners( VCLEVENT_TABLECELL_NAMECHANGED, pData );
     delete pData;
 }
 

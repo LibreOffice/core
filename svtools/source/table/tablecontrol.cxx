@@ -64,7 +64,7 @@ namespace svt { namespace table
 
     TableControl::~TableControl()
     {
-        ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+        CallEventListeners( VCLEVENT_OBJECT_DYING );
 
         m_pImpl->setModel( PTableModel() );
         m_pImpl->disposeAccessible();
