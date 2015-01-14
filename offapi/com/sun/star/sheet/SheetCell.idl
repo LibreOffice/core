@@ -226,6 +226,9 @@ published service SheetCell
     //-------------------------------------------------------------------------
 
     /** provides access to the text fields used in this cell.
+
+        <p><member scope="com::sun::star::text">XTextFieldsSupplier::getTextFieldMasters</member>
+        returns always <void/> since the field master is not supported.</p>
      */
     interface com::sun::star::text::XTextFieldsSupplier;
 
