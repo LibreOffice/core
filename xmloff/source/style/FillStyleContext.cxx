@@ -132,6 +132,17 @@ XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 n
     aBitmapStyle.importXML( xAttrList, maAny, maStrName, rImport );
 }
 
+XMLBitmapStyleContext::XMLBitmapStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList )
+{
+    // start import
+    XMLImageStyle aBitmapStyle;
+
+    // something missing
+}
+
 XMLBitmapStyleContext::~XMLBitmapStyleContext()
 {
 }
@@ -158,6 +169,14 @@ SvXMLImportContext* XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefi
     }
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLBitmapStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void XMLBitmapStyleContext::EndElement()
@@ -191,6 +210,40 @@ void XMLBitmapStyleContext::EndElement()
     catch( container::ElementExistException& )
     {}
 }
+
+void SAL_CALL XMLBitmapStyleContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    OUString sURL;
+    maAny >>= sURL;
+
+    if( sURL.isEmpty() && mxBase64Stream.is() )
+    {
+        sURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
+        mxBase64Stream = 0;
+        maAny <<= sURL;
+    }
+
+    uno::Reference< container::XNameContainer > xBitmap( GetImport().GetBitmapHelper() );
+
+    try
+    {
+        if(xBitmap.is())
+        {
+            if( xBitmap->hasByName( maStrName ) )
+            {
+                xBitmap->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xBitmap->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
 
 bool XMLBitmapStyleContext::IsTransient() const
 {

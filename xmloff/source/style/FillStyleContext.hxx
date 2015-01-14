@@ -78,14 +78,22 @@ public:
 
     XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    XMLBitmapStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual bool IsTransient() const SAL_OVERRIDE;
 };
