@@ -27,6 +27,9 @@
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="@oor:op|@oor:finalized|@oor:mandatory">
+</xsl:template>
+
 <xsl:template match="@*">
     <xsl:copy>
         <xsl:apply-templates select="*|@*"/>
