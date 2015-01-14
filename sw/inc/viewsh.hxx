@@ -581,6 +581,10 @@ public:
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload);
+    /// Set if we are doing tiled rendering.
+    void setTiledRendering(bool bTiledRendering);
+    /// Are we doing tiled rendering?
+    bool isTiledRendering();
 
     SwViewShell* GetNext()
         { return GetNextInRing(); }

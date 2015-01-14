@@ -129,6 +129,16 @@ void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload)
         mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
 }
 
+void SwViewShell::setTiledRendering(bool bTiledRendering)
+{
+    mbTiledRendering = bTiledRendering;
+}
+
+bool SwViewShell::isTiledRendering()
+{
+    return mbTiledRendering;
+}
+
 static void
 lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
 {
@@ -1764,6 +1774,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // them - mpBufferedOut, mpOut, mpWin, ..., and get rid of
     // mbTiledRendering)
     OutputDevice *pSaveOut = mpOut;
+    bool bTiledRendering = mbTiledRendering;
     mbTiledRendering = true;
     mpOut = &rDevice;
 
@@ -1812,7 +1823,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
-    mbTiledRendering = false;
+    mbTiledRendering = bTiledRendering;
 }
 
 #if !HAVE_FEATURE_DESKTOP

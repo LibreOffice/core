@@ -2025,9 +2025,9 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
             }
 
             // center page if possible
-            const long nSizeDiff = nVisWidth > nCurrentRowWidth ?
-                                   ( nVisWidth - nCurrentRowWidth ) / 2 :
-                                   0;
+            long nSizeDiff = 0;
+            if (nVisWidth > nCurrentRowWidth && !GetCurrShell()->isTiledRendering())
+                nSizeDiff = ( nVisWidth - nCurrentRowWidth ) / 2;
 
             // adjust positions of pages in current row
             long nX = nSizeDiff;
