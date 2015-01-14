@@ -60,6 +60,15 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
 
 }
 
+OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
+:   XMLPropStyleContext( rImport, Element, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    pStyles(&rStyles),
+    m_nNumberFormat(-1)
+{
+}
+
 OTableStyleContext::~OTableStyleContext()
 {
 
