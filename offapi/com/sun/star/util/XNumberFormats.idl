@@ -33,12 +33,17 @@
 
 
 /** provides access to multiple NumberFormats.
+
+    The number formats are managed by their unique key in the document.
  */
 published interface XNumberFormats: com::sun::star::uno::XInterface
 {
 
     /** @returns
                     a readonly NumberFormatProperties.
+
+        @param nKey
+            the key for the format
      */
     com::sun::star::beans::XPropertySet getByKey( [in] long nKey );
 
@@ -51,7 +56,7 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
                         NumberFormat constants.
 
                 @param  nLocale
-                        the language of number formats to return.
+                        the locale of number formats to return.
 
                 @param  bCreate
                         `TRUE`: create new entries if no formats for the selected language exist<BR>
@@ -63,6 +68,18 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
 
 
     /** finds a number format by its format string and returns its key.
+
+        @returns
+            the key for the format if found, otherwise -1.
+
+        @param aFormat
+            the string representation of the number format
+
+        @param nLocale
+            the locale for number formats to find
+
+        @param bScan
+            reserved for future use and should be set to false
      */
     long queryKey( [in] string aFormat,
              [in] com::sun::star::lang::Locale nLocale,
@@ -70,6 +87,18 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
 
 
     /** adds a new number format to the list, using a format string.
+
+        @returns
+            the key for new number format
+
+        @param aFormat
+            the string representation of the number format
+
+        @param nLocale
+            the locale for the number format
+
+        @throws com::sun::star::util::MalformedNumberFormatException
+            if incorrect number format is specified
      */
     long addNew( [in] string aFormat,
              [in] com::sun::star::lang::Locale nLocale )
@@ -79,6 +108,21 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
     /** adds a new number format to the list, using a format
         string in a different locale than the desired locale of the
         resulting number format.
+
+        @returns
+            the key for added number format
+
+        @param aFormat
+            the key for the number format
+
+        @param nLocale
+            the original locale for the number format
+
+        @param nNewLocale
+            the new locale for the number format to be converted
+
+        @throws com::sun::star::util::MalformedNumberFormatException
+            if incorrect number format is specified
      */
     long addNewConverted( [in] string aFormat,
              [in] com::sun::star::lang::Locale nLocale,
@@ -87,12 +131,36 @@ published interface XNumberFormats: com::sun::star::uno::XInterface
 
 
     /** removes a number format from the list.
+
+        @param nKey
+            the key for the numberformat
      */
     void removeByKey( [in] long nKey );
 
 
     /** generates a format string from several parameters without
         creating an actual number format.
+
+        @returns
+            the string representation for the number format
+
+        @param nBaseKey
+            the key for the number format to be used as base format
+
+        @param nLocale
+            the locale for the number format
+
+        @param bThousands
+            the thousands separator is shown or not
+
+        @param bRed
+            show negative number in red colored if <TRUE/>
+
+        @param nDecimals
+            how many digits are shown after the decimal point
+
+        @param nLeading
+            how many number of leading zeros are shown
      */
     string generateFormat( [in] long nBaseKey,
              [in] com::sun::star::lang::Locale nLocale,
