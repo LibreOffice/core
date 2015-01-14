@@ -30,6 +30,7 @@
 #include "sdxmlimp_impl.hxx"
 
 using namespace ::xmloff::token;
+using namespace com::sun::star;
 
 struct SdXMLDataStyleNumber
 {
@@ -607,6 +608,18 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rIm
     }
 }
 
+SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext(
+    SdXMLImport& rImport, sal_Int32 Element,
+    SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles)
+:   SvXMLNumFormatContext(rImport, Element, pNewData, nNewType, xAttrList, rStyles),
+    mbAutomatic( false ),
+    mnIndex(0),
+    mnKey( -1 )
+{
+}
+
 SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 {
 }
@@ -715,9 +728,83 @@ void SdXMLNumberFormatImportContext::EndElement()
     }
 }
 
+void SAL_CALL SdXMLNumberFormatImportContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLNumFormatContext::endFastElement( Element );
+
+    for( ; mnIndex < 16; mnIndex++ )
+    {
+        mnElements[mnIndex] = 0;
+    }
+
+    if( mbTimeStyle )
+    {
+        // compare import with all time styles
+        for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
+        {
+            sal_Int16 nIndex = 0;
+            if( compareStyle( aSdXMLFixedTimeFormats[nFormat], nIndex ) )
+            {
+                mnKey = nFormat + 2;
+                break;
+            }
+        }
+    }
+    else
+    {
+        // compare import with all date styles
+        for( sal_Int16 nFormat = 0; nFormat < SdXMLDateFormatCount; nFormat++ )
+        {
+            sal_Int16 nIndex = 0;
+            if( compareStyle( aSdXMLFixedDateFormats[nFormat], nIndex ) )
+            {
+                mnKey = nFormat + 2;
+                break;
+            }
+            else if( mnElements[nIndex] == DATA_STYLE_NUMBER_TEXT_SPACE )
+            {
+                // if it's a valid date ending with a space, see if a time style follows
+                for( sal_Int16 nTimeFormat = 0; nTimeFormat < SdXMLTimeFormatCount; nTimeFormat++ )
+                {
+                    sal_Int16 nIndex2 = nIndex + 1;
+                    if( compareStyle( aSdXMLFixedTimeFormats[nTimeFormat], nIndex2 ) )
+                    {
+                        mnKey = (nFormat + 2) | ((nTimeFormat + 2) << 4);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // no date style found? maybe its an extended time style
+        if( mnKey == -1 )
+        {
+            // compare import with all time styles
+            for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
+            {
+                sal_Int16 nIndex = 0;
+                if( compareStyle( aSdXMLFixedTimeFormats[nFormat], nIndex ) )
+                {
+                    mnKey = (nFormat + 2) << 4;
+                    break;
+                }
+            }
+        }
+    }
+}
+
 SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SdXMLNumberFormatImportContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
