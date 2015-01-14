@@ -1072,9 +1072,6 @@ namespace frm
 
     ValueList OListBoxModel::impl_getValues() const
     {
-        if (!isLoaded())
-            return ValueList();
-
         const sal_Int32 nFieldType = getValueType();
 
         if ( !m_aConvertedBoundValues.empty() && m_nConvertedBoundValuesType == nFieldType )
