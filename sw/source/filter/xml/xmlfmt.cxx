@@ -451,6 +451,9 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStylesC,
             sal_uInt16 nFamily);
+    SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStylesC, sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
     virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
@@ -459,6 +462,10 @@ public:
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
@@ -564,6 +571,20 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
 {
 }
 
+SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl(
+    SwXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStylesC, sal_uInt16 nFamily )
+:   SvXMLStyleContext( rImport, Element, xAttrList, nFamily ),
+    pItemSet( 0 ),
+    pTextStyle( 0 ),
+    rStyles( rStylesC ),
+    bHasMasterPageName( false ),
+    bPageDescConnected( false ),
+    bDataStyleIsResolved( true )
+{
+}
+
 SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
 {
     delete pItemSet;
@@ -615,6 +636,14 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLItemSetStyleContext_Impl::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
