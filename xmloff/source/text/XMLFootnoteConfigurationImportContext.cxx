@@ -164,6 +164,33 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     }
 
 }
+
+XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG ),
+    sPropertyAnchorCharStyleName("AnchorCharStyleName"),
+    sPropertyCharStyleName("CharStyleName"),
+    sPropertyNumberingType("NumberingType"),
+    sPropertyPageStyleName("PageStyleName"),
+    sPropertyParagraphStyleName("ParaStyleName"),
+    sPropertyPrefix("Prefix"),
+    sPropertyStartAt("StartAt"),
+    sPropertySuffix("Suffix"),
+    sPropertyPositionEndOfDoc("PositionEndOfDoc"),
+    sPropertyFootnoteCounting("FootnoteCounting"),
+    sPropertyEndNotice("EndNotice"),
+    sPropertyBeginNotice("BeginNotice"),
+    sNumFormat("1"),
+    sNumSync("false"),
+    pAttrTokenMap(NULL),
+    nOffset(0),
+    nNumbering(FootnoteNumbering::PER_PAGE),
+    bPosition(false),
+    bIsEndnote(false)
+{
+}
+
 XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
 {
     delete pAttrTokenMap;
@@ -289,6 +316,12 @@ void XMLFootnoteConfigurationImportContext::StartElement(
     }
 }
 
+void SAL_CALL XMLFootnoteConfigurationImportContext::startFastElement(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+}
+
 SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -329,6 +362,14 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLFootnoteConfigurationImportContext::createFastChildContext(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 // Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
