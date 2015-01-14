@@ -189,7 +189,7 @@ bool _SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
 
 void _SfxMacroTabPage::LaunchFillGroup()
 {
-    if (!mpImpl->maFillGroupIdle.GetTimeoutHdl().IsSet())
+    if (!mpImpl->maFillGroupIdle.GetIdleHdl().IsSet())
     {
         mpImpl->maFillGroupIdle.SetIdleHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
         mpImpl->maFillGroupIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGHEST );

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/idle.hxx>
 #include <svx/sdr/contact/viewobjectcontactofpageobj.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 #include <svx/svdopage.hxx>
@@ -83,7 +84,7 @@ PagePrimitiveExtractor::PagePrimitiveExtractor(
     setPreviewRenderer(true);
 
     // init timer
-    SetPriority(VCL_IDLE_PRIORITY_HIGH);
+    SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH);
     Stop();
 }
 

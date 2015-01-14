@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 namespace sdr
 {
@@ -95,7 +96,7 @@ namespace sdr
         class TimerEventHandler : public EventHandler, public Idle
         {
         public:
-            TimerEventHandler(IdlePriority ePriority = VCL_IDLE_PRIORITY_HIGH);
+            TimerEventHandler(IdlePriority ePriority = IdlePriority::VCL_IDLE_PRIORITY_HIGH);
 
             virtual ~TimerEventHandler();
 

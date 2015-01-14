@@ -31,6 +31,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <unotools/configitem.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "linguistic/misc.hxx"

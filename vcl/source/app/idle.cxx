@@ -94,9 +94,10 @@ void Idle::ImplDeInitIdle()
 void Idle::ProcessAllIdleHandlers()
 {
     // process all pending Idle
-    ImplIdleData* pIdleData;
-    ImplIdleData* pPrevIdleData;
-    while (pIdleData = ImplIdleData::GetFirstIdle())
+    ImplIdleData* pIdleData = NULL;
+    ImplIdleData* pPrevIdleData = NULL;
+    ImplSVData*     pSVData = ImplGetSVData();
+    while ((pIdleData = ImplIdleData::GetFirstIdle()))
     {
         pIdleData->Invoke();
     }
@@ -192,7 +193,7 @@ Idle& Idle::operator=( const Idle& rIdle )
 
 Idle::Idle():
     mpIdleData(NULL),
-    mePriority(VCL_IDLE_PRIORITY_HIGH),
+    mePriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH),
     mbActive(false)
 {
 }

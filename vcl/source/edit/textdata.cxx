@@ -223,7 +223,7 @@ IdleFormatter::IdleFormatter()
 {
     mpView = 0;
     mnRestarts = 0;
-    SetPriority(VCL_IDLE_PRIORITY_HIGH);
+    SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH);
 }
 
 IdleFormatter::~IdleFormatter()

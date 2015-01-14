@@ -723,7 +723,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     if ( pPageImpl->pLoadIdle && pPageImpl->pLoadIdle->IsActive() )
     {
         pPageImpl->pLoadIdle->Stop();
-        LoadTimerHdl_Impl( pPageImpl->pLoadIdle );
+        LoadIdleHdl_Impl( pPageImpl->pLoadIdle );
     }
 // os: Such a nonsense! One will always find such an item somewhere,
 //     but it must be existing in the rSet!
@@ -1095,7 +1095,7 @@ void SvxBackgroundTabPage::ShowSelector()
         pPageImpl->pLoadIdle = new Idle;
         pPageImpl->pLoadIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
         pPageImpl->pLoadIdle->SetIdleHdl(
-            LINK( this, SvxBackgroundTabPage, LoadTimerHdl_Impl ) );
+            LINK( this, SvxBackgroundTabPage, LoadIdleHdl_Impl ) );
 
         bAllowShowSelector = false;
 
@@ -1453,7 +1453,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
 
 
-IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
+IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle )
 
 /*  [Description]
 
@@ -1463,7 +1463,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 */
 
 {
-    if ( pTimer == pPageImpl->pLoadIdle )
+    if ( pIdle == pPageImpl->pLoadIdle )
     {
         pPageImpl->pLoadIdle->Stop();
 

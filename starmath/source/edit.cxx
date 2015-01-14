@@ -244,14 +244,14 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     Resize();
 }
 
-IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
+IMPL_LINK( SmEditWindow, ModifyTimerHdl, Idle *, EMPTYARG /*pTimer*/ )
 {
     UpdateStatus();
     aModifyIdle.Stop();
     return 0;
 }
 
-IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
+IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Idle *, EMPTYARG /*pTimer*/)
     // every once in a while check cursor position (selection) of edit
     // window and if it has changed (try to) set the formula-cursor
     // according to that.
