@@ -196,12 +196,11 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
-    const NameOrIndex *pItem;
     const OUString aSearchName( Name );
 
     while( aIter != aEnd )
     {
-        pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
+        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( XATTR_LINEEND ) ));
         if( pItem->GetName() == aSearchName )
         {
             delete (*aIter);
@@ -286,11 +285,10 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
 
 static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
-    const NameOrIndex *pItem;
     const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
     for( sal_uInt32 nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = static_cast<const NameOrIndex*>(pPool->GetItem2( nWhich, nSurrogate ));
+        const NameOrIndex *pItem = static_cast<const NameOrIndex*>(pPool->GetItem2( nWhich, nSurrogate ));
 
         if( pItem && pItem->GetName() == rSearchName )
         {

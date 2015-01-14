@@ -702,12 +702,12 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
         {
             OUString        aThemeName;
             sal_uInt16      nVersion;
-            bool        bThemeNameFromResource = false;
 
             pIStm->ReadUInt16( nVersion );
 
             if( nVersion <= 0x00ff )
             {
+                bool bThemeNameFromResource = false;
                 sal_uInt32      nThemeId = 0;
 
                 OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);

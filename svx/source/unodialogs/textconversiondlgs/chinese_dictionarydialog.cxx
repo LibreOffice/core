@@ -197,10 +197,9 @@ DictionaryEntry* DictionaryList::getEntryOnPos( sal_Int32 nPos ) const
 
 DictionaryEntry* DictionaryList::getTermEntry( const OUString& rTerm ) const
 {
-    DictionaryEntry* pE = 0;
     for( sal_Int32 nN=GetRowCount(); nN--; )
     {
-        pE = getEntryOnPos( nN );
+        DictionaryEntry* pE = getEntryOnPos( nN );
         if( pE && rTerm.equals( pE->m_aTerm ) )
             return pE;
     }

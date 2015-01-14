@@ -959,7 +959,6 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
 // Get the currently active cell which is text editing
 AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
 {
-    bool bCellEditing = false;
     Reference< AccessibleCell > xAccCell;
     AccessibleCell* pAccCell = NULL;
     SvxTableController* pController = getTableController();
@@ -971,7 +970,7 @@ AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
             ::sdr::table::CellRef xCellRef (pTableObj->getActiveCell());
             if ( xCellRef.is() )
             {
-                bCellEditing = xCellRef->IsTextEditActive();
+                const bool bCellEditing = xCellRef->IsTextEditActive();
                 if (bCellEditing)
                 {
                     //Reference< XCell > xCell(xCellRef.get(), UNO_QUERY);

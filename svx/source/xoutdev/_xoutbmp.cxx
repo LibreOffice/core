@@ -390,7 +390,6 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 {
     const Size  aSize( rBmp.GetSizePixel() );
     Bitmap      aRetBmp;
-    bool        bRet = false;
 
     if( ( aSize.Width() > 2L ) && ( aSize.Height() > 2L ) )
     {
@@ -398,6 +397,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 
         if( aWorkBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
         {
+            bool bRet = false;
+
             Bitmap              aDstBmp( aSize, 1 );
             BitmapReadAccess*   pReadAcc = aWorkBmp.AcquireReadAccess();
             BitmapWriteAccess*  pWriteAcc = aDstBmp.AcquireWriteAccess();

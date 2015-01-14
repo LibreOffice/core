@@ -1902,8 +1902,8 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLine
 
 void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
 {
-    bool bMrkChg=false;
     if (AreObjectsMarked()) {
+        bool bMrkChg = false;
         const size_t nMarkAnz=GetMarkedObjectCount();
         sal_uInt16 nDscrID=0;
         if(bLineToArea)

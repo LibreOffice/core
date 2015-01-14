@@ -81,11 +81,11 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
 
     if( mnCurrentPalette == 0 )
     {
-        const SfxPoolItem* pItem = NULL;
         XColorListRef pColorList;
 
         if ( pDocSh )
         {
+            const SfxPoolItem* pItem = NULL;
             if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
                 pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
         }

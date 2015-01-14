@@ -127,11 +127,10 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
-    const NameOrIndex *pItem;
 
     while( aIter != aEnd )
     {
-        pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
+        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
         if (sName.equals(pItem->GetName()))
         {
             delete (*aIter);
@@ -209,13 +208,12 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 
     if (mpModelPool && !aName.isEmpty())
     {
-        const NameOrIndex *pItem;
         sal_uInt32 nSurrogate;
 
         sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
         for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
         {
-            pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
+            const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
             if (isValid(pItem) && aName.equals(pItem->GetName()))
             {
@@ -235,13 +233,12 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
 
     std::set< OUString > aNameSet;
 
-    const NameOrIndex *pItem;
 
     const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     sal_uInt32 nSurrogate;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
+        const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
         if( !isValid( pItem ) )
             continue;
@@ -276,12 +273,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
 
     sal_uInt32 nSurrogate;
 
-    const NameOrIndex *pItem;
 
     sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
+        const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
         if (isValid(pItem) && aName.equals(pItem->GetName()))
             return sal_True;
     }
@@ -294,13 +290,12 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
 {
     SolarMutexGuard aGuard;
 
-    const NameOrIndex *pItem;
 
     sal_uInt32 nSurrogate;
     const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
+        const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
         if( isValid( pItem ) )
             return sal_True;
