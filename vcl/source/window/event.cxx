@@ -317,7 +317,7 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, vcl::Window* 
 
     Point aPos = pSource->OutputToScreenPixel( rCEvt.GetMousePosPixel() );
     aPos = pDest->ScreenToOutputPixel( aPos );
-    return CommandEvent( aPos, rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
+    return CommandEvent( aPos, rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData() );
 }
 
 void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )

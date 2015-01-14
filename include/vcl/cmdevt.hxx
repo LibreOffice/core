@@ -358,7 +358,7 @@ class VCL_DLLPUBLIC CommandEvent
 private:
     Point                               maPos;
     void*                               mpData;
-    sal_uInt16                              mnCommand;
+    sal_uInt16                          mnCommand;
     bool                                mbMouseEvent;
 
 public:
@@ -366,10 +366,10 @@ public:
                                         CommandEvent( const Point& rMousePos, sal_uInt16 nCmd,
                                                       bool bMEvt = false, const void* pCmdData = NULL );
 
-    sal_uInt16                              GetCommand() const { return mnCommand; }
+    sal_uInt16                          GetCommand() const { return mnCommand; }
     const Point&                        GetMousePosPixel() const { return maPos; }
     bool                                IsMouseEvent() const { return mbMouseEvent; }
-    void*                               GetData() const { return mpData; }
+    void*                               GetEventData() const { return mpData; }
 
     const CommandExtTextInputData*      GetExtTextInputData() const;
     const CommandInputContextData*      GetInputContextChangeData() const;

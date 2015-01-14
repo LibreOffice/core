@@ -117,7 +117,7 @@ void SdrMediaWindow::Command( const CommandEvent& rCEvt )
     if( pWindow && getWindow() )
     {
         const CommandEvent aTransformedEvent( pWindow->ScreenToOutputPixel( getWindow()->OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ),
-                                                rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
+                                                rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData() );
 
         pWindow->Command( aTransformedEvent );
     }

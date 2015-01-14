@@ -420,7 +420,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 
     aEventPos.Y() += GetParent()->GetTitleHeight();
     CommandEvent aEvt( aEventPos, rEvt.GetCommand(),
-                        rEvt.IsMouseEvent(), rEvt.GetData() );
+                        rEvt.IsMouseEvent(), rEvt.GetEventData() );
     bInCommand = true;
     GetParent()->Command( aEvt );
     if( bInDtor )
