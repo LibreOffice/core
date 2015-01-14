@@ -298,6 +298,10 @@ public:
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
             bool bDefaultStyle = false );
+    ScCellTextStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+        bool bDefaultStyle = false );
     virtual ~ScCellTextStyleContext();
 
     // override FillPropertySet to store style information

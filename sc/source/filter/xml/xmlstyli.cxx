@@ -1167,6 +1167,15 @@ ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16
 {
 }
 
+ScCellTextStyleContext::ScCellTextStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
+:   XMLTextStyleContext( rImport, Element, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    nLastSheet(-1)
+{
+}
+
 ScCellTextStyleContext::~ScCellTextStyleContext()
 {
 }
