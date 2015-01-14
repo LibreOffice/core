@@ -231,6 +231,15 @@ XMLFontStyleContextFontFaceFormat::XMLFontStyleContextFontFaceFormat( SvXMLImpor
 {
 }
 
+XMLFontStyleContextFontFaceFormat::XMLFontStyleContextFontFaceFormat(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    XMLFontStyleContextFontFaceUri& _uri )
+:   SvXMLStyleContext( rImport, Element, xAttrList ),
+    uri(_uri)
+{
+}
+
 void XMLFontStyleContextFontFaceFormat::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
     const OUString& rValue )
 {

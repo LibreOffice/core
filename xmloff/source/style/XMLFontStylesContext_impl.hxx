@@ -139,6 +139,9 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             XMLFontStyleContextFontFaceUri& uri );
+    XMLFontStyleContextFontFaceFormat( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        XMLFontStyleContextFontFaceUri& uri );
 
     void SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
         const OUString& rValue ) SAL_OVERRIDE;
