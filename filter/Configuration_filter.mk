@@ -59,13 +59,15 @@ $(if $(4),,$(error filter_Configuration__add_module: no input files))
 $(5) : \
 	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4))) \
 	$(gb_Module_CURRENTMAKEFILE)
+
 endef
 
 # $(call filter_Configuration_add_types,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_types
-$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+$(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterTypesTarget_get_target,$(2)),\
- $(call filter_XcuFilterTypesTarget_get_clean_target,$(2))))
+ $(call filter_XcuFilterTypesTarget_get_clean_target,$(2)))
+
 endef
 
 ### filters
@@ -92,9 +94,11 @@ $(call filter_XcuFilterFiltersTarget_get_clean_target,%) :
 
 # $(call filter_Configuration_add_filters,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_filters
-$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+$(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterFiltersTarget_get_target,$(2)),\
- $(call filter_XcuFilterFiltersTarget_get_clean_target,$(2))))
+ $(call filter_XcuFilterFiltersTarget_get_clean_target,$(2)))
+$(call filter_Configuration_add_ui_filters,$(1),$(3),$(4))
+
 endef
 
 ### others (frameloaders, contenthandlers)
@@ -125,9 +129,10 @@ $(call filter_XcuFilterOthersTarget_get_clean_target,%) :
 
 # $(call filter_Configuration_add_others,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_others
-$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+$(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterOthersTarget_get_target,$(2)),\
- $(call filter_XcuFilterOthersTarget_get_clean_target,$(2))))
+ $(call filter_XcuFilterOthersTarget_get_clean_target,$(2)))
+
 endef
 
 ### internal filters
@@ -155,9 +160,10 @@ $(call filter_XcuFilterInternalTarget_get_clean_target,%) :
 
 # $(call filter_Configuration_add_internal_filters,configuration,typesfile,prefix,xcufiles)
 define filter_Configuration_add_internal_filters
-$(eval $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
+$(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterInternalTarget_get_target,$(2)),\
- $(call filter_XcuFilterInternalTarget_get_clean_target,$(2))))
+ $(call filter_XcuFilterInternalTarget_get_clean_target,$(2)))
+
 endef
 
 
@@ -214,6 +220,7 @@ $$(call filter_XcuResTarget_get_target,$(1)) : \
 		$(subst $$,$$$$,$(call gb_ExternalExecutable_get_command,xsltproc)) --nonet --stringparam lang $(1) \
 			$(filter_XSLT_langfilter) \
 			$(filter_XcuFilterUiTarget) > $$@)
+
 endef
 
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
@@ -241,12 +248,13 @@ $(filter_XcuFilterUiTarget) : \
 endif
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuMergeTarget_get_clean_target,$(2)/$(3))
+
 endef
 
 # $(call filter_Configuration_add_ui_filters,configuration,prefix,xcufile)
 define filter_Configuration_add_ui_filters
-$(foreach xcu,$(3),$(eval \
-	$(call filter_Configuration_add_ui_filter,$(1),$(2),$(xcu).xcu)))
+$(foreach xcu,$(3),$(call filter_Configuration_add_ui_filter,$(1),$(2),$(xcu).xcu))
+
 endef
 
 
@@ -255,60 +263,60 @@ endef
 $(eval $(call filter_Configuration_Configuration,fcfg_langpack))
 
 # fcfg_base
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_base_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_base_types.xcu,filter/source/config/fragments/types,\
 	writer_web_HTML_help \
 	oxt_OpenOffice_Extension \
 	wav_Wave_Audio_File \
 	component_Bibliography \
 	component_DB \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_base_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_base_filters.xcu,filter/source/config/fragments/filters,\
 	writer_web_HTML_help \
-)
+))
 
-$(call filter_Configuration_add_others,fcfg_langpack,fcfg_base_others.xcu,filter/source/config/fragments,\
+$(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_base_others.xcu,filter/source/config/fragments,\
 	frameloaders/com_sun_star_frame_Bibliography \
 	frameloaders/com_sun_star_sdb_ContentLoader \
 	contenthandlers/com_sun_star_comp_framework_SoundHandler \
 	contenthandlers/com_sun_star_comp_framework_oxt_handler \
-)
+))
 
 # fcfg_database
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_database_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_database_types.xcu,filter/source/config/fragments/types,\
 	StarBase \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_database_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_database_filters.xcu,filter/source/config/fragments/filters,\
 	StarOffice_XML__Base_ \
-)
+))
 
-$(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others.xcu,filter/source/config/fragments,\
+$(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others.xcu,filter/source/config/fragments,\
 	frameloaders/org_openoffice_comp_dbflt_DBContentLoader2 \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	StarOffice_XML__Base__ui \
-)
+))
 
 # fcfg_reportbuilder
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_reportbuilder_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_reportbuilder_types.xcu,filter/source/config/fragments/types,\
 	StarBaseReport \
 	StarBaseReportChart \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_reportbuilder_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_reportbuilder_filters.xcu,filter/source/config/fragments/filters,\
 	StarBaseReport \
 	StarBaseReportChart \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	StarBaseReport_ui \
 	StarBaseReportChart_ui \
-)
+))
 
 # fcfg_writer
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \
 	calc_MS_Excel_40 \
 	calc_MS_Excel_5095 \
@@ -370,9 +378,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_Plucker_eBook \
 	writer_TealDoc \
 	writer_zTXT \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
 	HTML__StarWriter_ \
 	MS_WinWord_5 \
 	MS_WinWord_6_0 \
@@ -432,9 +440,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	Plucker_eBook \
 	TealDoc \
 	zTXT \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	HTML__StarWriter__ui \
 	MS_Word_95_Vorlage_ui \
 	MS_Word_97_Vorlage_ui \
@@ -448,10 +456,10 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	MS_Word_2007_XML_Template_ui \
 	OOXML_Text_ui \
 	OOXML_Text_Template_ui \
-)
+))
 
 # fcfg_web
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \
 	generic_Text \
 	writer_web_HTML_help \
@@ -459,9 +467,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/so
 	writer_web_StarOffice_XML_Writer_Web_Template \
 	pdf_Portable_Document_Format \
 	writerweb8_writer_template \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xcu,filter/source/config/fragments/filters,\
 	HTML \
 	Text__StarWriter_Web_ \
 	Text__encoded___StarWriter_Web_ \
@@ -471,9 +479,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xcu,filte
 	writer_web_pdf_Export\
 	writerweb8_writer_template\
 	writerweb8_writer \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	HTML_ui \
 	Text__StarWriter_Web__ui \
 	Text__encoded___StarWriter_Web__ui \
@@ -481,19 +489,19 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	writer_web_StarOffice_XML_Writer_Web_Template_ui \
 	writerweb8_writer_template_ui \
 	writerweb8_writer_ui \
-)
+))
 
 # fcfg_global
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
 	generic_Text \
 	writer_StarOffice_XML_Writer \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
 	pdf_Portable_Document_Format \
 	writerglobal8 \
 	writerglobal8_template \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,filter/source/config/fragments/filters,\
 	Text__encoded___StarWriter_GlobalDocument_ \
 	writer_globaldocument_StarOffice_XML_Writer \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
@@ -502,19 +510,19 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,fi
 	writerglobal8_template \
 	writerglobal8_writer \
 	writerglobal8_HTML \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	Text__encoded___StarWriter_GlobalDocument__ui \
 	writer_globaldocument_StarOffice_XML_Writer_ui \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument_ui \
 	writerglobal8_ui \
 	writerglobal8_template_ui \
 	writerglobal8_writer_ui \
-)
+))
 
 # fcfg_calc
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
 	calc_DIF \
 	calc_ODS_FlatXML \
 	calc_HTML \
@@ -550,9 +558,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	calc_Great_Works \
 	calc_Mac_Works \
 	calc_Mac_Wingz \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
 	DIF \
 	HTML__StarCalc_ \
 	ODS_FlatXML \
@@ -588,9 +596,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filt
 	Great_Works_Calc \
 	Mac_Wingz_Calc \
 	Mac_Works_Calc \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	HTML__StarCalc__ui \
 	MS_Excel_4_0_Vorlage_Template_ui \
 	MS_Excel_5_0_95_Vorlage_Template_ui \
@@ -607,10 +615,10 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	calc_MS_Excel_2007_Binary_ui \
 	calc_OOXML_ui \
 	calc_OOXML_Template_ui \
-)
+))
 
 # fcfg_draw
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
 	draw_ODG_FlatXML \
 	draw_StarOffice_XML_Draw \
 	draw_StarOffice_XML_Draw_Template \
@@ -633,9 +641,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw_MacPaint \
 	draw_SuperPaint \
 	draw_PageMaker_Document \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
 	ODG_FlatXML \
 	StarOffice_XML__Draw_ \
 	draw_StarOffice_XML_Draw_Template \
@@ -657,17 +665,17 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	MacPaint_Draw \
 	SuperPaint_Draw \
 	PageMakerDocument \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	StarOffice_XML__Draw__ui \
 	draw_StarOffice_XML_Draw_Template_ui \
 	draw8_ui \
 	draw8_template_ui \
-)
+))
 
 # fcfg_impress
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
 	draw_StarOffice_XML_Draw \
 	impress_AppleKeynote \
 	impress_MS_PowerPoint_97 \
@@ -688,9 +696,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 	impress_OOXML_Presentation_Template \
 	impress_OOXML_Presentation_AutoPlay \
 	impress_ClarisWorks \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
 	AppleKeynote \
 	MS_PowerPoint_97 \
 	MS_PowerPoint_97_AutoPlay \
@@ -711,9 +719,9 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,f
 	impress_OOXML_Template \
 	impress_OOXML_AutoPlay \
 	ClarisWorks_Impress \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	MS_PowerPoint_97_Vorlage_ui \
 	impress_StarOffice_XML_Draw_ui \
 	StarOffice_XML__Impress__ui \
@@ -725,52 +733,52 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	impress_MS_PowerPoint_2007_XML_Template_ui \
 	impress_OOXML_ui \
 	impress_OOXML_Template_ui \
-)
+))
 
 # fcfg_chart
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_chart_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_chart_types.xcu,filter/source/config/fragments/types,\
 	chart_StarOffice_XML_Chart \
 	chart8 \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_chart_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_chart_filters.xcu,filter/source/config/fragments/filters,\
 	StarOffice_XML__Chart_ \
 	chart8 \
-)
+))
 
-$(call filter_Configuration_add_others,fcfg_langpack,fcfg_chart_others.xcu,filter/source/config/fragments,\
+$(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_chart_others.xcu,filter/source/config/fragments,\
 	frameloaders/com_sun_star_comp_chart2_ChartFrameLoader \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	StarOffice_XML__Chart__ui \
 	chart8_ui \
-)
+))
 
 # fcfg_math
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_math_types.xcu,filter/source/config/fragments/types,\
 	math_MathML_XML_Math \
 	math_MathType_3x \
 	math_StarOffice_XML_Math \
 	pdf_Portable_Document_Format \
 	math8 \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_filters.xcu,filter/source/config/fragments/filters,\
 	MathML_XML__Math_ \
 	MathType_3_x \
 	StarOffice_XML__Math_ \
 	math_pdf_Export \
 	math8 \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	StarOffice_XML__Math__ui \
 	math8_ui \
-)
+))
 
 # fcfg_drawgraphics
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \
 	dxf_AutoCAD_Interchange \
 	emf_MS_Windows_Metafile \
@@ -801,9 +809,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_types.xcu,
 	wmf_MS_Windows_Metafile \
 	xbm_X_Consortium \
 	xpm_XPM \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_filters.xcu,filter/source/config/fragments/filters,\
 	BMP___MS_Windows \
 	DXF___AutoCAD_Interchange \
 	EMF___MS_Windows_Metafile \
@@ -851,14 +859,14 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_filters.
 	draw_tif_Export \
 	draw_wmf_Export \
 	draw_xpm_Export \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	draw_html_Export_ui \
-)
+))
 
 # fcfg_impressgraphics
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \
 	emf_MS_Windows_Metafile \
 	eps_Encapsulated_PostScript \
@@ -879,9 +887,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_types.x
 	tif_Tag_Image_File \
 	wmf_MS_Windows_Metafile \
 	xpm_XPM \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphics_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphics_filters.xcu,filter/source/config/fragments/filters,\
 	CGM___Computer_Graphics_Metafile \
 	impress_bmp_Export \
 	impress_emf_Export \
@@ -902,25 +910,25 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphics_filte
 	impress_tif_Export \
 	impress_wmf_Export \
 	impress_xpm_Export \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	impress_html_Export_ui \
-)
+))
 
 # fcfg_writergraphics
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_writergraphics_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writergraphics_types.xcu,filter/source/config/fragments/types,\
 	jpg_JPEG \
 	png_Portable_Network_Graphic \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writergraphics_filters.xcu,filter/source/config/fragments/filters,\
 	writer_jpg_Export \
 	writer_png_Export \
-)
+))
 
 # fcfg_internalgraphics
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \
 	dxf_AutoCAD_Interchange \
 	emf_MS_Windows_Metafile \
@@ -949,9 +957,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.
 	wmf_MS_Windows_Metafile \
 	xbm_X_Consortium \
 	xpm_XPM \
-)
+))
 
-$(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgraphics_filters.xcu,filter/source/config/fragments/internalgraphicfilters,\
+$(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgraphics_filters.xcu,filter/source/config/fragments/internalgraphicfilters,\
 	bmp_Export \
 	bmp_Import \
 	dxf_Import \
@@ -997,10 +1005,10 @@ $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgrap
 	xpm_Export \
 	xpm_Import \
         mov_Import \
-)
+))
 
 # fcfg_xslt
-$(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
+$(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
 	calc_MS_Excel_2003_XML \
 	writer_DocBook_File \
 	writer_MS_Word_2003_XML \
@@ -1008,9 +1016,9 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/s
 	Unified_Office_Format_text \
 	Unified_Office_Format_spreadsheet \
 	Unified_Office_Format_presentation \
-)
+))
 
-$(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
 	DocBook_File \
 	MS_Excel_2003_XML \
 	MS_Word_2003_XML \
@@ -1021,11 +1029,11 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filt
 	UOF_text \
 	UOF_spreadsheet \
 	UOF_presentation \
-)
+))
 
-$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
 	MS_Excel_2003_XML_ui \
 	MS_Word_2003_XML_ui \
-)
+))
 
 # vim: set noet sw=4 ts=4:
