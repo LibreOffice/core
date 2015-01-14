@@ -90,7 +90,6 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  bool bCurrency = false )
 {
     OUString            aStr = rStr;
-    OUString            fStr;
     OUStringBuffer      aStr1, aStr2, aStrFrac, aStrNum, aStrDenom;
     bool                bNegative = false;
     bool                bFrac = false;
@@ -114,7 +113,6 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     // parse fractional strings
     if (nFracDivPos > 0)
     {
-        OString o = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US );
         bFrac = true;
         nFracNumPos = aStr.lastIndexOf(' ', nFracDivPos);
         aStr1.append(aStr.getStr(), nFracNumPos);
