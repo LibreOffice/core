@@ -454,7 +454,7 @@ public class MultiPropertyTest extends MultiMethodTest
         protected Object getNewValue(String propName, Object oldValue)
                 throws java.lang.IllegalArgumentException
         {
-            return ValueChanger.changePValue(oldValue);
+            return ValueChanger.changePValue(oldValue, propName);
         }
 
         /**

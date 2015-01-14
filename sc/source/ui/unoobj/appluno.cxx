@@ -36,6 +36,7 @@
 #include "sc.hrc"
 #include "unonames.hxx"
 #include "funcdesc.hxx"
+#include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <com/sun/star/sheet/FunctionArgument.hpp>
 #include "ScPanelFactory.hxx"
 #include <boost/scoped_array.hpp>
@@ -395,7 +396,19 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     }
     else if (aString == SC_UNONAME_LINKUPD)
     {
-        aAppOpt.SetLinkMode( (ScLkUpdMode) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
+        sal_Int16 n;
+        if (!(aValue >>= n) || n < css::document::LinkUpdateModes::NEVER
+            || n > css::document::LinkUpdateModes::GLOBAL_SETTING)
+        {
+            throw css::lang::IllegalArgumentException(
+                ("LinkUpdateMode property value must be a SHORT with a value in"
+                 " the range of the css.document.LinkUpdateModes constants"),
+                css::uno::Reference<css::uno::XInterface>(), -1);
+        }
+        //TODO: ScLkUpdMode (LM_ALWAYS=0, LM_NEVER=1, LM_ON_DEMAND=2,
+        // LM_UNKNOWN=3) does not match css.document.LinkUpdateModes (NEVER=0,
+        // MANUAL=1, AUTO=2, GLOBAL_SETTINGS=3):
+        aAppOpt.SetLinkMode( static_cast<ScLkUpdMode>(n) );
         bSaveApp = true;
     }
     else if (aString == SC_UNONAME_MARKHDR)

@@ -156,7 +156,20 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
             aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aPropertyName == SC_UNONAME_LINKUPD )
-            rDoc.SetLinkMode( static_cast<ScLkUpdMode> ( ScUnoHelpFunctions::GetInt16FromAny( aValue ) ) );
+        {
+            sal_Int16 n;
+            //TODO: css.sheet.XGlobalSheetSettings LinkUpdateMode property is
+            // documented to take values in the range 0--2 (always, never, on
+            // demaned), but appears to be routinely set to 3 here,
+            // corresponding to ScLkUpdMode LM_UNKNOWN:
+            if (!(aValue >>= n) || n < 0 || n > 3) {
+                throw css::lang::IllegalArgumentException(
+                    ("LinkUpdateMode property value must be a SHORT in the"
+                     " range 0--3"),
+                    css::uno::Reference<css::uno::XInterface>(), -1);
+            }
+            rDoc.SetLinkMode( static_cast<ScLkUpdMode>(n) );
+        }
         else if ( aPropertyName == SC_UNO_COLROWHDR )
             aViewOpt.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aPropertyName == SC_UNO_SHEETTABS )

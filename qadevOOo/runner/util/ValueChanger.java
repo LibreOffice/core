@@ -58,9 +58,15 @@ public class ValueChanger {
             newValue = Long.valueOf(oldlong + 15);
         } else if (oldValue instanceof Short) {
             short n = ((Short) oldValue).shortValue();
-            // css.form.component.{CheckBox,RadioButton} DefaultState properties
-            // must have values in the range 0--2:
             if ("DefaultState".equals(name) && n == 2) {
+                // css.form.component.{CheckBox,RadioButton} DefaultState
+                // properties must have values in the range 0--2:
+                --n;
+            } else if ("LinkUpdateMode".equals(name) && n >= 2) {
+                // css.document.Settings LinkUpdateMode property must have
+                // values in the css.document.LinkUpdateModes range (0--3),
+                // while css.sheet.XGlobalSheetSettings LinkUpdateMode property
+                // must have values in the range 0--2:
                 --n;
             } else {
                 ++n;
