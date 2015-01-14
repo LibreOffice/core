@@ -165,7 +165,8 @@ public abstract class ComposedTileLayer extends Layer {
                     }
                 }
                 if (!contains) {
-                    LOEvent event = LOEventFactory.tileRequest(this, new TileIdentifier((int) x, (int) y, zoom, tileSize), false);
+                    TileIdentifier tileId = new TileIdentifier((int) x, (int) y, zoom, tileSize);
+                    LOEvent event = LOEventFactory.tileRequest(this, tileId, true);
                     event.mPriority = getTilePriority();
                     LOKitShell.sendEvent(event);
                 }
@@ -212,6 +213,9 @@ public abstract class ComposedTileLayer extends Layer {
         return RectF.intersects(currentViewport, tileId.getRect()) || currentViewport.contains(tileId.getRect());
     }
 
+    /**
+     * Invalidate tiles which intersect the input rect
+     */
     public void invalidateTiles(RectF rect) {
         RectF zoomedRect = RectUtils.inverseScale(rect, currentZoom);
 

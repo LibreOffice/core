@@ -19,7 +19,7 @@ public class DynamicTileLayer extends ComposedTileLayer {
         return 0;
     }
 
-    protected IntSize getInflateFactor() {
-        return tileSize;
+    private IntSize getInflateFactor() {
+        return new IntSize(tileSize.width*2, tileSize.height*4);
     }
 }
