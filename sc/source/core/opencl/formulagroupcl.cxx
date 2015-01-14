@@ -77,7 +77,7 @@ namespace sc { namespace opencl {
 
 namespace {
 
-std::string StackVarEnumToString(StackVarEnum e)
+std::string StackVarEnumToString(StackVar const e)
 {
     switch (e)
     {
