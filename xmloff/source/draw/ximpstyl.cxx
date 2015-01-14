@@ -428,6 +428,14 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
     }
 }
 
+SdXMLPageMasterContext::SdXMLPageMasterContext(
+    SdXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID ),
+    mpPageMasterStyle( 0L )
+{
+}
+
 SdXMLPageMasterContext::~SdXMLPageMasterContext()
 {
     // release remembered contexts, they are no longer needed
@@ -460,6 +468,14 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
         pContext = SvXMLStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SdXMLPageMasterContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 TYPEINIT1( SdXMLPresentationPageLayoutContext, SvXMLStyleContext );
