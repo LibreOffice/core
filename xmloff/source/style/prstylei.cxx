@@ -86,6 +86,17 @@ XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
 {
 }
 
+XMLPropStyleContext::XMLPropStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefault )
+:   SvXMLStyleContext( rImport, Element, xAttrList, nFamily, bDefault ),
+    msIsPhysical( "IsPhysical" ),
+    msFollowStyle( "FollowStyle" ),
+    mxStyles( &rStyles )
+{
+}
+
 XMLPropStyleContext::~XMLPropStyleContext()
 {
 }
@@ -209,6 +220,14 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLPropStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 void XMLPropStyleContext::FillPropertySet(
