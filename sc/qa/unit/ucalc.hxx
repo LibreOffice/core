@@ -329,6 +329,7 @@ public:
     void testSharedFormulaUpdateOnNamedRangeChange();
     void testSharedFormulaUpdateOnDBChange();
     void testSharedFormulaAbsCellListener();
+    void testSharedFormulaUnshareAreaListeners();
     void testFormulaPosition();
 
     void testMixData();
@@ -568,6 +569,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaUpdateOnNamedRangeChange);
     CPPUNIT_TEST(testSharedFormulaUpdateOnDBChange);
     CPPUNIT_TEST(testSharedFormulaAbsCellListener);
+    CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
     CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testMixData);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
