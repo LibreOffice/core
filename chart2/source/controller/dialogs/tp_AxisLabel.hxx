@@ -70,6 +70,7 @@ private:
 public:
     SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SchAxisLabelTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;

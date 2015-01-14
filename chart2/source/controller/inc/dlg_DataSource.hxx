@@ -50,6 +50,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~DataSourceDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // from Dialog (base of TabDialog)
     virtual short Execute() SAL_OVERRIDE;

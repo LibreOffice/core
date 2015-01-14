@@ -58,7 +58,6 @@ public:
         ChartTypeTemplateProvider* pTemplateProvider,
         Dialog * pParentDialog,
         bool bHideDescription = false );
-    virtual ~DataSourceTabPage();
 
     void commitPage();
 

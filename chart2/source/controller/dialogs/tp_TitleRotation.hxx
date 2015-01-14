@@ -43,6 +43,7 @@ private:
 public:
     SchAlignmentTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bWithRotation = true);
     virtual ~SchAlignmentTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     static SfxTabPage* CreateWithoutRotation(vcl::Window* pParent, const SfxItemSet* rInAttrs);

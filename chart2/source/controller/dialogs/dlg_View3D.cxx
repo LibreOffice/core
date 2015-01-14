@@ -66,11 +66,17 @@ View3DDialog::View3DDialog(vcl::Window* pParent, const uno::Reference< frame::XM
 
 View3DDialog::~View3DDialog()
 {
+    dispose();
+}
+
+void View3DDialog::dispose()
+{
     delete m_pGeometry;
     delete m_pAppearance;
     delete m_pIllumination;
 
     m_nLastPageId = m_pTabControl->GetCurPageId();
+    TabDialog::dispose();
 }
 
 short View3DDialog::Execute()

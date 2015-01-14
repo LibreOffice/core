@@ -95,12 +95,18 @@ DataEditor::DataEditor(vcl::Window* pParent,
 
 DataEditor::~DataEditor()
 {
+    dispose();
+}
+
+void DataEditor::dispose()
+{
     notifySystemWindow( this, m_pTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
 
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
 
     OSL_TRACE( "DataEditor: DTOR" );
+    ModalDialog::dispose();
 }
 
 // react on click (or keypress) on toolbar icon

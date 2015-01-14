@@ -52,7 +52,6 @@ protected:
 
 public:
     SchAxisDlg(vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput, bool bAxisDlg=true);
-    virtual ~SchAxisDlg();
 
     void getResult( InsertAxisOrGridDialogData& rOutput );
 };
@@ -66,7 +65,6 @@ class SchGridDlg : public SchAxisDlg
 {
 public:
     SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput );
-    virtual ~SchGridDlg();
 };
 
 } //namespace chart

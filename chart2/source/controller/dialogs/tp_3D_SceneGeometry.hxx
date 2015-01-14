@@ -39,7 +39,6 @@ public:
                                   const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::beans::XPropertySet > & xSceneProperties,
                                   ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneGeometry_TabPage();
 
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();

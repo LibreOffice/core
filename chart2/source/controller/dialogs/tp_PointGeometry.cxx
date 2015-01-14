@@ -39,7 +39,13 @@ SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
+    dispose();
+}
+
+void SchLayoutTabPage::dispose()
+{
     delete m_pGeometryResources;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SchLayoutTabPage::Create(vcl::Window* pWindow,

@@ -23,13 +23,13 @@
 #include <vcl/button.hxx>
 #include <svl/itemset.hxx>
 #include <boost/scoped_ptr.hpp>
+#include "../dialogs/res_DataLabel.hxx"
 
 class SvNumberFormatter;
 
 namespace chart
 {
 
-class DataLabelResources;
 class DataLabelsDialog : public ModalDialog
 {
 private:
@@ -44,7 +44,6 @@ private:
 
 public:
     DataLabelsDialog(vcl::Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
-    virtual ~DataLabelsDialog();
 
     void FillItemSet(SfxItemSet& rOutAttrs);
 };

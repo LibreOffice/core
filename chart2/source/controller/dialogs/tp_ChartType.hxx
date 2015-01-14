@@ -55,6 +55,7 @@ public:
                 ::com::sun::star::uno::XComponentContext >& xContext
                 , bool bDoLiveUpdate, bool bShowDescription = true );
     virtual ~ChartTypeTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        initializePage() SAL_OVERRIDE;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason eReason ) SAL_OVERRIDE;

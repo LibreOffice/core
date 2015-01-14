@@ -33,7 +33,6 @@ class PolarOptionsTabPage : public SfxTabPage
 
 public:
     PolarOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs );
-    virtual ~PolarOptionsTabPage();
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;

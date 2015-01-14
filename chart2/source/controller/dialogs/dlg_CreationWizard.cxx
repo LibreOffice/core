@@ -106,10 +106,6 @@ CreationWizard::CreationWizard( vcl::Window* pParent, const uno::Reference< fram
     ActivatePage();
 }
 
-CreationWizard::~CreationWizard()
-{
-}
-
 svt::OWizardPage* CreationWizard::createPage(WizardState nState)
 {
     svt::OWizardPage* pRet = 0;

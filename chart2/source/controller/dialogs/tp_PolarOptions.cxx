@@ -44,10 +44,6 @@ PolarOptionsTabPage::PolarOptionsTabPage( vcl::Window* pWindow,const SfxItemSet&
     m_pAngleDial->SetLinkedField( m_pNF_StartingAngle );
 }
 
-PolarOptionsTabPage::~PolarOptionsTabPage()
-{
-}
-
 SfxTabPage* PolarOptionsTabPage::Create( vcl::Window* pWindow,const SfxItemSet* rOutAttrs )
 {
     return new PolarOptionsTabPage( pWindow, *rOutAttrs );

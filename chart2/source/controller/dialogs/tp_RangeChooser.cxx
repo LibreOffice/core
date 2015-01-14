@@ -122,10 +122,6 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
     m_pEd_TimeEnd->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
 }
 
-RangeChooserTabPage::~RangeChooserTabPage()
-{
-}
-
 void RangeChooserTabPage::ActivatePage()
 {
     OWizardPage::ActivatePage();

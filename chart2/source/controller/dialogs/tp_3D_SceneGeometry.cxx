@@ -147,10 +147,6 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
     m_pMFPerspective->SetAccessibleRelationLabeledBy(m_pCbxPerspective);
 }
 
-ThreeD_SceneGeometry_TabPage::~ThreeD_SceneGeometry_TabPage()
-{
-}
-
 void ThreeD_SceneGeometry_TabPage::commitPendingChanges()
 {
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );

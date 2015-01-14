@@ -48,7 +48,6 @@ public:
                 , ChartTypeTemplateProvider* pTemplateProvider
                 , Dialog * pParentDialog
                 , bool bHideDescription = false );
-virtual ~RangeChooserTabPage();
 
     //RangeSelectionListenerParent
     virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;

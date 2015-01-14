@@ -47,7 +47,6 @@ class SelectorListBox : public ListBox
 {
     public:
         SelectorListBox( vcl::Window* pParent, WinBits nStyle );
-        virtual ~SelectorListBox();
 
         virtual void Select() SAL_OVERRIDE;
         virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

@@ -38,7 +38,6 @@ public:
         vcl::Window* pWindow,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel,
         ControllerLockHelper & rControllerLockHelper );
-    virtual ~ThreeD_SceneAppearance_TabPage();
 
     virtual void ActivatePage() SAL_OVERRIDE;
 

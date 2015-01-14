@@ -48,6 +48,7 @@ public:
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~DataEditor();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Dialog
     virtual bool Close() SAL_OVERRIDE;

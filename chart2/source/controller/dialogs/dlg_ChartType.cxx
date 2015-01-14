@@ -55,7 +55,13 @@ ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
 
 ChartTypeDialog::~ChartTypeDialog()
 {
+    dispose();
+}
+
+void ChartTypeDialog::dispose()
+{
     delete m_pChartTypeTabPage;
+    ModalDialog::dispose();
 }
 
 } //namespace chart

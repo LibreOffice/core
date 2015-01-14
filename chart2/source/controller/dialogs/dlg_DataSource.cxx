@@ -159,11 +159,17 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
 
 DataSourceDialog::~DataSourceDialog()
 {
+    dispose();
+}
+
+void DataSourceDialog::dispose()
+{
     delete m_pRangeChooserTabePage;
     delete m_pDataSourceTabPage;
 
     m_nLastPageId = m_pTabControl->GetCurPageId();
     delete m_pTabControl;
+    TabDialog::dispose();
 }
 
 short DataSourceDialog::Execute()

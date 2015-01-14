@@ -313,7 +313,6 @@ class SplinePropertiesDialog : public ModalDialog
 {
 public:
     SplinePropertiesDialog( vcl::Window* pParent );
-    virtual ~SplinePropertiesDialog();
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
@@ -345,10 +344,6 @@ SplinePropertiesDialog::SplinePropertiesDialog( vcl::Window* pParent )
     this->SetText( SCH_RESSTR( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
 
     m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
-}
-
-SplinePropertiesDialog::~SplinePropertiesDialog()
-{
 }
 
 void SplinePropertiesDialog::StateChanged( StateChangedType nType )
@@ -400,7 +395,6 @@ class SteppedPropertiesDialog : public ModalDialog
 {
 public:
     SteppedPropertiesDialog( vcl::Window* pParent );
-    virtual ~SteppedPropertiesDialog();
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
@@ -425,10 +419,6 @@ SteppedPropertiesDialog::SteppedPropertiesDialog( vcl::Window* pParent )
     get(m_pRB_CenterY, "step_center_y_rb");
 
     SetText(SCH_RESSTR(STR_DLG_STEPPED_LINE_PROPERTIES));
-}
-
-SteppedPropertiesDialog::~SteppedPropertiesDialog()
-{
 }
 
 void SteppedPropertiesDialog::StateChanged( StateChangedType nType )
@@ -774,6 +764,11 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
 
 ChartTypeTabPage::~ChartTypeTabPage()
 {
+    dispose();
+}
+
+void ChartTypeTabPage::dispose()
+{
     //delete all dialog controller
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
@@ -790,7 +785,9 @@ ChartTypeTabPage::~ChartTypeTabPage()
     delete m_pGeometryResourceGroup;
     delete m_pSortByXValuesResourceGroup;
     delete m_pGL3DResourceGroup;
+    svt::OWizardPage::dispose();
 }
+
 ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
 {
     ChartTypeParameter aParameter;

@@ -37,7 +37,6 @@ class LightButton : public ImageButton
 {
 public:
     LightButton( vcl::Window* pParent);
-    virtual ~LightButton();
 
     void switchLightOn(bool bOn);
     bool isLightOn() const { return m_bLightOn;}
@@ -58,6 +57,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
         const XColorListRef &pColorTable );
     virtual ~ThreeD_SceneIllumination_TabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     DECL_LINK( ClickLightSourceButtonHdl, LightButton* );

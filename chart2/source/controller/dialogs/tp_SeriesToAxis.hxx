@@ -31,7 +31,6 @@ class SchOptionTabPage : public SfxTabPage
 {
 public:
     SchOptionTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
-    virtual ~SchOptionTabPage();
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;

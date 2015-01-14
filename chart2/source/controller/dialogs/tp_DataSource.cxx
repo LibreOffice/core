@@ -273,9 +273,6 @@ DataSourceTabPage::DataSourceTabPage(
     m_pBTN_DOWN->SetAccessibleName(SCH_RESSTR(STR_BUTTON_DOWN));
 }
 
-DataSourceTabPage::~DataSourceTabPage()
-{}
-
 void DataSourceTabPage::ActivatePage()
 {
     OWizardPage::ActivatePage();

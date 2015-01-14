@@ -63,10 +63,6 @@ SchOptionTabPage::SchOptionTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
     m_pRbtAxis2->SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
 }
 
-SchOptionTabPage::~SchOptionTabPage()
-{
-}
-
 IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
 {
     if( m_nAllSeriesAxisIndex == 0 )

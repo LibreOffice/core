@@ -120,9 +120,6 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
     initControlsFromModel();
 }
 
-ThreeD_SceneAppearance_TabPage::~ThreeD_SceneAppearance_TabPage()
-{}
-
 void ThreeD_SceneAppearance_TabPage::ActivatePage()
 {
     updateScheme();

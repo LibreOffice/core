@@ -71,7 +71,15 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet
 }
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
-{delete m_pOrientHlp;}
+{
+    dispose();
+}
+
+void SchAxisLabelTabPage::dispose()
+{
+    delete m_pOrientHlp;
+    SfxTabPage::dispose();
+}
 
 SfxTabPage* SchAxisLabelTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {

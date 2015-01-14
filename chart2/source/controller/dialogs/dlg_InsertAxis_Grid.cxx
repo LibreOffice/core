@@ -81,10 +81,6 @@ SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
     m_pCbSecondaryZ->Enable( rInput.aPossibilityList[5] );
 }
 
-SchAxisDlg::~SchAxisDlg()
-{
-}
-
 void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
     rOutput.aExistenceList[0]=m_pCbPrimaryX->IsChecked();
@@ -97,10 +93,6 @@ void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 
 SchGridDlg::SchGridDlg( vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput )
                 : SchAxisDlg( pParent, rInput, false )//rInAttrs, b3D, bNet, bSecondaryX, bSecondaryY, false )
-{
-}
-
-SchGridDlg::~SchGridDlg()
 {
 }
 

@@ -57,7 +57,13 @@ SchAlignmentTabPage::SchAlignmentTabPage(vcl::Window* pWindow,
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
+    dispose();
+}
+
+void SchAlignmentTabPage::dispose()
+{
     delete m_pOrientHlp;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SchAlignmentTabPage::Create(vcl::Window* pParent,

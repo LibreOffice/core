@@ -48,10 +48,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLightButton(vcl::Windo
     return new LightButton(pParent);
 }
 
-LightButton::~LightButton()
-{
-}
-
 void LightButton::switchLightOn(bool bOn)
 {
     if( m_bLightOn==bOn )
@@ -298,7 +294,13 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 {
+    dispose();
+}
+
+void ThreeD_SceneIllumination_TabPage::dispose()
+{
     delete[] m_pLightSourceInfoList;
+    TabPage::dispose();
 }
 
 IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)

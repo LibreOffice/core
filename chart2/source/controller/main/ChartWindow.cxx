@@ -72,6 +72,11 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
 
 ChartWindow::~ChartWindow()
 {
+    dispose();
+}
+
+void ChartWindow::dispose()
+{
     if (m_pWindowController && m_pWindowController->getModel().is())
     {
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(m_pWindowController->getModel(), uno::UNO_QUERY_THROW);
@@ -79,6 +84,7 @@ ChartWindow::~ChartWindow()
         x3DWindowProvider->update();
     }
     delete m_pOpenGLWindow;
+    vcl::Window::dispose();
 }
 
 void ChartWindow::clear()

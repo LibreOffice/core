@@ -481,8 +481,14 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
 
 SchAttribTabDlg::~SchAttribTabDlg()
 {
+    dispose();
+}
+
+void SchAttribTabDlg::dispose()
+{
     delete m_pSymbolShapeProperties;
     delete m_pAutoSymbolGraphic;
+    SfxTabDialog::dispose();
 }
 
 void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)

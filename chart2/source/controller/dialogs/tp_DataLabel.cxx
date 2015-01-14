@@ -34,10 +34,6 @@ DataLabelsTabPage::DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rIn
 {
 }
 
-DataLabelsTabPage::~DataLabelsTabPage()
-{
-}
-
 SfxTabPage* DataLabelsTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rOutAttrs)
 {
     return new DataLabelsTabPage(pWindow, *rOutAttrs);

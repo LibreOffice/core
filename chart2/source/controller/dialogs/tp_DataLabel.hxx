@@ -34,7 +34,6 @@ class DataLabelsTabPage : public SfxTabPage
 {
 public:
     DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs);
-    virtual ~DataLabelsTabPage();
 
     static SfxTabPage* Create(vcl::Window* pWindow, const SfxItemSet* rInAttrs);
 
