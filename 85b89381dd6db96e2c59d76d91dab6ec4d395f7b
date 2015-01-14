@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_08652b44",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-14T15:42:06Z",
+      "side": 1,
+      "message": "Don\u0027t use isalnum(), it may be localized and yield unexpected results. Use rtl::isAsciiAlphanumeric() instead.",
+      "revId": "85b89381dd6db96e2c59d76d91dab6ec4d395f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_a8599f90",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-14T15:42:06Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this also handle \u0027:\u0027 and \u0027/\u0027 so that \"http://\" and the like and paths are preserved verbatim? Just asking, I don\u0027t know offhand what Excel does.",
+      "revId": "85b89381dd6db96e2c59d76d91dab6ec4d395f7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
