@@ -152,6 +152,16 @@ XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
 {
 }
 
+XMLTextShapeStyleContext::XMLTextShapeStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool /*bDefaultStyle*/ )
+:   XMLShapeStyleContext( rImport, Element, xAttrList, rStyles, nFamily ),
+    sIsAutoUpdate( "IsAutoUpdate" ),
+    bAutoUpdate( false )
+{
+}
+
 XMLTextShapeStyleContext::~XMLTextShapeStyleContext()
 {
 }
@@ -199,6 +209,14 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextShapeStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
