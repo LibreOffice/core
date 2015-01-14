@@ -90,12 +90,12 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
     boolean isOpcodeSubsetTested();
 
     /*
-     * Sets the lower limit on the number of cells involved in a formula for OpenCL to be considered.
+     * Sets the lower limit on the size of a formula group for OpenCL to be considered. (Sorry, the name is misleading.)
      */
     void setFormulaCellNumberLimit( [in] long number );
 
     /*
-     * Returns the lower limit on the number of cells involved in a formula for OpenCL to be considered.
+     * Returns the lower limit on the size of a formula group for OpenCL to be considered.
      */
     long getFormulaCellNumberLimit();
 
