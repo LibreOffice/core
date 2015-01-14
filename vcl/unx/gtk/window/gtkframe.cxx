@@ -3749,17 +3749,25 @@ uno::Reference<accessibility::XAccessibleEditableText>
             return uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
     }
 
-    for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
+    try
     {
-        uno::Reference< accessibility::XAccessible > xChild = xContext->getAccessibleChild(i);
-        if (!xChild.is())
-            continue;
-            uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
-        if (!xChildContext.is())
-            continue;
-        uno::Reference< accessibility::XAccessibleEditableText > xText = FindFocus(xChildContext);
-        if (xText.is())
-            return xText;
+        for (sal_Int32 i = 0, n = xContext->getAccessibleChildCount(); i < n; ++i)
+        {
+            uno::Reference< accessibility::XAccessible > xChild = xContext->getAccessibleChild(i);
+            if (!xChild.is())
+                continue;
+                uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+            if (!xChildContext.is())
+                continue;
+            uno::Reference< accessibility::XAccessibleEditableText > xText = FindFocus(xChildContext);
+            if (xText.is())
+                return xText;
+        }
+    }
+    catch( lang::IndexOutOfBoundsException & e )
+    {
+        OSL_TRACE( "GtkFrame FindFocus, %s", ::rtl::OUStringToOString(
+                e.Message, RTL_TEXTENCODING_UTF8 ).pData->buffer );
     }
     return uno::Reference< accessibility::XAccessibleEditableText >();
 }
