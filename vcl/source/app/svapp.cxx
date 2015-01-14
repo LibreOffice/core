@@ -45,6 +45,7 @@
 #include "vcl/cvtgrf.hxx"
 #include "vcl/unowrap.hxx"
 #include "vcl/timer.hxx"
+#include "vcl/idle.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/lazydelete.hxx"
 
@@ -349,7 +350,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     }
 
     //Process all idles
-    Timer::Timer::ProcessAllIdleHandlers();
+    Idle::Idle::ProcessAllIdleHandlers();
 
     pSVData->maAppData.mnDispatchLevel++;
     // do not wait for events if application was already quit; in that

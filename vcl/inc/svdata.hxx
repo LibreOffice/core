@@ -48,6 +48,7 @@
 #include <config_version.h>
 
 struct ImplTimerData;
+struct ImplIdleData;
 struct ImplConfigData;
 class ImplDirectFontSubstitution;
 struct ImplHotKey;
@@ -65,6 +66,7 @@ class AllSettings;
 class NotifyEvent;
 class Timer;
 class AutoTimer;
+class Idle;
 class Help;
 class ImageList;
 class Image;
@@ -310,6 +312,7 @@ struct ImplSVData
     sal_uLong               mnThreadCount;                  // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;              // pointer to the first config block
     ImplTimerData*          mpFirstTimerData;               // list of all running timers
+    ImplIdleData*           mpFirstIdleData;                // list of all running idles
     SalTimer*               mpSalTimer;                     // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus;                    // interface to ime status window
     SalSystem*              mpSalSystem;                    // SalSystem interface

@@ -33,6 +33,7 @@
 #include <vcl/pointr.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/vclevent.hxx>
 #include <vector>
 
