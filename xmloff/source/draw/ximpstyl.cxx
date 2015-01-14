@@ -141,12 +141,20 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
+    SdXMLDrawingPageStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles,
+        sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
     virtual ~SdXMLDrawingPageStyleContext();
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 
@@ -166,6 +174,14 @@ SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
     SvXMLStylesContext& rStyles,
     sal_uInt16 nFamily)
 :   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
+{
+}
+
+SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily )
+:   XMLPropStyleContext(rImport, Element, xAttrList, rStyles, nFamily)
 {
 }
 
@@ -197,6 +213,14 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SdXMLDrawingPageStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
