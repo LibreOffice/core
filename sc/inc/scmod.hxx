@@ -23,6 +23,7 @@
 #include "scdllapi.h"
 #include "scdll.hxx"
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"
 #include "shellids.hxx"

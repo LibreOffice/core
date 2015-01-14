@@ -25,6 +25,7 @@
 #include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/svmedit.hxx>
+#include <vcl/idle.hxx>
 #include "cfgutil.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
@@ -191,7 +192,7 @@ void _SfxMacroTabPage::LaunchFillGroup()
     if (!mpImpl->maFillGroupIdle.GetTimeoutHdl().IsSet())
     {
         mpImpl->maFillGroupIdle.SetIdleHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
-        mpImpl->maFillGroupIdle.SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+        mpImpl->maFillGroupIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGHEST );
         mpImpl->maFillGroupIdle.Start();
     }
 }

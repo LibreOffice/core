@@ -23,7 +23,6 @@
 #include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>
-#include <vcl/idle.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svtabbx.hxx>
@@ -34,6 +33,7 @@
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 class ScViewData;
 class ScDocument;

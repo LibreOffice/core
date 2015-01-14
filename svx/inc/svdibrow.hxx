@@ -23,6 +23,7 @@
 #include <svtools/brwbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/idle.hxx>
 
 class SfxItemSet;
 class ImpItemListRow;

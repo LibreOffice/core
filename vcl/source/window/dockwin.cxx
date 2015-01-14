@@ -25,6 +25,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 
@@ -105,7 +106,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
     SetBackground();
 
     maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
-    maDockIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    maDockIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM );
 }
 
 ImplDockFloatWin::~ImplDockFloatWin()
@@ -331,7 +332,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mpDialogParent = NULL;
 
     //To-Do, reuse maResizeTimer
-    maLayoutIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    maLayoutIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     maLayoutIdle.SetIdleHdl( LINK( this, DockingWindow, ImplHandleLayoutTimerHdl ) );
 }
 

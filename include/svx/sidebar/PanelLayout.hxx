@@ -15,6 +15,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

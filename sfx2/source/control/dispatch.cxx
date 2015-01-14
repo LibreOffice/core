@@ -58,6 +58,7 @@
 #include <svl/whiter.hxx>
 #include <svtools/helpopt.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/idle.hxx>
 
 #include <appdata.hxx>
 #include <sfxtypes.hxx>
@@ -336,7 +337,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 
     xImp->xPoster = new SfxHintPoster(aGenLink);
 
-    xImp->aIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+    xImp->aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_MEDIUM);
     xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
 }
 
@@ -472,7 +473,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, sal_uInt16 nMode)
     if(!pSfxApp->IsDowning() && !xImp->aToDoStack.empty())
     {
         // No immediate update is requested
-        xImp->aIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+        xImp->aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_MEDIUM);
         xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
         xImp->aIdle.Start();
     }
@@ -683,7 +684,7 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI, SfxViewFrame* /* pOld */)
     if(!xImp->aToDoStack.empty())
     {
         // No immediate update is requested
-        xImp->aIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+        xImp->aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_MEDIUM);
         xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
         xImp->aIdle.Start();
     }

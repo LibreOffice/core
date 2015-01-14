@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 
 #include <vcl/dialog.hxx>
+#include <vcl/idle.hxx>
 
 class TabPage;
 class Button;

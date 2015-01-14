@@ -22,6 +22,7 @@
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 
 
@@ -54,7 +55,7 @@ bAllowDoubles
             if( !_pIdle )
             {
                 _pIdle = new Idle;
-                _pIdle->SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+                _pIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGHEST );
                 _pIdle->SetIdleHdl( STATIC_LINK(
                     this, AsynchronLink, HandleCall) );
             }

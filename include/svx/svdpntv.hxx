@@ -34,6 +34,7 @@
 #include <svx/svxdllapi.h>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/options.hxx>
+#include <vcl/idle.hxx>
 
 
 //   Pre-Defines

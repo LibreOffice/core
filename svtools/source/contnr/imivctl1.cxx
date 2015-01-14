@@ -37,6 +37,7 @@
 
 #include <algorithm>
 #include <boost/scoped_ptr.hpp>
+#include <vcl/idle.hxx>
 
 #define IMPICNVIEW_ACC_RETURN 1
 #define IMPICNVIEW_ACC_ESCAPE 2

@@ -26,6 +26,7 @@
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
 #include <svtools/controldims.hrc>
+#include <vcl/idle.hxx>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -318,7 +319,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     SetUniqueId( GetHelpId() );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
-    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
@@ -457,7 +458,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
-    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
@@ -478,7 +479,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
-    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 

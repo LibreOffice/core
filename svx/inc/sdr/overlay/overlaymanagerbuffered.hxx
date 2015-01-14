@@ -23,6 +23,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/idle.hxx>
 
 
 
@@ -41,7 +42,7 @@ namespace sdr
             // is an extra device to avoid flickering of overlay paints
             VirtualDevice                           maOutputBufferDevice;
 
-            // Timer for buffering
+            // Idle for buffering
             Idle                                    maBufferIdle;
 
             // Range for buffering (in pixel to be independent from mapMode)
