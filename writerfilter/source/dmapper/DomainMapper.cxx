@@ -2196,6 +2196,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_PPr_pPrChange:
     case NS_ooxml::LN_trackchange:
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
+    case NS_ooxml::LN_EG_RangeMarkupElements_customXmlDelRangeStart:
+    case NS_ooxml::LN_EG_RangeMarkupElements_customXmlDelRangeEnd:
+    case NS_ooxml::LN_EG_RangeMarkupElements_customXmlMoveFromRangeStart:
+    case NS_ooxml::LN_EG_RangeMarkupElements_customXmlMoveFromRangeEnd:
+    case NS_ooxml::LN_EG_RangeMarkupElements_customXmlMoveToRangeStart:
+    case NS_ooxml::LN_EG_RangeMarkupElements_customXmlMoveToRangeEnd:
     {
         HandleRedline( rSprm );
     }

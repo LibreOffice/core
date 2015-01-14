@@ -744,6 +744,11 @@ DECLARE_OOXMLIMPORT_TEST(testN779834, "n779834.docx")
     // This document simply crashed the importer.
 }
 
+DECLARE_OOXMLIMPORT_TEST(testRHBZ1180114, "rhbz1180114.docx")
+{
+    // This document simply crashed the importer.
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
 {
     /*
