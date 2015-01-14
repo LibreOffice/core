@@ -149,6 +149,27 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 {
 }
 
+XMLTextStyleContext::XMLTextStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
+:   XMLPropStyleContext( rImport, Element, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    sIsAutoUpdate( "IsAutoUpdate" ),
+    sCategory( "Category" ),
+    sNumberingStyleName( "NumberingStyleName" ),
+    sOutlineLevel("OutlineLevel" ),
+    sDropCapCharStyleName( "DropCapCharStyleName" ),
+    sPageDescName( "PageDescName" ),
+    nOutlineLevel( -1 ),
+    bAutoUpdate( false ),
+    bHasMasterPageName( false ),
+    bHasCombinedCharactersLetter( false ),
+// Inherited paragraph style lost information about unset numbering (#i69523#)
+    mbListStyleSet( false ),
+    pEventContext( NULL )
+{
+}
+
 XMLTextStyleContext::~XMLTextStyleContext()
 {
 }
@@ -202,6 +223,14 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
