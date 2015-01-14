@@ -34,8 +34,8 @@
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
+using namespace ::com::sun::star::xml::sax;
 
-using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -72,6 +72,30 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
 {
 }
 
+XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList)
+:   SvXMLStyleContext(rImport, Element, xAttrList, XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG),
+    sFieldMaster_Bibliography(sAPI_FieldMaster_Bibliography),
+    sBracketBefore("BracketBefore"),
+    sBracketAfter("BracketAfter"),
+    sIsNumberEntries("IsNumberEntries"),
+    sIsSortByPosition("IsSortByPosition"),
+    sSortKeys("SortKeys"),
+    sSortKey("SortKey"),
+    sIsSortAscending("IsSortAscending"),
+    sSortAlgorithm("SortAlgorithm"),
+    sLocale("Locale"),
+    sSuffix(),
+    sPrefix(),
+    sAlgorithm(),
+    maLanguageTagODF(),
+    bNumberedEntries(false),
+    bSortByPosition(true)
+{
+}
+
+
 XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationContext()
 {
 }
@@ -91,6 +115,12 @@ void XMLIndexBibliographyConfigurationContext::StartElement(
                          xAttrList->getValueByIndex(nAttr));
         // else: ignore
     }
+}
+
+void SAL_CALL XMLIndexBibliographyConfigurationContext::startFastElement(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
 }
 
 void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
@@ -219,6 +249,14 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
     return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                   xAttrList);
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexBibliographyConfigurationContext::createFastChildContext(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return Reference< XFastContextHandler >();
 }
 
 void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
