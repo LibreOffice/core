@@ -97,6 +97,7 @@ define filter_Configuration_add_filters
 $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterFiltersTarget_get_target,$(2)),\
  $(call filter_XcuFilterFiltersTarget_get_clean_target,$(2)))
+$(call filter_Configuration_add_ui_filters,$(1),$(3),$(4))
 
 endef
 
