@@ -1845,7 +1845,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     Comparators aComparisons(buildComparators(rSrcDoc, *this));
 
-    for (auto a : aComparisons)
+    for (auto& a : aComparisons)
     {
         CompareData& rD0 = *a.first.get();
         CompareData& rD1 = *a.second.get();
@@ -1858,7 +1858,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
         getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON |
                        nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
-        for (auto a : aComparisons)
+        for (auto& a : aComparisons)
         {
             CompareData& rD1 = *a.second.get();
             rD1.SetRedlinesToDoc( !bDocWasModified );
