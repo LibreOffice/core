@@ -882,6 +882,24 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Assumption: always paint the whole sheet i.e. "visible" range is always
     // from (0,0) to last data position.
 
+    // Tile geometry is independent of the zoom level, but the output size is
+    // dependent of the zoom level.  Determine the correct zoom level before
+    // we start.
+
+    // TODO : zooming isn't perfect.  Find out why.
+    double nOutWTwips = static_cast<double>(nOutputWidth) / PIXEL_PER_TWIPS;
+    double nOutHTwips = static_cast<double>(nOutputHeight) / PIXEL_PER_TWIPS;
+
+    nOutWTwips /= nTileWidth;
+    nOutHTwips /= nTileHeight;
+    Fraction aFracX(nOutWTwips);
+    Fraction aFracY(nOutHTwips);
+
+    pViewData->SetZoom(aFracX, aFracY, true);
+    pViewData->RefreshZoom();
+
+    rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
+
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
     ScAddress aLastPos = pDoc->GetLastDataPos(nTab);
@@ -908,6 +926,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     }
     aOutData.SetGridColor(aGridColor);
 
+    aOutData.DrawClear();
+    aOutData.DrawDocumentBackground();
+    aOutData.DrawBackground();
     aOutData.DrawGrid(true, false);
 
     aOutData.DrawShadow();
