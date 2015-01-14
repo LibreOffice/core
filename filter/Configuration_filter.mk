@@ -59,6 +59,7 @@ $(if $(4),,$(error filter_Configuration__add_module: no input files))
 $(5) : \
 	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4))) \
 	$(gb_Module_CURRENTMAKEFILE)
+
 endef
 
 # $(call filter_Configuration_add_types,configuration,typesfile,prefix,xcufiles)
@@ -66,6 +67,7 @@ define filter_Configuration_add_types
 $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterTypesTarget_get_target,$(2)),\
  $(call filter_XcuFilterTypesTarget_get_clean_target,$(2)))
+
 endef
 
 ### filters
@@ -95,6 +97,7 @@ define filter_Configuration_add_filters
 $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterFiltersTarget_get_target,$(2)),\
  $(call filter_XcuFilterFiltersTarget_get_clean_target,$(2)))
+
 endef
 
 ### others (frameloaders, contenthandlers)
@@ -128,6 +131,7 @@ define filter_Configuration_add_others
 $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterOthersTarget_get_target,$(2)),\
  $(call filter_XcuFilterOthersTarget_get_clean_target,$(2)))
+
 endef
 
 ### internal filters
@@ -158,6 +162,7 @@ define filter_Configuration_add_internal_filters
 $(call filter_Configuration__add_module,$(1),$(2),$(3),$(4),\
  $(call gb_XcuFilterInternalTarget_get_target,$(2)),\
  $(call filter_XcuFilterInternalTarget_get_clean_target,$(2)))
+
 endef
 
 
@@ -214,6 +219,7 @@ $$(call filter_XcuResTarget_get_target,$(1)) : \
 		$(subst $$,$$$$,$(call gb_ExternalExecutable_get_command,xsltproc)) --nonet --stringparam lang $(1) \
 			$(filter_XSLT_langfilter) \
 			$(filter_XcuFilterUiTarget) > $$@)
+
 endef
 
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
