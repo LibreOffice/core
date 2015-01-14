@@ -3880,11 +3880,10 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
         if ( xForms.is() )
         {
             Reference< XLoadable >  xForm;
-            bool                    bFormWasLoaded = false;
             for ( sal_Int32 j = 0, nCount = xForms->getCount(); j < nCount; ++j )
             {
                 xForms->getByIndex( j ) >>= xForm;
-                bFormWasLoaded = false;
+                bool bFormWasLoaded = false;
                 // a database form must be loaded for
                 try
                 {

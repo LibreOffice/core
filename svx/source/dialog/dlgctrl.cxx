@@ -1151,12 +1151,11 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
         return;
 
     long nCount = pColorTab->Count();
-    XColorEntry* pEntry;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pColorTab->GetColor( i );
+        XColorEntry* pEntry = pColorTab->GetColor( i );
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
@@ -1181,12 +1180,11 @@ void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
 void FillAttrLB::Fill( const XColorListRef &pColorTab )
 {
     long nCount = pColorTab->Count();
-    XColorEntry* pEntry;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pColorTab->GetColor( i );
+        XColorEntry* pEntry = pColorTab->GetColor( i );
         InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
@@ -1272,12 +1270,11 @@ void HatchingLB::Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap
 void FillAttrLB::Fill( const XHatchListRef &pList )
 {
     long nCount = pList->Count();
-    XHatchEntry* pEntry;
     ListBox::SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetHatch( i );
+        XHatchEntry* pEntry = pList->GetHatch( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1315,14 +1312,13 @@ void GradientLB::Fill( const XGradientListRef &pList )
         return;
 
     mpList = pList;
-    XGradientEntry* pEntry;
     long nCount = pList->Count();
 
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetGradient( i );
+        XGradientEntry* pEntry = pList->GetGradient( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1389,12 +1385,11 @@ void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUStrin
 void FillAttrLB::Fill( const XGradientListRef &pList )
 {
     long nCount = pList->Count();
-    XGradientEntry* pEntry;
     ListBox::SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetGradient( i );
+        XGradientEntry* pEntry = pList->GetGradient( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
@@ -1634,12 +1629,11 @@ void LineLB::Fill( const XDashListRef &pList )
     // entries for dashed lines
 
     long nCount = pList->Count();
-    XDashEntry* pEntry;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetDash( i );
+        XDashEntry* pEntry = pList->GetDash( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {
@@ -1713,13 +1707,12 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         return;
 
     long nCount = pList->Count();
-    XLineEndEntry* pEntry;
     VirtualDevice aVD;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetLineEnd( i );
+        XLineEndEntry* pEntry = pList->GetLineEnd( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
         {

@@ -867,14 +867,13 @@ namespace svxform
 
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
-        SvTreeListEntry* pEntry = NULL;
         OUString sTemp;
 
         if ( DGTSubmission == m_eGroup )
         {
             try
             {
-                pEntry = m_pItemList->FirstSelected();
+                SvTreeListEntry* pEntry = m_pItemList->FirstSelected();
 
                 // #i36262# may be called for submission entry *or* for
                 // submission children. If we don't have any children, we

@@ -1901,9 +1901,10 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 
             SearchAttrItemList* pList = bSearch ? pSearchList : pReplaceList;
 
-            SearchAttrItem* pAItem;
             const SfxPoolItem* pItem;
             for( sal_uInt16 n = 0; n < pList->Count(); ++n )
+            {
+                SearchAttrItem* pAItem;
                 if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
                     SfxItemState::SET == aOutSet.GetItemState(
                         pAItem->pItem->Which(), false, &pItem ) )
@@ -1912,6 +1913,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
                     pAItem->pItem = pItem->Clone();
                     aOutSet.ClearItem( pAItem->pItem->Which() );
                 }
+            }
 
             if( aOutSet.Count() )
                 pList->Put( aOutSet );

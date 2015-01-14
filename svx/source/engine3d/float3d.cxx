@@ -2277,10 +2277,9 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
 
 IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
 {
-    bool bUpdatePreview = false;
-
     if( pBtn )
     {
+        bool bUpdatePreview = false;
         sal_uInt16 nSId = 0;
 
         if( pBtn == m_pBtnConvertTo3D )

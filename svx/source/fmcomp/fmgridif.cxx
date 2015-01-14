@@ -1332,7 +1332,6 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
     bool bRequestedAsAny = (xType.getTypeClass() == TypeClass_ANY);
     Reference< ::com::sun::star::sdb::XColumn >  xFieldContent;
-    DbGridColumn* pCol;
     for (sal_Int32 i=0; i < nColumnCount; ++i)
     {
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
@@ -1340,7 +1339,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
-        pCol = aColumns[ nModelPos ];
+        DbGridColumn* pCol = aColumns[ nModelPos ];
         xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
                     ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
                     :   Reference< XColumn > ();
