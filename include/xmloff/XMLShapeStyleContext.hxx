@@ -51,12 +51,20 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+    XMLShapeStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles,
+        sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID );
     virtual ~XMLShapeStyleContext();
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 

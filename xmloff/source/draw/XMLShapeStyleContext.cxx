@@ -57,6 +57,15 @@ XMLShapeStyleContext::XMLShapeStyleContext(
 {
 }
 
+XMLShapeStyleContext::XMLShapeStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily )
+:   XMLPropStyleContext(rImport, Element, xAttrList, rStyles, nFamily),
+    m_bIsNumRuleAlreadyConverted( false )
+{
+}
+
 XMLShapeStyleContext::~XMLShapeStyleContext()
 {
 }
@@ -121,6 +130,14 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLShapeStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet > & rPropSet )
