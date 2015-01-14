@@ -130,10 +130,9 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
 
     const long nCount = getCount();
     long i;
-    XPropertyEntry* pEntry;
     for( i = 0; i < nCount; i++ )
     {
-        pEntry = get( i );
+        XPropertyEntry* pEntry = get( i );
         if (pEntry && aInternalName.equals(pEntry->GetName()))
         {
             if( mpList )
@@ -155,10 +154,9 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
 
     const long nCount = getCount();
     long i;
-    XPropertyEntry* pEntry;
     for( i = 0; i < nCount; i++ )
     {
-        pEntry = get( i );
+        XPropertyEntry* pEntry = get( i );
         if (pEntry && aInternalName.equals(pEntry->GetName()))
         {
             XPropertyEntry* pNewEntry = getEntry( aInternalName, aElement );
@@ -184,10 +182,9 @@ uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
 
     const long nCount = getCount();
     long i;
-    XPropertyEntry* pEntry;
     for( i = 0; i < nCount; i++ )
     {
-        pEntry = get( i );
+        XPropertyEntry* pEntry = get( i );
 
         if (pEntry && aInternalName.equals(pEntry->GetName()))
             return getAny( pEntry );
@@ -205,10 +202,9 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
     uno::Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     long i;
-    XPropertyEntry* pEntry;
     for( i = 0; i < nCount; i++ )
     {
-        pEntry = get( i );
+        XPropertyEntry* pEntry = get( i );
 
         if (pEntry)
             *pNames++ = SvxUnogetApiNameForItem(mnWhich, pEntry->GetName());
@@ -226,10 +222,9 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 
     const long nCount = mpList?mpList->Count():0;
     long i;
-    XPropertyEntry* pEntry;
     for( i = 0; i < nCount; i++ )
     {
-        pEntry = get( i );
+        XPropertyEntry* pEntry = get( i );
         if (pEntry && aInternalName.equals(pEntry->GetName()))
             return sal_True;
     }

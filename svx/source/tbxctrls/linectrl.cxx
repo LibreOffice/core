@@ -292,14 +292,13 @@ SvxLineEndWindow::SvxLineEndWindow(
 void SvxLineEndWindow::implInit()
 {
     SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem   = NULL;
 
     SetHelpId( HID_POPUP_LINEEND );
     aLineEndSet.SetHelpId( HID_POPUP_LINEEND_CTRL );
 
     if ( pDocSh )
     {
-        pItem = pDocSh->GetItem( SID_LINEEND_LIST );
+        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_LINEEND_LIST );
         if( pItem )
             pLineEndList = static_cast<const SvxLineEndListItem*>( pItem )->GetLineEndList();
 

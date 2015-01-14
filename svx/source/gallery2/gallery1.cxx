@@ -305,7 +305,6 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
                         INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( s_sSDG_EXT );
                         INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( s_sSDV_EXT );
                         OUString        aTitle;
-                        bool        bReadOnly = false;
 
                         try
                         {
@@ -326,6 +325,8 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
                             if( !aTitle.isEmpty() )
                             {
+                                bool bReadOnly = false;
+
                                 try
                                 {
                                     aThmCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;

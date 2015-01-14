@@ -2132,11 +2132,10 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
                 if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
                 {
-                    bool bInsert;
                     while ( pStyle )
                     {
                         // sort out default styles
-                        bInsert = true;
+                        bool bInsert = true;
                         OUString aName( pStyle->GetName() );
                         for( _i = 0 ; _i < nCnt ; ++_i )
                         {

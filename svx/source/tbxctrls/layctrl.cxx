@@ -628,7 +628,6 @@ void ColumnsWindow::MouseButtonUp( const MouseEvent& rMEvt )
 void ColumnsWindow::Paint( const Rectangle& )
 {
     long    i;
-    long    j;
     long    nLineWidth;
     Size    aSize = GetOutputSizePixel();
 
@@ -648,7 +647,7 @@ void ColumnsWindow::Paint( const Rectangle& )
         DrawRect( Rectangle( i*nMX-1, -1,
                              i*nMX+nMX, aSize.Height()-nTextHeight+1 ) );
 
-        j = 4;
+        long j = 4;
         while ( j < aSize.Height()-nTextHeight-4 )
         {
             if ( !(j % 16) )

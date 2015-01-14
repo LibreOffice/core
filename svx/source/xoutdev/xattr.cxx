@@ -145,10 +145,9 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     {
         const sal_uInt32 nCount = pPool1->GetItemCount2( nWhich );
 
-        const NameOrIndex *pItem;
         for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
         {
-            pItem = static_cast<const NameOrIndex*>(pPool1->GetItem2( nWhich, nSurrogate ));
+            const NameOrIndex *pItem = static_cast<const NameOrIndex*>(pPool1->GetItem2( nWhich, nSurrogate ));
 
             if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
             {

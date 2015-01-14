@@ -75,11 +75,12 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
         {
             // do change at aNewPolyPolygon. Take a look at edge.
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));
-            bool bCandidateChanged(false);
             const sal_uInt32 nCount(aCandidate.count());
 
             if(nCount && (nPntNum + 1 < nCount || aCandidate.isClosed()))
             {
+                bool bCandidateChanged(false);
+
                 // it's a valid edge, check control point usage
                 const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
                 const bool bContolUsed(aCandidate.areControlPointsUsed()

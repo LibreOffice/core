@@ -1504,9 +1504,8 @@ bool SdrMarkView::MarkObj(const Rectangle& rRect, bool bUnmark)
         pObjList=pPV->GetObjList();
         Rectangle aFrm1(aR);
         const size_t nObjAnz = pObjList->GetObjCount();
-        SdrObject* pObj;
         for (size_t nO=0; nO<nObjAnz; ++nO) {
-            pObj=pObjList->GetObj(nO);
+            SdrObject* pObj=pObjList->GetObj(nO);
             Rectangle aRect(pObj->GetCurrentBoundRect());
             if (aFrm1.IsInside(aRect)) {
                 if (!bUnmark) {
