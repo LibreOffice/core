@@ -107,7 +107,6 @@ protected:
 
 public:
     ExtTreeListBox(vcl::Window* pParent, WinBits nStyle);
-    virtual ~ExtTreeListBox();
 };
 
 class CheckBox : public SvTabListBox
@@ -121,6 +120,7 @@ private:
 public:
     CheckBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~CheckBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     SvTreeListEntry*    DoInsertEntry( const OUString& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvTreeListEntry*    FindEntry( const OUString& rName );
@@ -168,6 +168,7 @@ private:
 public:
     OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
     virtual ~OrganizeDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual short   Execute() SAL_OVERRIDE;
 
@@ -246,6 +247,7 @@ protected:
 public:
                         LibPage( vcl::Window* pParent );
     virtual             ~LibPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };

@@ -100,9 +100,6 @@ DialogWindow::DialogWindow (
         SetReadOnly(true);
 }
 
-DialogWindow::~DialogWindow()
-{ }
-
 void DialogWindow::LoseFocus()
 {
     if ( IsModified() )
@@ -1411,11 +1408,17 @@ DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rOb
 
 DialogWindowLayout::~DialogWindowLayout()
 {
+    dispose();
+}
+
+void DialogWindowLayout::dispose()
+{
     if (pPropertyBrowser != 0)
     {
         Remove(pPropertyBrowser);
         delete pPropertyBrowser;
     }
+    Layout::dispose();
 }
 
 // shows the property browser (and creates if necessary)

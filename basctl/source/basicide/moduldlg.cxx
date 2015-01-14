@@ -62,9 +62,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtTreeListBox(vcl::Wi
     return new ExtTreeListBox(pParent, nWinBits);
 }
 
-ExtTreeListBox::~ExtTreeListBox ()
-{ }
-
 bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     bool bRet = false;
@@ -489,8 +486,14 @@ OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
 
 OrganizeDialog::~OrganizeDialog()
 {
+    dispose();
+}
+
+void OrganizeDialog::dispose()
+{
     for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
         delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
+    TabDialog::dispose();
 };
 
 short OrganizeDialog::Execute()

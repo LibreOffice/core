@@ -71,9 +71,9 @@ private:
     OUString            m_aCurLibName;
     boost::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
-    ScrollBar           aHScrollBar;
-    ScrollBar           aVScrollBar;
-    ScrollBarBox        aScrollBarBox;
+    VclPtr<ScrollBar>         aHScrollBar;
+    VclPtr<ScrollBar>         aVScrollBar;
+    VclPtr<ScrollBarBox>      aScrollBarBox;
     boost::scoped_ptr<TabBar> pTabBar; // basctl::TabBar
     bool                bTabBarSplitted;
     bool                bCreatingWindow;
@@ -83,7 +83,7 @@ private:
     // the active layout window
     Layout* pLayout;
     // common object catalog window
-    ObjectCatalog aObjectCatalog;
+    VclPtr<ObjectCatalog> aObjectCatalog;
 
     bool                m_bAppBasicModified;
     DocumentEventNotifier m_aNotifier;
@@ -163,9 +163,9 @@ public:
     OUString const&  GetCurLibName() const { return m_aCurLibName; }
     boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
-    ScrollBar&          GetHScrollBar()         { return aHScrollBar; }
-    ScrollBar&          GetVScrollBar()         { return aVScrollBar; }
-    ScrollBarBox&       GetScrollBarBox()       { return aScrollBarBox; }
+    ScrollBar&          GetHScrollBar()         { return *aHScrollBar.get(); }
+    ScrollBar&          GetVScrollBar()         { return *aVScrollBar.get(); }
+    ScrollBarBox&       GetScrollBarBox()       { return *aScrollBarBox.get(); }
     TabBar&             GetTabBar()             { return *pTabBar; }
     WindowTable&        GetWindowTable()        { return aWindowTable; }
     sal_uInt16          GetWindowId (BaseWindow const* pWin) const;
@@ -212,7 +212,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const SAL_OVERRIDE;
 
-    void UpdateObjectCatalog () { aObjectCatalog.UpdateEntries(); }
+    void UpdateObjectCatalog () { aObjectCatalog->UpdateEntries(); }
 
     void RemoveWindow (BaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true);
 };

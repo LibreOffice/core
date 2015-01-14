@@ -81,8 +81,7 @@ protected:
 public:
                         TYPEINFO_OVERRIDE();
     DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
-                        DialogWindow( DialogWindow* pCurView ); // never implemented
-                        virtual ~DialogWindow();
+    DialogWindow( DialogWindow* pCurView ); // never implemented
 
     virtual void        ExecuteCommand( SfxRequest& rReq ) SAL_OVERRIDE;
     virtual void        GetState( SfxItemSet& ) SAL_OVERRIDE;
@@ -129,6 +128,7 @@ class DialogWindowLayout : public Layout
 public:
     DialogWindowLayout (vcl::Window* pParent, ObjectCatalog&);
     virtual ~DialogWindowLayout();
+    virtual void dispose() SAL_OVERRIDE;
 public:
     void ShowPropertyBrowser ();
     void UpdatePropertyBrowser ();

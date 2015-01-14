@@ -330,7 +330,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_OBJCAT:
             // toggling object catalog
-            aObjectCatalog.Show(!aObjectCatalog.IsVisible());
+            aObjectCatalog->Show(!aObjectCatalog->IsVisible());
             if (pLayout)
                 pLayout->ArrangeWindows();
             // refresh the button state
@@ -750,7 +750,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_OBJCAT:
                 if (pLayout)
-                    rSet.Put(SfxBoolItem(nWh, aObjectCatalog.IsVisible()));
+                    rSet.Put(SfxBoolItem(nWh, aObjectCatalog->IsVisible()));
                 else
                     rSet.Put(SfxVisibilityItem(nWh, false));
                 break;
@@ -1032,7 +1032,7 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
             SfxObjectShell::SetCurrentComponent(0);
         }
-        aObjectCatalog.SetCurrentEntry(pCurWin);
+        aObjectCatalog->SetCurrentEntry(pCurWin);
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();
         EnableScrollbars(pCurWin != 0);
@@ -1188,13 +1188,13 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         return;
 
     Size aSz( rSize );
-    Size aScrollBarBoxSz( aScrollBarBox.GetSizePixel() );
+    Size aScrollBarBoxSz( aScrollBarBox->GetSizePixel() );
     aSz.Height() -= aScrollBarBoxSz.Height();
 
     Size aOutSz( aSz );
     aSz.Width() -= aScrollBarBoxSz.Width();
-    aScrollBarBox.SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
-    aVScrollBar.SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
+    aScrollBarBox->SetPosPixel( Point( rSize.Width() - aScrollBarBoxSz.Width(), rSize.Height() - aScrollBarBoxSz.Height() ) );
+    aVScrollBar->SetPosSizePixel( Point( rPos.X()+aSz.Width(), rPos.Y() ), Size( aScrollBarBoxSz.Width(), aSz.Height() ) );
     if ( bTabBarSplitted )
     {
         // SplitSize is 0 at a resize!
@@ -1203,12 +1203,12 @@ void Shell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
             nSplitPos = aSz.Width();
         pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( nSplitPos, aScrollBarBoxSz.Height() ) );
         long nScrlStart = rPos.X() + nSplitPos;
-        aHScrollBar.SetPosSizePixel( Point( nScrlStart, rPos.Y()+aSz.Height() ), Size( aSz.Width() - nScrlStart + 1, aScrollBarBoxSz.Height() ) );
-        aHScrollBar.Update();
+        aHScrollBar->SetPosSizePixel( Point( nScrlStart, rPos.Y()+aSz.Height() ), Size( aSz.Width() - nScrlStart + 1, aScrollBarBoxSz.Height() ) );
+        aHScrollBar->Update();
     }
     else
     {
-        aHScrollBar.SetPosSizePixel( Point( rPos.X()+ aSz.Width()/2 - 1, rPos.Y()+aSz.Height() ), Size( aSz.Width()/2 + 2, aScrollBarBoxSz.Height() ) );
+        aHScrollBar->SetPosSizePixel( Point( rPos.X()+ aSz.Width()/2 - 1, rPos.Y()+aSz.Height() ), Size( aSz.Width()/2 + 2, aScrollBarBoxSz.Height() ) );
         pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width()/2, aScrollBarBoxSz.Height() ) );
     }
 

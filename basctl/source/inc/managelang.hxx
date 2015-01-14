@@ -74,6 +74,7 @@ private:
 public:
     ManageLanguageDialog( vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
     virtual ~ManageLanguageDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class SetDefaultLanguageDialog : public ModalDialog

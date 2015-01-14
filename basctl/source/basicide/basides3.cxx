@@ -77,7 +77,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
 
                 // new dialog window
                 if (!pDialogLayout)
-                    pDialogLayout.reset(new DialogWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
+                    pDialogLayout.reset(new DialogWindowLayout(&GetViewFrame()->GetWindow(), *aObjectCatalog.get()));
                 pWin = new DialogWindow(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
                 nKey = InsertWindowInTable( pWin );
             }
@@ -96,7 +96,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
 
     if( pWin )
     {
-        pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
+        pWin->GrabScrollBars( aHScrollBar.get(), aVScrollBar.get() );
         pTabBar->InsertPage( (sal_uInt16)nKey, aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )

@@ -25,9 +25,6 @@ LineNumberWindow::LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
 
-LineNumberWindow::~LineNumberWindow()
-{ }
-
 void LineNumberWindow::Paint( const Rectangle& )
 {
     if(SyncYOffset())

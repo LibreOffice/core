@@ -208,6 +208,7 @@ public:
     TreeListBox(vcl::Window* pParent, const ResId& rRes);
     TreeListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~TreeListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();

@@ -21,6 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 
 #include <vcl/split.hxx>
+#include <vcl/vclptr.hxx>
 
 
 class DockingWindow;
@@ -51,7 +52,6 @@ public:
 
 protected:
     Layout (vcl::Window* pParent);
-    virtual ~Layout ();
 
     void AddToLeft   (DockingWindow* pWin, Size const& rSize) { aLeftSide.Add(pWin, rSize); }
     void AddToBottom (DockingWindow* pWin, Size const& rSize) { aBottomSide.Add(pWin, rSize); }
@@ -96,7 +96,7 @@ private:
         // size (width or height)
         long nSize;
         // the main splitting line
-        Splitter aSplitter;
+        VclPtr<Splitter> aSplitter;
         // the dockable windows (and some data)
         struct Item
         {

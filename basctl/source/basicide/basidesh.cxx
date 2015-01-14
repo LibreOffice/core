@@ -155,11 +155,11 @@ unsigned Shell::nShellCount = 0;
 Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
     SfxViewShell( pFrame_, ShellFlags ),
     m_aCurDocument( ScriptDocument::getApplicationScriptDocument() ),
-    aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
-    aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
-    aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
+    aHScrollBar( new ScrollBar(&GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG )) ),
+    aVScrollBar( new ScrollBar(&GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG )) ),
+    aScrollBarBox( new ScrollBarBox(&GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE )) ),
     pLayout(0),
-    aObjectCatalog(&GetViewFrame()->GetWindow()),
+    aObjectCatalog(new ObjectCatalog(&GetViewFrame()->GetWindow())),
     m_bAppBasicModified( false ),
     m_aNotifier( *this )
 {
@@ -416,15 +416,15 @@ bool Shell::PrepareClose( bool bUI )
 
 void Shell::InitScrollBars()
 {
-    aVScrollBar.SetLineSize( 300 );
-    aVScrollBar.SetPageSize( 2000 );
-    aHScrollBar.SetLineSize( 300 );
-    aHScrollBar.SetPageSize( 2000 );
-    aHScrollBar.Enable();
-    aVScrollBar.Enable();
-    aVScrollBar.Show();
-    aHScrollBar.Show();
-    aScrollBarBox.Show();
+    aVScrollBar->SetLineSize( 300 );
+    aVScrollBar->SetPageSize( 2000 );
+    aHScrollBar->SetLineSize( 300 );
+    aHScrollBar->SetPageSize( 2000 );
+    aHScrollBar->Enable();
+    aVScrollBar->Enable();
+    aVScrollBar->Show();
+    aHScrollBar->Show();
+    aScrollBarBox->Show();
 }
 
 
@@ -492,16 +492,16 @@ bool Shell::NextPage( bool bPrev )
 
 void Shell::ArrangeTabBar()
 {
-    long nBoxPos = aScrollBarBox.GetPosPixel().X() - 1;
+    long nBoxPos = aScrollBarBox->GetPosPixel().X() - 1;
     long nPos = pTabBar->GetSplitSize();
     if ( nPos <= nBoxPos )
     {
         Point aPnt( pTabBar->GetPosPixel() );
-        long nH = aHScrollBar.GetSizePixel().Height();
+        long nH = aHScrollBar->GetSizePixel().Height();
         pTabBar->SetPosSizePixel( aPnt, Size( nPos, nH ) );
         long nScrlStart = aPnt.X() + nPos;
-        aHScrollBar.SetPosSizePixel( Point( nScrlStart, aPnt.Y() ), Size( nBoxPos - nScrlStart + 2, nH ) );
-        aHScrollBar.Update();
+        aHScrollBar->SetPosSizePixel( Point( nScrlStart, aPnt.Y() ), Size( nBoxPos - nScrlStart + 2, nH ) );
+        aHScrollBar->Update();
     }
 }
 
@@ -530,7 +530,7 @@ void Shell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 case SFX_HINT_DYING:
                 {
                     EndListening( rBC, true /* log off all */ );
-                    aObjectCatalog.UpdateEntries();
+                    aObjectCatalog->UpdateEntries();
                 }
                 break;
             }
@@ -908,8 +908,8 @@ void Shell::InvalidateBasicIDESlots()
 
 void Shell::EnableScrollbars( bool bEnable )
 {
-    aHScrollBar.Enable(bEnable);
-    aVScrollBar.Enable(bEnable);
+    aHScrollBar->Enable(bEnable);
+    aVScrollBar->Enable(bEnable);
 }
 
 void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName, bool bUpdateWindows, bool bCheck )

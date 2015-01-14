@@ -112,8 +112,14 @@ MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
 
 MacroChooser::~MacroChooser()
 {
+    dispose();
+}
+
+void MacroChooser::dispose()
+{
     if ( bForceStoreBasic )
         SfxGetpApp()->SaveBasicAndDialogContainer();
+    SfxModalDialog::dispose();
 }
 
 void MacroChooser::StoreMacroDescription()

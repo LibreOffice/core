@@ -75,7 +75,13 @@ ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, boost::shared_p
 
 ManageLanguageDialog::~ManageLanguageDialog()
 {
+    dispose();
+}
+
+void ManageLanguageDialog::dispose()
+{
     ClearLanguageBox();
+    ModalDialog::dispose();
 }
 
 void ManageLanguageDialog::Init()

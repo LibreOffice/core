@@ -55,10 +55,16 @@ BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, c
 
 BaseWindow::~BaseWindow()
 {
+    dispose();
+}
+
+void BaseWindow::dispose()
+{
     if ( pShellVScrollBar )
         pShellVScrollBar->SetScrollHdl( Link() );
     if ( pShellHScrollBar )
         pShellHScrollBar->SetScrollHdl( Link() );
+    vcl::Window::dispose();
 }
 
 
