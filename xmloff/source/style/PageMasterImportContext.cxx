@@ -70,6 +70,15 @@ PageStyleContext::PageStyleContext( SvXMLImport& rImport,
 {
 }
 
+PageStyleContext::PageStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, bool bDefaultStyle)
+:   XMLPropStyleContext( rImport, Element, xAttrList, rStyles, XML_STYLE_FAMILY_PAGE_MASTER, bDefaultStyle),
+    sPageUsage(),
+    m_bIsFillStyleAlreadyConverted(false) //UUUU
+{
+}
+
 PageStyleContext::~PageStyleContext()
 {
 }
@@ -157,6 +166,14 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
     }
 
     return XMLPropStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    PageStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet > & rPropSet)
