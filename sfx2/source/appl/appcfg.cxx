@@ -91,7 +91,7 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     SfxEventAsyncer_Impl( const SfxEventHint& rHint );
     virtual ~SfxEventAsyncer_Impl();
-    DECL_LINK( TimerHdl, Timer*);
+    DECL_LINK( IdleHdl, Idle*);
 };
 
 
@@ -114,7 +114,7 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
     if( rHint.GetObjShell() )
         StartListening( *rHint.GetObjShell() );
     pIdle = new Idle;
-    pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, TimerHdl) );
+    pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
     pIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGHEST );
     pIdle->Start();
 }
@@ -128,10 +128,10 @@ SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 
 
 
-IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
+IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle)
 {
     SfxObjectShellRef xRef( aHint.GetObjShell() );
-    pAsyncTimer->Stop();
+    pAsyncIdle->Stop();
 #ifdef DBG_UTIL
     if (!xRef.Is())
     {

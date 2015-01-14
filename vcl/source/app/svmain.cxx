@@ -33,6 +33,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/cvtgrf.hxx"
+#include "vcl/idle.hxx"
 #include "vcl/image.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/unowrap.hxx"
@@ -387,6 +388,7 @@ void DeInitVCL()
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
     Timer::ImplDeInitTimer();
+    Idle::ImplDeInitIdle;
 
     if ( pSVData->maWinData.mpMsgBoxImgList )
     {
