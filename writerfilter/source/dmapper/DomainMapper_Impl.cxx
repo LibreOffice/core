@@ -4623,9 +4623,10 @@ void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
     {
         // This should be an assert, but somebody had the smart idea to reuse this function also for comments and whatnot,
         // and in some cases the id is actually not handled, which may be in fact a bug.
-        SAL_WARN( "writerfilter", !m_currentRedline.get());
         if( m_currentRedline.get())
             m_currentRedline->m_nId = sId;
+        else
+            SAL_INFO("writerfilter.dmapper", "no current redline");
     }
 }
 
