@@ -24200,6 +24200,22 @@
     <resource name="CT_TrackChange" resource="Properties" tag="redline">
       <attribute name="author" tokenid="ooxml:CT_TrackChange_author"/>
       <attribute name="date" tokenid="ooxml:CT_TrackChange_date"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeStart" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeStart"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeStart" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeEnd" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeEnd"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeEnd" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeStart" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeStart"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeStart" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeEnd" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeEnd"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeEnd" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeStart" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeStart"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeStart" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeEnd" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeEnd"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeEnd" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeStart" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeStart"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeStart" action="clearProps"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd" action="clearProps"/>
     </resource>
     <resource name="CT_CellMergeTrackChange" resource="Properties" tag="redline">
       <attribute name="vMerge" tokenid="ooxml:CT_CellMergeTrackChange_vMerge"/>
