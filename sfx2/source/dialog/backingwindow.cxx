@@ -115,6 +115,8 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     get(mpMathAllButton, "math_all");
 
     get(mpHelpButton, "help");
+    //set an alternative help label that doesn't hotkey the H of the Help menu
+    mpHelpButton->SetText(get<Window>("althelplabel")->GetText());
     get(mpExtensionsButton, "extensions");
 
     //Containers are invisible to cursor traversal

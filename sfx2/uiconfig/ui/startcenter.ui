@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkImage" id="calc_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -332,6 +332,19 @@
                     <property name="position">11</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="althelplabel">
+                    <property name="can_focus">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="label" translatable="yes">He_lp</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">12</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -365,13 +378,14 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="help">
-                            <property name="label" translatable="yes">He_lp</property>
+                            <property name="label">gtk-help</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="has_tooltip">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
+                            <property name="use_stock">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
