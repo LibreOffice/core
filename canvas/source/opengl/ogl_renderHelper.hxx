@@ -55,6 +55,11 @@ namespace oglcanvas
         RenderHelper();
 
         void SetVP(const float width, const float height);
+
+        void SetVP(const glm::mat4 vp);
+
+        glm::mat4 GetVP();
+
         void SetModelAndMVP(const glm::mat4& mat);
         void dispose();
         void  InitOpenGL();

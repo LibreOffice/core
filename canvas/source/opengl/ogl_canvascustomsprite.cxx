@@ -139,6 +139,9 @@ namespace oglcanvas
             RenderHelper* pRenderHelper = maCanvasHelper.getDeviceHelper()->getRenderHelper();
             IBufferContextSharedPtr pBufferContext;
 
+            GLint myviewport[4];
+            glGetIntegerv(GL_VIEWPORT, myviewport);
+
             if( mfAlpha != 0.0 || mxClip.is() )
             {
                 // drats. need to render to temp surface before, and then
@@ -146,12 +149,20 @@ namespace oglcanvas
 
                 // TODO(P3): buffer texture
                 pBufferContext = maCanvasHelper.getDeviceHelper()->createBufferContext(aSpriteSizePixel);
-                //glViewport(0, 0,aSpriteSizePixel.x,aSpriteSizePixel.y);
                 pBufferContext->startBufferRendering();
             }
             // this ends up in pBufferContext, if that one's "current"
+            // Draw in spriteresolution
+            const glm::mat4 oldResulution = pRenderHelper->GetVP();
+            pRenderHelper->SetVP(aSpriteSizePixel.x, aSpriteSizePixel.y);
+            glViewport(0, 0,aSpriteSizePixel.x,aSpriteSizePixel.y);
+
             if( !maCanvasHelper.renderRecordedActions() )
                 return false;
+
+            //go back to window resolution
+            pRenderHelper->SetVP(oldResulution);
+            glViewport(myviewport[0], myviewport[1],myviewport[2],myviewport[3]);
             const glm::mat4 translate = glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0));
             if( pBufferContext )
             {
@@ -171,6 +182,7 @@ namespace oglcanvas
                 );
 
                 pRenderHelper->SetModelAndMVP( translate *aGLTransform );
+
 
                 GLuint nTexture = pBufferContext->getTextureId();
                 glActiveTexture(GL_TEXTURE0);
@@ -237,16 +249,6 @@ namespace oglcanvas
                 glBindTexture(GL_TEXTURE_2D, 0);
 
             }
-        std::vector<glm::vec2> vertices;
-        vertices.reserve(6);
-        vertices.push_back(glm::vec2(-2, -2));
-        vertices.push_back(glm::vec2(-2, (float) maSize.Height+4));
-        vertices.push_back(glm::vec2((float) maSize.Width+4, (float) maSize.Height+4));
-        vertices.push_back(glm::vec2((float) maSize.Width+4, -2));
-        vertices.push_back(glm::vec2(-2, -2));
-        vertices.push_back(glm::vec2((float) maSize.Width+4, (float) maSize.Height+4));
-
-        pRenderHelper->renderVertexConstColor(vertices, glm::vec4(1, 0, 0, 1), GL_LINE_STRIP);
 
 #ifdef DEBUG_RENDERING
         std::vector<double> aVec;

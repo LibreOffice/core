@@ -87,6 +87,15 @@ namespace oglcanvas
     void RenderHelper::SetVP(const float nwidth, const float nheight)
     {
         m_VP = glm::ortho(0.0f, nwidth, nheight, 0.0f);
+
+    void RenderHelper::SetVP(const glm::mat4 vp)
+    {
+        m_VP = vp;
+    }
+
+    glm::mat4 RenderHelper::GetVP()
+    {
+        return m_VP;
     }
 
     static void cleanUp()
@@ -142,6 +151,7 @@ namespace oglcanvas
         glDeleteProgram( m_texManProgID);
         glDeleteProgram( m_simpleProgID);
         glDeleteProgram( m_texProgID);
+        glDeleteProgram( m_texTransProgID);
         glDeleteProgram( mnRectangularTwoColorGradientProgram );
         glDeleteProgram( mnRectangularMultiColorGradientProgram );
         glDeleteProgram( mnRadialTwoColorGradientProgram );
