@@ -23,6 +23,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -888,7 +889,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
-    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
@@ -939,7 +940,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
-    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
@@ -987,7 +988,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
-    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 

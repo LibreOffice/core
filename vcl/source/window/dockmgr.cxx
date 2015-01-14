@@ -31,6 +31,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
@@ -89,9 +90,9 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
-    maDockIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    maDockIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM );
     maEndDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
-    maEndDockIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    maEndDockIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM );
 }
 
 ImplDockFloatWin2::~ImplDockFloatWin2()

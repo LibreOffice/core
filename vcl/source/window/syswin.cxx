@@ -85,7 +85,7 @@ void SystemWindow::Init()
     mpDialogParent      = NULL;
 
     //To-Do, reuse maResizeTimer
-    maLayoutIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    maLayoutIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
     maLayoutIdle.SetIdleHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
 }
 

@@ -24,6 +24,7 @@
 #include "view/SlideSorterView.hxx"
 #include <canvas/elapsedtime.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <vector>
 #include <boost/function.hpp>

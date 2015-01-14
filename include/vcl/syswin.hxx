@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
+#include <vcl/idle.hxx>
 
 class ModalDialog;
 class MenuBar;

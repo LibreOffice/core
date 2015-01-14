@@ -23,6 +23,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 class ScDocShell;
 class ScRange;

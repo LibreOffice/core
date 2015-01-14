@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/dndhelp.hxx>

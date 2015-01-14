@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_CHARTLIS_HXX
 
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <svl/listener.hxx>
 #include "rangelst.hxx"
 #include "token.hxx"

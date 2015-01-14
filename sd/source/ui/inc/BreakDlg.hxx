@@ -29,6 +29,7 @@
 #include <vcl/edit.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <vcl/idle.hxx>
 
 class SvdProgressInfo;
 class SfxProgress;

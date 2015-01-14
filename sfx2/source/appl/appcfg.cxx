@@ -54,6 +54,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <vcl/idle.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -114,7 +115,7 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
         StartListening( *rHint.GetObjShell() );
     pIdle = new Idle;
     pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, TimerHdl) );
-    pIdle->SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+    pIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGHEST );
     pIdle->Start();
 }
 

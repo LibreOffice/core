@@ -28,6 +28,7 @@
 #include <svx/fmview.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdpage.hxx>
+#include <vcl/idle.hxx>
 #include "fupoor.hxx"
 
 #include "smarttag.hxx"

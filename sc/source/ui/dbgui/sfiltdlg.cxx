@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/dispatch.hxx>
+#include <vcl/idle.hxx>
 
 #include "uiitems.hxx"
 #include "rangenam.hxx"
@@ -86,7 +87,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
     // Hack: RefInput-Kontrolle
     pIdle = new Idle;
-    pIdle->SetTimeout( VCL_IDLE_PRIORITY_MEDIUM ); // 50ms warten
+    pIdle->SetTimeout( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM ); // 50ms warten
     pIdle->SetIdleHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pIdle->Start();
 

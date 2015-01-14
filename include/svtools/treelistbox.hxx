@@ -37,6 +37,7 @@
 #include <tools/contnr.hxx>
 #include <svtools/treelist.hxx>
 #include <svtools/transfer.hxx>
+#include <vcl/idle.hxx>
 
 class Application;
 class SvTreeListBox;

@@ -19,6 +19,7 @@
 #include <glm/glm.hpp>
 
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/openglwin.hxx>
 
 #include <rtl/ref.hxx>

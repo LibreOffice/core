@@ -33,6 +33,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
 #include <tools/fract.hxx>
+#include <vcl/idle.hxx>
 
 #include <vcl/dndhelp.hxx>
 #include <svl/ondemand.hxx>
