@@ -309,10 +309,16 @@ public:
     SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual bool IsTransient() const SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 private:
     OUString maStrName;
