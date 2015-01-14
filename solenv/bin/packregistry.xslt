@@ -18,6 +18,7 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:oor="http://openoffice.org/2001/registry">
+   <xsl:output indent="yes"/>
   <xsl:param name="prefix"/>
   <xsl:strip-space elements="*"/>
   <xsl:preserve-space elements="value it"/>
