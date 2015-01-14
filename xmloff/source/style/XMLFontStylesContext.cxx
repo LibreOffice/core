@@ -282,6 +282,15 @@ XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rIm
 {
 }
 
+XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const XMLFontStyleContextFontFace& _font )
+:   SvXMLStyleContext( rImport, Element, xAttrList ),
+    font( _font )
+{
+}
+
 SvXMLImportContext * XMLFontStyleContextFontFaceUri::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -296,6 +305,14 @@ SvXMLImportContext * XMLFontStyleContextFontFaceUri::CreateChildContext(
             return new XMLBase64ImportContext( GetImport(), nPrefix, rLocalName, xAttrList, mxBase64Stream );
     }
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLFontStyleContextFontFaceUri::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
@@ -347,6 +364,38 @@ void XMLFontStyleContextFontFaceUri::EndElement()
     else
         handleEmbeddedFont( maFontData, eot );
 }
+
+void SAL_CALL XMLFontStyleContextFontFaceUri::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( ( linkPath.getLength() == 0 ) && ( maFontData.getLength() == 0 ) )
+    {
+        SAL_WARN( "xmloff", "svg:font-face-uri tag with no link or base64 data; ignoring." );
+        return;
+    }
+    bool eot;
+    // Assume by default that the font is not compressed.
+    if( format.getLength() == 0
+        || format.equalsAscii( OPENTYPE_FORMAT )
+        || format.equalsAscii( TRUETYPE_FORMAT ))
+    {
+        eot = false;
+    }
+    else if( format.equalsAscii( EOT_FORMAT ))
+    {
+        eot = true;
+    }
+    else
+    {
+        SAL_WARN( "xmloff", "Unknown format of embedded font; assuming TTF." );
+        eot = false;
+    }
+    if ( maFontData.getLength() == 0 )
+        handleEmbeddedFont( linkPath, eot );
+    else
+        handleEmbeddedFont( maFontData, eot );
+}
+
 
 void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bool eot )
 {
