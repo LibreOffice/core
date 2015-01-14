@@ -33,4 +33,12 @@ public interface IDocumentProvider {
      * @return IFile object pointing to the content represented by uri.
      */
     IFile createFromUri(URI uri);
+
+    /**
+     * Get internationalized name for this provider. This name is intended to be
+     * shown in the UI.
+     *
+     * @return string resource pointing to the provider name.
+     */
+    int getNameResource();
 }

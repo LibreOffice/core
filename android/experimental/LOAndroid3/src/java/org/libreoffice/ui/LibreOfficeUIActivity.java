@@ -107,6 +107,8 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         super.onCreate(savedInstanceState);
         Log.d(tag, "onCreate - tweaked - meeks !");
 
+        // initialize document provider factory
+        DocumentProviderFactory.initialize(this);
         documentProviderFactory = DocumentProviderFactory.getInstance();
 
         //Set the "home" - top level - directory.

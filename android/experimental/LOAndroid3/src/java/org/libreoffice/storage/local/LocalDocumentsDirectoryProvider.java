@@ -12,6 +12,7 @@ package org.libreoffice.storage.local;
 import java.io.File;
 
 import org.libreoffice.storage.IFile;
+import org.libreoffice.R;
 
 import android.os.Environment;
 
@@ -30,5 +31,10 @@ public class LocalDocumentsDirectoryProvider extends LocalDocumentsProvider {
                 Environment.getExternalStorageDirectory(), "Documents");
         documentsDirectory.mkdirs();
         return new LocalFile(documentsDirectory);
+    }
+
+    @Override
+    public int getNameResource() {
+        return R.string.local_documents;
     }
 }

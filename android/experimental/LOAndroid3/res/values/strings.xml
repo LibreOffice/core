@@ -30,4 +30,8 @@
     <string name="share">Share</string>
     <string name="share_via">Share via</string>
 
+    <!-- Document provider names -->
+    <string name="local_documents">Local documents</string>
+    <string name="local_file_system">Local file system</string>
+
 </resources>

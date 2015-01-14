@@ -14,6 +14,8 @@ import java.net.URI;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
 
+import org.libreoffice.R;
+
 import android.os.Environment;
 
 /**
@@ -29,5 +31,10 @@ public class LocalDocumentsProvider implements IDocumentProvider {
     @Override
     public IFile createFromUri(URI uri) {
         return new LocalFile(uri);
+    }
+
+    @Override
+    public int getNameResource() {
+        return R.string.local_file_system;
     }
 }

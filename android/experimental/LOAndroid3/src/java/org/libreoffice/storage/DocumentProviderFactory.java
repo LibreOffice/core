@@ -12,6 +12,8 @@ package org.libreoffice.storage;
 import org.libreoffice.storage.local.LocalDocumentsDirectoryProvider;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
 
+import android.content.Context;
+
 /**
  * Keeps the instances of the available IDocumentProviders in the system.
  * Instances are maintained in a sorted list and providers have to be
@@ -31,22 +33,39 @@ public final class DocumentProviderFactory {
     private IDocumentProvider[] providers = {
             new LocalDocumentsDirectoryProvider(), new LocalDocumentsProvider() };
 
-    private String[] providerNames = {
-            "Local documents", "Local file system" };
+    private String[] providerNames;
 
     private DocumentProviderFactory() {
         // private to prevent external instances of the factory
     }
 
     /**
+     * Initializes the factory with some context. If this method is called for
+     * twice or more times those calls will have no effect.
+     *
+     * @param context
+     *            Application context for the factory.
+     */
+    public static void initialize(Context context) {
+        if (instance == null) {
+            // initialize instance
+            instance = new DocumentProviderFactory();
+
+            // initialize document providers list
+            instance.providerNames = new String[instance.providers.length];
+            for (int i = 0; i < instance.providers.length; i++) {
+                instance.providerNames[i] = context.getString(instance
+                        .getProvider(i).getNameResource());
+            }
+        }
+    }
+
+    /**
      * Retrieve the unique instance of the factory.
      *
-     * @return the unique factory object.
+     * @return the unique factory object or null if it is not yet initialized.
      */
     public static DocumentProviderFactory getInstance() {
-        if (instance == null) {
-            instance = new DocumentProviderFactory();
-        }
         return instance;
     }
 
