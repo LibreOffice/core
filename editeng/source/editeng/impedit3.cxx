@@ -845,7 +845,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( pTextRanges->size() )
                 {
                     long nA = pTextRanges->at(0);
-                    long nB = pTextRanges->at(0);
+                    long nB = pTextRanges->at(1);
                     DBG_ASSERT( nA <= nB, "TextRange distorted?" );
                     long nW = nB - nA;
                     if ( nW > nMaxRangeWidth )
