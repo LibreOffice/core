@@ -100,19 +100,20 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
     return GTK_WIDGET( pDocView );
 }
 
+// We know that VirtualDevises use a DPI of 96.
+static const int g_nDPI = 96;
+
+/// Converts from document coordinates to screen pixels.
+static float twipToPixel(float nInput)
+{
+    return nInput / 1440.0f * g_nDPI;
+}
+
 void renderDocument( LOKDocView* pDocView )
 {
-    long nWidth, nHeight;
-    int nRenderWidth, nRenderHeight;
+    long nDocumentWidthTwips, nDocumentHeightTwips, nBufferWidthPixels, nBufferHeightPixels;
     unsigned char* pBuffer;
     int nRowStride;
-    // TODO: we really should scale by screen DPI here -- 10 seems to be a vaguely
-    // correct factor for my screen at least.
-    const float fScaleFactor = 0.1;
-
-    // Various things blow up if we try to draw too large a tile,
-    // this size seems to be safe. (Very rare/unlikely that
-    const int nMaxWidth = 100000;
 
     g_assert( pDocView->pDocument );
 
@@ -121,37 +122,25 @@ void renderDocument( LOKDocView* pDocView )
         g_object_unref( G_OBJECT( pDocView->pPixBuf ) );
     }
 
-    pDocView->pDocument->pClass->getDocumentSize( pDocView->pDocument, &nWidth, &nHeight );
-
-    if ( nWidth * fScaleFactor > nMaxWidth )
-    {
-        nWidth = nMaxWidth;
-    }
-    if ( nHeight * fScaleFactor > nMaxWidth )
-    {
-        nHeight = nMaxWidth;
-    }
+    pDocView->pDocument->pClass->getDocumentSize(pDocView->pDocument, &nDocumentWidthTwips, &nDocumentHeightTwips);
 
     // Draw the whole document at once (for now)
 
-    nRenderWidth = nWidth * pDocView->fZoom * fScaleFactor;
-    nRenderHeight = nHeight * pDocView->fZoom * fScaleFactor;
+    nBufferWidthPixels = twipToPixel(nDocumentWidthTwips) * pDocView->fZoom;
+    nBufferHeightPixels = twipToPixel(nDocumentHeightTwips) * pDocView->fZoom;
 
     pDocView->pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB,
                                         TRUE, 8,
-                                        nRenderWidth, nRenderHeight);
+                                        nBufferWidthPixels, nBufferHeightPixels);
 
 
     pBuffer = gdk_pixbuf_get_pixels( pDocView->pPixBuf );
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
                                             pBuffer,
-                                            nRenderWidth, nRenderHeight,
+                                            nBufferWidthPixels, nBufferHeightPixels,
                                             &nRowStride,
                                             0, 0, // origin
-                                            nWidth, nHeight );
-    // TODO: double check that the rowstride really matches what we expected,
-    // although presumably we'd already be crashing by now if things were
-    // wrong.
+                                            nDocumentWidthTwips, nDocumentHeightTwips );
     (void) nRowStride;
 
     gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas ), pDocView->pPixBuf );
