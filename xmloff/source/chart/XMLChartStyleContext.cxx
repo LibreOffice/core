@@ -68,6 +68,15 @@ XMLChartStyleContext::XMLChartStyleContext(
         mrStyles( rStyles )
 {}
 
+XMLChartStyleContext::XMLChartStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily )
+:   XMLShapeStyleContext(rImport, Element, xAttrList, rStyles, nFamily),
+    mrStyles( rStyles )
+{
+}
+
 XMLChartStyleContext::~XMLChartStyleContext()
 {}
 
@@ -144,6 +153,14 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
                                                              xAttrList );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLChartStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

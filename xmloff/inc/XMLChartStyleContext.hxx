@@ -42,6 +42,9 @@ public:
         const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
+    XMLChartStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
     virtual ~XMLChartStyleContext();
 
     /// is called after all styles have been read to apply styles
@@ -54,6 +57,10 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_INC_XMLCHARTSTYLECONTEXT_HXX
