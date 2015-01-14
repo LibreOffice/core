@@ -274,12 +274,19 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nFamily,
             SvXMLStylesContext& rStyles );
+    SwXMLTextStyleContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        sal_uInt16 nFamily, SvXMLStylesContext& rStyles );
     virtual ~SwXMLTextStyleContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 };
@@ -316,6 +323,15 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nFamily,
         SvXMLStylesContext& rStyles ) :
     XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily ),
+    pConditions( 0 )
+{
+}
+
+SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl(
+    SwXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt16 nFamily, SvXMLStylesContext& rStyles )
+:   XMLTextStyleContext( rImport, Element, xAttrList, rStyles, nFamily ),
     pConditions( 0 )
 {
 }
@@ -361,6 +377,14 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLTextStyleContext_Impl::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
