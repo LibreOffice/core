@@ -37,7 +37,7 @@ local hook_name
 
     if [ -d ${repo?}/.git ] ; then
         # use core's hook by default
-	for hook_name in $(ls -1 ${COREDIR?}/.git-hooks) ; do
+	for hook_name in $(ls -1 "${COREDIR?}/.git-hooks") ; do
             hook="${repo?}/.git/hooks/${hook_name?}"
             if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -45,7 +45,7 @@ local hook_name
             fi
 	done
         # override if need be by the submodules' own hooks
-	for hook_name in $(ls -1 ${COREDIR?}/${repo?}/.git-hooks 2>/dev/null) ; do
+	for hook_name in $(ls -1 "${COREDIR?}/${repo?}/.git-hooks" 2>/dev/null) ; do
             hook="${repo?}/.git/hooks/${hook_name?}"
             if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -53,7 +53,7 @@ local hook_name
 	    fi
 	done
     elif [ -d .git/modules/${repo}/hooks ] ; then
-	for hook_name in $(ls -1 ${COREDIR?}/.git-hooks) ; do
+	for hook_name in $(ls -1 "${COREDIR?}/.git-hooks") ; do
             hook=".git/modules/${repo?}/hooks/${hook_name?}"
             if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -61,7 +61,7 @@ local hook_name
             fi
 	done
         # override if need be by the submodules' own hooks
-	for hook_name in $(ls -1 ${COREDIR?}/${repo?}/.git-hooks 2>/dev/null) ; do
+	for hook_name in $(ls -1 "${COREDIR?}/${repo?}/.git-hooks" 2>/dev/null) ; do
             hook=".git/modules/${repo?}/hooks/${hook_name?}"
             if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
 		rm -f "${hook?}"
@@ -78,8 +78,8 @@ local repo
 local hook_name
 local hook
 
-    pushd ${COREDIR?} > /dev/null
-    for hook_name in $(ls -1 ${COREDIR?}/.git-hooks) ; do
+    pushd "${COREDIR?}" > /dev/null
+    for hook_name in $(ls -1 "${COREDIR?}/.git-hooks") ; do
         hook=".git/hooks/${hook_name?}"
         if [ ! -e "${hook?}" -o -L "${hook?}" ] ; then
             rm -f "${hook?}"
