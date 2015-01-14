@@ -46,11 +46,45 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
     aGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
+XMLGradientStyleContext::XMLGradientStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList )
+{
+    // start import
+    XMLGradientStyleImport aGradientStyle( GetImport() );
+
+    //something missing
+}
+
 XMLGradientStyleContext::~XMLGradientStyleContext()
 {
 }
 
 void XMLGradientStyleContext::EndElement()
+{
+    uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
+
+    try
+    {
+        if(xGradient.is())
+        {
+            if( xGradient->hasByName( maStrName ) )
+            {
+                xGradient->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xGradient->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
+void SAL_CALL XMLGradientStyleContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference< container::XNameContainer > xGradient( GetImport().GetGradientHelper() );
 

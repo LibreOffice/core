@@ -37,9 +37,13 @@ public:
 
     XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    XMLGradientStyleContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual bool IsTransient() const SAL_OVERRIDE;
 };
