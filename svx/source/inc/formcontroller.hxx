@@ -75,6 +75,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22

@@ -30,6 +30,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <svl/hint.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include "ReportDefines.hxx"

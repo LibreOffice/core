@@ -476,7 +476,7 @@ LngSvcMgr::LngSvcMgr()
 
     UpdateAll();
 
-    aUpdateIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aUpdateIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
     aUpdateIdle.SetIdleHdl(LINK(this, LngSvcMgr, updateAndBroadcast));
 
     // request to be notified if an extension has been added/removed

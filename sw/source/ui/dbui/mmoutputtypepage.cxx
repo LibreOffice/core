@@ -64,6 +64,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/idle.hxx>
 
 #include <helpid.h>
 #include <cmdid.h>
@@ -92,7 +93,7 @@ struct SwSendMailDialog_Impl
         nCurrentDescriptor(0),
         nDocumentCount(0)
              {
-                aRemoveIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+                aRemoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
              }
 
     ~SwSendMailDialog_Impl()

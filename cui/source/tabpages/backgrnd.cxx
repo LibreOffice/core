@@ -22,6 +22,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/idle.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
@@ -1092,7 +1093,7 @@ void SvxBackgroundTabPage::ShowSelector()
 
         // delayed loading via timer (because of UI-Update)
         pPageImpl->pLoadIdle = new Idle;
-        pPageImpl->pLoadIdle->SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        pPageImpl->pLoadIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
         pPageImpl->pLoadIdle->SetIdleHdl(
             LINK( this, SvxBackgroundTabPage, LoadTimerHdl_Impl ) );
 

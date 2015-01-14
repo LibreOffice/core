@@ -28,6 +28,7 @@
 #include <vcl/group.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/idle.hxx>
 
 #include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
@@ -1772,7 +1773,7 @@ OUString FormulaDlg::GetMeText() const
 void FormulaDlg::Update()
 {
     m_pImpl->Update();
-    m_pImpl->aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
+    m_pImpl->aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWER);
     m_pImpl->aIdle.SetIdleHdl(LINK( this, FormulaDlg, UpdateFocusHdl));
     m_pImpl->aIdle.Start();
 }

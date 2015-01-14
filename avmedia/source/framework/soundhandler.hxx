@@ -36,6 +36,7 @@
 #include <cppuhelper/weak.hxx>
 
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <tools/link.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <osl/mutex.hxx>

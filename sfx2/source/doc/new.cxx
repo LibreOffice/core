@@ -22,6 +22,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/idle.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
@@ -431,7 +432,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         m_pRegionLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
     }
 
-    aPrevIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aPrevIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     aPrevIdle.SetIdleHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
     m_pRegionLb->SelectEntryPos(0);

@@ -20,6 +20,7 @@
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
@@ -57,7 +58,7 @@ struct SvxModifyControl::ImplData
         maImages[MODIFICATION_STATE_YES]      = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES));
         maImages[MODIFICATION_STATE_FEEDBACK] = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
 
-        maIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+        maIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
     }
 };
 

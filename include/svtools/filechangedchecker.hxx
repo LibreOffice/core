@@ -14,6 +14,7 @@
 #include <boost/function.hpp>
 #include <osl/file.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 /** Periodically checks if a file has been modified
 

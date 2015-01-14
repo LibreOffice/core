@@ -30,6 +30,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <svtools/svtabbx.hxx>
 #include "svtools/treelistentry.hxx"
 
@@ -124,7 +125,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateIdle.SetIdleHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
-    aUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aUpdateIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
 
     m_pPbOpenSource->Hide();
 

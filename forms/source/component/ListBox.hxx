@@ -39,6 +39,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #include <vector>
 

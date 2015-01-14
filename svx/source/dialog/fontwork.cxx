@@ -282,7 +282,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
 
     m_pShadowColorLB->SetSelectHdl( LINK(this, SvxFontWorkDialog, ColorSelectHdl_Impl) );
 
-    aInputIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aInputIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
     aInputIdle.SetIdleHdl(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
 }
 

@@ -23,6 +23,7 @@
 #include <avmedia/mediaitem.hxx>
 
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/slider.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/edit.hxx>

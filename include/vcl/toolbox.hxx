@@ -26,6 +26,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vector>
 
 class UserDrawEvent;

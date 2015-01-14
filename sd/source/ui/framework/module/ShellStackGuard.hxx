@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XController.hpp>
 
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <boost/scoped_ptr.hpp>
 

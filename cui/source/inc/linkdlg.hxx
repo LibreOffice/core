@@ -25,6 +25,7 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/idle.hxx>
 
 #include <svtools/svmedit.hxx>
 #include <svtools/svtabbx.hxx>

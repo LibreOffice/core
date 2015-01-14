@@ -1398,9 +1398,9 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
         LogicToPixel(Point(159, 2), MAP_APPFONT),
         LogicToPixel(Size(61, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT));
 
-    m_aEditLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    m_aEditLoseFocusIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
-    m_aBoxLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    m_aBoxLoseFocusIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     m_aBoxLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
     m_aNameBox.add_mnemonic_label(m_pHeaderAccName);

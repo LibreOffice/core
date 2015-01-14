@@ -22,6 +22,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/idle.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
@@ -364,7 +365,7 @@ void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl();
-    pImpl->aSelectionIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    pImpl->aSelectionIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     pImpl->aSelectionIdle.SetIdleHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
     EnableControls_Impl( 0 );

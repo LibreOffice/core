@@ -28,6 +28,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/idle.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svmedit.hxx>

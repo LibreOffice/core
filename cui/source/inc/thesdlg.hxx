@@ -25,6 +25,7 @@
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/idle.hxx>
 #include <svx/stddlg.hxx>
 
 #include <memory>

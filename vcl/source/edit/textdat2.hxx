@@ -23,6 +23,7 @@
 #include <vcl/seleng.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/idle.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

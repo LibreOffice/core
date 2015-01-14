@@ -775,7 +775,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
         mpOnlineSpellingList->seekShape(0);
         mpOnlineSpellingIdle = new Idle();
         mpOnlineSpellingIdle->SetIdleHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
-        mpOnlineSpellingIdle->SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+        mpOnlineSpellingIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
         mpOnlineSpellingIdle->Start();
     }
 }

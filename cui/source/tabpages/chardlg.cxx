@@ -19,6 +19,7 @@
 
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/idle.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/printer.hxx>
@@ -250,7 +251,7 @@ struct SvxCharNamePage_Impl
         m_bInSearchMode ( false )
 
     {
-        m_aUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        m_aUpdateIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
     }
 
     ~SvxCharNamePage_Impl()

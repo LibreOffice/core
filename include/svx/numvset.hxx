@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_NUMVSET_HXX
 #define INCLUDED_SVX_NUMVSET_HXX
 
+#include <vcl/idle.hxx>
 #include <svtools/valueset.hxx>
 #include <limits.h>
 #include <com/sun/star/uno/Reference.h>

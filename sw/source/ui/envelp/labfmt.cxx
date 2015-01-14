@@ -347,7 +347,7 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_pSavePB->SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
     // Set timer
-    aPreviewIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aPreviewIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
     aPreviewIdle.SetIdleHdl(LINK(this, SwLabFmtPage, PreviewHdl));
 }
 
