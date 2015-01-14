@@ -25,6 +25,7 @@
 #include "fmtcntnt.hxx"
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"
+#include "fmteiro.hxx"
 #include "charfmt.hxx"
 #include "frmfmt.hxx"
 #include "fmtanchr.hxx"
@@ -482,6 +483,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_PROTECT:
                 static_cast<const SvxProtectItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_EDIT_IN_READONLY:
+                static_cast<const SwFmtEditInReadonly*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -496,9 +500,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_EDIT_IN_READONLY:
-                pWhich = "edit in read-only";
-                break;
             case RES_COLUMNBALANCE:
                 pWhich = "column balance";
                 break;

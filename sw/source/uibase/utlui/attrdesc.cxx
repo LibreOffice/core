@@ -549,6 +549,14 @@ bool SwFmtEditInReadonly::GetPresentation
     return true;
 }
 
+void SwFmtEditInReadonly::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtEditInReadonly"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 bool SwFmtLayoutSplit::GetPresentation
 (
     SfxItemPresentation /*ePres*/,

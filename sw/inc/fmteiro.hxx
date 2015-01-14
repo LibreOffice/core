@@ -39,6 +39,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
