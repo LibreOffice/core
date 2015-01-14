@@ -21,8 +21,8 @@
  <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
- <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104"/>
- <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:helpid="10104"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:helpid="10110"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:visible="false" toolbar:helpid="10395"/>
  <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:visible="false" toolbar:helpid="10397"/>
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464"/>
