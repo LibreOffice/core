@@ -452,6 +452,21 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
 {
 }
 
+XMLTableStyleContext::XMLTableStyleContext(
+    ScXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
+:   XMLPropStyleContext( rImport, Element, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    sDataStyleName(),
+    pStyles(&rStyles),
+    nNumberFormat(-1),
+    nLastSheet(-1),
+    bParentSet(false),
+    mpCondFormat(NULL),
+    mbDeleteCondFormat(true)
+{
+}
+
 XMLTableStyleContext::~XMLTableStyleContext()
 {
     if(mbDeleteCondFormat)
@@ -492,6 +507,14 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                            xAttrList );
     return pContext;
+}
+
+uno::Reference< XFastContextHandler > SAL_CALL
+    XMLTableStyleContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< XFastContextHandler >();
 }
 
 void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRangeAddress>& xCellRanges )
