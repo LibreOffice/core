@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_e887a710",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-14T08:52:13Z",
+      "side": 1,
+      "message": "checking after the fact via FStatHelper::IsDocument is prone to TOCTOU and should not be necessary, as storeToURL should apparently report failure by throwing an IOException\n\nif there are failure cases that do not throw, I would suggest to rather fix those and make them throw",
+      "revId": "695f80463f04d568695b31acd26fd411f6c27409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_088d2b31",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-14T08:52:13Z",
+      "side": 1,
+      "message": "* output should go to stderr; I see this file uses a mixture of both \u003cstdio.h\u003e and \u003ciostream\u003e based output, but new code should probably better use \u003ciostream\u003e functionality\n\n* conversion to OString should use osl_getThreadTextEncoding() instead of hard-coded UTF8",
+      "revId": "695f80463f04d568695b31acd26fd411f6c27409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
