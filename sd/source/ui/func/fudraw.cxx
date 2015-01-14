@@ -255,8 +255,8 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 
     if (mpView->IsAction())
     {
-        // #i33136#
-        if(bIsImageSelected || (bRestricted && doConstructOrthogonal()))
+        // #i33136# and fdo#88339
+        if(bRestricted && (bIsImageSelected || doConstructOrthogonal()))
         {
             // Scale proportionally by default:
             // rectangle->quadrat, ellipse->circle, Images etc.
