@@ -2028,14 +2028,14 @@ DECLARE_RTFIMPORT_TEST(testFdo84685, "fdo84685.rtf")
 {
     // index mark was not imported
     uno::Reference<text::XDocumentIndexMark> xMark(
-        getProperty<uno::Reference<text::XDocumentIndexMark>>(
+        getProperty<uno::Reference<text::XDocumentIndexMark> >(
             getRun(getParagraph(1), 1),
             "DocumentIndexMark"));
     CPPUNIT_ASSERT(xMark.is());
     CPPUNIT_ASSERT_EQUAL(OUString("Key the 1st"), getProperty<OUString>(xMark, "PrimaryKey"));
     // let's test toc entry too
     uno::Reference<text::XDocumentIndexMark> xTOCMark(
-        getProperty<uno::Reference<text::XDocumentIndexMark>>(
+        getProperty<uno::Reference<text::XDocumentIndexMark> >(
             getRun(getParagraph(2), 1),
             "DocumentIndexMark"));
     CPPUNIT_ASSERT(xTOCMark.is());
