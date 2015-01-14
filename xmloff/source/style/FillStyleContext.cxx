@@ -89,6 +89,17 @@ XMLHatchStyleContext::XMLHatchStyleContext( SvXMLImport& rImport, sal_uInt16 nPr
     aHatchStyle.importXML( xAttrList, maAny, maStrName );
 }
 
+XMLHatchStyleContext::XMLHatchStyleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLStyleContext( rImport, Element, xAttrList )
+{
+    // start import
+    XMLHatchStyleImport aHatchStyle( GetImport() );
+
+    //something missing
+}
+
 XMLHatchStyleContext::~XMLHatchStyleContext()
 {
 }
@@ -114,6 +125,30 @@ void XMLHatchStyleContext::EndElement()
     catch( container::ElementExistException& )
     {}
 }
+
+void SAL_CALL XMLHatchStyleContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    uno::Reference< container::XNameContainer > xHatch( GetImport().GetHatchHelper() );
+
+    try
+    {
+        if(xHatch.is())
+        {
+            if( xHatch->hasByName( maStrName ) )
+            {
+                xHatch->replaceByName( maStrName, maAny );
+            }
+            else
+            {
+                xHatch->insertByName( maStrName, maAny );
+            }
+        }
+    }
+    catch( container::ElementExistException& )
+    {}
+}
+
 
 bool XMLHatchStyleContext::IsTransient() const
 {
