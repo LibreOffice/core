@@ -1055,6 +1055,16 @@ ScMasterPageContext::ScMasterPageContext( SvXMLImport& rImport,
 {
 }
 
+ScMasterPageContext::ScMasterPageContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    bool bOverwrite )
+:   XMLTextMasterPageContext( rImport, Element, xAttrList, bOverwrite ),
+    bContainsRightHeader(false),
+    bContainsRightFooter(false)
+{
+}
+
 ScMasterPageContext::~ScMasterPageContext()
 {
 }
@@ -1065,6 +1075,14 @@ SvXMLImportContext *ScMasterPageContext::CreateChildContext(
         const uno::Reference< XAttributeList > & xAttrList )
 {
     return XMLTextMasterPageContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    ScMasterPageContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return XMLTextMasterPageContext::createFastChildContext( Element, xAttrList );
 }
 
 SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
