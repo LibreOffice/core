@@ -32,4 +32,7 @@
       <prop oor:name="DocumentService">
         <value>com.sun.star.report.ReportDefinition</value>
       </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">ODF Database Report</value>
+      </prop>
     </node>

@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>calc_StarOffice_XML_Calc_Template</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">OpenOffice.org 1.0 Spreadsheet Template</value>
+        </prop>
     </node>

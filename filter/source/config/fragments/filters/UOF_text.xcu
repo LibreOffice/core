@@ -24,7 +24,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value>Unified Office Format text</value>
+            <value xml:lang="en-US">Unified Office Format text</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>

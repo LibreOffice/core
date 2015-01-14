@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>writer_StarOffice_XML_Writer</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">OpenOffice.org 1.0 Text Document</value>
+        </prop>
     </node>

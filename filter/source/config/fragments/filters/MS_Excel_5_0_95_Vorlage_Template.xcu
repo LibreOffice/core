@@ -24,4 +24,7 @@
     <prop oor:name="Type"><value>calc_MS_Excel_5095_VorlageTemplate</value></prop>
     <prop oor:name="TemplateName"/>
     <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
-</node>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Microsoft Excel 5.0 Template</value>
+        </prop>
+    </node>

@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>generic_HTML</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">HTML Document (Calc)</value>
+        </prop>
     </node>

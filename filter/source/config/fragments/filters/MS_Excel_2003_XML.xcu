@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>calc_MS_Excel_2003_XML</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
+        </prop>
     </node>

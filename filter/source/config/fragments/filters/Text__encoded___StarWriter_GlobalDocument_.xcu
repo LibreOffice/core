@@ -25,4 +25,7 @@
         <prop oor:name="Type"><value>generic_Text</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Text - Choose Encoding (Master Document)</value>
+        </prop>
     </node>

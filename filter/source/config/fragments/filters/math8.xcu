@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>math8</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.formula.FormulaProperties</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">ODF Formula</value>
+                    </prop>
     </node>

@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>chart_StarOffice_XML_Chart</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.chart2.ChartDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">OpenOffice.org 1.0 Chart</value>
+        </prop>
     </node>

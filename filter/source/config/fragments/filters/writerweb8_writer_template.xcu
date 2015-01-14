@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>writerweb8_writer_template</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">HTML Document Template</value>
+                    </prop>
     </node>

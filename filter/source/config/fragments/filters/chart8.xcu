@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>chart8</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.chart2.ChartDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">ODF Chart</value>
+                    </prop>
     </node>

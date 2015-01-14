@@ -295,10 +295,6 @@ $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_database_others
 	frameloaders/org_openoffice_comp_dbflt_DBContentLoader2 \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	StarOffice_XML__Base__ui \
-))
-
 # fcfg_reportbuilder
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_reportbuilder_types.xcu,filter/source/config/fragments/types,\
 	StarBaseReport \
@@ -308,11 +304,6 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_reportbuilder_ty
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_reportbuilder_filters.xcu,filter/source/config/fragments/filters,\
 	StarBaseReport \
 	StarBaseReportChart \
-))
-
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	StarBaseReport_ui \
-	StarBaseReportChart_ui \
 ))
 
 # fcfg_writer
@@ -442,22 +433,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	zTXT \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	HTML__StarWriter__ui \
-	MS_Word_95_Vorlage_ui \
-	MS_Word_97_Vorlage_ui \
-	StarOffice_XML__Writer__ui \
-	Text_ui \
-	Text__encoded__ui \
-	writer_StarOffice_XML_Writer_Template_ui \
-	writer8_ui \
-	writer8_template_ui \
-	MS_Word_2007_XML_ui \
-	MS_Word_2007_XML_Template_ui \
-	OOXML_Text_ui \
-	OOXML_Text_Template_ui \
-))
-
 # fcfg_web
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_web_types.xcu,filter/source/config/fragments/types,\
 	generic_HTML \
@@ -481,16 +456,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_web_filters.xc
 	writerweb8_writer \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	HTML_ui \
-	Text__StarWriter_Web__ui \
-	Text__encoded___StarWriter_Web__ui \
-	writer_web_StarOffice_XML_Writer_ui \
-	writer_web_StarOffice_XML_Writer_Web_Template_ui \
-	writerweb8_writer_template_ui \
-	writerweb8_writer_ui \
-))
-
 # fcfg_global
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter/source/config/fragments/types,\
 	generic_Text \
@@ -510,15 +475,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters
 	writerglobal8_template \
 	writerglobal8_writer \
 	writerglobal8_HTML \
-))
-
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	Text__encoded___StarWriter_GlobalDocument__ui \
-	writer_globaldocument_StarOffice_XML_Writer_ui \
-	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument_ui \
-	writerglobal8_ui \
-	writerglobal8_template_ui \
-	writerglobal8_writer_ui \
 ))
 
 # fcfg_calc
@@ -598,25 +554,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.x
 	Mac_Works_Calc \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	HTML__StarCalc__ui \
-	MS_Excel_4_0_Vorlage_Template_ui \
-	MS_Excel_5_0_95_Vorlage_Template_ui \
-	MS_Excel_95_Vorlage_Template_ui \
-	MS_Excel_97_Vorlage_Template_ui \
-	StarOffice_XML__Calc__ui \
-	Text___txt___csv__StarCalc__ui \
-	calc_HTML_WebQuery_ui \
-	calc_StarOffice_XML_Calc_Template_ui \
-	calc8_ui \
-	calc8_template_ui \
-	calc_MS_Excel_2007_XML_ui \
-	calc_MS_Excel_2007_XML_Template_ui \
-	calc_MS_Excel_2007_Binary_ui \
-	calc_OOXML_ui \
-	calc_OOXML_Template_ui \
-))
-
 # fcfg_draw
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
 	draw_ODG_FlatXML \
@@ -667,13 +604,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.x
 	PageMakerDocument \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	StarOffice_XML__Draw__ui \
-	draw_StarOffice_XML_Draw_Template_ui \
-	draw8_ui \
-	draw8_template_ui \
-))
-
 # fcfg_impress
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filter/source/config/fragments/types,\
 	draw_StarOffice_XML_Draw \
@@ -721,20 +651,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filter
 	ClarisWorks_Impress \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	MS_PowerPoint_97_Vorlage_ui \
-	impress_StarOffice_XML_Draw_ui \
-	StarOffice_XML__Impress__ui \
-	impress_StarOffice_XML_Impress_Template_ui \
-	impress8_ui \
-	impress8_template_ui \
-	impress8_draw_ui \
-	impress_MS_PowerPoint_2007_XML_ui \
-	impress_MS_PowerPoint_2007_XML_Template_ui \
-	impress_OOXML_ui \
-	impress_OOXML_Template_ui \
-))
-
 # fcfg_chart
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_chart_types.xcu,filter/source/config/fragments/types,\
 	chart_StarOffice_XML_Chart \
@@ -748,11 +664,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_chart_filters.
 
 $(eval $(call filter_Configuration_add_others,fcfg_langpack,fcfg_chart_others.xcu,filter/source/config/fragments,\
 	frameloaders/com_sun_star_comp_chart2_ChartFrameLoader \
-))
-
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	StarOffice_XML__Chart__ui \
-	chart8_ui \
 ))
 
 # fcfg_math
@@ -770,11 +681,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_math_filters.x
 	StarOffice_XML__Math_ \
 	math_pdf_Export \
 	math8 \
-))
-
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	StarOffice_XML__Math__ui \
-	math8_ui \
 ))
 
 # fcfg_drawgraphics
@@ -861,10 +767,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_xpm_Export \
 ))
 
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	draw_html_Export_ui \
-))
-
 # fcfg_impressgraphics
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_types.xcu,filter/source/config/fragments/types,\
 	bmp_MS_Windows \
@@ -910,10 +812,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_tif_Export \
 	impress_wmf_Export \
 	impress_xpm_Export \
-))
-
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	impress_html_Export_ui \
 ))
 
 # fcfg_writergraphics
@@ -1029,11 +927,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.x
 	UOF_text \
 	UOF_spreadsheet \
 	UOF_presentation \
-))
-
-$(eval $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
-	MS_Excel_2003_XML_ui \
-	MS_Word_2003_XML_ui \
 ))
 
 # vim: set noet sw=4 ts=4:

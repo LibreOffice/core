@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>impress_StarOffice_XML_Impress</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">OpenOffice.org 1.0 Presentation</value>
+        </prop>
     </node>

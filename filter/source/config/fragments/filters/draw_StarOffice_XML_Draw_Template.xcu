@@ -24,4 +24,7 @@
         <prop oor:name="Type"><value>draw_StarOffice_XML_Draw_Template</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">OpenOffice.org 1.0 Drawing Template</value>
+        </prop>
     </node>
