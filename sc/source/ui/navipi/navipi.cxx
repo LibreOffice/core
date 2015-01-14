@@ -657,7 +657,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aWndScenarios.SetPosPixel( aLbEntries.GetPosPixel() );
 
     aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
-    aContentIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aContentIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
 
     FreeResource();
 
@@ -878,9 +878,9 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK( ScNavigatorDlg, TimeHdl, Timer*, pTimer )
+IMPL_LINK( ScNavigatorDlg, TimeHdl, Idle*, pIdle )
 {
-    if ( pTimer != &aContentIdle )
+    if ( pIdle != &aContentIdle )
         return 0;
 
     aLbEntries.Refresh( SC_CONTENT_NOTE );

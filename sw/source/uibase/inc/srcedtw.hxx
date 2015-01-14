@@ -22,6 +22,7 @@
 #include <vcl/window.hxx>
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 
 #include <vcl/xtextedt.hxx>
 #include <set>

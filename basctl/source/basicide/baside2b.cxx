@@ -1356,7 +1356,7 @@ void EditorWindow::DestroyProgress()
 void EditorWindow::ForceSyntaxTimeout()
 {
     aSyntaxIdle.Stop();
-    aSyntaxIdle.GetTimeoutHdl().Call(&aSyntaxIdle);
+    aSyntaxIdle.GetIdleHdl().Call(&aSyntaxIdle);
 }
 
 

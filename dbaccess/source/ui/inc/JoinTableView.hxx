@@ -21,6 +21,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/rtti.hxx>
 #include <svtools/transfer.hxx>

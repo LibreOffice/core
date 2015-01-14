@@ -16,6 +16,7 @@
 #include <salhelper/thread.hxx>
 
 #include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 
 /// Avoid our timer tests just wedging the build if they fail.
@@ -86,12 +87,13 @@ class IdleBool : public Idle
     bool &mrBool;
 public:
     IdleBool( bool &rBool ) :
-        Idle( VCL_IDLE_PRIORITY_LOWEST ), mrBool( rBool )
+        Idle(), mrBool( rBool )
     {
+        SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
         Start();
         mrBool = false;
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void DoIdle() SAL_OVERRIDE
     {
         mrBool = true;
         Application::EndYield();
@@ -102,7 +104,7 @@ void TimerTest::testIdle()
 {
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
-    Timer::ProcessAllIdleHandlers();
+    Idle::ProcessAllIdleHandlers();
     CPPUNIT_ASSERT_MESSAGE("watchdog triggered", bTriggered);
 }
 

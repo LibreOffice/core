@@ -257,7 +257,7 @@ private:
 
     ScNavigatorControllerItem** ppBoundItems;
 
-    DECL_LINK( TimeHdl, Timer* );
+    DECL_LINK( TimeHdl, Idle* );
 
     void    DoResize();
 

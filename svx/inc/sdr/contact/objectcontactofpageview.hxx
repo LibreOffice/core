@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <vcl/idle.hxx>
 
 
 // predeclarations
