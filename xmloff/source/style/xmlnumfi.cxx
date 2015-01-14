@@ -1445,6 +1445,39 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     }
 }
 
+SvXMLNumFormatContext::SvXMLNumFormatContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles)
+:   SvXMLStyleContext( rImport, Element, xAttrList ),
+    pData( pNewData ),
+    pStyles( &rStyles ),
+    aMyConditions(),
+    nType( nNewType ),
+    nKey(-1),
+    nFormatLang( LANGUAGE_SYSTEM ),
+    bAutoOrder( false ),
+    bFromSystem( false ),
+    bTruncate( true ),
+    bAutoDec( false ),
+    bAutoInt( false ),
+    bHasExtraText( false ),
+    bHasLongDoW( false ),
+    bHasEra( false ),
+    bHasDateTime( false ),
+    bRemoveAfterUse( false ),
+    eDateDOW( XML_DEA_NONE ),
+    eDateDay( XML_DEA_NONE ),
+    eDateMonth( XML_DEA_NONE ),
+    eDateYear( XML_DEA_NONE ),
+    eDateHours( XML_DEA_NONE ),
+    eDateMins( XML_DEA_NONE ),
+    eDateSecs( XML_DEA_NONE ),
+    bDateNoDefault( false )
+{
+}
+
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                                     sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
@@ -1477,6 +1510,38 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bDateNoDefault( false )
 {
     SetAttribute(XML_NAMESPACE_STYLE, GetXMLToken(XML_NAME), rLName);
+}
+
+SvXMLNumFormatContext::SvXMLNumFormatContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const sal_Int32 nTempKey, SvXMLStylesContext& rStyles )
+:   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_DATA_STYLE ),
+    pData( NULL ),
+    pStyles( &rStyles ),
+    aMyConditions(),
+    nType( 0 ),
+    nKey(nTempKey),
+    nFormatLang( LANGUAGE_SYSTEM ),
+    bAutoOrder( false ),
+    bFromSystem( false ),
+    bTruncate( true ),
+    bAutoDec( false ),
+    bAutoInt( false ),
+    bHasExtraText( false ),
+    bHasLongDoW( false ),
+    bHasEra( false ),
+    bHasDateTime( false ),
+    bRemoveAfterUse( false ),
+    eDateDOW( XML_DEA_NONE ),
+    eDateDay( XML_DEA_NONE ),
+    eDateMonth( XML_DEA_NONE ),
+    eDateYear( XML_DEA_NONE ),
+    eDateHours( XML_DEA_NONE ),
+    eDateMins( XML_DEA_NONE ),
+    eDateSecs( XML_DEA_NONE ),
+    bDateNoDefault( false )
+{
 }
 
 SvXMLNumFormatContext::~SvXMLNumFormatContext()
@@ -1534,6 +1599,15 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
         pContext = new SvXMLImportContext( GetImport(), nPrfx, rLName );
     return pContext;
 }
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SvXMLNumFormatContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
+}
+
 
 sal_Int32 SvXMLNumFormatContext::GetKey()
 {

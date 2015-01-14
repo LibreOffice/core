@@ -162,18 +162,29 @@ public:
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
+    SvXMLNumFormatContext( SvXMLImport& rImport, sal_Int32 Element,
+        SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     SvXMLStylesContext& rStyles );
+    SvXMLNumFormatContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const sal_Int32 nKey, SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                     const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void CreateAndInsert(bool bOverwrite) SAL_OVERRIDE;
     virtual void Finish(bool bOverwrite) SAL_OVERRIDE;
 
