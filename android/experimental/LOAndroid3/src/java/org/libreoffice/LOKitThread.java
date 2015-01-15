@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
@@ -21,6 +22,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;
     private GeckoLayerClient mLayerClient;
+    private boolean mInvalidationCallbackRegistered = false;
 
     public LOKitThread() {
         TileProviderFactory.initialize();
@@ -97,11 +99,10 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             LOKitShell.showProgressSpinner();
-            mTileProvider.registerInvalidationCallback(this);
             refresh();
             LOKitShell.hideProgressSpinner();
+            mInvalidationCallbackRegistered = false;
         }
-
         return isReady;
     }
 
@@ -143,8 +144,18 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 break;
             case LOEvent.THUMBNAIL:
                 createThumbnail(event.mTask);
+                break;
             case LOEvent.TOUCH:
-                LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+                touch(event.mTouchType, event.mMotionEvent);
+                break;
+        }
+    }
+
+    private void touch(String touchType, MotionEvent motionEvent) {
+        LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+        if (!mInvalidationCallbackRegistered) {
+            mTileProvider.registerInvalidationCallback(this);
+            mInvalidationCallbackRegistered = true;
         }
     }
 

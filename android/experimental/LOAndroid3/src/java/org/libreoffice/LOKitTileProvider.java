@@ -70,8 +70,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
     public void postLoad() {
         mDocument.initializeForRendering();
-        // FIXME see gtktiledviewer, this has to be registered when we enter edit mode, not right after loading.
-        // mDocument.setMessageCallback(this);
+        mDocument.setMessageCallback(this);
 
         int parts = mDocument.getParts();
         Log.i(LOGTAG, "Document parts: " + parts);
@@ -303,7 +302,6 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                                 twipToPixel(x + width, mDPI),
                                 twipToPixel(y + height, mDPI)
                         );
-                        Log.i(LOGTAG, "Invalidate R: " + rect +" - " + getPageWidth() + " " + getPageHeight());
                         tileInvalidationCallback.invalidate(rect);
                     }
                 }
