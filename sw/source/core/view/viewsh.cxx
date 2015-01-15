@@ -1778,6 +1778,8 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     OutputDevice *pSaveOut = mpOut;
     bool bTiledRendering = mbTiledRendering;
     mbTiledRendering = true;
+    LibreOfficeKitCallback pCallback = mpLibreOfficeKitCallback;
+    mpLibreOfficeKitCallback = 0;
     mpOut = &rDevice;
 
     // resizes the virtual device so to contain the entrie context
@@ -1825,6 +1827,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
+    mpLibreOfficeKitCallback = pCallback;
     mbTiledRendering = bTiledRendering;
 
     static bool bDebug = getenv("SW_DEBUG_TILEDRENDERING") != 0;
