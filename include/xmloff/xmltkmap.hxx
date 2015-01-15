@@ -30,13 +30,14 @@ class SvXMLTokenMap_Impl;
 class SvXMLTokenMapEntry_Impl;
 
 #define XML_TOK_UNKNOWN 0xffffU
-#define XML_TOKEN_MAP_END { 0xffffU, ::xmloff::token::XML_TOKEN_INVALID, 0U }
+#define XML_TOKEN_MAP_END { 0xffffU, ::xmloff::token::XML_TOKEN_INVALID, 0U, 0 }
 
 struct SvXMLTokenMapEntry
 {
     sal_uInt16  nPrefixKey;
     enum ::xmloff::token::XMLTokenEnum eLocalName;
     sal_uInt16  nToken;
+    sal_Int32 fastToken;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLTokenMap
@@ -45,6 +46,8 @@ class XMLOFF_DLLPUBLIC SvXMLTokenMap
 
     SAL_DLLPRIVATE SvXMLTokenMapEntry_Impl *_Find(
         sal_uInt16 nKind, const OUString& rName ) const;
+    SAL_DLLPRIVATE SvXMLTokenMapEntry_Impl *_Find(
+        sal_Int32 nTok ) const;
 
 public:
 
@@ -52,6 +55,7 @@ public:
     ~SvXMLTokenMap();
 
     sal_uInt16 Get( sal_uInt16 nPrefix, const OUString& rLName ) const;
+    sal_uInt16 Get( sal_Int32 nTok ) const;
 };
 
 #endif // INCLUDED_XMLOFF_XMLTKMAP_HXX
