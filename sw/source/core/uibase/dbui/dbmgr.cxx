@@ -206,12 +206,16 @@ void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTarget
 class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
 < lang::XEventListener >
 {
-    SwDBManager&     rDBManager;
+private:
+    SwDBManager * m_pDBManager;
 
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+
 public:
     SwConnectionDisposedListener_Impl(SwDBManager& rMgr);
     virtual ~SwConnectionDisposedListener_Impl();
+
+    void Dispose() { m_pDBManager = 0; }
 
 };
 
@@ -219,13 +223,18 @@ struct SwDBManager_Impl
 {
     SwDSParam*          pMergeData;
     AbstractMailMergeDlg*     pMergeDialog;
-    uno::Reference<lang::XEventListener> xDisposeListener;
+    ::rtl::Reference<SwConnectionDisposedListener_Impl> m_xDisposeListener;
 
     SwDBManager_Impl(SwDBManager& rDBManager)
        :pMergeData(0)
        ,pMergeDialog(0)
-       ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))
+       , m_xDisposeListener(new SwConnectionDisposedListener_Impl(rDBManager))
         {}
+
+    ~SwDBManager_Impl()
+    {
+        m_xDisposeListener->Dispose();
+    }
 };
 
 static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
@@ -360,7 +369,7 @@ bool SwDBManager::MergeNew(const SwMergeDescriptor& rMergeDesc )
             {
                 uno::Reference<XComponent> xComponent(pInsert->xConnection, UNO_QUERY);
                 if(xComponent.is())
-                    xComponent->addEventListener(pImpl->xDisposeListener);
+                    xComponent->addEventListener(pImpl->m_xDisposeListener.get());
             }
             catch(const Exception&)
             {
@@ -2017,7 +2026,7 @@ uno::Reference< XConnection> SwDBManager::RegisterConnection(OUString& rDataSour
         {
             uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(pImpl->xDisposeListener);
+                xComponent->addEventListener(pImpl->m_xDisposeListener.get());
         }
         catch(const Exception&)
         {
@@ -2129,7 +2138,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
             {
                 uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
                 if(xComponent.is())
-                    xComponent->addEventListener(pImpl->xDisposeListener);
+                    xComponent->addEventListener(pImpl->m_xDisposeListener.get());
             }
             catch(const Exception&)
             {
@@ -2166,7 +2175,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
         {
             uno::Reference<XComponent> xComponent(pFound->xConnection, UNO_QUERY);
             if(xComponent.is())
-                xComponent->addEventListener(pImpl->xDisposeListener);
+                xComponent->addEventListener(pImpl->m_xDisposeListener.get());
         }
         catch(const Exception&)
         {
@@ -2933,27 +2942,31 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     return nRet;
 }
 
-SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rMgr) :
-    rDBManager(rMgr)
+SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwDBManager& rManager)
+    : m_pDBManager(&rManager)
 {
-};
+}
 
 SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
 {
-};
+}
 
 void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
+
+    if (!m_pDBManager) return; // we're disposed too!
+
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
-    for(sal_uInt16 nPos = rDBManager.aDataSourceParams.size(); nPos; nPos--)
+    for (size_t nPos = m_pDBManager->aDataSourceParams.size(); nPos; nPos--)
     {
-        SwDSParam* pParam = &rDBManager.aDataSourceParams[nPos - 1];
+        SwDSParam* pParam = &m_pDBManager->aDataSourceParams[nPos - 1];
         if(pParam->xConnection.is() &&
                 (xSource == pParam->xConnection))
         {
-            rDBManager.aDataSourceParams.erase(rDBManager.aDataSourceParams.begin() + nPos - 1);
+            m_pDBManager->aDataSourceParams.erase(
+                    m_pDBManager->aDataSourceParams.begin() + nPos - 1);
         }
     }
 }
