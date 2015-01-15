@@ -1,6 +1,9 @@
 package org.mozilla.gecko.gfx;
 
+import android.app.ActivityManager;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class ComposedTileLayer extends Layer {
+public abstract class ComposedTileLayer extends Layer implements ComponentCallbacks2 {
     private static final String LOGTAG = ComposedTileLayer.class.getSimpleName();
 
     protected final List<SubTile> tiles = new CopyOnWriteArrayList<SubTile>();
@@ -24,7 +27,13 @@ public abstract class ComposedTileLayer extends Layer {
     protected RectF currentViewport = new RectF();
     protected float currentZoom;
 
+    private static int getMemoryClass(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        return activityManager.getMemoryClass() * 1024 * 1024;
+    }
+
     public ComposedTileLayer(Context context) {
+        context.registerComponentCallbacks(this);
         this.tileSize = new IntSize(256, 256);
     }
 
@@ -185,7 +194,7 @@ public abstract class ComposedTileLayer extends Layer {
     private void markTiles(ImmutableViewportMetrics viewportMetrics) {
         float zoom = getZoom(viewportMetrics);
         for (SubTile tile : tiles) {
-            if (FloatUtils.fuzzyEquals(tile.id.zoom, zoom)) {
+            if (FloatUtils.fuzzyEquals(tile.id.zoom, currentZoom)) {
                 RectF tileRect = tile.id.getRect();
                 if (!RectF.intersects(currentViewport, tileRect)) {
                     tile.markForRemoval();
@@ -220,6 +229,26 @@ public abstract class ComposedTileLayer extends Layer {
             if (RectF.intersects(rect, tile.id.getRect())) {
                 LOKitShell.sendEvent(LOEventFactory.tileRerender(this, tile));
             }
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    }
+
+    @Override
+    public void onLowMemory() {
+        Log.i(LOGTAG, "onLowMemory");
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        Log.i(LOGTAG, "Trimming memory " + level);
+        if (level >= 10 /*TRIM_MEMORY_RUNNING_LOW*/) {
+            Log.i(LOGTAG, "Trimming memory - TRIM_MEMORY_RUNNING_LOW");
+        } else if (level >= 15 /*TRIM_MEMORY_RUNNING_CRITICAL*/) {
+            Log.i(LOGTAG, "Trimming memory - TRIM_MEMORY_RUNNING_CRITICAL");
+            clearAndReset();
         }
     }
 }
