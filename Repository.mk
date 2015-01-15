@@ -97,6 +97,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 		unopkg \
 		unopkg_com \
 	) \
+    textdemo \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,base_brand, \

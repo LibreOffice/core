@@ -30,7 +30,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
 			Executable_icontest \
 			Executable_outdevgrind \
 			Executable_vcldemo \
-            Executable_mtfdemo )) \
+            Executable_mtfdemo \
+            Executable_textdemo )) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
