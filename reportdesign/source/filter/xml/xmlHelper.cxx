@@ -50,6 +50,8 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <xmloff/token/tokens.hxx>
 
 #define XML_RPT_ALGINMENT   (XML_DB_TYPES_START+1)
 namespace rptxml
@@ -60,6 +62,7 @@ namespace rptxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
+    using namespace com::sun::star::xml::sax;
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
 }
@@ -330,28 +333,48 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
     return comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
 }
 
+using namespace xmloff;
+
 SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
 {
     static const SvXMLTokenMapEntry aElemTokenMap[]=
     {
-        { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER           },
-        { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER             },
-        { XML_NAMESPACE_REPORT, XML_GROUP,                      XML_TOK_GROUP                   },
-        { XML_NAMESPACE_REPORT, XML_DETAIL      ,               XML_TOK_DETAIL                  },
-        { XML_NAMESPACE_REPORT, XML_PAGE_FOOTER ,               XML_TOK_PAGE_FOOTER             },
-        { XML_NAMESPACE_REPORT, XML_REPORT_FOOTER,              XML_TOK_REPORT_FOOTER           },
-        { XML_NAMESPACE_REPORT, XML_HEADER_ON_NEW_PAGE,         XML_TOK_HEADER_ON_NEW_PAGE      },
-        { XML_NAMESPACE_REPORT, XML_FOOTER_ON_NEW_PAGE,         XML_TOK_FOOTER_ON_NEW_PAGE      },
-        { XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,               XML_TOK_COMMAND_TYPE            },
-        { XML_NAMESPACE_REPORT, XML_COMMAND,                    XML_TOK_COMMAND                 },
-        { XML_NAMESPACE_REPORT, XML_FILTER,                     XML_TOK_FILTER                  },
-        { XML_NAMESPACE_REPORT, XML_CAPTION,                    XML_TOK_CAPTION                 },
-        { XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING,          XML_TOK_ESCAPE_PROCESSING       },
-        { XML_NAMESPACE_REPORT, XML_FUNCTION,                   XML_TOK_REPORT_FUNCTION         },
-        { XML_NAMESPACE_OFFICE, XML_MIMETYPE,                   XML_TOK_REPORT_MIMETYPE         },
-        { XML_NAMESPACE_DRAW,   XML_NAME,                       XML_TOK_REPORT_NAME             },
-        { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS,       XML_TOK_MASTER_DETAIL_FIELDS    },
-        { XML_NAMESPACE_DRAW,   XML_FRAME,                      XML_TOK_SUB_FRAME               },
+        { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_report_header) },
+        { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_page_header) },
+        { XML_NAMESPACE_REPORT, XML_GROUP,                      XML_TOK_GROUP,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_group) },
+        { XML_NAMESPACE_REPORT, XML_DETAIL      ,               XML_TOK_DETAIL,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_detail) },
+        { XML_NAMESPACE_REPORT, XML_PAGE_FOOTER ,               XML_TOK_PAGE_FOOTER,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_page_footer) },
+        { XML_NAMESPACE_REPORT, XML_REPORT_FOOTER,              XML_TOK_REPORT_FOOTER,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_report_footer) },
+        { XML_NAMESPACE_REPORT, XML_HEADER_ON_NEW_PAGE,         XML_TOK_HEADER_ON_NEW_PAGE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_header_on_new_page) },
+        { XML_NAMESPACE_REPORT, XML_FOOTER_ON_NEW_PAGE,         XML_TOK_FOOTER_ON_NEW_PAGE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_footer_on_new_page) },
+        { XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,               XML_TOK_COMMAND_TYPE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_command_type) },
+        { XML_NAMESPACE_REPORT, XML_COMMAND,                    XML_TOK_COMMAND,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_command) },
+        { XML_NAMESPACE_REPORT, XML_FILTER,                     XML_TOK_FILTER,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_filter) },
+        { XML_NAMESPACE_REPORT, XML_CAPTION,                    XML_TOK_CAPTION,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_caption) },
+        { XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING,          XML_TOK_ESCAPE_PROCESSING,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_escape_processing) },
+        { XML_NAMESPACE_REPORT, XML_FUNCTION,                   XML_TOK_REPORT_FUNCTION,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_function) },
+        { XML_NAMESPACE_OFFICE, XML_MIMETYPE,                   XML_TOK_REPORT_MIMETYPE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_mimetype) },
+        { XML_NAMESPACE_DRAW,   XML_NAME,                       XML_TOK_REPORT_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+        { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS,       XML_TOK_MASTER_DETAIL_FIELDS,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_master_detail_fields) },
+        { XML_NAMESPACE_DRAW,   XML_FRAME,                      XML_TOK_SUB_FRAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_frame) },
         XML_TOKEN_MAP_END
     };
     return new SvXMLTokenMap( aElemTokenMap );
@@ -361,9 +384,12 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
 {
     static const SvXMLTokenMapEntry aElemTokenMap[]=
     {
-        { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD},
-        { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER},
-        { XML_NAMESPACE_REPORT, XML_DETAIL,                 XML_TOK_SUB_DETAIL},
+        { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_master_detail_field) },
+        { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_master) },
+        { XML_NAMESPACE_REPORT, XML_DETAIL,                 XML_TOK_SUB_DETAIL,
+            (FastToken::NAMESPACE | XML_NAMESPACE_REPORT | XML_detail) },
         XML_TOKEN_MAP_END
     };
     return new SvXMLTokenMap( aElemTokenMap );
@@ -375,7 +401,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
        {
                { XML_ISOTROPIC,        awt::ImageScaleMode::ISOTROPIC },
                { XML_ANISOTROPIC,      awt::ImageScaleMode::ANISOTROPIC },
-               { XML_TOKEN_INVALID, 0 }
+               { xmloff::token::XML_TOKEN_INVALID, 0 }
        };
        return s_aXML_EnumMap;
 }
