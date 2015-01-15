@@ -104,12 +104,17 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxOpenCLTabPage::~SvxOpenCLTabPage()
 {
-    for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
+    disposeOnce();
+}
+
+void SvxOpenCLTabPage::dispose()
+{
+   for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpBlackList->GetEntry(i)->GetUserData());
     for ( sal_uInt16 i = 0; i < mpWhiteList->GetEntryCount(); ++i )
         delete static_cast<OpenCLConfig::ImplMatcher*>(mpWhiteList->GetEntry(i)->GetUserData());
-    delete mpBlackList;
-    delete mpWhiteList;
+    mpBlackList.disposeAndClear()
+    mpWhiteList.disposeAndClear()
 }
 
 SfxTabPage* SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

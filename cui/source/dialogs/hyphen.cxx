@@ -513,11 +513,6 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
 }
 
 
-SvxHyphenWordDialog::~SvxHyphenWordDialog()
-{
-}
-
-
 void SvxHyphenWordDialog::SetWindowTitle( LanguageType nLang )
 {
     OUString aLangStr( SvtLanguageTable::GetLanguageString( nLang ) );

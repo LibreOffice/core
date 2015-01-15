@@ -395,7 +395,13 @@ SvInsertPlugInDialog::SvInsertPlugInDialog(vcl::Window* pParent,
 
 SvInsertPlugInDialog::~SvInsertPlugInDialog()
 {
+    dispose();
+}
+
+void SvInsertPlugInDialog::dispose()
+{
     delete m_pURL;
+    InsertObjectDialog_Impl::dispose();
 }
 
 

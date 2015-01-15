@@ -56,11 +56,6 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage( vcl::Window* pParent, const SfxIte
 }
 
 
-SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
-{
-}
-
-
 SfxTabPage*  SvxJSearchOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxJSearchOptionsPage( pParent, *rSet );

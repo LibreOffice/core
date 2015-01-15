@@ -57,10 +57,6 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rS
     m_pNumeralsLB->SetDropDownLineCount( m_pNumeralsLB->GetEntryCount() );
 }
 
-SvxCTLOptionsPage::~SvxCTLOptionsPage()
-{
-}
-
 SfxTabPage* SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxCTLOptionsPage( pParent, *rAttrSet );

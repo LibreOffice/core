@@ -82,6 +82,7 @@ protected:
 public:
 
     virtual                     ~_SvxMacroTabPage();
+    virtual void                dispose() SAL_OVERRIDE;
     void                        InitResources();
 
     void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );

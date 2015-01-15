@@ -62,8 +62,6 @@ protected:
                         SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
 public:
-                        virtual ~SvxJSearchOptionsPage();
-
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -307,10 +307,6 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pToolTipsCB->SetClickHdl( aLink );
 }
 
-OfaMiscTabPage::~OfaMiscTabPage()
-{
-}
-
 SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaMiscTabPage( pParent, *rAttrSet );
@@ -686,9 +682,15 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+    dispose();
+}
+
+void OfaViewTabPage::dispose()
+{
     delete mpDrawinglayerOpt;
     delete pCanvasSettings;
     delete pAppearanceCfg;
+    SfxTabPage::dispose();
 }
 
 #if defined( UNX )
@@ -1205,7 +1207,13 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
 {
+    dispose();
+}
+
+void OfaLanguagesTabPage::dispose()
+{
     delete pLangConfig;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaLanguagesTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

@@ -56,6 +56,7 @@ class SvxAsianLayoutPage : public SfxTabPage
 public:
 
     virtual ~SvxAsianLayoutPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*  GetRanges();

@@ -73,6 +73,7 @@ private:
 public:
     SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSaveTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

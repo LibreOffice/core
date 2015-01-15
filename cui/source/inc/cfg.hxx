@@ -322,7 +322,6 @@ protected:
 
 public:
     SvxMenuEntriesListBox(vcl::Window*, SvxConfigPage*);
-    virtual ~SvxMenuEntriesListBox();
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
 
@@ -483,6 +482,7 @@ private:
 public:
     SvxMenuConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual ~SvxMenuConfigPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     SaveInData* CreateSaveInData(
         const ::com::sun::star::uno::Reference <
@@ -516,8 +516,6 @@ public:
         vcl::Window*, SvxEntries*,
         SvxConfigEntry*, bool bCreateMenu = false );
 
-    virtual ~SvxMainMenuOrganizerDialog ();
-
     SvxEntries*     GetEntries() { return mpEntries;}
     void            SetEntries( SvxEntries* );
     SvxConfigEntry* GetSelectedEntry();
@@ -544,6 +542,7 @@ public:
 
     SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
     virtual ~SvxToolbarEntriesListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetChangedListener( const Link& aChangedListener )
         { m_aChangedListener = aChangedListener; }
@@ -584,6 +583,7 @@ private:
 public:
     SvxToolbarConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual ~SvxToolbarConfigPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
                                              bool bFront = false,
@@ -741,6 +741,7 @@ public:
             );
 
     virtual ~SvxIconSelectorDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
         GetSelectedIcon();

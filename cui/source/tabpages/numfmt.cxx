@@ -282,8 +282,15 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
 
 SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 {
+    dispose();
+}
+
+
+void SvxNumberFormatTabPage::dispose()
+{
     delete pNumFmtShell;
     delete pNumItem;
+    SfxTabPage::dispose();
 }
 
 void SvxNumberFormatTabPage::Init_Impl()

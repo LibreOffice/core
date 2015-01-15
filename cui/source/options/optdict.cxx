@@ -333,11 +333,6 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
 
 
-SvxEditDictionaryDialog::~SvxEditDictionaryDialog()
-{
-}
-
-
 /*
 void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 {

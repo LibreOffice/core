@@ -163,8 +163,9 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
         OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
                             const SfxItemSet& rSet );
         virtual ~OfaSwAutoFmtOptionsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
-    public:
+public:
         static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
         virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -257,6 +258,7 @@ private:
 public:
                         OfaAutocorrReplacePage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~OfaAutocorrReplacePage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 
@@ -315,6 +317,7 @@ private:
 public:
                         OfaAutocorrExceptPage( vcl::Window* pParent, const SfxItemSet& rSet );
                         virtual ~OfaAutocorrExceptPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -381,6 +384,7 @@ private:
                         OfaQuoteTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 public:
                         virtual ~OfaQuoteTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -430,8 +434,6 @@ private:
                         OfaAutoCompleteTabPage( vcl::Window* pParent,
                                                 const SfxItemSet& rSet );
 public:
-                        virtual ~OfaAutoCompleteTabPage();
-
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
@@ -496,8 +498,6 @@ private:
     DECL_LINK(SelectHdl, void *);
 
 public:
-
-    virtual ~OfaSmartTagOptionsTabPage();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

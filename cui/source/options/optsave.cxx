@@ -199,7 +199,13 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 SfxSaveTabPage::~SfxSaveTabPage()
 {
+    dispose();
+}
+
+void SvxSaveTabPage::dispose()
+{
     delete pImpl;
+    SfxTabPage::dispose();
 }
 
 

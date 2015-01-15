@@ -336,12 +336,6 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
 
 
-SvxBorderTabPage::~SvxBorderTabPage()
-{
-}
-
-
-
 SfxTabPage* SvxBorderTabPage::Create( vcl::Window* pParent,
                                       const SfxItemSet* rAttrSet )
 {

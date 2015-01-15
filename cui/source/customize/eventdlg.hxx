@@ -48,6 +48,7 @@ public:
                     struct EarlyInit { };
                     SvxEventConfigPage( vcl::Window *pParent, const SfxItemSet& rSet, EarlyInit );
                     virtual ~SvxEventConfigPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 

@@ -91,6 +91,7 @@ namespace svx
     public:
         DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
         virtual ~DbRegistrationOptionsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
         static const sal_uInt16*      GetRanges();
@@ -129,7 +130,6 @@ namespace svx
     {
     public:
         DatabaseRegistrationDialog( vcl::Window* pParent, const SfxItemSet& rAttr );
-        virtual ~DatabaseRegistrationDialog();
 
         virtual short   Execute() SAL_OVERRIDE;
     };

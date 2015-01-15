@@ -55,6 +55,7 @@ private:
 public:
     SvxDefaultColorOptPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxDefaultColorOptPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Construct();
 

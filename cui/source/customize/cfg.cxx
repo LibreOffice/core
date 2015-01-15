@@ -1395,11 +1395,6 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage
                      SV_DRAGDROP_APP_DROP);
 }
 
-SvxMenuEntriesListBox::~SvxMenuEntriesListBox()
-{
-    // do nothing
-}
-
 // drag and drop support
 DragDropMode SvxMenuEntriesListBox::NotifyStartDrag(
     TransferDataContainer& aTransferDataContainer, SvTreeListEntry* pEntry )
@@ -2226,6 +2221,11 @@ void SvxMenuConfigPage::Init()
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
+    dispose();
+}
+
+void SvxMenuConfigPage::dispose()
+{
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         MenuSaveInData* pData =
@@ -2236,6 +2236,7 @@ SvxMenuConfigPage::~SvxMenuConfigPage()
 
     delete m_pSelectorDlg;
     delete m_pContentsListBox;
+    SvxConfigPage::dispose();
 }
 
 IMPL_LINK( SvxMenuConfigPage, SelectMenuEntry, Control *, pBox )
@@ -2675,10 +2676,6 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
-{
-}
-
 IMPL_LINK( SvxMainMenuOrganizerDialog, SelectHdl, Control*, pCtrl )
 {
     (void)pCtrl;
@@ -2916,6 +2913,11 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
+    dispose();
+}
+
+void SvxToolbarConfigPage::dispose()
+{
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         ToolbarSaveInData* pData =
@@ -2931,6 +2933,7 @@ SvxToolbarConfigPage::~SvxToolbarConfigPage()
 
 
     delete m_pContentsListBox;
+    SvxConfigPage::dispose();
 }
 
 void SvxToolbarConfigPage::DeleteSelectedTopLevel()
@@ -4522,7 +4525,13 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(vcl::Window* pParent, SvxTool
 
 SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 {
+    dispose();
+}
+
+void SvxToolbarEntriesListBox::dispose()
+{
     delete m_pButtonData;
+    SvxMenuEntriesListBox::dispose();
 }
 
 void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pData )
@@ -4906,6 +4915,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
+    dispose();
+}
+
+void SvxIconSelectorDialog::dispose()
+{
     sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
     for (sal_uInt16 n = 0; n < nCount; ++n )
@@ -4920,6 +4934,7 @@ SvxIconSelectorDialog::~SvxIconSelectorDialog()
             xi->release();
         }
     }
+    ModalDialog::dispose();
 }
 
 uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()

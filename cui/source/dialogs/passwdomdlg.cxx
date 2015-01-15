@@ -153,6 +153,12 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
 
 PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 {
+    dispose();
+}
+
+void PasswordToOpenModifyDialog::dispose()
+{
+    SfxModalDialog::dispose();
 }
 
 

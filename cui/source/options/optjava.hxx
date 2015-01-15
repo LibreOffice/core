@@ -107,6 +107,7 @@ private:
 public:
     SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxJavaOptionsPage();
+    virtual void            dispose() SAL_OVERRIDE;
 
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
@@ -140,7 +141,6 @@ private:
 
 public:
     SvxJavaParameterDlg( vcl::Window* pParent );
-    virtual ~SvxJavaParameterDlg();
 
     virtual short           Execute() SAL_OVERRIDE;
 
@@ -173,6 +173,7 @@ private:
 public:
     SvxJavaClassPathDlg( vcl::Window* pParent );
     virtual ~SvxJavaClassPathDlg();
+    virtual void            dispose() SAL_OVERRIDE;
 
     inline const OUString&  GetOldPath() const { return m_sOldPath; }
     inline void             SetFocus() { m_pPathList->GrabFocus(); }

@@ -143,7 +143,13 @@ _SfxMacroTabPage::_SfxMacroTabPage(vcl::Window* pParent, const SfxItemSet& rAttr
 
 _SfxMacroTabPage::~_SfxMacroTabPage()
 {
+    dispose();
+}
+
+void _SfxMacroTabPage::dispose()
+{
     DELETEZ( mpImpl );
+    SfxTabPage::dispose();
 }
 
 void _SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )

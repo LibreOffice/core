@@ -64,7 +64,13 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItem
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
 {
+    dispose();
+}
+
+void SvxSearchFormatDialog::dispose()
+{
     delete m_pFontList;
+    SfxTabDialog::dispose();
 }
 
 void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )

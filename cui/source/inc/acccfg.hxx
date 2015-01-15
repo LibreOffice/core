@@ -172,6 +172,7 @@ private:
 public:
                                 SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
+    virtual void                dispose() SAL_OVERRIDE;
 
     virtual bool                FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void                Reset( const SfxItemSet* ) SAL_OVERRIDE;

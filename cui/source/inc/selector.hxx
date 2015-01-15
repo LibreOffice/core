@@ -102,6 +102,7 @@ friend class SvxConfigGroupListBox;
 public:
     SvxConfigFunctionListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxConfigFunctionListBox();
+    virtual void                    dispose() SAL_OVERRIDE;
     void                            ClearAll();
     OUString                        GetHelpText( SvTreeListEntry *pEntry );
     using Window::GetHelpText;
@@ -162,6 +163,7 @@ protected:
 public:
     SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle);
     virtual ~SvxConfigGroupListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
                     < ::com::sun::star::frame::XFrame >& xFrame);
@@ -203,8 +205,6 @@ public:
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame >& xFrame = 0
     );
-
-    virtual ~SvxScriptSelectorDialog ( );
 
     void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
     const Link& GetAddHdl() const { return m_aAddHdl; }

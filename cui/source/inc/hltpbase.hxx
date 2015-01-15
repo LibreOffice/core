@@ -118,6 +118,7 @@ public:
         const SfxItemSet& rItemSet
     );
     virtual ~SvxHyperlinkTabPageBase ();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetDocumentFrame(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame )

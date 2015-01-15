@@ -224,6 +224,11 @@ SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
+    dispose();
+}
+
+void SvxMultiPathDialog::dispose()
+{
     sal_uInt16 nPos = (sal_uInt16)m_pRadioLB->GetEntryCount();
     while ( nPos-- )
     {
@@ -232,13 +237,21 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
     }
 
     delete m_pRadioLB;
+    ModalDialog::dispose();
 }
 
 SvxPathSelectDialog::~SvxPathSelectDialog()
 {
+    dispose();
+}
+
+void SvxPathSelectDialog::dispose()
+{
     sal_uInt16 nPos = m_pPathLB->GetEntryCount();
     while ( nPos-- )
         delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
+
+    ModalDialog::dispose();
 }
 
 OUString SvxMultiPathDialog::GetPath() const

@@ -93,7 +93,6 @@ private:
 
 public:
                         SearchProgress( vcl::Window* pParent, const INetURLObject& rStartURL );
-                        virtual ~SearchProgress() {};
 
                         DECL_LINK( CleanUpHdl, void* );
 
@@ -161,7 +160,6 @@ private:
 
 public:
                         ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );
-                        virtual ~ActualizeProgress() {};
 
     virtual short       Execute() SAL_OVERRIDE;
 };
@@ -221,7 +219,6 @@ private:
 public:
 
                         TPGalleryThemeGeneral( vcl::Window* pParent, const SfxItemSet& rSet );
-                        virtual ~TPGalleryThemeGeneral() {}
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
@@ -287,6 +284,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 public:
                         TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet );
                         virtual ~TPGalleryThemeProperties();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }

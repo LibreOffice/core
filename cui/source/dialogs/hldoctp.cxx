@@ -71,10 +71,6 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 
-SvxHyperlinkDocTp::~SvxHyperlinkDocTp ()
-{
-}
-
 /*************************************************************************
 |*
 |* Fill all dialog-controls except controls in groupbox "more..."

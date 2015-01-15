@@ -143,10 +143,6 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     SetManager( pMgr );
 }
 
-SvBaseLinksDlg::~SvBaseLinksDlg()
-{
-}
-
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
 *************************************************************************/

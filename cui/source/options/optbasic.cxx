@@ -45,10 +45,6 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxI
 
 }
 
-SvxBasicIDEOptionsPage::~SvxBasicIDEOptionsPage()
-{
-}
-
 void SvxBasicIDEOptionsPage::LoadConfig()
 {
     bool bProcClose = officecfg::Office::BasicIDE::Autocomplete::AutocloseProc::get();

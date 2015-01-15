@@ -397,7 +397,13 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SvxColorTabPage::~SvxColorTabPage()
 {
+    dispose();
+}
+
+void SvxColorTabPage::dispose()
+{
     delete pShadow;
+    SfxTabPage::dispose();
 }
 
 

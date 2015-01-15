@@ -111,6 +111,7 @@ public:
         const Link& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** The found-handler gets in the 'found'-case a pointer on a FmFoundRecordInformation-structure
         (which is only valid in the handler; so if one needs to memorize the data, don't copy the pointer but

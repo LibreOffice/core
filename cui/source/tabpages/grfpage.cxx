@@ -127,7 +127,13 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
 
 SvxGrfCropPage::~SvxGrfCropPage()
 {
+    dispose();
+}
+
+void SvxGrfCropPage::dispose()
+{
     aTimer.Stop();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SvxGrfCropPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)

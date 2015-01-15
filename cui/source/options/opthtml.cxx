@@ -84,10 +84,6 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
     aCharSetLB->FillWithMimeAndSelectBest();
 }
 
-OfaHtmlTabPage::~OfaHtmlTabPage()
-{
-}
-
 SfxTabPage* OfaHtmlTabPage::Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet )
 {

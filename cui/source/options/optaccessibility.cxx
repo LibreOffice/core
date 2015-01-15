@@ -58,7 +58,13 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pPar
 
 SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 {
+    dispose();
+}
+
+void SvxAccessibilityOptionsTabPage::dispose()
+{
     delete m_pImpl;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SvxAccessibilityOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

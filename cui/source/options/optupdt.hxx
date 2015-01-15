@@ -52,7 +52,6 @@ private:
 
 public:
     SvxOnlineUpdateTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxOnlineUpdateTabPage();
 
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 

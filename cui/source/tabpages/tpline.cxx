@@ -230,6 +230,11 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
 
 SvxLineTabPage::~SvxLineTabPage()
 {
+    dispose();
+}
+
+void SvxLineTabPage::dispose()
+{
     // Symbols on a line (e.g. StarCharts), dtor new!
 
     delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
@@ -243,7 +248,9 @@ SvxLineTabPage::~SvxLineTabPage()
         delete pInfo->pBrushItem;
         delete pInfo;
     }
+    SvxTabPage::dispose();
 }
+
 void SvxLineTabPage::Construct()
 {
     // Color chart

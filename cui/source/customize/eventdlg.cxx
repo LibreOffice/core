@@ -103,6 +103,11 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
+    dispose();
+}
+
+void SvxEventConfigPage::dispose()
+{
     // need to delete the user data
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.GetEntry( 0 );
@@ -113,6 +118,7 @@ SvxEventConfigPage::~SvxEventConfigPage()
         pE->SetUserData((void*)0);
         pE = SvTreeListBox::NextSibling( pE );
     }
+    _SvxMacroTabPage::dispose();
 }
 
 void SvxEventConfigPage::ImplInitDocument()

@@ -291,10 +291,6 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     LoadExtensionThemes();
 }
 
-SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
-{
-}
-
 SfxTabPage* SvxPersonalizationTabPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {
     return new SvxPersonalizationTabPage( pParent, *rSet );

@@ -83,10 +83,6 @@ DatabaseRegistrationDialog::DatabaseRegistrationDialog( vcl::Window* pParent, co
     SetText(page->get<VclFrame>("frame1")->get_label());
 }
 
-DatabaseRegistrationDialog::~DatabaseRegistrationDialog()
-{
-}
-
 short DatabaseRegistrationDialog::Execute()
 {
     short result = SfxSingleTabDialog::Execute();
@@ -167,9 +163,15 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
+    dispose();
+}
+
+void DbRegistrationOptionsPage::dispose()
+{
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
     delete pPathBox;
+    SfxTabPage::dispose();
 }
 
 

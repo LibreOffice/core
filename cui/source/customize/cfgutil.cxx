@@ -276,7 +276,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigFunctionListB
 
 SfxConfigFunctionListBox::~SfxConfigFunctionListBox()
 {
+    dispose();
+}
+
+void SfxConfigFunctionListBox::dispose()
+{
     ClearAll();
+    SvTreeListBox::dispose();
 }
 
 void SfxConfigFunctionListBox::MouseMove( const MouseEvent& )
@@ -423,7 +429,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigGroupListBox(
 
 SfxConfigGroupListBox::~SfxConfigGroupListBox()
 {
+    dispose();
+}
+
+void SfxConfigGroupListBox::dispose()
+{
     ClearAll();
+    SvTreeListBox::dispose();
 }
 
 void SfxConfigGroupListBox::ClearAll()

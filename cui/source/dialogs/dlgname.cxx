@@ -138,7 +138,13 @@ SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const
 
 SvxMessDialog::~SvxMessDialog()
 {
+    dispose();
+}
+
+void SvxMessDialog::dispose()
+{
     delete pImage;
+    ModalDialog::dispose();
 }
 
 /*************************************************************************/

@@ -71,6 +71,7 @@ protected:
 private:
     SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
     virtual ~SvxBackgroundTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     VclContainer*           m_pAsGrid;
     FixedText*              m_pSelectTxt;

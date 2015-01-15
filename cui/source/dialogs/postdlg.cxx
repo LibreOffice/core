@@ -124,8 +124,14 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
 
 SvxPostItDialog::~SvxPostItDialog()
 {
+    dispose();
+}
+
+void SvxPostItDialog::dispose()
+{
     delete pOutSet;
     pOutSet = 0;
+    SfxModalDialog::dispose();
 }
 
 

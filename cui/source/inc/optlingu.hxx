@@ -86,6 +86,7 @@ class SvxEditModulesDlg : public ModalDialog
 public:
     SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData);
     virtual ~SvxEditModulesDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 // class SvxLinguTabPage -------------------------------------------------
@@ -147,6 +148,7 @@ private:
 
 public:
     virtual             ~SvxLinguTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

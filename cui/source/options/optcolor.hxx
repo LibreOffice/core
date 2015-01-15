@@ -49,6 +49,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
 public:
     SvxColorOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxColorOptionsTabPage(  );
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

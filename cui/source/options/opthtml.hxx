@@ -53,7 +53,6 @@ class OfaHtmlTabPage : public SfxTabPage
     DECL_LINK(CheckBoxHdl_Impl, CheckBox*);
 
     OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~OfaHtmlTabPage();
 public:
 
     static SfxTabPage*  Create( vcl::Window* pParent,

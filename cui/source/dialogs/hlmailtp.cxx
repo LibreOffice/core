@@ -66,10 +66,6 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
         m_pBtAdrBook->Hide();
 }
 
-SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
-{
-}
-
 /*************************************************************************
 |*
 |* Fill the all dialog-controls except controls in groupbox "more..."

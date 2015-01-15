@@ -115,8 +115,6 @@ public:
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
-
-    virtual                ~SvxStdParagraphTabPage();
 };
 
 // class SvxParaAlignTabPage ------------------------------------------------
@@ -156,7 +154,6 @@ class SvxParaAlignTabPage : public SfxTabPage
     void                    UpdateExample_Impl( bool bAll = false );
 
                             SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual                 ~SvxParaAlignTabPage();
 
 protected:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -192,8 +189,6 @@ class SvxExtParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pExtRanges[];
 
 public:
-    virtual             ~SvxExtParagraphTabPage();
-
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pExtRanges; }
@@ -271,9 +266,6 @@ class SvxAsianTabPage : public SfxTabPage
     DECL_LINK( ClickHdl_Impl, CheckBox* );
 
 public:
-    virtual ~SvxAsianTabPage();
-
-
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();

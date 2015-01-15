@@ -756,12 +756,18 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
 
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
+    dispose();
+}
+
+void TPGalleryThemeProperties::dispose()
+{
     xMediaPlayer.clear();
     xDialogListener.clear();
 
     for ( size_t i = 0, n = aFilterEntryList.size(); i < n; ++i ) {
         delete aFilterEntryList[ i ];
     }
+    SfxTabPage::dispose();
 }
 
 

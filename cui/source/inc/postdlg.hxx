@@ -46,6 +46,7 @@ public:
     SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSet,
                      bool bPrevNext = false);
     virtual ~SvxPostItDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     static const sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }

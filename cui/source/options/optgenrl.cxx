@@ -221,11 +221,6 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
 
 
 
-SvxGeneralTabPage::~SvxGeneralTabPage ()
-{ }
-
-
-
 // Initializes the titles and the edit boxes,
 // according to vRowInfo[] and vFieldInfo[] above.
 void SvxGeneralTabPage::InitControls ()

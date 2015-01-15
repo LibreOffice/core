@@ -40,6 +40,7 @@ public:
             sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */,
             bool bIsPasswordToModify );
     virtual ~PasswordToOpenModifyDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // AbstractPasswordToOpenModifyDialog
     OUString  GetPasswordToOpen() const;

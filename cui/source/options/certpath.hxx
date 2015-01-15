@@ -35,6 +35,7 @@ private:
 public:
     CertPathDialog(vcl::Window* pParent);
     virtual ~CertPathDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString getDirectory() const;
 };

@@ -54,10 +54,6 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(vcl::Window* pParent, const SfxItemSet& r
     aEBasicCodeCB->SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
 }
 
-OfaMSFilterTabPage::~OfaMSFilterTabPage()
-{
-}
-
 IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl)
 {
     aWBasicWbctblCB->Enable( aWBasicCodeCB->IsChecked() );
@@ -163,8 +159,14 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
 
 OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 {
+    dispose();
+}
+
+void OfaMSFilterTabPage2::dispose()
+{
     delete pCheckButtonData;
     delete m_pCheckLB;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaMSFilterTabPage2::Create( vcl::Window* pParent,

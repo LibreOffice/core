@@ -44,6 +44,7 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
 public:
 
     virtual ~SvxAccessibilityOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

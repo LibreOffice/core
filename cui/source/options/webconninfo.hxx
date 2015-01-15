@@ -64,6 +64,7 @@ namespace svx
     public:
         WebConnectionInfoDialog( vcl::Window* pParent );
         virtual ~WebConnectionInfoDialog();
+        virtual void dispose() SAL_OVERRIDE;
     };
 
 

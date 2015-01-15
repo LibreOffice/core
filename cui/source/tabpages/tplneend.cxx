@@ -114,12 +114,6 @@ void SvxLineEndDefTabPage::Resize()
 
 
 
-SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
-{
-}
-
-
-
 void SvxLineEndDefTabPage::Construct()
 {
     m_pLbLineEnds->Fill( pLineEndList );

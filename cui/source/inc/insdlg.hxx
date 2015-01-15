@@ -109,6 +109,7 @@ public:
     SvInsertPlugInDialog(vcl::Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
     virtual ~SvInsertPlugInDialog();
+    virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
 };
 

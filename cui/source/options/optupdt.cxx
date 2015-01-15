@@ -84,11 +84,6 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxIt
 
 
 
-SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
-{
-}
-
-
 void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 {
     OUString aDateStr;

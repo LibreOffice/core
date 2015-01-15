@@ -105,11 +105,17 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
     mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
 }
 
-SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
+SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase()
+{
+    dispose();
+}
+
+void SvxHyperlinkTabPageBase::dispose()
 {
     maTimer.Stop();
 
     delete mpMarkWnd;
+    IconChoicePage::dispose();
 }
 
 void SvxHyperlinkTabPageBase::ActivatePage()

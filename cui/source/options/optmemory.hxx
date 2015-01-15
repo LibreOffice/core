@@ -57,7 +57,6 @@ protected:
 
 public:
     OfaMemoryOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~OfaMemoryOptionsPage();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

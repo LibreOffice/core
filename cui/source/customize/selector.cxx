@@ -99,7 +99,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigFunctionListB
 
 SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
 {
+    dispose();
+}
+
+void SvxConfigFunctionListBox::dispose()
+{
     ClearAll();
+    SvTreeListBox::dispose();
 }
 
 SvTreeListEntry* SvxConfigFunctionListBox::GetLastSelectedEntry()
@@ -227,7 +233,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigGroupListBox(
 
 SvxConfigGroupListBox::~SvxConfigGroupListBox()
 {
+    dispose();
+}
+
+void SvxConfigGroupListBox::dispose()
+{
     ClearAll();
+    SvTreeListBox::dispose();
 }
 
 void SvxConfigGroupListBox::ClearAll()
@@ -904,10 +916,6 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_sDefaultDesc = m_pDescriptionText->GetText();
 
     UpdateUI();
-}
-
-SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
-{
 }
 
 IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )

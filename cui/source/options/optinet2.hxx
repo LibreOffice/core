@@ -99,7 +99,6 @@ private:
     DECL_LINK( LoseFocusHdl_Impl, Edit * );
 
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SvxProxyTabPage();
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
@@ -168,6 +167,7 @@ private:
 
                 SvxSecurityTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual     ~SvxSecurityTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
@@ -199,6 +199,7 @@ class SvxEMailTabPage : public SfxTabPage
 public:
     SvxEMailTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxEMailTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

@@ -75,7 +75,6 @@ private:
 
 public:
     SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
-    virtual ~SvxTextAnimationPage();
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() { return pRanges; }
@@ -104,7 +103,6 @@ public:
 
             SvxTextTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
                                 const SdrView* pView );
-            virtual ~SvxTextTabDialog() {};
 };
 
 

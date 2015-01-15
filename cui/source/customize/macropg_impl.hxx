@@ -49,7 +49,6 @@ private:
 
 public:
     AssignComponentDialog( vcl::Window * pParent, const OUString& rURL );
-    virtual ~AssignComponentDialog();
 
     OUString getURL( void ) const
         { return maURL; }

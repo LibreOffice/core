@@ -160,6 +160,11 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
 
 FmSearchDialog::~FmSearchDialog()
 {
+    dispose();
+}
+
+void FmSearchDialog::dispose()
+{
     if (m_aDelayedPaint.IsActive())
         m_aDelayedPaint.Stop();
 
@@ -172,6 +177,7 @@ FmSearchDialog::~FmSearchDialog()
     }
 
     delete m_pSearchEngine;
+    ModalDialog::dispose();
 }
 
 void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sInitialText)

@@ -151,7 +151,13 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()
 {
+    dispose();
+}
+
+void SvxAsianLayoutPage::dispose()
+{
     delete pImpl;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SvxAsianLayoutPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

@@ -142,7 +142,13 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
 
 WebConnectionInfoDialog::~WebConnectionInfoDialog()
 {
+    dispose();
+}
+
+void WebConnectionInfoDialog::dispose()
+{
     delete m_pPasswordsLB;
+    ModalDialog::dispose();
 }
 
 

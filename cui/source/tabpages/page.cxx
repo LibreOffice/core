@@ -366,10 +366,16 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
 SvxPageDescPage::~SvxPageDescPage()
 {
+    dispose();
+}
+
+void SvxPageDescPage::dispose()
+{
     if(mbDelPrinter)
     {
         delete mpDefPrinter;
     }
+    SfxTabPage::dispose();
 }
 
 

@@ -76,10 +76,6 @@ void LookUpComboBox::init(SvxThesaurusDialog *pDialog)
     m_pDialog = pDialog;
 }
 
-LookUpComboBox::~LookUpComboBox()
-{
-}
-
 void LookUpComboBox::Modify()
 {
     m_aModifyIdle.Start();
@@ -103,10 +99,6 @@ ReplaceEdit::ReplaceEdit(vcl::Window *pParent)
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReplaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new ReplaceEdit(pParent);
-}
-
-ReplaceEdit::~ReplaceEdit()
-{
 }
 
 void ReplaceEdit::Modify()
@@ -178,7 +170,13 @@ void ThesaurusAlternativesCtrl::init(SvxThesaurusDialog *pDialog)
 
 ThesaurusAlternativesCtrl::~ThesaurusAlternativesCtrl()
 {
+    dispose();
+}
+
+void ThesaurusAlternativesCtrl::dispose()
+{
     ClearExtraData();
+    SvxCheckListBox::dispose();
 }
 
 void ThesaurusAlternativesCtrl::ClearExtraData()
@@ -520,10 +518,6 @@ IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, EMPTYARG /*pBtn*/ )
 {
     EndDialog(RET_OK);
     return 0;
-}
-
-SvxThesaurusDialog::~SvxThesaurusDialog()
-{
 }
 
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )

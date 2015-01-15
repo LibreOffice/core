@@ -65,16 +65,6 @@ SvxConnectionDialog::SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet
 
 /*************************************************************************
 |*
-|* Dtor
-|*
-\************************************************************************/
-
-SvxConnectionDialog::~SvxConnectionDialog()
-{
-}
-
-/*************************************************************************
-|*
 |* page for changing connectors
 |*
 \************************************************************************/
@@ -139,16 +129,6 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     m_pMtrFldLine2->SetModifyHdl( aLink );
     m_pMtrFldLine3->SetModifyHdl( aLink );
     m_pLbType->SetSelectHdl( aLink );
-}
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-SvxConnectionPage::~SvxConnectionPage()
-{
 }
 
 /*************************************************************************

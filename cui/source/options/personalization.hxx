@@ -41,7 +41,6 @@ private:
 public:
     ::rtl::Reference< SearchAndParseThread > m_rApplyThread;
     SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet );
-    virtual ~SvxPersonalizationTabPage();
 
     static SfxTabPage* Create( vcl::Window *pParent, const SfxItemSet *rSet );
 

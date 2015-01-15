@@ -83,12 +83,18 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
 
 SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 {
+    dispose();
+}
+
+void SvxDefaultColorOptPage::dispose()
+{
     // save changes
     pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
     pChartOptions->Commit();
 
     delete pColorConfig;
     delete pChartOptions;
+    SfxTabPage::dispose();
 }
 
 void SvxDefaultColorOptPage::Construct()

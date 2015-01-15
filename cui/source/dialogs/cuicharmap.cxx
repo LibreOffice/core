@@ -102,15 +102,6 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
 
 
 
-SvxCharacterMap::~SvxCharacterMap()
-{
-}
-
-
-
-
-
-
 void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     m_pShowSet->SelectCharacter( c );
@@ -297,9 +288,6 @@ void SvxShowText::SetText( const OUString& rText )
 }
 
 
-
-SvxShowText::~SvxShowText()
-{}
 
 // class SvxCharacterMap =================================================
 

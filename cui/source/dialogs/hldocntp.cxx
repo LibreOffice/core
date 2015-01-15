@@ -129,12 +129,18 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
+    dispose();
+}
+
+void SvxHyperlinkNewDocTp::dispose()
+{
     for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
     {
         DocumentTypeData* pTypeData = static_cast<DocumentTypeData*>(
                                       m_pLbDocTypes->GetEntryData ( n ));
         delete pTypeData;
     }
+    SvxHyperlinkTabPageBase::dispose();
 }
 
 /*************************************************************************

@@ -43,6 +43,7 @@ namespace svx
     public:
         SuggestionSet( vcl::Window* pParent );
         virtual ~SuggestionSet();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
         void            ClearSet();
@@ -53,6 +54,7 @@ namespace svx
     public:
         SuggestionDisplay( vcl::Window* pParent, WinBits nBits );
         virtual ~SuggestionDisplay();
+        virtual void dispose() SAL_OVERRIDE;
 
         void DisplayListBox( bool bDisplayListBox );
 
@@ -87,8 +89,8 @@ namespace svx
 
     private:
         bool          m_bDisplayListBox;//otherwise ValueSet
-        SuggestionSet m_aValueSet;
-        ListBox       m_aListBox;
+        VclPtr<SuggestionSet> m_aValueSet;
+        VclPtr<ListBox>  m_aListBox;
 
         Link          m_aSelectLink;
         bool          m_bInSelectionUpdate;
@@ -136,7 +138,6 @@ namespace svx
         HangulHanjaConversionDialog(
                 vcl::Window* _pParent,
                 editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
-        virtual ~HangulHanjaConversionDialog( );
 
     public:
         void    SetOptionsChangedHdl( const Link& _rHdl );
@@ -222,6 +223,7 @@ namespace svx
     public:
                             HangulHanjaOptionsDialog( vcl::Window* _pParent );
         virtual             ~HangulHanjaOptionsDialog();
+        virtual void        dispose() SAL_OVERRIDE;
 
         void                AddDict( const OUString& _rName, bool _bChecked );
     };
@@ -257,7 +259,6 @@ namespace svx
         void                DoJump( bool _bUp );
     public:
                             SuggestionEdit( vcl::Window* pParent, WinBits nBits );
-        virtual             ~SuggestionEdit();
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         void init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
     };
@@ -312,6 +313,7 @@ namespace svx
     public:
                         HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );
                         virtual ~HangulHanjaEditDictDialog();
+        virtual void    dispose() SAL_OVERRIDE;
 
         void            UpdateScrollbar( void );
     };

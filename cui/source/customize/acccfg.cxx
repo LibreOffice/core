@@ -800,6 +800,11 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
+    dispose();
+}
+
+void SfxAcceleratorConfigPage::dispose()
+{
     // free memory - remove all dynamic user data
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
@@ -823,6 +828,7 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     m_pKeyBox->Clear();
 
     delete m_pFileDlg;
+    SfxTabPage::dispose();
 }
 
 void SfxAcceleratorConfigPage::InitAccCfg()

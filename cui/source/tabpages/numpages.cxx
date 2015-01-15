@@ -219,8 +219,14 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
 
 SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 {
+    dispose();
+}
+
+void SvxSingleNumPickTabPage::dispose()
+{
     delete pActNum;
     delete pSaveNum;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage*  SvxSingleNumPickTabPage::Create( vcl::Window* pParent,
@@ -380,8 +386,14 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
+    dispose();
+}
+
+void SvxBulletPickTabPage::dispose()
+{
     delete pActNum;
     delete pSaveNum;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage*  SvxBulletPickTabPage::Create( vcl::Window* pParent,
@@ -577,8 +589,14 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
 
 SvxNumPickTabPage::~SvxNumPickTabPage()
 {
+    dispose();
+}
+
+void SvxNumPickTabPage::dispose()
+{
     delete pActNum;
     delete pSaveNum;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage*  SvxNumPickTabPage::Create( vcl::Window* pParent,
@@ -818,8 +836,14 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
+    dispose();
+}
+
+void SvxBitmapPickTabPage::dispose()
+{
     delete pActNum;
     delete pSaveNum;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage*  SvxBitmapPickTabPage::Create( vcl::Window* pParent,
@@ -1125,9 +1149,15 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 {
+    dispose();
+}
+
+void SvxNumOptionsTabPage::dispose()
+{
     delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
     delete pActNum;
     delete pSaveNum;
+    SfxTabPage::dispose();
 }
 
 void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
@@ -2683,8 +2713,14 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
 
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
 {
+    dispose();
+}
+
+void SvxNumPositionTabPage::dispose()
+{
     delete pActNum;
     delete pSaveNum;
+    SfxTabPage::dispose();
 }
 /*-------------------------------------------------------*/
 

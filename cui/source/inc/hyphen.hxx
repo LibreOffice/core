@@ -85,7 +85,6 @@ public:
                          vcl::Window* pParent,
                          css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );
-    virtual ~SvxHyphenWordDialog();
 
     void            SetWindowTitle( LanguageType nLang );
     void            SelLeft();

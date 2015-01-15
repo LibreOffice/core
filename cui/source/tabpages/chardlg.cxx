@@ -185,12 +185,6 @@ SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const
 
 
 
-SvxCharBasePage::~SvxCharBasePage()
-{
-}
-
-
-
 void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
 {
     m_pPreviewWin->SetFromItemSet( rSet, m_bPreviewBackgroundToCharacter );
@@ -375,7 +369,13 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
 
 SvxCharNamePage::~SvxCharNamePage()
 {
+    dispose();
+}
+
+void SvxCharNamePage::dispose()
+{
     delete m_pImpl;
+    SvxCharBasePage::dispose();
 }
 
 
@@ -1439,12 +1439,6 @@ void SvxCharEffectsPage::Initialize()
         m_pPositionLB->Hide();
     }
 }
-
-SvxCharEffectsPage::~SvxCharEffectsPage()
-{
-}
-
-
 
 void SvxCharEffectsPage::UpdatePreview_Impl()
 {
@@ -2627,12 +2621,6 @@ void SvxCharPositionPage::Initialize()
     m_pScaleWidthMF->SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
 
-SvxCharPositionPage::~SvxCharPositionPage()
-{
-}
-
-
-
 void SvxCharPositionPage::UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc )
 {
     SetPrevFontEscapement( nProp, nEscProp, nEsc );
@@ -3320,12 +3308,6 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet&
 
     Initialize();
 }
-
-SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
-{
-}
-
-
 
 void SvxCharTwoLinesPage::Initialize()
 {

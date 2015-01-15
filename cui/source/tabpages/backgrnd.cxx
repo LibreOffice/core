@@ -183,6 +183,7 @@ public:
     BackgroundPreviewImpl(vcl::Window* pParent);
     void setBmp(bool bBmp);
     virtual ~BackgroundPreviewImpl();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            NotifyChange( const Color&  rColor );
     void            NotifyChange( const Bitmap* pBitmap );
@@ -230,7 +231,13 @@ void BackgroundPreviewImpl::setBmp(bool bBmp)
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
 {
+    dispose();
+}
+
+void BackgroundPreviewImpl::dispose()
+{
     delete pBitmap;
+    vcl::Window::dispose();
 }
 
 
@@ -422,6 +429,11 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
+    dispose();
+}
+
+void SvxBackgroundTabPage::dispose()
+{
     delete pPageImpl->pLoadIdle;
     delete pPageImpl;
     delete pImportDlg;
@@ -440,6 +452,7 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
         delete pParaBck_Impl->pCharBrush;
         delete pParaBck_Impl;
     }
+    SvxTabPage::dispose();
 }
 
 

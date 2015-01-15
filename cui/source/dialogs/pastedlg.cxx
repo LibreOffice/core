@@ -79,10 +79,6 @@ IMPL_LINK_INLINE_START( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox
 }
 IMPL_LINK_INLINE_END( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 
-SvPasteObjectDialog::~SvPasteObjectDialog()
-{
-}
-
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()
 *************************************************************************/

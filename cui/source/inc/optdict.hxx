@@ -152,7 +152,6 @@ public:
             const OUString& rName,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );
-    virtual ~SvxEditDictionaryDialog();
 
     sal_uInt16 GetSelectedDict() {return pAllDictsLB->GetSelectEntryPos();}
 };

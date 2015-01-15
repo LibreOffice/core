@@ -37,7 +37,6 @@ class OfaMSFilterTabPage : public SfxTabPage
     CheckBox*       aPBasicStgCB;
 
     OfaMSFilterTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~OfaMSFilterTabPage();
 
     DECL_LINK(LoadWordBasicCheckHdl_Impl, void *);
     DECL_LINK(LoadExcelBasicCheckHdl_Impl, void *);
@@ -88,6 +87,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
     OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType );
     void                InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,

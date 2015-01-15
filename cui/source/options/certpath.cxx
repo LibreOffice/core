@@ -144,6 +144,11 @@ OUString CertPathDialog::getDirectory() const
 
 CertPathDialog::~CertPathDialog()
 {
+    dispose();
+}
+
+void CertPathDialog::dispose()
+{
     SvTreeListEntry* pEntry = m_pCertPathList->First();
     while (pEntry)
     {
@@ -152,6 +157,7 @@ CertPathDialog::~CertPathDialog()
         pEntry = m_pCertPathList->Next( pEntry );
     }
     delete m_pCertPathList;
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvSimpleTable *, pList )

@@ -174,7 +174,6 @@ class ColorConfigWindow_Impl
 {
 public:
     ColorConfigWindow_Impl(vcl::Window* pParent);
-    virtual ~ColorConfigWindow_Impl();
 
 public:
     void SetLinks (Link const&, Link const&, Link const&);
@@ -639,9 +638,6 @@ void ColorConfigWindow_Impl::SetAppearance ()
     }
 }
 
-ColorConfigWindow_Impl::~ColorConfigWindow_Impl ()
-{ }
-
 void ColorConfigWindow_Impl::AdjustHeaderBar()
 {
     // horizontal positions
@@ -842,6 +838,7 @@ class ColorConfigCtrl_Impl : public VclVBox
 public:
     ColorConfigCtrl_Impl(vcl::Window* pParent);
     virtual ~ColorConfigCtrl_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
         const OUString &rColorSetting, const OUString &rPreview);
@@ -910,10 +907,16 @@ void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rU
 
 ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 {
+    dispose();
+}
+
+void ColorConfigCtrl_Impl::dispose()
+{
     delete m_pVScroll;
     delete m_pScrollWindow;
     delete m_pBody;
     delete m_pHeaderHB;
+    VclVBox::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorConfigCtrl(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -1056,6 +1059,11 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
 
 SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
+    dispose();
+}
+
+void SvxColorOptionsTabPage::dispose()
+{
     //when the dialog is cancelled but the color scheme ListBox has been changed these
     //changes need to be undone
     if(!bFillItemSetCalled && m_pColorSchemeLB->IsValueChangedFromSaved())
@@ -1073,6 +1081,7 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     pExtColorConfig->ClearModified();
     pExtColorConfig->EnableBroadcast();
     delete pExtColorConfig;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SvxColorOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

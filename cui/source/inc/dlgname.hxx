@@ -140,6 +140,7 @@ private:
 public:
     SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg = NULL );
     virtual ~SvxMessDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt );
 };

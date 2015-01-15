@@ -70,6 +70,7 @@ class SvxNumberFormatTabPage : public SfxTabPage
 
 public:
     virtual ~SvxNumberFormatTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );

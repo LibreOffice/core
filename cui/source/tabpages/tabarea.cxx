@@ -96,10 +96,6 @@ SvxAreaTabDialog::SvxAreaTabDialog
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
 }
 
-SvxAreaTabDialog::~SvxAreaTabDialog()
-{
-}
-
 void SvxAreaTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();

@@ -101,14 +101,15 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     OUString              sNumCharFmtName;
     sal_uInt16              nNumItemId;
 
-    protected:
+protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
 
-    public:
+public:
         SvxSingleNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-        virtual ~SvxSingleNumPickTabPage();
+    virtual ~SvxSingleNumPickTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -138,13 +139,14 @@ class SvxBulletPickTabPage : public SfxTabPage
     sal_uInt16              nNumItemId;
 
     OUString            sBulletCharFmtName;
-    protected:
+protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
-    public:
+public:
         SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-        virtual ~SvxBulletPickTabPage();
+    virtual ~SvxBulletPickTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -180,14 +182,15 @@ class SvxNumPickTabPage : public SfxTabPage
     bool                bPreset     : 1;
 
 
-    protected:
+protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
 
-    public:
-        SvxNumPickTabPage(vcl::Window* pParent,
+public:
+    SvxNumPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
-        virtual ~SvxNumPickTabPage();
+    virtual ~SvxNumPickTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -224,15 +227,16 @@ class SvxBitmapPickTabPage : public SfxTabPage
     bool                bModified   : 1;
     bool                bPreset     : 1;
 
-    protected:
+protected:
         DECL_LINK(NumSelectHdl_Impl, void *);
         DECL_LINK(DoubleClickHdl_Impl, void *);
         DECL_LINK(LinkBmpHdl_Impl, void *);
 
-    public:
+public:
         SvxBitmapPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxBitmapPickTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -341,10 +345,11 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
         DECL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
 
-    public:
+public:
         SvxNumOptionsTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxNumOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -448,6 +453,7 @@ public:
         SvxNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
         virtual ~SvxNumPositionTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;

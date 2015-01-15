@@ -53,10 +53,6 @@ SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
     }
 }
 
-SvxSplitTableDlg::~SvxSplitTableDlg()
-{
-}
-
 IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton )
 {
     const bool bIsVert =  pButton == m_pVertBox ;

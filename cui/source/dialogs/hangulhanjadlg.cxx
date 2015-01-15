@@ -338,7 +338,13 @@ namespace svx
 
     SuggestionSet::~SuggestionSet()
     {
+        dispose();
+    }
+
+    void SuggestionSet::dispose()
+    {
         ClearSet();
+        ValueSet::dispose();
     }
 
     void SuggestionSet::UserDraw( const UserDrawEvent& rUDEvt )
@@ -366,29 +372,37 @@ namespace svx
     SuggestionDisplay::SuggestionDisplay( vcl::Window* pParent, WinBits nBits )
         : Control( pParent, nBits )
         , m_bDisplayListBox( true )
-        , m_aValueSet( this )
-        , m_aListBox( this,GetStyle() | WB_BORDER )
+        , m_aValueSet( new SuggestionSet(this) )
+        , m_aListBox( new ListBox(this,GetStyle() | WB_BORDER) )
         , m_bInSelectionUpdate( false )
     {
-        m_aValueSet.SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
-        m_aListBox.SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
+        m_aValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
+        m_aListBox->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
 
-        m_aValueSet.SetLineCount( LINE_CNT );
-        m_aValueSet.SetStyle( m_aValueSet.GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
-        m_aValueSet.SetBorderStyle( WindowBorderStyle::MONO );
+        m_aValueSet->SetLineCount( LINE_CNT );
+        m_aValueSet->SetStyle( m_aValueSet->GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_VSCROLL );
+        m_aValueSet->SetBorderStyle( WindowBorderStyle::MONO );
         OUString aOneCharacter("AU");
         long nItemWidth = 2*GetTextWidth( aOneCharacter );
-        m_aValueSet.SetItemWidth( nItemWidth );
+        m_aValueSet->SetItemWidth( nItemWidth );
 
         Size aSize( approximate_char_width() * 48, GetTextHeight() * 5 );
-        m_aValueSet.SetSizePixel( aSize );
-        m_aListBox.SetSizePixel( aSize );
+        m_aValueSet->SetSizePixel( aSize );
+        m_aListBox->SetSizePixel( aSize );
 
         implUpdateDisplay();
     }
 
     SuggestionDisplay::~SuggestionDisplay()
     {
+        dispose();
+    }
+
+    void SuggestionDisplay::dispose()
+    {
+        m_aValueSet.disposeAndClear();
+        m_aListBox.disposeAndClear();
+        Control::dispose();
     }
 
     void SuggestionDisplay::implUpdateDisplay()
@@ -396,8 +410,8 @@ namespace svx
         bool bShowBox = IsVisible() && m_bDisplayListBox;
         bool bShowSet = IsVisible() && !m_bDisplayListBox;
 
-        m_aListBox.Show( bShowBox );
-        m_aValueSet.Show( bShowSet );
+        m_aListBox->Show( bShowBox );
+        m_aValueSet->Show( bShowSet );
     }
 
     void SuggestionDisplay::StateChanged( StateChangedType nStateChange )
@@ -409,8 +423,8 @@ namespace svx
     Control& SuggestionDisplay::implGetCurrentControl()
     {
         if( m_bDisplayListBox )
-            return m_aListBox;
-        return m_aValueSet;
+            return *m_aListBox.get();
+        return *m_aValueSet.get();
     }
 
     void SuggestionDisplay::KeyInput( const KeyEvent& rKEvt )
@@ -467,15 +481,15 @@ namespace svx
             return 0L;
 
         m_bInSelectionUpdate = true;
-        if( pControl == &m_aListBox )
+        if( pControl == m_aListBox.get() )
         {
-            sal_uInt16 nPos = m_aListBox.GetSelectEntryPos();
-            m_aValueSet.SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
+            sal_uInt16 nPos = m_aListBox->GetSelectEntryPos();
+            m_aValueSet->SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
         }
         else
         {
-            sal_uInt16 nPos = m_aValueSet.GetSelectItemId()-1; //itemid == pos+1 (id 0 has special meaning)
-            m_aListBox.SelectEntryPos( nPos );
+            sal_uInt16 nPos = m_aValueSet->GetSelectItemId()-1; //itemid == pos+1 (id 0 has special meaning)
+            m_aListBox->SelectEntryPos( nPos );
         }
         m_bInSelectionUpdate = false;
         m_aSelectLink.Call( this );
@@ -488,38 +502,38 @@ namespace svx
     }
     void SuggestionDisplay::Clear()
     {
-        m_aListBox.Clear();
-        m_aValueSet.Clear();
+        m_aListBox->Clear();
+        m_aValueSet->Clear();
     }
     void SuggestionDisplay::InsertEntry( const OUString& rStr )
     {
-        sal_uInt16 nItemId = m_aListBox.InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
-        m_aValueSet.InsertItem( nItemId );
+        sal_uInt16 nItemId = m_aListBox->InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
+        m_aValueSet->InsertItem( nItemId );
         OUString* pItemData = new OUString( rStr );
-        m_aValueSet.SetItemData( nItemId, pItemData );
+        m_aValueSet->SetItemData( nItemId, pItemData );
     }
     void SuggestionDisplay::SelectEntryPos( sal_uInt16 nPos )
     {
-        m_aListBox.SelectEntryPos( nPos );
-        m_aValueSet.SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
+        m_aListBox->SelectEntryPos( nPos );
+        m_aValueSet->SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
     }
     sal_uInt16 SuggestionDisplay::GetEntryCount() const
     {
-        return m_aListBox.GetEntryCount();
+        return m_aListBox->GetEntryCount();
     }
     OUString SuggestionDisplay::GetEntry( sal_uInt16 nPos ) const
     {
-        return m_aListBox.GetEntry( nPos );
+        return m_aListBox->GetEntry( nPos );
     }
     OUString SuggestionDisplay::GetSelectEntry() const
     {
-        return m_aListBox.GetSelectEntry();
+        return m_aListBox->GetSelectEntry();
     }
     void SuggestionDisplay::SetHelpIds()
     {
         this->SetHelpId( HID_HANGULDLG_SUGGESTIONS );
-        m_aValueSet.SetHelpId( HID_HANGULDLG_SUGGESTIONS_GRID );
-        m_aListBox.SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
+        m_aValueSet->SetHelpId( HID_HANGULDLG_SUGGESTIONS_GRID );
+        m_aListBox->SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }
 
     extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSuggestionDisplay( vcl::Window *pParent, VclBuilder::stringmap & )
@@ -589,11 +603,6 @@ namespace svx
         m_pSimpleConversion->Check();
 
         m_pSuggestions->SetHelpIds();
-    }
-
-
-    HangulHanjaConversionDialog::~HangulHanjaConversionDialog( )
-    {
     }
 
 
@@ -1125,6 +1134,11 @@ namespace svx
 
     HangulHanjaOptionsDialog::~HangulHanjaOptionsDialog()
     {
+        dispose();
+    }
+
+    void HangulHanjaOptionsDialog::dispose()
+    {
         SvTreeListEntry*    pEntry = m_pDictsLB->First();
         while( pEntry )
         {
@@ -1136,6 +1150,7 @@ namespace svx
 
         if( m_pCheckButtonData )
             delete m_pCheckButtonData;
+        ModalDialog::dispose();
     }
 
     void HangulHanjaOptionsDialog::AddDict( const OUString& _rName, bool _bChecked )
@@ -1354,10 +1369,6 @@ namespace svx
         , m_pPrev(NULL)
         , m_pNext(NULL)
         , m_pScrollBar(NULL)
-    {
-    }
-
-    SuggestionEdit::~SuggestionEdit()
     {
     }
 
@@ -1769,8 +1780,14 @@ namespace svx
 
     HangulHanjaEditDictDialog::~HangulHanjaEditDictDialog()
     {
+        dispose();
+    }
+
+    void HangulHanjaEditDictDialog::dispose()
+    {
         if( m_pSuggestions )
             delete m_pSuggestions;
+        ModalDialog::dispose();
     }
 
     void HangulHanjaEditDictDialog::UpdateScrollbar( void )

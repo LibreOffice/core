@@ -469,11 +469,17 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
 
 OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
+    dispose();
+}
+
+void OfaSwAutoFmtOptionsPage::dispose()
+{
     delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
     delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
     delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
     delete pCheckButtonData;
     delete m_pCheckLB;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaSwAutoFmtOptionsPage::Create( vcl::Window* pParent,
@@ -897,11 +903,17 @@ void OfaAutocorrReplacePage::Resize()
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
+    dispose();
+}
+
+void OfaAutocorrReplacePage::dispose()
+{
     aDoubleStringTable.clear();
     aChangesTable.clear();
 
     delete pCompareClass;
     delete pCharClass;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaAutocorrReplacePage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
@@ -1400,8 +1412,14 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItem
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
+    dispose();
+}
+
+void OfaAutocorrExceptPage::dispose()
+{
     aStringsTable.clear();
     delete pCompareClass;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaAutocorrExceptPage::Create( vcl::Window* pParent,
@@ -1817,8 +1835,14 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
+    dispose();
+}
+
+void OfaQuoteTabPage::dispose()
+{
     delete pCheckButtonData;
     delete m_pSwCheckLB;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaQuoteTabPage::Create( vcl::Window* pParent,
@@ -2141,10 +2165,6 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
     m_pCBCollect->SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
 }
 
-OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
-{
-}
-
 SfxTabPage* OfaAutoCompleteTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rSet)
 {
@@ -2377,11 +2397,6 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( vcl::Window* pParent,
     m_pMainCB->SetToggleHdl(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));
     m_pPropertiesPB->SetClickHdl(LINK(this, OfaSmartTagOptionsTabPage, ClickHdl));
     m_pSmartTagTypesLB->SetSelectHdl(LINK(this, OfaSmartTagOptionsTabPage, SelectHdl));
-}
-
-OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
-{
-
 }
 
 SfxTabPage* OfaSmartTagOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)

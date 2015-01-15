@@ -186,13 +186,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet
 }
 
 
-
-SvxTabulatorTabPage::~SvxTabulatorTabPage()
-{
-}
-
-
-
 bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;

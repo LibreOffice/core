@@ -200,6 +200,7 @@ public:
         bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( vcl::Window* pParent, const OUString& rExtensionId );
     virtual ~OfaTreeOptionsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const OUString& rPageName, sal_uInt16 nGroup );
     sal_uInt16              AddGroup(   const OUString& rGroupName,  SfxShell* pCreateShell,
@@ -277,6 +278,7 @@ public:
             com::sun::star::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~ExtensionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;

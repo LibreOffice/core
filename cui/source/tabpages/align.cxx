@@ -250,7 +250,13 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
 
 AlignmentTabPage::~AlignmentTabPage()
 {
+    dispose();
+}
+
+void AlignmentTabPage::dispose()
+{
     delete m_pOrientHlp;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* AlignmentTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

@@ -215,10 +215,6 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         aArgumentList );
 }
 
-SvxProxyTabPage::~SvxProxyTabPage()
-{
-}
-
 SfxTabPage* SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxProxyTabPage(pParent, *rAttrSet);
@@ -626,10 +622,16 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SvxSecurityTabPage::~SvxSecurityTabPage()
 {
+    dispose();
+}
+
+void SvxSecurityTabPage::dispose()
+{
     delete mpCertPathDlg;
 
     delete mpSecOptions;
     delete mpSecOptDlg;
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl)
@@ -972,7 +974,13 @@ SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxEMailTabPage::~SvxEMailTabPage()
 {
+    dispose();
+}
+
+void SvxEMailTabPage::dispose()
+{
     delete pImpl;
+    SfxTabPage::dispose();
 }
 
 /* -------------------------------------------------------------------------*/

@@ -202,6 +202,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
+    dispose();
+}
+
+void SvxJavaOptionsPage::dispose()
+{
     delete m_pJavaList;
     delete m_pParamDlg;
     delete m_pPathDlg;
@@ -216,6 +221,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
     jfw_unlock();
 #endif
+    SfxTabPage::dispose();
 }
 
 
@@ -807,12 +813,6 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
 
 
 
-SvxJavaParameterDlg::~SvxJavaParameterDlg()
-{
-}
-
-
-
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 {
     OUString sParam = comphelper::string::strip(m_pParameterEdit->GetText(), ' ');
@@ -939,9 +939,15 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(vcl::Window* pParent)
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
+    dispose();
+}
+
+void SvxJavaClassPathDlg::dispose()
+{
     sal_Int32 i, nCount = m_pPathList->GetEntryCount();
     for ( i = 0; i < nCount; ++i )
         delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
+    ModalDialog::dispose();
 }
 
 

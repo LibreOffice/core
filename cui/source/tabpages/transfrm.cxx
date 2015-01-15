@@ -116,12 +116,6 @@ SvxTransformTabDialog::SvxTransformTabDialog( vcl::Window* pParent, const SfxIte
 
 
 
-SvxTransformTabDialog::~SvxTransformTabDialog()
-{
-}
-
-
-
 void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
     if (nId==nPosSize)

@@ -83,32 +83,32 @@ static long nTabs[] =
 
 IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
-    DBG_ASSERT( pBar == &maHeaderBar, "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
+    DBG_ASSERT( pBar == maHeaderBar.get(), "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
     (void)pBar;
 
-    if( !maHeaderBar.GetCurItemId() )
+    if( !maHeaderBar->GetCurItemId() )
         return 0;
 
-    if( !maHeaderBar.IsItemMode() )
+    if( !maHeaderBar->IsItemMode() )
     {
         Size    aSz;
-        sal_uInt16    _nTabs = maHeaderBar.GetItemCount();
-        long    nWidth = maHeaderBar.GetItemSize( ITEMID_EVENT );
-        long    nBarWidth = maHeaderBar.GetSizePixel().Width();
+        sal_uInt16    _nTabs = maHeaderBar->GetItemCount();
+        long    nWidth = maHeaderBar->GetItemSize( ITEMID_EVENT );
+        long    nBarWidth = maHeaderBar->GetSizePixel().Width();
 
         if( nWidth < TAB_WIDTH_MIN )
-            maHeaderBar.SetItemSize( ITEMID_EVENT, TAB_WIDTH_MIN );
+            maHeaderBar->SetItemSize( ITEMID_EVENT, TAB_WIDTH_MIN );
         else if( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
-            maHeaderBar.SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
+            maHeaderBar->SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
 
         {
             long nTmpSz = 0;
             for( sal_uInt16 i = 1 ; i < _nTabs ; ++i )
             {
-                long _nWidth = maHeaderBar.GetItemSize( i );
+                long _nWidth = maHeaderBar->GetItemSize( i );
                 aSz.Width() =  _nWidth + nTmpSz;
                 nTmpSz += _nWidth;
-                maListBox.SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width(), MAP_APPFONT );
+                maListBox->SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width(), MAP_APPFONT );
             }
         }
     }
@@ -121,8 +121,8 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
 
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
-        if ( rNEvt.GetWindow() != &maListBox )
-            maListBox.GrabFocus();
+        if ( rNEvt.GetWindow() != maListBox.get() )
+            maListBox->GrabFocus();
     }
 
     return nRet;
@@ -130,13 +130,25 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
 
 MacroEventListBox::MacroEventListBox( vcl::Window* pParent, WinBits nStyle )
     : Control( pParent, nStyle )
-    , maHeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER )
-    , maListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
+    , maHeaderBar( new HeaderBar( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER ) )
+    , maListBox( new SvHeaderTabListBox( this, WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ) )
 {
-    maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
+    maListBox->SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 
     // enable the cell focus to show visible focus
-    maListBox.EnableCellFocus();
+    maListBox->EnableCellFocus();
+}
+
+MacroEventListBox::~MacroEventListBox()
+{
+    dispose();
+}
+
+void MacroEventListBox::dispose()
+{
+    maHeaderBar.disposeAndClear();
+    maListBox.disposeAndClear();
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeMacroEventListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -161,15 +173,15 @@ void MacroEventListBox::Resize()
 
     // calc pos and size of header bar
     Point    aPnt( 0, 0 );
-    Size    aSize( maHeaderBar.CalcWindowSizePixel() );
+    Size    aSize( maHeaderBar->CalcWindowSizePixel() );
     Size    aCtrlSize( GetOutputSizePixel() );
     aSize.Width() = aCtrlSize.Width();
-    maHeaderBar.SetPosSizePixel( aPnt, aSize );
+    maHeaderBar->SetPosSizePixel( aPnt, aSize );
 
     // calc pos and size of ListBox
     aPnt.Y() += aSize.Height();
     aSize.Height() = aCtrlSize.Height() - aSize.Height();
-    maListBox.SetPosSizePixel( aPnt, aSize );
+    maListBox->SetPosSizePixel( aPnt, aSize );
 }
 
 void MacroEventListBox::ConnectElements( void )
@@ -177,21 +189,21 @@ void MacroEventListBox::ConnectElements( void )
     Resize();
 
     // set handler
-    maHeaderBar.SetEndDragHdl( LINK( this, MacroEventListBox, HeaderEndDrag_Impl ) );
+    maHeaderBar->SetEndDragHdl( LINK( this, MacroEventListBox, HeaderEndDrag_Impl ) );
 
-    maListBox.InitHeaderBar( &maHeaderBar );
+    maListBox->InitHeaderBar( maHeaderBar.get() );
 }
 
 void MacroEventListBox::Show( bool bVisible, sal_uInt16 nFlags )
 {
-    maListBox.Show( bVisible, nFlags );
-    maHeaderBar.Show( bVisible, nFlags );
+    maListBox->Show( bVisible, nFlags );
+    maHeaderBar->Show( bVisible, nFlags );
 }
 
 void MacroEventListBox::Enable( bool bEnable, bool bChild )
 {
-    maListBox.Enable( bEnable, bChild );
-    maHeaderBar.Enable( bEnable, bChild );
+    maListBox->Enable( bEnable, bChild );
+    maHeaderBar->Enable( bEnable, bChild );
 }
 
 // assign button ("Add Command") is enabled only if it is not read only
@@ -226,7 +238,13 @@ _SvxMacroTabPage::_SvxMacroTabPage(vcl::Window* pParent, const OString& rID,
 
 _SvxMacroTabPage::~_SvxMacroTabPage()
 {
+   dispose();
+}
+
+void _SvxMacroTabPage::dispose()
+{
     DELETEZ( mpImpl );
+    SfxTabPage::dispose();
 }
 
 void _SvxMacroTabPage::InitResources()
@@ -869,12 +887,6 @@ AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUStr
     }
     mpMethodEdit->SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
 }
-
-AssignComponentDialog::~AssignComponentDialog()
-{
-}
-
-
 
 IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {

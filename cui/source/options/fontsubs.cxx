@@ -138,9 +138,15 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
 
 SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
+    dispose();
+}
+
+void SvxFontSubstTabPage::dispose()
+{
     delete pCheckButtonData;
     delete pConfig;
     delete m_pCheckLB;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage*  SvxFontSubstTabPage::Create( vcl::Window* pParent,

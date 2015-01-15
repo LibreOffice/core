@@ -150,7 +150,13 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
 {
+    dispose();
+}
+
+void SvxHlinkDlgMarkWnd::dispose()
+{
     ClearTree();
+    ModalDialog::dispose();
 }
 
 /*************************************************************************

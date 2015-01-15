@@ -40,7 +40,6 @@ protected:
 
 public:
     SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
-    virtual ~SvxSplitTableDlg();
 
     DECL_LINK( ClickHdl, Button * );
 

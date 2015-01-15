@@ -49,8 +49,6 @@ class SvxTabulatorTabPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 
 public:
-    virtual ~SvxTabulatorTabPage();
-
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pRanges; }
 

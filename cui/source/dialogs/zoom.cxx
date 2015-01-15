@@ -289,7 +289,16 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
 }
 
 SvxZoomDialog::~SvxZoomDialog()
-{}
+{
+    dispose();
+}
+
+void SvxZoomDialog::dispose()
+{
+    delete pOutSet;
+    pOutSet = 0;
+    SfxModalDialog::dispose();
+}
 
 IMPL_LINK(SvxZoomDialog, UserHdl, RadioButton *, pButton)
 {

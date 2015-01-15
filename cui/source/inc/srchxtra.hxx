@@ -31,6 +31,7 @@ class SvxSearchFormatDialog : public SfxTabDialog
 public:
     SvxSearchFormatDialog( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSearchFormatDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;

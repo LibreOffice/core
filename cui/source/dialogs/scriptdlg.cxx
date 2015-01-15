@@ -101,7 +101,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSFTreeListBox(vcl::Win
 
 SFTreeListBox::~SFTreeListBox()
 {
+    dispose();
+}
+
+void SFTreeListBox::dispose()
+{
     deleteAllTree();
+    SvTreeListBox::dispose();
 }
 
 void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
@@ -487,8 +493,14 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( vcl::Window* pParent, const OUString& la
 
 SvxScriptOrgDialog::~SvxScriptOrgDialog()
 {
+    dispose();
+}
+
+void SvxScriptOrgDialog::dispose()
+{
     // clear the SelectHdl so that it isn't called during the dtor
     m_pScriptsBox->SetSelectHdl( Link() );
+    SfxModalDialog::dispose();
 };
 
 short SvxScriptOrgDialog::Execute()

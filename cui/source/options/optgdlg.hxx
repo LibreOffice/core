@@ -74,7 +74,6 @@ protected:
 
 public:
     OfaMiscTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~OfaMiscTabPage();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
@@ -132,6 +131,7 @@ private:
 public:
     OfaViewTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaViewTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
@@ -176,6 +176,7 @@ class OfaLanguagesTabPage : public SfxTabPage
 public:
     OfaLanguagesTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaLanguagesTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

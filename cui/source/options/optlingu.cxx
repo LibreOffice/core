@@ -1122,8 +1122,14 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
+    dispose();
+}
+
+void SvxLinguTabPage::dispose()
+{
     if (pLinguData)
         delete pLinguData;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SvxLinguTabPage::Create( vcl::Window* pParent,
@@ -1892,7 +1898,13 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
 
 SvxEditModulesDlg::~SvxEditModulesDlg()
 {
+    dispose();
+}
+
+void SvxEditModulesDlg::dispose()
+{
     delete pDefaultLinguData;
+    ModalDialog::dispose();
 }
 
 

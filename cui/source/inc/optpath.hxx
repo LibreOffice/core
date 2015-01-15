@@ -71,6 +71,7 @@ private:
 public:
     SvxPathTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxPathTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();

@@ -141,12 +141,6 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
     m_pNfGraphicCache->SetModifyHdl( LINK( this, OfaMemoryOptionsPage, GraphicCacheConfigHdl ) );
 }
 
-
-
-OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
-{
-}
-
 SfxTabPage* OfaMemoryOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaMemoryOptionsPage( pParent, *rAttrSet );

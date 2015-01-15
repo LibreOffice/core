@@ -81,10 +81,6 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
     maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
 }
 
-SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
-{
-}
-
 /*************************************************************************
 |*
 |* Fill the all dialog-controls except controls in groupbox "more..."

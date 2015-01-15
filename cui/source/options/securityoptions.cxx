@@ -72,11 +72,6 @@ SecurityOptionsDialog::SecurityOptionsDialog(vcl::Window* pParent, SvtSecurityOp
         *get<FixedImage>("lockblockuntrusted"));
 }
 
-SecurityOptionsDialog::~SecurityOptionsDialog()
-{
-}
-
-
 }   // namespace svx
 
 

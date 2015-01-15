@@ -104,12 +104,6 @@ SvxLineTabDialog::SvxLineTabDialog
 
 
 
-SvxLineTabDialog::~SvxLineTabDialog()
-{
-}
-
-
-
 void SvxLineTabDialog::SavePalettes()
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
