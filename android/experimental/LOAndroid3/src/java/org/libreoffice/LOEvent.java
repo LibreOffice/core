@@ -1,5 +1,7 @@
 package org.libreoffice;
 
+import android.view.MotionEvent;
+
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.SubTile;
@@ -14,6 +16,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int TILE_REQUEST = 7;
     public static final int THUMBNAIL = 8;
     public static final int TILE_RERENDER = 9;
+    public static final int TOUCH = 10;
 
     public final int mType;
     public int mPriority = 0;
@@ -26,6 +29,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public ComposedTileLayer mComposedTileLayer;
     public boolean mForceRedraw;
     public SubTile mTile;
+    public String mTouchType;
+    public MotionEvent mMotionEvent;
 
     public LOEvent(int type) {
         mType = type;
@@ -71,6 +76,13 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Tile Rerender";
         mComposedTileLayer = composedTileLayer;
         mTile = tile;
+    }
+
+    public LOEvent(int type, String touchType, MotionEvent motionEvent) {
+        mType = type;
+        mTypeString = "Touch";
+        mTouchType = touchType;
+        mMotionEvent = motionEvent;
     }
 
     public String getTypeString() {

@@ -3,6 +3,7 @@ package org.libreoffice;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 
 
 public class LOKitShell {
@@ -13,19 +14,9 @@ public class LOKitShell {
         return metrics.density * 160;
     }
 
-    public static void sendEvent(LOEvent event) {
-        if (LibreOfficeMainActivity.mAppContext != null && LibreOfficeMainActivity.mAppContext.getLOKitThread() != null) {
-            LibreOfficeMainActivity.mAppContext.getLOKitThread().queueEvent(event);
-        }
-    }
-
     // Get a Handler for the main java thread
     public static Handler getMainHandler() {
         return LibreOfficeMainActivity.mAppContext.mMainHandler;
-    }
-
-    public static void queueRedraw() {
-        LOKitShell.sendEvent(LOEventFactory.redraw());
     }
 
     public static void showProgressSpinner() {
@@ -55,7 +46,19 @@ public class LOKitShell {
         return metrics;
     }
 
+    // EVENTS
+
+    public static void sendEvent(LOEvent event) {
+        if (LibreOfficeMainActivity.mAppContext != null && LibreOfficeMainActivity.mAppContext.getLOKitThread() != null) {
+            LibreOfficeMainActivity.mAppContext.getLOKitThread().queueEvent(event);
+        }
+    }
+
     public static void sendThumbnailEvent(ThumbnailCreator.ThumbnailCreationTask task) {
-        LOKitShell.sendEvent(LOEventFactory.thumbnail(task));
+        LOKitShell.sendEvent(new LOEvent(LOEvent.THUMBNAIL, task));
+    }
+
+    public static void sentTouchEvent(String touchType, MotionEvent motionEvent) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, "SingleTap", motionEvent));
     }
 }
