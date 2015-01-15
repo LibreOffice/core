@@ -1369,10 +1369,11 @@ static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, ScRange& rRang
         // Only loop within the data area.
         SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
         SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
-        bool bShrunk;
-        if (!pSrcDoc->ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
+        // the matrix for shrunken data range gives invalid match until the matrix supports the gap
+        //bool bShrunk;
+        //if (!pSrcDoc->ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
             // no data within specified range.
-            continue;
+        //    continue;
 
         if (pUsedRange.get())
             // Make sure the used area only grows, not shrinks.
