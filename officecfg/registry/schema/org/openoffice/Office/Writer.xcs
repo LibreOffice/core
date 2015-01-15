@@ -1288,7 +1288,7 @@
             <desc>Specifies whether rulers are displayed. Filters the values of HorizontalRuler and VerticalRuler.</desc>
             <label>Show rulers</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="HorizontalRuler" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Layout/Window -->
@@ -1363,7 +1363,7 @@
             <desc>Specifies whether the vertical ruler is displayed.</desc>
             <label>Vertical Ruler</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="IsVerticalRulerRight" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document - Layout - [Section] Window -->
