@@ -265,7 +265,7 @@ class Parser:
             "extensions" : 1,
             "external" : 1,
             "filter" : 1,
-            "forms" : 0, #
+            "forms" : 1,
             "formula" : 1,
             "fpicker" : 1,
             "framework" : 1,
@@ -318,7 +318,7 @@ class Parser:
             "stoc" : 0, #
             "store" : 1,
             "svgio" : 1,
-            "svl" : 0, #
+            "svl" : 1,
             "svtools" : 1,
             "svx" : 0, #
             "sw" : 0, #
@@ -347,6 +347,9 @@ class Parser:
             "xmlsecurity" : 1,
             "xmlscript" : 1,
         }
+
+        if not directory is '.':
+            sys.stderr.write("Warning: pass an absolute path to the top-level in order to use the faster white-list search\n")
 
         for path in lines:
             baseDir = self.first_elem(path)
