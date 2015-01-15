@@ -64,24 +64,41 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using namespace com::sun::star::xml::sax;
 
 static SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
-    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,    XML_TOK_STYLE_PAGE_MASTER          },
-    { XML_NAMESPACE_TEXT,   XML_LIST_STYLE,     XML_TOK_TEXT_LIST_STYLE            },
-    { XML_NAMESPACE_TEXT,   XML_OUTLINE_STYLE,  XML_TOK_TEXT_OUTLINE               },
-    { XML_NAMESPACE_STYLE,  XML_DEFAULT_STYLE,  XML_TOK_STYLE_DEFAULT_STYLE        },
-    { XML_NAMESPACE_DRAW,   XML_GRADIENT,       XML_TOK_STYLES_GRADIENTSTYLES      },
-    { XML_NAMESPACE_DRAW,   XML_HATCH,          XML_TOK_STYLES_HATCHSTYLES         },
-    { XML_NAMESPACE_DRAW,   XML_FILL_IMAGE,     XML_TOK_STYLES_BITMAPSTYLES        },
-    { XML_NAMESPACE_DRAW,   XML_OPACITY,        XML_TOK_STYLES_TRANSGRADIENTSTYLES },
-    { XML_NAMESPACE_DRAW,   XML_MARKER,         XML_TOK_STYLES_MARKERSTYLES        },
-    { XML_NAMESPACE_DRAW,   XML_STROKE_DASH,    XML_TOK_STYLES_DASHSTYLES        },
-    { XML_NAMESPACE_TEXT,   XML_NOTES_CONFIGURATION,    XML_TOK_TEXT_NOTE_CONFIG },
-    { XML_NAMESPACE_TEXT,   XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG },
-    { XML_NAMESPACE_TEXT,   XML_LINENUMBERING_CONFIGURATION,XML_TOK_TEXT_LINENUMBERING_CONFIG },
-    { XML_NAMESPACE_STYLE,  XML_DEFAULT_PAGE_LAYOUT,    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT        },
+    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_style) },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,    XML_TOK_STYLE_PAGE_MASTER,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout) },
+    { XML_NAMESPACE_TEXT,   XML_LIST_STYLE,     XML_TOK_TEXT_LIST_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_list_style) },
+    { XML_NAMESPACE_TEXT,   XML_OUTLINE_STYLE,  XML_TOK_TEXT_OUTLINE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_outline_style) },
+    { XML_NAMESPACE_STYLE,  XML_DEFAULT_STYLE,  XML_TOK_STYLE_DEFAULT_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_default_style) },
+    { XML_NAMESPACE_DRAW,   XML_GRADIENT,       XML_TOK_STYLES_GRADIENTSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient) },
+    { XML_NAMESPACE_DRAW,   XML_HATCH,          XML_TOK_STYLES_HATCHSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_hatch) },
+    { XML_NAMESPACE_DRAW,   XML_FILL_IMAGE,     XML_TOK_STYLES_BITMAPSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_fill_image) },
+    { XML_NAMESPACE_DRAW,   XML_OPACITY,        XML_TOK_STYLES_TRANSGRADIENTSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_opacity) },
+    { XML_NAMESPACE_DRAW,   XML_MARKER,         XML_TOK_STYLES_MARKERSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_marker) },
+    { XML_NAMESPACE_DRAW,   XML_STROKE_DASH,    XML_TOK_STYLES_DASHSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_dash) },
+    { XML_NAMESPACE_TEXT,   XML_NOTES_CONFIGURATION,    XML_TOK_TEXT_NOTE_CONFIG,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_notes_configuration) },
+    { XML_NAMESPACE_TEXT,   XML_BIBLIOGRAPHY_CONFIGURATION, XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_bibliography_configuration) },
+    { XML_NAMESPACE_TEXT,   XML_LINENUMBERING_CONFIGURATION,XML_TOK_TEXT_LINENUMBERING_CONFIG,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_linenumbering_configuration) },
+    { XML_NAMESPACE_STYLE,  XML_DEFAULT_PAGE_LAYOUT,    XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout) },
     XML_TOKEN_MAP_END
 };
 
@@ -529,9 +546,88 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
-    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle = NULL;
+
+    if(GetImport().GetDataStylesImport())
+    {
+        pStyle = GetImport().GetDataStylesImport()->CreateChildContext(
+            GetImport(), Element, xAttrList, *this);
+    }
+
+    if (!pStyle)
+    {
+        const SvXMLTokenMap& rTokenMap = GetStyleStylesElemTokenMap();
+        sal_uInt16 nToken = rTokenMap.Get( Element );
+        switch( nToken )
+        {
+        case XML_TOK_STYLE_STYLE:
+        case XML_TOK_STYLE_DEFAULT_STYLE:
+        {
+            sal_uInt16 nFamily = 0;
+            if( xAttrList->hasAttribute( (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_family) ) )
+            {
+                const OUString& rValue = xAttrList->getValue( (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_family) );
+                nFamily = GetFamily( rValue );
+            }
+            pStyle = (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_style)==Element
+                ? CreateStyleStyleChildContext( nFamily, Element, xAttrList )
+                : CreateDefaultStyleStyleChildContext( nFamily, Element, xAttrList );
+        }
+        break;
+        case XML_TOK_STYLE_PAGE_MASTER:
+        case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
+        {
+            //there is not page family in ODF now, so I specify one for it
+            bool bDefaultStyle = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken;
+            pStyle = new PageStyleContext( GetImport(), Element, xAttrList, *this, bDefaultStyle );
+        }
+        break;
+        case XML_TOK_TEXT_LIST_STYLE:
+            pStyle = new SvxXMLListStyleContext( GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_TEXT_OUTLINE:
+            pStyle = new SvxXMLListStyleContext( GetImport(), Element, xAttrList, true );
+        break;
+        case XML_TOK_TEXT_NOTE_CONFIG:
+            pStyle = new XMLFootnoteConfigurationImportContext(
+                GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_TEXT_BIBLIOGRAPHY_CONFIG:
+            pStyle = new XMLIndexBibliographyConfigurationContext(
+                GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_TEXT_LINENUMBERING_CONFIG:
+            pStyle = new XMLLineNumberingImportContext( GetImport(), Element, xAttrList );
+        break;
+
+        // FillStyles
+        case XML_TOK_STYLES_GRADIENTSTYLES:
+            pStyle = new XMLGradientStyleContext( GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_STYLES_HATCHSTYLES:
+            pStyle = new XMLHatchStyleContext( GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_STYLES_BITMAPSTYLES:
+            pStyle = new XMLBitmapStyleContext( GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_STYLES_TRANSGRADIENTSTYLES:
+            pStyle = new XMLTransGradientStyleContext( GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_STYLES_MARKERSTYLES:
+            pStyle = new XMLMarkerStyleContext( GetImport(), Element, xAttrList );
+        break;
+        case XML_TOK_STYLES_DASHSTYLES:
+            pStyle = new XMLDashStyleContext( GetImport(), Element, xAttrList );
+        break;
+        default:
+            DBG_ASSERT( true, "Shouldn't happen ");
+        break;
+        }
+    }
+
+    return pStyle;
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
@@ -569,10 +665,32 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle = 0;
+
+    switch( nFamily )
+    {
+        case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+        case XML_STYLE_FAMILY_TEXT_TEXT:
+        case XML_STYLE_FAMILY_TEXT_SECTION:
+            pStyle = new XMLTextStyleContext( GetImport(), Element, xAttrList, *this, nFamily );
+        break;
+        case XML_STYLE_FAMILY_TEXT_RUBY:
+            pStyle = new XMLPropStyleContext( GetImport(), Element, xAttrList, *this, nFamily );
+        break;
+        case XML_STYLE_FAMILY_SCH_CHART_ID:
+            pStyle = new XMLChartStyleContext( GetImport(), Element, xAttrList, *this, nFamily );
+        break;
+        case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        case XML_STYLE_FAMILY_SD_PRESENTATION_ID:
+        case XML_STYLE_FAMILY_SD_POOL_ID:
+            pStyle = new XMLShapeStyleContext( GetImport(), Element, xAttrList, *this, nFamily );
+        break;
+    }
+
+    return pStyle;
 }
 
 SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
