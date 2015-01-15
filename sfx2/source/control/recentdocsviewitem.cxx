@@ -31,7 +31,7 @@ using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 
 RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-    const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
+    const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, long nThumbnailSize)
     : ThumbnailViewItem(rView, nId),
       maURL(rURL),
       m_bRemoveIconHighlighted(false),
@@ -45,9 +45,6 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
         m_sHelpText = aURLObj.getFSysPath(INetURLObject::FSYS_DETECT);
     if( m_sHelpText.isEmpty() )
         m_sHelpText = aURLObj.GetURLNoPass();
-
-    RecentDocsView& rRecentView = dynamic_cast<RecentDocsView&>(rView);
-    long nThumbnailSize = rRecentView.GetThumbnailSize();
 
     if (aTitle.isEmpty())
         aTitle = aURLObj.GetName(INetURLObject::DECODE_WITH_CHARSET);

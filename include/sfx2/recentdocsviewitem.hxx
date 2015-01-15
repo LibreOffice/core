@@ -16,7 +16,7 @@ class RecentDocsViewItem : public ThumbnailViewItem
 {
 public:
     RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
-        const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId);
+        const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId, long nThumbnailSize = 256);
     virtual void setEditTitle (bool edit, bool bChangeFocus = true) SAL_OVERRIDE;
 
     /** Updates own highlight status based on the aPoint position.
