@@ -5181,7 +5181,7 @@ static bool ImplHandleIMEEndComposition( HWND hWnd )
     return bDef;
 }
 
-static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
+static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam, LRESULT & nRet )
 {
     sal_Int16 nCommand = 0;
     switch( GET_APPCOMMAND_LPARAM(lParam) )
@@ -5213,13 +5213,15 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam )
     if( pWindow )
     {
         const Point aPoint;
-        CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &nCommand );
-        NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
+        CommandMediaData aMediaData(nCommand);
+        CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &aMediaData );
+        NotifyEvent aNCmdEvt( VENT_COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
             pWindow->Command( aCEvt );
-            return true;
+            nRet = 1;
+            return !aMediaData.GetPassThroughToOS();
         }
     }
 
@@ -5847,10 +5849,9 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_APPCOMMAND:
-            if( ImplHandleAppCommand( hWnd, lParam ) )
+            if( ImplHandleAppCommand( hWnd, lParam, nRet ) )
             {
                 rDef = false;
-                nRet = 1;
             }
             break;
         case WM_IME_REQUEST:

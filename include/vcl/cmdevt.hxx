@@ -270,10 +270,7 @@ class VCL_DLLPUBLIC CommandDialogData
     int GetDialogId() const { return m_nDialogId; }
 };
 
-
 // Media Commands
-
-
 #define MEDIA_COMMAND_CHANNEL_DOWN           ((sal_Int16)1) // Decrement the channel value, for example, for a TV or radio tuner.
 #define MEDIA_COMMAND_CHANNEL_UP             ((sal_Int16)2) // Increment the channel value, for example, for a TV or radio tuner.
 #define MEDIA_COMMAND_NEXTTRACK              ((sal_Int16)3) // Go to next media track/slide.
@@ -297,11 +294,22 @@ class VCL_DLLPUBLIC CommandDialogData
 #define MEDIA_COMMAND_NEXTTRACK_HOLD         ((sal_Int16)21)// Button Right holding pressed.
 #define MEDIA_COMMAND_PREVIOUSTRACK_HOLD     ((sal_Int16)22)// Button Left holding pressed.
 
-
+class VCL_DLLPUBLIC CommandMediaData
+{
+    sal_Int16 m_nMediaId;
+    bool m_bPassThroughToOS;
+public:
+    CommandMediaData(sal_Int16 nMediaId)
+        : m_nMediaId(nMediaId)
+        , m_bPassThroughToOS(true)
+    {
+    }
+    sal_Int16 GetMediaId() const { return m_nMediaId; }
+    void SetPassThroughToOS(bool bPassThroughToOS) { m_bPassThroughToOS = bPassThroughToOS; }
+    bool GetPassThroughToOS() const { return m_bPassThroughToOS; }
+};
 
 // - CommandSelectionChangeData -
-
-
 class VCL_DLLPUBLIC CommandSelectionChangeData
 {
 private:
@@ -377,7 +385,7 @@ public:
     const CommandScrollData*            GetAutoScrollData() const;
     const CommandModKeyData*            GetModKeyData() const;
     const CommandDialogData*            GetDialogData() const;
-    sal_Int16                           GetMediaCommand() const;
+          CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
 };
 
@@ -445,12 +453,12 @@ inline const CommandDialogData* CommandEvent::GetDialogData() const
         return NULL;
 }
 
-inline sal_Int16 CommandEvent::GetMediaCommand() const
+inline CommandMediaData* CommandEvent::GetMediaData() const
 {
     if( mnCommand == COMMAND_MEDIA )
-        return *(const sal_Int16*)(mpData);
+        return (CommandMediaData*)(mpData);
     else
-        return 0;
+        return NULL;
 }
 
 inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const

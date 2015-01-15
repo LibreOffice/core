@@ -2001,7 +2001,9 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
 
         if( rEvent.GetCommand() == COMMAND_MEDIA )
         {
-            switch( rEvent.GetMediaCommand() )
+            CommandMediaData* pMediaData = rEvent.GetMediaData();
+            pMediaData->SetPassThroughToOS(false);
+            switch (pMediaData->GetMediaId())
             {
 #if defined( MACOSX )
             case MEDIA_COMMAND_MENU:
@@ -2056,6 +2058,9 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
                         mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
                 }
                 endPresentation();
+                break;
+            default:
+                pMediaData->SetPassThroughToOS(true);
                 break;
             }
         }

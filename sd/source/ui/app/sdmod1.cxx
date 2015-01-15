@@ -428,7 +428,9 @@ IMPL_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
 
         if( rEvent.GetCommand() == COMMAND_MEDIA )
         {
-            switch( rEvent.GetMediaCommand() )
+            CommandMediaData* pMediaData = rEvent.GetMediaData();
+            pMediaData->SetPassThroughToOS(false);
+            switch (pMediaData->GetMediaId())
             {
                 case MEDIA_COMMAND_PLAY:
                 {
@@ -441,10 +443,10 @@ IMPL_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
                         if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
                             pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
                     }
-                }
                     break;
-
+                }
                 default:
+                    pMediaData->SetPassThroughToOS(true);
                     break;
             }
         }
