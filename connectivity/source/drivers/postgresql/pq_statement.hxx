@@ -61,14 +61,16 @@ static const sal_Int32 STATEMENT_RESULT_SET_TYPE = 8;
 
 #define STATEMENT_SIZE 9
 
-class Statement : public cppu::OComponentHelper,
-                  public cppu::OPropertySetHelper,
-                  public com::sun::star::sdbc::XStatement,
-                  public com::sun::star::sdbc::XCloseable,
-                  public com::sun::star::sdbc::XWarningsSupplier,
-                  public com::sun::star::sdbc::XMultipleResults,
-                  public com::sun::star::sdbc::XGeneratedResultSet,
-                  public com::sun::star::sdbc::XResultSetMetaDataSupplier
+typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XStatement,
+                                            ::com::sun::star::sdbc::XCloseable,
+                                            ::com::sun::star::sdbc::XWarningsSupplier,
+                                            ::com::sun::star::sdbc::XMultipleResults,
+                                            ::com::sun::star::sdbc::XGeneratedResultSet,
+                                            ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                            > Statement_BASE;
+
+class Statement : public Statement_BASE,
+                  public cppu::OPropertySetHelper
 {
 private:
     com::sun::star::uno::Any m_props[STATEMENT_SIZE];
@@ -93,8 +95,8 @@ public:
 
     virtual ~Statement();
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { Statement_BASE::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { Statement_BASE::release(); }
     virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
