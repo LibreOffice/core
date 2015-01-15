@@ -849,10 +849,34 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle = 0;
+
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+        pStyle= new SwXMLTextStyleContext_Impl( GetSwImport(), Element, xAttrList, nFamily, *this );
+        break;
+    case XML_STYLE_FAMILY_TABLE_TABLE:
+    case XML_STYLE_FAMILY_TABLE_COLUMN:
+    case XML_STYLE_FAMILY_TABLE_ROW:
+    case XML_STYLE_FAMILY_TABLE_CELL:
+        pStyle = new SwXMLItemSetStyleContext_Impl( GetSwImport(),
+            Element, xAttrList, *this, nFamily );
+        break;
+    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        // As long as there are no element items, we can use the text
+        // style class.
+        pStyle = new XMLTextShapeStyleContext( GetImport(), Element, xAttrList, *this, nFamily );
+        break;
+    default:
+        pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, Element, xAttrList );
+        break;
+    }
+
+    return pStyle;
 }
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
@@ -887,10 +911,30 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
 }
 
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle = 0;
+
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XML_STYLE_FAMILY_TABLE_TABLE:
+    case XML_STYLE_FAMILY_TABLE_ROW:
+        pStyle = new XMLTextStyleContext( GetImport(), Element,
+            xAttrList, *this, nFamily, true );
+        break;
+    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        // There are no writer specific defaults for graphic styles!
+        pStyle = new XMLGraphicsDefaultStyle( GetImport(), Element, xAttrList, *this );
+        break;
+    default:
+        pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
+            nFamily, Element, xAttrList );
+        break;
+    }
+
+    return pStyle;
 }
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
