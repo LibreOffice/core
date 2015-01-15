@@ -235,7 +235,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     else // ->RP_FIXED
     {
         long    nVal;
-        int     nSwitch = ( bCompatible ) ? 0 : 1 ;
+        const int nSwitch = ( bCompatible ) ? 0 : 1 ;
         if ( nRealSize == 4 )
         {
             sal_uInt16* pShort = (sal_uInt16*)pPtr;
