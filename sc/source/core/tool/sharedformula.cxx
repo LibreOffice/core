@@ -14,8 +14,6 @@
 #include <document.hxx>
 #include <grouparealistener.hxx>
 
-#define USE_FORMULA_GROUP_LISTENER 1
-
 namespace sc {
 
 void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos)

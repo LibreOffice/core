@@ -66,6 +66,7 @@
 
 #include <editable.hxx>
 #include <bcaslot.hxx>
+#include <sharedformula.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
@@ -3991,6 +3992,8 @@ void Test::testCopyPasteRepeatOneFormula()
     m_pDoc->SetString(aPos, "=SUM(A1:B1)");
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(aPos));
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // At this point, there should be only one normal area listener listening
     // on A1:B1.
     ScRange aWholeSheet(0,0,0,MAXCOL,MAXROW,0);
@@ -4001,6 +4004,7 @@ void Test::testCopyPasteRepeatOneFormula()
     const sc::AreaListener* pListener = &aListeners[0];
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,0,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener shouldn't be a group listener.", !pListener->mbGroupListening);
+#endif
 
     // Copy C1 to clipboard.
     ScClipParam aClipParam(aPos, false);
@@ -4025,6 +4029,8 @@ void Test::testCopyPasteRepeatOneFormula()
         CPPUNIT_ASSERT_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(2,i,0)));
     }
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // At this point, there should only be one area listener and it should be
     // a group listener listening on A1:B10.
     aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
@@ -4032,6 +4038,7 @@ void Test::testCopyPasteRepeatOneFormula()
     pListener = &aListeners[0];
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
+#endif
 
     // Insert a new row at row 1.
     ScRange aRowOne(0,0,0,MAXCOL,0,0);
@@ -4041,12 +4048,15 @@ void Test::testCopyPasteRepeatOneFormula()
 
     CPPUNIT_ASSERT_MESSAGE("C1 should be empty.", m_pDoc->GetCellType(ScAddress(2,0,0)) == CELLTYPE_NONE);
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // Make there we only have one group area listener listening on A2:B11.
     aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
     pListener = &aListeners[0];
     CPPUNIT_ASSERT_EQUAL(ScRange(0,1,0,1,10,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
+#endif
 
     // Check the formula results.
     for (SCROW i = 0; i < 10; ++i)
@@ -4065,12 +4075,15 @@ void Test::testCopyPasteRepeatOneFormula()
         CPPUNIT_ASSERT_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(2,i,0)));
     }
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // Check the group area listener again to make sure it's listening on A1:B10 once again.
     aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
     pListener = &aListeners[0];
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
+#endif
 
     m_pDoc->DeleteTab(0);
 }
