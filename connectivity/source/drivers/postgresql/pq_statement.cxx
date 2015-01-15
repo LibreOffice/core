@@ -199,6 +199,7 @@ Any Statement::queryInterface( const Type & reqType ) throw (RuntimeException, s
                                     static_cast< com::sun::star::sdbc::XResultSetMetaDataSupplier * > ( this ),
                                     static_cast< XCloseable * > ( this ),
                                     static_cast< XPropertySet * > ( this ),
+                                    static_cast< XMultipleResults * > ( this ),
                                     static_cast< XMultiPropertySet * > ( this ),
                                     static_cast< XGeneratedResultSet * > ( this ),
                                     static_cast< XFastPropertySet * > ( this ) );
