@@ -21,6 +21,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
@@ -30,6 +32,7 @@ using namespace ::com::sun::star::xml::sax;
 
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_MASTER_PAGE;
+using xmloff::XML_master_page;
 
 TYPEINIT1( XMLTextMasterStylesContext, SvXMLStylesContext );
 
@@ -78,9 +81,18 @@ SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleChildContext(
-    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pContext = 0;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_master_page)
+        && InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
+        pContext = new XMLTextMasterPageContext( GetImport(), Element,
+                xAttrList, !GetImport().GetTextImport()->IsInsertMode() );
+
+    // any other style will be ignored here!
+
+    return pContext;
 }
 
 SvXMLStyleContext *XMLTextMasterStylesContext::CreateStyleStyleChildContext(
