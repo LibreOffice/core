@@ -15,6 +15,11 @@
 
 #include <vector>
 
+/* TODO: before this can be activated further implementation is needed to
+ * re-establish the area listeners in case of unshare/split/join that currently
+ * would get discarded. */
+#define USE_FORMULA_GROUP_LISTENER 0
+
 namespace sc {
 
 class StartListeningContext;
