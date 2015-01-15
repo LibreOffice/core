@@ -1277,13 +1277,12 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             const SwFrm *pFrm = (*aIter).first;
             if(pFrm->IsFlyFrm())
             {
-                bool bFrmChanged = false;
                 uno::Reference < XAccessible > xAcc = (*aIter).second;
 
                 if(xAcc.is())
                 {
                     SwAccessibleFrameBase *pAccFrame = (static_cast< SwAccessibleFrameBase * >(xAcc.get()));
-                    bFrmChanged = pAccFrame->SetSelectedState( true );
+                    bool bFrmChanged = pAccFrame->SetSelectedState( true );
                     if (bFrmChanged)
                     {
                         const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( pFrm );

@@ -127,7 +127,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 
     for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
-        bool bInsPos = false;
         pFmt = (SwFrmFmt*)rFmts[n];
         pAnchor = &pFmt->GetAnchor();
         const SwPosition* pAPos = pAnchor->GetCntntAnchor();
@@ -139,6 +138,8 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
               !( *pCntntIdx < rInsPos &&
                 rInsPos < pCntntIdx->GetNode().EndOfSectionIndex() )) )
         {
+            bool bInsPos = false;
+
             if( !bMoveAllFlys && rEndNdIdx == pAPos->nNode )
             {
                 // Do not touch Anchor, if only a part of the EndNode

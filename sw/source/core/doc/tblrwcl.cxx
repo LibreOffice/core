@@ -703,11 +703,12 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         // Special treatment for the border:
         if( bCorrBorder && 1 < rTblBoxes.size() )
         {
-            bool bChgd = false;
             const SvxBoxItem& rBoxItem = pBox->GetFrmFmt()->GetBox();
 
             if( rBoxItem.GetLeft() || rBoxItem.GetRight() )
             {
+                bool bChgd = false;
+
                 // JP 02.04.97: 1st part for Bug 36271
                 // First the left/right edges
                 if( nDelPos + 1 < (sal_uInt16)rTblBoxes.size() )
@@ -900,7 +901,6 @@ lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
                                 size_t *const pCurPos = 0 )
 {
 //JP 16.04.97:  2. part for Bug 36271
-    bool bChgd = false;
     const SwTableLine* pLine = rBox.GetUpper();
     const SwTableBoxes& rTblBoxes = pLine->GetTabBoxes();
     const SwTableBox* pUpperBox = &rBox;
@@ -911,7 +911,7 @@ lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
     // then the top/bottom edges
     if( rBoxItem.GetTop() || rBoxItem.GetBottom() )
     {
-        bChgd = false;
+        bool bChgd = false;
         const SwTableLines* pTblLns;
         if( pUpperBox )
             pTblLns = &pUpperBox->GetTabLines();

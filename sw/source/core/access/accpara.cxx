@@ -3390,7 +3390,6 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
 
     if(selectionIndex < 0) return sal_False;
 
-    bool bRet = false;
     sal_Int32 nSelected = selectionIndex;
 
     // get the selection, and test whether it affects our text node
@@ -3398,6 +3397,8 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
 
     if( pCrsr != NULL )
     {
+        bool bRet = false;
+
         // get SwPosition for my node
         const SwTxtNode* pNode = GetTxtNode();
         sal_uLong nHere = pNode->GetIndex();

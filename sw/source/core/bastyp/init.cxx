@@ -809,10 +809,12 @@ void _FinitCore()
     delete SwStyleNameMapper::pNumRuleProgMap;
 
     // delete all default attributes
-    SfxPoolItem* pHt;
     for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
+    {
+        SfxPoolItem* pHt;
         if( 0 != ( pHt = aAttrTab[n] ))
             delete pHt;
+    }
 
     ::ClearFEShellTabCols();
 

@@ -1510,11 +1510,10 @@ namespace //local functions originally from docfmt.cxx
             if( pHistory )
             {
                 SwRegHistory aRegH( pNode, *pNode, pHistory );
-                SwpHints *pSwpHints;
 
                 if( pTNd && pCharSet && pCharSet->Count() )
                 {
-                    pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
+                    SwpHints *pSwpHints = bCreateSwpHints ? &pTNd->GetOrCreateSwpHints()
                                                 : pTNd->GetpSwpHints();
                     if( pSwpHints )
                         pSwpHints->Register( &aRegH );

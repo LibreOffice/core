@@ -208,9 +208,9 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( pNewLRSpace && SfxItemState::SET == GetItemState( RES_LR_SPACE, false,
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
-        bool bChg = false;
         if( pOldLRSpace != pNewLRSpace )    // Avoid recursion (SetAttr!)
         {
+            bool bChg = false;
             SvxLRSpaceItem aNew( *pOldLRSpace );
             // We had a relative value -> recalculate
             if( 100 != aNew.GetPropLeft() )

@@ -1005,7 +1005,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     SwDoc* pDoc = GetDoc();
     std::vector<sal_uInt16> aPosArr;
     SwTable * pTable = &pTblNd->GetTable();
-    SwTableLine* pLine;
     SwTableBox* pBox;
     sal_uInt16 nBoxes, nLines, nMaxBoxes = 0;
 
@@ -1049,7 +1048,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         // Set the TableNode as StartNode for all TextNodes in the Table
         pTxtNd->pStartOfSection = pTblNd;
 
-        pLine = new SwTableLine( pLineFmt, 1, 0 );
+        SwTableLine* pLine = new SwTableLine( pLineFmt, 1, 0 );
         pTable->GetTabLines().insert( pTable->GetTabLines().begin() + nLines, pLine );
 
         SwStartNode* pSttNd;
@@ -1348,7 +1347,6 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 
     SwDoc* pDoc = GetDoc();
     SwTable * pTable = &pTblNd->GetTable();
-    SwTableLine* pLine;
     SwTableBox* pBox;
     sal_uInt16 nBoxes, nLines, nMaxBoxes = 0;
 
@@ -1369,7 +1367,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         aRowIter != rTableNodes.end();
         ++aRowIter, nLines++, nBoxes = 0 )
     {
-        pLine = new SwTableLine( pLineFmt, 1, 0 );
+        SwTableLine* pLine = new SwTableLine( pLineFmt, 1, 0 );
         pTable->GetTabLines().insert( pTable->GetTabLines().begin() + nLines, pLine );
 
         std::vector< SwNodeRange >::const_iterator aCellIter = aRowIter->begin();
@@ -2337,7 +2335,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
     if( !GetTable().GetFrmFmt()->GetDepends()) // Do we actually have Frame?
         return;
 
-    SwFrm *pFrm, *pNew;
+    SwFrm *pFrm;
     SwCntntNode * pNode = rIdx.GetNode().GetCntntNode();
 
     OSL_ENSURE( pNode, "No ContentNode or CopyNode and new Node is identical");
@@ -2348,7 +2346,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
 
     while( 0 != (pFrm = aNode2Layout.NextFrm()) )
     {
-        pNew = pNode->MakeFrm( pFrm );
+        SwFrm *pNew = pNode->MakeFrm( pFrm );
         // Will the Node receive Frames before or after?
         if ( bBefore )
             // The new one preceds me

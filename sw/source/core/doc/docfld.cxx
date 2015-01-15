@@ -455,10 +455,10 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         }
     }
 
-    const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for (sal_uInt32 n = 0; n < nMaxItems; ++n)
     {
+        const SfxPoolItem* pItem;
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
 

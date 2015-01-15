@@ -180,8 +180,9 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                     lcl_GCBorder_GetLastBox_B( pBox, &aBoxes );
             }
 
-            SwTableBox* pBox;
             for( sal_uInt16 i = aBoxes.size(); i; )
+            {
+                SwTableBox* pBox;
                 if( SfxItemState::SET == (pBox = aBoxes[ --i ])->GetFrmFmt()->
                     GetItemState( RES_BOX, true, &pItem ) &&
                     0 != ( pBrd = static_cast<const SvxBoxItem*>(pItem)->GetRight() ) )
@@ -199,6 +200,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                             pBox->ClaimFrmFmt()->SetFmtAttr( aBox );
                     }
                 }
+            }
 
             aBoxes.clear();
         }

@@ -143,15 +143,17 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
     case EVENT_OBJECT_INETATTR:
         if( bCheckPtr  )
         {
-            const SfxPoolItem* pItem;
             sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
             for( n = 0; n < nMaxItems; ++n )
+            {
+                const SfxPoolItem* pItem;
                 if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
                     bCheckPtr = false;       // misuse as a flag
                     break;
                 }
+            }
         }
         if( !bCheckPtr )
             pTbl = rCallEvent.PTR.pINetAttr->GetMacroTbl();

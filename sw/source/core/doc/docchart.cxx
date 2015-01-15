@@ -149,15 +149,17 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
     bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )
     {
-        const SwFrmFmt* pFmt;
         const SwFrmFmts& rTbl = *GetTblFrmFmts();
         for( size_t i = rTbl.size(); i; )
+        {
+            const SwFrmFmt* pFmt;
             if( !( pFmt = rTbl[ --i ] )->IsDefault() &&
                 pFmt->GetName() == rNewName && IsUsed( *pFmt ) )
             {
                 bNameFound = true;
                 break;
             }
+        }
     }
 
     if( !bNameFound )

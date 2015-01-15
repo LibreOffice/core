@@ -319,13 +319,13 @@ void CntntIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
     {
         if ( RES_FLYFRMFMT == pFrmFmt->Which() || RES_DRAWFRMFMT == pFrmFmt->Which() )
         {
-            bool bSkip = false;
             const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
             SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
             if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
                  ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
                    FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
             {
+                bool bSkip = false;
                 aSave.m_bOther = false;
                 aSave.m_nCntnt = pAPos->nContent.GetIndex();
                 if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )

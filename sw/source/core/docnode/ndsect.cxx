@@ -1077,11 +1077,11 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
         else
         {
             SwNode2Layout aNode2Layout( *this, rIdx.GetIndex() );
-            SwFrm *pFrm, *pNew;
+            SwFrm *pFrm;
             while( 0 != (pFrm = aNode2Layout.NextFrm()) )
             {
                 OSL_ENSURE( pFrm->IsSctFrm(), "Depend of Section not a Section." );
-                pNew = rIdx.GetNode().GetCntntNode()->MakeFrm( pFrm );
+                SwFrm *pNew = rIdx.GetNode().GetCntntNode()->MakeFrm( pFrm );
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
 
