@@ -879,7 +879,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
     }
 
-    Point aPos( rInf.GetPos() );
+    Point aTextOriginPos( rInf.GetPos() );
     if( !bPrt )
     {
         if( rInf.GetpOut() != pPixOut || rInf.GetOut().GetMapMode() != *pPixMap )
@@ -890,7 +890,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             nPixWidth = rInf.GetOut().PixelToLogic( aTmp ).Width();
         }
 
-        aPos.X() += rInf.GetFrm()->IsRightToLeft() ? 0 : nPixWidth;
+        aTextOriginPos.X() += rInf.GetFrm()->IsRightToLeft() ? 0 : nPixWidth;
     }
 
     Color aOldColor( pTmpFont->GetColor() );
@@ -903,18 +903,22 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     if ( COMPLETE_STRING == rInf.GetLen() )
         rInf.SetLen( rInf.GetText().getLength() );
 
-    // ASIAN LINE AND CHARACTER GRID MODE START: snap to characters
+    // ASIAN LINE AND CHARACTER GRID MODE START
 
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
+
+        // ASIAN LINE AND CHARACTER GRID MODE: Do we want to snap asian characters to the grid?
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
         {
             //for textgrid refactor
             //const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
+
+            // kerning array - gives the absolute position of end of each character
             long* pKernArray = new long[rInf.GetLen()];
 
             if ( pPrinter )
@@ -924,67 +928,86 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                             rInf.GetIdx(), rInf.GetLen() );
 
-            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+            // Change the average width per character to an appropriate grid width
+            // basically get the ratio of the avg width to the grid unit width, then
+            // multiple this ratio to give the new avg width - which in this case
+            // gives a new grid width unit size
 
-            const sal_uLong i = nWidthPerChar ?
-                                ( nWidthPerChar - 1 ) / nGridWidth + 1:
+            long nAvgWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+
+            const sal_uLong nRatioAvgWidthCharToGridWidth = nAvgWidthPerChar ?
+                                ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
                                 1;
 
-            nWidthPerChar = i * nGridWidth;
+            nAvgWidthPerChar = nRatioAvgWidthCharToGridWidth * nGridWidth;
 
-            // position of first character, we take the printer position
+            // the absolute end position of the first character is also its width
             long nCharWidth = pKernArray[ 0 ];
-            sal_uLong nHalfWidth = nWidthPerChar / 2;
+            sal_uLong nHalfWidth = nAvgWidthPerChar / 2;
 
-            long nNextFix;
+            long nNextFix=0;
 
-            // punctuation characters are not centered
+            // we work out the start position (origin) of the first character,
+            // and we set the next "fix" offset to half the width of the char.
+            // The exceptions are for punctuation characters that are not centered
+            // so in these cases we just add half a regular "average" character width
+            // to the first characters actual width to allow the next character to
+            // be centred automatically
+            // If the character is "special right", then the offset is correct already
+            // so the fix offset is as normal - half the average character width
+
             sal_Unicode cChar = rInf.GetText()[ rInf.GetIdx() ];
             sal_uInt8 nType = lcl_WhichPunctuation( cChar );
             switch ( nType )
             {
+            // centre character
             case SwScriptInfo::NONE :
-                aPos.X() += ( nWidthPerChar - nCharWidth ) / 2;
+                aTextOriginPos.X() += ( nAvgWidthPerChar - nCharWidth ) / 2;
                 nNextFix = nCharWidth / 2;
                 break;
             case SwScriptInfo::SPECIAL_RIGHT :
                 nNextFix = nHalfWidth;
                 break;
+            // punctuation
             default:
-                aPos.X() += nWidthPerChar - nCharWidth;
+                aTextOriginPos.X() += nAvgWidthPerChar - nCharWidth;
                 nNextFix = nCharWidth - nHalfWidth;
             }
 
             // calculate offsets
             for( sal_Int32 j = 1; j < rInf.GetLen(); ++j )
             {
-                long nScr = pKernArray[ j ] - pKernArray[ j - 1 ];
-                nNextFix += nWidthPerChar;
+                long nCurrentCharWidth = pKernArray[ j ] - pKernArray[ j - 1 ];
+                nNextFix += nAvgWidthPerChar;
 
-                // punctuation characters are not centered
+                // almost the same as getting the offset for the first character:
+                // punctuation characters are not centered, so just add half an
+                // average character width minus the characters actual char width
+                // to get the offset intot the centre of the next character
+
                 cChar = rInf.GetText()[ rInf.GetIdx() + j ];
                 nType = lcl_WhichPunctuation( cChar );
                 switch ( nType )
                 {
                 case SwScriptInfo::NONE :
-                    pKernArray[ j - 1 ] = nNextFix - ( nScr / 2 );
+                    pKernArray[ j - 1 ] = nNextFix - ( nCurrentCharWidth / 2 );
                     break;
                 case SwScriptInfo::SPECIAL_RIGHT :
                     pKernArray[ j - 1 ] = nNextFix - nHalfWidth;
                     break;
                 default:
-                    pKernArray[ j - 1 ] = nNextFix + nHalfWidth - nScr;
+                    pKernArray[ j - 1 ] = nNextFix + nHalfWidth - nCurrentCharWidth;
                 }
             }
 
             // the layout engine requires the total width of the output
             pKernArray[ rInf.GetLen() - 1 ] = rInf.GetWidth() -
-                                              aPos.X() + rInf.GetPos().X() ;
+                                              aTextOriginPos.X() + rInf.GetPos().X() ;
 
             if ( bSwitchH2V )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
 
-            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                 pKernArray, rInf.GetIdx(), rInf.GetLen() );
 
             delete[] pKernArray;
@@ -1000,6 +1023,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     {
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
 
+        // ASIAN LINE AND CHARACTER GRID MODE - do not snap to characters
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
             const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
@@ -1013,7 +1037,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                 rInf.GetIdx(), rInf.GetLen() );
             if ( bSwitchH2V )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
             if ( rInf.GetSpace() || rInf.GetKanaComp())
             {
                 long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
@@ -1027,8 +1051,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         pSI && pSI->CountCompChg() &&
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
                     {
-                        pSI->Compress( pKernArray,rInf.GetIdx(), rInf.GetLen(),
-                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(),&aPos );
+                        pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
+                            rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
                         bSpecialJust = true;
                     }
                     ///Asian Justification
@@ -1071,25 +1095,25 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             if( 1 == rInf.GetLen() )
                             {
                                 pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
-                                rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                     pKernArray, rInf.GetIdx(), 1 );
                             }
                             else
                             {
                                 pKernArray[ rInf.GetLen() - 2] += nSpaceAdd;
-                                rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                     pKernArray, rInf.GetIdx(), rInf.GetLen() );
                             }
                         }
                         else
                         {
-                            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                 pKernArray, rInf.GetIdx(), rInf.GetLen() );
                         }
                     }
                     else
                     {
-                        Point aTmpPos( aPos );
+                        Point aTmpPos( aTextOriginPos );
                         sal_Int32 i;
                         sal_Int32 j = 0;
                         long nSpaceSum = 0;
@@ -1103,7 +1127,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                     rInf.GetIdx() + j, i - j );
                                 j = i + 1;
                                 pKernArray[i] = pKernArray[i] + nSpaceSum;
-                                aTmpPos.X() = aPos.X() + pKernArray[ i ] + nKernSum;
+                                aTmpPos.X() = aTextOriginPos.X() + pKernArray[ i ] + nKernSum;
                             }
                         }
                         if( j < i )
@@ -1121,7 +1145,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pKernArray[i] += nGridAddSum;
                 }
-                rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                     pKernArray, rInf.GetIdx(), rInf.GetLen() );
             }
             delete[] pKernArray;
@@ -1138,10 +1162,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 
         if ( bSwitchL2R )
-            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+            rInf.GetFrm()->SwitchLTRtoRTL( aTextOriginPos );
 
         if ( bSwitchH2V )
-            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+            rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
 
         // In the good old days we used to have a simple DrawText if the
         // output device is the printer. Now we need a DrawTextArray if
@@ -1199,7 +1223,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
-                                   (sal_uInt16)aFont.GetSize().Height(), &aPos );
+                                   (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
                     bSpecialJust = true;
                 }
 
@@ -1280,23 +1304,23 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     {
                         pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
 
-                        rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                        rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                                      pKernArray, rInf.GetIdx(), 1 );
                     }
                     else
                     {
                         pKernArray[ rInf.GetLen() - 2 ] += nSpaceAdd;
-                        rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                        rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                             pKernArray, rInf.GetIdx(), rInf.GetLen() );
                     }
                 }
                 else
-                    rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                    rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                                  pKernArray, rInf.GetIdx(), rInf.GetLen() );
             }
             else
             {
-                Point aTmpPos( aPos );
+                Point aTmpPos( aTextOriginPos );
                 sal_Int32 j = 0;
                 sal_Int32 i;
                 for( i = 0; i < rInf.GetLen(); i++ )
@@ -1311,7 +1335,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         SwTwips nAdd = pKernArray[ i ] + nKernSum;
                         if ( ( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL ) == nMode )
                             nAdd *= -1;
-                        aTmpPos.X() = aPos.X() + nAdd;
+                        aTmpPos.X() = aTextOriginPos.X() + nAdd;
                     }
                 }
                 if( j < i )
@@ -1325,7 +1349,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             long nTmpWidth = rInf.GetWidth();
             if( rInf.GetKern() && rInf.GetLen() && nTmpWidth > rInf.GetKern() )
                 nTmpWidth -= rInf.GetKern();
-            rInf.GetOut().DrawStretchText( aPos, nTmpWidth,
+            rInf.GetOut().DrawStretchText( aTextOriginPos, nTmpWidth,
                                            rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         }
         else if( rInf.GetKern() )
@@ -1342,11 +1366,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 pTmpFont->SetColor( aSaveColor );
             }
 
-            rInf.GetOut().DrawStretchText( aPos, nTmpWidth,
+            rInf.GetOut().DrawStretchText( aTextOriginPos, nTmpWidth,
                                            rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         }
         else
-            rInf.GetOut().DrawText( aPos, rInf.GetText(),
+            rInf.GetOut().DrawText( aTextOriginPos, rInf.GetText(),
                                     rInf.GetIdx(), rInf.GetLen() );
     }
 
@@ -1406,13 +1430,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                  pSI && pSI->CountCompChg() &&
                  lcl_IsMonoSpaceFont( rInf.GetOut() ) )
             {
-                Point aTmpPos( aPos );
+                Point aTmpPos( aTextOriginPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
                                (sal_uInt16)aFont.GetSize().Height(), &aTmpPos );
                 pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                rInf.GetKanaComp(),
-                               (sal_uInt16)aFont.GetSize().Height(), &aPos );
+                               (sal_uInt16)aFont.GetSize().Height(), &aTextOriginPos );
             }
 
             // Asian Justification
@@ -1528,19 +1552,19 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                           ( rInf.GetSpace() / SPACING_PRECISION_FACTOR );
 
             if ( bSwitchL2R )
-                rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+                rInf.GetFrm()->SwitchLTRtoRTL( aTextOriginPos );
 
             if ( bSwitchH2V )
-                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
 
 #if defined(MACOSX) || defined(IOS)
-            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1, bBullet ? SAL_LAYOUT_DRAW_BULLET : 0 );
 #else
-            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1 );
             if( bBullet )
-                rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray,
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
 #endif
         }
@@ -1718,13 +1742,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             {
 
                 if ( bSwitchL2R )
-                    rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+                    rInf.GetFrm()->SwitchLTRtoRTL( aTextOriginPos );
 
                 if ( bSwitchH2V )
-                    rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                    rInf.GetFrm()->SwitchHorizontalToVertical( aTextOriginPos );
 
 #if defined(MACOSX) || defined(IOS)
-                rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
                                              rInf.GetIdx() + nOffs , nLen - nOffs, bBullet ? SAL_LAYOUT_DRAW_BULLET : 0 );
 #else
                 // If we paint bullets instead of spaces, we use a copy of
@@ -1734,7 +1758,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 sal_Int32 nTmpIdx = bBullet ?
                                               ( rInf.GetIdx() ? 1 : 0 ) :
                                               rInf.GetIdx();
-                rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
+                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
                                              nTmpIdx + nOffs , nLen - nOffs );
                 if (bBullet)
                 {
@@ -1750,7 +1774,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetOverline(UNDERLINE_NONE);
                     pTmpFont->SetStrikeout(STRIKEOUT_NONE);
                     rInf.GetOut().SetFont( *pTmpFont );
-                    rInf.GetOut().DrawTextArray( aPos, aBulletOverlay, pKernArray + nOffs,
+                    rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, pKernArray + nOffs,
                                                  nTmpIdx + nOffs , nLen - nOffs );
                     pTmpFont->SetColor( aPreviousColor );
 
@@ -1809,10 +1833,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             aTxtSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
 
-            long nWidthPerChar = aTxtSize.Width() / nLn;
+            long nAvgWidthPerChar = aTxtSize.Width() / nLn;
 
-            const sal_uLong i = nWidthPerChar ?
-                            ( nWidthPerChar - 1 ) / nGridWidth + 1:
+            const sal_uLong i = nAvgWidthPerChar ?
+                            ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
                             1;
 
             aTxtSize.Width() = i * nGridWidth * nLn;
@@ -2068,16 +2092,16 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
-            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+            long nAvgWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            sal_uLong i = nWidthPerChar ?
-                      ( nWidthPerChar - 1 ) / nGridWidth + 1:
+            sal_uLong i = nAvgWidthPerChar ?
+                      ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
                       1;
 
-            nWidthPerChar = i * nGridWidth;
+            nAvgWidthPerChar = i * nGridWidth;
 
-            nCnt = rInf.GetOfst() / nWidthPerChar;
-            if ( 2 * ( rInf.GetOfst() - nCnt * nWidthPerChar ) > nWidthPerChar )
+            nCnt = rInf.GetOfst() / nAvgWidthPerChar;
+            if ( 2 * ( rInf.GetOfst() - nCnt * nAvgWidthPerChar ) > nAvgWidthPerChar )
                 ++nCnt;
 
             delete[] pKernArray;
@@ -2308,18 +2332,18 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );
 
-            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+            long nAvgWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            const sal_uLong i = nWidthPerChar ?
-                            ( nWidthPerChar - 1 ) / nGridWidth + 1:
+            const sal_uLong i = nAvgWidthPerChar ?
+                            ( nAvgWidthPerChar - 1 ) / nGridWidth + 1:
                             1;
 
-            nWidthPerChar = i * nGridWidth;
-            long nCurrPos = nWidthPerChar;
+            nAvgWidthPerChar = i * nGridWidth;
+            long nCurrPos = nAvgWidthPerChar;
 
             while( nTxtBreak < rInf.GetLen() && nTextWidth >= nCurrPos )
             {
-                nCurrPos += nWidthPerChar;
+                nCurrPos += nAvgWidthPerChar;
                 ++nTxtBreak;
             }
 
