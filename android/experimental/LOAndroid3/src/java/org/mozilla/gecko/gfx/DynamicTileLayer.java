@@ -1,8 +1,13 @@
 package org.mozilla.gecko.gfx;
 
+import android.content.Context;
 import android.graphics.RectF;
 
 public class DynamicTileLayer extends ComposedTileLayer {
+    public DynamicTileLayer(Context context) {
+        super(context);
+    }
+
     @Override
     protected RectF getViewPort(ImmutableViewportMetrics viewportMetrics) {
         RectF rect = viewportMetrics.getViewport();

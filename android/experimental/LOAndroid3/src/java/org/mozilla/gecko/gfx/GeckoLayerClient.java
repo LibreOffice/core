@@ -108,8 +108,8 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     public void notifyReady() {
         mGeckoIsReady = true;
 
-        mRootLayer = new DynamicTileLayer();
-        mLowResLayer = new FixedZoomTileLayer();
+        mRootLayer = new DynamicTileLayer(mContext);
+        mLowResLayer = new FixedZoomTileLayer(mContext);
 
         mLayerRenderer = new LayerRenderer(mView);
 

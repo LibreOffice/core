@@ -1,8 +1,13 @@
 package org.mozilla.gecko.gfx;
 
+import android.content.Context;
 import android.graphics.RectF;
 
 public class FixedZoomTileLayer extends ComposedTileLayer {
+    public FixedZoomTileLayer(Context context) {
+        super(context);
+    }
+
     @Override
     protected RectF getViewPort(ImmutableViewportMetrics viewportMetrics) {
         float zoom = getZoom(viewportMetrics);

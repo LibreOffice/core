@@ -1,5 +1,6 @@
 package org.mozilla.gecko.gfx;
 
+import android.content.Context;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
@@ -23,12 +24,8 @@ public abstract class ComposedTileLayer extends Layer {
     protected RectF currentViewport = new RectF();
     protected float currentZoom;
 
-    public ComposedTileLayer() {
+    public ComposedTileLayer(Context context) {
         this.tileSize = new IntSize(256, 256);
-    }
-
-    public ComposedTileLayer(IntSize tileSize) {
-        this.tileSize = tileSize;
     }
 
     public void invalidate() {
