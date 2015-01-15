@@ -51,7 +51,6 @@ class SmParser : boost::noncopyable
     //! locale where '.' is decimal separator!
     ::com::sun::star::lang::Locale m_aDotLoc;
 
-protected:
 #if OSL_DEBUG_LEVEL > 1
     bool            IsDelimiter( const OUString &rTxt, sal_Int32 nPos );
 #endif
