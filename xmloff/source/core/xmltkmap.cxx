@@ -30,22 +30,25 @@ class SvXMLTokenMapEntry_Impl
     sal_uInt16  nPrefixKey;
     OUString    sLocalName;
     sal_uInt16  nToken;
+    sal_Int32   fastToken;
 
 public:
 
     sal_uInt16 GetToken() const { return nToken; }
 
     SvXMLTokenMapEntry_Impl( sal_uInt16 nPrefix, const OUString& rLName,
-                             sal_uInt16 nTok=XML_TOK_UNKNOWN ) :
+            sal_Int32 fastTok = 0, sal_uInt16 nTok=XML_TOK_UNKNOWN ) :
         nPrefixKey( nPrefix ),
         sLocalName( rLName  ),
-        nToken( nTok )
+        nToken( nTok ),
+        fastToken( fastTok )
     {}
 
     explicit SvXMLTokenMapEntry_Impl( const SvXMLTokenMapEntry& rEntry ) :
         nPrefixKey( rEntry.nPrefixKey ),
         sLocalName( GetXMLToken( rEntry.eLocalName ) ),
-        nToken( rEntry.nToken )
+        nToken( rEntry.nToken ),
+        fastToken( rEntry.fastToken )
     {}
 
     bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
@@ -68,6 +71,21 @@ SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap )
     }
 }
 
+SvXMLTokenMapEntry_Impl *SvXMLTokenMap::Find( sal_Int32 nTok ) const
+{
+    SvXMLTokenMapEntry_Impl *pRet = 0;
+    SvXMLTokenMapEntry_Impl aTst( 0, "", nTok );
+
+    SvXMLTokenMap_Impl::iterator it = pImpl->find( aTst );
+    if( it != pImpl->end() )
+    {
+        pRet = &*it;
+    }
+
+    return pRet;
+}
+
+
 SvXMLTokenMap::~SvXMLTokenMap()
 {
 }
@@ -84,6 +102,15 @@ sal_uInt16 SvXMLTokenMap::Get( sal_uInt16 nKeyPrefix,
         pEntry = &*it;
     }
 
+    if( pEntry )
+        return pEntry->GetToken();
+    else
+        return XML_TOK_UNKNOWN;
+}
+
+sal_uInt16 SvXMLTokenMap::Get( sal_Int32 nTok ) const
+{
+    SvXMLTokenMapEntry_Impl *pEntry = Find( nTok );
     if( pEntry )
         return pEntry->GetToken();
     else
