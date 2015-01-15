@@ -22,6 +22,7 @@
 #include <globalnames.hxx>
 #include <dbdata.hxx>
 #include <bcaslot.hxx>
+#include <sharedformula.hxx>
 
 #include <svl/sharedstring.hxx>
 
@@ -631,6 +632,8 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
     std::sort(aListeners.begin(), aListeners.end(), sc::AreaListener::SortByArea());
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     CPPUNIT_ASSERT_MESSAGE("There should only be 2 area listeners.", aListeners.size() == 2);
     // First one should be group-listening on A1:B2.
     CPPUNIT_ASSERT_MESSAGE("This listener should be listening on A1:B2.", aListeners[0].maArea == ScRange(0,0,0,1,1,0));
@@ -638,6 +641,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     // Second one should be group-listening on A4:B5.
     CPPUNIT_ASSERT_MESSAGE("This listener should be listening on A1:B2.", aListeners[0].maArea == ScRange(0,0,0,1,1,0));
     CPPUNIT_ASSERT_MESSAGE("This listener should be group-listening.", aListeners[0].mbGroupListening);
+#endif
 
     // Make sure that C1:C2 and C4:C5 are formula groups.
     const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
@@ -662,11 +666,14 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // We should only have one listener group-listening on A1:B4.
     aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
     CPPUNIT_ASSERT_MESSAGE("There should only be 1 area listener.", aListeners.size() == 1);
     CPPUNIT_ASSERT_MESSAGE("This listener should be listening on A1:B4.", aListeners[0].maArea == ScRange(0,0,0,1,3,0));
     CPPUNIT_ASSERT_MESSAGE("This listener should be group-listening.", aListeners[0].mbGroupListening);
+#endif
 
     // Change the value of B4 and make sure the value of C4 changes.
     rFunc.SetValueCell(ScAddress(1,3,0), 100.0, false);
@@ -691,6 +698,8 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     aListeners = pBASM->GetAllListeners(aWholeArea, sc::AreaInside);
     std::sort(aListeners.begin(), aListeners.end(), sc::AreaListener::SortByArea());
 
+    // This check makes only sense if group listeners are activated.
+#if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     CPPUNIT_ASSERT_MESSAGE("There should only be 2 area listeners.", aListeners.size() == 2);
     // First one should be group-listening on A1:B2.
     CPPUNIT_ASSERT_MESSAGE("This listener should be listening on A1:B2.", aListeners[0].maArea == ScRange(0,0,0,1,1,0));
@@ -698,6 +707,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
     // Second one should be group-listening on A4:B5.
     CPPUNIT_ASSERT_MESSAGE("This listener should be listening on A1:B2.", aListeners[0].maArea == ScRange(0,0,0,1,1,0));
     CPPUNIT_ASSERT_MESSAGE("This listener should be group-listening.", aListeners[0].mbGroupListening);
+#endif
 
     m_pDoc->DeleteTab(0);
 }
