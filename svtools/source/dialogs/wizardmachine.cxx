@@ -55,6 +55,7 @@ namespace svt
     void OWizardPage::dispose()
     {
         delete m_pImpl;
+        TabPage::dispose();
     }
 
     void OWizardPage::initializePage()

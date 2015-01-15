@@ -2169,9 +2169,16 @@ ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 ImplListBox::~ImplListBox()
 {
+    dispose();
+}
+
+void ImplListBox::dispose()
+{
     delete mpHScrollBar;
     delete mpVScrollBar;
     delete mpScrollBarBox;
+    maLBWindow.clear();
+    Control::dispose();
 }
 
 void ImplListBox::Clear()
@@ -2519,12 +2526,6 @@ bool ImplListBox::Notify( NotifyEvent& rNEvt )
     }
 
     return nDone || Window::Notify( rNEvt );
-}
-
-void ImplListBox::dispose()
-{
-    maLBWindow.clear();
-    Control::dispose();
 }
 
 const Wallpaper& ImplListBox::GetDisplayBackground() const

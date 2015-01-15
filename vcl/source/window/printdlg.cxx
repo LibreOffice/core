@@ -717,6 +717,7 @@ PrintDialog::~PrintDialog()
 void PrintDialog::dispose()
 {
     delete mpCustomOptionsUIBuilder;
+    ModalDialog::dispose();
 }
 
 void PrintDialog::readFromSettings()

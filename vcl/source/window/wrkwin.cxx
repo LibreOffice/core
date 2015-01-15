@@ -113,17 +113,17 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
 
 WorkWindow::~WorkWindow()
 {
+    dispose();
+}
+
+void WorkWindow::dispose()
+{
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpAppWin == this )
     {
         pSVData->maWinData.mpAppWin = NULL;
         Application::Quit();
     }
-    dispose();
-}
-
-void WorkWindow::dispose()
-{
     SystemWindow::dispose();
 }
 

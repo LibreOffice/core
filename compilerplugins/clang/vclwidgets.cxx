@@ -38,6 +38,9 @@ public:
     bool VisitParmVarDecl(ParmVarDecl const * decl);
 
     bool VisitFunctionDecl( const FunctionDecl* var );
+
+private:
+    bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
 };
 
 bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
@@ -115,12 +118,12 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
     if (isPointerToWindowSubclass(fieldDecl->getType())) {
-        report(
+/*        report(
             DiagnosticsEngine::Remark,
             "vcl::Window subclass declared as a pointer field, should be wrapped in VclPtr.",
             fieldDecl->getLocation())
           << fieldDecl->getSourceRange();
-        return true;
+        return true;*/
     }
 
     const RecordType *recordType = fieldDecl->getType()->getAs<RecordType>();
@@ -176,6 +179,10 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
         return true;
     }
+    if (pMethodDecl
+        && pMethodDecl->getParent()->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+        return true;
+    }
     QualType t1 { compat::getReturnType(*functionDecl) };
     if (t1.getAsString().find("VclPtr") != std::string::npos) {
         report(
@@ -184,8 +191,73 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             functionDecl->getLocation())
           << functionDecl->getSourceRange();
     }
+    if (functionDecl->hasBody() && pMethodDecl && isDerivedFromWindow(pMethodDecl->getParent())) {
+        const CXXDestructorDecl *pDestructorDecl = dyn_cast<CXXDestructorDecl>(pMethodDecl);
+        // check that the destructor for a vcl::Window subclass does nothing except call into the dispose() method
+        if (pDestructorDecl) {
+            const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(functionDecl->getBody());
+            bool ok = false;
+            if (pCompoundStatement && pCompoundStatement->size() == 1) {
+                const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
+                if (pCallExpr) {
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    "vcl::Window subclass should have nothing in it's destructor but a call to dispose().",
+                    functionDecl->getBody()->getLocStart())
+                  << functionDecl->getBody()->getSourceRange();
+            }
+        // check the last thing that the dispose() method does, is to call into the superclass dispose method
+        } else if (pMethodDecl->getNameAsString() == "dispose") {
+            if (!isDisposeCallingSuperclassDispose(pMethodDecl)) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    "vcl::Window subclass dispose() method MUST call it's superclass dispose() as the last thing it does.",
+                    functionDecl->getBody()->getLocStart())
+                  << functionDecl->getBody()->getSourceRange();
+           }
+        }
+    }
     return true;
 }
+
+/**
+The AST looks like:
+`-CXXMemberCallExpr 0xb06d8b0 'void'
+  `-MemberExpr 0xb06d868 '<bound member function type>' ->dispose 0x9d34880
+    `-ImplicitCastExpr 0xb06d8d8 'class SfxTabPage *' <UncheckedDerivedToBase (SfxTabPage)>
+      `-CXXThisExpr 0xb06d850 'class SfxAcceleratorConfigPage *' this
+
+*/
+bool VCLWidgets::isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl)
+{
+    const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pMethodDecl->getBody());
+    if (!pCompoundStatement) return false;
+    // find the last statement
+    const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_rbegin());
+    if (!pCallExpr) return false;
+    const MemberExpr *pMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
+    if (!pMemberExpr) return false;
+    if (pMemberExpr->getMemberDecl()->getNameAsString() != "dispose") return false;
+    const CXXMethodDecl *pDirectCallee = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
+    if (!pDirectCallee) return false;
+/* Not working yet. Partially because sometimes the superclass does not a dispose() method, so it gets passed up the chain.
+   Need complex checking for that case.
+    if (pDirectCallee->getParent()->getTypeForDecl() != (*pMethodDecl->getParent()->bases_begin()).getType().getTypePtr()) {
+        report(
+            DiagnosticsEngine::Warning,
+            "dispose() method calling wrong baseclass, calling " + pDirectCallee->getParent()->getQualifiedNameAsString() +
+            " should be calling " + (*pMethodDecl->getParent()->bases_begin()).getType().getAsString(),
+            pCallExpr->getLocStart())
+          << pCallExpr->getSourceRange();
+        return false;
+    }*/
+    return true;
+}
+
 
 
 loplugin::Plugin::Registration< VCLWidgets > X("vclwidgets");

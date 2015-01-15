@@ -124,8 +124,15 @@ XIMStatusWindow::XIMStatusWindow( bool bOn ) :
 
 XIMStatusWindow::~XIMStatusWindow()
 {
+    dispose();
+}
+
+void XIMStatusWindow::dispose()
+{
     if( m_nDelayedEvent )
         Application::RemoveUserEvent( m_nDelayedEvent );
+    m_aStatusText.disposeAndClear();
+    StatusWindow::dispose();
 }
 
 void XIMStatusWindow::toggle( bool bOn )
@@ -133,12 +140,6 @@ void XIMStatusWindow::toggle( bool bOn )
     m_bOn = bOn;
     show( bOn, I18NStatus::contextmap );
 }
-
-void XIMStatusWindow::dispose()
-{
-    m_aStatusText.disposeAndClear();
-    StatusWindow::dispose();
-};
 
 void XIMStatusWindow::layout()
 {
@@ -311,7 +312,6 @@ class IIIMPStatusWindow : public StatusWindow
 
 public:
     IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
-    virtual ~IIIMPStatusWindow();
 
     virtual void setText( const OUString & ) SAL_OVERRIDE;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
@@ -366,10 +366,6 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         fprintf( stderr, "Warning: could not reposition status window since no frame\n" );
 #endif
     EnableAlwaysOnTop( true );
-}
-
-IIIMPStatusWindow::~IIIMPStatusWindow()
-{
 }
 
 void IIIMPStatusWindow::layout()

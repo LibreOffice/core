@@ -403,7 +403,6 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void        dispose() SAL_OVERRIDE;
 
     void                ImplResizeControls();
     void                ImplCheckScrollBars();
@@ -416,6 +415,7 @@ protected:
 public:
                     ImplListBox( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~ImplListBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow->GetEntryList(); }
     ImplListBoxWindowPtr    GetMainWindow()                 { return maLBWindow; }
