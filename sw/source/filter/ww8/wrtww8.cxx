@@ -3864,7 +3864,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( !type )
         SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
     if ( type )
-        pDataStrm->WriteUInt16( sal_uInt16(0) );
+        pDataStrm->WriteUInt16( 0 );
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffformat ), true );
     SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffhelptext ), true );
