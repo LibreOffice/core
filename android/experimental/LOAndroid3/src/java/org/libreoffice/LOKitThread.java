@@ -144,6 +144,8 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 break;
             case LOEvent.THUMBNAIL:
                 createThumbnail(event.mTask);
+            case LOEvent.TOUCH:
+                LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
         }
     }
 
