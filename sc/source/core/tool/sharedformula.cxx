@@ -410,7 +410,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
 
 #else
     ScFormulaCell** pp = ppSharedTop;
-    ScFormulaCell** ppEnd = ppSharedTop + (**ppSharedTop).GetSharedLength();
+    ScFormulaCell** ppEnd = ppSharedTop + rTopCell.GetSharedLength();
     for (; pp != ppEnd; ++pp)
     {
         ScFormulaCell& rFC = **pp;
