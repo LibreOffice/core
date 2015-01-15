@@ -461,7 +461,7 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext( sal_Int32 Elem
     SvXMLStyleContext *pStyle;
     if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_font_face) )
     {
-        pStyle = 0;
+        pStyle = new XMLFontStyleContextFontFace( GetImport(), Element, xAttrList, *this );;
     }
     else
     {
