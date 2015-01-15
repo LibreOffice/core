@@ -178,20 +178,30 @@ void renderDocument( LOKDocView* pDocView )
     }
 }
 
+/// Callback data, allocated in lok_docview_callback_worker(), released in lok_docview_callback().
+typedef struct
+{
+    int m_nType;
+    const char* m_pPayload;
+    LOKDocView* m_pDocView;
+}
+LOKDocViewCallbackData;
+
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
 {
-    LOKDocView* pDocView = pData;
+    LOKDocViewCallbackData* pCallback = pData;
 
-#if ! GTK_CHECK_VERSION(2,12,0)
-    GDK_THREADS_ENTER();
-#endif
+    switch (pCallback->m_nType)
+    {
+    case LOK_CALLBACK_INVALIDATE_TILES:
+        renderDocument(pCallback->m_pDocView);
+        break;
+    default:
+        break;
+    }
 
-    renderDocument(pDocView);
-
-#if ! GTK_CHECK_VERSION(2,12,0)
-    GDK_THREADS_LEAVE();
-#endif
+    g_free(pCallback);
     return G_SOURCE_REMOVE;
 }
 
@@ -200,20 +210,15 @@ static void lok_docview_callback_worker(int nType, const char* pPayload, void* p
 {
     LOKDocView* pDocView = pData;
 
-    switch (nType)
-    {
-    case LOK_CALLBACK_INVALIDATE_TILES:
-        // TODO for now just always render the document.
-        (void)pPayload;
+    LOKDocViewCallbackData* pCallback = g_new0(LOKDocViewCallbackData, 1);
+    pCallback->m_nType = nType;
+    pCallback->m_pPayload = pPayload;
+    pCallback->m_pDocView = pDocView;
 #if GTK_CHECK_VERSION(2,12,0)
-        gdk_threads_add_idle(lok_docview_callback, pDocView);
+    gdk_threads_add_idle(lok_docview_callback, pCallback);
 #else
-        g_idle_add(lok_docview_callback, pDocView);
+    g_idle_add(lok_docview_callback, pDocView);
 #endif
-        break;
-    default:
-        break;
-    }
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, char* pPath )
