@@ -1912,6 +1912,14 @@ SfxPoolItem* SwFmtNoBalancedColumns::Clone( SfxItemPool* ) const
     return new SwFmtNoBalancedColumns( GetValue() );
 }
 
+void SwFmtNoBalancedColumns::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtNoBalancedColumns"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(GetValue()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 // class SwFmtFtnEndAtTxtEnd
 
 sal_uInt16 SwFmtFtnEndAtTxtEnd::GetValueCount() const

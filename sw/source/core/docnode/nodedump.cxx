@@ -25,6 +25,7 @@
 #include "fmtcntnt.hxx"
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"
+#include "fmtclbl.hxx"
 #include "fmteiro.hxx"
 #include "charfmt.hxx"
 #include "frmfmt.hxx"
@@ -486,6 +487,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_EDIT_IN_READONLY:
                 static_cast<const SwFmtEditInReadonly*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_COLUMNBALANCE:
+                static_cast<const SwFmtNoBalancedColumns*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -500,9 +504,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_COLUMNBALANCE:
-                pWhich = "column balance";
-                break;
             case RES_LR_SPACE:
                 pWhich = "left-right space";
                 break;

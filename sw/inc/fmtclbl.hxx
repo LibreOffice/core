@@ -33,6 +33,7 @@ public:
 
     /// "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(bool bInP) const
