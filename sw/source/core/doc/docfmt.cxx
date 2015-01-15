@@ -363,10 +363,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    boost::scoped_ptr< SwDataChanged > pDataChanged;
+    boost::scoped_ptr< SwDataChanged > xDataChanged;
     if ( bSendDataChangedEvents )
     {
-        pDataChanged.reset( new SwDataChanged( *pPam ) );
+        xDataChanged.reset( new SwDataChanged( *pPam ) );
     }
     SwHistory* pHst = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -468,10 +468,12 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         GetNodes().ForEach( pStt->nNode, aTmpEnd, lcl_RstTxtAttr, &aPara );
     }
 
+    SetModified();
+
+    xDataChanged.reset(); //before delete pPam
+
     if( pPam != &rRg )
         delete pPam;
-
-    SetModified();
 }
 
 #define DELETECHARSETS if ( bDelete ) { delete pCharSet; delete pOtherSet; }
