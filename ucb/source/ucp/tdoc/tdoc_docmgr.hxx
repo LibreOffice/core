@@ -22,6 +22,7 @@
 
 #include <map>
 
+#include <rtl/ref.hxx>
 #include "osl/mutex.hxx"
 
 #include "cppuhelper/implbase1.hxx"
@@ -90,7 +91,7 @@ namespace tdoc_ucp {
         {
         public:
             OfficeDocumentsCloseListener( OfficeDocumentsManager * pMgr )
-            : m_pManager( pMgr ) {};
+                : m_pManager( pMgr ) {}
 
             // util::XCloseListener
             virtual void SAL_CALL queryClosing(
@@ -107,6 +108,9 @@ namespace tdoc_ucp {
             virtual void SAL_CALL disposing(
                     const com::sun::star::lang::EventObject & Source )
                 throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+            void Dispose() { m_pManager = 0; }
+
         private:
             OfficeDocumentsManager * m_pManager;
         };
@@ -185,8 +189,7 @@ namespace tdoc_ucp {
             com::sun::star::frame::XModuleManager2 >        m_xModuleMgr;
         DocumentList                                        m_aDocs;
         OfficeDocumentsEventListener *                      m_pDocEventListener;
-        com::sun::star::uno::Reference<
-            com::sun::star::util::XCloseListener >          m_xDocCloseListener;
+        ::rtl::Reference<OfficeDocumentsCloseListener> m_xDocCloseListener;
     };
 
 } // namespace tdoc_ucp

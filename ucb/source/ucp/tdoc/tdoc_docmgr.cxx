@@ -74,6 +74,8 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
          const lang::EventObject& Source )
     throw ( uno::RuntimeException, std::exception )
 {
+    if (!m_pManager) return; // disposed?
+
     document::EventObject aDocEvent;
     aDocEvent.Source = Source.Source;
     aDocEvent.EventName = "OfficeDocumentsListener::notifyClosing";
@@ -124,6 +126,7 @@ OfficeDocumentsManager::~OfficeDocumentsManager()
     // objects are actually released/destroyed upon shutdown is not defined. And when we arrive *here*,
     // OOo *is* shutting down currently, since we're held by the TDOC provider, which is disposed
     // upon shutdown.
+    m_xDocCloseListener->Dispose();
 }
 
 
@@ -235,7 +238,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                     "OnLoadFinished/OnCreate event: got no close broadcaster!" );
 
                 if ( xCloseBroadcaster.is() )
-                    xCloseBroadcaster->addCloseListener( m_xDocCloseListener );
+                    xCloseBroadcaster->addCloseListener(m_xDocCloseListener.get());
 
                 // Propagate document closure.
                 OSL_ENSURE( m_pDocEventListener,
@@ -294,7 +297,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                     "OnUnload event: got no XCloseBroadcaster from XModel" );
 
                 if ( xCloseBroadcaster.is() )
-                    xCloseBroadcaster->removeCloseListener( m_xDocCloseListener );
+                    xCloseBroadcaster->removeCloseListener(m_xDocCloseListener.get());
 
                 m_aDocs.erase( it );
             }
@@ -501,7 +504,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                             "buildDocumentsList: got no close broadcaster!" );
 
                         if ( xCloseBroadcaster.is() )
-                            xCloseBroadcaster->addCloseListener( m_xDocCloseListener );
+                            xCloseBroadcaster->addCloseListener(m_xDocCloseListener.get());
                     }
                 }
             }
