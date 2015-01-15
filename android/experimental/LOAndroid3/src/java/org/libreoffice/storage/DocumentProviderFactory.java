@@ -16,14 +16,39 @@ import org.libreoffice.storage.local.LocalDocumentsProvider;
  * Keeps the instances of the available IDocumentProviders in the system.
  * Instances are maintained in a sorted list and providers have to be
  * accessed from their position.
+ *
+ * The factory follows the Singleton pattern, there is only one instance of it
+ * in the application and it must be retrieved with
+ * DocumentProviderFactory.getInstance().
  */
-public class DocumentProviderFactory {
+public final class DocumentProviderFactory {
 
-    private static IDocumentProvider[] providers = {
+    /**
+     * Private factory instance for the Singleton pattern.
+     */
+    private static DocumentProviderFactory instance = null;
+
+    private IDocumentProvider[] providers = {
             new LocalDocumentsDirectoryProvider(), new LocalDocumentsProvider() };
 
-    private static String[] providerNames = {
+    private String[] providerNames = {
             "Local documents", "Local file system" };
+
+    private DocumentProviderFactory() {
+        // private to prevent external instances of the factory
+    }
+
+    /**
+     * Retrieve the unique instance of the factory.
+     *
+     * @return the unique factory object.
+     */
+    public static DocumentProviderFactory getInstance() {
+        if (instance == null) {
+            instance = new DocumentProviderFactory();
+        }
+        return instance;
+    }
 
     /**
      * Retrieve the provider associated to a certain position.
@@ -31,7 +56,7 @@ public class DocumentProviderFactory {
      * @param position
      * @return document provider in that position.
      */
-    public static IDocumentProvider getProvider(int position) {
+    public IDocumentProvider getProvider(int position) {
         return providers[position];
     }
 
@@ -41,7 +66,7 @@ public class DocumentProviderFactory {
      *
      * @return Array with the names of the available providers.
      */
-    public static String[] getNames() {
+    public String[] getNames() {
         return providerNames;
     }
 
@@ -50,7 +75,7 @@ public class DocumentProviderFactory {
      *
      * @return default provider.
      */
-    public static IDocumentProvider getDefaultProvider() {
+    public IDocumentProvider getDefaultProvider() {
         return providers[0];
     }
 }

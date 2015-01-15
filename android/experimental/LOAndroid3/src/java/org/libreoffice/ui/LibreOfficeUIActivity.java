@@ -78,6 +78,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     FileFilter fileFilter;
     FilenameFilter filenameFilter;
     private List<IFile> filePaths;
+    private DocumentProviderFactory documentProviderFactory;
     private IDocumentProvider documentProvider;
     private IFile homeDirectory;
     private IFile currentDirectory;
@@ -105,8 +106,11 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
         super.onCreate(savedInstanceState);
         Log.d(tag, "onCreate - tweaked - meeks !");
+
+        documentProviderFactory = DocumentProviderFactory.getInstance();
+
         //Set the "home" - top level - directory.
-        documentProvider = DocumentProviderFactory.getDefaultProvider();
+        documentProvider = documentProviderFactory.getDefaultProvider();
         homeDirectory = documentProvider.getRootDirectory();
         currentDirectory = homeDirectory;
         //Load default settings
@@ -177,13 +181,13 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
         // Set the adapter for the list view
         drawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.item_in_drawer, DocumentProviderFactory.getNames()));
+                R.layout.item_in_drawer, documentProviderFactory.getNames()));
         // Set the list's click listener
         drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view,
                     int position, long id) {
-                documentProvider = DocumentProviderFactory.getProvider(position);
+                documentProvider = documentProviderFactory.getProvider(position);
                 homeDirectory = documentProvider.getRootDirectory();
                 currentDirectory = homeDirectory;
                 createUI();
