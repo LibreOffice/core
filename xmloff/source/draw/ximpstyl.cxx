@@ -21,6 +21,7 @@
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
 #include <tools/debug.hxx>
@@ -34,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/namecontainer.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/families.hxx>
@@ -50,6 +52,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 {
@@ -1124,10 +1127,70 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
-    sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList>& /*xAttrList*/)
+    sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
 {
-    return 0;
+    SvXMLStyleContext *pContext = 0;
+    const SvXMLTokenMap& rStyleTokenMap = GetSdImport().GetStylesElemTokenMap();
+
+    switch( rStyleTokenMap.Get( Element ) )
+    {
+        case XML_TOK_STYLES_PAGE_MASTER:
+        {
+            // style:page-master inside office:styles context
+            pContext = new SdXMLPageMasterContext(GetSdImport(), Element, xAttrList);
+            break;
+        }
+        case XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT:
+        {
+            // style::presentation-page-layout inside office:styles context
+            pContext = new SdXMLPresentationPageLayoutContext(GetSdImport(), Element, xAttrList);
+            break;
+        }
+    }
+
+    if(!pContext)
+    {
+        const SvXMLTokenMap& rTokenMap = mpNumFmtHelper->GetStylesElemTokenMap();
+        sal_uInt16 nToken = rTokenMap.Get( Element );
+        switch( nToken )
+        {
+            case XML_TOK_STYLES_DATE_STYLE:
+            case XML_TOK_STYLES_TIME_STYLE:
+                // number:date-style or number:time-style
+                pContext = new SdXMLNumberFormatImportContext( GetSdImport(),
+                    Element, mpNumFmtHelper->getData(), nToken, xAttrList, *this );
+            break;
+            case XML_TOK_STYLES_NUMBER_STYLE:
+            case XML_TOK_STYLES_CURRENCY_STYLE:
+            case XML_TOK_STYLES_PERCENTAGE_STYLE:
+            case XML_TOK_STYLES_BOOLEAN_STYLE:
+            case XML_TOK_STYLES_TEXT_STYLE:
+                pContext = new SvXMLNumFormatContext( GetSdImport(), Element,
+                    mpNumFmtHelper->getData(), nToken, xAttrList, *this );
+            break;
+        }
+    }
+
+    if( !pContext && (
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_header_decl) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_footer_decl) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_date_time_decl) ) )
+    {
+        pContext = new SdXMLHeaderFooterDeclContext( GetImport(), Element, xAttrList );
+    }
+
+    if(!pContext &&
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_template))
+    {
+        pContext = GetImport().GetShapeImport()->GetShapeTableImport()->CreateTableTemplateContext( Element, xAttrList );
+    }
+
+    // call base class
+    if(!pContext)
+        pContext = SvXMLStylesContext::CreateStyleChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
@@ -1158,10 +1221,28 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
 {
-    return 0;
+    SvXMLStyleContext *pContext = 0;
+
+    switch( nFamily )
+    {
+        case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
+            pContext = new SdXMLDrawingPageStyleContext(GetSdImport(), Element, xAttrList, *this);
+        break;
+        case XML_STYLE_FAMILY_TABLE_CELL:
+        case XML_STYLE_FAMILY_TABLE_COLUMN:
+        case XML_STYLE_FAMILY_TABLE_ROW:
+            pContext = new XMLShapeStyleContext(GetSdImport(), Element, xAttrList, *this, nFamily );
+        break;
+    }
+
+    // call base class
+    if(!pContext)
+        pContext = SvXMLStylesContext::CreateStyleStyleChildContext(nFamily, Element, xAttrList);
+
+    return pContext;
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
@@ -1187,10 +1268,23 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
 }
 
 SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
 {
-    return 0;
+    SvXMLStyleContext *pContext = 0;
+
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        pContext = new XMLGraphicsDefaultStyle(GetSdImport(), Element, xAttrList, *this);
+        break;
+    }
+
+    // call base class
+    if(!pContext)
+        pContext = SvXMLStylesContext::CreateDefaultStyleStyleChildContext(nFamily, Element, xAttrList);
+
+    return pContext;
 }
 
 sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
@@ -1305,6 +1399,56 @@ void SdXMLStylesContext::EndElement()
 void SAL_CALL SdXMLStylesContext::endFastElement( sal_Int32 /*Element*/ )
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
+    if(mbIsAutoStyle)
+    {
+        // AutoStyles for text import
+        GetImport().GetTextImport()->SetAutoStyles( this );
+
+        // AutoStyles for chart
+        GetImport().GetChartImport()->SetAutoStylesContext( this );
+
+        // AutoStyles for forms
+        GetImport().GetFormImport()->setAutoStyleContext( this );
+
+        // associate AutoStyles with styles in preparation to setting Styles on shapes
+        for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
+        {
+            const SvXMLStyleContext *pStyle = GetStyle(a);
+            if(pStyle && pStyle->ISA(XMLShapeStyleContext))
+            {
+                const XMLShapeStyleContext* pDocStyle = static_cast<const XMLShapeStyleContext*>(pStyle);
+
+                SvXMLStylesContext *pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
+                if( pStylesContext )
+                {
+                    const XMLShapeStyleContext *pParentStyle = static_cast<const XMLShapeStyleContext*>(pStyle);
+                    if(pParentStyle->GetStyle().is())
+                    {
+                        const_cast<XMLShapeStyleContext*>(pDocStyle)->SetStyle(pParentStyle->GetStyle());
+                    }
+                }
+            }
+        }
+
+        FinishStyles( false );
+    }
+    else
+    {
+        // Process styles list
+        ImpSetGraphicStyles();
+        ImpSetCellStyles();
+        GetImport().GetShapeImport()->GetShapeTableImport()->finishStyles();
+
+        // put style infos in the info set for other components ( content import f.e. )
+        uno::Reference< beans::XPropertySet > xInfoSet( GetImport().getImportInfo() );
+        if( xInfoSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
+
+            if( xInfoSetInfo->hasPropertyByName("PageLayouts") )
+                xInfoSet->setPropertyValue("PageLayouts", uno::makeAny( getPageLayouts() ) );
+        }
+    }
 }
 
 // set master-page styles (all with family="presentation" and a special

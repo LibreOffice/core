@@ -224,6 +224,12 @@ SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx,
     return new XMLTableTemplateContext( mrImport, nPrfx, rLName, xAttrList );
 }
 
+SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+{
+    return new XMLTableTemplateContext( mrImport, Element, xAttrList );
+}
+
 void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
 {
     std::shared_ptr< XMLTableTemplate > xPtr( new XMLTableTemplate );
