@@ -87,6 +87,8 @@ public class JavaPanZoomController
     private long mLastEventTime;
     /* Current state the pan/zoom UI is in. */
     private PanZoomState mState;
+    /* Whether or not to wait for a double-tap before dispatching a single-tap */
+    private boolean mWaitForDoubleTap;
 
     public JavaPanZoomController(PanZoomTarget target) {
         mTarget = target;
@@ -865,6 +867,7 @@ public class JavaPanZoomController
         mTarget.setViewportMetrics(viewportMetrics);
     }
 
+    @Override
     public boolean getRedrawHint() {
         switch (mState) {
             case PINCHING:
@@ -881,18 +884,41 @@ public class JavaPanZoomController
     }
 
     @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        mWaitForDoubleTap = mTarget.getZoomConstraints().getAllowDoubleTapZoom();
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+        // If we get this, it will be followed either by a call to
+        // onSingleTapUp (if the user lifts their finger before the
+        // long-press timeout) or a call to onLongPress (if the user
+        // does not). In the former case, we want to make sure it is
+        // treated as a click. (Note that if this is called, we will
+        // not get a call to onDoubleTap).
+        mWaitForDoubleTap = false;
+    }
+
+    @Override
     public void onLongPress(MotionEvent motionEvent) {
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
-        // When zooming is enabled, wait to see if there's a double-tap.
+        // When double-tapping is allowed, we have to wait to see if this is
+        // going to be a double-tap.
+        if (!mWaitForDoubleTap) {
+        }
+        // return false because we still want to get the ACTION_UP event that triggers this
         return false;
     }
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        // When zooming is disabled, we handle this in onSingleTapUp.
+        // In cases where we don't wait for double-tap, we handle this in onSingleTapUp.
+        if (mWaitForDoubleTap) {
+        }
         return true;
     }
 
@@ -938,8 +964,8 @@ public class JavaPanZoomController
 
         ImmutableViewportMetrics finalMetrics = getMetrics();
         finalMetrics = finalMetrics.setViewportOrigin(
-                zoomToRect.left * finalMetrics.zoomFactor,
-                zoomToRect.top * finalMetrics.zoomFactor);
+            zoomToRect.left * finalMetrics.zoomFactor,
+            zoomToRect.top * finalMetrics.zoomFactor);
         finalMetrics = finalMetrics.scaleTo(finalZoom, new PointF(0.0f, 0.0f));
 
         // 2. now run getValidViewportMetrics on it, so that the target viewport is
@@ -951,16 +977,19 @@ public class JavaPanZoomController
     }
 
     /** This function must be called from the UI thread. */
+    @Override
     public void abortPanning() {
         checkMainThread();
         bounce();
     }
 
+    @Override
     public void setOverScrollMode(int overscrollMode) {
         mX.setOverScrollMode(overscrollMode);
         mY.setOverScrollMode(overscrollMode);
     }
 
+    @Override
     public int getOverScrollMode() {
         return mX.getOverScrollMode();
     }
