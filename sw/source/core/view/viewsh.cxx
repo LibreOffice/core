@@ -543,7 +543,9 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
             {
                 if ( rSh.IsPreview() )
                     ::RepaintPagePreview( &rSh, rRect );
-                else if ( rSh.VisArea().IsOver( rRect ) )
+                // In case of tiled rendering, invalidation is wanted even if
+                // the rectangle is outside the visual area.
+                else if ( rSh.VisArea().IsOver( rRect ) || rSh.isTiledRendering() )
                     rSh.GetWin()->Invalidate( rRect.SVRect() );
             }
         }
