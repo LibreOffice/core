@@ -77,16 +77,19 @@ void SvxZoomDialog::SetFactor(sal_uInt16 nNewFactor, sal_uInt16 nButtonId)
             {
                 m_pOptimalBtn->Check();
                 m_pOptimalBtn->GrabFocus();
+                break;
             }
             case ZOOMBTN_PAGEWIDTH:
             {
                 m_pPageWidthBtn->Check();
                 m_pPageWidthBtn->GrabFocus();
+                break;
             }
             case ZOOMBTN_WHOLEPAGE:
             {
                 m_pWholePageBtn->Check();
                 m_pWholePageBtn->GrabFocus();
+                break;
             }
         }
     }
