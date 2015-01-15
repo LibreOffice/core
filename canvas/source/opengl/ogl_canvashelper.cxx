@@ -227,6 +227,7 @@ namespace oglcanvas
                                           (float) rColor.Green,
                                           (float) rColor.Blue,
                                           (float) rColor.Alpha);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
