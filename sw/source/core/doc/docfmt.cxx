@@ -289,10 +289,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    boost::scoped_ptr< SwDataChanged > pDataChanged;
+    boost::scoped_ptr< SwDataChanged > xDataChanged;
     if ( bSendDataChangedEvents )
     {
-        pDataChanged.reset( new SwDataChanged( *pPam ) );
+        xDataChanged.reset( new SwDataChanged( *pPam ) );
     }
     SwHistory* pHst = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -394,10 +394,12 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         GetNodes().ForEach( pStt->nNode, aTmpEnd, sw::DocumentContentOperationsManager::lcl_RstTxtAttr, &aPara );
     }
 
+    getIDocumentState().SetModified();
+
+    xDataChanged.reset(); //before delete pPam
+
     if( pPam != &rRg )
         delete pPam;
-
-    getIDocumentState().SetModified();
 }
 
 /// Set the rsid of the next nLen symbols of rRg to the current session number
