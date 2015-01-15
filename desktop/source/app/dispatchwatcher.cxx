@@ -513,7 +513,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
                             {
                                 if( ::osl::FileBase::createTempFile(0, 0, &fileForCat) != ::osl::FileBase::E_None )
-                                    fprintf( stderr, "Error: Cannot create temporary file...\n" );
+                                    std::cerr << "Error: Cannot create temporary file...\n" ;
                                 aOutFile = fileForCat;
                             }
 
@@ -549,15 +549,15 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
                             OUString aTempName;
                             FileBase::getSystemPathFromFileURL( aName, aTempName );
-                            OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                            OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
                             FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                            OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
+                            OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
                             if( aDispatchRequest.aRequestType != REQUEST_CAT )
                             {
-                                printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                                       OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
+                                std::cout << "convert " << aSource8.getStr() << " -> " << aTargetURL8.getStr();
+                                std::cout << " using " << OUStringToOString( aFilter, osl_getThreadTextEncoding() ).getStr() << std::endl;
                                 if( FStatHelper::IsDocument( aOutFile ) )
-                                    printf("Overwriting: %s\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                    std::cout << "Overwriting: " << OUStringToOString( aTempName, osl_getThreadTextEncoding() ).getStr() << std::endl ;
                             }
                             try
                             {
@@ -577,7 +577,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                 osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
                                 if( aRC != osl::File::E_None )
                                 {
-                                    fprintf( stderr, "Error: Cannot read from temp file\n" );
+                                    std::cerr << "Error: Cannot read from temp file\n";
                                 }
                                 else
                                 {
@@ -621,12 +621,14 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
                         OUString aTempName;
                         FileBase::getSystemPathFromFileURL( aName, aTempName );
-                        OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                        OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
                         FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                        OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
-                        printf("print %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                               aPrinterName.isEmpty() ?
-                                                     "<default_printer>" : OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
+
+                        std::cout << "print " << aSource8.getStr() << " -> " << aTargetURL8.getStr();
+                        std::cout << " using " << aPrinterName.isEmpty() ?
+                                                       "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() ).getStr();
+                        std::cout << std::endl;
 
                         // create the custom printer, if given
                         Sequence < PropertyValue > aPrinterArgs( 1 );
