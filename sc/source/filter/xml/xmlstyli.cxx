@@ -25,9 +25,11 @@
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -67,6 +69,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
+using namespace xmloff;
 using namespace ::formula;
 
 using com::sun::star::uno::Reference;
@@ -1034,9 +1037,18 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *ScXMLMasterStylesContext:: CreateStyleChildContext(
-    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pContext(0);
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_master_page)
+        && InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
+        pContext = new ScMasterPageContext( GetImport(), Element, xAttrList,
+                !GetImport().GetTextImport()->IsInsertMode() );
+
+    //any other style will be ignored here!
+
+    return pContext;
 }
 
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
