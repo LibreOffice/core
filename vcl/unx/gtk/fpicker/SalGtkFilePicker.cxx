@@ -233,7 +233,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(m_pFilterView), true);
 
     GtkTreeViewColumn *column;
-    GtkCellRenderer *cell;
+    GtkCellRenderer *cell = NULL;
 
     for (i = 0; i < 2; ++i)
     {
