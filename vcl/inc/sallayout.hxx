@@ -41,7 +41,6 @@ typedef unsigned short LanguageType;
 class SalGraphics;
 class PhysicalFontFace;
 
-
 // used for managing runs e.g. for BiDi, glyph and script fallback
 class VCL_PLUGIN_PUBLIC ImplLayoutRuns
 {
@@ -178,6 +177,7 @@ public:
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
+    virtual void    GetAllGlyphs( std::vector< sal_GlyphId > &rGlyphs, std::vector< Point > &rGlyphPosAry ) const;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
@@ -335,6 +335,8 @@ public:
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
 
     // used by display layers
+    int             GetNumGlyphs() const { return m_GlyphItems.size(); }
+    virtual void    GetAllGlyphs( std::vector< sal_GlyphId > &rGlyphs, std::vector< Point > &rGlyphPosAry ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const SAL_OVERRIDE;

@@ -659,6 +659,19 @@ SalLayout::SalLayout()
 SalLayout::~SalLayout()
 {}
 
+void SalLayout::GetAllGlyphs( std::vector< sal_GlyphId > &rGlyphs, std::vector< Point > &rGlyphPosAry ) const
+{
+    // this is an extremely inefficient verson of this function
+    Point aPos;
+    sal_GlyphId aGlyphId;
+
+    for( int nStart = 0; GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    {
+        rGlyphs.push_back(aGlyphId);
+        rGlyphPosAry.push_back(aPos);
+    }
+}
+
 void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     mnMinCharPos  = rArgs.mnMinCharPos;
@@ -1310,6 +1323,25 @@ sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoor
     }
 
     return -1;
+}
+
+void GenericSalLayout::GetAllGlyphs( std::vector< sal_GlyphId > &rGlyphs, std::vector< Point > &rGlyphPosAry ) const
+{
+    GlyphVector::const_iterator pGlyphIter = m_GlyphItems.begin();
+    GlyphVector::const_iterator pGlyphIterEnd = m_GlyphItems.end();
+
+    // calculate absolute position in pixel units
+    while ( pGlyphIter != pGlyphIterEnd)
+    {
+        Point aRelativePos = pGlyphIter->maLinearPos - maBasePoint;
+        rGlyphs.push_back( pGlyphIter->maGlyphId );
+
+        aRelativePos.X() /= mnUnitsPerPixel;
+        aRelativePos.Y() /= mnUnitsPerPixel;
+
+        rGlyphPosAry.push_back( GetDrawPosition( aRelativePos ) );
+        pGlyphIter++;
+    }
 }
 
 int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,

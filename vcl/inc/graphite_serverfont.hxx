@@ -87,6 +87,15 @@ public:
             maImpl.GetCaretPositions(as, cxa);
         }
 
+        virtual void GetAllGlyphs(
+                        std::vector< sal_GlyphId > &rGlyphs,
+                        std::vector< Point > &rGlyphPosAry ) const SAL_OVERRIDE
+        {
+            maImpl.DrawBase() = maDrawBase;
+            maImpl.DrawOffset() = maDrawOffset;
+            maImpl.GetAllGlyphs(rGlyphs, rGlyphPosAry);
+        }
+
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
                         long* gaa = NULL, int* cpa = NULL,

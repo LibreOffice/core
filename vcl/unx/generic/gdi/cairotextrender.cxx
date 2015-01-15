@@ -177,17 +177,23 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     std::vector<int> glyph_extrarotation;
     cairo_glyphs.reserve( 256 );
 
-    Point aPos;
-    sal_GlyphId aGlyphId;
-    for( int nStart = 0; rLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    std::vector< sal_GlyphId > aGlyphIdAry;
+    std::vector< Point > aPosAry;
+
+    rLayout.GetAllGlyphs( aGlyphIdAry, aPosAry );
+
+    int nNumGlyphs = aGlyphIdAry.size();
+
+    for( int i = 0; i < nNumGlyphs; i++ )
     {
         cairo_glyph_t aGlyph;
-        aGlyph.index = aGlyphId & GF_IDXMASK;
-        aGlyph.x = aPos.X();
-        aGlyph.y = aPos.Y();
+        aGlyph.index = aGlyphIdAry[i] & GF_IDXMASK;
+        aGlyph.x = aPosAry[i].X();
+        aGlyph.y = aPosAry[i].Y();
+
         cairo_glyphs.push_back(aGlyph);
 
-        switch (aGlyphId & GF_ROTMASK)
+        switch (aGlyphIdAry[i] & GF_ROTMASK)
         {
             case GF_ROTL:    // left
                 glyph_extrarotation.push_back(1);
