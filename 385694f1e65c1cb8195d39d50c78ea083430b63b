@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_f3031875",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-15T16:42:46Z",
+      "side": 1,
+      "message": "using \"x\" prefix for something that\u0027s not a UNO object seems odd",
+      "revId": "385694f1e65c1cb8195d39d50c78ea083430b63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
