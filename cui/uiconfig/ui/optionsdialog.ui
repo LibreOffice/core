@@ -26,7 +26,6 @@
             <property name="spacing">6</property>
             <child>
               <object class="svtlo-SvTreeListBox" id="pages:border">
-                <property name="width_request">240</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="vexpand">True</property>
