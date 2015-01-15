@@ -113,7 +113,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     pUpdtFld = const_cast<SwTableFmlUpdate*>(static_cast<const SwTableFmlUpdate*>(pItem));
 
     // detect table that contains this attribute
-    const SwTableNode* pTblNd;
+    const SwTableNode* pTblNd = 0;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && &pNd->GetNodes() == &pNd->GetDoc()->GetNodes() &&
         0 != ( pTblNd = pNd->FindTableNode() ))

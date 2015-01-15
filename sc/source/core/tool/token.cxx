@@ -445,7 +445,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
 
-    StackVar sv1, sv2;
+    StackVar sv1, sv2 = svUnknown;
     // Doing a RangeOp with RefList is probably utter nonsense, but Xcl
     // supports it, so do we.
     if (((sv1 = rTok1.GetType()) != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList &&
