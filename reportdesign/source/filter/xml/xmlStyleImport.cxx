@@ -300,10 +300,22 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
 }
 
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle = 0;
+
+    switch( nFamily )
+    {
+        case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+            // There are no writer specific defaults for graphic styles!
+            pStyle = new XMLGraphicsDefaultStyle( GetImport(), Element, xAttrList, *this );
+        break;
+        default:
+            pStyle = SvXMLStylesContext::CreateDefaultStyleStyleChildContext( nFamily, Element, xAttrList );
+        break;
+    }
+    return pStyle;
 }
 
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
