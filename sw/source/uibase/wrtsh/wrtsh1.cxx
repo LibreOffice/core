@@ -1260,14 +1260,22 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
-                // #i111172#
+                // #i111172#/fdo#85666
                 // If text node is already inside a list, assure that the indents
                 // are the same. Thus, adjust the indent change value by subtracting
                 // indents of to be applied list style.
                 SwTwips nIndentChange = nTxtNodeIndent + nWidthOfTabs;
                 if ( pTxtNode->GetNumRule() )
                 {
-                    const SwNumFmt aFmt( aNumRule.Get( 0 ) );
+                    int nLevel = pTxtNode->GetActualListLevel();
+
+                    if (nLevel < 0)
+                        nLevel = 0;
+
+                    if (nLevel >= MAXLEVEL)
+                        nLevel = MAXLEVEL - 1;
+
+                    const SwNumFmt aFmt( aNumRule.Get( nLevel ) );
                     if ( aFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
                     {
                         nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
