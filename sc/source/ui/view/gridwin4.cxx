@@ -874,7 +874,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
-                              int nTilePosX, int nTilePosY,
+                              int /*nTilePosX*/, int /*nTilePosY*/,
                               long nTileWidth, long nTileHeight )
 {
     // Output size is in pixels while tile position and size are in logical units (twips).
