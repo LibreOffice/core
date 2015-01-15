@@ -25,6 +25,8 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/extract.hxx>
@@ -45,6 +47,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
+using namespace xmloff;
 
 TYPEINIT1( OTableStyleContext, XMLPropStyleContext );
 TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
@@ -263,10 +266,24 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext(
+        nFamily, Element, xAttrList );
+    if (!pStyle)
+    {
+        switch( nFamily )
+        {
+        case XML_STYLE_FAMILY_TABLE_TABLE:
+        case XML_STYLE_FAMILY_TABLE_COLUMN:
+        case XML_STYLE_FAMILY_TABLE_CELL:
+            pStyle = new OTableStyleContext( GetOwnImport(), Element, xAttrList, *this, nFamily );
+            break;
+        }
+    }
+
+    return pStyle;
 }
 
 Reference < XNameContainer >
