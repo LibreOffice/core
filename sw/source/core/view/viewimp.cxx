@@ -132,10 +132,16 @@ void SwViewImp::DelRegion()
 
 bool SwViewImp::AddPaintRect( const SwRect &rRect )
 {
-    if ( rRect.IsOver( pSh->VisArea() ) )
+    // In case of tiled rendering the visual area is the last painted tile -> not interesting.
+    if ( rRect.IsOver( pSh->VisArea() ) || pSh->isTiledRendering() )
     {
         if ( !pRegion )
-            pRegion = new SwRegionRects( pSh->VisArea() );
+        {
+            // In case of normal rendering, this makes sure only visible rectangles are painted.
+            // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
+            const SwRect& rArea = pSh->isTiledRendering() ? pSh->GetLayout()->Frm() : pSh->VisArea();
+            pRegion = new SwRegionRects( rArea );
+        }
         (*pRegion) -= rRect;
         return true;
     }
