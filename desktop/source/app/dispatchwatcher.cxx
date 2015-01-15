@@ -139,7 +139,12 @@ const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const r
         pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
     if ( !pFilter )
     {
-        std::cerr << "Error:  no export filter for " << rUrl << " found, now using the default filter for " << rFactory << "\n";
+        OUString aTempName;
+        FileBase::getSystemPathFromFileURL( rUrl, aTempName );
+        OString aSource = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
+        OString aFactory = OUStringToOString ( rFactory, osl_getThreadTextEncoding() );
+        std::cerr << "Error:  no export filter for " << aSource << " found, now using the default filter for " << aFactory << std::endl;
+
         pFilter = SfxFilter::GetDefaultFilterFromFactory( rFactory );
     }
 
@@ -513,7 +518,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
                             {
                                 if( ::osl::FileBase::createTempFile(0, 0, &fileForCat) != ::osl::FileBase::E_None )
-                                    fprintf( stderr, "Error: Cannot create temporary file...\n" );
+                                    std::cerr << "Error: Cannot create temporary file..." << std::endl ;
                                 aOutFile = fileForCat;
                             }
 
@@ -549,15 +554,15 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
                             OUString aTempName;
                             FileBase::getSystemPathFromFileURL( aName, aTempName );
-                            OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                            OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
                             FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                            OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
+                            OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
                             if( aDispatchRequest.aRequestType != REQUEST_CAT )
                             {
-                                printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                                       OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
+                                std::cout << "convert " << aSource8 << " -> " << aTargetURL8;
+                                std::cout << " using filter : " << OUStringToOString( aFilter, osl_getThreadTextEncoding() ) << std::endl;
                                 if( FStatHelper::IsDocument( aOutFile ) )
-                                    printf("Overwriting: %s\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                    std::cout << "Overwriting: " << OUStringToOString( aTempName, osl_getThreadTextEncoding() ) << std::endl ;
                             }
                             try
                             {
@@ -577,7 +582,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                 osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
                                 if( aRC != osl::File::E_None )
                                 {
-                                    fprintf( stderr, "Error: Cannot read from temp file\n" );
+                                    std::cerr << "Error: Cannot read from temp file" << std::endl;
                                 }
                                 else
                                 {
@@ -594,7 +599,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                         {
                                             std::cout << aStr[i];
                                         }
-                                        std::cout << "\n";
+                                        std::cout << std::endl;
                                     }
                                     aFile.close();
                                     osl::File::remove( fileForCat );
@@ -621,12 +626,14 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
                         OUString aTempName;
                         FileBase::getSystemPathFromFileURL( aName, aTempName );
-                        OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                        OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
                         FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                        OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
-                        printf("print %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                               aPrinterName.isEmpty() ?
-                                                     "<default_printer>" : OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
+
+                        std::cout << "print " << aSource8 << " -> " << aTargetURL8;
+                        std::cout << " using " << aPrinterName.isEmpty() ?
+                                                       "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() );
+                        std::cout << std::endl;
 
                         // create the custom printer, if given
                         Sequence < PropertyValue > aPrinterArgs( 1 );
@@ -663,7 +670,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 }
                 else
                 {
-                    std::cerr << ("Error: source file could not be loaded\n");
+                    std::cerr << "Error: source file could not be loaded" << std::endl;
                 }
 
                 // remove the document
