@@ -4538,7 +4538,7 @@ if test -n "$enable_werror" -a "$enable_werror" != "no"; then
     ENABLE_WERROR="TRUE"
     AC_MSG_RESULT([yes])
 else
-    if test -n "$LODE_HOME"; then
+    if test -n "$LODE_HOME" -a -z "$enable_werror"; then
         ENABLE_WERROR="TRUE"
         AC_MSG_RESULT([yes])
     else
