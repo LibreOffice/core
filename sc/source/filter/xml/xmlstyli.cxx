@@ -700,10 +700,31 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
 }
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle;
+    // use own wrapper for text and paragraph, to record style usage
+    if( nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH ||
+        nFamily == XML_STYLE_FAMILY_TEXT_TEXT )
+        pStyle = new ScCellTextStyleContext( GetImport(), Element, xAttrList, *this, nFamily );
+    else
+        pStyle = SvXMLStylesContext::CreateStyleStyleChildContext(nFamily, Element, xAttrList );
+
+    if( !pStyle )
+    {
+        switch( nFamily )
+        {
+        case XML_STYLE_FAMILY_TABLE_CELL:
+        case XML_STYLE_FAMILY_TABLE_COLUMN:
+        case XML_STYLE_FAMILY_TABLE_ROW:
+        case XML_STYLE_FAMILY_TABLE_TABLE:
+            pStyle = new XMLTextStyleContext( GetScImport(), Element, xAttrList, *this, nFamily );
+            break;
+        }
+    }
+
+    return pStyle;
 }
 
 SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
@@ -732,10 +753,25 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
 }
 
 SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
-    sal_uInt16 /*nFamily*/, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_uInt16 nFamily, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    return 0;
+    SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
+        nFamily, Element, xAttrList ));
+    if( !pStyle )
+    {
+        switch( nFamily )
+        {
+        case XML_STYLE_FAMILY_TABLE_CELL:
+            pStyle = new XMLTableStyleContext( GetScImport(), Element, xAttrList, *this, nFamily, true);
+        break;
+        case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+            pStyle = new XMLGraphicsDefaultStyle( GetScImport(), Element, xAttrList, *this);
+        break;
+        }
+    }
+
+    return pStyle;
 }
 
 XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
