@@ -212,29 +212,12 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
     rDest.SetPoolHlpFileId( rSource.GetPoolHlpFileId() );
 }
 
-namespace
-{
-    SwFrmFmt& getFrmFmt(SwPageDesc &rDesc, bool bLeft, bool bFirst)
-    {
-        if (bFirst)
-        {
-            if (bLeft)
-                return rDesc.GetFirstLeft();
-            rDesc.GetFirstMaster();
-        }
-        return rDesc.GetLeft();
-    }
-
-    const SwFrmFmt& getConstFrmFmt(const SwPageDesc &rDesc, bool bLeft, bool bFirst)
-    {
-        return getFrmFmt(const_cast<SwPageDesc&>(rDesc), bLeft, bFirst);
-    }
-}
-
 void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc &rDesc, bool bLeft, bool bFirst)
 {
     assert(bLeft || bFirst);
-    SwFrmFmt& rDescFrmFmt = getFrmFmt(rDesc, bLeft, bFirst);
+    SwFrmFmt& rDescFrmFmt = (bFirst)
+            ? (bLeft) ? rDesc.GetFirstLeft() : rDesc.GetFirstMaster()
+            : rDesc.GetLeft();
     if (bFirst && bLeft)
     {
         // special case: always shared with something
@@ -269,7 +252,9 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
 
             if (!aCnt.GetCntntIdx())
             {
-                const SwFrmFmt& rChgedFrmFmt = getConstFrmFmt(rChged, bLeft, bFirst);
+                const SwFrmFmt& rChgedFrmFmt = (bFirst)
+                    ? (bLeft) ? rChged.GetFirstLeft() : rChged.GetFirstMaster()
+                    : rChged.GetLeft();
                 rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetHeader() );
             }
             else if ((*aRCnt.GetCntntIdx() == *aCnt.GetCntntIdx()) ||
@@ -307,7 +292,9 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
 void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc &rDesc, bool bLeft, bool bFirst)
 {
     assert(bLeft || bFirst);
-    SwFrmFmt& rDescFrmFmt = getFrmFmt(rDesc, bLeft, bFirst);
+    SwFrmFmt& rDescFrmFmt = (bFirst)
+            ? (bLeft) ? rDesc.GetFirstLeft() : rDesc.GetFirstMaster()
+            : rDesc.GetLeft();
     if (bFirst && bLeft)
     {
         // special case: always shared with something
@@ -341,7 +328,9 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
             const SwFmtCntnt &aLCnt = rFmtFoot.GetFooterFmt()->GetCntnt();
             if( !aLCnt.GetCntntIdx() )
             {
-                const SwFrmFmt& rChgedFrmFmt = getConstFrmFmt(rChged, bLeft, bFirst);
+                const SwFrmFmt& rChgedFrmFmt = (bFirst)
+                    ? (bLeft) ? rChged.GetFirstLeft() : rChged.GetFirstMaster()
+                    : rChged.GetLeft();
                 rDescFrmFmt.SetFmtAttr( rChgedFrmFmt.GetFooter() );
             }
             else if ((*aRCnt.GetCntntIdx() == *aLCnt.GetCntntIdx()) ||
