@@ -934,7 +934,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aOutData.DrawShadow();
     aOutData.DrawFrame();
 
+    // TODO : Scaling of strings is incorrect.  Find out why.
     aOutData.DrawStrings(true);
+    // TODO : Edit texts don't get rendered at all.  Fix this.
     aOutData.DrawEdit(true);
 }
 
