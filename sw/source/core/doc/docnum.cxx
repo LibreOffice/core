@@ -1933,10 +1933,11 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
                 // All, that are in the to-be-deleted Node, need to be
                 // moved to the next Node
-                SwPosition* pPos;
                 for( sal_uInt16 n = 0; n < getIDocumentRedlineAccess().GetRedlineTbl().size(); ++n )
                 {
                     SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTbl()[ n ];
+
+                    SwPosition* pPos;
                     if( ( pPos = &pTmp->GetBound(true))->nNode == aIdx )
                     {
                         pPos->nNode++;

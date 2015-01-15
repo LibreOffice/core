@@ -132,11 +132,11 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
 {
     mpDocStat->Reset();
     mpDocStat->nPara = 0; // default is 1!
-    SwNode* pNd;
 
     // This is the inner loop - at least while the paras are dirty.
     for( sal_uLong i = m_rDoc.GetNodes().Count(); i > 0 && nChars > 0; )
     {
+        SwNode* pNd;
         switch( ( pNd = m_rDoc.GetNodes()[ --i ])->GetNodeType() )
         {
         case ND_TEXTNODE:

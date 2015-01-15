@@ -340,10 +340,9 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
     bool bDocIsModified = pDoc->getIDocumentState().IsModified();
     bool bFnd = false;
-    const SwNumRule* pRule;
     for( sal_uInt16 n = pDoc->GetNumRuleTbl().size(); !bFnd && n; )
     {
-        pRule = pDoc->GetNumRuleTbl()[ --n ];
+        const SwNumRule* pRule = pDoc->GetNumRuleTbl()[ --n ];
         for( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
             if( pRule->GetNumFmt( i ) == this )
             {
@@ -537,8 +536,9 @@ SwNumRule::~SwNumRule()
 
 void SwNumRule::CheckCharFmts( SwDoc* pDoc )
 {
-    SwCharFmt* pFmt;
     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n )
+    {
+        SwCharFmt* pFmt;
         if( maFmts[ n ] && 0 != ( pFmt = maFmts[ n ]->GetCharFmt() ) &&
             pFmt->GetDoc() != pDoc )
         {
@@ -548,6 +548,7 @@ void SwNumRule::CheckCharFmts( SwDoc* pDoc )
             delete maFmts[ n ];
             maFmts[ n ] = pNew;
         }
+    }
 }
 
 SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )

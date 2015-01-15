@@ -200,12 +200,13 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    SwDrawFrmFmt *pFmt = 0L;
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     bool bNoGroup = ( 0 == pObj->GetUpGroup() );
     SwDrawContact* pNewContact = 0;
     if( bNoGroup )
     {
+        SwDrawFrmFmt *pFmt = 0L;
+
         // Revoke anchor attribute.
         SwDrawContact *pMyContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
         const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );

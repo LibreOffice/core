@@ -510,13 +510,15 @@ bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
                         GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
 
     {
-        const SfxPoolItem* pItem;
-        const SwCntntFrm* pCFrm;
         const SwTxtNode* pTxtNd;
         const SwTxtTOXMark* pTxtTOX;
         sal_uInt32 n, nMaxItems = GetDoc()->GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
 
         for( n = 0; n < nMaxItems; ++n )
+        {
+            const SfxPoolItem* pItem;
+            const SwCntntFrm* pCFrm;
+
             if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_TXTATR_TOXMARK, n ) ) &&
                 0 != (pTxtTOX = static_cast<const SwTOXMark*>(pItem)->GetTxtTOXMark() ) &&
@@ -535,6 +537,7 @@ bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
                     bFnd = true;
                 }
             }
+        }
     }
 
     if( bFnd )

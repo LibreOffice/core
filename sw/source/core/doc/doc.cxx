@@ -557,9 +557,9 @@ bool sw_GetPostIts(
     {
         // Found modify object; insert all fields into the array
         SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-        const SwTxtFld* pTxtFld;
         for( SwFmtFld* pFld = aIter.First(); pFld;  pFld = aIter.Next() )
         {
+            const SwTxtFld* pTxtFld;
             if( 0 != ( pTxtFld = pFld->GetTxtFld() ) &&
                 pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
@@ -1014,10 +1014,10 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 /// @return the reference in the doc for the name
 const SwFmtRefMark* SwDoc::GetRefMark( const OUString& rName ) const
 {
-    const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
+        const SfxPoolItem* pItem;
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
             continue;
 
@@ -1033,13 +1033,15 @@ const SwFmtRefMark* SwDoc::GetRefMark( const OUString& rName ) const
 /// @return the RefMark per index - for Uno
 const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 {
-    const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
     const SwFmtRefMark* pRet = 0;
 
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
     sal_uInt32 nCount = 0;
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    {
+        const SfxPoolItem* pItem;
+
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = static_cast<const SwFmtRefMark*>(pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
@@ -1051,6 +1053,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
             }
             nCount++;
         }
+    }
    return pRet;
 }
 
@@ -1059,12 +1062,14 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 // OS 25.06.96: From now on we always return the reference count
 sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 {
-    const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
 
     const sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
     sal_uInt16 nCount = 0;
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+    {
+        const SfxPoolItem* pItem;
+
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = static_cast<const SwFmtRefMark*>(pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
@@ -1076,6 +1081,7 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
             }
             ++nCount;
         }
+    }
 
     return nCount;
 }

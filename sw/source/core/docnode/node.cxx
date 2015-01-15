@@ -661,9 +661,10 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
         {
             SwFindNearestNode aInfo( *pNd );
             // Over all Nodes of all PageDescs
-            const SfxPoolItem* pItem;
             sal_uInt32 i, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_PAGEDESC );
             for( i = 0; i < nMaxItems; ++i )
+            {
+                const SfxPoolItem* pItem;
                 if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_PAGEDESC, i ) ) &&
                     static_cast<const SwFmtPageDesc*>(pItem)->GetDefinedIn() )
                 {
@@ -673,6 +674,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                     else if( pMod->ISA( SwFmt ))
                         static_cast<const SwFmt*>(pMod)->GetInfo( aInfo );
                 }
+            }
 
             if( 0 != ( pNd = aInfo.GetFoundNode() ))
             {
@@ -1194,7 +1196,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     if( !GetDepends() || &rNode == this )   // Do we actually have Frames?
         return;
 
-    SwFrm *pFrm, *pNew;
+    SwFrm *pFrm;
     SwLayoutFrm *pUpper;
     // Create Frames for Nodes which come after the Table?
     OSL_ENSURE( FindTableNode() == rNode.FindTableNode(), "Table confusion" );
@@ -1203,7 +1205,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 
     while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, rNode )) )
     {
-        pNew = rNode.MakeFrm( pUpper );
+        SwFrm *pNew = rNode.MakeFrm( pUpper );
         pNew->Paste( pUpper, pFrm );
         // #i27138#
         // notify accessibility paragraphs objects about changed

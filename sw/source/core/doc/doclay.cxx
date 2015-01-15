@@ -606,7 +606,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
 */
 static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWhich )
 {
-    const SfxPoolItem *pOldItem = NULL, *pNewItem = NULL;
+    const SfxPoolItem *pOldItem = NULL;
 
     rOldSet.GetItemState( nWhich, false, &pOldItem);
     if (pOldItem != NULL)
@@ -616,7 +616,7 @@ static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uIn
         pOldItem = rOldSet.GetItem( nWhich, true);
         if (pOldItem != NULL)
         {
-            pNewItem = rNewSet.GetItem( nWhich, true);
+            const SfxPoolItem *pNewItem = rNewSet.GetItem( nWhich, true);
             if (pNewItem != NULL)
             {
                 if (*pOldItem != *pNewItem)
@@ -1417,10 +1417,10 @@ void SwDoc::SetAllUniqueFlyNames()
     {
         if( RES_FLYFRMFMT == (pFlyFmt = (*GetSpzFrmFmts())[ --n ])->Which() )
         {
-            sal_Int32 *pNum = 0;
             const OUString aNm = pFlyFmt->GetName();
             if ( !aNm.isEmpty() )
             {
+                sal_Int32 *pNum = 0;
                 sal_Int32 nLen = 0;
                 if ( aNm.startsWith(sGrfNm) )
                 {
@@ -1462,9 +1462,10 @@ void SwDoc::SetAllUniqueFlyNames()
     }
     SetContainsAtPageObjWithContentAnchor( bContainsAtPageObjWithContentAnchor );
 
-    const SwNodeIndex* pIdx;
-
     for( n = aArr.size(); n; )
+    {
+        const SwNodeIndex* pIdx;
+
         if( 0 != ( pIdx = ( pFlyFmt = aArr[ --n ])->GetCntnt().GetCntntIdx() )
             && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
@@ -1487,6 +1488,7 @@ void SwDoc::SetAllUniqueFlyNames()
             }
             pFlyFmt->SetName( sNm + OUString::number( nNum ));
         }
+    }
     aArr.clear();
 
     if( !GetFtnIdxs().empty() )

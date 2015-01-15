@@ -141,10 +141,9 @@ void BigPtrArray::UpdIndex( sal_uInt16 pos )
 {
     BlockInfo** pp = ppInf + pos;
     sal_uLong idx = (*pp)->nEnd + 1;
-    BlockInfo* p;
     while( ++pos < nBlock )
     {
-        p = *++pp;
+        BlockInfo* p = *++pp;
         p->nStart = idx;
         idx += p->nElem;
         p->nEnd = idx - 1;
