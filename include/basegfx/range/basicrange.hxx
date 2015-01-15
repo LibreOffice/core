@@ -158,7 +158,16 @@ namespace basegfx
             }
             else
             {
+// Silence over-eager warning emitted at least by GCC 4.9.2 in certain
+// instantiations:
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-overflow"
+#endif
                 if(nValue < mnMinimum)
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
                 {
                     mnMinimum = nValue;
                 }
