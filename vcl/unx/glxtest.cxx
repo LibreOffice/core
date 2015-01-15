@@ -73,8 +73,12 @@ static func_ptr_type cast(void *ptr)
 
 static void fatal_error(const char *str)
 {
-  write(write_end_of_the_pipe, str, strlen(str));
-  write(write_end_of_the_pipe, "\n", 1);
+  int length = strlen(str);
+  if (write(write_end_of_the_pipe, str, length) != length
+      || write(write_end_of_the_pipe, "\n", 1) != 1)
+  {
+      /* Cannot write to pipe. Fall through to call _exit */
+  }
   _exit(EXIT_FAILURE);
 }
 
@@ -88,7 +92,10 @@ x_error_handler(Display *, XErrorEvent *ev)
                         ev->error_code,
                         ev->request_code,
                         ev->minor_code);
-  write(write_end_of_the_pipe, buf, length);
+  if (write(write_end_of_the_pipe, buf, length) != length)
+  {
+      /* Cannot write to pipe. Fall through to call _exit */
+  }
   _exit(EXIT_FAILURE);
   return 0;
 }
@@ -233,7 +240,8 @@ void glxtest()
   dlclose(libgl);
 
   ///// Finally write data to the pipe
-  write(write_end_of_the_pipe, buf, length);
+  if (write(write_end_of_the_pipe, buf, length) != length)
+    fatal_error("Could not write to pipe");
 }
 
 /** \returns true in the child glxtest process, false in the parent process */
