@@ -14,8 +14,6 @@
 #include <document.hxx>
 #include <grouparealistener.hxx>
 
-#define USE_FORMULA_GROUP_LISTENER 1
-
 namespace sc {
 
 void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos)
@@ -412,7 +410,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
 
 #else
     ScFormulaCell** pp = ppSharedTop;
-    ScFormulaCell** ppEnd = ppSharedTop + (**ppSharedTop).GetSharedLength();
+    ScFormulaCell** ppEnd = ppSharedTop + rTopCell.GetSharedLength();
     for (; pp != ppEnd; ++pp)
     {
         ScFormulaCell& rFC = **pp;
