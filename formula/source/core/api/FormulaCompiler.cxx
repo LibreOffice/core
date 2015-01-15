@@ -1705,6 +1705,8 @@ void FormulaCompiler::PopTokenArray()
         else if ( !pArr->IsRecalcModeNormal() && p->pArr->IsRecalcModeNormal() )
             p->pArr->SetMaskedRecalcMode( pArr->GetRecalcMode() );
         p->pArr->SetCombinedBitsRecalcMode( pArr->GetRecalcMode() );
+        if ( pArr->IsHyperLink() )  // fdo 87534
+            p->pArr->SetHyperLink( true );
         if( p->bTemp )
             delete pArr;
         pArr = p->pArr;
