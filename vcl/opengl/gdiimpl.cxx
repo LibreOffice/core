@@ -50,6 +50,8 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
 #ifdef DBG_UTIL
     , mProgramIsSolidColor(false)
 #endif
+    , mProgramSolidColor(SALCOLOR_NONE)
+    , mProgramSolidTransparency(0.0)
 {
 }
 
