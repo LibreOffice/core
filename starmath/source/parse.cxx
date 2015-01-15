@@ -1519,7 +1519,7 @@ void SmParser::Term(bool bGroupNumberIdent)
 
                 bool    bIsAttr;
                 sal_uInt16  n = 0;
-                while (true == (bIsAttr = TokenInGroup(TGATTRIBUT))
+                while ( (bIsAttr = TokenInGroup(TGATTRIBUT))
                        ||  TokenInGroup(TGFONTATTR))
                 {   aArray.resize(n + 1);
 
