@@ -1674,7 +1674,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSh.GetCurAttr(aSet);
 
                 // If a hyperlink is selected, either alone or along with other text...
-                if(aSet.GetItemState( RES_TXTATR_INETFMT, true ) != SfxItemState::DONTCARE || rSh.HasReadonlySel())
+                if ((aSet.GetItemState(RES_TXTATR_INETFMT, true) > SfxItemState::SET &&
+                    aSet.GetItemState(RES_TXTATR_INETFMT, true) != SfxItemState::DONTCARE) ||
+                    rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);
                 }
