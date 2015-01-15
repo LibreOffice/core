@@ -2,6 +2,7 @@ package org.libreoffice;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -187,6 +189,22 @@ public class LibreOfficeMainActivity extends LOAbout {
 
     public DocumentPartViewListAdapter getDocumentPartViewListAdapter() {
         return mDocumentPartViewListAdapter;
+    }
+
+    public void showSoftKeyboard() {
+        Log.i(LOGTAG, "SoftKeyboard show request..");
+
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+
+                if (layerView.requestFocus()) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.showSoftInput(layerView, InputMethodManager.SHOW_FORCED);
+                }
+            }
+        });
     }
 
     public void showProgressSpinner() {

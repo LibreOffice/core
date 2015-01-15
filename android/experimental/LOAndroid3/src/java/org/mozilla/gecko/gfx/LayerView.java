@@ -351,15 +351,6 @@ public class LayerView extends FrameLayout {
         }
     }
 
-    public void showSoftKeyboard() {
-        View view = mSurfaceView != null ? mSurfaceView : mTextureView;
-
-        if (view.requestFocus()) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-        }
-    }
-
     private class SurfaceTextureListener implements TextureView.SurfaceTextureListener {
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             // We don't do this for surfaceCreated above because it is always followed by a surfaceChanged,
