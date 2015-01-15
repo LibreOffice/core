@@ -121,7 +121,7 @@ private:
 
     Link                maSelectHdl;
     GalleryTheme*       mpTheme;
-    sal_uIntPtr               mnCurRow;
+    long                mnCurRow;
 
     void                InitSettings();
 

@@ -508,7 +508,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
     rDev.Push( PushFlags::CLIPREGION );
     rDev.IntersectClipRegion( rRect );
 
-    if( mpTheme && ( mnCurRow < mpTheme->GetObjectCount() ) )
+    if( mpTheme && ( static_cast<size_t>(mnCurRow) < mpTheme->GetObjectCount() ) )
     {
         const Size aSize(rRect.GetHeight(), rRect.GetHeight());
         BitmapEx aBitmapEx;
