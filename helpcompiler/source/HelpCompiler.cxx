@@ -399,6 +399,7 @@ void myparser::traverse( xmlNodePtr parentNode )
         else if (!strcmp((const char*)test->name, "ahelp"))
         {
             std::string text = dump(test);
+            std::replace(text.begin(), text.end(), '\n', ' ');
             trim(text);
             std::string name;
 
