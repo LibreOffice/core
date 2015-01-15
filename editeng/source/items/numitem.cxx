@@ -298,7 +298,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
         nTempColor = COL_BLACK;
     WriteColor( rStream, nTempColor );
     rStream.WriteUInt16( nBulletRelSize );
-    rStream.WriteUInt16( IsShowSymbol() );
+    rStream.WriteUInt16( sal_uInt16(IsShowSymbol()) );
 
     rStream.WriteUInt16( mePositionAndSpaceMode );
     rStream.WriteUInt16( meLabelFollowedBy );
@@ -681,7 +681,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( nLevelCount );
     //first save of nFeatureFlags for old versions
     rStream.WriteUInt16( nFeatureFlags );
-    rStream.WriteUInt16( bContinuousNumbering );
+    rStream.WriteUInt16( sal_uInt16(bContinuousNumbering) );
     rStream.WriteUInt16( eNumberingType );
 
     FontToSubsFontConverter pConverter = 0;
