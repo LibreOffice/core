@@ -87,4 +87,14 @@ public final class DirectBufferAllocator {
         // can't free buffer - leave this to the VM
         return null;
     }
+
+    public static ByteBuffer guardedAllocate(int size) {
+        ByteBuffer buffer = null;
+        try {
+            buffer = allocate(size);
+        } catch (OutOfMemoryError oomException) {
+            return null;
+        }
+        return buffer;
+    }
 }

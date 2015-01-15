@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.util.Log;
 
+import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
@@ -189,7 +190,10 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
     @Override
     public CairoImage createTile(float x, float y, IntSize tileSize, float zoom) {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(tileSize.width * tileSize.height * 4);
+        ByteBuffer buffer = DirectBufferAllocator.guardedAllocate(tileSize.width * tileSize.height * 4);
+        if (buffer == null)
+            return null;
+
         CairoImage image = new BufferedCairoImage(buffer, tileSize.width, tileSize.height, CairoImage.FORMAT_ARGB32);
         rerenderTile(image, x, y, tileSize, zoom);
         return image;
