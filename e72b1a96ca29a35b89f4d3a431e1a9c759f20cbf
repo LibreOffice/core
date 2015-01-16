@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_6eaf1fe4",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-16T19:33:57Z",
+      "side": 1,
+      "message": "Where did you pull that spec from? It is not what Excel does, see below.",
+      "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_aea44708",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-16T19:33:57Z",
+      "side": 1,
+      "message": "I now tried with Excel and it preserves only \u0027-\u0027 and \u0027_\u0027 and %-encodes everything else, including \u0027 \u0027 space. Apparently that function is meant to encode URI components.",
+      "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_cea98be1",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-16T19:33:57Z",
+      "side": 1,
+      "message": "This is wrong, it assumes UTF-16, but instead an UTF-16 string needs to be converted to an UTF-8 string first and then be %-encoded 8-bit character-wise.",
+      "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
