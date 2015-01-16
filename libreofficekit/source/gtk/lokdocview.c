@@ -191,6 +191,7 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
 
                 pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, aTileRectanglePixels.width, aTileRectanglePixels.height);
                 pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+                g_info("renderDocument: paintTile(%d, %d)", nRow, nColumn);
                 pDocView->pDocument->pClass->paintTile(pDocView->pDocument,
                                                        // Buffer and its size, depends on the position only.
                                                        pBuffer,
@@ -287,6 +288,7 @@ static void lok_docview_callback_worker(int nType, const char* pPayload, void* p
     pCallback->m_nType = nType;
     pCallback->m_pPayload = g_strdup(pPayload);
     pCallback->m_pDocView = pDocView;
+    g_info("lok_docview_callback_worker: %d, '%s'", nType, pPayload);
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(lok_docview_callback, pCallback);
 #else
@@ -368,7 +370,10 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
                                                 gboolean bEdit )
 {
     if (!pDocView->m_bEdit && bEdit)
+    {
+        g_info("lok_docview_set_edit: entering edit mode, registering callback");
         pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
+    }
     pDocView->m_bEdit = bEdit;
 }
 

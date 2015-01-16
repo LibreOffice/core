@@ -43,6 +43,5 @@ LibreOfficeKitGtk
 
 Currently consists of only a very basic GTK+ document viewer widget.
 
-Currently this simply renders the entire document as one large tile (for
-Writer) and/or entire sheet for Calc, which can be somewhat slow with
-larger documents.
+The widget uses g_info() instead of SAL_INFO(), use the 'G_MESSAGES_DEBUG=all'
+environment variable to display those messages.
