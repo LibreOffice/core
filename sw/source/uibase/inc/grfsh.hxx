@@ -23,6 +23,9 @@
 
 class SwGrfShell: public SwBaseShell
 {
+    class SwExternalToolEdit;
+    std::vector<std::unique_ptr<SwExternalToolEdit>> m_ExternalEdits;
+
 public:
     SFX_DECL_INTERFACE(SW_GRFSHELL)
 
@@ -39,6 +42,7 @@ public:
     void GetAttrStateForRotation(SfxItemSet& rRequest);
 
     SwGrfShell(SwView &rView);
+    virtual ~SwGrfShell();
 };
 
 #endif

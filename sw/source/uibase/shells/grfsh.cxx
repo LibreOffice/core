@@ -75,27 +75,37 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
+#include <unocrsr.hxx>
 #include <boost/scoped_ptr.hpp>
 
 #define TOOLBOX_NAME "colorbar"
 
-namespace
+class SwGrfShell::SwExternalToolEdit
+    : public ExternalToolEdit
 {
-    class SwExternalToolEdit : public ExternalToolEdit
+private:
+    SwWrtShell *const m_pShell;
+    ::std::unique_ptr<SwUnoCrsr> const m_pCursor;
+
+public:
+    SwExternalToolEdit(SwWrtShell *const pShell)
+        : m_pShell(pShell)
+        , m_pCursor( // need only Point, must point to SwGrfNode
+            pShell->GetDoc()->CreateUnoCrsr(
+                *pShell->GetCurrentShellCursor().GetPoint()))
     {
-        SwWrtShell*  m_pShell;
+    }
 
-    public:
-        SwExternalToolEdit ( SwWrtShell* pShell ) :
-            m_pShell  (pShell)
-        {}
-
-        virtual void Update( Graphic& aGraphic ) SAL_OVERRIDE
-        {
-            m_pShell->ReRead(OUString(), OUString(), (const Graphic*) &aGraphic);
-        }
-    };
-}
+    virtual void Update(Graphic & rGraphic) SAL_OVERRIDE
+    {
+        DBG_TESTSOLARMUTEX();
+        m_pShell->Push();
+        m_pShell->GetCurrentShellCursor().DeleteMark();
+        *m_pShell->GetCurrentShellCursor().GetPoint() = *m_pCursor->GetPoint();
+        m_pShell->ReRead(OUString(), OUString(), &rGraphic);
+        m_pShell->Pop();
+    }
+};
 
 SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 
@@ -180,11 +190,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         {
             // When the graphic is selected to be opened via some external tool
             // for advanced editing
-            GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
+            GraphicObject const*const pGraphicObject(rSh.GetGraphicObj());
             if(0 != pGraphicObject)
             {
-                SwExternalToolEdit* externalToolEdit = new SwExternalToolEdit( &rSh );
-                externalToolEdit->Edit ( pGraphicObject );
+                m_ExternalEdits.push_back(std::unique_ptr<SwExternalToolEdit>(
+                            new SwExternalToolEdit(&rSh)));
+                m_ExternalEdits.back()->Edit(pGraphicObject);
             }
         }
         break;
@@ -903,6 +914,10 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
         nWhich = aIterator.NextWhich();
     }
     SetGetStateSet( 0 );
+}
+
+SwGrfShell::~SwGrfShell()
+{
 }
 
 SwGrfShell::SwGrfShell(SwView &_rView) :

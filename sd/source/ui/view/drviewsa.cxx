@@ -43,6 +43,7 @@
 #include <svx/fmshell.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
+#include <svx/extedit.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
 #include "helpids.h"
 
