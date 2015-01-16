@@ -3,6 +3,7 @@ package org.libreoffice;
 
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 
@@ -60,5 +61,9 @@ public class LOKitShell {
 
     public static void sentTouchEvent(String touchType, MotionEvent motionEvent) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, "SingleTap", motionEvent));
+    }
+
+    public static void sendKeyPressEvent(KeyEvent event) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_PRESS, event));
     }
 }

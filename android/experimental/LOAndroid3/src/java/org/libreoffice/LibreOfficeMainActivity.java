@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -238,6 +239,12 @@ public class LibreOfficeMainActivity extends LOAbout {
             LOKitShell.sendEvent(LOEventFactory.changePart(partView.partIndex));
             mDrawerLayout.closeDrawer(mDrawerList);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        LOKitShell.sendKeyPressEvent(event);
+        return super.onKeyDown(keyCode, event);
     }
 }
 
