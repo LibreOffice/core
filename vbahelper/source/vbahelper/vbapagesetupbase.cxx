@@ -31,12 +31,13 @@ VbaPageSetupBase::VbaPageSetupBase(const uno::Reference< XHelperInterface >& xPa
 
 double SAL_CALL VbaPageSetupBase::getTopMargin() throw (css::uno::RuntimeException, std::exception)
 {
-    bool headerOn = false;
     sal_Int32 topMargin = 0;
-    sal_Int32 headerHeight = 0;
 
     try
     {
+        bool headerOn = false;
+        sal_Int32 headerHeight = 0;
+
         uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
         aValue >>= headerOn;
 
@@ -60,11 +61,12 @@ double SAL_CALL VbaPageSetupBase::getTopMargin() throw (css::uno::RuntimeExcepti
 void SAL_CALL VbaPageSetupBase::setTopMargin( double margin ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 topMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
-    bool headerOn = false;
-    sal_Int32 headerHeight = 0;
 
     try
     {
+        bool headerOn = false;
+        sal_Int32 headerHeight = 0;
+
         uno::Any aValue = mxPageProps->getPropertyValue( "HeaderIsOn" );
         aValue >>= headerOn;
 
@@ -85,12 +87,13 @@ void SAL_CALL VbaPageSetupBase::setTopMargin( double margin ) throw (css::uno::R
 
 double SAL_CALL VbaPageSetupBase::getBottomMargin() throw (css::uno::RuntimeException, std::exception)
 {
-    bool footerOn = false;
     sal_Int32 bottomMargin = 0;
-    sal_Int32 footerHeight = 0;
 
     try
     {
+        bool footerOn = false;
+        sal_Int32 footerHeight = 0;
+
         uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
         aValue >>= footerOn;
 
@@ -114,11 +117,12 @@ double SAL_CALL VbaPageSetupBase::getBottomMargin() throw (css::uno::RuntimeExce
 void SAL_CALL VbaPageSetupBase::setBottomMargin( double margin ) throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 bottomMargin = Millimeter::getInHundredthsOfOneMillimeter( margin );
-    bool footerOn = false;
-    sal_Int32 footerHeight = 0;
 
     try
     {
+        bool footerOn = false;
+        sal_Int32 footerHeight = 0;
+
         uno::Any aValue = mxPageProps->getPropertyValue( "FooterIsOn" );
         aValue >>= footerOn;
 

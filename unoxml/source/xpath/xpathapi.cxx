@@ -126,13 +126,12 @@ namespace XPath
     {
         nsmap_t::const_iterator i = nsmap.begin();
         OString oprefix, ouri;
-        xmlChar *p, *u;
         while (i != nsmap.end())
         {
             oprefix = OUStringToOString(i->first,  RTL_TEXTENCODING_UTF8);
             ouri    = OUStringToOString(i->second, RTL_TEXTENCODING_UTF8);
-            p = (xmlChar*)oprefix.getStr();
-            u = (xmlChar*)ouri.getStr();
+            xmlChar *p = (xmlChar*)oprefix.getStr();
+            xmlChar *u = (xmlChar*)ouri.getStr();
             xmlXPathRegisterNs(ctx, p, u);
             ++i;
         }

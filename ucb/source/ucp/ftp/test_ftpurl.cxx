@@ -245,7 +245,7 @@ int test_ftpopen(void)
 
     FILE* file = url.open();
     if(file) {
-        int nbuf,ndest;
+        int nbuf;
         const int bffsz = 256;
         char buff[bffsz];
         char *dest = (char*) malloc(sizeof(char));
@@ -254,7 +254,7 @@ int test_ftpopen(void)
             memset((void*)buff, 0, bffsz);
             fread(buff,bffsz-1,1,file);
             nbuf = strlen(buff);
-            ndest = strlen(dest);
+            int ndest = strlen(dest);
             dest = (char*)realloc(dest,ndest + nbuf + 1);
             strncat(dest,buff,nbuf);
         } while(nbuf == bffsz-1);

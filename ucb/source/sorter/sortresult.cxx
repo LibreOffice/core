@@ -1278,12 +1278,11 @@ sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
     sal_IntPtr nEnd   = _nEnd;
     sal_IntPtr nMid = 0, nCompare = 0;
 
-    SortListData    *pMid;
 
     while ( nStart <= nEnd )
     {
         nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = maS2O.GetData( nMid );
+        SortListData *pMid = maS2O.GetData( nMid );
         nCompare = Compare( pEntry, pMid );
 
         if ( !nCompare )
@@ -1771,12 +1770,11 @@ void SortedResultSet::ResortModified( EventList* pList )
 void SortedResultSet::ResortNew( EventList* pList )
 {
     sal_IntPtr            i, j, nNewPos, nVal;
-    SortListData    *pData;
 
     try {
         for ( i = mnLastSort; i<(sal_IntPtr)maS2O.Count(); i++ )
         {
-            pData = (SortListData*) maModList.GetObject( i );
+            SortListData *pData = (SortListData*) maModList.GetObject( i );
             nNewPos = FindPos( pData, 1, mnLastSort );
             if ( nNewPos != i )
             {

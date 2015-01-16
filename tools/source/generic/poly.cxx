@@ -1069,7 +1069,6 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
     ImplMakeUnique();
 
-    long nX, nY;
     long nCenterX = rCenter.X();
     long nCenterY = rCenter.Y();
 
@@ -1077,8 +1076,8 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
     {
         Point& rPt = mpImplPolygon->mpPointAry[ i ];
 
-        nX = rPt.X() - nCenterX;
-        nY = rPt.Y() - nCenterY;
+        const long nX = rPt.X() - nCenterX;
+        const long nY = rPt.Y() - nCenterY;
         rPt.X() = (long) FRound( fCos * nX + fSin * nY ) + nCenterX;
         rPt.Y() = -(long) FRound( fSin * nX - fCos * nY ) + nCenterY;
     }
