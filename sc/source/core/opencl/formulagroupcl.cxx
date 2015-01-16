@@ -170,6 +170,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             pHostBuffer, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
+        SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer << " using host buffer " << pHostBuffer);
     }
     else
     {
@@ -181,6 +182,8 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             szHostBuffer, NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
+        SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
+
         double* pNanBuffer = (double*)clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
             szHostBuffer, 0, NULL, NULL, &err);
@@ -766,6 +769,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             szHostBuffer, NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
+        SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
         pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
@@ -796,6 +800,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             szHostBuffer, NULL, &err);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
+        SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
         pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
@@ -1439,11 +1444,15 @@ public:
             (cl_mem_flags)CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
             szHostBuffer,
             pHostBuffer, &err);
+        SAL_INFO("sc.opencl", "Created buffer " << Base::mpClmem << " size " << nInput << "*" << sizeof(double) << "=" << szHostBuffer << " using host buffer " << pHostBuffer);
+
         mpClmem2 = clCreateBuffer(kEnv.mpkContext,
             CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
             sizeof(double) * w, NULL, NULL);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
+        SAL_INFO("sc.opencl", "Created buffer " << mpClmem2 << " size " << sizeof(double) << "*" << w << "=" << (sizeof(double)*w));
+
         // reproduce the reduction function name
         std::string kernelName;
         if (!dynamic_cast<OpAverage*>(mpCodeGen.get()))
@@ -1564,6 +1573,7 @@ public:
                 w * sizeof(double) * 2, pAllBuffer.get(), &err);
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
+            SAL_INFO("sc.opencl", "Created buffer " << mpClmem2 << " size " << w << "*" << sizeof(double) << "=" << (w*sizeof(double)) << " copying host buffer " << pAllBuffer.get());
         }
         // set kernel arg
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
@@ -2184,6 +2194,7 @@ public:
                     sizeof(double) * nVectorWidth, NULL, &err);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
+                SAL_INFO("sc.opencl", "Created buffer " << pClmem2 << " size " << sizeof(double) << "*" << nVectorWidth << "=" << (sizeof(double)*nVectorWidth));
 
                 std::string kernelName = "GeoMean_reduction";
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
@@ -2254,6 +2265,7 @@ public:
                     sizeof(double) * nVectorWidth, NULL, &err);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
+                SAL_INFO("sc.opencl", "Created buffer " << mpClmem2 << " size " << sizeof(double) << "*" << nVectorWidth << "=" << (sizeof(double)*nVectorWidth));
 
                 std::string kernelName = mvSubArguments[0]->GetName() + "_SumIfs_reduction";
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
@@ -3778,6 +3790,8 @@ void DynamicKernel::Launch( size_t nr )
         nr * sizeof(double), NULL, &err);
     if (CL_SUCCESS != err)
         throw OpenCLError(err, __FILE__, __LINE__);
+    SAL_INFO("sc.opencl", "Created buffer " << mpResClmem << " size " << nr << "*" << sizeof(double) << "=" << (nr*sizeof(double)));
+
     SAL_INFO("sc.opencl", "Kernel " << mpKernel << " arg " << 0 << ": cl_mem: " << mpResClmem);
     err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
     if (CL_SUCCESS != err)
