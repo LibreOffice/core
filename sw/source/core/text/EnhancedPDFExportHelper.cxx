@@ -325,7 +325,6 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     {
         const SwFrm& rFrm = mpFrmInfo->mrFrm;
         const SwFrm* pKeyFrm = 0;
-        void* pKey = 0;
 
         // Reopen an existing structure element if
         // - rFrm is not the first page frame (reopen Document tag)
@@ -356,7 +355,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
         if ( pKeyFrm )
         {
-            pKey = lcl_GetKeyFromFrame( *pKeyFrm );
+            void* pKey = lcl_GetKeyFromFrame( *pKeyFrm );
 
             if ( pKey )
             {
@@ -1258,10 +1257,11 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // FlyFrm: Figure, Formula, Control
             // fly in content or fly at page
             {
-                bool bFormula = false;
                 const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pFrm);
                 if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
                 {
+                    bool bFormula = false;
+
                     const SwNoTxtFrm* pNoTxtFrm = static_cast<const SwNoTxtFrm*>(pFly->Lower());
                     SwOLENode* pOLENd = const_cast<SwOLENode*>(pNoTxtFrm->GetNode()->GetOLENode());
                     if ( pOLENd )
@@ -1409,10 +1409,9 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                                         rInf.GetIdx() - 1 :
                                         rInf.GetIdx();
                 const SwTxtAttr* pHint = mpPorInfo->mrTxtPainter.GetAttr( nIdx );
-                const SwField* pFld = 0;
                 if ( pHint && RES_TXTATR_FIELD == pHint->Which() )
                 {
-                    pFld = (SwField*)pHint->GetFmtFld().GetField();
+                    const SwField* pFld = (SwField*)pHint->GetFmtFld().GetField();
                     if ( RES_GETREFFLD == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;

@@ -1704,11 +1704,10 @@ void SwChartDataProvider::AddRowCols(
                     const sal_Int32 nLen = xRef->getTextualData().getLength();
                     if (nLen > 1) // value data-sequence ?
                     {
-                        SwChartDataSequence *pDataSeq = 0;
                         uno::Reference< lang::XUnoTunnel > xTunnel( xRef, uno::UNO_QUERY );
                         if(xTunnel.is())
                         {
-                            pDataSeq = reinterpret_cast< SwChartDataSequence * >(
+                            SwChartDataSequence *pDataSeq = reinterpret_cast< SwChartDataSequence * >(
                                     sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwChartDataSequence::getUnoTunnelId() )));
 
                             if (pDataSeq)

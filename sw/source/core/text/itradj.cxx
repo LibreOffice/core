@@ -194,10 +194,9 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTx
     // check kashida width
     // if width is smaller than minimal kashida width allowed by fonts in the current line
     // drop one kashida after the other until kashida width is OK
-    bool bAddSpaceChanged;
     while (rKashidas)
     {
-        bAddSpaceChanged = false;
+        bool bAddSpaceChanged = false;
         sal_Int32 nIdx = rItr.GetStart();
         sal_Int32 nEnd = rItr.GetEnd();
         while ( nIdx < nEnd )

@@ -894,13 +894,12 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
     if ( SfxItemState::SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, false ))
         return ;
 
-    SwHistoryHint* pHstHnt;
     SwNodes& rNds = rDoc.GetNodes();
     for ( sal_uInt16 n = 0; n < m_pHistory->Count(); ++n )
     {
         sal_Int32 nCntnt = 0;
         sal_uLong nNode = 0;
-        pHstHnt = (*m_pHistory)[ n ];
+        SwHistoryHint* pHstHnt = (*m_pHistory)[ n ];
         switch ( pHstHnt->Which() )
         {
             case HSTRY_RESETTXTHNT:

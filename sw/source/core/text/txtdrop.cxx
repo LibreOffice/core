@@ -756,7 +756,6 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             // reset pCurrPart to first part
             pCurrPart = pDrop->GetPart();
             bool bFirstGlyphRect = true;
-            bool bHaveGlyphRect = false;
             Rectangle aCommonRect, aRect;
 
             while ( pCurrPart )
@@ -779,7 +778,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 nAscent = rFnt.GetAscent( rInf.GetVsh(), *pOut );
 
                 // we get the rectangle that covers all chars
-                bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
+                bool bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
                                      nIdx, pCurrPart->GetLen() ) &&
                                  ! aRect.IsEmpty();
 
