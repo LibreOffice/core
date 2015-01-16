@@ -1,6 +1,8 @@
 package org.libreoffice;
 
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -36,6 +38,11 @@ public class LOKitShell {
                 LibreOfficeMainActivity.mAppContext.hideProgressSpinner();
             }
         });
+    }
+
+    public static int getMemoryClass(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        return activityManager.getMemoryClass() * 1024 * 1024;
     }
 
     public static DisplayMetrics getDisplayMetrics() {
