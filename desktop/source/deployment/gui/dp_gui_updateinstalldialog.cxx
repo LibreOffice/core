@@ -237,7 +237,15 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_pHelp->Disable();
 }
 
-UpdateInstallDialog::~UpdateInstallDialog() {}
+UpdateInstallDialog::~UpdateInstallDialog()
+{
+    dispose();
+}
+
+void UpdateInstallDialog::dispose()
+{
+    ModalDialog::dispose();
+}
 
 bool UpdateInstallDialog::Close()
 {

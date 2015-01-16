@@ -60,6 +60,7 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCtx);
 
     virtual ~UpdateInstallDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool Close() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;

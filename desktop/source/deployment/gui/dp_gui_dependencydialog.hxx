@@ -38,8 +38,6 @@ public:
     DependencyDialog(
         vcl::Window * parent, std::vector< OUString > const & dependencies);
 
-    virtual ~DependencyDialog();
-
 private:
     DependencyDialog(DependencyDialog &) SAL_DELETED_FUNCTION;
     void operator =(DependencyDialog &) SAL_DELETED_FUNCTION;

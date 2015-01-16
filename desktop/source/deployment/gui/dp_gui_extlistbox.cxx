@@ -239,6 +239,11 @@ void ExtensionBox_Impl::Init()
 
 ExtensionBox_Impl::~ExtensionBox_Impl()
 {
+    dispose();
+}
+
+void ExtensionBox_Impl::dispose()
+{
     if ( ! m_bInDelete )
         DeleteRemoved();
 
@@ -264,6 +269,7 @@ ExtensionBox_Impl::~ExtensionBox_Impl()
 
     delete m_pLocale;
     delete m_pCollator;
+    ::svt::IExtensionListBox::dispose();
 }
 
 

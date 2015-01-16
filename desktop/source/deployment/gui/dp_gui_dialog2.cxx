@@ -137,6 +137,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 public:
                     ExtBoxWithBtns_Impl(vcl::Window* pParent);
                    virtual ~ExtBoxWithBtns_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);
 
@@ -202,9 +203,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtBoxWithBtns(vcl::Wi
 
 ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 {
+    dispose();
+}
+
+void ExtBoxWithBtns_Impl::dispose()
+{
     delete m_pOptionsBtn;
     delete m_pEnableBtn;
     delete m_pRemoveBtn;
+    ExtensionBox_Impl::dispose();
 }
 
 
@@ -716,7 +723,13 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager)
 
 ExtMgrDialog::~ExtMgrDialog()
 {
+    dispose();
+}
+
+void ExtMgrDialog::dispose()
+{
     m_aIdle.Stop();
+    ModelessDialog::dispose();
 }
 
 
@@ -1197,7 +1210,13 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
+    dispose();
+}
+
+void UpdateRequiredDialog::dispose()
+{
     m_aIdle.Stop();
+    ModalDialog::dispose();
 }
 
 long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,

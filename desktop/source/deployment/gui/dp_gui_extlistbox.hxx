@@ -182,6 +182,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 public:
     ExtensionBox_Impl(vcl::Window* pParent);
     virtual ~ExtensionBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;

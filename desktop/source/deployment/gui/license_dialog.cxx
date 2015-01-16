@@ -57,6 +57,7 @@ class LicenseView : public MultiLineEdit, public SfxListener
 public:
     LicenseView( vcl::Window* pParent, WinBits nStyle );
     virtual ~LicenseView();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ScrollDown( ScrollType eScroll );
 
@@ -122,9 +123,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLicenseView(vcl::Windo
 
 LicenseView::~LicenseView()
 {
+    dispose();
+}
+
+void LicenseView::dispose()
+{
     maEndReachedHdl = Link();
     maScrolledHdl   = Link();
     EndListeningAll();
+    MultiLineEdit::dispose();
 }
 
 void LicenseView::ScrollDown( ScrollType eScroll )

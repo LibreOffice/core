@@ -564,6 +564,11 @@ UpdateDialog::UpdateDialog(
 
 UpdateDialog::~UpdateDialog()
 {
+    dispose();
+}
+
+void UpdateDialog::dispose()
+{
     storeIgnoredUpdates();
 
     for ( std::vector< UpdateDialog::Index* >::iterator i( m_ListboxEntries.begin() ); i != m_ListboxEntries.end(); ++i )
@@ -575,6 +580,7 @@ UpdateDialog::~UpdateDialog()
         delete (*i);
     }
     delete m_pUpdates;
+    ModalDialog::dispose();
 }
 
 
@@ -598,9 +604,6 @@ UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & d
 {
     SetNormalStaticImage(Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)));
 }
-
-UpdateDialog::CheckListBox::~CheckListBox() {}
-
 
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
     sal_uLong i = GetEntryCount();

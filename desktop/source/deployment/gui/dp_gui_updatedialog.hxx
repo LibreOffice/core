@@ -85,6 +85,7 @@ public:
         std::vector< dp_gui::UpdateData > * updateData);
 
     virtual ~UpdateDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
 
@@ -110,8 +111,6 @@ private:
     public:
         CheckListBox(
             vcl::Window* pParent, UpdateDialog & dialog);
-
-        virtual ~CheckListBox();
 
         sal_uInt16 getItemCount() const;
 
