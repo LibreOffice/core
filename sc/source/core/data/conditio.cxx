@@ -2088,6 +2088,9 @@ void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 
 void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
+    if (maRanges.empty())
+        return;
+
     SCTAB nTab = maRanges[0]->aStart.Tab();
     maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
