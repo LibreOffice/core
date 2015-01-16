@@ -22,14 +22,18 @@
 #include "XMLEventImportHelper.hxx"
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlerror.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
@@ -48,6 +52,10 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
+XMLEventsImportContext::XMLEventsImportContext( SvXMLImport& rImport )
+    : SvXMLImportContext( rImport )
+{
+}
 
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
@@ -59,6 +67,12 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
+XMLEventsImportContext::XMLEventsImportContext( SvXMLImport& rImport,
+    const Reference< XEventsSupplier >& xEventsSupplier )
+:   SvXMLImportContext( rImport ),
+    xEvents( xEventsSupplier->getEvents() )
+{
+}
 
 XMLEventsImportContext::XMLEventsImportContext(
     SvXMLImport& rImport,
@@ -67,6 +81,13 @@ XMLEventsImportContext::XMLEventsImportContext(
     const Reference<XNameReplace> & xNameReplace) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         xEvents(xNameReplace)
+{
+}
+
+XMLEventsImportContext::XMLEventsImportContext( SvXMLImport& rImport,
+    const Reference< XNameReplace >& xNameReplace )
+:   SvXMLImportContext( rImport ),
+    xEvents( xNameReplace )
 {
 }
 
@@ -83,7 +104,20 @@ void XMLEventsImportContext::StartElement(
     // nothing to be done
 }
 
+void SAL_CALL XMLEventsImportContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    // nothing to be done
+}
+
 void XMLEventsImportContext::EndElement()
+{
+    // nothing to be done
+}
+
+void SAL_CALL XMLEventsImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, SAXException, std::exception)
 {
     // nothing to be done
 }
@@ -128,6 +162,31 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
     return GetImport().GetEventImport().CreateContext(
         GetImport(), p_nPrefix, rLocalName, xAttrList,
         this, sEventName, sLanguage);
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLEventsImportContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    // a) search for script:language and script:event-name attribute
+    // b) delegate to factory. The factory will:
+    //    1) translate XML event name into API event name
+    //    2) get proper event context factory from import
+    //    3) instantiate context
+
+    // a) search for script:language and script:event-name attribute
+    OUString sLanguage;
+    OUString sEventName;
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_SCRIPT | XML_event_name ) )
+        sEventName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_SCRIPT | XML_event_name );
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_SCRIPT | XML_language ) )
+        sLanguage = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_SCRIPT | XML_language );
+    // else: ignore -> let child context handle this
+
+    // b) delegate to factory
+    return GetImport().GetEventImport().CreateFastContext( GetImport(), Element,
+        xAttrList, this, sEventName, sLanguage );
 }
 
 void XMLEventsImportContext::SetEvents(

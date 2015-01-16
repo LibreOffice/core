@@ -70,6 +70,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
+    XMLEventsImportContext( SvXMLImport& rImport );
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
@@ -77,6 +78,8 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
+    XMLEventsImportContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::document::XEventsSupplier >& xEventsSupplier );
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
@@ -84,6 +87,8 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xNameRepl);
+    XMLEventsImportContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::container::XNameReplace >& xNameRepl);
 
     virtual ~XMLEventsImportContext();
 
@@ -116,14 +121,23 @@ protected:
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

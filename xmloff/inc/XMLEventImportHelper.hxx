@@ -28,7 +28,8 @@
 
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml { namespace sax { class XAttributeList;
+    class XFastAttributeList;} }
 } } }
 class XMLEventContextFactory;
 class XMLEventsImportContext;
@@ -91,7 +92,10 @@ public:
         XMLEventsImportContext* rEvents,
         const OUString& rXmlEventName,
         const OUString& rLanguage);
-
+    SvXMLImportContext* CreateFastContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        XMLEventsImportContext* rEvents, const OUString& rXmlEventName,
+        const OUString& rLanguage );
 };
 
 #endif

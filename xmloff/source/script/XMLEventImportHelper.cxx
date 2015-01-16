@@ -26,6 +26,7 @@
 #include <xmloff/xmlerror.hxx>
 
 using ::com::sun::star::xml::sax::XAttributeList;
+using com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
@@ -161,6 +162,19 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
                          aMsgParams);
 
     }
+
+    return pContext;
+}
+
+SvXMLImportContext* XMLEventImportHelper::CreateFastContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    XMLEventsImportContext* rEvents,
+    const OUString& rXmlEventName, const OUString& rLanguage )
+{
+    SvXMLImportContext* pContext = NULL;
+
+    // translage event name from xml to api
 
     return pContext;
 }
