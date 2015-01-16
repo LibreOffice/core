@@ -147,10 +147,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         return mView;
     }
 
-    public FloatSize getViewportSize() {
-        return mViewportMetrics.getSize();
-    }
-
     /**
      * The view calls this function to indicate that the viewport changed size. It must hold the
      * monitor while calling it.
@@ -220,7 +216,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         ImmutableViewportMetrics clampedMetrics = metrics.clamp();
 
         if (displayPort == null) {
-            displayPort = DisplayPortCalculator.calculate(metrics, getPanZoomController().getVelocityVector());
+            displayPort = DisplayPortCalculator.calculate(metrics, mPanZoomController.getVelocityVector());
         }
 
         mDisplayPort = displayPort;
@@ -280,7 +276,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         synchronized (this) {
             try {
                 mNewGeckoViewport = viewportMetrics;
-                updateViewport(true);
+                updateViewport();
                 mLowResLayer.invalidate();
                 mRootLayer.invalidate();
             } finally {
@@ -290,12 +286,12 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         }
     }
 
-    protected void updateViewport(boolean onlyUpdatePageSize) {
+    protected void updateViewport() {
         // save and restore the viewport size stored in java; never let the
         // JS-side viewport dimensions override the java-side ones because
         // java is the One True Source of this information, and allowing JS
         // to override can lead to race conditions where this data gets clobbered.
-        FloatSize viewportSize = getViewportSize();
+        FloatSize viewportSize = mViewportMetrics.getSize();
         mGeckoViewport = mNewGeckoViewport.setViewportSize(viewportSize.width, viewportSize.height);
 
         RectF position = mGeckoViewport.getViewport();
@@ -305,15 +301,10 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mLowResLayer.setPosition(RectUtils.round(position));
         mLowResLayer.setResolution(mGeckoViewport.zoomFactor);
 
-        if (onlyUpdatePageSize) {
-            // Don't adjust page size when zooming unless zoom levels are
-            // approximately equal.
-            if (FloatUtils.fuzzyEquals(getViewportMetrics().zoomFactor, mGeckoViewport.zoomFactor)) {
-                setPageRect(mGeckoViewport.getPageRect(), mGeckoViewport.getCssPageRect());
-            }
-        } else {
-            setViewportMetrics(mGeckoViewport);
-            abortPanZoomAnimation();
+        // Don't adjust page size when zooming unless zoom levels are
+        // approximately equal.
+        if (FloatUtils.fuzzyEquals(getViewportMetrics().zoomFactor, mGeckoViewport.zoomFactor)) {
+            setPageRect(mGeckoViewport.getPageRect(), mGeckoViewport.getCssPageRect());
         }
     }
 
@@ -397,14 +388,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         }
     }
 
-    public void forceRender() {
-        post(new Runnable() {
-            public void run() {
-                mView.requestRender();
-            }
-        });
-    }
-
     /** Implementation of PanZoomTarget */
     public boolean post(Runnable action) {
         return mView.post(action);
@@ -446,10 +429,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         return layerPoint;
     }
 
-    public ImmutableViewportMetrics getGeckoViewportMetrics() {
-        return mGeckoViewport;
-    }
-
     public void destroy() {
         mPanZoomController.destroy();
     }
@@ -457,7 +436,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     public Context getContext() {
         return mContext;
     }
-
 
     public void zoomTo(RectF rect) {
         if (mPanZoomController instanceof JavaPanZoomController) {
@@ -467,6 +445,14 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
     public void zoomTo(float pageWidth, float pageHeight) {
         zoomTo(new RectF(0, 0, pageWidth, pageHeight));
+    }
+
+    public void forceRender() {
+        post(new Runnable() {
+            public void run() {
+                mView.requestRender();
+            }
+        });
     }
 
     private class AdjustRunnable implements Runnable {
