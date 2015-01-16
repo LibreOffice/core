@@ -134,7 +134,10 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
     int nCode = 0;
 
     if (!pLOKDocView->m_bEdit)
+    {
+        g_info("signalKey: not in edit mode, ignore");
         return;
+    }
 
     switch (pEvent->keyval)
     {
