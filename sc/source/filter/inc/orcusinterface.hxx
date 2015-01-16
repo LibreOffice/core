@@ -218,8 +218,9 @@ private:
 
     struct border
     {
-
         border();
+
+        void applyToItemSet(SfxItemSet& rSet) const;
     };
 
     border maCurrentBorder;
@@ -231,6 +232,7 @@ private:
         bool mbLocked;
 
         protection();
+        void applyToItemSet(SfxItemSet& rSet) const;
     };
 
     protection maCurrentProtection;
@@ -239,6 +241,8 @@ private:
     struct number_format
     {
         OUString maCode;
+
+        void applyToItemSet(SfxItemSet& rSet) const;
     };
 
     number_format maCurrentNumberFormat;
