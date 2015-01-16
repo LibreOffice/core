@@ -22,7 +22,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;
     private GeckoLayerClient mLayerClient;
-    private boolean mInvalidationCallbackRegistered = false;
 
     public LOKitThread() {
         TileProviderFactory.initialize();
@@ -99,9 +98,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             LOKitShell.showProgressSpinner();
+            mTileProvider.registerInvalidationCallback(this);
             refresh();
             LOKitShell.hideProgressSpinner();
-            mInvalidationCallbackRegistered = false;
         }
         return isReady;
     }
@@ -153,10 +152,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     private void touch(String touchType, MotionEvent motionEvent) {
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
-        if (!mInvalidationCallbackRegistered) {
-            mTileProvider.registerInvalidationCallback(this);
-            mInvalidationCallbackRegistered = true;
-        }
     }
 
     private void createThumbnail(final ThumbnailCreator.ThumbnailCreationTask task) {
