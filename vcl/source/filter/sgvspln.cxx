@@ -692,13 +692,10 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
 
     double      Step;          // stepsize for t
     double      dt1,dt2,dt3;   // delta t, y, ^3
-    double      t;
-    bool        bEnd;         // partial polynom ended?
     sal_uInt16  n;             // number of partial polynoms to draw
     sal_uInt16  i;             // actual partial polynom
     bool        bOk;           // all still ok?
     sal_uInt16  PolyMax=16380; // max number of polygon points
-    long        x,y;
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
     if (bOk) {
@@ -708,14 +705,14 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
         rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); // first point
         i=0;
         while (i<n) {       // draw n partial polynoms
-            t=tv[i]+Step;
-            bEnd=false;
+            double t=tv[i]+Step;
+            bool bEnd=false; // partial polynom ended?
             while (!bEnd) {  // extrapolate one partial polynom
                 bEnd=t>=tv[i+1];
                 if (bEnd) t=tv[i+1];
                 dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
-                x=long(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
-                y=long(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
+                long x=long(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
+                long y=long(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
                 if (x<MinKoord) x=MinKoord; if (x>MaxKoord) x=MaxKoord;
                 if (y<MinKoord) y=MinKoord; if (y>MaxKoord) y=MaxKoord;
                 if (rPoly.GetSize()<PolyMax) {

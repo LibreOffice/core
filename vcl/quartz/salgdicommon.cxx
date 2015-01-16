@@ -1694,12 +1694,11 @@ CGPoint* AquaSalGraphics::makeCGptArray(sal_uInt32 nPoints, const SalPoint* pPtA
 
 void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )
 {
-    CGPoint* CGpoints ;
     if ( CheckContext() )
     {
         CG_TRACE("CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth);
         CGContextSaveGState(mrContext);
-        CGpoints = makeCGptArray(nPoints,pPtAry);
+        CGPoint* CGpoints = makeCGptArray(nPoints,pPtAry);
         CGContextAddLines ( mrContext, CGpoints, nPoints );
         if ( nSalFlags & SAL_INVERT_TRACKFRAME )
         {

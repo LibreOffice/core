@@ -1008,8 +1008,6 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
-    MetaAction* pMA;
-
     if( bStatus )
     {
         size_t nACount = rMTF.GetActionSize();
@@ -1018,7 +1016,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
         for( size_t nA = 0; nA < nACount; nA++ )
         {
-            pMA = rMTF.GetAction( nA );
+            MetaAction* pMA = rMTF.GetAction( nA );
 
             switch( pMA->GetType() )
             {

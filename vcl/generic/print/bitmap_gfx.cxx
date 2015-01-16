@@ -625,12 +625,11 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
     {
         long      nBitPos = 0;
-        unsigned char nBit    = 0;
         unsigned char nByte   = 0;
 
         for (long nColumn = rArea.Left(); nColumn <= rArea.Right(); nColumn++)
         {
-            nBit   = rBitmap.GetPixelIdx (nRow, nColumn);
+            unsigned char nBit   = rBitmap.GetPixelIdx (nRow, nColumn);
             nByte |= nBit << (7 - nBitPos);
 
             if (++nBitPos == 8)
