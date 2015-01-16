@@ -548,9 +548,10 @@ void SwHTMLWriter::OutHiddenControls(
 {
     sal_Int32 nCount = rFormComps->getCount();
     sal_Int32 nPos = 0;
-    bool bDone = false;
     if( rPropSet.is() )
     {
+        bool bDone = false;
+
         uno::Reference< form::XFormComponent > xFC( rPropSet, uno::UNO_QUERY );
         for( nPos=0; !bDone && nPos < nCount; nPos++ )
         {

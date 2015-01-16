@@ -1296,13 +1296,11 @@ void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
         sal_uInt8 nitcFirst= pParamsTDxaCol[0]; // first col to be changed
         sal_uInt8 nitcLim  = pParamsTDxaCol[1]; // (last col to be changed)+1
         short nDxaCol = (sal_Int16)SVBT16ToShort( pParamsTDxaCol + 2 );
-        short nOrgWidth;
-        short nDelta;
 
         for( int i = nitcFirst; (i < nitcLim) && (i < nWwCols); i++ )
         {
-            nOrgWidth  = nCenter[i+1] - nCenter[i];
-            nDelta     = nDxaCol - nOrgWidth;
+            const short nOrgWidth  = nCenter[i+1] - nCenter[i];
+            const short nDelta = nDxaCol - nOrgWidth;
             for( int j = i+1; j <= nWwCols; j++ )
             {
                 nCenter[j] = nCenter[j] + nDelta;

@@ -759,7 +759,6 @@ IMAGE_SETEVENT:
         pFlyFmt->SetFmtAttr( aURL );
 
         {
-            const SvxMacro *pMacro;
             static const sal_uInt16 aEvents[] = {
                 SFX_EVENT_MOUSEOVER_OBJECT,
                 SFX_EVENT_MOUSECLICK_OBJECT,
@@ -767,8 +766,11 @@ IMAGE_SETEVENT:
                 0 };
 
             for( sal_uInt16 n = 0; aEvents[ n ]; ++n )
-                if( 0 != ( pMacro = rINetFmt.GetMacro( aEvents[ n ] ) ))
+            {
+                const SvxMacro *pMacro = rINetFmt.GetMacro( aEvents[ n ] );
+                if( 0 != pMacro )
                     aMacroItem.SetMacro( aEvents[ n ], *pMacro );
+            }
         }
 
         if ((FLY_AS_CHAR == pFlyFmt->GetAnchor().GetAnchorId()) &&
@@ -1276,10 +1278,9 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
     // to check the last bookmark
     if( !bIgnoreStack )
     {
-        _HTMLAttr* pAttr;
         for( sal_uInt16 i = aSetAttrTab.size(); i; )
         {
-            pAttr = aSetAttrTab[ --i ];
+            _HTMLAttr* pAttr = aSetAttrTab[ --i ];
             if( RES_FLTR_BOOKMARK == pAttr->pItem->Which() )
             {
                 if( pAttr->GetSttParaIdx() == nNodeIdx )

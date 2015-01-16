@@ -309,14 +309,14 @@ SwViewShell::~SwViewShell()
         if( mpDoc && GetWin() )
         {
             SwNodes& rNds = mpDoc->GetNodes();
-            SwGrfNode *pGNd;
 
             SwStartNode *pStNd;
             SwNodeIndex aIdx( *rNds.GetEndOfAutotext().StartOfSectionNode(), 1 );
             while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
             {
                 ++aIdx;
-                if ( 0 != ( pGNd = aIdx.GetNode().GetGrfNode() ) )
+                SwGrfNode *pGNd = aIdx.GetNode().GetGrfNode();
+                if ( 0 != pGNd )
                 {
                     if( pGNd->IsAnimated() )
                     {

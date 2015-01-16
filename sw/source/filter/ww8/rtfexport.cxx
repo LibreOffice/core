@@ -186,14 +186,16 @@ static bool IsExportNumRule(const SwNumRule& rRule, sal_uInt8* pEnd = 0)
         ;
     ++nEnd;
 
-    const SwNumFmt* pNFmt;
     sal_uInt8 nLvl;
 
     for (nLvl = 0; nLvl < nEnd; ++nLvl)
-        if (SVX_NUM_NUMBER_NONE != (pNFmt = &rRule.Get(nLvl))
-                ->GetNumberingType() || !pNFmt->GetPrefix().isEmpty() ||
+    {
+        const SwNumFmt* pNFmt = &rRule.Get(nLvl);
+        if (SVX_NUM_NUMBER_NONE != pNFmt->GetNumberingType() ||
+                !pNFmt->GetPrefix().isEmpty() ||
                 (!pNFmt->GetSuffix().isEmpty() && pNFmt->GetSuffix() != "."))
             break;
+    }
 
     if (pEnd)
         *pEnd = nEnd;
