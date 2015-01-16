@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_5303e40f",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-16T09:57:23Z",
+      "side": 1,
+      "message": "this code could arguably be improved by taking the assignments out of the if condition, which would most likely make the false -Werror\u003dmaybe-uninitialized go away",
+      "revId": "d4b08deca7e46e4f193f18859a957ab9d81ff664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_eefecf04",
+        "filename": "sd/source/ui/view/drawview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-16T09:57:23Z",
+      "side": 1,
+      "message": "this code could arguably be improved by taking the assignment out of the if condition, which would most likely make the false -Werror\u003dmaybe-uninitialized go away",
+      "revId": "d4b08deca7e46e4f193f18859a957ab9d81ff664",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
