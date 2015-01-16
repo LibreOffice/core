@@ -24,7 +24,9 @@
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
 #include <svx/svdmark.hxx>
+#include <boost/shared_ptr.hpp>
 
+class SdrExternalToolEdit;
 class ScViewData;
 
 #include "drawsh.hxx"
@@ -36,6 +38,8 @@ public:
     SFX_DECL_INTERFACE(SCID_GRAPHIC_SHELL)
 
 private:
+    std::vector<boost::shared_ptr<SdrExternalToolEdit> > m_ExternalEdits;
+
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 

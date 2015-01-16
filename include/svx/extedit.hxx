@@ -10,30 +10,52 @@
 #ifndef INCLUDED_SVX_EXTEDIT_HXX
 #define INCLUDED_SVX_EXTEDIT_HXX
 
-#include <svtools/grfmgr.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <vcl/graph.hxx>
-#include <vcl/timer.hxx>
 #include <svx/svxdllapi.h>
+#include <svl/lstner.hxx>
+#include <rtl/ustring.hxx>
+#include <memory>
+#include <boost/scoped_ptr.hpp>
+
+class Graphic;
+class GraphicObject;
+class FileChangedChecker;
 
 class SVX_DLLPUBLIC ExternalToolEdit
 {
-public:
-    GraphicObject* m_pGraphicObject;
+protected:
     OUString m_aFileName;
+
+    ::boost::scoped_ptr<FileChangedChecker> m_pChecker;
+
+public:
 
     ExternalToolEdit();
     virtual ~ExternalToolEdit();
 
     virtual void Update( Graphic& aGraphic ) = 0;
-    void Edit( GraphicObject *pGraphic );
+    void Edit(GraphicObject const*const pGraphic);
 
-    DECL_LINK( StartListeningEvent, void *pEvent );
+    void StartListeningEvent();
 
-    static void threadWorker( void *pThreadData );
     static void HandleCloseEvent( ExternalToolEdit* pData );
 };
 
+class FmFormView;
+class SdrObject;
+
+class SVX_DLLPUBLIC SdrExternalToolEdit
+    : public ExternalToolEdit
+    , public SfxListener
+{
+private:
+    FmFormView * m_pView;
+    SdrObject *  m_pObj;
+
+    SAL_DLLPRIVATE virtual void Update(Graphic&) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster&, const SfxHint&) SAL_OVERRIDE;
+
+public:
+    SdrExternalToolEdit(FmFormView * pView, SdrObject * pObj);
+};
 
 #endif

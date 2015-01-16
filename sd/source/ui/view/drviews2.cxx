@@ -186,33 +186,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-class SdExternalToolEdit : public ExternalToolEdit
-{
-    FmFormView* m_pView;
-    SdrObject*  m_pObj;
-
-public:
-    SdExternalToolEdit ( FmFormView* pView, SdrObject* pObj ) :
-        m_pView   (pView),
-        m_pObj (pObj)
-    {}
-
-    virtual void Update( Graphic& aGraphic ) SAL_OVERRIDE
-    {
-        SdrPageView* pPageView = m_pView->GetSdrPageView();
-        if( pPageView )
-        {
-            SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
-            OUString    aStr = m_pView->GetDescriptionOfMarkedObjects();
-            aStr += " External Edit";
-            m_pView->BegUndo( aStr );
-            pNewObj->SetGraphicObject( aGraphic );
-            m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
-            m_pView->EndUndo();
-        }
-    }
-};
-
 /**
  * SfxRequests for temporary actions
  */
@@ -1001,9 +974,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                 if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
-                    SdExternalToolEdit* aExternalToolEdit = new SdExternalToolEdit( mpDrawView, pObj );
-                    aExternalToolEdit->Edit( &aGraphicObject );
+                    GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
+                    m_ExternalEdits.push_back(
+                        boost::shared_ptr<SdrExternalToolEdit>(
+                            new SdrExternalToolEdit(mpDrawView, pObj)));
+                    m_ExternalEdits.back()->Edit( &aGraphicObject );
                 }
             }
             Cancel();
