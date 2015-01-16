@@ -2832,10 +2832,18 @@ void OpConvert::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
+    // The CONVERT function converts a value from one unit of
+    // measurement to another. It takes the units of measurements to
+    // convert between as string arguments. This implementation
+    // handles just a very small subset of such conversions.
+
     int arg1=vSubArguments[1]->GetFormulaToken()->GetString().\
         getString().toAsciiUpperCase().hashCode();
     int arg2=vSubArguments[2]->GetFormulaToken()->GetString().\
         getString().toAsciiUpperCase().hashCode();
+
+    // Check if the from and to units are those combinations that the
+    // code below supports.
     if( !((arg1==5584&&arg2==108)||
         (arg1==108&&arg2==5584)||
         (arg1==5665&&arg2==268206)||
