@@ -102,6 +102,7 @@ public:
         ,const ::com::sun::star::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialogSetup();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
     virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;

@@ -80,6 +80,7 @@ namespace dbaui
 
         OWizColumnSelect(vcl::Window* pParent);
         virtual ~OWizColumnSelect();
+        virtual void dispose() SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WCOLUMNSELECT_HXX

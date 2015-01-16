@@ -686,6 +686,11 @@ void OCopyTableWizard::construct()
 
 OCopyTableWizard::~OCopyTableWizard()
 {
+    dispose();
+}
+
+void OCopyTableWizard::dispose()
+{
     for ( ;; )
     {
         TabPage *pPage = GetPage(0);
@@ -710,6 +715,7 @@ OCopyTableWizard::~OCopyTableWizard()
     delete m_pbPrev;
     delete m_pbNext;
     delete m_pbFinish;
+    WizardDialog::dispose();
 }
 
 IMPL_LINK_NOARG(OCopyTableWizard, ImplPrevHdl)

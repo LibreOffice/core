@@ -151,11 +151,6 @@ namespace dbaui
         Show();
     }
 
-    OTextConnectionHelper::~OTextConnectionHelper()
-    {
-
-    }
-
     IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*, /*EMPTYARG*/)
     {
         callModifiedHdl();

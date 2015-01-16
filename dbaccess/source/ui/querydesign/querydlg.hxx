@@ -69,6 +69,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                     bool _bAllowTableSelect);
         virtual ~DlgQryJoin();
+        virtual void dispose() SAL_OVERRIDE;
         EJoinType GetJoinType() const { return eJoinType; };
 
         /** getConnectionData returns the current connection data

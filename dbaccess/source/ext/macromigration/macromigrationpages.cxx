@@ -95,7 +95,13 @@ namespace dbmm
 
     SaveDBDocPage::~SaveDBDocPage()
     {
+        dispose();
+    }
+
+    void SaveDBDocPage::dispose()
+    {
         delete m_pLocationController;
+        MacroMigrationPage::dispose();
     }
 
     void SaveDBDocPage::impl_updateLocationDependentItems()

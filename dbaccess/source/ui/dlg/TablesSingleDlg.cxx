@@ -61,7 +61,13 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()
 {
+    dispose();
+}
+
+void OTableSubscriptionDialog::dispose()
+{
     delete m_pOutSet;
+    SfxSingleTabDialog::dispose();
 }
 
 short OTableSubscriptionDialog::Execute()

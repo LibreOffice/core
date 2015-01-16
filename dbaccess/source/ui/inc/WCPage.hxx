@@ -65,7 +65,6 @@ namespace dbaui
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OCopyTable( vcl::Window * pParent );
-        virtual ~OCopyTable();
 
         bool IsOptionDefData() const { return m_pRB_DefData->IsChecked(); }
         bool IsOptionDef() const { return m_pRB_Def->IsChecked(); }

@@ -45,7 +45,6 @@ namespace dbaui
 
     protected:
         CheckBox *m_pPasswordrequired;
-        virtual ~OSpreadSheetConnectionPageSetup();
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -66,6 +65,7 @@ namespace dbaui
 
     protected:
         virtual ~OTextConnectionPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
         virtual bool prepareLeave() SAL_OVERRIDE;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
@@ -108,10 +108,12 @@ namespace dbaui
     {
     private:
         FixedText           *m_pHelpText;
-        MySQLNativeSettings m_aMySQLSettings;
+        VclPtr<MySQLNativeSettings> m_aMySQLSettings;
 
     public:
         MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs );
+        virtual ~MySQLNativeSetupPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         static OGenericAdministrationPage* Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
@@ -216,7 +218,6 @@ namespace dbaui
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
-        virtual ~OMySQLIntroPageSetup();
 
     private:
         RadioButton         *m_pODBCDatabase;
@@ -241,7 +242,6 @@ namespace dbaui
         Edit*       m_pETUserName;
         CheckBox*   m_pCBPasswordRequired;
         PushButton* m_pPBTestConnection;
-        virtual ~OAuthentificationPageSetup();
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -275,9 +275,6 @@ namespace dbaui
         Link getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OGenericAdministrationPage, OnControlModified); }
 
         DECL_LINK(OnOpenSelected, CheckBox*);
-    protected:
-        virtual ~OFinalDBPageSetup();
-
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;

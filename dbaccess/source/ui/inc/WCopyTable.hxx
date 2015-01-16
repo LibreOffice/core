@@ -323,6 +323,7 @@ namespace dbaui
         );
 
         virtual ~OCopyTableWizard();
+        virtual void        dispose() SAL_OVERRIDE;
 
         virtual long        DeactivatePage() SAL_OVERRIDE;
         OKButton&           GetOKButton() { return static_cast<OKButton&>(*m_pbFinish); }

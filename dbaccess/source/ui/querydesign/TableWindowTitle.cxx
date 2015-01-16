@@ -55,7 +55,13 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
 
 OTableWindowTitle::~OTableWindowTitle()
 {
+    dispose();
+}
+
+void OTableWindowTitle::dispose()
+{
     m_pTabWin = NULL;
+    FixedText::dispose();
 }
 
 void OTableWindowTitle::GetFocus()

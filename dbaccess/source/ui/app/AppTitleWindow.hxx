@@ -25,9 +25,9 @@ namespace dbaui
 {
     class OTitleWindow : public vcl::Window
     {
-        FixedText   m_aSpace1;
-        FixedText   m_aSpace2;
-        FixedText   m_aTitle;
+        VclPtr<FixedText>   m_aSpace1;
+        VclPtr<FixedText>   m_aSpace2;
+        VclPtr<FixedText>   m_aTitle;
         vcl::Window*     m_pChild;
         bool        m_bShift;
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -36,6 +36,7 @@ namespace dbaui
     public:
         OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,bool _bShift = true);
         virtual ~OTitleWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;

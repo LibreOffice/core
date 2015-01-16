@@ -62,6 +62,7 @@ namespace dbaui
 
         OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;

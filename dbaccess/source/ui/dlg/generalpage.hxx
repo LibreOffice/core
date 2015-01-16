@@ -34,7 +34,6 @@ namespace dbaui
     {
     protected:
         OGeneralPage( vcl::Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
-        virtual ~OGeneralPage();
 
         OUString            m_eCurrentSelection;    /// currently selected type
         ::dbaccess::DATASOURCE_TYPE

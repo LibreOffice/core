@@ -56,6 +56,10 @@ namespace dbaui
     }
     OQueryContainerWindow::~OQueryContainerWindow()
     {
+        dispose();
+    }
+    void OQueryContainerWindow::dispose()
+    {
         {
             boost::scoped_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
             m_pViewSwitch = NULL;
@@ -73,7 +77,7 @@ namespace dbaui
 
         boost::scoped_ptr<vcl::Window> aTemp(m_pSplitter);
         m_pSplitter = NULL;
-
+        ODataView::dispose();
     }
     bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
     {

@@ -38,8 +38,14 @@ OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :
 
 OTableDesignHelpBar::~OTableDesignHelpBar()
 {
+    dispose();
+}
+
+void OTableDesignHelpBar::dispose()
+{
     boost::scoped_ptr<vcl::Window> aTemp(m_pTextWin);
     m_pTextWin = NULL;
+    TabPage::dispose();
 }
 
 void OTableDesignHelpBar::SetHelpText( const OUString& rText )

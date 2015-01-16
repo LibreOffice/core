@@ -66,11 +66,11 @@ namespace dbaui
         :Window(pParent,nStyle)
         ,m_xContext(_rxContext)
         ,m_rController( _rController )
-        ,m_aSeparator( this )
+        ,m_aSeparator( new FixedLine(this) )
     {
         m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
-        m_aSeparator.Show();
+        m_aSeparator->Show();
     }
 
     void ODataView::Construct()
@@ -79,8 +79,14 @@ namespace dbaui
 
     ODataView::~ODataView()
     {
+        dispose();
+    }
 
+    void ODataView::dispose()
+    {
         m_rController.release();
+        m_aSeparator.disposeAndClear();
+        vcl::Window::dispose();
     }
 
     void ODataView::resizeDocumentView( Rectangle& /*_rPlayground*/ )
@@ -105,7 +111,7 @@ namespace dbaui
 
         // position the separator
         const Size aSeparatorSize = Size( aPlayground.GetWidth(), 2 );
-        m_aSeparator.SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
+        m_aSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
         aPlayground.Top() += aSeparatorSize.Height() + 1;
 
         // position the controls of the document's view

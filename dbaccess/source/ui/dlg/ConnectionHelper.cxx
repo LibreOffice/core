@@ -110,6 +110,11 @@ namespace dbaui
 
     OConnectionHelper::~OConnectionHelper()
     {
+        dispose();
+    }
+
+    void OConnectionHelper::dispose()
+    {
         if(m_bDelete)
         {
             delete m_pFT_Connection;
@@ -117,6 +122,7 @@ namespace dbaui
             delete m_pPB_Connection;
             delete m_pPB_CreateDB;
         }
+        OGenericAdministrationPage::dispose();
     }
 
     void OConnectionHelper::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)

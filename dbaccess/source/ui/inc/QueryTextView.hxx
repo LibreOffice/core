@@ -32,6 +32,7 @@ namespace dbaui
     public:
         OQueryTextView( OQueryContainerWindow* pParent );
         virtual ~OQueryTextView();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;
 

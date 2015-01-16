@@ -58,7 +58,6 @@ namespace dbaui
 
     public:
         OQueryTableView(vcl::Window* pParent,OQueryDesignView* pView);
-        virtual ~OQueryTableView();
 
         /// base class overwritten: create and delete windows
         /// (not really delete, as it becomes an UndoAction)

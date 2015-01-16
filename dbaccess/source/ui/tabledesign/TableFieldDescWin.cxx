@@ -66,6 +66,11 @@ OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
 
 OTableFieldDescWin::~OTableFieldDescWin()
 {
+    dispose();
+}
+
+void OTableFieldDescWin::dispose()
+{
     // destroy children
     m_pHelpBar->Hide();
     getGenPage()->Hide();
@@ -83,6 +88,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
         boost::scoped_ptr<vcl::Window> aTemp(m_pHelpBar);
         m_pHelpBar = NULL;
     }
+    TabPage::dispose();
 }
 
 void OTableFieldDescWin::Init()

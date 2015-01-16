@@ -60,6 +60,7 @@ namespace dbaui
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
         virtual ~OUserAdminDlg();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual const SfxItemSet* getOutputSet() const SAL_OVERRIDE;
         virtual SfxItemSet* getWriteOutputSet() SAL_OVERRIDE;

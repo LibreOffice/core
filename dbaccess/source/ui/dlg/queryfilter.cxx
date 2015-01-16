@@ -190,10 +190,6 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
         m_pET_WHEREVALUE1->GrabFocus();
 }
 
-DlgFilterCrit::~DlgFilterCrit()
-{
-}
-
 #define LbText(x)       ((x).GetSelectEntry())
 #define LbPos(x)        ((x).GetSelectEntryPos())
 

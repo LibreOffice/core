@@ -48,7 +48,6 @@ namespace dbaui
 
     public:
         OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
-        virtual ~OTextConnectionHelper();
 
     private:
         FixedText        *m_pExtensionHeader;

@@ -311,9 +311,14 @@ namespace dbaui
 
     DbaIndexDialog::~DbaIndexDialog( )
     {
+        dispose();
+    }
+
+    void DbaIndexDialog::dispose()
+    {
         setToolBox(NULL);
         delete m_pIndexes;
-
+        ModalDialog::dispose();
     }
 
     bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)

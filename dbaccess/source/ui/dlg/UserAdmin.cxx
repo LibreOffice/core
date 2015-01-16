@@ -114,9 +114,9 @@ OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
     , m_pNEWUSER(0)
     , m_pCHANGEPWD(0)
     , m_pDELETEUSER(0)
-    ,m_TableCtrl(get<VclAlignment>("table"), WB_TABSTOP)
+    ,m_TableCtrl(new OTableGrantControl(get<VclAlignment>("table"), WB_TABSTOP))
 {
-    m_TableCtrl.Show();
+    m_TableCtrl->Show();
     get(m_pUSER, "user");
     get(m_pNEWUSER, "add");
     get(m_pCHANGEPWD, "changepass");
@@ -131,7 +131,14 @@ OUserAdmin::OUserAdmin(vcl::Window* pParent,const SfxItemSet& _rAttrSet)
 
 OUserAdmin::~OUserAdmin()
 {
+    dispose();
+}
+
+void OUserAdmin::dispose()
+{
     m_xConnection = NULL;
+    m_TableCtrl.disposeAndClear();
+    OGenericAdministrationPage::dispose();
 }
 
 void OUserAdmin::FillUserNames()
@@ -162,11 +169,11 @@ void OUserAdmin::FillUserNames()
                 {
                     Reference<XAuthorizable> xAuth;
                     m_xUsers->getByName(m_UserName) >>= xAuth;
-                    m_TableCtrl.setGrantUser(xAuth);
+                    m_TableCtrl->setGrantUser(xAuth);
                 }
 
-                m_TableCtrl.setUserName(GetUser());
-                m_TableCtrl.Init();
+                m_TableCtrl->setUserName(GetUser());
+                m_TableCtrl->Init();
             }
         }
     }
@@ -177,7 +184,7 @@ void OUserAdmin::FillUserNames()
     m_pDELETEUSER->Enable(xDrop.is());
 
     m_pCHANGEPWD->Enable(m_xUsers.is());
-    m_TableCtrl.Enable(m_xUsers.is());
+    m_TableCtrl->Enable(m_xUsers.is());
 
 }
 
@@ -261,10 +268,10 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
 
 IMPL_LINK( OUserAdmin, ListDblClickHdl, ListBox *, /*pListBox*/ )
 {
-    m_TableCtrl.setUserName(GetUser());
-    m_TableCtrl.UpdateTables();
-    m_TableCtrl.DeactivateCell();
-    m_TableCtrl.ActivateCell(m_TableCtrl.GetCurRow(),m_TableCtrl.GetCurColumnId());
+    m_TableCtrl->setUserName(GetUser());
+    m_TableCtrl->UpdateTables();
+    m_TableCtrl->DeactivateCell();
+    m_TableCtrl->ActivateCell(m_TableCtrl->GetCurRow(),m_TableCtrl->GetCurColumnId());
     return 0;
 }
 
@@ -283,7 +290,7 @@ void OUserAdmin::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlLis
 
 void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
 {
-    m_TableCtrl.setComponentContext(m_xORB);
+    m_TableCtrl->setComponentContext(m_xORB);
     try
     {
         if ( !m_xConnection.is() && m_pAdminDialog )
@@ -302,7 +309,7 @@ void OUserAdmin::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
             }
             if ( xUsersSup.is() )
             {
-                m_TableCtrl.setTablesSupplier(xTablesSup);
+                m_TableCtrl->setTablesSupplier(xTablesSup);
                 m_xUsers = xUsersSup->getUsers();
             }
         }

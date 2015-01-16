@@ -125,10 +125,6 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
     m_pLB_ORDERFIELD2->SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
 }
 
-DlgOrderCrit::~DlgOrderCrit()
-{
-}
-
 IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*/ )
 {
     EnableLines();

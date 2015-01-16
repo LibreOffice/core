@@ -717,8 +717,14 @@ SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
 
 SbaGridControl::~SbaGridControl()
 {
+    dispose();
+}
+
+void SbaGridControl::dispose()
+{
     if (m_nAsyncDropEvent)
         Application::RemoveUserEvent(m_nAsyncDropEvent);
+    FmGridControl::dispose();
 }
 
 BrowserHeader* SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)

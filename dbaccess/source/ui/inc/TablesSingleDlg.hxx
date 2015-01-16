@@ -55,6 +55,7 @@ class ODbDataSourceAdministrationHelper;
             ,const ::com::sun::star::uno::Any& _aDataSourceName
         );
         virtual ~OTableSubscriptionDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         // forwards from ODbDataSourceAdministrationHelper
         void        successfullyConnected();

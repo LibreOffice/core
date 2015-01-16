@@ -21,6 +21,7 @@
 
 #include "IClipBoardTest.hxx"
 #include <vcl/lstbox.hxx>
+#include <vcl/vclptr.hxx>
 #include "AppIconControl.hxx"
 #include "AppElementType.hxx"
 
@@ -30,7 +31,7 @@ namespace dbaui
     class OApplicationSwapWindow :  public vcl::Window,
                                     public IClipboardTest
     {
-        OApplicationIconControl             m_aIconControl;
+        VclPtr<OApplicationIconControl>     m_aIconControl;
         ElementType                         m_eLastType;
         OAppBorderWindow&                   m_rBorderWin;
 
@@ -44,6 +45,7 @@ namespace dbaui
         OApplicationSwapWindow( vcl::Window* _pParent, OAppBorderWindow& _rBorderWindow );
         virtual ~OApplicationSwapWindow();
         // Window overrides
+        virtual void dispose() SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
 
         bool isCutAllowed() SAL_OVERRIDE      { return false; }
@@ -54,9 +56,9 @@ namespace dbaui
         void cut() SAL_OVERRIDE   { }
         void paste() SAL_OVERRIDE { }
 
-        inline sal_uLong                    GetEntryCount() const { return m_aIconControl.GetEntryCount(); }
-        inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl.GetEntry(nPos); }
-        inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl.GetBoundingBox(pEntry); }
+        inline sal_uLong                    GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
+        inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl->GetEntry(nPos); }
+        inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl->GetBoundingBox(pEntry); }
 
         /** automatically creates mnemonics for the icon/texts in our left hand side panel
         */

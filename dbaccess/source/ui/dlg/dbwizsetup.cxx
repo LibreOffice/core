@@ -264,7 +264,13 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
 
 ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 {
+    dispose();
+}
+
+void ODbTypeWizDialogSetup::dispose()
+{
     delete m_pOutSet;
+    svt::RoadmapWizard::dispose();
 }
 
 IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, /*_pTabPage*/)

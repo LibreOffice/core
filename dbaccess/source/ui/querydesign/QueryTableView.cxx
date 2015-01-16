@@ -228,10 +228,6 @@ OQueryTableView::OQueryTableView( vcl::Window* pParent,OQueryDesignView* pView)
     SetHelpId(HID_CTL_QRYDGNTAB);
 }
 
-OQueryTableView::~OQueryTableView()
-{
-}
-
 sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMax)
 {
     sal_Int32 nRet = 0;

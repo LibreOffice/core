@@ -28,7 +28,6 @@ namespace dbaui
     {
     public:
         OQueryView(vcl::Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
-        virtual ~OQueryView();
 
         virtual bool isCutAllowed()     = 0;
         virtual bool isPasteAllowed()   = 0;

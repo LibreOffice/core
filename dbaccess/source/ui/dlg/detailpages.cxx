@@ -97,6 +97,11 @@ namespace dbaui
 
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
+        dispose();
+    }
+
+    void OCommonBehaviourTabPage::dispose()
+    {
         if(m_bDelete)
         {
             DELETEZ(m_pOptionsLabel);
@@ -112,7 +117,7 @@ namespace dbaui
             DELETEZ(m_pAutoRetrievingLabel);
             DELETEZ(m_pAutoRetrieving);
         }
-
+        OGenericAdministrationPage::dispose();
     }
 
     void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -194,11 +199,6 @@ namespace dbaui
         m_pShowDeleted->SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
     }
 
-    ODbaseDetailsPage::~ODbaseDetailsPage()
-    {
-
-    }
-
     SfxTabPage* ODriversSettings::CreateDbase( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new ODbaseDetailsPage( pParent, *_rAttrSet ) );
@@ -261,10 +261,6 @@ namespace dbaui
 
     }
 
-    OAdoDetailsPage::~OAdoDetailsPage()
-    {
-
-    }
     SfxTabPage* ODriversSettings::CreateAdo( vcl::Window* pParent,   const SfxItemSet* _rAttrSet )
     {
         return ( new OAdoDetailsPage( pParent, *_rAttrSet ) );
@@ -511,7 +507,7 @@ namespace dbaui
     // MySQLNativePage
     MySQLNativePage::MySQLNativePage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, "MysqlNativePage", "dbaccess/ui/mysqlnativepage.ui", _rCoreAttrs, CBTP_USE_CHARSET )
-        ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
+        ,m_aMySQLSettings       ( new MySQLNativeSettings(*get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink()) )
     {
         get(m_pSeparator1, "connectionheader");
         get(m_pSeparator2, "userheader");
@@ -521,13 +517,24 @@ namespace dbaui
 
         m_pUserName->SetModifyHdl(getControlModifiedLink());
 
-        m_aMySQLSettings.Show();
+        m_aMySQLSettings->Show();
+    }
+
+    MySQLNativePage::~MySQLNativePage()
+    {
+        dispose();
+    }
+
+    void MySQLNativePage::dispose()
+    {
+        m_aMySQLSettings.disposeAndClear();
+        OCommonBehaviourTabPage::dispose();
     }
 
     void MySQLNativePage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls( _rControlList );
-        m_aMySQLSettings.fillControls( _rControlList );
+        m_aMySQLSettings->fillControls( _rControlList );
 
         _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pUserName));
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pPasswordRequired));
@@ -535,7 +542,7 @@ namespace dbaui
     void MySQLNativePage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows( _rControlList );
-        m_aMySQLSettings.fillWindows( _rControlList);
+        m_aMySQLSettings->fillWindows( _rControlList);
 
         _rControlList.push_back(new ODisableWrapper<FixedText>(m_pSeparator1));
         _rControlList.push_back(new ODisableWrapper<FixedText>(m_pSeparator2));
@@ -546,7 +553,7 @@ namespace dbaui
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
-        bChangedSomething |= m_aMySQLSettings.FillItemSet( _rSet );
+        bChangedSomething |= m_aMySQLSettings->FillItemSet( _rSet );
 
         if ( m_pUserName->IsValueChangedFromSaved() )
         {
@@ -564,7 +571,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        m_aMySQLSettings.implInitControls( _rSet );
+        m_aMySQLSettings->implInitControls( _rSet );
 
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, true);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
@@ -680,8 +687,13 @@ namespace dbaui
 
     OTextDetailsPage::~OTextDetailsPage()
     {
-        DELETEZ(m_pTextConnectionHelper);
+        dispose();
+    }
 
+    void OTextDetailsPage::dispose()
+    {
+        DELETEZ(m_pTextConnectionHelper);
+        OCommonBehaviourTabPage::dispose();
     }
 
     SfxTabPage* ODriversSettings::CreateText( vcl::Window* pParent,  const SfxItemSet* _rAttrSet )

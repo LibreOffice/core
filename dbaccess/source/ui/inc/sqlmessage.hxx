@@ -45,9 +45,9 @@ namespace dbaui
 struct SQLMessageBox_Impl;
 class OSQLMessageBox : public ButtonDialog
 {
-    FixedImage      m_aInfoImage;
-    FixedText       m_aTitle;
-    FixedText       m_aMessage;
+    VclPtr<FixedImage>      m_aInfoImage;
+    VclPtr<FixedText>       m_aTitle;
+    VclPtr<FixedText>       m_aMessage;
     OUString m_sHelpURL;
 
     ::std::unique_ptr< SQLMessageBox_Impl >   m_pImpl;
@@ -90,6 +90,7 @@ public:
                 const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo = NULL );
 
     virtual ~OSQLMessageBox();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     void Construct( WinBits nStyle, MessageType eImage );

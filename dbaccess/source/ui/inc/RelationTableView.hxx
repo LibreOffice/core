@@ -54,6 +54,7 @@ namespace dbaui
     public:
         ORelationTableView( vcl::Window* pParent, ORelationDesignView* pView );
         virtual ~ORelationTableView();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void RemoveTabWin( OTableWindow* pTabWin ) SAL_OVERRIDE;
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;

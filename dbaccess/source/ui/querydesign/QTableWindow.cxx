@@ -66,10 +66,6 @@ OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowDa
     SetHelpId(HID_CTL_QRYDGNTAB);
 }
 
-OQueryTableWindow::~OQueryTableWindow()
-{
-}
-
 bool OQueryTableWindow::Init()
 {
     bool bSuccess = OTableWindow::Init();
@@ -102,8 +98,8 @@ bool OQueryTableWindow::Init()
     SetAliasName(sAliasName);
         // SetAliasName passes it as WinName, hence it uses the base class
     // reset the title
-    m_aTitle.SetText( pWinData->GetWinName() );
-    m_aTitle.Show();
+    m_aTitle->SetText( pWinData->GetWinName() );
+    m_aTitle->Show();
 
     getTableView()->getDesignView()->getController().InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
     return bSuccess;

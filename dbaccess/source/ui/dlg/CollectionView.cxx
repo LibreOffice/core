@@ -91,11 +91,6 @@ OCollectionView::OCollectionView( vcl::Window * pParent
     m_pPB_OK->SetClickHdl( LINK( this, OCollectionView, Save_Click ) );
 }
 
-OCollectionView::~OCollectionView( )
-{
-}
-
-
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
     OUString sName = m_pName->GetText();

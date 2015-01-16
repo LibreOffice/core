@@ -113,9 +113,14 @@ namespace dbaui
 
     OParameterDialog::~OParameterDialog()
     {
+        dispose();
+    }
+
+    void OParameterDialog::dispose()
+    {
         if (m_aResetVisitFlag.IsActive())
             m_aResetVisitFlag.Stop();
-
+        ModalDialog::dispose();
     }
 
     void OParameterDialog::Construct()

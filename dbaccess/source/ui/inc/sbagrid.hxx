@@ -231,6 +231,7 @@ namespace dbaui
     public:
         SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
         virtual ~SbaGridControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
         virtual void Select() SAL_OVERRIDE;

@@ -78,6 +78,7 @@ namespace dbaui
     public:
         OTableWindowListBox(OTableWindow* pParent);
         virtual ~OTableWindowListBox();
+        virtual void dispose() SAL_OVERRIDE;
 
         // DnD stuff
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;

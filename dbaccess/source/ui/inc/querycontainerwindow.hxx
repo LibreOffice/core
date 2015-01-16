@@ -50,6 +50,7 @@ namespace dbaui
     public:
         OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
         virtual ~OQueryContainerWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Construct() SAL_OVERRIDE;
 

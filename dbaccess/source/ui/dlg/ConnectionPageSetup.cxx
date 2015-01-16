@@ -119,10 +119,6 @@ namespace dbaui
         SetRoadmapStateValue(false);
     }
 
-    OConnectionTabPageSetup::~OConnectionTabPageSetup()
-    {
-    }
-
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);

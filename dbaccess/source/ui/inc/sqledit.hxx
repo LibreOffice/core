@@ -68,6 +68,7 @@ namespace dbaui
     public:
         OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle = WB_LEFT | WB_VSCROLL |WB_BORDER);
         virtual ~OSqlEdit();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Edit overridables
         virtual void SetText(const OUString& rNewText) SAL_OVERRIDE;

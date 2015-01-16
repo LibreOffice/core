@@ -42,6 +42,7 @@ namespace dbaui
                         OJoinController& _rController,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OJoinDesignView();
+        virtual void dispose() SAL_OVERRIDE;
 
         // set the view readonly or not
         virtual void setReadOnly(bool _bReadOnly);

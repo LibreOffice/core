@@ -74,10 +74,6 @@ namespace dbaui
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
     }
 
-    OGeneralPage::~OGeneralPage()
-    {
-    }
-
     namespace
     {
         struct DisplayedType

@@ -29,7 +29,6 @@ public:
 
     QueryPropertiesDialog(
         vcl::Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
-    virtual ~QueryPropertiesDialog();
 
     bool getDistinct() const;
     sal_Int64 getLimit() const;

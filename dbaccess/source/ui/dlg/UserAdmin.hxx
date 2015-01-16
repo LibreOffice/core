@@ -45,7 +45,7 @@ protected:
     PushButton          *m_pNEWUSER;
     PushButton          *m_pCHANGEPWD;
     PushButton          *m_pDELETEUSER;
-    OTableGrantControl  m_TableCtrl; // show the grant rights of one user
+    VclPtr<OTableGrantControl>  m_TableCtrl; // show the grant rights of one user
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
@@ -65,6 +65,7 @@ public:
     static  SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetUser();
 
     // subclasses must override this, but it isn't pure virtual

@@ -40,6 +40,7 @@ class OMarkableTreeListBox : public DBTreeListBox
 public:
     OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinStyle=0 );
     virtual ~OMarkableTreeListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void    CheckButtonHdl() SAL_OVERRIDE;

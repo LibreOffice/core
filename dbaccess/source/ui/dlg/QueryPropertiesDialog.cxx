@@ -28,10 +28,6 @@ QueryPropertiesDialog::QueryPropertiesDialog(
     m_pLB_Limit->SetValue( nLimit );
 }
 
-QueryPropertiesDialog::~QueryPropertiesDialog()
-{
-}
-
 } ///dbaui namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

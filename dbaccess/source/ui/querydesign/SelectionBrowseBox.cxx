@@ -153,13 +153,18 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 
 OSelectionBrowseBox::~OSelectionBrowseBox()
 {
+    dispose();
+}
 
+void OSelectionBrowseBox::dispose()
+{
     delete m_pTextCell;
     delete m_pVisibleCell;
     delete m_pFieldCell;
     delete m_pTableCell;
     delete m_pOrderCell;
     delete m_pFunctionCell;
+    ::svt::EditBrowseBox::dispose();
 }
 
 void OSelectionBrowseBox::initialize()

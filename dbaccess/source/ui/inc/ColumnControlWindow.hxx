@@ -55,7 +55,6 @@ namespace dbaui
     public:
         OColumnControlWindow(vcl::Window* pParent
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
-        virtual ~OColumnControlWindow();
 
         void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xCon);
 

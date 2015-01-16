@@ -99,13 +99,18 @@ namespace dbaui
 
     OTableSubscriptionPage::~OTableSubscriptionPage()
     {
+        dispose();
+    }
+
+    void OTableSubscriptionPage::dispose()
+    {
         // just to make sure that our connection will be removed
         try
         {
             ::comphelper::disposeComponent(m_xCurrentConnection);
         }
         catch (RuntimeException&) { }
-
+        OGenericAdministrationPage::dispose();
     }
 
     void OTableSubscriptionPage::StateChanged( StateChangedType nType )

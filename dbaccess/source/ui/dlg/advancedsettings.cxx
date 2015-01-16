@@ -134,7 +134,13 @@ namespace dbaui
 
     SpecialSettingsPage::~SpecialSettingsPage()
     {
+        dispose();
+    }
+
+    void SpecialSettingsPage::dispose()
+    {
         m_aControlDependencies.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void SpecialSettingsPage::impl_initBooleanSettings()
@@ -317,7 +323,13 @@ namespace dbaui
 
     GeneratedValuesPage::~GeneratedValuesPage()
     {
+        dispose();
+    }
+
+    void GeneratedValuesPage::dispose()
+    {
         m_aControlDependencies.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void GeneratedValuesPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
@@ -406,8 +418,14 @@ namespace dbaui
 
     AdvancedSettingsDialog::~AdvancedSettingsDialog()
     {
+        dispose();
+    }
+
+    void AdvancedSettingsDialog::dispose()
+    {
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
+        SfxTabDialog::dispose();
     }
 
     bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const OUString& _sURL )

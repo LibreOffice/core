@@ -34,7 +34,6 @@ class LimitBoxImpl: public LimitBox
 {
     public:
         LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl );
-        virtual ~LimitBoxImpl();
 
         virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
@@ -45,10 +44,6 @@ class LimitBoxImpl: public LimitBox
 LimitBoxImpl::LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl )
     : LimitBox( pParent, WinBits( WB_DROPDOWN | WB_VSCROLL) )
     , m_pControl( pCtrl )
-{
-}
-
-LimitBoxImpl::~LimitBoxImpl()
 {
 }
 

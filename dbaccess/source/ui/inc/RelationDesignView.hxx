@@ -33,7 +33,6 @@ namespace dbaui
     {
     public:
         ORelationDesignView(vcl::Window* pParent, ORelationController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
-        virtual ~ORelationDesignView();
 
         // set the statement for representation
         /// late construction

@@ -102,7 +102,13 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
 
 ODbTypeWizDialog::~ODbTypeWizDialog()
 {
+    dispose();
+}
+
+void ODbTypeWizDialog::dispose()
+{
     delete m_pOutSet;
+    svt::OWizardMachine::dispose();
 }
 
 IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)

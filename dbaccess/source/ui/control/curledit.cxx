@@ -40,8 +40,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConnectionURLEdit(vcl:
 
 OConnectionURLEdit::~OConnectionURLEdit()
 {
+    dispose();
+}
+
+void OConnectionURLEdit::dispose()
+{
     SetSubEdit(VclPtr<Edit>());
     delete m_pForcedPrefix;
+    Edit::dispose();
 }
 
 void OConnectionURLEdit::SetTextNoPrefix(const OUString& _rText)

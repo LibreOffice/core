@@ -86,6 +86,11 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
 OAppBorderWindow::~OAppBorderWindow()
 {
+    dispose();
+}
+
+void OAppBorderWindow::dispose()
+{
     // destroy children
     if ( m_pPanel )
     {
@@ -99,7 +104,7 @@ OAppBorderWindow::~OAppBorderWindow()
         boost::scoped_ptr<vcl::Window> aTemp(m_pDetailView);
         m_pDetailView = NULL;
     }
-
+    vcl::Window::dispose();
 }
 
 void OAppBorderWindow::GetFocus()
@@ -204,13 +209,16 @@ OApplicationView::OApplicationView( vcl::Window* pParent
 
 OApplicationView::~OApplicationView()
 {
+    dispose();
+}
 
-    {
-        stopComponentListening(m_xObject);
-        m_pWin->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
-        m_pWin = NULL;
-    }
+void OApplicationView::dispose()
+{
+    stopComponentListening(m_xObject);
+    m_pWin->Hide();
+    boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
+    m_pWin = NULL;
+    ODataView::dispose();
 }
 
 void OApplicationView::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )

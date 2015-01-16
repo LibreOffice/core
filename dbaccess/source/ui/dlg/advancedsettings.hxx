@@ -78,6 +78,7 @@ namespace dbaui
 
     protected:
         virtual ~SpecialSettingsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         // OGenericAdministrationPage overridables
         virtual void implInitControls (const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
@@ -115,6 +116,7 @@ namespace dbaui
 
         // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~GeneratedValuesPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         // subclasses must override this, but it isn't pure virtual
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;

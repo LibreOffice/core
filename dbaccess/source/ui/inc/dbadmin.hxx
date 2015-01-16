@@ -66,6 +66,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
     virtual ~ODbAdminDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** create and return an item set for use with the dialog.
         @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case

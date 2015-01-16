@@ -46,6 +46,11 @@ DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
 
 DBTreeView::~DBTreeView()
 {
+    dispose();
+}
+
+void DBTreeView::dispose()
+{
     if (m_pTreeListBox)
     {
         if (m_pTreeListBox->GetModel())
@@ -56,6 +61,7 @@ DBTreeView::~DBTreeView()
         boost::scoped_ptr<vcl::Window> aTemp(m_pTreeListBox);
         m_pTreeListBox = NULL;
     }
+    vcl::Window::dispose();
 }
 
 void DBTreeView::SetPreExpandHandler(const Link& _rHdl)

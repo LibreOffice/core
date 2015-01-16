@@ -161,7 +161,11 @@ void OFieldDescControl::Contruct()
 
 OFieldDescControl::~OFieldDescControl()
 {
+    dispose();
+}
 
+void OFieldDescControl::dispose()
+{
     {
         boost::scoped_ptr<vcl::Window> aTemp(m_pVertScroll);
         m_pVertScroll    = NULL;
@@ -187,6 +191,7 @@ OFieldDescControl::~OFieldDescControl()
     DeactivateAggregate( tpColumnName );
     DeactivateAggregate( tpType );
     DeactivateAggregate( tpAutoIncrementValue );
+    TabPage::dispose();
 }
 
 OUString OFieldDescControl::BoolStringPersistent(const OUString& rUIString) const

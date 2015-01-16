@@ -47,10 +47,6 @@ LimitBox::LimitBox( vcl::Window* pParent, WinBits nStyle )
     SetSizePixel(aSize);
 }
 
-LimitBox::~LimitBox()
-{
-}
-
 OUString LimitBox::CreateFieldText( sal_Int64 nValue ) const
 {
     if( nValue == ALL_INT )

@@ -69,8 +69,8 @@ namespace DatabaseObject = css::sdb::application::DatabaseObject;
 OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData )
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
-          ,m_aTypeImage( this )
-          ,m_aTitle( this )
+          ,m_aTypeImage( new FixedImage(this) )
+          ,m_aTitle( new OTableWindowTitle(this) )
           ,m_pListBox(NULL)
           ,m_pAccessible(NULL)
           ,m_pData( pTabWinData )
@@ -99,7 +99,11 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
 
 OTableWindow::~OTableWindow()
 {
+    dispose();
+}
 
+void OTableWindow::dispose()
+{
     if (m_pListBox)
     {
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
@@ -110,6 +114,9 @@ OTableWindow::~OTableWindow()
         m_pContainerListener->dispose();
 
     m_pAccessible = NULL;
+    m_aTypeImage.disposeAndClear();
+    m_aTitle.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 const OJoinTableView* OTableWindow::getTableView() const
@@ -263,8 +270,8 @@ void OTableWindow::impl_updateImage()
         return;
     }
 
-    m_aTypeImage.SetModeImage( aImage );
-    m_aTypeImage.Show();
+    m_aTypeImage->SetModeImage( aImage );
+    m_aTypeImage->Show();
 }
 
 bool OTableWindow::Init()
@@ -278,8 +285,8 @@ bool OTableWindow::Init()
     }
 
     // Set the title
-    m_aTitle.SetText( m_pData->GetWinName() );
-    m_aTitle.Show();
+    m_aTitle->SetText( m_pData->GetWinName() );
+    m_aTitle->Show();
 
     m_pListBox->Show();
 
@@ -456,15 +463,15 @@ void OTableWindow::Resize()
     long nPositionY = n5Pos;
 
     // position the image which indicates the type
-    m_aTypeImage.SetPosPixel( Point( nPositionX, nPositionY ) );
-    Size aImageSize( m_aTypeImage.GetImage().GetSizePixel() );
-    m_aTypeImage.SetSizePixel( aImageSize );
+    m_aTypeImage->SetPosPixel( Point( nPositionX, nPositionY ) );
+    Size aImageSize( m_aTypeImage->GetImage().GetSizePixel() );
+    m_aTypeImage->SetSizePixel( aImageSize );
 
     if ( nTitleHeight < aImageSize.Height() )
         nTitleHeight = aImageSize.Height();
 
     nPositionX += aImageSize.Width() + CalcZoom( 2 );
-    m_aTitle.SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
+    m_aTitle->SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
 
     long nTitleToList = CalcZoom( 3 );
 
@@ -478,10 +485,10 @@ void OTableWindow::Resize()
 
 void OTableWindow::SetBoldTitle( bool bBold )
 {
-    vcl::Font aFont = m_aTitle.GetFont();
+    vcl::Font aFont = m_aTitle->GetFont();
     aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
-    m_aTitle.SetFont( aFont );
-    m_aTitle.Invalidate();
+    m_aTitle->SetFont( aFont );
+    m_aTitle->Invalidate();
 }
 
 void OTableWindow::GetFocus()
@@ -559,7 +566,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );
 
-        m_aTitle.SetZoom(GetZoom());
+        m_aTitle->SetZoom(GetZoom());
         m_pListBox->SetZoom(GetZoom());
         Resize();
         Invalidate();
@@ -591,7 +598,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                     if ( pCurrent )
                         ptWhere = m_pListBox->GetEntryPosition(pCurrent);
                     else
-                        ptWhere = m_aTitle.GetPosPixel();
+                        ptWhere = m_aTitle->GetPosPixel();
                 }
 
                 PopupMenu aContextMenu(ModuleRes(RID_MENU_JOINVIEW_TABLE));
@@ -746,7 +753,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
 
 OUString OTableWindow::getTitle() const
 {
-    return m_aTitle.GetText();
+    return m_aTitle->GetText();
 }
 
 void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException, std::exception)

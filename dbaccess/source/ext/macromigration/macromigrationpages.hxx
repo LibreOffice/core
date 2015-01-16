@@ -73,6 +73,7 @@ namespace dbmm
     public:
         SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
         virtual ~SaveDBDocPage();
+        virtual void dispose() SAL_OVERRIDE;
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
     public:

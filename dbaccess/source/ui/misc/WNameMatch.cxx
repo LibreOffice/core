@@ -72,10 +72,6 @@ OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
     m_sDestText   += "\n";
 }
 
-OWizNameMatching::~OWizNameMatching()
-{
-}
-
 void OWizNameMatching::Reset()
 {
     // urspr"unglichen zustand wiederherstellen

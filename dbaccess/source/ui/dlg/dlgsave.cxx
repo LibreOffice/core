@@ -285,7 +285,13 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
 
 OSaveAsDlg::~OSaveAsDlg()
 {
+    dispose();
+}
+
+void OSaveAsDlg::dispose()
+{
     DELETEZ(m_pImpl);
+    ModalDialog::dispose();
 }
 
 IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)

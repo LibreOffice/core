@@ -76,11 +76,16 @@ namespace dbaui
 
     DirectSQLDialog::~DirectSQLDialog()
     {
+        dispose();
+    }
+
+    void DirectSQLDialog::dispose()
+    {
         {
             ::osl::MutexGuard aGuard(m_aMutex);
             stopAllComponentListening();
         }
-
+        ModalDialog::dispose();
     }
 
     void DirectSQLDialog::_disposing( const EventObject& _rSource )

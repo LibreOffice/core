@@ -55,6 +55,7 @@ namespace dbaui
     public:
         OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
         virtual ~OAppBorderWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void GetFocus() SAL_OVERRIDE;
@@ -103,6 +104,7 @@ namespace dbaui
                             ,PreviewMode _ePreviewMode
                             );
         virtual ~OApplicationView();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// automatically creates mnemonics for the icon/texts in our left hand side panel
         void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );

@@ -168,10 +168,6 @@ namespace dbaui
 #endif
     }
 
-    MySQLNativeSettings::~MySQLNativeSettings()
-    {
-    }
-
     void MySQLNativeSettings::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pDatabaseName ) );

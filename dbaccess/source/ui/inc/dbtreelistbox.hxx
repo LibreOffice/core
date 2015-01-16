@@ -84,6 +84,7 @@ namespace dbaui
             ,WinBits nWinStyle=0
             ,bool _bHandleEnterKey = false);
         virtual ~DBTreeListBox();
+        virtual void dispose() SAL_OVERRIDE;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
         void                    setContextMenuProvider( IContextMenuProvider* _pContextMenuProvider ) { m_pContextMenuProvider = _pContextMenuProvider; }

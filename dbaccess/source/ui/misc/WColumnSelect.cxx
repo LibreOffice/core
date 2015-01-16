@@ -81,6 +81,11 @@ OWizColumnSelect::OWizColumnSelect( vcl::Window* pParent)
 
 OWizColumnSelect::~OWizColumnSelect()
 {
+    dispose();
+}
+
+void OWizColumnSelect::dispose()
+{
     while ( m_pNewColumnNames->GetEntryCount() )
     {
         void* pData = m_pNewColumnNames->GetEntryData(0);
@@ -90,6 +95,7 @@ OWizColumnSelect::~OWizColumnSelect()
         m_pNewColumnNames->RemoveEntry(0);
     }
     m_pNewColumnNames->Clear();
+    OWizardPage::dispose();
 }
 
 void OWizColumnSelect::Reset()

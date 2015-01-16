@@ -48,11 +48,6 @@ OTableRowView::OTableRowView(vcl::Window* pParent)
 
 }
 
-OTableRowView::~OTableRowView()
-{
-
-}
-
 void OTableRowView::Init()
 {
     EditBrowseBox::Init();

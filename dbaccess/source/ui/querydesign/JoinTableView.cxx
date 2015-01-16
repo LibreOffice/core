@@ -65,8 +65,8 @@ using namespace ::com::sun::star::lang;
 #define TABWIN_HEIGHT_STD   120
 
 OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParent)
-    ,m_aHScrollBar( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
-    ,m_aVScrollBar( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
+    ,m_aHScrollBar( new ScrollBar(this, WB_HSCROLL|WB_REPEAT|WB_DRAG) )
+    ,m_aVScrollBar( new ScrollBar(this, WB_VSCROLL|WB_REPEAT|WB_DRAG) )
     ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
     ,m_pTableView(NULL)
 {
@@ -89,9 +89,17 @@ OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParen
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
+    dispose();
+}
+
+void OScrollWindowHelper::dispose()
+{
     boost::scoped_ptr<vcl::Window> aTemp(m_pCornerWindow);
     m_pCornerWindow = NULL;
     m_pTableView = NULL;
+    m_aHScrollBar.disposeAndClear();
+    m_aVScrollBar.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void OScrollWindowHelper::setTableView(OJoinTableView* _pTableView)
@@ -174,6 +182,11 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
 
 OJoinTableView::~OJoinTableView()
 {
+    dispose();
+}
+
+void OJoinTableView::dispose()
+{
     if( m_pAccessible )
     {
         m_pAccessible->clearTableView();
@@ -181,6 +194,7 @@ OJoinTableView::~OJoinTableView()
     }
     // delete lists
     clearLayoutInformation();
+    vcl::Window::dispose();
 }
 
 IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )

@@ -32,7 +32,6 @@ namespace dbaui
         OUString     m_strInitialAlias;
     public:
         OQueryTableWindow( vcl::Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias = NULL );
-        virtual ~OQueryTableWindow();
 
         OUString GetAliasName() const
         {

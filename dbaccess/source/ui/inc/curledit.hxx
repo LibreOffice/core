@@ -43,6 +43,7 @@ class OConnectionURLEdit : public Edit
 public:
     OConnectionURLEdit(vcl::Window* pParent, WinBits _nBits,bool _bShowPrefix = false);
     virtual ~OConnectionURLEdit();
+    virtual void dispose() SAL_OVERRIDE;
 
 public:
     // Edit overridables

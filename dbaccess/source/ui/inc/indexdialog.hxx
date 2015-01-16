@@ -111,6 +111,7 @@ namespace dbaui
             sal_Int32 _nMaxColumnsInIndex
             );
         virtual ~DbaIndexDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

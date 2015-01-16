@@ -83,7 +83,6 @@ namespace dbaui
         {
             m_pBoxControl = pController;
         }
-        virtual ~ORelationControl();
 
         /** searches for a connection between these two tables
             @param  _pSource
@@ -141,10 +140,6 @@ namespace dbaui
     extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeORelationControl(vcl::Window *pParent, VclBuilder::stringmap &)
     {
         return new ORelationControl(pParent);
-    }
-
-    ORelationControl::~ORelationControl()
-    {
     }
 
     void ORelationControl::Init(const TTableConnectionData::value_type& _pConnData)

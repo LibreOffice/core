@@ -101,10 +101,6 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
     SetText(ModuleRes(STR_COPYTABLE_TITLE_COPY));
 }
 
-OCopyTable::~OCopyTable()
-{
-}
-
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 {
 

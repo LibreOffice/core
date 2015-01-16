@@ -139,7 +139,13 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
 
 DlgQryJoin::~DlgQryJoin()
 {
+    dispose();
+}
+
+void DlgQryJoin::dispose()
+{
     delete m_pTableControl;
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )

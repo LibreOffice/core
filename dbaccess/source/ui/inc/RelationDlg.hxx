@@ -27,11 +27,11 @@
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
 #include "moduledbu.hxx"
+#include "RelationControl.hxx"
 
 namespace dbaui
 {
     class OJoinTableView;
-    class OTableListBoxControl;
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface
     {
@@ -60,7 +60,6 @@ namespace dbaui
         ORelationDialog(OJoinTableView* pParent,
                         const TTableConnectionData::value_type& pConnectionData,
                         bool bAllowTableSelect = false );
-        virtual ~ORelationDialog();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 

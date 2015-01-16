@@ -62,6 +62,7 @@ namespace dbaui
                             IController& _rController,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~UnoDataBrowserView();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// late construction
         void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);

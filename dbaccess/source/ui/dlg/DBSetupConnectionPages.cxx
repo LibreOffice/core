@@ -76,8 +76,13 @@ using namespace ::com::sun::star;
 
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
     {
-        DELETEZ(m_pTextConnectionHelper);
+        dispose();
+    }
 
+    void OTextConnectionPageSetup::dispose()
+    {
+        DELETEZ(m_pTextConnectionHelper);
+        OConnectionTabPageSetup::dispose();
     }
 
     IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, /*_pTextConnectionHelper*/)
@@ -241,11 +246,6 @@ using namespace ::com::sun::star;
         return long(true);
     }
 
-    OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
-    {
-
-    }
-
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
     {
         // show the "Connect directly" option only if the driver is installed
@@ -292,12 +292,23 @@ using namespace ::com::sun::star;
     // MySQLNativeSetupPage
     MySQLNativeSetupPage::MySQLNativeSetupPage( vcl::Window* _pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage( _pParent, "DBWizMysqlNativePage", "dbaccess/ui/dbwizmysqlnativepage.ui", _rCoreAttrs )
-        ,m_aMySQLSettings       ( *get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink() )
+        ,m_aMySQLSettings       ( new MySQLNativeSettings(*get<VclVBox>("MySQLSettingsContainer"), getControlModifiedLink()) )
     {
         get(m_pHelpText, "helptext");
-        m_aMySQLSettings.Show();
+        m_aMySQLSettings->Show();
 
         SetRoadmapStateValue(false);
+    }
+
+    MySQLNativeSetupPage::~MySQLNativeSetupPage()
+    {
+        dispose();
+    }
+
+    void MySQLNativeSetupPage::dispose()
+    {
+        m_aMySQLSettings.disposeAndClear();
+        OGenericAdministrationPage::dispose();
     }
 
     OGenericAdministrationPage* MySQLNativeSetupPage::Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
@@ -307,23 +318,23 @@ using namespace ::com::sun::star;
 
     void MySQLNativeSetupPage::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        m_aMySQLSettings.fillControls( _rControlList );
+        m_aMySQLSettings->fillControls( _rControlList );
     }
 
     void MySQLNativeSetupPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new ODisableWrapper< FixedText >( m_pHelpText ) );
-        m_aMySQLSettings.fillWindows( _rControlList );
+        m_aMySQLSettings->fillWindows( _rControlList );
     }
 
     bool MySQLNativeSetupPage::FillItemSet( SfxItemSet* _rSet )
     {
-        return m_aMySQLSettings.FillItemSet( _rSet );
+        return m_aMySQLSettings->FillItemSet( _rSet );
     }
 
     void MySQLNativeSetupPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
     {
-        m_aMySQLSettings.implInitControls( _rSet );
+        m_aMySQLSettings->implInitControls( _rSet );
 
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
 
@@ -337,7 +348,7 @@ using namespace ::com::sun::star;
 
     IMPL_LINK( MySQLNativeSetupPage, OnModified, Edit*, _pEdit )
     {
-        SetRoadmapStateValue( m_aMySQLSettings.canAdvance() );
+        SetRoadmapStateValue( m_aMySQLSettings->canAdvance() );
 
         return OGenericAdministrationPage::getControlModifiedLink().Call( _pEdit );
     }
@@ -634,11 +645,6 @@ using namespace ::com::sun::star;
         m_pPasswordrequired->SetToggleHdl(getControlModifiedLink());
     }
 
-    OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
-    {
-
-    }
-
     void OSpreadSheetConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
@@ -681,11 +687,6 @@ using namespace ::com::sun::star;
            m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
 
         LayoutHelper::fitSizeRightAligned( *m_pPBTestConnection );
-    }
-
-    OAuthentificationPageSetup::~OAuthentificationPageSetup()
-    {
-
     }
 
     void OAuthentificationPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -751,11 +752,6 @@ using namespace ::com::sun::star;
         m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_pCBStartTableWizard->SetClickHdl(getControlModifiedLink());
         m_pRBRegisterDataSource->SetState(true);
-    }
-
-    OFinalDBPageSetup::~OFinalDBPageSetup()
-    {
-
     }
 
     bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()

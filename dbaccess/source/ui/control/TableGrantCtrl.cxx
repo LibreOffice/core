@@ -71,6 +71,11 @@ OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
 
 OTableGrantControl::~OTableGrantControl()
 {
+    dispose();
+}
+
+void OTableGrantControl::dispose()
+{
     if (m_nDeactivateEvent)
     {
         Application::RemoveUserEvent(m_nDeactivateEvent);
@@ -81,6 +86,7 @@ OTableGrantControl::~OTableGrantControl()
     delete m_pEdit;
 
     m_xTables       = NULL;
+    ::svt::EditBrowseBox::dispose();
 }
 
 void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _xTablesSup)

@@ -31,7 +31,6 @@ namespace dbaui
         ORelationTableConnection( ORelationTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
         ORelationTableConnection( const ORelationTableConnection& rConn );
             // wichtiger Kommentar zum CopyConstructor siehe OTableConnection(const OTableConnection&)
-        virtual ~ORelationTableConnection();
 
         ORelationTableConnection& operator=( const ORelationTableConnection& rConn );
 

@@ -79,12 +79,12 @@ namespace dbaui
     {
         DBTreeListBox*      m_pLists[ELEMENT_COUNT];
         OAppBorderWindow&   m_rBorderWin;
-        FixedLine           m_aFL;
-        ToolBox             m_aTBPreview;
-        Window              m_aBorder;
-        OPreviewWindow      m_aPreview;
-        ::svtools::ODocumentInfoPreview
-                            m_aDocumentInfo;
+        VclPtr<FixedLine>         m_aFL;
+        VclPtr<ToolBox>           m_aTBPreview;
+        VclPtr<Window>            m_aBorder;
+        VclPtr<OPreviewWindow>    m_aPreview;
+        VclPtr<::svtools::ODocumentInfoPreview>
+                                 m_aDocumentInfo;
         vcl::Window*             m_pTablePreview;
         ::std::unique_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
@@ -169,6 +169,7 @@ namespace dbaui
     public:
         OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;

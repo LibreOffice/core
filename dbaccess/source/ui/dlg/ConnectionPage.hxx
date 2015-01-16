@@ -70,7 +70,6 @@ namespace dbaui
     private:
         OConnectionTabPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
             // nControlFlags is a combination of the CBTP_xxx-constants
-        virtual ~OConnectionTabPage();
 
     private:
         /** enables the test connection button, if allowed

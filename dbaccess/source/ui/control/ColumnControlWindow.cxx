@@ -47,11 +47,6 @@ OColumnControlWindow::OColumnControlWindow(vcl::Window* pParent
     m_aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 }
 
-OColumnControlWindow::~OColumnControlWindow()
-{
-
-}
-
 void OColumnControlWindow::ActivateAggregate( EControlType eType )
 {
     switch(eType )

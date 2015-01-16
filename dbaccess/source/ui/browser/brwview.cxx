@@ -117,6 +117,11 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
 UnoDataBrowserView::~UnoDataBrowserView()
 {
+    dispose();
+}
+
+void UnoDataBrowserView::dispose()
+{
     {
         boost::scoped_ptr<Splitter> aTemp(m_pSplitter);
         m_pSplitter = NULL;
@@ -136,7 +141,7 @@ UnoDataBrowserView::~UnoDataBrowserView()
     }
     catch(const Exception&)
     {}
-
+    ODataView::dispose();
 }
 
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, /*NOINTERESTEDIN*/ )

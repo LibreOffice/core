@@ -68,6 +68,11 @@ void OTableWindowListBox::dragFinished( )
 
 OTableWindowListBox::~OTableWindowListBox()
 {
+    dispose();
+}
+
+void OTableWindowListBox::dispose()
+{
     if (m_nDropEvent)
         Application::RemoveUserEvent(m_nDropEvent);
     if (m_nUiEvent)
@@ -75,6 +80,7 @@ OTableWindowListBox::~OTableWindowListBox()
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
     m_pTabWin = NULL;
+    SvTreeListBox::dispose();
 }
 
 SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const OUString& rEntryText )

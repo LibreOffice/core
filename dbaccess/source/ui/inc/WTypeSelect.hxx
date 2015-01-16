@@ -52,7 +52,6 @@ namespace dbaui
 
     public:
         OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
-        virtual ~OWizTypeSelectControl();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
@@ -118,6 +117,7 @@ namespace dbaui
 
         OWizTypeSelect(vcl::Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();
+        virtual void dispose() SAL_OVERRIDE;
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         inline void setDuplicateName(bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }

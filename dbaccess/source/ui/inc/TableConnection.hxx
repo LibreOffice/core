@@ -65,6 +65,7 @@ namespace dbaui
                        eventually.
          */
         virtual ~OTableConnection();
+        virtual void dispose() SAL_OVERRIDE;
 
         OTableConnection& operator=( const OTableConnection& rConn );
 

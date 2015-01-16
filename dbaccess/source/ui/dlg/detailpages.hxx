@@ -74,6 +74,7 @@ namespace dbaui
     protected:
 
         virtual ~OCommonBehaviourTabPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         // subclasses must override this, but it isn't pure virtual
         virtual void        implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -100,10 +101,6 @@ namespace dbaui
         OUString            m_sDsn;
 
     protected:
-
-        virtual ~ODbaseDetailsPage();
-
-    protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
 
     private:
@@ -113,10 +110,7 @@ namespace dbaui
     // OAdoDetailsPage
     class OAdoDetailsPage : public OCommonBehaviourTabPage
     {
-    protected:
-        virtual ~OAdoDetailsPage();
     public:
-
         OAdoDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
@@ -197,10 +191,12 @@ namespace dbaui
     public:
         MySQLNativePage(    vcl::Window* pParent,
                             const SfxItemSet& _rCoreAttrs );
+        virtual ~MySQLNativePage();
+        virtual void dispose() SAL_OVERRIDE;
 
     private:
         FixedText           *m_pSeparator1;
-        MySQLNativeSettings m_aMySQLSettings;
+        VclPtr<MySQLNativeSettings> m_aMySQLSettings;
 
         FixedText           *m_pSeparator2;
         FixedText           *m_pUserNameLabel;
@@ -237,10 +233,7 @@ namespace dbaui
     // OMozillaDetailsPage Detail page for Mozilla and Thunderbird addressbook
     class OMozillaDetailsPage : public OCommonBehaviourTabPage
     {
-    protected:
-        virtual ~OMozillaDetailsPage();
     public:
-
         OMozillaDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
     };
 
@@ -255,6 +248,7 @@ namespace dbaui
 
     protected:
         virtual ~OTextDetailsPage();
+        virtual void dispose() SAL_OVERRIDE;
         virtual bool prepareLeave() SAL_OVERRIDE;
 
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;

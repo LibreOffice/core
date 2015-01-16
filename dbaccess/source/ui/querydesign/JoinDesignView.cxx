@@ -61,10 +61,16 @@ OJoinDesignView::OJoinDesignView(vcl::Window* _pParent, OJoinController& _rContr
 
 OJoinDesignView::~OJoinDesignView()
 {
+    dispose();
+}
+
+void OJoinDesignView::dispose()
+{
     boost::scoped_ptr<vcl::Window> aT3(m_pScrollWindow);
     m_pScrollWindow = NULL;
     boost::scoped_ptr<vcl::Window> aT2(m_pTableView);
     m_pTableView = NULL;
+    ODataView::dispose();
 }
 
 void OJoinDesignView::Construct()

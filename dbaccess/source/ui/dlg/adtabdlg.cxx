@@ -362,7 +362,13 @@ OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rCont
 
 OAddTableDlg::~OAddTableDlg()
 {
+    dispose();
+}
+
+void OAddTableDlg::dispose()
+{
     m_rContext.onWindowClosing( this );
+    ModelessDialog::dispose();
 }
 
 void OAddTableDlg::impl_switchTo( ObjectList _eList )

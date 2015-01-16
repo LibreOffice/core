@@ -110,9 +110,14 @@ namespace dbaui
 
     IndexFieldsControl::~IndexFieldsControl()
     {
+        dispose();
+    }
+
+    void IndexFieldsControl::dispose()
+    {
         delete m_pSortingCell;
         delete m_pFieldNameCell;
-
+        ::svt::EditBrowseBox::dispose();
     }
 
     bool IndexFieldsControl::SeekRow(long nRow)

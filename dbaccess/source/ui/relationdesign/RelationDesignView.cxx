@@ -50,10 +50,6 @@ ORelationDesignView::ORelationDesignView(vcl::Window* _pParent, ORelationControl
 {
 }
 
-ORelationDesignView::~ORelationDesignView()
-{
-}
-
 void ORelationDesignView::Construct()
 {
     m_pTableView    = new ORelationTableView(m_pScrollWindow,this);

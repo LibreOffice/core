@@ -38,6 +38,7 @@ namespace dbaui
     public:
         OTableWindowTitle( OTableWindow* pParent );
         virtual ~OTableWindowTitle();
+        virtual void dispose() SAL_OVERRIDE;
         virtual void LoseFocus() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;

@@ -132,10 +132,6 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     }
 }
 
-ORelationDialog::~ORelationDialog()
-{
-}
-
 IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 {
     // RadioButtons auslesen

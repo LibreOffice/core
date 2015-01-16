@@ -109,10 +109,6 @@ namespace dbaui
         m_pTestJavaDriver->SetClickHdl(LINK(this,OConnectionTabPage,OnTestJavaClickHdl));
     }
 
-    OConnectionTabPage::~OConnectionTabPage()
-    {
-    }
-
     void OConnectionTabPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
     {
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)

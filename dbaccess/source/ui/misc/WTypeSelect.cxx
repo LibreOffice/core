@@ -49,11 +49,6 @@ OWizTypeSelectControl::OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* 
     m_pParentTabPage = pParentTabPage;
 }
 
-OWizTypeSelectControl::~OWizTypeSelectControl()
-{
-
-}
-
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
 {
     switch(eType )
@@ -255,7 +250,13 @@ OWizTypeSelect::OWizTypeSelect( vcl::Window* pParent, SvStream* _pStream )
 
 OWizTypeSelect::~OWizTypeSelect()
 {
+    dispose();
+}
+
+void OWizTypeSelect::dispose()
+{
     delete m_pTypeControl;
+    OWizardPage::dispose();
 }
 
 OUString OWizTypeSelect::GetTitle() const

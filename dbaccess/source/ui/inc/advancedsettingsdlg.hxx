@@ -51,6 +51,7 @@ namespace dbaui
                             ,const ::com::sun::star::uno::Any& _aDataSourceName);
 
         virtual ~AdvancedSettingsDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// determines whether or not the given data source type has any advanced setting
         static  bool    doesHaveAnyAdvancedSettings( const OUString& _sURL );

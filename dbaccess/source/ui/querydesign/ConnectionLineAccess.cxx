@@ -180,12 +180,16 @@ namespace dbaui
     }
     OTableConnection::~OTableConnection()
     {
+        dispose();
+    }
+    void OTableConnection::dispose()
+    {
         // clear vector
         clearLineData();
+        vcl::Window::dispose();
     }
     bool OConnectionLineAccess::isEditable() const
     {
-
         return m_pLine ? !m_pLine->GetParent()->getDesignView()->getController().isReadOnly() : sal_False;
     }
     Reference< XAccessibleContext > SAL_CALL OConnectionLineAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)

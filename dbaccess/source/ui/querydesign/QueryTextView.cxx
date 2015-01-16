@@ -52,8 +52,14 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 
 OQueryTextView::~OQueryTextView()
 {
+    dispose();
+}
+
+void OQueryTextView::dispose()
+{
     boost::scoped_ptr<vcl::Window> aTemp(m_pEdit);
     m_pEdit = NULL;
+    vcl::Window::dispose();
 }
 
 void OQueryTextView::GetFocus()

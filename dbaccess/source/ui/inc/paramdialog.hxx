@@ -84,6 +84,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                     getValues() const { return m_aFinalValues; }

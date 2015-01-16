@@ -30,9 +30,4 @@ OQueryView::OQueryView(vcl::Window* _pParent, OQueryController& _rController,con
 
 }
 
-OQueryView::~OQueryView()
-{
-
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

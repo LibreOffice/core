@@ -73,8 +73,14 @@ ORelationTableView::ORelationTableView( vcl::Window* pParent, ORelationDesignVie
 
 ORelationTableView::~ORelationTableView()
 {
+    dispose();
+}
+
+void ORelationTableView::dispose()
+{
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
+    OJoinTableView::dispose();
 }
 
 void ORelationTableView::ReSync()

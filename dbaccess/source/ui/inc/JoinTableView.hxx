@@ -23,6 +23,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/rtti.hxx>
 #include <svtools/transfer.hxx>
 
@@ -51,9 +52,9 @@ namespace dbaui
     class OJoinTableView;
     class OScrollWindowHelper : public vcl::Window
     {
-        ScrollBar           m_aHScrollBar;
-        ScrollBar           m_aVScrollBar;
-        vcl::Window*             m_pCornerWindow;
+        VclPtr<ScrollBar>   m_aHScrollBar;
+        VclPtr<ScrollBar>   m_aVScrollBar;
+        vcl::Window*        m_pCornerWindow;
         OJoinTableView*     m_pTableView;
 
     protected:
@@ -62,14 +63,15 @@ namespace dbaui
     public:
         OScrollWindowHelper( vcl::Window* pParent);
         virtual ~OScrollWindowHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
         void setTableView(OJoinTableView* _pTableView);
 
         void resetRange(const Point& _aSize);
 
         // own methods
-        ScrollBar& GetHScrollBar() { return m_aHScrollBar; }
-        ScrollBar& GetVScrollBar() { return m_aVScrollBar; }
+        ScrollBar& GetHScrollBar() { return *m_aHScrollBar.get(); }
+        ScrollBar& GetVScrollBar() { return *m_aVScrollBar.get(); }
     };
 
 
@@ -112,6 +114,7 @@ namespace dbaui
     public:
         OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView );
         virtual ~OJoinTableView();
+        virtual void dispose() SAL_OVERRIDE;
 
         // window override
         virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

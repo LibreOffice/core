@@ -188,34 +188,34 @@ namespace
 // class OAppDetailPageHelper
 OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_rBorderWin(_rBorderWin)
-    ,m_aFL(this,WB_VERT)
-    ,m_aTBPreview(this,WB_TABSTOP )
-    ,m_aBorder(this,WB_BORDER | WB_READONLY)
-    ,m_aPreview(&m_aBorder)
-    ,m_aDocumentInfo(&m_aBorder,WB_LEFT | WB_VSCROLL | WB_READONLY )
+    ,m_aFL(new FixedLine(this,WB_VERT))
+    ,m_aTBPreview(new ToolBox(this,WB_TABSTOP) )
+    ,m_aBorder(new Window(this,WB_BORDER | WB_READONLY))
+    ,m_aPreview(new OPreviewWindow(m_aBorder.get()))
+    ,m_aDocumentInfo(new ::svtools::ODocumentInfoPreview(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
     ,m_pTablePreview(NULL)
     ,m_ePreviewMode(_ePreviewMode)
 {
 
-    m_aBorder.SetBorderStyle(WindowBorderStyle::MONO);
+    m_aBorder->SetBorderStyle(WindowBorderStyle::MONO);
 
     m_aMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
-    m_aTBPreview.SetOutStyle(TOOLBOX_STYLE_FLAT);
-    m_aTBPreview.InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
-    m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
-    m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
-    m_aTBPreview.EnableMenuStrings();
-    m_aTBPreview.Enable(true);
+    m_aTBPreview->SetOutStyle(TOOLBOX_STYLE_FLAT);
+    m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
+    m_aTBPreview->SetHelpId(HID_APP_VIEW_PREVIEW_CB);
+    m_aTBPreview->SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
+    m_aTBPreview->EnableMenuStrings();
+    m_aTBPreview->Enable(true);
 
-    m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
+    m_aBorder->SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 
-    m_aPreview.SetHelpId(HID_APP_VIEW_PREVIEW_1);
+    m_aPreview->SetHelpId(HID_APP_VIEW_PREVIEW_1);
 
-    m_pTablePreview = new OTablePreviewWindow(&m_aBorder,WB_READONLY | WB_DIALOGCONTROL );
+    m_pTablePreview = new OTablePreviewWindow(m_aBorder.get(), WB_READONLY | WB_DIALOGCONTROL );
     m_pTablePreview->SetHelpId(HID_APP_VIEW_PREVIEW_2);
 
-    m_aDocumentInfo.SetHelpId(HID_APP_VIEW_PREVIEW_3);
+    m_aDocumentInfo->SetHelpId(HID_APP_VIEW_PREVIEW_3);
 
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
@@ -226,6 +226,11 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
 }
 
 OAppDetailPageHelper::~OAppDetailPageHelper()
+{
+    dispose();
+}
+
+void OAppDetailPageHelper::dispose()
 {
     try
     {
@@ -250,7 +255,12 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
         }
 
     }
-
+    m_aFL.disposeAndClear();
+    m_aTBPreview.disposeAndClear();
+    m_aBorder.disposeAndClear();
+    m_aPreview.disposeAndClear();
+    m_aDocumentInfo.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 int OAppDetailPageHelper::getVisibleControlIndex() const
@@ -571,7 +581,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
         );
 
         pTreeView->notifyHiContrastChanged();
-        m_aBorder.SetZOrder(pTreeView, WINDOW_ZORDER_BEHIND);
+        m_aBorder->SetZOrder(pTreeView, WINDOW_ZORDER_BEHIND);
     }
     if ( !m_pLists[E_TABLE]->GetEntryCount() )
     {
@@ -657,13 +667,13 @@ void OAppDetailPageHelper::setDetailPage(vcl::Window* _pWindow)
 
     showPreview(NULL);
     bool bHasFocus = false;
-    m_aFL.Show();
+    m_aFL->Show();
     {
         bHasFocus = pCurrent != 0 && pCurrent->HasChildPathFocus();
     _pWindow->Show();
     }
-    m_aTBPreview.Show();
-    m_aBorder.Show();
+    m_aTBPreview->Show();
+    m_aBorder->Show();
     switchPreview(m_ePreviewMode,true);
 
     if ( bHasFocus )
@@ -947,17 +957,17 @@ void OAppDetailPageHelper::Resize()
 
         pWindow->SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
 
-        m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0 ), Size(aFLSize.Width(), nOutputHeight ) );
+        m_aFL->SetPosSizePixel( Point(nHalfOutputWidth , 0 ), Size(aFLSize.Width(), nOutputHeight ) );
 
-        Size aTBSize = m_aTBPreview.CalcWindowSizePixel();
-        m_aTBPreview.SetPosSizePixel(Point(nOutputWidth - aTBSize.getWidth(), 0 ),
+        Size aTBSize = m_aTBPreview->CalcWindowSizePixel();
+        m_aTBPreview->SetPosSizePixel(Point(nOutputWidth - aTBSize.getWidth(), 0 ),
                                      aTBSize );
 
-        m_aBorder.SetPosSizePixel(Point(nHalfOutputWidth + aFLSize.Width() + n6PPT, aTBSize.getHeight() + n6PPT ),
+        m_aBorder->SetPosSizePixel(Point(nHalfOutputWidth + aFLSize.Width() + n6PPT, aTBSize.getHeight() + n6PPT ),
                                   Size(nHalfOutputWidth - aFLSize.Width() - n6PPT, nOutputHeight - 2*n6PPT - aTBSize.getHeight()) );
-        m_aPreview.SetPosSizePixel(Point(0,0),m_aBorder.GetSizePixel() );
-        m_aDocumentInfo.SetPosSizePixel(Point(0,0),m_aBorder.GetSizePixel() );
-        m_pTablePreview->SetPosSizePixel(Point(0,0),m_aBorder.GetSizePixel() );
+        m_aPreview->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
+        m_aDocumentInfo->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
+        m_pTablePreview->SetPosSizePixel(Point(0,0),m_aBorder->GetSizePixel() );
     }
 }
 
@@ -993,7 +1003,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
         }
 
         m_aMenu->CheckItem(nSelectedAction);
-        m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, m_aMenu->GetItemText(nSelectedAction));
+        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, m_aMenu->GetItemText(nSelectedAction));
         Resize();
 
         // simulate a selectionChanged event at the controller, to force the preview to be updated
@@ -1007,8 +1017,8 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
         else
         {
             m_pTablePreview->Hide();
-            m_aPreview.Hide();
-            m_aDocumentInfo.Hide();
+            m_aPreview->Hide();
+            m_aDocumentInfo->Hide();
         }
     }
 }
@@ -1034,8 +1044,8 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                 Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
                 if ( m_ePreviewMode == E_DOCUMENT )
                 {
-                    m_aDocumentInfo.Hide();
-                    m_aPreview.Show();
+                    m_aDocumentInfo->Hide();
+                    m_aPreview->Show();
 
                     Graphic aGraphic;
                     Sequence < sal_Int8 > aBmpSequence;
@@ -1047,24 +1057,24 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
 
                         GraphicConverter::Import(aData,aGraphic);
                     }
-                    m_aPreview.setGraphic( aGraphic );
-                    m_aPreview.Invalidate();
+                    m_aPreview->setGraphic( aGraphic );
+                    m_aPreview->Invalidate();
                 }
                 else
                 {
-                    m_aPreview.Hide();
-                    m_aDocumentInfo.clear();
-                    m_aDocumentInfo.Show();
+                    m_aPreview->Hide();
+                    m_aDocumentInfo->clear();
+                    m_aDocumentInfo->Show();
                     Reference<document::XDocumentProperties> xProp(
                         aPreview, UNO_QUERY);
                     if ( xProp.is() )
-                        m_aDocumentInfo.fill(xProp,OUString());
+                        m_aDocumentInfo->fill(xProp,OUString());
                 }
             }
             else
             {
-                m_aPreview.Hide();
-                m_aDocumentInfo.Hide();
+                m_aPreview->Hide();
+                m_aDocumentInfo->Hide();
             }
         }
         catch( const Exception& )
@@ -1081,8 +1091,8 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
     if ( isPreviewEnabled() )
     {
         WaitObject aWaitCursor( this );
-        m_aPreview.Hide();
-        m_aDocumentInfo.Hide();
+        m_aPreview->Hide();
+        m_aDocumentInfo->Hide();
         m_pTablePreview->Show();
         if ( !m_xFrame.is() )
         {
@@ -1142,17 +1152,17 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
 
 IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
 {
-    m_aTBPreview.EndSelection();
+    m_aTBPreview->EndSelection();
 
     // tell the toolbox that the item is pressed down
-    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, true );
+    m_aTBPreview->SetItemDown( SID_DB_APP_DISABLE_PREVIEW, true );
 
     // simulate a mouse move (so the "down" state is really painted)
-    Point aPoint = m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
+    Point aPoint = m_aTBPreview->GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
     MouseEvent aMove( aPoint, 0, MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::SYNTHETIC );
-    m_aTBPreview.MouseMove( aMove );
+    m_aTBPreview->MouseMove( aMove );
 
-    m_aTBPreview.Update();
+    m_aTBPreview->Update();
 
     // execute the menu
     boost::scoped_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
@@ -1171,14 +1181,14 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     // no disabled entries
     aMenu->RemoveDisabledEntries();
 
-    sal_uInt16 nSelectedAction = aMenu->Execute(&m_aTBPreview, m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
+    sal_uInt16 nSelectedAction = aMenu->Execute(m_aTBPreview.get(), m_aTBPreview->GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
     // "cleanup" the toolbox state
     MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
-    m_aTBPreview.MouseMove( aLeave );
-    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, false);
+    m_aTBPreview->MouseMove( aLeave );
+    m_aTBPreview->SetItemDown( SID_DB_APP_DISABLE_PREVIEW, false);
     if ( nSelectedAction )
     {
-        m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));
+        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));
         Resize();
         getBorderWin().getView()->getAppController().executeChecked(nSelectedAction,Sequence<PropertyValue>());
     }
@@ -1230,19 +1240,19 @@ void OAppDetailPageHelper::ImplInitSettings()
     aFont = rStyleSettings.GetFieldFont();
     aFont.SetColor( rStyleSettings.GetWindowTextColor() );
     SetPointFont( aFont );
-    m_aTBPreview.SetPointFont( aFont );
+    m_aTBPreview->SetPointFont( aFont );
 
     SetTextColor( rStyleSettings.GetFieldTextColor() );
     SetTextFillColor();
-    m_aBorder.SetTextColor( rStyleSettings.GetFieldTextColor() );
-    m_aBorder.SetTextFillColor();
-    m_aTBPreview.SetTextColor( rStyleSettings.GetFieldTextColor() );
-    m_aTBPreview.SetTextFillColor();
+    m_aBorder->SetTextColor( rStyleSettings.GetFieldTextColor() );
+    m_aBorder->SetTextFillColor();
+    m_aTBPreview->SetTextColor( rStyleSettings.GetFieldTextColor() );
+    m_aTBPreview->SetTextFillColor();
     SetBackground( rStyleSettings.GetFieldColor() );
-    m_aBorder.SetBackground( rStyleSettings.GetFieldColor() );
-    m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
-    m_aDocumentInfo.SetBackground( rStyleSettings.GetFieldColor() );
-    m_aTBPreview.SetBackground( rStyleSettings.GetFieldColor() );
+    m_aBorder->SetBackground( rStyleSettings.GetFieldColor() );
+    m_aFL->SetBackground( rStyleSettings.GetFieldColor() );
+    m_aDocumentInfo->SetBackground( rStyleSettings.GetFieldColor() );
+    m_aTBPreview->SetBackground( rStyleSettings.GetFieldColor() );
     m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
 }
 

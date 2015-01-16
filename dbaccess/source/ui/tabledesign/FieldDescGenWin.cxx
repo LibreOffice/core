@@ -38,8 +38,14 @@ OFieldDescGenWin::OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* p
 
 OFieldDescGenWin::~OFieldDescGenWin()
 {
+    dispose();
+}
+
+void OFieldDescGenWin::dispose()
+{
     boost::scoped_ptr<vcl::Window> aTemp(m_pFieldControl);
     m_pFieldControl = NULL;
+    TabPage::dispose();
 }
 
 void OFieldDescGenWin::Init()

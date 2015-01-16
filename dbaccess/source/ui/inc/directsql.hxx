@@ -69,6 +69,7 @@ namespace dbaui
             vcl::Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
         virtual ~DirectSQLDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// number of history entries
         sal_Int32 getHistorySize() const;

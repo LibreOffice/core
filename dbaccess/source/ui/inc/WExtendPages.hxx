@@ -36,8 +36,6 @@ namespace dbaui
         }
 
         static OWizTypeSelect* Create( vcl::Window* _pParent, SvStream& _rInput ) { return new OWizHTMLExtend( _pParent, _rInput ); }
-
-        virtual ~OWizHTMLExtend(){}
     };
     // Wizard Page: OWizRTFExtend
     class OWizRTFExtend : public OWizTypeSelect
@@ -51,8 +49,6 @@ namespace dbaui
         }
 
         static OWizTypeSelect* Create( vcl::Window* _pParent, SvStream& _rInput ) { return new OWizRTFExtend( _pParent, _rInput ); }
-
-        virtual ~OWizRTFExtend(){}
     };
 
     // Wizard Page: OWizNormalExtend

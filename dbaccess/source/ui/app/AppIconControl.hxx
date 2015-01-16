@@ -34,6 +34,7 @@ namespace dbaui
     public:
         OApplicationIconControl(vcl::Window* _pParent);
         virtual ~OApplicationIconControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
         IControlActionListener* getControlActionListener( ) const { return m_pActionListener; }
