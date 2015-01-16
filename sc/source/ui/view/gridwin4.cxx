@@ -874,7 +874,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
-                              int /*nTilePosX*/, int /*nTilePosY*/,
+                              int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
     // Output size is in pixels while tile position and size are in logical units (twips).
@@ -898,7 +898,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     pViewData->SetZoom(aFracX, aFracY, true);
     pViewData->RefreshZoom();
 
-    rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
+    double fTilePosXPixel = static_cast<double>(nTilePosX) * PIXEL_PER_TWIPS;
+    double fTilePosYPixel = static_cast<double>(nTilePosY) * PIXEL_PER_TWIPS;
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -914,7 +915,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     pDoc->FillInfo(aTabInfo, nCol1, nRow1, nCol2, nRow2, nTab, fPPTX, fPPTY, false, false, NULL);
 
     ScOutputData aOutData(
-        &rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, 0, 0, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
+        &rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
 
     const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
     Color aGridColor = rColorCfg.GetColorValue(svtools::CALCGRID, false).nColor;
