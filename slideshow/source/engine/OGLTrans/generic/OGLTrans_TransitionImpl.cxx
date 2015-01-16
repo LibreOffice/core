@@ -101,31 +101,10 @@ void OGLTransitionImpl::finish()
 static void blendSlide()
 {
 
-
     float showHeight = 0.4;
     GLuint m_vertexBuffer;
 
     glDisable( GL_DEPTH_TEST );
-
-/*
-    glBegin( GL_QUADS );
-    glColor4fv( reflectionColor );
-    glVertex3f( -1, -1, 0 );
-    glColor4f( 0, 0, 0, 1 );
-    glVertex3f(-1,  showHeight, 0 );
-    glVertex3f( 1,  showHeight, 0 );
-    glColor4fv( reflectionColor );
-    glVertex3f( 1, -1, 0 );
-    glEnd();
-
-    // Initialization:
-    glGenBuffers(); // create a buffer object
-    glBindBuffer(); // use the buffer
-    glBufferData(); // allocate memory in the buffer
-
-    <stuff to get memory into the buffer>
-    glVertexPointer(); // tell OpenGL how your data is packed inside the buffer
-*/
 
     GLfloat vertices[] = { -1, -1, 0,
                            -1, showHeight, 0,
@@ -151,21 +130,6 @@ static void blendSlide()
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 
-/*
-    // Draw:
-    glBindBuffer(); // use the buffer
-    glEnableClientState(); // enable the parts of the data you want to draw
-    glDrawArrays(); // the actual draw command
-
-    glBegin( GL_QUADS );
-    glColor4f( 0, 0, 0, 1 );
-    glVertex3f( -1, showHeight, 0 );
-    glVertex3f( -1,  1, 0 );
-    glVertex3f(  1,  1, 0 );
-    glVertex3f(  1, showHeight, 0 );
-    glEnd();
-*/
-
     GLfloat vertices2[] = { -1, showHeight, 0,
                             -1,  1, 0,
                             1,  1, 0,
@@ -190,28 +154,7 @@ static void blendSlide()
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 
-/*    // Initialization:
-    glGenBuffers(); // create a buffer object
-    glBindBuffer(); // use the buffer
-    glBufferData(); // allocate memory in the buffer
-
-    <stuff to get memory into the buffer>
-    glVertexPointer(); // tell OpenGL how your data is packed inside the buffer
-
-    GLfloat vertices[] = { -1, showHeight, 0,
-                           -1,  1, 0,
-                           1,  1, 0
-                           1, showHeight, 0 };
-
-    // Draw:
-    glBindBuffer(); // use the buffer
-    glEnableClientState(); // enable the parts of the data you want to draw
-    glDrawArrays(); // the actual draw command
-*/
-
-
     glEnable( GL_DEPTH_TEST );
-
 
 }
 
@@ -283,7 +226,7 @@ void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthS
 }
 
 void
-OGLTransitionImpl::displaySlide(
+        OGLTransitionImpl::displaySlide(
         const double nTime,
         const ::sal_Int32 glSlideTex, const Primitives_t& primitives,
         double SlideWidthScale, double SlideHeightScale )
@@ -310,7 +253,7 @@ OGLTransitionImpl::displaySlide(
             primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
-        slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
+        //slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
 
         glPopMatrix();
     }
