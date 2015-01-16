@@ -126,6 +126,7 @@ public:
                     { return nPropFirstLineOfst; }
     inline void SetTxtFirstLineOfstValue( const short nValue )
                     { nFirstLineOfst = nValue; }
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline SvxLRSpaceItem &SvxLRSpaceItem::operator=( const SvxLRSpaceItem &rCpy )

@@ -490,6 +490,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_COLUMNBALANCE:
                 static_cast<const SwFmtNoBalancedColumns*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_LR_SPACE:
+                static_cast<const SvxLRSpaceItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -504,9 +507,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_LR_SPACE:
-                pWhich = "left-right space";
-                break;
             case RES_UL_SPACE:
                 pWhich = "upper-lower space";
                 break;
