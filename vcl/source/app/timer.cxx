@@ -210,6 +210,31 @@ void Timer::ImplTimerCallbackProc( bool idle )
     pSVData->mbNotAllTimerCalled = false;
 }
 
+bool Timer::TimerReady()
+{
+// find timer where the timer handler needs to be called
+    ImplSVData*     pSVData = ImplGetSVData();
+    ImplTimerData* pTimerData = pSVData->mpFirstTimerData;
+    sal_uLong       nTime = tools::Time::GetSystemTicks();
+    while ( pTimerData )
+    {
+        // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
+        // call the handler as soon as the time is up.
+        if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
+             !pTimerData->mbDelete && !pTimerData->mbInTimeout)
+        {
+            // time has expired
+            if ( pTimerData->GetDeadline() <= nTime )
+            {
+               return true;
+            }
+        }
+
+        pTimerData = pTimerData->mpNext;
+    }
+    return false;
+}
+
 Timer::Timer():
     mpTimerData(NULL),
     mnTimeout(1),
