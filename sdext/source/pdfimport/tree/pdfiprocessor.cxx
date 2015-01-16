@@ -282,15 +282,22 @@ void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
 {
     double ascent = getFont(getCurrentContext().FontId).ascent;
 
-    double ascentdx = rFontMatrix.m01 * ascent * fontSize;
-    double ascentdy = rFontMatrix.m11 * ascent * fontSize;
+    basegfx::B2DHomMatrix fontMatrix(
+        rFontMatrix.m00, rFontMatrix.m01, 0.0,
+        rFontMatrix.m10, rFontMatrix.m11, 0.0);
+    fontMatrix.scale(fontSize, fontSize);
 
-    basegfx::B2DHomMatrix totalTextMatrix1(
-        rFontMatrix.m00, rFontMatrix.m01, rRect.X1 + ascentdx,
-        rFontMatrix.m10, rFontMatrix.m11, rRect.Y1 + ascentdy);
-    basegfx::B2DHomMatrix totalTextMatrix2(
-        rFontMatrix.m00, rFontMatrix.m01, rRect.X2 + ascentdx,
-        rFontMatrix.m10, rFontMatrix.m11, rRect.Y2 + ascentdy);
+    basegfx::B2DHomMatrix totalTextMatrix1(fontMatrix);
+    basegfx::B2DHomMatrix totalTextMatrix2(fontMatrix);
+    totalTextMatrix1.translate(rRect.X1, rRect.Y1);
+    totalTextMatrix2.translate(rRect.X2, rRect.Y2);
+
+    basegfx::B2DHomMatrix corrMatrix;
+    corrMatrix.scale(1.0, -1.0);
+    corrMatrix.translate(0.0, ascent);
+    totalTextMatrix1 = totalTextMatrix1 * corrMatrix;
+    totalTextMatrix2 = totalTextMatrix2 * corrMatrix;
+
     totalTextMatrix1 *= getCurrentContext().Transformation;
     totalTextMatrix2 *= getCurrentContext().Transformation;
 
@@ -334,72 +341,23 @@ void PDFIProcessor::endText()
 
 void PDFIProcessor::setupImage(ImageId nImage)
 {
-    const GraphicsContext& rGC( getCurrentContext() );
+    const GraphicsContext& rGC(getCurrentContext());
 
-    basegfx::B2DHomMatrix aTrans( rGC.Transformation );
-
-    // check for rotation, which is the other way around in ODF
     basegfx::B2DTuple aScale, aTranslation;
     double fRotate, fShearX;
-    rGC.Transformation.decompose( aScale, aTranslation, fRotate, fShearX );
-    // TODDO(F4): correcting rotation when fShearX != 0 ?
-    if( fRotate != 0.0 )
-    {
+    rGC.Transformation.decompose(aScale, aTranslation, fRotate, fShearX);
 
-        // try to create a Transformation that corrects for the wrong rotation
-        aTrans.identity();
-        aTrans.scale( aScale.getX(), aScale.getY() );
-        aTrans.rotate( -fRotate );
-
-        basegfx::B2DRange aRect( 0, 0, 1, 1 );
-        aRect.transform( aTrans );
-
-        // TODO(F3) treat translation correctly
-        // the corrections below work for multiples of 90 degree
-        // which is a common case (landscape/portrait/seascape)
-        // we need a general solution here; however this needs to
-        // work in sync with DrawXmlEmitter::fillFrameProps and WriterXmlEmitter::fillFrameProps
-        // admittedly this is a lame workaround and fails for arbitrary rotation
-        double fQuadrant = fmod( fRotate, 2.0*M_PI ) / M_PI_2;
-        int nQuadrant = (int)fQuadrant;
-        if( nQuadrant < 0 )
-            nQuadrant += 4;
-        if( nQuadrant == 1 )
-        {
-            aTranslation.setX( aTranslation.getX() + aRect.getHeight() + aRect.getWidth());
-            aTranslation.setY( aTranslation.getY() + aRect.getHeight() );
-        }
-        if( nQuadrant == 3 )
-            aTranslation.setX( aTranslation.getX() - aRect.getHeight() );
-
-        aTrans.translate( aTranslation.getX(),
-                          aTranslation.getY() );
-    }
-
-    bool bMirrorVertical = aScale.getY() > 0;
-
-    // transform unit rect to determine view box
-    basegfx::B2DRange aRect( 0, 0, 1, 1 );
-    aRect.transform( aTrans );
-
-    // TODO(F3): Handle clip
     const sal_Int32 nGCId = getGCId(rGC);
     FrameElement* pFrame = m_pElFactory->createFrameElement( m_pCurElement, nGCId );
     ImageElement* pImageElement = m_pElFactory->createImageElement( pFrame, nGCId, nImage );
-    pFrame->x = pImageElement->x = aRect.getMinX();
-    pFrame->y = pImageElement->y = aRect.getMinY();
-    pFrame->w = pImageElement->w = aRect.getWidth();
-    pFrame->h = pImageElement->h = aRect.getHeight();
+    pFrame->x = pImageElement->x = aTranslation.getX();
+    pFrame->y = pImageElement->y = aTranslation.getY();
+    pFrame->w = pImageElement->w = aScale.getX();
+    pFrame->h = pImageElement->h = aScale.getY();
     pFrame->ZOrder = m_nNextZOrder++;
 
-    if( bMirrorVertical )
-    {
+    if (aScale.getY() > 0)
         pFrame->MirrorVertical = pImageElement->MirrorVertical = true;
-        pFrame->x        += aRect.getWidth();
-        pImageElement->x += aRect.getWidth();
-        pFrame->y        += aRect.getHeight();
-        pImageElement->y += aRect.getHeight();
-    }
 }
 
 void PDFIProcessor::drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
