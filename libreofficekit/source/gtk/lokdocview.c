@@ -160,55 +160,56 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
     {
         for (nColumn = 0; nColumn < nColumns; ++nColumn)
         {
-            int nTileWidthPixels, nTileHeightPixels;
-            GdkPixbuf* pPixBuf;
-            unsigned char* pBuffer;
-            int nRowStride;
-            GdkRectangle aTileRectangle;
+            GdkRectangle aTileRectangleTwips, aTileRectanglePixels;
             gboolean bPaint = TRUE;
 
             // Determine size of the tile: the rightmost/bottommost tiles may be smaller and we need the size to decide if we need to repaint.
             if (nColumn == nColumns - 1)
-                nTileWidthPixels = nDocumentWidthPixels - nColumn * nTileSizePixels;
+                aTileRectanglePixels.width = nDocumentWidthPixels - nColumn * nTileSizePixels;
             else
-                nTileWidthPixels = nTileSizePixels;
+                aTileRectanglePixels.width = nTileSizePixels;
             if (nRow == nRows - 1)
-                nTileHeightPixels = nDocumentHeightPixels - nRow * nTileSizePixels;
+                aTileRectanglePixels.height = nDocumentHeightPixels - nRow * nTileSizePixels;
             else
-                nTileHeightPixels = nTileSizePixels;
+                aTileRectanglePixels.height = nTileSizePixels;
 
             // Determine size and position of the tile in document coordinates, so we can decide if we can skip painting for partial rendering.
-            aTileRectangle.x = pixelToTwip(nTileSizePixels) / pDocView->fZoom * nColumn;
-            aTileRectangle.y = pixelToTwip(nTileSizePixels) / pDocView->fZoom * nRow;
-            aTileRectangle.width = pixelToTwip(nTileWidthPixels) / pDocView->fZoom;
-            aTileRectangle.height = pixelToTwip(nTileHeightPixels) / pDocView->fZoom;
-            if (pPartial && !gdk_rectangle_intersect(pPartial, &aTileRectangle, NULL))
+            aTileRectangleTwips.x = pixelToTwip(nTileSizePixels) / pDocView->fZoom * nColumn;
+            aTileRectangleTwips.y = pixelToTwip(nTileSizePixels) / pDocView->fZoom * nRow;
+            aTileRectangleTwips.width = pixelToTwip(aTileRectanglePixels.width) / pDocView->fZoom;
+            aTileRectangleTwips.height = pixelToTwip(aTileRectanglePixels.height) / pDocView->fZoom;
+            if (pPartial && !gdk_rectangle_intersect(pPartial, &aTileRectangleTwips, NULL))
                     bPaint = FALSE;
 
             if (bPaint)
             {
-                pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileWidthPixels, nTileHeightPixels);
+                // Index of the current tile.
+                guint nTile = nRow * nColumns + nColumn;
+                GdkPixbuf* pPixBuf;
+                unsigned char* pBuffer;
+                int nRowStride;
+
+                pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, aTileRectanglePixels.width, aTileRectanglePixels.height);
                 pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
                 pDocView->pDocument->pClass->paintTile(pDocView->pDocument,
                                                        // Buffer and its size, depends on the position only.
                                                        pBuffer,
-                                                       nTileWidthPixels, nTileHeightPixels,
+                                                       aTileRectanglePixels.width, aTileRectanglePixels.height,
                                                        &nRowStride,
                                                        // Position of the tile.
-                                                       aTileRectangle.x, aTileRectangle.y,
+                                                       aTileRectangleTwips.x, aTileRectangleTwips.y,
                                                        // Size of the tile, depends on the zoom factor and the tile position only.
-                                                       aTileRectangle.width, aTileRectangle.height);
+                                                       aTileRectangleTwips.width, aTileRectangleTwips.height);
                 (void) nRowStride;
 
-                if (pDocView->pCanvas[nRow * nColumns + nColumn])
-                    gtk_widget_destroy(GTK_WIDGET(pDocView->pCanvas[nRow * nColumns + nColumn]));
-                pDocView->pCanvas[nRow * nColumns + nColumn] = gtk_image_new();
-                gtk_image_set_from_pixbuf(GTK_IMAGE(pDocView->pCanvas[nRow * nColumns + nColumn]), pPixBuf);
+                if (pDocView->pCanvas[nTile])
+                    gtk_widget_destroy(GTK_WIDGET(pDocView->pCanvas[nTile]));
+                pDocView->pCanvas[nTile] = gtk_image_new();
+                gtk_image_set_from_pixbuf(GTK_IMAGE(pDocView->pCanvas[nTile]), pPixBuf);
                 g_object_unref(G_OBJECT(pPixBuf));
-                gtk_widget_show(pDocView->pCanvas[nRow * nColumns + nColumn]);
-                gtk_table_attach_defaults(GTK_TABLE(pDocView->pTable), pDocView->pCanvas[nRow * nColumns + nColumn], nColumn, nColumn + 1, nRow, nRow + 1);
+                gtk_widget_show(pDocView->pCanvas[nTile]);
                 gtk_table_attach(GTK_TABLE(pDocView->pTable),
-                                 pDocView->pCanvas[nRow * nColumns + nColumn],
+                                 pDocView->pCanvas[nTile],
                                  nColumn, nColumn + 1, nRow, nRow + 1,
                                  GTK_SHRINK, GTK_SHRINK, 0, 0);
             }
