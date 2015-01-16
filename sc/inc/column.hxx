@@ -687,6 +687,9 @@ private:
      */
     std::vector<sc::FormulaGroupEntry> GetFormulaGroupEntries();
 
+    void EndListeningIntersectedGroup(
+        sc::EndListeningContext& rCxt, SCROW nRow, std::vector<ScAddress>* pGroupPos = NULL );
+
     void EndListeningIntersectedGroups(
         sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos = NULL );
 

@@ -1119,6 +1119,9 @@ private:
     ScColumn* FetchColumn( SCCOL nCol );
     const ScColumn* FetchColumn( SCCOL nCol ) const;
 
+    void EndListeningIntersectedGroup(
+        sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, std::vector<ScAddress>* pGroupPos = NULL );
+
     void EndListeningIntersectedGroups(
         sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         std::vector<ScAddress>* pGroupPos = NULL );

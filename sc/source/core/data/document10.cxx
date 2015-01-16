@@ -361,6 +361,16 @@ bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
     return false;
 }
 
+void ScDocument::EndListeningIntersectedGroup(
+    sc::EndListeningContext& rCxt, const ScAddress& rPos, std::vector<ScAddress>* pGroupPos )
+{
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->EndListeningIntersectedGroup(rCxt, rPos.Col(), rPos.Row(), pGroupPos);
+}
+
 void ScDocument::EndListeningIntersectedGroups(
     sc::EndListeningContext& rCxt, const ScRange& rRange, std::vector<ScAddress>* pGroupPos )
 {
