@@ -44,11 +44,19 @@ published interface XProtectable: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** activates the protection.
+
+        @param aPassword
+            a string to specify new password.
      */
     void protect( [in] string aPassword );
 
     //-------------------------------------------------------------------------
     /** removes the protection.
+
+        @param aPassword
+            a string to match with the current password.
+        @throws com::sun::star::lang::IllegalArgumentException
+            if invalid password is specified.
      */
     void unprotect( [in] string aPassword )
             raises( com::sun::star::lang::IllegalArgumentException );
