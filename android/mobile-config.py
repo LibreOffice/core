@@ -23,7 +23,6 @@ main_xcd_discard = [
 
     # no conventional UI; reverse sorted by size
     'org.openoffice.Office.UI/GenericCommands',
-    'org.openoffice.Office/Accelerators',
     'org.openoffice.Office.UI/DrawImpressCommands',
     'org.openoffice.Office.UI/Sidebar',
     'org.openoffice.Office.UI/ChartCommands',
