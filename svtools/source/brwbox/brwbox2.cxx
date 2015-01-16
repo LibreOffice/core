@@ -1031,6 +1031,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
         }
     }
 
+    OSL_ENSURE(SeekRow(nCurRow), "BrowseBox::ImplPaintData could not seek back to current row after paint");
+
     if (aPos.Y() > aOverallAreaBRPos.Y() + 1)
         aPos.Y() = aOverallAreaBRPos.Y() + 1;
         // needed for some of the following drawing
