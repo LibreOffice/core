@@ -28,14 +28,16 @@ struct ImplIdleData;
 struct ImplSVData;
 
 enum class IdlePriority {
-    VCL_IDLE_PRIORITY_HIGHEST   = 0, // -> 0ms
-    VCL_IDLE_PRIORITY_HIGH      = 1,    // -> 1ms
-    VCL_IDLE_PRIORITY_REPAINT   = 2, // -> 30ms
-    VCL_IDLE_PRIORITY_RESIZE    = 3,  // -> 50ms
-    VCL_IDLE_PRIORITY_MEDIUM    = 4,  // -> 50ms
-    VCL_IDLE_PRIORITY_LOW       = 5,     // -> 100ms
-    VCL_IDLE_PRIORITY_LOWER     = 6,   // -> 200ms
-    VCL_IDLE_PRIORITY_LOWEST    = 7   // -> 400ms
+    VCL_IDLE_PRIORITY_STARVATIONPROTECTION  = -1, // Do not use this for normal prioritizing
+    VCL_IDLE_PRIORITY_HIGHEST               = 0, // -> 0ms
+    VCL_IDLE_PRIORITY_HIGH                  = 1,    // -> 1ms
+    VCL_IDLE_PRIORITY_DEFAULT               = 1,    // -> 1ms
+    VCL_IDLE_PRIORITY_REPAINT               = 2, // -> 30ms
+    VCL_IDLE_PRIORITY_RESIZE                = 3,  // -> 50ms
+    VCL_IDLE_PRIORITY_MEDIUM                = 3,  // -> 50ms
+    VCL_IDLE_PRIORITY_LOW                   = 5,     // -> 100ms
+    VCL_IDLE_PRIORITY_LOWER                 = 6,   // -> 200ms
+    VCL_IDLE_PRIORITY_LOWEST                = 7   // -> 400ms
 };
 
 
@@ -46,6 +48,7 @@ class VCL_DLLPUBLIC Idle
 protected:
     ImplIdleData*   mpIdleData;
     IdlePriority    mePriority;
+    IdlePriority    meDefaultPriority;
     bool            mbActive;
     Link            maIdleHdl;
 
@@ -56,8 +59,9 @@ public:
     Idle( const Idle& rIdle );
     virtual ~Idle();
 
-    void SetPriority( IdlePriority ePriority ) { mePriority = ePriority; }
+    void SetPriority( IdlePriority ePriority );
     IdlePriority GetPriority() const { return mePriority; }
+    IdlePriority GetDefaultPriority() const { return meDefaultPriority; }
 
     /// Make it possible to associate a callback with this idle handler
     /// of course, you can also sub-class and override 'DoIdle'

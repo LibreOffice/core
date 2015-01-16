@@ -63,6 +63,7 @@ public:
     /// @internal
     static void ImplDeInitTimer();
     static void ImplTimerCallbackProc();
+    static bool TimerReady();
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

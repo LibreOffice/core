@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 
 #include <svdata.hxx>
 #include <salinst.hxx>
@@ -35,6 +36,7 @@ struct ImplIdleData
         if (mbDelete || mbInIdle )
             return;
 
+        mpIdle->SetPriority(mpIdle->GetDefaultPriority());
         mbDelete = true;
         mpIdle->mbActive = false;
 
@@ -59,11 +61,46 @@ struct ImplIdleData
             {
                 // Find the highest priority one somehow.
                 if ( p->mpIdle->GetPriority() < pMostUrgent->mpIdle->GetPriority() )
+                {
+                    IncreasePriority(pMostUrgent->mpIdle);
                     pMostUrgent = p;
+                }
+                else
+                    IncreasePriority(p->mpIdle);
             }
         }
 
         return pMostUrgent;
+    }
+
+    static void IncreasePriority( Idle *pIdle )
+    {
+        switch(pIdle->GetPriority())
+        {
+            case IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION:
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_HIGHEST:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION);
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_HIGH:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGHEST);
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_REPAINT:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH);
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_MEDIUM:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_REPAINT);
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_LOW:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_MEDIUM);
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_LOWER:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOW);
+                break;
+            case IdlePriority::VCL_IDLE_PRIORITY_LOWEST:
+                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWER);
+                break;
+        }
     }
 };
 
@@ -97,7 +134,7 @@ void Idle::ProcessAllIdleHandlers()
     ImplIdleData* pIdleData = NULL;
     ImplIdleData* pPrevIdleData = NULL;
     ImplSVData*     pSVData = ImplGetSVData();
-    while ((pIdleData = ImplIdleData::GetFirstIdle()))
+    while (!Timer::TimerReady() && (pIdleData = ImplIdleData::GetFirstIdle()))
     {
         pIdleData->Invoke();
     }
@@ -124,6 +161,13 @@ void Idle::ProcessAllIdleHandlers()
             pIdleData = pIdleData->mpNext;
         }
     }
+}
+
+void Idle::SetPriority( IdlePriority ePriority )
+{
+    mePriority = ePriority;
+    if( !mbActive && meDefaultPriority == IdlePriority::VCL_IDLE_PRIORITY_DEFAULT )
+        meDefaultPriority = mePriority;
 }
 
 void Idle::DoIdle()
@@ -183,6 +227,7 @@ Idle& Idle::operator=( const Idle& rIdle )
 
     mbActive        = false;
     mePriority       = rIdle.mePriority;
+    meDefaultPriority = rIdle.meDefaultPriority;
     maIdleHdl    = rIdle.maIdleHdl;
 
     if ( rIdle.IsActive() )
@@ -193,7 +238,8 @@ Idle& Idle::operator=( const Idle& rIdle )
 
 Idle::Idle():
     mpIdleData(NULL),
-    mePriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH),
+    mePriority(IdlePriority::VCL_IDLE_PRIORITY_DEFAULT),
+    meDefaultPriority(IdlePriority::VCL_IDLE_PRIORITY_DEFAULT),
     mbActive(false)
 {
 }
@@ -201,6 +247,7 @@ Idle::Idle():
 Idle::Idle( const Idle& rIdle ):
     mpIdleData(NULL),
     mePriority(rIdle.mePriority),
+    meDefaultPriority(rIdle.meDefaultPriority),
     mbActive(false),
     maIdleHdl(rIdle.maIdleHdl)
 {
