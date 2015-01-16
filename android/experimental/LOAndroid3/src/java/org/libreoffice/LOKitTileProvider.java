@@ -305,6 +305,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                         tileInvalidationCallback.invalidate(rect);
                     }
                 }
+                break;
         }
     }
 }
