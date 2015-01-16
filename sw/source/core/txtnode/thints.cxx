@@ -881,11 +881,12 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 // Remove any attributes which are already set at the whole paragraph:
                 bool bOptimizeAllowed = true;
 
-                SfxItemSet* pNewSet = 0;
                 // #i75750# Remove attributes already set at whole paragraph
                 // #i81764# This should not be applied for no length attributes!!! <--
                 if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && pNewStyle->Count() )
                 {
+                    SfxItemSet* pNewSet = 0;
+
                     SfxItemIter aIter2( *pNewStyle );
                     const SfxPoolItem* pItem = aIter2.GetCurItem();
                     const SfxItemSet& rWholeParaAttrSet = rNode.GetSwAttrSet();
@@ -1403,10 +1404,12 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     sal_uLong nSttIdx =
                         static_cast<SwTxtFtn*>(pAttr)->GetStartNode()->GetIndex();
                     sal_uLong nEndIdx = rNodes[ nSttIdx++ ]->EndOfSectionIndex();
-                    SwCntntNode* pCNd;
                     for( ; nSttIdx < nEndIdx; ++nSttIdx )
-                        if( 0 != ( pCNd = rNodes[ nSttIdx ]->GetCntntNode() ))
+                    {
+                        SwCntntNode* pCNd = rNodes[ nSttIdx ]->GetCntntNode();
+                        if( 0 != pCNd )
                             pCNd->DelFrms();
+                    }
                 }
 
                 if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
