@@ -2647,12 +2647,12 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE);
         if ( SOT_FORMATSTR_ID_XFORMS == nFmt )
         {
-            SdrObject* pObj;
             rSh.MakeDrawView();
             FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
             if(pFmView) {
                 const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
-                if(0 != (pObj = pFmView->CreateXFormsControl(rDesc)))
+                SdrObject* pObj = pFmView->CreateXFormsControl(rDesc);
+                if(0 != pObj)
                 {
                     rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
                 }
@@ -2703,12 +2703,12 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         }
         else
         {
-            SdrObject* pObj;
             rSh.MakeDrawView();
             FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
             if (pFmView && bHaveColumnDescriptor)
             {
-                if ( 0 != (pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) ) ) )
+                SdrObject* pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) );
+                if ( 0 != pObj)
                     rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
             }
         }

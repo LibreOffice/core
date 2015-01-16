@@ -164,14 +164,16 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
     // #i89178#
     rChg = SwNumRule( maName, numfunc::GetDefaultPositionAndSpaceMode() );
     rChg.SetAutoRule( false );
-    _SwNumFmtGlobal* pFmt;
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
-        if( 0 != ( pFmt = aFmts[ n ] ) )
+    {
+        _SwNumFmtGlobal* pFmt = aFmts[ n ];
+        if( 0 != pFmt)
         {
             SwNumFmt aNew;
             pFmt->ChgNumFmt( rSh, aNew );
             rChg.Set( n, aNew );
         }
+    }
 }
 
 void SwNumRulesWithName::GetNumFmt(

@@ -1381,11 +1381,13 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     void* pUserData;
     if( 0 != (pUserData = m_pSortAlgorithmLB->GetEntryData( m_pSortAlgorithmLB->GetSelectEntryPos())) )
         sOldString = *(OUString*)pUserData;
-    void* pDel;
     sal_Int32 nEnd = m_pSortAlgorithmLB->GetEntryCount();
     for( sal_Int32 n = 0; n < nEnd; ++n )
-        if( 0 != ( pDel = m_pSortAlgorithmLB->GetEntryData( n )) )
+    {
+        void* pDel = m_pSortAlgorithmLB->GetEntryData( n );
+        if( 0 != pDel )
             delete (OUString*)pDel;
+    }
     m_pSortAlgorithmLB->Clear();
 
     nEnd = aSeq.getLength();
@@ -3564,13 +3566,15 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     }
 
     // initialise templates
-    const SwTxtFmtColl *pColl;
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
     const sal_uInt16 nSz = rSh.GetTxtFmtCollCount();
 
     for( sal_uInt16 i = 0; i < nSz; ++i )
-        if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
+    {
+        const SwTxtFmtColl *pColl = &rSh.GetTxtFmtColl( i );
+        if( !pColl->IsDefault() )
             m_pParaLayLB->InsertEntry( pColl->GetName() );
+    }
 
     // query pool collections and set them for the directory
     for( sal_uInt16 i = 0; i < m_pCurrentForm->GetFormMax(); ++i )

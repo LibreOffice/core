@@ -204,10 +204,9 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     // aFormatBox
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     nCount = pMgr->GetFldTypeCount();
-    SwFieldType* pFldType;
     for ( sal_uInt16 i = nCount; i; )
     {
-        pFldType = pMgr->GetFldType(USHRT_MAX, --i);
+        SwFieldType* pFldType = pMgr->GetFldType(USHRT_MAX, --i);
         if( pFldType->GetName().equals(m_pCategoryBox->GetText()) )
         {
             nSelFmt = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFldType)->GetSeqFormat();

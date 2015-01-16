@@ -353,7 +353,6 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
 
     SwTabCols aTabCols;
     bool bTabCols = false;
-    bool bSingleLine = false;
     SwTableRep* pRep = 0;
     SwFrmFmt *pFmt = rSh.GetTableFmt();
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
@@ -431,7 +430,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     if(bTabCols)
     {
         rSh.GetTabCols( aTabCols );
-        bSingleLine = pRep->FillTabCols( aTabCols );
+        bool bSingleLine = pRep->FillTabCols( aTabCols );
         rSh.SetTabCols( aTabCols, bSingleLine );
     }
 

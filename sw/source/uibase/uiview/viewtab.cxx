@@ -1838,13 +1838,12 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     // The entire frame width - The difference is twice the distance to the edge.
                     const sal_uInt16 nOuterWidth = (sal_uInt16)aAbsRect.Width();
                     int nWidth = 0,
-                        nStart = 0,
                         nEnd = 0;
                     aRectangle.Left() = 0;
                     for ( sal_uInt16 i = 0; i < nCount; ++i )
                     {
                         const SwColumn* pCol = &rCols[i];
-                        nStart = pCol->GetLeft() + nWidth;
+                        const int nStart = pCol->GetLeft() + nWidth;
                         if(i == nNum - 2)
                             aRectangle.Left() = nStart;
                         nWidth += pCols->CalcColWidth( i, nTotalWidth );
