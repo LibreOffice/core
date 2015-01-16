@@ -134,9 +134,6 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         float newZoom = getZoom(viewportMetrics);
 
         if (!currentViewport.equals(newCurrentViewPort) || currentZoom != newZoom) {
-            if (newZoom == 1.0f) {
-                Log.i(LOGTAG, "Suspisious zoom 1.0");
-            }
             currentViewport = newCurrentViewPort;
             currentZoom = newZoom;
             RectF pageRect = viewportMetrics.getPageRect();
@@ -216,10 +213,9 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
      * Invalidate tiles which intersect the input rect
      */
     public void invalidateTiles(RectF rect) {
-        RectF zoomedRect = RectUtils.inverseScale(rect, currentZoom);
-
+        RectF zoomedRect = RectUtils.scale(rect, currentZoom);
         for (SubTile tile : tiles.values()) {
-            if (RectF.intersects(rect, tile.id.getRect())) {
+            if (RectF.intersects(zoomedRect, tile.id.getRect())) {
                 LOKitShell.sendEvent(LOEventFactory.tileRerender(this, tile));
             }
         }
