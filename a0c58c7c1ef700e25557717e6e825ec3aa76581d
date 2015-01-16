@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_8e3703e3",
+        "filename": "configmgr/qa/unit/test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-16T14:42:01Z",
+      "side": 1,
+      "message": "better use\n\n  CPPUNIT_ASSERT_EQUAL(749, names.getLength());\n\nbut for me that fails with 752 vs. 749, probably because\n\n  $(eval $(call gb_CppunitTest_use_configuration,configmgr_unit))\n\n(in CppunitTest_configmgr_unit.mk) makes the test use the instdir/share/registry/ xcsxcu data (which probably depends on configuration options) in addition to the workdir/unittest/registry/ data",
+      "revId": "a0c58c7c1ef700e25557717e6e825ec3aa76581d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
