@@ -160,12 +160,16 @@ AtkStateType mapAtkState( sal_Int16 nState )
         MAP_DIRECT( TRANSIENT );
         MAP_DIRECT( VERTICAL );
         MAP_DIRECT( VISIBLE );
+        MAP_DIRECT( DEFAULT );
         // a spelling error ...
         case accessibility::AccessibleStateType::DEFUNC:
             type = ATK_STATE_DEFUNCT; break;
         case accessibility::AccessibleStateType::MULTI_SELECTABLE:
             type = ATK_STATE_MULTISELECTABLE; break;
     default:
+        //Mis-use ATK_STATE_LAST_DEFINED to check if a state is unmapped
+        //NOTE! Do not report it
+        type = ATK_STATE_LAST_DEFINED;
         break;
     }
 
@@ -534,7 +538,12 @@ wrapper_ref_state_set( AtkObject *atk_obj )
                 uno::Sequence< sal_Int16 > aStates = xStateSet->getStates();
 
                 for( sal_Int32 n = 0; n < aStates.getLength(); n++ )
-                    atk_state_set_add_state( pSet, mapAtkState( aStates[n] ) );
+                {
+                    // ATK_STATE_LAST_DEFINED is used to check if the state
+                    // is unmapped, do not report it to Atk
+                    if ( mapAtkState( aStates[n] ) != ATK_STATE_LAST_DEFINED )
+                        atk_state_set_add_state( pSet, mapAtkState( aStates[n] ) );
+                }
 
                 // We need to emulate FOCUS state for menus, menu-items etc.
                 if( atk_obj == atk_get_focus_object() )
