@@ -397,7 +397,6 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
     sal_uInt8      nLTyp;
     sal_uInt8      nOTyp;
     bool      bEoDt=false;
-    bool      bPDwn=false;
     Point     aP0(0,0);
     Point     aP1(0,0);
     sal_uInt16    RecNr=0;
@@ -412,7 +411,7 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
         nLTyp=(sal_uInt8)((aVect.Flag & 0x00F0) >>4);
         nOTyp=(sal_uInt8)((aVect.Flag & 0x0F00) >>8);
         bEoDt=(aVect.Flag & 0x4000) !=0;
-        bPDwn=(aVect.Flag & 0x8000) !=0;
+        bool bPDwn=(aVect.Flag & 0x8000) !=0;
 
         long x=aVect.x-rHead.Xoffs;
         long y=rHead.Ysize-(aVect.y-rHead.Yoffs);

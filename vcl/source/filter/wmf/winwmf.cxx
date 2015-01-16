@@ -1285,8 +1285,6 @@ void WMFReader::ReadWMF()
     nEMFRec         = 0;
     nEMFSize        = 0;
 
-    bool bEMFAvailable = false;
-
     pOut->SetMapMode( MM_ANISOTROPIC );
     pOut->SetWinOrg( Point() );
     pOut->SetWinExt( Size( 1, 1 ) );
@@ -1298,6 +1296,7 @@ void WMFReader::ReadWMF()
 
     if ( ReadHeader( ) )
     {
+        bool bEMFAvailable = false;
 
         nPos = pWMF->Tell();
 

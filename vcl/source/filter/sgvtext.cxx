@@ -411,7 +411,6 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
 sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
                    sal_uInt16 nChar, sal_uInt16& LF, sal_uInt16& MaxGrad)
 {
-    UCHAR  c=0;
     bool   AbsEnd=false;
     sal_uLong  LF100=0;
     sal_uLong  MaxLF100=0;
@@ -424,7 +423,7 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
     MaxGrad=0;
     while (!AbsEnd && nChar>0) {
         nChar--;
-        c=GetTextChar(TBuf,Index,Atr0,AktAtr,nChar,false);
+        UCHAR c=GetTextChar(TBuf,Index,Atr0,AktAtr,nChar,false);
         i++;
         AbsEnd=(c==TextEnd || c==AbsatzEnd);
         if (First || (!AbsEnd && c!=' ' && c!=HardTrenn)) {
@@ -666,7 +665,6 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
 {
     VirtualDevice vOut;
     UCHAR        c,c0;
-    UCHAR        ct;
     bool         First;               // first char ?
     sal_uInt8    Just = 0;            // paragraph format
     bool         Border;              // border of box reached ?
@@ -734,7 +732,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         (*TRrec)=(*R); TRnChar=nChars;
         Border0=false; Border=false;
         do {                // first check how many syllables fit
-            ct=ProcessChar(vOut,TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
+            UCHAR ct=ProcessChar(vOut,TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
             c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
             AbsEnd=(ct==AbsatzEnd) || (ct==TextEnd) || (nChars>=MaxLineChars);
 
@@ -953,9 +951,8 @@ void TextType::Draw(OutputDevice& rOut)
             if (TextFit) {
                 if (LineFit) FitXDiv=xLine[lc+1];
                 if (FitXDiv>0) {
-                    long Temp;
                     for (i=1;i<=l+1;i++) {
-                        Temp=long(xLine[i])*long(FitXMul) /long(FitXDiv);
+                        const long Temp=long(xLine[i])*long(FitXMul) /long(FitXDiv);
                         xLine[i]=short(Temp);
                     }
                     LF=MulDiv(LF,FitYMul,FitYDiv);

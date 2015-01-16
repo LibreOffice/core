@@ -1008,7 +1008,6 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     sal_uInt16 nDay = 0;
     sal_uInt16 nMonth = 0;
     sal_uInt16 nYear = 0;
-    bool bYear = true;
     bool bError = false;
     OUString aStr( rStr );
 
@@ -1037,6 +1036,8 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     }
     else
     {
+        bool bYear = true;
+
         // Check if year is present:
         OUString aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
         sal_Int32 nSepPos = aStr.indexOf( aDateSep );
