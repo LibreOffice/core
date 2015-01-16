@@ -31,11 +31,6 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     protected RectF currentViewport = new RectF();
     protected float currentZoom;
 
-    private static int getMemoryClass(Context context) {
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        return activityManager.getMemoryClass() * 1024 * 1024;
-    }
-
     public ComposedTileLayer(Context context) {
         context.registerComponentCallbacks(this);
         this.tileSize = new IntSize(256, 256);
