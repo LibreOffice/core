@@ -59,7 +59,13 @@ namespace frm
 
     RichTextControl::~RichTextControl( )
     {
+        dispose();
+    }
+
+    void RichTextControl::dispose()
+    {
         delete m_pImpl;
+        Control::dispose();
     }
 
 

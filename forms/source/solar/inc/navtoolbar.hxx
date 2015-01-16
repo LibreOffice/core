@@ -71,6 +71,7 @@ namespace frm
             const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
         );
         virtual ~NavigationToolBar( );
+        virtual void dispose() SAL_OVERRIDE;
 
         /** sets the dispatcher which is to be used for the features
 
@@ -158,7 +159,6 @@ namespace frm
 
     public:
         RecordPositionInput( vcl::Window* _pParent );
-        virtual ~RecordPositionInput();
 
         /** sets the dispatcher which is to be used for the features
         */

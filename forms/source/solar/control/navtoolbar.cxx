@@ -147,6 +147,11 @@ namespace frm
 
     NavigationToolBar::~NavigationToolBar( )
     {
+        dispose();
+    }
+
+    void NavigationToolBar::dispose()
+    {
         for (   ::std::vector< vcl::Window* >::iterator loopChildWins = m_aChildWins.begin();
                 loopChildWins != m_aChildWins.end();
                 ++loopChildWins
@@ -155,6 +160,7 @@ namespace frm
             delete *loopChildWins;
         }
         delete m_pToolbar;
+        vcl::Window::dispose();
     }
 
 
@@ -655,11 +661,6 @@ namespace frm
         SetDecimalDigits( 0 );
         SetStrictFormat( true );
         SetBorderStyle( WindowBorderStyle::MONO );
-    }
-
-
-    RecordPositionInput::~RecordPositionInput()
-    {
     }
 
 
