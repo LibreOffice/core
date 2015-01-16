@@ -33,6 +33,7 @@
 
 class Outliner;
 class SdPage;
+class SdrExternalToolEdit;
 class DrawDocShell;
 class TabBar;
 class SdrObject;
@@ -507,6 +508,8 @@ private:
 
     ::std::unique_ptr< AnnotationManager > mpAnnotationManager;
     ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
+
+    std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
 };
 
 } // end of namespace sd
