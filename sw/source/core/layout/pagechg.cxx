@@ -354,7 +354,6 @@ static void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
 
     for ( size_t i = 0; i < rTbl.size(); ++i )
     {
-        SdrObject *pSdrObj;
         SwFrmFmt *pFmt = rTbl[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
@@ -373,7 +372,7 @@ static void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
 
             // is it a border or a SdrObject?
             bool bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
-            pSdrObj = 0;
+            SdrObject *pSdrObj = 0;
             if ( bSdrObj  && 0 == (pSdrObj = pFmt->FindSdrObject()) )
             {
                 OSL_FAIL( "DrawObject not found." );

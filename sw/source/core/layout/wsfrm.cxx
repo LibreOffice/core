@@ -1045,10 +1045,10 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     _InvalidatePos();
     const SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
-    SwFrm *pFrm;
     if( !IsColumnFrm() )
     {
-        if( 0 != ( pFrm = GetIndNext() ) )
+        SwFrm *pFrm = GetIndNext();
+        if( 0 != pFrm )
         {
             pFrm->_InvalidatePos();
             if( IsInFtn() )
@@ -3317,7 +3317,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             }
             pCol = static_cast<SwLayoutFrm*>(Lower());
             // OD 28.03.2003 #108446# - initialize local variable
-            SwFrm *pLow = NULL;
             SwTwips nDiff = 0;
             SwTwips nMaxFree = 0;
             SwTwips nAllFree = LONG_MAX;
@@ -3479,7 +3478,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     pCol = static_cast<SwLayoutFrm*>(Lower()->GetNext());
                     while ( pCol )
                     {
-                        pLow = pCol->Lower();
+                        SwFrm *pLow = pCol->Lower();
                         if ( pLow )
                             pLow->_InvalidatePos();
                         pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());

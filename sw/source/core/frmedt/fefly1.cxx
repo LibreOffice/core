@@ -389,7 +389,6 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
     bool bFlyFrame = pObj->ISA(SwVirtFlyDrawObj);
 
     SwFlyFrm* pFly = 0L;
-    const SwFrm* pOldAnch;
     const SwFrm* pFooterOrHeader = NULL;
 
     if( bFlyFrame )
@@ -401,7 +400,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         pFly = pCntnt->FindFlyFrm();
         if ( !pFly )
             return aRet;
-        pOldAnch = pFly->GetAnchorFrm();
+        const SwFrm* pOldAnch = pFly->GetAnchorFrm();
         if( !pOldAnch )
             return aRet;
         if ( FLY_AT_PAGE != nAnchorId )

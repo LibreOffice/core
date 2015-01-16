@@ -221,30 +221,34 @@ static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
     SwTxtFld* pTFld = 0;
     if( RES_INPUTFLD == rFld.Which() )
     {
-        const SfxPoolItem* pItem = NULL;
         const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        {
+            const SfxPoolItem* pItem = NULL;
             if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n ) )
                 && static_cast<const SwFmtFld*>(pItem)->GetField() == &rFld )
             {
                 pTFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem))->GetTxtFld();
                 break;
             }
+        }
     }
     else if( RES_SETEXPFLD == rFld.Which()
         && static_cast<SwSetExpField&>(rFld).GetInputFlag() )
     {
-        const SfxPoolItem* pItem = NULL;
         const sal_uInt32 nMaxItems =
             pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        {
+            const SfxPoolItem* pItem = NULL;
             if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
                 && static_cast<const SwFmtFld*>(pItem)->GetField() == &rFld )
             {
                 pTFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem))->GetTxtFld();
                 break;
             }
+        }
     }
     return pTFld;
 }

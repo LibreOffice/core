@@ -384,7 +384,6 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         SwSelBoxes *pBoxes = new SwSelBoxes();
         long nLeft = 0;
         long nRight = 0;
-        long nRowSpan = 1;
         const size_t nCount = pLine->GetTabBoxes().size();
         for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
         {
@@ -392,7 +391,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
             OSL_ENSURE( pBox, "Missing table box" );
             nLeft = nRight;
             nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-            nRowSpan = pBox->getRowSpan();
+            long nRowSpan = pBox->getRowSpan();
             if( nRight <= nMin )
             {
                 if( nRight == nMin && nLeftSpanCnt )
@@ -1831,11 +1830,10 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
     {
         SwTableLine* pLine = aLines[nRow];
         const size_t nCols = pLine->GetTabBoxes().size();
-        long nLeft = 0;
         long nRight = 0;
         for( size_t nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
         {
-            nLeft = nRight;
+            long nLeft = nRight;
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
             nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
             if( nLeft >= rMin && nRight <= rMax )
@@ -1861,11 +1859,10 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
     {
         SwTableLine* pLine = aLines[nRow];
         const size_t nCols = pLine->GetTabBoxes().size();
-        long nLeft = 0;
         long nRight = 0;
         for( size_t nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
         {
-            nLeft = nRight;
+            long nLeft = nRight;
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
             nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
             if( nRight < nMin )

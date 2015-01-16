@@ -276,13 +276,14 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
 {
     sal_uLong n = 0;
-    bool bTextOnly = true;
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";
     rText.clear();
 
     try
     {
+        bool bTextOnly = true;
+
         xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
         uno::Reference < container::XNameAccess > xAccess( xRoot, uno::UNO_QUERY );
         if ( !xAccess->hasByName( aStreamName ) || !xRoot->isStreamElement( aStreamName ) )

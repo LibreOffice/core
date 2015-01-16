@@ -1813,11 +1813,11 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
     const SwPageFrm *pVirtPage = 0;
     const SwFrm *pFrm = 0;
     const SfxItemPool &rPool = pPage->GetFmt()->GetDoc()->GetAttrPool();
-    const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rPool.GetItem2( RES_PAGEDESC, n ) ))
+        const SfxPoolItem* pItem = rPool.GetItem2( RES_PAGEDESC, n );
+        if ( 0 == pItem )
             continue;
 
         const SwFmtPageDesc *pDesc = static_cast<const SwFmtPageDesc*>(pItem);

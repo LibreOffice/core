@@ -696,7 +696,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     aCpyPam.SetMark();
     aCpyPam.Move( fnMoveForward, fnGoDoc );
 
-    bool bRet = true, bDelTbl = true;
+    bool bRet = true;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     GetDoc()->getIDocumentFieldsAccess().LockExpFlds();
@@ -812,6 +812,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     }
     else
     {
+        bool bDelTbl = true;
+
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
 

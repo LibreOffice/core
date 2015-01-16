@@ -250,12 +250,11 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
     int bChkProtected = nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType;
 
-    bool bTblIsValid;
     // #i55421# Reduced value 10
     int nLoopMax = 10;
 
     do {
-        bTblIsValid = true;
+        bool bTblIsValid = true;
 
         // First, compute tables and rectangles
         SwSelUnions aUnions;
@@ -451,13 +450,13 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     const SwLayoutFrm *pEnd = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aNullPos )->GetUpper();
     OSL_ENSURE( pEnd, "without frame nothing works" );
 
-    bool bTblIsValid, bValidChartSel;
+    bool bValidChartSel;
     // #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
     sal_uInt16 i = 0;
 
     do {
-        bTblIsValid = true;
+        bool bTblIsValid = true;
         bValidChartSel = true;
 
         sal_uInt16 nRowCells = USHRT_MAX;
@@ -1325,7 +1324,6 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     //Block to delete  SwPaM, SwPosition from stack
     if( !aPosArr.empty() )
     {
-        SwTxtNode* pTxtNd = 0;
         SwPosition aInsPos( *(*ppMergeBox)->GetSttNd() );
         SwNodeIndex& rInsPosNd = aInsPos.nNode;
 
@@ -1369,7 +1367,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             // skip the first TextNode
             rInsPosNd.Assign( pDoc->GetNodes(),
                             rInsPosNd.GetNode().EndOfSectionIndex() - 2 );
-            pTxtNd = rInsPosNd.GetNode().GetTxtNode();
+            SwTxtNode* pTxtNd = rInsPosNd.GetNode().GetTxtNode();
             if( pTxtNd )
                 aInsPos.nContent.Assign(pTxtNd, pTxtNd->GetTxt().getLength());
         }

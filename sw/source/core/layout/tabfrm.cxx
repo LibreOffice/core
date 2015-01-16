@@ -1159,12 +1159,11 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     //such situations).
     if ( bNewFollow )
     {
-        SwFrm* pNxt = 0;
         SwFrm* pInsertBehind = pFoll->GetLastLower();
 
         while ( pRow )
         {
-            pNxt = pRow->GetNext();
+            SwFrm* pNxt = pRow->GetNext();
             nRet += (pRow->Frm().*fnRect->fnGetHeight)();
             // The footnotes do not have to be moved, this is done in the
             // MoveFwd of the follow table!!!
@@ -1177,14 +1176,13 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     }
     else
     {
-        SwFrm* pNxt = 0;
         SwFrm* pPasteBefore = HasFollowFlowLine() ?
                               pFollowRow->GetNext() :
                               pFoll->GetFirstNonHeadlineRow();
 
         while ( pRow )
         {
-            pNxt = pRow->GetNext();
+            SwFrm* pNxt = pRow->GetNext();
             nRet += (pRow->Frm().*fnRect->fnGetHeight)();
 
             // The footnotes have to be moved:
@@ -1750,7 +1748,6 @@ void SwTabFrm::MakeAll()
     // gets set to true when the Frm is split
     bool bSplit = false;
     const bool bFtnsInDoc = !GetFmt()->GetDoc()->GetFtnIdxs().empty();
-    bool bMoveable;
     const bool bFly     = IsInFly();
 
     SwBorderAttrAccess  *pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
@@ -1836,7 +1833,8 @@ void SwTabFrm::MakeAll()
     SWRECTFN( this )
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
-        if ( (bMoveable = IsMoveable()) )
+        const bool bMoveable = IsMoveable();
+        if (bMoveable)
             if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd ) )
             {
                 bMovedFwd = true;

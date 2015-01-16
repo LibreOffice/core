@@ -1192,9 +1192,8 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
         SwTxtFrmInfo aFInfo( m_pCurTxtFrm );
         aFInfo.GetSpaces( m_aDelPam, !m_aFlags.bAFmtByInput || bWithLineBreaks );
 
-        SwPaM* pNxt;
         do {
-            pNxt = m_aDelPam.GetNext();
+            SwPaM* pNxt = m_aDelPam.GetNext();
             if( pNxt->HasMark() && *pNxt->GetPoint() != *pNxt->GetMark() )
             {
                 bool bHasBlnks = HasSelBlanks( *pNxt );

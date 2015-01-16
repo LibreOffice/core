@@ -487,7 +487,6 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
         {
             const size_t nSize = pTxtNd->GetpSwpHints()->Count();
             sal_Int32 nAttrStart;
-            const sal_Int32* pAttrEnd;
 
             for( size_t n = 0; n < nSize; ++n )
             {
@@ -496,6 +495,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                 if( nAttrStart > nStart )       // beyond the area
                     break;
 
+                const sal_Int32* pAttrEnd;
                 if( 0 != ( pAttrEnd = pHt->End() ) &&
                     ( ( nAttrStart < nStart &&
                         ( pHt->DontExpand() ? nStart < *pAttrEnd
