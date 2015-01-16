@@ -28,7 +28,9 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -43,7 +45,9 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
@@ -77,19 +81,32 @@ enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
 
 static SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
-    { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },
-    { XML_NAMESPACE_DRAW,   XML_NOHREF,         XML_TOK_IMAP_NOHREF         },
-    { XML_NAMESPACE_SVG,    XML_X,              XML_TOK_IMAP_X              },
-    { XML_NAMESPACE_SVG,    XML_Y,              XML_TOK_IMAP_Y              },
-    { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_IMAP_CENTER_X       },
-    { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_IMAP_CENTER_Y       },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,          XML_TOK_IMAP_WIDTH          },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGHT         },
-    { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_IMAP_RADIUS         },
-    { XML_NAMESPACE_SVG,    XML_VIEWBOX,        XML_TOK_IMAP_VIEWBOX        },
-    { XML_NAMESPACE_DRAW,   XML_POINTS,         XML_TOK_IMAP_POINTS         },
-    { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, XML_TOK_IMAP_TARGET      },
+    { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+    { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_name) },
+    { XML_NAMESPACE_DRAW,   XML_NOHREF,         XML_TOK_IMAP_NOHREF,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_nohref) },
+    { XML_NAMESPACE_SVG,    XML_X,              XML_TOK_IMAP_X,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_x) },
+    { XML_NAMESPACE_SVG,    XML_Y,              XML_TOK_IMAP_Y,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_y) },
+    { XML_NAMESPACE_SVG,    XML_CX,             XML_TOK_IMAP_CENTER_X,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_cx) },
+    { XML_NAMESPACE_SVG,    XML_CY,             XML_TOK_IMAP_CENTER_Y,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_cy) },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,          XML_TOK_IMAP_WIDTH,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_width) },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,         XML_TOK_IMAP_HEIGHT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_height) },
+    { XML_NAMESPACE_SVG,    XML_R,              XML_TOK_IMAP_RADIUS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_r) },
+    { XML_NAMESPACE_SVG,    XML_VIEWBOX,        XML_TOK_IMAP_VIEWBOX,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_viewBox) },
+    { XML_NAMESPACE_DRAW,   XML_POINTS,         XML_TOK_IMAP_POINTS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_points) },
+    { XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, XML_TOK_IMAP_TARGET,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_target_frame_name) },
     XML_TOKEN_MAP_END
 };
 
