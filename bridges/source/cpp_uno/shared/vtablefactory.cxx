@@ -229,8 +229,13 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     sal_Size size = getBlockSize(slotCount);
     sal_Size pagesize = sysconf(_SC_PAGESIZE);
     block.size = (size + (pagesize - 1)) & ~(pagesize - 1);
-    block.start = block.exec = NULL;
     block.fd = -1;
+
+    // Try non-doublemmaped allocation first:
+    block.start = block.exec = rtl_arena_alloc(m_arena, &block.size);
+    if (block.start != nullptr) {
+        return true;
+    }
 
     osl::Security aSecurity;
     OUString strDirectory;
@@ -289,12 +294,6 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         freeBlock(block);
 
         strDirectory.clear();
-    }
-    if (!block.start || !block.exec || block.fd == -1)
-    {
-       //Fall back to non-doublemmaped allocation
-       block.fd = -1;
-       block.start = block.exec = rtl_arena_alloc(m_arena, &block.size);
     }
     return (block.start != 0 && block.exec != 0);
 }
