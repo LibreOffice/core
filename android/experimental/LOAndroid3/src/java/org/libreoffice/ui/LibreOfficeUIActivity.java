@@ -38,6 +38,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -111,10 +112,9 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         DocumentProviderFactory.initialize(this);
         documentProviderFactory = DocumentProviderFactory.getInstance();
 
-        //Set the "home" - top level - directory.
-        documentProvider = documentProviderFactory.getDefaultProvider();
-        homeDirectory = documentProvider.getRootDirectory();
-        currentDirectory = homeDirectory;
+        // init UI and populate with contents from the provider
+        createUI();
+        switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
     }
 
     public void createUI(){
@@ -142,30 +142,22 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         bgSplit.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
         actionBar.setSplitBackgroundDrawable(bgSplit);
 
-        if( !currentDirectory.equals( homeDirectory )){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
         if( viewMode == GRID_VIEW){
             // code to make a grid view
             setContentView(R.layout.file_grid);
             gv = (GridView)findViewById(R.id.file_explorer_grid_view);
-            filePaths = currentDirectory.listFiles(FileUtilities.getFileFilter(filterMode));
             gv.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                     open(position);
                 }
             });
-            gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
             actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
             registerForContextMenu(gv);
         }else{
             setContentView(R.layout.file_list);
             lv = (ListView)findViewById( R.id.file_explorer_list_view);
             lv.setClickable(true);
-            filePaths = currentDirectory.listFiles(FileUtilities.getFileFilter(filterMode));
-            lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
             actionBar.setSelectedNavigationItem( filterMode + 1 );
             registerForContextMenu(lv);
         }
@@ -183,10 +175,8 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             @Override
             public void onItemClick(AdapterView parent, View view,
                     int position, long id) {
-                documentProvider = documentProviderFactory.getProvider(position);
-                homeDirectory = documentProvider.getRootDirectory();
-                currentDirectory = homeDirectory;
-                createUI();
+                switchToDocumentProvider(documentProviderFactory
+                        .getProvider(position));
             }
         });
 
@@ -214,6 +204,42 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void switchToDocumentProvider(IDocumentProvider provider) {
+
+        new AsyncTask<IDocumentProvider, Void, Void>() {
+            @Override
+            protected Void doInBackground(IDocumentProvider... provider) {
+                // switch document provider:
+                // these operations may imply network access and must be run in
+                // a different thread
+                documentProvider = provider[0];
+                homeDirectory = documentProvider.getRootDirectory();
+                currentDirectory = homeDirectory;
+                filePaths = currentDirectory.listFiles(FileUtilities
+                        .getFileFilter(filterMode));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                // enable home icon as "up" if required
+                if (!currentDirectory.equals(homeDirectory)) {
+                    getActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                // refresh view
+                if (viewMode == GRID_VIEW) {
+                    gv.setAdapter(new GridItemAdapter(getApplicationContext(),
+                            currentDirectory, filePaths));
+                } else {
+                    lv.setAdapter(new ListItemAdapter(getApplicationContext(),
+                            filePaths));
+                }
+                // close drawer
+                drawerLayout.closeDrawer(drawerList);
+            }
+        }.execute(provider);
     }
 
     public void openDirectory(IFile dir) {
