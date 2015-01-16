@@ -38,7 +38,7 @@ namespace dbaui
 
     protected:
         IController&        m_rController;  // the controller in where we resides in
-        FixedLine           m_aSeparator;
+        VclPtr<FixedLine>   m_aSeparator;
         ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
     public:
@@ -47,6 +47,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView();
+        virtual void dispose() SAL_OVERRIDE;
 
         /// late construction
         virtual void Construct();

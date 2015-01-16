@@ -279,7 +279,7 @@ protected:
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~SvxLineWindow_Impl() { dispose(); }
-    virtual void dispose() SAL_OVERRIDE { m_aLineStyleLb.disposeAndClear(); }
+    virtual void dispose() SAL_OVERRIDE { m_aLineStyleLb.disposeAndClear(); SfxPopupWindow::dispose(); }
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
 

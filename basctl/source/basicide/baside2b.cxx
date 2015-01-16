@@ -271,6 +271,7 @@ void EditorWindow::dispose()
         EndListening( *pEditEngine );
         pEditEngine->RemoveView(pEditView.get());
     }
+    vcl::Window::dispose();
 }
 
 OUString EditorWindow::GetWordAtCursor()
@@ -1683,6 +1684,7 @@ void WatchWindow::dispose()
     aHeaderBar.disposeAndClear();
     aTreeListBox.disposeAndClear();
     GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    DockingWindow::dispose();
 }
 
 
