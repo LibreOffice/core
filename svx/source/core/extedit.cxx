@@ -7,15 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <svx/extedit.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/fmview.hxx>
+#include <svtools/grfmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <salhelper/thread.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/process.h>
@@ -32,7 +38,6 @@ using namespace css::uno;
 using namespace css::system;
 
 ExternalToolEdit::ExternalToolEdit()
-    : m_pGraphicObject(NULL)
 {
 }
 
@@ -57,33 +62,40 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
     }
 }
 
-IMPL_LINK (ExternalToolEdit, StartListeningEvent, void*, pEvent)
+void ExternalToolEdit::StartListeningEvent()
 {
     //Start an event listener implemented via VCL timeout
-    ExternalToolEdit* pData = ( ExternalToolEdit* )pEvent;
-
-    new FileChangedChecker(pData->m_aFileName, ::boost::bind(&HandleCloseEvent, pData));
-
-    return 0;
+    assert(!m_pChecker.get());
+    m_pChecker.reset(new FileChangedChecker(
+            m_aFileName, ::boost::bind(&HandleCloseEvent, this)));
 }
 
-void ExternalToolEdit::threadWorker(void* pThreadData)
+// self-destructing thread to make shell execute async
+class ExternalToolEditThread
+    : public ::salhelper::Thread
 {
-    ExternalToolEdit* pData = (ExternalToolEdit*) pThreadData;
+private:
+    OUString const m_aFileName;
 
-    // Make an asynchronous call to listen to the event of temporary image file
-    // getting changed
-    Application::PostUserEvent( LINK( NULL, ExternalToolEdit, StartListeningEvent ), pThreadData);
+    virtual void execute() SAL_OVERRIDE;
 
+public:
+    ExternalToolEditThread(OUString const& rFileName)
+        : ::salhelper::Thread("ExternalToolEdit")
+        , m_aFileName(rFileName)
+    {}
+};
+
+void ExternalToolEditThread::execute()
+{
     Reference<XSystemShellExecute> xSystemShellExecute(
         SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
-    xSystemShellExecute->execute( pData->m_aFileName, OUString(), SystemShellExecuteFlags::URIS_ONLY );
+    xSystemShellExecute->execute(m_aFileName, OUString(), SystemShellExecuteFlags::URIS_ONLY);
 }
 
-void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
+void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
 {
     //Get the graphic from the GraphicObject
-    m_pGraphicObject = pGraphicObject;
     const Graphic aGraphic = pGraphicObject->GetGraphic();
 
     //get the Preferred File Extension for this graphic
@@ -116,8 +128,57 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
 
     //Create a thread
 
-    // Create the data that is needed by the thread later
-    osl_createThread(ExternalToolEdit::threadWorker, this);
+    rtl::Reference<ExternalToolEditThread> const pThread(
+            new ExternalToolEditThread(m_aFileName));
+    pThread->launch();
+
+    StartListeningEvent();
+}
+
+SdrExternalToolEdit::SdrExternalToolEdit(
+        FmFormView *const pView, SdrObject *const pObj)
+    : m_pView(pView)
+    , m_pObj(pObj)
+{
+    assert(m_pObj && m_pView);
+    StartListening(*m_pObj->GetModel());
+}
+
+
+void SdrExternalToolEdit::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
+{
+    SdrHint const*const pSdrHint(dynamic_cast<SdrHint const*>(&rHint));
+    if (pSdrHint
+        && (HINT_MODELCLEARED == pSdrHint->GetKind()
+            || (pSdrHint->GetObject() == m_pObj
+                && HINT_OBJREMOVED == pSdrHint->GetKind())))
+    {
+        m_pView = 0;
+        m_pObj = 0;
+        m_pChecker.reset(); // avoid modifying deleted object
+        EndListening(rBC);
+    }
+}
+
+void SdrExternalToolEdit::Update(Graphic & rGraphic)
+{
+    assert(m_pObj && m_pView); // timer should be deleted by Notify() too
+    SdrPageView *const pPageView = m_pView->GetSdrPageView();
+    if (pPageView)
+    {
+        SdrGrafObj *const pNewObj(static_cast<SdrGrafObj*>(m_pObj->Clone()));
+        assert(pNewObj);
+        OUString const description =
+            m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
+        m_pView->BegUndo(description);
+        pNewObj->SetGraphicObject(rGraphic);
+        // set to new object before ReplaceObjectAtView() so that Notify() will
+        // not delete the running timer and crash
+        SdrObject *const pOldObj = m_pObj;
+        m_pObj = pNewObj;
+        m_pView->ReplaceObjectAtView(pOldObj, *pPageView, pNewObj);
+        m_pView->EndUndo();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

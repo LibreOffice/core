@@ -30,8 +30,10 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <unotools/caserotate.hxx>
+#include <boost/shared_ptr.hpp>
 
 class SdPage;
+class SdrExternalToolEdit;
 class DrawDocShell;
 class TabBar;
 class SdrObject;
@@ -501,6 +503,8 @@ private:
 
     ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
     ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;
+
+    std::vector<boost::shared_ptr<SdrExternalToolEdit> > m_ExternalEdits;
 };
 
 

@@ -38,31 +38,6 @@
 #define ScGraphicShell
 #include "scslots.hxx"
 
-class ScExternalToolEdit : public ExternalToolEdit
-{
-    FmFormView* m_pView;
-    SdrObject*  m_pObj;
-
-public:
-    ScExternalToolEdit ( FmFormView* pView, SdrObject* pObj ) :
-        m_pView   (pView),
-        m_pObj (pObj)
-    {}
-
-    virtual void Update( Graphic& aGraphic ) SAL_OVERRIDE
-    {
-        SdrPageView* pPageView = m_pView->GetSdrPageView();
-        if( pPageView )
-        {
-            SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
-            OUString    aStr = m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
-            m_pView->BegUndo( aStr );
-            pNewObj->SetGraphicObject( aGraphic );
-            m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
-            m_pView->EndUndo();
-        }
-    }
-};
 
 SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL))
 
@@ -187,9 +162,10 @@ void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
-            ScExternalToolEdit* aExternalToolEdit = new ScExternalToolEdit( pView, pObj );
-            aExternalToolEdit->Edit( &aGraphicObject );
+            GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
+            m_ExternalEdits.push_back( boost::shared_ptr<SdrExternalToolEdit>(
+                        new SdrExternalToolEdit(pView, pObj)));
+            m_ExternalEdits.back()->Edit( &aGraphicObject );
         }
     }
 
