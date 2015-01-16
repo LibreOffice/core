@@ -3212,10 +3212,25 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                             ScSetStringParam* pParam )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->SetString( nCol, nRow, nTab, rString, pParam );
-    else
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
         return false;
+
+    // In case setting this string affects an existing formula group, record
+    // its above and below position for later listening.
+
+    std::vector<ScAddress> aGroupPos;
+    sc::EndListeningContext aCxt(*this);
+    ScAddress aPos(nCol, nRow, nTab);
+    EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
+    aCxt.purgeEmptyBroadcasters();
+
+    bool bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+
+    SetNeedsListeningGroups(aGroupPos);
+    StartNeededListeners();
+
+    return bNumFmtSet;
 }
 
 bool ScDocument::SetString(
@@ -3291,17 +3306,27 @@ void ScDocument::SetEmptyCell( const ScAddress& rPos )
 
 void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal )
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
-        if (maTabs[nTab])
-            maTabs[nTab]->SetValue( nCol, nRow, rVal );
+    SetValue(ScAddress(nCol, nRow, nTab), rVal);
 }
 
 void ScDocument::SetValue( const ScAddress& rPos, double fVal )
 {
-    if (!TableExists(rPos.Tab()))
+    ScTable* pTab = FetchTable(rPos.Tab());
+    if (!pTab)
         return;
 
-    maTabs[rPos.Tab()]->SetValue(rPos.Col(), rPos.Row(), fVal);
+    // In case setting this string affects an existing formula group, record
+    // its above and below position for later listening.
+
+    std::vector<ScAddress> aGroupPos;
+    sc::EndListeningContext aCxt(*this);
+    EndListeningIntersectedGroup(aCxt, rPos, &aGroupPos);
+    aCxt.purgeEmptyBroadcasters();
+
+    pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
+
+    SetNeedsListeningGroups(aGroupPos);
+    StartNeededListeners();
 }
 
 OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const

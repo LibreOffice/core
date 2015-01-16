@@ -2210,6 +2210,9 @@ private:
 
     void SharePooledResources( ScDocument* pSrcDoc );
 
+    void EndListeningIntersectedGroup(
+        sc::EndListeningContext& rCxt, const ScAddress& rPos, std::vector<ScAddress>* pGroupPos = NULL );
+
     void EndListeningIntersectedGroups(
         sc::EndListeningContext& rCxt, const ScRange& rRange, std::vector<ScAddress>* pGroupPos = NULL );
 

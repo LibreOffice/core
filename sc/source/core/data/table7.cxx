@@ -199,6 +199,15 @@ bool ScTable::HasFormulaCell( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
     return false;
 }
 
+void ScTable::EndListeningIntersectedGroup(
+    sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, std::vector<ScAddress>* pGroupPos )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].EndListeningIntersectedGroup(rCxt, nRow, pGroupPos);
+}
+
 void ScTable::EndListeningIntersectedGroups(
     sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     std::vector<ScAddress>* pGroupPos )

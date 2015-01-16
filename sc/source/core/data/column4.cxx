@@ -1382,6 +1382,40 @@ void ScColumn::EndListeningFormulaCells(
         *pEndRow = aFunc.getEndRow();
 }
 
+void ScColumn::EndListeningIntersectedGroup(
+    sc::EndListeningContext& rCxt, SCROW nRow, std::vector<ScAddress>* pGroupPos )
+{
+    if (!ValidRow(nRow))
+        return;
+
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    sc::CellStoreType::iterator it = aPos.first;
+    if (it->type != sc::element_type_formula)
+        // Only interested in a formula block.
+        return;
+
+    ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
+    ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
+    if (!xGroup)
+        // Not a formula group.
+        return;
+
+    // End listening.
+    pFC->EndListeningTo(rCxt);
+
+    if (pGroupPos)
+    {
+        if (!pFC->IsSharedTop())
+            // Record the position of the top cell of the group.
+            pGroupPos->push_back(xGroup->mpTopCell->aPos);
+
+        SCROW nGrpLastRow = pFC->GetSharedTopRow() + pFC->GetSharedLength() - 1;
+        if (nRow < nGrpLastRow)
+            // Record the last position of the group.
+            pGroupPos->push_back(ScAddress(nCol, nGrpLastRow, nTab));
+    }
+}
+
 void ScColumn::EndListeningIntersectedGroups(
     sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos )
 {
