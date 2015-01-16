@@ -435,6 +435,9 @@ AC_ARG_WITH(system-jpeg,
 AC_ARG_WITH(system-expat,
 [  --with-system-expat     Use expat already on system
 ],,)
+AC_ARG_WITH(system-libwpd,
+[  --with-system-libwpd    Use libwpd already on system
+],,)
 AC_ARG_WITH(system-libxml,
 [  --with-system-libxml    Use libxml already on system
 ],,)
@@ -3762,6 +3765,23 @@ else
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)
+
+dnl ===================================================================
+dnl Check for system libwpd
+dnl ===================================================================
+AC_MSG_CHECKING([which libwpd to use])
+if test -n "$with_system_libwpd" -o -n "$with_system_libs" && \
+        test "$with_system_libwpd" != "no"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBWPD=YES
+    PKG_CHECK_MODULES( LIBWPD, libwpd-0.8 )
+else
+    AC_MSG_RESULT([no])
+    SYSTEM_LIBWPD=
+fi
+AC_SUBST(SYSTEM_LIBWPD)
+AC_SUBST(LIBWPD_CFLAGS)
+AC_SUBST(LIBWPD_LIBS)
 
 dnl ===================================================================
 dnl Check for system cppunit
