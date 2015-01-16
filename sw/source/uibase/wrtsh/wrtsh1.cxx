@@ -1482,11 +1482,13 @@ SwCharFmt *SwWrtShell::GetCharStyle(const OUString &rFmtName, GetStyle eCreate )
 
 SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
 {
-    SwFrmFmt *pFmt = 0;
     for( size_t i = GetTblFrmFmtCount(); i; )
-        if( !( pFmt = &GetTblFrmFmt( --i ) )->IsDefault() &&
+    {
+        SwFrmFmt *pFmt = &GetTblFrmFmt( --i );
+        if( !pFmt->IsDefault() &&
             pFmt->GetName() == rFmtName && IsUsed( *pFmt ) )
             return pFmt;
+    }
     return 0;
 }
 
@@ -1754,11 +1756,12 @@ void SwWrtShell::ChangeHeaderOrFooter(
     for( sal_uInt16 nFrom = 0, nTo = GetPageDescCnt();
             nFrom < nTo; ++nFrom )
     {
-        bool bChgd = false;
         SwPageDesc aDesc( GetPageDesc( nFrom ));
         OUString sTmp(aDesc.GetName());
         if( rStyleName.isEmpty() || rStyleName == sTmp )
         {
+            bool bChgd = false;
+
             if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
                 ( (bHeader && aDesc.GetMaster().GetHeader().IsActive()) ||
                   (!bHeader && aDesc.GetMaster().GetFooter().IsActive()) ) )

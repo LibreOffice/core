@@ -456,10 +456,9 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     if (pSh)
     {
-        SwFieldType* pFldType;
         for ( sal_uInt16 i = pMgr->GetFldTypeCount(); i; )
         {
-            pFldType = pMgr->GetFldType(USHRT_MAX, --i);
+            SwFieldType* pFldType = pMgr->GetFldType(USHRT_MAX, --i);
             if (pFldType->GetName().equals(m_pCategoryBox->GetText()))
             {
                 nSelFmt = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFldType)->GetSeqFormat();

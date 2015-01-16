@@ -518,11 +518,10 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     // Fill the color listbox
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem*  pItem       = NULL;
     XColorListRef pColorList;
     if ( pDocSh )
     {
-        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
             pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }

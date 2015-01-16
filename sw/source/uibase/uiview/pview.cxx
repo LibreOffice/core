@@ -1599,16 +1599,14 @@ void SwPagePreview::ScrollViewSzChg()
         const Rectangle& rDocRect = pViewWin->GetPaintedPreviewDocRect();
         const Size& rPreviewSize =
                 GetViewShell()->PagePreviewLayout()->GetPreviewDocSize();
-        long nVisWidth = 0;
-        long nThumb   = 0;
         Range aRange(0,0);
 
         if(rDocRect.GetWidth() < rPreviewSize.Width())
         {
             bShowHScrollbar = true;
 
-            nVisWidth = rDocRect.GetWidth();
-            nThumb = rDocRect.Left();
+            long nVisWidth = rDocRect.GetWidth();
+            long nThumb = rDocRect.Left();
             aRange = Range(0, rPreviewSize.Width());
 
             pHScrollbar->SetRange( aRange );

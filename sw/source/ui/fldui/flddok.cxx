@@ -198,10 +198,10 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
         m_pTypeLB->SelectEntryPos(0);
     }
 
-    size_t nCount;
-
     if (nOld != GetTypeSel())
     {
+        size_t nCount;
+
         m_pDateFT->Hide();
         m_pTimeFT->Hide();
 

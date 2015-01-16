@@ -522,10 +522,9 @@ void SwFldRefPage::UpdateSubType()
             const IDocumentOutlineNodes* pIDoc( pSh->getIDocumentOutlineNodesAccess() );
             pIDoc->getOutlineNodes( maOutlineNodes );
             bool bCertainTxtNodeSelected( false );
-            SvTreeListEntry* pEntry = 0;
             for ( size_t nOutlIdx = 0; nOutlIdx < maOutlineNodes.size(); ++nOutlIdx )
             {
-                pEntry = m_pSelectionToolTipLB->InsertEntry(
+                SvTreeListEntry* pEntry = m_pSelectionToolTipLB->InsertEntry(
                                 pIDoc->getOutlineText( nOutlIdx, true, true, false ) );
                 pEntry->SetUserData( reinterpret_cast<void*>(nOutlIdx) );
                 if ( ( IsFldEdit() &&
@@ -550,10 +549,9 @@ void SwFldRefPage::UpdateSubType()
             const IDocumentListItems* pIDoc( pSh->getIDocumentListItemsAccess() );
             pIDoc->getNumItems( maNumItems );
             bool bCertainTxtNodeSelected( false );
-            SvTreeListEntry* pEntry = 0;
             for ( size_t nNumItemIdx = 0; nNumItemIdx < maNumItems.size(); ++nNumItemIdx )
             {
-                pEntry = m_pSelectionToolTipLB->InsertEntry(
+                SvTreeListEntry* pEntry = m_pSelectionToolTipLB->InsertEntry(
                             pIDoc->getListItemText( *maNumItems[nNumItemIdx], true, true ) );
                 pEntry->SetUserData( reinterpret_cast<void*>(nNumItemIdx) );
                 if ( ( IsFldEdit() &&
