@@ -1020,7 +1020,6 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     //start the real layout so nothing overlaps anymore
     if (aVisiblePostItList.size()>1)
     {
-        long lSpaceUsed = 0;
         int loop = 0;
         bool bDone = false;
         // if no window is moved anymore we are finished
@@ -1028,7 +1027,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
         {
             loop++;
             bDone = true;
-            lSpaceUsed = lTopBorder + GetSpaceBetween();
+            long lSpaceUsed = lTopBorder + GetSpaceBetween();
             for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
             {
                 SwSidebarWin_iterator aNextPostIt = i;

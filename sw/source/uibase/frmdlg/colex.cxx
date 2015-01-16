@@ -298,11 +298,10 @@ void SwColExample::DrawPage( const Point& rOrg,
                 }
             }
 
-            int nDist;
             for( i = 0; i < nColumnCount -  1; i++)
             {
                 int nGutter = pColMgr->GetGutterWidth(i);
-                nDist = pColMgr->GetColWidth( i ) + nGutter;
+                int nDist = pColMgr->GetColWidth( i ) + nGutter;
                 nDist -= (i == 0) ?
                     nGutter/2 :
                         0;

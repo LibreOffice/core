@@ -2408,9 +2408,9 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             // this part should only be called when a temporary document needs to be created,
             // for example for PDF export or printing of (multi-)selection only.
 
-            bool bIsSwSrcView = false;
             if (!rpView)
             {
+                bool bIsSwSrcView = false;
                 (void) bIsPDFExport;
                 // aside from maybe PDF export the view should always have been provided!
                 OSL_ENSURE( bIsPDFExport, "view is missing, guessing one..." );
