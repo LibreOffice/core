@@ -898,8 +898,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     pViewData->SetZoom(aFracX, aFracY, true);
     pViewData->RefreshZoom();
 
-    double fTilePosXPixel = static_cast<double>(nTilePosX) * PIXEL_PER_TWIPS;
-    double fTilePosYPixel = static_cast<double>(nTilePosY) * PIXEL_PER_TWIPS;
+    double fTilePosXPixel = static_cast<double>(nTilePosX) * PIXEL_PER_TWIPS * static_cast<double>(aFracX);
+    double fTilePosYPixel = static_cast<double>(nTilePosY) * PIXEL_PER_TWIPS * static_cast<double>(aFracY);
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
