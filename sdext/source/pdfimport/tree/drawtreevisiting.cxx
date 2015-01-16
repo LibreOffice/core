@@ -190,74 +190,55 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
                                      bool               bWasTransformed
                                      )
 {
-    double rel_x = rElem.x, rel_y = rElem.y;
-
     rProps[ "draw:z-index" ] = OUString::number( rElem.ZOrder );
     rProps[ "draw:style-name"] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
-    rProps[ "svg:width" ]   = convertPixelToUnitString( rElem.w );
-    rProps[ "svg:height" ]  = convertPixelToUnitString( rElem.h );
 
     if (rElem.IsForText)
         rProps["draw:text-style-name"] = rEmitContext.rStyles.getStyleName(rElem.TextStyleId);
 
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
-    if( rGC.Transformation.isIdentity() || bWasTransformed )
+
+    if (bWasTransformed)
     {
-        rProps[ "svg:x" ]       = convertPixelToUnitString( rel_x );
-        rProps[ "svg:y" ]       = convertPixelToUnitString( rel_y );
+        rProps[ "svg:x" ]       = convertPixelToUnitString(rElem.x);
+        rProps[ "svg:y" ]       = convertPixelToUnitString(rElem.y);
+        rProps[ "svg:width" ]   = convertPixelToUnitString(rElem.w);
+        rProps[ "svg:height" ]  = convertPixelToUnitString(rElem.h);
     }
     else
     {
-        basegfx::B2DTuple aScale, aTranslation;
-        double fRotate, fShearX;
+        OUStringBuffer aBuf(256);
 
-        rGC.Transformation.decompose( aScale, aTranslation, fRotate, fShearX );
+        basegfx::B2DHomMatrix mat(rGC.Transformation);
 
-        OUStringBuffer aBuf( 256 );
-
-        // TODO(F2): general transformation case missing; if implemented, note
-        // that ODF rotation is oriented the other way
-
-        // vertical mirroring is done by horizontally mirroring and rotaing 180 degree
-        // quaint !
-        if( rElem.MirrorVertical )
-            fRotate += M_PI;
-
-        // First check here is to skip image frame case
-        if (rElem.IsForText &&
-            (aScale.getX() < 0) &&
-            (aScale.getY() > 0) &&
-            (basegfx::fTools::equalZero(aScale.getX() + aScale.getY(), 0.0001)))
+        if (rElem.MirrorVertical)
         {
-            fRotate += M_PI;
+            basegfx::B2DHomMatrix mat2;
+            mat2.translate(-0.5, -0.5);
+            mat2.scale(-1, -1);
+            mat2.translate(0.5, 0.5);
+            mat = mat * mat2;
         }
 
-        // build transformation string
-        if( fShearX != 0.0 )
-        {
-            aBuf.appendAscii( "skewX( " );
-            aBuf.append( fShearX );
-            aBuf.appendAscii( " )" );
-        }
-        if( fRotate != 0.0 )
-        {
-            if( !aBuf.isEmpty() )
-                aBuf.append( ' ' );
-            aBuf.appendAscii( "rotate( " );
-            aBuf.append( -fRotate );
-            aBuf.appendAscii( " )" );
+        double scale = convPx2mm(100);
+        mat.scale(scale, scale);
 
-        }
-        if( !aBuf.isEmpty() )
-            aBuf.append( ' ' );
-        aBuf.appendAscii( "translate( " );
-        aBuf.append( convertPixelToUnitString( rel_x ) );
-        aBuf.append( ' ' );
-        aBuf.append( convertPixelToUnitString( rel_y ) );
-        aBuf.appendAscii( " )" );
+        aBuf.appendAscii("matrix(");
+        aBuf.append(mat.get(0, 0));
+        aBuf.append(' ');
+        aBuf.append(mat.get(1, 0));
+        aBuf.append(' ');
+        aBuf.append(mat.get(0, 1));
+        aBuf.append(' ');
+        aBuf.append(mat.get(1, 1));
+        aBuf.append(' ');
+        aBuf.append(mat.get(0, 2));
+        aBuf.append(' ');
+        aBuf.append(mat.get(1, 2));
+        aBuf.appendAscii(")");
 
-        rProps[ "draw:transform" ] = aBuf.makeStringAndClear();
+        rProps["draw:transform"] = aBuf.makeStringAndClear();
     }
 }
 
@@ -905,7 +886,7 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
     double fRotate, fShearX;
     basegfx::B2DTuple aScale, aTranslation;
     rGC.Transformation.decompose(aScale, aTranslation, fRotate, fShearX);
-    double textScale = -100 * aScale.getX() / aScale.getY();
+    double textScale = 100 * aScale.getX() / aScale.getY();
     if (((textScale >= 1) && (textScale <= 99)) ||
         ((textScale >= 101) && (textScale <= 999)))
     {
