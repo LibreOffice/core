@@ -887,6 +887,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
     Color aDelimiterLineColor( ::svtools::ColorConfig().GetColorValue( ::svtools::CALCGRID ).nColor );
 
     // redraw the invalid fields
+    bool paint_seeked(false);
     for ( sal_uLong nRelRow = nRelTopRow;
           nRelRow <= nRelBottomRow && (sal_uLong)nTopRow+nRelRow < (sal_uLong)nRowCount;
           ++nRelRow, aPos.Y() += nDataRowHeigt )
@@ -899,6 +900,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
 
         // prepare row
         sal_uLong nRow = nTopRow+nRelRow;
+        paint_seeked = true;
         if ( !SeekRow( nRow) ) {
             OSL_FAIL("BrowseBox::ImplPaintData: SeekRow failed");
         }
@@ -1029,6 +1031,11 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
                                       nY ) );
             _rOut.Pop();
         }
+    }
+
+    if (paint_seeked && !SeekRow(nCurRow))
+    {
+        SAL_WARN("svtools.brwbox", "BrowseBox::ImplPaintData could not seek back to current row after paint");
     }
 
     if (aPos.Y() > aOverallAreaBRPos.Y() + 1)
