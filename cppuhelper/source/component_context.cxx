@@ -40,7 +40,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -331,8 +331,8 @@ protected:
 
 class ComponentContext
     : private MutexHolder
-    , public WeakComponentImplHelper2< XComponentContext,
-                                       container::XNameContainer >
+    , public WeakComponentImplHelper< XComponentContext,
+                                      container::XNameContainer >
 {
 protected:
     Reference< XComponentContext > m_xDelegate;
@@ -752,8 +752,7 @@ void ComponentContext::disposing()
 ComponentContext::ComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    : WeakComponentImplHelper2< XComponentContext, container::XNameContainer >(
-        m_mutex ),
+    : WeakComponentImplHelper( m_mutex ),
       m_xDelegate( xDelegate )
 {
     for ( sal_Int32 nPos = 0; nPos < nEntries; ++nPos )
