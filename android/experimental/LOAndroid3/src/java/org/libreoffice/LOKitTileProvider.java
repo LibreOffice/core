@@ -15,6 +15,9 @@ import org.mozilla.gecko.gfx.IntSize;
 
 import java.nio.ByteBuffer;
 
+/**
+ * LOKit implementation of TileProvider.
+ */
 public class LOKitTileProvider implements TileProvider, Document.MessageCallback {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
     private static int TILE_SIZE = 256;
@@ -261,6 +264,9 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_TEXT;
     }
 
+    /**
+     * Register the tile invalidation callback.
+     */
     @Override
     public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
         this.tileInvalidationCallback = tileInvalidationCallback;
@@ -284,6 +290,9 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         return mDocument.getPart();
     }
 
+    /**
+     * Process the retrieved messages from LOK
+     */
     @Override
     public void messageRetrieved(int signalNumber, String payload) {
         switch (signalNumber) {

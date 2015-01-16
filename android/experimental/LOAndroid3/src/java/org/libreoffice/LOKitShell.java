@@ -49,6 +49,9 @@ public class LOKitShell {
 
     // EVENTS
 
+    /**
+     * Make sure LOKitThread is running and send event to it.
+     */
     public static void sendEvent(LOEvent event) {
         if (LibreOfficeMainActivity.mAppContext != null && LibreOfficeMainActivity.mAppContext.getLOKitThread() != null) {
             LibreOfficeMainActivity.mAppContext.getLOKitThread().queueEvent(event);
@@ -59,10 +62,16 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.THUMBNAIL, task));
     }
 
+    /**
+     * Send touch event to LOKitThread.
+     */
     public static void sentTouchEvent(String touchType, MotionEvent motionEvent) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, "SingleTap", motionEvent));
     }
 
+    /**
+     * Send key press event to LOKitThread.
+     */
     public static void sendKeyPressEvent(KeyEvent event) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_PRESS, event));
     }

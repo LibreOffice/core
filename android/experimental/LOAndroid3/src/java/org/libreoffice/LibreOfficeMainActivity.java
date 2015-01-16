@@ -192,6 +192,10 @@ public class LibreOfficeMainActivity extends LOAbout {
         return mDocumentPartViewListAdapter;
     }
 
+    /**
+     * Show software keyboard.
+     * Force the request on main thread.
+     */
     public void showSoftKeyboard() {
         Log.i(LOGTAG, "SoftKeyboard show request..");
 
@@ -241,6 +245,10 @@ public class LibreOfficeMainActivity extends LOAbout {
         }
     }
 
+
+    /**
+     * Listen to key presses and send event to LOK.
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         LOKitShell.sendKeyPressEvent(event);
