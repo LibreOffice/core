@@ -9,6 +9,7 @@
 
 #include <sal/types.h>
 #include <math.h>
+#include <string.h>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
@@ -113,11 +114,14 @@ static float pixelToTwip(float nInput)
     return (nInput / g_nDPI) * 1440.0f;
 }
 
-void renderDocument( LOKDocView* pDocView )
+void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
 {
     long nDocumentWidthTwips, nDocumentHeightTwips, nDocumentWidthPixels, nDocumentHeightPixels;
     const int nTileSizePixels = 256;
-    long nRow, nColumn, nRows, nColumns;
+    // Current row / column.
+    guint nRow, nColumn;
+    // Total number of rows / columns in this document.
+    guint nRows, nColumns;
 
     // Get document size and find out how many rows / columns we need.
     pDocView->pDocument->pClass->getDocumentSize(pDocView->pDocument, &nDocumentWidthTwips, &nDocumentHeightTwips);
@@ -127,14 +131,29 @@ void renderDocument( LOKDocView* pDocView )
     nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
     // Set up our table and the tile pointers.
-    if (pDocView->pTable)
-        gtk_container_remove(GTK_CONTAINER( pDocView->pEventBox ), pDocView->pTable);
-    pDocView->pTable = gtk_table_new(nRows, nColumns, FALSE);
-    gtk_container_add(GTK_CONTAINER(pDocView->pEventBox), pDocView->pTable);
-    gtk_widget_show(pDocView->pTable);
-    if (pDocView->pCanvas)
-        g_free(pDocView->pCanvas);
-    pDocView->pCanvas = g_malloc0(sizeof(GtkWidget*) * nRows * nColumns);
+    if (!pDocView->pTable)
+        pPartial = NULL;
+    if (pPartial)
+    {
+        // Same as nRows / nColumns, but from the previous renderDocument() call.
+        guint nOldRows, nOldColumns;
+
+        gtk_table_get_size(GTK_TABLE(pDocView->pTable), &nOldRows, &nOldColumns);
+        if (nOldRows != nRows || nOldColumns != nColumns)
+            // Can't do partial rendering, document size changed.
+            pPartial = NULL;
+    }
+    if (!pPartial)
+    {
+        if (pDocView->pTable)
+            gtk_container_remove(GTK_CONTAINER(pDocView->pEventBox), pDocView->pTable);
+        pDocView->pTable = gtk_table_new(nRows, nColumns, FALSE);
+        gtk_container_add(GTK_CONTAINER(pDocView->pEventBox), pDocView->pTable);
+        gtk_widget_show(pDocView->pTable);
+        if (pDocView->pCanvas)
+            g_free(pDocView->pCanvas);
+        pDocView->pCanvas = g_malloc0(sizeof(GtkWidget*) * nRows * nColumns);
+    }
 
     // Render the tiles.
     for (nRow = 0; nRow < nRows; ++nRow)
@@ -145,8 +164,10 @@ void renderDocument( LOKDocView* pDocView )
             GdkPixbuf* pPixBuf;
             unsigned char* pBuffer;
             int nRowStride;
+            GdkRectangle aTileRectangle;
+            gboolean bPaint = TRUE;
 
-            // The rightmost/bottommost tiles may be smaller.
+            // Determine size of the tile: the rightmost/bottommost tiles may be smaller and we need the size to decide if we need to repaint.
             if (nColumn == nColumns - 1)
                 nTileWidthPixels = nDocumentWidthPixels - nColumn * nTileSizePixels;
             else
@@ -156,27 +177,41 @@ void renderDocument( LOKDocView* pDocView )
             else
                 nTileHeightPixels = nTileSizePixels;
 
-            pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB, TRUE, 8, nTileWidthPixels, nTileHeightPixels);
-            pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
-            pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
-                                                    // Buffer and its size, depends on the position only.
-                                                    pBuffer,
-                                                    nTileWidthPixels, nTileHeightPixels,
-                                                    &nRowStride,
-                                                    // Position of the tile.
-                                                    pixelToTwip(nTileSizePixels) / pDocView->fZoom * nColumn, pixelToTwip(nTileSizePixels) / pDocView->fZoom * nRow,
-                                                    // Size of the tile, depends on the zoom factor and the tile position only.
-                                                    pixelToTwip(nTileWidthPixels) / pDocView->fZoom, pixelToTwip(nTileHeightPixels) / pDocView->fZoom );
-            (void) nRowStride;
+            // Determine size and position of the tile in document coordinates, so we can decide if we can skip painting for partial rendering.
+            aTileRectangle.x = pixelToTwip(nTileSizePixels) / pDocView->fZoom * nColumn;
+            aTileRectangle.y = pixelToTwip(nTileSizePixels) / pDocView->fZoom * nRow;
+            aTileRectangle.width = pixelToTwip(nTileWidthPixels) / pDocView->fZoom;
+            aTileRectangle.height = pixelToTwip(nTileHeightPixels) / pDocView->fZoom;
+            if (pPartial && !gdk_rectangle_intersect(pPartial, &aTileRectangle, NULL))
+                    bPaint = FALSE;
 
-            pDocView->pCanvas[nRow * nColumns + nColumn] = gtk_image_new();
-            gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas[nRow * nColumns + nColumn] ), pPixBuf );
-            g_object_unref(G_OBJECT(pPixBuf));
-            gtk_table_attach(GTK_TABLE(pDocView->pTable),
-                             pDocView->pCanvas[nRow * nColumns + nColumn],
-                             nColumn, nColumn + 1, nRow, nRow + 1,
-                             GTK_SHRINK, GTK_SHRINK, 0, 0);
-            gtk_widget_show(pDocView->pCanvas[nRow * nColumns + nColumn]);
+            if (bPaint)
+            {
+                pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileWidthPixels, nTileHeightPixels);
+                pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+                pDocView->pDocument->pClass->paintTile(pDocView->pDocument,
+                                                       // Buffer and its size, depends on the position only.
+                                                       pBuffer,
+                                                       nTileWidthPixels, nTileHeightPixels,
+                                                       &nRowStride,
+                                                       // Position of the tile.
+                                                       aTileRectangle.x, aTileRectangle.y,
+                                                       // Size of the tile, depends on the zoom factor and the tile position only.
+                                                       aTileRectangle.width, aTileRectangle.height);
+                (void) nRowStride;
+
+                if (pDocView->pCanvas[nRow * nColumns + nColumn])
+                    gtk_widget_destroy(GTK_WIDGET(pDocView->pCanvas[nRow * nColumns + nColumn]));
+                pDocView->pCanvas[nRow * nColumns + nColumn] = gtk_image_new();
+                gtk_image_set_from_pixbuf(GTK_IMAGE(pDocView->pCanvas[nRow * nColumns + nColumn]), pPixBuf);
+                g_object_unref(G_OBJECT(pPixBuf));
+                gtk_widget_show(pDocView->pCanvas[nRow * nColumns + nColumn]);
+                gtk_table_attach_defaults(GTK_TABLE(pDocView->pTable), pDocView->pCanvas[nRow * nColumns + nColumn], nColumn, nColumn + 1, nRow, nRow + 1);
+                gtk_table_attach(GTK_TABLE(pDocView->pTable),
+                                 pDocView->pCanvas[nRow * nColumns + nColumn],
+                                 nColumn, nColumn + 1, nRow, nRow + 1,
+                                 GTK_SHRINK, GTK_SHRINK, 0, 0);
+            }
         }
     }
 }
@@ -185,10 +220,35 @@ void renderDocument( LOKDocView* pDocView )
 typedef struct
 {
     int m_nType;
-    const char* m_pPayload;
+    char* m_pPayload;
     LOKDocView* m_pDocView;
 }
 LOKDocViewCallbackData;
+
+/// Returns the GdkRectangle of a width,height,x,y string.
+static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
+{
+    GdkRectangle aRet;
+    gchar** ppCoordinates;
+
+    ppCoordinates = g_strsplit(pPayload, ", ", 4);
+    if (!*ppCoordinates)
+        return aRet;
+    aRet.width = atoi(*ppCoordinates);
+    ++ppCoordinates;
+    if (!*ppCoordinates)
+        return aRet;
+    aRet.height = atoi(*ppCoordinates);
+    ++ppCoordinates;
+    if (!*ppCoordinates)
+        return aRet;
+    aRet.x = atoi(*ppCoordinates);
+    ++ppCoordinates;
+    if (!*ppCoordinates)
+        return aRet;
+    aRet.y = atoi(*ppCoordinates);
+    return aRet;
+}
 
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
@@ -198,12 +258,21 @@ static gboolean lok_docview_callback(gpointer pData)
     switch (pCallback->m_nType)
     {
     case LOK_CALLBACK_INVALIDATE_TILES:
-        renderDocument(pCallback->m_pDocView);
-        break;
+    {
+        if (strcmp(pCallback->m_pPayload, "EMPTY") != 0)
+        {
+            GdkRectangle aRectangle = lcl_payloadToRectangle(pCallback->m_pPayload);
+            renderDocument(pCallback->m_pDocView, &aRectangle);
+        }
+        else
+            renderDocument(pCallback->m_pDocView, NULL);
+    }
+    break;
     default:
         break;
     }
 
+    g_free(pCallback->m_pPayload);
     g_free(pCallback);
     return G_SOURCE_REMOVE;
 }
@@ -215,7 +284,7 @@ static void lok_docview_callback_worker(int nType, const char* pPayload, void* p
 
     LOKDocViewCallbackData* pCallback = g_new0(LOKDocViewCallbackData, 1);
     pCallback->m_nType = nType;
-    pCallback->m_pPayload = pPayload;
+    pCallback->m_pPayload = g_strdup(pPayload);
     pCallback->m_pDocView = pDocView;
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(lok_docview_callback, pCallback);
@@ -244,7 +313,7 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     else
     {
         pDocView->pDocument->pClass->initializeForRendering(pDocView->pDocument);
-        renderDocument( pDocView );
+        renderDocument(pDocView, NULL);
     }
 
     return TRUE;
@@ -256,7 +325,7 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_zoom ( LOKDocView* pDocView, float fZo
 
     if ( pDocView->pDocument )
     {
-        renderDocument( pDocView );
+        renderDocument(pDocView, NULL);
     }
     // TODO: maybe remember and reset positiong?
 }
@@ -279,7 +348,7 @@ SAL_DLLPUBLIC_EXPORT int lok_docview_get_part( LOKDocView* pDocView )
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_part( LOKDocView* pDocView, int nPart)
 {
     pDocView->pDocument->pClass->setPart( pDocView->pDocument, nPart );
-    renderDocument( pDocView );
+    renderDocument(pDocView, NULL);
 }
 
 SAL_DLLPUBLIC_EXPORT char* lok_docview_get_part_name( LOKDocView* pDocView, int nPart )
@@ -291,7 +360,7 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_partmode( LOKDocView* pDocView,
                                                     LibreOfficeKitPartMode ePartMode )
 {
     pDocView->pDocument->pClass->setPartMode( pDocView->pDocument, ePartMode );
-    renderDocument( pDocView );
+    renderDocument(pDocView, NULL);
 }
 
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
