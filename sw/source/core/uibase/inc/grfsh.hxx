@@ -20,9 +20,13 @@
 #define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_GRFSH_HXX
 
 #include "frmsh.hxx"
+#include <boost/shared_ptr.hpp>
 
 class SwGrfShell: public SwBaseShell
 {
+    class SwExternalToolEdit;
+    std::vector<boost::shared_ptr<SwExternalToolEdit> > m_ExternalEdits;
+
 public:
     SFX_DECL_INTERFACE(SW_GRFSHELL)
 
@@ -39,6 +43,7 @@ public:
     void GetAttrStateForRotation(SfxItemSet& rRequest);
 
     SwGrfShell(SwView &rView);
+    virtual ~SwGrfShell();
 };
 
 #endif
