@@ -1476,8 +1476,9 @@ void ScColumn::EndListeningGroup( sc::EndListeningContext& rCxt, SCROW nRow )
 
     // Move back to the top cell.
     SCROW nTopDelta = (*pp)->aPos.Row() - xGroup->mpTopCell->aPos.Row();
-    for (SCROW i = 0; i < nTopDelta; ++i)
-        --pp;
+    assert(nTopDelta >= 0);
+    if (nTopDelta > 0)
+        pp -= nTopDelta;
 
     // Set the needs listening flag to all cells in the group.
     assert(*pp == xGroup->mpTopCell);
@@ -1505,8 +1506,9 @@ void ScColumn::SetNeedsListeningGroup( SCROW nRow )
 
     // Move back to the top cell.
     SCROW nTopDelta = (*pp)->aPos.Row() - xGroup->mpTopCell->aPos.Row();
-    for (SCROW i = 0; i < nTopDelta; ++i)
-        --pp;
+    assert(nTopDelta >= 0);
+    if (nTopDelta > 0)
+        pp -= nTopDelta;
 
     // Set the needs listening flag to all cells in the group.
     assert(*pp == xGroup->mpTopCell);
