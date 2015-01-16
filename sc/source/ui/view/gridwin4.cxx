@@ -935,10 +935,20 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aOutData.DrawShadow();
     aOutData.DrawFrame();
 
-    // TODO : Scaling of strings is incorrect.  Find out why.
+    // Set scaling to map mode only for text rendering, to get texts to scale
+    // correctly.
+    MapMode aOldMapMode = rDevice.GetMapMode();
+    MapMode aNewMapMode = aOldMapMode;
+    aNewMapMode.SetScaleX(aFracX);
+    aNewMapMode.SetScaleY(aFracY);
+    rDevice.SetMapMode(aNewMapMode);
+
     aOutData.DrawStrings(true);
+
     // TODO : Edit texts don't get rendered at all.  Fix this.
     aOutData.DrawEdit(true);
+
+    rDevice.SetMapMode(aOldMapMode);
 }
 
 void ScGridWindow::CheckNeedsRepaint()
