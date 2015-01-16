@@ -414,7 +414,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             sal_uInt8 nNxtActual = rInf.GetFont()->GetActual();
             sal_uInt8 nLstActual = nNxtActual;
             sal_uInt16 nLstHeight = (sal_uInt16)rInf.GetFont()->GetHeight();
-            bool bAllowBefore = false;
             bool bAllowBehind = false;
             const CharClass& rCC = GetAppCharClass();
 
@@ -443,6 +442,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const SwLinePortion* pLast = rInf.GetLast();
             if ( bAllowBehind && pLast )
             {
+                bool bAllowBefore = false;
+
                 if ( pLast->InFldGrp() )
                 {
                     OUString aAltTxt;

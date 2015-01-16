@@ -259,13 +259,12 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // remove from array
     SwDoc* pDoc = pObjArr->pFmt->GetDoc();
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
-    SdrObject* pObj;
 
     for( sal_uInt16 n = 1; n < nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
-        pObj = rSave.pObj;
+        SdrObject* pObj = rSave.pObj;
 
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 

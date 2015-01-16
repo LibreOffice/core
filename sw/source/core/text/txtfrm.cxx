@@ -390,7 +390,6 @@ SwTxtFrm::~SwTxtFrm()
         size_t nPos = 0;
         sal_uLong nIndex = pCNd->GetIndex();
         rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
-        SwTxtFtn* pTxtFtn;
         if( nPos < rFtnIdxs.size() )
         {
             while( nPos && pTxtNd == &(rFtnIdxs[ nPos ]->GetTxtNode()) )
@@ -400,7 +399,7 @@ SwTxtFrm::~SwTxtFrm()
         }
         while( nPos < rFtnIdxs.size() )
         {
-            pTxtFtn = rFtnIdxs[ nPos ];
+            SwTxtFtn* pTxtFtn = rFtnIdxs[ nPos ];
             if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )
                 break;
             pTxtFtn->DelFrms( this );
