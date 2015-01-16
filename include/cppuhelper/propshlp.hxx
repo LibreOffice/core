@@ -686,7 +686,11 @@ protected:
 
 /**
    OPropertySetHelper plus XPropertySetOption
- */
+
+   @attention
+   The getTypes() inherited from OPropertysetHelper does not cover
+   XPropertySetOption.
+*/
 class CPPUHELPER_DLLPUBLIC OPropertySetHelper2 : public OPropertySetHelper,
                             public ::com::sun::star::beans::XPropertySetOption
 {

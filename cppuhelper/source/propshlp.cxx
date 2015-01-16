@@ -231,12 +231,10 @@ Any OPropertySetHelper2::queryInterface( const ::com::sun::star::uno::Type & rTy
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > OPropertySetHelper::getTypes()
     throw (RuntimeException)
 {
-    Sequence< ::com::sun::star::uno::Type > aTypes( 4 );
-    aTypes[ 0 ] = XPropertySet::static_type();
-    aTypes[ 1 ] = XPropertySetOption::static_type();
-    aTypes[ 2 ] = XMultiPropertySet::static_type();
-    aTypes[ 3 ] = XFastPropertySet::static_type();
-    return aTypes;
+    return css::uno::Sequence<css::uno::Type>({
+        UnoType<css::beans::XPropertySet>::get(),
+        UnoType<css::beans::XMultiPropertySet>::get(),
+        UnoType<css::beans::XFastPropertySet>::get()});
 }
 
 // ComponentHelper

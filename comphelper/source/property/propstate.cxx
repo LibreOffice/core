@@ -55,15 +55,12 @@ namespace comphelper
 
     css::uno::Sequence<css::uno::Type> OPropertyStateHelper::getTypes()
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes(4);
-        ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-        // base class types
-        pTypes[0] = cppu::UnoType<com::sun::star::beans::XPropertySet>::get();
-        pTypes[1] = cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get();
-        pTypes[2] = cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get();
-        // my own type
-        pTypes[3] = cppu::UnoType<com::sun::star::beans::XPropertyState>::get();
-        return aTypes;
+        return css::uno::Sequence<css::uno::Type>({
+            cppu::UnoType<css::beans::XPropertySet>::get(),
+            cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+            cppu::UnoType<css::beans::XFastPropertySet>::get(),
+            cppu::UnoType<css::beans::XPropertySetOption>::get(),
+            cppu::UnoType<css::beans::XPropertyState>::get()});
     }
 
     OPropertyStateHelper::OPropertyStateHelper(
