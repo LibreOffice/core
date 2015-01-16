@@ -85,12 +85,6 @@ public class LibreOfficeMainActivity extends LOAbout {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public DisplayMetrics getDisplayMetrics() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        return metrics;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.w(LOGTAG, "onCreate..");
