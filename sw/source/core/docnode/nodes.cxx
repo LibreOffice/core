@@ -96,11 +96,10 @@ SwNodes::~SwNodes()
     delete pOutlineNds;
 
     {
-        SwNode *pNode;
         SwNodeIndex aNdIdx( *this );
         while( true )
         {
-            pNode = &aNdIdx.GetNode();
+            SwNode *pNode = &aNdIdx.GetNode();
             if( pNode == pEndOfContent )
                 break;
 
@@ -1023,7 +1022,6 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
  */
 void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd )
 {
-    SwNode * pAktNode;
     SwNodeIndex aTmpIdx( aStart, +1 );
     // array forms a stack, holding all StartOfSelections
     SwSttNdPtrs aSttNdStack;
@@ -1034,7 +1032,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
     // (the indices are updated from the end node backwards to the start)
     for( ;; ++aTmpIdx )
     {
-        pAktNode = &aTmpIdx.GetNode();
+        SwNode * pAktNode = &aTmpIdx.GetNode();
         pAktNode->pStartOfSection = aSttNdStack[ aSttNdStack.size()-1 ];
 
         if( pAktNode->GetStartNode() )

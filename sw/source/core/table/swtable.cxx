@@ -1400,7 +1400,6 @@ const SwTableBox* SwTable::GetTblBox( const OUString& rName,
     const SwTableBox* pBox = 0;
     const SwTableLine* pLine;
     const SwTableLines* pLines;
-    const SwTableBoxes* pBoxes;
 
     sal_uInt16 nLine, nBox;
     OUString aNm( rName );
@@ -1425,7 +1424,7 @@ const SwTableBox* SwTable::GetTblBox( const OUString& rName,
         pLine = (*pLines)[ nLine-1 ];
 
         // determine box
-        pBoxes = &pLine->GetTabBoxes();
+        const SwTableBoxes* pBoxes = &pLine->GetTabBoxes();
         if( nBox >= pBoxes->size() )
             return 0;
         pBox = (*pBoxes)[ nBox ];

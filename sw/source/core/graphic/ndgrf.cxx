@@ -997,10 +997,11 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
         // delete all Graphic-Links with this name from cache
         const sfx2::LinkManager& rLnkMgr = pDoc->getIDocumentLinksAdministration().GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-        SwGrfNode* pGrfNd;
         OUString sFileNm;
         for( size_t n = rLnks.size(); n; )
         {
+            SwGrfNode* pGrfNd;
+
             ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm ) &&

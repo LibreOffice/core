@@ -543,12 +543,16 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
 
     // check if number is already used and if a new one needs to be created
     SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-    const SwTxtNode* pNd;
     for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+    {
+        const SwTxtNode* pNd;
         if( pF->GetField() != &rFld && pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
+        {
             InsertSort( aArr, static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
+        }
+    }
 
     // check first if number already exists
     sal_uInt16 nNum = rFld.GetSeqNumber();
@@ -578,8 +582,9 @@ size_t SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
     rList.Clear();
 
     SwIterator<SwFmtFld,SwFieldType> aIter( *this );
-    const SwTxtNode* pNd;
     for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+    {
+        const SwTxtNode* pNd;
         if( pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
@@ -589,6 +594,7 @@ size_t SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }
+    }
 
     return rList.Count();
 }

@@ -1129,7 +1129,6 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         return ;
 
     const OUString sName( pDShell->GetMedium()->GetName() );
-    SwBaseLink* pBLink;
     const OUString sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
     uno::Any aValue;
     aValue <<= sName; // Arbitrary name
@@ -1137,6 +1136,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     const ::sfx2::SvBaseLinks& rLnks = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( sal_uInt16 n = rLnks.size(); n; )
     {
+        SwBaseLink* pBLink;
+
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
