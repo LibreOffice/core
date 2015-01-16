@@ -50,8 +50,12 @@
 #include <xmloff/attrlist.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
+using namespace xmloff;
 using namespace ::xmloff::token;
 
 class SwXMLConditionParser_Impl
@@ -200,6 +204,8 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    SwXMLConditionContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList );
     virtual ~SwXMLConditionContext_Impl();
 
     TYPEINFO_OVERRIDE();
@@ -245,6 +251,32 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
             {
                 sApplyStyle = rValue;
             }
+        }
+    }
+}
+
+SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLImportContext( rImport ),
+    nCondition( 0 ),
+    nSubCondition( 0 )
+{
+    if( xAttrList.is() && xAttrList->hasAttribute( Element ) )
+    {
+        const OUString& rValue = xAttrList->getValue( Element );
+        if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_condition) )
+        {
+            SwXMLConditionParser_Impl aCondParser( rValue );
+            if( aCondParser.IsValid() )
+            {
+                nCondition = aCondParser.GetCondition();
+                nSubCondition = aCondParser.GetSubCondition();
+            }
+        }
+        else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_apply_style_name) )
+        {
+            sApplyStyle = rValue;
         }
     }
 }
@@ -380,11 +412,30 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SwXMLTextStyleContext_Impl::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SwXMLTextStyleContext_Impl::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_map) )
+    {
+        SwXMLConditionContext_Impl *pCond =
+            new SwXMLConditionContext_Impl( GetImport(), Element, xAttrList );
+        if( pCond->IsValid() )
+        {
+            if( !pConditions )
+                pConditions = new SwXMLConditions_Impl;
+            pConditions->push_back( pCond );
+            pCond->AddFirstRef();
+        }
+        pContext = pCond;
+    }
+
+    if( !pContext.is() )
+        pContext = XMLTextStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
