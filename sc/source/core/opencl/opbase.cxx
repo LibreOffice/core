@@ -190,13 +190,20 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream & ss,
     ss<< "    tmp";
     ss<< i;
     ss<< "= fsum(";
-    vSubArguments[i]->GenDeclRef(ss);
     if(vSubArguments[i]->GetFormulaToken()->GetType() ==
      formula::svDoubleVectorRef)
+    {
+        vSubArguments[i]->GenDeclRef(ss);
         ss<<"["<< p.c_str()<< "]";
+    }
     else  if(vSubArguments[i]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
-        ss<<"[get_group_id(1)]";
+    {
+        formula::SingleVectorRefToken *pSVR = dynamic_cast<formula::SingleVectorRefToken*>(vSubArguments[i]->GetFormulaToken());
+        ss<<"(get_group_id(1)<" << pSVR->GetArrayLength() << "?";
+        vSubArguments[i]->GenDeclRef(ss);
+        ss<<"[get_group_id(1)]:0)";
+    }
     ss<<", 0);\n";
 #else
     ss <<"    tmp";
