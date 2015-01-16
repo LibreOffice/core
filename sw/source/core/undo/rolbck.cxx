@@ -1133,10 +1133,9 @@ bool SwHistory::Rollback( SwDoc* pDoc, sal_uInt16 nStart )
     if ( !Count() )
         return false;
 
-    SwHistoryHint * pHHt;
     for ( sal_uInt16 i = Count(); i > nStart ; )
     {
-        pHHt = m_SwpHstry[ --i ];
+        SwHistoryHint * pHHt = m_SwpHstry[ --i ];
         pHHt->SetInDoc( pDoc, false );
         delete pHHt;
     }
@@ -1245,13 +1244,13 @@ void SwHistory::CopyAttr(
 
     // copy all attributes of the TextNode in the area from nStart to nEnd
     SwTxtAttr* pHt;
-    const sal_Int32 * pEndIdx;
     for( size_t n = 0; n < pHts->Count(); ++n )
     {
         // nAttrStt must even be set when !pEndIdx
         pHt = pHts->GetTextHint(n);
         const sal_Int32 nAttrStt = pHt->GetStart();
-        if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
+        const sal_Int32 * pEndIdx = pHt->GetEnd();
+        if( 0 !=  pEndIdx && nAttrStt > nEnd )
             break;
 
         // never copy Flys and Ftn !!

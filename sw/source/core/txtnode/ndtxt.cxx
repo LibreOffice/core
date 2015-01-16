@@ -299,7 +299,6 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
     SwpHints *pSwpHints = rNode.GetpSwpHints();
     if( pSwpHints && rNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwTxtAttr* pHt;
         SwCntntFrm* pFrm = NULL;
         // OD 07.11.2002 #104840# - local variable to remember first footnote
         // of node <rNode> in order to invalidate position of its first content.
@@ -307,7 +306,7 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
         SwFtnFrm* pFirstFtnOfNode = 0;
         for( size_t j = pSwpHints->Count(); j; )
         {
-            pHt = pSwpHints->GetTextHint(--j);
+            SwTxtAttr* pHt = pSwpHints->GetTextHint(--j);
             if (RES_TXTATR_FTN == pHt->Which())
             {
                 if( !pFrm )
@@ -1412,11 +1411,10 @@ static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const OUString& 
 {
     if( !rName.isEmpty() )
     {
-        SwCharFmt* pFmt;
         const size_t nArrLen = pCharFmts->size();
         for( size_t i = 1; i < nArrLen; i++ )
         {
-            pFmt = (*pCharFmts)[ i ];
+            SwCharFmt* pFmt = (*pCharFmts)[ i ];
             if( pFmt->GetName()==rName )
                 return pFmt;
         }

@@ -330,19 +330,20 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
            std::exception)
 {
     SolarMutexGuard aGuard;
-    bool    bLoadStyleText = true;
-    bool    bLoadStylePage = true;
-    bool    bLoadStyleOverwrite = true;
-    bool    bLoadStyleNumbering = true;
-    bool    bLoadStyleFrame = true;
     if(IsValid() && !rURL.isEmpty())
     {
-        const uno::Any* pVal;
+        bool    bLoadStyleText = true;
+        bool    bLoadStylePage = true;
+        bool    bLoadStyleOverwrite = true;
+        bool    bLoadStyleNumbering = true;
+        bool    bLoadStyleFrame = true;
+
         int nCount = aOptions.getLength();
         const beans::PropertyValue* pArray = aOptions.getConstArray();
         for(int i = 0; i < nCount; i++)
-            if( ( pVal = &pArray[i].Value)->getValueType() ==
-                    ::getBooleanCppuType() )
+        {
+            const uno::Any* pVal = &pArray[i].Value;
+            if( pVal->getValueType() == ::getBooleanCppuType() )
             {
                 const OUString sName = pArray[i].Name;
                 bool bVal = *(sal_Bool*)pVal->getValue();
@@ -357,6 +358,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
                 else if( sName == UNO_NAME_LOAD_TEXT_STYLES )
                     bLoadStyleText = bVal;
             }
+        }
 
         SwgReaderOption aOpt;
         aOpt.SetFrmFmts( bLoadStyleFrame );

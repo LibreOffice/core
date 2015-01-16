@@ -2773,7 +2773,6 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SolarMutexGuard aGuard;
     const sal_uInt16 nRowCount = getRowCount();
     const sal_uInt16 nColCount = getColumnCount();
-    bool bChanged = false;
 
     if(!nRowCount || !nColCount)
     {
@@ -2785,6 +2784,8 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt )
     {
+        bool bChanged = false;
+
         const sal_uInt16 nRowStart = bFirstRowAsLabel ? 1 : 0;
         if(rData.getLength() < nRowCount - nRowStart)
         {
@@ -3619,15 +3620,17 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
     if(pFmt)
     {
         const OUString aOldName( pFmt->GetName() );
-        const SwFrmFmt* pTmpFmt;
         const SwFrmFmts* pTbl = pFmt->GetDoc()->GetTblFrmFmts();
         for( size_t i = pTbl->size(); i; )
-            if( !( pTmpFmt = (*pTbl)[ --i ] )->IsDefault() &&
+        {
+            const SwFrmFmt* pTmpFmt = (*pTbl)[ --i ] ;
+            if( !pTmpFmt->IsDefault() &&
                 pTmpFmt->GetName() == rName &&
                             pFmt->GetDoc()->IsUsed( *pTmpFmt ))
             {
                 throw uno::RuntimeException();
             }
+        }
 
         pFmt->SetName( rName );
 

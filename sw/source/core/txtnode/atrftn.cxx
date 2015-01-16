@@ -345,12 +345,12 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
     if ( m_pStartNode )
     {
         // must iterate over all TxtNodes because of footnotes on other pages
-        SwNode* pNd;
         sal_uLong nSttIdx = m_pStartNode->GetIndex() + 1;
         sal_uLong nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
         for( ; nSttIdx < nEndIdx; ++nSttIdx )
         {
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
+            SwNode* pNd;
             if( ( pNd = rNodes[ nSttIdx ] )->IsTxtNode() )
                 static_cast<SwTxtNode*>(pNd)->ModifyNotification( 0, &rFtn );
         }
