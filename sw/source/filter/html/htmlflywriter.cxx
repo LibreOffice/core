@@ -1000,12 +1000,13 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rF
     // Umlauf fuer absatzgeb. Grafiken als <BR CLEAR=...> in den String
     // schreiben
 
-    const sal_Char* pSurroundString = 0;
     if( (nFrameOptions & HTML_FRMOPT_BRCLEAR) &&
         ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) ||
          (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId())) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
     {
+        const sal_Char* pSurroundString = 0;
+
         const SwFmtSurround* pSurround = static_cast<const SwFmtSurround*>(pItem);
         sal_Int16 eHoriOri = rFrmFmt.GetHoriOrient().GetHoriOrient();
         SwSurround eSurround = pSurround->GetSurround();
@@ -1911,11 +1912,12 @@ void SwHTMLWriter::CollectLinkTargets()
 {
     const SwFmtINetFmt* pINetFmt;
     const SwTxtINetFmt* pTxtAttr;
-    const SwTxtNode* pTxtNd;
 
     sal_uInt32 n, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
+        const SwTxtNode* pTxtNd;
+
         if( 0 != (pINetFmt = static_cast<const SwFmtINetFmt*>(pDoc->GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) ) &&
             0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&

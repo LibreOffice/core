@@ -333,11 +333,13 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     if (pPrt)
         pPrtDoc->getIDocumentDeviceAccess().setPrinter( new SfxPrinter(*pPrt), true, true );
 
-    const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
     for( sal_uInt16 nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
-        if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
+    {
+        const SfxPoolItem* pCpyItem = rPool.GetPoolDefaultItem( nWh );
+        if( 0 != pCpyItem )
             pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
+    }
 
     // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
     //                              the PrintDoc - will be replaced!

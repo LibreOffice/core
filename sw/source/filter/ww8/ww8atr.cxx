@@ -893,15 +893,14 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
 
 bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
-    const SwTxtNode* pNd;
 
     SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_GETREFFLD );
     SwIterator<SwFmtFld, SwFieldType> aFmtFlds( *pType );
     for ( SwFmtFld* pFmtFld = aFmtFlds.First(); pFmtFld; pFmtFld = aFmtFlds.Next() )
     {
+        const SwTxtNode* pNd = pFmtFld->GetTxtFld()->GetpTxtNode();
         if ( pFmtFld->GetTxtFld() && nTyp == pFmtFld->GetField()->GetSubType() &&
-             0 != ( pNd = pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
-             pNd->GetNodes().IsDocNodes() )
+             0 != pNd && pNd->GetNodes().IsDocNodes() )
         {
             const SwGetRefField& rRFld = *static_cast< SwGetRefField* >( pFmtFld->GetField() );
             switch ( nTyp )
@@ -2032,12 +2031,13 @@ static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, OUString& rText )
     // #i21237#
     SwFormTokens aPattern = rForm.GetPattern(nLvl);
     SwFormTokens::iterator aIt = aPattern.begin();
-    bool bPgNumFnd = false;
     FormTokenType eTType;
 
     // #i61362#
     if (! aPattern.empty())
     {
+        bool bPgNumFnd = false;
+
         // #i21237#
         while( ++aIt != aPattern.end() && !bPgNumFnd )
         {

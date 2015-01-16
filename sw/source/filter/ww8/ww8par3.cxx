@@ -987,10 +987,9 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     {
         nIdenticalItemSetLevel = nMaxLevel;
         SfxItemIter aIter( *pThisLevelItemSet );
-        SfxItemSet* pLowerLevelItemSet;
         for (sal_uInt8 nLowerLevel = 0; nLowerLevel < nLevel; ++nLowerLevel)
         {
-            pLowerLevelItemSet = rListItemSet[ nLowerLevel ];
+            SfxItemSet* pLowerLevelItemSet = rListItemSet[ nLowerLevel ];
             if(     pLowerLevelItemSet
                 && (pLowerLevelItemSet->Count() == pThisLevelItemSet->Count()) )
             {
