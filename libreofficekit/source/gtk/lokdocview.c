@@ -172,7 +172,10 @@ void renderDocument( LOKDocView* pDocView )
             pDocView->pCanvas[nRow * nColumns + nColumn] = gtk_image_new();
             gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas[nRow * nColumns + nColumn] ), pPixBuf );
             g_object_unref(G_OBJECT(pPixBuf));
-            gtk_table_attach_defaults(GTK_TABLE(pDocView->pTable), pDocView->pCanvas[nRow * nColumns + nColumn], nColumn, nColumn + 1, nRow, nRow + 1);
+            gtk_table_attach(GTK_TABLE(pDocView->pTable),
+                             pDocView->pCanvas[nRow * nColumns + nColumn],
+                             nColumn, nColumn + 1, nRow, nRow + 1,
+                             GTK_SHRINK, GTK_SHRINK, 0, 0);
             gtk_widget_show(pDocView->pCanvas[nRow * nColumns + nColumn]);
         }
     }
