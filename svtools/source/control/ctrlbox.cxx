@@ -1196,10 +1196,9 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                 sSampleText = makeShortRepresentativeTextForSelectedFont(*rUDEvt.GetDevice());
         }
 
-        //If we're not a symbol font, but could neither render our own name and
-        //we can't determine what script it would like to render, then try a
-        //few well known scripts
-        if (sSampleText.isEmpty() && !bUsingCorrectFont)
+        // If we're not a symbol font, and we can't determine what sample text we would like to
+        // render, then try a few well known scripts to generate the sample text
+        if (sSampleText.isEmpty() && !isSymbolFont(aFont) )
         {
             static const UScriptCode aScripts[] =
             {
