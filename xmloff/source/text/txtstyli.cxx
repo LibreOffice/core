@@ -28,6 +28,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/maptype.hxx>
 
@@ -38,6 +39,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -64,6 +66,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 static const SvXMLEnumMapEntry aCategoryMap[] =
 {
@@ -73,7 +76,7 @@ static const SvXMLEnumMapEntry aCategoryMap[] =
     { XML_INDEX,    ParagraphStyleCategory::INDEX },
     { XML_EXTRA,    ParagraphStyleCategory::EXTRA },
     { XML_HTML,     ParagraphStyleCategory::HTML },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
@@ -226,11 +229,48 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
 }
 
 Reference< XFastContextHandler > SAL_CALL
-    XMLTextStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    XMLTextStyleContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    return Reference< XFastContextHandler >();
+    Reference< XFastContextHandler > pContext;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) )
+    {
+        //create and remember events import context
+        //(for delayed processing of events)
+        pEventContext = new XMLEventsImportContext( GetImport() );
+        pEventContext->AddFirstRef();
+        pContext = pEventContext;
+    }
+    else
+    {
+        sal_uInt32 nFamily = 0;
+
+        if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_text_properties) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_paragraph_properties) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_section_properties) )
+            nFamily = XML_TYPE_PROP_SECTION;
+        else if( IsDefaultStyle() && Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_properties) )
+            nFamily = XML_TYPE_PROP_TABLE;
+        else if( IsDefaultStyle() && Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_row_properties) )
+            nFamily = XML_TYPE_PROP_TABLE_ROW;
+
+        if( nFamily )
+        {
+            rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+                GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+                pContext = new XMLTextPropertySetContext( GetImport(), Element,
+                    xAttrList, nFamily, GetProperties(), xImpPrMap, sDropCapTextStyleName );
+        }
+    }
+
+    if( !pContext.is() )
+        pContext = XMLPropStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
