@@ -270,10 +270,9 @@ void SwView::SelectShell()
             if ( nId )
                 pBarCfg->SetTopToolbar( m_nSelectionType, nId );
 
-            SfxShell *pSfxShell;
             for ( sal_uInt16 i = 0; true; ++i )
             {
-                pSfxShell = rDispatcher.GetShell( i );
+                SfxShell *pSfxShell = rDispatcher.GetShell( i );
                 if  (  pSfxShell->ISA( SwBaseShell )
                     || pSfxShell->ISA( SwDrawTextShell )
                     || pSfxShell->ISA( svx::ExtrusionBar )

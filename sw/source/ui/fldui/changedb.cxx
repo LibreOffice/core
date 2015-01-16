@@ -219,12 +219,11 @@ IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl)
 
 IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
 {
-    bool bEnable = false;
-
     SvTreeListEntry* pEntry = m_pAvailDBTLB->GetCurEntry();
 
     if (pEntry)
     {
+        bool bEnable = false;
         if (m_pAvailDBTLB->GetParent(pEntry))
             bEnable = true;
         m_pDefineBT->Enable( bEnable );

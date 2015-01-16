@@ -360,9 +360,9 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         SdrView* pDrawView = rWrtShell.GetDrawView();
         if(pDrawView)
         {
-            bool bOnlyHardAttr = true;
             if( pDrawView->AreObjectsMarked() )
             {
+                bool bOnlyHardAttr = true;
                 pItemSet_TxtAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
                 //remove attributes defining the type/data of custom shapes
                 pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);

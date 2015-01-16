@@ -135,10 +135,12 @@ OUString InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const OUString& r
 static void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
 {
     sal_uInt16 nCollCnt = pOldSh->GetTxtFmtCollCount();
-    SwTxtFmtColl* pColl;
     for( sal_uInt16 nCnt = 0; nCnt < nCollCnt; ++nCnt )
-        if(nCollId == (pColl = &pOldSh->GetTxtFmtColl(nCnt))->GetPoolFmtId())
+    {
+        SwTxtFmtColl* pColl = &pOldSh->GetTxtFmtColl(nCnt);
+        if(nCollId == pColl->GetPoolFmtId())
             pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
+    }
 }
 
 void SwModule::InsertEnv( SfxRequest& rReq )

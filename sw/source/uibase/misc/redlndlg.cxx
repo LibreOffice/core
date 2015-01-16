@@ -709,7 +709,6 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     if (nEnd == USHRT_MAX)
         return;     // no redlines in the document
 
-    RedlinData *pData;
     SvTreeListEntry *pParent;
     SwRedlineDataParent* pRedlineParent;
     const SwRangeRedline* pCurrRedline;
@@ -739,7 +738,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         pRedlineParent->sComment = sComment.replace('\n', ' ');
         aRedlineParents.insert(aRedlineParents.begin() + i, pRedlineParent);
 
-        pData = new RedlinData;
+        RedlinData *pData = new RedlinData;
         pData->pData = pRedlineParent;
         pData->bDisabled = false;
 

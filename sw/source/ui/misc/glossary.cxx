@@ -958,7 +958,6 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
     SvTreeListEntry* pSrcParent = GetParent(pEntry);
     SvTreeListEntry* pDestParent =
         GetParent(pTarget) ? GetParent(pTarget) : pTarget;
-    bool bRet = false;
     if(pDestParent != pSrcParent)
     {
         SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParentDialog());
@@ -978,7 +977,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
             + OUStringLiteral1<GLOS_DELIM>()
             + OUString::number(pDestData->nPathIdx);
 
-        bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
+        const bool bRet = pDlg->pGlossaryHdl->CopyOrMove( sSourceGroup,  sShortName,
                         sDestName, sTitle, bIsMove );
         if(bRet)
         {

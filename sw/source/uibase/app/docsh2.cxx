@@ -868,9 +868,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();
                 }
-                bool bError = false;
                 if ( aFileName.isEmpty() )
                 {
+                    bool bError = false;
+
                     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
 
                     const sal_Int16 nControlIds[] = {
@@ -953,13 +954,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         const SwOutlineNodes& rOutlNds = mpDoc->GetNodes().GetOutLineNds();
                         if( !rOutlNds.empty() )
                         {
-                            int nLevel;
                             for(sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
-                                if( ( nLevel = rOutlNds[n]->GetTxtNode()->GetAttrOutlineLevel()) > 0 &&
-                                    ! bOutline[nLevel-1] )
+                            {
+                                const int nLevel = rOutlNds[n]->GetTxtNode()->GetAttrOutlineLevel();
+                                if( nLevel > 0 && ! bOutline[nLevel-1] )
                                 {
                                     bOutline[nLevel-1] = true;
                                 }
+                            }
                         }
 
                         const sal_uInt16 nStyleCount = mpDoc->GetTxtFmtColls()->size();
