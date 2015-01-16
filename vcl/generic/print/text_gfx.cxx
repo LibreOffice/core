@@ -442,7 +442,7 @@ bool PrinterGfx::drawVerticalizedText(
 
     int nTextScale   = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     int nNormalAngle = mnTextAngle;
-    int nDeltaAngle, nLastPos = 0;
+    int nLastPos = 0;
 
     double fSin = sin( -2.0*M_PI*nNormalAngle/3600 );
     double fCos = cos( -2.0*M_PI*nNormalAngle/3600 );
@@ -453,6 +453,7 @@ bool PrinterGfx::drawVerticalizedText(
     Point aPoint( rPoint );
     for( int i = 0; i < nLen; )
     {
+        int nDeltaAngle;
         while( ( nDeltaAngle = getVerticalDeltaAngle( pStr[i] ) ) == 0 && i < nLen )
             i++;
         if( i <= nLen && i > nLastPos )

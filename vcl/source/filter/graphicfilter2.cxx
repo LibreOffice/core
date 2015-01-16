@@ -606,7 +606,6 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 {
-    bool    bDetectOk = false;
     bool    bRet = false;
     sal_uInt8   cByte1 = 0;
     sal_uInt8   cByte2 = 1;
@@ -616,6 +615,8 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
     rStm.ReadUChar( cByte2 );
     if ( cByte1 == cByte2 )
     {
+        bool bDetectOk = false;
+
         if ( cByte1 == 0x49 )
         {
             rStm.SetEndian( SvStreamEndian::LITTLE );
@@ -642,7 +643,6 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                     sal_uLong   nCount;
                     sal_uLong   nMax = DATA_SIZE - 48;
                     sal_uInt32  nTemp32 = 0;
-                    bool        bOk = false;
 
                     // Offset of the first IFD
                     rStm.ReadUInt32( nTemp32 );
@@ -650,6 +650,8 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 
                     if ( nCount < nMax )
                     {
+                        bool bOk = false;
+
                         // read tags till we find Tag256 ( Width )
                         // do not read more bytes than DATA_SIZE
                         rStm.ReadUInt16( nTemp16 );

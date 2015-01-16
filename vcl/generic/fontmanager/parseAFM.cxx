@@ -360,13 +360,12 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
 {
     bool cont = true, save = (gfi != NULL);
     int error = ok;
-    char *keyword;
     int direction = -1;
     int tokenlen;
 
     while (cont)
     {
-        keyword = token(fp, tokenlen);
+        char *keyword = token(fp, tokenlen);
 
         if (keyword == NULL)
             /* Have reached an early and unexpected EOF. */
@@ -564,11 +563,10 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
 {
     bool cont = true, save = (cwi != NULL);
     int pos = 0, error = ok, tokenlen;
-    char *keyword;
 
     while (cont)
     {
-        keyword = token(fp,tokenlen);
+        char *keyword = token(fp,tokenlen);
         /* Have reached an early and unexpected EOF. */
         /* Set flag and stop parsing */
         if (keyword == NULL)
@@ -717,11 +715,10 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
     bool cont = true, firstTime = true;
     int error = ok, count = 0, tokenlen;
     CharMetricInfo *temp = fi->cmi;
-    char *keyword;
 
     while (cont)
     {
-        keyword = token(fp,tokenlen);
+        char *keyword = token(fp,tokenlen);
         if (keyword == NULL)
         {
             error = earlyEOF;
@@ -873,11 +870,10 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, save = (fi->tkd != NULL);
     int pos = 0, error = ok, tcount = 0, tokenlen;
-    char *keyword;
 
     while (cont)
     {
-        keyword = token(fp,tokenlen);
+        char *keyword = token(fp,tokenlen);
 
         if (keyword == NULL)
         {
@@ -980,11 +976,10 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, save = (fi->pkd != NULL);
     int pos = 0, error = ok, pcount = 0, tokenlen;
-    char *keyword;
 
     while (cont)
     {
-        keyword = token(fp,tokenlen);
+        char *keyword = token(fp,tokenlen);
 
         if (keyword == NULL)
         {
@@ -1109,11 +1104,10 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, firstTime = true, save = (fi->ccd != NULL);
     int pos = 0, j = 0, error = ok, ccount = 0, pcount = 0, tokenlen;
-    char *keyword;
 
     while (cont)
     {
-        keyword = token(fp,tokenlen);
+        char *keyword = token(fp,tokenlen);
         if (keyword == NULL)
             /* Have reached an early and unexpected EOF. */
             /* Set flag and stop parsing */

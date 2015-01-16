@@ -1019,11 +1019,12 @@ void ImplListBoxWindow::SelectEntry( sal_Int32 nPos, bool bSelect )
 
 bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bool bShift, bool bCtrl, bool bSelectPosChange /*=FALSE*/ )
 {
-    bool bFocusChanged = false;
     bool bSelectionChanged = false;
 
     if( IsEnabled() && mpEntryList->IsEntrySelectable( nSelect ) )
     {
+        bool bFocusChanged = false;
+
         // here (Single-ListBox) only one entry can be deselected
         if( !mbMulti )
         {
@@ -2643,10 +2644,10 @@ void ImplWin::ImplDraw( bool bLayout )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    bool bNativeOK = false;
-
     if( ! bLayout )
     {
+        bool bNativeOK = false;
+
         ControlState nState = ControlState::ENABLED;
         if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )

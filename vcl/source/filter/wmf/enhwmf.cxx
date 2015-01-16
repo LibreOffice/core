@@ -622,7 +622,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 nDat32(0), nNom1(0), nDen1(0), nNom2(0), nDen2(0);
     sal_Int32   nX32(0), nY32(0), nx32(0), ny32(0);
 
-    bool    bFlag(false), bStatus = ReadHeader();
+    bool    bStatus = ReadHeader();
     bool    bHaveDC = false;
 
     static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
@@ -652,7 +652,7 @@ bool EnhWMFReader::ReadEnhWMF()
             pOut->ResolveBitmapActions( aBmpSaveList );
         }
 
-        bFlag = false;
+        bool bFlag = false;
 
         SAL_INFO ("vcl.emf", "0x" << std::hex << (nNextPos - nRecSize) <<  "-0x" << nNextPos << " " << record_type_name(nRecType) << " size: " <<  nRecSize << std::dec);
 
