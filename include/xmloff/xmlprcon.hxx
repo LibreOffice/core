@@ -46,12 +46,21 @@ public:
             ::std::vector< XMLPropertyState > &rProps,
             const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
               sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
+    SvXMLPropertySetContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        sal_uInt32 nFamily, std::vector< XMLPropertyState >& rProps,
+        const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
+        sal_Int32 nStartIdx = -1, sal_Int32 nEndIdx = -1 );
 
     virtual ~SvXMLPropertySetContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     // This method is called from this instance implementation of
     // CreateChildContext if the element matches an entry in the
@@ -61,6 +70,11 @@ public:
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp );
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        std::vector< XMLPropertyState >& rProperties,
+        const XMLPropertyState& rProp );
 
 };
 

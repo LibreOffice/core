@@ -46,6 +46,21 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
                         mnStartIdx, mnEndIdx );
 }
 
+SvXMLPropertySetContext::SvXMLPropertySetContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    sal_uInt32 nFam, vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
+    sal_Int32 nSIdx, sal_Int32 nEIdx )
+:   SvXMLImportContext( rImport )
+,   mnStartIdx( nSIdx )
+,   mnEndIdx( nEIdx )
+,   mnFamily( nFam )
+,   mrProperties( rProps )
+,   mxMapper( rMap )
+{
+}
+
 SvXMLPropertySetContext::~SvXMLPropertySetContext()
 {
 }
@@ -74,6 +89,14 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     }
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SvXMLPropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
+}
+
 /** This method is called from this instance implementation of
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
@@ -88,5 +111,12 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
+uno::Reference< xml::sax::XFastContextHandler >
+    SvXMLPropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >&, const XMLPropertyState& )
+{
+    return new SvXMLImportContext( GetImport() );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
