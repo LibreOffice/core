@@ -45,8 +45,28 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
 {
 }
 
+XMLTextPropertySetContext::XMLTextPropertySetContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt32 nFamily, std::vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
+    OUString& rDCTextStyleName )
+:   SvXMLPropertySetContext( rImport, Element, xAttrList, nFamily, rProps, rMap ),
+    rDropCapTextStyleName( rDCTextStyleName )
+{
+}
+
 XMLTextPropertySetContext::~XMLTextPropertySetContext()
 {
+}
+
+uno::Reference< xml::sax::XFastContextHandler >
+    XMLTextPropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& /*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
