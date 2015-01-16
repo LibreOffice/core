@@ -235,19 +235,19 @@ void SvPersistStream::WriteCompressed( SvStream & rStm, sal_uInt32 nVal )
 {
 #ifdef STOR_NO_OPTIMIZE
     if( nVal < 0x80 )
-        rStm.WriteUChar( (LEN_1 | nVal) );
+        rStm.WriteUChar( LEN_1 | nVal );
     else if( nVal < 0x4000 )
     {
-        rStm.WriteUChar( (LEN_2 | (nVal >> 8)) );
+        rStm.WriteUChar( LEN_2 | (nVal >> 8) );
         rStm.WriteUChar( nVal );
     }
     else if( nVal < 0x20000000 )
     {
         // highest sal_uInt8
-        rStm.WriteUChar( (LEN_4 | (nVal >> 24)) );
+        rStm.WriteUChar( LEN_4 | (nVal >> 24) );
         // 2nd highest sal_uInt8
-        rStm.WriteUChar( (nVal >> 16) );
-        rStm.WriteUInt16( (nVal) );
+        rStm.WriteUChar( nVal >> 16 );
+        rStm.WriteUInt16( nVal );
     }
     else
 #endif
@@ -368,12 +368,12 @@ static void WriteId
     {
         if( (nHdr & P_OBJ) || nId != 0 )
         { // Id set only for pointers or DBGUTIL
-            rStm.WriteUChar( (nHdr) );
+            rStm.WriteUChar( nHdr );
             SvPersistStream::WriteCompressed( rStm, nId );
         }
         else
         { // NULL Pointer
-            rStm.WriteUChar( (nHdr | P_ID_0) );
+            rStm.WriteUChar( nHdr | P_ID_0 );
             return;
         }
     }

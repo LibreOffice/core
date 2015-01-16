@@ -266,7 +266,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
     {
         sal_uInt32 nCurrentPos = m_rOStm.Tell();
         m_rOStm.Seek( mnLatestIfdPos );
-        m_rOStm.WriteUInt32( ( nCurrentPos - mnStreamOfs ) );   // offset to the IFD
+        m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );   // offset to the IFD
         m_rOStm.Seek( nCurrentPos );
 
         // (OFS8) TIFF image file directory (IFD)
@@ -342,17 +342,17 @@ void TIFFWriter::ImplWritePalette()
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm.WriteUInt16( ( rColor.GetRed() << 8 ) );
+        m_rOStm.WriteUInt16( rColor.GetRed() << 8 );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm.WriteUInt16( ( rColor.GetGreen() << 8 ) );
+        m_rOStm.WriteUInt16( rColor.GetGreen() << 8 );
     }
     for ( i = 0; i < mnColors; i++ )
     {
         const BitmapColor& rColor = mpAcc->GetPaletteColor( i );
-        m_rOStm.WriteUInt16( ( rColor.GetBlue() << 8 ) );
+        m_rOStm.WriteUInt16( rColor.GetBlue() << 8 );
     }
 }
 
@@ -498,13 +498,13 @@ inline void TIFFWriter::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
     nOffset -= nCodeLen;
     while ( nOffset < 24 )
     {
-        m_rOStm.WriteUChar( ( dwShift >> 24 ) );
+        m_rOStm.WriteUChar( dwShift >> 24 );
         dwShift <<= 8;
         nOffset += 8;
     }
     if ( nCode == 257 && nOffset != 32 )
     {
-        m_rOStm.WriteUChar( ( dwShift >> 24 ) );
+        m_rOStm.WriteUChar( dwShift >> 24 );
     }
 }
 

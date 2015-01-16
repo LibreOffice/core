@@ -221,11 +221,11 @@ void XPMWriter::ImplWritePixel( sal_uLong nCol ) const
     if ( mnColors > 26 )
     {
         sal_uInt8 nDiff = (sal_uInt8) ( nCol / 26 );
-        m_rOStm.WriteUChar( ( nDiff + 'A' ) );
-        m_rOStm.WriteUChar( ( nCol - ( nDiff*26 ) + 'A' ) );
+        m_rOStm.WriteUChar( nDiff + 'A' );
+        m_rOStm.WriteUChar( nCol - ( nDiff*26 ) + 'A' );
     }
     else
-        m_rOStm.WriteUChar( ( nCol + 'A' ) );
+        m_rOStm.WriteUChar( nCol + 'A' );
 }
 
 

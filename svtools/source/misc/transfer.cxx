@@ -98,7 +98,7 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     const sal_uInt32 nLastPos = rOStm.Tell();
 
     rOStm.Seek( nFirstPos );
-    rOStm.WriteUInt32(  nLastPos - nFirstPos  );
+    rOStm.WriteUInt32( nLastPos - nFirstPos  );
     rOStm.Seek( nLastPos );
 
     return rOStm;

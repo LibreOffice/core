@@ -1091,7 +1091,7 @@ inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
     if( nDrawStretchText )
         rOS.WriteCharPtr( "\tnDrawStretchText: " ).WriteUInt16( nDrawStretchText ).WriteChar( '\n' );
     if( nChangeFont )
-        rOS.WriteCharPtr( "\tnChangeFont: " ).WriteUInt16(  nChangeFont ).WriteChar( '\n' );
+        rOS.WriteCharPtr( "\tnChangeFont: " ).WriteUInt16( nChangeFont ).WriteChar( '\n' );
     if( nGetFontMetric )
         rOS.WriteCharPtr( "\tnGetFontMetric: " ).WriteUInt16( nGetFontMetric ).WriteChar( '\n' );
      rOS.WriteCharPtr( "}\n" );

@@ -725,10 +725,10 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteUChar( rImpl_Font.mnKerning );
 
     // new in version 2
-    rOStm.WriteUChar(        rImpl_Font.meRelief );
-    rOStm.WriteUInt16(   rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
+    rOStm.WriteUChar( rImpl_Font.meRelief );
+    rOStm.WriteUInt16( rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
     rOStm.WriteUChar( rImpl_Font.mbVertical );
-    rOStm.WriteUInt16(   rImpl_Font.meEmphasisMark );
+    rOStm.WriteUInt16( rImpl_Font.meEmphasisMark );
 
     // new in version 3
     rOStm.WriteUInt16( rImpl_Font.meOverline );

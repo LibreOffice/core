@@ -154,7 +154,7 @@ static sal_uInt32 nMSOleObjCntr = 0;
 void Impl_OlePres::Write( SvStream & rStm )
 {
     WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
-    rStm.WriteInt32( (nJobLen +4) );       // a TargetDevice that's always empty
+    rStm.WriteInt32( nJobLen + 4 );       // a TargetDevice that's always empty
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
     rStm.WriteUInt32( nAspect );
@@ -196,7 +196,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     }
     sal_uLong nEndPos = rStm.Tell();
     rStm.Seek( nPos );
-    rStm.WriteUInt32( (nEndPos - nPos - 4) );
+    rStm.WriteUInt32( nEndPos - nPos - 4 );
     rStm.Seek( nEndPos );
 }
 

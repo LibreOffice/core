@@ -532,7 +532,7 @@ bool ORTFImportExport::Write()
     }
 
     m_pStream->WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
-    m_pStream->WriteUChar(  0 );
+    m_pStream->WriteUChar( 0 );
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
 

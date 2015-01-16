@@ -247,7 +247,7 @@ void WMFWriter::WriteRectangle(const Rectangle & rRect)
 
 void WMFWriter::WriteColor(const Color & rColor)
 {
-    pWMF->WriteUChar(  rColor.GetRed() ).WriteUChar( rColor.GetGreen() ).WriteUChar( rColor.GetBlue() ).WriteUChar( 0 );
+    pWMF->WriteUChar( rColor.GetRed() ).WriteUChar( rColor.GetGreen() ).WriteUChar( rColor.GetBlue() ).WriteUChar( 0 );
 }
 
 void WMFWriter::WriteRecordHeader(sal_uInt32 nSizeWords, sal_uInt16 nType)
@@ -426,7 +426,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 
     WriteRecordHeader( 3 + 9 + ( ( nLen + 1 ) >> 1 ), W_META_ESCAPE );
     pWMF->WriteUInt16( W_MFCOMMENT )
-         .WriteUInt16( ( nLen + 14 ) )  // we will always have a fourteen byte escape header:
+         .WriteUInt16( nLen + 14 )      // we will always have a fourteen byte escape header:
          .WriteUInt16( 0x4f4f )         // OO
          .WriteUInt32( 0xa2c2a )        // evil magic number
          .WriteUInt32( nCheckSum )      // crc32 checksum about nEsc & pData
@@ -1903,7 +1903,7 @@ void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sa
    // according to http://msdn.microsoft.com/en-us/library/dd366152%28PROT.13%29.aspx
    WriteRecordHeader( 0, W_META_ESCAPE );
    pWMF->WriteUInt16( W_MFCOMMENT )         // same as META_ESCAPE_ENHANCED_METAFILE
-         .WriteUInt16( ( nCurSize + 34 ) )  // we will always have a 34 byte escape header:
+         .WriteUInt16( nCurSize + 34 )     // we will always have a 34 byte escape header:
          .WriteUInt32( 0x43464D57 )        // WMFC
          .WriteUInt32( 0x00000001 )        // Comment type
          .WriteUInt32( 0x00010000 )        // version

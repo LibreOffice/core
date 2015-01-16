@@ -268,7 +268,7 @@ bool SbxBase::Store( SvStream& rStrm )
         bool bRes = StoreData( rStrm );
         sal_Size nNewPos = rStrm.Tell();
         rStrm.Seek( nOldPos );
-        rStrm.WriteUInt32( ( nNewPos - nOldPos ) );
+        rStrm.WriteUInt32( nNewPos - nOldPos );
         rStrm.Seek( nNewPos );
         if( rStrm.GetError() != SVSTREAM_OK )
             bRes = false;

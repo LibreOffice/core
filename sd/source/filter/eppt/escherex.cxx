@@ -34,8 +34,8 @@ sal_uInt32 PptEscherEx::DrawingGroupContainerSize()
 void PptEscherEx::WriteDrawingGroupContainer( SvStream& rSt )
 {
     sal_uInt32 nSize = DrawingGroupContainerSize();
-    rSt.WriteUInt32( ( 0xf | ( 1035 << 16 ) ) )     // EPP_PPDrawingGroup
-       .WriteUInt32( ( nSize - 8 ) );
+    rSt.WriteUInt32( 0xf | ( 1035 << 16 ) )     // EPP_PPDrawingGroup
+       .WriteUInt32( nSize - 8 );
 
     ImplWriteDggContainer( rSt );
 }
@@ -57,8 +57,8 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
     sal_uInt32 nSize = ImplDggContainerSize();
     if ( nSize )
     {
-        rSt.WriteUInt32( ( 0xf | ( ESCHER_DggContainer << 16 ) ) )
-           .WriteUInt32( ( nSize - 8 ) );
+        rSt.WriteUInt32( 0xf | ( ESCHER_DggContainer << 16 ) )
+           .WriteUInt32( nSize - 8 );
 
         mxGlobal->SetDggContainer();
         mxGlobal->WriteDggAtom( rSt );
@@ -83,8 +83,8 @@ void PptEscherEx::ImplWriteOptAtom( SvStream& rSt )
     sal_uInt32 nSize = ImplOptAtomSize();
     if ( nSize )
     {
-        rSt.WriteUInt32( ( ( ESCHER_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 ) )
-           .WriteUInt32( ( nSize - 8 ) )
+        rSt.WriteUInt32( ( ESCHER_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 )
+           .WriteUInt32( nSize - 8 )
            .WriteUInt16( ESCHER_Prop_fillColor )           .WriteUInt32( 0xffb800 )
            .WriteUInt16( ESCHER_Prop_fillBackColor )       .WriteUInt32( 0 )
            .WriteUInt16( ESCHER_Prop_fNoFillHitTest )      .WriteUInt32( 0x00100010 )
@@ -109,8 +109,8 @@ void PptEscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
     sal_uInt32 nSize = ImplSplitMenuColorsAtomSize();
     if ( nSize )
     {
-        rSt.WriteUInt32( ( ( ESCHER_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) ) )
-           .WriteUInt32( ( nSize - 8 ) )
+        rSt.WriteUInt32( ( ESCHER_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) )
+           .WriteUInt32( nSize - 8 )
            .WriteUInt32( 0x08000004 )
            .WriteUInt32( 0x08000001 )
            .WriteUInt32( 0x08000002 )
@@ -125,7 +125,7 @@ PptEscherEx::~PptEscherEx()
 
 void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {
-    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( n_EscherContainer ).WriteUInt32( 0 );
+    mpOutStrm->WriteUInt16( ( nRecInstance << 4 ) | 0xf ).WriteUInt16( n_EscherContainer ).WriteUInt32( 0 );
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( n_EscherContainer );
 
@@ -253,7 +253,7 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             sal_uInt32 nSize = pClientData->Tell();
             if ( nSize )
             {
-                mpOutStrm->WriteUInt32( ( ( ESCHER_ClientData << 16 ) | 0xf ) )
+                mpOutStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
                        .WriteUInt32( nSize );
                 mpOutStrm->Write( pClientData->GetData(), nSize );
             }

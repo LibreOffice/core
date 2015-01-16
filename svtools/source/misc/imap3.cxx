@@ -70,7 +70,7 @@ IMapCompat::~IMapCompat()
             const sal_uLong nEndPos = pRWStm->Tell();
 
             pRWStm->Seek( nCompatPos );
-            pRWStm->WriteUInt32( ( nEndPos - nTotalSize ) );
+            pRWStm->WriteUInt32( nEndPos - nTotalSize );
             pRWStm->Seek( nEndPos );
         }
         else

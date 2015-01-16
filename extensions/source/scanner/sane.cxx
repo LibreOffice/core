@@ -758,8 +758,8 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 aConverter.WriteUInt32( nWidth );
                 aConverter.WriteUInt32( nHeight );
                 aConverter.Seek( 38 );
-                aConverter.WriteUInt32( (1000*nWidth/nWidthMM) );
-                aConverter.WriteUInt32( (1000*nHeight/nHeightMM) );
+                aConverter.WriteUInt32( 1000*nWidth/nWidthMM );
+                aConverter.WriteUInt32( 1000*nHeight/nHeightMM );
                 bWidthSet = true;
             }
             aConverter.Seek(60);

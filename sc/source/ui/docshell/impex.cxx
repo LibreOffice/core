@@ -320,7 +320,7 @@ bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
     // mba: no BaseURL for data exc
     if( ExportStream( aStrm, OUString(), nFmt ) )
     {
-        aStrm.WriteUInt16(  0 );
+        aStrm.WriteUInt16( 0 );
         aStrm.Seek( STREAM_SEEK_TO_END );
 
         rText = OUString( (const sal_Unicode*) aStrm.GetData() );

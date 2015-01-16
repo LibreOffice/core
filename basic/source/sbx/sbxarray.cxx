@@ -783,7 +783,7 @@ bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 bool SbxDimArray::StoreData( SvStream& rStrm ) const
 {
-    rStrm.WriteInt16(  m_vDimensions.size() );
+    rStrm.WriteInt16( m_vDimensions.size() );
     for( short i = 0; i < static_cast<short>(m_vDimensions.size()); i++ )
     {
         short lb, ub;

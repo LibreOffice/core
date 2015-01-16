@@ -97,14 +97,14 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             comphelper::getProcessComponentContext() );
 
         // create SoundContainer
-        rSt.WriteUInt32( ( ( EPP_Sound << 16 ) | 0xf ) ).WriteUInt32( ( GetSize( nId ) - 8 ) );
+        rSt.WriteUInt32( ( EPP_Sound << 16 ) | 0xf ).WriteUInt32( GetSize( nId ) - 8 );
 
         OUString aSoundName( ImplGetName() );
         sal_Int32 i, nSoundNameLen = aSoundName.getLength();
         if ( nSoundNameLen )
         {
             // name of sound ( instance 0 )
-            rSt.WriteUInt32( ( EPP_CString << 16 ) ).WriteUInt32( ( nSoundNameLen * 2 ) );
+            rSt.WriteUInt32( EPP_CString << 16 ).WriteUInt32( nSoundNameLen * 2 );
             for ( i = 0; i < nSoundNameLen; ++i )
                 rSt.WriteUInt16( aSoundName[i] );
         }
@@ -113,18 +113,18 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
         if ( nExtensionLen )
         {
             // extension of sound ( instance 1 )
-            rSt.WriteUInt32( ( ( EPP_CString << 16 ) | 16 ) ).WriteUInt32( ( nExtensionLen * 2 ) );
+            rSt.WriteUInt32( ( EPP_CString << 16 ) | 16 ).WriteUInt32( nExtensionLen * 2 );
             for ( i = 0; i < nExtensionLen; ++i )
                 rSt.WriteUInt16( aExtension[i] );
         }
         // id of sound ( instance 2 )
         OUString aId( OUString::number(nId ) );
         sal_Int32 nIdLen = aId.getLength();
-        rSt.WriteUInt32( ( ( EPP_CString << 16 ) | 32 ) ).WriteUInt32( ( nIdLen * 2 ) );
+        rSt.WriteUInt32( ( EPP_CString << 16 ) | 32 ).WriteUInt32( nIdLen * 2 );
         for ( i = 0; i < nIdLen; ++i )
             rSt.WriteUInt16( aId[i] );
 
-        rSt.WriteUInt32( ( EPP_SoundData << 16 ) ).WriteUInt32( ( nFileSize ) );
+        rSt.WriteUInt32( EPP_SoundData << 16 ).WriteUInt32( nFileSize );
         sal_uInt32 nBytesLeft = nFileSize;
         SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( aSoundURL, StreamMode::READ );
         if ( pSourceFile )
@@ -198,10 +198,10 @@ void ExSoundCollection::Write( SvStream& rSt ) const
         sal_uInt32 nSoundCount = maEntries.size();
 
         // create SoundCollection Container
-        rSt.WriteUInt16( 0xf ).WriteUInt16( EPP_SoundCollection ).WriteUInt32( ( GetSize() - 8 ) );
+        rSt.WriteUInt16( 0xf ).WriteUInt16( EPP_SoundCollection ).WriteUInt32( GetSize() - 8 );
 
         // create SoundCollAtom ( reference to the next free SoundId );
-        rSt.WriteUInt32( ( EPP_SoundCollAtom << 16 ) ).WriteUInt32( 4 ).WriteUInt32( nSoundCount );
+        rSt.WriteUInt32( EPP_SoundCollAtom << 16 ).WriteUInt32( 4 ).WriteUInt32( nSoundCount );
 
         boost::ptr_vector<ExSoundEntry>::const_iterator iter;
         for ( iter = maEntries.begin(); iter != maEntries.end(); ++iter, ++i)

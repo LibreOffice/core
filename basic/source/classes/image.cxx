@@ -95,7 +95,7 @@ void SbiCloseRecord( SvStream& r, sal_Size nOff )
 {
     sal_Size nPos = r.Tell();
     r.Seek( nOff + 2 );
-    r.WriteInt32( ( nPos - nOff - 8 ) );
+    r.WriteInt32(nPos - nOff - 8 );
     r.Seek( nPos );
 }
 
@@ -287,8 +287,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     }
     r .WriteInt32( eCharSet )
       .WriteInt32( nDimBase )
-      .WriteInt16(  nFlags )
-      .WriteInt16(  0 )
+      .WriteInt16( nFlags )
+      .WriteInt16( 0 )
       .WriteInt32( 0 )
       .WriteInt32( 0 );
 

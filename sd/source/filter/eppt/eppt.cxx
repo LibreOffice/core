@@ -177,7 +177,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     mpStrm->WriteInt32( static_cast<sal_Int32>(rLayout.nLayout) );
     mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs (8 parts)
-    mpStrm->WriteUInt32( (nMasterNum | 0x80000000) )// master ID (equals 0x80000000 on a master page)
+    mpStrm->WriteUInt32( nMasterNum | 0x80000000 )  // master ID (equals 0x80000000 on a master page)
            .WriteUInt32( nPageNum + 0x100 )         // notes ID (equals null if no notes are present)
            .WriteUInt16( nMode )
            .WriteUInt16( 0 );                       // padword
@@ -547,8 +547,8 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
 {
     if ( rSt.Tell() )
     {
-        aBuExOutlineStream.WriteUInt32( ( ( EPP_PST_ExtendedParagraphHeaderAtom << 16 )
-                                | ( nRef << 4 ) ) )
+        aBuExOutlineStream.WriteUInt32( ( EPP_PST_ExtendedParagraphHeaderAtom << 16 )
+                                        | ( nRef << 4 ) )
                            .WriteUInt32( 8 )
                            .WriteUInt32( nSlideId )
                            .WriteUInt32( nInstance );
@@ -838,7 +838,7 @@ bool PPTWriter::ImplCreateDocument()
                     const sal_Unicode* pCustomShow = aCustomShow.getStr();
                     for ( i = 0; i < nCustomShowNameLen; i++ )
                     {
-                        mpStrm->WriteUInt16( ( pCustomShow[ i ] ) );
+                        mpStrm->WriteUInt16( pCustomShow[ i ] );
                     }
                 }
                 for ( i = nCustomShowNameLen; i < 32; i++, mpStrm->WriteUInt16( 0 ) ) ;
@@ -870,7 +870,7 @@ bool PPTWriter::ImplCreateDocument()
                                         nNamedShowLen = 31;
                                     mpPptEscherEx->AddAtom( nNamedShowLen << 1, EPP_CString );
                                     const sal_Unicode* pCustomShowName = pUString[ i ].getStr();
-                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; mpStrm->WriteUInt16( ( pCustomShowName[ k++ ] ) ) ) ;
+                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; mpStrm->WriteUInt16( pCustomShowName[ k++ ] ) ) ;
                                     mAny = aXCont->getByName( pUString[ i ] );
                                     if ( mAny.getValue() )
                                     {
@@ -902,7 +902,7 @@ bool PPTWriter::ImplCreateDocument()
                                                             if (pIter != maSlideNameList.end())
                                                             {
                                                                 sal_uInt32 nPageNumber = pIter - maSlideNameList.begin();
-                                                                mpStrm->WriteUInt32( ( nPageNumber + 0x100 ) ); // unique slide id
+                                                                mpStrm->WriteUInt32( nPageNumber + 0x100 ); // unique slide id
                                                             }
                                                         }
                                                     }
@@ -971,7 +971,7 @@ bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
             case 1 :        // click action to slidenumber
             {
                 rStrm.WriteUInt32( 0x1f ).WriteUInt32( 1 ).WriteUInt32( 0 );    // path
-                rStrm.WriteUInt32( 0x1f ).WriteUInt32( ( nUrlLen + 1 ) );
+                rStrm.WriteUInt32( 0x1f ).WriteUInt32( nUrlLen + 1 );
                 for ( sal_Int32 i = 0; i < nUrlLen; i++ )
                 {
                     rStrm.WriteUInt16( rUrl[ i ] );
@@ -984,7 +984,7 @@ bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
                 sal_Int32 i;
 
                 rStrm  .WriteUInt32( 0x1f )
-                       .WriteUInt32( ( nUrlLen + 1 ) );
+                       .WriteUInt32( nUrlLen + 1 );
                 for ( i = 0; i < nUrlLen; i++ )
                 {
                     rStrm.WriteUInt16( rUrl[ i ] );
@@ -1001,7 +1001,7 @@ bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     }
     nCurrentOfs = rStrm.Tell();
     rStrm.Seek( nParaOfs );
-    rStrm.WriteUInt32( ( nCurrentOfs - ( nParaOfs + 4 ) ) );
+    rStrm.WriteUInt32( nCurrentOfs - ( nParaOfs + 4 ) );
     rStrm.WriteUInt32( nParaCount );
     rStrm.Seek( nCurrentOfs );
     return true;
@@ -1426,7 +1426,7 @@ bool PPTWriter::ImplWriteAtomEnding()
     nPos = mpStrm->Tell();
     mpStrm->Seek( nPersistOfs );
     mpPptEscherEx->AddAtom( ( nPersistEntrys + 1 ) << 2, EPP_PersistPtrIncrementalBlock );      // insert Record Header
-    mpStrm->WriteUInt32( ( ( nPersistEntrys << 20 ) | 1 ) );
+    mpStrm->WriteUInt32( ( nPersistEntrys << 20 ) | 1 );
     mpStrm->Seek( nPos );
 
     mpCurUserStrm->WriteUInt32( nPos );             // set offset to current edit

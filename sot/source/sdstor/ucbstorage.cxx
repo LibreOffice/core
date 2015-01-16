@@ -3164,7 +3164,7 @@ OUString UCBStorage::CreateLinkFile( const OUString& rName )
     SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE | StreamMode::TRUNC );
 
     // write header
-    pStream->WriteUInt32(  0x04034b50 );
+    pStream->WriteUInt32( 0x04034b50 );
 
     // assemble a new folder name in the destination folder
     INetURLObject aObj( rName );

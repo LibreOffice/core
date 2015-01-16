@@ -43,15 +43,15 @@
 
 static void lclWriteMiniHeader(SvStream *p, sal_uInt32 nPreTag, sal_uInt32 nStartPos, sal_uInt32 nEndPos)
 {
-   (*p).WriteUInt32(  sal_uInt32(nPreTag) |
-             sal_uInt32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8  );
+   (*p).WriteUInt32( sal_uInt32(nPreTag) |
+                     sal_uInt32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8  );
 }
 
 static void lclWriteHeader(SvStream *p, sal_uInt32 nRecType, sal_uInt32 nContentTag, sal_uInt32 nContentVer)
 {
-    (*p).WriteUInt32(  sal_uInt32(nRecType) |
-             ( sal_uInt32(nContentVer) << 8 ) |
-             ( sal_uInt32(nContentTag) << 16 )  );
+    (*p).WriteUInt32( sal_uInt32(nRecType) |
+                     ( sal_uInt32(nContentVer) << 8 ) |
+                     ( sal_uInt32(nContentTag) << 16 )  );
 }
 
 #define SFX_REC_CONTENT_HEADER(nContentVer,n1StStartPos,nCurStartPos) \

@@ -324,8 +324,8 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, 
         SvStream& rOut = pBuProv->aBuExMasterStream;
         if ( !nLev )
         {
-            rOut.WriteUInt32( ( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) ) )
-                .WriteUInt32( ( 5 * 16 + 2 ) )
+            rOut.WriteUInt32( ( EPP_PST_ExtendedParagraphMasterAtom << 16 ) | ( mnInstance << 4 ) )
+                .WriteUInt32( 5 * 16 + 2 )
                 .WriteUInt16( 5 );              // depth
         }
         sal_uInt16 nBulletId = rLev.mnBulletId;
@@ -483,9 +483,9 @@ void PPTExStyleSheet::WriteTxCFStyleAtom( SvStream& rSt )
     sal_uInt32 nCharFlags = rCharStyle.mnFlags;
     nCharFlags &= CharAttr_Italic | CharAttr_Bold | CharAttr_Underline | CharAttr_Shadow;
 
-    rSt.WriteUInt32( ( EPP_TxCFStyleAtom << 16 ) )  // recordheader
+    rSt.WriteUInt32( EPP_TxCFStyleAtom << 16 )  // recordheader
        .WriteUInt32( SizeOfTxCFStyleAtom() - 8 )
-       .WriteUInt16( ( 0x80 | nCharFlags ) )
+       .WriteUInt16( 0x80 | nCharFlags )
        .WriteUInt16( nFlags )
        .WriteUInt16( nCharFlags )
        .WriteInt32( -1 )                            // ?

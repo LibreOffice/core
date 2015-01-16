@@ -132,7 +132,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     pImp->bStreaming = true;
     if ( !pStoreMaster )
     {
-        rStream.WriteUInt16(  rStream.GetVersion() >= SOFFICE_FILEFORMAT_50
+        rStream.WriteUInt16( rStream.GetVersion() >= SOFFICE_FILEFORMAT_50
                 ? SFX_ITEMPOOL_TAG_STARTPOOL_5
                 : SFX_ITEMPOOL_TAG_STARTPOOL_4  );
         rStream.WriteUInt8( SFX_ITEMPOOL_VER_MAJOR ).WriteUInt8( SFX_ITEMPOOL_VER_MINOR );
@@ -853,7 +853,7 @@ bool SfxItemPool::StoreSurrogate ( SvStream& rStream, const SfxPoolItem*  pItem)
     if ( pItem )
     {
         bool bRealSurrogate = IsItemFlag(*pItem, SFX_ITEM_POOLABLE);
-        rStream.WriteUInt32(  bRealSurrogate
+        rStream.WriteUInt32( bRealSurrogate
                         ? GetSurrogate( pItem )
                         : SFX_ITEMS_DIRECT  );
         return bRealSurrogate;
@@ -1162,7 +1162,7 @@ bool SfxItemPool::StoreItem( SvStream &rStream, const SfxPoolItem &rItem,
         rItem.Store(rStream, nItemVersion);
         sal_uLong nIEnd = rStream.Tell();
         rStream.Seek( nIStart-4 );
-        rStream.WriteInt32( ( nIEnd-nIStart ) );
+        rStream.WriteInt32( nIEnd-nIStart );
         rStream.Seek( nIEnd );
     }
 

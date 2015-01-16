@@ -83,7 +83,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     rOStm.WriteUInt16( GetType() );
     rOStm.WriteUInt16( GetVersion() );
-    rOStm.WriteUInt16(  eEncoding  );
+    rOStm.WriteUInt16( eEncoding  );
 
     const OString aRelURL = OUStringToOString(
         URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);

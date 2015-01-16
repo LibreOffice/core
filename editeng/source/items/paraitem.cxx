@@ -265,11 +265,11 @@ SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar(   GetPropLineSpace() )
-         .WriteInt16(  GetInterLineSpace() )
+    rStrm.WriteSChar( GetPropLineSpace() )
+         .WriteInt16( GetInterLineSpace() )
          .WriteUInt16( GetLineHeight() )
-         .WriteSChar(    GetLineSpaceRule() )
-         .WriteSChar(    GetInterLineSpaceRule() );
+         .WriteSChar( GetLineSpaceRule() )
+         .WriteSChar( GetInterLineSpaceRule() );
     return rStrm;
 }
 
@@ -503,7 +503,7 @@ SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
             nFlags |= 0x0002;
         if ( bLastBlock )
             nFlags |= 0x0004;
-        rStrm.WriteSChar(  nFlags );
+        rStrm.WriteSChar( nFlags );
     }
     return rStrm;
 }
@@ -600,7 +600,7 @@ SfxPoolItem* SvxOrphansItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar(  GetValue() );
+    rStrm.WriteSChar( GetValue() );
     return rStrm;
 }
 
@@ -795,11 +795,11 @@ SfxPoolItem* SvxHyphenZoneItem::Create(SvStream& rStrm, sal_uInt16) const
 
 SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar(  (sal_Int8) IsHyphen() )
-         .WriteSChar(  (sal_Int8) IsPageEnd() )
-         .WriteSChar(  GetMinLead() )
-         .WriteSChar(  GetMinTrail() )
-         .WriteSChar(  GetMaxHyphens() );
+    rStrm.WriteSChar( (sal_Int8) IsHyphen() )
+         .WriteSChar( (sal_Int8) IsPageEnd() )
+         .WriteSChar( GetMinLead() )
+         .WriteSChar( GetMinTrail() )
+         .WriteSChar( GetMaxHyphens() );
     return rStrm;
 }
 
@@ -1158,14 +1158,14 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         nCount = (sal_uInt16)(nNew < lA3Width ? ( lA3Width - nNew ) / nDefDist + 1 : 0);
     }
 
-    rStrm.WriteSChar(  ( nTabs + nCount ) );
+    rStrm.WriteSChar( nTabs + nCount );
     for ( short i = 0; i < nTabs; i++ )
     {
         const SvxTabStop& rTab = (*this)[ i ];
         rStrm.WriteInt32( rTab.GetTabPos() )
-             .WriteSChar(  rTab.GetAdjustment() )
-             .WriteUChar(  rTab.GetDecimal() )
-             .WriteUChar(  rTab.GetFill() );
+             .WriteSChar( rTab.GetAdjustment() )
+             .WriteUChar( rTab.GetDecimal() )
+             .WriteUChar( rTab.GetFill() );
     }
 
     if ( bStoreDefTabs )
@@ -1173,9 +1173,9 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         {
             SvxTabStop aSwTabStop(nNew, SVX_TAB_ADJUST_DEFAULT);
             rStrm.WriteInt32( aSwTabStop.GetTabPos() )
-                 .WriteSChar(  aSwTabStop.GetAdjustment() )
-                 .WriteUChar(  aSwTabStop.GetDecimal() )
-                 .WriteUChar(  aSwTabStop.GetFill() );
+                 .WriteSChar( aSwTabStop.GetAdjustment() )
+                 .WriteUChar( aSwTabStop.GetDecimal() )
+                 .WriteUChar( aSwTabStop.GetFill() );
             nNew += nDefDist;
         }
 

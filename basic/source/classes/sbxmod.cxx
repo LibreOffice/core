@@ -2065,11 +2065,11 @@ bool SbMethod::StoreData( SvStream& rStrm ) const
 {
     if( !SbxMethod::StoreData( rStrm ) )
         return false;
-    rStrm.WriteInt16(  nDebugFlags )
-         .WriteInt16(  nLine1 )
-         .WriteInt16(  nLine2 )
-         .WriteInt16(  nStart )
-         .WriteUChar(  bInvalid );
+    rStrm.WriteInt16( nDebugFlags )
+         .WriteInt16( nLine1 )
+         .WriteInt16( nLine2 )
+         .WriteInt16( nStart )
+         .WriteUChar( bInvalid );
     return true;
 }
 

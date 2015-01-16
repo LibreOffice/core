@@ -916,7 +916,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             nPackType = 4;
 
         // writing PixMap-Structure:
-        pPict->WriteUInt16( (nDstRowBytes|0x8000) ) // Bytes per row and the fact that it's a 'PixMap'
+        pPict->WriteUInt16( nDstRowBytes|0x8000 )   // Bytes per row and the fact that it's a 'PixMap'
               .WriteUInt16( 0x0000 )                // Y1-position of the bitmap in the source
               .WriteUInt16( 0x0000 )                // X1-position of the bitmap in the source
               .WriteUInt16( nHeight )               // Y2-position of the bitmap in the source
@@ -1100,7 +1100,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             nPackType = 0;
 
         // write PixMap-Structure:
-        pPict->WriteUInt16( (nDstRowBytes|0x8000) ) // Bytes per row and the fact that it's a 'PixMap'
+        pPict->WriteUInt16( nDstRowBytes|0x8000 )   // Bytes per row and the fact that it's a 'PixMap'
               .WriteUInt16( 0x0000 )                // Y1-position of the bitmap in the source
               .WriteUInt16( 0x0000 )                // X1-position of the bitmap in the source
               .WriteUInt16( nHeight )               // Y2-position of the bitmap in the source
@@ -1120,7 +1120,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
 
         // writing and reading the palette:
         nColTabSize = pAcc->GetPaletteEntryCount();
-        pPict->WriteUInt32( 0 ).WriteUInt16( 0x8000 ).WriteUInt16( ( nColTabSize - 1 ) );
+        pPict->WriteUInt32( 0 ).WriteUInt16( 0x8000 ).WriteUInt16( nColTabSize - 1 );
 
         for ( i = 0; i < nColTabSize; i++ )
         {
@@ -2175,7 +2175,7 @@ void PictWriter::UpdateHeader()
     // correct the Lo-16-Bits of the file size without the 512 bytes trash:
     nPos=pPict->Tell();
     pPict->Seek(512);
-    pPict->WriteUInt16( ((nPos-512)&0x0000ffff) );
+    pPict->WriteUInt16( (nPos-512) & 0xffff );
     pPict->Seek(nPos);
 }
 

@@ -153,7 +153,7 @@ void PBMWriter::ImplWriteBody()
                     m_rOStm.WriteUChar( nBYTE );
             }
             if ( ( x & 7 ) != 0 )
-                m_rOStm.WriteUChar( ( nBYTE << ( ( x ^ 7 ) + 1 ) ) );
+                m_rOStm.WriteUChar( nBYTE << ( ( x ^ 7 ) + 1 ) );
         }
     }
     else
@@ -168,7 +168,7 @@ void PBMWriter::ImplWriteBody()
                     nxCount = 69;
                     m_rOStm.WriteUChar( 10 );
                 }
-                m_rOStm.WriteUChar( ( ( mpAcc->GetPixelIndex( y, x ) ^ 1 ) + '0' ) ) ;
+                m_rOStm.WriteUChar( ( mpAcc->GetPixelIndex( y, x ) ^ 1 ) + '0' ) ;
             }
             m_rOStm.WriteUChar( 10 );
         }

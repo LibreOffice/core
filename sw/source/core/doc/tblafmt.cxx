@@ -962,18 +962,17 @@ bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
 bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    bool b;
     rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
         RTL_TEXTENCODING_UTF8 );
     rStream.WriteUInt16( nStrResId );
-    rStream.WriteUChar( ( b = bInclFont ) );
-    rStream.WriteUChar( ( b = bInclJustify ) );
-    rStream.WriteUChar( ( b = bInclFrame ) );
-    rStream.WriteUChar( ( b = bInclBackground ) );
-    rStream.WriteUChar( ( b = bInclValueFormat ) );
-    rStream.WriteUChar( ( b = bInclWidthHeight ) );
+    rStream.WriteUChar( bInclFont );
+    rStream.WriteUChar( bInclJustify );
+    rStream.WriteUChar( bInclFrame );
+    rStream.WriteUChar( bInclBackground );
+    rStream.WriteUChar( bInclValueFormat );
+    rStream.WriteUChar( bInclWidthHeight );
 
     {
         WriterSpecificAutoFormatBlock block(rStream);

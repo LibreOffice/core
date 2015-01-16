@@ -72,7 +72,7 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
     {
         OString aAsciiCbFmt(OUStringToOString(aCbFmt,
                                               RTL_TEXTENCODING_ASCII_US));
-        rStm.WriteInt32( (aAsciiCbFmt.getLength() + 1) );
+        rStm.WriteInt32( aAsciiCbFmt.getLength() + 1 );
         rStm.WriteCharPtr( (const char *)aAsciiCbFmt.getStr() );
         rStm.WriteUChar( 0 );
     }

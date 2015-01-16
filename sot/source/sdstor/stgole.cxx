@@ -146,14 +146,14 @@ bool StgCompObjStream::Store()
         return false;
     Seek( 0L );
     OString aAsciiUserName(OUStringToOString(aUserName, RTL_TEXTENCODING_MS_1252));
-    WriteInt16(  1 );          // Version?
-    WriteInt16(  -2 );                     // 0xFFFE = Byte Order Indicator
+    WriteInt16( 1 );          // Version?
+    WriteInt16( -2 );                     // 0xFFFE = Byte Order Indicator
     WriteInt32( 0x0A03 );         // Windows 3.10
     WriteInt32( -1L );
     WriteClsId( *this, aClsId );             // Class ID
-    WriteInt32( (aAsciiUserName.getLength() + 1) );
+    WriteInt32( aAsciiUserName.getLength() + 1 );
     WriteCharPtr( (const char *)aAsciiUserName.getStr() );
-    WriteUChar(  0 );             // string terminator
+    WriteUChar( 0 );             // string terminator
     WriteClipboardFormat( *this, nCbFormat );
     WriteInt32( 0 );             // terminator
     Commit();

@@ -2209,9 +2209,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
     OpenContainer( ESCHER_DggContainer );
 
     sal_uInt16 nColorCount = 4;
-    pStrm ->WriteUInt16( ( nColorCount << 4 ) )     // instance
+    pStrm ->WriteUInt16( nColorCount << 4 )     // instance
            .WriteUInt16( ESCHER_SplitMenuColors )   // record type
-           .WriteUInt32( ( nColorCount * 4 ) )      // size
+           .WriteUInt32( nColorCount * 4 )      // size
            .WriteUInt32( 0x08000004 )
            .WriteUInt32( 0x08000001 )
            .WriteUInt32( 0x08000002 )

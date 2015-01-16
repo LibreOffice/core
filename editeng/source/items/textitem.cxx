@@ -373,7 +373,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     bool bToBats = IsStarSymbol( GetFamilyName() );
 
     rStrm.WriteUChar( GetFamily() ).WriteUChar( GetPitch() )
-         .WriteUChar( (bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet())) );
+         .WriteUChar( bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet()) );
 
     OUString aStoreFamilyName( GetFamilyName() );
     if( bToBats )

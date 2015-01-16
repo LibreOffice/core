@@ -341,7 +341,7 @@ void METWriter::CountActionsAndBitmaps(const GDIMetaFile * pMTF)
 
 void METWriter::WriteBigEndianShort(sal_uInt16 nWord)
 {
-    pMET->WriteUChar( (nWord>>8) ).WriteUChar( (nWord&0x00ff) );
+    pMET->WriteUChar( nWord>>8 ).WriteUChar( nWord&0x00ff );
 }
 
 
@@ -356,8 +356,8 @@ void METWriter::WritePoint(Point aPt)
 {
     Point aNewPt = OutputDevice::LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
 
-    pMET->WriteInt32( ( aNewPt.X() - aPictureRect.Left() ) )
-         .WriteInt32( ( aPictureRect.Bottom() - aNewPt.Y() ) );
+    pMET->WriteInt32( aNewPt.X() - aPictureRect.Left() )
+         .WriteInt32( aPictureRect.Bottom() - aNewPt.Y() );
 }
 
 
@@ -534,9 +534,9 @@ void METWriter::WriteColorAttributeTable(sal_uInt32 nFieldId, BitmapPalette* pPa
             {
                 const BitmapColor& rCol = (*pPalette)[ nIndex ];
 
-                pMET->WriteUChar(  rCol.GetRed() );
-                pMET->WriteUChar(  rCol.GetGreen() );
-                pMET->WriteUChar(  rCol.GetBlue() );
+                pMET->WriteUChar( rCol.GetRed() );
+                pMET->WriteUChar( rCol.GetGreen() );
+                pMET->WriteUChar( rCol.GetBlue() );
                 nIndex++;
             }
         }
@@ -868,8 +868,8 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     Size aUnitsPerDecimeter=OutputDevice::LogicToLogic(Size(10,10),MapMode(MAP_CM),aPictureMapMode);
     pMET->WriteUChar( 0xf6 ).WriteUChar( 0x28 ).WriteUChar( 0x40 ).WriteUChar( 0x00 )
          .WriteUChar( 0x05 ).WriteUChar( 0x01 )
-         .WriteUInt32( (aUnitsPerDecimeter.Width()) )
-         .WriteUInt32( (aUnitsPerDecimeter.Height()) )
+         .WriteUInt32( aUnitsPerDecimeter.Width() )
+         .WriteUInt32( aUnitsPerDecimeter.Height() )
          .WriteUInt32( 0 )
          .WriteUInt32( 0 ).WriteUInt32( aPictureRect.GetWidth() )
          .WriteUInt32( 0 ).WriteUInt32( aPictureRect.GetHeight() )
@@ -1153,8 +1153,8 @@ void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
     WritePoint(Point(aPt.X(),aPt.Y()+aSize.Height()));
     WritePoint(Point(aPt.X()+aSize.Width(),aPt.Y()));
     pMET->WriteUInt32( 0 ).WriteUInt32( 0 )
-         .WriteUInt32( (rBmpSizePixel.Width()) )
-         .WriteUInt32( (rBmpSizePixel.Height()) );
+         .WriteUInt32( rBmpSizePixel.Width() )
+         .WriteUInt32( rBmpSizePixel.Height() );
 }
 
 void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
@@ -1303,7 +1303,7 @@ void METWriter::METLine(const Polygon & rPolygon)
         else {
             pMET->WriteUChar( 0x81 ); // Line at current pos
         }
-        pMET->WriteUChar( (nOrderPoints*8) );
+        pMET->WriteUChar( nOrderPoints*8 );
         for (j=0; j<nOrderPoints; j++) WritePoint(rPolygon.GetPoint(i++));
     }
 }
@@ -1348,7 +1348,7 @@ void METWriter::METFullArc(Point aCenter, double fMultiplier)
     WillWriteOrder(14);
     pMET->WriteUChar( 0xc7 ).WriteUChar( 12 );
     WritePoint(aCenter);
-    pMET->WriteInt32( (fMultiplier*65536.0+0.5) );
+    pMET->WriteInt32( fMultiplier*65536.0+0.5 );
 }
 
 
@@ -1364,9 +1364,9 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
     WillWriteOrder(22);
     pMET->WriteUChar( 0xa3 ).WriteUChar( 20 );
     WritePoint(aCenter);
-    pMET->WriteInt32( (fMultiplier*65536.0+0.5) );
-    pMET->WriteInt32( (fStartAngle*65536.0+0.5) );
-    pMET->WriteInt32( (fSweepAngle*65536.0+0.5) );
+    pMET->WriteInt32( fMultiplier*65536.0+0.5 );
+    pMET->WriteInt32( fStartAngle*65536.0+0.5 );
+    pMET->WriteInt32( fSweepAngle*65536.0+0.5 );
 }
 
 
@@ -1376,7 +1376,7 @@ void METWriter::METChrStr( Point aPt, const OUString& aUniStr )
         osl_getThreadTextEncoding()));
     sal_uInt16 nLen = aStr.getLength();
     WillWriteOrder( 11 + nLen );
-    pMET->WriteUChar( 0xc3 ).WriteUChar( ( 9 + nLen ) );
+    pMET->WriteUChar( 0xc3 ).WriteUChar( 9 + nLen );
     WritePoint(aPt);
     for (sal_uInt16 i = 0; i < nLen; ++i)
         pMET->WriteChar( aStr[i] );
@@ -1398,9 +1398,9 @@ void METWriter::METSetColor(Color aColor)
 
     WillWriteOrder(6);
     pMET->WriteUChar( 0xa6 ).WriteUChar( 4 ).WriteUChar( 0 )
-         .WriteUChar( (aColor.GetBlue()) )
-         .WriteUChar( (aColor.GetGreen()) )
-         .WriteUChar( (aColor.GetRed()) );
+         .WriteUChar( aColor.GetBlue() )
+         .WriteUChar( aColor.GetGreen() )
+         .WriteUChar( aColor.GetRed() );
 }
 
 
@@ -1411,9 +1411,9 @@ void METWriter::METSetBackgroundColor(Color aColor)
 
     WillWriteOrder(6);
     pMET->WriteUChar( 0xa7 ).WriteUChar( 4 ).WriteUChar( 0 )
-         .WriteUChar( (aColor.GetBlue()) )
-         .WriteUChar( (aColor.GetGreen()) )
-         .WriteUChar( (aColor.GetRed()) );
+         .WriteUChar( aColor.GetBlue() )
+         .WriteUChar( aColor.GetGreen() )
+         .WriteUChar( aColor.GetRed() );
 }
 
 void METWriter::METSetMix(RasterOp eROP)

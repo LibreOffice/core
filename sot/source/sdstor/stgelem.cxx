@@ -164,7 +164,7 @@ bool StgHeader::Store( StgIo& rIo )
      .WriteUInt16( nByteOrder )                 // 1C Unicode byte order indicator
      .WriteInt16( nPageSize )                  // 1E 1 << nPageSize = block size
      .WriteInt16( nDataPageSize )              // 20 1 << this size == data block size
-     .WriteInt32( 0 ).WriteInt32( 0 ).WriteInt16(  0 )
+     .WriteInt32( 0 ).WriteInt32( 0 ).WriteInt16( 0 )
      .WriteInt32( nFATSize )                   // 2C total number of FAT pages
      .WriteInt32( nTOCstrm )                   // 30 starting page for the TOC stream
      .WriteInt32( nReserved )                  // 34

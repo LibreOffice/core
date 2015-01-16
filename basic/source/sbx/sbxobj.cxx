@@ -690,7 +690,7 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     }
     sal_Size nNew = rStrm.Tell();
     rStrm.Seek( nPos );
-    rStrm.WriteUInt32( ( nNew - nPos ) );
+    rStrm.WriteUInt32( nNew - nPos );
     rStrm.Seek( nNew );
     if( !pMethods->Store( rStrm ) )
     {
@@ -832,7 +832,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     OString aClassNameStr(OUStringToOString(aClassName, RTL_TEXTENCODING_ASCII_US));
     rStrm.WriteCharPtr( "Object( " )
          .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(this)).getStr() ).WriteCharPtr( "=='" )
-         .WriteCharPtr(  aNameStr.isEmpty() ?  "<unnamed>" : aNameStr.getStr()  ).WriteCharPtr( "', " )
+         .WriteCharPtr( aNameStr.isEmpty() ?  "<unnamed>" : aNameStr.getStr()  ).WriteCharPtr( "', " )
          .WriteCharPtr( "of class '" ).WriteCharPtr( aClassNameStr.getStr() ).WriteCharPtr( "', " )
          .WriteCharPtr( "counts " )
          .WriteCharPtr( OString::number(GetRefCount()).getStr() )
@@ -842,7 +842,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
         OString aParentNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
         rStrm.WriteCharPtr( "in parent " )
              .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(GetParent())).getStr() )
-             .WriteCharPtr( "=='" ).WriteCharPtr(  aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr.getStr()   ).WriteCharPtr( "'" );
+             .WriteCharPtr( "=='" ).WriteCharPtr( aParentNameStr.isEmpty() ? "<unnamed>" : aParentNameStr.getStr()   ).WriteCharPtr( "'" );
     }
     else
     {

@@ -790,18 +790,17 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 {
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
-    bool b;
     rStream.WriteUInt16( nVal );
     // --- from 680/dr25 on: store strings as UTF-8
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, aName, RTL_TEXTENCODING_UTF8);
 
     rStream.WriteUInt16( nStrResId );
-    rStream.WriteUChar( ( b = bIncludeFont ) );
-    rStream.WriteUChar( ( b = bIncludeJustify ) );
-    rStream.WriteUChar( ( b = bIncludeFrame ) );
-    rStream.WriteUChar( ( b = bIncludeBackground ) );
-    rStream.WriteUChar( ( b = bIncludeValueFormat ) );
-    rStream.WriteUChar( ( b = bIncludeWidthHeight ) );
+    rStream.WriteUChar( bIncludeFont );
+    rStream.WriteUChar( bIncludeJustify );
+    rStream.WriteUChar( bIncludeFrame );
+    rStream.WriteUChar( bIncludeBackground );
+    rStream.WriteUChar( bIncludeValueFormat );
+    rStream.WriteUChar( bIncludeWidthHeight );
 
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         WriteAutoFormatSwBlob( rStream, m_swFields );
@@ -1091,7 +1090,7 @@ bool ScAutoFormat::Save()
 
         bRet &= (rStream.GetError() == 0);
 
-        rStream.WriteUInt16( (maData.size() - 1) );
+        rStream.WriteUInt16( maData.size() - 1 );
         bRet &= (rStream.GetError() == 0);
         MapType::iterator it = maData.begin(), itEnd = maData.end();
         if (it != itEnd)

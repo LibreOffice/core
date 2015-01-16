@@ -99,7 +99,7 @@ using namespace ::com::sun::star;
 EscherExContainer::EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance ) :
     rStrm   ( rSt )
 {
-    rStrm.WriteUInt32( ( ( 0xf | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) ).WriteUInt32( 0 );
+    rStrm.WriteUInt32( ( 0xf | ( nInstance << 4 ) ) | ( nRecType << 16 ) ).WriteUInt32( 0 );
     nContPos = rStrm.Tell();
 }
 EscherExContainer::~EscherExContainer()
@@ -117,7 +117,7 @@ EscherExContainer::~EscherExContainer()
 EscherExAtom::EscherExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance, const sal_uInt8 nVersion ) :
     rStrm   ( rSt )
 {
-    rStrm.WriteUInt32( ( ( nVersion | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) ).WriteUInt32( 0 );
+    rStrm.WriteUInt32( ( nVersion | ( nInstance << 4 ) ) | ( nRecType << 16 ) ).WriteUInt32( 0 );
     nContPos = rStrm.Tell();
 }
 EscherExAtom::~EscherExAtom()
@@ -301,7 +301,7 @@ extern "C" int SAL_CALL EscherPropSortFunc( const void* p1, const void* p2 )
 
 void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uInt16 nRecType )
 {
-    rSt.WriteUInt16( ( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
+    rSt.WriteUInt16( ( nCountCount << 4 ) | ( nVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
     if ( nSortCount )
     {
         qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
@@ -366,7 +366,7 @@ sal_uInt32 EscherPropertyContainer::GetGradientColor(
             aColor = pGradient->EndColor;
         }
     }
-    sal_uInt32  nRed = ( ( aColor.GetRed() * nIntensity ) / 100 );
+    sal_uInt32  nRed = ( aColor.GetRed() * nIntensity ) / 100;
     sal_uInt32  nGreen = ( ( aColor.GetGreen() * nIntensity ) / 100 ) << 8;
     sal_uInt32  nBlue = ( ( aColor.GetBlue() * nIntensity ) / 100 ) << 16;
     return nRed | nGreen | nBlue;
@@ -4161,8 +4161,8 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
 {
     sal_uInt32  nPictureOffset = ( bWritePictureOffset ) ? mnPictureOffset : 0;
 
-    rSt.WriteUInt32( ( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) ) )
-       .WriteUInt32( ( 36 + nResize ) )
+    rSt.WriteUInt32( ( ESCHER_BSE << 16 ) | ( ( (sal_uInt16)meBlibType << 4 ) | 2 ) )
+       .WriteUInt32( 36 + nResize )
        .WriteUChar( meBlibType );
 
     switch ( meBlibType )
@@ -4177,7 +4177,7 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
 
     rSt.Write( &mnIdentifier[ 0 ], 16 );
     rSt.WriteUInt16( 0 )
-       .WriteUInt32( ( mnSize + mnSizeExtra ) )
+       .WriteUInt32( mnSize + mnSizeExtra )
        .WriteUInt32( mnRefCount )
        .WriteUInt32( nPictureOffset )
        .WriteUInt32( 0 );
@@ -4262,8 +4262,8 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
     sal_uInt32  nSize = GetBlibStoreContainerSize( pMergePicStreamBSE );
     if ( nSize )
     {
-        rSt.WriteUInt32( ( ( ESCHER_BstoreContainer << 16 ) | 0x1f ) )
-           .WriteUInt32( ( nSize - 8 ) );
+        rSt.WriteUInt32( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
+           .WriteUInt32( nSize - 8 );
 
         if ( pMergePicStreamBSE )
         {
@@ -4455,7 +4455,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
             if ( mnFlags & _E_GRAPH_PROV_USE_INSTANCES )
             {
-                rPicOutStrm.WriteUInt32( ( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) ) )
+                rPicOutStrm.WriteUInt32( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) )
                            .WriteUInt32( 0 );
                 nAtomSize = rPicOutStrm.Tell();
                  if ( eBlibType == PNG )
@@ -4495,7 +4495,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 //nInstance = ( eBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
 
 
-                rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( ( p_EscherBlibEntry->mnSize + nExtra ) );
+                rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( p_EscherBlibEntry->mnSize + nExtra );
                 rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                 rPicOutStrm.WriteUChar( 0xff );
                 rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
@@ -4515,7 +4515,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     nExtra = eBlibType == WMF ? 0x42 : 0x32;                                    // !EMF -> no change
                     p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
                     nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d40;                 // !EMF -> no change
-                    rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( ( p_EscherBlibEntry->mnSize + nExtra ) );
+                    rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( p_EscherBlibEntry->mnSize + nExtra );
                     if ( eBlibType == WMF )                                                     // !EMF -> no change
                         rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                     rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
@@ -4561,7 +4561,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             {
                 sal_uInt32  nPos = rPicOutStrm.Tell();
                 rPicOutStrm.Seek( nAtomSize - 4 );
-                rPicOutStrm.WriteUInt32( ( nPos - nAtomSize ) );
+                rPicOutStrm.WriteUInt32( nPos - nAtomSize );
                 rPicOutStrm.Seek( nPos );
             }
             nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = NULL;
@@ -4884,7 +4884,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     if ( nCount )
     {
         sal_uInt32  nRecHdPos, nCurrentPos, nSize;
-        rStrm  .WriteUInt16( ( ( nCount << 4 ) | 0xf ) )    // open an ESCHER_SolverContainer
+        rStrm  .WriteUInt16( ( nCount << 4 ) | 0xf )    // open an ESCHER_SolverContainer
                .WriteUInt16( ESCHER_SolverContainer )
                .WriteUInt32( 0 );
 
@@ -4907,7 +4907,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
                 if ( aConnectorRule.nShapeB )
                     aConnectorRule.ncptiB = pPtr->GetConnectorRule( false );
             }
-            rStrm  .WriteUInt32( ( ( ESCHER_ConnectorRule << 16 ) | 1 ) )   // atom hd
+            rStrm  .WriteUInt32( ( ESCHER_ConnectorRule << 16 ) | 1 )   // atom hd
                    .WriteUInt32( 24 )
                    .WriteUInt32( aConnectorRule.nRuleId )
                    .WriteUInt32( aConnectorRule.nShapeA )
@@ -5159,7 +5159,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
         if ( (nCurPos < nEndOfRecord) || ((nCurPos == nEndOfRecord) && (bContainer || bExpandEndOfAtom)) )
         {
             mpOutStrm->SeekRel( -4 );
-            mpOutStrm->WriteUInt32( ( nSize + nBytes ) );
+            mpOutStrm->WriteUInt32( nSize + nBytes );
             if ( !bContainer )
                 mpOutStrm->SeekRel( nSize );
         }
@@ -5241,7 +5241,7 @@ bool EscherEx::InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue )
 
 void EscherEx::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
-    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | 0xf  ) ).WriteUInt16( nEscherContainer ).WriteUInt32( 0 );
+    mpOutStrm->WriteUInt16( ( nRecInstance << 4 ) | 0xf ).WriteUInt16( nEscherContainer ).WriteUInt32( 0 );
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( nEscherContainer );
     switch( nEscherContainer )
@@ -5344,13 +5344,13 @@ void EscherEx::EndAtom( sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
     sal_uInt32  nOldPos = mpOutStrm->Tell();
     mpOutStrm->Seek( mnCountOfs );
     sal_uInt32 nSize = nOldPos - mnCountOfs;
-    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( ( nSize - 8 ) );
+    mpOutStrm->WriteUInt16( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nSize - 8 );
     mpOutStrm->Seek( nOldPos );
 }
 
 void EscherEx::AddAtom( sal_uInt32 nAtomSize, sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
 {
-    mpOutStrm->WriteUInt16( ( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) ).WriteUInt16( nRecType ).WriteUInt32( nAtomSize );
+    mpOutStrm->WriteUInt16( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nAtomSize );
 }
 
 void EscherEx::AddChildAnchor( const Rectangle& rRect )
@@ -5367,8 +5367,8 @@ void EscherEx::AddClientAnchor( const Rectangle& rRect )
     AddAtom( 8, ESCHER_ClientAnchor );
     mpOutStrm->WriteInt16( rRect.Top() )
               .WriteInt16( rRect.Left() )
-              .WriteInt16( ( rRect.GetWidth()  + rRect.Left() ) )
-              .WriteInt16( ( rRect.GetHeight() + rRect.Top() ) );
+              .WriteInt16( rRect.GetWidth()  + rRect.Left() )
+              .WriteInt16( rRect.GetHeight() + rRect.Top() );
 }
 
 EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()

@@ -150,7 +150,7 @@ bool RASWriter::ImplWriteHeader()
     {
         m_rOStm.WriteUInt32( 0x59a66a95 ).WriteUInt32( mnWidth ).WriteUInt32( mnHeight )
            .WriteUInt32( mnDepth )
-           .WriteUInt32( (( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight) )
+           .WriteUInt32( ( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight )
            .WriteUInt32( 2 );
 
         if ( mnDepth > 8 )
@@ -158,7 +158,7 @@ bool RASWriter::ImplWriteHeader()
         else
         {
 
-            m_rOStm.WriteUInt32( 1 ).WriteUInt32( ( mnColors * 3 ) );
+            m_rOStm.WriteUInt32( 1 ).WriteUInt32( mnColors * 3 );
         }
     }
     else mbStatus = false;

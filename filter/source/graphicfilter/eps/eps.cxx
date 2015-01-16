@@ -2615,7 +2615,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
 
 void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
-    mpPS->WriteUChar( ( nNumb ) );
+    mpPS->WriteUChar( nNumb );
     mnCursorPos++;
     ImplExecMode( nMode );
 }
@@ -2625,14 +2625,14 @@ void PSWriter::ImplWriteByte( sal_uInt8 nNumb, sal_uLong nMode )
 void PSWriter::ImplWriteHexByte( sal_uInt8 nNumb, sal_uLong nMode )
 {
     if ( ( nNumb >> 4 ) > 9 )
-        mpPS->WriteUChar( ( ( nNumb >> 4 ) + 'A' - 10 ) );
+        mpPS->WriteUChar( ( nNumb >> 4 ) + 'A' - 10 );
     else
-        mpPS->WriteUChar( ( ( nNumb >> 4 ) + '0' ) );
+        mpPS->WriteUChar( ( nNumb >> 4 ) + '0' );
 
     if ( ( nNumb & 0xf ) > 9 )
-        mpPS->WriteUChar( ( ( nNumb & 0xf ) + 'A' - 10 ) );
+        mpPS->WriteUChar( ( nNumb & 0xf ) + 'A' - 10 );
     else
-        mpPS->WriteUChar( ( ( nNumb & 0xf ) + '0' ) );
+        mpPS->WriteUChar( ( nNumb & 0xf ) + '0' );
     mnCursorPos += 2;
     ImplExecMode( nMode );
 }

@@ -1221,15 +1221,15 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     memset(aBuffer,0,sizeof(aBuffer));
 
     m_pFileStream->Seek(0L);
-    (*m_pFileStream).WriteUChar( nDbaseType );                              // dBase format
-    (*m_pFileStream).WriteUChar( (aDate.GetYear() % 100) );                 // current date
+    (*m_pFileStream).WriteUChar( nDbaseType );                            // dBase format
+    (*m_pFileStream).WriteUChar( aDate.GetYear() % 100 );                 // current date
 
 
     (*m_pFileStream).WriteUChar( aDate.GetMonth() );
     (*m_pFileStream).WriteUChar( aDate.GetDay() );
-    (*m_pFileStream).WriteUInt32( 0 );                                             // number of data records
-    (*m_pFileStream).WriteUInt16( ((m_pColumns->getCount()+1) * 32 + 1) );  // header information,
-                                                                        // pColumns contains always an additional column
+    (*m_pFileStream).WriteUInt32( 0 );                                    // number of data records
+    (*m_pFileStream).WriteUInt16( (m_pColumns->getCount()+1) * 32 + 1 );  // header information,
+                                                                          // pColumns contains always an additional column
     (*m_pFileStream).WriteUInt16( 0 );                                     // record length will be determined later
     m_pFileStream->Write(aBuffer, 20);
 
@@ -1348,7 +1348,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                     {
                         sal_Int32 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
 
-                        (*m_pFileStream).WriteUChar( ( nPrec) );
+                        (*m_pFileStream).WriteUChar( nPrec );
                         (*m_pFileStream).WriteUChar( nScale );
                         nRecLength += (sal_uInt16)nPrec;
                     }

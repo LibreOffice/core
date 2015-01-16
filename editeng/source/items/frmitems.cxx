@@ -1239,7 +1239,7 @@ SvStream& SvxProtectItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
     if( IsPosProtected() )   cProt |= 0x01;
     if( IsSizeProtected() )  cProt |= 0x02;
     if( IsCntntProtected() ) cProt |= 0x04;
-    rStrm.WriteSChar(  cProt );
+    rStrm.WriteSChar( cProt );
     return rStrm;
 }
 
@@ -1489,12 +1489,12 @@ bool SvxShadowItem::GetPresentation
 
 SvStream& SvxShadowItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
-    rStrm.WriteSChar(  GetLocation() )
+    rStrm.WriteSChar( GetLocation() )
          .WriteUInt16( GetWidth() )
-         .WriteUChar( (aShadowColor.GetTransparency() > 0) );
+         .WriteUChar( aShadowColor.GetTransparency() > 0 );
     WriteColor( rStrm, GetColor() );
     WriteColor( rStrm, GetColor() );
-    rStrm.WriteSChar( (aShadowColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
+    rStrm.WriteSChar( aShadowColor.GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
     return rStrm;
 }
 
@@ -1753,7 +1753,7 @@ namespace
 bool
 lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool bConvert, bool bGuessWidth)
 {
-    rSvxLine.SetColor(   Color(rLine.Color));
+    rSvxLine.SetColor( Color(rLine.Color));
     if ( bGuessWidth )
     {
         rSvxLine.GuessLinesWidths( rSvxLine.GetBorderLineStyle(),
@@ -2589,7 +2589,7 @@ SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ )
         cFlags |= 0x02;
     if ( IsMinDist() )
         cFlags |= 0x04;
-    rStrm.WriteSChar(    cFlags )
+    rStrm.WriteSChar( cFlags )
          .WriteUInt16( GetDefDist() );
     const SvxBorderLine* pLine[ 2 ];
     pLine[ 0 ] = GetHori();
@@ -3840,7 +3840,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
     rStream.WriteUChar( false );
     WriteColor( rStream, aColor );
     WriteColor( rStream, aColor );
-    rStream.WriteSChar( (aColor.GetTransparency() > 0 ? 0 : 1) ); //BRUSH_NULL : BRUSH_SOLID
+    rStream.WriteSChar( aColor.GetTransparency() > 0 ? 0 : 1 ); //BRUSH_NULL : BRUSH_SOLID
 
     sal_uInt16 nDoLoad = 0;
 

@@ -165,12 +165,12 @@ void PGMWriter::ImplWriteBody()
                 nNumb = nDat / 100;
                 if ( nNumb )
                 {
-                    m_rOStm.WriteUChar( ( nNumb + '0' ) );
+                    m_rOStm.WriteUChar( nNumb + '0' );
                     nDat -= ( nNumb * 100 );
                     nNumb = nDat / 10;
-                    m_rOStm.WriteUChar( ( nNumb + '0' ) );
+                    m_rOStm.WriteUChar( nNumb + '0' );
                     nDat -= ( nNumb * 10 );
-                    m_rOStm.WriteUChar( ( nDat + '0' ) );
+                    m_rOStm.WriteUChar( nDat + '0' );
                     nCount -= 4;
                 }
                 else
@@ -178,14 +178,14 @@ void PGMWriter::ImplWriteBody()
                     nNumb = nDat / 10;
                     if ( nNumb )
                     {
-                        m_rOStm.WriteUChar( ( nNumb + '0' ) );
+                        m_rOStm.WriteUChar( nNumb + '0' );
                         nDat -= ( nNumb * 10 );
-                        m_rOStm.WriteUChar( ( nDat + '0' ) );
+                        m_rOStm.WriteUChar( nDat + '0' );
                         nCount -= 3;
                     }
                     else
                     {
-                        m_rOStm.WriteUChar( ( nDat + '0' ) );
+                        m_rOStm.WriteUChar( nDat + '0' );
                         nCount -= 2;
                     }
                 }
