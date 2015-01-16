@@ -3,6 +3,7 @@ package org.libreoffice;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
@@ -270,6 +271,11 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     @Override
     public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
         this.tileInvalidationCallback = tileInvalidationCallback;
+    }
+
+    @Override
+    public void keyPress(KeyEvent keyEvent) {
+        mOffice.postKeyEvent(Office.KEY_PRESS, keyEvent.getKeyCode());
     }
 
 

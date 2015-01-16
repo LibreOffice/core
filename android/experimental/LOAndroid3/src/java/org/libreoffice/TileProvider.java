@@ -3,6 +3,7 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.RectF;
+import android.view.KeyEvent;
 
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
@@ -32,6 +33,8 @@ public interface TileProvider {
     boolean isTextDocument();
 
     void registerInvalidationCallback(TileProvider.TileInvalidationCallback tileInvalidationCallback);
+
+    void keyPress(KeyEvent keyEvent);
 
     /**
      * Callback to retrieve invalidation calls

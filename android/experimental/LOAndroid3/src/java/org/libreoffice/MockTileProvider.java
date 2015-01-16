@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.graphics.Bitmap;
+import android.view.KeyEvent;
 
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
@@ -84,6 +85,10 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
+    }
+
+    @Override
+    public void keyPress(KeyEvent keyEvent) {
     }
 
     @Override

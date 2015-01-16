@@ -147,6 +147,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             case LOEvent.TOUCH:
                 touch(event.mTouchType, event.mMotionEvent);
                 break;
+            case LOEvent.KEY_PRESS:
+                mTileProvider.keyPress(event.mKeyEvent);
+                break;
         }
     }
 
