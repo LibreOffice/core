@@ -365,7 +365,7 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
 
                         if ( nMediaTypeLength == rStream->readBytes ( aBuffer, nMediaTypeLength ) )
                         {
-                            aMediaType = OUString( (sal_Unicode*)aBuffer.getConstArray(),
+                            aMediaType = OUString( reinterpret_cast<sal_Unicode const *>(aBuffer.getConstArray()),
                                                             nMediaTypeLength / sizeof( sal_Unicode ) );
                             bOk = true;
                         }
@@ -672,7 +672,7 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
         if (nRead < aNameBuffer.getLength())
             aNameBuffer.realloc(nRead);
 
-        OUString sLOCPath = OUString::intern( (sal_Char *) aNameBuffer.getArray(),
+        OUString sLOCPath = OUString::intern( reinterpret_cast<char *>(aNameBuffer.getArray()),
                                                           aNameBuffer.getLength(),
                                                           RTL_TEXTENCODING_UTF8 );
 
@@ -845,7 +845,7 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException("unexpected extra header info length" );
 
             // read always in UTF8, some tools seem not to set UTF8 bit
-            aEntry.sPath = OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
+            aEntry.sPath = OUString::intern ( reinterpret_cast<char const *>(aMemGrabber.getCurrentPos()),
                                                    aEntry.nPathLen,
                                                    RTL_TEXTENCODING_UTF8 );
 
@@ -935,7 +935,7 @@ sal_Int32 ZipFile::recover()
                             {
                                 // read always in UTF8, some tools seem not to set UTF8 bit
                                 if( nPos + 30 + aEntry.nPathLen <= nBufSize )
-                                    aEntry.sPath = OUString ( (sal_Char *) &pBuffer[nPos + 30],
+                                    aEntry.sPath = OUString ( reinterpret_cast<char const *>(&pBuffer[nPos + 30]),
                                                               aEntry.nPathLen,
                                                               RTL_TEXTENCODING_UTF8 );
                                 else
@@ -943,7 +943,7 @@ sal_Int32 ZipFile::recover()
                                     Sequence < sal_Int8 > aFileName;
                                     aGrabber.seek( nGenPos + nPos + 30 );
                                     aGrabber.readBytes( aFileName, aEntry.nPathLen );
-                                    aEntry.sPath = OUString ( (sal_Char *) aFileName.getArray(),
+                                    aEntry.sPath = OUString ( reinterpret_cast<char *>(aFileName.getArray()),
                                                               aFileName.getLength(),
                                                               RTL_TEXTENCODING_UTF8 );
                                     aEntry.nPathLen = static_cast< sal_Int16 >(aFileName.getLength());

@@ -102,12 +102,7 @@ struct StorageHolder_Impl
     OStorage* m_pPointer;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakRef;
 
-    StorageHolder_Impl( OStorage* pStorage )
-    : m_pPointer( pStorage )
-    , m_xWeakRef( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >(
-                                                (::com::sun::star::embed::XStorage*)pStorage ) )
-    {
-    }
+    inline StorageHolder_Impl( OStorage* pStorage );
 
     StorageHolder_Impl( const StorageHolder_Impl& aSH )
     : m_pPointer( aSH.m_pPointer )
@@ -809,6 +804,12 @@ public:
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
+
+StorageHolder_Impl::StorageHolder_Impl( OStorage* pStorage )
+: m_pPointer( pStorage )
+, m_xWeakRef( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >( pStorage ) )
+{
+}
 
 #endif
 

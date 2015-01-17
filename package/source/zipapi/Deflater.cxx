@@ -70,8 +70,8 @@ Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
 sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
 {
     sal_Int32 nResult;
-    pStream->next_in   = (unsigned char*) sInBuffer.getConstArray() + nOffset;
-    pStream->next_out  = (unsigned char*) rBuffer.getArray()+nNewOffset;
+    pStream->next_in   = reinterpret_cast<unsigned char*>(sInBuffer.getArray()) + nOffset;
+    pStream->next_out  = reinterpret_cast<unsigned char*>(rBuffer.getArray())+nNewOffset;
     pStream->avail_in  = nLength;
     pStream->avail_out = nNewLength;
 

@@ -376,7 +376,7 @@ void ZipPackage::parseManifest()
                         nRead = aData.getLength();
 
                     if ( nRead )
-                        aPackageMediatype = OUString( ( sal_Char* )aData.getConstArray(), nRead, RTL_TEXTENCODING_ASCII_US );
+                        aPackageMediatype = OUString( reinterpret_cast<char const *>(aData.getConstArray()), nRead, RTL_TEXTENCODING_ASCII_US );
                 }
             }
 
@@ -986,7 +986,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     ZipEntry * pEntry = new ZipEntry;
     sal_Int32 nBufferLength = m_pRootFolder->GetMediaType().getLength();
     OString sMediaType = OUStringToOString( m_pRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
-    const uno::Sequence< sal_Int8 > aType( ( sal_Int8* )sMediaType.getStr(),
+    const uno::Sequence< sal_Int8 > aType( reinterpret_cast<sal_Int8 const *>(sMediaType.getStr()),
                                      nBufferLength );
 
     pEntry->sPath = sMime;

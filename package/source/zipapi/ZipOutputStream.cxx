@@ -198,7 +198,7 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
         throw IOException( "File contains streams that are too large." );
     }
 
-    Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
+    Sequence < sal_Int8 > aSequence( reinterpret_cast<sal_Int8 const *>(sUTF8Name.getStr()), sUTF8Name.getLength() );
     m_aChucker.WriteBytes( aSequence );
 }
 
@@ -271,7 +271,7 @@ void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
         throw IOException( "File contains streams that are too large." );
     }
 
-    Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
+    Sequence < sal_Int8 > aSequence( reinterpret_cast<sal_Int8 const *>(sUTF8Name.getStr()), sUTF8Name.getLength() );
     m_aChucker.WriteBytes( aSequence );
 
     m_pCurrentEntry->nOffset = m_aChucker.GetPosition() - (LOCHDR + nNameLength);
