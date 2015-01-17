@@ -365,8 +365,6 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
 
         if( maNotifyLink.IsSet() )
         {
-            AInfo* pAInfo;
-
             // create AInfo-List
             for( size_t i = 0, n = maViewList.size(); i < n; ++i )
                 aAInfoList.push_back( maViewList[ i ]->createAInfo() );
@@ -376,7 +374,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
             // set view state from AInfo structure
             for( size_t i = 0, n = aAInfoList.size(); i < n; ++i )
             {
-                pAInfo = aAInfoList[ i ];
+                AInfo* pAInfo = aAInfoList[ i ];
                 if( !pAInfo->pViewData )
                 {
                     pView = new ImplAnimView( this, pAInfo->pOutDev,

@@ -366,9 +366,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
     double fGradientLine = (double)aRect.Top();
     double fMirrorGradientLine = (double) aMirrorRect.Bottom();
 
-    double fAlpha = 0.0;
     const double fStepsMinus1 = ((double)nSteps) - 1.0;
-    double fTempColor;
     if ( !bLinear)
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
@@ -376,8 +374,8 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
     for ( long i = 0; i < nSteps; i++ )
     {
         // linear interpolation of color
-        fAlpha = ((double)i) / fStepsMinus1;
-        fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
+        const double fAlpha = ((double)i) / fStepsMinus1;
+        double fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
         nRed = GetGradientColorValue((long)fTempColor);
         fTempColor = ((double)nStartGreen) * (1.0-fAlpha) + ((double)nEndGreen) * fAlpha;
         nGreen = GetGradientColorValue((long)fTempColor);
@@ -711,9 +709,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
     double fGradientLine = (double)aRect.Top();
     double fMirrorGradientLine = (double) aMirrorRect.Bottom();
 
-    double fAlpha = 0.0;
     const double fStepsMinus1 = ((double)nSteps) - 1.0;
-    double fTempColor;
     if ( !bLinear)
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
@@ -721,8 +717,8 @@ void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
     for ( long i = 0; i < nSteps; i++ )
     {
         // linear interpolation of color
-        fAlpha = ((double)i) / fStepsMinus1;
-        fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
+        double fAlpha = ((double)i) / fStepsMinus1;
+        double fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
         nRed = GetGradientColorValue((long)fTempColor);
         fTempColor = ((double)nStartGreen) * (1.0-fAlpha) + ((double)nEndGreen) * fAlpha;
         nGreen = GetGradientColorValue((long)fTempColor);

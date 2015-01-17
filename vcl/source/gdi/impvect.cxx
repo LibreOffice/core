@@ -1014,8 +1014,6 @@ bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
 {
     long                nActX = rStartPt.X();
     long                nActY = rStartPt.Y();
-    long                nTryX;
-    long                nTryY;
     sal_uLong               nFound;
     sal_uLong               nLastDir = 0UL;
     sal_uLong               nDir;
@@ -1025,8 +1023,8 @@ bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
         nFound = 0UL;
 
         // first try last direction
-        nTryX = nActX + aImplMove[ nLastDir ].nDX;
-        nTryY = nActY + aImplMove[ nLastDir ].nDY;
+        long nTryX = nActX + aImplMove[ nLastDir ].nDX;
+        long nTryY = nActY + aImplMove[ nLastDir ].nDY;
 
         if( pMap->IsCont( nTryY, nTryX ) )
         {

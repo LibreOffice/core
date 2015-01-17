@@ -904,7 +904,7 @@ static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
 {
     if (n == 0) return -1;
 
-    int l = 0, r = n-1, i;
+    int l = 0, r = n-1;
     sal_uInt32 t1, t2;
     sal_uInt32 m1, m2;
 
@@ -912,7 +912,7 @@ static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
     m2 = (languageID << 16) | nameID;
 
     do {
-        i = (l + r) >> 1;
+        const int i = (l + r) >> 1;
         t1 = GetUInt32(name + 6, i * 12 + 0, 1);
         t2 = GetUInt32(name + 6, i * 12 + 4, 1);
 
@@ -1044,10 +1044,11 @@ static void GetNames(TrueTypeFont *t)
             bPSNameOK = false;
     if( !bPSNameOK )
     {
-        bool bReplace = true;
         /* check if family is a suitable replacement */
         if( t->ufamily && t->family )
         {
+            bool bReplace = true;
+
             for( i = 0; t->ufamily[ i ] != 0 && bReplace; i++ )
                 if( t->ufamily[ i ] < 33 || t->ufamily[ i ] > 127 )
                     bReplace = false;
@@ -1167,7 +1168,7 @@ static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
 }
 
 static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSearch) {
-    signed int low, mid, high, lastfound = 0xffff;
+    signed int low, high, lastfound = 0xffff;
     sal_uInt16 res;
     if(length == (sal_uInt16)0 || length == (sal_uInt16)0xFFFF) {
         return (sal_uInt16)0xFFFF;
@@ -1175,7 +1176,7 @@ static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSe
     low = 0;
     high = length - 1;
     while(high >= low) {
-        mid = (high + low)/2;
+        int mid = (high + low)/2;
         res = Int16FromMOTA(*(ar+mid));
         if(res >= toSearch) {
             lastfound = mid;
@@ -1820,7 +1821,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 {
     ControlPoint *pa;
     PSPathElement *path;
-    int i, j, r, n;
+    int i, j, n;
     const sal_uInt8* table = getTable(ttf, O_head);
     TTGlyphMetrics metrics;
     int UPEm = ttf->unitsPerEm;
@@ -1909,7 +1910,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname,
 
     for (i = 0; i < nGlyphs; i++) {
         fprintf(outf, h33, i);
-        r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->nglyphs ? glyphArray[i] : 0, &pa, &metrics, 0);
+        int r = GetTTGlyphOutline(ttf, glyphArray[i] < ttf->nglyphs ? glyphArray[i] : 0, &pa, &metrics, 0);
 
         if (r > 0) {
             n =  BSplineToPSPath(pa, r, &path);

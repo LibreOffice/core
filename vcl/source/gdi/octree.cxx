@@ -242,8 +242,6 @@ void Octree::GetPalIndex( PNODE pNode )
 InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
             nBits( 8 - OCTREE_BITS )
 {
-    sal_uLong*          cdp;
-    sal_uInt8*           crgbp;
     const sal_uLong     nColorMax = 1 << OCTREE_BITS;
     const sal_uLong     xsqr = 1 << ( nBits << 1 );
     const sal_uLong     xsqr2 = xsqr << 1;
@@ -252,8 +250,6 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
     const long      x2 = x >> 1L;
     sal_uLong           r, g, b;
     long            rxx, gxx, bxx;
-    long            rdist, gdist, bdist;
-    long            crinc, cginc, cbinc;
 
     ImplCreateBuffers( nColorMax );
 
@@ -264,17 +260,17 @@ InverseColorMap::InverseColorMap( const BitmapPalette& rPal ) :
         const long          cGreen = rColor.GetGreen();
         const long          cBlue = rColor.GetBlue();
 
-        rdist = cRed - x2;
-        gdist = cGreen - x2;
-        bdist = cBlue - x2;
+        long rdist = cRed - x2;
+        long gdist = cGreen - x2;
+        long bdist = cBlue - x2;
         rdist = rdist*rdist + gdist*gdist + bdist*bdist;
 
-        crinc = ( xsqr - ( cRed << nBits ) ) << 1L;
-        cginc = ( xsqr - ( cGreen << nBits ) ) << 1L;
-        cbinc = ( xsqr - ( cBlue << nBits ) ) << 1L;
+        const long crinc = ( xsqr - ( cRed << nBits ) ) << 1L;
+        const long cginc = ( xsqr - ( cGreen << nBits ) ) << 1L;
+        const long cbinc = ( xsqr - ( cBlue << nBits ) ) << 1L;
 
-        cdp = (sal_uLong*) pBuffer;
-        crgbp = pMap;
+        sal_uLong* cdp = (sal_uLong*) pBuffer;
+        sal_uInt8* crgbp = pMap;
 
         for( r = 0, rxx = crinc; r < nColorMax; rdist += rxx, r++, rxx += xsqr2 )
         {
