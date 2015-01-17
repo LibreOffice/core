@@ -148,6 +148,18 @@ void OpenGLProgram::SetUniform2fv( const OString& rName, GLsizei nCount, GLfloat
     glUniform2fv( nUniform, nCount, aValues );
 }
 
+void OpenGLProgram::SetUniform1i( const OString& rName, GLint v1 )
+{
+    GLuint nUniform = GetUniformLocation( rName );
+    glUniform1i( nUniform, v1 );
+}
+
+void OpenGLProgram::SetUniform1iv( const OString& rName, GLsizei nCount, GLint* aValues )
+{
+    GLuint nUniform = GetUniformLocation( rName );
+    glUniform1iv( nUniform, nCount, aValues );
+}
+
 void OpenGLProgram::SetColor( const OString& rName, SalColor nColor, sal_uInt8 nTransparency )
 {
     GLuint nUniform = GetUniformLocation( rName );

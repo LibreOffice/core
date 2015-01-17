@@ -188,6 +188,78 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     return true;
 }
 
+/*
+ "Area" scaling algorithm, which seems to give better results for downscaling
+ than other algorithms. The principle (taken from opencv, see resize.cl)
+ is that each resulting pixel is the average of all the source pixel values
+ it represents. Which is trivial in the case of exact multiples for downscaling,
+ the generic case needs to also consider that some source pixels contribute
+ only partially to their resulting pixels (becauses of non-integer multiples).
+*/
+bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
+{
+    int nNewWidth( mnWidth * rScaleX );
+    int nNewHeight( mnHeight * rScaleY );
+
+    if( nNewWidth == mnWidth && nNewHeight == mnHeight )
+        return true;
+
+    double ixscale = 1 / rScaleX;
+    double iyscale = 1 / rScaleY;
+    bool fast = ( ixscale == int( ixscale ) && iyscale == int( iyscale )
+        && int( nNewWidth * ixscale ) == mnWidth && int( nNewHeight * iyscale ) == mnHeight );
+
+    // The generic case has arrays only up to 100 ratio downscaling, which is hopefully enough
+    // in practice, but protect against buffer overflows in case such an extreme case happens
+    // (and in such case the precision of the generic algorithm probably doesn't matter anyway).
+    if( ixscale > 100 || iyscale > 100 )
+        fast = true;
+
+    // TODO Make sure the framebuffer is alright
+
+    OpenGLProgram* pProgram = mpContext->UseProgram( "textureVertexShader",
+        fast ? OUString( "areaScaleFastFragmentShader" ) : OUString( "areaScaleFragmentShader" ));
+    if( pProgram == 0 )
+        return false;
+
+    OpenGLTexture aScratchTex = OpenGLTexture( nNewWidth, nNewHeight );
+    OpenGLFramebuffer* pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
+
+    if( fast )
+    {
+        pProgram->SetUniform1i( "xscale", ixscale );
+        pProgram->SetUniform1i( "yscale", iyscale );
+        pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
+        pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
+        pProgram->SetUniform1f( "ratio", 1.0 / ( ixscale * iyscale ));
+    }
+    else
+    {
+        pProgram->SetUniform1f( "xscale", ixscale );
+        pProgram->SetUniform1f( "yscale", iyscale );
+        pProgram->SetUniform1i( "swidth", mnWidth );
+        pProgram->SetUniform1i( "sheight", mnHeight );
+        // For converting between <0,mnWidth-1> and <0.0,1.0> coordinate systems.
+        pProgram->SetUniform1f( "xsrcconvert", 1.0 / ( mnWidth - 1 ));
+        pProgram->SetUniform1f( "ysrcconvert", 1.0 / ( mnHeight - 1 ));
+        pProgram->SetUniform1f( "xdestconvert", 1.0 * ( nNewWidth - 1 ));
+        pProgram->SetUniform1f( "ydestconvert", 1.0 * ( nNewHeight - 1 ));
+    }
+
+    pProgram->SetTexture( "sampler", maTexture );
+    pProgram->DrawTexture( maTexture );
+    pProgram->Clean();
+
+    maTexture = aScratchTex;
+    mpContext->ReleaseFramebuffer( pFramebuffer );
+
+    mnWidth = nNewWidth;
+    mnHeight = nNewHeight;
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
 bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
     SAL_INFO( "vcl.opengl", "::ImplScale" );
@@ -208,6 +280,10 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, s
         const Lanczos3Kernel aKernel;
 
         return ImplScaleConvolution( rScaleX, rScaleY, aKernel );
+    }
+    else if( nScaleFlag == BMP_SCALE_BESTQUALITY && rScaleX <= 1 && rScaleY <= 1 )
+    { // Use are scaling for best quality, but only if downscaling.
+        return ImplScaleArea( rScaleX, rScaleY );
     }
     else if( nScaleFlag == BMP_SCALE_LANCZOS || nScaleFlag == BMP_SCALE_BESTQUALITY  )
     {

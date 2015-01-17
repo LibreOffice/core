@@ -55,6 +55,8 @@ public:
     void SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 );
     void SetUniform1fv( const OString& rName, GLsizei nCount, GLfloat* aValues );
     void SetUniform2fv( const OString& rName, GLsizei nCount, GLfloat* aValues );
+    void SetUniform1i( const OString& rName, GLint v1 );
+    void SetUniform1iv( const OString& rName, GLsizei nCount, GLint* aValues );
     void SetColor( const OString& rName, const Color& rColor );
     void SetColor( const OString& rName, SalColor nColor, sal_uInt8 nTransparency );
     void SetColorf( const OString& rName, SalColor nColor, double fTransparency );

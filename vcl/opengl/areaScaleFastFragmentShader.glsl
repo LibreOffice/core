@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/* TODO Use textureOffset for newest version of GLSL */
+
+uniform sampler2D sampler;
+uniform int xscale;
+uniform int yscale;
+uniform float xstep;
+uniform float ystep;
+uniform float ratio; // = 1.0/(xscale*yscale)
+
+varying vec2 tex_coord;
+
+/*
+ Just make the resulting color the average of all the source pixels
+ (which is an area (xscale)x(yscale) ).
+*/
+void main(void)
+{
+    vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
+    vec2 offset = vec2( 0.0, 0.0 );
+    for( int y = 0; y < yscale; ++y )
+    {
+        for( int x = 0; x < xscale; ++x )
+        {
+            sum += texture2D( sampler, tex_coord.st + offset );
+            offset.x += xstep;
+        }
+        offset.y += ystep;
+        offset.x = 0.0;
+    }
+    sum *= ratio;
+    gl_FragColor = sum;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
