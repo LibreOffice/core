@@ -1128,12 +1128,12 @@ void SvtFileDialog::EnableAutocompletion( bool _bEnable )
 
 
 
-IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
+IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, void*, pInstance )
 {
-    DBG_ASSERT( pBox, "SvtFileDialog:keine Instanz" );
+    DBG_ASSERT( pInstance, "SvtFileDialog:keine Instanz" );
 
     // was the handler executed by the travel timer?
-    if ( pBox == (ListBox*)&pThis->_pImp->_aFilterTimer )
+    if ( pInstance == &pThis->_pImp->_aFilterTimer )
     {
         // filter the view again
         pThis->ExecuteFilter();
