@@ -1292,22 +1292,6 @@ void OpenGLContext::clearCurrent()
         pCurrentCtx->ReleaseFramebuffers();
 }
 
-void OpenGLContext::resetAllContexts()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // release all framebuffers from the old context so we can re-attach the
-    // texture in the new context
-    for (OpenGLContext* l = pSVData->maGDIData.mpLastContext; l;
-         l = l->mpPrevContext)
-    {
-        l->ReleaseFramebuffers();
-        if (l->isCurrent())
-            l->resetCurrent();
-        assert (!l->mpNextContext || l->mpNextContext->mpPrevContext == l);
-    }
-}
-
 void OpenGLContext::makeCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();

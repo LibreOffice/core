@@ -200,9 +200,6 @@ public:
 
     bool isCurrent();
     static void clearCurrent();
-    /// reset all contexts dis-associating them with their underlying
-    /// resources before a potential thread switch.
-    static void resetAllContexts();
 
     /// make this GL context current - so it is implicit in subsequent GL calls
     void makeCurrent();
