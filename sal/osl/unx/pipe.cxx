@@ -279,7 +279,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         if ( ( stat(name, &status) == 0) &&
              ( S_ISSOCK(status.st_mode) || S_ISFIFO(status.st_mode) ) )
         {
-            if ( connect(pPipe->m_Socket,(struct sockaddr *)&addr,len) >= 0 )
+            if ( connect(pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
             {
                 OSL_TRACE("osl_createPipe : Pipe already in use. Errno: %d; %s",errno,strerror(errno));
                 close (pPipe->m_Socket);
@@ -291,7 +291,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         }
 
         /* ok, fs clean */
-        if ( bind(pPipe->m_Socket, (struct sockaddr *)&addr, len) < 0 )
+        if ( bind(pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) < 0 )
         {
             OSL_TRACE("osl_createPipe : failed to bind socket. Errno: %d; %s",errno,strerror(errno));
             close (pPipe->m_Socket);
@@ -326,7 +326,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     {   /* osl_pipe_OPEN */
         if ( access(name, F_OK) != -1 )
         {
-            if ( connect( pPipe->m_Socket, (struct sockaddr *)&addr, len) >= 0 )
+            if ( connect( pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
             {
                 return (pPipe);
             }
@@ -402,7 +402,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path) - 1);
         size_t len = sizeof(addr);
 
-        nRet = connect( fd, (struct sockaddr *)&addr, len);
+        nRet = connect( fd, reinterpret_cast<sockaddr *>(&addr), len);
         if ( nRet < 0 )
         {
             OSL_TRACE("connect in osl_destroyPipe failed with error: %s", strerror(errno));

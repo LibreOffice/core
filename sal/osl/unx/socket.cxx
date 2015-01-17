@@ -487,7 +487,7 @@ static oslSocketAddr __osl_createSocketAddrWithFamily(
     {
     case osl_Socket_FamilyInet:
     {
-        struct sockaddr_in* pInetAddr= (struct sockaddr_in*)&(pAddr->m_sockaddr);
+        struct sockaddr_in* pInetAddr= reinterpret_cast<sockaddr_in*>(&pAddr->m_sockaddr);
 
         pInetAddr->sin_family = FAMILY_TO_NATIVE(osl_Socket_FamilyInet);
         pInetAddr->sin_addr.s_addr = nAddr;
@@ -567,8 +567,8 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
         {
             case AF_INET:
             {
-                struct sockaddr_in* pInetAddr1= (struct sockaddr_in*)pAddr1;
-                struct sockaddr_in* pInetAddr2= (struct sockaddr_in*)pAddr2;
+                struct sockaddr_in* pInetAddr1= reinterpret_cast<sockaddr_in*>(pAddr1);
+                struct sockaddr_in* pInetAddr2= reinterpret_cast<sockaddr_in*>(pAddr2);
 
                 if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
@@ -693,7 +693,7 @@ oslSocketResult SAL_CALL osl_setAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
         OSL_ASSERT( pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE( osl_Socket_FamilyInet ) );
         OSL_ASSERT( pByteSeq->nElements == 4 );
 
-        pSystemInetAddr = (struct sockaddr_in * ) &(pAddr->m_sockaddr);
+        pSystemInetAddr = reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
         memcpy( &(pSystemInetAddr->sin_addr) , pByteSeq->elements , 4 );
         res = osl_Socket_Ok;
     }
@@ -709,8 +709,8 @@ oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr pAddr, sal_Seque
 
     if( pAddr && ppByteSeq )
     {
-        struct sockaddr_in * pSystemInetAddr = (struct sockaddr_in * ) &(pAddr->m_sockaddr);
-        rtl_byte_sequence_constructFromArray( ppByteSeq , (sal_Int8 *) &(pSystemInetAddr->sin_addr),4);
+        struct sockaddr_in * pSystemInetAddr = reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
+        rtl_byte_sequence_constructFromArray( ppByteSeq, reinterpret_cast<sal_Int8 *>(&pSystemInetAddr->sin_addr), 4);
         res = osl_Socket_Ok;
     }
     return res;
@@ -813,7 +813,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     pSockAddr->m_sockaddr.sa_family= he->h_addrtype;
     if (pSockAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
-        struct sockaddr_in *sin= (struct sockaddr_in *)&(pSockAddr->m_sockaddr);
+        struct sockaddr_in *sin= reinterpret_cast<sockaddr_in *>(&pSockAddr->m_sockaddr);
         memcpy (
             &(sin->sin_addr.s_addr),
             he->h_addr_list[0],
@@ -955,13 +955,13 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
 
     if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
-        const struct sockaddr_in *sin= (const struct sockaddr_in *)&(pAddr->m_sockaddr);
+        const struct sockaddr_in *sin= reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
         struct hostent *he;
 
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
             return ((oslHostAddr)NULL);
 
-        he= gethostbyaddr((sal_Char *)&(sin->sin_addr),
+        he= gethostbyaddr(&sin->sin_addr,
                           sizeof (sin->sin_addr),
                           sin->sin_family);
         return _osl_hostentToHostAddr (he);
@@ -1208,7 +1208,7 @@ sal_Int32 SAL_CALL osl_getInetPortOfSocketAddr(oslSocketAddr pAddr)
     OSL_ASSERT(pAddr);
     if( pAddr )
     {
-        struct sockaddr_in* pSystemInetAddr= (struct sockaddr_in*)&(pAddr->m_sockaddr);
+        struct sockaddr_in* pSystemInetAddr= reinterpret_cast<sockaddr_in*>(&pAddr->m_sockaddr);
 
         if ( pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
             return ntohs(pSystemInetAddr->sin_port);
@@ -1221,7 +1221,7 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr(oslSocketAddr pAddr, sal_Int32 Por
     OSL_ASSERT(pAddr);
     if( pAddr )
     {
-        struct sockaddr_in* pSystemInetAddr= (struct sockaddr_in*)&(pAddr->m_sockaddr);
+        struct sockaddr_in* pSystemInetAddr= reinterpret_cast<sockaddr_in*>(&pAddr->m_sockaddr);
         if ( pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
         {
             pSystemInetAddr->sin_port= htons((short)Port);
@@ -1290,7 +1290,7 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAd
 
     if( pAddr )
     {
-        struct sockaddr_in* pSystemInetAddr = ( struct sockaddr_in * ) &(pAddr->m_sockaddr);
+        struct sockaddr_in* pSystemInetAddr = reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
 
         if (pSystemInetAddr->sin_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
         {
@@ -2272,7 +2272,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
     if(getsockopt(pSocket->m_Socket,
                   OPTION_LEVEL_TO_NATIVE(osl_Socket_LevelSocket),
                   OPTION_TO_NATIVE(osl_Socket_OptionType),
-                  (sal_Char*)&Type,
+                  &Type,
                   &TypeSize) == -1)
     {
         /* error */

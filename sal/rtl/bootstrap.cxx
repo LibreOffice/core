@@ -365,9 +365,9 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     {
         rtl::ByteSequence seq;
 
-        while (osl_File_E_None == osl_readLine(handle , (sal_Sequence **)&seq))
+        while (osl_File_E_None == osl_readLine(handle , reinterpret_cast<sal_Sequence **>(&seq)))
         {
-            OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+            OString line( reinterpret_cast<const char *>(seq.getConstArray()), seq.getLength() );
             sal_Int32 nIndex = line.indexOf('=');
             if (nIndex >= 1)
             {

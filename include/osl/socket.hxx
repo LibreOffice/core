@@ -112,7 +112,7 @@ namespace osl
     inline ::rtl::ByteSequence SAL_CALL SocketAddr::getAddr( oslSocketResult *pResult ) const
     {
         ::rtl::ByteSequence sequence;
-        oslSocketResult result = osl_getAddrOfSocketAddr( m_handle,(sal_Sequence **) &sequence );
+        oslSocketResult result = osl_getAddrOfSocketAddr( m_handle, reinterpret_cast<sal_Sequence **>(&sequence) );
         if( pResult )
             *pResult = result;
         return sequence;

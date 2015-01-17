@@ -131,22 +131,22 @@ static bool __rtl_random_initPool (RandomPool_Impl *pImpl)
 
         tid = osl::Thread::getCurrentIdentifier();
         tid = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(tid));
-        __rtl_random_seedPool (pImpl, (sal_uInt8*)&tid, sizeof(tid));
+        __rtl_random_seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&tid), sizeof(tid));
 
         osl_getSystemTime (&tv);
         tv.Seconds = RTL_RANDOM_RNG_2(tv.Seconds);
         tv.Nanosec = RTL_RANDOM_RNG_2(tv.Nanosec);
-        __rtl_random_seedPool (pImpl, (sal_uInt8*)&tv, sizeof(tv));
+        __rtl_random_seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&tv), sizeof(tv));
 
         rd.m_nX = (sal_Int16)(((tid         >> 1) << 1) + 1);
         rd.m_nY = (sal_Int16)(((tv.Seconds >> 1) << 1) + 1);
         rd.m_nZ = (sal_Int16)(((tv.Nanosec >> 1) << 1) + 1);
-        __rtl_random_seedPool (pImpl, (sal_uInt8*)&rd, sizeof(rd));
+        __rtl_random_seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&rd), sizeof(rd));
 
         while (pImpl->m_nData < RTL_RANDOM_SIZE_POOL)
         {
             seed = __rtl_random_data (&rd);
-            __rtl_random_seedPool (pImpl, (sal_uInt8*)&seed, sizeof(seed));
+            __rtl_random_seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&seed), sizeof(seed));
         }
         return true;
     }

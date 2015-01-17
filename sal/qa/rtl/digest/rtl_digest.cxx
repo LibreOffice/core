@@ -88,7 +88,7 @@ OString getDigest(const OString& aMessage, rtlDigestAlgorithm aAlgorithm)
 {
     rtlDigest handle = rtl_digest_create(aAlgorithm);
 
-    const sal_uInt8* pData = (const sal_uInt8*) aMessage.getStr();
+    const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(aMessage.getStr());
     sal_uInt32       nSize = aMessage.getLength();
 
     rtl_digest_init(handle, pData, nSize);
@@ -178,7 +178,7 @@ public:
             handle = rtl_digest_create(constDigestAlgorithms[i]);
 
             OString aMessage = sSampleString;
-            const sal_uInt8* pData = (const sal_uInt8*) aMessage.getStr();
+            const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(aMessage.getStr());
             sal_uInt32       nSize = aMessage.getLength();
 
             aError = rtl_digest_init(handle, pData, nSize);
@@ -239,7 +239,7 @@ public:
 
         memset(pKeyBuffer.get(), 0, nKeyLen);
 
-        sal_uInt8* pPassword    = (sal_uInt8*)sPassword.getStr();
+        sal_uInt8 const * pPassword = reinterpret_cast<sal_uInt8 const *>(sPassword.getStr());
         sal_Int32  nPasswordLen = sPassword.getLength();
 
         sal_uInt32   nSaltDataLen = RTL_DIGEST_LENGTH_HMAC_SHA1;
@@ -299,7 +299,7 @@ public:
         aHandle = rtl_digest_create( rtl_Digest_AlgorithmMD2 );
         CPPUNIT_ASSERT_MESSAGE("create with rtl_Digest_AlgorithmMD2", aHandle != 0);
 
-        const sal_uInt8* pData = (const sal_uInt8*)sSampleString.getStr();
+        const sal_uInt8* pData = reinterpret_cast<const sal_uInt8*>(sSampleString.getStr());
         sal_uInt32       nSize = sSampleString.getLength();
 
         aError = rtl_digest_updateMD2(aHandle, NULL, 0);

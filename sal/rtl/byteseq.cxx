@@ -234,7 +234,7 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
 const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
-    return ((const sal_Int8*)(pSequence->elements));
+    return reinterpret_cast<sal_Int8*>(pSequence->elements);
 }
 
 sal_Int32 SAL_CALL rtl_byte_sequence_getLength( sal_Sequence *pSequence )

@@ -802,7 +802,7 @@ rtlDigestError SAL_CALL rtl_digest_updateMD5 (
 
     if (ctx->m_nDatLen)
     {
-        sal_uInt8  *p = (sal_uInt8 *)(ctx->m_pData) + ctx->m_nDatLen;
+        sal_uInt8  *p = reinterpret_cast<sal_uInt8 *>(ctx->m_pData) + ctx->m_nDatLen;
         sal_uInt32  n = DIGEST_CBLOCK_MD5 - ctx->m_nDatLen;
 
         if (nDatLen < n)
@@ -1286,7 +1286,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA (
 
     if (ctx->m_nDatLen)
     {
-        sal_uInt8  *p = (sal_uInt8 *)(ctx->m_pData) + ctx->m_nDatLen;
+        sal_uInt8  *p = reinterpret_cast<sal_uInt8 *>(ctx->m_pData) + ctx->m_nDatLen;
         sal_uInt32  n = DIGEST_CBLOCK_SHA - ctx->m_nDatLen;
 
         if (nDatLen < n)
@@ -1476,7 +1476,7 @@ rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
 
     if (ctx->m_nDatLen)
     {
-        sal_uInt8  *p = (sal_uInt8 *)(ctx->m_pData) + ctx->m_nDatLen;
+        sal_uInt8  *p = reinterpret_cast<sal_uInt8 *>(ctx->m_pData) + ctx->m_nDatLen;
         sal_uInt32  n = DIGEST_CBLOCK_SHA - ctx->m_nDatLen;
 
         if (nDatLen < n)

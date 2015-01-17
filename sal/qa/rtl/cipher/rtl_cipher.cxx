@@ -183,7 +183,7 @@ public:
             sal_uInt32     nPlainTextLen = 16;
             sal_uInt8     *pPlainTextBuffer = new sal_uInt8[ nPlainTextLen ];
             memset(pPlainTextBuffer, 0, nPlainTextLen);
-            strncpy((char*)pPlainTextBuffer, _sPlainTextStr.getStr(), 16);
+            strncpy(reinterpret_cast<char*>(pPlainTextBuffer), _sPlainTextStr.getStr(), 16);
 
             sal_uInt32     nCipherLen = 16;
             sal_uInt8     *pCipherBuffer = new sal_uInt8[ nCipherLen ];
@@ -231,7 +231,7 @@ public:
             sal_uInt32     nPlainTextLen = 16;
             sal_uInt8     *pPlainTextBuffer = new sal_uInt8[ nPlainTextLen ];
             memset(pPlainTextBuffer, 0, nPlainTextLen);
-            strncpy((char*)pPlainTextBuffer, _sPlainTextStr.getStr(), 16);
+            strncpy(reinterpret_cast<char*>(pPlainTextBuffer), _sPlainTextStr.getStr(), 16);
 
             sal_uInt32     nCipherLen = 16;
             sal_uInt8     *pCipherBuffer = new sal_uInt8[ nCipherLen ];

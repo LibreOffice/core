@@ -27,7 +27,7 @@
 
 #define SWAP_INT32_TO_NETWORK(x)\
                { sal_uInt32 y = x;\
-                 sal_uInt8 *p = (sal_uInt8 * )&(x); \
+                 sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(x)); \
                  p[0] = (sal_uInt8) ( ( y >> 24 ) & 0xff );\
                  p[1] = (sal_uInt8) ( ( y >> 16 ) & 0xff );\
                  p[2] = (sal_uInt8) ( ( y >> 8 )  & 0xff );\
@@ -35,20 +35,20 @@
                }
 #define SWAP_INT16_TO_NETWORK(x)\
                { sal_uInt16 y = x;\
-                 sal_uInt8 *p = (sal_uInt8 * )&(x); \
+                 sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(x)); \
                  p[0] = (sal_uInt8) ( ( y >> 8 )  & 0xff );\
                  p[1] = (sal_uInt8) ( ( y ) & 0xff);\
                }
 
 #define SWAP_NETWORK_TO_INT16(x)\
                { sal_uInt16 y = x;\
-                 sal_uInt8 *p = (sal_uInt8 * )&(y);\
+                 sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(y));\
                  x = ( ( ((sal_uInt16)p[0]) & 0xff) << 8 ) |\
                      ( (  (sal_uInt16)p[1]) & 0xff);\
                }
 #define SWAP_NETWORK_TO_INT32(x)\
                { sal_uInt32 y = x;\
-                 sal_uInt8 *p = (sal_uInt8 * )&(y); \
+                 sal_uInt8 *p = reinterpret_cast<sal_uInt8 *>(&(y)); \
                  x = ( ( ((sal_uInt32)p[0]) & 0xff) << 24 ) |\
                      ( ( ((sal_uInt32)p[1]) & 0xff) << 16 ) |\
                      ( ( ((sal_uInt32)p[2]) & 0xff) << 8  ) |\

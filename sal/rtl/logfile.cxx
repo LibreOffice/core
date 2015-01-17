@@ -125,16 +125,16 @@ Logger::Logger(): aFile(0), buffer(0)
 
                 if( nConverted > 0 )
                 {
-                    sal_Int64 nWritten;
-                    osl_writeFile( aFile, buffer, nConverted , (sal_uInt64 *)&nWritten );
+                    sal_uInt64 nWritten;
+                    osl_writeFile( aFile, buffer, nConverted , &nWritten );
                 }
             }
 
             nConverted = sprintf (buffer, "Process id is %" SAL_PRIuUINT32 "\n", aProcessId);
             if( nConverted )
             {
-                sal_Int64 nWritten;
-                osl_writeFile( aFile, buffer, nConverted, (sal_uInt64 *)&nWritten );
+                sal_uInt64 nWritten;
+                osl_writeFile( aFile, buffer, nConverted, &nWritten );
             }
         }
         else
@@ -150,10 +150,13 @@ Logger::~Logger()
 {
     if( buffer )
     {
-        sal_Int64 nWritten, nConverted =
+        sal_Int64 nConverted =
             sprintf( buffer, "closing log file at %06" SAL_PRIuUINT32, osl_getGlobalTimer() );
         if( nConverted > 0 )
-            osl_writeFile( aFile, buffer, nConverted, (sal_uInt64 *)&nWritten );
+        {
+            sal_uInt64 nWritten;
+            osl_writeFile( aFile, buffer, nConverted, &nWritten );
+        }
         osl_closeFile( aFile );
         rtl_freeMemory( buffer );
     }
@@ -171,12 +174,15 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
         va_list args;
         va_start(args, pszFormat);
         {
-            sal_Int64 nConverted, nWritten;
+            sal_Int64 nConverted;
             MutexGuard guard( logger.mutex );
             nConverted = vsnprintf( logger.buffer , g_BUFFERSIZE, pszFormat, args );
             nConverted = (nConverted > g_BUFFERSIZE ? g_BUFFERSIZE : nConverted );
             if( nConverted > 0 )
-                osl_writeFile( logger.aFile, logger.buffer, nConverted, (sal_uInt64*)&nWritten );
+            {
+                sal_uInt64 nWritten;
+                osl_writeFile( logger.aFile, logger.buffer, nConverted, &nWritten );
+            }
         }
         va_end(args);
     }

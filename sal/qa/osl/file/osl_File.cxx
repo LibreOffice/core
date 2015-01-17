@@ -2941,7 +2941,7 @@ namespace osl_File
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             CPPUNIT_ASSERT_MESSAGE( "test for readLine function: read the first line of the file.",
                                     ( ::osl::FileBase::E_None == nError1 ) &&
-                                    ( 0 == strncmp( ( const char * )aSequence.getArray(), pBuffer_Char, 5 ) ) );
+                                    ( 0 == strncmp( reinterpret_cast<char *>(aSequence.getArray()), pBuffer_Char, 5 ) ) );
         }
 
         void readLine_002()
@@ -2962,7 +2962,7 @@ namespace osl_File
 
             CPPUNIT_ASSERT_MESSAGE( "test for readLine function: read three lines of the file and check the file pointer moving.",
                                      *pEOF &&
-                                    ( 0 == strncmp( ( const char * )aSequence.getArray(), &pBuffer_Char[26], 26 ) ) );
+                                    ( 0 == strncmp( reinterpret_cast<char *>(aSequence.getArray()), &pBuffer_Char[26], 26 ) ) );
         }
         CPPUNIT_TEST_SUITE( readLine );
         CPPUNIT_TEST( readLine_001 );

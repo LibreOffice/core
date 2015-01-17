@@ -242,7 +242,7 @@ public:
         @return pointer to byte array
     */
     inline const sal_Int8 * SAL_CALL getConstArray() const
-        { return (const sal_Int8 *)_pSequence->elements; }
+        { return reinterpret_cast<sal_Int8 *>(_pSequence->elements); }
     /** Gets a pointer to elements array for READING AND WRITING. In general if the sequence
         has a handle acquired by other sequences (reference count > 1), then a new sequence is
         created copying all bytes to keep value semantics!

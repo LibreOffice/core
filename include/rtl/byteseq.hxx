@@ -95,7 +95,7 @@ inline sal_Int8 * ByteSequence::getArray()
     ::rtl_byte_sequence_reference2One( &_pSequence );
     if (_pSequence == 0)
         throw ::std::bad_alloc();
-    return (sal_Int8 *)_pSequence->elements;
+    return reinterpret_cast<sal_Int8 *>(_pSequence->elements);
 }
 
 inline void ByteSequence::realloc( sal_Int32 nSize )

@@ -116,7 +116,7 @@ try_alloc:
 
         if (addr != 0)
         {
-            ((sal_Size*)(addr))[0] = size;
+            reinterpret_cast<sal_Size*>(addr)[0] = size;
             p = addr + RTL_MEMALIGN;
         }
         else if (gp_alloc_arena == 0)
@@ -139,7 +139,7 @@ void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
     if (p != 0)
     {
         char *   addr = (char*)(p) - RTL_MEMALIGN;
-        sal_Size size = ((sal_Size*)(addr))[0];
+        sal_Size size = reinterpret_cast<sal_Size*>(addr)[0];
 
         if (size <= RTL_MEMORY_CACHED_LIMIT)
             rtl_cache_free(g_alloc_table[(size - 1) >> RTL_MEMALIGN_SHIFT], addr);
@@ -157,7 +157,7 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
         if (p != 0)
         {
             void *   p_old = p;
-            sal_Size n_old = ((sal_Size*)( (char*)(p) - RTL_MEMALIGN  ))[0] - RTL_MEMALIGN;
+            sal_Size n_old = reinterpret_cast<sal_Size*>( (char*)(p) - RTL_MEMALIGN  )[0] - RTL_MEMALIGN;
 
             p = rtl_allocateMemory (n);
             if (p != 0)
