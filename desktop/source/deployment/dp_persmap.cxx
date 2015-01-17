@@ -203,8 +203,8 @@ bool PersistentMap::readAll()
         if( m_MapFile.readLine( aValLine) != osl::File::E_None)
             return false;
         // decode key and value strings
-        const OString aKeyName = decodeString( (sal_Char*)aKeyLine.getConstArray(), aKeyLine.getLength());
-        const OString aValName = decodeString( (sal_Char*)aValLine.getConstArray(), aValLine.getLength());
+        const OString aKeyName = decodeString( reinterpret_cast<char const *>(aKeyLine.getConstArray()), aKeyLine.getLength());
+        const OString aValName = decodeString( reinterpret_cast<char const *>(aValLine.getConstArray()), aValLine.getLength());
         // insert key-value pair into map
         add( aKeyName, aValName );
         // check end-of-file status
@@ -391,7 +391,7 @@ bool PersistentMap::importFromBDB()
                 break;
             if( (pCur[0] != 0x01) || (pCur[1] != 0xFF))
                 continue;
-            const OString aVal( (sal_Char*)pVal, pCur - pVal);
+            const OString aVal( reinterpret_cast<char const *>(pVal), pCur - pVal);
             // get the key-candidate
             const sal_uInt8* pKey = pCur + 1;
             while( ++pCur < pEnd)
@@ -399,7 +399,7 @@ bool PersistentMap::importFromBDB()
                     break;
             if( (pCur < pEnd) && (*pCur > 0x01))
                 continue;
-            const OString aKey( (sal_Char*)pKey, pCur - pKey);
+            const OString aKey( reinterpret_cast<char const *>(pKey), pCur - pKey);
             --pCur; // prepare for next round by rewinding to end of key-string
 
             // add the key/value pair

@@ -406,7 +406,7 @@ void DescriptionInfoset::checkBlacklist() const
                     m_context->getServiceManager()->createInstanceWithContext("com.sun.star.xml.dom.DocumentBuilder", m_context),
                     css::uno::UNO_QUERY_THROW);
 
-                css::uno::Sequence< sal_Int8 > byteSeq((const sal_Int8*)xmlDependencies.getStr(), xmlDependencies.getLength());
+                css::uno::Sequence< sal_Int8 > byteSeq(reinterpret_cast<const sal_Int8*>(xmlDependencies.getStr()), xmlDependencies.getLength());
 
                 css::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
                                                                          css::uno::UNO_QUERY_THROW);

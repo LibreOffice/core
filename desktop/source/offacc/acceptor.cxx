@@ -209,9 +209,10 @@ sal_Bool Acceptor::supportsService(OUString const & ServiceName)
 Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServiceFactory >& aFactory )
 {
     try {
-        return (XComponent*) new Acceptor( comphelper::getComponentContext(aFactory) );
+        return static_cast<cppu::OWeakObject *>(
+            new Acceptor(comphelper::getComponentContext(aFactory)));
     } catch ( const Exception& ) {
-        return (XComponent*) NULL;
+        return css::uno::Reference<css::uno::XInterface>();
     }
 }
 
