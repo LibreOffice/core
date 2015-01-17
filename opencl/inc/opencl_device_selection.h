@@ -570,7 +570,7 @@ inline ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
                             }
                             deviceScoreStart += strlen(DS_TAG_SCORE);
                             deviceScoreEnd = findString(deviceScoreStart, contentEnd, DS_TAG_SCORE_END);
-                            status = deserializer(profile->devices + i, (const unsigned char*)deviceScoreStart, deviceScoreEnd - deviceScoreStart);
+                            status = deserializer(profile->devices + i, reinterpret_cast<const unsigned char*>(deviceScoreStart), deviceScoreEnd - deviceScoreStart);
                             if (status != DS_SUCCESS)
                             {
                                 goto cleanup;
@@ -594,7 +594,7 @@ inline ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
                         }
                         deviceScoreStart += strlen(DS_TAG_SCORE);
                         deviceScoreEnd = findString(deviceScoreStart, contentEnd, DS_TAG_SCORE_END);
-                        status = deserializer(profile->devices + i, (const unsigned char*)deviceScoreStart, deviceScoreEnd - deviceScoreStart);
+                        status = deserializer(profile->devices + i, reinterpret_cast<const unsigned char*>(deviceScoreStart), deviceScoreEnd - deviceScoreStart);
                         if (status != DS_SUCCESS)
                         {
                             goto cleanup;
