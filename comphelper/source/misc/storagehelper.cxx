@@ -439,7 +439,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
                 break;
             }
 
-            aEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+            aEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
         }
     }
 

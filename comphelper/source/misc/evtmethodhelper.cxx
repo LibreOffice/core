@@ -29,7 +29,7 @@ namespace comphelper
     Sequence< OUString> getEventMethodsForType(const Type& type)
     {
         typelib_InterfaceTypeDescription *pType=0;
-        type.getDescription( (typelib_TypeDescription**)&pType);
+        type.getDescription(reinterpret_cast<typelib_TypeDescription**>(&pType));
 
         if(!pType)
             return Sequence< OUString>();
@@ -50,7 +50,7 @@ namespace comphelper
                 *pNames = pRealMemberDescription->pMemberName;
             }
         }
-        typelib_typedescription_release( (typelib_TypeDescription *)pType );
+        typelib_typedescription_release( &pType->aBase );
         return aNames;
     }
 

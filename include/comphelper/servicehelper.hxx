@@ -31,7 +31,7 @@ private:
 public:
     UnoTunnelIdInit() : m_aSeq(16)
     {
-        rtl_createUuid( (sal_uInt8*)m_aSeq.getArray(), 0, sal_True );
+        rtl_createUuid( reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), 0, sal_True );
     }
     const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
 };
