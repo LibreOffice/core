@@ -193,7 +193,7 @@ bool BinaryCodec_XOR::initCodec( const uno::Sequence< beans::NamedValue >& aData
 uno::Sequence< beans::NamedValue > BinaryCodec_XOR::getEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ OUString("XOR95EncryptionKey") ] <<= uno::Sequence<sal_Int8>( (sal_Int8*)mpnKey, 16 );
+    aHashData[ OUString("XOR95EncryptionKey") ] <<= uno::Sequence<sal_Int8>( reinterpret_cast<sal_Int8*>(mpnKey), 16 );
     aHashData[ OUString("XOR95BaseKey") ] <<= (sal_Int16)mnBaseKey;
     aHashData[ OUString("XOR95PasswordHash") ] <<= (sal_Int16)mnHash;
 
@@ -302,19 +302,19 @@ bool BinaryCodec_RCF::initCodec( const uno::Sequence< beans::NamedValue >& aData
 uno::Sequence< beans::NamedValue > BinaryCodec_RCF::getEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ OUString("STD97EncryptionKey") ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnDigestValue, RTL_DIGEST_LENGTH_MD5 );
-    aHashData[ OUString("STD97UniqueID") ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)mpnUnique, 16 );
+    aHashData[ OUString("STD97EncryptionKey") ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(mpnDigestValue), RTL_DIGEST_LENGTH_MD5 );
+    aHashData[ OUString("STD97UniqueID") ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(mpnUnique), 16 );
 
     return aHashData.getAsConstNamedValueList();
 }
 
 void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt8 pnSalt[ 16 ] )
 {
-    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pnPassData, uno::Sequence< sal_Int8 >( (sal_Int8*)pnSalt, 16 ) );
+    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pnPassData, uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(pnSalt), 16 ) );
     // Fill raw digest of above updates into DigestValue.
 
     if ( aKey.getLength() == sizeof(mpnDigestValue) )
-        (void)memcpy ( mpnDigestValue, (const sal_uInt8*)aKey.getConstArray(), sizeof(mpnDigestValue) );
+        (void)memcpy ( mpnDigestValue, aKey.getConstArray(), sizeof(mpnDigestValue) );
     else
         memset( mpnDigestValue, 0, sizeof(mpnDigestValue) );
 
