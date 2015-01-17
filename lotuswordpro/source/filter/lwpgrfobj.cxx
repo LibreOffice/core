@@ -136,11 +136,11 @@ void LwpGraphicObject::Read()
     }
     if (nServerContextSize == 0)
     {
-        if (strcmp((char *)m_sServerContextFormat, ".cht") == 0 &&
-            strcmp((char *)m_sDataFormat, ".sdw") == 0)
+        if (strcmp(reinterpret_cast<char *>(m_sServerContextFormat), ".cht") == 0 &&
+            strcmp(reinterpret_cast<char *>(m_sDataFormat), ".sdw") == 0)
         {
-            strcpy((char *)m_sServerContextFormat, ".lch");
-            strcpy((char *)m_sDataFormat, ".lch");
+            strcpy(reinterpret_cast<char *>(m_sServerContextFormat), ".lch");
+            strcpy(reinterpret_cast<char *>(m_sDataFormat), ".lch");
         }
     }
     m_nCachedBaseLine = m_pObjStrm->QuickReadInt32();
@@ -701,7 +701,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
             {
                 pEquData[nIndex] = pGrafData[nBegin + nIndex];
             }
-            pXFNotePara->Add(OUString((sal_Char*)pEquData, (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
+            pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
             delete [] pEquData;
         }
         pXFNote->Add(pXFNotePara);

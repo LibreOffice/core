@@ -1074,8 +1074,8 @@ OUString LwpDrawTextBox::RegisterStyle()
     rtl::Reference<XFFont> pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
-    OUString aFontName = OUString((sal_Char*)m_aTextRec.tmpTextFaceName,
-        strlen((char*)m_aTextRec.tmpTextFaceName), aEncoding);
+    OUString aFontName = OUString(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName),
+        strlen(reinterpret_cast<char*>(m_aTextRec.tmpTextFaceName)), aEncoding);
     pFont->SetFontName(aFontName);
 
     SetFontStyle(pFont, &m_aTextRec);
@@ -1103,7 +1103,7 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     }
 
     XFParagraph* pXFPara = new XFParagraph();
-    pXFPara->Add(OUString((sal_Char*)m_aTextRec.pTextString, (TextLength-2), aEncoding));
+    pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextRec.pTextString), (TextLength-2), aEncoding));
     pXFPara->SetStyleName(rStyleName);
 
     pTextBox->Add(pXFPara);
@@ -1279,8 +1279,8 @@ OUString LwpDrawTextArt::RegisterStyle()
     rtl::Reference<XFFont> pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
-    OUString aFontName = OUString((sal_Char*)m_aTextArtRec.tmpTextFaceName,
-        strlen((char*)m_aTextArtRec.tmpTextFaceName), aEncoding);
+    OUString aFontName = OUString(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName),
+        strlen(reinterpret_cast<char*>(m_aTextArtRec.tmpTextFaceName)), aEncoding);
     pFont->SetFontName(aFontName);
 
     LwpDrawTextBox::SetFontStyle(pFont, &m_aTextArtRec);
@@ -1315,7 +1315,7 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     }
 
     XFParagraph* pXFPara = new XFParagraph();
-    pXFPara->Add(OUString((sal_Char*)m_aTextArtRec.pTextString, (m_aTextArtRec.nTextLen-1), aEncoding));
+    pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextArtRec.pTextString), (m_aTextArtRec.nTextLen-1), aEncoding));
     pXFPara->SetStyleName(rStyleName);
     pRetObj->Add(pXFPara);
 
