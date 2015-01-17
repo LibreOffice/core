@@ -366,7 +366,7 @@ const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index)
             if (n < m_bufferLen
                 && std::memchr(m_pBuffer + n, 0, m_bufferLen - n) != nullptr)
             {
-                aName = (const sal_Char*) (m_pBuffer + n);
+                aName = reinterpret_cast<const char*>(m_pBuffer + n);
             }
         }
     }
