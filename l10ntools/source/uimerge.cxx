@@ -45,7 +45,7 @@ int extractTranslations()
 
     OString sStyleSheet = OString(getenv("SRC_ROOT"))  + OString("/solenv/bin/uilangfilter.xslt");
 
-    xsltStylesheetPtr stylesheet = xsltParseStylesheetFile ((const xmlChar *)sStyleSheet.getStr());
+    xsltStylesheetPtr stylesheet = xsltParseStylesheetFile (reinterpret_cast<const xmlChar *>(sStyleSheet.getStr()));
 
     xmlDocPtr doc = xmlParseFile(sInputFileName.getStr());
 

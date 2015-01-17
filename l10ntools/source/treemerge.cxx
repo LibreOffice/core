@@ -40,9 +40,9 @@ namespace
         {
             if (!xmlStrcmp(pCurrent->name, pNodeName))
             {
-                xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("id"));
+                xmlChar* pID = xmlGetProp(pCurrent, reinterpret_cast<const xmlChar*>("id"));
                 xmlChar* pText =
-                    xmlGetProp(pCurrent, (const xmlChar*)("title"));
+                    xmlGetProp(pCurrent, reinterpret_cast<const xmlChar*>("title"));
 
                 common::writePoEntry(
                     "Treex", rPOStream, pSource->name, helper::xmlStrToOString( pNodeName ),
@@ -52,7 +52,7 @@ namespace
                 xmlFree( pText );
 
                 lcl_ExtractLevel(
-                    pSource, pCurrent, (const xmlChar *)("node"),
+                    pSource, pCurrent, reinterpret_cast<const xmlChar *>("node"),
                     rPOStream );
             }
         }
@@ -63,7 +63,7 @@ namespace
         const xmlNodePtr pCurrent, const OString& rXhpRoot )
     {
         xmlNodePtr pReturn = pCurrent;
-        xmlChar* pID = xmlGetProp(pReturn, (const xmlChar*)("id"));
+        xmlChar* pID = xmlGetProp(pReturn, reinterpret_cast<const xmlChar*>("id"));
         const OString sID =
             helper::xmlStrToOString( pID );
         xmlFree( pID );
@@ -76,7 +76,7 @@ namespace
                 rXhpRoot.copy( rXhpRoot.lastIndexOf('/') + 1 ) +
                 sID.copy( sID.indexOf( '/', nFirstSlash + 1 ) );
             xmlSetProp(
-                pReturn, (const xmlChar*)("id"),
+                pReturn, reinterpret_cast<const xmlChar*>("id"),
                 reinterpret_cast<const xmlChar*>(sNewID.getStr()));
         }
 
@@ -89,7 +89,7 @@ namespace
         {
             xmlNodePtr pTemp = pReturn;
             xmlChar* sNewID =
-                xmlGetProp(pReturn, (const xmlChar*)("id"));
+                xmlGetProp(pReturn, reinterpret_cast<const xmlChar*>("id"));
             xmlChar* sComment =
                 xmlStrcat( xmlCharStrdup("removed "), sNewID );
             pReturn = xmlNewComment( sComment );
@@ -109,7 +109,7 @@ namespace
                 {
                     pXhpNode = pXhpNode->next;
                 }
-                if(!xmlStrcmp(pXhpNode->name, (const xmlChar *)("title")))
+                if(!xmlStrcmp(pXhpNode->name, reinterpret_cast<const xmlChar *>("title")))
                 {
                     xmlChar* sTitle =
                         xmlNodeListGetString(pXhpFile, pXhpNode->children, 1);
@@ -156,7 +156,7 @@ namespace
                 if( rLang != "en-US" )
                 {
                     OString sNewText;
-                    xmlChar* pID = xmlGetProp(pCurrent, (const xmlChar*)("id"));
+                    xmlChar* pID = xmlGetProp(pCurrent, reinterpret_cast<const xmlChar*>("id"));
                     ResData  aResData(
                         helper::xmlStrToOString( pID ),
                         static_cast<OString>(io_pSource->name) );
@@ -173,7 +173,7 @@ namespace
                     }
                     else if( rLang == "qtz" )
                     {
-                        xmlChar* pText = xmlGetProp(pCurrent, (const xmlChar*)("title"));
+                        xmlChar* pText = xmlGetProp(pCurrent, reinterpret_cast<const xmlChar*>("title"));
                         const OString sOriginText = helper::xmlStrToOString(pText);
                         xmlFree( pText );
                         sNewText = MergeEntrys::GetQTZText(aResData, sOriginText);
@@ -181,16 +181,16 @@ namespace
                     if( !sNewText.isEmpty() )
                     {
                         xmlSetProp(
-                            pCurrent, (const xmlChar*)("title"),
-                            (const xmlChar*)(sNewText.getStr()));
+                            pCurrent, reinterpret_cast<const xmlChar*>("title"),
+                            reinterpret_cast<const xmlChar*>(sNewText.getStr()));
                     }
                 }
 
                 lcl_MergeLevel(
-                    io_pSource, pCurrent, (const xmlChar *)("node"),
+                    io_pSource, pCurrent, reinterpret_cast<const xmlChar *>("node"),
                     pMergeDataFile, rLang, rXhpRoot );
             }
-            else if( !xmlStrcmp(pCurrent->name, (const xmlChar *)("topic")) )
+            else if( !xmlStrcmp(pCurrent->name, reinterpret_cast<const xmlChar *>("topic")) )
             {
                 pCurrent = lcl_UpdateTopic( pCurrent, rXhpRoot );
             }
@@ -237,7 +237,7 @@ void TreeParser::Extract( const OString& rPOFile )
 
     xmlNodePtr pRootNode = xmlDocGetRootElement( m_pSource );
     lcl_ExtractLevel(
-        m_pSource, pRootNode, (const xmlChar *)("help_section"),
+        m_pSource, pRootNode, reinterpret_cast<const xmlChar *>("help_section"),
         aPOStream );
 
     xmlFreeDoc( m_pSource );
@@ -271,7 +271,7 @@ void TreeParser::Merge(
         }
     }
     lcl_MergeLevel(
-        m_pSource, pRootNode, (const xmlChar *)("help_section"),
+        m_pSource, pRootNode, reinterpret_cast<const xmlChar *>("help_section"),
         pMergeDataFile, m_sLang, rXhpRoot );
 
     delete pMergeDataFile;
