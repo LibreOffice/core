@@ -550,7 +550,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
         Reference< XIdlArray > xIdlArray = xIdlTargetClass->getArray();
         typelib_TypeDescription * pTD = 0;
         aType.getDescription( &pTD );
-        Type aElementType( ((typelib_IndirectTypeDescription *)pTD)->pType );
+        Type aElementType( reinterpret_cast<typelib_IndirectTypeDescription *>(pTD)->pType );
         ::typelib_typedescription_release( pTD );
 
         sal_Int32 nLen = xIdlArray->getLen( aValue );
@@ -770,7 +770,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             typelib_TypeDescription * pTD = 0;
             aType.getDescription( &pTD );
             OSL_ASSERT( pTD && pTD->eTypeClass == typelib_TypeClass_SEQUENCE );
-            Type aElementType( ((typelib_IndirectTypeDescription *)pTD)->pType );
+            Type aElementType( reinterpret_cast<typelib_IndirectTypeDescription *>(pTD)->pType );
             ::typelib_typedescription_release( pTD );
 
             // build an Array in Basic
@@ -1345,7 +1345,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                     typelib_TypeDescription * pSeqTD = 0;
                     typelib_typedescription_getByName( &pSeqTD, aClassName.pData );
                     OSL_ASSERT( pSeqTD );
-                    Type aElemType( ((typelib_IndirectTypeDescription *)pSeqTD)->pType );
+                    Type aElemType( reinterpret_cast<typelib_IndirectTypeDescription *>(pSeqTD)->pType );
 
                     // convert all array member and register them
                     sal_Int32 nIdx = nLower;
@@ -1388,7 +1388,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                         OSL_ASSERT( pSeqTD );
                         if( pSeqTD->eTypeClass == typelib_TypeClass_SEQUENCE )
                         {
-                            aCurType = Type( ((typelib_IndirectTypeDescription *)pSeqTD)->pType );
+                            aCurType = Type( reinterpret_cast<typelib_IndirectTypeDescription *>(pSeqTD)->pType );
                             nSeqLevel++;
                         }
                         else
@@ -4843,10 +4843,10 @@ void SbUnoStructRefObject::initMemberCache()
     sal_Int32 nAll = 0;
     typelib_TypeDescription * pTD = 0;
     maMemberInfo.getType().getDescription(&pTD);
-    typelib_CompoundTypeDescription * pCompTypeDescr = (typelib_CompoundTypeDescription *)pTD;
+    typelib_CompoundTypeDescription * pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD);
     for ( ; pCompTypeDescr; pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
         nAll += pCompTypeDescr->nMembers;
-    for ( pCompTypeDescr = (typelib_CompoundTypeDescription *)pTD; pCompTypeDescr;
+    for ( pCompTypeDescr = reinterpret_cast<typelib_CompoundTypeDescription *>(pTD); pCompTypeDescr;
         pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
     {
         typelib_TypeDescriptionReference ** ppTypeRefs = pCompTypeDescr->ppTypeRefs;

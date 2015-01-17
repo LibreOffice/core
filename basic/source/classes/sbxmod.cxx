@@ -1501,7 +1501,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
 const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine, sal_uInt16& nCol,
     bool bFollowJumps, const SbiImage* pImg ) const
 {
-    sal_uInt32 nPC = (sal_uInt32) ( p - (const sal_uInt8*) pImage->GetCode() );
+    sal_uInt32 nPC = (sal_uInt32) ( p - reinterpret_cast<const sal_uInt8*>(pImage->GetCode()) );
     while( nPC < pImage->GetCodeSize() )
     {
         SbiOpcode eOp = (SbiOpcode ) ( *p++ );
@@ -1511,7 +1511,7 @@ const sal_uInt8* SbModule::FindNextStmnt( const sal_uInt8* p, sal_uInt16& nLine,
             SAL_WARN_IF( !pImg, "basic", "FindNextStmnt: pImg==NULL with FollowJumps option" );
             sal_uInt32 nOp1 = *p++; nOp1 |= *p++ << 8;
             nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
-            p = (const sal_uInt8*) pImg->GetCode() + nOp1;
+            p = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
         }
         else if( eOp >= SbOP1_START && eOp <= SbOP1_END )
             p += 4, nPC += 4;
@@ -1542,7 +1542,7 @@ bool SbModule::IsBreakable( sal_uInt16 nLine ) const
 {
     if( !pImage )
         return false;
-    const sal_uInt8* p = (const sal_uInt8* ) pImage->GetCode();
+    const sal_uInt8* p = reinterpret_cast<const sal_uInt8*>(pImage->GetCode());
     sal_uInt16 nl, nc;
     while( ( p = FindNextStmnt( p, nl, nc ) ) != NULL )
         if( nl == nLine )

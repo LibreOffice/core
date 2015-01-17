@@ -268,7 +268,7 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
             return;
     }
     SbxVarEntry* p = new SbxVarEntry;
-    *((SbxVariableRef*) p) = pVar;
+    p->mpVar = pVar;
     size_t nSize = mpVarEntries->size();
     if( nIdx > nSize )
     {

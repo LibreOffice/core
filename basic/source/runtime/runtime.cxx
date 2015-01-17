@@ -584,7 +584,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, sal_uInt32 nStart )
     pRestart  = NULL;
     pNext     = NULL;
     pCode     =
-    pStmnt    = (const sal_uInt8* ) pImg->GetCode() + nStart;
+    pStmnt    = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nStart;
     bRun      =
     bError    = true;
     bInError  = false;
@@ -1184,7 +1184,7 @@ void SbiRuntime::PushForEach()
     if( (pArray = PTR_CAST(SbxDimArray,pObj)) != NULL )
     {
         p->eForType = FOR_EACH_ARRAY;
-        p->refEnd = (SbxVariable*)pArray;
+        p->refEnd = reinterpret_cast<SbxVariable*>(pArray);
 
         short nDims = pArray->GetDims();
         p->pArrayLowerBounds = new sal_Int32[nDims];
@@ -2953,7 +2953,7 @@ void SbiRuntime::StepJUMP( sal_uInt32 nOp1 )
     if( nOp1 >= pImg->GetCodeSize() )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
 #endif
-    pCode = (const sal_uInt8*) pImg->GetCode() + nOp1;
+    pCode = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
 }
 
 // evaluate TOS, conditional jump (+target)
@@ -2995,7 +2995,7 @@ void SbiRuntime::StepONJUMP( sal_uInt32 nOp1 )
     }
     if( n < 1 || static_cast<sal_uInt32>(n) > nOp1 )
         n = static_cast<sal_Int16>( nOp1 + 1 );
-    nOp1 = (sal_uInt32) ( (const char*) pCode - pImg->GetCode() ) + 5 * --n;
+    nOp1 = (sal_uInt32) ( reinterpret_cast<const char*>(pCode) - pImg->GetCode() ) + 5 * --n;
     StepJUMP( nOp1 );
 }
 
@@ -3006,7 +3006,7 @@ void SbiRuntime::StepGOSUB( sal_uInt32 nOp1 )
     PushGosub( pCode );
     if( nOp1 >= pImg->GetCodeSize() )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
-    pCode = (const sal_uInt8*) pImg->GetCode() + nOp1;
+    pCode = reinterpret_cast<const sal_uInt8*>(pImg->GetCode()) + nOp1;
 }
 
 // UP-return (+0 or target)
@@ -3047,7 +3047,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
             }
             else
             {
-                SbxDimArray* pArray = (SbxDimArray*)(SbxVariable*)p->refEnd;
+                SbxDimArray* pArray = reinterpret_cast<SbxDimArray*>((SbxVariable*)p->refEnd);
                 short nDims = pArray->GetDims();
 
                 // Empty array?

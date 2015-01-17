@@ -182,9 +182,9 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     nLegacyCodeSize = (sal_uInt16) nCodeSize;
                     pLegacyPCode = pCode;
 
-                    PCodeBuffConvertor< sal_uInt16, sal_uInt32 > aLegacyToNew( (sal_uInt8*)pLegacyPCode, nLegacyCodeSize );
+                    PCodeBuffConvertor< sal_uInt16, sal_uInt32 > aLegacyToNew( reinterpret_cast<sal_uInt8*>(pLegacyPCode), nLegacyCodeSize );
                     aLegacyToNew.convert();
-                    pCode = (char*)aLegacyToNew.GetBuffer();
+                    pCode = reinterpret_cast<char*>(aLegacyToNew.GetBuffer());
                     nCodeSize = aLegacyToNew.GetSize();
                     // we don't release the legacy buffer
                     // right now, thats because the module
@@ -320,9 +320,9 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         if ( bLegacy )
         {
             ReleaseLegacyBuffer(); // release any previously held buffer
-            PCodeBuffConvertor< sal_uInt32, sal_uInt16 > aNewToLegacy( (sal_uInt8*)pCode, nCodeSize );
+            PCodeBuffConvertor< sal_uInt32, sal_uInt16 > aNewToLegacy( reinterpret_cast<sal_uInt8*>(pCode), nCodeSize );
             aNewToLegacy.convert();
-            pLegacyPCode = (char*)aNewToLegacy.GetBuffer();
+            pLegacyPCode = reinterpret_cast<char*>(aNewToLegacy.GetBuffer());
             nLegacyCodeSize = aNewToLegacy.GetSize();
             r.Write( pLegacyPCode, nLegacyCodeSize );
         }
@@ -512,12 +512,12 @@ const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )
 {
-    return SbiCodeGen::calcLegacyOffSet( (sal_uInt8*)pCode, nOffset ) ;
+    return SbiCodeGen::calcLegacyOffSet( reinterpret_cast<sal_uInt8*>(pCode), nOffset ) ;
 }
 
 sal_uInt32 SbiImage::CalcNewOffset( sal_Int16 nOffset )
 {
-    return SbiCodeGen::calcNewOffSet( (sal_uInt8*)pLegacyPCode, nOffset ) ;
+    return SbiCodeGen::calcNewOffSet( reinterpret_cast<sal_uInt8*>(pLegacyPCode), nOffset ) ;
 }
 
 void  SbiImage::ReleaseLegacyBuffer()
