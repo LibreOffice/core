@@ -1679,10 +1679,9 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
 #ifndef DISABLE_DYNLOADING
             OUString sModule = sModuleBuf.makeStringAndClear();
             ModuleMap::iterator aI = m_aModuleMap.find(sModule);
-            osl::Module* pModule = NULL;
             if (aI == m_aModuleMap.end())
             {
-                pModule = new osl::Module;
+                osl::Module* pModule = new osl::Module;
                 pModule->loadRelative(&thisModule, sModule);
                 aI = m_aModuleMap.insert(sModule, pModule).first;
             }

@@ -490,7 +490,6 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByAttributes( sal_uLong nSea
     InitMatchData();
     PhysicalFontFamily* pFoundData = NULL;
 
-    long    nTestMatch;
     long    nBestMatch = 40000;
     sal_uLong   nBestType = 0;
 
@@ -517,7 +516,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByAttributes( sal_uLong nSea
         //              Otherstyle, +Special, +Decorative,
         //       1000   Typewriter, Rounded, Gothic, Schollbook
         //        100
-        nTestMatch = 0;
+        long nTestMatch = 0;
 
         // test CJK script attributes
         if ( nSearchType & IMPL_FONT_ATTR_CJK )

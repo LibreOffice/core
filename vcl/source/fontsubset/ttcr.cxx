@@ -482,16 +482,12 @@ static void TrueTypeTableDispose_glyf(TrueTypeTable *_this)
 
 static void TrueTypeTableDispose_cmap(TrueTypeTable *_this)
 {
-    table_cmap *t;
-    CmapSubTable *s;
-    sal_uInt32 i;
-
     if (_this) {
-        t = (table_cmap *) _this->data;
+        table_cmap *t = (table_cmap *) _this->data;
         if (t) {
-            s = t->s;
+            CmapSubTable *s = t->s;
             if (s) {
-                for (i = 0; i < t->m; i++) {
+                for (sal_uInt32 i = 0; i < t->m; i++) {
                     if (s[i].xc) free(s[i].xc);
                     if (s[i].xg) free(s[i].xg);
                 }
@@ -1195,7 +1191,6 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
     list l;
     sal_uInt32 currentID;
     int ret, n, ncomponents;
-    GlyphData *gd;
 
     assert(table != 0);
     assert(table->tag == T_glyf);
@@ -1235,7 +1230,7 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
             } while (listNext(l));
 
             if (!found) {
-                gd = GetTTRawGlyphData(fnt, currentID);
+                GlyphData *gd = GetTTRawGlyphData(fnt, currentID);
                 gd->newID = n++;
                 listAppend(l, gd);
             }
