@@ -30,10 +30,10 @@ OUString TCHARArrayToOUString(TCHAR const *str)
 {
     // UTF-16
     if (sizeof(TCHAR) == sizeof(sal_Unicode))
-        return OUString((const sal_Unicode*)(str));
+        return OUString(reinterpret_cast<const sal_Unicode*>(str));
 
     // UTF-32
-    return OUString((const sal_uInt32*)str, wcslen(str));
+    return OUString(reinterpret_cast<const sal_uInt32*>(str), wcslen(str));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

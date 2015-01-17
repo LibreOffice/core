@@ -77,7 +77,7 @@ xmlDocPtr HelpCompiler::compactXhpForJar( xmlDocPtr doc )
 
     if (!compact)
     {
-        compact = xsltParseStylesheetFile((const xmlChar *)resCompactStylesheet.native_file_string().c_str());
+        compact = xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(resCompactStylesheet.native_file_string().c_str()));
     }
 
     compacted = xsltApplyStylesheet(compact, doc, params);
@@ -139,7 +139,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 
             xmlSubstituteEntitiesDefault(1);
             xmlLoadExtDtdDefaultValue = 1;
-            cur = xsltParseStylesheetFile((const xmlChar *)resEmbStylesheet.native_file_string().c_str());
+            cur = xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(resEmbStylesheet.native_file_string().c_str()));
 
             int nbparams = 0;
             params[nbparams++] = "fsroot";
@@ -171,17 +171,17 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
         xmlNodePtr list = node->xmlChildrenNode;
         while (list)
         {
-            if (strcmp((const char*)list->name, "switchinline") == 0 || strcmp((const char*)list->name, "switch") == 0)
+            if (strcmp(reinterpret_cast<const char*>(list->name), "switchinline") == 0 || strcmp(reinterpret_cast<const char*>(list->name), "switch") == 0)
             {
                 std::string tmp="";
-                xmlChar * prop = xmlGetProp(list, (xmlChar*)"select");
+                xmlChar * prop = xmlGetProp(list, reinterpret_cast<xmlChar const *>("select"));
                 if (prop != 0)
                 {
-                    if (strcmp((char *)prop, "sys") == 0)
+                    if (strcmp(reinterpret_cast<char *>(prop), "sys") == 0)
                     {
                         tmp = gui;
                     }
-                    else if (strcmp((char *)prop, "appl") == 0)
+                    else if (strcmp(reinterpret_cast<char *>(prop), "appl") == 0)
                     {
                         tmp = appl;
                     }
@@ -193,10 +193,10 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
                     xmlNodePtr caseList=list->xmlChildrenNode;
                     while (caseList)
                     {
-                        xmlChar *select = xmlGetProp(caseList, (xmlChar*)"select");
+                        xmlChar *select = xmlGetProp(caseList, reinterpret_cast<xmlChar const *>("select"));
                         if (select)
                         {
-                            if (!strcmp((const char*)select, tmp.c_str()) && !isCase)
+                            if (!strcmp(reinterpret_cast<char*>(select), tmp.c_str()) && !isCase)
                             {
                                 isCase=true;
                                 xmlNodePtr clp = caseList->xmlChildrenNode;
@@ -210,7 +210,7 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
                         }
                         else
                         {
-                            if ((strcmp((const char*)caseList->name, "defaultinline") != 0) && (strcmp((const char*)caseList->name, "default") != 0))
+                            if ((strcmp(reinterpret_cast<const char*>(caseList->name), "defaultinline") != 0) && (strcmp(reinterpret_cast<const char*>(caseList->name), "default") != 0))
                             {
                                 xmlAddChild(root, clone(caseList, appl));
                             }
@@ -282,7 +282,7 @@ std::string myparser::dump(xmlNodePtr node)
     if (xmlNodeIsText(node))
     {
         xmlChar *pContent = xmlNodeGetContent(node);
-        app += std::string((const char*)pContent);
+        app += std::string(reinterpret_cast<char*>(pContent));
         xmlFree(pContent);
     }
     return app;
@@ -308,28 +308,28 @@ void myparser::traverse( xmlNodePtr parentNode )
     xmlNodePtr test ;
     for (test = parentNode->xmlChildrenNode; test; test = test->next)
     {
-        if (fileName.empty() && !strcmp((const char*)test->name, "filename"))
+        if (fileName.empty() && !strcmp(reinterpret_cast<const char*>(test->name), "filename"))
         {
             xmlNodePtr node = test->xmlChildrenNode;
             if (xmlNodeIsText(node))
             {
                 xmlChar *pContent = xmlNodeGetContent(node);
-                fileName = std::string((const char*)pContent);
+                fileName = std::string(reinterpret_cast<char*>(pContent));
                 xmlFree(pContent);
             }
         }
-        else if (title.empty() && !strcmp((const char*)test->name, "title"))
+        else if (title.empty() && !strcmp(reinterpret_cast<const char*>(test->name), "title"))
         {
             title = dump(test);
             if (title.empty())
                 title = "<notitle>";
         }
-        else if (!strcmp((const char*)test->name, "bookmark"))
+        else if (!strcmp(reinterpret_cast<const char*>(test->name), "bookmark"))
         {
-            xmlChar *branchxml = xmlGetProp(test, (const xmlChar*)"branch");
-            xmlChar *idxml = xmlGetProp(test, (const xmlChar*)"id");
-            std::string branch((const char*)branchxml);
-            std::string anchor((const char*)idxml);
+            xmlChar *branchxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("branch"));
+            xmlChar *idxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("id"));
+            std::string branch(reinterpret_cast<char*>(branchxml));
+            std::string anchor(reinterpret_cast<char*>(idxml));
             xmlFree (branchxml);
             xmlFree (idxml);
 
@@ -357,14 +357,14 @@ void myparser::traverse( xmlNodePtr parentNode )
 
                 for (xmlNodePtr nd = test->xmlChildrenNode; nd; nd = nd->next)
                 {
-                    if (strcmp((const char*)nd->name, "bookmark_value"))
+                    if (strcmp(reinterpret_cast<const char*>(nd->name), "bookmark_value"))
                         continue;
 
                     std::string embedded;
-                    xmlChar *embeddedxml = xmlGetProp(nd, (const xmlChar*)"embedded");
+                    xmlChar *embeddedxml = xmlGetProp(nd, reinterpret_cast<const xmlChar*>("embedded"));
                     if (embeddedxml)
                     {
-                        embedded = std::string((const char*)embeddedxml);
+                        embedded = std::string(reinterpret_cast<char*>(embeddedxml));
                         xmlFree (embeddedxml);
                         std::transform (embedded.begin(), embedded.end(),
                             embedded.begin(), tocharlower);
@@ -396,7 +396,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                 // currently not used
             }
         }
-        else if (!strcmp((const char*)test->name, "ahelp"))
+        else if (!strcmp(reinterpret_cast<const char*>(test->name), "ahelp"))
         {
             std::string text = dump(test);
             trim(text);

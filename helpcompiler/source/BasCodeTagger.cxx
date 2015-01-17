@@ -82,14 +82,14 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
     m_pXmlTreeWalker = new LibXmlTreeWalker( m_pDocument );
 
     currentNode = m_pXmlTreeWalker->currentNode();
-    if ( !( xmlStrcmp( currentNode->name, (const xmlChar*) "bascode" ) ) )
+    if ( !( xmlStrcmp( currentNode->name, reinterpret_cast<const xmlChar*>("bascode") ) ) )
     { //Found <bascode>
         m_BasicCodeContainerTags.push_back( currentNode ); //it goes to the end of the list
     }
     while ( !m_pXmlTreeWalker->end() )
     {
           m_pXmlTreeWalker->nextNode();
-        if ( !( xmlStrcmp( m_pXmlTreeWalker->currentNode()->name, (const xmlChar*) "bascode" ) ) )
+        if ( !( xmlStrcmp( m_pXmlTreeWalker->currentNode()->name, reinterpret_cast<const xmlChar*>("bascode") ) ) )
         { //Found <bascode>
             m_BasicCodeContainerTags.push_back( m_pXmlTreeWalker->currentNode() ); //it goes to the end of the list
             m_pXmlTreeWalker->ignoreCurrNodesChildren();
@@ -151,12 +151,12 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
          i != portions.end(); ++i)
     {
         OString sToken(OUStringToOString(strLine.copy(i->nBegin, i->nEnd-i->nBegin), RTL_TEXTENCODING_UTF8));
-        xmlNodePtr text = xmlNewText((const xmlChar*)sToken.getStr());
+        xmlNodePtr text = xmlNewText(reinterpret_cast<const xmlChar*>(sToken.getStr()));
         if ( i->tokenType != TT_WHITESPACE )
         {
             xmlChar* typeStr = getTypeString( i->tokenType );
-            curNode = xmlNewTextChild( paragraph, 0, (xmlChar*)"item", 0 );
-            xmlNewProp( curNode, (xmlChar*)"type", typeStr );
+            curNode = xmlNewTextChild( paragraph, 0, reinterpret_cast<xmlChar const *>("item"), 0 );
+            xmlNewProp( curNode, reinterpret_cast<xmlChar const *>("type"), typeStr );
             xmlAddChild( curNode, text );
             xmlFree( typeStr );
         }

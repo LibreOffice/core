@@ -52,9 +52,9 @@ IndexerPreProcessor::IndexerPreProcessor
     fs::create_directory( m_fsContentFilesDirName );
 
     m_xsltStylesheetPtrCaption = xsltParseStylesheetFile
-        ((const xmlChar *)idxCaptionStylesheet.native_file_string().c_str());
+        (reinterpret_cast<const xmlChar *>(idxCaptionStylesheet.native_file_string().c_str()));
     m_xsltStylesheetPtrContent = xsltParseStylesheetFile
-        ((const xmlChar *)idxContentStylesheet.native_file_string().c_str());
+        (reinterpret_cast<const xmlChar *>(idxContentStylesheet.native_file_string().c_str()));
 }
 
 IndexerPreProcessor::~IndexerPreProcessor()
