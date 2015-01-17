@@ -20,6 +20,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -1292,8 +1293,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::b2dtuple);
 CPPUNIT_TEST_SUITE_REGISTRATION(basegfx2d::bcolor);
 } // namespace basegfx2d
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-// NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
