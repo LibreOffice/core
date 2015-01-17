@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX
 
+#include <memory>
 #include "wrtww8.hxx"
 
 class RtfAttributeOutput;
@@ -41,12 +42,12 @@ class RtfExport : public MSWordExportBase
     Writer* m_pWriter;
 
     /// Attribute output for document.
-    boost::shared_ptr<RtfAttributeOutput> m_pAttrOutput;
+    std::unique_ptr<RtfAttributeOutput> m_pAttrOutput;
 
     /// Sections/headers/footers
     MSWordSections* m_pSections;
 
-    boost::shared_ptr<RtfSdrExport> m_pSdrExport;
+    std::unique_ptr<RtfSdrExport> m_pSdrExport;
     bool m_bOutOutlineOnly;
 
 public:
