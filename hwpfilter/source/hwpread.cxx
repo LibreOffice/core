@@ -432,7 +432,7 @@ bool Picture::Read(HWPFile & hwpf)
         hwpf.Read1b(follow, follow_block_size);
         if (pictype == PICTYPE_DRAW)
         {
-            hmem = new HMemIODev((char *) follow, follow_block_size);
+            hmem = new HMemIODev(reinterpret_cast<char *>(follow), follow_block_size);
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
             delete hmem;

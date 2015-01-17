@@ -140,7 +140,7 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
         nRead = xInputStream->readBytes(aBuffer, nBlock);
         if( nRead == 0 )
             break;
-        stream->addData( (const byte *)aBuffer.getConstArray(), nRead );
+        stream->addData( reinterpret_cast<const byte *>(aBuffer.getConstArray()), nRead );
         nTotal += nRead;
     }
 
@@ -500,7 +500,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 if( !prop->pictype )
                 {
                     padd( "xlink:href", sXML_CDATA,
-                        hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
+                        hconv(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str()));
                 }
                 else
                 {
@@ -543,7 +543,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     else
                     {
                         padd( "xlink:href", sXML_CDATA,
-                            hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
+                            hconv(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str()));
                     }
 
                 }
@@ -723,7 +723,7 @@ void HwpReader::makeStyles()
 
     for (int ii = 0; ii < hwpstyle.Num(); ii++)
     {
-        unsigned char *stylename = (unsigned char *) hwpstyle.GetName(ii);
+        unsigned char *stylename = reinterpret_cast<unsigned char *>(hwpstyle.GetName(ii));
         padd("style:name", sXML_CDATA, (hconv(kstr2hstr(stylename).c_str())));
         padd("style:family", sXML_CDATA, "paragraph");
         padd("style:parent-style-name", sXML_CDATA, "Standard");
@@ -1323,7 +1323,7 @@ void HwpReader::parseCharShape(CharShape * cshape)
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
 
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
-        (unsigned char *) hwpfont.GetFontName(0, cshape->font[0])).c_str());
+        reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font[0]))).c_str());
     double fRatio = 1.0;
     int size = getRepFamilyName(tmp.c_str(), buf, fRatio);
 
@@ -1709,7 +1709,7 @@ void HwpReader::makePageStyle()
                       hconv(kstr2hstr((uchar*) urltowin(hwpinfo.back_info.filename).c_str()).c_str()));
 #else
                  padd("xlink:href", sXML_CDATA,
-                    hconv(kstr2hstr( (uchar *)urltounix(hwpinfo.back_info.filename).c_str()).c_str()));
+                    hconv(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(hwpinfo.back_info.filename).c_str())).c_str()));
 #endif
                  padd("xlink:type", sXML_CDATA, "simple");
                  padd("xlink:actuate", sXML_CDATA, "onLoad");
@@ -1725,7 +1725,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 2 ){
                  rstartEl("office:binary-data", rList);
                  pList->clear();
-                 boost::shared_ptr<char> pStr(base64_encode_string((unsigned char *) hwpinfo.back_info.data, hwpinfo.back_info.size ), Free<char>());
+                 boost::shared_ptr<char> pStr(base64_encode_string(reinterpret_cast<unsigned char *>(hwpinfo.back_info.data), hwpinfo.back_info.size ), Free<char>());
                  rchars(ascii(pStr.get()));
                  rendEl("office:binary-data");
              }
@@ -3703,13 +3703,13 @@ void HwpReader::makeHyperText(TxtBox * hbox)
     HyperText *hypert = hwpfile.GetHyperText();
      if( !hypert ) return;
 
-    if( strlen((char *)hypert->filename) > 0 ){
+    if( strlen(reinterpret_cast<char *>(hypert->filename)) > 0 ){
               ::std::string const tmp = hstr2ksstr(hypert->bookmark);
               ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
                   (uchar *) urltowin((char *)hypert->filename).c_str()).c_str());
 #else
-                  (uchar *) urltounix((char *)hypert->filename).c_str()).c_str());
+                  reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #endif
           padd("xlink:type", sXML_CDATA, "simple");
           if (tmp.size() > 0 && strcmp(tmp.c_str(), "[HTML]")) {
@@ -3811,10 +3811,10 @@ void HwpReader::makePicture(Picture * hbox)
 #else
                 if( hbox->follow[4] != 0 )
                     padd("xlink:href", sXML_CDATA,
-                        (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 4)).c_str()).c_str())));
+                        (hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow + 4)).c_str())).c_str())));
                 else
                     padd("xlink:href", sXML_CDATA,
-                        (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 5)).c_str()).c_str())));
+                        (hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow + 5)).c_str())).c_str())));
 #endif
                 rstartEl("draw:a", rList);
                 pList->clear();
@@ -3869,7 +3869,7 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("xlink:href", sXML_CDATA, (hconv(kstr2hstr((uchar *) buf).c_str())));
 #else
                 padd("xlink:href", sXML_CDATA,
-                    (hconv(kstr2hstr((uchar *) urltounix(hbox->picinfo.picun.path).c_str()).c_str())));
+                    (hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str())));
 #endif
                 padd("xlink:type", sXML_CDATA, "simple");
                 padd("xlink:show", sXML_CDATA, "embed");

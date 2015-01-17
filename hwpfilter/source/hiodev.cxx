@@ -247,7 +247,7 @@ int HStreamIODev::skipBlock(int size)
 HMemIODev::HMemIODev(char *s, int len)
 {
     init();
-    ptr = (uchar *) s;
+    ptr = reinterpret_cast<uchar *>(s);
     length = len;
 }
 
