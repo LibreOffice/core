@@ -162,12 +162,13 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
     // Since the design of Ctrl-Tab looks to be inconsistent ( non-modal dialogs are not reachable
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
-    bool bSplitterOnly = false;
-    bool bFocusInList = false;
     vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     bool bForward = !aKeyCode.IsShift();
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {
+        bool bSplitterOnly = false;
+        bool bFocusInList = false;
+
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
         // is the focus in the list ?

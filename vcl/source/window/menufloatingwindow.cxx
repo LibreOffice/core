@@ -70,11 +70,10 @@ void MenuFloatingWindow::doShutdown()
         if (!bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
         {
             // #102461# remove highlight in parent
-            MenuItemData* pData;
             size_t i, nCount = pMenu->pStartedFrom->pItemList->size();
             for(i = 0; i < nCount; i++)
             {
-                pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
+                MenuItemData* pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
                 if( pData && ( pData->pSubMenu == pMenu ) )
                     break;
             }
@@ -672,11 +671,10 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
         if (pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
         {
             // #102461# make sure parent entry is highlighted as well
-            MenuItemData* pData;
             size_t i, nCount = pMenu->pStartedFrom->pItemList->size();
             for(i = 0; i < nCount; i++)
             {
-                pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
+                MenuItemData* pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
                 if( pData && ( pData->pSubMenu == pMenu ) )
                     break;
             }
