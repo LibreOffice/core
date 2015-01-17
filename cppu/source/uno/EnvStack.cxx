@@ -365,7 +365,7 @@ int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pRea
     {
         cppu::Enterable * pEnterable = reinterpret_cast<cppu::Enterable *>(pEnv->pReserved);
         if (pEnterable)
-            result = pEnterable->isValid((rtl::OUString *)pReason);
+            result = pEnterable->isValid(reinterpret_cast<rtl::OUString *>(pReason));
     }
     else
     {
@@ -374,7 +374,7 @@ int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pRea
 
         uno::Environment env(envDcp);
 
-        result = env.isValid((rtl::OUString *)pReason);
+        result = env.isValid(reinterpret_cast<rtl::OUString *>(pReason));
     }
 
     return result;

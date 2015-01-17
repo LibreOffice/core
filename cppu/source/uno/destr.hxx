@@ -115,7 +115,7 @@ inline void _destructAny(
     {
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
-        _destructStruct( pAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr, release );
+        _destructStruct( pAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr), release );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
         ::rtl_freeMemory( pAny->pData );
         break;
@@ -205,7 +205,7 @@ inline sal_Int32 idestructElements(
         {
             _destructStruct(
                 (char *)pElements + (nElementSize * nPos),
-                (typelib_CompoundTypeDescription *)pElementTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pElementTypeDescr),
                 release );
         }
         sal_Int32 nSize = pElementTypeDescr->nSize;
@@ -273,7 +273,7 @@ inline void idestroySequence(
         {
             idestructElements(
                 pSeq->elements,
-                ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType, 0,
                 pSeq->nElements, release );
         }
         else
@@ -281,7 +281,7 @@ inline void idestroySequence(
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             idestructElements(
                 pSeq->elements,
-                ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType, 0,
                 pSeq->nElements, release );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
@@ -325,12 +325,12 @@ inline void _destructData(
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
         {
-            _destructStruct( pValue, (typelib_CompoundTypeDescription *)pTypeDescr, release );
+            _destructStruct( pValue, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr), release );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _destructStruct( pValue, (typelib_CompoundTypeDescription *)pTypeDescr, release );
+            _destructStruct( pValue, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr), release );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;

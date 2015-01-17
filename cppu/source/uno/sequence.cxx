@@ -152,7 +152,7 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(float), nAlloc );
         if (pSeq != 0)
         {
-            float * pElements = (float *) pSeq->elements;
+            float * pElements = reinterpret_cast<float *>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 pElements[nPos] = 0.0;
@@ -166,7 +166,7 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(double), nAlloc );
         if (pSeq != 0)
         {
-            double * pElements = (double *) pSeq->elements;
+            double * pElements = reinterpret_cast<double *>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 pElements[nPos] = 0.0;
@@ -180,7 +180,7 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(rtl_uString *), nAlloc );
         if (pSeq != 0)
         {
-            rtl_uString ** pElements = (rtl_uString **) pSeq->elements;
+            rtl_uString ** pElements = reinterpret_cast<rtl_uString **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 pElements[nPos] = 0;
@@ -199,7 +199,7 @@ static inline bool idefaultConstructElements(
         if (pSeq != 0)
         {
             typelib_TypeDescriptionReference ** pElements =
-                (typelib_TypeDescriptionReference **) pSeq->elements;
+                reinterpret_cast<typelib_TypeDescriptionReference **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 pElements[nPos] = _getVoidType();
@@ -213,7 +213,7 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(uno_Any), nAlloc );
         if (pSeq != 0)
         {
-            uno_Any * pElements = (uno_Any *) pSeq->elements;
+            uno_Any * pElements = reinterpret_cast<uno_Any *>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 CONSTRUCT_EMPTY_ANY( &pElements[nPos] );
@@ -230,11 +230,11 @@ static inline bool idefaultConstructElements(
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
             sal_Int32 eEnum =
-                ((typelib_EnumTypeDescription *)
+                reinterpret_cast<typelib_EnumTypeDescription *>(
                  pElementTypeDescr)->nDefaultEnumValue;
             TYPELIB_DANGER_RELEASE( pElementTypeDescr );
 
-            sal_Int32 * pElements = (sal_Int32 *) pSeq->elements;
+            sal_Int32 * pElements = reinterpret_cast<sal_Int32 *>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 pElements[nPos] = eEnum;
@@ -258,7 +258,7 @@ static inline bool idefaultConstructElements(
             {
                 _defaultConstructStruct(
                     pElements + (nElementSize * nPos),
-                    (typelib_CompoundTypeDescription *)pElementTypeDescr );
+                    reinterpret_cast<typelib_CompoundTypeDescription *>(pElementTypeDescr) );
             }
         }
 
@@ -275,7 +275,7 @@ static inline bool idefaultConstructElements(
         if (pSeq != 0)
         {
             uno_Sequence ** pElements =
-                (uno_Sequence **) pSeq->elements;
+                reinterpret_cast<uno_Sequence **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 pElements[nPos] = createEmptySequence();
@@ -431,7 +431,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(rtl_uString *), nAlloc );
         if (pSeq != 0)
         {
-            rtl_uString ** pDestElements = (rtl_uString **) pSeq->elements;
+            rtl_uString ** pDestElements = reinterpret_cast<rtl_uString **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 // This code tends to trigger coverity's overrun-buffer-arg warning
@@ -453,7 +453,7 @@ static inline bool icopyConstructFromElements(
         if (pSeq != 0)
         {
             typelib_TypeDescriptionReference ** pDestElements =
-                (typelib_TypeDescriptionReference **) pSeq->elements;
+                reinterpret_cast<typelib_TypeDescriptionReference **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 TYPE_ACQUIRE(
@@ -472,7 +472,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(uno_Any), nAlloc );
         if (pSeq != 0)
         {
-            uno_Any * pDestElements = (uno_Any *) pSeq->elements;
+            uno_Any * pDestElements = reinterpret_cast<uno_Any *>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 uno_Any * pSource = (uno_Any *)pSourceElements + nPos;
@@ -499,7 +499,7 @@ static inline bool icopyConstructFromElements(
             char * pDestElements = pSeq->elements;
 
             typelib_CompoundTypeDescription * pTypeDescr =
-                (typelib_CompoundTypeDescription *)pElementTypeDescr;
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pElementTypeDescr);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 char * pDest =
@@ -546,8 +546,8 @@ static inline bool icopyConstructFromElements(
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
             typelib_TypeDescriptionReference * pSeqElementType =
-                ((typelib_IndirectTypeDescription *) pElementTypeDescr)->pType;
-            uno_Sequence ** pDestElements = (uno_Sequence **) pSeq->elements;
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pElementTypeDescr)->pType;
+            uno_Sequence ** pDestElements = reinterpret_cast<uno_Sequence **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 uno_Sequence * pNew = icopyConstructSequence(
@@ -695,7 +695,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
 
         typelib_TypeDescriptionReference * pElementType =
-            ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
+            reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType;
 
         *ppSequence = 0;
         if (pElements == 0)
@@ -736,7 +736,7 @@ sal_Bool SAL_CALL uno_sequence_construct(
     if (len > 0)
     {
         typelib_TypeDescriptionReference * pElementType =
-            ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
+            reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType;
 
         *ppSequence = 0;
         if (pElements == 0)
@@ -779,7 +779,7 @@ sal_Bool SAL_CALL uno_type_sequence_realloc(
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
         ret = ireallocSequence(
-            ppSequence, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+            ppSequence, reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
             nSize, acquire, release );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
     }
@@ -799,7 +799,7 @@ sal_Bool SAL_CALL uno_sequence_realloc(
     if (nSize != (*ppSequence)->nElements)
     {
         ret = ireallocSequence(
-            ppSequence, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+            ppSequence, reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
             nSize, acquire, release );
     }
     return ret;
@@ -825,7 +825,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
 
             ret = icopyConstructFromElements(
                 &pNew, pSequence->elements,
-                ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                 0, pSequence->nElements, acquire,
                 pSequence->nElements ); // alloc nElements
             if (ret)
@@ -869,7 +869,7 @@ sal_Bool SAL_CALL uno_sequence_reference2One(
         {
             ret = icopyConstructFromElements(
                 &pNew, pSequence->elements,
-                ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                 0, pSequence->nElements, acquire,
                 pSequence->nElements ); // alloc nElements
             if (ret)

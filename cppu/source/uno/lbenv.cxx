@@ -57,11 +57,10 @@ inline static bool td_equals( typelib_InterfaceTypeDescription * pTD1,
                               typelib_InterfaceTypeDescription * pTD2 )
 {
     return (pTD1 == pTD2 ||
-            (((typelib_TypeDescription *)pTD1)->pTypeName->length ==
-             ((typelib_TypeDescription *)pTD2)->pTypeName->length &&
+            (pTD1->aBase.pTypeName->length == pTD2->aBase.pTypeName->length &&
              ::rtl_ustr_compare(
-                 ((typelib_TypeDescription *) pTD1)->pTypeName->buffer,
-                 ((typelib_TypeDescription *) pTD2)->pTypeName->buffer ) == 0));
+                 pTD1->aBase.pTypeName->buffer,
+                 pTD2->aBase.pTypeName->buffer ) == 0));
 }
 
 struct ObjectEntry;
@@ -170,7 +169,7 @@ inline void ObjectEntry::append(
     aNewEntry.refCount = 1;
     aNewEntry.pInterface = pInterface;
     aNewEntry.fpFreeProxy = fpFreeProxy;
-    typelib_typedescription_acquire( (typelib_TypeDescription *) pTypeDescr );
+    typelib_typedescription_acquire( &pTypeDescr->aBase );
     aNewEntry.pTypeDescr = pTypeDescr;
 
     ::std::pair< Ptr2ObjectMap::iterator, bool > i(
@@ -194,8 +193,7 @@ inline InterfaceEntry * ObjectEntry::find(
 
     // shortcut common case:
     OUString const & type_name =
-        OUString::unacquired(
-            &((typelib_TypeDescription *) pTypeDescr_)->pTypeName );
+        OUString::unacquired( &pTypeDescr_->aBase.pTypeName );
     if ( type_name == "com.sun.star.uno.XInterface" )
     {
         return &aInterfaces[ 0 ];
@@ -370,8 +368,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
         for ( nPos = pOEntry->aInterfaces.size(); nPos--; )
         {
             InterfaceEntry const & rEntry = pOEntry->aInterfaces[nPos];
-            typelib_typedescription_release(
-                (typelib_TypeDescription *) rEntry.pTypeDescr );
+            typelib_typedescription_release( &rEntry.pTypeDescr->aBase );
             if (rEntry.fpFreeProxy) // is proxy or used interface?
             {
                 (*rEntry.fpFreeProxy)( pEnv, rEntry.pInterface );
@@ -522,7 +519,7 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
 
 static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 {
-    uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
+    uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     osl_atomic_increment( &that->nWeakRef );
     osl_atomic_increment( &that->nRef );
 }
@@ -530,7 +527,7 @@ static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 
 static void SAL_CALL defenv_release( uno_Environment * pEnv )
 {
-    uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
+    uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     if (! osl_atomic_decrement( &that->nRef ))
     {
         // invoke dispose callback
@@ -551,14 +548,14 @@ static void SAL_CALL defenv_release( uno_Environment * pEnv )
 
 static void SAL_CALL defenv_acquireWeak( uno_Environment * pEnv )
 {
-    uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
+    uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     osl_atomic_increment( &that->nWeakRef );
 }
 
 
 static void SAL_CALL defenv_releaseWeak( uno_Environment * pEnv )
 {
-    uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
+    uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     if (! osl_atomic_decrement( &that->nWeakRef ))
     {
         delete that;
@@ -580,7 +577,7 @@ static void SAL_CALL defenv_harden(
     if (rData.isDisposing)
         return;
 
-    uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
+    uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
     {
     ::osl::MutexGuard guard( rData.mutex );
     if (1 == osl_atomic_increment( &that->nRef )) // is dead
@@ -636,7 +633,7 @@ uno_DefaultEnvironment::uno_DefaultEnvironment(
 
 uno_DefaultEnvironment::~uno_DefaultEnvironment()
 {
-    ::rtl_uString_release( ((uno_Environment *) this)->pTypeName );
+    ::rtl_uString_release( aBase.pTypeName );
 }
 
 
@@ -744,8 +741,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
             const InterfaceEntry & rIEntry = pOEntry->aInterfaces[nPos];
 
             buf.append( "  - " );
-            buf.append(
-                ((typelib_TypeDescription *) rIEntry.pTypeDescr)->pTypeName );
+            buf.append( rIEntry.pTypeDescr->aBase.pTypeName );
             if (rIEntry.fpFreeProxy)
             {
                 buf.append( "; proxy free=0x" );
@@ -870,7 +866,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
         oid.append( reinterpret_cast< sal_Int64 >(pUnoI), 16 );
         oid.append( ';' );
         // environment[context]
-        oid.append( ((uno_Environment *) pEnv)->pTypeName );
+        oid.append( pEnv->aBase.pTypeName );
         oid.append( '[' );
         oid.append( reinterpret_cast< sal_Int64 >(
                         reinterpret_cast<
@@ -1091,7 +1087,7 @@ static uno_Environment * initDefaultEnvironment(
     // create default environment
     if ( envTypeName == UNO_LB_UNO )
     {
-        uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
+        uno_DefaultEnvironment * that = reinterpret_cast<uno_DefaultEnvironment *>(pEnv);
         that->computeObjectIdentifier = unoenv_computeObjectIdentifier;
         that->acquireInterface = unoenv_acquireInterface;
         that->releaseInterface = unoenv_releaseInterface;

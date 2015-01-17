@@ -426,7 +426,7 @@ static Mapping loadExternalMapping(
             if (fpGetMapFunc)
             {
                 Mapping aExt;
-                (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
+                (*fpGetMapFunc)( reinterpret_cast<uno_Mapping **>(&aExt), rFrom.get(), rTo.get() );
                 OSL_ASSERT( aExt.is() );
                 if (aExt.is())
                 {
@@ -503,7 +503,7 @@ static Mapping getMediateMapping(
     else
     {
         // get registered uno env
-        ::uno_getEnvironment( (uno_Environment **)&aUno, aUnoEnvTypeName.pData, 0 );
+        ::uno_getEnvironment( reinterpret_cast<uno_Environment **>(&aUno), aUnoEnvTypeName.pData, 0 );
 
         aUno2To = getDirectMapping( aUno, rTo );
         // : uno <-> to
@@ -516,7 +516,7 @@ static Mapping getMediateMapping(
     {
         // create anonymous uno env
         Environment aAnUno;
-        ::uno_createEnvironment( (uno_Environment **)&aAnUno, aUnoEnvTypeName.pData, 0 );
+        ::uno_createEnvironment( reinterpret_cast<uno_Environment **>(&aAnUno), aUnoEnvTypeName.pData, 0 );
 
         Mapping aAnUno2Uno( getDirectMapping( aAnUno, aUno, rAddPurpose ) );
         if (! aAnUno2Uno.is())

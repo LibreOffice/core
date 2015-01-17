@@ -51,7 +51,7 @@ namespace cppu_threadpool {
             {
                 if( a.getLength() >= 4 )
                 {
-                    return *(sal_Int32 *)a.getConstArray();
+                    return *reinterpret_cast<sal_Int32 const *>(a.getConstArray());
                 }
                 return 0;
             }

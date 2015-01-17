@@ -57,13 +57,13 @@ inline void * _map(
         if (pTypeDescr)
         {
             (*mapping->mapInterface)(
-                mapping, &pRet, p, (typelib_InterfaceTypeDescription *)pTypeDescr );
+                mapping, &pRet, p, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTypeDescr) );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             (*mapping->mapInterface)(
-                mapping, &pRet, p, (typelib_InterfaceTypeDescription *)pTypeDescr );
+                mapping, &pRet, p, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTypeDescr) );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
     }

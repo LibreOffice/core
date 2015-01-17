@@ -187,12 +187,12 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     ::typelib_typedescription_newInterface(
                         &pTD, sTypeName.pData, 0, 0, 0, 0, 0, 0, 3, pMembers );
 
-                    ::typelib_typedescription_register( (typelib_TypeDescription **)&pTD );
+                    ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription **>(&pTD) );
                     ::typelib_typedescriptionreference_acquire(
-                        s_aTypes[typelib_TypeClass_INTERFACE] = ((typelib_TypeDescription *)pTD)->pWeakRef );
+                        s_aTypes[typelib_TypeClass_INTERFACE] = pTD->aBase.pWeakRef );
                     // another static ref:
                     ++s_aTypes[typelib_TypeClass_INTERFACE]->nStaticRefCount;
-                    ::typelib_typedescription_release( (typelib_TypeDescription*)pTD );
+                    ::typelib_typedescription_release( &pTD->aBase );
 
                     ::typelib_typedescriptionreference_release( pMembers[0] );
                     ::typelib_typedescriptionreference_release( pMembers[1] );
@@ -247,20 +247,20 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                         &pMethod, 0, sal_False, sMethodName0.pData,
                         typelib_TypeClass_ANY, sReturnType0.pData,
                         1, aParameters, 1, pExceptions );
-                    ::typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
+                    ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
 
                     OUString sReturnType1("void");
                     ::typelib_typedescription_newInterfaceMethod(
                         &pMethod, 1, sal_True, sMethodName1.pData,
                         typelib_TypeClass_VOID, sReturnType1.pData, 0, 0, 0, 0 );
-                    ::typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
+                    ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
 
                     ::typelib_typedescription_newInterfaceMethod(
                         &pMethod, 2, sal_True, sMethodName2.pData,
                         typelib_TypeClass_VOID, sReturnType1.pData,
                         0, 0, 0, 0 );
-                    ::typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
-                    ::typelib_typedescription_release( (typelib_TypeDescription*)pMethod );
+                    ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
+                    ::typelib_typedescription_release( &pMethod->aBase.aBase );
                 }
                 break;
             }
@@ -321,7 +321,7 @@ void SAL_CALL typelib_static_sequence_type_init(
                     aTypeName.pData, pElementType, 0, 0 );
 
                 ::typelib_typedescription_register( &pReg );
-                *ppRef = (typelib_TypeDescriptionReference *)pReg;
+                *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
@@ -354,16 +354,16 @@ void init(
             {
                 typelib_CompoundTypeDescription * pComp = 0;
                 ::typelib_typedescription_newEmpty(
-                    (typelib_TypeDescription **)&pComp, eTypeClass, aTypeName.pData );
+                    reinterpret_cast<typelib_TypeDescription **>(&pComp), eTypeClass, aTypeName.pData );
 
                 sal_Int32 nOffset = 0;
                 if (pBaseType)
                 {
                     ::typelib_typedescriptionreference_getDescription(
-                        (typelib_TypeDescription **)&pComp->pBaseTypeDescription, pBaseType );
+                        reinterpret_cast<typelib_TypeDescription **>(&pComp->pBaseTypeDescription), pBaseType );
                     assert( pComp->pBaseTypeDescription );
-                    nOffset = ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize;
-                    assert( newAlignedSize( 0, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pComp->pBaseTypeDescription)->nSize ); // unexpected offset
+                    nOffset = pComp->pBaseTypeDescription->aBase.nSize;
+                    assert( newAlignedSize( 0, pComp->pBaseTypeDescription->aBase.nSize, pComp->pBaseTypeDescription->aBase.nAlignment ) == pComp->pBaseTypeDescription->aBase.nSize ); // unexpected offset
                 }
 
                 if (nMembers)
@@ -396,15 +396,15 @@ void init(
                     }
                 }
 
-                typelib_TypeDescription * pReg = (typelib_TypeDescription *)pComp;
-                pReg->pWeakRef = (typelib_TypeDescriptionReference *)pReg;
+                typelib_TypeDescription * pReg = &pComp->aBase;
+                pReg->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 // sizeof( void ) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
                 pReg->nAlignment = adjustAlignment( pReg->nAlignment );
                 pReg->bComplete = sal_False;
 
                 ::typelib_typedescription_register( &pReg );
-                *ppRef = (typelib_TypeDescriptionReference *)pReg;
+                *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
@@ -467,7 +467,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
             {
                 typelib_InterfaceTypeDescription * pIface = 0;
                 ::typelib_typedescription_newEmpty(
-                    (typelib_TypeDescription **)&pIface, typelib_TypeClass_INTERFACE, aTypeName.pData );
+                    reinterpret_cast<typelib_TypeDescription **>(&pIface), typelib_TypeClass_INTERFACE, aTypeName.pData );
 
                 pIface->nBaseTypes = std::max< sal_Int32 >(nBaseTypes, 1);
                 pIface->ppBaseTypes = new typelib_InterfaceTypeDescription *[
@@ -477,7 +477,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                     for (sal_Int32 i = 0; i < nBaseTypes; ++i) {
                         pIface->ppBaseTypes[i] = 0;
                         ::typelib_typedescriptionreference_getDescription(
-                            (typelib_TypeDescription **)&pIface->ppBaseTypes[i], ppBaseTypes[i] );
+                            reinterpret_cast<typelib_TypeDescription **>(&pIface->ppBaseTypes[i]), ppBaseTypes[i] );
                         assert( pIface->ppBaseTypes[i] );
                     }
                 }
@@ -485,7 +485,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 {
                     pIface->ppBaseTypes[0] = 0;
                     ::typelib_typedescriptionreference_getDescription(
-                        (typelib_TypeDescription **)&pIface->ppBaseTypes[0],
+                        reinterpret_cast<typelib_TypeDescription **>(&pIface->ppBaseTypes[0]),
                         * ::typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE ) );
                     assert( pIface->ppBaseTypes[0] );
                 }
@@ -493,8 +493,8 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 typelib_typedescription_acquire(
                     &pIface->pBaseTypeDescription->aBase);
 
-                typelib_TypeDescription * pReg = (typelib_TypeDescription *)pIface;
-                pReg->pWeakRef = (typelib_TypeDescriptionReference *)pReg;
+                typelib_TypeDescription * pReg = &pIface->aBase;
+                pReg->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 // sizeof( void ) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
 
@@ -502,7 +502,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
                 pReg->bComplete = sal_False;
 
                 ::typelib_typedescription_register( &pReg );
-                *ppRef = (typelib_TypeDescriptionReference *)pReg;
+                *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:
@@ -531,18 +531,18 @@ void SAL_CALL typelib_static_enum_type_init(
                 typelib_TypeDescription * pReg = 0;
                 ::typelib_typedescription_newEmpty(
                     &pReg, typelib_TypeClass_ENUM, aTypeName.pData );
-                typelib_EnumTypeDescription * pEnum = (typelib_EnumTypeDescription *)pReg;
+                typelib_EnumTypeDescription * pEnum = reinterpret_cast<typelib_EnumTypeDescription *>(pReg);
 
                 pEnum->nDefaultEnumValue = nDefaultValue;
 
-                pReg->pWeakRef = (typelib_TypeDescriptionReference *)pReg;
+                pReg->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 // sizeof( void ) not allowed
                 pReg->nSize = ::typelib_typedescription_getAlignedUnoSize( pReg, 0, pReg->nAlignment );
                 pReg->nAlignment = ::adjustAlignment( pReg->nAlignment );
                 pReg->bComplete = sal_False;
 
                 ::typelib_typedescription_register( &pReg );
-                *ppRef = (typelib_TypeDescriptionReference *)pReg;
+                *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
                 assert( *ppRef == pReg->pWeakRef );
             }
             // another static ref:

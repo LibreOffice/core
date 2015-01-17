@@ -46,7 +46,7 @@ static inline void createLocalId( sal_Sequence **ppThreadId )
     (*ppThreadId)->elements[1] = (id >> 8) & 0xFF;
     (*ppThreadId)->elements[2] = (id >> 16) & 0xFF;
     (*ppThreadId)->elements[3] = (id >> 24) & 0xFF;
-    rtl_getGlobalProcessId( (sal_uInt8 * ) &( (*ppThreadId)->elements[4]) );
+    rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8 *>(&(*ppThreadId)->elements[4]) );
 }
 
 

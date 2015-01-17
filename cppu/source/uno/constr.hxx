@@ -101,12 +101,12 @@ inline void _defaultConstructData(
     case typelib_TypeClass_ENUM:
         if (pTypeDescr)
         {
-            *(sal_Int32 *)pMem = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+            *(sal_Int32 *)pMem = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            *(sal_Int32 *)pMem = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+            *(sal_Int32 *)pMem = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
@@ -114,12 +114,12 @@ inline void _defaultConstructData(
     case typelib_TypeClass_EXCEPTION:
         if (pTypeDescr)
         {
-            _defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
+            _defaultConstructStruct( pMem, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            _defaultConstructStruct( pMem, (typelib_CompoundTypeDescription *)pTypeDescr );
+            _defaultConstructStruct( pMem, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;

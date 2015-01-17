@@ -382,7 +382,7 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
 static inline void typelib_typedescription_initTables(
     typelib_TypeDescription * pTD )
 {
-    typelib_InterfaceTypeDescription * pITD = (typelib_InterfaceTypeDescription *)pTD;
+    typelib_InterfaceTypeDescription * pITD = reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD);
 
     sal_Bool * pReadWriteAttributes = (sal_Bool *)alloca( pITD->nAllMembers );
     for ( sal_Int32 i = pITD->nAllMembers; i--; )
@@ -395,7 +395,7 @@ static inline void typelib_typedescription_initTables(
             OSL_ASSERT( pM );
             if (pM)
             {
-                pReadWriteAttributes[i] = !((typelib_InterfaceAttributeTypeDescription *)pM)->bReadOnly;
+                pReadWriteAttributes[i] = !reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(pM)->bReadOnly;
                 TYPELIB_DANGER_RELEASE( pM );
             }
 #if OSL_DEBUG_LEVEL > 1
@@ -470,7 +470,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
                     !reallyWeak( (*ppTypeDescr)->eTypeClass ) );
 
         if (typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass &&
-            ((typelib_InterfaceTypeDescription *)*ppTypeDescr)->ppAllMembers)
+            reinterpret_cast<typelib_InterfaceTypeDescription *>(*ppTypeDescr)->ppAllMembers)
         {
             if (initTables) {
                 typelib_typedescription_initTables( *ppTypeDescr );
@@ -487,7 +487,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             if (typelib_TypeClass_TYPEDEF == pTD->eTypeClass)
             {
                 typelib_typedescriptionreference_getDescription(
-                    &pTD, ((typelib_IndirectTypeDescription *)pTD)->pType );
+                    &pTD, reinterpret_cast<typelib_IndirectTypeDescription *>(pTD)->pType );
                 OSL_ASSERT( pTD );
                 if (! pTD)
                     return false;
@@ -502,7 +502,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
                 && !pTD->bComplete && initTables)
             {
                 // mandatory info from callback chain
-                OSL_ASSERT( ((typelib_InterfaceTypeDescription *)pTD)->ppAllMembers );
+                OSL_ASSERT( reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD)->ppAllMembers );
                 // complete except of tables init
                 typelib_typedescription_initTables( pTD );
                 pTD->bComplete = sal_True;
@@ -569,7 +569,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_SEQUENCE:
         {
             typelib_IndirectTypeDescription * pTmp = new typelib_IndirectTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nIndirectTypeDescriptionCount );
 #endif
@@ -582,7 +582,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             // FEATURE_EMPTYCLASS
             typelib_StructTypeDescription * pTmp;
             pTmp = new typelib_StructTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase.aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
 #endif
@@ -600,7 +600,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             // FEATURE_EMPTYCLASS
             typelib_CompoundTypeDescription * pTmp;
             pTmp = new typelib_CompoundTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nCompoundTypeDescriptionCount );
 #endif
@@ -615,7 +615,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_ENUM:
         {
             typelib_EnumTypeDescription * pTmp = new typelib_EnumTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nEnumTypeDescriptionCount );
 #endif
@@ -629,7 +629,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_INTERFACE:
         {
             typelib_InterfaceTypeDescription * pTmp = new typelib_InterfaceTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nInterfaceTypeDescriptionCount );
 #endif
@@ -649,7 +649,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_INTERFACE_METHOD:
         {
             typelib_InterfaceMethodTypeDescription * pTmp = new typelib_InterfaceMethodTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase.aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nInterfaceMethodTypeDescriptionCount );
 #endif
@@ -668,7 +668,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         {
             typelib_InterfaceAttributeTypeDescription * pTmp = new typelib_InterfaceAttributeTypeDescription();
-            pRet = (typelib_TypeDescription *)pTmp;
+            pRet = &pTmp->aBase.aBase;
 #if OSL_DEBUG_LEVEL > 1
             osl_atomic_increment( &Init::get().nInterfaceAttributeTypeDescriptionCount );
 #endif
@@ -736,7 +736,7 @@ void newTypeDescription(
         {
             OSL_ASSERT( nMembers == 0 );
             typelib_typedescriptionreference_acquire( pType );
-            ((typelib_IndirectTypeDescription *)*ppRet)->pType = pType;
+            reinterpret_cast<typelib_IndirectTypeDescription *>(*ppRet)->pType = pType;
         }
         break;
 
@@ -744,15 +744,15 @@ void newTypeDescription(
         case typelib_TypeClass_STRUCT:
         {
             // FEATURE_EMPTYCLASS
-            typelib_CompoundTypeDescription * pTmp = (typelib_CompoundTypeDescription*)*ppRet;
+            typelib_CompoundTypeDescription * pTmp = reinterpret_cast<typelib_CompoundTypeDescription*>(*ppRet);
 
             sal_Int32 nOffset = 0;
             if( pType )
             {
                 typelib_typedescriptionreference_getDescription(
-                    (typelib_TypeDescription **)&pTmp->pBaseTypeDescription, pType );
-                nOffset = ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize;
-                OSL_ENSURE( newAlignedSize( 0, ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize, ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nAlignment ) == ((typelib_TypeDescription *)pTmp->pBaseTypeDescription)->nSize, "### unexpected offset!" );
+                    reinterpret_cast<typelib_TypeDescription **>(&pTmp->pBaseTypeDescription), pType );
+                nOffset = pTmp->pBaseTypeDescription->aBase.nSize;
+                OSL_ENSURE( newAlignedSize( 0, pTmp->pBaseTypeDescription->aBase.nSize, pTmp->pBaseTypeDescription->aBase.nAlignment ) == pTmp->pBaseTypeDescription->aBase.nSize, "### unexpected offset!" );
             }
             if( nMembers )
             {
@@ -823,7 +823,7 @@ void newTypeDescription(
     }
 
     if( !reallyWeak( eTypeClass ) )
-        (*ppRet)->pWeakRef = (typelib_TypeDescriptionReference *)*ppRet;
+        (*ppRet)->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppRet);
     if( eTypeClass != typelib_TypeClass_VOID )
     {
         // sizeof( void ) not allowed
@@ -871,7 +871,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     SAL_THROW_EXTERN_C()
 {
     typelib_typedescription_newEmpty( ppRet, typelib_TypeClass_ENUM, pTypeName );
-    typelib_EnumTypeDescription * pEnum = (typelib_EnumTypeDescription *)*ppRet;
+    typelib_EnumTypeDescription * pEnum = reinterpret_cast<typelib_EnumTypeDescription *>(*ppRet);
 
     pEnum->nDefaultEnumValue = nDefaultValue;
     pEnum->nEnumValues       = nEnumValues;
@@ -883,7 +883,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEnum(
     pEnum->pEnumValues      = new sal_Int32[ nEnumValues ];
     ::memcpy( pEnum->pEnumValues, pEnumValues, nEnumValues * sizeof(sal_Int32) );
 
-    (*ppRet)->pWeakRef = (typelib_TypeDescriptionReference *)*ppRet;
+    (*ppRet)->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppRet);
     // sizeof( void ) not allowed
     (*ppRet)->nSize = typelib_typedescription_getAlignedUnoSize( (*ppRet), 0, (*ppRet)->nAlignment );
     (*ppRet)->nAlignment = adjustAlignment( (*ppRet)->nAlignment );
@@ -995,7 +995,7 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
 
     typelib_InterfaceTypeDescription * pITD = 0;
     typelib_typedescription_newEmpty(
-        (typelib_TypeDescription **)&pITD, typelib_TypeClass_INTERFACE, pTypeName );
+        reinterpret_cast<typelib_TypeDescription **>(&pITD), typelib_TypeClass_INTERFACE, pTypeName );
 
     pITD->nBaseTypes = nBaseInterfaces;
     pITD->ppBaseTypes = new typelib_InterfaceTypeDescription *[nBaseInterfaces];
@@ -1076,9 +1076,9 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
         }
     }
 
-    typelib_TypeDescription * pTmp = (typelib_TypeDescription *)pITD;
+    typelib_TypeDescription * pTmp = &pITD->aBase;
     if( !reallyWeak( typelib_TypeClass_INTERFACE ) )
-        pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
+        pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
     pTmp->nSize = typelib_typedescription_getAlignedUnoSize( pTmp, 0, pTmp->nAlignment );
     pTmp->nAlignment = adjustAlignment( pTmp->nAlignment );
     pTmp->bComplete = sal_False;
@@ -1147,8 +1147,8 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     }
 
     typelib_typedescription_newEmpty(
-        (typelib_TypeDescription **)ppRet, typelib_TypeClass_INTERFACE_METHOD, pTypeName );
-    typelib_TypeDescription * pTmp = (typelib_TypeDescription *)*ppRet;
+        reinterpret_cast<typelib_TypeDescription **>(ppRet), typelib_TypeClass_INTERFACE_METHOD, pTypeName );
+    typelib_TypeDescription * pTmp = reinterpret_cast<typelib_TypeDescription *>(*ppRet);
 
     rtl_uString_newFromStr_WithLength( &(*ppRet)->aBase.pMemberName,
                                        pTypeName->buffer + nOffset +1,
@@ -1184,7 +1184,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     (*ppRet)->nIndex = nAbsolutePosition
         - (pInterface->nAllMembers - pInterface->nMembers);
     if( !reallyWeak( typelib_TypeClass_INTERFACE_METHOD ) )
-        pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
+        pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
 }
 
 
@@ -1240,8 +1240,8 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     }
 
     typelib_typedescription_newEmpty(
-        (typelib_TypeDescription **)ppRet, typelib_TypeClass_INTERFACE_ATTRIBUTE, pTypeName );
-    typelib_TypeDescription * pTmp = (typelib_TypeDescription *)*ppRet;
+        reinterpret_cast<typelib_TypeDescription **>(ppRet), typelib_TypeClass_INTERFACE_ATTRIBUTE, pTypeName );
+    typelib_TypeDescription * pTmp = reinterpret_cast<typelib_TypeDescription *>(*ppRet);
 
     rtl_uString_newFromStr_WithLength( &(*ppRet)->aBase.pMemberName,
                                        pTypeName->buffer + nOffset +1,
@@ -1263,7 +1263,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     (*ppRet)->ppSetExceptions = copyExceptions(
         nSetExceptions, ppSetExceptionNames);
     if( !reallyWeak( typelib_TypeClass_INTERFACE_ATTRIBUTE ) )
-        pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
+        pTmp->pWeakRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pTmp);
 }
 
 
@@ -1298,8 +1298,8 @@ static inline void typelib_typedescription_destructExtendedMembers(
     switch( pTD->eTypeClass )
     {
     case typelib_TypeClass_SEQUENCE:
-        if( ((typelib_IndirectTypeDescription*)pTD)->pType )
-            typelib_typedescriptionreference_release( ((typelib_IndirectTypeDescription*)pTD)->pType );
+        if( reinterpret_cast<typelib_IndirectTypeDescription*>(pTD)->pType )
+            typelib_typedescriptionreference_release( reinterpret_cast<typelib_IndirectTypeDescription*>(pTD)->pType );
         break;
     case typelib_TypeClass_STRUCT:
         delete[] reinterpret_cast< typelib_StructTypeDescription * >(pTD)->
@@ -1307,9 +1307,9 @@ static inline void typelib_typedescription_destructExtendedMembers(
         // Fall-through intentional
     case typelib_TypeClass_EXCEPTION:
     {
-        typelib_CompoundTypeDescription * pCTD = (typelib_CompoundTypeDescription*)pTD;
+        typelib_CompoundTypeDescription * pCTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD);
         if( pCTD->pBaseTypeDescription )
-            typelib_typedescription_release( (typelib_TypeDescription *)pCTD->pBaseTypeDescription );
+            typelib_typedescription_release( &pCTD->pBaseTypeDescription->aBase );
         sal_Int32 i;
         for( i = 0; i < pCTD->nMembers; i++ )
         {
@@ -1329,7 +1329,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
     break;
     case typelib_TypeClass_INTERFACE:
     {
-        typelib_InterfaceTypeDescription * pITD = (typelib_InterfaceTypeDescription*)pTD;
+        typelib_InterfaceTypeDescription * pITD = reinterpret_cast<typelib_InterfaceTypeDescription*>(pTD);
         for( sal_Int32 i = 0; i < pITD->nAllMembers; i++ )
         {
             typelib_typedescriptionreference_release( pITD->ppAllMembers[i] );
@@ -1347,7 +1347,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
-        typelib_InterfaceMethodTypeDescription * pIMTD = (typelib_InterfaceMethodTypeDescription*)pTD;
+        typelib_InterfaceMethodTypeDescription * pIMTD = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(pTD);
         if( pIMTD->pReturnTypeRef )
             typelib_typedescriptionreference_release( pIMTD->pReturnTypeRef );
         for( sal_Int32 i = 0; i < pIMTD->nParams; i++ )
@@ -1366,7 +1366,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
     break;
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
-        typelib_InterfaceAttributeTypeDescription * pIATD = (typelib_InterfaceAttributeTypeDescription*)pTD;
+        typelib_InterfaceAttributeTypeDescription * pIATD = reinterpret_cast<typelib_InterfaceAttributeTypeDescription*>(pTD);
         deleteExceptions(pIATD->nGetExceptions, pIATD->ppGetExceptions);
         deleteExceptions(pIATD->nSetExceptions, pIATD->ppSetExceptions);
         if( pIATD->pAttributeTypeRef )
@@ -1381,7 +1381,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
     break;
     case typelib_TypeClass_ENUM:
     {
-        typelib_EnumTypeDescription * pEnum = (typelib_EnumTypeDescription *)pTD;
+        typelib_EnumTypeDescription * pEnum = reinterpret_cast<typelib_EnumTypeDescription *>(pTD);
         for ( sal_Int32 nPos = pEnum->nEnumValues; nPos--; )
         {
             rtl_uString_release( pEnum->ppEnumNames[nPos] );
@@ -1519,8 +1519,8 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                  (!pTDR->pType->bComplete && (*ppNewDescription)->bComplete) ||
                  // new one may be partly initialized interface (except of tables):
                  (typelib_TypeClass_INTERFACE == pTDR->pType->eTypeClass &&
-                  !((typelib_InterfaceTypeDescription *)pTDR->pType)->ppAllMembers &&
-                  (*(typelib_InterfaceTypeDescription **)ppNewDescription)->ppAllMembers)))
+                  !reinterpret_cast<typelib_InterfaceTypeDescription *>(pTDR->pType)->ppAllMembers &&
+                  (*reinterpret_cast<typelib_InterfaceTypeDescription **>(ppNewDescription))->ppAllMembers)))
             {
                 // uninitialized or incomplete
 
@@ -1579,7 +1579,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
     }
     else
     {
-        pTDR = (typelib_TypeDescriptionReference *)*ppNewDescription;
+        pTDR = reinterpret_cast<typelib_TypeDescriptionReference *>(*ppNewDescription);
         if( !rInit.pWeakMap )
             rInit.pWeakMap = new WeakMap_Impl;
 
@@ -1604,7 +1604,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
 
 
 static inline bool type_equals(
-    typelib_TypeDescriptionReference * p1, typelib_TypeDescriptionReference * p2 )
+    typelib_TypeDescriptionReference const * p1, typelib_TypeDescriptionReference const * p2 )
 {
     return (p1 == p2 ||
             (p1->eTypeClass == p2->eTypeClass &&
@@ -1616,7 +1616,7 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_equals(
     SAL_THROW_EXTERN_C()
 {
     return type_equals(
-        (typelib_TypeDescriptionReference *)p1, (typelib_TypeDescriptionReference *)p2 );
+        reinterpret_cast<typelib_TypeDescriptionReference const *>(p1), reinterpret_cast<typelib_TypeDescriptionReference const *>(p2) );
 }
 
 
@@ -1652,7 +1652,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
             case typelib_TypeClass_EXCEPTION:
                 // FEATURE_EMPTYCLASS
                 {
-                typelib_CompoundTypeDescription * pTmp = (typelib_CompoundTypeDescription *)pTypeDescription;
+                typelib_CompoundTypeDescription const * pTmp = reinterpret_cast<typelib_CompoundTypeDescription const *>(pTypeDescription);
                 sal_Int32 nStructSize = 0;
                 if( pTmp->pBaseTypeDescription )
                 {
@@ -2026,7 +2026,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
             {
                 typelib_TypeDescription * pTD = 0;
                 typelib_typedescriptionreference_getDescription(
-                    &pTD, ((typelib_IndirectTypeDescription *)*ppRet)->pType );
+                    &pTD, reinterpret_cast<typelib_IndirectTypeDescription *>(*ppRet)->pType );
                 typelib_typedescription_release( *ppRet );
                 *ppRet = pTD;
             }
@@ -2082,10 +2082,10 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
             if (typelib_TypeClass_TYPEDEF == pRet->eTypeClass)
             {
                 typelib_typedescriptionreference_acquire(
-                    ((typelib_IndirectTypeDescription *)pRet)->pType );
+                    reinterpret_cast<typelib_IndirectTypeDescription *>(pRet)->pType );
                 if (*ppTDR)
                     typelib_typedescriptionreference_release( *ppTDR );
-                *ppTDR = ((typelib_IndirectTypeDescription *)pRet)->pType;
+                *ppTDR = reinterpret_cast<typelib_IndirectTypeDescription *>(pRet)->pType;
                 typelib_typedescription_release( pRet );
             }
             else
@@ -2148,10 +2148,10 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
     }
     else
     {
-        typelib_typedescription_newEmpty( (typelib_TypeDescription ** )ppTDR, eTypeClass, pTypeName );
+        typelib_typedescription_newEmpty( reinterpret_cast<typelib_TypeDescription ** >(ppTDR), eTypeClass, pTypeName );
         // description will be registered but not acquired
-        (*(typelib_TypeDescription ** )ppTDR)->bOnDemand = sal_True;
-        (*(typelib_TypeDescription ** )ppTDR)->bComplete = sal_False;
+        (*reinterpret_cast<typelib_TypeDescription **>(ppTDR))->bOnDemand = sal_True;
+        (*reinterpret_cast<typelib_TypeDescription **>(ppTDR))->bComplete = sal_False;
     }
 
     if( !rInit.pWeakMap )
@@ -2201,7 +2201,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
     }
     else
     {
-        typelib_typedescription_release( (typelib_TypeDescription *)pRef );
+        typelib_typedescription_release( reinterpret_cast<typelib_TypeDescription *>(pRef) );
     }
 }
 
@@ -2219,8 +2219,8 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
     if( !reallyWeak( pRef->eTypeClass ) && pRef->pType && pRef->pType->pWeakRef )
     {
         // reference is a description and initialized
-        osl_atomic_increment( &((typelib_TypeDescription *)pRef)->nRefCount );
-        *ppRet = (typelib_TypeDescription *)pRef;
+        osl_atomic_increment( &reinterpret_cast<typelib_TypeDescription *>(pRef)->nRefCount );
+        *ppRet = reinterpret_cast<typelib_TypeDescription *>(pRef);
         return;
     }
 
@@ -2380,14 +2380,14 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
                 {
                     typelib_TypeDescription * pFromDescr = 0;
                     TYPELIB_DANGER_GET( &pFromDescr, pFrom );
-                    if (! ((typelib_CompoundTypeDescription *)pFromDescr)->pBaseTypeDescription)
+                    if (!reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription)
                     {
                         TYPELIB_DANGER_RELEASE( pFromDescr );
                         return sal_False;
                     }
                     bool bRet = typelib_typedescriptionreference_isAssignableFrom(
                         pAssignable,
-                        ((typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pFromDescr)->pBaseTypeDescription)->pWeakRef );
+                        reinterpret_cast<typelib_CompoundTypeDescription *>(pFromDescr)->pBaseTypeDescription->aBase.pWeakRef );
                     TYPELIB_DANGER_RELEASE( pFromDescr );
                     return bRet;
                 }

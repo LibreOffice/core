@@ -356,10 +356,9 @@ inline bool _assignData(
             if (pSourceTypeDescr)
             {
                 typelib_CompoundTypeDescription * pTypeDescr =
-                    (typelib_CompoundTypeDescription *)pSourceTypeDescr;
+                    reinterpret_cast<typelib_CompoundTypeDescription *>(pSourceTypeDescr);
                 while (pTypeDescr &&
-                       !_type_equals(
-                           ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                       !_type_equals(pTypeDescr->aBase.pWeakRef, pDestType))
                 {
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
                 }
@@ -373,10 +372,9 @@ inline bool _assignData(
             {
                 TYPELIB_DANGER_GET( &pSourceTypeDescr, pSourceType );
                 typelib_CompoundTypeDescription * pTypeDescr =
-                    (typelib_CompoundTypeDescription *)pSourceTypeDescr;
+                    reinterpret_cast<typelib_CompoundTypeDescription *>(pSourceTypeDescr);
                 while (pTypeDescr &&
-                       !_type_equals(
-                           ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                       !_type_equals(pTypeDescr->aBase.pWeakRef, pDestType))
                 {
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
                 }
@@ -429,8 +427,7 @@ inline bool _assignData(
                 typelib_TypeDescription * pTD = pSourceTypeDescr;
                 while (pTD && !_type_equals( pTD->pWeakRef, pDestType ))
                 {
-                    pTD = (typelib_TypeDescription *)
-                        ((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
+                    pTD = &(reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD))->pBaseTypeDescription->aBase;
                 }
                 if (pTD) // is base of dest
                 {

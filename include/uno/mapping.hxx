@@ -157,7 +157,7 @@ public:
         @return                 mapped interface
     */
     inline void * SAL_CALL mapInterface( void * pInterface, typelib_TypeDescription * pTypeDescr ) const
-        { return mapInterface( pInterface, (typelib_InterfaceTypeDescription *)pTypeDescr ); }
+        { return mapInterface( pInterface, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTypeDescr) ); }
 
     /** Maps an interface from one environment to another.
 
@@ -183,7 +183,7 @@ public:
         @param pTypeDescr       type description of interface
     */
     inline void SAL_CALL mapInterface( void ** ppOut, void * pInterface, typelib_TypeDescription * pTypeDescr ) const
-        { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, (typelib_InterfaceTypeDescription *)pTypeDescr ); }
+        { (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTypeDescr) ); }
 
     /** Maps an interface from one environment to another.
 
@@ -261,7 +261,7 @@ inline void Mapping::mapInterface(
     TYPELIB_DANGER_GET( &pTD, rType.getTypeLibType() );
     if (pTD)
     {
-        (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, (typelib_InterfaceTypeDescription *)pTD );
+        (*_pMapping->mapInterface)( _pMapping, ppOut, pInterface, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
         TYPELIB_DANGER_RELEASE( pTD );
     }
 }

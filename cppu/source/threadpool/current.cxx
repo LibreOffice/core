@@ -63,7 +63,7 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 1,
                 pMembers );
 
-            typelib_typedescription_register( (typelib_TypeDescription**)&pTD );
+            typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pTD) );
             typelib_typedescriptionreference_release( pMembers[0] );
 
             typelib_InterfaceMethodTypeDescription * pMethod = 0;
@@ -85,8 +85,8 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
                 sMethodName0.pData,
                 typelib_TypeClass_ANY, sReturnType0.pData,
                 1, aParameters, 1, pExceptions );
-            typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );
-            typelib_typedescription_release( (typelib_TypeDescription*)pMethod );
+            typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription**>(&pMethod) );
+            typelib_typedescription_release( &pMethod->aBase.aBase );
             // another static ref:
             ++reinterpret_cast< typelib_TypeDescription * >( pTD )->
                 nStaticRefCount;
@@ -151,8 +151,8 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
         {
             (*pId->pCurrentContextEnv->releaseInterface)(
                 pId->pCurrentContextEnv, pId->pCurrentContext );
-            (*((uno_Environment *)pId->pCurrentContextEnv)->release)(
-                (uno_Environment *)pId->pCurrentContextEnv );
+            (*pId->pCurrentContextEnv->aBase.release)(
+                &pId->pCurrentContextEnv->aBase );
         }
         if (pId->bInit)
         {
@@ -196,8 +196,8 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     {
         (*pId->pCurrentContextEnv->releaseInterface)(
             pId->pCurrentContextEnv, pId->pCurrentContext );
-        (*((uno_Environment *)pId->pCurrentContextEnv)->release)(
-            (uno_Environment *)pId->pCurrentContextEnv );
+        (*pId->pCurrentContextEnv->aBase.release)(
+            &pId->pCurrentContextEnv->aBase );
         pId->pCurrentContextEnv = 0;
 
         pId->pCurrentContext = 0;
@@ -268,7 +268,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
             return sal_False;
     }
 
-    Mapping mapping((uno_Environment *) pId->pCurrentContextEnv, target_env.get());
+    Mapping mapping(&pId->pCurrentContextEnv->aBase, target_env.get());
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
         return sal_False;

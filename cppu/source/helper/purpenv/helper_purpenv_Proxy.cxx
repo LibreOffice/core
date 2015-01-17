@@ -47,7 +47,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
 //      case typelib_TypeClass_TYPEDEF:
     case typelib_TypeClass_SEQUENCE:
     {
-        switch (((typelib_IndirectTypeDescription *)pTypeDescr)->pType->eTypeClass)
+        switch (reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType->eTypeClass)
         {
         case typelib_TypeClass_INTERFACE:
         case typelib_TypeClass_ANY: // might relate to interface
@@ -57,7 +57,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
         case typelib_TypeClass_EXCEPTION:
         {
             typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
+            TYPELIB_DANGER_GET( &pTD, reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType );
             bool bRel = relatesToInterface( pTD );
             TYPELIB_DANGER_RELEASE( pTD );
             return bRel;
@@ -71,7 +71,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
     case typelib_TypeClass_EXCEPTION:
     {
         // ...optimized... to avoid getDescription() calls!
-        typelib_CompoundTypeDescription * pComp    = (typelib_CompoundTypeDescription *)pTypeDescr;
+        typelib_CompoundTypeDescription * pComp    = reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr);
         typelib_TypeDescriptionReference ** pTypes = pComp->ppTypeRefs;
         for ( sal_Int32 nPos = pComp->nMembers; nPos--; )
         {
@@ -97,7 +97,7 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
             }
         }
         if (pComp->pBaseTypeDescription)
-            return relatesToInterface( (typelib_TypeDescription *)pComp->pBaseTypeDescription );
+            return relatesToInterface( &pComp->pBaseTypeDescription->aBase );
         break;
     }
     case typelib_TypeClass_ANY: // might relate to interface
@@ -132,14 +132,14 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
         if (pReturn)
         {
             pReturnTypeRef =
-                ((typelib_InterfaceAttributeTypeDescription *)
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(
                  pMemberType)->pAttributeTypeRef;
             nParams = 0;
             pParams = NULL;
         }
         else
         {
-            param.pTypeRef = ((typelib_InterfaceAttributeTypeDescription *)
+            param.pTypeRef = reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(
                               pMemberType)->pAttributeTypeRef;
             param.bIn = sal_True;
             param.bOut = sal_False;
@@ -149,8 +149,8 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
         break;
     case typelib_TypeClass_INTERFACE_METHOD:
     {
-        typelib_InterfaceMethodTypeDescription * method_td =
-            (typelib_InterfaceMethodTypeDescription *) pMemberType;
+        typelib_InterfaceMethodTypeDescription const * method_td =
+            reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberType);
         pReturnTypeRef = method_td->pReturnTypeRef;
         nParams = method_td->nParams;
         pParams = method_td->pParams;
@@ -223,11 +223,11 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
 {
     LOG_LIFECYCLE_Proxy_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Proxy::Proxy(<>)", this));
 
-    typelib_typedescription_acquire((typelib_TypeDescription *)m_pTypeDescr);
-    if (!((typelib_TypeDescription *)m_pTypeDescr)->bComplete)
-        typelib_typedescription_complete((typelib_TypeDescription **)&m_pTypeDescr);
+    typelib_typedescription_acquire(&m_pTypeDescr->aBase);
+    if (!m_pTypeDescr->aBase.bComplete)
+        typelib_typedescription_complete(reinterpret_cast<typelib_TypeDescription **>(&m_pTypeDescr));
 
-    OSL_ENSURE(((typelib_TypeDescription *)m_pTypeDescr)->bComplete, "### type is incomplete!");
+    OSL_ENSURE(m_pTypeDescr->aBase.bComplete, "### type is incomplete!");
 
     uno_Environment_invoke(m_to.get(), s_acquireAndRegister_v, m_pUnoI, rOId.pData, pTypeDescr, m_to.get());
 
@@ -252,7 +252,7 @@ Proxy::~Proxy()
 
     uno_Environment_invoke(m_to.get(), s_releaseAndRevoke_v, m_to.get(), m_pUnoI);
 
-    typelib_typedescription_release((typelib_TypeDescription *)m_pTypeDescr);
+    typelib_typedescription_release(&m_pTypeDescr->aBase);
 }
 
 static uno::TypeDescription getAcquireMethod(void)

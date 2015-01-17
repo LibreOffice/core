@@ -180,7 +180,7 @@ inline void _copyConstructAnyFromData(
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
             _copyConstructStruct(
                 pDestAny->pData, pSource,
-                (typelib_CompoundTypeDescription *)pTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr),
                 acquire, mapping );
         }
         else
@@ -189,7 +189,7 @@ inline void _copyConstructAnyFromData(
             pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
             _copyConstructStruct(
                 pDestAny->pData, pSource,
-                (typelib_CompoundTypeDescription *)pTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr),
                 acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
@@ -200,7 +200,7 @@ inline void _copyConstructAnyFromData(
         {
             *(uno_Sequence **)pDestAny->pData = copyConstructSequence(
                 *(uno_Sequence **)pSource,
-                ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                 acquire, mapping );
         }
         else
@@ -208,7 +208,7 @@ inline void _copyConstructAnyFromData(
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             *(uno_Sequence **)pDestAny->pData = copyConstructSequence(
                 *(uno_Sequence **)pSource,
-                ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+                reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                 acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
@@ -327,12 +327,12 @@ inline void _copyConstructAny(
                 pDestAny->pData = &pDestAny->pReserved;
                 if (pTypeDescr)
                 {
-                    *(sal_Int32 *)pDestAny->pData = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+                    *(sal_Int32 *)pDestAny->pData = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    *(sal_Int32 *)pDestAny->pData = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+                    *(sal_Int32 *)pDestAny->pData = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
@@ -342,14 +342,14 @@ inline void _copyConstructAny(
                 {
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
                     _defaultConstructStruct(
-                        pDestAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr );
+                        pDestAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
                     pDestAny->pData = ::rtl_allocateMemory( pTypeDescr->nSize );
                     _defaultConstructStruct(
-                        pDestAny->pData, (typelib_CompoundTypeDescription *)pTypeDescr );
+                        pDestAny->pData, reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
@@ -395,8 +395,8 @@ inline uno_Sequence * icopyConstructSequence(
                 pDest = allocSeq( sizeof (uno_Any), nElements );
                 if (pDest != 0)
                 {
-                    uno_Any * pDestElements = (uno_Any *)pDest->elements;
-                    uno_Any * pSourceElements = (uno_Any *)pSource->elements;
+                    uno_Any * pDestElements = reinterpret_cast<uno_Any *>(pDest->elements);
+                    uno_Any * pSourceElements = reinterpret_cast<uno_Any *>(pSource->elements);
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
                         typelib_TypeDescriptionReference * pType =
@@ -433,8 +433,8 @@ inline uno_Sequence * icopyConstructSequence(
                         _copyConstructStruct(
                             pElements + (nPos * nElementSize),
                             pSourceElements + (nPos * nElementSize),
-                            (typelib_CompoundTypeDescription *)
-                            pElementTypeDescr,
+                            reinterpret_cast<typelib_CompoundTypeDescription *>(
+                                pElementTypeDescr),
                             acquire, mapping );
                     }
                 }
@@ -450,13 +450,13 @@ inline uno_Sequence * icopyConstructSequence(
                     typelib_TypeDescription * pElementTypeDescr = 0;
                     TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                     typelib_TypeDescriptionReference * pSeqElementType =
-                        ((typelib_IndirectTypeDescription *)
-                         pElementTypeDescr)->pType;
+                        reinterpret_cast<typelib_IndirectTypeDescription *>(
+                            pElementTypeDescr)->pType;
 
                     uno_Sequence ** pDestElements =
-                        (uno_Sequence **) pDest->elements;
+                        reinterpret_cast<uno_Sequence **>(pDest->elements);
                     uno_Sequence ** pSourceElements =
-                        (uno_Sequence **) pSource->elements;
+                        reinterpret_cast<uno_Sequence **>(pSource->elements);
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
                         uno_Sequence * pNew = copyConstructSequence(
@@ -490,8 +490,8 @@ inline uno_Sequence * icopyConstructSequence(
                             (*mapping->mapInterface)(
                                 mapping, (void **)pElements + nPos,
                                 pSourceElements[nPos],
-                                (typelib_InterfaceTypeDescription *)
-                                pElementTypeDescr );
+                                reinterpret_cast<typelib_InterfaceTypeDescription *>(
+                                    pElementTypeDescr) );
                         }
                     }
                     TYPELIB_DANGER_RELEASE( pElementTypeDescr );
@@ -571,7 +571,7 @@ inline void _copyConstructData(
         {
             _copyConstructStruct(
                 pDest, pSource,
-                (typelib_CompoundTypeDescription *)pTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr),
                 acquire, mapping );
         }
         else
@@ -579,7 +579,7 @@ inline void _copyConstructData(
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             _copyConstructStruct(
                 pDest, pSource,
-                (typelib_CompoundTypeDescription *)pTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr),
                 acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
@@ -591,7 +591,7 @@ inline void _copyConstructData(
             {
                 *(uno_Sequence **)pDest = icopyConstructSequence(
                     *(uno_Sequence **)pSource,
-                    ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+                    reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                     acquire, mapping );
             }
             else
@@ -599,7 +599,7 @@ inline void _copyConstructData(
                 TYPELIB_DANGER_GET( &pTypeDescr, pType );
                 *(uno_Sequence **)pDest = icopyConstructSequence(
                     *(uno_Sequence **)pSource,
-                    ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
+                    reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                     acquire, mapping );
                 TYPELIB_DANGER_RELEASE( pTypeDescr );
             }

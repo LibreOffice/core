@@ -244,7 +244,7 @@ inline void SAL_CALL Environment::enter() const
 
 inline int  SAL_CALL Environment::isValid(rtl::OUString * pReason) const
 {
-    return uno_Environment_isValid(_pEnv, (rtl_uString **)pReason);
+    return uno_Environment_isValid(_pEnv, &pReason->pData);
 }
 
 inline Environment Environment::getCurrent(rtl::OUString const & typeName)

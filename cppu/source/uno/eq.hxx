@@ -211,7 +211,7 @@ inline bool _equalSequence(
         {
             if (! _equalStruct( (char *)pDestElements + (nPos * nElementSize),
                                 (char *)pSourceElements + (nPos * nElementSize),
-                                (typelib_CompoundTypeDescription *)pElementTypeDescr,
+                                reinterpret_cast<typelib_CompoundTypeDescription *>(pElementTypeDescr),
                                 queryInterface, release ))
             {
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
@@ -226,7 +226,7 @@ inline bool _equalSequence(
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         typelib_TypeDescriptionReference * pSeqElementType =
-            ((typelib_IndirectTypeDescription *)pElementTypeDescr)->pType;
+            reinterpret_cast<typelib_IndirectTypeDescription *>(pElementTypeDescr)->pType;
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
             if (! equalSequence( ((uno_Sequence **)pDestElements)[nPos],
@@ -541,7 +541,7 @@ inline bool _equalData(
         {
             return _equalStruct(
                 pDest, pSource,
-                (typelib_CompoundTypeDescription *)pDestTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pDestTypeDescr),
                 queryInterface, release );
         }
         else
@@ -549,7 +549,7 @@ inline bool _equalData(
             TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
             bool bRet = _equalStruct(
                 pDest, pSource,
-                (typelib_CompoundTypeDescription *)pDestTypeDescr,
+                reinterpret_cast<typelib_CompoundTypeDescription *>(pDestTypeDescr),
                 queryInterface, release );
             TYPELIB_DANGER_RELEASE( pDestTypeDescr );
             return bRet;
@@ -561,7 +561,7 @@ inline bool _equalData(
             {
                 return _equalSequence(
                     *(uno_Sequence **)pDest, *(uno_Sequence **)pSource,
-                    ((typelib_IndirectTypeDescription *)pDestTypeDescr)->pType,
+                    reinterpret_cast<typelib_IndirectTypeDescription *>(pDestTypeDescr)->pType,
                     queryInterface, release );
             }
             else
@@ -569,7 +569,7 @@ inline bool _equalData(
                 TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
                 bool bRet = _equalSequence(
                     *(uno_Sequence **)pDest, *(uno_Sequence **)pSource,
-                    ((typelib_IndirectTypeDescription *)pDestTypeDescr)->pType,
+                    reinterpret_cast<typelib_IndirectTypeDescription *>(pDestTypeDescr)->pType,
                     queryInterface, release );
                 TYPELIB_DANGER_RELEASE( pDestTypeDescr );
                 return bRet;

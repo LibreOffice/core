@@ -56,7 +56,7 @@ public:
     inline void callInto(uno_EnvCallee * pCallee, ...);
     inline void callOut (uno_EnvCallee * pCallee, ...);
 
-    inline int  isValid (rtl::OUString * pReason) {return m_isValid(this, (rtl_uString **)pReason);}
+    inline int  isValid (rtl::OUString * pReason) {return m_isValid(this, &pReason->pData);}
 
 private:
     Enterable(Enterable const &);
@@ -70,7 +70,7 @@ extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee *
 extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam)
     { ((Enterable *)context)->v_callOut_v(pCallee, pParam); }
 extern "C" inline int  Enterable_call_isValid   (void * context, rtl_uString ** pReason)
-    {return ((Enterable *)context)->v_isValid((rtl::OUString *)pReason);}
+    {return ((Enterable *)context)->v_isValid(reinterpret_cast<rtl::OUString *>(pReason));}
 
 
 Enterable::Enterable(void)
