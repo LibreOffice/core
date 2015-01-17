@@ -202,13 +202,12 @@ static void getServerDirectories( std::list< OString >& o_rFontPaths )
         if( pPipe )
         {
             char line[1024];
-            char* pSearch;
             while( fgets( line, sizeof(line), pPipe ) )
             {
                 int nLen = strlen( line );
                 if( line[nLen-1] == '\n' )
                     line[nLen-1] = 0;
-                pSearch = strstr( line, ": " );
+                char* pSearch = strstr( line, ": " );
                 if( pSearch )
                     aLines.push_back( pSearch+2 );
             }

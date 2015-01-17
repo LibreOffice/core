@@ -416,7 +416,6 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     sal_uInt16              nAbsItems;
     long                nCalcSize;
     long                nSizeDelta;
-    long                nCurSize;
     long                nSizeWinSize;
     long                nNewSizeWinSize;
     long                nTemp;
@@ -443,7 +442,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     else
         nCalcSize = nSetWidth;
     nCalcSize -= (nVisItems-1)*pSet->mnSplitSize;
-    nCurSize   = 0;
+    long nCurSize   = 0;
     if ( pSet->mbCalcPix || (pSet->mnLastSize != nCalcSize) )
     {
         long nPercentFactor = 10;
@@ -2003,7 +2002,6 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         ImplSplitItem*  pSplitItem;
         long            nCurMaxSize;
         sal_uInt16          nTemp;
-        bool            bDown;
         bool            bPropSmaller;
 
         mnMouseModifier = rMEvt.GetModifier();
@@ -2028,7 +2026,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
 
         if ( mpSplitSet->mpItems )
         {
-            bDown = true;
+            bool bDown = true;
             if ( (mpSplitSet == mpMainSet) && mbBottomRight )
                 bDown = false;
 

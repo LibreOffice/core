@@ -52,12 +52,11 @@ OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 {
     int         nRet;
-    wchar_t     c1;
     char       c2;
     do
     {
         // change to LowerCase if the char is between 'A' and 'Z'
-        c1 = *pStr1;
+        wchar_t c1 = *pStr1;
         c2 = *pStr2;
         if ( (c1 >= 65) && (c1 <= 90) )
             c1 += 32;

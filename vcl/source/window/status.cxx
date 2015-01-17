@@ -315,11 +315,9 @@ Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
 
 sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
 {
-    ImplStatusItem* pItem;
-
     for( size_t nPos = 0; nPos < mpItemList->size(); nPos++ )
     {
-        pItem = (*mpItemList)[ nPos ];
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( pItem )
         {
             if ( pItem->mbVisible )

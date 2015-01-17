@@ -929,12 +929,11 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         {
             //fdo#43049 very basic support for Custom entries, we ignore the
             //validation params and types
-            PPDKey* pKey = NULL;
             OUString aUniKey(OStringToOUString(aKey, RTL_TEXTENCODING_MS_1252));
             keyit = m_aKeys.find( aUniKey );
             if(keyit != m_aKeys.end())
             {
-                pKey = keyit->second;
+                PPDKey* pKey = keyit->second;
                 pKey->insertValue("Custom", eInvocation, true);
             }
             continue;
@@ -1362,14 +1361,13 @@ OUString PPDParser::matchPaper( int nWidth, int nHeight ) const
         return OUString();
 
     int nPDim = -1;
-    double PDWidth, PDHeight;
     double fSort = 2e36, fNewSort;
 
     for( int i = 0; i < m_pPaperDimensions->countValues(); i++ )
     {
         OUString aArea =  m_pPaperDimensions->getValue( i )->m_aValue;
-        PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
-        PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
+        double PDWidth     = StringToDouble( GetCommandLineToken( 0, aArea ) );
+        double PDHeight    = StringToDouble( GetCommandLineToken( 1, aArea ) );
         PDWidth     /= (double)nWidth;
         PDHeight    /= (double)nHeight;
         if( PDWidth >= 0.9      &&  PDWidth <= 1.1      &&

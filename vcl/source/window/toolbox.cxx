@@ -1733,13 +1733,13 @@ bool ToolBox::ImplCalcItem()
         std::vector< ImplToolItem >::iterator it = mpData->m_aItems.begin();
         while ( it != mpData->m_aItems.end() )
         {
-            bool bImage;
-            bool bText;
-
             it->mbVisibleText = false;  // indicates if text will definitely be drawn, influences dropdown pos
 
             if ( it->meType == ToolBoxItemType::BUTTON )
             {
+                bool bImage;
+                bool bText;
+
                 // check if image and/or text exists
                 if ( !(it->maImage) )
                     bImage = false;
