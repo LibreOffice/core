@@ -2157,7 +2157,7 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
         // build a sequence from the to-be-submitted string
         OString a8BitData(OUStringToOString(aData, _eEncoding));
         // always ANSI #58641
-        Sequence< sal_Int8 > aPostData((const sal_Int8*)a8BitData.getStr(), a8BitData.getLength());
+        Sequence< sal_Int8 > aPostData(reinterpret_cast<const sal_Int8*>(a8BitData.getStr()), a8BitData.getLength());
         Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
         aArgs.getArray()[1].Name = "PostData";

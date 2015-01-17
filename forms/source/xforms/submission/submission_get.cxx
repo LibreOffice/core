@@ -79,7 +79,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< 
         sal_Int32 n = 0;
         Sequence< sal_Int8 > aByteBuffer(size);
         while ((n = aInStream->readSomeBytes(aByteBuffer, size-1)) != 0)
-            aQueryString.append((sal_Char*)aByteBuffer.getArray(), n);
+            aQueryString.append(reinterpret_cast<char const *>(aByteBuffer.getConstArray()), n);
         if (!aQueryString.isEmpty() && m_aURLObj.GetProtocol() != INET_PROT_FILE)
         {
             aUTF8QueryURL.append('?');

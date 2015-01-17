@@ -51,7 +51,7 @@ using namespace com::sun::star::lang;
 xmlXPathFunction xforms_lookupFunc(void *, const xmlChar *xname, const xmlChar *)
 {
 
-    const char *name = (char *)xname;
+    const char *name = reinterpret_cast<char const *>(xname);
     if (strcmp("boolean-from-string", name)==0)
         return xforms_booleanFromStringFunction;
     else if ((strcmp("if", name))==0)
@@ -92,7 +92,7 @@ void xforms_booleanFromStringFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCase("true") ||
         aString.equalsIgnoreAsciiCase("1"))
         xmlXPathReturnTrue(ctxt);
@@ -221,11 +221,11 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCase("version"))
-        xmlXPathReturnString(ctxt, (xmlChar*)_version);
+        xmlXPathReturnString(ctxt, reinterpret_cast<xmlChar *>(const_cast<char *>(_version)));
     else if (aString.equalsIgnoreAsciiCase("conformance-level"))
-        xmlXPathReturnString(ctxt, (xmlChar*)_conformance);
+        xmlXPathReturnString(ctxt, reinterpret_cast<xmlChar *>(const_cast<char *>(_conformance)));
     else
         xmlXPathReturnEmptyString(ctxt);
 }
@@ -280,7 +280,7 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     DateTime aDateTime( DateTime::SYSTEM );
     OString aDateTimeString = makeDateTimeString(aDateTime);
     xmlChar *pString = static_cast<xmlChar*>(xmlMalloc(aDateTimeString.getLength()+1));
-    strncpy((char*)pString, (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
+    strncpy(reinterpret_cast<char*>(pString), (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
     pString[aDateTimeString.getLength()] = 0;
     xmlXPathReturnString(ctxt, pString);
 }
@@ -332,7 +332,7 @@ void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
 
     DateTime aDateTime( DateTime::EMPTY );
     if (parseDateTime(aString, aDateTime))
@@ -355,7 +355,7 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
 
     DateTime aDateTime( DateTime::EMPTY );
 
@@ -378,10 +378,10 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
                               sal_Int32& nHours, sal_Int32& nMinutes, sal_Int32& nSeconds)
 {
     bool bTime = false; // in part after T
-    sal_Int32 nLength = strlen((char*)aString)+1;
+    sal_Int32 nLength = strlen(reinterpret_cast<char const *>(aString))+1;
     char *pString = (char*)rtl_allocateMemory(nLength);
     char *pString0 = pString;
-    strncpy(pString, (char*)aString, nLength);
+    strncpy(pString, reinterpret_cast<char const *>(aString), nLength);
 
     if (pString[0] == '-') {
         bNegative = true;
@@ -504,7 +504,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
 
     Reference< XModel > aModel = ((CLibxml2XFormsExtension*)ctxt->context->funcLookupData)->getModel();
     if (aModel.is())

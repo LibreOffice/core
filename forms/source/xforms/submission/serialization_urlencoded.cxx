@@ -142,7 +142,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
             aEncodedBuffer.append("=");
             encode_and_append(aUnencValue, aEncodedBuffer);
             aEncodedBuffer.append("&");
-            sal_Int8 *pData = (sal_Int8*)aEncodedBuffer.getStr();
+            sal_Int8 const *pData = reinterpret_cast<sal_Int8 const *>(aEncodedBuffer.getStr());
             Sequence< sal_Int8 > sData(pData, aEncodedBuffer.getLength());
             m_aPipe->writeBytes(sData);
         }
