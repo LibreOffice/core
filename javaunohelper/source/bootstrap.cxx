@@ -126,8 +126,8 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         OUString cpp_env_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
         OUString java_env_name = UNO_LB_JAVA;
         Environment java_env, cpp_env;
-        uno_getEnvironment((uno_Environment **)&cpp_env, cpp_env_name.pData, NULL);
-        uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
+        uno_getEnvironment(reinterpret_cast<uno_Environment **>(&cpp_env), cpp_env_name.pData, NULL);
+        uno_getEnvironment(reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
         // map to java
         Mapping mapping( cpp_env.get(), java_env.get() );

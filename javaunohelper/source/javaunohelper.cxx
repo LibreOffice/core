@@ -79,12 +79,12 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             Environment java_env, loader_env;
 
             const sal_Char * pEnvTypeName = 0;
-            (*((component_getImplementationEnvironmentFunc)pSym))(
-                &pEnvTypeName, (uno_Environment **)&loader_env );
+            (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
+                &pEnvTypeName, reinterpret_cast<uno_Environment **>(&loader_env) );
             if (! loader_env.is())
             {
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-                uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
+                uno_getEnvironment( reinterpret_cast<uno_Environment **>(&loader_env), aEnvTypeName.pData, 0 );
             }
 
             // create vm access
@@ -92,7 +92,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = UNO_LB_JAVA;
             uno_getEnvironment(
-                (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
+                reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
             OUString aWriteInfoName( COMPONENT_WRITEINFO );
             pSym = lib.getFunctionSymbol(aWriteInfoName);
@@ -114,7 +114,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                         uno_ExtEnvironment * env = loader_env.get()->pExtEnv;
                         if (pKey)
                         {
-                            bRet = (*((component_writeInfoFunc)pSym))( pSMgr, pKey );
+                            bRet = (*reinterpret_cast<component_writeInfoFunc>(pSym))( pSMgr, pKey );
 
                             if (env)
                                 (*env->releaseInterface)( env, pKey );
@@ -171,13 +171,13 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             Environment java_env, loader_env;
 
             const sal_Char * pEnvTypeName = 0;
-            (*((component_getImplementationEnvironmentFunc)pSym))(
-                &pEnvTypeName, (uno_Environment **)&loader_env );
+            (*reinterpret_cast<component_getImplementationEnvironmentFunc>(pSym))(
+                &pEnvTypeName, reinterpret_cast<uno_Environment **>(&loader_env) );
 
             if (! loader_env.is())
             {
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-                uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
+                uno_getEnvironment( reinterpret_cast<uno_Environment **>(&loader_env), aEnvTypeName.pData, 0 );
             }
 
             // create vm access
@@ -185,7 +185,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                 ::javaunohelper::create_vm_access( pJEnv, loader ) );
             OUString java_env_name = UNO_LB_JAVA;
             uno_getEnvironment(
-                (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
+                reinterpret_cast<uno_Environment **>(&java_env), java_env_name.pData, vm_access.get() );
 
             OUString aGetFactoryName( COMPONENT_GETFACTORY );
             pSym = lib.getFunctionSymbol(aGetFactoryName);
@@ -207,7 +207,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
 
                         const char* pImplName = pJEnv->GetStringUTFChars( jImplName, NULL );
 
-                        void * pSSF = (*((component_getFactoryFunc)pSym))(
+                        void * pSSF = (*reinterpret_cast<component_getFactoryFunc>(pSym))(
                             pImplName, pSMgr, pKey );
 
                         pJEnv->ReleaseStringUTFChars( jImplName, pImplName );

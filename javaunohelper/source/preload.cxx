@@ -63,14 +63,14 @@ static bool inited_juhx( JNIEnv * jni_env )
     {
         OUString symbol =
               "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo";
-        s_writeInfo = (javaunohelper::detail::Func_writeInfo *)aModule.getFunctionSymbol(symbol);
+        s_writeInfo = reinterpret_cast<javaunohelper::detail::Func_writeInfo *>(aModule.getFunctionSymbol(symbol));
         symbol =
             "Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory";
-        s_getFactory = (javaunohelper::detail::Func_getFactory *)aModule.getFunctionSymbol(symbol);
+        s_getFactory = reinterpret_cast<javaunohelper::detail::Func_getFactory *>(aModule.getFunctionSymbol(symbol));
         symbol =
             "Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap";
         s_bootstrap =
-            (javaunohelper::detail::Func_bootstrap *)aModule.getFunctionSymbol(symbol);
+            reinterpret_cast<javaunohelper::detail::Func_bootstrap *>(aModule.getFunctionSymbol(symbol));
 
         if (0 == s_writeInfo ||
             0 == s_getFactory ||
