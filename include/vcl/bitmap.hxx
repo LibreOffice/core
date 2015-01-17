@@ -561,6 +561,15 @@ public:
      */
     bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag = BMP_SCALE_DEFAULT );
 
+    /**
+      Returns true if bitmap scaling is considered to be fast.
+
+      Currently this returns true if OpenGL is used for scaling, otherwise false (CPU scaling is slower).
+
+      @since 4.5
+    */
+    static bool HasFastScale();
+
     // Adapt the BitCount of rNew to BitCount of lolal, including grey or color paltette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit
     void                    AdaptBitCount(Bitmap& rNew) const;

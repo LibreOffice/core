@@ -96,7 +96,7 @@ PresenterPreviewCache::PresenterPreviewCache (const Reference<XComponentContext>
     : PresenterPreviewCacheInterfaceBase(m_aMutex),
       maPreviewSize(Size(200,200)),
       mpCacheContext(new PresenterCacheContext()),
-      mpCache(new PageCache(maPreviewSize, false, mpCacheContext))
+      mpCache(new PageCache(maPreviewSize, Bitmap::HasFastScale(), mpCacheContext))
 {
     (void)rxContext;
 }
@@ -146,7 +146,7 @@ void SAL_CALL PresenterPreviewCache::setPreviewSize (
     OSL_ASSERT(mpCache.get()!=NULL);
 
     maPreviewSize = Size(rSize.Width, rSize.Height);
-    mpCache->ChangeSize(maPreviewSize, false);
+    mpCache->ChangeSize(maPreviewSize, Bitmap::HasFastScale());
 }
 
 Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
