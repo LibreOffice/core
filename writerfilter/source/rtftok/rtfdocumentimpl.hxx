@@ -76,11 +76,11 @@ enum class RTFBmpStyle
     JPEG
 };
 
-enum RTFFieldStatus
+enum class RTFFieldStatus
 {
-    FIELD_NONE,
-    FIELD_INSTRUCTION,
-    FIELD_RESULT
+    NONE,
+    INSTRUCTION,
+    RESULT
 };
 
 struct TableRowBuffer;
@@ -214,7 +214,7 @@ public:
     RTFDocumentImpl* m_pDocumentImpl;
     RTFInternalState nInternalState;
     RTFDestinationState nDestinationState;
-    RTFFieldStatus nFieldStatus;
+    RTFFieldStatus eFieldStatus;
     RTFBorderState nBorderState;
     // font table, stylesheet table
     RTFSprms aTableSprms;

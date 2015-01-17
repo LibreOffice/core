@@ -5941,14 +5941,14 @@ RTFError RTFDocumentImpl::popState()
         break;
     case DESTINATION_FIELDINSTRUCTION:
         if (!m_aStates.empty())
-            m_aStates.top().nFieldStatus = FIELD_INSTRUCTION;
+            m_aStates.top().eFieldStatus = RTFFieldStatus::INSTRUCTION;
         break;
     case DESTINATION_FIELDRESULT:
         if (!m_aStates.empty())
-            m_aStates.top().nFieldStatus = FIELD_RESULT;
+            m_aStates.top().eFieldStatus = RTFFieldStatus::RESULT;
         break;
     case DESTINATION_FIELD:
-        if (aState.nFieldStatus == FIELD_INSTRUCTION)
+        if (aState.eFieldStatus == RTFFieldStatus::INSTRUCTION)
             singleChar(cFieldEnd);
         break;
     case DESTINATION_SHAPEPROPERTYVALUEPICT:
@@ -6099,7 +6099,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     : m_pDocumentImpl(pDocumentImpl),
       nInternalState(RTFInternalState::NORMAL),
       nDestinationState(DESTINATION_NORMAL),
-      nFieldStatus(FIELD_NONE),
+      eFieldStatus(RTFFieldStatus::NONE),
       nBorderState(BORDER_NONE),
       aTableSprms(),
       aTableAttributes(),
