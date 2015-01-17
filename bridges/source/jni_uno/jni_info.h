@@ -322,7 +322,7 @@ inline void JNI_info::append_sig(
         buf->append( '[' );
         TypeDescr td( type );
         append_sig(
-            buf, ((typelib_IndirectTypeDescription *)td.get())->pType,
+            buf, reinterpret_cast<typelib_IndirectTypeDescription *>(td.get())->pType,
             use_Object_for_type_XInterface, use_slashes );
         break;
     }

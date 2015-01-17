@@ -157,15 +157,15 @@ void Bridge::acquire()
         {
             uno_Mapping * pMapping = &aCpp2Uno;
             ::uno_registerMapping(
-                &pMapping, freeMapping, (uno_Environment *)pCppEnv,
-                (uno_Environment *)pUnoEnv, 0 );
+                &pMapping, freeMapping, &pCppEnv->aBase,
+                &pUnoEnv->aBase, 0 );
         }
         else
         {
             uno_Mapping * pMapping = &aUno2Cpp;
             ::uno_registerMapping(
-                &pMapping, freeMapping, (uno_Environment *)pUnoEnv,
-                (uno_Environment *)pCppEnv, 0 );
+                &pMapping, freeMapping, &pUnoEnv->aBase,
+                &pCppEnv->aBase, 0 );
         }
     }
 }
@@ -196,14 +196,14 @@ Bridge::Bridge(
     aUno2Cpp.release = releaseMapping;
     aUno2Cpp.mapInterface = uno2cppMapping;
 
-    (*((uno_Environment *)pCppEnv)->acquire)( (uno_Environment *)pCppEnv );
-    (*((uno_Environment *)pUnoEnv)->acquire)( (uno_Environment *)pUnoEnv );
+    (*pCppEnv->aBase.acquire)( &pCppEnv->aBase );
+    (*pUnoEnv->aBase.acquire)( &pUnoEnv->aBase );
 }
 
 Bridge::~Bridge()
 {
-    (*((uno_Environment *)pUnoEnv)->release)( (uno_Environment *)pUnoEnv );
-    (*((uno_Environment *)pCppEnv)->release)( (uno_Environment *)pCppEnv );
+    (*pUnoEnv->aBase.release)( &pUnoEnv->aBase );
+    (*pCppEnv->aBase.release)( &pCppEnv->aBase );
 }
 
 } } }

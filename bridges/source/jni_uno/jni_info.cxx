@@ -243,7 +243,7 @@ JNI_compound_type_info::JNI_compound_type_info(
         reinterpret_cast< typelib_CompoundTypeDescription * >( m_td.get() );
 
     OUString const & uno_name =
-        OUString::unacquired( &((typelib_TypeDescription *)td)->pTypeName );
+        OUString::unacquired( &td->aBase.pTypeName );
 
     // Erase type arguments of instantiated polymorphic struct types:
     OUString nucleus;
@@ -284,10 +284,10 @@ JNI_compound_type_info::JNI_compound_type_info(
     try
     {
         if (type_equals(
-                ((typelib_TypeDescription *)td)->pWeakRef,
+                td->aBase.pWeakRef,
                 jni_info->m_Exception_type.getTypeLibType() ) ||
             type_equals(
-                ((typelib_TypeDescription *)td)->pWeakRef,
+                td->aBase.pWeakRef,
                 jni_info->m_RuntimeException_type.getTypeLibType() ))
         {
             // coverity [ctor_dtor_leak]

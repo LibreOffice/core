@@ -73,7 +73,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
 {
     std::type_info * rtti;
 
-    OUString const & unoName = *(OUString const *)&pTypeDescr.pTypeName;
+    OUString const & unoName = OUString::unacquired(&pTypeDescr.pTypeName);
 
     osl::MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );

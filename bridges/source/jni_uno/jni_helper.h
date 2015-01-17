@@ -44,7 +44,7 @@ inline void jstring_to_ustring(
         std::unique_ptr< rtl_mem > mem(
             rtl_mem::allocate(
                 sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
-        rtl_uString * ustr = (rtl_uString *)mem.get();
+        rtl_uString * ustr = reinterpret_cast<rtl_uString *>(mem.get());
         jni->GetStringRegion( jstr, 0, len, (jchar *) ustr->buffer );
         jni.ensure_no_exception();
         ustr->refCount = 1;

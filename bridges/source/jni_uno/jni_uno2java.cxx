@@ -462,8 +462,8 @@ inline void UNO_proxy::acquire() const
         (*m_bridge->m_uno_env->registerProxyInterface)(
             m_bridge->m_uno_env, &that,
             UNO_proxy_free, m_oid.pData,
-            (typelib_InterfaceTypeDescription *)m_type_info->m_td.get() );
-        assert( this == (void const * const)that );
+            reinterpret_cast<typelib_InterfaceTypeDescription *>(m_type_info->m_td.get()) );
+        assert( this == that );
     }
 }
 
@@ -490,7 +490,7 @@ uno_Interface * Bridge::map_to_uno(
     uno_Interface * pUnoI = 0;
     (*m_uno_env->getRegisteredInterface)(
         m_uno_env, (void **)&pUnoI,
-        oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
+        oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(info->m_td.get()) );
 
     if (0 == pUnoI) // no existing interface, register new proxy
     {
@@ -502,7 +502,7 @@ uno_Interface * Bridge::map_to_uno(
         (*m_uno_env->registerProxyInterface)(
             m_uno_env, (void **)&pUnoI,
             UNO_proxy_free,
-            oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
+            oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(info->m_td.get()) );
     }
     return pUnoI;
 }
@@ -520,7 +520,7 @@ extern "C"
 void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     SAL_THROW_EXTERN_C()
 {
-    UNO_proxy const * that = reinterpret_cast< UNO_proxy const * >( proxy );
+    UNO_proxy * that = reinterpret_cast< UNO_proxy * >( proxy );
     Bridge const * bridge = that->m_bridge;
 
     assert(env == bridge->m_uno_env); (void) env;
@@ -549,7 +549,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 
     bridge->release();
 #if OSL_DEBUG_LEVEL > 0
-    *(int *)that = 0xdeadcafe;
+    *reinterpret_cast<int *>(that) = 0xdeadcafe;
 #endif
     delete that;
 }
@@ -668,7 +668,7 @@ void SAL_CALL UNO_proxy_dispatch(
                 (*bridge->m_uno_env->getRegisteredInterface)(
                     bridge->m_uno_env,
                     (void **) &pInterface, that->m_oid.pData,
-                    (typelib_InterfaceTypeDescription *)demanded_td.get() );
+                    reinterpret_cast<typelib_InterfaceTypeDescription *>(demanded_td.get()) );
 
                 if (0 == pInterface)
                 {

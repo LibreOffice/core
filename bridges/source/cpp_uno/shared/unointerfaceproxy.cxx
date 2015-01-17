@@ -40,8 +40,7 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
     (*pThis->pBridge->getCppEnv()->revokeInterface)(
         pThis->pBridge->getCppEnv(), pThis->pCppI );
     pThis->pCppI->release();
-    ::typelib_typedescription_release(
-        (typelib_TypeDescription *)pThis->pTypeDescr );
+    ::typelib_typedescription_release(&pThis->pTypeDescr->aBase);
     pThis->pBridge->release();
 
 #if OSL_DEBUG_LEVEL > 1
@@ -105,11 +104,11 @@ UnoInterfaceProxy::UnoInterfaceProxy(
     , oid( rOId_ )
 {
     pBridge->acquire();
-    ::typelib_typedescription_acquire( (typelib_TypeDescription *)pTypeDescr );
-    if (! ((typelib_TypeDescription *)pTypeDescr)->bComplete)
+    ::typelib_typedescription_acquire(&pTypeDescr->aBase);
+    if (!pTypeDescr->aBase.bComplete)
         ::typelib_typedescription_complete(
-            (typelib_TypeDescription **)&pTypeDescr );
-    assert(((typelib_TypeDescription *)pTypeDescr)->bComplete);
+            reinterpret_cast<typelib_TypeDescription **>(&pTypeDescr));
+    assert(pTypeDescr->aBase.bComplete);
     pCppI->acquire();
     (*pBridge->getCppEnv()->registerInterface)(
         pBridge->getCppEnv(), reinterpret_cast< void ** >( &pCppI ), oid.pData,

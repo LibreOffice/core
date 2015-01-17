@@ -92,7 +92,7 @@ void SAL_CALL Mapping_map_to_uno(
             JNI_interface_type_info const * info =
                 static_cast< JNI_interface_type_info const * >(
                     bridge->getJniInfo()->get_type_info(
-                        jni, (typelib_TypeDescription *)td ) );
+                        jni, &td->aBase ) );
             uno_Interface * pUnoI = bridge->map_to_uno( jni, javaI, info );
             if (0 != *ppUnoI)
             {
@@ -157,7 +157,7 @@ void SAL_CALL Mapping_map_to_java(
             JNI_interface_type_info const * info =
                 static_cast< JNI_interface_type_info const * >(
                     bridge->getJniInfo()->get_type_info(
-                        jni, (typelib_TypeDescription *)td ) );
+                        jni, &td->aBase ) );
             jobject jlocal = bridge->map_to_java( jni, pUnoI, info );
             if (0 != *ppJavaI)
                 jni->DeleteGlobalRef( *ppJavaI );
@@ -202,14 +202,14 @@ void Bridge::acquire() const
             uno_Mapping * mapping = const_cast< Mapping * >( &m_java2uno );
             uno_registerMapping(
                 &mapping, Bridge_free,
-                m_java_env, (uno_Environment *)m_uno_env, 0 );
+                m_java_env, &m_uno_env->aBase, 0 );
         }
         else
         {
             uno_Mapping * mapping = const_cast< Mapping * >( &m_uno2java );
             uno_registerMapping(
                 &mapping, Bridge_free,
-                (uno_Environment *)m_uno_env, m_java_env, 0 );
+                &m_uno_env->aBase, m_java_env, 0 );
         }
     }
 }
@@ -246,7 +246,7 @@ Bridge::Bridge(
         throw BridgeRuntimeError("error during JNI-UNO's uno_initEnvironment");
     }
 
-    (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
+    (*m_uno_env->aBase.acquire)( &m_uno_env->aBase );
     (*m_java_env->acquire)( m_java_env );
 
     // java2uno
@@ -265,7 +265,7 @@ Bridge::Bridge(
 Bridge::~Bridge()
 {
     (*m_java_env->release)( m_java_env );
-    (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );
+    (*m_uno_env->aBase.release)( &m_uno_env->aBase );
 }
 
 JNI_info const * Bridge::getJniInfo() const {
@@ -323,7 +323,7 @@ void JNI_context::java_exc_occurred() const
     std::unique_ptr< rtl_mem > ustr_mem(
         rtl_mem::allocate(
             sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
-    rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
+    rtl_uString * ustr = reinterpret_cast<rtl_uString *>(ustr_mem.get());
     m_env->GetStringRegion( static_cast<jstring>(jo_descr.get()), 0, len, ustr->buffer );
     if (m_env->ExceptionCheck())
     {
@@ -334,7 +334,7 @@ void JNI_context::java_exc_occurred() const
     ustr->refCount = 1;
     ustr->length = len;
     ustr->buffer[ len ] = '\0';
-    OUString message( (rtl_uString *)ustr_mem.release(), SAL_NO_ACQUIRE );
+    OUString message( reinterpret_cast<rtl_uString *>(ustr_mem.release()), SAL_NO_ACQUIRE );
 
     throw BridgeRuntimeError( message + get_stack_trace( jo_exc.get() ) );
 }
@@ -399,7 +399,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
                 std::unique_ptr< rtl_mem > ustr_mem(
                     rtl_mem::allocate(
                         sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ) );
-                rtl_uString * ustr = (rtl_uString *)ustr_mem.get();
+                rtl_uString * ustr = reinterpret_cast<rtl_uString *>(ustr_mem.get());
                 m_env->GetStringRegion(
                     static_cast<jstring>(jo_stack_trace.get()), 0, len, ustr->buffer );
                 if (assert_no_exception())
@@ -408,7 +408,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
                     ustr->length = len;
                     ustr->buffer[ len ] = '\0';
                     return OUString(
-                        (rtl_uString *)ustr_mem.release(), SAL_NO_ACQUIRE );
+                        reinterpret_cast<rtl_uString *>(ustr_mem.release()), SAL_NO_ACQUIRE );
                 }
             }
         }
@@ -551,7 +551,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             mapping = &bridge->m_java2uno;
             uno_registerMapping(
                 &mapping, Bridge_free,
-                pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
+                pFrom, &pTo->pExtEnv->aBase, 0 );
             // coverity[leaked_storage]
         }
         else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_JAVA )
@@ -561,7 +561,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             mapping = &bridge->m_uno2java;
             uno_registerMapping(
                 &mapping, Bridge_free,
-                (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
+                &pFrom->pExtEnv->aBase, pTo, 0 );
             // coverity[leaked_storage]
         }
     }

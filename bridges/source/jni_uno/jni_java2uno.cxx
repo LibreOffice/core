@@ -56,7 +56,7 @@ jobject Bridge::map_to_java(
         // register uno interface
         (*m_uno_env->registerInterface)(
             m_uno_env, reinterpret_cast< void ** >( &pUnoI ),
-            oid.pData, (typelib_InterfaceTypeDescription *)info->m_td.get() );
+            oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(info->m_td.get()) );
 
         // create java and register java proxy
         jvalue args2[ 8 ];
@@ -188,7 +188,7 @@ jobject Bridge::call_uno(
         return_size + (nParams * sizeof (largest)) );
     void ** uno_args = (void **) mem;
     void * uno_ret = return_size == 0 ? 0 : (mem + (nParams * sizeof (void *)));
-    largest * uno_args_mem = (largest *)
+    largest * uno_args_mem = reinterpret_cast<largest *>
         (mem + (nParams * sizeof (void *)) + return_size);
 
     assert( (0 == nParams) || (nParams == jni->GetArrayLength( jo_args )) );
@@ -581,7 +581,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         // the thing that should not be... no method info found!
         throw BridgeRuntimeError(
             "calling undeclared function on interface "
-            + OUString::unacquired(&((typelib_TypeDescription *)td)->pTypeName)
+            + OUString::unacquired(&td->aBase.pTypeName)
             + ": " + method_name + jni.get_stack_trace() );
     }
     catch (const BridgeRuntimeError & err)

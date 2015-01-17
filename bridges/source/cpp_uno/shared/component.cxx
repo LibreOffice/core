@@ -111,13 +111,10 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                 oid.append( reinterpret_cast< sal_Int64 >(xHome.get()), 16 );
                 oid.append( ';' );
                 // ;environment[context]
-                oid.append(
-                    *reinterpret_cast< OUString const * >(
-                        &((uno_Environment *) pEnv)->pTypeName ) );
+                oid.append( OUString::unacquired(&pEnv->aBase.pTypeName) );
                 oid.append( '[' );
                 oid.append(
-                    reinterpret_cast< sal_Int64 >(
-                        ((uno_Environment *)pEnv)->pContext),
+                    reinterpret_cast< sal_Int64 >(pEnv->aBase.pContext),
                     16 );
                 // ];good guid
                 oid.append( cppu_cppenv_getStaticOIdPart() );
@@ -184,10 +181,10 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv
              pCppEnv->pTypeName->buffer, rtl_str_getLength(CPPU_CURRENT_LANGUAGE_BINDING_NAME), CPPU_CURRENT_LANGUAGE_BINDING_NAME )
         == 0
         && "### wrong environment type!");
-    ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier
+    reinterpret_cast<uno_ExtEnvironment *>(pCppEnv)->computeObjectIdentifier
         = computeObjectIdentifier;
-    ((uno_ExtEnvironment *)pCppEnv)->acquireInterface = acquireInterface;
-    ((uno_ExtEnvironment *)pCppEnv)->releaseInterface = releaseInterface;
+    reinterpret_cast<uno_ExtEnvironment *>(pCppEnv)->acquireInterface = acquireInterface;
+    reinterpret_cast<uno_ExtEnvironment *>(pCppEnv)->releaseInterface = releaseInterface;
     pCppEnv->environmentDisposing = environmentDisposing;
 }
 
@@ -218,8 +215,8 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
                 pFrom->pExtEnv, pTo->pExtEnv, true );
             ::uno_registerMapping(
                 &pMapping, bridges::cpp_uno::shared::freeMapping,
-                (uno_Environment *)pFrom->pExtEnv,
-                (uno_Environment *)pTo->pExtEnv, 0 );
+                &pFrom->pExtEnv->aBase,
+                &pTo->pExtEnv->aBase, 0 );
         }
         else if (0 == rtl_ustr_ascii_compare(
                      to_envTypeName.pData->buffer,
@@ -232,8 +229,8 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
                 pTo->pExtEnv, pFrom->pExtEnv, false );
             ::uno_registerMapping(
                 &pMapping, bridges::cpp_uno::shared::freeMapping,
-                (uno_Environment *)pFrom->pExtEnv,
-                (uno_Environment *)pTo->pExtEnv, 0 );
+                &pFrom->pExtEnv->aBase,
+                &pTo->pExtEnv->aBase, 0 );
         }
 
         if (*ppMapping)

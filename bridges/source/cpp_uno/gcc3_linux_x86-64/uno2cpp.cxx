@@ -326,7 +326,7 @@ void unoInterfaceProxyDispatch(
     {
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
-        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
+        sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)->nPosition;
         assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
         VtableSlot aVtableSlot(
@@ -340,7 +340,7 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef,
                 0, 0, // no params
                 pReturn, pArgs, ppException );
         }
@@ -349,7 +349,7 @@ void unoInterfaceProxyDispatch(
             // is SET
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef;
             aParam.bIn      = sal_True;
             aParam.bOut     = sal_False;
 
@@ -375,7 +375,7 @@ void unoInterfaceProxyDispatch(
     {
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
-        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
+        sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)->nPosition;
         assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
         VtableSlot aVtableSlot(
@@ -404,7 +404,7 @@ void unoInterfaceProxyDispatch(
                 uno_Interface * pInterface = 0;
                 (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
                     pThis->getBridge()->getUnoEnv(),
-                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+                    (void **)&pInterface, pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
 
                 if (pInterface)
                 {
@@ -423,9 +423,9 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->pReturnTypeRef,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->nParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->pParams,
                 pReturn, pArgs, ppException );
         }
         break;
