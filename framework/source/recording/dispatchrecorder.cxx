@@ -82,8 +82,8 @@ Sequence< Any > make_seq_out_of_struct(
     }
 
     ::std::vector< Any > vec;
-    vec.reserve( ((typelib_CompoundTypeDescription *)pTD)->nMembers ); // good guess
-    flatten_struct_members( &vec, val.getValue(), (typelib_CompoundTypeDescription *)pTD );
+    vec.reserve( reinterpret_cast<typelib_CompoundTypeDescription *>(pTD)->nMembers ); // good guess
+    flatten_struct_members( &vec, val.getValue(), reinterpret_cast<typelib_CompoundTypeDescription *>(pTD) );
     TYPELIB_DANGER_RELEASE( pTD );
     return Sequence< Any >( &vec[ 0 ], vec.size() );
 }
