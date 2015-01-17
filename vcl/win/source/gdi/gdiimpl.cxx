@@ -1743,12 +1743,11 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
     // for NT, we can handover the array directly
    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphicsImpl::DrawPolyPolygon(): POINT != SalPoint" );
-    const SalPoint* pPolyAry;
     UINT            n = 0;
     for ( i = 0; i < (UINT)nPoly; i++ )
     {
         nPoints = pWinPointAry[i];
-        pPolyAry = pPtAry[i];
+        const SalPoint* pPolyAry = pPtAry[i];
         memcpy( pWinPointAryAry+n, pPolyAry, (nPoints-1)*sizeof(POINT) );
         pWinPointAryAry[n+nPoints-1] = pWinPointAryAry[n];
         n += nPoints;

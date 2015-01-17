@@ -232,12 +232,11 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(m_pFilterView), false);
     gtk_tree_view_set_rules_hint (GTK_TREE_VIEW(m_pFilterView), true);
 
-    GtkTreeViewColumn *column;
     GtkCellRenderer *cell;
 
     for (i = 0; i < 2; ++i)
     {
-        column = gtk_tree_view_column_new ();
+        GtkTreeViewColumn *column = gtk_tree_view_column_new ();
         cell = gtk_cell_renderer_text_new ();
         gtk_tree_view_column_set_expand (column, true);
         gtk_tree_view_column_pack_start (column, cell, false);
