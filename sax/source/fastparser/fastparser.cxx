@@ -997,7 +997,7 @@ void FastSaxParserImpl::parse()
         {
             if( rEntity.mpParser != NULL )
             {
-                if( xmlParseChunk( rEntity.mpParser, (const char*) seqOut.getConstArray(), 0, 1 ) != XML_ERR_OK )
+                if( xmlParseChunk( rEntity.mpParser, reinterpret_cast<const char*>(seqOut.getConstArray()), 0, 1 ) != XML_ERR_OK )
                     rEntity.throwException( mxDocumentLocator, true );
             }
             break;

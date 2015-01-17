@@ -258,7 +258,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     case '&':  // resemble to &amp;
                     {
                         if ((rPos + 5) > SEQUENCESIZE)
-                            AddBytes(pTarget, rPos, (sal_Int8*)"&amp;", 5);
+                            AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&amp;"), 5);
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&amp;", 5 );
@@ -269,7 +269,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     case '<':
                     {
                         if ((rPos + 4) > SEQUENCESIZE)
-                            AddBytes(pTarget, rPos, (sal_Int8*)"&lt;", 4);
+                            AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&lt;"), 4);
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&lt;" , 4 );
@@ -280,7 +280,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     case '>':
                     {
                         if ((rPos + 4) > SEQUENCESIZE)
-                            AddBytes(pTarget, rPos, (sal_Int8*)"&gt;", 4);
+                            AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&gt;"), 4);
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&gt;" , 4 );
@@ -291,7 +291,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     case 39:                 // 39 == '''
                     {
                         if ((rPos + 6) > SEQUENCESIZE)
-                            AddBytes(pTarget, rPos, (sal_Int8*)"&apos;", 6);
+                            AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&apos;"), 6);
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&apos;" , 6 );
@@ -302,7 +302,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     case '"':
                     {
                         if ((rPos + 6) > SEQUENCESIZE)
-                            AddBytes(pTarget, rPos, (sal_Int8*)"&quot;", 6);
+                            AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&quot;"), 6);
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&quot;" , 6 );
@@ -313,7 +313,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                     case 13:
                     {
                         if ((rPos + 6) > SEQUENCESIZE)
-                            AddBytes(pTarget, rPos, (sal_Int8*)"&#x0d;", 6);
+                            AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&#x0d;"), 6);
                         else
                         {
                             memcpy( &(pTarget[rPos]) , "&#x0d;" , 6 );
@@ -326,7 +326,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                         if( bNormalizeWhitespace )
                         {
                             if ((rPos + 6) > SEQUENCESIZE)
-                                AddBytes(pTarget, rPos, (sal_Int8*)"&#x0a;" , 6);
+                                AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&#x0a;"), 6);
                             else
                             {
                                 memcpy( &(pTarget[rPos]) , "&#x0a;" , 6 );
@@ -346,7 +346,7 @@ inline bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                         if( bNormalizeWhitespace )
                         {
                             if ((rPos + 6) > SEQUENCESIZE)
-                                AddBytes(pTarget, rPos, (sal_Int8*)"&#x09;" , 6);
+                                AddBytes(pTarget, rPos, reinterpret_cast<sal_Int8 const *>("&#x09;"), 6);
                             else
                             {
                                 memcpy( &(pTarget[rPos]) , "&#x09;" , 6 );
@@ -537,7 +537,7 @@ inline void SaxWriterHelper::startDocument() throw( SAXException )
     }
     else
     {
-        AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)pc, nLen);
+        AddBytes(mp_Sequence, nCurrentPos, reinterpret_cast<sal_Int8 const *>(pc), nLen);
     }
     OSL_ENSURE(nCurrentPos <= SEQUENCESIZE, "not reset current position");
     if (nCurrentPos == SEQUENCESIZE)
@@ -716,7 +716,7 @@ inline void SaxWriterHelper::startCDATA() throw( SAXException )
         nCurrentPos += 9;
     }
     else
-        AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)"<![CDATA[" , 9);
+        AddBytes(mp_Sequence, nCurrentPos, reinterpret_cast<sal_Int8 const *>("<![CDATA["), 9);
     if (nCurrentPos == SEQUENCESIZE)
         nCurrentPos = writeSequence();
 }
@@ -730,7 +730,7 @@ inline void SaxWriterHelper::endCDATA() throw( SAXException )
         nCurrentPos += 3;
     }
     else
-        AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)"]]>" , 3);
+        AddBytes(mp_Sequence, nCurrentPos, reinterpret_cast<sal_Int8 const *>("]]>"), 3);
     if (nCurrentPos == SEQUENCESIZE)
         nCurrentPos = writeSequence();
 }

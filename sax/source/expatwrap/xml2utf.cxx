@@ -128,11 +128,11 @@ XMLFile2UTFConverter::~XMLFile2UTFConverter()
 void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 {
     const sal_Int8 *pSource = seq.getArray();
-    if( ! strncmp( (const char * ) pSource , "<?xml" , 4) )
+    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 4) )
     {
 
         // scan for encoding
-        OString str( (sal_Char * ) pSource , seq.getLength() );
+        OString str( reinterpret_cast<char const *>(pSource), seq.getLength() );
 
         // cut sequence to first line break
         // find first line break;
@@ -180,7 +180,7 @@ bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &s
         return false;
     }
 
-    if( ! strncmp( (const char * ) pSource , "<?xml" , 4 ) ) {
+    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 4 ) ) {
         // scan if the <?xml tag finishes within this buffer
         bCheckIfFirstClosingBracketExsists = true;
     }
@@ -225,10 +225,10 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
     }
 
     // first level : detect possible file formats
-    if( ! strncmp( (const char * ) pSource , "<?xml" , 4 ) ) {
+    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 4 ) ) {
 
         // scan for encoding
-        OString str( (const sal_Char *) pSource , seq.getLength() );
+        OString str( reinterpret_cast<const char *>(pSource), seq.getLength() );
 
         // cut sequence to first line break
         //find first line break;
@@ -277,8 +277,8 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
         // simply add the byte order mark !
         seq.realloc( seq.getLength() + 2 );
         memmove( &( seq.getArray()[2] ) , seq.getArray() , seq.getLength() - 2 );
-        ((sal_uInt8*)seq.getArray())[0] = 0xFE;
-        ((sal_uInt8*)seq.getArray())[1] = 0xFF;
+        reinterpret_cast<sal_uInt8*>(seq.getArray())[0] = 0xFE;
+        reinterpret_cast<sal_uInt8*>(seq.getArray())[1] = 0xFF;
 
         m_sEncoding = "utf-16";
     }
@@ -288,8 +288,8 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
 
         seq.realloc( seq.getLength() + 2 );
         memmove( &( seq.getArray()[2] ) , seq.getArray() , seq.getLength() - 2 );
-        ((sal_uInt8*)seq.getArray())[0] = 0xFF;
-        ((sal_uInt8*)seq.getArray())[1] = 0xFE;
+        reinterpret_cast<sal_uInt8*>(seq.getArray())[0] = 0xFF;
+        reinterpret_cast<sal_uInt8*>(seq.getArray())[1] = 0xFE;
 
         m_sEncoding = "utf-16";
     }
@@ -416,7 +416,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
         nTargetCount +=     rtl_convertTextToUnicode(
                                     m_convText2Unicode,
                                     m_contextText2Unicode,
-                                    ( const sal_Char * ) &( pbSource[nSourceCount] ),
+                                    reinterpret_cast<const char *>(&( pbSource[nSourceCount] )),
                                     nSourceSize - nSourceCount ,
                                     &( seqUnicode.getArray()[ nTargetCount ] ),
                                     seqUnicode.getLength() - nTargetCount,
@@ -504,7 +504,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
     sal_Int32 nSeqSize =  nSourceSize * 3;
 
     Sequence<sal_Int8>  seqText( nSeqSize );
-    sal_Char *pTarget = (sal_Char *) seqText.getArray();
+    sal_Char *pTarget = reinterpret_cast<char *>(seqText.getArray());
     while( true ) {
 
         nTargetCount += rtl_convertUnicodeToText(
@@ -523,7 +523,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
         if( uiInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL ) {
             nSeqSize = nSeqSize *2;
             seqText.realloc( nSeqSize );  // double array size
-            pTarget = ( sal_Char * ) seqText.getArray();
+            pTarget = reinterpret_cast<char *>(seqText.getArray());
             continue;
         }
         break;

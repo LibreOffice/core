@@ -79,7 +79,7 @@ uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInpu
 {
     uno::Reference< io::XOutputStream > xPipe( io::Pipe::create(m_xContext) );
     uno::Reference< io::XInputStream > xInStream( xPipe, uno::UNO_QUERY );
-    uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)sInput.getStr(), sInput.getLength() );
+    uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(sInput.getStr()), sInput.getLength() );
     xPipe->writeBytes( aSeq );
     xPipe->flush();
     xPipe->closeOutput();

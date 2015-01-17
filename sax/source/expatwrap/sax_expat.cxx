@@ -709,14 +709,14 @@ void SaxExpatParser_Impl::parse( )
 
         if( ! nRead ) {
             XML_Parse( getEntity().pParser ,
-                                   ( const char * ) seqOut.getArray() ,
+                                   reinterpret_cast<const char *>(seqOut.getConstArray()),
                                    0 ,
                                    1 );
             break;
         }
 
         bool bContinue = ( XML_Parse( getEntity().pParser ,
-                                                (const char *) seqOut.getArray(),
+                                                reinterpret_cast<const char *>(seqOut.getConstArray()),
                                                 nRead,
                                                 0 ) != XML_STATUS_ERROR );
 

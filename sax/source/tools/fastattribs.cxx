@@ -243,7 +243,7 @@ sal_Int32 FastTokenHandlerBase::getTokenFromChars(
     else
     {
         // heap allocate, copy & then free
-        Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen );
+        Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(pToken), nLen );
         nRet = xTokenHandler->getTokenFromUTF8( aSeq );
     }
 
