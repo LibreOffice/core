@@ -232,7 +232,6 @@ void SecurityEnvironment_NssImpl :: setCertDb( CERTCertDBHandle* aCertDb ) throw
 }
 
 void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Exception , RuntimeException ) {
-    PK11SymKey* symkey ;
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
@@ -243,7 +242,7 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
         }
 
         //If we do not find the key in the list, add a new node
-        symkey = PK11_ReferenceSymKey( aSymKey ) ;
+        PK11SymKey* symkey = PK11_ReferenceSymKey( aSymKey ) ;
         if( symkey == NULL )
             throw RuntimeException() ;
 
@@ -256,13 +255,12 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
 }
 
 void SecurityEnvironment_NssImpl :: rejectSymKey( PK11SymKey* aSymKey ) throw( Exception , RuntimeException ) {
-    PK11SymKey* symkey ;
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
         for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey ) {
-                symkey = *keyIt ;
+                PK11SymKey* symkey = *keyIt ;
                 PK11_FreeSymKey( symkey ) ;
                 m_tSymKeyList.erase( keyIt ) ;
                 break ;
@@ -286,7 +284,6 @@ PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) th
 }
 
 void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) throw( Exception , RuntimeException ) {
-    SECKEYPublicKey*    pubkey ;
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
@@ -297,7 +294,7 @@ void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) thro
         }
 
         //If we do not find the key in the list, add a new node
-        pubkey = SECKEY_CopyPublicKey( aPubKey ) ;
+        SECKEYPublicKey* pubkey = SECKEY_CopyPublicKey( aPubKey ) ;
         if( pubkey == NULL )
             throw RuntimeException() ;
 
@@ -310,13 +307,12 @@ void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) thro
 }
 
 void SecurityEnvironment_NssImpl :: rejectPubKey( SECKEYPublicKey* aPubKey ) throw( Exception , RuntimeException ) {
-    SECKEYPublicKey*    pubkey ;
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
         for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey ) {
-                pubkey = *keyIt ;
+                SECKEYPublicKey* pubkey = *keyIt ;
                 SECKEY_DestroyPublicKey( pubkey ) ;
                 m_tPubKeyList.erase( keyIt ) ;
                 break ;
@@ -340,7 +336,6 @@ SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position
 }
 
 void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) throw( Exception , RuntimeException ) {
-    SECKEYPrivateKey*   prikey ;
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
@@ -351,7 +346,7 @@ void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) thr
         }
 
         //If we do not find the key in the list, add a new node
-        prikey = SECKEY_CopyPrivateKey( aPriKey ) ;
+        SECKEYPrivateKey* prikey = SECKEY_CopyPrivateKey( aPriKey ) ;
         if( prikey == NULL )
             throw RuntimeException() ;
 
@@ -364,13 +359,12 @@ void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) thr
 }
 
 void SecurityEnvironment_NssImpl :: rejectPriKey( SECKEYPrivateKey* aPriKey ) throw( Exception , RuntimeException ) {
-    SECKEYPrivateKey*   prikey ;
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
         for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey ) {
-                prikey = *keyIt ;
+                SECKEYPrivateKey* prikey = *keyIt ;
                 SECKEY_DestroyPrivateKey( prikey ) ;
                 m_tPriKeyList.erase( keyIt ) ;
                 break ;
@@ -991,11 +985,10 @@ X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert )
 
 X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* priKey )
 {
-    CERTCertificate* cert ;
     X509Certificate_NssImpl* xcert ;
 
     if( priKey != NULL ) {
-        cert = PK11_GetCertFromPrivateKey( priKey ) ;
+        CERTCertificate* cert = PK11_GetCertFromPrivateKey( priKey ) ;
 
         if( cert != NULL ) {
             xcert = NssCertToXCert( cert ) ;

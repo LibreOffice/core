@@ -64,8 +64,6 @@ void
 printChainFailure(CERTVerifyLog *log)
 {
     unsigned int       depth  = (unsigned int)-1;
-    const char * specificError = NULL;
-    const char * issuer = NULL;
     CERTVerifyLogNode *node   = NULL;
 
     if (log->count > 0)
@@ -83,8 +81,8 @@ printChainFailure(CERTVerifyLog *log)
             }
             SAL_INFO("xmlsecurity.xmlsec", "  ERROR " << node->error << ": " <<
                      getCertError(node->error));
-            specificError = NULL;
-            issuer = NULL;
+            const char * specificError = NULL;
+            const char * issuer = NULL;
             switch (node->error)
             {
             case SEC_ERROR_INADEQUATE_KEY_USAGE:

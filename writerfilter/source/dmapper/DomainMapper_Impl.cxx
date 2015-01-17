@@ -2452,7 +2452,6 @@ void DomainMapper_Impl::ChainTextFrames()
 
     try
     {
-        bool bIsTxbxChained = false ;
         sal_Int32 nTxbxId1  = 0 ; //holds id for the shape in outer loop
         sal_Int32 nTxbxId2  = 0 ; //holds id for the shape in inner loop
         sal_Int32 nTxbxSeq1 = 0 ; //holds seq number for the shape in outer loop
@@ -2465,7 +2464,7 @@ void DomainMapper_Impl::ChainTextFrames()
         for( std::vector<uno::Reference< drawing::XShape > >::iterator outer_itr = m_vTextFramesForChaining.begin();
              outer_itr != m_vTextFramesForChaining.end(); )
         {
-            bIsTxbxChained = false ;
+            bool bIsTxbxChained = false ;
             uno::Reference<text::XTextContent>  xTextContent1(*outer_itr, uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropertySet1(xTextContent1, uno::UNO_QUERY);
             uno::Sequence<beans::PropertyValue> aGrabBag1;

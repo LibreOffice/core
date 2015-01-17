@@ -198,7 +198,6 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
 OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
-        char* issuer ;
         DWORD cbIssuer ;
 
         cbIssuer = CertNameToStr(
@@ -210,7 +209,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::
 
         // Here the cbIssuer count the last 0x00 , take care.
         if( cbIssuer != 0 ) {
-            issuer = new char[ cbIssuer ] ;
+            char* issuer = new char[ cbIssuer ] ;
             if( issuer == NULL )
                 throw RuntimeException() ;
 
@@ -249,7 +248,6 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
 {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
-        wchar_t* subject ;
         DWORD cbSubject ;
 
         cbSubject = CertNameToStrW(
@@ -261,7 +259,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
 
         if( cbSubject != 0 )
         {
-            subject = new wchar_t[ cbSubject ] ;
+            wchar_t* subject = new wchar_t[ cbSubject ] ;
             if( subject == NULL )
                 throw RuntimeException() ;
 
@@ -371,11 +369,10 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl :: getExtensions() throw ( ::com::sun::star::uno::RuntimeException ) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
-        CERT_EXTENSION* pExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
 
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
-            pExtn = &(m_pCertContext->pCertInfo->rgExtension[i]) ;
+            CERT_EXTENSION* pExtn = &(m_pCertContext->pCertInfo->rgExtension[i]) ;
 
 
             OUString objId = OUString::createFromAscii( pExtn->pszObjId );
@@ -401,12 +398,11 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
 ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl :: findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*oid*/ ) throw (::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
-        CERT_EXTENSION* pExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
 
         xExtn = NULL ;
         for( unsigned int i = 0; i < m_pCertContext->pCertInfo->cExtension; i++ ) {
-            pExtn = &( m_pCertContext->pCertInfo->rgExtension[i] ) ;
+            CERT_EXTENSION* pExtn = &( m_pCertContext->pCertInfo->rgExtension[i] ) ;
 
             //TODO: Compare the oid
             if( 0 ) {

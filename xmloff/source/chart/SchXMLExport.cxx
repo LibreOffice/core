@@ -1898,10 +1898,11 @@ void SchXMLExportHelper_Impl::exportPlotArea(
                 if( xDocProp.is())
                 {
                     Any aAny;
-                    bool bFirstCol = false, bFirstRow = false;
 
                     try
                     {
+                        bool bFirstCol = false, bFirstRow = false;
+
                         aAny = xDocProp->getPropertyValue(
                             OUString(  "DataSourceLabelsInFirstColumn" ));
                         aAny >>= bFirstCol;

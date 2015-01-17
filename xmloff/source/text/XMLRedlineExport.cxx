@@ -332,7 +332,6 @@ void XMLRedlineExport::ExportChangeInline(
     enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
     Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
     bool bCollapsed = *(sal_Bool *)aAny.getValue();
-    bool bStart = true; // ignored if bCollapsed = sal_True
     if (bCollapsed)
     {
         eElement = XML_CHANGE;
@@ -340,7 +339,7 @@ void XMLRedlineExport::ExportChangeInline(
     else
     {
         aAny = rPropSet->getPropertyValue(sIsStart);
-        bStart = *(sal_Bool *)aAny.getValue();
+        const bool bStart = *(sal_Bool *)aAny.getValue();
         eElement = bStart ? XML_CHANGE_START : XML_CHANGE_END;
     }
 
