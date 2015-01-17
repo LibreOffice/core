@@ -39,7 +39,7 @@ uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( do
 {
     boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[m_rHandle.viewport.width * m_rHandle.viewport.height * 4]);
     glTFHandle* pHandle = &m_rHandle;
-    int nRet = gltf_renderer_get_bitmap(&pHandle, 1, (char*)pBuffer.get(), GL_BGRA);
+    int nRet = gltf_renderer_get_bitmap(&pHandle, 1, reinterpret_cast<char*>(pBuffer.get()), GL_BGRA);
     if( nRet != 0 )
     {
         SAL_WARN("avmedia.opengl", "Error occurred while rendering to bitmap! Error code: " << nRet);

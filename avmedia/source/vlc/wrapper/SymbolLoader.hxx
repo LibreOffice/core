@@ -16,7 +16,7 @@
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 
-#define SYM_MAP(a) { #a, (SymbolFunc *)&a }
+#define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
 
 namespace avmedia
 {
