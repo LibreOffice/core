@@ -368,10 +368,6 @@ certain functionality.
 
 @li @c stoc.corerefl - CoreReflection
 
-@section svl
-
-@li @c svl.items
-
 @section VCL
 
 @li @c vcl
