@@ -104,6 +104,7 @@ private:
     bool ImplScaleFilter( const double& rScaleX, const double& rScaleY, GLenum nFilter );
     void ImplCreateKernel( const double& fScale, const Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
     bool ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel );
+    bool ImplScaleArea( double rScaleX, double rScaleY );
 
 public:
 
