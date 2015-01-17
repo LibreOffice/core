@@ -1574,7 +1574,7 @@ namespace cairocanvas
             const Format eFormat( mbHaveAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24 );
             uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
             sal_Int8* pData = aRes.getArray();
-            cairo_surface_t* pImageSurface = cairo_image_surface_create_for_data( (unsigned char *) pData,
+            cairo_surface_t* pImageSurface = cairo_image_surface_create_for_data( reinterpret_cast<unsigned char *>(pData),
                                                                                   eFormat,
                                                                                   nWidth, nHeight, 4*nWidth );
             cairo_t* pCairo = cairo_create( pImageSurface );

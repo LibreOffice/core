@@ -183,7 +183,7 @@ namespace cairocanvas
                         unsigned int nStride = cairo_image_surface_get_stride( pPixels );
                         for( unsigned long y = 0; y < (unsigned long) aSize.Height(); y++ )
                         {
-                            sal_uInt32 *pPix = (sal_uInt32 *)(pSrc + nStride * y);
+                            sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
                             for( unsigned long x = 0; x < (unsigned long) aSize.Width(); x++ )
                             {
                                 sal_uInt8 nAlpha = (*pPix >> 24);
