@@ -952,8 +952,8 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
             glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
             CHECK_GL_ERROR();
             //update light information
-            glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
-            glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);
+            glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, reinterpret_cast<GLfloat*>(m_LightColor));
+            glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, reinterpret_cast<GLfloat*>(m_PositionWorldspace));
             glUniform1fv(maResources.m_3DLightPowerID, m_iLightNum, m_fLightPower);
             glUniform1i(maResources.m_3DLightNumID, m_iLightNum);
             glUniform4fv(maResources.m_3DLightAmbientID, 1, &m_Ambient[0]);
@@ -1638,8 +1638,8 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
             glUniform1fv(maResources.m_3DMaxCoordXID, 1, &m_fMaxCoordX);
             glUniform1i(maResources.m_3DUndrawID, m_bUndrawFlag);
             //update light information
-            glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
-            glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);
+            glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, reinterpret_cast<GLfloat*>(m_LightColor));
+            glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, reinterpret_cast<GLfloat*>(m_PositionWorldspace));
             glUniform1fv(maResources.m_3DLightPowerID, m_iLightNum, m_fLightPower);
             glUniform1i(maResources.m_3DLightNumID, m_iLightNum);
             glUniform4fv(maResources.m_3DLightAmbientID, 1, &m_Ambient[0]);
