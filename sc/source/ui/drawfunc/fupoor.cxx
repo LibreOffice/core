@@ -324,17 +324,30 @@ void FuPoor::ImpForceQuadratic(Rectangle& rRect)
     }
 }
 
-// #i33136#
+// #i33136# fdo#88339
 bool FuPoor::doConstructOrthogonal() const
 {
-    // Check whether an image is selected -> they should scale proportionally
+    // Detect whether we're moving an object or resizing.
+    bool bIsMoveMode = false;
+    if (pView->IsDragObj())
+    {
+        const SdrHdl* pHdl = pView->GetDragStat().GetHdl();
+        if (!pHdl || (!pHdl->IsCornerHdl() && !pHdl->IsVertexHdl()))
+        {
+            bIsMoveMode = true;
+        }
+    }
+
+    // Detect image and resize proportionally, but don't constrain movement by default
     if (pView->AreObjectsMarked())
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            if (rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF)
+            if (rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF && !bIsMoveMode)
+            {
                 return true;
+            }
         }
     }
     return false;
