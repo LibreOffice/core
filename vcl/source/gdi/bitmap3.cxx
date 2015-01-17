@@ -24,6 +24,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapscalesuper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <boost/scoped_array.hpp>
 
@@ -991,6 +992,11 @@ bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
         bRet = true;
 
     return bRet;
+}
+
+bool Bitmap::HasFastScale()
+{
+    return OpenGLHelper::isVCLOpenGLEnabled();
 }
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
