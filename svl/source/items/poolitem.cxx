@@ -256,50 +256,6 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
     return new SfxVoidItem(*this);
 }
 
-// SfxInvalidItem
-
-SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
-    pRef(new sal_uInt16(1)),
-    pItem(rItem.Clone())
-{
-}
-
-
-SfxItemHandle::SfxItemHandle(const SfxItemHandle &rCopy):
-    pRef(rCopy.pRef),
-    pItem(rCopy.pItem)
-{
-    ++(*pRef);
-}
-
-
-const SfxItemHandle &SfxItemHandle::operator=(const SfxItemHandle &rCopy)
-{
-    if(&rCopy == this || pItem == rCopy.pItem)
-        return *this;
-    --(*pRef);
-    if(!(*pRef))
-    {
-        delete pItem;
-        pItem = 0;
-    }
-    pRef = rCopy.pRef;
-    ++(*pRef);
-    pItem = rCopy.pItem;
-    return *this;
-}
-
-
-SfxItemHandle::~SfxItemHandle()
-{
-    --(*pRef);
-    if(!(*pRef)) {
-        delete pRef; pRef = 0;
-        delete pItem; pItem = 0;
-    }
-}
-
-
 bool SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
     return false;

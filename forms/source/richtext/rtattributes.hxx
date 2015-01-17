@@ -45,7 +45,7 @@ namespace frm
     struct AttributeState
     {
     private:
-        SfxItemHandle*      pItemHandle;
+        SfxPoolItem     *pItemHandleItem;
 
     public:
         AttributeCheckState eSimpleState;
@@ -64,19 +64,19 @@ namespace frm
     };
 
     inline AttributeState::AttributeState( )
-        :pItemHandle( NULL )
+        :pItemHandleItem ( NULL )
         ,eSimpleState( eIndetermined )
     {
     }
 
     inline AttributeState::AttributeState( AttributeCheckState _eCheckState )
-        :pItemHandle( NULL )
+        :pItemHandleItem ( NULL )
         ,eSimpleState( _eCheckState )
     {
     }
 
     inline AttributeState::AttributeState( const AttributeState& _rSource )
-        :pItemHandle( NULL )
+        :pItemHandleItem ( NULL )
         ,eSimpleState( eIndetermined )
     {
         operator=( _rSource );
@@ -84,7 +84,7 @@ namespace frm
 
     inline AttributeState::~AttributeState( )
     {
-        delete(pItemHandle);
+//        delete(pItemHandle);
     }
 
     inline AttributeState& AttributeState::operator=( const AttributeState& _rSource )
@@ -99,17 +99,17 @@ namespace frm
 
     inline const SfxPoolItem* AttributeState::getItem() const
     {
-        return pItemHandle ? &pItemHandle->GetItem() : NULL;
+        return pItemHandleItem;
     }
 
     inline void AttributeState::setItem( const SfxPoolItem* _pItem )
     {
-        if ( pItemHandle )
-            delete pItemHandle;
+        if ( pItemHandleItem )
+            delete pItemHandleItem;
         if ( _pItem )
-            pItemHandle = new SfxItemHandle( *const_cast< SfxPoolItem* >( _pItem ) );
+            pItemHandleItem = _pItem->Clone();
         else
-            pItemHandle = NULL;
+            pItemHandleItem = NULL;
     }
 
     inline bool AttributeState::operator==( const AttributeState& _rRHS )
@@ -117,16 +117,16 @@ namespace frm
         if ( eSimpleState != _rRHS.eSimpleState )
             return false;
 
-        if ( pItemHandle && !_rRHS.pItemHandle )
+        if ( pItemHandleItem && !_rRHS.pItemHandleItem )
             return false;
 
-        if ( !pItemHandle && _rRHS.pItemHandle )
+        if ( !pItemHandleItem && _rRHS.pItemHandleItem )
             return false;
 
-        if ( !pItemHandle && !_rRHS.pItemHandle )
+        if ( !pItemHandleItem && !_rRHS.pItemHandleItem )
             return true;
 
-        return ( pItemHandle->GetItem() == _rRHS.pItemHandle->GetItem() );
+        return pItemHandleItem == _rRHS.pItemHandleItem;
     }
 
     class IMultiAttributeDispatcher

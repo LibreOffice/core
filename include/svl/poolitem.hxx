@@ -339,23 +339,6 @@ public:
 };
 
 
-// Handle class for PoolItems
-
-class SVL_DLLPUBLIC SfxItemHandle
-{
-    sal_uInt16      *pRef;
-    SfxPoolItem     *pItem;
-public:
-    explicit SfxItemHandle( SfxPoolItem& );
-    SfxItemHandle( const SfxItemHandle& );
-    ~SfxItemHandle();
-
-    const SfxItemHandle &operator=(const SfxItemHandle &);
-    const SfxPoolItem &GetItem() const { return *pItem; }
-};
-
-
-
 DECL_PTRHINT(SVL_DLLPUBLIC, SfxPoolItemHint, SfxPoolItem);
 
 
