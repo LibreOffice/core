@@ -115,12 +115,12 @@ void XMLTextNumRuleInfo::Set(
     {
         if ( !mbOutlineStyleAsNormalListStyle )
         {
-            bool bIsOutline = false;
             Reference<XPropertySet> xNumRulesProps(mxNumRules, UNO_QUERY);
             if ( xNumRulesProps.is() &&
                  xNumRulesProps->getPropertySetInfo()->
                                     hasPropertyByName( msNumberingIsOutline ) )
             {
+                bool bIsOutline = false;
                 xNumRulesProps->getPropertyValue( msNumberingIsOutline ) >>= bIsOutline;
                 bSuppressListStyle = bIsOutline;
             }

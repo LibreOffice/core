@@ -1460,7 +1460,6 @@ bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< bean
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        bool bTemp = false;
 
         // is empty pes shape?
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsEmptyPresentationObject"))
@@ -1473,6 +1472,7 @@ bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< bean
         // is user-transformed?
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsPlaceholderDependent"))
         {
+            bool bTemp = false;
             xPropSet->getPropertyValue("IsPlaceholderDependent") >>= bTemp;
             if(!bTemp)
                 mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_USER_TRANSFORMED, XML_TRUE);

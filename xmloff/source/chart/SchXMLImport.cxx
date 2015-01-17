@@ -620,9 +620,10 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
 
         uno::Reference< container::XChild > xChild( xChartDoc, uno::UNO_QUERY );
         uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
-        bool bHasOwnData = true;
         if( xChild.is() && xDataReceiver.is())
         {
+            bool bHasOwnData = true;
+
             Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
             if( xFact.is() )
             {

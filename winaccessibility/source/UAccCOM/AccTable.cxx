@@ -663,11 +663,11 @@ STDMETHODIMP CAccTable::selectRow(long row)
             return E_FAIL;
 
         // Select row.
-        long            lCol, lColumnCount, lChildIndex;
+        long            lCol, lColumnCount;
         lColumnCount = GetXInterface()->getAccessibleColumnCount();
         for(lCol = 0; lCol < lColumnCount; lCol ++)
         {
-            lChildIndex = GetXInterface()->getAccessibleIndex(row, lCol);
+            long lChildIndex = GetXInterface()->getAccessibleIndex(row, lCol);
             pRSelection.get()->selectAccessibleChild(lChildIndex);
         }
 
@@ -707,11 +707,11 @@ STDMETHODIMP CAccTable::selectColumn(long column)
             return E_FAIL;
 
         // Select column.
-        long            lRow, lRowCount, lChildIndex;
+        long            lRow, lRowCount;
         lRowCount = GetXInterface()->getAccessibleRowCount();
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
-            lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
+            long lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
             pRSelection.get()->selectAccessibleChild(lChildIndex);
         }
 
@@ -754,11 +754,11 @@ STDMETHODIMP CAccTable::unselectRow(long row)
             return E_FAIL;
 
         // Select column.
-        long            lColumn, lColumnCount, lChildIndex;
+        long            lColumn, lColumnCount;
         lColumnCount = GetXInterface()->getAccessibleColumnCount();
         for(lColumn = 0; lColumn < lColumnCount; lColumn ++)
         {
-            lChildIndex = GetXInterface()->getAccessibleIndex(row,lColumn);
+            long lChildIndex = GetXInterface()->getAccessibleIndex(row,lColumn);
             pRSelection.get()->deselectAccessibleChild(lChildIndex);
         }
 
@@ -801,12 +801,12 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
             return E_FAIL;
 
         // Unselect columns.
-        long            lRow, lRowCount, lChildIndex;
+        long            lRow, lRowCount;
         lRowCount = GetXInterface()->getAccessibleRowCount();
 
         for(lRow = 0; lRow < lRowCount; lRow ++)
         {
-            lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
+            long lChildIndex = GetXInterface()->getAccessibleIndex(lRow, column);
             pRSelection.get()->deselectAccessibleChild(lChildIndex);
         }
         return S_OK;

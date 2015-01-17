@@ -44,8 +44,6 @@ namespace xmloff
         ScriptEventDescriptor* pTranslated = aTranslated.getArray();
 
         // loop through the collected events and translate them
-        const PropertyValue* pEventDescription;
-        const PropertyValue* pEventDescriptionEnd;
         sal_Int32 nSeparatorPos = -1;
         for (   EventsVector::const_iterator aEvent = aCollectEvents.begin();
                 aEvent != aCollectEvents.end();
@@ -61,8 +59,8 @@ namespace xmloff
             OUString sLibrary;
 
             // the local macro name and the event type are specified as properties
-            pEventDescription       =                       aEvent->second.getConstArray();
-            pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
+            const PropertyValue* pEventDescription = aEvent->second.getConstArray();
+            const PropertyValue* pEventDescriptionEnd = pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
                 if (pEventDescription->Name == EVENT_LOCALMACRONAME ||
