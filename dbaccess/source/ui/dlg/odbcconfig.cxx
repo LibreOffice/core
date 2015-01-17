@@ -62,10 +62,10 @@ typedef SQLRETURN (SQL_API* TSQLSetEnvAttr) (SQLHENV EnvironmentHandle, SQLINTEG
 typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMALLINT   Direction, SQLCHAR* ServerName,
                                 SQLSMALLINT BufferLength1, SQLSMALLINT* NameLength1Ptr, SQLCHAR* Description, SQLSMALLINT BufferLength2, SQLSMALLINT* NameLength2Ptr);
 
-#define NSQLAllocHandle(a,b,c) (*(TSQLAllocHandle)(m_pAllocHandle))(a,b,c)
-#define NSQLFreeHandle(a,b) (*(TSQLFreeHandle)(m_pFreeHandle))(a,b)
+#define NSQLAllocHandle(a,b,c) (*reinterpret_cast<TSQLAllocHandle>(m_pAllocHandle))(a,b,c)
+#define NSQLFreeHandle(a,b) (*reinterpret_cast<TSQLFreeHandle>(m_pFreeHandle))(a,b)
 #define NSQLSetEnvAttr(a,b,c,d) (*reinterpret_cast<TSQLSetEnvAttr>(m_pSetEnvAttr))(a,b,c,d)
-#define NSQLDataSources(a,b,c,d,e,f,g,h) (*(TSQLDataSources)(m_pDataSources))(a,b,c,d,e,f,g,h)
+#define NSQLDataSources(a,b,c,d,e,f,g,h) (*reinterpret_cast<TSQLDataSources>(m_pDataSources))(a,b,c,d,e,f,g,h)
 #endif
 
 // OOdbcLibWrapper

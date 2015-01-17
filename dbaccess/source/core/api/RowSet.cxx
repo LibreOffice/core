@@ -2602,7 +2602,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         // the data is given as character data and the length defines the character length
         sal_Int32 nSize = x->readBytes(aData, length * sizeof(sal_Unicode));
         if (nSize / sizeof(sal_Unicode))
-            aDataStr = OUString((sal_Unicode*)aData.getConstArray(), nSize / sizeof(sal_Unicode));
+            aDataStr = OUString(reinterpret_cast<sal_Unicode const *>(aData.getConstArray()), nSize / sizeof(sal_Unicode));
         m_bParametersDirty = true;
         rParamValue = aDataStr;
         rParamValue.setTypeKind( DataType::LONGVARCHAR );
