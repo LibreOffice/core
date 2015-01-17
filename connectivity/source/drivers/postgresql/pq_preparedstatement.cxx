@@ -576,14 +576,14 @@ void PreparedStatement::setBytes(
     buf.append( "'" );
     size_t len;
     unsigned char * escapedString =
-        PQescapeBytea( (unsigned char *)x.getConstArray(), x.getLength(), &len);
+        PQescapeBytea( reinterpret_cast<unsigned char const *>(x.getConstArray()), x.getLength(), &len);
     if( ! escapedString )
     {
         throw SQLException(
             "pq_preparedstatement.setBytes: Error during converting bytesequence to an SQL conform string",
             *this, OUString(), 1, Any() );
     }
-    buf.append( (const sal_Char *)escapedString, len -1 );
+    buf.append( reinterpret_cast<char *>(escapedString), len -1 );
     free( escapedString );
     buf.append( "'" );
     m_vars[parameterIndex-1] = buf.makeStringAndClear();

@@ -502,7 +502,7 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
         aErr = isc_put_segment(m_statusVector,
                                &aBlobHandle,
                                nWriteSize,
-                               (const char*) xBlob->getBytes(nDataWritten, nWriteSize).getConstArray());
+                               reinterpret_cast<const char*>(xBlob->getBytes(nDataWritten, nWriteSize).getConstArray()));
         nDataWritten += nWriteSize;
 
 
@@ -602,7 +602,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
         aErr = isc_put_segment(m_statusVector,
                                &aBlobHandle,
                                nWriteSize,
-                               (const char*) xBytes.getConstArray() + nDataWritten);
+                               reinterpret_cast<const char*>(xBytes.getConstArray()) + nDataWritten);
         nDataWritten += nWriteSize;
 
         if (aErr)

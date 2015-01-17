@@ -239,7 +239,7 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
                                &m_blobHandle,
                                &nBytesRead,
                                nReadSize,
-                               (char*) rDataOut.getArray() + nTotalBytesRead);
+                               reinterpret_cast<char*>(rDataOut.getArray()) + nTotalBytesRead);
         if (aErr && IndicatesError(m_statusVector))
         {
             OUString sError(StatusVectorToString(m_statusVector, "isc_get_segment"));

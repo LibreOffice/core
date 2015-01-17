@@ -202,7 +202,7 @@ void ODbaseTable::readHeader()
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
-    m_pFileStream->Read((char*)(&m_aHeader.db_aedat), 3*sizeof(sal_uInt8));
+    m_pFileStream->Read(m_aHeader.db_aedat, 3*sizeof(sal_uInt8));
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
     (*m_pFileStream).ReadUInt32( m_aHeader.db_anz );
@@ -216,7 +216,7 @@ void ODbaseTable::readHeader()
         throwInvalidDbaseFormat();
     if (m_aHeader.db_slng == 0)
         throwInvalidDbaseFormat();
-    m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(sal_uInt8));
+    m_pFileStream->Read(m_aHeader.db_frei, 20*sizeof(sal_uInt8));
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
@@ -334,7 +334,7 @@ void ODbaseTable::fillColumns()
             break;
 
         aDBFColumn.db_fnm[sizeof(aDBFColumn.db_fnm)-1] = 0; //ensure null termination for broken input
-        const OUString aColumnName((const char *)aDBFColumn.db_fnm, strlen((const char *)aDBFColumn.db_fnm), m_eEncoding);
+        const OUString aColumnName(reinterpret_cast<char *>(aDBFColumn.db_fnm), strlen(reinterpret_cast<char *>(aDBFColumn.db_fnm)), m_eEncoding);
 
         bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
 
@@ -853,7 +853,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         if ( ( nByteOffset + nLen) > m_nBufferSize )
             break; // length doesn't match buffer size.
 
-        char *pData = (char *) (m_pBuffer + nByteOffset);
+        char *pData = reinterpret_cast<char *>(m_pBuffer + nByteOffset);
 
         if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         {
@@ -1570,7 +1570,7 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
     // position on desired record:
     sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
-    m_pFileStream->Read((char*)m_pBuffer, m_aHeader.db_slng);
+    m_pFileStream->Read(m_pBuffer, m_aHeader.db_slng);
 
     sal_Size nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
@@ -1846,7 +1846,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
                 pIndex->Insert(m_nFilePos, thisColVal);
         }
 
-        char* pData = (char *)(m_pBuffer + nByteOffset);
+        char* pData = reinterpret_cast<char *>(m_pBuffer + nByteOffset);
         if (thisColIsNull)
         {
             if ( bSetZero )
@@ -2658,7 +2658,7 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        sal_Size nRead = m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
+        sal_Size nRead = m_pFileStream->Read(m_pBuffer, nEntryLen);
         if (nRead != nEntryLen)
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::seekRow: short read!");
@@ -2798,7 +2798,7 @@ bool ODbaseTable::WriteBuffer()
     // position on desired record:
     sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
-    return m_pFileStream->Write((char*) m_pBuffer, m_aHeader.db_slng) > 0;
+    return m_pFileStream->Write(m_pBuffer, m_aHeader.db_slng) > 0;
 }
 
 sal_Int32 ODbaseTable::getCurrentLastPos() const

@@ -875,7 +875,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
 
         char aEmptyData[DINDEX_PAGE_SIZE];
         memset(aEmptyData,0x00,DINDEX_PAGE_SIZE);
-        rStream.Write((sal_uInt8*)aEmptyData,DINDEX_PAGE_SIZE);
+        rStream.Write(aEmptyData, DINDEX_PAGE_SIZE);
     }
     sal_Size nCurrentPos = rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
     OSL_UNUSED( nCurrentPos );
@@ -898,7 +898,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
         {
             char* pEmptyData = new char[nRemainSize];
             memset(pEmptyData,0x00,nRemainSize);
-            rStream.Write((sal_uInt8*)pEmptyData,nRemainSize);
+            rStream.Write(pEmptyData, nRemainSize);
             rStream.Seek(nTell);
             delete [] pEmptyData;
         }

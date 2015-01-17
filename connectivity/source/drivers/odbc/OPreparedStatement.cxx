@@ -392,7 +392,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     rDataLen = _nDataLen;
 
     SQLRETURN nRetcode;
-    nRetcode = (*(T3SQLBindParameter)m_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(
+    nRetcode = (*reinterpret_cast<T3SQLBindParameter>(m_pConnection->getOdbcFunction(ODBC3SQLBindParameter)))(
                   m_aStatementHandle,
                   // checkParameterIndex guarantees this is safe
                   static_cast<SQLUSMALLINT>(parameterIndex),
@@ -928,7 +928,7 @@ void OPreparedStatement::prepareStatement()
     {
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
         OString aSql(OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
-        SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
+        SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength());
         OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         m_bPrepared = true;
         initBoundParam();

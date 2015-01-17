@@ -523,8 +523,8 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
         OString val = OUStringToOString( ustr, RTL_TEXTENCODING_ASCII_US );
 
         size_t length;
-        char * res = (char*) PQunescapeBytea( (unsigned char *)val.getStr() , &length);
-        ret = Sequence< sal_Int8 > ( (sal_Int8*)res, length );
+        char * res = reinterpret_cast<char*>(PQunescapeBytea( reinterpret_cast<unsigned char const *>(val.getStr()), &length));
+        ret = Sequence< sal_Int8 > ( reinterpret_cast<sal_Int8*>(res), length );
         if( res )
             free( res );
     }

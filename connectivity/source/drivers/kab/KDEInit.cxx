@@ -68,7 +68,7 @@ namespace connectivity
             osl_getProcessLocale(&pProcessLocale);
             // sal_Unicode and QChar are (currently) both 16 bits characters
             QString aLanguage(
-                (const QChar *) pProcessLocale->Language->buffer,
+                reinterpret_cast<QChar *>(pProcessLocale->Language->buffer),
                 (int) pProcessLocale->Language->length);
             KGlobal::locale()->setLanguage(aLanguage);
 

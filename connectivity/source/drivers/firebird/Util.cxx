@@ -28,7 +28,7 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
                                     const OUString& rCause)
 {
     OUStringBuffer buf;
-    const ISC_STATUS* pStatus = (const ISC_STATUS*) &rStatusVector;
+    const ISC_STATUS* pStatus = reinterpret_cast<const ISC_STATUS*>(&rStatusVector);
 
     buf.appendAscii("firebird_sdbc error:");
     try

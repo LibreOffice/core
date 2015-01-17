@@ -40,6 +40,7 @@
 #include <comphelper/propertycontainer.hxx>
 
 #include "EApi.h"
+#include <NConnection.hxx>
 
 #include <list>
 
@@ -47,7 +48,6 @@ namespace connectivity
 {
     namespace evoab
     {
-        class OEvoabConnection;
         typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::sdbc::XWarningsSupplier
                                                     ,   ::com::sun::star::sdbc::XCloseable
                                                     >   OCommonStatement_IBase;
@@ -230,7 +230,7 @@ namespace connectivity
                 impl_executeQuery_throw( const QueryData& _rData );
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                impl_getConnection() { return ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >( (::com::sun::star::sdbc::XConnection*)m_pConnection ); }
+                impl_getConnection() { return ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >( m_pConnection ); }
 
             OUString
                 impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );

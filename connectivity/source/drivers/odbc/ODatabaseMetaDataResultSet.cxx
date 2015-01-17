@@ -892,10 +892,10 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
         pCOL = SQL_ALL_TABLE_TYPES;
 
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
-                            (SDB_ODBC_CHAR *) pCOL, pCOL ? SQL_NTS : 0);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), pCOL ? SQL_NTS : 0);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 
@@ -907,7 +907,7 @@ void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeE
                             0,0,
                             0,0,
                             0,0,
-                            (SDB_ODBC_CHAR *) SQL_ALL_TABLE_TYPES,SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_TABLE_TYPES)),SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
@@ -920,10 +920,10 @@ void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeE
 void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeException)
 {
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) SQL_ALL_CATALOGS,SQL_NTS,
-                            (SDB_ODBC_CHAR *) "",SQL_NTS,
-                            (SDB_ODBC_CHAR *) "",SQL_NTS,
-                            (SDB_ODBC_CHAR *) "",SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_CATALOGS)),SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS);
 
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
@@ -937,10 +937,10 @@ void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeExcep
 void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeException)
 {
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) "",SQL_NTS,
-                            (SDB_ODBC_CHAR *) SQL_ALL_SCHEMAS,SQL_NTS,
-                            (SDB_ODBC_CHAR *) "",SQL_NTS,
-                            (SDB_ODBC_CHAR *) "",SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_SCHEMAS)),SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>("")),SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     m_aColMapping.clear();
@@ -976,10 +976,10 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
 
 
     SQLRETURN nRetcode = N3SQLColumnPrivileges(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
-                            (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     checkColumnCount();
@@ -1010,10 +1010,10 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
 
     SQLRETURN nRetcode = N3SQLColumns(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
-                            (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
 
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     TInt2IntMap aMap;
@@ -1078,10 +1078,10 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 
 
     SQLRETURN nRetcode = N3SQLProcedureColumns(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
-                            (SDB_ODBC_CHAR *) pCOL, SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pCOL)), SQL_NTS);
 
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
@@ -1111,9 +1111,9 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const OUStri
 
 
     SQLRETURN nRetcode = N3SQLProcedures(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
@@ -1154,9 +1154,9 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(bool _bRowVer,const Any& cat
 
 
     SQLRETURN nRetcode = N3SQLSpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
                             (SQLSMALLINT)scope,
                             nullable ? SQL_NULLABLE : SQL_NO_NULLS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -1195,12 +1195,12 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUSt
 
 
     SQLRETURN nRetcode = N3SQLForeignKeys(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKN, pPKN ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pFKQ, (catalog2.hasValue() && !aFKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pFKO, pFKO ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pFKN, SQL_NTS
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), pPKN ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pFKQ)), (catalog2.hasValue() && !aFKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pFKO)), pFKO ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pFKN)), SQL_NTS
                             );
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
@@ -1241,9 +1241,9 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const OUStr
 
 
     SQLRETURN nRetcode = N3SQLPrimaryKeys(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
@@ -1270,9 +1270,9 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const O
 
 
     SQLRETURN nRetcode = N3SQLTablePrivileges(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS);
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     checkColumnCount();
 }
@@ -1300,9 +1300,9 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const OUStri
 
 
     SQLRETURN nRetcode = N3SQLStatistics(m_aStatementHandle,
-                            (SDB_ODBC_CHAR *) pPKQ, (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
-                            (SDB_ODBC_CHAR *) pPKO, pPKO ? SQL_NTS : 0 ,
-                            (SDB_ODBC_CHAR *) pPKN, SQL_NTS,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKQ)), (catalog.hasValue() && !aPKQ.isEmpty()) ? SQL_NTS : 0,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKO)), pPKO ? SQL_NTS : 0 ,
+                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(pPKN)), SQL_NTS,
                             unique ? SQL_INDEX_UNIQUE : SQL_INDEX_ALL,
                             approximate ? 1 : 0);
     OTools::ThrowException(m_pConnection,nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);

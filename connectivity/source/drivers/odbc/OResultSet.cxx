@@ -1343,7 +1343,7 @@ OUString OResultSet::getCursorName() const
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
     N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
-    return OUString::createFromAscii((const char*)pName);
+    return OUString::createFromAscii(reinterpret_cast<char*>(pName));
 }
 
 bool  OResultSet::isBookmarkable() const

@@ -147,7 +147,7 @@ static sal_Int32 readLogLevelFromConfiguration()
     sal_Int32 loglevel = LogLevel::NONE;
     OUString fileName;
     osl_getModuleURLFromAddress(
-        (void*) readLogLevelFromConfiguration, (rtl_uString **) &fileName );
+        (void*) readLogLevelFromConfiguration, &fileName.pData );
     fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
 #ifdef MACOSX
     fileName += "../Resources/";
@@ -279,7 +279,7 @@ Reference< XStatement > Connection::createStatement() throw (SQLException, Runti
     Statement *stmt = new Statement( m_refMutex, this , &m_settings );
     Reference< XStatement > ret( stmt );
     ::rtl::ByteSequence id( 16 );
-    rtl_createUuid( (sal_uInt8*) id.getConstArray(), 0 , sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), 0, sal_False );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
     return ret;
@@ -296,7 +296,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
     Reference< XPreparedStatement > ret = stmt;
 
     ::rtl::ByteSequence id( 16 );
-    rtl_createUuid( (sal_uInt8*) id.getConstArray(), 0 , sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(id.getArray()), 0, sal_False );
     m_myStatements[ id ] = Reference< XCloseable > ( stmt );
     stmt->queryAdapter()->addReference( new ClosableReference( id, this ) );
     return ret;

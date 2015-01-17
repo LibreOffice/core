@@ -353,7 +353,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
     try {
-        THROW_SQL(N3SQLExecDirect(m_aStatementHandle, (SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength()));
+        THROW_SQL(N3SQLExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())), aSql.getLength()));
     }
     catch (const SQLWarning& ex) {
 
@@ -504,7 +504,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
     }
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    THROW_SQL(N3SQLExecDirect(m_aStatementHandle, (SDB_ODBC_CHAR*)aBatchSql.getStr(),aBatchSql.getLength()));
+    THROW_SQL(N3SQLExecDirect(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aBatchSql.getStr())), aBatchSql.getLength()));
 
     Sequence< sal_Int32 > aRet(nLen);
     sal_Int32* pArray = aRet.getArray();
@@ -732,7 +732,7 @@ OUString OStatement_Base::getCursorName() const
     SQLSMALLINT nRealLen = 0;
     SQLRETURN nRetCode = N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
     OSL_UNUSED( nRetCode );
-    return OUString::createFromAscii((const char*)pName);
+    return OUString::createFromAscii(reinterpret_cast<char*>(pName));
 }
 
 void OStatement_Base::setQueryTimeOut(sal_Int64 seconds)
@@ -861,7 +861,7 @@ void OStatement_Base::setCursorName(const OUString &_par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     OString aName(OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
-    N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),(SQLSMALLINT)aName.getLength());
+    N3SQLSetCursorName(m_aStatementHandle, reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aName.getStr())), (SQLSMALLINT)aName.getLength());
 }
 
 bool OStatement_Base::isUsingBookmarks() const

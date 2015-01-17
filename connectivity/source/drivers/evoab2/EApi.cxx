@@ -34,7 +34,7 @@ static const char *eBookLibNames[] = {
 
 typedef void (*SymbolFunc) (void);
 
-#define SYM_MAP(a) { #a, (SymbolFunc *)&a }
+#define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
 struct ApiMap
 {
     const char *sym_name;

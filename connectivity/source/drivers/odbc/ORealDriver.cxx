@@ -107,214 +107,214 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
     switch(_nIndex)
     {
         case ODBC3SQLAllocHandle:
-            pFunction = (oslGenericFunction)pODBC3SQLAllocHandle;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLAllocHandle);
             break;
         case ODBC3SQLConnect:
-            pFunction = (oslGenericFunction)pODBC3SQLConnect;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLConnect);
             break;
         case ODBC3SQLDriverConnect:
-            pFunction = (oslGenericFunction)pODBC3SQLDriverConnect;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLDriverConnect);
             break;
         case ODBC3SQLBrowseConnect:
-            pFunction = (oslGenericFunction)pODBC3SQLBrowseConnect;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLBrowseConnect);
             break;
         case ODBC3SQLDataSources:
-            pFunction = (oslGenericFunction)pODBC3SQLDataSources;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLDataSources);
             break;
         case ODBC3SQLDrivers:
-            pFunction = (oslGenericFunction)pODBC3SQLDrivers;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLDrivers);
             break;
         case ODBC3SQLGetInfo:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetInfo;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetInfo);
             break;
         case ODBC3SQLGetFunctions:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetFunctions;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetFunctions);
             break;
         case ODBC3SQLGetTypeInfo:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetTypeInfo;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetTypeInfo);
             break;
         case ODBC3SQLSetConnectAttr:
 
-            pFunction = (oslGenericFunction)pODBC3SQLSetConnectAttr;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLSetConnectAttr);
             break;
         case ODBC3SQLGetConnectAttr:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetConnectAttr;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetConnectAttr);
             break;
         case ODBC3SQLSetEnvAttr:
 
-            pFunction = (oslGenericFunction)pODBC3SQLSetEnvAttr;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLSetEnvAttr);
             break;
         case ODBC3SQLGetEnvAttr:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetEnvAttr;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetEnvAttr);
             break;
         case ODBC3SQLSetStmtAttr:
 
-            pFunction = (oslGenericFunction)pODBC3SQLSetStmtAttr;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLSetStmtAttr);
             break;
         case ODBC3SQLGetStmtAttr:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetStmtAttr;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetStmtAttr);
             break;
         case ODBC3SQLPrepare:
 
-            pFunction = (oslGenericFunction)pODBC3SQLPrepare;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLPrepare);
             break;
         case ODBC3SQLBindParameter:
 
-            pFunction = (oslGenericFunction)pODBC3SQLBindParameter;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLBindParameter);
             break;
         case ODBC3SQLSetCursorName:
 
-            pFunction = (oslGenericFunction)pODBC3SQLSetCursorName;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLSetCursorName);
             break;
         case ODBC3SQLExecute:
 
-            pFunction = (oslGenericFunction)pODBC3SQLExecute;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLExecute);
             break;
         case ODBC3SQLExecDirect:
 
-            pFunction = (oslGenericFunction)pODBC3SQLExecDirect;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLExecDirect);
             break;
         case ODBC3SQLDescribeParam:
 
-            pFunction = (oslGenericFunction)pODBC3SQLDescribeParam;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLDescribeParam);
             break;
         case ODBC3SQLNumParams:
 
-            pFunction = (oslGenericFunction)pODBC3SQLNumParams;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLNumParams);
             break;
         case ODBC3SQLParamData:
 
-            pFunction = (oslGenericFunction)pODBC3SQLParamData;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLParamData);
             break;
         case ODBC3SQLPutData:
 
-            pFunction = (oslGenericFunction)pODBC3SQLPutData;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLPutData);
             break;
         case ODBC3SQLRowCount:
 
-            pFunction = (oslGenericFunction)pODBC3SQLRowCount;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLRowCount);
             break;
         case ODBC3SQLNumResultCols:
 
-            pFunction = (oslGenericFunction)pODBC3SQLNumResultCols;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLNumResultCols);
             break;
         case ODBC3SQLDescribeCol:
 
-            pFunction = (oslGenericFunction)pODBC3SQLDescribeCol;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLDescribeCol);
             break;
         case ODBC3SQLColAttribute:
 
-            pFunction = (oslGenericFunction)pODBC3SQLColAttribute;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLColAttribute);
             break;
         case ODBC3SQLBindCol:
 
-            pFunction = (oslGenericFunction)pODBC3SQLBindCol;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLBindCol);
             break;
         case ODBC3SQLFetch:
 
-            pFunction = (oslGenericFunction)pODBC3SQLFetch;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLFetch);
             break;
         case ODBC3SQLFetchScroll:
 
-            pFunction = (oslGenericFunction)pODBC3SQLFetchScroll;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLFetchScroll);
             break;
         case ODBC3SQLGetData:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetData;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetData);
             break;
         case ODBC3SQLSetPos:
 
-            pFunction = (oslGenericFunction)pODBC3SQLSetPos;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLSetPos);
             break;
         case ODBC3SQLBulkOperations:
 
-            pFunction = (oslGenericFunction)pODBC3SQLBulkOperations;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLBulkOperations);
             break;
         case ODBC3SQLMoreResults:
 
-            pFunction = (oslGenericFunction)pODBC3SQLMoreResults;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLMoreResults);
             break;
         case ODBC3SQLGetDiagRec:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetDiagRec;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetDiagRec);
             break;
         case ODBC3SQLColumnPrivileges:
 
-            pFunction = (oslGenericFunction)pODBC3SQLColumnPrivileges;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLColumnPrivileges);
             break;
         case ODBC3SQLColumns:
 
-            pFunction = (oslGenericFunction)pODBC3SQLColumns;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLColumns);
             break;
         case ODBC3SQLForeignKeys:
 
-            pFunction = (oslGenericFunction)pODBC3SQLForeignKeys;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLForeignKeys);
             break;
         case ODBC3SQLPrimaryKeys:
 
-            pFunction = (oslGenericFunction)pODBC3SQLPrimaryKeys;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLPrimaryKeys);
             break;
         case ODBC3SQLProcedureColumns:
 
-            pFunction = (oslGenericFunction)pODBC3SQLProcedureColumns;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLProcedureColumns);
             break;
         case ODBC3SQLProcedures:
 
-            pFunction = (oslGenericFunction)pODBC3SQLProcedures;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLProcedures);
             break;
         case ODBC3SQLSpecialColumns:
 
-            pFunction = (oslGenericFunction)pODBC3SQLSpecialColumns;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLSpecialColumns);
             break;
         case ODBC3SQLStatistics:
 
-            pFunction = (oslGenericFunction)pODBC3SQLStatistics;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLStatistics);
             break;
         case ODBC3SQLTablePrivileges:
 
-            pFunction = (oslGenericFunction)pODBC3SQLTablePrivileges;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLTablePrivileges);
             break;
         case ODBC3SQLTables:
 
-            pFunction = (oslGenericFunction)pODBC3SQLTables;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLTables);
             break;
         case ODBC3SQLFreeStmt:
 
-            pFunction = (oslGenericFunction)pODBC3SQLFreeStmt;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLFreeStmt);
             break;
         case ODBC3SQLCloseCursor:
 
-            pFunction = (oslGenericFunction)pODBC3SQLCloseCursor;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLCloseCursor);
             break;
         case ODBC3SQLCancel:
 
-            pFunction = (oslGenericFunction)pODBC3SQLCancel;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLCancel);
             break;
         case ODBC3SQLEndTran:
 
-            pFunction = (oslGenericFunction)pODBC3SQLEndTran;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLEndTran);
             break;
         case ODBC3SQLDisconnect:
 
-            pFunction = (oslGenericFunction)pODBC3SQLDisconnect;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLDisconnect);
             break;
         case ODBC3SQLFreeHandle:
 
-            pFunction = (oslGenericFunction)pODBC3SQLFreeHandle;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLFreeHandle);
             break;
         case ODBC3SQLGetCursorName:
 
-            pFunction = (oslGenericFunction)pODBC3SQLGetCursorName;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLGetCursorName);
             break;
         case ODBC3SQLNativeSql:
 
-            pFunction = (oslGenericFunction)pODBC3SQLNativeSql;
+            pFunction = reinterpret_cast<oslGenericFunction>(pODBC3SQLNativeSql);
             break;
         default:
             OSL_FAIL("Function unknown!");

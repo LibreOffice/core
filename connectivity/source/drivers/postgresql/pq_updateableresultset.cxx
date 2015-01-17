@@ -491,7 +491,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
 
     size_t len;
     unsigned char * escapedString =
-        PQescapeBytea( (unsigned char *)x.getConstArray(), x.getLength(), &len);
+        PQescapeBytea( reinterpret_cast<unsigned char const *>(x.getConstArray()), x.getLength(), &len);
     if( ! escapedString )
     {
         throw SQLException(
@@ -501,7 +501,7 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
 //     buf.append( (const sal_Char *)escapedString, len -1 );
 
     m_updateableField[columnIndex-1].value <<=
-        OUString( (sal_Char*) escapedString, len, RTL_TEXTENCODING_ASCII_US );
+        OUString( reinterpret_cast<char*>(escapedString), len, RTL_TEXTENCODING_ASCII_US );
     free( escapedString );
 }
 

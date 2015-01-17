@@ -125,7 +125,7 @@ namespace connectivity
             Reference< XJavaVM > xVM = JavaVirtualMachine::create(_rxContext);
 
             Sequence<sal_Int8> processID(16);
-            rtl_getGlobalProcessId( (sal_uInt8*) processID.getArray() );
+            rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(processID.getArray()) );
             processID.realloc(17);
             processID[16] = 0;
 

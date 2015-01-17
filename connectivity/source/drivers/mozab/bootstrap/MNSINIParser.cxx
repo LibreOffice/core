@@ -58,9 +58,9 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
             sal_uInt64 nPos;
             if (osl_File_E_None != osl_getFilePos(handle, &nPos) || nPos >= nSize)
                 break;
-            if (osl_File_E_None != osl_readLine(handle , (sal_Sequence **) &seq))
+            if (osl_File_E_None != osl_readLine(handle, reinterpret_cast<sal_Sequence **>(&seq)))
                 break;
-            OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+            OString line(reinterpret_cast<const char *>(seq.getConstArray()), seq.getLength() );
             sal_Int32 nIndex = line.indexOf('=');
             if (nIndex >= 1)
             {

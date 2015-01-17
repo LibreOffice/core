@@ -83,7 +83,7 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
                                               ,sal_Int32 _ident) throw(SQLException, RuntimeException)
 {
     SQLLEN nValue=0;
-    OTools::ThrowException(_pConnection,(*(T3SQLColAttribute)_pConnection->getOdbcFunction(ODBC3SQLColAttribute))(_aStatementHandle,
+    OTools::ThrowException(_pConnection,(*reinterpret_cast<T3SQLColAttribute>(_pConnection->getOdbcFunction(ODBC3SQLColAttribute)))(_aStatementHandle,
                                          (SQLUSMALLINT)_column,
                                          (SQLUSMALLINT)_ident,
                                          NULL,

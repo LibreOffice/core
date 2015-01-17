@@ -110,7 +110,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     memset(szConnStrOut,'\0',4096);
     memset(szConnStrIn,'\0',2048);
     OString aConStr(OUStringToOString(aConnectStr,getTextEncoding()));
-    memcpy(szConnStrIn, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
+    memcpy(szConnStrIn, aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
 #ifndef MACOSX
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,reinterpret_cast<SQLPOINTER>(nTimeOut),SQL_IS_UINTEGER);
@@ -315,7 +315,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& sql ) throw(SQLExcepti
     OString aSql(OUStringToOString(sql.getStr(),getTextEncoding()));
     char pOut[2048];
     SQLINTEGER nOutLen;
-    OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,sizeof pOut - 1,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
+    OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())),aSql.getLength(),reinterpret_cast<SDB_ODBC_CHAR*>(pOut),sizeof pOut - 1,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
     return OUString(pOut,nOutLen,getTextEncoding());
 }
 
@@ -408,7 +408,7 @@ void SAL_CALL OConnection::setCatalog( const OUString& catalog ) throw(SQLExcept
 
     OString aCat(OUStringToOString(catalog.getStr(),getTextEncoding()));
     OTools::ThrowException(this,
-        N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)aCat.getStr(),SQL_NTS),
+        N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,const_cast<char *>(aCat.getStr()),SQL_NTS),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 
@@ -421,7 +421,7 @@ OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeExcepti
     SQLINTEGER nValueLen;
     char pCat[1024];
     OTools::ThrowException(this,
-        N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,(sizeof pCat)-1,&nValueLen),
+        N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,pCat,(sizeof pCat)-1,&nValueLen),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 
     return OUString(pCat,nValueLen,getTextEncoding());

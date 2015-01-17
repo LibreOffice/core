@@ -142,7 +142,7 @@ struct HashByteSequence
 {
     sal_Int32 operator () ( const ::rtl::ByteSequence & seq ) const
     {
-        return *(sal_Int32*) seq.getConstArray();
+        return *reinterpret_cast<sal_Int32 const *>(seq.getConstArray());
     }
 };
 
