@@ -161,7 +161,7 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
     if( PyErr_Occurred() )
     {
         PyRef excType, excValue, excTraceback;
-        PyErr_Fetch( (PyObject **)&excType, (PyObject**)&excValue,(PyObject**)&excTraceback);
+        PyErr_Fetch( reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         // As of Python 2.7 this gives a rather non-useful "<traceback object at 0xADDRESS>",
         // but it is the best we can do in the absence of uno._uno_extract_printable_stacktrace
         // Who knows, a future Python might print something better.
@@ -186,7 +186,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
     OUString fileName;
     osl_getModuleURLFromFunctionAddress(
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
-        (rtl_uString **) &fileName );
+        &fileName.pData );
     fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
 #ifdef MACOSX
     fileName += "../" LIBO_ETC_FOLDER "/";
@@ -460,7 +460,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         {
             desc.makeComplete();
             typelib_EnumTypeDescription *pEnumDesc =
-                (typelib_EnumTypeDescription *) desc.get();
+                reinterpret_cast<typelib_EnumTypeDescription *>(desc.get());
             for( int i = 0 ; i < pEnumDesc->nEnumValues ; i ++ )
             {
                 if( pEnumDesc->pEnumValues[i] == l )
@@ -740,7 +740,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             if( PyStrBytes_Check( str.get() ) )
             {
                 seq = Sequence<sal_Int8 > (
-                    (sal_Int8*) PyStrBytes_AsString(str.get()), PyStrBytes_Size(str.get()));
+                    reinterpret_cast<sal_Int8*>(PyStrBytes_AsString(str.get())), PyStrBytes_Size(str.get()));
             }
             a <<= seq;
         }
@@ -757,7 +757,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         else if( isInstanceOfStructOrException( o ) )
         {
             PyRef struc(PyObject_GetAttrString( o , "value" ),SAL_NO_ACQUIRE);
-            PyUNO * obj = (PyUNO*)struc.get();
+            PyUNO * obj = reinterpret_cast<PyUNO*>(struc.get());
             Reference< XMaterialHolder > holder( obj->members->xInvocation, UNO_QUERY );
             if( holder.is( ) )
                 a = holder->getMaterial();
@@ -770,7 +770,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         else if( PyObject_IsInstance( o, getPyUnoClass().get() ) )
         {
             PyUNO* o_pi;
-            o_pi = (PyUNO*) o;
+            o_pi = reinterpret_cast<PyUNO*>(o);
             if (o_pi->members->wrappedObject.getValueTypeClass () ==
                 com::sun::star::uno::TypeClass_STRUCT ||
                 o_pi->members->wrappedObject.getValueTypeClass () ==

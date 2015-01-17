@@ -53,7 +53,7 @@ void PyUNO_callable_del (PyObject* self)
 {
     PyUNO_callable* me;
 
-    me = (PyUNO_callable*) self;
+    me = reinterpret_cast<PyUNO_callable*>(self);
     delete me->members;
     PyObject_Del (self);
 
@@ -71,7 +71,7 @@ PyObject* PyUNO_callable_call(
     Any any_params;
     Any ret_value;
     RuntimeCargo *cargo = 0;
-    me = (PyUNO_callable*) self;
+    me = reinterpret_cast<PyUNO_callable*>(self);
 
     PyRef ret;
     try
@@ -255,7 +255,7 @@ PyRef PyUNO_callable_new (
     self->members->methodName = methodName;
     self->members->mode = mode;
 
-    return PyRef( (PyObject*)self, SAL_NO_ACQUIRE );
+    return PyRef( reinterpret_cast<PyObject*>(self), SAL_NO_ACQUIRE );
 }
 
 }

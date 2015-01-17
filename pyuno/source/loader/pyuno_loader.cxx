@@ -67,7 +67,7 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
     if( PyErr_Occurred() )
     {
         PyRef excType, excValue, excTraceback;
-        PyErr_Fetch( (PyObject **)&excType, (PyObject**)&excValue,(PyObject**)&excTraceback);
+        PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Runtime runtime;
         com::sun::star::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
         OUStringBuffer buf;

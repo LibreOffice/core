@@ -350,8 +350,7 @@ static PyObject* initTestEnvironment(
         oslGenericFunction const pFunc(
                 mod.getFunctionSymbol("test_init"));
         if (!pFunc) { abort(); }
-        // guess casting pFunc is undefined behavior but don't see a better way
-        ((void (SAL_CALL *)(XMultiServiceFactory*)) pFunc) (xMSF.get());
+        reinterpret_cast<void (SAL_CALL *)(XMultiServiceFactory*)>(pFunc)(xMSF.get());
     }
     catch (const com::sun::star::uno::Exception &)
     {
@@ -403,13 +402,13 @@ static PyObject *createUnoStructHelper(
                     if (idl_class.is ())
                     {
                         idl_class->createObject (IdlStruct);
-                        PyUNO *me = (PyUNO*)PyUNO_new_UNCHECKED( IdlStruct, c->xInvocation );
-                        PyRef returnCandidate( (PyObject*)me, SAL_NO_ACQUIRE );
+                        PyUNO *me = reinterpret_cast<PyUNO*>(PyUNO_new_UNCHECKED( IdlStruct, c->xInvocation ));
+                        PyRef returnCandidate( reinterpret_cast<PyObject*>(me), SAL_NO_ACQUIRE );
                         TypeDescription desc( typeName );
                         OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
 
                         typelib_CompoundTypeDescription *pCompType =
-                            ( typelib_CompoundTypeDescription * ) desc.get();
+                            reinterpret_cast<typelib_CompoundTypeDescription *>(desc.get());
                         fillStructState state;
                         if ( PyTuple_Size( initializer ) > 0 || PyDict_Size( keywordArgs ) > 0 )
                             fillStruct( me->members->xInvocation, pCompType, initializer, keywordArgs, state, runtime );
@@ -632,7 +631,7 @@ static PyObject * generateUuid(
     SAL_UNUSED_PARAMETER PyObject *, SAL_UNUSED_PARAMETER PyObject * )
 {
     Sequence< sal_Int8 > seq( 16 );
-    rtl_createUuid( (sal_uInt8*)seq.getArray() , 0 , sal_False );
+    rtl_createUuid( reinterpret_cast<sal_uInt8*>(seq.getArray()) , 0 , sal_False );
     PyRef ret;
     try
     {

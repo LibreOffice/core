@@ -174,11 +174,11 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
 
         desc.makeComplete();
 
-        typelib_EnumTypeDescription *pEnumDesc = (typelib_EnumTypeDescription*) desc.get();
+        typelib_EnumTypeDescription *pEnumDesc = reinterpret_cast<typelib_EnumTypeDescription*>(desc.get());
         int i = 0;
         for( i = 0; i < pEnumDesc->nEnumValues ; i ++ )
         {
-            if( (*((OUString *)&pEnumDesc->ppEnumNames[i])).equalsAscii( stringValue ) )
+            if( OUString::unacquired(&pEnumDesc->ppEnumNames[i]).equalsAscii( stringValue ) )
             {
                 break;
             }
@@ -293,7 +293,7 @@ PyObject *PyUNO_ByteSequence_new(
     const com::sun::star::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
 {
     PyRef str(
-        PyStrBytes_FromStringAndSize( (char*)byteSequence.getConstArray(), byteSequence.getLength()),
+        PyStrBytes_FromStringAndSize( reinterpret_cast<char const *>(byteSequence.getConstArray()), byteSequence.getLength()),
         SAL_NO_ACQUIRE );
     PyRef args( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
     PyTuple_SetItem( args.get() , 0 , str.getAcquired() );

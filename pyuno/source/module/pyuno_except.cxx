@@ -109,7 +109,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyRef base;
     if( isInterface )
     {
-        typelib_InterfaceTypeDescription *pDesc = (typelib_InterfaceTypeDescription * )desc.get();
+        typelib_InterfaceTypeDescription *pDesc = reinterpret_cast<typelib_InterfaceTypeDescription *>(desc.get());
         if( pDesc->pBaseTypeDescription )
         {
             base = getClass( pDesc->pBaseTypeDescription->aBase.pTypeName, runtime );
@@ -121,7 +121,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     }
     else
     {
-        typelib_CompoundTypeDescription *pDesc = (typelib_CompoundTypeDescription*)desc.get();
+        typelib_CompoundTypeDescription *pDesc = reinterpret_cast<typelib_CompoundTypeDescription*>(desc.get());
         if( pDesc->pBaseTypeDescription )
         {
             base = getClass( pDesc->pBaseTypeDescription->aBase.pTypeName, runtime );

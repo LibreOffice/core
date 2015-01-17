@@ -130,12 +130,12 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
         assert( pTypeDescr );
 
-        typelib_CompoundTypeDescription * pCompType = (typelib_CompoundTypeDescription *)pTypeDescr;
+        typelib_CompoundTypeDescription * pCompType = reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr);
         sal_Int32 nDescr = pCompType->nMembers;
 
         if (pCompType->pBaseTypeDescription)
         {
-            buf.append( val2str( pVal, ((typelib_TypeDescription *)pCompType->pBaseTypeDescription)->pWeakRef,mode ) );
+            buf.append( val2str( pVal, pCompType->pBaseTypeDescription->aBase.pWeakRef, mode ) );
             if (nDescr)
                 buf.append( ", " );
         }
@@ -168,7 +168,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 
         uno_Sequence * pSequence = *(uno_Sequence **)pVal;
         typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType );
+        TYPELIB_DANGER_GET( &pElementTypeDescr, reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType );
 
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
         sal_Int32 nElements = pSequence->nElements;
@@ -213,15 +213,15 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
-        sal_Int32 * pValues = ((typelib_EnumTypeDescription *)pTypeDescr)->pEnumValues;
-        sal_Int32 nPos = ((typelib_EnumTypeDescription *)pTypeDescr)->nEnumValues;
+        sal_Int32 * pValues = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->pEnumValues;
+        sal_Int32 nPos = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nEnumValues;
         while (nPos--)
         {
             if (pValues[nPos] == *(int *)pVal)
                 break;
         }
         if (nPos >= 0)
-            buf.append( ((typelib_EnumTypeDescription *)pTypeDescr)->ppEnumNames[nPos] );
+            buf.append( reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->ppEnumNames[nPos] );
         else
             buf.append( '?' );
 
@@ -296,7 +296,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
 
 PyObject *PyUNO_repr( PyObject  * self )
 {
-    PyUNO *me = (PyUNO * ) self;
+    PyUNO *me = reinterpret_cast<PyUNO *>(self);
     PyObject * ret = 0;
 
     if( me->members->wrappedObject.getValueType().getTypeClass()
@@ -328,7 +328,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
         PyRef paras,callable;
         if( PyObject_IsInstance( object, getPyUnoClass().get() ) )
         {
-            PyUNO* me = (PyUNO*) object;
+            PyUNO* me = reinterpret_cast<PyUNO*>(object);
             OUString attrName = OUString::createFromAscii(name);
             if (! me->members->xInvocation->hasMethod (attrName))
             {
@@ -393,7 +393,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
 
 PyObject *PyUNO_str( PyObject * self )
 {
-    PyUNO *me = ( PyUNO * ) self;
+    PyUNO *me = reinterpret_cast<PyUNO *>(self);
 
     OStringBuffer buf;
 
@@ -428,7 +428,7 @@ PyObject *PyUNO_str( PyObject * self )
 
 PyObject* PyUNO_dir (PyObject* self)
 {
-    PyUNO* me = (PyUNO*) self;
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
 
     PyObject* member_list = NULL;
     Sequence<OUString> oo_member_list;
@@ -461,7 +461,7 @@ PyObject* PyUNO_getattr (PyObject* self, char* name)
 
         Runtime runtime;
 
-        me = (PyUNO*) self;
+        me = reinterpret_cast<PyUNO*>(self);
         if (strcmp (name, "__dict__") == 0)
         {
             Py_INCREF (Py_TYPE(me)->tp_dict);
@@ -539,7 +539,7 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
 {
     PyUNO* me;
 
-    me = (PyUNO*) self;
+    me = reinterpret_cast<PyUNO*>(self);
     try
     {
         Runtime runtime;
@@ -644,7 +644,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 
 static PyMethodDef PyUNOMethods[] =
 {
-    {"__dir__", (PyCFunction)PyUNO_dir, METH_NOARGS, NULL},
+    {"__dir__", reinterpret_cast<PyCFunction>(PyUNO_dir), METH_NOARGS, NULL},
     {NULL,      NULL,                   0,           NULL}
 };
 
@@ -766,7 +766,7 @@ PyObject* PyUNO_new_UNCHECKED (
     self->members = new PyUNOInternals();
     self->members->xInvocation = tmp_invocation;
     self->members->wrappedObject = targetInterface;
-    return (PyObject*) self;
+    return reinterpret_cast<PyObject*>(self);
 }
 
 }
