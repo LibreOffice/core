@@ -236,7 +236,6 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
 
     sal_uInt16      nArrangeAry[5];
     sal_uInt16      nArrangeIndex;
-    bool        bBreak;
     Point       e1,e2;  // the common edge between the item rect and the floating window
 
     if ( nFlags & FLOATWIN_POPUPMODE_LEFT )
@@ -278,7 +277,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
-        bBreak = true;
+        bool bBreak = true;
         switch ( nArrangeAry[nArrangeIndex] )
         {
 
