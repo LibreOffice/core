@@ -62,11 +62,11 @@ public:
 
     virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                     {
-                        ((RscEnumInst*)rInst.pData)->bDflt = true;
+                        reinterpret_cast<RscEnumInst*>(rInst.pData)->bDflt = true;
                     }
     bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE
                     {
-                        return( ((RscEnumInst*)rInst.pData)->bDflt );
+                        return reinterpret_cast<RscEnumInst*>(rInst.pData)->bDflt;
                     };
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;

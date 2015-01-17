@@ -46,11 +46,11 @@ public:
                     // Eine Zuweisung an eine Variable
     virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
-                            ((RscRangeInst*)rInst.pData)->bDflt = true;
+                            reinterpret_cast<RscRangeInst*>(rInst.pData)->bDflt = true;
                         }
     bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
-                            return( ((RscRangeInst*)rInst.pData)->bDflt );
+                            return reinterpret_cast<RscRangeInst*>(rInst.pData)->bDflt;
                         };
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
@@ -84,11 +84,11 @@ public:
                     // Eine Zuweisung an eine Variable
     virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
-                            ((RscLongRangeInst*)rInst.pData)->bDflt = true;
+                            reinterpret_cast<RscLongRangeInst*>(rInst.pData)->bDflt = true;
                         }
     bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
-                            return( ((RscLongRangeInst*)rInst.pData)->bDflt );
+                            return reinterpret_cast<RscLongRangeInst*>(rInst.pData)->bDflt;
                         };
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
@@ -131,12 +131,12 @@ public:
     sal_uInt32          Size() SAL_OVERRIDE { return nSize; }
     virtual void    SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
-                            ((RscId*)rInst.pData)->aExp.cUnused = true;
+                            reinterpret_cast<RscId*>(rInst.pData)->aExp.cUnused = true;
                         }
     bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
                             //cUnused wird fuer Defaultkennung verwendet
-                            return ((RscId*)rInst.pData)->aExp.cUnused;
+                            return reinterpret_cast<RscId*>(rInst.pData)->aExp.cUnused;
                         }
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;

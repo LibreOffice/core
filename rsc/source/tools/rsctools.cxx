@@ -240,16 +240,15 @@ void * RscPtrPtr :: GetEntry( sal_uInt32 nEntry )
 
 RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
 {
-    short               nSwapTest = 1;
-    RSCBYTEORDER_TYPE   nMachineOrder;
-
     bSwap = false;
     if( nOrder != RSC_SYSTEMENDIAN )
     {
-        if( (sal_uInt8)*(sal_uInt8 *)&nSwapTest )
-            nMachineOrder = RSC_LITTLEENDIAN;
-        else
-            nMachineOrder = RSC_BIGENDIAN;
+        RSCBYTEORDER_TYPE nMachineOrder;
+#if defined OSL_LITENDIAN
+        nMachineOrder = RSC_LITTLEENDIAN;
+#else
+        nMachineOrder = RSC_BIGENDIAN;
+#endif
         bSwap = nOrder != nMachineOrder;
     }
     nByteOrder = nOrder;

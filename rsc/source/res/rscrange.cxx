@@ -56,8 +56,8 @@ bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
     {
-        if( ((RscRangeInst*)rInst.pData)->nValue ==
-          ((RscRangeInst*)pDef)->nValue )
+        if( reinterpret_cast<RscRangeInst*>(rInst.pData)->nValue ==
+            reinterpret_cast<RscRangeInst*>(pDef)->nValue )
         {
             return true;
         }
@@ -71,14 +71,14 @@ ERRTYPE RscRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     if( nMax < nValue || nMin > nValue )
         return ERR_RSCRANGE_OUTDEFSET;
 
-    ((RscRangeInst *)rInst.pData)->nValue = (sal_uInt16)( nValue - nMin );
-    ((RscRangeInst *)rInst.pData)->bDflt = false;
+    reinterpret_cast<RscRangeInst *>(rInst.pData)->nValue = (sal_uInt16)( nValue - nMin );
+    reinterpret_cast<RscRangeInst *>(rInst.pData)->bDflt = false;
     return ERR_OK;
 }
 
 ERRTYPE RscRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 {
-    *pN = ((RscRangeInst *)rInst.pData)->nValue + nMin;
+    *pN = reinterpret_cast<RscRangeInst *>(rInst.pData)->nValue + nMin;
     return ERR_OK;
 }
 
@@ -103,11 +103,11 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     else
     {
         if( 0L >= nMin && 0L <= nMax )
-            ((RscRangeInst *)aInst.pData)->nValue = (sal_uInt16)(0L - nMin);
+            reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue = (sal_uInt16)(0L - nMin);
         else
-            ((RscRangeInst *)aInst.pData)->nValue = 0;
+            reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue = 0;
 
-        ((RscRangeInst *)aInst.pData)->bDflt = true;
+        reinterpret_cast<RscRangeInst *>(aInst.pData)->bDflt = true;
     }
 
     return aInst;
@@ -116,7 +116,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
 {
-    fprintf( fOutput, "%ld", long( ((RscRangeInst *)rInst.pData)->nValue + nMin ) );
+    fprintf( fOutput, "%ld", long( reinterpret_cast<RscRangeInst *>(rInst.pData)->nValue + nMin ) );
 }
 
 ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
@@ -125,13 +125,13 @@ ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     if( nMin >= 0 )
     {
         sal_uInt16 n;
-        n = (sal_uInt16)(((RscRangeInst *)rInst.pData)->nValue + nMin);
+        n = (sal_uInt16)(reinterpret_cast<RscRangeInst *>(rInst.pData)->nValue + nMin);
         aMem.Put( n );
     }
     else
     {
         sal_Int16 n;
-        n = (sal_Int16)(((RscRangeInst *)rInst.pData)->nValue + nMin);
+        n = (sal_Int16)(reinterpret_cast<RscRangeInst *>(rInst.pData)->nValue + nMin);
         aMem.Put( n );
     }
 
@@ -169,8 +169,8 @@ ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
-        return 0 == memcmp( &((RscLongRangeInst*)rInst.pData)->nValue,
-                            &((RscLongRangeInst*)pDef)->nValue,
+        return 0 == memcmp( &reinterpret_cast<RscLongRangeInst*>(rInst.pData)->nValue,
+                            &reinterpret_cast<RscLongRangeInst*>(pDef)->nValue,
                             sizeof( sal_Int32 ) );
 
     return false;
@@ -181,15 +181,15 @@ ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
 
-    void * pData = &((RscLongRangeInst*)rInst.pData)->nValue;
+    void * pData = &reinterpret_cast<RscLongRangeInst*>(rInst.pData)->nValue;
     memcpy( pData, &nValue, sizeof( sal_Int32 ) );
-    ((RscLongRangeInst *)rInst.pData)->bDflt = false;
+    reinterpret_cast<RscLongRangeInst *>(rInst.pData)->bDflt = false;
     return ERR_OK;
 }
 
 ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 {
-    memmove( pN, &((RscLongRangeInst*)rInst.pData)->nValue,
+    memmove( pN, &reinterpret_cast<RscLongRangeInst*>(rInst.pData)->nValue,
              sizeof( sal_Int32 ) );
     return ERR_OK;
 }
@@ -220,9 +220,9 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
         else
             lDflt = nMin;
 
-        void * pData = &((RscLongRangeInst*)aInst.pData)->nValue;
+        void * pData = &reinterpret_cast<RscLongRangeInst*>(aInst.pData)->nValue;
         memcpy( pData, &lDflt, sizeof( sal_Int32 ) );
-        ((RscLongRangeInst *)aInst.pData)->bDflt = true;
+        reinterpret_cast<RscLongRangeInst *>(aInst.pData)->bDflt = true;
     }
 
     return aInst;
@@ -287,12 +287,12 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnCla
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
-    pClassData = (RscId *)aInst.pData;
+    pClassData = reinterpret_cast<RscId *>(aInst.pData);
 
     pClassData->Create();
 
     if( bOwnClass )
-        *pClassData = *(RscId *)rDflt.pData;
+        *pClassData = *reinterpret_cast<RscId *>(rDflt.pData);
     else
     {
         *pClassData = RscId();
@@ -302,7 +302,7 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnCla
             *pClassData = RscId( nMin );
 
         //cUnused wird fuer Defaultkennung verwendet
-        ((RscId *)aInst.pData)->aExp.cUnused = true;
+        reinterpret_cast<RscId *>(aInst.pData)->aExp.cUnused = true;
     }
 
     return aInst;
@@ -310,18 +310,18 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnCla
 
 void RscIdRange :: Destroy( const RSCINST & rInst )
 {
-    ((RscId *)rInst.pData)->Destroy();
+    reinterpret_cast<RscId *>(rInst.pData)->Destroy();
 }
 
 bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     if( pDef )
     {
-        if( ((RscId*)rInst.pData)->aExp.IsNumber() &&
-            ((RscId*)pDef)->aExp.IsNumber() )
+        if( reinterpret_cast<RscId*>(rInst.pData)->aExp.IsNumber() &&
+            reinterpret_cast<RscId*>(pDef)->aExp.IsNumber() )
         {
-            if( ((RscId*)rInst.pData)->GetNumber() ==
-                ((RscId*)pDef)->GetNumber() )
+            if( reinterpret_cast<RscId*>(rInst.pData)->GetNumber() ==
+                reinterpret_cast<RscId*>(pDef)->GetNumber() )
             {
                 return true;
             }
@@ -336,14 +336,14 @@ ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
     if( nMax < nValue || nMin > nValue )
         return ERR_RSCRANGE_OUTDEFSET;
 
-    *(RscId *)rInst.pData = RscId( nValue );
-    ((RscId *)rInst.pData)->aExp.cUnused = false;
+    *reinterpret_cast<RscId *>(rInst.pData) = RscId( nValue );
+    reinterpret_cast<RscId *>(rInst.pData)->aExp.cUnused = false;
     return ERR_OK;
 }
 
 ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, sal_Int32 * plValue )
 {
-    *plValue = ((RscId *)rInst.pData)->GetNumber();
+    *plValue = reinterpret_cast<RscId *>(rInst.pData)->GetNumber();
     return ERR_OK;
 }
 
@@ -355,8 +355,8 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId )
         aError = SetNumber( rInst, rRscId );
         if( aError.IsOk() )
         {
-            *(RscId *)rInst.pData = rRscId;
-            ((RscId *)rInst.pData)->aExp.cUnused = false;
+            *reinterpret_cast<RscId *>(rInst.pData) = rRscId;
+            reinterpret_cast<RscId *>(rInst.pData)->aExp.cUnused = false;
         }
     }
     else
@@ -367,7 +367,7 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId )
 
 ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId )
 {
-    *pRscId = *(RscId *)rInst.pData;
+    *pRscId = *reinterpret_cast<RscId *>(rInst.pData);
 
     return ERR_OK;
 }
@@ -375,13 +375,13 @@ ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId )
 void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                            RscTypCont *, sal_uInt32, const char * )
 {
-    fprintf( fOutput, "%s", ((RscId *)rInst.pData)->GetName().getStr() );
+    fprintf( fOutput, "%s", reinterpret_cast<RscId *>(rInst.pData)->GetName().getStr() );
 }
 
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont *, sal_uInt32, bool )
 {
-    sal_Int32 lVal = ((RscId*)rInst.pData)->GetNumber();
+    sal_Int32 lVal = reinterpret_cast<RscId*>(rInst.pData)->GetNumber();
 
     aMem.Put( (sal_Int32)lVal );
 
@@ -390,7 +390,7 @@ ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 
 bool RscIdRange::IsConsistent( const RSCINST & rInst )
 {
-    long nValue = ((RscId *)rInst.pData)->GetNumber();
+    long nValue = reinterpret_cast<RscId *>(rInst.pData)->GetNumber();
 
     return (nMax >= nValue) && (nMin <= nValue);
 
@@ -443,7 +443,7 @@ RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 
     GetNumber( aInst, &l );
     if( l == nOutRange )
-        ((RscRangeInst *)aInst.pData)->nValue++;
+        reinterpret_cast<RscRangeInst *>(aInst.pData)->nValue++;
 
     return aInst;
 }

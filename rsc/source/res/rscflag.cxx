@@ -44,8 +44,8 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
         sal_uInt32 nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
 
         i = i / (sizeof( sal_uInt32 ) * 8);
-        ((RscFlagInst *)rInst.pData)[ i ].nFlags     &= ~nFlag;
-        ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
+        reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nFlags     &= ~nFlag;
+        reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nDfltFlags &= ~nFlag;
         return ERR_OK;
     }
 
@@ -61,8 +61,8 @@ ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
         sal_uInt32 nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
 
         i = i / (sizeof( sal_uInt32 ) * 8);
-        ((RscFlagInst *)rInst.pData)[ i ].nFlags     |= nFlag;
-        ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
+        reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nFlags     |= nFlag;
+        reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nDfltFlags &= ~nFlag;
         return ERR_OK;
     }
 
@@ -97,8 +97,8 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass 
     {
         for( sal_uInt32 i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
         {
-            ((RscFlagInst *)aInst.pData)[ i ].nFlags = 0;
-            ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
+            reinterpret_cast<RscFlagInst *>(aInst.pData)[ i ].nFlags = 0;
+            reinterpret_cast<RscFlagInst *>(aInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
         }
     }
 
@@ -120,15 +120,15 @@ RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
         i = i / (sizeof( sal_uInt32 ) * 8);
         if( bOwnClass )
         {
-            ((RscFlagInst *)aInst.pData)[ i ].nFlags &=
-                ~nFlag | ((RscFlagInst *)rDfltI.pData)[ i ].nFlags;
-            ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags &=
-                ~nFlag | ((RscFlagInst *)rDfltI.pData)[ i ].nDfltFlags;
+            reinterpret_cast<RscFlagInst *>(aInst.pData)[ i ].nFlags &=
+                ~nFlag | reinterpret_cast<RscFlagInst *>(rDfltI.pData)[ i ].nFlags;
+            reinterpret_cast<RscFlagInst *>(aInst.pData)[ i ].nDfltFlags &=
+                ~nFlag | reinterpret_cast<RscFlagInst *>(rDfltI.pData)[ i ].nDfltFlags;
         }
         else
         {
-            ((RscFlagInst *)aInst.pData)[ i ].nFlags &= ~nFlag;
-            ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags |= nFlag;
+            reinterpret_cast<RscFlagInst *>(aInst.pData)[ i ].nFlags &= ~nFlag;
+            reinterpret_cast<RscFlagInst *>(aInst.pData)[ i ].nDfltFlags |= nFlag;
         }
     }
 
@@ -140,7 +140,7 @@ void RscFlag::SetToDefault( const RSCINST & rInst )
     sal_uInt32 i = 0;
 
     for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
-        ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
+        reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
 }
 
 bool RscFlag::IsDefault( const RSCINST & rInst )
@@ -149,7 +149,7 @@ bool RscFlag::IsDefault( const RSCINST & rInst )
 
     for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
     {
-        if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags != 0xFFFFFFFF )
+        if( reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nDfltFlags != 0xFFFFFFFF )
             return false;
     }
     return true;
@@ -164,7 +164,7 @@ bool RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
         nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
 
-        if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags & nFlag )
+        if( reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nDfltFlags & nFlag )
             return true ;
         else
             return false;
@@ -184,8 +184,8 @@ bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
 
         if( pDef )
         {
-            if( (((RscFlagInst *)rInst.pData)[ i ].nFlags & nFlag) ==
-                (((RscFlagInst *)pDef)[ i ].nFlags & nFlag) )
+            if( (reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nFlags & nFlag) ==
+                (reinterpret_cast<RscFlagInst *>(pDef)[ i ].nFlags & nFlag) )
             {
                 return true;
             }
@@ -206,8 +206,8 @@ bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
         {
             nIndex = i / (sizeof( sal_uInt32 ) * 8);
 
-            if( (((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag) !=
-                (((RscFlagInst *)pDef)[ nIndex ].nFlags & Flag)  )
+            if( (reinterpret_cast<RscFlagInst *>(rInst.pData)[ nIndex ].nFlags & Flag) !=
+                (reinterpret_cast<RscFlagInst *>(pDef)[ nIndex ].nFlags & Flag)  )
             {
                 return false;
             }
@@ -231,7 +231,7 @@ bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
         nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
         i = i / (sizeof( sal_uInt32 ) * 8);
 
-        if( ((RscFlagInst *)rInst.pData)[ i ].nFlags & nFlag )
+        if( reinterpret_cast<RscFlagInst *>(rInst.pData)[ i ].nFlags & nFlag )
             return true;
         else
             return false;
@@ -249,12 +249,12 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     for( i = 0; i < nEntries; i++ )
     {
         nIndex = i / (sizeof( sal_uInt32 ) * 8);
-        if( !( ((RscFlagInst *)rInst.pData)[ nIndex ].nDfltFlags & Flag) )
+        if( !( reinterpret_cast<RscFlagInst *>(rInst.pData)[ nIndex ].nDfltFlags & Flag) )
         {
             if( bComma )
                 fprintf( fOutput, ", " );
 
-            if( ((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag )
+            if( reinterpret_cast<RscFlagInst *>(rInst.pData)[ nIndex ].nFlags & Flag )
                 fprintf( fOutput, "%s", pHS->getString( pVarArray[ i ].nId ).getStr() );
             else
             {
@@ -280,7 +280,7 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     {
         nIndex = i / (sizeof( sal_uInt32 ) * 8);
 
-        if( ((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag )
+        if( reinterpret_cast<RscFlagInst *>(rInst.pData)[ nIndex ].nFlags & Flag )
             lVal |= pVarArray[ i ].lValue;
 
         Flag <<= 1;

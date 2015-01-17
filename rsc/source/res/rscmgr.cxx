@@ -54,12 +54,12 @@ RSCINST RscMgr::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass )
 
     RscClass::Create( &aInst, rDflt, bOwnClass );
 
-    pClassData = (RscMgrInst *)(aInst.pData + RscClass::Size() );
+    pClassData = reinterpret_cast<RscMgrInst *>(aInst.pData + RscClass::Size() );
     pClassData->Create();
 
     if( bOwnClass )
     {
-        RscMgrInst * pDfltData = (RscMgrInst *)(rDflt.pData + RscClass::Size());
+        RscMgrInst * pDfltData = reinterpret_cast<RscMgrInst *>(rDflt.pData + RscClass::Size());
         *pClassData = *pDfltData;
     }
 
@@ -72,7 +72,7 @@ void RscMgr::Destroy( const RSCINST & rInst )
 
     RscClass::Destroy( rInst );
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
     pClassData->Destroy();
 }
 
@@ -80,7 +80,7 @@ void RscMgr::SetToDefault( const RSCINST & rInst )
 {
     RscMgrInst * pClassData;
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
     pClassData->bDflt = true;
 
     RscClass::SetToDefault( rInst );
@@ -90,7 +90,7 @@ bool RscMgr::IsDefault( const RSCINST & rInst )
 {
     RscMgrInst * pClassData;
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
     if( !pClassData->bDflt )
         return false;
 
@@ -104,8 +104,8 @@ bool RscMgr::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 
     if( pDef )
     {
-        RscMgrInst * pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
-        RscMgrInst * pDfltData  = (RscMgrInst *)(pDef + RscClass::Size());
+        RscMgrInst * pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
+        RscMgrInst * pDfltData  = reinterpret_cast<RscMgrInst *>(pDef + RscClass::Size());
 
         if( !pClassData->aRefId.IsId() && !pDfltData->aRefId.IsId() )
         {
@@ -124,7 +124,7 @@ void RscMgr::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
     RscMgrInst * pClassData;
     sal_uInt32       i;
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
 
     fprintf( fOutput, "%s %s",
              pHS->getString( rInst.pClass->GetId() ).getStr(),
@@ -164,7 +164,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
     ERRTYPE         aError;
     ObjNode *       pObjNode = NULL;
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
 
     if( pClassData->aRefId.IsId() )
     {
@@ -258,7 +258,7 @@ bool RscMgr::IsConsistent( const RSCINST & rInst )
 
     bRet = RscClass::IsConsistent( rInst );
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
     if( pClassData->aRefId.IsId() &&
         ((pClassData->aRefId.GetNumber() < 1) ||
          (pClassData->aRefId.GetNumber() > 0x7FFF) ||
@@ -274,7 +274,7 @@ ERRTYPE RscMgr::GetRef( const RSCINST & rInst, RscId * pRscId )
 {
     RscMgrInst * pClassData;
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
     *pRscId = pClassData->aRefId;
     return ERR_OK;
 }
@@ -287,7 +287,7 @@ ERRTYPE RscMgr::IsToDeep( const RSCINST & rInst, sal_uInt32 nDeep )
     RSCINST         aTmpI = rInst;
     ObjNode *       pObjNode;
 
-    pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+    pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
 
     while( aTmpI.IsInst() && (nDeep < nRefDeep) && aError.IsOk() )
     {
@@ -328,7 +328,7 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
     }
     else
     {
-        pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
+        pClassData = reinterpret_cast<RscMgrInst *>(rInst.pData + RscClass::Size());
         aOldId = pClassData->aRefId;// Alten Wert merken
         pClassData->aRefId = rRefId;// vorher eintragen,
                                     // sonst Fehler bei rekursion

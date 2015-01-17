@@ -104,13 +104,13 @@ RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
 
     RscTop::Create( &aInst, rDflt, bOwnClass );
 
-    pClassData = (RscArrayInst *)(aInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(aInst.pData + nOffInstData);
     pClassData->pNode = NULL;
     if( bOwnClass )
     {
         RscArrayInst *   pDfltClassData;
 
-        pDfltClassData = (RscArrayInst *)(rDflt.pData + nOffInstData);
+        pDfltClassData = reinterpret_cast<RscArrayInst *>(rDflt.pData + nOffInstData);
 
         pClassData->pNode = ::Create( pDfltClassData->pNode );
     }
@@ -133,7 +133,7 @@ void RscArray::Destroy( const RSCINST & rInst )
 
     RscTop::Destroy( rInst );
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     //Baum rekursiv loeschen
     ::Destroy( pClassData->pNode );
@@ -147,7 +147,7 @@ ERRTYPE RscArray::GetValueEle( const RSCINST & rInst,
     RscArrayInst *  pClassData;
     RscInstNode *   pNode;
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     ERRTYPE     aError;
 
@@ -217,7 +217,7 @@ bool RscArray::IsConsistent( const RSCINST & rInst )
 
     bRet = RscTop::IsConsistent( rInst );
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
     if( !::IsConsistent( pClassData->pNode ) )
         bRet = false;
 
@@ -238,7 +238,7 @@ void RscArray::SetToDefault( const RSCINST & rInst )
 {
     RscArrayInst * pClassData;
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     ::SetToDefault( pClassData->pNode );
 
@@ -264,7 +264,7 @@ bool RscArray::IsDefault( const RSCINST & rInst )
 {
     RscArrayInst * pClassData;
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     bool bRet = ::IsDefault( pClassData->pNode );
 
@@ -294,7 +294,7 @@ bool RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 
     if( bRet )
     {
-        RscArrayInst * pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+        RscArrayInst * pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
         bRet = ::IsValueDefault( pClassData->pNode, pDef );
     }
@@ -307,7 +307,7 @@ void RscArray::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 {
     RscArrayInst * pClassData;
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     if( pTC->IsSrsDefault() )
     { // nur einen Wert schreiben
@@ -374,7 +374,7 @@ void RscArray::WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
 {
     RscArrayInst * pClassData;
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     ::WriteSrc( pClassData->pNode, fOutput, pTC, nTab, pVarName,
                 rInst.pData, pTypeClass );
@@ -394,7 +394,7 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     RscArrayInst * pClassData;
     RscInstNode *   pNode = NULL;
 
-    pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscArrayInst *>(rInst.pData + nOffInstData);
 
     if( pClassData->pNode )
     {

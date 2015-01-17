@@ -100,9 +100,9 @@ RSCINST RscClass::GetInstData
         else if( VAR_POINTER & pVarTypeList[ nEle ].nVarType )
         {
             if( VAR_EXTENDABLE & pVarTypeList[ nEle ].nVarType )
-                aInst = *(RSCINST *) (pData + pVarTypeList[ nEle ].nOffset);
+                aInst = *reinterpret_cast<RSCINST *>(pData + pVarTypeList[ nEle ].nOffset);
             else
-                aInst.pData = *(CLASS_DATA *) (pData + pVarTypeList[ nEle ].nOffset);
+                aInst.pData = *reinterpret_cast<CLASS_DATA *>(pData + pVarTypeList[ nEle ].nOffset);
         }
         else
             aInst.pData = pData + pVarTypeList[ nEle ].nOffset;
@@ -122,7 +122,7 @@ void RscClass::SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle, bool bSet )
 {
     RscClassInst * pClass;
 
-    pClass = (RscClassInst *)(pData + nSuperSize );
+    pClass = reinterpret_cast<RscClassInst *>(pData + nSuperSize );
     if( bSet )
         pClass->nVarDflt |= ((sal_uLong)1 << nEle);
     else
@@ -133,7 +133,7 @@ bool RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
 {
     RscClassInst *  pClass;
 
-    pClass = (RscClassInst *)(pData + nSuperSize );
+    pClass = reinterpret_cast<RscClassInst *>(pData + nSuperSize );
     return pClass->nVarDflt & ((sal_uLong)1 << nEle);
 }
 
@@ -159,10 +159,10 @@ RSCINST RscClass::Create( RSCINST * pInst,
     RscTop::Create( &aInst, rDflt, bOwnClass );
 
     if( bOwnClass )
-        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt =
-            ((RscClassInst *)(rDflt.pData + nSuperSize))->nVarDflt;
+        reinterpret_cast<RscClassInst *>(aInst.pData + nSuperSize)->nVarDflt =
+            reinterpret_cast<RscClassInst *>(rDflt.pData + nSuperSize)->nVarDflt;
     else
-        ((RscClassInst *)(aInst.pData + nSuperSize))->nVarDflt = ~((sal_uLong)0);
+        reinterpret_cast<RscClassInst *>(aInst.pData + nSuperSize)->nVarDflt = ~((sal_uLong)0);
 
     for( i = 0; i < nEntries; i++ )
     {
@@ -174,12 +174,12 @@ RSCINST RscClass::Create( RSCINST * pInst,
             CLASS_DATA  * ppData;
             if( VAR_EXTENDABLE & pVarTypeList[ i ].nVarType )
             {
-                RSCINST * pInstance = (RSCINST *) (aInst.pData + pVarTypeList[ i ].nOffset );
+                RSCINST * pInstance = reinterpret_cast<RSCINST *>(aInst.pData + pVarTypeList[ i ].nOffset );
                 pInstance->pClass = pVarTypeList[ i ].pClass;
                 ppData = &pInstance->pData;
             }
             else
-                ppData = (CLASS_DATA* ) (aInst.pData + pVarTypeList[ i ].nOffset );
+                ppData = reinterpret_cast<CLASS_DATA*>(aInst.pData + pVarTypeList[ i ].nOffset );
 
             *ppData = NULL;
             if( aDfltI.IsInst() )
@@ -335,7 +335,7 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
             { // Wird ueber Zeiger angegeben
                 if( VAR_EXTENDABLE & pVarTypeList[ i ].nVarType )
                 {
-                    RSCINST * pInst = (RSCINST *)
+                    RSCINST * pInst = reinterpret_cast<RSCINST *>
                             (rInst.pData + pVarTypeList[ i ].nOffset );
                     if( pCreateClass && pCreateClass->InHierarchy( aTmpI.pClass ) )
                         *pInst = pCreateClass->Create( NULL, aDefInst );
@@ -346,7 +346,7 @@ RSCINST RscClass::GetVariable( const RSCINST & rInst,
                 else
                 {
                     CLASS_DATA  * ppData
-                        = (CLASS_DATA *)(rInst.pData + pVarTypeList[ i ].nOffset);
+                        = reinterpret_cast<CLASS_DATA *>(rInst.pData + pVarTypeList[ i ].nOffset);
                     aTmpI = aTmpI.pClass->Create( NULL, aDefInst );
                     *ppData = aTmpI.pData;
                 }
@@ -423,7 +423,7 @@ void RscClass::SetToDefault( const RSCINST & rInst )
     RSCINST aTmpI;
     RscClassInst *  pClass;
 
-    pClass = (RscClassInst *)(rInst.pData + nSuperSize );
+    pClass = reinterpret_cast<RscClassInst *>(rInst.pData + nSuperSize );
 
     for( i = 0; i < nEntries; i++ )
     {

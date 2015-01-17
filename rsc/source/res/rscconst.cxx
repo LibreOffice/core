@@ -120,8 +120,8 @@ ERRTYPE RscEnum::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
 
     if( nEntries != (i = GetConstPos( nConst )) )
     {
-        ((RscEnumInst *)rInst.pData)->nValue = i;
-        ((RscEnumInst *)rInst.pData)->bDflt = false;
+        reinterpret_cast<RscEnumInst *>(rInst.pData)->nValue = i;
+        reinterpret_cast<RscEnumInst *>(rInst.pData)->bDflt = false;
         return ERR_OK;
     }
 
@@ -143,12 +143,12 @@ ERRTYPE RscEnum::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
 
 ERRTYPE RscEnum::GetConst( const RSCINST & rInst, Atom * pH )
 {
-    *pH = pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].nId;
+    *pH = pVarArray[ reinterpret_cast<RscEnumInst *>(rInst.pData)->nValue ].nId;
     return ERR_OK;
 }
 
 ERRTYPE RscEnum::GetNumber( const RSCINST & rInst, sal_Int32 * pNumber ){
-    *pNumber = pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue;
+    *pNumber = pVarArray[ reinterpret_cast<RscEnumInst *>(rInst.pData)->nValue ].lValue;
     return ERR_OK;
 }
 
@@ -172,8 +172,8 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass 
         memmove( aInst.pData, rDflt.pData, Size() );
     else
     {
-        ((RscEnumInst *)aInst.pData)->nValue = 0;
-        ((RscEnumInst *)aInst.pData)->bDflt = true;
+        reinterpret_cast<RscEnumInst *>(aInst.pData)->nValue = 0;
+        reinterpret_cast<RscEnumInst *>(aInst.pData)->bDflt = true;
     }
 
     return aInst;
@@ -181,20 +181,20 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass 
 
 bool RscEnum::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
-    return pDef && (((RscEnumInst*)rInst.pData)->nValue == ((RscEnumInst*)pDef)->nValue );
+    return pDef && (reinterpret_cast<RscEnumInst*>(rInst.pData)->nValue == reinterpret_cast<RscEnumInst*>(pDef)->nValue );
 }
 
 void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                         RscTypCont *, sal_uInt32, const char * )
 {
     fprintf( fOutput, "%s",
-             pHS->getString( pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].nId ).getStr() );
+             pHS->getString( pVarArray[ reinterpret_cast<RscEnumInst *>(rInst.pData)->nValue ].nId ).getStr() );
 }
 
 ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                           RscTypCont *, sal_uInt32, bool )
 {
-    aMem.Put( (sal_Int32)pVarArray[ ((RscEnumInst *)rInst.pData)->nValue ].lValue );
+    aMem.Put( (sal_Int32)pVarArray[ reinterpret_cast<RscEnumInst *>(rInst.pData)->nValue ].lValue );
     return ERR_OK;
 }
 

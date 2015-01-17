@@ -47,9 +47,9 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
 
     if( aError.IsOk() )
     {
-        ((RscStringInst *)rInst.pData)->bDflt = false;
+        reinterpret_cast<RscStringInst *>(rInst.pData)->bDflt = false;
 
-        pTmp = ((RscStringInst *)rInst.pData)->pStr;
+        pTmp = reinterpret_cast<RscStringInst *>(rInst.pData)->pStr;
         if( pTmp )
         {
             rtl_freeMemory( pTmp );
@@ -63,7 +63,7 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
             memcpy( pTmp, pStr, nLen );
         }
 
-        ((RscStringInst *)rInst.pData)->pStr = pTmp;
+        reinterpret_cast<RscStringInst *>(rInst.pData)->pStr = pTmp;
     }
 
     return aError;
@@ -71,13 +71,13 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
 
 ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr )
 {
-    *ppStr = ((RscStringInst *)rInst.pData)->pStr;
+    *ppStr = reinterpret_cast<RscStringInst *>(rInst.pData)->pStr;
     return ERR_OK;
 }
 
 ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId )
 {
-    *pRscId = ((RscStringInst *)rInst.pData)->aRefId;
+    *pRscId = reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId;
     return ERR_OK;
 }
 
@@ -85,8 +85,8 @@ ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId )
 {
     if( pRefClass )
     {
-        ((RscStringInst *)rInst.pData)->aRefId = rRefId;
-        ((RscStringInst *)rInst.pData)->bDflt  = false;
+        reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId = rRefId;
+        reinterpret_cast<RscStringInst *>(rInst.pData)->bDflt  = false;
     }
     else
         return( ERR_REFNOTALLOWED );
@@ -111,17 +111,17 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
 
-    ((RscStringInst *)aInst.pData)->aRefId.Create();
-    ((RscStringInst *)aInst.pData)->pStr = NULL;
-    ((RscStringInst *)aInst.pData)->bDflt = true;
+    reinterpret_cast<RscStringInst *>(aInst.pData)->aRefId.Create();
+    reinterpret_cast<RscStringInst *>(aInst.pData)->pStr = NULL;
+    reinterpret_cast<RscStringInst *>(aInst.pData)->bDflt = true;
 
     if( bOwnClass )
     {
-        ((RscStringInst *)aInst.pData)->aRefId =
-            ((RscStringInst *)rDflt.pData)->aRefId;
-        SetString( aInst, ((RscStringInst *)rDflt.pData)->pStr );
-        ((RscStringInst *)aInst.pData)->bDflt =
-            ((RscStringInst *)rDflt.pData)->bDflt ;
+        reinterpret_cast<RscStringInst *>(aInst.pData)->aRefId =
+            reinterpret_cast<RscStringInst *>(rDflt.pData)->aRefId;
+        SetString( aInst, reinterpret_cast<RscStringInst *>(rDflt.pData)->pStr );
+        reinterpret_cast<RscStringInst *>(aInst.pData)->bDflt =
+            reinterpret_cast<RscStringInst *>(rDflt.pData)->bDflt;
     }
 
     return aInst;
@@ -129,15 +129,15 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
 
 void RscString::Destroy( const RSCINST & rInst )
 {
-    if( ((RscStringInst *)rInst.pData)->pStr )
-        rtl_freeMemory( ((RscStringInst *)rInst.pData)->pStr );
-    ((RscStringInst *)rInst.pData)->aRefId.Destroy();
+    if( reinterpret_cast<RscStringInst *>(rInst.pData)->pStr )
+        rtl_freeMemory( reinterpret_cast<RscStringInst *>(rInst.pData)->pStr );
+    reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId.Destroy();
 }
 
 bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
-    RscStringInst * pData    = (RscStringInst*)rInst.pData;
-    RscStringInst * pDefData = (RscStringInst*)pDef;
+    RscStringInst * pData    = reinterpret_cast<RscStringInst*>(rInst.pData);
+    RscStringInst * pDefData = reinterpret_cast<RscStringInst*>(pDef);
 
     if( pDef )
     {
@@ -186,14 +186,14 @@ bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont *, sal_uInt32, const char * )
 {
-    if ( ((RscStringInst *)rInst.pData)->aRefId.IsId() )
+    if ( reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId.IsId() )
     {
         fprintf( fOutput, "%s",
-                 ((RscStringInst *)rInst.pData)->aRefId.GetName().getStr() );
+                 reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId.GetName().getStr() );
     }
     else
     {
-        RscStringInst * pStrI = ((RscStringInst *)rInst.pData);
+        RscStringInst * pStrI = reinterpret_cast<RscStringInst *>(rInst.pData);
         if(  pStrI->pStr ){
             //char *  pChangeTab = RscChar::GetChangeTab();
             sal_uInt32  n = 0;
@@ -233,9 +233,9 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     ObjNode *       pObjNode = NULL;
 
 
-    if( ((RscStringInst *)rInst.pData)->aRefId.IsId() )
+    if( reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId.IsId() )
     {
-        RscId   aId( ((RscStringInst *)rInst.pData)->aRefId );
+        RscId   aId( reinterpret_cast<RscStringInst *>(rInst.pData)->aRefId );
         RSCINST aTmpI;
 
         aTmpI.pClass = pRefClass;
@@ -282,15 +282,15 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
         }
         else
         {
-            if( ((RscStringInst *)rInst.pData)->pStr && pTC )
+            if( reinterpret_cast<RscStringInst *>(rInst.pData)->pStr && pTC )
             {
-                char * pStr = RscChar::MakeUTF8( ((RscStringInst *)rInst.pData)->pStr,
+                char * pStr = RscChar::MakeUTF8( reinterpret_cast<RscStringInst *>(rInst.pData)->pStr,
                                                 pTC->GetSourceCharSet() );
                 rMem.PutUTF8( pStr );
                 rtl_freeMemory( pStr );
             }
             else
-                rMem.PutUTF8( ((RscStringInst *)rInst.pData)->pStr );
+                rMem.PutUTF8( reinterpret_cast<RscStringInst *>(rInst.pData)->pStr );
         }
     }
     return aError;

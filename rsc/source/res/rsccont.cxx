@@ -89,7 +89,7 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
 
     RscTop::Create( &aInst, rDflt, bOwnClass );
 
-    pClassData = (RscBaseContInst *)(aInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(aInst.pData + nOffInstData);
     pClassData->nEntries = 0;
     pClassData->pEntries = NULL;
     pClassData->bDflt = true;
@@ -99,7 +99,7 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
         RscBaseContInst *   pDfltClassData;
         RSCINST         aDfltI;
 
-        pDfltClassData = (RscBaseContInst *)(rDflt.pData + nOffInstData);
+        pDfltClassData = reinterpret_cast<RscBaseContInst *>(rDflt.pData + nOffInstData);
 
         if( 0 != pDfltClassData->nEntries )
         {
@@ -128,7 +128,7 @@ void RscBaseCont::Destroy( const RSCINST & rInst )
 
     RscTop::Destroy( rInst);
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
     DestroyElements( pClassData );
 }
 
@@ -137,7 +137,7 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
 {
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
     if( !pClass )
         pClass = pTypeClass;
 
@@ -172,7 +172,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
     if( !bNoId && !rEleName.IsId() )
         aError = WRN_CONT_NOID;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( pCreateClass )
     {
@@ -250,7 +250,7 @@ sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst )
 {
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
     return pClassData->nEntries;
 }
 
@@ -258,7 +258,7 @@ RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos )
 {
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( nPos < pClassData->nEntries )
         return( pClassData->pEntries[ nPos ].aInst );
@@ -271,7 +271,7 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
     ERRTYPE aError;
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( (nDestPos < pClassData->nEntries) && (nSourcePos < pClassData->nEntries) )
     {
@@ -304,7 +304,7 @@ ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
     RSCINST           aTmpI;
     ERRTYPE           aError;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( nPos < pClassData->nEntries )
     {
@@ -327,7 +327,7 @@ SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos )
     RscBaseContInst * pClassData;
     SUBINFO_STRUCT  aInfo;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( nPos < pClassData->nEntries )
     {
@@ -345,7 +345,7 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
     ERRTYPE aError;
     char    *pTmpStr;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
@@ -381,7 +381,7 @@ ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
     ERRTYPE aError;
     sal_Int32   lNumber;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
@@ -417,7 +417,7 @@ ERRTYPE RscBaseCont::SetBool( const RSCINST & rInst,
     ERRTYPE aError;
     bool    bBool;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
@@ -455,7 +455,7 @@ ERRTYPE RscBaseCont::SetConst( const RSCINST & rInst,
     ERRTYPE aError;
     Atom    nConst;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
@@ -491,7 +491,7 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId )
     ERRTYPE aError;
     RscId   aId;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     // otherwise infinite recursion is possible
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
@@ -528,7 +528,7 @@ bool RscBaseCont::IsConsistent( const RSCINST & rInst )
 
     bRet = RscTop::IsConsistent( rInst );
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     // auf doppelten Id Testen und Reihenfolge beibehalten
     // Komplexitaet = n^2 / 2
@@ -562,7 +562,7 @@ void RscBaseCont::SetToDefault( const RSCINST & rInst )
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     for( i = 0; i < pClassData->nEntries; i++ )
     {
@@ -578,7 +578,7 @@ bool RscBaseCont::IsDefault( const RSCINST & rInst )
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( !pClassData->bDflt )
         return false;
@@ -602,7 +602,7 @@ bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
     if( !RscTop::IsValueDefault( rInst, pDef ) )
         return false;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( pClassData->nEntries )
         return false;
@@ -616,7 +616,7 @@ void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
     if( !pClass )
         pClass = pTypeClass;
 
@@ -638,7 +638,7 @@ void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos )
 {
     RscBaseContInst *   pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( nPos < pClassData->nEntries )
     {
@@ -663,7 +663,7 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
     sal_uInt32  i = 0, t = 0;
     RscBaseContInst * pClassData;
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     for( i = 0; i < pClassData->nEntries; i++ )
     {
@@ -686,7 +686,7 @@ ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( bExtra || bNoId )
     { // Nur Subresourcen schreiben, wenn bExtra == true
-        pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+        pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
         for (sal_uInt32 i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )
         {
@@ -762,7 +762,7 @@ ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
 
-    pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
+    pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     rMem.Put( pClassData->nEntries );
 

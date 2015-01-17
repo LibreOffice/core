@@ -101,7 +101,7 @@ public:
                 {
                     sal_uInt16 nVal = 0;
                     char* pFrom = GetPointer(nPos);
-                    char* pTo = (char*)&nVal;
+                    char* pTo = reinterpret_cast<char*>(&nVal);
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
                     return bSwap ? OSL_SWAPWORD( nVal ) : nVal;
@@ -110,7 +110,7 @@ public:
                 {
                     sal_uInt32 nVal = 0;
                     char* pFrom = GetPointer(nPos);
-                    char* pTo = (char*)&nVal;
+                    char* pTo = reinterpret_cast<char*>(&nVal);
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
@@ -204,7 +204,7 @@ public:
                     if( bSwap )
                         nVal = OSL_SWAPWORD( nVal );
                     char* pTo = GetPointer( nPos );
-                    char* pFrom = (char*)&nVal;
+                    char* pFrom = reinterpret_cast<char*>(&nVal);
                     *pTo++ = *pFrom++;
                     *pTo++ = *pFrom++;
                 }

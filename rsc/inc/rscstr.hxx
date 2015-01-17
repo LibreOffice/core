@@ -45,11 +45,11 @@ public:
     sal_uInt32      Size() SAL_OVERRIDE { return nSize; }
     void            SetToDefault( const RSCINST & rInst ) SAL_OVERRIDE
                         {
-                            ((RscStringInst*)rInst.pData)->bDflt = true;
+                            reinterpret_cast<RscStringInst*>(rInst.pData)->bDflt = true;
                         }
     bool            IsDefault( const RSCINST & rInst) SAL_OVERRIDE
                         {
-                            return ((RscStringInst*)rInst.pData)->bDflt;
+                            return reinterpret_cast<RscStringInst*>(rInst.pData)->bDflt;
                         }
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE;
