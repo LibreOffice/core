@@ -171,15 +171,15 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     if( aEntry.mhModule ) {
         oslGenericFunction func;
         func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getExistMark" );
-        aEntry.maData.existMark = ((sal_uInt8 const * (*)()) func)();
+        aEntry.maData.existMark = reinterpret_cast<sal_uInt8 const * (*)()>(func)();
         func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getIndex1" );
-        aEntry.maData.index1 = ((sal_Int16 const * (*)()) func)();
+        aEntry.maData.index1 = reinterpret_cast<sal_Int16 const * (*)()>(func)();
         func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getIndex2" );
-        aEntry.maData.index2 = ((sal_Int32 const * (*)()) func)();
+        aEntry.maData.index2 = reinterpret_cast<sal_Int32 const * (*)()>(func)();
         func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getLenArray" );
-        aEntry.maData.lenArray = ((sal_Int32 const * (*)()) func)();
+        aEntry.maData.lenArray = reinterpret_cast<sal_Int32 const * (*)()>(func)();
         func = osl_getAsciiFunctionSymbol( aEntry.mhModule, "getDataArea" );
-        aEntry.maData.dataArea = ((sal_Unicode const * (*)()) func)();
+        aEntry.maData.dataArea = reinterpret_cast<sal_Unicode const * (*)()>(func)();
     }
 
     data = aEntry.maData;

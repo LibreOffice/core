@@ -157,17 +157,17 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     OUString funclen_base = func_base + "_length";
                     if (OUString("TW HK MO").indexOf(rLocale.Country) >= 0)
                     {
-                        func = (const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule,
-                                    OUString(func_base + "TW_" + rAlgorithm).pData);
-                        funclen = (size_t (*)()) osl_getFunctionSymbol(hModule,
-                                    OUString(funclen_base + "TW_" + rAlgorithm).pData);
+                        func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(hModule,
+                                    OUString(func_base + "TW_" + rAlgorithm).pData));
+                        funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(hModule,
+                                    OUString(funclen_base + "TW_" + rAlgorithm).pData));
                     }
                     if (!func)
                     {
-                        func = (const sal_uInt8* (*)()) osl_getFunctionSymbol(
-                                hModule, OUString(func_base + rAlgorithm).pData);
-                        funclen = (size_t (*)()) osl_getFunctionSymbol(
-                                hModule, OUString(funclen_base + rAlgorithm).pData);
+                        func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(
+                                hModule, OUString(func_base + rAlgorithm).pData));
+                        funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(
+                                hModule, OUString(funclen_base + rAlgorithm).pData));
                     }
                 } else {
                     if ( rLocale.Language == "ja" ) {
@@ -183,8 +183,8 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     }
                     OUString func_base = aBuf.makeStringAndClear();
                     OUString funclen_base = func_base + "_length";
-                    func = (const sal_uInt8* (*)()) osl_getFunctionSymbol(hModule, func_base.pData);
-                    funclen = (size_t (*)()) osl_getFunctionSymbol(hModule, funclen_base.pData);
+                    func = reinterpret_cast<const sal_uInt8* (*)()>(osl_getFunctionSymbol(hModule, func_base.pData));
+                    funclen = reinterpret_cast<size_t (*)()>(osl_getFunctionSymbol(hModule, funclen_base.pData));
                 }
             }
 #else

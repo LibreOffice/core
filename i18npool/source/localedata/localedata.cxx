@@ -369,7 +369,7 @@ LocaleDataImpl::~LocaleDataImpl()
 LocaleDataItem SAL_CALL
 LocaleDataImpl::getLocaleItem( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getLocaleItem" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getLocaleItem" ));
 
     if ( func ) {
         sal_Int16 dataItemCount = 0;
@@ -697,7 +697,7 @@ LocaleDataImpl::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException
 
     sal_Unicode const * const * allCalendars = NULL;
 
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getAllCalendars" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getAllCalendars" ));
 
     if ( func ) {
         sal_Int16 calendarsCount = 0;
@@ -756,7 +756,7 @@ LocaleDataImpl::getAllCalendars( const Locale& rLocale ) throw(RuntimeException,
 Sequence< Currency2 > SAL_CALL
 LocaleDataImpl::getAllCurrencies2( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getAllCurrencies" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getAllCurrencies" ));
 
     if ( func ) {
         sal_Int16 currencyCount = 0;
@@ -889,7 +889,7 @@ LocaleDataImpl::getAllFormats( const Locale& rLocale ) throw(RuntimeException, s
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getDateAcceptancePatterns" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getDateAcceptancePatterns" ));
 
     if (func)
     {
@@ -918,7 +918,7 @@ LocaleDataImpl::getDateAcceptancePatterns( const Locale& rLocale ) throw(Runtime
 OUString SAL_CALL
 LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getCollatorImplementation" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
     if ( func ) {
         sal_Int16 collatorCount = 0;
         sal_Unicode **collatorArray = func(collatorCount);
@@ -933,7 +933,7 @@ LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUStrin
 Sequence< Implementation > SAL_CALL
 LocaleDataImpl::getCollatorImplementations( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getCollatorImplementation" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollatorImplementation" ));
 
     if ( func ) {
         sal_Int16 collatorCount = 0;
@@ -956,7 +956,7 @@ LocaleDataImpl::getCollatorImplementations( const Locale& rLocale ) throw(Runtim
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getCollationOptions( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getCollationOptions" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getCollationOptions" ));
 
     if ( func ) {
         sal_Int16 optionsCount = 0;
@@ -976,7 +976,7 @@ LocaleDataImpl::getCollationOptions( const Locale& rLocale ) throw(RuntimeExcept
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getSearchOptions( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getSearchOptions" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getSearchOptions" ));
 
     if ( func ) {
         sal_Int16 optionsCount = 0;
@@ -996,7 +996,7 @@ LocaleDataImpl::getSearchOptions( const Locale& rLocale ) throw(RuntimeException
 sal_Unicode ** SAL_CALL
 LocaleDataImpl::getIndexArray(const Locale& rLocale, sal_Int16& indexCount)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getIndexAlgorithm" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getIndexAlgorithm" ));
 
     if (func)
         return func(indexCount);
@@ -1090,7 +1090,7 @@ LocaleDataImpl::getIndexModuleByAlgorithm( const Locale& rLocale, const OUString
 Sequence< UnicodeScript > SAL_CALL
 LocaleDataImpl::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeException)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getUnicodeScripts" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getUnicodeScripts" ));
 
     if ( func ) {
         sal_Int16 scriptCount = 0;
@@ -1110,7 +1110,7 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeExceptio
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getFollowPageWords( const Locale& rLocale ) throw(RuntimeException)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getFollowPageWords" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getFollowPageWords" ));
 
     if ( func ) {
         sal_Int16 wordCount = 0;
@@ -1130,7 +1130,7 @@ LocaleDataImpl::getFollowPageWords( const Locale& rLocale ) throw(RuntimeExcepti
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getTransliterations( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getTransliterations" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getTransliterations" ));
 
     if ( func ) {
         sal_Int16 transliterationsCount = 0;
@@ -1155,7 +1155,7 @@ LocaleDataImpl::getTransliterations( const Locale& rLocale ) throw(RuntimeExcept
 LanguageCountryInfo SAL_CALL
 LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getLCInfo" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getLCInfo" ));
 
     if ( func ) {
         sal_Int16 LCInfoCount = 0;
@@ -1178,7 +1178,7 @@ LocaleDataImpl::getLanguageCountryInfo( const Locale& rLocale ) throw(RuntimeExc
 ForbiddenCharacters SAL_CALL
 LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getForbiddenCharacters" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
 
     if ( func ) {
         sal_Int16 LCForbiddenCharactersCount = 0;
@@ -1195,7 +1195,7 @@ LocaleDataImpl::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeExc
 OUString SAL_CALL
 LocaleDataImpl::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getForbiddenCharacters" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getForbiddenCharacters" ));
 
     if ( func ) {
         sal_Int16 LCForbiddenCharactersCount = 0;
@@ -1209,7 +1209,7 @@ LocaleDataImpl::getHangingCharacters( const Locale& rLocale ) throw(RuntimeExcep
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getBreakIteratorRules" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getBreakIteratorRules" ));
 
     if ( func ) {
         sal_Int16 LCBreakIteratorRuleCount = 0;
@@ -1231,7 +1231,7 @@ LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeExc
 Sequence< OUString > SAL_CALL
 LocaleDataImpl::getReservedWord( const Locale& rLocale  ) throw(RuntimeException, std::exception)
 {
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getReservedWords" );
+    MyFunc_Type func = reinterpret_cast<MyFunc_Type>(getFunctionSymbol( rLocale, "getReservedWords" ));
 
     if ( func ) {
         sal_Int16 LCReservedWordsCount = 0;
@@ -1254,7 +1254,7 @@ Sequence< Sequence<beans::PropertyValue> > SAL_CALL
 LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
 {
     // load symbol
-    MyFunc_Type2 func = (MyFunc_Type2) getFunctionSymbol( rLocale, "getContinuousNumberingLevels" );
+    MyFunc_Type2 func = reinterpret_cast<MyFunc_Type2>(getFunctionSymbol( rLocale, "getContinuousNumberingLevels" ));
 
     if ( func )
     {
@@ -1366,7 +1366,7 @@ Sequence< Reference<container::XIndexAccess> > SAL_CALL
 LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
 {
     // load symbol
-    MyFunc_Type3 func = (MyFunc_Type3) getFunctionSymbol( rLocale, "getOutlineNumberingLevels" );
+    MyFunc_Type3 func = reinterpret_cast<MyFunc_Type3>(getFunctionSymbol( rLocale, "getOutlineNumberingLevels" ));
 
     if ( func )
     {

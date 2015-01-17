@@ -87,9 +87,9 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
     if (hModule) {
         OUString get("get_indexdata_");
         if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 )
-            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_TW_"+rAlgorithm).pData);
+            func=reinterpret_cast<sal_uInt16** (*)(sal_Int16*)>(osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_TW_"+rAlgorithm).pData));
         if (!func)
-            func=(sal_uInt16** (*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_"+rAlgorithm).pData);
+            func=reinterpret_cast<sal_uInt16** (*)(sal_Int16*)>(osl_getFunctionSymbol(hModule, OUString(get+rLocale.Language+"_"+rAlgorithm).pData));
     }
 #else
     if ( rLocale.Language == "zh" && OUString( "TW HK MO" ).indexOf(rLocale.Country) >= 0 ) {
@@ -168,7 +168,7 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
         else if ( rLocale.Language == "ko" )
             func_name="get_ko_phonetic";
         if (func_name)
-            func=(sal_uInt16 **(*)(sal_Int16*))osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);
+            func=reinterpret_cast<sal_uInt16 **(*)(sal_Int16*)>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
     }
 #else
     if ( rLocale.Language == "zh" )

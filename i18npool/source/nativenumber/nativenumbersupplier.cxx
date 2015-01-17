@@ -314,8 +314,8 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         sal_Int32 i;
 
         OUString numberChar, multiplierChar, decimalChar, minusChar, separatorChar;
-        numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
-        multiplierChar = OUString((sal_Unicode*) MultiplierChar_7_CJK, ExponentCount_7_CJK*Multiplier_Count);
+        numberChar = OUString(NumberChar[0], 10*NumberChar_Count);
+        multiplierChar = OUString(MultiplierChar_7_CJK[0], ExponentCount_7_CJK*Multiplier_Count);
         decimalChar = OUString(DecimalChar, NumberChar_Count);
         minusChar = OUString(MinusChar, NumberChar_Count);
         separatorChar = OUString(SeparatorChar, NumberChar_Count);

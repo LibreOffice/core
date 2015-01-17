@@ -84,14 +84,14 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
 
 #ifndef DISABLE_DYNLOADING
     if (toSChinese) {
-        Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_T2S"))();
-        Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_T2S"))();
+        Data = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getSTC_CharData_T2S"))();
+        Index = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_CharIndex_T2S"))();
     } else if (nConversionOptions & TextConversionOption::USE_CHARACTER_VARIANTS) {
-        Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_S2V"))();
-        Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2V"))();
+        Data = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getSTC_CharData_S2V"))();
+        Index = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_CharIndex_S2V"))();
     } else {
-        Data = ((const sal_Unicode* (*)())getFunctionBySymbol("getSTC_CharData_S2T"))();
-        Index = ((const sal_uInt16* (*)())getFunctionBySymbol("getSTC_CharIndex_S2T"))();
+        Data = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getSTC_CharData_S2T"))();
+        Index = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_CharIndex_S2T"))();
     }
 #else
     if (toSChinese) {
@@ -125,21 +125,21 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     bool one2one=true;
 
 #ifndef DISABLE_DYNLOADING
-    const sal_Unicode *wordData = ((const sal_Unicode* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordData"))(dictLen);
+    const sal_Unicode *wordData = reinterpret_cast<const sal_Unicode* (*)(sal_Int32&)>(getFunctionBySymbol("getSTC_WordData"))(dictLen);
     if (toSChinese) {
-        index = ((const sal_uInt16* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordIndex_T2S"))(maxLen);
-        entry = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_WordEntry_T2S"))();
-        charData = ((const sal_Unicode* (*)()) getFunctionBySymbol("getSTC_CharData_T2S"))();
-        charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_T2S"))();
+        index = reinterpret_cast<const sal_uInt16* (*)(sal_Int32&)>(getFunctionBySymbol("getSTC_WordIndex_T2S"))(maxLen);
+        entry = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_WordEntry_T2S"))();
+        charData = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getSTC_CharData_T2S"))();
+        charIndex = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_CharIndex_T2S"))();
     } else {
-        index = ((const sal_uInt16* (*)(sal_Int32&)) getFunctionBySymbol("getSTC_WordIndex_S2T"))(maxLen);
-        entry = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_WordEntry_S2T"))();
+        index = reinterpret_cast<const sal_uInt16* (*)(sal_Int32&)>(getFunctionBySymbol("getSTC_WordIndex_S2T"))(maxLen);
+        entry = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_WordEntry_S2T"))();
         if (nConversionOptions & TextConversionOption::USE_CHARACTER_VARIANTS) {
-            charData = ((const sal_Unicode* (*)()) getFunctionBySymbol("getSTC_CharData_S2V"))();
-            charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_S2V"))();
+            charData = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getSTC_CharData_S2V"))();
+            charIndex = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_CharIndex_S2V"))();
         } else {
-            charData = ((const sal_Unicode* (*)()) getFunctionBySymbol("getSTC_CharData_S2T"))();
-            charIndex = ((const sal_uInt16* (*)()) getFunctionBySymbol("getSTC_CharIndex_S2T"))();
+            charData = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getSTC_CharData_S2T"))();
+            charIndex = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getSTC_CharIndex_S2T"))();
         }
     }
 #else

@@ -129,11 +129,11 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     sal_Unicode ch;
     Sequence< OUString > output;
 #ifndef DISABLE_DYNLOADING
-    const sal_Unicode* (*getHangul2HanjaData)() = (const sal_Unicode* (*)())getFunctionBySymbol("getHangul2HanjaData");
-    const Hangul_Index* (*getHangul2HanjaIndex)() = (const Hangul_Index* (*)()) getFunctionBySymbol("getHangul2HanjaIndex");
-    sal_Int16 (*getHangul2HanjaIndexCount)() = (sal_Int16 (*)()) getFunctionBySymbol("getHangul2HanjaIndexCount");
-    const sal_uInt16* (*getHanja2HangulIndex)() = (const sal_uInt16* (*)()) getFunctionBySymbol("getHanja2HangulIndex");
-    const sal_Unicode* (*getHanja2HangulData)() = (const sal_Unicode* (*)()) getFunctionBySymbol("getHanja2HangulData");
+    const sal_Unicode* (*getHangul2HanjaData)() = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getHangul2HanjaData"));
+    const Hangul_Index* (*getHangul2HanjaIndex)() = reinterpret_cast<const Hangul_Index* (*)()>(getFunctionBySymbol("getHangul2HanjaIndex"));
+    sal_Int16 (*getHangul2HanjaIndexCount)() = reinterpret_cast<sal_Int16 (*)()>(getFunctionBySymbol("getHangul2HanjaIndexCount"));
+    const sal_uInt16* (*getHanja2HangulIndex)() = reinterpret_cast<const sal_uInt16* (*)()>(getFunctionBySymbol("getHanja2HangulIndex"));
+    const sal_Unicode* (*getHanja2HangulData)() = reinterpret_cast<const sal_Unicode* (*)()>(getFunctionBySymbol("getHanja2HangulData"));
 #else
 #pragma GCC diagnostic push
 #ifdef __clang__

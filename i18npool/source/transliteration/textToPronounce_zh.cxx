@@ -163,7 +163,7 @@ TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
     idx=NULL;
     if (hModule) {
-        sal_uInt16** (*function)() = (sal_uInt16** (*)()) osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);
+        sal_uInt16** (*function)() = reinterpret_cast<sal_uInt16** (*)()>(osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData));
         if (function)
             idx=function();
     }
