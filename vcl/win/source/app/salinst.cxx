@@ -149,7 +149,7 @@ void SalYieldMutex::release()
         {
             if ( mnCount == 1 )
             {
-                OpenGLContext::resetAllContexts();
+                OpenGLContext::clearCurrent();
 
                 // If we don't call these message, the Output from the
                 // Java clients doesn't come in the right order
