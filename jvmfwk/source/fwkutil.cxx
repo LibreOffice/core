@@ -134,7 +134,7 @@ rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData)
         pCurBuf++;
     }
 
-    rtl::ByteSequence ret((sal_Int8*) pBuf.get(), lenRaw * 2);
+    rtl::ByteSequence ret(reinterpret_cast<sal_Int8*>(pBuf.get()), lenRaw * 2);
     return ret;
 }
 
@@ -173,7 +173,7 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
         }
         pBuf[i] = nibble;
     }
-    rtl::ByteSequence ret((sal_Int8*) pBuf.get(), lenBuf );
+    rtl::ByteSequence ret(reinterpret_cast<sal_Int8*>(pBuf.get()), lenBuf );
     return ret;
 }
 

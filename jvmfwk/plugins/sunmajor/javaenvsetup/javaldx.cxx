@@ -111,7 +111,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
 OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
 {
-    const sal_Unicode* chars = (sal_Unicode*) vendorData.getConstArray();
+    const sal_Unicode* chars = reinterpret_cast<sal_Unicode const *>(vendorData.getConstArray());
     sal_Int32 len = vendorData.getLength();
     OUString sData(chars, len / 2);
     //the runtime lib is on the first line

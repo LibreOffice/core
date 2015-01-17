@@ -169,7 +169,7 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     }
 
     OUString sVendorData = buf.makeStringAndClear();
-    rtl::ByteSequence byteSeq( (sal_Int8*) sVendorData.pData->buffer,
+    rtl::ByteSequence byteSeq( reinterpret_cast<sal_Int8*>(sVendorData.pData->buffer),
                                sVendorData.getLength() * sizeof(sal_Unicode));
     pInfo->arVendorData = byteSeq.get();
     rtl_byte_sequence_acquire(pInfo->arVendorData);
@@ -179,7 +179,7 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
 
 OUString getRuntimeLib(const rtl::ByteSequence & data)
 {
-    const sal_Unicode* chars = (sal_Unicode*) data.getConstArray();
+    const sal_Unicode* chars = reinterpret_cast<sal_Unicode const *>(data.getConstArray());
     sal_Int32 len = data.getLength();
     OUString sData(chars, len / 2);
     //the runtime lib is on the first line
@@ -694,7 +694,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     OUString sSymbolCreateJava("JNI_CreateJavaVM");
 
     JNI_CreateVM_Type * pCreateJavaVM =
-        (JNI_CreateVM_Type *)moduleRt.getFunctionSymbol(sSymbolCreateJava);
+        reinterpret_cast<JNI_CreateVM_Type *>(moduleRt.getFunctionSymbol(sSymbolCreateJava));
     if (!pCreateJavaVM)
     {
         OSL_ASSERT(false);

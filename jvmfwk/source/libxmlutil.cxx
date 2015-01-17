@@ -124,7 +124,7 @@ CXmlCharPtr::operator OUString()
     OUString ret;
     if (_object != NULL)
     {
-        OString aOStr((sal_Char*)_object);
+        OString aOStr(reinterpret_cast<char*>(_object));
         ret = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
     }
     return ret;
