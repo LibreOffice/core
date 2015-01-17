@@ -481,7 +481,7 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {
     if( rType == cppu::UnoType<text::XTextRange>::get())
-        return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
+        return uno::makeAny(uno::Reference< text::XTextRange >(static_cast<SvxUnoTextRangeBase *>(this)));
     else QUERYINT( text::XTextCursor );
     else QUERYINT( beans::XMultiPropertyStates );
     else QUERYINT( beans::XPropertySet );

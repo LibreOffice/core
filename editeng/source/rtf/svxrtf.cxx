@@ -1111,8 +1111,8 @@ void SvxRTFParser::BuildWhichTbl()
     // Building a Which-Map 'rWhichMap' from an array of
     // 'pWhichIds' from Which-Ids. It has the long 'nWhichIds'.
     // The Which-Map is not going to be deleted.
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPardMap, sizeof(aPardMap) / sizeof(sal_uInt16) );
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16*)&aPlainMap, sizeof(aPlainMap) / sizeof(sal_uInt16) );
+    SvParser::BuildWhichTbl( aWhichMap, reinterpret_cast<sal_uInt16*>(&aPardMap), sizeof(aPardMap) / sizeof(sal_uInt16) );
+    SvParser::BuildWhichTbl( aWhichMap, reinterpret_cast<sal_uInt16*>(&aPlainMap), sizeof(aPlainMap) / sizeof(sal_uInt16) );
 }
 
 const SfxItemSet& SvxRTFParser::GetRTFDefaults()
