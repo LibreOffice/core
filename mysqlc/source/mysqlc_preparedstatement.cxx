@@ -721,7 +721,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< 
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    std::string blobby((char *)x.getConstArray(), x.getLength());
+    std::string blobby(reinterpret_cast<char const *>(x.getConstArray()), x.getLength());
     try {
         static_cast<sql::PreparedStatement *>(cppStatement)->setString(parameter, blobby);
     } catch (const sql::MethodNotImplementedException &) {

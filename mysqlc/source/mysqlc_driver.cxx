@@ -162,7 +162,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     const rtl::OUString sSymbolName = "sql_mysql_get_driver_instance";
     typedef void* (* FGetMySQLDriver)();
 
-    const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
+    const FGetMySQLDriver pFactoryFunction = reinterpret_cast<FGetMySQLDriver>( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
     if ( !pFactoryFunction )
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");

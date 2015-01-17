@@ -224,7 +224,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 column)
     if (!val.length()) {
         return Sequence< sal_Int8>();
     } else {
-        return Sequence< sal_Int8 > ((sal_Int8*)val.c_str(), val.length());
+        return Sequence< sal_Int8 > (reinterpret_cast<sal_Int8 const *>(val.c_str()), val.length());
     }
 }
 
