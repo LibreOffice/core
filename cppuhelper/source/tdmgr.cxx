@@ -224,7 +224,7 @@ inline static typelib_TypeDescription * createCTD(
             setExc.push_back( setExcs[i]->getName().pData );
         }
         typelib_typedescription_newExtendedInterfaceAttribute(
-            (typelib_InterfaceAttributeTypeDescription **)&pRet,
+            reinterpret_cast<typelib_InterfaceAttributeTypeDescription **>(&pRet),
             xAttribute->getPosition(),
             aMemberName.pData, // name
             (typelib_TypeClass)xType->getTypeClass(),
@@ -285,7 +285,7 @@ static typelib_TypeDescription * createCTD(
         OUString aReturnTypeName( xReturnType->getName() );
 
         typelib_typedescription_newInterfaceMethod(
-            (typelib_InterfaceMethodTypeDescription **)&pRet,
+            reinterpret_cast<typelib_InterfaceMethodTypeDescription **>(&pRet),
             xMethod->getPosition(),
             xMethod->isOneway(),
             aTypeName.pData,
@@ -354,7 +354,7 @@ inline static typelib_TypeDescription * createCTD(
         }
 
         typelib_typedescription_newMIInterface(
-            (typelib_InterfaceTypeDescription **)&pRet,
+            reinterpret_cast<typelib_InterfaceTypeDescription **>(&pRet),
             aTypeName.pData,
             0, 0, 0, 0, 0,
             nBases, pBaseTypeRefs,
@@ -386,7 +386,7 @@ inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDes
         typelib_typedescription_newEnum(
             &pRet, aTypeName.pData, xType->getDefaultEnumValue(),
             aNames.getLength(),
-            (rtl_uString **)aNames.getConstArray(),
+            const_cast<rtl_uString **>(reinterpret_cast<rtl_uString * const *>(aNames.getConstArray())),
             const_cast< sal_Int32 * >( aValues.getConstArray() ) );
     }
     return pRet;

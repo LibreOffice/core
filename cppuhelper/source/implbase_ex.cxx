@@ -66,7 +66,7 @@ static inline void checkInterface( Type const & rType )
 
 static inline bool isXInterface( rtl_uString * pStr )
 {
-    return (*((OUString const *)&pStr) == "com.sun.star.uno.XInterface");
+    return OUString::unacquired(&pStr) == "com.sun.star.uno.XInterface";
 }
 
 static inline void * makeInterface( sal_IntPtr nOffset, void * that )
@@ -79,7 +79,7 @@ static inline bool __td_equals(
     typelib_TypeDescriptionReference const * pTDR2 )
 {
     return ((pTDR1 == pTDR2) ||
-            ((OUString const *)&pTDR1->pTypeName)->equals( *(OUString const *)&pTDR2->pTypeName ));
+            OUString::unacquired(&pTDR1->pTypeName) == OUString::unacquired(&pTDR2->pTypeName));
 }
 
 static inline type_entry * __getTypeEntries( class_data * cd )
