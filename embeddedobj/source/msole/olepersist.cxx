@@ -409,7 +409,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
         // write 0xFFFFFFFF at the beginning
         uno::Sequence< sal_Int8 > aData( 4 );
-        *( (sal_uInt32*)aData.getArray() ) = 0xFFFFFFFF;
+        *( reinterpret_cast<sal_uInt32*>(aData.getArray()) ) = 0xFFFFFFFF;
 
         xTempOutStream->writeBytes( aData );
 
@@ -440,7 +440,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         xTempOutStream->writeBytes( aData );
 
         // write l-index
-        *( (sal_uInt32*)aData.getArray() ) = 0xFFFFFFFF;
+        *( reinterpret_cast<sal_uInt32*>(aData.getArray()) ) = 0xFFFFFFFF;
         xTempOutStream->writeBytes( aData );
 
         // write adv. flags
@@ -448,7 +448,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         xTempOutStream->writeBytes( aData );
 
         // write compression
-        *( (sal_uInt32*)aData.getArray() ) = 0x0;
+        *( reinterpret_cast<sal_uInt32*>(aData.getArray()) ) = 0x0;
         xTempOutStream->writeBytes( aData );
 
         // get the size

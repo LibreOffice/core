@@ -424,7 +424,7 @@ void OwnView_Impl::CreateNative()
         {
             sal_uInt8 aClassID[] =
                 { 0x00, 0x03, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 };
-            uno::Sequence< sal_Int8 > aPackageClassID( (sal_Int8*)aClassID, 16 );
+            uno::Sequence< sal_Int8 > aPackageClassID( reinterpret_cast<sal_Int8*>(aClassID), 16 );
 
             uno::Reference< io::XStream > xSubStream;
             xNameAccess->getByName( aSubStreamName ) >>= xSubStream;
