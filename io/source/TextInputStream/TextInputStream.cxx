@@ -310,7 +310,7 @@ sal_Int32 OTextInputStream::implReadNext()
             nTargetCount += rtl_convertTextToUnicode(
                                 mConvText2Unicode,
                                 mContextText2Unicode,
-                                (const sal_Char*) &( pbSource[nSourceCount] ),
+                                reinterpret_cast<const char*>(&( pbSource[nSourceCount] )),
                                 nTotalRead - nSourceCount,
                                 mpBuffer + mnCharsInBuffer + nTargetCount,
                                 nFreeBufferSize - nTargetCount,

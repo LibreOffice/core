@@ -128,7 +128,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
     sal_Int32 nSeqSize =  nSourceSize * 3;
 
     Sequence<sal_Int8> seqText( nSeqSize );
-    sal_Char *pTarget = (sal_Char *) seqText.getArray();
+    sal_Char *pTarget = reinterpret_cast<char *>(seqText.getArray());
     while( true )
     {
         nTargetCount += rtl_convertUnicodeToText(
@@ -148,7 +148,7 @@ Sequence<sal_Int8> OTextOutputStream::implConvert( const OUString& rSource )
         {
             nSeqSize *= 2;
             seqText.realloc( nSeqSize );  // double array size
-            pTarget = (sal_Char*) seqText.getArray();
+            pTarget = reinterpret_cast<char*>(seqText.getArray());
             continue;
         }
         break;

@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/endian.h>
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -235,7 +236,7 @@ sal_Unicode ODataInputStream::readChar(void) throw (IOException, RuntimeExceptio
         throw UnexpectedEOFException();
     }
 
-    const sal_uInt8 * pBytes = ( const sal_uInt8 * )aTmp.getConstArray();
+    const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
     return ((sal_Unicode)pBytes[0] << 8) + pBytes[1];
 }
 
@@ -247,7 +248,7 @@ sal_Int16 ODataInputStream::readShort(void) throw (IOException, RuntimeException
         throw UnexpectedEOFException();
     }
 
-    const sal_uInt8 * pBytes = ( const sal_uInt8 * ) aTmp.getConstArray();
+    const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
     return ((sal_Int16)pBytes[0] << 8) + pBytes[1];
 }
 
@@ -260,7 +261,7 @@ sal_Int32 ODataInputStream::readLong(void) throw (IOException, RuntimeException,
         throw UnexpectedEOFException( );
     }
 
-    const sal_uInt8 * pBytes = ( const sal_uInt8 * ) aTmp.getConstArray();
+    const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
     return ((sal_Int32)pBytes[0] << 24) + ((sal_Int32)pBytes[1] << 16) + ((sal_Int32)pBytes[2] << 8) + pBytes[3];
 }
 
@@ -273,7 +274,7 @@ sal_Int64 ODataInputStream::readHyper(void) throw (IOException, RuntimeException
         throw UnexpectedEOFException( );
     }
 
-    const sal_uInt8 * pBytes = ( const sal_uInt8 * ) aTmp.getConstArray();
+    const sal_uInt8 * pBytes = reinterpret_cast<const sal_uInt8 *>(aTmp.getConstArray());
     return
         (((sal_Int64)pBytes[0]) << 56) +
         (((sal_Int64)pBytes[1]) << 48) +
@@ -294,20 +295,14 @@ float ODataInputStream::readFloat(void) throw (IOException, RuntimeException, st
 
 double ODataInputStream::readDouble(void) throw (IOException, RuntimeException, std::exception)
 {
-    sal_uInt32 n = 1;
     union { double d; struct { sal_uInt32 n1; sal_uInt32 n2; } ad; } a;
-    if( *(sal_uInt8 *)&n == 1 )
-    {
-        // little endian
-        a.ad.n2 = readLong();
-        a.ad.n1 = readLong();
-    }
-    else
-    {
-        // big endian
-        a.ad.n1 = readLong();
-        a.ad.n2 = readLong();
-    }
+#if defined OSL_LITENDIAN
+    a.ad.n2 = readLong();
+    a.ad.n1 = readLong();
+#else
+    a.ad.n1 = readLong();
+    a.ad.n2 = readLong();
+#endif
     return a.d;
 }
 
@@ -713,21 +708,15 @@ void ODataOutputStream::writeDouble(double Value)
     throw ( IOException,
             RuntimeException, std::exception)
 {
-    sal_uInt32 n = 1;
     union { double d; struct { sal_uInt32 n1; sal_uInt32 n2; } ad; } a;
     a.d = Value;
-    if( *(sal_Int8 *)&n == 1 )
-    {
-        // little endian
-        writeLong( a.ad.n2 );
-        writeLong( a.ad.n1 );
-    }
-    else
-    {
-        // big endian
-        writeLong( a.ad.n1 );
-        writeLong( a.ad.n2 );
-    }
+#if defined OSL_LITENDIAN
+    writeLong( a.ad.n2 );
+    writeLong( a.ad.n1 );
+#else
+    writeLong( a.ad.n1 );
+    writeLong( a.ad.n2 );
+#endif
 }
 
 void ODataOutputStream::writeUTF(const OUString& Value)
