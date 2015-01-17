@@ -86,6 +86,11 @@
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 
+/* The following spell is for Solaris and its descendants.
+ * See the "Solaris" section of
+ * <http://sourceforge.net/p/predef/wiki/OperatingSystems/>, and
+ * <http://stackoverflow.com/questions/16618604/solaris-and-preprocessor-macros>.
+ */
 #ifdef sun
 #undef sun
 #define sun sun
