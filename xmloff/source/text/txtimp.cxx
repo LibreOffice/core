@@ -2114,14 +2114,13 @@ void XMLTextImportHelper::SetRuby(
         xPropSet->setPropertyValue(sRubyText, makeAny(rText));
 
         // the ruby style (ruby-adjust)
-        XMLPropStyleContext *pStyle = 0;
         if (!rStyleName.isEmpty() && m_pImpl->m_xAutoStyles.Is())
         {
             const SvXMLStyleContext* pTempStyle =
                 static_cast<SvXMLStylesContext *>(&m_pImpl->m_xAutoStyles)->
                 FindStyleChildContext( XML_STYLE_FAMILY_TEXT_RUBY,
                                        rStyleName, true );
-            pStyle = const_cast<XMLPropStyleContext*>(PTR_CAST(XMLPropStyleContext,pTempStyle));
+            XMLPropStyleContext *pStyle = const_cast<XMLPropStyleContext*>(PTR_CAST(XMLPropStyleContext,pTempStyle));
 
             if (NULL != pStyle)
                 pStyle->FillPropertySet( xPropSet );

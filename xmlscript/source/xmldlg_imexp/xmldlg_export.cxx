@@ -1051,9 +1051,9 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
         SAL_WARN( "xmlscript.xmldlg", "unexpected property type for \"Enabled\": not bool!" );
     }
 
-    bool bVisible = true;
     if (supportVisible) try
     {
+        bool bVisible = true;
         if (_xProps->getPropertyValue("EnableVisible" ) >>= bVisible)
         {
 
