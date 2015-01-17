@@ -55,7 +55,7 @@ void SalYieldMutex::release()
     {
         if ( mnCount == 1 )
         {
-            OpenGLContext::resetAllContexts();
+            OpenGLContext::clearCurrent();
             mnThreadId = 0;
         }
         mnCount--;
