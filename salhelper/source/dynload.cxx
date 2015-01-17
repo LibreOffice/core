@@ -58,8 +58,8 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
         return NULL;
     }
 
-    initFunc = (ApiInitFunction)osl_getFunctionSymbol(
-        pModule, initFunction.pData);
+    initFunc = reinterpret_cast<ApiInitFunction>(osl_getFunctionSymbol(
+        pModule, initFunction.pData));
 
     if ( !initFunc )
     {
