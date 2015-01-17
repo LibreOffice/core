@@ -31,9 +31,6 @@ enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
 
 inline bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
 
-// Greek char range as seen in svx/.../charmap.cxx RID_SUBSETSTR_BASIC_GREEK
-inline bool IsGreekChar( sal_Unicode cChar ) { return 0x0370 <= cChar  &&  cChar <= 0x03FF; }
-
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar );
 
 

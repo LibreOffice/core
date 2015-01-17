@@ -137,7 +137,6 @@ public:
     std::set< OUString >      GetSymbolSetNames() const;
     const SymbolPtrVec_t    GetSymbolSet(  const OUString& rSymbolSetName );
 
-    sal_uInt16                  GetSymbolCount() const  { return static_cast< sal_uInt16 >(m_aSymbols.size()); }
     const SymbolPtrVec_t    GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const OUString & rSymbolName );
