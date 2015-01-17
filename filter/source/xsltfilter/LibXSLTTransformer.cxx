@@ -159,7 +159,7 @@ namespace XSLT
             xmlXPathObjectPtr streamName = valuePop(ctxt);
             streamName = ensureStringValue(streamName, ctxt);
 
-            oh->insertByName(OUString::createFromAscii((sal_Char*) streamName->stringval), OString((sal_Char*) value->stringval));
+            oh->insertByName(OUString::createFromAscii(reinterpret_cast<char*>(streamName->stringval)), OString(reinterpret_cast<char*>(value->stringval)));
             valuePush(ctxt, xmlXPathNewCString(""));
         }
 
@@ -200,7 +200,7 @@ namespace XSLT
             OleHandler * oh = static_cast<OleHandler*> (data);
             xmlXPathObjectPtr streamName = valuePop(ctxt);
             streamName = ensureStringValue(streamName, ctxt);
-            const OString content = oh->getByName(OUString::createFromAscii((sal_Char*) streamName->stringval));
+            const OString content = oh->getByName(OUString::createFromAscii(reinterpret_cast<char*>(streamName->stringval)));
             valuePush(ctxt, xmlXPathNewCString(content.getStr()));
             xmlXPathFreeObject(streamName);
         }
@@ -297,7 +297,7 @@ namespace XSLT
                 &ParserInputBufferCallback::on_close,
                 static_cast<void*> (this), NULL, NULL, 0);
         xsltStylesheetPtr styleSheet = xsltParseStylesheetFile(
-                (const xmlChar *) m_transformer->getStyleSheetURL().getStr());
+                reinterpret_cast<const xmlChar *>(m_transformer->getStyleSheetURL().getStr()));
         xmlDocPtr result = NULL;
         xsltTransformContextPtr tcontext = NULL;
         exsltRegisterAll();
@@ -349,14 +349,14 @@ namespace XSLT
     void
     Reader::registerExtensionModule()
     {
-        const xmlChar* oleModuleURI = (const xmlChar *) EXT_MODULE_OLE_URI;
+        const xmlChar* oleModuleURI = reinterpret_cast<const xmlChar *>(EXT_MODULE_OLE_URI);
         xsltRegisterExtModule(oleModuleURI, &ExtFuncOleCB::init, NULL);
         xsltRegisterExtModuleFunction(
-                                 (const xmlChar*) "insertByName",
+                                 reinterpret_cast<const xmlChar*>("insertByName"),
                                  oleModuleURI,
                                  &ExtFuncOleCB::insertByName);
         xsltRegisterExtModuleFunction(
-                                (const xmlChar*) "getByName",
+                                reinterpret_cast<const xmlChar*>("getByName"),
                                 oleModuleURI,
                                  &ExtFuncOleCB::getByName);
 

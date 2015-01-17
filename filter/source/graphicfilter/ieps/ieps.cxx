@@ -52,7 +52,7 @@ class FilterConfigItem;
 |*
 *************************************************************************/
 
-static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
+static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -247,9 +247,9 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     if (pOut)
     {
         rtl::ByteSequence seq;
-        if (osl_File_E_None == osl_readLine(pOut, (sal_Sequence **)&seq))
+        if (osl_File_E_None == osl_readLine(pOut, reinterpret_cast<sal_Sequence **>(&seq)))
         {
-            OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
+            OString line( reinterpret_cast<const char *>(seq.getConstArray()), seq.getLength() );
             if (line.startsWith("Unsupported output format"))
                 bEMFSupported=false;
         }
@@ -461,7 +461,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 
     OUString aString;
     int nLen;
-    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Title:", nBytesRead - 32, 8 );
+    sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%Title:"), nBytesRead - 32, 8 );
     if ( pDest )
     {
         pDest += 8;
@@ -469,13 +469,13 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        if ( strcmp( (const char*)pDest, "none" ) != 0 )
+        if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
         {
-            aString += " Title:" + OUString::createFromAscii( (char*)pDest ) + "\n";
+            aString += " Title:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
         }
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%Creator:", nBytesRead - 32, 10 );
+    pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%Creator:"), nBytesRead - 32, 10 );
     if ( pDest )
     {
         pDest += 10;
@@ -483,10 +483,10 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        aString += " Creator:" + OUString::createFromAscii( (char*)pDest ) + "\n";
+        aString += " Creator:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%CreationDate:", nBytesRead - 32, 15 );
+    pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%CreationDate:"), nBytesRead - 32, 15 );
     if ( pDest )
     {
         pDest += 15;
@@ -494,13 +494,13 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
             pDest++;
         nLen = ImplGetLen( pDest, 32 );
         sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        if ( strcmp( (const char*)pDest, "none" ) != 0 )
+        if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
         {
-            aString += " CreationDate:" + OUString::createFromAscii( (char*)pDest ) + "\n";
+            aString += " CreationDate:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
         }
         pDest[ nLen ] = aOldValue;
     }
-    pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%LanguageLevel:", nBytesRead - 4, 16 );
+    pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%LanguageLevel:"), nBytesRead - 4, 16 );
     if ( pDest )
     {
         pDest += 16;
@@ -589,8 +589,8 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     sal_uInt8* pHeader = new sal_uInt8[ 22 ];
     rStream.Seek( nPSStreamPos );
     rStream.Read( pHeader, 22 );    // check PostScript header
-    if ( ImplSearchEntry( pHeader, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
-        ImplSearchEntry( &pHeader[ 15 ], (sal_uInt8*)"EPS", 3, 3 ) )
+    if ( ImplSearchEntry( pHeader, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
+        ImplSearchEntry( &pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) )
     {
         bool bGraphicLinkCreated = false;
 
@@ -605,7 +605,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 int nSecurityCount = 32;
                 if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
                 {
-                    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BeginPreview:", nBytesRead - 32, 15 );
+                    sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - 32, 15 );
                     if ( pDest  )
                     {
                         pDest += 15;
@@ -613,7 +613,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                         long nHeight = ImplGetNumber( &pDest, nSecurityCount );
                         long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
                         long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
-                        pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       // go to the first Scanline
+                        pDest = ImplSearchEntry( pDest, reinterpret_cast<sal_uInt8 const *>("%"), 16, 1 );       // go to the first Scanline
                         if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
                         {
                             rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
@@ -704,7 +704,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     }
                 }
 
-                sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
+                sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
                 if ( pDest )
                 {
                     nSecurityCount = 100;

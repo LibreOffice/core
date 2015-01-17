@@ -124,13 +124,13 @@ CGMFList& CGMFList::operator=( CGMFList& rSource )
         FontEntry* pCFontEntry = new FontEntry;
         if ( pPtr->pFontName )
         {
-            sal_uInt32 nSize = strlen( (const char*)pPtr->pFontName ) + 1;
+            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName) ) + 1;
             pCFontEntry->pFontName = new sal_Int8[ nSize ];
             memcpy( pCFontEntry->pFontName, pPtr->pFontName, nSize );
         }
         if ( pPtr->pCharSetValue )
         {
-            sal_uInt32 nSize = strlen( (const char*)pPtr->pCharSetValue ) + 1;
+            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pCharSetValue) ) + 1;
             pCFontEntry->pCharSetValue = new sal_Int8[ nSize ];
             memcpy( pCFontEntry->pCharSetValue, pPtr->pCharSetValue, nSize );
         }
@@ -153,7 +153,7 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
 
 
 
-static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8* pDest, sal_uInt32 nComp, sal_uInt32 nSize )
+static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8 const * pDest, sal_uInt32 nComp, sal_uInt32 nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -186,7 +186,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     nFontNameCount++;
     boost::scoped_array<sal_Int8> pBuf(new sal_Int8[ nSize ]);
     memcpy( pBuf.get(), pSource, nSize );
-    sal_Int8* pFound = ImplSearchEntry( pBuf.get(), (sal_Int8*)"ITALIC", nSize, 6 );
+    sal_Int8* pFound = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_Int8 const *>("ITALIC"), nSize, 6 );
     if ( pFound )
     {
         pFontEntry->nFontType |= 1;
@@ -205,7 +205,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         }
         nSize -= nToCopyOfs;
     }
-    pFound = ImplSearchEntry( pBuf.get(), (sal_Int8*)"BOLD", nSize, 4 );
+    pFound = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_Int8 const *>("BOLD"), nSize, 4 );
     if ( pFound )
     {
         pFontEntry->nFontType |= 2;

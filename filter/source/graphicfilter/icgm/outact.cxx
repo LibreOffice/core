@@ -29,7 +29,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
     mnCurrentPage = 0;
     mnGroupActCount = mnGroupLevel = 0;
     mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL] ();
-    mpPoints = (Point*)new sal_Int8[ 0x2000 * sizeof( Point ) ];
+    mpPoints = reinterpret_cast<Point*>(new sal_Int8[ 0x2000 * sizeof( Point ) ]);
     mpFlags = new sal_uInt8[ 0x2000 ];
 
     mnIndex = 0;
@@ -38,7 +38,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
 
 CGMOutAct::~CGMOutAct()
 {
-    delete[] (sal_Int8*) mpPoints;
+    delete[] reinterpret_cast<sal_Int8*>(mpPoints);
     delete[] mpFlags;
     delete[] mpGroupLevel;
     delete mpGradient;

@@ -1840,12 +1840,12 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::st
                         aPolygon = Polygon( nInnerSequenceCount );
                         for( b = 0; b < nInnerSequenceCount; b++)
                         {
-                            PolyFlags   ePolyFlags( *( (PolyFlags*)pFlags++ ) );
+                            css::drawing::PolygonFlags ePolyFlags = *pFlags++;
                             ::com::sun::star::awt::Point aPoint( *(pArray++) );
                             aPolygon[ b ] = Point( aPoint.X, aPoint.Y );
-                            aPolygon.SetFlags( b, ePolyFlags );
+                            aPolygon.SetFlags( b, static_cast<PolyFlags>(ePolyFlags) );
 
-                            if ( ePolyFlags == POLY_CONTROL )
+                            if ( ePolyFlags == css::drawing::PolygonFlags_CONTROL )
                                 continue;
                         }
                         aPolyPolygon.Insert( aPolygon, POLYPOLY_APPEND );
@@ -4712,8 +4712,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                             {
                                 for ( b = 0; b < pInnerSequence->getLength(); b++, pArray++ )
                                 {
-                                    PolyFlags ePolyFlags = *( (PolyFlags*)pFlags++ );
-                                    if ( ePolyFlags == POLY_CONTROL )
+                                    css::drawing::PolygonFlags ePolyFlags = *pFlags++;
+                                    if ( ePolyFlags == css::drawing::PolygonFlags_CONTROL )
                                         continue;
                                     sal_uInt32 nDist = (sal_uInt32)hypot( aRefPoint.X - pArray->X, aRefPoint.Y - pArray->Y );
                                     if ( nDist < nDistance )

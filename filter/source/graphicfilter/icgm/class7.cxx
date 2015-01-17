@@ -32,7 +32,7 @@ void CGM::ImplDoClass7()
         case 0x02 :
         {
             sal_uInt8*  pAppData = mpSource + 12;
-            sal_uInt16* pTemp = (sal_uInt16*)mpSource;
+            sal_uInt16* pTemp = reinterpret_cast<sal_uInt16*>(mpSource);
             sal_uInt16 nOpcode = pTemp[ 4 ];
 
             if ( mpChart || ( nOpcode == 0 ) )
@@ -69,10 +69,10 @@ void CGM::ImplDoClass7()
                     case 0x262 : /*AppData - ENDGROUP */break;
                     case 0x264 : /*AppData - DATANODE*/
                     {
-                        mpChart->mDataNode[ 0 ] = *(DataNode*)( pAppData );
+                        mpChart->mDataNode[ 0 ] = *reinterpret_cast<DataNode*>( pAppData );
                         sal_Int8 nZoneEnum = mpChart->mDataNode[ 0 ].nZoneEnum;
                         if ( nZoneEnum && ( nZoneEnum <= 6 ) )
-                            mpChart->mDataNode[ nZoneEnum ] = *(DataNode*)( pAppData );
+                            mpChart->mDataNode[ nZoneEnum ] = *reinterpret_cast<DataNode*>( pAppData );
                     }
                     break;
                     case 0x2BE : /*AppData - SHWSLIDEREC*/
@@ -106,16 +106,16 @@ void CGM::ImplDoClass7()
                     case 0x320 : /*AppData - TEXT*/
                     {
                         TextEntry* pTextEntry = new TextEntry;
-                        pTextEntry->nTypeOfText = *((sal_uInt16*)( pAppData ) );
-                        pTextEntry->nRowOrLineNum = *((sal_uInt16*)( pAppData + 2 ) );
-                        pTextEntry->nColumnNum = *((sal_uInt16*)( pAppData + 4 ) );
-                        sal_uInt16 nAttributes = *( (sal_uInt16*)( pAppData + 6 ) );
+                        pTextEntry->nTypeOfText = *(reinterpret_cast<sal_uInt16*>( pAppData ) );
+                        pTextEntry->nRowOrLineNum = *(reinterpret_cast<sal_uInt16*>( pAppData + 2 ) );
+                        pTextEntry->nColumnNum = *(reinterpret_cast<sal_uInt16*>( pAppData + 4 ) );
+                        sal_uInt16 nAttributes = *( reinterpret_cast<sal_uInt16*>( pAppData + 6 ) );
                         pTextEntry->nZoneSize = nAttributes & 0xff;
                         pTextEntry->nLineType = ( nAttributes >> 8 ) & 0xf;
                         nAttributes >>= 12;
                         pTextEntry->nAttributes = nAttributes;
                         pAppData += 8;
-                        sal_uInt32 nLen = strlen( (char*)( pAppData ) ) + 1;
+                        sal_uInt32 nLen = strlen( reinterpret_cast<char*>( pAppData ) ) + 1;
                         pTextEntry->pText = new char[ nLen ];
                         memcpy( pTextEntry->pText, pAppData, nLen );
                         pAppData += nLen;
@@ -125,7 +125,7 @@ void CGM::ImplDoClass7()
                         {
                             TextAttribute* pTextAttr = new TextAttribute;
 
-                            *pTextAttr = *(TextAttribute*)( pAppData );
+                            *pTextAttr = *reinterpret_cast<TextAttribute*>( pAppData );
 
                             pTextAttr->pNextAttribute = NULL;
                             if ( i == 0 )
@@ -142,7 +142,7 @@ void CGM::ImplDoClass7()
                     case 0x321 : /*AppData - IOC_TABS */break;
                     case 0x322 : /*AppData - CHARTZONE*/
                     {
-                        mpChart->mChartZone = *( ChartZone* )( pAppData );
+                        mpChart->mChartZone = *reinterpret_cast<ChartZone*>( pAppData );
                     }
                     break;
                     case 0x324 : /*AppData - TITLEZONE */break;
@@ -150,17 +150,17 @@ void CGM::ImplDoClass7()
                     case 0x32A : /*AppData - LEGENDZONE */break;
                     case 0x330 : /*AppData - PAGEORIENTDIM*/
                     {
-                        mpChart->mPageOrientDim = *( PageOrientDim*)( pAppData );
+                        mpChart->mPageOrientDim = *reinterpret_cast<PageOrientDim*>( pAppData );
                     }
                     break;
                     case 0x334 : /*AppData - CHTZONEOPTN*/
                     {
-                        mpChart->mZoneOption = *( ZoneOption*)( pAppData );
+                        mpChart->mZoneOption = *reinterpret_cast<ZoneOption*>( pAppData );
                     }
                     break;
                     case 0x336 : /*AppData - CHTINTL*/
                     {
-                        mpChart->mIntSettings = *( IntSettings*)( pAppData );
+                        mpChart->mIntSettings = *reinterpret_cast<IntSettings*>( pAppData );
                     }
                     break;
                     case 0x338 : /*AppData - CHTLINESPC */break;
@@ -176,12 +176,12 @@ void CGM::ImplDoClass7()
                     case 0x44E : /*AppData - BULTEXTOPTN */break;
                     case 0x452 : /*AppData - BULLETOPTN*/
                     {
-                        mpChart->mBulletOption = *( BulletOption*)( pAppData );
+                        mpChart->mBulletOption = *reinterpret_cast<BulletOption*>( pAppData );
                     }
                     break;
                     case 0x454 : /*AppData - BULLETLINES*/
                     {
-                        mpChart->mBulletLines = *( BulletLines*)( pAppData );
+                        mpChart->mBulletLines = *reinterpret_cast<BulletLines*>( pAppData );
                     }
                     break;
                     case 0x456 : /*AppData - BULAUTOBUILD */break;

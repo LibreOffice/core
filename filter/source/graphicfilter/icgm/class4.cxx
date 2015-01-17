@@ -193,7 +193,7 @@ void CGM::ImplDoClass4()
                 awt::Size aSize;
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 mpOutAct->DrawText( aPoint, aSize,
-                                (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
+                                reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
             }
             break;
@@ -229,7 +229,7 @@ void CGM::ImplDoClass4()
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 awt::Size aSize((long)dx, (long)dy);
                 mpOutAct->DrawText( aPoint, aSize ,
-                                (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
+                                reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
             }
             break;
@@ -242,7 +242,7 @@ void CGM::ImplDoClass4()
                 nSize = ImplGetUI( 1 );
                 mpSource[ mnParaSize + nSize ] = 0;
 
-                mpOutAct->AppendText( (char*)mpSource + mnParaSize, nSize, (FinalFlag)nType );
+                mpOutAct->AppendText( reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
             }
             break;

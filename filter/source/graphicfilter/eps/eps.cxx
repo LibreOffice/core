@@ -227,7 +227,7 @@ private:
     double              ImplGetScaling( const MapMode& );
     void                ImplGetMapMode( const MapMode& );
     bool            ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong nSize );
-    sal_uInt8*          ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize );
+    sal_uInt8*          ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize );
                         // LZW methods
     void                StartCompression();
     void                Compress( sal_uInt8 nSrc );
@@ -1173,7 +1173,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
                 if ( pSource && ( mnLevel == 1 ) )
                 {
-                    sal_uInt8* pFound = ImplSearchEntry( pSource, (sal_uInt8*)"%%LanguageLevel:", nParseThis - 10, 16 );
+                    sal_uInt8* pFound = ImplSearchEntry( pSource, reinterpret_cast<sal_uInt8 const *>("%%LanguageLevel:"), nParseThis - 10, 16 );
                     if ( pFound )
                     {
                         sal_uInt8   k, i = 10;
@@ -2756,7 +2756,7 @@ void PSWriter::EndCompression()
 
 
 
-sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
+sal_uInt8* PSWriter::ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -2788,7 +2788,7 @@ bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong 
     else
         nBytesRead = POSTSCRIPT_BOUNDINGSEARCH;
 
-    sal_uInt8* pDest = ImplSearchEntry( pSource, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
+    sal_uInt8* pDest = ImplSearchEntry( pSource, reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
     if ( pDest )
     {
         int     nSecurityCount = 100;   // only 100 bytes following the bounding box will be checked

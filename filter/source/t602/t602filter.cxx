@@ -545,7 +545,7 @@ unsigned char T602ImportFilter::Readchar602()
     static Sequence< sal_Int8 > aData;
 
     return (mxInputStream->readBytes(aData, 1) > 0) ?
-        ((unsigned char *) aData.getConstArray())[0] : 0;
+        reinterpret_cast<unsigned char const *>(aData.getConstArray())[0] : 0;
 }
 
 void T602ImportFilter::par602(bool endofpage)
@@ -607,7 +607,7 @@ sal_Int16 T602ImportFilter::readnum(unsigned char *ch, bool show)
     buff[i]='\0';
 
     // mba: cast from unsigned char via int to sal_Int16 seems to be safe
-    return (sal_Int16) atoi((char *)buff);
+    return (sal_Int16) atoi(reinterpret_cast<char const *>(buff));
 }
 
 unsigned char T602ImportFilter::Setformat602(char *cmd)

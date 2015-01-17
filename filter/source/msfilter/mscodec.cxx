@@ -187,7 +187,7 @@ bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 uno::Sequence< beans::NamedValue > MSCodec_Xor95::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ OUString( "XOR95EncryptionKey" ) ] <<= uno::Sequence<sal_Int8>( (sal_Int8*)mpnKey, 16 );
+    aHashData[ OUString( "XOR95EncryptionKey" ) ] <<= uno::Sequence<sal_Int8>( reinterpret_cast<sal_Int8*>(mpnKey), 16 );
     aHashData[ OUString( "XOR95BaseKey" ) ] <<= (sal_Int16)mnKey;
     aHashData[ OUString( "XOR95PasswordHash" ) ] <<= (sal_Int16)mnHash;
 
@@ -318,8 +318,8 @@ bool MSCodec_Std97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
 uno::Sequence< beans::NamedValue > MSCodec_Std97::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ OUString( "STD97EncryptionKey" ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)m_pDigestValue, RTL_DIGEST_LENGTH_MD5 );
-    aHashData[ OUString( "STD97UniqueID" ) ] <<= uno::Sequence< sal_Int8 >( (sal_Int8*)m_pDocId, 16 );
+    aHashData[ OUString( "STD97EncryptionKey" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_pDigestValue), RTL_DIGEST_LENGTH_MD5 );
+    aHashData[ OUString( "STD97UniqueID" ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_pDocId), 16 );
 
     return aHashData.getAsConstNamedValueList();
 }
