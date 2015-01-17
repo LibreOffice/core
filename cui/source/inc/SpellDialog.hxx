@@ -70,7 +70,7 @@ private:
 
     void            CallModifyLink() {m_aModifyLink.Call(this);}
 
-    SpellDialog*    GetSpellDialog() const {return (SpellDialog*)GetParentDialog();}
+    inline SpellDialog* GetSpellDialog() const;
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
@@ -226,6 +226,9 @@ public:
 
     void            InvalidateDialog();
 };
+
+SpellDialog* SentenceEditWindow_Impl::GetSpellDialog() const {return static_cast<SpellDialog*>(GetParentDialog());}
+
 } //namespace svx
 
 #endif

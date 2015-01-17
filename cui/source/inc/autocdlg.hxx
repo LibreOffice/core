@@ -305,7 +305,7 @@ private:
     CollatorWrapper* pCompareClass;
     LanguageType    eLang;
 
-    DECL_LINK(NewDelHdl, PushButton*);
+    DECL_LINK(NewDelHdl, void*);
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
                     /// Box filled with new language

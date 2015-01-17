@@ -1616,9 +1616,9 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
     m_pAutoCapsCB->SaveValue();
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
+IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, void*, pBtn)
 {
-    if((pBtn == m_pNewAbbrevPB || pBtn == (PushButton*)m_pAbbrevED )
+    if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED )
         && !m_pAbbrevED->GetText().isEmpty())
     {
         m_pAbbrevLB->InsertEntry(m_pAbbrevED->GetText());
@@ -1629,7 +1629,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, PushButton*, pBtn)
         m_pAbbrevLB->RemoveEntry(m_pAbbrevED->GetText());
         ModifyHdl(m_pAbbrevED);
     }
-    else if((pBtn == m_pNewDoublePB || pBtn == (PushButton*)m_pDoubleCapsED )
+    else if((pBtn == m_pNewDoublePB || pBtn == m_pDoubleCapsED )
             && !m_pDoubleCapsED->GetText().isEmpty())
     {
         m_pDoubleCapsLB->InsertEntry(m_pDoubleCapsED->GetText());

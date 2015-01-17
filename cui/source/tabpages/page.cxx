@@ -1327,7 +1327,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SfxItemState::SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                            false, (const SfxPoolItem**)&pSetItem ) )
+                            false, reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -1389,7 +1389,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SfxItemState::SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
-                            false, (const SfxPoolItem**)&pSetItem ) )
+                            false, reinterpret_cast<const SfxPoolItem**>(&pSetItem) ) )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
         const SfxBoolItem& rFooterOn =

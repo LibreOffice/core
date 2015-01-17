@@ -563,9 +563,9 @@ const sal_uInt16* SvxSlantTabPage::GetRanges()
 
 void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxRectangleItem* pRectItem = NULL;
+    SfxRectangleItem const * pRectItem = NULL;
 
-    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
     {
         const Rectangle aTempRect(pRectItem->GetValue());
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
@@ -1002,9 +1002,9 @@ const sal_uInt16* SvxPositionSizeTabPage::GetRanges()
 
 void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    SfxRectangleItem* pRectItem = NULL;
+    SfxRectangleItem const * pRectItem = NULL;
 
-    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, reinterpret_cast<SfxPoolItem const **>(&pRectItem) ) )
     {
         { // #i75273#
             const Rectangle aTempRect(pRectItem->GetValue());

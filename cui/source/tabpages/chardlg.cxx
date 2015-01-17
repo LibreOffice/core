@@ -1615,7 +1615,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
         bChanged = ( m_pFontColorLB->GetSavedValue() == LISTBOX_ENTRY_NOTFOUND );
 
     if ( !bChanged && pExampleSet &&
-         pExampleSet->GetItemState( nWhich, false, (const SfxPoolItem**)&pItem ) == SfxItemState::SET &&
+         pExampleSet->GetItemState( nWhich, false, reinterpret_cast<const SfxPoolItem**>(&pItem) ) == SfxItemState::SET &&
          ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
         bChanged = true;
 
