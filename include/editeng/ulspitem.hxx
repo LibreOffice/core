@@ -78,6 +78,7 @@ public:
     bool GetContext() const { return bContext; }
     sal_uInt16 GetPropUpper() const { return nPropUpper; }
     sal_uInt16 GetPropLower() const { return nPropLower; }
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline SvxULSpaceItem &SvxULSpaceItem::operator=( const SvxULSpaceItem &rCpy )

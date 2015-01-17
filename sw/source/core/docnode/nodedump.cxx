@@ -493,6 +493,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_LR_SPACE:
                 static_cast<const SvxLRSpaceItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_UL_SPACE:
+                static_cast<const SvxULSpaceItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -507,9 +510,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_UL_SPACE:
-                pWhich = "upper-lower space";
-                break;
             case RES_SHADOW:
                 pWhich = "shadow";
                 break;
