@@ -125,7 +125,7 @@ MediatorMessage* PluginConnector::Transact( sal_uInt32 nFunction, ... )
     char* pBuffer;
 
     va_start( ap, nFunction );
-    sal_uLong nSize = FillBuffer( pBuffer, (char*)&nFunction, sizeof( nFunction ), ap );
+    sal_uLong nSize = FillBuffer( pBuffer, reinterpret_cast<char*>(&nFunction), sizeof( nFunction ), ap );
     va_end( ap );
     MediatorMessage* pRet = TransactMessage( nSize, pBuffer );
     delete[] pBuffer;
@@ -138,7 +138,7 @@ sal_uLong PluginConnector::Send( sal_uInt32 nFunction, ... )
     char* pBuffer;
 
     va_start( ap, nFunction );
-    sal_uLong nSize = FillBuffer( pBuffer, (char*)&nFunction, sizeof( nFunction ), ap );
+    sal_uLong nSize = FillBuffer( pBuffer, reinterpret_cast<char*>(&nFunction), sizeof( nFunction ), ap );
     va_end( ap );
     sal_uLong nRet = SendMessage( nSize, pBuffer );
     delete[] pBuffer;

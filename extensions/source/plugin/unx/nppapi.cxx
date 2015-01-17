@@ -107,7 +107,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 char* pWindow       = pMessage->GetString();
                 NPError aRet = NPN_GetURL( instance, pUrl, pWindow );
                 Respond( pMessage->m_nID,
-                         (char*)(&aRet), sizeof( NPError ), NULL );
+                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), NULL );
                 delete [] pUrl;
                 delete [] pWindow;
             }
@@ -122,7 +122,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPError aRet = NPN_GetURLNotify( instance, pUrl, pWindow,
                                                  *pNotifyData );
                 Respond( pMessage->m_nID,
-                         (char*)(&aRet), sizeof( NPError ), NULL );
+                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), NULL );
                 delete [] pUrl;
                 delete [] pWindow;
                 delete [] pNotifyData;
@@ -158,7 +158,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         "nonexistent StreamID " << nFileID);
 
                 Respond( pMessage->m_nID,
-                         (char*)(&aRet), sizeof( NPError ), NULL );
+                         reinterpret_cast<char*>(&aRet), sizeof( NPError ), NULL );
 
                 delete [] pUrl;
                 delete [] pReason;
@@ -179,7 +179,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 {
                     sal_uInt32 nDummy = 0;
                     Respond( pMessage->m_nID,
-                             (char*)&aRet, sizeof( aRet ),
+                             reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              "", 0,
                              &nDummy, sizeof(sal_uInt32),
                              &nDummy, sizeof(sal_uInt32),
@@ -191,7 +191,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
                     sal_uLong nLen = strlen( pStream->url );
                     Respond( pMessage->m_nID,
-                             (char*)&aRet, sizeof( aRet ),
+                             reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              pStream->url, nLen,
                              &pStream->end, sizeof(sal_uInt32),
                              &pStream->lastmodified, sizeof(sal_uInt32),
@@ -214,7 +214,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 void** pNData   = (void**)pMessage->GetBytes();
                 NPError aRet =
                     NPN_PostURLNotify( instance, pUrl, pTarget, nLen, pBuf, *pFile, *pNData );
-                Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
                 delete [] pUrl;
                 delete [] pTarget;
                 delete [] pBuf;
@@ -233,7 +233,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPBool* pFile   = (NPBool*)pMessage->GetBytes();
                 NPError aRet =
                     NPN_PostURL( instance, pUrl, pWindow, nLen, pBuf, *pFile );
-                Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
                 delete [] pUrl;
                 delete [] pWindow;
                 delete [] pBuf;
@@ -257,7 +257,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     pRun = pRun->next;
                 }
                 NPError aRet = NPN_RequestRead( pStream, pFirst );
-                Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
                 while( pFirst )
                 {
                     pRun = pFirst->next;
@@ -281,7 +281,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 int major, minor, net_major, net_minor;
                 NPN_Version( &major, &minor, &net_major, &net_minor );
                 Respond( pMessage->m_nID,
-                         (char*)&major, sizeof( int ),
+                         reinterpret_cast<char*>(&major), sizeof( int ),
                          &minor, sizeof( int ),
                          &net_major, sizeof( int ),
                          &net_minor, sizeof( int ),
@@ -298,7 +298,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 void* pBuffer       = pMessage->GetBytes();
                 sal_Int32 nRet = NPN_Write( instance, pStream, nLen, pBuffer );
                 Respond( pMessage->m_nID,
-                         (char*)&nRet, sizeof( nRet ),
+                         reinterpret_cast<char*>(&nRet), sizeof( nRet ),
                          NULL );
                 delete [] (char*)pBuffer;
                 delete instance;
@@ -335,7 +335,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         return err
 
 
-#define POST_INSTANCE() (char*)&nInstance, sizeof( nInstance )
+#define POST_INSTANCE() reinterpret_cast<char*>(&nInstance), sizeof( nInstance )
 
 NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
 {

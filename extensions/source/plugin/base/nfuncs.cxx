@@ -336,7 +336,7 @@ extern "C" {
         if( ! pImpl )
             return NPERR_INVALID_INSTANCE_ERROR;
 
-        ::com::sun::star::uno::Sequence<sal_Int8> Bytes( (sal_Int8*)buf, len );
+        ::com::sun::star::uno::Sequence<sal_Int8> Bytes( reinterpret_cast<sal_Int8 const *>(buf), len );
 
         OString aPostURL = normalizeURL( pImpl, url );
         PluginEventListener* pListener =
@@ -378,7 +378,7 @@ extern "C" {
         if( ! pImpl )
             return NPERR_INVALID_INSTANCE_ERROR;
 
-        ::com::sun::star::uno::Sequence<sal_Int8> Bytes( (sal_Int8*)buf, len );
+        ::com::sun::star::uno::Sequence<sal_Int8> Bytes( reinterpret_cast<sal_Int8 const *>(buf), len );
         OString aPostURL = normalizeURL( pImpl, url );
         try
         {

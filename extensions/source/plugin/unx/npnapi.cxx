@@ -541,7 +541,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
                 aReason = aPluginFuncs.destroystream( instance, pStream, aReason );
                 Respond( pMessage->m_nID,
-                         (char*)&aReason, sizeof( aReason ),
+                         reinterpret_cast<char*>(&aReason), sizeof( aReason ),
                          NULL );
 
                 delete [] pStream->url;
@@ -563,7 +563,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
                 // the other side will call eNPP_DestroyPhase2 after this
                 NPError aReason = NPERR_NO_ERROR;
-                Respond( pMessage->m_nID, (char*)&aReason, sizeof( aReason ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aReason), sizeof( aReason ), NULL );
             }
             break;
             case eNPP_DestroyPhase2:
@@ -578,14 +578,14 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 if( pSave )
                 {
                     Respond( pMessage->m_nID,
-                             (char*)&aRet, sizeof( aRet ),
+                             reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              pSave->buf, pSave->len,
                              NULL );
                     delete [] (char*)pSave->buf;
                 }
                 else
                     Respond( pMessage->m_nID,
-                             (char*)&aRet, sizeof( aRet ),
+                             reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              "0000", 4,
                              NULL );
 
@@ -631,7 +631,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         << ", lastmodified = " << pStream->lastmodified
                         << ", notifyData = " << pStream->notifyData << " }");
                 Respond( pMessage->m_nID,
-                         (char*)&aRet, sizeof( aRet ),
+                         reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                          &nStype, sizeof( nStype ),
                          NULL );
                 delete [] pType;
@@ -661,7 +661,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 aRet = aPluginFuncs.newp( pInst->pMimeType, instance, *pMode, *pArgc,
                                           pInst->nArg ? pInst->argn : NULL,
                                           pInst->nArg ? pInst->argv : NULL,
-                                          ( nSaveBytes == 4 && *(sal_uInt32*)pSavedData == 0 ) ?
+                                          ( nSaveBytes == 4 && *reinterpret_cast<sal_uInt32*>(pSavedData) == 0 ) ?
                                           &(pInst->aData) : NULL );
                 SAL_INFO(
                     "extensions.plugin",
@@ -694,7 +694,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 #endif
 
                 Respond( pMessage->m_nID,
-                         (char*)&aRet, sizeof( aRet ),
+                         reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                          NULL );
                 delete [] pMode;
                 delete [] pArgc;
@@ -800,9 +800,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     "extensions.plugin",
                     "pluginapp: NPP_SetWindow returns " << aRet);
                 Respond( pMessage->m_nID,
-                         (char*)&aRet, sizeof( aRet ),
+                         reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                          NULL );
-                delete [] (char*)pWindow;
+                delete [] reinterpret_cast<char*>(pWindow);
             }
             break;
             case eNPP_StreamAsFile:
@@ -847,7 +847,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         << nRet);
 
                 Respond( pMessage->m_nID,
-                         (char*)&nRet, sizeof( nRet ),
+                         reinterpret_cast<char*>(&nRet), sizeof( nRet ),
                          NULL );
             }
             break;
@@ -874,7 +874,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         << pStream->notifyData << " }");
 
                 Respond( pMessage->m_nID,
-                         (char*)&nRet, sizeof( nRet ),
+                         reinterpret_cast<char*>(&nRet), sizeof( nRet ),
                          NULL );
                 delete [] buffer;
             }
@@ -882,8 +882,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_GetMIMEDescription:
             {
                 if( ! pNPP_GetMIMEDescription )
-                    pNPP_GetMIMEDescription = (char*(*)())
-                        osl_getAsciiFunctionSymbol( pPluginLib, "NPP_GetMIMEDescription" );
+                    pNPP_GetMIMEDescription = reinterpret_cast<char*(*)()>(
+                        osl_getAsciiFunctionSymbol( pPluginLib, "NPP_GetMIMEDescription" ));
                 char* pMIME = pNPP_GetMIMEDescription();
                 Respond( pMessage->m_nID,
                          POST_STRING( pMIME ),
@@ -894,13 +894,13 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             {
 
                 pNP_Initialize =
-                    (NPError(*)(NPNetscapeFuncs*, NPPluginFuncs*))
-                    osl_getAsciiFunctionSymbol( pPluginLib, "NP_Initialize" );
+                    reinterpret_cast<NPError(*)(NPNetscapeFuncs*, NPPluginFuncs*)>(
+                    osl_getAsciiFunctionSymbol( pPluginLib, "NP_Initialize" ));
                 SAL_WARN_IF(
                     !pNP_Initialize, "extensions.plugin",
                     "no NP_Initialize, " << dlerror());
-                pNP_Shutdown = (NPError(*)())
-                    osl_getAsciiFunctionSymbol( pPluginLib, "NP_Shutdown" );
+                pNP_Shutdown = reinterpret_cast<NPError(*)()>(
+                    osl_getAsciiFunctionSymbol( pPluginLib, "NP_Shutdown" ));
                 SAL_WARN_IF(
                     !pNP_Initialize, "extensions.plugin",
                     "no NP_Shutdown, " << dlerror());
@@ -910,7 +910,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 SAL_INFO(
                     "extensions.plugin",
                     "pluginapp: NP_Initialize returns " << aRet);
-                Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
+                Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
             }
             break;
             case eNPP_Shutdown:

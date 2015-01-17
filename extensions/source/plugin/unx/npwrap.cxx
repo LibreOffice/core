@@ -192,8 +192,8 @@ static void CheckPlugin( const char* pPath )
     oslModule pLib = LoadModule( pPath );
     if (pLib != 0)
     {
-        char*(*pNP_GetMIMEDescription)() = (char*(*)())
-            osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" );
+        char*(*pNP_GetMIMEDescription)() = reinterpret_cast<char*(*)()>(
+            osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" ));
         if( pNP_GetMIMEDescription )
             printf( "%s\n", pNP_GetMIMEDescription() );
         else

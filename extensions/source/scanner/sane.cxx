@@ -187,38 +187,38 @@ void Sane::Init()
     if( pSaneLib )
     {
         bSaneSymbolLoadFailed = false;
-        p_init = (SANE_Status(*)(SANE_Int*, SANE_Auth_Callback ))
-            LoadSymbol( "sane_init" );
-        p_exit = (void(*)())
-            LoadSymbol( "sane_exit" );
-        p_get_devices = (SANE_Status(*)(const SANE_Device***,
-                                        SANE_Bool ))
-            LoadSymbol( "sane_get_devices" );
-        p_open = (SANE_Status(*)(SANE_String_Const, SANE_Handle ))
-            LoadSymbol( "sane_open" );
-        p_close = (void(*)(SANE_Handle))
-            LoadSymbol( "sane_close" );
-        p_get_option_descriptor = (const SANE_Option_Descriptor*(*)(SANE_Handle,
-                                                              SANE_Int))
-            LoadSymbol( "sane_get_option_descriptor" );
-        p_control_option = (SANE_Status(*)(SANE_Handle, SANE_Int,
-                                           SANE_Action, void*, SANE_Int*))
-            LoadSymbol( "sane_control_option" );
-        p_get_parameters = (SANE_Status(*)(SANE_Handle,SANE_Parameters*))
-            LoadSymbol( "sane_get_parameters" );
-        p_start = (SANE_Status(*)(SANE_Handle))
-            LoadSymbol( "sane_start" );
-        p_read = (SANE_Status(*)(SANE_Handle, SANE_Byte*,
-                                 SANE_Int, SANE_Int* ))
-            LoadSymbol( "sane_read" );
-        p_cancel = (void(*)(SANE_Handle))
-            LoadSymbol( "sane_cancel" );
-        p_set_io_mode = (SANE_Status(*)(SANE_Handle, SANE_Bool))
-            LoadSymbol( "sane_set_io_mode" );
-        p_get_select_fd = (SANE_Status(*)(SANE_Handle, SANE_Int*))
-            LoadSymbol( "sane_get_select_fd" );
-        p_strstatus = (SANE_String_Const(*)(SANE_Status))
-            LoadSymbol( "sane_strstatus" );
+        p_init = reinterpret_cast<SANE_Status(*)(SANE_Int*, SANE_Auth_Callback )>(
+            LoadSymbol( "sane_init" ));
+        p_exit = reinterpret_cast<void(*)()>(
+            LoadSymbol( "sane_exit" ));
+        p_get_devices = reinterpret_cast<SANE_Status(*)(const SANE_Device***,
+                                        SANE_Bool )>(
+            LoadSymbol( "sane_get_devices" ));
+        p_open = reinterpret_cast<SANE_Status(*)(SANE_String_Const, SANE_Handle )>(
+            LoadSymbol( "sane_open" ));
+        p_close = reinterpret_cast<void(*)(SANE_Handle)>(
+            LoadSymbol( "sane_close" ));
+        p_get_option_descriptor = reinterpret_cast<const SANE_Option_Descriptor*(*)(SANE_Handle,
+                                                              SANE_Int)>(
+            LoadSymbol( "sane_get_option_descriptor" ));
+        p_control_option = reinterpret_cast<SANE_Status(*)(SANE_Handle, SANE_Int,
+                                           SANE_Action, void*, SANE_Int*)>(
+            LoadSymbol( "sane_control_option" ));
+        p_get_parameters = reinterpret_cast<SANE_Status(*)(SANE_Handle,SANE_Parameters*)>(
+            LoadSymbol( "sane_get_parameters" ));
+        p_start = reinterpret_cast<SANE_Status(*)(SANE_Handle)>(
+            LoadSymbol( "sane_start" ));
+        p_read = reinterpret_cast<SANE_Status(*)(SANE_Handle, SANE_Byte*,
+                                 SANE_Int, SANE_Int* )>(
+            LoadSymbol( "sane_read" ));
+        p_cancel = reinterpret_cast<void(*)(SANE_Handle)>(
+            LoadSymbol( "sane_cancel" ));
+        p_set_io_mode = reinterpret_cast<SANE_Status(*)(SANE_Handle, SANE_Bool)>(
+            LoadSymbol( "sane_set_io_mode" ));
+        p_get_select_fd = reinterpret_cast<SANE_Status(*)(SANE_Handle, SANE_Int*)>(
+            LoadSymbol( "sane_get_select_fd" ));
+        p_strstatus = reinterpret_cast<SANE_String_Const(*)(SANE_Status)>(
+            LoadSymbol( "sane_strstatus" ));
         if( bSaneSymbolLoadFailed )
             DeInit();
         else

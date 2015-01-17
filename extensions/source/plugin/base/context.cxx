@@ -200,7 +200,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
 
     if( file )
     {
-        OUString aFileName( (char*)buf.getConstArray(), strlen((char*)buf.getConstArray()), m_aEncoding );
+        OUString aFileName( reinterpret_cast<char const *>(buf.getConstArray()), strlen(reinterpret_cast<char const *>(buf.getConstArray())), m_aEncoding );
         INetURLObject aFilePath( aFileName );
         aFileName = aFilePath.PathToFileName();
         SvFileStream aStream( aFileName, StreamMode::READ );
@@ -227,7 +227,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
             aValues[0].Value <<= pPlugin->getRefererURL();
 
             aValues[1].Name = "PostString";
-            aValues[1].Value <<= OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
+            aValues[1].Value <<= OStringToOUString( reinterpret_cast<char const *>(( file ? aBuf : buf ).getConstArray()), m_aEncoding );
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
                 xDesktop->loadComponentFromURL(
