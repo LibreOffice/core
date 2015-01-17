@@ -945,7 +945,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     aOutData.DrawStrings(true);
 
-    // TODO : Edit texts don't get rendered at all.  Fix this.
+    // Edit texts need 1/100mm map mode to be rendered correctly.
+    aNewMapMode.SetMapUnit(MAP_100TH_MM);
+    rDevice.SetMapMode(aNewMapMode);
     aOutData.DrawEdit(true);
 
     rDevice.SetMapMode(aOldMapMode);
