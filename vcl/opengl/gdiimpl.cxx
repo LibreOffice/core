@@ -640,7 +640,7 @@ void OpenGLSalGraphicsImpl::DrawEdgeAA( double nX1, double nY1, double nX2, doub
     ImplDrawLineAA( nX1, nY1, nX2, nY2, true );
 }
 
-void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA )
 {
     std::vector<GLfloat> aVertices(nPoints * 2);
     sal_uInt32 i, j;
@@ -653,9 +653,32 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+
+    if( !blockAA && mrParent.getAntiAliasB2DDraw())
+    {
+        // Make the edges antialiased by drawing the edge lines again with AA.
+        // TODO: If transparent drawing is set up, drawing the lines themselves twice
+        // may be a problem, if that is a real problem, the polygon areas itself needs to be
+        // masked out for this or something.
+#ifdef DBG_UTIL
+        assert( mProgramIsSolidColor );
+#endif
+        SalColor lastSolidColor = mProgramSolidColor;
+        double lastSolidTransparency = mProgramSolidTransparency;
+        if( UseSolidAA( lastSolidColor, lastSolidTransparency ))
+        {
+            for( i = 0; i < nPoints; ++i )
+            {
+                const SalPoint& rPt1 = pPtAry[ i ];
+                const SalPoint& rPt2 = pPtAry[ ( i + 1 ) % nPoints ];
+                DrawEdgeAA( rPt1.mnX, rPt1.mnY, rPt2.mnX, rPt2.mnY );
+            }
+            UseSolid( lastSolidColor, lastSolidTransparency );
+        }
+    }
 }
 
-void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
+void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blockAA )
 {
     sal_uInt16 nPoints = rPolygon.GetSize() - 1;
     std::vector<GLfloat> aVertices(nPoints * 2);
@@ -671,7 +694,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
 
-    if( mrParent.getAntiAliasB2DDraw())
+    if( !blockAA && mrParent.getAntiAliasB2DDraw())
     {
         // Make the edges antialiased by drawing the edge lines again with AA.
         // TODO: If transparent drawing is set up, drawing the lines themselves twice
@@ -704,7 +727,7 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
-    DrawConvexPolygon( 4, aPoints );
+    DrawConvexPolygon( 4, aPoints, true );
 }
 
 void OpenGLSalGraphicsImpl::DrawRect( const Rectangle& rRect )
@@ -716,7 +739,7 @@ void OpenGLSalGraphicsImpl::DrawRect( const Rectangle& rRect )
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
-    DrawConvexPolygon( 4, aPoints );
+    DrawConvexPolygon( 4, aPoints, true );
 }
 
 void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -958,7 +981,7 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     GLfloat fMin = 1.0 - 100.0 / (100.0 - rGradient.GetBorder());
     aTexCoord[5] = aTexCoord[7] = fMin;
     mpProgram->SetTextureCoord( aTexCoord );
-    DrawConvexPolygon( aPoly );
+    DrawConvexPolygon( aPoly, true );
 }
 
 void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect )
@@ -1008,7 +1031,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
     GLfloat fMin = 1.0 - 100.0 / (100.0 - rGradient.GetBorder());
     aTexCoord[3] = aTexCoord[5] = aTexCoord[9] = aTexCoord[11] = fMin;
     mpProgram->SetTextureCoord( aTexCoord );
-    DrawConvexPolygon( aPoly );
+    DrawConvexPolygon( aPoly, true );
 }
 
 void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect )
