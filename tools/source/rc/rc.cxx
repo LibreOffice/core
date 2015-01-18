@@ -65,8 +65,8 @@ OUString ResId::toString() const
     // String loading
     RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
 
-    sal_Int32 nStringLen = rtl_str_getLength( (char*)(pResHdr+1) );
-    OUString sRet((const char*)(pResHdr+1), nStringLen, RTL_TEXTENCODING_UTF8);
+    sal_Int32 nStringLen = rtl_str_getLength( reinterpret_cast<char*>(pResHdr+1) );
+    OUString sRet(reinterpret_cast<char*>(pResHdr+1), nStringLen, RTL_TEXTENCODING_UTF8);
 
     sal_uInt32 nSize = sizeof( RSHEADER_TYPE )
         + sal::static_int_cast< sal_uInt32 >(nStringLen) + 1;

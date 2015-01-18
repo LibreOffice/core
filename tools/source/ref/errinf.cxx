@@ -319,14 +319,14 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
                 delete pInfo;
                 if(!pData->bIsWindowDsp)
                 {
-                    (*(BasicDisplayErrorFunc*)pData->pDsp)(aErr,aAction);
+                    (*reinterpret_cast<BasicDisplayErrorFunc*>(pData->pDsp))(aErr,aAction);
                     return 0;
                 }
                 else
                 {
                     if (nFlags != USHRT_MAX)
                         nErrFlags = nFlags;
-                    return (*(WindowDisplayErrorFunc*)pData->pDsp)(
+                    return (*reinterpret_cast<WindowDisplayErrorFunc*>(pData->pDsp))(
                         pParent, nErrFlags, aErr, aAction);
                 }
             }

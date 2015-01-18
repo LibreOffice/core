@@ -134,14 +134,14 @@ inline static void SwapDouble( double& r )
     if( bIoRead && sizeof(datatype)<=nBufFree)             \
     {                                                       \
         for (std::size_t i = 0; i < sizeof(datatype); i++)  \
-            ((char *)&value)[i] = pBufPos[i];              \
+            reinterpret_cast<char *>(&value)[i] = pBufPos[i]; \
         nBufActualPos += sizeof(datatype);                  \
         pBufPos += sizeof(datatype);                        \
         nBufFree -= sizeof(datatype);                       \
     }                                                       \
     else                                                    \
     {                                                       \
-        Read( (char*)&value, sizeof(datatype) );            \
+        Read( &value, sizeof(datatype) );                   \
     }                                                       \
 
 
@@ -149,7 +149,7 @@ inline static void SwapDouble( double& r )
     if( bIoWrite && sizeof(datatype) <= nBufFree)    \
     {                                                   \
         for (std::size_t i = 0; i < sizeof(datatype); i++)  \
-            pBufPos[i] = ((char *)&value)[i];               \
+            pBufPos[i] = reinterpret_cast<char const *>(&value)[i]; \
         nBufFree -= sizeof(datatype);                       \
         nBufActualPos += sizeof(datatype);                  \
         if( nBufActualPos > nBufActualLen )                 \
@@ -159,7 +159,7 @@ inline static void SwapDouble( double& r )
     }                                                       \
     else                                                    \
     {                                                       \
-        Write( (char*)&value, sizeof(datatype) );           \
+        Write( &value, sizeof(datatype) );                  \
     }                                                       \
 
 //  class SvLockBytes
@@ -605,7 +605,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
     while( !bEnd && !GetError() )   // Don't test for EOF as we
                                     // are reading block-wise!
     {
-        sal_uInt16 nLen = (sal_uInt16)Read( (char*)buf, sizeof(buf)-sizeof(sal_Unicode) );
+        sal_uInt16 nLen = (sal_uInt16)Read( buf, sizeof(buf)-sizeof(sal_Unicode) );
         nLen /= sizeof(sal_Unicode);
         if ( !nLen )
         {
@@ -664,7 +664,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
     if ( bEnd && (c=='\r' || c=='\n') )  // special treatment for DOS files
     {
         sal_Unicode cTemp;
-        Read( (char*)&cTemp, sizeof(cTemp) );
+        Read( &cTemp, sizeof(cTemp) );
         if ( bSwap )
             SwapUShort( cTemp );
         if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
@@ -733,7 +733,7 @@ sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "write_uInt16s_FromOUString: swapping sizeof(sal_Unicode) not implemented" );
     sal_Size nWritten;
     if (!rStrm.IsEndianSwap())
-        nWritten = rStrm.Write( (char*)rStr.getStr(), nUnits * sizeof(sal_Unicode) );
+        nWritten = rStrm.Write( rStr.getStr(), nUnits * sizeof(sal_Unicode) );
     else
     {
         sal_Size nLen = nUnits;
@@ -747,7 +747,7 @@ sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
             SwapUShort( *p );
             p++;
         }
-        nWritten = rStrm.Write( (char*)pTmp, nLen * sizeof(sal_Unicode) );
+        nWritten = rStrm.Write( pTmp, nLen * sizeof(sal_Unicode) );
         if ( pTmp != aBuf )
             delete [] pTmp;
     }
@@ -968,7 +968,7 @@ SvStream& SvStream::ReadSChar( signed char& r )
         nBufFree -= sizeof(signed char);
     }
     else
-        Read( (char*)&r, sizeof(signed char) );
+        Read( &r, sizeof(signed char) );
     return *this;
 }
 
@@ -1000,7 +1000,7 @@ SvStream& SvStream::ReadUChar( unsigned char& r )
         nBufFree -= sizeof(char);
     }
     else
-        Read( (char*)&r, sizeof(char) );
+        Read( &r, sizeof(char) );
     return *this;
 }
 
@@ -1135,7 +1135,7 @@ SvStream& SvStream::WriteSChar( signed char v )
         bIsDirty = true;
     }
     else
-        Write( (char*)&v, sizeof(signed char) );
+        Write( &v, sizeof(signed char) );
     return *this;
 }
 
@@ -1173,7 +1173,7 @@ SvStream& SvStream::WriteUChar( unsigned char v )
         bIsDirty = true;
     }
     else
-        Write( (char*)&v, sizeof(char) );
+        Write( &v, sizeof(char) );
     return *this;
 }
 
@@ -1550,7 +1550,7 @@ sal_Size SvStream::CryptAndWriteBuffer( const void* pStart, sal_Size nLen)
             pTemp[n] = aCh;
         }
         // *************************
-        nCount += PutData( (char*)pTemp, nBufCount );
+        nCount += PutData( pTemp, nBufCount );
         pDataPtr += nBufCount;
     }
     while ( nLen );

@@ -61,7 +61,7 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, bool bFlags  )
 {
     if ( nInitSize )
     {
-        mpPointAry = (Point*)new char[(sal_uIntPtr)nInitSize*sizeof(Point)];
+        mpPointAry = reinterpret_cast<Point*>(new char[(sal_uIntPtr)nInitSize*sizeof(Point)]);
         memset( mpPointAry, 0, (sal_uIntPtr)nInitSize*sizeof(Point) );
     }
     else
@@ -83,7 +83,7 @@ ImplPolygon::ImplPolygon( const ImplPolygon& rImpPoly )
 {
     if ( rImpPoly.mnPoints )
     {
-        mpPointAry = (Point*)new char[(sal_uIntPtr)rImpPoly.mnPoints*sizeof(Point)];
+        mpPointAry = reinterpret_cast<Point*>(new char[(sal_uIntPtr)rImpPoly.mnPoints*sizeof(Point)]);
         memcpy( mpPointAry, rImpPoly.mpPointAry, (sal_uIntPtr)rImpPoly.mnPoints*sizeof(Point) );
 
         if( rImpPoly.mpFlagAry )
@@ -108,7 +108,7 @@ ImplPolygon::ImplPolygon( sal_uInt16 nInitSize, const Point* pInitAry, const sal
 {
     if ( nInitSize )
     {
-        mpPointAry = (Point*)new char[(sal_uIntPtr)nInitSize*sizeof(Point)];
+        mpPointAry = reinterpret_cast<Point*>(new char[(sal_uIntPtr)nInitSize*sizeof(Point)]);
         memcpy( mpPointAry, pInitAry, (sal_uIntPtr)nInitSize*sizeof( Point ) );
 
         if( pInitFlags )
@@ -133,7 +133,7 @@ ImplPolygon::~ImplPolygon()
 {
     if ( mpPointAry )
     {
-        delete[] (char*) mpPointAry;
+        delete[] reinterpret_cast<char*>(mpPointAry);
     }
 
     if( mpFlagAry )
@@ -149,7 +149,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
 
     if ( nNewSize )
     {
-        pNewAry = (Point*)new char[(sal_uIntPtr)nNewSize*sizeof(Point)];
+        pNewAry = reinterpret_cast<Point*>(new char[(sal_uIntPtr)nNewSize*sizeof(Point)]);
 
         if ( bResize )
         {
@@ -172,7 +172,7 @@ void ImplPolygon::ImplSetSize( sal_uInt16 nNewSize, bool bResize )
         pNewAry = NULL;
 
     if ( mpPointAry )
-        delete[] (char*) mpPointAry;
+        delete[] reinterpret_cast<char*>(mpPointAry);
 
     // ggf. FlagArray beruecksichtigen
     if( mpFlagAry )
@@ -236,7 +236,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
         const sal_uInt16    nSecPos = nPos + nSpace;
         const sal_uInt16    nRest = mnPoints - nPos;
 
-        Point* pNewAry = (Point*) new char[ (sal_uIntPtr) nNewSize * sizeof( Point ) ];
+        Point* pNewAry = reinterpret_cast<Point*>(new char[ (sal_uIntPtr) nNewSize * sizeof( Point ) ]);
 
         memcpy( pNewAry, mpPointAry, nPos * sizeof( Point ) );
 
@@ -246,7 +246,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
             memset( pNewAry + nPos, 0, nSpaceSize );
 
         memcpy( pNewAry + nSecPos, mpPointAry + nPos, nRest * sizeof( Point ) );
-        delete[] (char*) mpPointAry;
+        delete[] reinterpret_cast<char*>(mpPointAry);
 
         // consider FlagArray
         if( mpFlagAry )

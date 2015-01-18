@@ -755,15 +755,15 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
 
     if ( pStack->pResource && pStack->pClassRes )
     {
-        pTmp = (RSHEADER_TYPE*)
-               ((sal_uInt8*)pStack->pResource + pStack->pResource->GetLocalOff());
-        pEnd = (RSHEADER_TYPE*)
-               ((sal_uInt8*)pStack->pResource + pStack->pResource->GetGlobOff());
+        pTmp = reinterpret_cast<RSHEADER_TYPE*>
+               (reinterpret_cast<sal_uInt8*>(pStack->pResource) + pStack->pResource->GetLocalOff());
+        pEnd = reinterpret_cast<RSHEADER_TYPE*>
+               (reinterpret_cast<sal_uInt8*>(pStack->pResource) + pStack->pResource->GetGlobOff());
         while ( pTmp != pEnd )
         {
             if ( pTmp->GetRT() == nRTType && pTmp->GetId() == nId )
                 return pTmp;
-            pTmp = (RSHEADER_TYPE*)((sal_uInt8*)pTmp + pTmp->GetGlobOff());
+            pTmp = reinterpret_cast<RSHEADER_TYPE*>(reinterpret_cast<sal_uInt8*>(pTmp) + pTmp->GetGlobOff());
         }
     }
 
@@ -1113,7 +1113,7 @@ void ResMgr::PopContext( const Resource* pResObj )
 #ifdef DBG_UTIL
         if ( DbgIsResource() && !(pTop->Flags & RC_NOTFOUND) )
         {
-            void* pRes = (sal_uInt8*)pTop->pResource +
+            void* pRes = reinterpret_cast<sal_uInt8*>(pTop->pResource) +
                          pTop->pResource->GetLocalOff();
 
             if ( pTop->pClassRes != pRes )
@@ -1215,13 +1215,13 @@ sal_uInt32 ResMgr::GetByteString( OString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
     sal_uInt32 nRet = GetStringSize( pStr, nLen );
-    rStr = OString( (const sal_Char*)pStr, nLen );
+    rStr = OString( reinterpret_cast<const char*>(pStr), nLen );
     return nRet;
 }
 
 sal_uInt32 ResMgr::GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen )
 {
-    nLen = static_cast< sal_uInt32 >( strlen( (const char*)pStr ) );
+    nLen = static_cast< sal_uInt32 >( strlen( reinterpret_cast<const char*>(pStr) ) );
     return GetStringSize( nLen );
 }
 
@@ -1257,7 +1257,7 @@ void* ResMgr::Increment( sal_uInt32 nSize )
 
     sal_uInt32 nLocalOff = pRes->GetLocalOff();
     if ( (pRes->GetGlobOff() == nLocalOff) &&
-         (((char*)pRes + nLocalOff) == rStack.pClassRes) &&
+         ((reinterpret_cast<char*>(pRes) + nLocalOff) == rStack.pClassRes) &&
          (rStack.Flags & RC_AUTORELEASE))
     {
         PopContext( rStack.pResObj );
@@ -1608,7 +1608,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     }
 
     // sal_uIntPtr nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
-    ResMgr::GetString( sReturn, (const sal_uInt8*)(pResHeader+1) );
+    ResMgr::GetString( sReturn, reinterpret_cast<sal_uInt8*>(pResHeader+1) );
 
     // not necessary with the current implementation which holds the string table permanently, but to be sure ....
     // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
