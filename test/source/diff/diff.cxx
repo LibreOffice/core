@@ -254,7 +254,7 @@ void XMLDiff::cppunitAssertEqual(const xmlChar *expected, const xmlChar *found)
 {
 #if USE_CPPUNIT
     std::stringstream stringStream;
-    stringStream << "Reference: " << fileName << "\n- Expected: " << (const char*) expected << "\n- Found: " << (const char*) found;
+    stringStream << "Reference: " << fileName << "\n- Expected: " << reinterpret_cast<const char*>(expected) << "\n- Found: " << reinterpret_cast<const char*>(found);
 
     CPPUNIT_ASSERT_MESSAGE(stringStream.str(), xmlStrEqual(expected, found));
 #endif
@@ -265,7 +265,7 @@ void XMLDiff::cppunitAssertEqualDouble(const xmlNodePtr node, const xmlAttrPtr a
 #if USE_CPPUNIT
     xmlChar * path = xmlGetNodePath(node);
     std::stringstream stringStream;
-    stringStream << "Reference: " << fileName << "\n- Node: " << (const char*) path << "\n- Attr: " << (const char*) attr->name;
+    stringStream << "Reference: " << fileName << "\n- Node: " << reinterpret_cast<const char*>(path) << "\n- Attr: " << reinterpret_cast<const char*>(attr->name);
     xmlFree(path);
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(stringStream.str(), expected, found, delta);
