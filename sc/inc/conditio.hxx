@@ -393,7 +393,7 @@ public:
     ScConditionalFormat* Clone(ScDocument* pNewDoc = NULL) const;
 
     void            AddEntry( ScFormatEntry* pNew );
-    void            AddRange( const ScRangeList& rRanges );
+    void            SetRange( const ScRangeList& rRanges );
     const ScRangeList&  GetRange() const  { return maRanges; }
     // don't use the same name as for the const version
     ScRangeList& GetRangeList() { return maRanges; }

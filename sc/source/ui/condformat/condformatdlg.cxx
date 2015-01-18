@@ -163,7 +163,7 @@ ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
             pFormat->AddEntry(pEntry);
     }
 
-    pFormat->AddRange(maRanges);
+    pFormat->SetRange(maRanges);
 
     return pFormat;
 }
@@ -506,7 +506,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
     ScConditionalFormat* pFormat = mpCondFormList->GetConditionalFormat();
 
     if(nFlags & SCA_VALID && !aRange.empty() && pFormat)
-        pFormat->AddRange(aRange);
+        pFormat->SetRange(aRange);
     else
     {
         delete pFormat;

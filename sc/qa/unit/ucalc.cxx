@@ -3660,7 +3660,7 @@ void Test::testCopyPasteSkipEmptyConditionalFormatting()
     m_pDoc->SetCondFormList(pCondFormatList, 0);
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
-    pFormat->AddRange(aDestRange);
+    pFormat->SetRange(aDestRange);
     sal_uLong nCondFormatKey = m_pDoc->AddCondFormat(pFormat, 0);
 
     // Prepare a clipboard content interleaved with empty cells.
@@ -3675,7 +3675,7 @@ void Test::testCopyPasteSkipEmptyConditionalFormatting()
     aClipDoc.SetValue(4,5,0,2);
 
     ScConditionalFormat* pClipFormat = new ScConditionalFormat(2, &aClipDoc);
-    pClipFormat->AddRange(aSrcRange);
+    pClipFormat->SetRange(aSrcRange);
     aClipDoc.AddCondFormat(pClipFormat, 0);
 
     // Create undo document.
@@ -5466,7 +5466,7 @@ void Test::testCondFormatINSDEL()
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRangeList aRangeList(ScRange(0,0,0,0,3,0));
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
 
@@ -5490,7 +5490,7 @@ void Test::testCondFormatInsertCol()
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5512,7 +5512,7 @@ void Test::testCondFormatInsertRow()
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRangeList aRangeList(ScRange(0,0,0,3,3,0));
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5533,7 +5533,7 @@ void Test::testCondFormatInsertDeleteSheets()
 
     // Add a conditional format to B2:B4.
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
-    pFormat->AddRange(ScRange(1,1,0,1,3,0));
+    pFormat->SetRange(ScRange(1,1,0,1,3,0));
 
     sal_uLong nKey = m_pDoc->AddCondFormat(pFormat, 0);
 
@@ -5640,7 +5640,7 @@ void Test::testCondCopyPaste()
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRange aCondFormatRange(0,0,0,3,3,0);
     ScRangeList aRangeList(aCondFormatRange);
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5674,7 +5674,7 @@ void Test::testCondCopyPasteSingleCell()
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRange aCondFormatRange(0,0,0,3,3,0);
     ScRangeList aRangeList(aCondFormatRange);
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5708,7 +5708,7 @@ void Test::testCondCopyPasteSingleCellToRange()
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRange aCondFormatRange(0,0,0,3,3,0);
     ScRangeList aRangeList(aCondFormatRange);
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5750,7 +5750,7 @@ void Test::testCondCopyPasteSheetBetweenDoc()
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRange aCondFormatRange(0,0,0,3,3,0);
     ScRangeList aRangeList(aCondFormatRange);
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5772,7 +5772,7 @@ void Test::testCondCopyPasteSheet()
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRange aCondFormatRange(0,0,0,3,3,0);
     ScRangeList aRangeList(aCondFormatRange);
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
@@ -5805,7 +5805,7 @@ void Test::testIconSet()
 
     ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
     ScRangeList aRangeList(ScRange(0,0,0,0,0,0));
-    pFormat->AddRange(aRangeList);
+    pFormat->SetRange(aRangeList);
 
     ScIconSetFormat* pEntry = new ScIconSetFormat(m_pDoc);
     ScIconSetFormatData* pData = new ScIconSetFormatData;

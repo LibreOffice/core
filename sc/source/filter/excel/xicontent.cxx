@@ -657,7 +657,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
         if(maRanges.size() > 1)
             maRanges.Join(*maRanges[0], true);
-        mxScCondFmt->AddRange(maRanges);
+        mxScCondFmt->SetRange(maRanges);
     }
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry( eMode, xTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );

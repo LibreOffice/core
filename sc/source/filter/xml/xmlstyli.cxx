@@ -534,7 +534,7 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
     {
         sal_uLong nIndex = pDoc->AddCondFormat(mpCondFormat, nTab );
         mpCondFormat->SetKey(nIndex);
-        mpCondFormat->AddRange(aRangeList);
+        mpCondFormat->SetRange(aRangeList);
 
         pDoc->AddCondFormatData( aRangeList, nTab, nIndex );
         mbDeleteCondFormat = false;

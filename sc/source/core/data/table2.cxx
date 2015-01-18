@@ -584,7 +584,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         ScRangeList aIntersectedRange = rCondFormatRange.GetIntersectedRange(aOldRange);
         ScConditionalFormat* pNewFormat = itr->Clone(pDocument);
 
-        pNewFormat->AddRange(aIntersectedRange);
+        pNewFormat->SetRange(aIntersectedRange);
         sc::RefUpdateContext aRefCxt(*pDocument);
         aRefCxt.meMode = URM_COPY;
         aRefCxt.maRange = aNewRange;

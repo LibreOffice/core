@@ -993,7 +993,7 @@ void CondFormat::finalizeImport()
         aList.Append(aRange);
     }
     rDoc.AddCondFormatData( aList, nTab, nIndex );
-    mpFormat->AddRange(aList);
+    mpFormat->SetRange(aList);
 }
 
 CondFormatRuleRef CondFormat::createRule()

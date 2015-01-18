@@ -87,7 +87,7 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
             formula::FormulaGrammar::CONV_ODF);
 
     mxFormat.reset(new ScConditionalFormat(0, GetScImport().GetDocument()));
-    mxFormat->AddRange(maRange);
+    mxFormat->SetRange(maRange);
 }
 
 SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt16 nPrefix,

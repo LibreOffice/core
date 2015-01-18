@@ -1815,7 +1815,7 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
         pNew->maEntries.push_back( pNewEntry );
         pNewEntry->SetParent(pNew);
     }
-    pNew->AddRange( maRanges );
+    pNew->SetRange( maRanges );
 
     return pNew;
 }
@@ -1836,7 +1836,7 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
     return true;
 }
 
-void ScConditionalFormat::AddRange( const ScRangeList& rRanges )
+void ScConditionalFormat::SetRange( const ScRangeList& rRanges )
 {
     maRanges = rRanges;
     SAL_WARN_IF(maRanges.empty(), "sc", "the conditional format range is empty! will result in a crash later!");

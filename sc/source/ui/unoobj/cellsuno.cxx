@@ -2415,7 +2415,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 {
                                     ScConditionalFormat* pNew = new ScConditionalFormat( 0, &rDoc );    // Index wird beim Einfuegen gesetzt
                                     pFormat->FillFormat( *pNew, &rDoc, eGrammar );
-                                    pNew->AddRange( aRanges );
+                                    pNew->SetRange( aRanges );
                                     pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
                                 }
                             }
