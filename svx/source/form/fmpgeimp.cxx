@@ -511,7 +511,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xDatabaseProps(rDatabase, UNO_QUERY);
                 Any aDatabaseUrl = xDatabaseProps->getPropertyValue(FM_PROP_URL);
-                xFormProps->setPropertyValue(FM_PROP_DATASOURCE, aDatabaseUrl);
+                xFormProps->setPropertyValue(FM_PROP_URL, aDatabaseUrl);
             }
 
             xFormProps->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
