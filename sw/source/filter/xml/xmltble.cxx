@@ -897,7 +897,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const long nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
-                SvXMLElementExport aElem2( *this, XML_NAMESPACE_TABLE,
+                SvXMLElementExport aElem2( *this, rTblInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
             }
@@ -930,7 +930,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
             for( size_t i=nOldCol; i<nCol; ++i )
             {
-                SvXMLElementExport aElemExport( *this, XML_NAMESPACE_TABLE,
+                SvXMLElementExport aElemExport( *this, rTblInfo.GetPrefix(),
                                           XML_COVERED_TABLE_CELL, true,
                                           false );
             }
