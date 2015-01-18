@@ -278,7 +278,7 @@ handleCertificateValidationRequest_(
     for (sal_Int32 i = 0 ; i < extensions.getLength(); i++){
         uno::Reference< security::XCertificateExtension >element = extensions[i];
 
-        OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
+        OString aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
         if (aId.equals(OID_SUBJECT_ALTERNATIVE_NAME))
         {
            uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
