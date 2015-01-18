@@ -114,17 +114,38 @@ void SwTextBoxHelper::destroy(SwFrmFmt* pShape)
 
 std::set<const SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
 {
-    std::set<const SwFrmFmt*> aRet;
+    std::set<const SwFrmFmt*> aTextBoxes;
+    std::map<SwNodeIndex, const SwFrmFmt*> aFlyFormats, aDrawFormats;
 
     const SwFrmFmts& rSpzFrmFmts = *pDoc->GetSpzFrmFmts();
     for (SwFrmFmts::const_iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
     {
-        SwFrmFmt* pTextBox = findTextBox(*it);
-        if (pTextBox)
-            aRet.insert(pTextBox);
+        const SwFrmFmt* pFormat = *it;
+
+        // A TextBox in the context of this class is a fly frame that has a
+        // matching (same RES_CNTNT) draw frame.
+        if (!pFormat->GetAttrSet().HasItem(RES_CNTNT) || !pFormat->GetCntnt().GetCntntIdx())
+            continue;
+
+        const SwNodeIndex& rIndex = *pFormat->GetCntnt().GetCntntIdx();
+
+        if (pFormat->Which() == RES_FLYFRMFMT)
+        {
+            if (aDrawFormats.find(rIndex) != aDrawFormats.end())
+                aTextBoxes.insert(pFormat);
+            else
+                aFlyFormats[rIndex] = pFormat;
+        }
+        else if (pFormat->Which() == RES_DRAWFRMFMT)
+        {
+            if (aFlyFormats.find(rIndex) != aFlyFormats.end())
+                aTextBoxes.insert(aFlyFormats[rIndex]);
+            else
+                aDrawFormats[rIndex] = pFormat;
+        }
     }
 
-    return aRet;
+    return aTextBoxes;
 }
 
 std::set<const SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwNode& rNode)
