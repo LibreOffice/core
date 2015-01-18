@@ -202,8 +202,8 @@ bool PDFString::emit( EmitContext& rWriteContext ) const
         OString aFiltered( getFilteredString() );
         // decrypt inplace (evil since OString is supposed to be const
         // however in this case we know that getFilteredString returned a singular string instance
-        pEData->decrypt( (sal_uInt8*)aFiltered.getStr(), aFiltered.getLength(),
-                         (sal_uInt8*)aFiltered.getStr(),
+        pEData->decrypt( reinterpret_cast<sal_uInt8 const *>(aFiltered.getStr()), aFiltered.getLength(),
+                         reinterpret_cast<sal_uInt8 *>(const_cast<char *>(aFiltered.getStr())),
                          pEData->m_nDecryptObject, pEData->m_nDecryptGeneration );
         // check for string or hex string
         const sal_Char* pStr = aFiltered.getStr();
@@ -722,11 +722,11 @@ bool PDFObject::getDeflatedStream( char** ppStream, unsigned int* pBytes, const 
     return bIsDeflated;
 }
 
-static void unzipToBuffer( const char* pBegin, unsigned int nLen,
+static void unzipToBuffer( char* pBegin, unsigned int nLen,
                            sal_uInt8** pOutBuf, sal_uInt32* pOutLen )
 {
     z_stream aZStr;
-    aZStr.next_in       = (Bytef*)pBegin;
+    aZStr.next_in       = reinterpret_cast<Bytef *>(pBegin);
     aZStr.avail_in      = nLen;
     aZStr.zalloc        = ( alloc_func )0;
     aZStr.zfree         = ( free_func )0;
@@ -825,7 +825,7 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
             else
             {
                 // nothing to deflate, but decryption has happened
-                pOutBytes = (sal_uInt8*)pStream;
+                pOutBytes = reinterpret_cast<sal_uInt8*>(pStream);
                 nOutBytes = (sal_uInt32)nBytes;
             }
 
@@ -879,14 +879,14 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                     bRet = rWriteContext.write( pOutBytes, nOutBytes );
                 if( bRet )
                     bRet = rWriteContext.write( "\nendstream\nendobj\n", 18 );
-                if( pOutBytes != (sal_uInt8*)pStream )
+                if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
                     rtl_freeMemory( pOutBytes );
                 rtl_freeMemory( pStream );
                 if( pEData )
                     pEData->setDecryptObject( 0, 0 );
                 return bRet;
             }
-            if( pOutBytes != (sal_uInt8*)pStream )
+            if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream) )
                 rtl_freeMemory( pOutBytes );
         }
         rtl_freeMemory( pStream );
@@ -1258,7 +1258,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
                                           nPwd, 32 ); // decrypt inplace
             }
         }
-        bValid = check_user_password( OString( (sal_Char*)nPwd, 32 ), m_pData );
+        bValid = check_user_password( OString( reinterpret_cast<char*>(nPwd), 32 ), m_pData );
     }
 
     return bValid;

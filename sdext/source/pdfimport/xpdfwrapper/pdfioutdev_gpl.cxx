@@ -942,12 +942,12 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         {
             GfxRGB aMinRGB;
             colorMap->getColorSpace()->getRGB(
-                (GfxColor*)maskColors,
+                reinterpret_cast<GfxColor*>(maskColors),
                 &aMinRGB );
 
             GfxRGB aMaxRGB;
             colorMap->getColorSpace()->getRGB(
-                (GfxColor*)maskColors+gfxColorMaxComps,
+                reinterpret_cast<GfxColor*>(maskColors)+gfxColorMaxComps,
                 &aMaxRGB );
 
             aMaskBuf.push_back( colToByte(aMinRGB.r) );
