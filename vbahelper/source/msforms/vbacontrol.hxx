@@ -100,15 +100,15 @@ public:
     virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
+    //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     //XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
-    //General helper methods for properties ( may or maynot be relevant for all
-    //controls
+    //General helper methods for properties (may or maynot be relevant for all
+    //controls)
     sal_Int32 getBackColor() throw (css::uno::RuntimeException);
     void setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
     bool getAutoSize() throw (css::uno::RuntimeException);

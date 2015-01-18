@@ -655,7 +655,7 @@ void XSecController::endMission()
 
             /*
              * askes the SignatureCreator/SignatureVerifier to release
-             * all resouces it uses.
+             * all resources it uses.
              */
             xMissionTaker->endMission();
         }
