@@ -2866,6 +2866,11 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
                 NoteInHistory( p1, true );
                 bRet = true;
             }
+
+            if (bRet)
+            {
+                SwpHintsArray::Resort();
+            }
         }
         else
         {
@@ -2901,11 +2906,6 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             i = j; // ++i not enough: i + 1 may have been deleted (MATCH)!
             ++j;
         }
-    }
-
-    if ( bRet )
-    {
-        SwpHintsArray::Resort();
     }
 
     return bRet;
