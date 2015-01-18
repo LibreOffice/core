@@ -75,6 +75,10 @@ public:
                     Fix( long l ) { x=(l<<FIX_POST); }
                     Fix( long Z, long N ) { x=(Z<<FIX_POST)/N; }
 
+    enum class Bits { Bits };
+
+    Fix(long bits, Bits): x(bits) {}
+
     void            SetInternVal( long nVal ) { x=nVal; }
     long            GetInternVal() const { return x; }
 
@@ -140,26 +144,22 @@ inline Fix operator- ( const Fix& a )
 
 inline Fix operator+ ( const Fix& a, const Fix& b )
 {
-    long l = a.x+b.x;
-    return *((Fix*)&l);
+    return Fix(a.x+b.x, Fix::Bits::Bits);
 }
 
 inline Fix operator- ( const Fix& a, const Fix& b )
 {
-    long l = a.x-b.x;
-    return *((Fix*)&l);
+    return Fix(a.x-b.x, Fix::Bits::Bits);
 }
 
 inline Fix operator* ( const Fix& a, const Fix& b )
 {
-    long l=(a.x*b.x+FIX_ADD)>>FIX_POST;
-    return *((Fix*)&l);
+    return Fix((a.x*b.x+FIX_ADD)>>FIX_POST, Fix::Bits::Bits);
 }
 
 inline Fix operator/ ( const Fix& a, const Fix& b )
 {
-    long l=(a.x<<FIX_POST)/b.x;
-    return *((Fix*)&l);
+    return Fix((a.x<<FIX_POST)/b.x, Fix::Bits::Bits);
 }
 
 inline FixCpx operator- ( const FixCpx& a )

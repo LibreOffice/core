@@ -242,8 +242,8 @@ namespace svt
             if ( s_hAccessibleImplementationModule != NULL )
             {
                 const OUString sFactoryCreationFunc( "getSvtAccessibilityComponentFactory" );
-                s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
-                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
+                s_pAccessibleFactoryFunc = reinterpret_cast<GetSvtAccessibilityComponentFactory>(
+                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData ));
 
             }
             OSL_ENSURE( s_pAccessibleFactoryFunc, "ac_registerClient: could not load the library, or not retrieve the needed symbol!" );

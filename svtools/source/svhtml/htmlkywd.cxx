@@ -208,7 +208,7 @@ int GetHTMLToken( const OUString& rName )
     aSrch.pUToken = &rName;
     aSrch.nToken = -1;
 
-    pFound = bsearch( (sal_Char *) &aSrch,
+    pFound = bsearch( &aSrch,
                       (void*) aHTMLTokenTab,
                       sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
                       sizeof( HTML_TokenEntry ),
@@ -541,7 +541,7 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
     aSrch.pUName = &rName;
     aSrch.cChar = USHRT_MAX;
 
-    if( 0 != ( pFound = bsearch( (sal_Char *) &aSrch,
+    if( 0 != ( pFound = bsearch( &aSrch,
                         (void*) aHTMLCharNameTab,
                         sizeof( aHTMLCharNameTab) / sizeof( HTML_CharEntry ),
                         sizeof( HTML_CharEntry ),
@@ -724,7 +724,7 @@ int GetHTMLOption( const OUString& rName )
     aSrch.pUToken = &rName;
     aSrch.nToken = -1;
 
-    if( 0 != ( pFound = bsearch( (sal_Char *) &aSrch,
+    if( 0 != ( pFound = bsearch( &aSrch,
                         (void*) aHTMLOptionTab,
                         sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                         sizeof( HTML_TokenEntry ),
@@ -942,7 +942,7 @@ sal_uInt32 GetHTMLColor( const OUString& rName )
     aSrch.pUName = &aLowerCase;
     aSrch.nColor = HTML_NO_COLOR;
 
-    if( 0 != ( pFound = bsearch( (sal_Char *) &aSrch,
+    if( 0 != ( pFound = bsearch( &aSrch,
                         (void*) aHTMLColorNameTab,
                         sizeof( aHTMLColorNameTab) / sizeof( HTML_ColorEntry ),
                         sizeof( HTML_ColorEntry ),

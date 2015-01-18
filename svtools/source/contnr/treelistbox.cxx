@@ -1344,7 +1344,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     WriteDragServerInfo( rPosPixel, &aDDInfo );
 
     pContainer->CopyAnyData( SOT_FORMATSTR_ID_TREELISTBOX,
-                        (sal_Char*)&aDDInfo, sizeof(SvLBoxDDInfo) );
+                        reinterpret_cast<char*>(&aDDInfo), sizeof(SvLBoxDDInfo) );
     pDDSource = this;
     pDDTarget = 0;
 
