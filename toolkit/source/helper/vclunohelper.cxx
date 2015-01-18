@@ -87,12 +87,12 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
             Bitmap aDIB, aMask;
             {
                 ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
-                SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
+                SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
                 ReadDIB(aDIB, aMem, true);
             }
             {
                 ::com::sun::star::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
-                SvMemoryStream aMem( (char*) aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
+                SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
                 ReadDIB(aMask, aMem, true);
             }
             aBmp = BitmapEx( aDIB, aMask );

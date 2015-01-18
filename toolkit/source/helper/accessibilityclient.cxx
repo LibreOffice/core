@@ -168,8 +168,8 @@ namespace toolkit
             {
                 const OUString sFactoryCreationFunc =
                     OUString("getStandardAccessibleFactory");
-                s_pAccessibleFactoryFunc = (GetStandardAccComponentFactory)
-                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
+                s_pAccessibleFactoryFunc = reinterpret_cast<GetStandardAccComponentFactory>(
+                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData ));
 
             }
             OSL_ENSURE( s_pAccessibleFactoryFunc, "AccessibilityClient::ensureInitialized: could not load the library, or not retrieve the needed symbol!" );

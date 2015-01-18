@@ -1060,7 +1060,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                             {
                                 sal_Int8 processID[16];
 
-                                rtl_getGlobalProcessId( (sal_uInt8*)processID );
+                                rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(processID) );
 
                                 ::com::sun::star::uno::Sequence<sal_Int8> processIdSeq((sal_Int8*)processID, 16);
 
@@ -1212,7 +1212,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if ( hSvToolsLib )
         {
             OUString aFunctionName( "CreateWindow" );
-            fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
+            fnSvtCreateWindow = reinterpret_cast<FN_SvtCreateWindow>(osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData ));
         }
 #else
         fnSvtCreateWindow = CreateWindow;
