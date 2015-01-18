@@ -88,19 +88,10 @@ void SidebarDockingWindow::GetFocus()
 
 
 
+// fdo#87217
 bool SidebarDockingWindow::Close (void)
 {
-    if (mpSidebarController.is())
-    {
-        // Do not close the floating window.
-        // Dock it and close just the deck instead.
-        SetFloatingMode(false);
-        mpSidebarController->RequestCloseDeck();
-        mpSidebarController->NotifyResize();
-        return false;
-    }
-    else
-        return SfxDockingWindow::Close();
+    return SfxDockingWindow::Close();
 }
 
 
