@@ -126,7 +126,7 @@ static OUString xdg_user_dir_lookup (const char *type)
     if(osl_File_E_None == osl_openFile(aConfigFileURL.pData, &handle, osl_File_OpenFlag_Read))
     {
         rtl::ByteSequence seq;
-        while (osl_File_E_None == osl_readLine(handle , (sal_Sequence **)&seq))
+        while (osl_File_E_None == osl_readLine(handle , reinterpret_cast<sal_Sequence **>(&seq)))
         {
             /* Remove newline at end */
             int relative = 0;
@@ -134,7 +134,7 @@ static OUString xdg_user_dir_lookup (const char *type)
             if(len>0 && seq[len-1] == '\n')
                 seq[len-1] = 0;
 
-            p = (char *)seq.getArray();
+            p = reinterpret_cast<char *>(seq.getArray());
             while (*p == ' ' || *p == '\t')
                 p++;
             if (strncmp (p, "XDG_", 4) != 0)
