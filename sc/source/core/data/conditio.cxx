@@ -1839,6 +1839,7 @@ bool ScConditionalFormat::EqualEntries( const ScConditionalFormat& r ) const
 void ScConditionalFormat::AddRange( const ScRangeList& rRanges )
 {
     maRanges = rRanges;
+    SAL_WARN_IF(maRanges.empty(), "sc", "the conditional format range is empty! will result in a crash later!");
 }
 
 void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
