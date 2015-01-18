@@ -853,7 +853,7 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, bool bChoose
     aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
 
     // get symbol
-    basicide_choose_macro pSymbol = (basicide_choose_macro) aMod.getFunctionSymbol("basicide_choose_macro");
+    basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(aMod.getFunctionSymbol("basicide_choose_macro"));
     SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)
         return OUString();

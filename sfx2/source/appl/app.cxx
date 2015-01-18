@@ -494,7 +494,7 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
 
     // get symbol
-    basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) aMod.getFunctionSymbol("basicide_handle_basic_error");
+    basicide_handle_basic_error pSymbol = reinterpret_cast<basicide_handle_basic_error>(aMod.getFunctionSymbol("basicide_handle_basic_error"));
 
     aMod.release();
 
@@ -592,7 +592,7 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
     aMod.loadRelative(&thisModule, SVLIBRARY("basctl"), 0);
 
     // get symbol
-    basicide_macro_organizer pSymbol = (basicide_macro_organizer) aMod.getFunctionSymbol("basicide_macro_organizer");
+    basicide_macro_organizer pSymbol = reinterpret_cast<basicide_macro_organizer>(aMod.getFunctionSymbol("basicide_macro_organizer"));
 
     SAL_WARN_IF(!pSymbol, "sfx.doc", "SfxApplication::MacroOrganizer, no symbol!");
     if (!pSymbol)

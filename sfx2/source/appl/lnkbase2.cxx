@@ -592,7 +592,7 @@ DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
         {
             if( aValue >>= aSeq )
             {
-                aData = DdeData( (const char *)aSeq.getConstArray(), aSeq.getLength(), nFormat );
+                aData = DdeData( aSeq.getConstArray(), aSeq.getLength(), nFormat );
 
                 bIsValidData = true;
                 return &aData;

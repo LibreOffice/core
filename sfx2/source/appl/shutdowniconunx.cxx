@@ -155,7 +155,7 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
         GDK_COLORSPACE_RGB, sal_True, 8,
         aSize.Width(), aSize.Height(),
         aSize.Width() * 4,
-        (GdkPixbufDestroyNotify) g_free,
+        reinterpret_cast<GdkPixbufDestroyNotify>(g_free),
         NULL );
 }
 
@@ -412,7 +412,7 @@ void plugin_init_sys_tray()
     if (pFile)
     {
         if ((pMonitor = g_file_monitor_file(pFile, G_FILE_MONITOR_NONE, NULL, NULL)))
-            g_signal_connect(pMonitor, "changed", (GCallback)notify_file_changed, NULL);
+            g_signal_connect(pMonitor, "changed", reinterpret_cast<GCallback>(notify_file_changed), NULL);
         g_object_unref(pFile);
     }
 #endif

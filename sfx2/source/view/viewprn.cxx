@@ -477,7 +477,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     // Evaluate Printer Options
     sal_uInt16 nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
     const SfxFlagItem *pFlagItem = 0;
-    pDocPrinter->GetOptions().GetItemState( nWhich, false, (const SfxPoolItem**) &pFlagItem );
+    pDocPrinter->GetOptions().GetItemState( nWhich, false, reinterpret_cast<const SfxPoolItem**>(&pFlagItem) );
     bool bOriToDoc = pFlagItem && (pFlagItem->GetValue() & SFX_PRINTER_CHG_ORIENTATION);
     bool bSizeToDoc = pFlagItem && (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE);
 

@@ -327,7 +327,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
             const sal_Char* p = (sal_Char*)( pData->operator const void*() );
             long nLen = FORMAT_STRING == nFmt ? (p ? strlen( p ) : 0) : (long)*pData;
 
-            Sequence< sal_Int8 > aSeq( (const sal_Int8*)p, nLen );
+            Sequence< sal_Int8 > aSeq( reinterpret_cast<const sal_Int8*>(p), nLen );
             if( pGetData )
             {
                 *pGetData <<= aSeq;  // Copy Data

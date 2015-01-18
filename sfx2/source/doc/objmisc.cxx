@@ -2041,7 +2041,7 @@ void WriteStringInStream( const uno::Reference< io::XOutputStream >& xOutStream,
     if ( xOutStream.is() )
     {
         OString aStrLog = OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
-        uno::Sequence< sal_Int8 > aLogData( (const sal_Int8*)aStrLog.getStr(), aStrLog.getLength() );
+        uno::Sequence< sal_Int8 > aLogData( reinterpret_cast<const sal_Int8*>(aStrLog.getStr()), aStrLog.getLength() );
         xOutStream->writeBytes( aLogData );
 
         aLogData.realloc( 1 );

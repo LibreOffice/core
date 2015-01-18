@@ -206,7 +206,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
         sal_Int32 nRead = xStream->readBytes( lData, 1024 );
         while ( nRead > 0 )
         {
-            OString sOldString( (sal_Char*)lData.getConstArray(), nRead );
+            OString sOldString( reinterpret_cast<char const *>(lData.getConstArray()), nRead );
             OUString sString = OStringToOUString( sOldString, RTL_TEXTENCODING_UTF8 );
             aRet.append( sString );
 
