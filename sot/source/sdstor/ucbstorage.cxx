@@ -678,7 +678,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
             if ( nErr == rtl_Digest_E_None )
             {
                 sal_uInt8* pBuffer = aBuffer;
-                ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+                ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
                 ::com::sun::star::uno::Any aAny;
                 aAny <<= aSequ;
                 m_pContent->setPropertyValue("EncryptionKey", aAny );

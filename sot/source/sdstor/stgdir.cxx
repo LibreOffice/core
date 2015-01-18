@@ -158,7 +158,7 @@ void StgDirEntry::DelTemp( bool bForce )
         {
             // this deletes the element if refcnt == 0!
             bool bDel = nRefCnt == 0;
-            StgAvlNode::Remove( (StgAvlNode**) &pUp->pDown, this, bDel );
+            StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&pUp->pDown), this, bDel );
             if( !bDel )
             {
                 pLeft = pRight = pDown = 0;
@@ -589,8 +589,8 @@ bool StgDirEntry::Revert()
                     if( p->bRenamed )
                     {
                         StgAvlNode::Move
-                            ( (StgAvlNode**) &p->pUp->pDown,
-                              (StgAvlNode**) &p->pUp->pDown, p );
+                            ( reinterpret_cast<StgAvlNode**>(&p->pUp->pDown),
+                              reinterpret_cast<StgAvlNode**>(&p->pUp->pDown), p );
                         p->bRenamed = false;
                     }
                     p = aIter.Next();
@@ -800,7 +800,7 @@ StgDirStrm::StgDirStrm( StgIo& r )
     {
         // temporarily use this instance as owner, so
         // the TOC pages can be removed.
-        pEntry = (StgDirEntry*) this; // just for a bit pattern
+        pEntry = reinterpret_cast<StgDirEntry*>(this); // just for a bit pattern
         SetupEntry( 0, pRoot );
         pEntry = NULL;
     }
@@ -870,7 +870,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
             }
 
             if( StgAvlNode::Insert
-                ( (StgAvlNode**) ( pUpper ? &pUpper->pDown : &pRoot ), pCur ) )
+                ( reinterpret_cast<StgAvlNode**>( pUpper ? &pUpper->pDown : &pRoot ), pCur ) )
             {
                 pCur->pUp    = pUpper;
                 pCur->ppRoot = &pRoot;
@@ -1025,7 +1025,7 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
     else
     {
         pRes = new StgDirEntry( aEntry );
-        if( StgAvlNode::Insert( (StgAvlNode**) &rStg.pDown, pRes ) )
+        if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.pDown), pRes ) )
         {
             pRes->pUp    = &rStg;
             pRes->ppRoot = &pRoot;
@@ -1049,10 +1049,10 @@ bool StgDirStrm::Rename( StgDirEntry& rStg, const OUString& rOld, const OUString
     if( p )
     {
 
-        if( !StgAvlNode::Remove( (StgAvlNode**) &rStg.pDown, p, false ) )
+        if( !StgAvlNode::Remove( reinterpret_cast<StgAvlNode**>(&rStg.pDown), p, false ) )
             return false;
         p->aEntry.SetName( rNew );
-        if( !StgAvlNode::Insert( (StgAvlNode**) &rStg.pDown, p ) )
+        if( !StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.pDown), p ) )
             return false;
         p->bRenamed = p->bDirty   = true;
         return true;
@@ -1072,7 +1072,7 @@ bool StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const OUString& r
     if( p )
     {
         if( !StgAvlNode::Move
-            ( (StgAvlNode**) &rStg1.pDown, (StgAvlNode**) &rStg2.pDown, p ) )
+            ( reinterpret_cast<StgAvlNode**>(&rStg1.pDown), reinterpret_cast<StgAvlNode**>(&rStg2.pDown), p ) )
             return false;
         p->bDirty = true;
         return true;
