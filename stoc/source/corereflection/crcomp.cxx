@@ -129,7 +129,7 @@ Reference< XIdlClass > IdlCompFieldImpl::getDeclaringClass()
         if (! _xDeclClass.is())
         {
             typelib_CompoundTypeDescription * pTD =
-                (typelib_CompoundTypeDescription *)getDeclTypeDescr();
+                reinterpret_cast<typelib_CompoundTypeDescription *>(getDeclTypeDescr());
             while (pTD)
             {
                 typelib_TypeDescriptionReference ** ppTypeRefs = pTD->ppTypeRefs;
@@ -137,7 +137,7 @@ Reference< XIdlClass > IdlCompFieldImpl::getDeclaringClass()
                 {
                     if (td_equals( (typelib_TypeDescription *)getTypeDescr(), ppTypeRefs[nPos] ))
                     {
-                        _xDeclClass = getReflection()->forType( (typelib_TypeDescription *)pTD );
+                        _xDeclClass = getReflection()->forType( &pTD->aBase );
                         return _xDeclClass;
                     }
                 }
@@ -180,7 +180,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         typelib_TypeDescription * pTD = pObjTD;
         typelib_TypeDescription * pDeclTD = getDeclTypeDescr();
         while (pTD && !typelib_typedescription_equals( pTD, pDeclTD ))
-            pTD = (typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pTD)->pBaseTypeDescription;
+            pTD = &reinterpret_cast<typelib_CompoundTypeDescription *>(pTD)->pBaseTypeDescription->aBase;
 
         OSL_ENSURE( pTD, "### illegal object type!" );
         if (pTD)
@@ -213,7 +213,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         typelib_TypeDescription * pTD = pObjTD;
         typelib_TypeDescription * pDeclTD = getDeclTypeDescr();
         while (pTD && !typelib_typedescription_equals( pTD, pDeclTD ))
-            pTD = (typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pTD)->pBaseTypeDescription;
+            pTD = &reinterpret_cast<typelib_CompoundTypeDescription *>(pTD)->pBaseTypeDescription->aBase;
 
         OSL_ENSURE( pTD, "### illegal object type!" );
         if (pTD)
@@ -250,7 +250,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
         typelib_TypeDescription * pTD = pObjTD;
         typelib_TypeDescription * pDeclTD = getDeclTypeDescr();
         while (pTD && !typelib_typedescription_equals( pTD, pDeclTD ))
-            pTD = (typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pTD)->pBaseTypeDescription;
+            pTD = &reinterpret_cast<typelib_CompoundTypeDescription *>(pTD)->pBaseTypeDescription->aBase;
 
         OSL_ENSURE( pTD, "### illegal object type!" );
         if (pTD)
@@ -320,7 +320,7 @@ Sequence< Reference< XIdlClass > > CompoundIdlClassImpl::getSuperclasses()
         {
             typelib_CompoundTypeDescription * pCompTypeDescr = getTypeDescr()->pBaseTypeDescription;
             if (pCompTypeDescr)
-                _xSuperClass = getReflection()->forType( (typelib_TypeDescription *)pCompTypeDescr );
+                _xSuperClass = getReflection()->forType( &pCompTypeDescr->aBase );
         }
     }
     if (_xSuperClass.is())

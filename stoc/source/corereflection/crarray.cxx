@@ -95,7 +95,7 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     }
 
     uno_Sequence ** ppSeq = (uno_Sequence **)rArray.getValue();
-    uno_sequence_realloc( ppSeq, (typelib_TypeDescription *)getTypeDescr(),
+    uno_sequence_realloc( ppSeq, &getTypeDescr()->aBase,
                           nLen,
                           reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
                           reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
@@ -168,7 +168,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
 
     uno_Sequence ** ppSeq = (uno_Sequence **)rArray.getValue();
     uno_sequence_reference2One(
-        ppSeq, (typelib_TypeDescription *)getTypeDescr(),
+        ppSeq, &getTypeDescr()->aBase,
         reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
         reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
     rArray.pData = ppSeq;

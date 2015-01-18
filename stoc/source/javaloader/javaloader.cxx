@@ -244,7 +244,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             pUno_environment = NULL;
 
             cppu::UnoType<XImplementationLoader>::get().
-                getDescription((typelib_TypeDescription **) & pType_XImplementationLoader);
+                getDescription(reinterpret_cast<typelib_TypeDescription **>(&pType_XImplementationLoader));
             if(!pType_XImplementationLoader)
                 throw RuntimeException(
                     "javaloader error - no type information for XImplementationLoader");

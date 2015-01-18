@@ -170,7 +170,7 @@ inline AdapterImpl::~AdapterImpl()
     for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
     {
         ::typelib_typedescription_release(
-            (typelib_TypeDescription *)m_pInterfaces[ nPos ].m_pTypeDescr );
+            &m_pInterfaces[ nPos ].m_pTypeDescr->aBase );
     }
     delete [] m_pInterfaces;
 
@@ -356,8 +356,8 @@ void AdapterImpl::getValue(
 {
     uno_Any aInvokRet;
     void * pInvokArgs[1];
-    pInvokArgs[0] =
-        &((typelib_InterfaceMemberTypeDescription *)pMemberType)->pMemberName;
+    pInvokArgs[0] = const_cast<rtl_uString **>(
+        &reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberType)->pMemberName);
     uno_Any aInvokExc;
     uno_Any * pInvokExc = &aInvokExc;
 
@@ -375,7 +375,7 @@ void AdapterImpl::getValue(
     {
         if (coerce_construct(
                 pReturn,
-                ((typelib_InterfaceAttributeTypeDescription *)
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(
                  pMemberType)->pAttributeTypeRef,
                 &aInvokRet, *ppException ))
         {
@@ -392,12 +392,12 @@ void AdapterImpl::setValue(
     uno_Any aInvokVal;
     ::uno_type_any_construct(
         &aInvokVal, pArgs[0],
-        ((typelib_InterfaceAttributeTypeDescription *)
+        reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(
          pMemberType)->pAttributeTypeRef, 0 );
 
     void * pInvokArgs[2];
-    pInvokArgs[0] =
-        &((typelib_InterfaceMemberTypeDescription *)pMemberType)->pMemberName;
+    pInvokArgs[0] = const_cast<rtl_uString **>(
+        &reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberType)->pMemberName);
     pInvokArgs[1] = &aInvokVal;
     uno_Any aInvokExc;
     uno_Any * pInvokExc = &aInvokExc;
@@ -424,15 +424,15 @@ void AdapterImpl::invoke(
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     sal_Int32 nParams =
-        ((typelib_InterfaceMethodTypeDescription *)pMemberType)->nParams;
+        reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberType)->nParams;
     typelib_MethodParameter * pFormalParams =
-        ((typelib_InterfaceMethodTypeDescription *)pMemberType)->pParams;
+        reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberType)->pParams;
 
     // in params
     uno_Sequence * pInParamsSeq = 0;
     ::uno_sequence_construct(
         &pInParamsSeq, m_pFactory->m_pAnySeqTD, 0, nParams, 0 );
-    uno_Any * pInAnys = (uno_Any *)pInParamsSeq->elements;
+    uno_Any * pInAnys = reinterpret_cast<uno_Any *>(pInParamsSeq->elements);
     sal_Int32 nOutParams = 0;
     sal_Int32 nPos;
     for ( nPos = nParams; nPos--; )
@@ -456,8 +456,8 @@ void AdapterImpl::invoke(
     uno_Any aInvokRet;
     // perform call
     void * pInvokArgs[4];
-    pInvokArgs[0] =
-        &((typelib_InterfaceMemberTypeDescription *)pMemberType)->pMemberName;
+    pInvokArgs[0] = const_cast<rtl_uString **>(
+        &reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberType)->pMemberName);
     pInvokArgs[1] = &pInParamsSeq;
     pInvokArgs[2] = &pOutIndices;
     pInvokArgs[3] = &pOutParams;
@@ -484,8 +484,8 @@ void AdapterImpl::invoke(
         if (pOutParams->nElements == nOutParams &&
             pOutIndices->nElements == nOutParams)
         {
-            sal_Int16 * pIndices = (sal_Int16 *)pOutIndices->elements;
-            uno_Any * pOut       = (uno_Any *)pOutParams->elements;
+            sal_Int16 * pIndices = reinterpret_cast<sal_Int16 *>(pOutIndices->elements);
+            uno_Any * pOut       = reinterpret_cast<uno_Any *>(pOutParams->elements);
             for ( nPos = 0; nPos < nOutParams; ++nPos )
             {
                 sal_Int32 nIndex = pIndices[nPos];
@@ -525,7 +525,7 @@ void AdapterImpl::invoke(
                 // out param copy ok; write return value
                 if (coerce_construct(
                         pReturn,
-                        ((typelib_InterfaceMethodTypeDescription *)
+                        reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(
                          pMemberType)->pReturnTypeRef,
                         &aInvokRet, *ppException ))
                 {
@@ -568,7 +568,7 @@ static void SAL_CALL adapter_dispatch(
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     // query to emulated interface
-    switch (((typelib_InterfaceMemberTypeDescription *)pMemberType)->nPosition)
+    switch (reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberType)->nPosition)
     {
     case 0: // queryInterface()
     {
@@ -584,13 +584,12 @@ static void SAL_CALL adapter_dispatch(
                 that->m_pInterfaces[nPos].m_pTypeDescr;
             while (pTD)
             {
-                if (type_equals(
-                        ((typelib_TypeDescription *)pTD)->pWeakRef, pDemanded ))
+                if (type_equals( pTD->aBase.pWeakRef, pDemanded ))
                 {
                     uno_Interface * pUnoI2 = &that->m_pInterfaces[nPos];
                     ::uno_any_construct(
                         (uno_Any *)pReturn, &pUnoI2,
-                        (typelib_TypeDescription *)pTD, 0 );
+                        &pTD->aBase, 0 );
                     return;
                 }
                 pTD = pTD->pBaseTypeDescription;
@@ -649,15 +648,14 @@ AdapterImpl::AdapterImpl(
         pInterface->m_pAdapter = this;
         pInterface->m_pTypeDescr = 0;
         pTypes[nPos].getDescription(
-            (typelib_TypeDescription **)&pInterface->m_pTypeDescr );
+            reinterpret_cast<typelib_TypeDescription **>(&pInterface->m_pTypeDescr) );
         OSL_ASSERT( pInterface->m_pTypeDescr );
         if (! pInterface->m_pTypeDescr)
         {
             for ( sal_Int32 n = 0; n < nPos; ++n )
             {
                 ::typelib_typedescription_release(
-                    (typelib_TypeDescription *)
-                    m_pInterfaces[ n ].m_pTypeDescr );
+                    &m_pInterfaces[ n ].m_pTypeDescr->aBase );
             }
             delete [] m_pInterfaces;
             throw RuntimeException(
@@ -787,8 +785,7 @@ static inline AdapterImpl * lookup_adapter(
             {
                 if (::typelib_typedescriptionreference_isAssignableFrom(
                         rType.getTypeLibType(),
-                        ((typelib_TypeDescription *)that->
-                         m_pInterfaces[ nPos ].m_pTypeDescr)->pWeakRef ))
+                        that->m_pInterfaces[ nPos ].m_pTypeDescr->aBase.pWeakRef ))
                 {
                     // found
                     break;

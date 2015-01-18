@@ -223,7 +223,7 @@ void EnumIdlClassImpl::createObject( Any & rObj )
     throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 eVal =
-        ((typelib_EnumTypeDescription *)IdlClassImpl::getTypeDescr())->nDefaultEnumValue;
+        reinterpret_cast<typelib_EnumTypeDescription *>(IdlClassImpl::getTypeDescr())->nDefaultEnumValue;
     rObj.setValue( &eVal, IdlClassImpl::getTypeDescr() );
 }
 

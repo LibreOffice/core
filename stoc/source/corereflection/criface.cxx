@@ -50,7 +50,7 @@ class IdlAttributeFieldImpl
 {
 public:
     typelib_InterfaceAttributeTypeDescription * getAttributeTypeDescr()
-        { return (typelib_InterfaceAttributeTypeDescription *)getTypeDescr(); }
+        { return reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(getTypeDescr()); }
 
     IdlAttributeFieldImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                            typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr )
@@ -175,7 +175,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
     throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     uno_Interface * pUnoI = getReflection()->mapToUno(
-        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+        rObj, reinterpret_cast<typelib_InterfaceTypeDescription *>(getDeclTypeDescr()) );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -215,7 +215,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     }
 
     uno_Interface * pUnoI = getReflection()->mapToUno(
-        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+        rObj, reinterpret_cast<typelib_InterfaceTypeDescription *>(getDeclTypeDescr()) );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -243,12 +243,12 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         {
             Reference< XInterface > xObj;
             bAssign = extract(
-                rValue, (typelib_InterfaceTypeDescription *)pTD, xObj,
+                rValue, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD), xObj,
                 getReflection() );
             if (bAssign)
             {
                 *(void **)pArg = getReflection()->getCpp2Uno().mapInterface(
-                    xObj.get(), (typelib_InterfaceTypeDescription *)pTD );
+                    xObj.get(), reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
             }
         }
         else
@@ -339,7 +339,7 @@ class IdlInterfaceMethodImpl
 
 public:
     typelib_InterfaceMethodTypeDescription * getMethodTypeDescr()
-        { return (typelib_InterfaceMethodTypeDescription *)getTypeDescr(); }
+        { return reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(getTypeDescr()); }
 
     IdlInterfaceMethodImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                             typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr )
@@ -598,7 +598,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
     }
 
     uno_Interface * pUnoI = getReflection()->mapToUno(
-        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+        rObj, reinterpret_cast<typelib_InterfaceTypeDescription *>(getDeclTypeDescr()) );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -651,12 +651,12 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 {
                     Reference< XInterface > xDest;
                     bAssign = extract(
-                        pCppArgs[nPos], (typelib_InterfaceTypeDescription *)pTD,
+                        pCppArgs[nPos], reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD),
                         xDest, getReflection() );
                     if (bAssign)
                     {
                         *(void **)ppUnoArgs[nPos] = getReflection()->getCpp2Uno().mapInterface(
-                            xDest.get(), (typelib_InterfaceTypeDescription *)pTD );
+                            xDest.get(), reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
                     }
                 }
                 else
@@ -819,7 +819,7 @@ void InterfaceIdlClassImpl::initMembers()
         typelib_TypeDescription * pTD = 0;
         typelib_typedescriptionreference_getDescription( &pTD, ppAllMembers[nPos] );
         assert(pTD && "### cannot get type description!");
-        pSortedMemberInit[nIndex].first = ((typelib_InterfaceMemberTypeDescription *)pTD)->pMemberName;
+        pSortedMemberInit[nIndex].first = reinterpret_cast<typelib_InterfaceMemberTypeDescription *>(pTD)->pMemberName;
         pSortedMemberInit[nIndex].second = pTD;
     }
 

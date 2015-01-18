@@ -584,11 +584,11 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             typelib_TypeDescription * pSourceElementTD = 0;
             TYPELIB_DANGER_GET(
                 &pSourceElementTD,
-                ((typelib_IndirectTypeDescription *)aSourceTD.get())->pType );
+                reinterpret_cast<typelib_IndirectTypeDescription *>(aSourceTD.get())->pType );
             typelib_TypeDescription * pDestElementTD = 0;
             TYPELIB_DANGER_GET(
                 &pDestElementTD,
-                ((typelib_IndirectTypeDescription *)aDestTD.get())->pType );
+                reinterpret_cast<typelib_IndirectTypeDescription *>(aDestTD.get())->pType );
 
             sal_uInt32 nPos = (*(const uno_Sequence * const *)rVal.getValue())->nElements;
             uno_Sequence * pRet = 0;
@@ -641,10 +641,10 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
         if (aSourceClass==TypeClass_STRING)
         {
-            for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
+            for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
                 if (((const OUString *)rVal.getValue())->equalsIgnoreAsciiCase(
-                        ((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos] ))
+                        reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos] ))
                     break;
             }
         }
@@ -653,9 +653,9 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                  aSourceClass!=TypeClass_CHAR)
         {
             sal_Int32 nEnumValue = (sal_Int32)toHyper( rVal, -(sal_Int64)0x80000000, 0x7fffffff );
-            for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
+            for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
-                if (nEnumValue == ((typelib_EnumTypeDescription *)aEnumTD.get())->pEnumValues[nPos])
+                if (nEnumValue == reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos])
                     break;
             }
         }
@@ -663,7 +663,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         if (nPos >= 0)
         {
             aRet.setValue(
-                &((typelib_EnumTypeDescription *)aEnumTD.get())->pEnumValues[nPos],
+                &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos],
                 aEnumTD.get() );
         }
         else
@@ -839,15 +839,15 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             aEnumTD.makeComplete();
             sal_Int32 nPos;
             sal_Int32 nEnumValue = *(sal_Int32 *)rVal.getValue();
-            for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
+            for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
-                if (nEnumValue == ((typelib_EnumTypeDescription *)aEnumTD.get())->pEnumValues[nPos])
+                if (nEnumValue == reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos])
                     break;
             }
             if (nPos >= 0)
             {
                 aRet.setValue(
-                    &((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos],
+                    &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos],
                     cppu::UnoType<OUString>::get());
             }
             else

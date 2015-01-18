@@ -215,7 +215,7 @@ class InterfaceIdlClassImpl
 
 public:
     typelib_InterfaceTypeDescription * getTypeDescr() const
-        { return (typelib_InterfaceTypeDescription *)IdlClassImpl::getTypeDescr(); }
+        { return reinterpret_cast<typelib_InterfaceTypeDescription *>(IdlClassImpl::getTypeDescr()); }
 
     // ctor/ dtor
     InterfaceIdlClassImpl( IdlReflectionServiceImpl * pReflection,
@@ -250,7 +250,7 @@ class CompoundIdlClassImpl
 
 public:
     typelib_CompoundTypeDescription * getTypeDescr() const
-        { return (typelib_CompoundTypeDescription *)IdlClassImpl::getTypeDescr(); }
+        { return reinterpret_cast<typelib_CompoundTypeDescription *>(IdlClassImpl::getTypeDescr()); }
 
     // ctor/ dtor
     CompoundIdlClassImpl( IdlReflectionServiceImpl * pReflection,
@@ -275,7 +275,7 @@ class ArrayIdlClassImpl
 {
 public:
     typelib_IndirectTypeDescription * getTypeDescr() const
-        { return (typelib_IndirectTypeDescription *)IdlClassImpl::getTypeDescr(); }
+        { return reinterpret_cast<typelib_IndirectTypeDescription *>(IdlClassImpl::getTypeDescr()); }
 
     // ctor
     ArrayIdlClassImpl( IdlReflectionServiceImpl * pReflection,
@@ -313,7 +313,7 @@ class EnumIdlClassImpl
 
 public:
     typelib_EnumTypeDescription * getTypeDescr() const
-        { return (typelib_EnumTypeDescription *)IdlClassImpl::getTypeDescr(); }
+        { return reinterpret_cast<typelib_EnumTypeDescription *>(IdlClassImpl::getTypeDescr()); }
 
     // ctor/ dtor
     EnumIdlClassImpl( IdlReflectionServiceImpl * pReflection,
@@ -379,7 +379,7 @@ inline bool extract(
         if (rObj.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
         {
             return ::uno_type_assignData(
-                &rDest, ((typelib_TypeDescription *)pTo)->pWeakRef,
+                &rDest, pTo->aBase.pWeakRef,
                 const_cast< void * >( rObj.getValue() ), rObj.getValueTypeRef(),
                 reinterpret_cast< uno_QueryInterfaceFunc >(css::uno::cpp_queryInterface),
                 reinterpret_cast< uno_AcquireFunc >(css::uno::cpp_acquire),
@@ -401,7 +401,7 @@ inline bool coerce_assign(
     if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
     {
         css::uno::Reference< css::uno::XInterface > xVal;
-        if (extract( rSource, (typelib_InterfaceTypeDescription *)pTD, xVal, pRefl ))
+        if (extract( rSource, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD), xVal, pRefl ))
         {
             if (*(css::uno::XInterface **)pDest)
                 (*(css::uno::XInterface **)pDest)->release();
