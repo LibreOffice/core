@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a41bdd9_6e95df3e",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-01-18T14:16:24Z",
+      "side": 1,
+      "message": "I could not find sufficient information about how the Excel ENCODEURL works, so I contacted a PHP-expert. He pointed me to RFC3986 and the PHP-encodeurl function, from which I took the explanatory text.",
+      "parentUuid": "9a41bdd9_6eaf1fe4",
+      "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_aea44708",
         "filename": "sc/source/core/tool/interpr7.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a41bdd9_8e92a356",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-01-18T14:16:24Z",
+      "side": 1,
+      "message": "No problem, I\u0027ll remove the \u0027.\u0027, \u0027:\u0027 and \u0027/\u0027 again and alse remove the space to \u0027+\u0027 conversion.",
+      "parentUuid": "9a41bdd9_aea44708",
+      "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a41bdd9_cea98be1",
         "filename": "sc/source/core/tool/interpr7.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2015-01-16T19:33:57Z",
       "side": 1,
       "message": "This is wrong, it assumes UTF-16, but instead an UTF-16 string needs to be converted to an UTF-8 string first and then be %-encoded 8-bit character-wise.",
+      "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_2e9fd760",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-01-18T14:16:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a41bdd9_cea98be1",
       "revId": "e72b1a96ca29a35b89f4d3a431e1a9c759f20cbf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
