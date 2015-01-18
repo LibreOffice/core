@@ -520,8 +520,17 @@ void SidebarController::OpenThenSwitchToDeck (
     // fdo#67627 Clicking a second time on a Deck icon will close the Deck
     if (IsDeckVisible(rsDeckId))
     {
-        RequestCloseDeck();
-        return;
+        // fdo#88241 Summoning an undocked sidebar a second time should close sidebar
+        if (!GetSplitWindow())
+        {
+            mpParentWindow->Close();
+            return;
+        }
+        else
+        {
+            RequestCloseDeck();
+            return;
+        }
     }
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
