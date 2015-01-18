@@ -443,14 +443,14 @@ namespace
 
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const Reference<css::form::XForms>& _rTopLevelDestContainer)
 {
-    Reference< XInterface >  xTopLevelSouce;
-    OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
-    if (!xTopLevelSouce.is())
+    Reference< XInterface >  xTopLevelSource;
+    OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSource);
+    if (!xTopLevelSource.is())
         // something went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
 
     Reference< XIndexContainer >  xDestContainer(_rTopLevelDestContainer, UNO_QUERY_THROW);
-    Reference< XIndexContainer >  xSourceContainer(xTopLevelSouce, UNO_QUERY);
+    Reference< XIndexContainer >  xSourceContainer(xTopLevelSource, UNO_QUERY);
     DBG_ASSERT(xSourceContainer.is(), "FmFormObj::ensureModelEnv : the top level source is invalid !");
 
     sal_Int32 nTokIndex = 0;

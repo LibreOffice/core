@@ -117,7 +117,7 @@ ScVbaControlListener::disposing( const lang::EventObject& ) throw( uno::RuntimeE
 {
     if( pControl )
     {
-        pControl->removeResouce();
+        pControl->removeResource();
         pControl = NULL;
     }
 }
@@ -165,7 +165,7 @@ ScVbaControl::setGeometryHelper( AbstractGeometryAttributes* pHelper )
     mpGeometryHelper.reset( pHelper );
 }
 
-void ScVbaControl::removeResouce() throw( uno::RuntimeException )
+void ScVbaControl::removeResource() throw( uno::RuntimeException )
 {
     uno::Reference< lang::XComponent > xComponent( m_xControl, uno::UNO_QUERY_THROW );
     xComponent->removeEventListener( m_xEventListener );
