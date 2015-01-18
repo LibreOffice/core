@@ -139,8 +139,8 @@ struct VbaTimerInfoHash
     size_t operator()( const VbaTimerInfo& rTimerInfo ) const
     {
         return (size_t)rTimerInfo.first.hashCode()
-             + (size_t)rtl_str_hashCode_WithLength( (char*)&rTimerInfo.second.first, sizeof( double ) )
-             + (size_t)rtl_str_hashCode_WithLength( (char*)&rTimerInfo.second.second, sizeof( double ) );
+             + (size_t)rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.first), sizeof( double ) )
+             + (size_t)rtl_str_hashCode_WithLength( reinterpret_cast<char const *>(&rTimerInfo.second.second), sizeof( double ) );
     }
 };
 
