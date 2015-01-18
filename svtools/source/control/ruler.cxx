@@ -463,13 +463,16 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 {
     double nCenter = nTop + ((nBottom - nTop) / 2);
 
-    long nTickLength3 = (nBottom - nTop) * 0.5 * ruler_tab.DPIScaleFactor;
+    long nTickLength3 = (nBottom - nTop) * 0.5;
     long nTickLength2 = nTickLength3 * 0.66;
     long nTickLength1 = nTickLength2 * 0.66;
 
+    long nScale = ruler_tab.DPIScaleFactor;
+    long DPIOffset = nScale - 1;
+
     double nTick4 = aImplRulerUnitTab[mnUnitIndex].nTick4;
     double nTick2 = 0;
-    double nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1;
+    double nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1 / nScale;
     double nTickUnit = 0;
     long nTickWidth;
     bool bNoTicks = false;
@@ -548,7 +551,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
             else
                 nMulti += 1000;
 
-            // Overeflow - in this case don't draw ticks and exit
+            // Overflow - in this case don't draw ticks and exit
             if ( nMulti < nOldMulti )
             {
                 bNoTicks = true;
@@ -630,10 +633,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 
                     if(nMin < nHorizontalLocation && nHorizontalLocation < nMax)
                     {
-                        ImplVDrawLine(nHorizontalLocation, nBottom, nHorizontalLocation,
-                            nBottom - 1 * ruler_tab.DPIScaleFactor);
-                        ImplVDrawLine(nHorizontalLocation, nTop,    nHorizontalLocation,
-                            nTop    + 1 * ruler_tab.DPIScaleFactor);
+                        ImplVDrawRect(nHorizontalLocation, nBottom, nHorizontalLocation + DPIOffset,
+                            nBottom - 1 * nScale);
+                        ImplVDrawRect(nHorizontalLocation, nTop,    nHorizontalLocation + DPIOffset,
+                            nTop    + 1 * nScale);
                     }
 
                     nHorizontalLocation = nStart - n;
@@ -641,10 +644,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
 
                     if(nMin < nHorizontalLocation && nHorizontalLocation < nMax)
                     {
-                        ImplVDrawLine( nHorizontalLocation, nBottom, nHorizontalLocation,
-                            nBottom - 1 * ruler_tab.DPIScaleFactor );
-                        ImplVDrawLine( nHorizontalLocation, nTop,    nHorizontalLocation,
-                            nTop    + 1 * ruler_tab.DPIScaleFactor );
+                        ImplVDrawRect( nHorizontalLocation, nBottom, nHorizontalLocation + DPIOffset,
+                            nBottom - 1 * nScale );
+                        ImplVDrawRect( nHorizontalLocation, nTop,    nHorizontalLocation + DPIOffset,
+                            nTop    + 1 * nScale );
                     }
                 }
                 // Tick/Tick2 - Output (Strokes)
@@ -673,10 +676,10 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
                         nT = nStart + n;
 
                         if ( nT < nMax )
-                            ImplVDrawLine( nT, nT1, nT, nT2 );
+                            ImplVDrawRect( nT, nT1, nT + DPIOffset, nT2 );
                         nT = nStart - n;
                         if ( nT > nMin )
-                            ImplVDrawLine( nT, nT1, nT, nT2 );
+                            ImplVDrawRect( nT, nT1, nT + DPIOffset, nT2 );
                     }
                 }
             }
