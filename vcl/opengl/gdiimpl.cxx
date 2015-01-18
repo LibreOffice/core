@@ -716,6 +716,47 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blo
     }
 }
 
+void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid )
+{
+    const basegfx::B2DPolygon& rPolygon = trapezoid.getB2DPolygon();
+    sal_uInt16 nPoints = rPolygon.count();
+    std::vector<GLfloat> aVertices(nPoints * 2);
+    sal_uInt32 i, j;
+
+    for( i = 0, j = 0; i < nPoints; i++, j += 2 )
+    {
+        const basegfx::B2DPoint& rPt = rPolygon.getB2DPoint( i );
+        aVertices[j] = (2 * rPt.getX()) / GetWidth() - 1.0;
+        aVertices[j+1] = 1.0 - (2 * rPt.getY() / GetHeight());
+    }
+
+    mpProgram->SetVertices( &aVertices[0] );
+    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+
+    if( mrParent.getAntiAliasB2DDraw())
+    {
+        // Make the edges antialiased by drawing the edge lines again with AA.
+        // TODO: If transparent drawing is set up, drawing the lines themselves twice
+        // may be a problem, if that is a real problem, the polygon areas itself needs to be
+        // masked out for this or something.
+#ifdef DBG_UTIL
+        assert( mProgramIsSolidColor );
+#endif
+        SalColor lastSolidColor = mProgramSolidColor;
+        double lastSolidTransparency = mProgramSolidTransparency;
+        if( UseSolidAA( lastSolidColor, lastSolidTransparency ))
+        {
+            for( i = 0; i < nPoints; ++i )
+            {
+                const basegfx::B2DPoint& rPt1 = rPolygon.getB2DPoint( i );
+                const basegfx::B2DPoint& rPt2 = rPolygon.getB2DPoint(( i + 1 ) % nPoints );
+                DrawEdgeAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+            }
+            UseSolid( lastSolidColor, lastSolidTransparency );
+        }
+    }
+}
+
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
     long nX1( nX );
@@ -1243,17 +1284,19 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     if( bIsHairline )
     {
         // hairlines can be drawn in a simpler way (the linejoin and linecap styles can be ignored)
-        PreDraw();
-        if( UseSolidAA( mnLineColor, fTransparency ))
+        basegfx::B2DTrapezoidVector aB2DTrapVector;
+        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
+        // draw tesselation result
+        if( aB2DTrapVector.size())
         {
-            for( sal_uInt32 j = 0; j < rPolygon.count() - 1; j++ )
+            PreDraw();
+            if( UseSolid( mnLineColor, fTransparency ))
             {
-                const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
-                const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 )) );
-                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
+                for( size_t i = 0; i < aB2DTrapVector.size(); ++i )
+                    DrawTrapezoid( aB2DTrapVector[ i ] );
             }
+            PostDraw();
         }
-        PostDraw();
         return true;
     }
 
