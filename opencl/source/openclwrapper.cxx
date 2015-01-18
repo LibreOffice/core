@@ -245,7 +245,7 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
         }
     }
 
-    // Release all resouces and memory
+    // Release all resources and memory
     for ( size_t i = 0; i < numDevices; i++ )
     {
         delete[] binaries[i];

@@ -75,7 +75,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
                 });
         drawNaviBar();
         fielditems = new HashMap<String, FieldDescription>();
-        //TODO if reportResouces cannot be gotten dispose officedocument
+        //TODO if reportResources cannot be gotten dispose officedocument
         if (getTableResources())
         {
             setRightPaneHeaders(m_oResource, UIConsts.RID_TABLE + 8, 4);
