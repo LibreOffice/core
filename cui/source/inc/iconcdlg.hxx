@@ -192,7 +192,7 @@ public :
         bool bItemsOnDemand = false, sal_uLong nPos = TREELIST_APPEND );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
-    sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
+    sal_uInt16          GetCurPageId() const           { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
 
     /// gives via map converted local slots if applicable
@@ -211,7 +211,7 @@ public :
 
     short               Execute() SAL_OVERRIDE;
     void                Start( bool bShow = true );
-    bool            QueryClose();
+    bool                QueryClose();
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 
