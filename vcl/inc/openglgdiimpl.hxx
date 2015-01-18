@@ -89,7 +89,7 @@ public:
     void DrawEdgeAA( double nX1, double nY1, double nX2, double nY2 );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA = false );
     void DrawConvexPolygon( const Polygon& rPolygon, bool blockAA = false );
-    void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid );
+    void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA = false );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
