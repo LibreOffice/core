@@ -220,7 +220,7 @@ extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
 
         if ( xOutputStream.is() )
         {
-            const uno::Sequence< sal_Int8 > aSeq( (sal_Int8 *)inBuf, inLen );
+            const uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(inBuf), inLen );
             xOutputStream->writeBytes( aSeq );
         }
     }

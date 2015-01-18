@@ -69,7 +69,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
 {
     uno::Reference< task::XInteractionHandler > xIH;
 
-    OOoMountOperation *pThis = (OOoMountOperation*)op;
+    OOoMountOperation *pThis = reinterpret_cast<OOoMountOperation*>(op);
 
     const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > &xEnv = *(pThis->pEnv);
 
@@ -178,7 +178,7 @@ GMountOperation *ooo_mount_operation_new(const uno::Reference< ucb::XCommandEnvi
 {
     OOoMountOperation *pRet = (OOoMountOperation*)g_object_new (OOO_TYPE_MOUNT_OPERATION, NULL);
     pRet->pEnv = &rEnv;
-    return (GMountOperation*)pRet;
+    return &pRet->parent_instance;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
