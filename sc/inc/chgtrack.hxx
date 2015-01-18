@@ -462,17 +462,10 @@ class ScChangeActionDelMoveEntry : public ScChangeActionLinkEntry
     short               nCutOffFrom;
     short               nCutOffTo;
 
-    ScChangeActionDelMoveEntry(
+    inline ScChangeActionDelMoveEntry(
         ScChangeActionDelMoveEntry** ppPrevP,
         ScChangeActionMove* pMove,
-        short nFrom, short nTo )
-        :   ScChangeActionLinkEntry(
-                (ScChangeActionLinkEntry**)
-                    ppPrevP,
-                (ScChangeAction*) pMove ),
-            nCutOffFrom( nFrom ),
-            nCutOffTo( nTo )
-        {}
+        short nFrom, short nTo );
 
     ScChangeActionDelMoveEntry* GetNext()
                             {
@@ -637,6 +630,18 @@ public:
     virtual void GetRefString(
         OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const SAL_OVERRIDE;
 };
+
+ScChangeActionDelMoveEntry::ScChangeActionDelMoveEntry(
+    ScChangeActionDelMoveEntry** ppPrevP,
+    ScChangeActionMove* pMove,
+    short nFrom, short nTo )
+    :   ScChangeActionLinkEntry(
+            reinterpret_cast<ScChangeActionLinkEntry**>(
+                ppPrevP),
+            (ScChangeAction*) pMove ),
+        nCutOffFrom( nFrom ),
+        nCutOffTo( nTo )
+{}
 
 inline ScChangeActionMove* ScChangeActionDelMoveEntry::GetMove()
                            {

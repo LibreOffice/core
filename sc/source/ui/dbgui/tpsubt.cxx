@@ -333,7 +333,7 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 
 // Handler:
 
-IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
+IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
 {
     if (   (mpLbColumns->GetEntryCount() > 0)
         && (mpLbColumns->GetSelectionCount() > 0) )
@@ -346,7 +346,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
         if ( !pFunction )
             return 0;
 
-        if ( ((SvxCheckListBox*)pLb) == mpLbColumns )
+        if ( pLb == mpLbColumns )
         {
             mpLbFunctions->SelectEntryPos( *pFunction );
         }
@@ -359,9 +359,9 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
     return 0;
 }
 
-IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
+IMPL_LINK( ScTpSubTotalGroup, CheckHdl, void *, pLb )
 {
-    if ( ((SvxCheckListBox*)pLb) == mpLbColumns )
+    if ( pLb == mpLbColumns )
     {
         SvTreeListEntry* pEntry = mpLbColumns->GetHdlEntry();
 

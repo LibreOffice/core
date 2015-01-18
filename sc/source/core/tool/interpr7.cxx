@@ -90,16 +90,16 @@ void ScInterpreter::ScFilterXML()
                     {
                         if(pNodeSet->nodeTab[0]->type == XML_NAMESPACE_DECL)
                         {
-                            xmlNsPtr ns = (xmlNsPtr)pNodeSet->nodeTab[0];
-                            xmlNodePtr cur = (xmlNodePtr)ns->next;
+                            xmlNsPtr ns = reinterpret_cast<xmlNsPtr>(pNodeSet->nodeTab[0]);
+                            xmlNodePtr cur = reinterpret_cast<xmlNodePtr>(ns->next);
                             boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString((char*)pChar2.get()), RTL_TEXTENCODING_UTF8);
+                            aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
                         }
                         else
                         {
                             xmlNodePtr cur = pNodeSet->nodeTab[0];
                             boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OStringToOUString(OString((char*)pChar2.get()), RTL_TEXTENCODING_UTF8);
+                            aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
                         }
                     }
                     else
@@ -123,7 +123,7 @@ void ScInterpreter::ScFilterXML()
                 }
                 break;
             case XPATH_STRING:
-                PushString(OUString::createFromAscii((char*)pXPathObj->stringval));
+                PushString(OUString::createFromAscii(reinterpret_cast<char*>(pXPathObj->stringval)));
                 break;
             case XPATH_POINT:
                 PushNoValue();

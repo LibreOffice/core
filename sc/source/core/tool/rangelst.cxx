@@ -1589,8 +1589,8 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
     nListCount = maPairs.size();
     OSL_ENSURE( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
         "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
-    ScRangePairNameSort* pSortArray = (ScRangePairNameSort*)
-        new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ];
+    ScRangePairNameSort* pSortArray = reinterpret_cast<ScRangePairNameSort*>(
+        new sal_uInt8 [ nListCount * sizeof(ScRangePairNameSort) ]);
     sal_uLong j;
     for ( j=0; j < nListCount; j++ )
     {
@@ -1599,7 +1599,7 @@ ScRangePair** ScRangePairList::CreateNameSortedArray( size_t& nListCount,
     }
     qsort( (void*)pSortArray, nListCount, sizeof(ScRangePairNameSort), &ScRangePairList_QsortNameCompare );
     // ScRangePair Pointer aufruecken
-    ScRangePair** ppSortArray = (ScRangePair**)pSortArray;
+    ScRangePair** ppSortArray = reinterpret_cast<ScRangePair**>(pSortArray);
     for ( j=0; j < nListCount; j++ )
     {
         ppSortArray[j] = pSortArray[j].pPair;

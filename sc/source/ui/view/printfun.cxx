@@ -826,7 +826,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     const SvxSetItem* pHeaderSetItem;
     const SfxItemSet* pHeaderSet = NULL;
     if ( pParamSet->GetItemState( ATTR_PAGE_HEADERSET, false,
-                            (const SfxPoolItem**)&pHeaderSetItem ) == SfxItemState::SET )
+                            reinterpret_cast<const SfxPoolItem**>(&pHeaderSetItem) ) == SfxItemState::SET )
     {
         pHeaderSet = &pHeaderSetItem->GetItemSet();
                                                         // Headline has space below
@@ -842,7 +842,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     const SvxSetItem* pFooterSetItem;
     const SfxItemSet* pFooterSet = NULL;
     if ( pParamSet->GetItemState( ATTR_PAGE_FOOTERSET, false,
-                            (const SfxPoolItem**)&pFooterSetItem ) == SfxItemState::SET )
+                            reinterpret_cast<const SfxPoolItem**>(&pFooterSetItem) ) == SfxItemState::SET )
     {
         pFooterSet = &pFooterSetItem->GetItemSet();
                                                         // Footline has space above
@@ -860,19 +860,19 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     SfxItemState             eState;
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, false,
-                                      (const SfxPoolItem**)&pScaleItem );
+                                      reinterpret_cast<const SfxPoolItem**>(&pScaleItem) );
     if ( SfxItemState::DEFAULT == eState )
         pScaleItem = static_cast<const SfxUInt16Item*>(
                     &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALE ));
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETO, false,
-                                      (const SfxPoolItem**)&pScaleToItem );
+                                      reinterpret_cast<const SfxPoolItem**>(&pScaleToItem) );
     if ( SfxItemState::DEFAULT == eState )
         pScaleToItem = static_cast<const ScPageScaleToItem*>(
                     &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETO ));
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false,
-                                      (const SfxPoolItem**)&pScaleToPagesItem );
+                                      reinterpret_cast<const SfxPoolItem**>(&pScaleToPagesItem) );
     if ( SfxItemState::DEFAULT == eState )
         pScaleToPagesItem = static_cast<const SfxUInt16Item*>(
                     &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETOPAGES ));

@@ -3327,7 +3327,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction* pAct, bool bUndo )
 
     // First the generated ones, as if they were tracked previously!
     if ( pFirstGeneratedDelContent )
-        UpdateReference( (ScChangeAction**)&pFirstGeneratedDelContent, pAct,
+        UpdateReference( reinterpret_cast<ScChangeAction**>(&pFirstGeneratedDelContent), pAct,
             bUndo );
     UpdateReference( &pFirst, pAct, bUndo );
 
@@ -3344,7 +3344,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
 {
     ScChangeActionType eActType = pAct->GetType();
     bool bGeneratedDelContents =
-        ( ppFirstAction == (ScChangeAction**)&pFirstGeneratedDelContent );
+        ( ppFirstAction == reinterpret_cast<ScChangeAction**>(&pFirstGeneratedDelContent) );
     const ScBigRange& rOrgRange = pAct->GetBigRange();
     ScBigRange aRange( rOrgRange );
     ScBigRange aDelRange( rOrgRange );

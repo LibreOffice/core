@@ -187,7 +187,7 @@ bool InitExternalFunc(const OUString& rModuleName)
             {
                 LanguageType eLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
                 sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
-                (*((SetLanguagePtr)fpSetLanguage))( nLanguage );
+                (*reinterpret_cast<SetLanguagePtr>(fpSetLanguage))( nLanguage );
             }
 
             // Module in die Collection aufnehmen
@@ -198,7 +198,7 @@ bool InitExternalFunc(const OUString& rModuleName)
             AdvData pfCallBack = &ScAddInAsyncCallBack;
             FuncCollection* pFuncCol = ScGlobal::GetFuncCollection();
             sal_uInt16 nCount;
-            (*((GetFuncCountPtr)fpGetCount))(nCount);
+            (*reinterpret_cast<GetFuncCountPtr>(fpGetCount))(nCount);
             for (sal_uInt16 i=0; i < nCount; i++)
             {
                 sal_Char cFuncName[256];
@@ -214,13 +214,13 @@ bool InitExternalFunc(const OUString& rModuleName)
                 {
                     eParamType[j] = ParamType::NONE;
                 }
-                (*((GetFuncDataPtr)fpGetData))(i, cFuncName, nParamCount,
+                (*reinterpret_cast<GetFuncDataPtr>(fpGetData))(i, cFuncName, nParamCount,
                                                eParamType, cInternalName);
                 if( fpIsAsync )
                 {
-                    (*((IsAsync)fpIsAsync))(i, &eAsyncType);
+                    (*reinterpret_cast<IsAsync>(fpIsAsync))(i, &eAsyncType);
                     if ( fpAdvice && eAsyncType != ParamType::NONE )
-                        (*((Advice)fpAdvice))( i, pfCallBack );
+                        (*reinterpret_cast<Advice>(fpAdvice))( i, pfCallBack );
                 }
                 OUString aInternalName( cInternalName, strlen(cInternalName), osl_getThreadTextEncoding() );
                 OUString aFuncName( cFuncName, strlen(cFuncName), osl_getThreadTextEncoding() );
@@ -263,79 +263,79 @@ bool FuncData::Call(void** ppParam) const
         switch (nParamCount)
         {
             case 1 :
-                (*((ExFuncPtr1)fProc))(ppParam[0]);
+                (*reinterpret_cast<ExFuncPtr1>(fProc))(ppParam[0]);
                 bRet = true;
                 break;
             case 2 :
-                (*((ExFuncPtr2)fProc))(ppParam[0], ppParam[1]);
+                (*reinterpret_cast<ExFuncPtr2>(fProc))(ppParam[0], ppParam[1]);
                 bRet = true;
                 break;
             case 3 :
-                (*((ExFuncPtr3)fProc))(ppParam[0], ppParam[1], ppParam[2]);
+                (*reinterpret_cast<ExFuncPtr3>(fProc))(ppParam[0], ppParam[1], ppParam[2]);
                 bRet = true;
                 break;
             case 4 :
-                (*((ExFuncPtr4)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3]);
+                (*reinterpret_cast<ExFuncPtr4>(fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3]);
                 bRet = true;
                 break;
             case 5 :
-                (*((ExFuncPtr5)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4]);
+                (*reinterpret_cast<ExFuncPtr5>(fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4]);
                 bRet = true;
                 break;
             case 6 :
-                (*((ExFuncPtr6)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5]);
+                (*reinterpret_cast<ExFuncPtr6>(fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5]);
                 bRet = true;
                 break;
             case 7 :
-                (*((ExFuncPtr7)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr7>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6]);
                 bRet = true;
                 break;
             case 8 :
-                (*((ExFuncPtr8)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr8>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7]);
                 bRet = true;
                 break;
             case 9 :
-                (*((ExFuncPtr9)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr9>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8]);
                 bRet = true;
                 break;
             case 10 :
-                (*((ExFuncPtr10)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr10>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9]);
                 bRet = true;
                 break;
             case 11 :
-                (*((ExFuncPtr11)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr11>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10]);
                 bRet = true;
                 break;
             case 12:
-                (*((ExFuncPtr12)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr12>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11]);
                 bRet = true;
                 break;
             case 13:
-                (*((ExFuncPtr13)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr13>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12]);
                 bRet = true;
                 break;
             case 14 :
-                (*((ExFuncPtr14)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr14>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13]);
                 bRet = true;
                 break;
             case 15 :
-                (*((ExFuncPtr15)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr15>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14]);
                 bRet = true;
                 break;
             case 16 :
-                (*((ExFuncPtr16)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
+                (*reinterpret_cast<ExFuncPtr16>(fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14], ppParam[15]);
                 bRet = true;
@@ -358,7 +358,7 @@ bool FuncData::Unadvice( double nHandle )
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(UNADVICE);
     if (fProc != NULL)
     {
-        ((::Unadvice)fProc)(nHandle);
+        reinterpret_cast< ::Unadvice>(fProc)(nHandle);
         bRet = true;
     }
     return bRet;
@@ -389,7 +389,7 @@ bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam
             sal_Char pcDesc[256];
             *pcName = *pcDesc = 0;
             sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
-            ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
+            reinterpret_cast< ::GetParamDesc>(fProc)( nFuncNo, nParam, pcName, pcDesc );
             aName = OUString( pcName, 256, osl_getThreadTextEncoding() );
             aDesc = OUString( pcDesc, 256, osl_getThreadTextEncoding() );
             bRet = true;

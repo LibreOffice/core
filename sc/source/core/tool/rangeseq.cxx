@@ -435,7 +435,7 @@ bool ScByteSequenceToString::GetString( OUString& rString, const uno::Any& rAny,
     uno::Sequence<sal_Int8> aSeq;
     if ( rAny >>= aSeq )
     {
-        rString = OUString( (const sal_Char*)aSeq.getConstArray(),
+        rString = OUString( reinterpret_cast<const char*>(aSeq.getConstArray()),
                             aSeq.getLength(), nEncoding );
         rString = comphelper::string::stripEnd(rString, 0);
         return true;

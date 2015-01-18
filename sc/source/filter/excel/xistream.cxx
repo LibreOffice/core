@@ -135,7 +135,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
     if( (0 < nLen) && (nLen < 16) )
     {
         // init codec
-        maCodec.InitKey( (sal_uInt8*)aBytePassword.getStr() );
+        maCodec.InitKey( reinterpret_cast<sal_uInt8 const *>(aBytePassword.getStr()) );
 
         if ( maCodec.VerifyKey( mnKey, mnHash ) )
         {
@@ -151,7 +151,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
             OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the senquence!" );
 
             ::msfilter::MSCodec_Std97 aCodec97;
-            aCodec97.InitKey( &aPassVect.front(), (sal_uInt8*)aDocId.getConstArray() );
+            aCodec97.InitKey( &aPassVect.front(), reinterpret_cast<sal_uInt8 const *>(aDocId.getConstArray()) );
 
             // merge the EncryptionData, there should be no conflicts
             ::comphelper::SequenceAsHashMap aEncryptionHash( maEncryptionData );

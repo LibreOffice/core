@@ -2062,7 +2062,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
             OString aFmtByte(OUStringToOString(aDdeTextFmt,
                 osl_getThreadTextEncoding()));
             rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                        (const sal_Int8*)aFmtByte.getStr(),
+                                        reinterpret_cast<const sal_Int8*>(aFmtByte.getStr()),
                                         aFmtByte.getLength() + 1 );
             return true;
         }
@@ -2080,7 +2080,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
                                         SOT_FORMATSTR_ID_SYLK ) )
             {
                 rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                            (const sal_Int8*)aData.getStr(),
+                                            reinterpret_cast<const sal_Int8*>(aData.getStr()),
                                             aData.getLength() + 1 );
                 return true;
             }

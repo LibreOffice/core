@@ -2190,7 +2190,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     SfxBoolItem              aBoolItem   ( 0, true );
 
     eState   = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, true,
-                                        (const SfxPoolItem**)&pHorJustify );
+                                        reinterpret_cast<const SfxPoolItem**>(&pHorJustify) );
     switch ( eState )
     {
         case SfxItemState::SET:
@@ -2257,7 +2257,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     aBoolItem.SetValue( true );
 
     eState = rAttrSet.GetItemState( ATTR_VER_JUSTIFY, true,
-                                    (const SfxPoolItem**)&pVerJustify );
+                                    reinterpret_cast<const SfxPoolItem**>(&pVerJustify) );
 
     switch ( eState )
     {

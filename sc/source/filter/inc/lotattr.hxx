@@ -83,10 +83,10 @@ private:
 
     inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
     {
-        ( ( sal_uInt8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
-        ( ( sal_uInt8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
-        ( ( sal_uInt8* ) &rOut )[ 2 ] = rAttr.nFontCol;
-        ( ( sal_uInt8* ) &rOut )[ 3 ] = rAttr.nBack;
+        reinterpret_cast<sal_uInt8*>(&rOut)[ 0 ] = rAttr.nFont & 0x7F;
+        reinterpret_cast<sal_uInt8*>(&rOut)[ 1 ] = rAttr.nLineStyle;
+        reinterpret_cast<sal_uInt8*>(&rOut)[ 2 ] = rAttr.nFontCol;
+        reinterpret_cast<sal_uInt8*>(&rOut)[ 3 ] = rAttr.nBack;
     }
 
     static void LotusToScBorderLine( sal_uInt8 nLine, ::editeng::SvxBorderLine& );

@@ -76,7 +76,7 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
     sal_uInt16 nWhich = GetWhich( SID_SCATTR_PROTECTION );
     const ScProtectionAttr* pProtAttr = NULL;
     SfxItemState eItemState = rCoreAttrs->GetItemState( nWhich, false,
-                                          (const SfxPoolItem**)&pProtAttr );
+                                          reinterpret_cast<const SfxPoolItem**>(&pProtAttr) );
 
     // Is this a Default-Item?
     if ( eItemState == SfxItemState::DEFAULT )

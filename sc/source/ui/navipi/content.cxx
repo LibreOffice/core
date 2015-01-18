@@ -483,7 +483,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                     case SC_CONTENT_GRAPHIC:
                     case SC_CONTENT_DRAWING:
                     {
-                        vcl::Window* pWindow=(vcl::Window*)GetParent(pEntry);
+                        vcl::Window* pWindow=reinterpret_cast<vcl::Window*>(GetParent(pEntry));
                         ScNavigatorDlg* pScNavigatorDlg = static_cast<ScNavigatorDlg*>(pWindow);
                         ScTabViewShell* pScTabViewShell = NULL;
                         ScDrawView* pScDrawView = NULL;
@@ -970,7 +970,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                     ScDrawView* pScDrawView=NULL;
                                     ScNavigatorDlg* pScNavigatorDlg=NULL;
                                     if(pChild)
-                                         pWindow=(vcl::Window*)GetParent(pChild);
+                                         pWindow=reinterpret_cast<vcl::Window*>(GetParent(pChild));
                                     if(pWindow)
                                             pScNavigatorDlg = static_cast<ScNavigatorDlg*>(pWindow);
                                     if (pScNavigatorDlg!=NULL)

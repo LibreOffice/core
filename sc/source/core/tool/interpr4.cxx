@@ -585,7 +585,7 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         return false;
 
     sal_uInt16 nCount = 0;
-    sal_uInt16* p = (sal_uInt16*) pCellArr;
+    sal_uInt16* p = reinterpret_cast<sal_uInt16*>(pCellArr);
     *p++ = static_cast<sal_uInt16>(nCol1);
     *p++ = static_cast<sal_uInt16>(nRow1);
     *p++ = static_cast<sal_uInt16>(nTab1);
@@ -644,7 +644,7 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         *p++ = nErr;
                         memcpy( p, &nVal, sizeof(double));
                         nPos += 8 + sizeof(double);
-                        p = (sal_uInt16*) ( pCellArr + nPos );
+                        p = reinterpret_cast<sal_uInt16*>( pCellArr + nPos );
                         nCount++;
                     }
                 }
@@ -671,7 +671,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         return false;
 
     sal_uInt16 nCount = 0;
-    sal_uInt16* p = (sal_uInt16*) pCellArr;
+    sal_uInt16* p = reinterpret_cast<sal_uInt16*>(pCellArr);
     *p++ = static_cast<sal_uInt16>(nCol1);
     *p++ = static_cast<sal_uInt16>(nRow1);
     *p++ = static_cast<sal_uInt16>(nTab1);
@@ -741,7 +741,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         sal_uInt8* q = ( pCellArr + nPos );
                         if( (nStrLen & 1) == 0 )
                             *q++ = 0, nPos++;
-                        p = (sal_uInt16*) ( pCellArr + nPos );
+                        p = reinterpret_cast<sal_uInt16*>( pCellArr + nPos );
                         nCount++;
                     }
                 }
@@ -768,7 +768,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         return false;
 
     sal_uInt16 nCount = 0;
-    sal_uInt16* p = (sal_uInt16*) pCellArr;
+    sal_uInt16* p = reinterpret_cast<sal_uInt16*>(pCellArr);
     *p++ = static_cast<sal_uInt16>(nCol1);
     *p++ = static_cast<sal_uInt16>(nRow1);
     *p++ = static_cast<sal_uInt16>(nTab1);
@@ -860,7 +860,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 *q++ = 0, nPos++;
                         }
                         nCount++;
-                        p = (sal_uInt16*) ( pCellArr + nPos );
+                        p = reinterpret_cast<sal_uInt16*>( pCellArr + nPos );
                     }
                 }
                 nCol++;

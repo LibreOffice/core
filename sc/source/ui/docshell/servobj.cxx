@@ -174,7 +174,7 @@ bool ScServerObject::GetData(
             if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
             {
                 rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                        (const sal_Int8*)aByteData.getStr(),
+                                        reinterpret_cast<const sal_Int8*>(aByteData.getStr()),
                                         aByteData.getLength() + 1 );
                 return true;
             }
