@@ -718,7 +718,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blo
     }
 }
 
-void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid )
+void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA )
 {
     const basegfx::B2DPolygon& rPolygon = trapezoid.getB2DPolygon();
     sal_uInt16 nPoints = rPolygon.count();
@@ -735,7 +735,7 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
 
-    if( mrParent.getAntiAliasB2DDraw())
+    if( !blockAA && mrParent.getAntiAliasB2DDraw())
     {
         // Make the edges antialiased by drawing the edge lines again with AA.
         // TODO: If transparent drawing is set up, drawing the lines themselves twice
@@ -805,56 +805,15 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
 {
-    ::std::vector< GLfloat > aVertices;
-    GLfloat nWidth = GetWidth();
-    GLfloat nHeight = GetHeight();
     const ::basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
-
-    for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
+    basegfx::B2DTrapezoidVector aB2DTrapVector;
+    basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
+    // draw tesselation result
+    if( aB2DTrapVector.size())
     {
-        const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
-        const ::basegfx::B2DPolygon& aResult(
-            ::basegfx::triangulator::triangulate( rPolygon ) );
-
-        for( sal_uInt32 j = 0; j < aResult.count(); j++ )
-        {
-            const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint( j ) );
-            aVertices.push_back( 2 * rPt.getX() / nWidth - 1.0f );
-            aVertices.push_back( 1.0f - 2 * rPt.getY() / nHeight );
-        }
+        for( size_t i = 0; i < aB2DTrapVector.size(); ++i )
+            DrawTrapezoid( aB2DTrapVector[ i ], blockAA );
     }
-
-    mpProgram->SetVertices( aVertices.data() );
-    glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
-
-    if( !blockAA && mrParent.getAntiAliasB2DDraw())
-    {
-        // Make the edges antialiased by drawing the edge lines again with AA.
-        // TODO: If transparent drawing is set up, drawing the lines themselves twice
-        // may be a problem, if that is a real problem, the polygon areas itself needs to be
-        // masked out for this or something.
-#ifdef DBG_UTIL
-        assert( mProgramIsSolidColor );
-#endif
-        SalColor lastSolidColor = mProgramSolidColor;
-        double lastSolidTransparency = mProgramSolidTransparency;
-        if( UseSolidAA( lastSolidColor, lastSolidTransparency ))
-        {
-            for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
-            {
-                const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
-                for( sal_uInt32 j = 0; j < rPolygon.count(); j++ )
-                {
-                    const ::basegfx::B2DPoint& rPt1( rPolygon.getB2DPoint( j ) );
-                    const ::basegfx::B2DPoint& rPt2( rPolygon.getB2DPoint(( j + 1 ) % rPolygon.count()) );
-                    DrawEdgeAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
-                }
-            }
-            UseSolid( lastSolidColor, lastSolidTransparency );
-        }
-    }
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
@@ -1212,8 +1171,24 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
 
     if( UseSolid( mnFillColor ) )
     {
-        for( sal_uInt32 i = 0; i < nPoly; i++ )
-            DrawPolygon( pPoints[i], pPtAry[i] );
+        if( nPoly == 1 )
+        {
+            for( sal_uInt32 i = 0; i < nPoly; i++ )
+                DrawPolygon( pPoints[i], pPtAry[i] );
+        }
+        else
+        {
+            basegfx::B2DPolyPolygon polyPolygon;
+            for( sal_uInt32 i = 0; i < nPoly; ++i )
+            {
+                basegfx::B2DPolygon polygon;
+                for( sal_uInt32 j = 0; j < pPoints[ i ]; ++j )
+                    polygon.append( basegfx::B2DPoint( pPtAry[i][j].mnX, pPtAry[i][j].mnY ) );
+                polygon.setClosed( true );
+                polyPolygon.append( polygon );
+            }
+            DrawPolyPolygon( polyPolygon );
+        }
     }
 
     if( UseSolidAA( mnLineColor ) )
@@ -1235,13 +1210,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rP
     PreDraw();
 
     if( UseSolid( mnFillColor, fTransparency ) )
-    {
-        for( sal_uInt32 i = 0; i < rPolyPolygon.count(); i++ )
-        {
-            const ::basegfx::B2DPolyPolygon aOnePoly( rPolyPolygon.getB2DPolygon( i ) );
-            DrawPolyPolygon( aOnePoly );
-        }
-    }
+        DrawPolyPolygon( rPolyPolygon );
 
     PostDraw();
 
